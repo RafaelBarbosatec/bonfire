@@ -14,5 +14,6 @@ export 'package:bonfire/util/direction.dart';
 export 'package:bonfire/util/flying_attack_object.dart';
 export 'package:bonfire/util/game_interface.dart';
 export 'package:bonfire/util/joystick_controller.dart';
-export 'package:box2d_flame/box2d.dart';
+export 'package:flame/animation.dart';
 export 'package:flame/flame.dart';
+export 'package:flame/position.dart';
