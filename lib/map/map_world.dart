@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/map/tile.dart';
 import 'package:bonfire/rpg_game.dart';
-import 'package:bonfire/util/joystick_controller.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 
 class MapWorld extends MapGame with HasGameRef<RPGGame> {
@@ -17,7 +17,7 @@ class MapWorld extends MapGame with HasGameRef<RPGGame> {
   MapWorld(Iterable<Tile> map) : super(map);
 
   void verifyMaxTopAndLeft() {
-    if (maxLeft == 0 || maxTop == 0) {
+    if ((maxLeft == 0 || maxTop == 0) && gameRef.size != null) {
       maxTop = map.fold(0, (max, tile) {
         if (tile.initPosition.y > max)
           return tile.initPosition.y;

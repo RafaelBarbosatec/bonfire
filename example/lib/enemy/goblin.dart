@@ -12,25 +12,25 @@ class Goblin extends Enemy {
     @required this.initPosition,
   }) : super(
           animationIdleRight: FlameAnimation.Animation.sequenced(
-            "goblin_idle.png",
+            "enemy/goblin_idle.png",
             6,
             textureWidth: 16,
             textureHeight: 16,
           ),
           animationIdleLeft: FlameAnimation.Animation.sequenced(
-            "goblin_idle_left.png",
+            "enemy/goblin_idle_left.png",
             6,
             textureWidth: 16,
             textureHeight: 16,
           ),
           animationRunRight: FlameAnimation.Animation.sequenced(
-            "goblin_run_right.png",
+            "enemy/goblin_run_right.png",
             6,
             textureWidth: 16,
             textureHeight: 16,
           ),
           animationRunLeft: FlameAnimation.Animation.sequenced(
-            "goblin_run_left.png",
+            "enemy/goblin_run_left.png",
             6,
             textureWidth: 16,
             textureHeight: 16,
@@ -73,7 +73,7 @@ class Goblin extends Enemy {
     gameRef.add(
       AnimatedObjectOnce(
         animation: FlameAnimation.Animation.sequenced(
-          "enemy_explosin.png",
+          "smoke_explosin.png",
           6,
           textureWidth: 16,
           textureHeight: 16,

@@ -54,10 +54,7 @@ class GameDecoration extends AnimatedObject with HasGameRef<RPGGame> {
 
   @override
   void render(Canvas canvas) {
-    if (position.top < (gameRef.size.height + height) &&
-        position.top > (height * -1) &&
-        position.left > (width * -1) &&
-        position.left < (gameRef.size.width + width)) {
+    if (isVisibleInMap()) {
       super.render(canvas);
       if (_sprite != null && _sprite.loaded())
         _sprite.renderRect(canvas, position);
@@ -73,10 +70,15 @@ class GameDecoration extends AnimatedObject with HasGameRef<RPGGame> {
     }
   }
 
-  bool isVisibleInMap() =>
-      position.top < (gameRef.size.height + height) &&
-      position.top > (height * -1) &&
-      position.left > (width * -1) &&
-      position.left < (gameRef.size.width + width) &&
-      !destroy();
+  bool isVisibleInMap() {
+    if (gameRef.size != null) {
+      return position.top < (gameRef.size.height + height) &&
+          position.top > (height * -1) &&
+          position.left > (width * -1) &&
+          position.left < (gameRef.size.width + width) &&
+          !destroy();
+    } else {
+      return false;
+    }
+  }
 }

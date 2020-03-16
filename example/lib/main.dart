@@ -28,11 +28,14 @@ class Game extends StatelessWidget {
     return BonfireWidget(
       joystick: Joystick(
         screenSize: size,
+        pathSpriteBackgroundDirectional: 'joystick_background.png',
+        pathSpriteKnobDirectional: 'joystick_knob.png',
+        sizeDirectional: 100,
         actions: [
           JoystickAction(
             actionId: 0,
             pathSprite: 'joystick_atack.png',
-            size: 50,
+            size: 80,
             marginBottom: 50,
             marginRight: 50,
           ),
@@ -40,9 +43,8 @@ class Game extends StatelessWidget {
             actionId: 1,
             pathSprite: 'joystick_atack_range.png',
             size: 50,
-            marginTop: 50,
-            marginRight: 50,
-            align: JoystickActionAlign.TOP,
+            marginBottom: 50,
+            marginRight: 160,
           )
         ],
       ),

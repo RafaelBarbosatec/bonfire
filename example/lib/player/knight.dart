@@ -13,25 +13,25 @@ class Knight extends Player {
     this.initPosition,
   }) : super(
           animIdleLeft: FlameAnimation.Animation.sequenced(
-            "knight_idle_left.png",
+            "player/knight_idle_left.png",
             6,
             textureWidth: 16,
             textureHeight: 16,
           ),
           animIdleRight: FlameAnimation.Animation.sequenced(
-            "knight_idle.png",
+            "player/knight_idle.png",
             6,
             textureWidth: 16,
             textureHeight: 16,
           ),
           animRunRight: FlameAnimation.Animation.sequenced(
-            "knight_run.png",
+            "player/knight_run.png",
             6,
             textureWidth: 16,
             textureHeight: 16,
           ),
           animRunLeft: FlameAnimation.Animation.sequenced(
-            "knight_run_left.png",
+            "player/knight_run_left.png",
             6,
             textureWidth: 16,
             textureHeight: 16,
@@ -59,6 +59,17 @@ class Knight extends Player {
   @override
   void die() {
     remove();
+    gameRef.addDecoration(
+      GameDecoration(
+        initPosition: Position(
+          positionInWorld.left,
+          positionInWorld.top,
+        ),
+        height: 30,
+        width: 30,
+        spriteImg: 'player/crypt.png',
+      ),
+    );
     super.die();
   }
 
@@ -66,29 +77,29 @@ class Knight extends Player {
     if (stamina < 15) {
       return;
     }
-    incrementStamina(15);
+    decrementStamina(15);
     this.simpleAttackMelee(
       damage: attack,
       attackEffectBottomAnim: FlameAnimation.Animation.sequenced(
-        'atack_effect_bottom.png',
+        'player/atack_effect_bottom.png',
         6,
         textureWidth: 16,
         textureHeight: 16,
       ),
       attackEffectLeftAnim: FlameAnimation.Animation.sequenced(
-        'atack_effect_left.png',
+        'player/atack_effect_left.png',
         6,
         textureWidth: 16,
         textureHeight: 16,
       ),
       attackEffectRightAnim: FlameAnimation.Animation.sequenced(
-        'atack_effect_right.png',
+        'player/atack_effect_right.png',
         6,
         textureWidth: 16,
         textureHeight: 16,
       ),
       attackEffectTopAnim: FlameAnimation.Animation.sequenced(
-        'atack_effect_top.png',
+        'player/atack_effect_top.png',
         6,
         textureWidth: 16,
         textureHeight: 16,
@@ -100,7 +111,7 @@ class Knight extends Player {
     if (stamina < 10) {
       return;
     }
-    incrementStamina(10);
+    decrementStamina(10);
     this.simpleAttackRange(
       animationRight: FlameAnimation.Animation.sequenced(
         'player/fireball_right.png',
@@ -160,7 +171,7 @@ class Knight extends Player {
     }
   }
 
-  void incrementStamina(int i) {
+  void decrementStamina(int i) {
     stamina -= i;
     if (stamina < 0) {
       stamina = 0;

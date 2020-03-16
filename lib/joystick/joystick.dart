@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/joystick/joystick_action.dart';
-import 'package:bonfire/util/joystick_controller.dart';
+import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
@@ -32,12 +32,12 @@ class Joystick extends JoystickController {
 
   Joystick({
     @required this.screenSize,
+    @required this.pathSpriteBackgroundDirectional,
+    @required this.pathSpriteKnobDirectional,
     this.actions,
     this.sizeDirectional = 80,
     this.marginBottomDirectional = 100,
     this.marginLeftDirectional = 100,
-    this.pathSpriteBackgroundDirectional = 'joystick_background.png',
-    this.pathSpriteKnobDirectional = 'joystick_knob.png',
   }) {
     _backgroundSprite = Sprite(pathSpriteBackgroundDirectional);
     _knobSprite = Sprite(pathSpriteKnobDirectional);

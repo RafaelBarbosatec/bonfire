@@ -1,5 +1,5 @@
+import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/tile.dart';
-import 'package:bonfire/util/joystick_controller.dart';
 import 'package:flame/components/component.dart';
 
 abstract class MapGame extends Component {

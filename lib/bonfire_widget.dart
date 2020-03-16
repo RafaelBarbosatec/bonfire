@@ -1,10 +1,10 @@
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
+import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/game_interface.dart';
-import 'package:bonfire/util/joystick_controller.dart';
 import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {
@@ -54,39 +54,26 @@ class _BonfireWidgetState extends State<BonfireWidget> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
+          _game.widget,
           Row(
             children: <Widget>[
               Expanded(
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onPanStart: widget.joystick.onPanStart,
-                  onPanUpdate: widget.joystick.onPanUpdate,
-                  onPanEnd: widget.joystick.onPanEnd,
-                  onTapDown: (d) {
-                    widget.joystick.onTapDown(d);
-                    _game.onTapDown(d);
-                  },
-                  onTapUp: (d) {
-                    widget.joystick.onTapUp(d);
-                    _game.onTapUp(d);
-                  },
+                  onPanStart: _game.onPanStartLeftScreen,
+                  onPanUpdate: _game.onPanUpdateLeftScreen,
+                  onPanEnd: _game.onPanEndLeftScreen,
+                  onTapDown: _game.onTapDownLeftScreen,
+                  onTapUp: _game.onTapUpLeftScreen,
                   child: Container(),
                 ),
               ),
               Expanded(
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTapDown: (d) {
-                    widget.joystick.onTapDownAction(d);
-                    _game.onTapDown(d);
-                  },
-                  onTapUp: (d) {
-                    widget.joystick.onTapUpAction(d);
-                    _game.onTapUp(d);
-                  },
-                  onTapCancel: () {
-                    widget.joystick.onTapCancelAction();
-                  },
+                  onTapDown: _game.onTapDown,
+                  onTapUp: _game.onTapUp,
+                  onTapCancel: _game.onTapCancel,
                   child: Container(),
                 ),
               )

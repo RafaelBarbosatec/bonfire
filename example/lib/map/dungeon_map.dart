@@ -56,7 +56,7 @@ class DungeonMap {
     return [
       GameDecoration(
         spriteImg: 'itens/barrel.png',
-        initPosition: getRelativeTilePosition(10, 5),
+        initPosition: getRelativeTilePosition(10, 6),
         width: 32,
         height: 32,
         collision: true,
@@ -127,7 +127,7 @@ class DungeonMap {
         height: 32,
       ),
       GameDecoration(
-        spriteImg: 'itens/flag_red.png',
+        spriteImg: 'itens/prisoner.png',
         initPosition: getRelativeTilePosition(10, 4),
         width: 32,
         height: 32,
@@ -144,7 +144,6 @@ class DungeonMap {
   static List<Enemy> enemies() {
     return [
       Goblin(initPosition: getRelativeTilePosition(14, 6)),
-      Goblin(initPosition: getRelativeTilePosition(10, 7)),
       Goblin(initPosition: getRelativeTilePosition(25, 6)),
     ];
   }

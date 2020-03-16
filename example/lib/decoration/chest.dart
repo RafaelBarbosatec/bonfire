@@ -13,8 +13,8 @@ class Chest extends GameDecoration {
             textureWidth: 16,
             textureHeight: 16,
           ),
-          width: 16,
-          height: 16,
+          width: 20,
+          height: 20,
           initPosition: initPosition,
         );
 
@@ -39,7 +39,7 @@ class Chest extends GameDecoration {
           gameRef.add(
             AnimatedObjectOnce(
               animation: FlameAnimation.Animation.sequenced(
-                "enemy_explosin.png",
+                "smoke_explosin.png",
                 6,
                 textureWidth: 16,
                 textureHeight: 16,
@@ -51,7 +51,7 @@ class Chest extends GameDecoration {
           gameRef.add(
             AnimatedObjectOnce(
               animation: FlameAnimation.Animation.sequenced(
-                "enemy_explosin.png",
+                "smoke_explosin.png",
                 6,
                 textureWidth: 16,
                 textureHeight: 16,

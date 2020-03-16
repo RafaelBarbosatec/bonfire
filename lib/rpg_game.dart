@@ -1,9 +1,9 @@
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
+import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/game_interface.dart';
-import 'package:bonfire/util/joystick_controller.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flame/position.dart';
@@ -65,6 +65,7 @@ class RPGGame extends BaseGame with TapDetector {
 
   @override
   void onTapDown(TapDownDetails details) {
+    joystickController.onTapDownAction(details);
     components
         .where((item) => item is TapDetector)
         .forEach((item) => (item as TapDetector).onTapDown(details));
@@ -72,6 +73,7 @@ class RPGGame extends BaseGame with TapDetector {
 
   @override
   void onTapUp(TapUpDetails details) {
+    joystickController.onTapUpAction(details);
     components
         .where((item) => item is TapDetector)
         .forEach((item) => (item as TapDetector).onTapUp(details));
@@ -86,8 +88,29 @@ class RPGGame extends BaseGame with TapDetector {
 
   @override
   void onTapCancel() {
+    joystickController.onTapCancelAction();
     components
         .where((item) => item is TapDetector)
         .forEach((item) => (item as TapDetector).onTapCancel());
+  }
+
+  void onPanStartLeftScreen(DragStartDetails details) {
+    joystickController.onPanStart(details);
+  }
+
+  void onPanUpdateLeftScreen(DragUpdateDetails details) {
+    joystickController.onPanUpdate(details);
+  }
+
+  void onPanEndLeftScreen(DragEndDetails details) {
+    joystickController.onPanEnd(details);
+  }
+
+  void onTapDownLeftScreen(TapDownDetails details) {
+    joystickController.onTapDown(details);
+  }
+
+  void onTapUpLeftScreen(TapUpDetails details) {
+    joystickController.onTapUp(details);
   }
 }

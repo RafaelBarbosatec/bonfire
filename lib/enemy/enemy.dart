@@ -120,12 +120,17 @@ class Enemy extends AnimatedObject with ObjectCollision, HasGameRef<RPGGame> {
     }
   }
 
-  bool isVisibleInMap() =>
-      position.top < (gameRef.size.height + height) &&
-      position.top > (height * -1) &&
-      position.left > (width * -1) &&
-      position.left < (gameRef.size.width + width) &&
-      !destroy();
+  bool isVisibleInMap() {
+    if (gameRef.size != null) {
+      return position.top < (gameRef.size.height + height) &&
+          position.top > (height * -1) &&
+          position.left > (width * -1) &&
+          position.left < (gameRef.size.width + width) &&
+          !destroy();
+    } else {
+      return false;
+    }
+  }
 
   Rect _currentToRealPosition(Rect currentPosition) {
     return Rect.fromLTWH(
