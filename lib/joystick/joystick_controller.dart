@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:bonfire/rpg_game.dart';
 import 'package:flame/components/component.dart';
+import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flutter/gestures.dart';
 
 enum JoystickMoveDirectional {
@@ -20,7 +22,7 @@ abstract class JoystickListener {
   void joystickAction(int action);
 }
 
-abstract class JoystickController extends Component {
+abstract class JoystickController extends Component with HasGameRef<RPGGame> {
   JoystickListener joystickListener;
   @override
   void render(Canvas c) {}

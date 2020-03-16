@@ -11,20 +11,22 @@ class MapWorld extends MapGame with HasGameRef<RPGGame> {
   double maxLeft = 0;
   double lastCameraX = -1;
   double lastCameraY = -1;
+  Size _sizeScreen;
   Iterable<Tile> tilesToRender = List();
   Iterable<Tile> tilesCollisionsRendered = List();
 
   MapWorld(Iterable<Tile> map) : super(map);
 
   void verifyMaxTopAndLeft() {
-    if ((maxLeft == 0 || maxTop == 0) && gameRef.size != null) {
+    if (gameRef.size != null && _sizeScreen != gameRef.size) {
+      _sizeScreen = gameRef.size;
       maxTop = map.fold(0, (max, tile) {
         if (tile.initPosition.y > max)
           return tile.initPosition.y;
         else
           return max;
       });
-      maxTop = (maxTop * map.first.size) - gameRef.size.height;
+      maxTop = (maxTop * map.first.size) - _sizeScreen.height;
 
       maxLeft = map.fold(0, (max, tile) {
         if (tile.initPosition.x > max)
@@ -32,7 +34,7 @@ class MapWorld extends MapGame with HasGameRef<RPGGame> {
         else
           return max;
       });
-      maxLeft = (maxLeft * map.first.size) - gameRef.size.width;
+      maxLeft = (maxLeft * map.first.size) - _sizeScreen.width;
     }
   }
 

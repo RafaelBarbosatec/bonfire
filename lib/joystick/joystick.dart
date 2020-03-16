@@ -20,7 +20,7 @@ class Joystick extends JoystickController {
   double _sensitivity = 6;
 
   double _tileSize;
-  final Size screenSize;
+  Size _screenSize;
 
   final double sizeDirectional;
   final double marginBottomDirectional;
@@ -31,7 +31,6 @@ class Joystick extends JoystickController {
   final List<JoystickAction> actions;
 
   Joystick({
-    @required this.screenSize,
     @required this.pathSpriteBackgroundDirectional,
     @required this.pathSpriteKnobDirectional,
     this.actions,
@@ -42,12 +41,12 @@ class Joystick extends JoystickController {
     _backgroundSprite = Sprite(pathSpriteBackgroundDirectional);
     _knobSprite = Sprite(pathSpriteKnobDirectional);
     _tileSize = sizeDirectional / 2;
-    initialize();
   }
 
   void initialize() async {
+    _screenSize = gameRef.size;
     Offset osBackground = Offset(
-        marginLeftDirectional, screenSize.height - marginBottomDirectional);
+        marginLeftDirectional, _screenSize.height - marginBottomDirectional);
     _backgroundRect =
         Rect.fromCircle(center: osBackground, radius: sizeDirectional / 2);
 
@@ -62,8 +61,8 @@ class Joystick extends JoystickController {
         double radius = action.size / 2;
         action.rect = Rect.fromCircle(
           center: Offset(
-            screenSize.width - (action.marginRight + radius),
-            (action.align == JoystickActionAlign.TOP ? 0 : screenSize.height) +
+            _screenSize.width - (action.marginRight + radius),
+            (action.align == JoystickActionAlign.TOP ? 0 : _screenSize.height) +
                 (action.align == JoystickActionAlign.TOP
                     ? (action.marginTop + radius)
                     : ((action.marginBottom + radius) * -1)),
@@ -75,13 +74,22 @@ class Joystick extends JoystickController {
   }
 
   void render(Canvas canvas) {
-    _backgroundSprite.renderRect(canvas, _backgroundRect);
-    _knobSprite.renderRect(canvas, _knobRect);
+    if (_backgroundSprite != null)
+      _backgroundSprite.renderRect(canvas, _backgroundRect);
+    if (_knobSprite != null) _knobSprite.renderRect(canvas, _knobRect);
 
-    actions.forEach((action) => action.render(canvas));
+    if (actions != null) actions.forEach((action) => action.render(canvas));
   }
 
   void update(double t) {
+    if (gameRef.size != null && _screenSize != gameRef.size) {
+      initialize();
+    }
+
+    if (_backgroundRect == null) {
+      return;
+    }
+
     if (_dragging) {
       double _radAngle = atan2(_dragPosition.dy - _backgroundRect.center.dy,
           _dragPosition.dx - _backgroundRect.center.dx);
@@ -179,8 +187,10 @@ class Joystick extends JoystickController {
           _knobRect.center;
       _knobRect = _knobRect.shift(diff);
     } else {
-      Offset diff = _dragPosition - _knobRect.center;
-      _knobRect = _knobRect.shift(diff);
+      if (_knobRect != null) {
+        Offset diff = _dragPosition - _knobRect.center;
+        _knobRect = _knobRect.shift(diff);
+      }
     }
   }
 
