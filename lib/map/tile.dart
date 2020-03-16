@@ -26,7 +26,8 @@ class Tile {
   }
 
   void render(Canvas canvas, Position camera) {
-    if (_sprite.loaded()) _sprite.renderRect(canvas, position);
+    if (_sprite != null && _sprite.loaded())
+      _sprite.renderRect(canvas, position);
   }
 
   bool isVisible(RPGGame game) {

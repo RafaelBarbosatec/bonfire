@@ -13,7 +13,7 @@ class DungeonMap {
     List<Tile> tileList = List();
     List.generate(35, (indexRow) {
       List.generate(70, (indexColumm) {
-        if (indexRow == 3) {
+        if (indexRow == 3 && indexColumm > 2 && indexColumm < 30) {
           tileList.add(Tile(
             'tile/wall_bottom.png',
             Position(indexColumm.toDouble(), indexRow.toDouble()),
@@ -21,7 +21,7 @@ class DungeonMap {
           ));
           return;
         }
-        if (indexRow == 4) {
+        if (indexRow == 4 && indexColumm > 2 && indexColumm < 30) {
           tileList.add(Tile(
             'tile/wall.png',
             Position(indexColumm.toDouble(), indexRow.toDouble()),
@@ -30,7 +30,7 @@ class DungeonMap {
           return;
         }
 
-        if (indexRow == 9) {
+        if (indexRow == 9 && indexColumm > 2 && indexColumm < 30) {
           tileList.add(Tile(
             'tile/wall_top.png',
             Position(indexColumm.toDouble(), indexRow.toDouble()),
@@ -39,9 +39,43 @@ class DungeonMap {
           return;
         }
 
-        if (indexRow > 4 && indexRow < 9) {
+        if (indexRow > 4 &&
+            indexRow < 9 &&
+            indexColumm > 2 &&
+            indexColumm < 30) {
           tileList.add(Tile(
             randomFloor(),
+            Position(indexColumm.toDouble(), indexRow.toDouble()),
+          ));
+          return;
+        }
+
+        if (indexRow > 3 && indexRow < 9 && indexColumm == 2) {
+          tileList.add(Tile(
+            'tile/wall_left.png',
+            Position(indexColumm.toDouble(), indexRow.toDouble()),
+            collision: true,
+          ));
+        }
+        if (indexRow == 9 && indexColumm == 2) {
+          tileList.add(Tile(
+            'tile/wall_bottom_left.png',
+            Position(indexColumm.toDouble(), indexRow.toDouble()),
+            collision: true,
+          ));
+        }
+
+        if (indexRow > 3 && indexRow < 9 && indexColumm == 30) {
+          tileList.add(Tile(
+            'tile/wall_right.png',
+            Position(indexColumm.toDouble(), indexRow.toDouble()),
+            collision: true,
+          ));
+        }
+
+        if (indexRow == 9 && indexColumm > 30 && indexColumm < 35) {
+          tileList.add(Tile(
+            '',
             Position(indexColumm.toDouble(), indexRow.toDouble()),
           ));
           return;
