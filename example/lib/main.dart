@@ -6,28 +6,20 @@ import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.util.setLandscape();
+//  await Flame.util.setLandscape();
   await Flame.util.fullScreen();
-  Size size = await Flame.util.initialDimensions();
   runApp(
     MaterialApp(
-      home: Game(
-        size: size,
-      ),
+      home: Game(),
     ),
   );
 }
 
 class Game extends StatelessWidget {
-  final Size size;
-
-  const Game({Key key, this.size}) : super(key: key);
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return BonfireWidget(
       joystick: Joystick(
-        screenSize: size,
         pathSpriteBackgroundDirectional: 'joystick_background.png',
         pathSpriteKnobDirectional: 'joystick_knob.png',
         sizeDirectional: 100,
