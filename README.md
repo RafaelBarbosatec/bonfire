@@ -17,36 +17,34 @@ Você encontra o código completo desse exemplo [aqui](https://github.com/Rafael
 
 ## Como funciona?
 
-Essa ferramenta foi construida utilizando os recursos disponíveis pelo [FlameEngine](https://flame-engine.org/) e todos eles estarão disponíveis para ser utilizados alem dos implementados pelo Bonfire.
+Essa ferramenta foi construida utilizando os recursos disponíveis pelo [FlameEngine](https://flame-engine.org/) e todos eles estarão disponíveis para serem utilizados além dos implementados pelo Bonfire. Por conta disso recomenda-se dar uma olhadinha no [FlameEngine](https://flame-engine.org/) antes de iniciar a brincadeira com o Bonfire.
 
-Por conta disso recomenda-se dar uma olhadinha no [FlameEngine](https://flame-engine.org/) antes de iniciar a brincadeira com o Bonfire.
-
-Bonfire nos ajuda a montar um game utilizando aos seguintes componentes e organização:
+O Bonfire nos ajuda a montar um game utilizando os seguintes componentes e organização:
 
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/game_diagram.png)
 
 ### Map
 Esse componente representa nada mais que o mapa ou mundo em que o jogo ocorre. 
 
-Consiste uma matriz de quadradinhos(Tiles) que em conjunto forma o seu mundo [veja](https://www.mapeditor.org/img/screenshot-terrain.png). Atualmente você monta essa matriz na mão como pode ver nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/map/dungeon_map.dart), mas futuramente terá suporte a carregar mapas montados com [Tiled](https://www.mapeditor.org/).
+Consiste em uma matriz de quadradinhos(Tiles), que em conjunto formam o seu mundo [(veja)](https://www.mapeditor.org/img/screenshot-terrain.png). Atualmente você monta essa matriz manualmente, como podemos ver nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/map/dungeon_map.dart), mas futuramente terá suporte para o carregamento de mapas montados com [Tiled](https://www.mapeditor.org/).
 
 ### Derocations
-Esse componente representa qualquer coisa que queira adicionar ao cenário, ele pode ser um simples 'barril" no meio do caminho, a um NPC que você poderá utilizar para interagir com o seu player.
+Representa qualquer coisa que queira adicionar ao cenário, ele pode ser um simples "barril" no meio do caminho a um NPC que você poderá utilizar para interagir com o seu player.
 
 ### Enemy
-Esse componente é utilizado para representar seus inimigos. Nele existe algumas ações e movimentos prontos para você configurar-lo. Mas, caso deseje algo diferente terá a total liberdade de customizar suas ações e movimentos.
+É utilizado para representar seus inimigos. Nesse componente existem movimentos prontos para você configurá-lo. Mas, caso deseje algo diferente terá a total liberdade de customizar suas ações e movimentos.
 
 ### Player
-Esse componente representa o seu personagem. Nele também existe ações e movimentos prontos para ser utilizados.
+Representa o seu personagem. Nele também existem ações e movimentos prontos para serem utilizados.
 
 ### Interface
-Esse componente é um meio disponibilizado para você desenhar a interface do game, como barra de vida, stamina, configurações, etc. qualquer coisa que queira adicionar a tela durante o game rodando.
+É um meio disponibilizado para você desenhar a interface do game, como barra de vida, stamina, configurações, etc; qualquer coisa que queira adicionar à tela.
 
 ### Joystick
-Esse componente é responsavel por controcar seu personagem. Existe um componente totalmente pronto e configuravel para vc personalizar o visual e adicionar a quantidade de ações que achar necessário. Ou, pode criar o seu próprio utilizando nossa classe abstrata.
+É responsavel por controlar seu personagem. Existe um componente totalmente pronto e configurável para você personalizar o visual e adicionar a quantidade de ações que achar necessário, ou poderá criar o seu próprio joystick utilizando nossa classe abstrata.
 
 ### OBS:
-Todos esses componentes utilizam o mixin ´HasGameRef´ então você tera acesso a todos os componentes do game (Map,Decoration,Enemy,Player,...), isso será útil para criar qualquer tipo de interação ou adicionar novos componentes programaticamente.
+Esses elementos do game utilizam o mixin ´HasGameRef´, então você terá acesso a todos esses componentes (Map,Decoration,Enemy,Player,...) internamente, que serão úteis para a criação de qualquer tipo de interação ou adição de novos componentes programaticamente.
 
 ## Próximos passos
 - [ ] Documentação detalhada dos componentes.
