@@ -26,7 +26,7 @@ O Bonfire nos ajuda a montar um game utilizando os seguintes componentes e organ
 ### Map
 Esse componente representa nada mais que o mapa ou mundo em que o jogo ocorre. 
 
-Consiste em uma matriz de quadradinhos(Tiles), que em conjunto formam o seu mundo [(veja)](https://www.mapeditor.org/img/screenshot-terrain.png). Atualmente você monta essa matriz manualmente, como podemos ver nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/map/dungeon_map.dart), mas futuramente terá suporte para o carregamento de mapas montados com [Tiled](https://www.mapeditor.org/).
+Consiste em uma matriz de quadradinhos (Tiles), que em conjunto formam o seu mundo [(veja)](https://www.mapeditor.org/img/screenshot-terrain.png). Atualmente você monta essa matriz manualmente, como podemos ver nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/map/dungeon_map.dart), mas futuramente terá suporte para o carregamento de mapas montados com [Tiled](https://www.mapeditor.org/).
 
 ### Derocations
 Representa qualquer coisa que queira adicionar ao cenário, ele pode ser um simples "barril" no meio do caminho a um NPC que você poderá utilizar para interagir com o seu player.
