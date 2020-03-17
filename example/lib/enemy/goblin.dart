@@ -49,10 +49,11 @@ class Goblin extends Enemy {
         observed: (player) {
           _seePlayerClose = true;
           this.seeAndMoveToPlayer(
-              closePlayer: (player) {
-                execAttack();
-              },
-              visionCells: 3);
+            closePlayer: (player) {
+              execAttack();
+            },
+            visionCells: 3,
+          );
         },
         visionCells: 3);
 

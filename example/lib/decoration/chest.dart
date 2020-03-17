@@ -20,21 +20,28 @@ class Chest extends GameDecoration {
 
   @override
   void update(double dt) {
+    if (!this.isVisibleInMap()) return;
     this.seePlayer(
         observed: (player) {
-          gameRef.addDecoration(PotionLife(
+          gameRef.addDecoration(
+            PotionLife(
               Position(
                 positionInWorld.translate(width * 2, 0).left,
                 positionInWorld.top,
               ),
-              30));
+              30,
+            ),
+          );
 
-          gameRef.addDecoration(PotionLife(
+          gameRef.addDecoration(
+            PotionLife(
               Position(
                 positionInWorld.translate(width * 2, 0).left,
                 positionInWorld.top + height * 2,
               ),
-              30));
+              30,
+            ),
+          );
 
           gameRef.add(
             AnimatedObjectOnce(

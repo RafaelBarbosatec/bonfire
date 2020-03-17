@@ -6,7 +6,6 @@ import 'package:flame/position.dart';
 class PotionLife extends GameDecoration {
   final Position initPosition;
   final double life;
-  Timer _timer;
   double _lifeDistributed = 0;
 
   PotionLife(this.initPosition, this.life)
@@ -19,8 +18,9 @@ class PotionLife extends GameDecoration {
 
   @override
   void update(double dt) {
+    if (!this.isVisibleInMap()) return;
     if (position.overlaps(gameRef.player.position)) {
-      _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      Timer.periodic(Duration(milliseconds: 100), (timer) {
         if (_lifeDistributed >= life) {
           timer.cancel();
         } else {

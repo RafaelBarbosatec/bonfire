@@ -74,9 +74,8 @@ class Knight extends Player {
   }
 
   void actionAttack() {
-    if (stamina < 15) {
-      return;
-    }
+    if (stamina < 15) return;
+
     decrementStamina(15);
     this.simpleAttackMelee(
       damage: attack,
@@ -108,9 +107,8 @@ class Knight extends Player {
   }
 
   void actionAttackRange() {
-    if (stamina < 10) {
-      return;
-    }
+    if (stamina < 10) return;
+
     decrementStamina(10);
     this.simpleAttackRange(
       animationRight: FlameAnimation.Animation.sequenced(
