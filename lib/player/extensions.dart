@@ -4,8 +4,10 @@ import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/animated_object_once.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/flying_attack_object.dart';
+import 'package:bonfire/util/text_damage.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
+import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -127,6 +129,23 @@ extension PlayerExtensions on Player {
           damage: damage,
           speed: speed,
           damageInPlayer: false),
+    );
+  }
+
+  void showDamage(double damage,
+      {TextConfig config = const TextConfig(
+        fontSize: 10,
+        color: Colors.red,
+      )}) {
+    gameRef.add(
+      TextDamage(
+        damage.toInt().toString(),
+        Position(
+          positionInWorld.center.dx,
+          positionInWorld.top,
+        ),
+        config: config,
+      ),
     );
   }
 }

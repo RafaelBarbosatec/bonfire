@@ -157,4 +157,10 @@ class Goblin extends Enemy {
       ),
     );
   }
+
+  @override
+  void receiveDamage(double damage) {
+    this.showDamage(damage);
+    super.receiveDamage(damage);
+  }
 }

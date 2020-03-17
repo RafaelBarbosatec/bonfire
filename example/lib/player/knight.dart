@@ -175,4 +175,10 @@ class Knight extends Player {
       stamina = 0;
     }
   }
+
+  @override
+  void receiveDamage(double damage) {
+    this.showDamage(damage);
+    super.receiveDamage(damage);
+  }
 }
