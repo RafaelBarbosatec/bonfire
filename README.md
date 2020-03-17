@@ -15,6 +15,16 @@ Construa games do tipo RPG ou similares explorando o poder do [FlameEngine](http
 
 Você encontra o código completo desse exemplo [aqui](https://github.com/RafaelBarbosatec/bonfire/tree/master/example).
 
+## Sumário
+1. [Como funciona?](#como-funciona)
+   - [Map](#map)
+   - [Derocations](#derocations)
+   - [Enemy](#enemy)
+   - [Player](#player)
+   - [Interface](#interface)
+   - [Joystick](#joystick)
+2. [Próximos passos](#próximos-passos)
+
 ## Como funciona?
 
 Essa ferramenta foi construida utilizando os recursos disponíveis pelo [FlameEngine](https://flame-engine.org/) e todos eles estarão disponíveis para serem utilizados além dos implementados pelo Bonfire. Por conta disso recomenda-se dar uma olhadinha no [FlameEngine](https://flame-engine.org/) antes de iniciar a brincadeira com o Bonfire.
