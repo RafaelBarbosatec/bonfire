@@ -32,7 +32,7 @@ Consiste em uma matriz de quadradinhos (Tiles), que em conjunto formam o seu mun
 Representa qualquer coisa que queira adicionar ao cenário, ele pode ser um simples "barril" no meio do caminho a um NPC que você poderá utilizar para interagir com o seu player.
 
 ### Enemy
-É utilizado para representar seus inimigos. Nesse componente existem movimentos prontos para você configurá-lo. Mas, caso deseje algo diferente terá a total liberdade de customizar suas ações e movimentos.
+É utilizado para representar seus inimigos. Nesse componente existem ações e movimentos prontos para serem utilizados e configurados se quiser. Mas, caso deseje algo diferente terá a total liberdade de customizar suas ações e movimentos.
 
 ### Player
 Representa o seu personagem. Nele também existem ações e movimentos prontos para serem utilizados.
