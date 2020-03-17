@@ -3,8 +3,9 @@
 [![Flutter](https://img.shields.io/badge/Made%20with-Flutter-blue.svg)](https://flutter.dev/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
-# Bonfire
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/bonfire.gif)
+# Bonfire
+
 
 Construa games do tipo RPG ou similares explorando o poder do [FlameEngine](https://flame-engine.org/)!
 
