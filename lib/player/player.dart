@@ -20,7 +20,6 @@ class Player extends AnimatedObject
 
   final double width;
   final double height;
-  final double sizeTileMap;
   final Position initPosition;
   final Direction initDirection;
   final FlameAnimation.Animation animIdleLeft;
@@ -51,8 +50,7 @@ class Player extends AnimatedObject
     @required this.animRunLeft,
     this.width = 16,
     this.height = 16,
-    this.sizeTileMap = 16,
-    this.initPosition,
+    @required this.initPosition,
     this.initDirection = Direction.right,
     this.speed = 5,
     this.life = 10,
@@ -68,8 +66,8 @@ class Player extends AnimatedObject
       statusMoveDirectional = JoystickMoveDirectional.MOVE_RIGHT;
 
     position = Rect.fromLTWH(
-      (initPosition != null ? initPosition.x : 0.0) * sizeTileMap,
-      (initPosition != null ? initPosition.y : 0.0) * sizeTileMap,
+      initPosition.x,
+      initPosition.y,
       width,
       height,
     );

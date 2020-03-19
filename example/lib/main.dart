@@ -16,6 +16,7 @@ void main() async {
 }
 
 class Game extends StatelessWidget {
+  static const sizeTile = 32.0;
   @override
   Widget build(BuildContext context) {
     return BonfireWidget(
@@ -41,7 +42,7 @@ class Game extends StatelessWidget {
         ],
       ),
       player: Knight(
-        initPosition: Position(5, 6),
+        initPosition: Position(5 * sizeTile, 6 * sizeTile),
       ),
       interface: KnightInterface(),
       map: DungeonMap.map(),

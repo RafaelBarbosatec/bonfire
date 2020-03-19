@@ -38,7 +38,6 @@ class Knight extends Player {
           ),
           width: 32,
           height: 32,
-          sizeTileMap: 32,
           initPosition: initPosition,
           life: 200,
           speed: 2.5,
