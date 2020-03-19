@@ -47,7 +47,7 @@ Para executar o game com Bonfire basta utilizar o seguinte widget:
   }
 ```
 
-Descrevendo um pouco mais componentes e organização:
+Descrevendo um pouco mais sobre os componentes e organização:
 
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/game_diagram.png)
 
