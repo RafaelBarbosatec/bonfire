@@ -272,6 +272,13 @@ class Enemy extends AnimatedObject with ObjectCollision, HasGameRef<RPGGame> {
     }
   }
 
+  void addLife(double life) {
+    this.life += life;
+    if (this.life > maxLife) {
+      this.life = maxLife;
+    }
+  }
+
   void die() {
     _isDead = true;
   }
