@@ -199,6 +199,15 @@ void seePlayer(
     // Caso precise saber em qual direção o player estar de você. poderá utilizar essa função.
     Direction directionThatPlayerIs()
     
+    // Caso deseje adicionar uma animação curta (animação sem loop, ele excuta somente uma vez).
+    void addFastAnimation(FlameAnimation.Animation animation)
+    
+    // Caso deseje infligir dano a ele.
+    void receiveDamage(double damage)
+    
+    // Caso deseje adicionar vida.
+    void addLife(double life)
+    
 ```
 
 ### Player
@@ -274,6 +283,15 @@ E ao perceber o toque nessas ações do joystick você poderá executar ações.
          )
       }
     )
+    
+    // Caso deseje adicionar uma animação curta (animação sem loop, ele excuta somente uma vez).
+    void addFastAnimation(FlameAnimation.Animation animation)
+    
+    // Caso deseje infligir dano a ele.
+    void receiveDamage(double damage)
+    
+    // Caso deseje adicionar vida.
+    void addLife(double life)
   
 ```
 
