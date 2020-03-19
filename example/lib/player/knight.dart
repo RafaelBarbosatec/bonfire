@@ -45,7 +45,8 @@ class Knight extends Player {
 
   @override
   void joystickAction(int action) {
-    super.joystickAction(action);
+    if (isDead) return;
+
     if (action == 0) {
       actionAttack();
     }
@@ -53,6 +54,7 @@ class Knight extends Player {
     if (action == 1) {
       actionAttackRange();
     }
+    super.joystickAction(action);
   }
 
   @override
