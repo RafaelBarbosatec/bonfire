@@ -34,7 +34,7 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
     positionInWorld.x += moveAxisX;
     velocity += gravity;
 
-    if (positionInWorld.y > initialY) {
+    if (positionInWorld.y > initialY + 16) {
       remove();
     }
 
