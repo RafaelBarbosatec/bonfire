@@ -30,7 +30,6 @@ class Enemy extends AnimatedObject with ObjectCollision, HasGameRef<RPGGame> {
   final bool drawDefaultLife;
   double life;
   double maxLife;
-  Rect positionInWorld;
   bool _isDead = false;
   Direction lastDirection;
   Direction lastDirectionHorizontal;

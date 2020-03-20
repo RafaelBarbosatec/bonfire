@@ -19,7 +19,6 @@ class GameDecoration extends AnimatedObject with HasGameRef<RPGGame> {
   final FlameAnimation.Animation animation;
   final Position initPosition;
   Sprite _sprite;
-  Rect positionInWorld;
 
   GameDecoration({
     this.spriteImg,

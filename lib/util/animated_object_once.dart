@@ -1,39 +1,36 @@
 import 'dart:ui';
 
 import 'package:bonfire/rpg_game.dart';
+import 'package:bonfire/util/animated_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 
-class AnimatedObjectOnce extends Component with HasGameRef<RPGGame> {
+class AnimatedObjectOnce extends AnimatedObject with HasGameRef<RPGGame> {
   Rect position;
-  final FlameAnimation.Animation animation;
   final VoidCallback onFinish;
   final bool onlyUpdate;
   bool _isDestroyed = false;
-  Rect positionInWorld;
 
   AnimatedObjectOnce({
     this.position,
-    this.animation,
+    FlameAnimation.Animation animation,
     this.onFinish,
     this.onlyUpdate = false,
   }) {
+    this.animation = animation;
     positionInWorld = position;
   }
 
   @override
   void render(Canvas canvas) {
-    if (animation == null || onlyUpdate) return;
-    if (animation.loaded()) {
-      animation.getSprite().renderRect(canvas, position);
-    }
+    if (onlyUpdate) return;
+    super.render(canvas);
   }
 
   @override
   void update(double dt) {
     if (animation != null && !_isDestroyed) {
-      animation.update(dt);
+      super.update(dt);
       if (animation.isLastFrame) {
         if (onFinish != null) onFinish();
         remove();

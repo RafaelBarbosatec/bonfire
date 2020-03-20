@@ -19,7 +19,6 @@ class FlyingAttackObject extends AnimatedObject with HasGameRef<RPGGame> {
   final Position initPosition;
   final bool damageInPlayer;
   final bool damageInEnemy;
-  Rect positionInWorld;
 
   FlyingAttackObject({
     @required this.initPosition,

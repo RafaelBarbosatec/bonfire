@@ -5,6 +5,7 @@ import 'package:flame/components/component.dart';
 
 class AnimatedObject extends Component {
   Rect position;
+  Rect positionInWorld;
   FlameAnimation.Animation animation;
   bool isDestroyed = false;
 

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/animated_object_once.dart';
 import 'package:bonfire/util/direction.dart';
@@ -147,5 +148,39 @@ extension PlayerExtensions on Player {
         config: config,
       ),
     );
+  }
+
+  void seeEnemy({
+    Function(List<Enemy>) observed,
+    Function() notObserved,
+    int visionCells = 3,
+  }) {
+    if (isDead) return;
+
+    var enemiesInLife = this.gameRef.enemies.where((e) => !e.isDead);
+    if (enemiesInLife.length == 0) {
+      if (notObserved != null) notObserved();
+      return;
+    }
+
+    double visionWidth = position.width * visionCells * 2;
+    double visionHeight = position.height * visionCells * 2;
+
+    Rect fieldOfVision = Rect.fromLTWH(
+      position.left - (visionWidth / 2),
+      position.top - (visionHeight / 2),
+      visionWidth,
+      visionHeight,
+    );
+
+    List<Enemy> enemiesObserved = enemiesInLife
+        .where((enemy) => fieldOfVision.overlaps(enemy.position))
+        .toList();
+
+    if (enemiesObserved.length > 0) {
+      if (observed != null) observed(enemiesObserved);
+    } else {
+      if (notObserved != null) notObserved();
+    }
   }
 }

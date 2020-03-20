@@ -44,6 +44,8 @@ class Goblin extends Enemy {
 
   @override
   void update(double dt) {
+    if (this.isDead) return;
+
     _seePlayerClose = false;
     this.seePlayer(
         observed: (player) {
