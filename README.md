@@ -24,7 +24,8 @@ Você encontra o código completo desse exemplo [aqui](https://github.com/Rafael
    - [Player](#player)
    - [Interface](#interface)
    - [Joystick](#joystick)
-2. [Próximos passos](#próximos-passos)
+4. [Componentes úteis](#componentes-úteis)
+3. [Próximos passos](#próximos-passos)
 
 ## Como funciona?
 
@@ -65,7 +66,7 @@ Nele passamos a lista de Tiles que montará nosso mapa e toda a movimentação d
 Tile(
    'tile/wall_left.png', // Imagem que representa esse Tile
    Position(positionX, positionY), // posição no mapa onde será renderizado.
-   collision: true, // se ele possue colisão, ou seja, o player nem inimigos iram passar por ele(Ideal para muros e obstáculos).
+   collision: true, // se ele possui colisão, ou seja, o player nem inimigos iram passar por ele(Ideal para muros e obstáculos).
    size:16 // Tamanho do tile, nesse caso 16x16
 )
 ```
@@ -193,6 +194,15 @@ void seePlayer(
            color: Colors.white,
          )
       }
+    )
+    
+    // De acordo com o raio passado por parámetro o player irá procurar e observar inimigos.
+    void seeEnemy(
+       {
+          Function(List<Enemy>) observed,
+          Function() notObserved,
+          int visionCells = 3,
+       }
     )
     
     // Caso precise saber em qual direção o player estar de você. poderá utilizar essa função.
@@ -345,6 +355,8 @@ veja o [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example
 Esses elementos do game utilizam o mixin ´HasGameRef´, então você terá acesso a todos esses componentes (Map,Decoration,Enemy,Player,...) internamente, que serão úteis para a criação de qualquer tipo de interação ou adição de novos componentes programaticamente.
 
 Se for necessário obter a posição de um componente para ser utilizado como base para adicionar outros componentes no mapa ou coisa do tipo, sempre utilize o ```positionInWorld``` ela é a posição atual do componente no mapa. A variavel ```position``` refere-se a posição na tela para ser rendereziado.
+
+## Componentes úteis
 
 ## Próximos passos
 - [ ] Documentação detalhada dos componentes.
