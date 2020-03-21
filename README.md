@@ -358,6 +358,65 @@ Se for necessário obter a posição de um componente para ser utilizado como ba
 
 ## Componentes úteis
 
+São componentes que executam algum tipo de comportamento e podem ser úteis. Assim como qualquer outro componente criado por você que extenda de ```Component``` do flame ou ```AnimatedObject``` do Bonfire você pode utiliza-lo ao seu game programaticamente dessa forma:
+
+```dart
+this.gameRef.add(COMPONENTE);
+```
+
+Esses são os componentes disponíveis até o momento:
+
+```dart
+
+// Componente que executa sua animação uma única vez e logo após se destroi.
+AnimatedObjectOnce(
+   {
+      Rect position,
+      FlameAnimation.Animation animation,
+      VoidCallback onFinish,
+      bool onlyUpdate = false,
+   }
+)
+
+// Esse componente assim como o anterior pode executar sua animação e se destruir ou continuar executando em loop. Mas o grande diferencial é que ele é executado seguindo a posição de um outro componente como um player, enemy ou decoration.
+AnimatedFollowerObject(
+    {
+      FlameAnimation.Animation animation,
+      AnimatedObject target,
+      Position positionFromTarget,
+      double height = 16,
+      double width = 16,
+      bool loopAnimation = false
+   }
+)
+
+// Componente que anda em determinada direção configurada em uma determinada velocidade também configurável e somente para ao atingir um inimigo ou player infligindo dano, ou pode se destruir ao atigir algum componente que tenha colisão(Tiles,Decorations).
+FlyingAttackObject(
+   {
+      @required this.initPosition,
+      @required FlameAnimation.Animation flyAnimation,
+      @required Direction direction,
+      @required double width,
+      @required double height,
+      FlameAnimation.Animation this.destroyAnimation,
+      double speed = 1.5,
+      double damage = 1,
+      bool damageInPlayer = true,
+      bool damageInEnemy = true,
+  }
+)
+  
+```
+
+Se for necessário adicionar de forma programática qualquer um dos componentes que fazem parte da base do game no Bonfire(Decorations ou Enemy), deve ser adicionado com seus métodos específicos:
+
+```dart
+this.gameRef.addEnemy(ENEMY);
+this.gameRef.addDecoration(DECORATION);
+```
+
+
+
 ## Próximos passos
 - [ ] Documentação detalhada dos componentes.
 - [ ] Support with [Tiled](https://www.mapeditor.org/)
