@@ -168,8 +168,8 @@ class FlyingAttackObject extends AnimatedObject {
   }
 
   _transformPositionInWord(Rect position) => Rect.fromLTWH(
-        position.left - gameRef.mapCamera.x,
-        position.top - gameRef.mapCamera.y,
+        position.left - gameRef.mapCamera.position.x,
+        position.top - gameRef.mapCamera.position.y,
         position.width,
         position.height,
       );

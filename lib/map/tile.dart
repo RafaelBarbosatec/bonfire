@@ -32,8 +32,8 @@ class Tile {
 
   bool isVisible(RPGGame game) {
     position = Rect.fromLTWH(
-      _initRectPosition.left + game.mapCamera.x,
-      _initRectPosition.top + game.mapCamera.y,
+      _initRectPosition.left + game.mapCamera.position.x,
+      _initRectPosition.top + game.mapCamera.position.y,
       size,
       size,
     );

@@ -64,8 +64,8 @@ class AnimatedObject extends Component with HasGameRef<RPGGame> {
 
   Rect positionInWordToPosition() {
     return Rect.fromLTWH(
-      positionInWorld.left + gameRef.mapCamera.x,
-      positionInWorld.top + gameRef.mapCamera.y,
+      positionInWorld.left + gameRef.mapCamera.position.x,
+      positionInWorld.top + gameRef.mapCamera.position.y,
       positionInWorld.width,
       positionInWorld.height,
     );

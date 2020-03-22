@@ -3,10 +3,10 @@ import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_interface.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 
 class RPGGame extends BaseGame with TapDetector {
@@ -17,7 +17,7 @@ class RPGGame extends BaseGame with TapDetector {
   final List<Enemy> enemies;
   final List<GameDecoration> decorations;
   final JoystickController joystickController;
-  Position mapCamera = Position.empty();
+  Camera mapCamera = Camera();
   Function(RPGGame) _gameListener;
 
   RPGGame({

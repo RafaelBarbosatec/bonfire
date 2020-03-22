@@ -3,10 +3,8 @@ import 'dart:ui';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/map/tile.dart';
-import 'package:bonfire/rpg_game.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
 
-class MapWorld extends MapGame with HasGameRef<RPGGame> {
+class MapWorld extends MapGame {
   double maxTop = 0;
   double maxLeft = 0;
   double lastCameraX = -1;
@@ -40,51 +38,55 @@ class MapWorld extends MapGame with HasGameRef<RPGGame> {
 
   @override
   bool isMaxBottom() {
-    return (gameRef.mapCamera.y * -1) >= maxTop;
+    return (gameRef.mapCamera.position.y * -1) >= maxTop;
   }
 
   @override
   bool isMaxLeft() {
-    return gameRef.mapCamera.x == 0;
+    return gameRef.mapCamera.position.x == 0;
   }
 
   @override
   bool isMaxRight() {
-    return (gameRef.mapCamera.x * -1) >= maxLeft;
+    return (gameRef.mapCamera.position.x * -1) >= maxLeft;
   }
 
   @override
   bool isMaxTop() {
-    return gameRef.mapCamera.y == 0;
+    return gameRef.mapCamera.position.y == 0;
   }
 
   @override
   void moveCamera(double displacement, JoystickMoveDirectional directional) {
     switch (directional) {
       case JoystickMoveDirectional.MOVE_TOP:
-        if (gameRef.mapCamera.y > 0) {
-          gameRef.mapCamera.y = 0;
+        if (gameRef.mapCamera.position.y > 0) {
+          gameRef.mapCamera.position.y = 0;
         }
-        if (gameRef.mapCamera.y < 0) {
-          gameRef.mapCamera.y = gameRef.mapCamera.y + displacement;
+        if (gameRef.mapCamera.position.y < 0) {
+          gameRef.mapCamera.position.y =
+              gameRef.mapCamera.position.y + displacement;
         }
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
         if (!isMaxRight()) {
-          gameRef.mapCamera.x = gameRef.mapCamera.x - displacement;
+          gameRef.mapCamera.position.x =
+              gameRef.mapCamera.position.x - displacement;
         }
         break;
       case JoystickMoveDirectional.MOVE_BOTTOM:
         if (!isMaxBottom()) {
-          gameRef.mapCamera.y = gameRef.mapCamera.y - displacement;
+          gameRef.mapCamera.position.y =
+              gameRef.mapCamera.position.y - displacement;
         }
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
-        if (gameRef.mapCamera.x > 0) {
-          gameRef.mapCamera.x = 0;
+        if (gameRef.mapCamera.position.x > 0) {
+          gameRef.mapCamera.position.x = 0;
         }
         if (!isMaxLeft()) {
-          gameRef.mapCamera.x = gameRef.mapCamera.x + displacement;
+          gameRef.mapCamera.position.x =
+              gameRef.mapCamera.position.x + displacement;
         }
         break;
       case JoystickMoveDirectional.MOVE_TOP_LEFT:
@@ -108,10 +110,10 @@ class MapWorld extends MapGame with HasGameRef<RPGGame> {
   @override
   void update(double t) {
     verifyMaxTopAndLeft();
-    if (lastCameraX != gameRef.mapCamera.x ||
-        gameRef.mapCamera.y != lastCameraY) {
-      lastCameraX = gameRef.mapCamera.x;
-      lastCameraY = gameRef.mapCamera.y;
+    if (lastCameraX != gameRef.mapCamera.position.x ||
+        gameRef.mapCamera.position.y != lastCameraY) {
+      lastCameraX = gameRef.mapCamera.position.x;
+      lastCameraY = gameRef.mapCamera.position.y;
       tilesToRender = map.where((i) => i.isVisible(gameRef));
       tilesCollisionsRendered = tilesToRender.where((i) => i.collision);
     }
