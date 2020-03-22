@@ -14,24 +14,60 @@ export 'package:bonfire/enemy/extensions.dart';
 
 /// It is used to represent your enemies.
 class Enemy extends AnimatedObject with ObjectCollision {
+  /// Animation that was used when enemy stay stopped on the right.
   final FlameAnimation.Animation animationIdleRight;
+
+  /// Animation that was used when enemy stay stopped on the left.
   final FlameAnimation.Animation animationIdleLeft;
+
+  /// Animation that was used when enemy stay stopped on the top.
   final FlameAnimation.Animation animationIdleTop;
+
+  /// Animation that was used when enemy stay stopped on the bottom.
   final FlameAnimation.Animation animationIdleBottom;
+
+  /// Animation used when the enemy walks to the top.
   final FlameAnimation.Animation animationRunTop;
+
+  /// Animation used when the enemy walks to the right.
   final FlameAnimation.Animation animationRunRight;
+
+  /// Animation used when the enemy walks to the left.
   final FlameAnimation.Animation animationRunLeft;
+
+  /// Animation used when the enemy walks to the bottom.
   final FlameAnimation.Animation animationRunBottom;
+
+  /// Variable that represents the speed of the enemy.
   final double speed;
+
+  /// Height of the Enemy.
   final double height;
+
+  /// Width of the Enemy.
   final double width;
+
+  /// World position that this enemy must position yourself.
   final Position initPosition;
+
+  /// Whether to draw the default life bar.
   final bool drawDefaultLife;
+
+  /// Life of the Enemy.
   double life;
+
+  /// Max life of the Enemy.
   double maxLife;
+
   bool _isDead = false;
+
+  /// Last position the enemy was in.
   Direction lastDirection;
+
+  /// Last horizontal position the enemy was in.
   Direction lastDirectionHorizontal;
+
+  /// Map available to store times that can be used to control the frequency of any action.
   Map<String, Timer> timers = Map();
 
   Enemy({
@@ -268,5 +304,19 @@ class Enemy extends AnimatedObject with ObjectCollision {
     );
     this.animation = fastAnimation.animation;
     gameRef.add(fastAnimation);
+  }
+
+  bool checkPassedInterval(String name, int intervalInMilli) {
+    if (this.timers[name] == null) {
+      this.timers[name] = Timer(
+        Duration(milliseconds: intervalInMilli),
+        () {
+          this.timers[name] = null;
+        },
+      );
+      return true;
+    } else {
+      return false;
+    }
   }
 }

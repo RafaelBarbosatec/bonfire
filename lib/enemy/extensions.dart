@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/enemy/enemy.dart';
@@ -111,16 +110,8 @@ extension EnemyExtensions on Enemy {
     FlameAnimation.Animation attackEffectLeftAnim,
     FlameAnimation.Animation attackEffectTopAnim,
   }) {
-    if (this.timers['attackMelee'] == null) {
-      this.timers['attackMelee'] = Timer(
-        Duration(milliseconds: interval),
-        () {
-          this.timers['attackMelee'] = null;
-        },
-      );
-    } else {
-      return;
-    }
+    if (!this.checkPassedInterval('attackMelee', interval)) return;
+
     Player player = gameRef.player;
 
     if (player.isDead || !isVisibleInMap() || isDead) return;
@@ -204,16 +195,7 @@ extension EnemyExtensions on Enemy {
     Direction direction,
     int interval = 1000,
   }) {
-    if (this.timers['attackRange'] == null) {
-      this.timers['attackRange'] = Timer(
-        Duration(milliseconds: interval),
-        () {
-          this.timers['attackRange'] = null;
-        },
-      );
-    } else {
-      return;
-    }
+    if (!this.checkPassedInterval('attackRange', interval)) return;
 
     Player player = this.gameRef.player;
 

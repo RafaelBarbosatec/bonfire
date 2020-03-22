@@ -63,7 +63,7 @@ class FlyingAttackObject extends AnimatedObject {
       remove();
     }
 
-    if (_verifyCollision()) return;
+    _verifyCollision();
 
     super.update(dt);
   }
@@ -75,7 +75,7 @@ class FlyingAttackObject extends AnimatedObject {
     }
   }
 
-  bool _verifyCollision() {
+  void _verifyCollision() {
     bool destroy = false;
 
     Rect rectCollision = Rect.fromLTWH(
@@ -110,7 +110,7 @@ class FlyingAttackObject extends AnimatedObject {
     }
 
     if (damageInEnemy) {
-      gameRef.enemies.where((i) => i.isVisibleInMap()).forEach((enemy) {
+      gameRef.visibleEnemies().forEach((enemy) {
         if (enemy.positionInWorld.overlaps(positionInWorld)) {
           enemy.receiveDamage(damage);
           destroy = true;
@@ -165,8 +165,6 @@ class FlyingAttackObject extends AnimatedObject {
       }
       remove();
     }
-
-    return destroy;
   }
 
   _transformPositionInWord(Rect position) => Rect.fromLTWH(

@@ -57,7 +57,7 @@ extension PlayerExtensions on Player {
 
     gameRef.add(AnimatedObjectOnce(animation: anim, position: positionAttack));
 
-    gameRef.enemies.where((i) => i.isVisibleInMap()).forEach((enemy) {
+    gameRef.visibleEnemies().forEach((enemy) {
       if (enemy.positionInWorld.overlaps(positionAttack)) {
         enemy.receiveDamage(damage);
         if (!this.isCollision(
