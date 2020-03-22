@@ -31,12 +31,14 @@ class BonfireWidget extends StatefulWidget {
   _BonfireWidgetState createState() => _BonfireWidgetState();
 }
 
-class _BonfireWidgetState extends State<BonfireWidget> {
+class _BonfireWidgetState extends State<BonfireWidget>
+    with TickerProviderStateMixin {
   RPGGame _game;
   @override
   void initState() {
     _game = RPGGame(
       context: context,
+      vsync: this,
       joystickController: widget.joystick,
       player: widget.player,
       interface: widget.interface,

@@ -5,12 +5,14 @@ import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_interface.dart';
+import 'package:bonfire/util/value_enerator.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flutter/cupertino.dart';
 
 class RPGGame extends BaseGame with TapDetector {
   final BuildContext context;
+  final TickerProvider vsync;
   final Player player;
   final GameInterface interface;
   final MapGame map;
@@ -22,6 +24,7 @@ class RPGGame extends BaseGame with TapDetector {
 
   RPGGame({
     @required this.context,
+    @required this.vsync,
     @required this.player,
     @required this.map,
     @required this.joystickController,
@@ -122,5 +125,18 @@ class RPGGame extends BaseGame with TapDetector {
     return decorations
         .where((decoration) => decoration.isVisibleInMap())
         .toList();
+  }
+
+  ValueGenerator getValueGenerator(
+    Duration duration, {
+    double begin = 0.0,
+    double end = 1.0,
+  }) {
+    return ValueGenerator(
+      vsync,
+      duration,
+      end: end,
+      begin: begin,
+    );
   }
 }

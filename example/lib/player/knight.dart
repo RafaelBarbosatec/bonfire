@@ -55,6 +55,7 @@ class Knight extends Player {
     if (action == 1) {
       actionAttackRange();
     }
+
     super.joystickAction(action);
   }
 
