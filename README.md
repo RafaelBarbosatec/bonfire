@@ -113,7 +113,6 @@ Goblin() : super(
           height: 25,
           speed: 1.5,
           life: 100,
-          drawDefaultLife:true, // desenhará acima do enimigo uma barra de vida. Caso queira desenhar sua própria sobescrevendo o 'render', marque aqui como false.
         );
 ```   
 
@@ -216,6 +215,16 @@ void seePlayer(
     
     // Caso deseje adicionar vida.
     void addLife(double life)
+
+    // Desenha barra padrão de vida. Deve ser utilizado sobescrevendo o método 'render'.
+    void drawDefaultLifeBar(
+      Canvas canvas,
+      {
+        bool drawInBottom = false,
+        double padding = 5,
+        double strokeWidth = 2,
+      }
+    )
     
 ```
 

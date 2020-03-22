@@ -420,4 +420,46 @@ extension EnemyExtensions on Enemy {
       ),
     );
   }
+
+  void drawDefaultLifeBar(
+    Canvas canvas, {
+    bool drawInBottom = false,
+    double padding = 5,
+    double strokeWidth = 2,
+  }) {
+    double yPosition = position.top - padding;
+
+    if (drawInBottom) {
+      yPosition = position.bottom + padding;
+    }
+
+    canvas.drawLine(
+        Offset(position.left, yPosition),
+        Offset(position.left + position.width, yPosition),
+        Paint()
+          ..color = Colors.black
+          ..strokeWidth = strokeWidth
+          ..style = PaintingStyle.fill);
+
+    double currentBarLife = (life * position.width) / maxLife;
+
+    canvas.drawLine(
+        Offset(position.left, yPosition),
+        Offset(position.left + currentBarLife, yPosition),
+        Paint()
+          ..color = _getColorLife(currentBarLife)
+          ..strokeWidth = strokeWidth
+          ..style = PaintingStyle.fill);
+  }
+
+  Color _getColorLife(double currentBarLife) {
+    if (currentBarLife > width - (width / 3)) {
+      return Colors.green;
+    }
+    if (currentBarLife > (width / 3)) {
+      return Colors.yellow;
+    } else {
+      return Colors.red;
+    }
+  }
 }

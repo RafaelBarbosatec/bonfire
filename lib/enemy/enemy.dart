@@ -50,9 +50,6 @@ class Enemy extends AnimatedObject with ObjectCollision {
   /// World position that this enemy must position yourself.
   final Position initPosition;
 
-  /// Whether to draw the default life bar.
-  final bool drawDefaultLife;
-
   /// Life of the Enemy.
   double life;
 
@@ -85,7 +82,6 @@ class Enemy extends AnimatedObject with ObjectCollision {
     Direction initDirection = Direction.right,
     this.speed = 3,
     this.life = 10,
-    this.drawDefaultLife = true,
   }) {
     lastDirection = initDirection;
     maxLife = life;
@@ -109,9 +105,6 @@ class Enemy extends AnimatedObject with ObjectCollision {
   @override
   void render(Canvas canvas) {
     if (isVisibleInMap()) {
-      if (drawDefaultLife) {
-        _drawLife(canvas);
-      }
       super.render(canvas);
     }
   }
@@ -119,37 +112,6 @@ class Enemy extends AnimatedObject with ObjectCollision {
   @override
   void update(double dt) {
     super.update(dt);
-  }
-
-  void _drawLife(Canvas canvas) {
-    canvas.drawLine(
-        Offset(position.left, position.top - 4),
-        Offset(position.left + width, position.top - 4),
-        Paint()
-          ..color = Colors.black
-          ..strokeWidth = 2
-          ..style = PaintingStyle.fill);
-
-    double currentBarLife = (life * width) / maxLife;
-
-    canvas.drawLine(
-        Offset(position.left, position.top - 4),
-        Offset(position.left + currentBarLife, position.top - 4),
-        Paint()
-          ..color = _getColorLife(currentBarLife)
-          ..strokeWidth = 2
-          ..style = PaintingStyle.fill);
-  }
-
-  Color _getColorLife(double currentBarLife) {
-    if (currentBarLife > width - (width / 3)) {
-      return Colors.green;
-    }
-    if (currentBarLife > (width / 3)) {
-      return Colors.yellow;
-    } else {
-      return Colors.red;
-    }
   }
 
   void translate(double translateX, double translateY) {

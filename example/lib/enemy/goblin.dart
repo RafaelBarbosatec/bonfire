@@ -72,6 +72,12 @@ class Goblin extends Enemy {
   }
 
   @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    this.drawDefaultLifeBar(canvas);
+  }
+
+  @override
   void die() {
     gameRef.add(
       AnimatedObjectOnce(
