@@ -92,7 +92,7 @@ GameDecoration(
 
 ou poderá criar sua própria classe, basta extender de ```GameDecoration``` e adicionar comportamentos que desejar utilizando o ```update``` e/ou ```render```, como feito nesse  [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/decoration/chest.dart) (um baú que ao player se aproximar, se remove do game e faz "brotar" duas poções de vida que também são ```GameDecoration```).
 
-Em todos os demais, você tem acesso ao ```BuildContext``` do Widget que renderiza o game, então poderá exibir dialogs, overlays, entre outros componentes do Flutter para exibir algo na tela.
+Neste componente como em todos os demais, você tem acesso ao ```BuildContext``` do Widget que renderiza o game, então poderá exibir dialogs, overlays, entre outros componentes do Flutter para exibir algo na tela.
 
 ### Enemy
 É utilizado para representar seus inimigos. Nesse componente existem ações e movimentos prontos para serem utilizados e configurados se quiser. Mas, caso deseje algo diferente terá a total liberdade de customizar suas ações e movimentos.
