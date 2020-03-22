@@ -16,25 +16,56 @@ class Player extends AnimatedObject
     implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
+  /// Width of the Player.
   final double width;
+
+  /// Height of the Player.
   final double height;
+
+  /// World position that this Player must position yourself.
   final Position initPosition;
+
+  /// Start direction.
   final Direction initDirection;
+
+  /// Animation that was used when player stay stopped on the left.
   final FlameAnimation.Animation animIdleLeft;
+
+  /// Animation that was used when player stay stopped on the right.
   final FlameAnimation.Animation animIdleRight;
+
+  /// Animation that was used when player stay stopped on the top.
   final FlameAnimation.Animation animIdleTop;
+
+  /// Animation that was used when player stay stopped on the bottom.
   final FlameAnimation.Animation animIdleBottom;
+
+  /// Animation used when the player walks to the top.
   final FlameAnimation.Animation animRunTop;
+
+  /// Animation used when the player walks to the right.
   final FlameAnimation.Animation animRunRight;
+
+  /// Animation used when the player walks to the bottom.
   final FlameAnimation.Animation animRunBottom;
+
+  /// Animation used when the player walks to the left.
   final FlameAnimation.Animation animRunLeft;
+
   double speed;
   double life;
   double maxLife;
+
+  /// Variable that represents the current directional status of the joystick.
   JoystickMoveDirectional statusMoveDirectional;
+
   Direction lastDirection;
+
   Direction _lastDirectionHorizontal = Direction.right;
+
   bool _isDead = false;
+
+  /// Variable that represents the last action pressed in joystick.
   int lastJoystickAction;
 
   Player({
@@ -56,12 +87,10 @@ class Player extends AnimatedObject
     lastDirection = initDirection;
     if (initDirection == Direction.left || initDirection == Direction.right) {
       _lastDirectionHorizontal = initDirection;
+      statusMoveDirectional = initDirection == Direction.left
+          ? JoystickMoveDirectional.MOVE_LEFT
+          : JoystickMoveDirectional.MOVE_RIGHT;
     }
-
-    if (initDirection == Direction.left)
-      statusMoveDirectional = JoystickMoveDirectional.MOVE_LEFT;
-    if (initDirection == Direction.right)
-      statusMoveDirectional = JoystickMoveDirectional.MOVE_RIGHT;
 
     position = Rect.fromLTWH(
       initPosition.x,
