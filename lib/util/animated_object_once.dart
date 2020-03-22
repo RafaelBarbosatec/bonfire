@@ -36,13 +36,6 @@ class AnimatedObjectOnce extends AnimatedObject with HasGameRef<RPGGame> {
         remove();
       }
     }
-
-    position = Rect.fromLTWH(
-      positionInWorld.left + gameRef.mapCamera.x,
-      positionInWorld.top + gameRef.mapCamera.y,
-      positionInWorld.width,
-      positionInWorld.height,
-    );
   }
 
   @override

@@ -1,20 +1,19 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/animated_object.dart';
 import 'package:bonfire/util/animated_object_once.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/object_collision.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 export 'package:bonfire/enemy/extensions.dart';
 
-class Enemy extends AnimatedObject with ObjectCollision, HasGameRef<RPGGame> {
+/// It is used to represent your enemies.
+class Enemy extends AnimatedObject with ObjectCollision {
   final FlameAnimation.Animation animationIdleRight;
   final FlameAnimation.Animation animationIdleLeft;
   final FlameAnimation.Animation animationIdleTop;
@@ -54,13 +53,12 @@ class Enemy extends AnimatedObject with ObjectCollision, HasGameRef<RPGGame> {
   }) {
     lastDirection = initDirection;
     maxLife = life;
-    this.position = Rect.fromLTWH(
+    this.position = this.positionInWorld = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
       width,
       height,
     );
-    positionInWorld = this.position;
     widthCollision = width;
     heightCollision = height / 3;
 
@@ -84,7 +82,6 @@ class Enemy extends AnimatedObject with ObjectCollision, HasGameRef<RPGGame> {
 
   @override
   void update(double dt) {
-    position = _currentToRealPosition(positionInWorld);
     super.update(dt);
   }
 
@@ -117,27 +114,6 @@ class Enemy extends AnimatedObject with ObjectCollision, HasGameRef<RPGGame> {
     } else {
       return Colors.red;
     }
-  }
-
-  bool isVisibleInMap() {
-    if (gameRef.size != null) {
-      return position.top < (gameRef.size.height + height) &&
-          position.top > (height * -1) &&
-          position.left > (width * -1) &&
-          position.left < (gameRef.size.width + width) &&
-          !destroy();
-    } else {
-      return false;
-    }
-  }
-
-  Rect _currentToRealPosition(Rect currentPosition) {
-    return Rect.fromLTWH(
-      positionInWorld.left + gameRef.mapCamera.x,
-      positionInWorld.top + gameRef.mapCamera.y,
-      width,
-      height,
-    );
   }
 
   void translate(double translateX, double translateY) {

@@ -1,20 +1,18 @@
 import 'dart:ui';
 
 import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/animated_object.dart';
 import 'package:bonfire/util/animated_object_once.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/object_collision.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 
 export 'package:bonfire/player/extensions.dart';
 
 class Player extends AnimatedObject
-    with HasGameRef<RPGGame>, ObjectCollision
+    with ObjectCollision
     implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 

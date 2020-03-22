@@ -1,23 +1,40 @@
 import 'dart:ui';
 
-import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/animated_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
 export 'package:bonfire/decoration/extensions.dart';
 
-class GameDecoration extends AnimatedObject with HasGameRef<RPGGame> {
+/// This component represents anything you want to add to the scene, it can be
+/// a simple "barrel" halfway to an NPC that you can use to interact with your
+/// player.
+///
+/// You can use ImageSprite or Animation[FlameAnimation.Animation]
+class GameDecoration extends AnimatedObject {
+  /// Height of the Decoration.
   final double height;
+
+  /// Width of the Decoration.
   final double width;
+
+  /// ImageSprite to draw.
   final String spriteImg;
+
+  /// Use to define if this decoration should be drawing on the player.
   final bool frontFromPlayer;
+
+  /// Use to define if this decoration contains collision.
   final bool collision;
+
+  /// Animation[FlameAnimation.Animation] to draw.
   final FlameAnimation.Animation animation;
+
+  /// World position that this decoration must position yourself.
   final Position initPosition;
+
   Sprite _sprite;
 
   GameDecoration({
@@ -31,32 +48,26 @@ class GameDecoration extends AnimatedObject with HasGameRef<RPGGame> {
   }) {
     this.animation = animation;
     if (spriteImg != null && spriteImg.isNotEmpty) _sprite = Sprite(spriteImg);
-    position = Rect.fromLTWH(
+    this.position = this.positionInWorld = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
       width,
       height,
     );
-    positionInWorld = position;
   }
 
   @override
   void update(double dt) {
-    position = Rect.fromLTWH(
-      positionInWorld.left + gameRef.mapCamera.x,
-      positionInWorld.top + gameRef.mapCamera.y,
-      width,
-      height,
-    );
     super.update(dt);
   }
 
   @override
   void render(Canvas canvas) {
     if (isVisibleInMap()) {
-      super.render(canvas);
       if (_sprite != null && _sprite.loaded())
         _sprite.renderRect(canvas, position);
+
+      super.render(canvas);
     }
   }
 
@@ -66,18 +77,6 @@ class GameDecoration extends AnimatedObject with HasGameRef<RPGGame> {
       return 1;
     } else {
       return super.priority();
-    }
-  }
-
-  bool isVisibleInMap() {
-    if (gameRef.size != null) {
-      return position.top < (gameRef.size.height + height) &&
-          position.top > (height * -1) &&
-          position.left > (width * -1) &&
-          position.left < (gameRef.size.width + width) &&
-          !destroy();
-    } else {
-      return false;
     }
   }
 }

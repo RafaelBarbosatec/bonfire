@@ -2,10 +2,9 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/animated_object.dart';
-import 'package:bonfire/util/animated_object_once.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
-class AnimatedFollowerObject extends AnimatedObjectOnce {
+class AnimatedFollowerObject extends AnimatedObject {
   final AnimatedObject target;
   final Position positionFromTarget;
   final double height;
@@ -17,8 +16,9 @@ class AnimatedFollowerObject extends AnimatedObjectOnce {
       this.positionFromTarget,
       this.height = 16,
       this.width = 16,
-      this.loopAnimation = false})
-      : super(animation: animation);
+      this.loopAnimation = false}) {
+    this.animation = animation;
+  }
 
   @override
   void update(double dt) {
@@ -30,16 +30,12 @@ class AnimatedFollowerObject extends AnimatedObjectOnce {
       height,
     ).translate(newPosition.x, newPosition.y);
 
-    if (loopAnimation) {
-      if (this.animation != null) this.animation.update(dt);
-      this.position = Rect.fromLTWH(
-        this.positionInWorld.left + gameRef.mapCamera.x,
-        this.positionInWorld.top + gameRef.mapCamera.y,
-        this.positionInWorld.width,
-        this.positionInWorld.height,
-      );
-    } else {
-      super.update(dt);
+    super.update(dt);
+
+    if (!loopAnimation) {
+      if (animation.isLastFrame) {
+        remove();
+      }
     }
   }
 }

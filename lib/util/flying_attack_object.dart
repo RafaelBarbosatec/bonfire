@@ -1,14 +1,12 @@
 import 'package:bonfire/decoration/decoration.dart';
-import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/animated_object.dart';
 import 'package:bonfire/util/animated_object_once.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
 
-class FlyingAttackObject extends AnimatedObject with HasGameRef<RPGGame> {
+class FlyingAttackObject extends AnimatedObject {
   final FlameAnimation.Animation flyAnimation;
   final FlameAnimation.Animation destroyAnimation;
   final Direction direction;
@@ -33,10 +31,12 @@ class FlyingAttackObject extends AnimatedObject with HasGameRef<RPGGame> {
     this.damageInEnemy = true,
   }) {
     animation = flyAnimation;
-    position =
-        position = Rect.fromLTWH(initPosition.x, initPosition.y, width, height);
-    positionInWorld = position;
-    positionInWorld = position;
+    position = positionInWorld = Rect.fromLTWH(
+      initPosition.x,
+      initPosition.y,
+      width,
+      height,
+    );
   }
 
   @override
@@ -56,13 +56,6 @@ class FlyingAttackObject extends AnimatedObject with HasGameRef<RPGGame> {
         break;
     }
 
-    position = Rect.fromLTWH(
-      positionInWorld.left + gameRef.mapCamera.x,
-      positionInWorld.top + gameRef.mapCamera.y,
-      width,
-      height,
-    );
-
     if (position.right > gameRef.size.width * 1.5 ||
         position.left < gameRef.size.width * -1.5 ||
         position.bottom > gameRef.size.height * 1.5 ||
@@ -77,10 +70,7 @@ class FlyingAttackObject extends AnimatedObject with HasGameRef<RPGGame> {
 
   @override
   void render(Canvas canvas) {
-    if (position.top < (gameRef.size.height + height) &&
-        position.top > (height * -1) &&
-        position.left > (width * -1) &&
-        position.left < (gameRef.size.width + width)) {
+    if (this.isVisibleInMap()) {
       super.render(canvas);
     }
   }
