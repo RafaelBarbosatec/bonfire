@@ -1,3 +1,8 @@
+## [0.0.4] - 22/03/2020
+
+* Organization improvements.
+* Update readme.
+
 ## [0.0.3] - 20/03/2020
 
 * Add AnimatedFollowerObject and 'seeEnemy' in player.
