@@ -33,6 +33,9 @@ class MapWorld extends MapGame {
           return max;
       });
       maxLeft = (maxLeft * map.first.size) - _sizeScreen.width;
+
+      gameRef.mapCamera.maxLeft = maxLeft;
+      gameRef.mapCamera.maxTop = maxTop;
     }
   }
 
