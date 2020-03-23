@@ -426,7 +426,13 @@ this.gameRef.addEnemy(ENEMY);
 this.gameRef.addDecoration(DECORATION);
 ```
 
+### Camera
+É possível movimentar a cámera de forma animada para uma determinada posição do mapa e depois voltar para o personagem. Lembrando que ao movimentar a câmera para uma determinada posição o player fica bloqueado de ações e movimentos e só é desbloqueado quando a camera volta a focar nele.
 
+```dart
+ gameRef.mapCamera.moveToPosition(Position(X,Y));
+ gameRef.mapCamera.moveToPlayer();
+```
 
 ## Próximos passos
 - [ ] Documentação detalhada dos componentes.
