@@ -73,7 +73,7 @@ Tile(
 )
 ```
 
-### Derocations
+### Decorations
 Representa qualquer coisa que queira adicionar ao cenário, ele pode ser um simples "barril" no meio do caminho a um NPC que você poderá utilizar para interagir com o seu player.
 
 Você poderá criar seu decoration utilizando:
@@ -85,14 +85,14 @@ GameDecoration(
   width: 32,
   height: 32,
   collision: true, // se terá colisão
-//  animation: false, // caso você queira adicionar algo animado vc pode passar sua animação aqui e não passar o 'spriteImg'
+//  animation: false, // caso você queira adicionar algo animado você pode passar sua animação aqui e não passar o 'spriteImg'
 //  frontFromPlayer: false // caso queira forçar que esse elemento fique por cima do player ao passar por ele
 )
 ```   
 
-ou poderá criar sua própria classe, extender de ```GameDecoration``` e adicionar comportamentos que desejar utilizando o ```update``` e/ou ```render```, como feito nesse  [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/decoration/chest.dart) (um baú que ao player se aproximar se remove do game e faz "brotar" duas poções de vida que tabém são ```GameDecoration```).
+ou poderá criar sua própria classe, basta extender de ```GameDecoration``` e adicionar comportamentos que desejar utilizando o ```update``` e/ou ```render```, como feito nesse  [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/decoration/chest.dart) (um baú que ao player se aproximar, se remove do game e faz "brotar" duas poções de vida que também são ```GameDecoration```).
 
-Nesse componente como em todos os demais, você tem acesso ao ```BuildContext``` do Widget que renderiza o game, então poderá exibir dialogs, overlays, entre outros componentes do Flutter para exibir algo na tela.
+Neste componente como em todos os demais, você tem acesso ao ```BuildContext``` do Widget que renderiza o game, então poderá exibir dialogs, overlays, entre outros componentes do Flutter para exibir algo na tela.
 
 ### Enemy
 É utilizado para representar seus inimigos. Nesse componente existem ações e movimentos prontos para serem utilizados e configurados se quiser. Mas, caso deseje algo diferente terá a total liberdade de customizar suas ações e movimentos.
@@ -118,7 +118,7 @@ Goblin() : super(
         );
 ```   
 
-Depois disso já terá seu inimigo mas ele não fará nada além de ficar parado. Para adicionar movimentos a ele, você precisará sobescrever o método ```Update``` e implementar alí o seu comportamento.
+Depois disso já terá seu inimigo, mas ele não fará nada além de ficar parado. Para adicionar movimentos a ele, você precisará sobescrever o método ```Update``` e implementar alí o seu comportamento.
 Já existe algumas ações prontas que você poderar utilzar como visto nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/enemy/goblin.dart), são eles:
 
 
@@ -130,16 +130,16 @@ void moveTop({double moveSpeed})
 void moveLeft({double moveSpeed})
 void moveRight({double moveSpeed})
     
-// De acordo com o raio passado por parámetro o inimigo irá procurar e observar o player.
-void seePlayer(
-     {
-      Function(Player) observed,
-      Function() notObserved,
-      int visionCells = 3,
-     }
+  // De acordo com o raio passado por parâmetro, o inimigo irá procurar e observar o player.
+  void seePlayer(
+        {
+         Function(Player) observed,
+         Function() notObserved,
+         int visionCells = 3,
+        }
   )
   
-  // De acordo com o raio configurado ele irá procurar e se observar o player irá se movimentar em direção. Estando do lado dele será notificado pela função 'closePlayer'.
+  // De acordo com o raio configurado, o inimigo irá procurar o player, caso o encontre, irá se movimentar em direção ao player e ao chegar próximo, o método 'closePlayer' será disparado.
   void seeAndMoveToPlayer(
      {
       Function(Player) closePlayer,
@@ -147,7 +147,7 @@ void seePlayer(
      }
   )
  
-  // Executa um ataque físico ao player infligindo o dano configurado com a frequencia configurada. Poderá adicionar animações para represetar esse ataque.
+  // Executa um ataque físico ao player infligindo o dano configurado com a frequência configurada. Poderá adicionar animações para representar esse ataque.
   void simpleAttackMelee(
      {
        @required double damage,
@@ -161,7 +161,7 @@ void seePlayer(
      }
   )
   
-  // Executa um ataque a distância. Será adicionado ao game um 'FlyingAttackObject' que é um componente que se moverá pelo mapa na direção configurada e infligirar dano a aquele que atingir ou se destruir ao se bater em barreiras.
+  // Executa um ataque a distância. Será adicionado ao game um 'FlyingAttackObject' que é um componente que se moverá pelo mapa na direção configurada e causará dano a aquele que atingir ou se destruir ao se bater em barreiras.
   void simpleAttackRange(
      {
        @required FlameAnimation.Animation animationRight,
@@ -178,7 +178,7 @@ void seePlayer(
      }
   )
   
-  // De acordo com o raio configurado ele irá procurar e se observar o player ele irá se posicionar para executar um ataque a distância. Ao chegar nessa posição ele notificará pela função 'positioned'.
+  // De acordo com o raio configurado o inimigo irá procurar o player, caso o encontre, irá se posicionar para executar um ataque a distância. Ao chegar nessa posição ele notificará pela função 'positioned'.
   void seeAndMoveToAttackRange(
       {
         Function(Player) positioned,
@@ -206,7 +206,7 @@ void seePlayer(
        }
     )
     
-    // Caso precise saber em qual direção o player estar de você. poderá utilizar essa função.
+    // Caso precise saber em qual direção o player em relação a você.
     Direction directionThatPlayerIs()
     
     // Caso deseje adicionar uma animação curta (animação sem loop, ele excuta somente uma vez).
@@ -254,18 +254,18 @@ Knight() : super(
         );
 ```   
 
-No player você poderá escultar as as ações que foram configuradas em seu Joystick(essa configuração você verá com mais detalhes a frente). Poderá escultar essas ações sobescrevendo o método:
+No player você poderá escultar as ações que foram configuradas em seu Joystick(essa configuração você verá com mais detalhes a frente) sobescrevendo o método:
 
 ```dart
   @override
   void joystickAction(int action) {}
 ```
 
-E ao perceber o toque nessas ações do joystick você poderá executar ações. Assim como no inimigo aqui também temos algumas ações prontas para serem utilizadas:
+Ao perceber o toque nessas ações do joystick, você poderá executar outras ações. Assim como no inimigo, aqui também temos algumas ações prontas para serem utilizadas:
 
 ```dart
   
-  // Executa um ataque físico ao player infligindo o dano configurado com a frequência configurada. Poderá adicionar animações para represetar esse ataque.
+  // Executa um ataque físico ao player infligindo o dano configurado com a frequência configurada. Poderá adicionar animações para representar esse ataque.
   void simpleAttackMelee(
      {
        @required FlameAnimation.Animation attackEffectRightAnim,
@@ -278,7 +278,7 @@ E ao perceber o toque nessas ações do joystick você poderá executar ações.
      }
   )
   
-  // Executa um ataque a distância. Será adicionado ao game um 'FlyingAttackObject' que é um componente que se moverá pelo mapa na direção configurada e infligirar dano a aquele que atingir ou se destruir ao se bater em barreiras.
+  // Executa um ataque a distância. Será adicionado ao game um 'FlyingAttackObject' que é um componente que se moverá pelo mapa na direção configurada e causará dano a aquele que atingir ou se destruir ao se bater em barreiras.
   void simpleAttackRange(
      {
        @required FlameAnimation.Animation animationRight,
@@ -345,7 +345,7 @@ O componente default que existe para ser utilizado é configurável da seguinte 
             size: 80,
             marginBottom: 50,
             marginRight: 50,
-            align = JoystickActionAlign.BOTTOM // eles sempre estarão alinhado a direita da tela, ams poderá definir se queira que se posicione em cima ou em baixo (JoystickActionAlign.TOP/JoystickActionAlign.BOTTOM).
+            align = JoystickActionAlign.BOTTOM // eles sempre estarão alinhado a direita da tela, com possibilidades de definir para cima ou em baixo (JoystickActionAlign.TOP/JoystickActionAlign.BOTTOM).
           ),
           JoystickAction(
             actionId: 1,
@@ -365,7 +365,7 @@ veja o [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example
 ### OBS:
 Esses elementos do game utilizam o mixin ´HasGameRef´, então você terá acesso a todos esses componentes (Map,Decoration,Enemy,Player,...) internamente, que serão úteis para a criação de qualquer tipo de interação ou adição de novos componentes programaticamente.
 
-Se for necessário obter a posição de um componente para ser utilizado como base para adicionar outros componentes no mapa ou coisa do tipo, sempre utilize o ```positionInWorld``` ela é a posição atual do componente no mapa. A variavel ```position``` refere-se a posição na tela para ser rendereziado.
+Se for necessário obter a posição de um componente para ser utilizado como base para adicionar outros componentes no mapa ou coisa do tipo, sempre utilize o ```positionInWorld``` ela é a posição atual do componente no mapa. A variável ```position``` refere-se a posição na tela para ser rendereziado.
 
 ## Componentes úteis
 
