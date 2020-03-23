@@ -12,32 +12,6 @@ class MapWorld extends MapGame {
 
   MapWorld(Iterable<Tile> map) : super(map);
 
-  void verifyMaxTopAndLeft() {
-    if (gameRef.size != null && _sizeScreen != gameRef.size) {
-      double maxTop = 0;
-      double maxLeft = 0;
-      _sizeScreen = gameRef.size;
-      maxTop = map.fold(0, (max, tile) {
-        if (tile.initPosition.y > max)
-          return tile.initPosition.y;
-        else
-          return max;
-      });
-      maxTop = (maxTop * map.first.size) - _sizeScreen.height;
-
-      maxLeft = map.fold(0, (max, tile) {
-        if (tile.initPosition.x > max)
-          return tile.initPosition.x;
-        else
-          return max;
-      });
-      maxLeft = (maxLeft * map.first.size) - _sizeScreen.width;
-
-      gameRef.mapCamera.maxLeft = maxLeft;
-      gameRef.mapCamera.maxTop = maxTop;
-    }
-  }
-
   @override
   void render(Canvas canvas) {
     tilesToRender.forEach((tile) => tile.render(canvas, gameRef.camera));
@@ -63,5 +37,31 @@ class MapWorld extends MapGame {
   @override
   List<Tile> getCollisionsRendered() {
     return tilesCollisionsRendered.toList();
+  }
+
+  void verifyMaxTopAndLeft() {
+    if (gameRef.size != null && _sizeScreen != gameRef.size) {
+      double maxTop = 0;
+      double maxLeft = 0;
+      _sizeScreen = gameRef.size;
+      maxTop = map.fold(0, (max, tile) {
+        if (tile.initPosition.y > max)
+          return tile.initPosition.y;
+        else
+          return max;
+      });
+      maxTop = (maxTop * map.first.size) - _sizeScreen.height;
+
+      maxLeft = map.fold(0, (max, tile) {
+        if (tile.initPosition.x > max)
+          return tile.initPosition.x;
+        else
+          return max;
+      });
+      maxLeft = (maxLeft * map.first.size) - _sizeScreen.width;
+
+      gameRef.mapCamera.maxLeft = maxLeft;
+      gameRef.mapCamera.maxTop = maxTop;
+    }
   }
 }

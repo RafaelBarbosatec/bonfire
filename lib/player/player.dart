@@ -1,17 +1,17 @@
 import 'dart:ui';
 
 import 'package:bonfire/joystick/joystick_controller.dart';
+import 'package:bonfire/util/animated_object.dart';
 import 'package:bonfire/util/animated_object_once.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/object_collision.dart';
-import 'package:bonfire/util/player_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 
 export 'package:bonfire/player/extensions.dart';
 
-class Player extends PlayerObject
+class Player extends AnimatedObject
     with ObjectCollision
     implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
@@ -67,6 +67,8 @@ class Player extends PlayerObject
 
   /// Variable that represents the last action pressed in joystick.
   int lastJoystickAction;
+
+  bool locked = false;
 
   Player({
     @required this.animIdleLeft,
@@ -380,11 +382,25 @@ class Player extends PlayerObject
     }
   }
 
+  void lockPositionInWorld() {
+    super.positionInWorld = positionInWorld;
+    locked = true;
+  }
+
+  void unlockPositionInWorld() {
+    locked = false;
+  }
+
   @override
-  Rect get positionInWorld => Rect.fromLTWH(
-        position.left - gameRef.mapCamera.position.x,
-        position.top - gameRef.mapCamera.position.y,
-        position.width,
-        position.height,
-      );
+  Rect get positionInWorld {
+    if (locked) {
+      return super.positionInWorld;
+    }
+    return Rect.fromLTWH(
+      position.left - gameRef.mapCamera.position.x,
+      position.top - gameRef.mapCamera.position.y,
+      position.width,
+      position.height,
+    );
+  }
 }
