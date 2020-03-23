@@ -68,8 +68,6 @@ class Player extends AnimatedObject
   /// Variable that represents the last action pressed in joystick.
   int lastJoystickAction;
 
-  bool locked = false;
-
   Player({
     @required this.animIdleLeft,
     @required this.animIdleRight,
@@ -94,7 +92,7 @@ class Player extends AnimatedObject
           : JoystickMoveDirectional.MOVE_RIGHT;
     }
 
-    position = Rect.fromLTWH(
+    position = positionInWorld = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
       width,
@@ -125,7 +123,7 @@ class Player extends AnimatedObject
 
   @override
   void joystickChangeDirectional(JoystickMoveDirectional directional) {
-    if (_isDead || locked) return;
+    if (_isDead) return;
     switch (directional) {
       case JoystickMoveDirectional.MOVE_TOP:
         _moveTop();
@@ -164,15 +162,16 @@ class Player extends AnimatedObject
       return;
     }
 
-    Rect displacement = position.translate(0, (speed * -1));
+    Rect displacement = positionInWorld.translate(0, (speed * -1));
+    Rect displacementCollision = position.translate(0, (speed * -1));
 
-    if (isCollision(displacement, gameRef)) {
+    if (isCollision(displacementCollision, gameRef)) {
       return;
     }
 
     if (position.top > gameRef.size.height / 2.9 ||
         gameRef.mapCamera.isMaxTop()) {
-      position = displacement;
+      positionInWorld = displacement;
     } else {
       gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_TOP);
     }
@@ -200,15 +199,16 @@ class Player extends AnimatedObject
       return;
     }
 
-    Rect displacement = position.translate(speed, 0);
+    Rect displacement = positionInWorld.translate(speed, 0);
+    Rect displacementCollision = position.translate(speed, 0);
 
-    if (isCollision(displacement, gameRef)) {
+    if (isCollision(displacementCollision, gameRef)) {
       return;
     }
 
     if (position.left < gameRef.size.width / 1.5 ||
         gameRef.mapCamera.isMaxRight()) {
-      position = displacement;
+      positionInWorld = displacement;
     } else {
       gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_RIGHT);
     }
@@ -231,15 +231,16 @@ class Player extends AnimatedObject
       return;
     }
 
-    Rect displacement = position.translate(0, speed);
+    Rect displacement = positionInWorld.translate(0, speed);
+    Rect displacementCollision = position.translate(0, speed);
 
-    if (isCollision(displacement, gameRef)) {
+    if (isCollision(displacementCollision, gameRef)) {
       return;
     }
 
     if (position.top < gameRef.size.height / 1.9 ||
         gameRef.mapCamera.isMaxBottom()) {
-      position = displacement;
+      positionInWorld = displacement;
     } else {
       gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_BOTTOM);
     }
@@ -267,15 +268,16 @@ class Player extends AnimatedObject
     if (position.left <= 0) {
       return;
     }
-    Rect displacement = position.translate(speed * -1, 0);
+    Rect displacement = positionInWorld.translate(speed * -1, 0);
+    Rect displacementToCollision = position.translate(speed * -1, 0);
 
-    if (isCollision(displacement, gameRef)) {
+    if (isCollision(displacementToCollision, gameRef)) {
       return;
     }
 
     if (position.left > gameRef.size.width / 3 ||
         gameRef.mapCamera.isMaxLeft()) {
-      position = displacement;
+      positionInWorld = displacement;
     } else {
       gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_LEFT);
     }
@@ -380,27 +382,5 @@ class Player extends AnimatedObject
     if (this.life > maxLife) {
       this.life = maxLife;
     }
-  }
-
-  void lockPositionInWorld() {
-    super.positionInWorld = positionInWorld;
-    locked = true;
-  }
-
-  void unlockPositionInWorld() {
-    locked = false;
-  }
-
-  @override
-  Rect get positionInWorld {
-    if (locked) {
-      return super.positionInWorld;
-    }
-    return Rect.fromLTWH(
-      position.left - gameRef.mapCamera.position.x,
-      position.top - gameRef.mapCamera.position.y,
-      position.width,
-      position.height,
-    );
   }
 }

@@ -8,8 +8,6 @@ class Camera with HasGameRef<RPGGame> {
   double maxLeft = 0;
   Position position = Position.empty();
 
-  Rect _positionPlayer;
-
   bool isMaxBottom() {
     return (position.y * -1) >= maxTop;
   }
@@ -85,17 +83,12 @@ class Camera with HasGameRef<RPGGame> {
     }
   }
 
-  void moveToPosition(
+  void moveToPositionAnimated(
     Position position, {
     VoidCallback finish,
     Duration duration,
     Curve curve = Curves.decelerate,
   }) {
-    if (_positionPlayer == null) {
-      _positionPlayer = gameRef.player.positionInWorld;
-      this.gameRef.player.lockPositionInWorld();
-    }
-
     double distanceLeft = gameRef.size.width / 2;
     double distanceTop = gameRef.size.height / 2;
 
@@ -128,17 +121,39 @@ class Camera with HasGameRef<RPGGame> {
       ..start();
   }
 
-  void moveToPlayer({Duration duration, VoidCallback finish}) {
-    if (_positionPlayer != null) {
-      moveToPosition(
-        Position(_positionPlayer.left, _positionPlayer.top),
-        finish: () {
-          gameRef.player.unlockPositionInWorld();
-          _positionPlayer = null;
-          if (finish != null) finish();
-        },
-        duration: duration,
-      );
-    }
+  void moveToPosition(Position position) {
+    double distanceLeft = gameRef.size.width / 2;
+    double distanceTop = gameRef.size.height / 2;
+
+    double positionLeftCamera = position.x - distanceLeft;
+    double positionTopCamera = position.y - distanceTop;
+
+    if (positionLeftCamera > maxLeft) positionLeftCamera = maxLeft;
+
+    positionLeftCamera *= -1;
+    if (positionLeftCamera > 0) positionLeftCamera = 0;
+
+    if (positionTopCamera * -1 > maxTop) positionTopCamera = maxTop;
+    positionTopCamera *= -1;
+    if (positionTopCamera > 0) positionTopCamera = 0;
+
+    this.position.x = positionLeftCamera;
+    this.position.y = positionTopCamera;
+  }
+
+  void moveToPlayerAnimated({Duration duration, VoidCallback finish}) {
+    Rect _positionPlayer = gameRef.player.positionInWorld;
+    moveToPositionAnimated(
+      Position(_positionPlayer.left, _positionPlayer.top),
+      finish: () {
+        if (finish != null) finish();
+      },
+      duration: duration,
+    );
+  }
+
+  void moveToPlayer() {
+    Rect _positionPlayer = gameRef.player.positionInWorld;
+    moveToPosition(Position(_positionPlayer.left, _positionPlayer.top));
   }
 }
