@@ -1,17 +1,17 @@
 import 'dart:ui';
 
 import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/util/animated_object.dart';
 import 'package:bonfire/util/animated_object_once.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/object_collision.dart';
+import 'package:bonfire/util/player_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 
 export 'package:bonfire/player/extensions.dart';
 
-class Player extends AnimatedObject
+class Player extends PlayerObject
     with ObjectCollision
     implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
@@ -123,7 +123,7 @@ class Player extends AnimatedObject
 
   @override
   void joystickChangeDirectional(JoystickMoveDirectional directional) {
-    if (_isDead) return;
+    if (_isDead || locked) return;
     switch (directional) {
       case JoystickMoveDirectional.MOVE_TOP:
         _moveTop();
@@ -168,10 +168,11 @@ class Player extends AnimatedObject
       return;
     }
 
-    if (position.top > gameRef.size.height / 2.9 || gameRef.map.isMaxTop()) {
+    if (position.top > gameRef.size.height / 2.9 ||
+        gameRef.mapCamera.isMaxTop()) {
       position = displacement;
     } else {
-      gameRef.map.moveCamera(speed, JoystickMoveDirectional.MOVE_TOP);
+      gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_TOP);
     }
 
     if (addAnimation &&
@@ -203,10 +204,11 @@ class Player extends AnimatedObject
       return;
     }
 
-    if (position.left < gameRef.size.width / 1.5 || gameRef.map.isMaxRight()) {
+    if (position.left < gameRef.size.width / 1.5 ||
+        gameRef.mapCamera.isMaxRight()) {
       position = displacement;
     } else {
-      gameRef.map.moveCamera(speed, JoystickMoveDirectional.MOVE_RIGHT);
+      gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_RIGHT);
     }
 
     if (addAnimation &&
@@ -233,10 +235,11 @@ class Player extends AnimatedObject
       return;
     }
 
-    if (position.top < gameRef.size.height / 1.9 || gameRef.map.isMaxBottom()) {
+    if (position.top < gameRef.size.height / 1.9 ||
+        gameRef.mapCamera.isMaxBottom()) {
       position = displacement;
     } else {
-      gameRef.map.moveCamera(speed, JoystickMoveDirectional.MOVE_BOTTOM);
+      gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_BOTTOM);
     }
 
     if (addAnimation &&
@@ -268,10 +271,11 @@ class Player extends AnimatedObject
       return;
     }
 
-    if (position.left > gameRef.size.width / 3 || gameRef.map.isMaxLeft()) {
+    if (position.left > gameRef.size.width / 3 ||
+        gameRef.mapCamera.isMaxLeft()) {
       position = displacement;
     } else {
-      gameRef.map.moveCamera(speed, JoystickMoveDirectional.MOVE_LEFT);
+      gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_LEFT);
     }
 
     if (addAnimation &&

@@ -35,6 +35,7 @@ class RPGGame extends BaseGame with TapDetector {
         assert(map != null),
         assert(context != null),
         assert(joystickController != null) {
+    mapCamera.gameRef = this;
     joystickController.joystickListener = player;
 
     add(map);
