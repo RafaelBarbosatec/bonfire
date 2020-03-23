@@ -27,7 +27,7 @@ class AnimatedObject extends Component with HasGameRef<RPGGame> {
 
   @override
   void render(Canvas canvas) {
-    if (animation == null) return;
+    if (animation == null || position == null) return;
     if (animation.loaded()) {
       animation.getSprite().renderRect(canvas, position);
     }

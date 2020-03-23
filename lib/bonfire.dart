@@ -11,6 +11,7 @@ export 'package:bonfire/map/map_world.dart';
 export 'package:bonfire/map/tile.dart';
 export 'package:bonfire/player/player.dart';
 export 'package:bonfire/util/animated_follower_object.dart';
+export 'package:bonfire/util/animated_object.dart';
 export 'package:bonfire/util/animated_object_once.dart';
 export 'package:bonfire/util/direction.dart';
 export 'package:bonfire/util/flying_attack_object.dart';
