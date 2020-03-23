@@ -56,11 +56,6 @@ class Knight extends Player {
       actionAttackRange();
     }
 
-    gameRef.mapCamera.moveToPosition(Position(
-      gameRef.enemies[1].positionInWorld.left,
-      gameRef.enemies[1].positionInWorld.top,
-    ));
-
     super.joystickAction(action);
   }
 

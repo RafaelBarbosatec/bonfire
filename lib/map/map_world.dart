@@ -1,12 +1,9 @@
 import 'dart:ui';
 
-import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/map/tile.dart';
 
 class MapWorld extends MapGame {
-  double maxTop = 0;
-  double maxLeft = 0;
   double lastCameraX = -1;
   double lastCameraY = -1;
   Size _sizeScreen;
@@ -17,6 +14,8 @@ class MapWorld extends MapGame {
 
   void verifyMaxTopAndLeft() {
     if (gameRef.size != null && _sizeScreen != gameRef.size) {
+      double maxTop = 0;
+      double maxLeft = 0;
       _sizeScreen = gameRef.size;
       maxTop = map.fold(0, (max, tile) {
         if (tile.initPosition.y > max)
@@ -36,72 +35,6 @@ class MapWorld extends MapGame {
 
       gameRef.mapCamera.maxLeft = maxLeft;
       gameRef.mapCamera.maxTop = maxTop;
-    }
-  }
-
-  @override
-  bool isMaxBottom() {
-    return (gameRef.mapCamera.position.y * -1) >= maxTop;
-  }
-
-  @override
-  bool isMaxLeft() {
-    return gameRef.mapCamera.position.x == 0;
-  }
-
-  @override
-  bool isMaxRight() {
-    return (gameRef.mapCamera.position.x * -1) >= maxLeft;
-  }
-
-  @override
-  bool isMaxTop() {
-    return gameRef.mapCamera.position.y == 0;
-  }
-
-  @override
-  void moveCamera(double displacement, JoystickMoveDirectional directional) {
-    switch (directional) {
-      case JoystickMoveDirectional.MOVE_TOP:
-        if (gameRef.mapCamera.position.y > 0) {
-          gameRef.mapCamera.position.y = 0;
-        }
-        if (gameRef.mapCamera.position.y < 0) {
-          gameRef.mapCamera.position.y =
-              gameRef.mapCamera.position.y + displacement;
-        }
-        break;
-      case JoystickMoveDirectional.MOVE_RIGHT:
-        if (!isMaxRight()) {
-          gameRef.mapCamera.position.x =
-              gameRef.mapCamera.position.x - displacement;
-        }
-        break;
-      case JoystickMoveDirectional.MOVE_BOTTOM:
-        if (!isMaxBottom()) {
-          gameRef.mapCamera.position.y =
-              gameRef.mapCamera.position.y - displacement;
-        }
-        break;
-      case JoystickMoveDirectional.MOVE_LEFT:
-        if (gameRef.mapCamera.position.x > 0) {
-          gameRef.mapCamera.position.x = 0;
-        }
-        if (!isMaxLeft()) {
-          gameRef.mapCamera.position.x =
-              gameRef.mapCamera.position.x + displacement;
-        }
-        break;
-      case JoystickMoveDirectional.MOVE_TOP_LEFT:
-        break;
-      case JoystickMoveDirectional.MOVE_TOP_RIGHT:
-        break;
-      case JoystickMoveDirectional.MOVE_BOTTOM_RIGHT:
-        break;
-      case JoystickMoveDirectional.MOVE_BOTTOM_LEFT:
-        break;
-      case JoystickMoveDirectional.IDLE:
-        break;
     }
   }
 
