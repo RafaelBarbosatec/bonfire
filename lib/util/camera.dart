@@ -85,8 +85,12 @@ class Camera with HasGameRef<RPGGame> {
     }
   }
 
-  void moveToPosition(Position position,
-      {VoidCallback finish, Duration duration}) {
+  void moveToPosition(
+    Position position, {
+    VoidCallback finish,
+    Duration duration,
+    Curve curve = Curves.decelerate,
+  }) {
     if (_positionPlayer == null) {
       _positionPlayer = gameRef.player.positionInWorld;
       this.gameRef.player.lockPositionInWorld();
@@ -97,8 +101,6 @@ class Camera with HasGameRef<RPGGame> {
 
     double positionLeftCamera = position.x - distanceLeft;
     double positionTopCamera = position.y - distanceTop;
-    print('$maxLeft / $maxTop');
-    print('$positionLeftCamera / $positionTopCamera');
 
     if (positionLeftCamera > maxLeft) positionLeftCamera = maxLeft;
 
@@ -108,8 +110,6 @@ class Camera with HasGameRef<RPGGame> {
     if (positionTopCamera * -1 > maxTop) positionTopCamera = maxTop;
     positionTopCamera *= -1;
     if (positionTopCamera > 0) positionTopCamera = 0;
-
-    print('$positionLeftCamera / $positionTopCamera');
 
     double diffX = this.position.x - positionLeftCamera;
     double diffY = this.position.y - positionTopCamera;
@@ -124,17 +124,21 @@ class Camera with HasGameRef<RPGGame> {
       ..addListenerFinish(() {
         if (finish != null) finish();
       })
-      ..addCurve(Curves.decelerate)
+      ..addCurve(curve)
       ..start();
   }
 
-  void moveToPlayer({Duration duration}) {
+  void moveToPlayer({Duration duration, VoidCallback finish}) {
     if (_positionPlayer != null) {
-      moveToPosition(Position(_positionPlayer.left, _positionPlayer.top),
-          finish: () {
-        gameRef.player.unlockPositionInWorld();
-        _positionPlayer = null;
-      }, duration: duration);
+      moveToPosition(
+        Position(_positionPlayer.left, _positionPlayer.top),
+        finish: () {
+          gameRef.player.unlockPositionInWorld();
+          _positionPlayer = null;
+          if (finish != null) finish();
+        },
+        duration: duration,
+      );
     }
   }
 }
