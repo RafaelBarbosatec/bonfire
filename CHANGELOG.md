@@ -1,3 +1,9 @@
+## [0.0.5] - 24/03/2020
+
+* Add camera movements.
+* Fix delay between map and components.
+* Update readme.
+
 ## [0.0.4] - 22/03/2020
 
 * Organization improvements.
