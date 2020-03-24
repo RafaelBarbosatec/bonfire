@@ -130,7 +130,7 @@ class Player extends AnimatedObject
 
   @override
   void joystickChangeDirectional(JoystickMoveDirectional directional) {
-    if (_isDead) return;
+    if (_isDead || _usePositionInWorld) return;
     switch (directional) {
       case JoystickMoveDirectional.MOVE_TOP:
         _moveTop();
@@ -175,7 +175,8 @@ class Player extends AnimatedObject
       return;
     }
 
-    if (position.top > gameRef.size.height / 2.9 || gameRef.gameCamera.isMaxTop()) {
+    if (position.top > gameRef.size.height / 2.9 ||
+        gameRef.gameCamera.isMaxTop()) {
       position = displacement;
     } else {
       gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_TOP);
@@ -277,7 +278,8 @@ class Player extends AnimatedObject
       return;
     }
 
-    if (position.left > gameRef.size.width / 3 || gameRef.gameCamera.isMaxLeft()) {
+    if (position.left > gameRef.size.width / 3 ||
+        gameRef.gameCamera.isMaxLeft()) {
       position = displacement;
     } else {
       gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_LEFT);
@@ -385,11 +387,11 @@ class Player extends AnimatedObject
     }
   }
 
-  void usePositionInWorld() {
+  void usePositionInWorldToRender() {
     _usePositionInWorld = true;
   }
 
-  void usePosition() {
+  void usePositionToRender() {
     _nextFrameUsePosition = true;
   }
 

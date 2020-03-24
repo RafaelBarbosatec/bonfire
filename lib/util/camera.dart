@@ -35,13 +35,15 @@ class Camera with HasGameRef<RPGGame> {
 
   void moveRight(double displacement) {
     if (!isMaxRight()) {
-      gameRef.gameCamera.position.x = gameRef.gameCamera.position.x - displacement;
+      gameRef.gameCamera.position.x =
+          gameRef.gameCamera.position.x - displacement;
     }
   }
 
   void moveBottom(double displacement) {
     if (!isMaxBottom()) {
-      gameRef.gameCamera.position.y = gameRef.gameCamera.position.y - displacement;
+      gameRef.gameCamera.position.y =
+          gameRef.gameCamera.position.y - displacement;
     }
   }
 
@@ -87,7 +89,7 @@ class Camera with HasGameRef<RPGGame> {
     Duration duration,
     Curve curve = Curves.decelerate,
   }) {
-    gameRef.player.usePositionInWorld();
+    gameRef.player.usePositionInWorldToRender();
     double distanceLeft = gameRef.size.width / 2;
     double distanceTop = gameRef.size.height / 2;
 
@@ -121,7 +123,7 @@ class Camera with HasGameRef<RPGGame> {
   }
 
   void moveToPosition(Position position) {
-    gameRef.player.usePositionInWorld();
+    gameRef.player.usePositionInWorldToRender();
     double distanceLeft = gameRef.size.width / 2;
     double distanceTop = gameRef.size.height / 2;
 
@@ -146,7 +148,7 @@ class Camera with HasGameRef<RPGGame> {
     moveToPositionAnimated(
       Position(_positionPlayer.left, _positionPlayer.top),
       finish: () {
-        gameRef.player.usePosition();
+        gameRef.player.usePositionToRender();
         if (finish != null) finish();
       },
       duration: duration,
@@ -156,6 +158,6 @@ class Camera with HasGameRef<RPGGame> {
   void moveToPlayer() {
     Rect _positionPlayer = gameRef.player.positionInWorld;
     moveToPosition(Position(_positionPlayer.left, _positionPlayer.top));
-    gameRef.player.usePosition();
+    gameRef.player.usePositionToRender();
   }
 }
