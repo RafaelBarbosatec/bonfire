@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/map/tile.dart';
 
@@ -14,16 +15,18 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    tilesToRender.forEach((tile) => tile.render(canvas, gameRef.camera));
+    tilesToRender
+        .forEach((tile) => tile.render(canvas, gameRef.gameCamera.position));
   }
 
   @override
   void update(double t) {
     verifyMaxTopAndLeft();
-    if (lastCameraX != gameRef.mapCamera.position.x ||
-        gameRef.mapCamera.position.y != lastCameraY) {
-      lastCameraX = gameRef.mapCamera.position.x;
-      lastCameraY = gameRef.mapCamera.position.y;
+    if (lastCameraX != gameRef.gameCamera.position.x ||
+        gameRef.gameCamera.position.y != lastCameraY) {
+      lastCameraX = gameRef.gameCamera.position.x;
+      lastCameraY = gameRef.gameCamera.position.y;
+      map.forEach((tile) => tile.update(gameRef));
       tilesToRender = map.where((i) => i.isVisible(gameRef));
       tilesCollisionsRendered = tilesToRender.where((i) => i.collision);
     }
@@ -60,8 +63,9 @@ class MapWorld extends MapGame {
       });
       maxLeft = (maxLeft * map.first.size) - _sizeScreen.width;
 
-      gameRef.mapCamera.maxLeft = maxLeft;
-      gameRef.mapCamera.maxTop = maxTop;
+      gameRef.gameCamera.maxLeft = maxLeft;
+      gameRef.gameCamera.maxTop = maxTop;
+      gameRef.gameCamera.moveToPlayer();
     }
   }
 }

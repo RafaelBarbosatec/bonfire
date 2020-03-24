@@ -8,8 +8,6 @@ class Camera with HasGameRef<RPGGame> {
   double maxLeft = 0;
   Position position = Position.empty();
 
-  Rect _positionPlayer;
-
   bool isMaxBottom() {
     return (position.y * -1) >= maxTop;
   }
@@ -37,15 +35,15 @@ class Camera with HasGameRef<RPGGame> {
 
   void moveRight(double displacement) {
     if (!isMaxRight()) {
-      gameRef.mapCamera.position.x =
-          gameRef.mapCamera.position.x - displacement;
+      gameRef.gameCamera.position.x =
+          gameRef.gameCamera.position.x - displacement;
     }
   }
 
   void moveBottom(double displacement) {
     if (!isMaxBottom()) {
-      gameRef.mapCamera.position.y =
-          gameRef.mapCamera.position.y - displacement;
+      gameRef.gameCamera.position.y =
+          gameRef.gameCamera.position.y - displacement;
     }
   }
 
@@ -61,16 +59,16 @@ class Camera with HasGameRef<RPGGame> {
   void moveCamera(double displacement, JoystickMoveDirectional directional) {
     switch (directional) {
       case JoystickMoveDirectional.MOVE_TOP:
-        gameRef.mapCamera.moveTop(displacement);
+        gameRef.gameCamera.moveTop(displacement);
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
-        gameRef.mapCamera.moveRight(displacement);
+        gameRef.gameCamera.moveRight(displacement);
         break;
       case JoystickMoveDirectional.MOVE_BOTTOM:
-        gameRef.mapCamera.moveBottom(displacement);
+        gameRef.gameCamera.moveBottom(displacement);
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
-        gameRef.mapCamera.moveLeft(displacement);
+        gameRef.gameCamera.moveLeft(displacement);
         break;
       case JoystickMoveDirectional.MOVE_TOP_LEFT:
         break;
@@ -85,17 +83,13 @@ class Camera with HasGameRef<RPGGame> {
     }
   }
 
-  void moveToPosition(
+  void moveToPositionAnimated(
     Position position, {
     VoidCallback finish,
     Duration duration,
     Curve curve = Curves.decelerate,
   }) {
-    if (_positionPlayer == null) {
-      _positionPlayer = gameRef.player.positionInWorld;
-      this.gameRef.player.lockPositionInWorld();
-    }
-
+    gameRef.player.usePositionInWorldToRender();
     double distanceLeft = gameRef.size.width / 2;
     double distanceTop = gameRef.size.height / 2;
 
@@ -128,17 +122,42 @@ class Camera with HasGameRef<RPGGame> {
       ..start();
   }
 
-  void moveToPlayer({Duration duration, VoidCallback finish}) {
-    if (_positionPlayer != null) {
-      moveToPosition(
-        Position(_positionPlayer.left, _positionPlayer.top),
-        finish: () {
-          gameRef.player.unlockPositionInWorld();
-          _positionPlayer = null;
-          if (finish != null) finish();
-        },
-        duration: duration,
-      );
-    }
+  void moveToPosition(Position position) {
+    gameRef.player.usePositionInWorldToRender();
+    double distanceLeft = gameRef.size.width / 2;
+    double distanceTop = gameRef.size.height / 2;
+
+    double positionLeftCamera = position.x - distanceLeft;
+    double positionTopCamera = position.y - distanceTop;
+
+    if (positionLeftCamera > maxLeft) positionLeftCamera = maxLeft;
+
+    positionLeftCamera *= -1;
+    if (positionLeftCamera > 0) positionLeftCamera = 0;
+
+    if (positionTopCamera * -1 > maxTop) positionTopCamera = maxTop;
+    positionTopCamera *= -1;
+    if (positionTopCamera > 0) positionTopCamera = 0;
+
+    this.position.x = positionLeftCamera;
+    this.position.y = positionTopCamera;
+  }
+
+  void moveToPlayerAnimated({Duration duration, VoidCallback finish}) {
+    Rect _positionPlayer = gameRef.player.positionInWorld;
+    moveToPositionAnimated(
+      Position(_positionPlayer.left, _positionPlayer.top),
+      finish: () {
+        gameRef.player.usePositionToRender();
+        if (finish != null) finish();
+      },
+      duration: duration,
+    );
+  }
+
+  void moveToPlayer() {
+    Rect _positionPlayer = gameRef.player.positionInWorld;
+    moveToPosition(Position(_positionPlayer.left, _positionPlayer.top));
+    gameRef.player.usePositionToRender();
   }
 }

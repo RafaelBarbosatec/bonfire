@@ -27,8 +27,8 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
   @override
   void update(double t) {
     setByPosition(Position(
-      positionInWorld.x + gameRef.mapCamera.position.x,
-      positionInWorld.y + gameRef.mapCamera.position.y,
+      positionInWorld.x + gameRef.gameCamera.position.x,
+      positionInWorld.y + gameRef.gameCamera.position.y,
     ));
     positionInWorld.y += velocity;
     positionInWorld.x += moveAxisX;

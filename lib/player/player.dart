@@ -68,7 +68,8 @@ class Player extends AnimatedObject
   /// Variable that represents the last action pressed in joystick.
   int lastJoystickAction;
 
-  bool locked = false;
+  bool _usePositionInWorld = true;
+  bool _nextFrameUsePosition = false;
 
   Player({
     @required this.animIdleLeft,
@@ -94,7 +95,7 @@ class Player extends AnimatedObject
           : JoystickMoveDirectional.MOVE_RIGHT;
     }
 
-    position = Rect.fromLTWH(
+    position = positionInWorld = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
       width,
@@ -115,6 +116,10 @@ class Player extends AnimatedObject
   @override
   void update(double dt) {
     super.update(dt);
+    if (_nextFrameUsePosition) {
+      _nextFrameUsePosition = false;
+      _usePositionInWorld = false;
+    }
   }
 
   @override
@@ -125,7 +130,7 @@ class Player extends AnimatedObject
 
   @override
   void joystickChangeDirectional(JoystickMoveDirectional directional) {
-    if (_isDead || locked) return;
+    if (_isDead || _usePositionInWorld) return;
     switch (directional) {
       case JoystickMoveDirectional.MOVE_TOP:
         _moveTop();
@@ -171,10 +176,10 @@ class Player extends AnimatedObject
     }
 
     if (position.top > gameRef.size.height / 2.9 ||
-        gameRef.mapCamera.isMaxTop()) {
+        gameRef.gameCamera.isMaxTop()) {
       position = displacement;
     } else {
-      gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_TOP);
+      gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_TOP);
     }
 
     if (addAnimation &&
@@ -207,10 +212,10 @@ class Player extends AnimatedObject
     }
 
     if (position.left < gameRef.size.width / 1.5 ||
-        gameRef.mapCamera.isMaxRight()) {
+        gameRef.gameCamera.isMaxRight()) {
       position = displacement;
     } else {
-      gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_RIGHT);
+      gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_RIGHT);
     }
 
     if (addAnimation &&
@@ -238,10 +243,10 @@ class Player extends AnimatedObject
     }
 
     if (position.top < gameRef.size.height / 1.9 ||
-        gameRef.mapCamera.isMaxBottom()) {
+        gameRef.gameCamera.isMaxBottom()) {
       position = displacement;
     } else {
-      gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_BOTTOM);
+      gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_BOTTOM);
     }
 
     if (addAnimation &&
@@ -274,10 +279,10 @@ class Player extends AnimatedObject
     }
 
     if (position.left > gameRef.size.width / 3 ||
-        gameRef.mapCamera.isMaxLeft()) {
+        gameRef.gameCamera.isMaxLeft()) {
       position = displacement;
     } else {
-      gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_LEFT);
+      gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_LEFT);
     }
 
     if (addAnimation &&
@@ -382,23 +387,21 @@ class Player extends AnimatedObject
     }
   }
 
-  void lockPositionInWorld() {
-    super.positionInWorld = positionInWorld;
-    locked = true;
+  void usePositionInWorldToRender() {
+    _usePositionInWorld = true;
   }
 
-  void unlockPositionInWorld() {
-    locked = false;
+  void usePositionToRender() {
+    _nextFrameUsePosition = true;
   }
 
   @override
-  Rect get positionInWorld {
-    if (locked) {
-      return super.positionInWorld;
-    }
-    return Rect.fromLTWH(
-      position.left - gameRef.mapCamera.position.x,
-      position.top - gameRef.mapCamera.position.y,
+  get positionInWorld {
+    if (_usePositionInWorld) return super.positionInWorld;
+
+    return super.positionInWorld = Rect.fromLTWH(
+      position.left - gameRef.gameCamera.position.x,
+      position.top - gameRef.gameCamera.position.y,
       position.width,
       position.height,
     );
