@@ -30,13 +30,17 @@ class Tile {
       _sprite.renderRect(canvas, position);
   }
 
-  bool isVisible(RPGGame game) {
+  void update(RPGGame game) {
     position = Rect.fromLTWH(
       _initRectPosition.left + game.mapCamera.position.x,
       _initRectPosition.top + game.mapCamera.position.y,
       size,
       size,
     );
+  }
+
+  bool isVisible(RPGGame game) {
+    if (game.size == null) return false;
     return position.left > (size * -1) &&
         position.left < game.size.width + size &&
         position.top > (size * -1) &&

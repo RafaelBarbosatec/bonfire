@@ -25,6 +25,7 @@ class MapWorld extends MapGame {
         gameRef.mapCamera.position.y != lastCameraY) {
       lastCameraX = gameRef.mapCamera.position.x;
       lastCameraY = gameRef.mapCamera.position.y;
+      map.forEach((tile) => tile.update(gameRef));
       tilesToRender = map.where((i) => i.isVisible(gameRef));
       tilesCollisionsRendered = tilesToRender.where((i) => i.collision);
     }
