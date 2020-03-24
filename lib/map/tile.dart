@@ -32,8 +32,8 @@ class Tile {
 
   void update(RPGGame game) {
     position = Rect.fromLTWH(
-      _initRectPosition.left + game.mapCamera.position.x,
-      _initRectPosition.top + game.mapCamera.position.y,
+      _initRectPosition.left + game.gameCamera.position.x,
+      _initRectPosition.top + game.gameCamera.position.y,
       size,
       size,
     );

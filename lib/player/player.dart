@@ -175,11 +175,10 @@ class Player extends AnimatedObject
       return;
     }
 
-    if (position.top > gameRef.size.height / 2.9 ||
-        gameRef.mapCamera.isMaxTop()) {
+    if (position.top > gameRef.size.height / 2.9 || gameRef.gameCamera.isMaxTop()) {
       position = displacement;
     } else {
-      gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_TOP);
+      gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_TOP);
     }
 
     if (addAnimation &&
@@ -212,10 +211,10 @@ class Player extends AnimatedObject
     }
 
     if (position.left < gameRef.size.width / 1.5 ||
-        gameRef.mapCamera.isMaxRight()) {
+        gameRef.gameCamera.isMaxRight()) {
       position = displacement;
     } else {
-      gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_RIGHT);
+      gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_RIGHT);
     }
 
     if (addAnimation &&
@@ -243,10 +242,10 @@ class Player extends AnimatedObject
     }
 
     if (position.top < gameRef.size.height / 1.9 ||
-        gameRef.mapCamera.isMaxBottom()) {
+        gameRef.gameCamera.isMaxBottom()) {
       position = displacement;
     } else {
-      gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_BOTTOM);
+      gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_BOTTOM);
     }
 
     if (addAnimation &&
@@ -278,11 +277,10 @@ class Player extends AnimatedObject
       return;
     }
 
-    if (position.left > gameRef.size.width / 3 ||
-        gameRef.mapCamera.isMaxLeft()) {
+    if (position.left > gameRef.size.width / 3 || gameRef.gameCamera.isMaxLeft()) {
       position = displacement;
     } else {
-      gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_LEFT);
+      gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_LEFT);
     }
 
     if (addAnimation &&
@@ -400,8 +398,8 @@ class Player extends AnimatedObject
     if (_usePositionInWorld) return super.positionInWorld;
 
     return super.positionInWorld = Rect.fromLTWH(
-      position.left - gameRef.mapCamera.position.x,
-      position.top - gameRef.mapCamera.position.y,
+      position.left - gameRef.gameCamera.position.x,
+      position.top - gameRef.gameCamera.position.y,
       position.width,
       position.height,
     );

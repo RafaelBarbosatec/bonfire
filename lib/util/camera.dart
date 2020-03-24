@@ -35,15 +35,13 @@ class Camera with HasGameRef<RPGGame> {
 
   void moveRight(double displacement) {
     if (!isMaxRight()) {
-      gameRef.mapCamera.position.x =
-          gameRef.mapCamera.position.x - displacement;
+      gameRef.gameCamera.position.x = gameRef.gameCamera.position.x - displacement;
     }
   }
 
   void moveBottom(double displacement) {
     if (!isMaxBottom()) {
-      gameRef.mapCamera.position.y =
-          gameRef.mapCamera.position.y - displacement;
+      gameRef.gameCamera.position.y = gameRef.gameCamera.position.y - displacement;
     }
   }
 
@@ -59,16 +57,16 @@ class Camera with HasGameRef<RPGGame> {
   void moveCamera(double displacement, JoystickMoveDirectional directional) {
     switch (directional) {
       case JoystickMoveDirectional.MOVE_TOP:
-        gameRef.mapCamera.moveTop(displacement);
+        gameRef.gameCamera.moveTop(displacement);
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
-        gameRef.mapCamera.moveRight(displacement);
+        gameRef.gameCamera.moveRight(displacement);
         break;
       case JoystickMoveDirectional.MOVE_BOTTOM:
-        gameRef.mapCamera.moveBottom(displacement);
+        gameRef.gameCamera.moveBottom(displacement);
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
-        gameRef.mapCamera.moveLeft(displacement);
+        gameRef.gameCamera.moveLeft(displacement);
         break;
       case JoystickMoveDirectional.MOVE_TOP_LEFT:
         break;
