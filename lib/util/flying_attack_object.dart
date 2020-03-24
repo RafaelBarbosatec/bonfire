@@ -41,6 +41,8 @@ class FlyingAttackObject extends AnimatedObject {
 
   @override
   void update(double dt) {
+    super.update(dt);
+
     switch (direction) {
       case Direction.left:
         positionInWorld = positionInWorld.translate(speed * -1, 0);
@@ -64,8 +66,6 @@ class FlyingAttackObject extends AnimatedObject {
     }
 
     _verifyCollision();
-
-    super.update(dt);
   }
 
   @override
@@ -88,9 +88,7 @@ class FlyingAttackObject extends AnimatedObject {
     var collisionsDecorations = List<GameDecoration>();
     var collisions = gameRef.map
         .getCollisionsRendered()
-        .where((i) =>
-            i.collision &&
-            _transformPositionInWord(i.position).overlaps(rectCollision))
+        .where((i) => i.collision && i.positionInWorld.overlaps(rectCollision))
         .toList();
 
     if (gameRef.decorations != null) {
@@ -166,11 +164,4 @@ class FlyingAttackObject extends AnimatedObject {
       remove();
     }
   }
-
-  _transformPositionInWord(Rect position) => Rect.fromLTWH(
-        position.left - gameRef.gameCamera.position.x,
-        position.top - gameRef.gameCamera.position.y,
-        position.width,
-        position.height,
-      );
 }

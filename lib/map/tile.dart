@@ -12,6 +12,7 @@ class Tile {
   Rect _initRectPosition;
   Rect position;
   Sprite _sprite;
+  RPGGame _game;
 
   Tile(this.spriteImg, this.initPosition,
       {this.collision = false, this.size = 32}) {
@@ -31,6 +32,7 @@ class Tile {
   }
 
   void update(RPGGame game) {
+    _game = game;
     position = Rect.fromLTWH(
       _initRectPosition.left + game.gameCamera.position.x,
       _initRectPosition.top + game.gameCamera.position.y,
@@ -40,10 +42,18 @@ class Tile {
   }
 
   bool isVisible(RPGGame game) {
+    _game = game;
     if (game.size == null) return false;
     return position.left > (size * -1) &&
         position.left < game.size.width + size &&
         position.top > (size * -1) &&
         position.top < game.size.height + size;
   }
+
+  get positionInWorld => Rect.fromLTWH(
+        position.left - _game.gameCamera.position.x,
+        position.top - _game.gameCamera.position.y,
+        position.width,
+        position.height,
+      );
 }
