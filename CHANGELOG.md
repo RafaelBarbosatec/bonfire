@@ -1,3 +1,7 @@
+## [0.0.6] - 24/03/2020
+
+* Fix bug FlyingAttackObject.
+
 ## [0.0.5] - 24/03/2020
 
 * Add camera movements.
