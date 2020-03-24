@@ -63,11 +63,7 @@ class MapWorld extends MapGame {
 
       gameRef.mapCamera.maxLeft = maxLeft;
       gameRef.mapCamera.maxTop = maxTop;
-
-      gameRef.mapCamera.moveToPosition(Position(
-        gameRef.player.positionInWorld.left,
-        gameRef.player.positionInWorld.top,
-      ));
+      gameRef.mapCamera.moveToPlayer();
     }
   }
 }

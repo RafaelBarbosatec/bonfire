@@ -155,7 +155,7 @@ extension PlayerExtensions on Player {
     Function() notObserved,
     int visionCells = 3,
   }) {
-    if (isDead) return;
+    if (isDead || position == null) return;
 
     var enemiesInLife = this.gameRef.enemies.where((e) => !e.isDead);
     if (enemiesInLife.length == 0) {

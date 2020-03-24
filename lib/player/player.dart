@@ -68,6 +68,9 @@ class Player extends AnimatedObject
   /// Variable that represents the last action pressed in joystick.
   int lastJoystickAction;
 
+  bool _usePositionInWorld = true;
+  bool _nextFrameUsePosition = false;
+
   Player({
     @required this.animIdleLeft,
     @required this.animIdleRight,
@@ -113,6 +116,10 @@ class Player extends AnimatedObject
   @override
   void update(double dt) {
     super.update(dt);
+    if (_nextFrameUsePosition) {
+      _nextFrameUsePosition = false;
+      _usePositionInWorld = false;
+    }
   }
 
   @override
@@ -162,16 +169,15 @@ class Player extends AnimatedObject
       return;
     }
 
-    Rect displacement = positionInWorld.translate(0, (speed * -1));
-    Rect displacementCollision = position.translate(0, (speed * -1));
+    Rect displacement = position.translate(0, (speed * -1));
 
-    if (isCollision(displacementCollision, gameRef)) {
+    if (isCollision(displacement, gameRef)) {
       return;
     }
 
     if (position.top > gameRef.size.height / 2.9 ||
         gameRef.mapCamera.isMaxTop()) {
-      positionInWorld = displacement;
+      position = displacement;
     } else {
       gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_TOP);
     }
@@ -199,16 +205,15 @@ class Player extends AnimatedObject
       return;
     }
 
-    Rect displacement = positionInWorld.translate(speed, 0);
-    Rect displacementCollision = position.translate(speed, 0);
+    Rect displacement = position.translate(speed, 0);
 
-    if (isCollision(displacementCollision, gameRef)) {
+    if (isCollision(displacement, gameRef)) {
       return;
     }
 
     if (position.left < gameRef.size.width / 1.5 ||
         gameRef.mapCamera.isMaxRight()) {
-      positionInWorld = displacement;
+      position = displacement;
     } else {
       gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_RIGHT);
     }
@@ -231,16 +236,15 @@ class Player extends AnimatedObject
       return;
     }
 
-    Rect displacement = positionInWorld.translate(0, speed);
-    Rect displacementCollision = position.translate(0, speed);
+    Rect displacement = position.translate(0, speed);
 
-    if (isCollision(displacementCollision, gameRef)) {
+    if (isCollision(displacement, gameRef)) {
       return;
     }
 
     if (position.top < gameRef.size.height / 1.9 ||
         gameRef.mapCamera.isMaxBottom()) {
-      positionInWorld = displacement;
+      position = displacement;
     } else {
       gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_BOTTOM);
     }
@@ -268,16 +272,15 @@ class Player extends AnimatedObject
     if (position.left <= 0) {
       return;
     }
-    Rect displacement = positionInWorld.translate(speed * -1, 0);
-    Rect displacementToCollision = position.translate(speed * -1, 0);
+    Rect displacement = position.translate(speed * -1, 0);
 
-    if (isCollision(displacementToCollision, gameRef)) {
+    if (isCollision(displacement, gameRef)) {
       return;
     }
 
     if (position.left > gameRef.size.width / 3 ||
         gameRef.mapCamera.isMaxLeft()) {
-      positionInWorld = displacement;
+      position = displacement;
     } else {
       gameRef.mapCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_LEFT);
     }
@@ -382,5 +385,25 @@ class Player extends AnimatedObject
     if (this.life > maxLife) {
       this.life = maxLife;
     }
+  }
+
+  void usePositionInWorld() {
+    _usePositionInWorld = true;
+  }
+
+  void usePosition() {
+    _nextFrameUsePosition = true;
+  }
+
+  @override
+  get positionInWorld {
+    if (_usePositionInWorld) return super.positionInWorld;
+
+    return super.positionInWorld = Rect.fromLTWH(
+      position.left - gameRef.mapCamera.position.x,
+      position.top - gameRef.mapCamera.position.y,
+      position.width,
+      position.height,
+    );
   }
 }
