@@ -199,15 +199,6 @@ void moveRight({double moveSpeed})
       }
     )
     
-    // De acordo com o raio passado por parámetro o player irá procurar e observar inimigos.
-    void seeEnemy(
-       {
-          Function(List<Enemy>) observed,
-          Function() notObserved,
-          int visionCells = 3,
-       }
-    )
-    
     // Caso precise saber em qual direção o player em relação a você.
     Direction directionThatPlayerIs()
     
@@ -304,6 +295,15 @@ Ao perceber o toque nessas ações do joystick, você poderá executar outras a�
            color: Colors.white,
          )
       }
+    )
+    
+    // De acordo com o raio passado por parámetro o player irá procurar e observar inimigos.
+    void seeEnemy(
+       {
+          Function(List<Enemy>) observed,
+          Function() notObserved,
+          int visionCells = 3,
+       }
     )
     
     // Caso deseje adicionar uma animação curta (animação sem loop, ele excuta somente uma vez).
