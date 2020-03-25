@@ -40,10 +40,10 @@ Para executar o game com Bonfire basta utilizar o seguinte widget:
 @override
   Widget build(BuildContext context) {
     return BonfireWidget(
-      joystick: MyJoystick(),
-      player: Knight(),  // Caso não passe o player o direcional do joystick explora o mapa. Bom para checar se está tudo ok e auxiliar na construção do mapa.
+      joystick: MyJoystick(), // required
+      map: DungeonMap.map(), // required
+      player: Knight(), // Caso não passe o player o direcional do joystick explora o mapa. Bom para checar se está tudo ok e auxiliar na construção do mapa.
       interface: KnightInterface(),
-      map: DungeonMap.map(),
       decorations: DungeonMap.decorations(),
       enemies: DungeonMap.enemies(),
       background: BackgroundColorGame(Colors.blueGrey[900]),
