@@ -11,7 +11,7 @@ extension GameDecorationExtensions on GameDecoration {
     int visionCells = 3,
   }) {
     Player player = gameRef.player;
-    if (!isVisibleInMap()) return;
+    if (!isVisibleInMap() || player == null) return;
 
     if (player.isDead) {
       if (notObserved != null) notObserved();

@@ -144,6 +144,7 @@ class Camera with HasGameRef<RPGGame> {
   }
 
   void moveToPlayerAnimated({Duration duration, VoidCallback finish}) {
+    if (gameRef.player == null) return;
     Rect _positionPlayer = gameRef.player.positionInWorld;
     moveToPositionAnimated(
       Position(_positionPlayer.left, _positionPlayer.top),
@@ -156,6 +157,7 @@ class Camera with HasGameRef<RPGGame> {
   }
 
   void moveToPlayer() {
+    if (gameRef.player == null) return;
     Rect _positionPlayer = gameRef.player.positionInWorld;
     moveToPosition(Position(_positionPlayer.left, _positionPlayer.top));
     gameRef.player.usePositionToRender();

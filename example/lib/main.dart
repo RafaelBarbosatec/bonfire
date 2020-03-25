@@ -1,6 +1,5 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/map/dungeon_map.dart';
-import 'package:example/player/knight.dart';
 import 'package:example/player/knight_interface.dart';
 import 'package:flutter/material.dart';
 
@@ -41,13 +40,17 @@ class Game extends StatelessWidget {
           )
         ],
       ),
-      player: Knight(
-        initPosition: Position(5 * sizeTile, 6 * sizeTile),
-      ),
+//      player: Knight(
+//        initPosition: Position(5 * sizeTile, 6 * sizeTile),
+//      ),
       interface: KnightInterface(),
       map: DungeonMap.map(),
       decorations: DungeonMap.decorations(),
       enemies: DungeonMap.enemies(),
+      background: BackgroundColorGame(Colors.blueGrey[900]),
+      listener: (context, game) {
+        // TODO ANYTHINGS
+      },
     );
   }
 }

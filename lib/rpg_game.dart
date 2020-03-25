@@ -4,7 +4,9 @@ import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/camera.dart';
+import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_interface.dart';
+import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_enerator.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
@@ -19,31 +21,31 @@ class RPGGame extends BaseGame with TapDetector {
   final List<Enemy> enemies;
   final List<GameDecoration> decorations;
   final JoystickController joystickController;
+  final GameComponent background;
   final Camera gameCamera = Camera();
   Function(RPGGame) _gameListener;
 
   RPGGame({
     @required this.context,
     @required this.vsync,
-    @required this.player,
     @required this.map,
     @required this.joystickController,
+    this.player,
     this.interface,
     this.enemies,
     this.decorations,
-  })  : assert(player != null),
-        assert(map != null),
+    this.background,
+  })  : assert(map != null),
         assert(context != null),
         assert(joystickController != null) {
     gameCamera.gameRef = this;
-    joystickController.joystickListener = player;
-
+    joystickController.joystickListener = player ?? MapExplorer(gameCamera);
+    if (background != null) add(background);
     add(map);
     decorations?.forEach((decoration) => add(decoration));
     enemies?.forEach((enemy) => add(enemy));
-    add(player);
+    if (player != null) add(player);
     add(joystickController);
-
     if (interface != null) add(interface);
   }
 

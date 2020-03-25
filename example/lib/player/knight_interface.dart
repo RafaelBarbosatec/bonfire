@@ -21,10 +21,12 @@ class KnightInterface extends GameInterface {
 
   @override
   void update(double t) {
-    life = this.gameRef.player.life;
-    maxLife = this.gameRef.player.maxLife;
-    if (this.gameRef.player is Knight) {
-      stamina = (this.gameRef.player as Knight).stamina;
+    if (this.gameRef.player != null) {
+      life = this.gameRef.player.life;
+      maxLife = this.gameRef.player.maxLife;
+      if (this.gameRef.player is Knight) {
+        stamina = (this.gameRef.player as Knight).stamina;
+      }
     }
     super.update(t);
   }
@@ -34,8 +36,8 @@ class KnightInterface extends GameInterface {
     try {
       _drawLife(c);
       _drawStamina(c);
-      _drawSprite(c);
     } catch (e) {}
+    _drawSprite(c);
     super.render(c);
   }
 

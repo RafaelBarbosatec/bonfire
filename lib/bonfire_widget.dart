@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/rpg_game.dart';
+import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_interface.dart';
 import 'package:flutter/material.dart';
 
@@ -14,17 +17,21 @@ class BonfireWidget extends StatefulWidget {
   final MapGame map;
   final List<Enemy> enemies;
   final List<GameDecoration> decorations;
+  final GameComponent background;
+  final int frequencyListener;
   final Function(BuildContext context, RPGGame) listener;
 
   const BonfireWidget({
     Key key,
     @required this.joystick,
-    @required this.player,
     @required this.map,
+    this.player,
     this.interface,
     this.enemies,
     this.decorations,
     this.listener,
+    this.background,
+    this.frequencyListener = 1000,
   }) : super(key: key);
 
   @override
@@ -33,6 +40,7 @@ class BonfireWidget extends StatefulWidget {
 
 class _BonfireWidgetState extends State<BonfireWidget>
     with TickerProviderStateMixin {
+  Timer timerListener;
   RPGGame _game;
   @override
   void initState() {
@@ -45,8 +53,17 @@ class _BonfireWidgetState extends State<BonfireWidget>
       map: widget.map,
       decorations: widget.decorations,
       enemies: widget.enemies,
+      background: widget.background,
     )..addListener((game) {
-        if (widget.listener != null) widget.listener(context, game);
+        if (timerListener == null) {
+          timerListener = Timer(
+            Duration(milliseconds: widget.frequencyListener),
+            () {
+              timerListener = null;
+            },
+          );
+          if (widget.listener != null) widget.listener(context, game);
+        }
       });
     super.initState();
   }
