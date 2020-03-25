@@ -27,7 +27,7 @@ class Chest extends GameDecoration {
             PotionLife(
               Position(
                 positionInWorld.translate(width * 2, 0).left,
-                positionInWorld.top,
+                positionInWorld.top - height * 2,
               ),
               30,
             ),

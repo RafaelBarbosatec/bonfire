@@ -50,7 +50,7 @@ class Game extends StatelessWidget {
       enemies: DungeonMap.enemies(),
       background: BackgroundColorGame(Colors.blueGrey[900]),
       listener: (context, game) {
-        // TODO ANYTHINGS
+        // TODO ANYTHING
       },
     );
   }

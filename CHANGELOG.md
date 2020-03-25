@@ -1,3 +1,8 @@
+## [0.0.7] - 24/03/2020
+
+* Add MapExplorer when not set Player
+* Add BackgroundGame
+
 ## [0.0.6] - 24/03/2020
 
 * Fix bug FlyingAttackObject.

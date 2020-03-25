@@ -54,17 +54,19 @@ class _BonfireWidgetState extends State<BonfireWidget>
       decorations: widget.decorations,
       enemies: widget.enemies,
       background: widget.background,
-    )..addListener((game) {
-        if (timerListener == null) {
-          timerListener = Timer(
-            Duration(milliseconds: widget.frequencyListener),
-            () {
-              timerListener = null;
-            },
-          );
-          if (widget.listener != null) widget.listener(context, game);
-        }
-      });
+    )..addListener(
+        (game) {
+          if (timerListener == null) {
+            timerListener = Timer(
+              Duration(milliseconds: widget.frequencyListener),
+              () {
+                timerListener = null;
+              },
+            );
+            if (widget.listener != null) widget.listener(context, game);
+          }
+        },
+      );
     super.initState();
   }
 
