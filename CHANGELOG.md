@@ -1,3 +1,7 @@
+## [0.0.10] - 26/03/2020
+
+* Add constructionMode. (HotReload update game too)
+
 ## [0.0.9] - 26/03/2020
 
 * Map size improvements
