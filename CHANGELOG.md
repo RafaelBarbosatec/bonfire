@@ -1,4 +1,9 @@
-## [0.0.7] - 24/03/2020
+## [0.0.8] - 25/03/2020
+
+* Collision system improvements
+* Add 'drawPositionCollision(Canvas canvas)'
+
+## [0.0.7] - 25/03/2020
 
 * Add MapExplorer when not set Player
 * Add BackgroundGame
