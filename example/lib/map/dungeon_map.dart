@@ -73,7 +73,7 @@ class DungeonMap {
           ));
         }
 
-        if (indexRow == 9 && indexColumm > 30 && indexColumm < 35) {
+        if (indexRow == 9 && indexColumm > 30 && indexColumm < 32) {
           tileList.add(Tile(
             '',
             Position(indexColumm.toDouble(), indexRow.toDouble()),
