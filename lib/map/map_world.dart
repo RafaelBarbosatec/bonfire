@@ -48,20 +48,21 @@ class MapWorld extends MapGame {
       double maxLeft = 0;
       _sizeScreen = gameRef.size;
       maxTop = map.fold(0, (max, tile) {
-        if (tile.initPosition.y > max)
-          return tile.initPosition.y;
+        if (tile.position.bottom > max)
+          return tile.position.bottom;
         else
           return max;
       });
-      maxTop = (maxTop * map.first.size) - _sizeScreen.height;
+
+      maxTop -= _sizeScreen.height;
 
       maxLeft = map.fold(0, (max, tile) {
-        if (tile.initPosition.x > max)
-          return tile.initPosition.x;
+        if (tile.position.right > max)
+          return tile.position.right;
         else
           return max;
       });
-      maxLeft = (maxLeft * map.first.size) - _sizeScreen.width;
+      maxLeft -= _sizeScreen.width;
 
       gameRef.gameCamera.maxLeft = maxLeft;
       gameRef.gameCamera.maxTop = maxTop;

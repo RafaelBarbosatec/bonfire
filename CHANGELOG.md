@@ -1,3 +1,7 @@
+## [0.0.9] - 26/03/2020
+
+* Map size improvements
+
 ## [0.0.8] - 25/03/2020
 
 * Collision system improvements
