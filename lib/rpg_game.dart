@@ -114,10 +114,16 @@ class RPGGame extends BaseGame with TapDetector {
 
   void onTapDownLeftScreen(TapDownDetails details) {
     joystickController.onTapDown(details);
+    components
+        .where((item) => item is TapDetector)
+        .forEach((item) => (item as TapDetector).onTapDown(details));
   }
 
   void onTapUpLeftScreen(TapUpDetails details) {
     joystickController.onTapUp(details);
+    components
+        .where((item) => item is TapDetector)
+        .forEach((item) => (item as TapDetector).onTapUp(details));
   }
 
   List<Enemy> visibleEnemies() {

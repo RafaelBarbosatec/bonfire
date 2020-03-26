@@ -3,8 +3,9 @@ import 'dart:ui';
 
 import 'package:bonfire/util/animated_object.dart';
 import 'package:bonfire/util/animated_object_once.dart';
+import 'package:bonfire/util/collision/collision.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/object_collision.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
@@ -67,22 +68,22 @@ class Enemy extends AnimatedObject with ObjectCollision {
   /// Map available to store times that can be used to control the frequency of any action.
   Map<String, Timer> timers = Map();
 
-  Enemy({
-    @required this.animationIdleRight,
-    @required this.animationIdleLeft,
-    this.animationIdleTop,
-    this.animationIdleBottom,
-    this.animationRunTop,
-    @required this.animationRunRight,
-    @required this.animationRunLeft,
-    this.animationRunBottom,
-    @required this.initPosition,
-    @required this.height,
-    @required this.width,
-    Direction initDirection = Direction.right,
-    this.speed = 3,
-    this.life = 10,
-  }) {
+  Enemy(
+      {@required this.animationIdleRight,
+      @required this.animationIdleLeft,
+      this.animationIdleTop,
+      this.animationIdleBottom,
+      this.animationRunTop,
+      @required this.animationRunRight,
+      @required this.animationRunLeft,
+      this.animationRunBottom,
+      @required this.initPosition,
+      @required this.height,
+      @required this.width,
+      Direction initDirection = Direction.right,
+      this.speed = 3,
+      this.life = 10,
+      Collision collision}) {
     lastDirection = initDirection;
     maxLife = life;
     this.position = this.positionInWorld = Rect.fromLTWH(
@@ -91,8 +92,8 @@ class Enemy extends AnimatedObject with ObjectCollision {
       width,
       height,
     );
-    widthCollision = width;
-    heightCollision = height / 3;
+
+    this.collision = collision ?? Collision(width: width, height: height / 3);
 
     lastDirectionHorizontal =
         initDirection == Direction.left ? Direction.left : Direction.right;

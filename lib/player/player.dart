@@ -3,11 +3,13 @@ import 'dart:ui';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/util/animated_object.dart';
 import 'package:bonfire/util/animated_object_once.dart';
+import 'package:bonfire/util/collision/collision.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/object_collision.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 export 'package:bonfire/player/extensions.dart';
 
@@ -86,6 +88,7 @@ class Player extends AnimatedObject
     this.initDirection = Direction.right,
     this.speed = 5,
     this.life = 10,
+    Collision collision,
   }) {
     lastDirection = initDirection;
     if (initDirection == Direction.left || initDirection == Direction.right) {
@@ -102,8 +105,7 @@ class Player extends AnimatedObject
       height,
     );
 
-    widthCollision = width;
-    heightCollision = height / 2;
+    this.collision = collision ?? Collision(width: width, height: height / 2);
     maxLife = life;
     idle();
   }
