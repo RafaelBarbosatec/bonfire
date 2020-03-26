@@ -49,6 +49,7 @@ class Game extends StatelessWidget {
       decorations: DungeonMap.decorations(),
       enemies: DungeonMap.enemies(),
       background: BackgroundColorGame(Colors.blueGrey[900]),
+      constructionMode: true,
       listener: (context, game) {
         // TODO ANYTHING
       },

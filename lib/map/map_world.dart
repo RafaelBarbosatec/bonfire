@@ -69,4 +69,12 @@ class MapWorld extends MapGame {
       gameRef.gameCamera.moveToPlayer();
     }
   }
+
+  @override
+  void updateTiles(Iterable<Tile> map) {
+    lastCameraX = -1;
+    lastCameraY = -1;
+    _sizeScreen = null;
+    this.map = map;
+  }
 }

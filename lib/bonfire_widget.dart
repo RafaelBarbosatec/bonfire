@@ -20,6 +20,7 @@ class BonfireWidget extends StatefulWidget {
   final GameComponent background;
   final int frequencyListener;
   final Function(BuildContext context, RPGGame) listener;
+  final bool constructionMode;
 
   const BonfireWidget({
     Key key,
@@ -32,6 +33,7 @@ class BonfireWidget extends StatefulWidget {
     this.listener,
     this.background,
     this.frequencyListener = 1000,
+    this.constructionMode = false,
   }) : super(key: key);
 
   @override
@@ -42,6 +44,21 @@ class _BonfireWidgetState extends State<BonfireWidget>
     with TickerProviderStateMixin {
   Timer timerListener;
   RPGGame _game;
+
+  @override
+  void didUpdateWidget(BonfireWidget oldWidget) {
+    if (widget.constructionMode) {
+      _game.map.updateTiles(widget.map.map);
+      _game.decorations.forEach((d) => d.remove());
+      _game.decorations.clear();
+      widget.decorations.forEach((d) => _game.addDecoration(d));
+      _game.enemies.forEach((e) => e.remove());
+      _game.enemies.clear();
+      widget.enemies.forEach((e) => _game.addEnemy(e));
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   @override
   void initState() {
     _game = RPGGame(

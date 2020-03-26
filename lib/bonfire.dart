@@ -14,6 +14,7 @@ export 'package:bonfire/util/animated_follower_object.dart';
 export 'package:bonfire/util/animated_object.dart';
 export 'package:bonfire/util/animated_object_once.dart';
 export 'package:bonfire/util/background_color_game.dart';
+export 'package:bonfire/util/collision/collision.dart';
 export 'package:bonfire/util/direction.dart';
 export 'package:bonfire/util/flying_attack_object.dart';
 export 'package:bonfire/util/game_component.dart';
