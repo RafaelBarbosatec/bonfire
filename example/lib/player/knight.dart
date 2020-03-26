@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
@@ -167,6 +168,11 @@ class Knight extends Player {
       },
     );
     super.update(dt);
+  }
+
+  @override
+  void render(Canvas c) {
+    super.render(c);
   }
 
   void _verifyStamina() {

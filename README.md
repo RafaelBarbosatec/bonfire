@@ -220,6 +220,9 @@ void moveRight({double moveSpeed})
         double strokeWidth = 2,
       }
     )
+
+    // Adicione em 'render' caso deseje desenhar área de colisão.
+    void drawPositionCollision(Canvas canvas)
     
 ```
 
@@ -314,6 +317,9 @@ Ao perceber o toque nessas ações do joystick, você poderá executar outras a�
     
     // Caso deseje adicionar vida.
     void addLife(double life)
+
+    // Adicione em 'render' caso deseje desenhar área de colisão.
+    void drawPositionCollision(Canvas canvas)
   
 ```
 
