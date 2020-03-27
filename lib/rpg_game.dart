@@ -23,6 +23,7 @@ class RPGGame extends BaseGame with TapDetector {
   final JoystickController joystickController;
   final GameComponent background;
   final Camera gameCamera = Camera();
+  final bool constructionMode;
   Function(RPGGame) _gameListener;
 
   RPGGame({
@@ -35,6 +36,7 @@ class RPGGame extends BaseGame with TapDetector {
     this.enemies,
     this.decorations,
     this.background,
+    this.constructionMode = false,
   })  : assert(map != null),
         assert(context != null),
         assert(joystickController != null) {

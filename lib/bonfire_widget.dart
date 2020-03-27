@@ -71,6 +71,7 @@ class _BonfireWidgetState extends State<BonfireWidget>
       decorations: widget.decorations,
       enemies: widget.enemies,
       background: widget.background,
+      constructionMode: widget.constructionMode,
     )..addListener(
         (game) {
           if (timerListener == null) {
