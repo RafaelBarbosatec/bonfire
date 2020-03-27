@@ -1,3 +1,8 @@
+## [0.0.11] - 27/03/2020
+
+* Add draw grid tiles in constructionMode.
+* Improvements in FlyingAttackObject
+
 ## [0.0.10] - 26/03/2020
 
 * Add constructionMode. (HotReload update game too)
