@@ -1,3 +1,8 @@
+## [0.0.12] - 27/03/2020
+
+* Update Readme
+* Improvements in draw grid
+
 ## [0.0.11] - 27/03/2020
 
 * Add draw grid tiles in constructionMode.
