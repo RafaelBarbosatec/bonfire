@@ -21,7 +21,8 @@ mixin ObjectCollision {
 
     if (game.decorations != null) {
       var collisionsDecorations = game.decorations
-          .where((i) => i.collision && i.position.overlaps(rectCollision))
+          .where((i) =>
+              !i.destroy() && i.collision && i.position.overlaps(rectCollision))
           .toList();
 
       if (collisionsDecorations.length > 0) {
@@ -46,8 +47,10 @@ mixin ObjectCollision {
 
     if (game.decorations != null) {
       var collisionsDecorations = game.decorations
-          .where(
-              (i) => i.collision && i.positionInWorld.overlaps(rectCollision))
+          .where((i) =>
+              !i.destroy() &&
+              i.collision &&
+              i.positionInWorld.overlaps(rectCollision))
           .toList();
 
       if (collisionsDecorations.length > 0) {
