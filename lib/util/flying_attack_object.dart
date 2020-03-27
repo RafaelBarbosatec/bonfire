@@ -63,9 +63,9 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
     }
 
     if (position.right > gameRef.size.width * 1.5 ||
-        position.left < gameRef.size.width * -1.5 ||
+        position.left < gameRef.size.width * -0.5 ||
         position.bottom > gameRef.size.height * 1.5 ||
-        position.top < gameRef.size.height * -1.5) {
+        position.top < gameRef.size.height * -0.5) {
       remove();
     }
 
