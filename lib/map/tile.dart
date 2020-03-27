@@ -34,7 +34,9 @@ class Tile {
     if (spriteImg.isNotEmpty) _sprite = Sprite(spriteImg);
 
     _textConfig = TextConfig(
-        fontSize: size / 3.5, color: Colors.lightBlueAccent.withOpacity(0.4));
+      fontSize: size / 3.5,
+      color: Colors.lightBlueAccent.withOpacity(0.4),
+    );
     _positionText = Position(position.left / size, position.top / size);
   }
 
