@@ -1,12 +1,13 @@
-import 'package:bonfire/decoration/decoration.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/animated_object.dart';
 import 'package:bonfire/util/animated_object_once.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
 
-class FlyingAttackObject extends AnimatedObject {
+class FlyingAttackObject extends AnimatedObject with ObjectCollision {
   final FlameAnimation.Animation flyAnimation;
   final FlameAnimation.Animation destroyAnimation;
   final Direction direction;
@@ -29,6 +30,7 @@ class FlyingAttackObject extends AnimatedObject {
     this.damage = 1,
     this.damageInPlayer = true,
     this.damageInEnemy = true,
+    Collision collision,
   }) {
     animation = flyAnimation;
     position = positionInWorld = Rect.fromLTWH(
@@ -37,6 +39,8 @@ class FlyingAttackObject extends AnimatedObject {
       width,
       height,
     );
+
+    this.collision = collision ?? Collision(width: width, height: height / 2);
   }
 
   @override
@@ -78,32 +82,12 @@ class FlyingAttackObject extends AnimatedObject {
   void _verifyCollision() {
     bool destroy = false;
 
-    Rect rectCollision = Rect.fromLTWH(
-      positionInWorld.left,
-      positionInWorld.top + (height / 2),
-      width,
-      height / 3,
-    );
-
-    var collisionsDecorations = List<GameDecoration>();
-    var collisions = gameRef.map
-        .getCollisionsRendered()
-        .where((i) => i.collision && i.positionInWorld.overlaps(rectCollision))
-        .toList();
-
-    if (gameRef.decorations != null) {
-      collisionsDecorations = gameRef.decorations
-          .where(
-              (i) => i.collision && i.positionInWorld.overlaps(rectCollision))
-          .toList();
-    }
-
-    destroy = collisions.length > 0 || collisionsDecorations.length > 0;
+    destroy = isCollisionPositionInWorld(positionInWorld, gameRef);
 
     if (damageInPlayer) {
       if (position.overlaps(gameRef.player.position)) {
-        destroy = true;
         gameRef.player.receiveDamage(damage);
+        destroy = true;
       }
     }
 
@@ -122,7 +106,7 @@ class FlyingAttackObject extends AnimatedObject {
         switch (direction) {
           case Direction.left:
             positionDestroy = Rect.fromLTWH(
-              positionInWorld.left - width,
+              positionInWorld.left - (width / 2),
               positionInWorld.top,
               width,
               height,
@@ -130,7 +114,7 @@ class FlyingAttackObject extends AnimatedObject {
             break;
           case Direction.right:
             positionDestroy = Rect.fromLTWH(
-              positionInWorld.left + width,
+              positionInWorld.left + (width / 2),
               positionInWorld.top,
               width,
               height,
@@ -139,7 +123,7 @@ class FlyingAttackObject extends AnimatedObject {
           case Direction.top:
             positionDestroy = Rect.fromLTWH(
               positionInWorld.left,
-              positionInWorld.top - height,
+              positionInWorld.top - (height / 2),
               width,
               height,
             );
@@ -147,7 +131,7 @@ class FlyingAttackObject extends AnimatedObject {
           case Direction.bottom:
             positionDestroy = Rect.fromLTWH(
               positionInWorld.left,
-              positionInWorld.bottom,
+              positionInWorld.top + (height / 2),
               width,
               height,
             );

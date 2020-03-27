@@ -32,6 +32,32 @@ mixin ObjectCollision {
     return false;
   }
 
+  bool isCollisionPositionInWorld(Rect displacement, RPGGame game) {
+    Rect rectCollision = _createRectCollision(displacement);
+
+    var collisions = game.map
+        .getCollisionsRendered()
+        .where((i) => i.collision && i.positionInWorld.overlaps(rectCollision))
+        .toList();
+
+    if (collisions.length > 0) {
+      return true;
+    }
+
+    if (game.decorations != null) {
+      var collisionsDecorations = game.decorations
+          .where(
+              (i) => i.collision && i.positionInWorld.overlaps(rectCollision))
+          .toList();
+
+      if (collisionsDecorations.length > 0) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   bool isCollisionTranslate(
       Rect position, double translateX, double translateY, RPGGame game) {
     var moveToCurrent = position.translate(translateX, translateY);
