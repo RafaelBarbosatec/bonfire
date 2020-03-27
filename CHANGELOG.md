@@ -1,3 +1,7 @@
+## [0.0.13] - 27/03/2020
+
+* Fix bug collision decoration
+
 ## [0.0.12] - 27/03/2020
 
 * Update Readme
