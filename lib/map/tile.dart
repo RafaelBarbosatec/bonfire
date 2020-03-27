@@ -16,6 +16,11 @@ class Tile {
   Sprite _sprite;
   RPGGame _game;
   TextConfig _textConfig;
+  Position _positionText;
+  Paint _paintText = Paint()
+    ..color = Colors.lightBlueAccent.withOpacity(0.5)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 1;
 
   Tile(this.spriteImg, this.initPosition,
       {this.collision = false, this.size = 32}) {
@@ -29,7 +34,10 @@ class Tile {
     if (spriteImg.isNotEmpty) _sprite = Sprite(spriteImg);
 
     _textConfig = TextConfig(
-        fontSize: size / 3.5, color: Colors.lightBlueAccent.withOpacity(0.4));
+      fontSize: size / 3.5,
+      color: Colors.lightBlueAccent.withOpacity(0.4),
+    );
+    _positionText = Position(position.left / size, position.top / size);
   }
 
   void render(Canvas canvas, Position camera) {
@@ -67,14 +75,13 @@ class Tile {
 
   void _drawGrid(Canvas canvas) {
     canvas.drawRect(
-        position,
-        new Paint()
-          ..color = Colors.lightBlueAccent.withOpacity(0.4)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1);
+      position,
+      _paintText,
+    );
     _textConfig.render(
-        canvas,
-        '${positionInWorld.left ~/ size}:${positionInWorld.top ~/ size}',
-        Position(position.left + 2, position.top + 2));
+      canvas,
+      '${_positionText.x.toInt()}:${_positionText.y.toInt()}',
+      Position(position.left + 2, position.top + 2),
+    );
   }
 }
