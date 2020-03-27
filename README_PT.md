@@ -200,6 +200,9 @@ void moveRight({double moveSpeed})
       }
     )
     
+    // Adicione em 'render' caso deseje desenhar área de colisão.
+    void drawPositionCollision(Canvas canvas)
+    
     // Caso precise saber em qual direção o player em relação a você.
     Direction directionThatPlayerIs()
     
@@ -306,6 +309,9 @@ Ao perceber o toque nessas ações do joystick, você poderá executar outras a�
           int visionCells = 3,
        }
     )
+    
+    // Adicione em 'render' caso deseje desenhar área de colisão.
+    void drawPositionCollision(Canvas canvas)
     
     // Caso deseje adicionar uma animação curta (animação sem loop, ele executa somente uma vez).
     void addFastAnimation(FlameAnimation.Animation animation)
