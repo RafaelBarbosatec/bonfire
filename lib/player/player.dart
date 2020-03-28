@@ -408,4 +408,6 @@ class Player extends AnimatedObject
       position.height,
     );
   }
+
+  Rect get rectCollision => getRectCollision(position);
 }

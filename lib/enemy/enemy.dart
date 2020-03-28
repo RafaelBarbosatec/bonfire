@@ -282,4 +282,6 @@ class Enemy extends AnimatedObject with ObjectCollision {
       return false;
     }
   }
+
+  Rect get rectCollision => getRectCollision(position);
 }
