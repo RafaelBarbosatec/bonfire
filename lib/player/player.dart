@@ -165,17 +165,19 @@ class Player extends AnimatedObject
   }
 
   void _moveTop({bool addAnimation = true, bool isDiagonal = false}) {
+    if (addAnimation) _addTopAnimation();
+
+    statusMoveDirectional = JoystickMoveDirectional.MOVE_TOP;
+    lastDirection = Direction.top;
+
+    if (position.top <= 0) return;
+
     double speed =
         isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed;
-    if (position.top <= 0) {
-      return;
-    }
 
     Rect displacement = position.translate(0, (speed * -1));
 
-    if (isCollision(displacement, gameRef)) {
-      return;
-    }
+    if (isCollision(displacement, gameRef)) return;
 
     if (position.top > gameRef.size.height / 2.9 ||
         gameRef.gameCamera.isMaxTop()) {
@@ -183,9 +185,10 @@ class Player extends AnimatedObject
     } else {
       gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_TOP);
     }
+  }
 
-    if (addAnimation &&
-        statusMoveDirectional != JoystickMoveDirectional.MOVE_TOP) {
+  void _addTopAnimation() {
+    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_TOP) {
       if (animRunTop != null) {
         animation = animRunTop;
       } else {
@@ -196,22 +199,23 @@ class Player extends AnimatedObject
         }
       }
     }
-    statusMoveDirectional = JoystickMoveDirectional.MOVE_TOP;
-    lastDirection = Direction.top;
   }
 
   void _moveRight({bool addAnimation = true, bool isDiagonal = false}) {
+    if (addAnimation) _addRightAnimation();
+
+    statusMoveDirectional = JoystickMoveDirectional.MOVE_RIGHT;
+    lastDirection = Direction.right;
+    _lastDirectionHorizontal = Direction.right;
+
+    if (position.right >= gameRef.size.width) return;
+
     double speed =
         isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed;
-    if (position.right >= gameRef.size.width) {
-      return;
-    }
 
     Rect displacement = position.translate(speed, 0);
 
-    if (isCollision(displacement, gameRef)) {
-      return;
-    }
+    if (isCollision(displacement, gameRef)) return;
 
     if (position.left < gameRef.size.width / 1.5 ||
         gameRef.gameCamera.isMaxRight()) {
@@ -219,30 +223,29 @@ class Player extends AnimatedObject
     } else {
       gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_RIGHT);
     }
+  }
 
-    if (addAnimation &&
-        statusMoveDirectional != JoystickMoveDirectional.MOVE_RIGHT &&
+  void _addRightAnimation() {
+    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_RIGHT &&
         animRunRight != null) {
       animation = animRunRight;
     }
-    statusMoveDirectional = JoystickMoveDirectional.MOVE_RIGHT;
-    lastDirection = Direction.right;
-    _lastDirectionHorizontal = Direction.right;
   }
 
   void _moveBottom({bool addAnimation = true, bool isDiagonal = false}) {
+    if (addAnimation) _addBottomAnimation();
+
+    statusMoveDirectional = JoystickMoveDirectional.MOVE_BOTTOM;
+    lastDirection = Direction.bottom;
+
+    if (position.bottom >= gameRef.size.height) return;
+
     double speed =
         isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed;
 
-    if (position.bottom >= gameRef.size.height) {
-      return;
-    }
-
     Rect displacement = position.translate(0, speed);
 
-    if (isCollision(displacement, gameRef)) {
-      return;
-    }
+    if (isCollision(displacement, gameRef)) return;
 
     if (position.top < gameRef.size.height / 1.9 ||
         gameRef.gameCamera.isMaxBottom()) {
@@ -250,9 +253,10 @@ class Player extends AnimatedObject
     } else {
       gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_BOTTOM);
     }
+  }
 
-    if (addAnimation &&
-        statusMoveDirectional != JoystickMoveDirectional.MOVE_BOTTOM) {
+  void _addBottomAnimation() {
+    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_BOTTOM) {
       if (animRunBottom != null) {
         animation = animRunBottom;
       } else {
@@ -263,22 +267,22 @@ class Player extends AnimatedObject
         }
       }
     }
-    statusMoveDirectional = JoystickMoveDirectional.MOVE_BOTTOM;
-    lastDirection = Direction.bottom;
   }
 
   void _moveLeft({bool addAnimation = true, bool isDiagonal = false}) {
+    if (addAnimation) _addLeftAnimation();
+
+    statusMoveDirectional = JoystickMoveDirectional.MOVE_LEFT;
+    lastDirection = Direction.left;
+    _lastDirectionHorizontal = Direction.left;
+
+    if (position.left <= 0) return;
+
     double speed =
         isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed;
-
-    if (position.left <= 0) {
-      return;
-    }
     Rect displacement = position.translate(speed * -1, 0);
 
-    if (isCollision(displacement, gameRef)) {
-      return;
-    }
+    if (isCollision(displacement, gameRef)) return;
 
     if (position.left > gameRef.size.width / 3 ||
         gameRef.gameCamera.isMaxLeft()) {
@@ -286,16 +290,13 @@ class Player extends AnimatedObject
     } else {
       gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_LEFT);
     }
+  }
 
-    if (addAnimation &&
-        statusMoveDirectional != JoystickMoveDirectional.MOVE_LEFT &&
+  void _addLeftAnimation() {
+    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_LEFT &&
         animRunLeft != null) {
       animation = animRunLeft;
     }
-    statusMoveDirectional = JoystickMoveDirectional.MOVE_LEFT;
-    lastDirection = Direction.left;
-
-    _lastDirectionHorizontal = Direction.left;
   }
 
   void idle({bool forceAddAnimation = false}) {
