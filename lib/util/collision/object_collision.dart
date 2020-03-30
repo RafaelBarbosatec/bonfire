@@ -8,7 +8,7 @@ mixin ObjectCollision {
   Collision collision = Collision();
 
   bool isCollision(Rect displacement, RPGGame game) {
-    Rect rectCollision = _createRectCollision(displacement);
+    Rect rectCollision = getRectCollision(displacement);
 
     var collisions = game.map
         .getCollisionsRendered()
@@ -34,7 +34,7 @@ mixin ObjectCollision {
   }
 
   bool isCollisionPositionInWorld(Rect displacement, RPGGame game) {
-    Rect rectCollision = _createRectCollision(displacement);
+    Rect rectCollision = getRectCollision(displacement);
 
     var collisions = game.map
         .getCollisionsRendered()
@@ -67,7 +67,7 @@ mixin ObjectCollision {
     return isCollision(moveToCurrent, game);
   }
 
-  Rect _createRectCollision(Rect displacement) {
+  Rect getRectCollision(Rect displacement) {
     double left =
         displacement.left + (displacement.width - collision.width) / 2;
 
@@ -89,7 +89,7 @@ mixin ObjectCollision {
 
   void drawCollision(Canvas canvas, Rect currentPosition) {
     canvas.drawRect(
-      _createRectCollision(currentPosition),
+      getRectCollision(currentPosition),
       new Paint()..color = Colors.lightGreenAccent.withOpacity(0.5),
     );
   }
