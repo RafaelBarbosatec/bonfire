@@ -93,7 +93,11 @@ class DungeonMap {
         initPosition: getRelativeTilePosition(10, 6),
         width: 32,
         height: 32,
-        collision: true,
+        withCollision: true,
+        collision: Collision(
+          width: 18,
+          height: 32,
+        ),
       ),
       Chest(getRelativeTilePosition(18, 7)),
       GameDecoration(
@@ -101,14 +105,14 @@ class DungeonMap {
         initPosition: getRelativeTilePosition(15, 7),
         width: 32,
         height: 32,
-        collision: true,
+        withCollision: true,
       ),
       GameDecoration(
         spriteImg: 'itens/table.png',
         initPosition: getRelativeTilePosition(27, 6),
         width: 32,
         height: 32,
-        collision: true,
+        withCollision: true,
       ),
       GameDecoration(
         animation: FlameAnimation.Animation.sequenced(

@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/animated_object.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
@@ -13,7 +15,7 @@ export 'package:bonfire/decoration/extensions.dart';
 /// player.
 ///
 /// You can use ImageSprite or Animation[FlameAnimation.Animation]
-class GameDecoration extends AnimatedObject {
+class GameDecoration extends AnimatedObject with ObjectCollision {
   /// Height of the Decoration.
   final double height;
 
@@ -27,7 +29,7 @@ class GameDecoration extends AnimatedObject {
   final bool frontFromPlayer;
 
   /// Use to define if this decoration contains collision.
-  final bool collision;
+  final bool withCollision;
 
   /// Animation[FlameAnimation.Animation] to draw.
   final FlameAnimation.Animation animation;
@@ -44,7 +46,8 @@ class GameDecoration extends AnimatedObject {
     @required this.width,
     this.frontFromPlayer = false,
     this.animation,
-    this.collision = false,
+    this.withCollision = false,
+    Collision collision,
   }) {
     this.animation = animation;
     if (spriteImg != null && spriteImg.isNotEmpty) _sprite = Sprite(spriteImg);
@@ -54,6 +57,9 @@ class GameDecoration extends AnimatedObject {
       width,
       height,
     );
+    if (withCollision) {
+      this.collision = collision ?? Collision(height: height, width: width);
+    }
   }
 
   @override
@@ -79,4 +85,7 @@ class GameDecoration extends AnimatedObject {
       return super.priority();
     }
   }
+
+  Rect get rectCollision => getRectCollision(position);
+  Rect get rectCollisionInWorld => getRectCollision(positionInWorld);
 }

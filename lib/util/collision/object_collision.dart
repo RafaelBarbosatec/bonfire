@@ -22,7 +22,10 @@ mixin ObjectCollision {
     if (game.decorations != null) {
       var collisionsDecorations = game.decorations
           .where((i) =>
-              !i.destroy() && i.collision && i.position.overlaps(rectCollision))
+              !i.destroy() &&
+              i.withCollision &&
+              i.collision != null &&
+              i.rectCollision.overlaps(rectCollision))
           .toList();
 
       if (collisionsDecorations.length > 0) {
@@ -49,8 +52,9 @@ mixin ObjectCollision {
       var collisionsDecorations = game.decorations
           .where((i) =>
               !i.destroy() &&
-              i.collision &&
-              i.positionInWorld.overlaps(rectCollision))
+              i.withCollision &&
+              i.collision != null &&
+              i.rectCollisionInWorld.overlaps(rectCollision))
           .toList();
 
       if (collisionsDecorations.length > 0) {
@@ -71,7 +75,8 @@ mixin ObjectCollision {
     double left =
         displacement.left + (displacement.width - collision.width) / 2;
 
-    double top = 0.0;
+    double top =
+        displacement.top + (displacement.height - collision.height) / 2;
 
     switch (collision.align) {
       case CollisionAlign.BOTTOM_CENTER:
@@ -82,6 +87,28 @@ mixin ObjectCollision {
         break;
       case CollisionAlign.TOP_CENTER:
         top = displacement.top;
+        break;
+      case CollisionAlign.LEFT_CENTER:
+        left = displacement.left;
+        break;
+      case CollisionAlign.RIGHT_CENTER:
+        left = displacement.right - collision.width;
+        break;
+      case CollisionAlign.TOP_LEFT:
+        top = displacement.top;
+        left = displacement.left;
+        break;
+      case CollisionAlign.TOP_RIGHT:
+        top = displacement.top;
+        left = displacement.right - collision.width;
+        break;
+      case CollisionAlign.BOTTOM_LEFT:
+        top = displacement.bottom - collision.height;
+        left = displacement.left;
+        break;
+      case CollisionAlign.BOTTOM_RIGHT:
+        top = displacement.bottom - collision.height;
+        left = displacement.right - collision.width;
         break;
     }
     return Rect.fromLTWH(left, top, collision.width, collision.height);
