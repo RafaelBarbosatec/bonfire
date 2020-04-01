@@ -87,7 +87,11 @@ GameDecoration(
   initPosition: getRelativeTilePosition(10, 6), // posição no mundo que será posicionado.
   width: 32,
   height: 32,
-  collision: true, // se terá colisão.
+  withCollision: true, // adiciona colisão default.
+  collision: Collision( // caso queira customizar a área de colisão.
+    width: 18,
+    height: 32,
+  ),
 //  animation: false, // caso você queira adicionar algo animado você pode passar sua animação aqui e não passar o 'spriteImg'.
 //  frontFromPlayer: false // caso queira forçar que esse elemento fique por cima do player ao passar por ele.
 )
@@ -118,6 +122,7 @@ Goblin() : super(
           height: 25,
           speed: 1.5,
           life: 100,
+          collision: Collision(), // Caso deseje editar área de colisão
         );
 ```   
 
@@ -214,6 +219,9 @@ void moveRight({double moveSpeed})
     
     // Caso deseje adicionar vida.
     void addLife(double life)
+    
+    // Adicione em 'render' caso deseje desenhar área de colisão.
+    void drawPositionCollision(Canvas canvas)
 
     // Desenha a barra padrão de vida. Deve ser utilizado sobrescrevendo o método 'render'.
     void drawDefaultLifeBar(
@@ -248,6 +256,7 @@ Knight() : super(
           initDirection: Direction.right,
           life: 200,
           speed: 2.5,
+          collision: Collision(), // Caso deseje editar área de colisão
         );
 ```   
 
@@ -449,3 +458,6 @@ this.gameRef.addDecoration(DECORATION);
 - [ ] Documentação detalhada dos componentes.
 - [ ] Support with [Tiled](https://www.mapeditor.org/)
 - [ ] Using Box2D
+
+## Game exemplo
+[![](https://github.com/RafaelBarbosatec/darkness_dungeon/blob/master/icone/icone_small.png)](https://github.com/RafaelBarbosatec/darkness_dungeon)
