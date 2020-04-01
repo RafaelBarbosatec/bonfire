@@ -48,6 +48,9 @@ Para executar o game com Bonfire, basta utilizar o seguinte widget:
       enemies: DungeonMap.enemies(),
       background: BackgroundColorGame(Colors.blueGrey[900]),
       constructionMode: false, // Se true ativa hot reload para facilitar construção do mapa e desenha grid.
+      listener: (context, game) {
+        // TODO ANYTHING
+      },
     );
   }
 ```
@@ -92,7 +95,7 @@ GameDecoration(
     width: 18,
     height: 32,
   ),
-//  animation: false, // caso você queira adicionar algo animado você pode passar sua animação aqui e não passar o 'spriteImg'.
+//  animation: FlameAnimation(), // caso você queira adicionar algo animado você pode passar sua animação aqui e não passar o 'spriteImg'.
 //  frontFromPlayer: false // caso queira forçar que esse elemento fique por cima do player ao passar por ele.
 )
 ```   
