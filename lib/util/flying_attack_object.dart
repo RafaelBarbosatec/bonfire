@@ -18,6 +18,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
   final Position initPosition;
   final bool damageInPlayer;
   final bool damageInEnemy;
+  final VoidCallback destroyedObject;
 
   FlyingAttackObject({
     @required this.initPosition,
@@ -30,6 +31,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
     this.damage = 1,
     this.damageInPlayer = true,
     this.damageInEnemy = true,
+    this.destroyedObject,
     Collision collision,
   }) {
     animation = flyAnimation;
@@ -146,6 +148,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
         );
       }
       remove();
+      if (this.destroyedObject != null) this.destroyedObject();
     }
   }
 }
