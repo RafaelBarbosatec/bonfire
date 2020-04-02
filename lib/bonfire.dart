@@ -20,7 +20,7 @@ export 'package:bonfire/util/flying_attack_object.dart';
 export 'package:bonfire/util/game_component.dart';
 export 'package:bonfire/util/game_interface.dart';
 export 'package:bonfire/util/text_damage.dart';
-export 'package:bonfire/util/value_enerator.dart';
+export 'package:bonfire/util/value_generator.dart';
 export 'package:flame/animation.dart';
 export 'package:flame/components/text_component.dart';
 export 'package:flame/flame.dart';

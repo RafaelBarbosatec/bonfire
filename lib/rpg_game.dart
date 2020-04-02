@@ -7,7 +7,7 @@ import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_interface.dart';
 import 'package:bonfire/util/map_explorer.dart';
-import 'package:bonfire/util/value_enerator.dart';
+import 'package:bonfire/util/value_generator.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
 import 'package:flutter/cupertino.dart';
