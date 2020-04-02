@@ -1,3 +1,8 @@
+## [0.0.15] - 2/04/2020
+
+* Add callback destroyedObject in FlyingAttackObject
+* Add TalkDialog to create your conversation.
+
 ## [0.0.14] - 27/03/2020
 
 * Improvements collision
