@@ -10,6 +10,7 @@ class Knight extends Player {
   double stamina = 100;
   Timer _timerStamina;
   bool showObserveEnemy = false;
+  bool showTalk = false;
 
   Knight({
     this.initPosition,
@@ -165,6 +166,10 @@ class Knight extends Player {
         if (showObserveEnemy) return;
         showObserveEnemy = true;
         _showEmote();
+        if (!showTalk) {
+          showTalk = true;
+          _showTalk();
+        }
       },
     );
     super.update(dt);
@@ -217,6 +222,21 @@ class Knight extends Player {
         height: 16,
         positionFromTarget: Position(18, -6),
       ),
+    );
+  }
+
+  void _showTalk() {
+    TalkDialog.show(
+      gameRef.context,
+      [
+        Say(
+          "Look at this! It seems that I'm not alone here ...",
+          Flame.util.animationAsWidget(
+            Position(100, 100),
+            animation,
+          ),
+        ),
+      ],
     );
   }
 }
