@@ -109,6 +109,7 @@ extension EnemyExtensions on Enemy {
     FlameAnimation.Animation attackEffectBottomAnim,
     FlameAnimation.Animation attackEffectLeftAnim,
     FlameAnimation.Animation attackEffectTopAnim,
+    VoidCallback execute,
   }) {
     if (!this.checkPassedInterval('attackMelee', interval)) return;
 
@@ -180,6 +181,8 @@ extension EnemyExtensions on Enemy {
     gameRef.add(AnimatedObjectOnce(animation: anim, position: positionAttack));
 
     player.receiveDamage(damage);
+
+    if (execute != null) execute();
   }
 
   void simpleAttackRange({
@@ -194,6 +197,8 @@ extension EnemyExtensions on Enemy {
     double damage = 1,
     Direction direction,
     int interval = 1000,
+    VoidCallback destroy,
+    VoidCallback execute,
   }) {
     if (!this.checkPassedInterval('attackRange', interval)) return;
 
@@ -269,17 +274,19 @@ extension EnemyExtensions on Enemy {
 
     gameRef.add(
       FlyingAttackObject(
-        direction: finalDirection,
-        flyAnimation: attackRangeAnimation,
-        destroyAnimation: animationDestroy,
-        initPosition: startPosition,
-        height: height,
-        width: width,
-        damage: damage,
-        speed: speed,
-        damageInEnemy: false,
-      ),
+          direction: finalDirection,
+          flyAnimation: attackRangeAnimation,
+          destroyAnimation: animationDestroy,
+          initPosition: startPosition,
+          height: height,
+          width: width,
+          damage: damage,
+          speed: speed,
+          damageInEnemy: false,
+          destroyedObject: destroy),
     );
+
+    if (execute != null) execute();
   }
 
   void seeAndMoveToAttackRange(

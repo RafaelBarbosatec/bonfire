@@ -96,74 +96,81 @@ class Goblin extends Enemy {
 
   void execAttackRange() {
     this.simpleAttackRange(
-      animationRight: FlameAnimation.Animation.sequenced(
-        'player/fireball_right.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationLeft: FlameAnimation.Animation.sequenced(
-        'player/fireball_left.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationTop: FlameAnimation.Animation.sequenced(
-        'player/fireball_top.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationBottom: FlameAnimation.Animation.sequenced(
-        'player/fireball_bottom.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationDestroy: FlameAnimation.Animation.sequenced(
-        'player/explosion_fire.png',
-        6,
-        textureWidth: 32,
-        textureHeight: 32,
-      ),
-      width: 25,
-      height: 25,
-      damage: attack,
-      speed: speed * 1.5,
-    );
+        animationRight: FlameAnimation.Animation.sequenced(
+          'player/fireball_right.png',
+          3,
+          textureWidth: 23,
+          textureHeight: 23,
+        ),
+        animationLeft: FlameAnimation.Animation.sequenced(
+          'player/fireball_left.png',
+          3,
+          textureWidth: 23,
+          textureHeight: 23,
+        ),
+        animationTop: FlameAnimation.Animation.sequenced(
+          'player/fireball_top.png',
+          3,
+          textureWidth: 23,
+          textureHeight: 23,
+        ),
+        animationBottom: FlameAnimation.Animation.sequenced(
+          'player/fireball_bottom.png',
+          3,
+          textureWidth: 23,
+          textureHeight: 23,
+        ),
+        animationDestroy: FlameAnimation.Animation.sequenced(
+          'player/explosion_fire.png',
+          6,
+          textureWidth: 32,
+          textureHeight: 32,
+        ),
+        width: 25,
+        height: 25,
+        damage: attack,
+        speed: speed * 1.5,
+        execute: () {
+          print('attack range');
+        },
+        destroy: () {
+          print('destroy attack range');
+        });
   }
 
   void execAttack() {
     this.simpleAttackMelee(
-      heightArea: 20,
-      widthArea: 20,
-      damage: attack / 2,
-      interval: 300,
-      attackEffectBottomAnim: FlameAnimation.Animation.sequenced(
-        'enemy/atack_effect_bottom.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
-      ),
-      attackEffectLeftAnim: FlameAnimation.Animation.sequenced(
-        'enemy/atack_effect_left.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
-      ),
-      attackEffectRightAnim: FlameAnimation.Animation.sequenced(
-        'enemy/atack_effect_right.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
-      ),
-      attackEffectTopAnim: FlameAnimation.Animation.sequenced(
-        'enemy/atack_effect_top.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
-      ),
-    );
+        heightArea: 20,
+        widthArea: 20,
+        damage: attack / 2,
+        interval: 300,
+        attackEffectBottomAnim: FlameAnimation.Animation.sequenced(
+          'enemy/atack_effect_bottom.png',
+          6,
+          textureWidth: 16,
+          textureHeight: 16,
+        ),
+        attackEffectLeftAnim: FlameAnimation.Animation.sequenced(
+          'enemy/atack_effect_left.png',
+          6,
+          textureWidth: 16,
+          textureHeight: 16,
+        ),
+        attackEffectRightAnim: FlameAnimation.Animation.sequenced(
+          'enemy/atack_effect_right.png',
+          6,
+          textureWidth: 16,
+          textureHeight: 16,
+        ),
+        attackEffectTopAnim: FlameAnimation.Animation.sequenced(
+          'enemy/atack_effect_top.png',
+          6,
+          textureWidth: 16,
+          textureHeight: 16,
+        ),
+        execute: () {
+          print('attack meele');
+        });
   }
 
   @override
