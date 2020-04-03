@@ -1,3 +1,7 @@
+## [0.0.16] - 2/04/2020
+
+* Update extensions enemy and player
+
 ## [0.0.15] - 2/04/2020
 
 * Add callback destroyedObject in FlyingAttackObject
