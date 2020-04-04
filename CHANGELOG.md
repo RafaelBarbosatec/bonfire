@@ -1,3 +1,8 @@
+## [0.1.0] - 3/04/2020
+
+* First version stable! Possible to create complete games like this: https://github.com/RafaelBarbosatec/darkness_dungeon
+* Update readme and demo.
+
 ## [0.0.16] - 2/04/2020
 
 * Update extensions enemy and player
