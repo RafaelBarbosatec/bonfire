@@ -467,3 +467,7 @@ It is possible to move the camera to some position and go back to the player aft
 
 ## Example game
 [![](https://github.com/RafaelBarbosatec/darkness_dungeon/blob/master/icone/icone_small.png)](https://github.com/RafaelBarbosatec/darkness_dungeon)
+
+# Contribution
+
+If you find any errors or want to add improvements, you can open a issue or develop the fix and open a pull request. Thank you for your cooperation!
