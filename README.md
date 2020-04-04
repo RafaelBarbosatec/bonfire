@@ -471,4 +471,6 @@ It is possible to move the camera to some position and go back to the player aft
 ## Credits
 
  * The entire FlameEgine team, especially [Erick](https://github.com/erickzanardo).
+ * [Renan](https://github.com/renancaraujo) That helped in the translation of the readme.
  * And all those who were able to contribute as they could.
+ 
