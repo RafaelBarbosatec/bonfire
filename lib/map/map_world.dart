@@ -15,8 +15,10 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
+    canvas.save();
     tilesToRender
         .forEach((tile) => tile.render(canvas, gameRef.gameCamera.position));
+    canvas.restore();
   }
 
   @override
