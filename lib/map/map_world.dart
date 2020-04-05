@@ -23,7 +23,6 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    verifyMaxTopAndLeft();
     if (lastCameraX != gameRef.gameCamera.position.x ||
         gameRef.gameCamera.position.y != lastCameraY) {
       lastCameraX = gameRef.gameCamera.position.x;
@@ -42,6 +41,12 @@ class MapWorld extends MapGame {
   @override
   List<Tile> getCollisionsRendered() {
     return tilesCollisionsRendered.toList();
+  }
+
+  @override
+  void resize(Size size) {
+    verifyMaxTopAndLeft();
+    super.resize(size);
   }
 
   void verifyMaxTopAndLeft() {
@@ -68,6 +73,13 @@ class MapWorld extends MapGame {
 
       gameRef.gameCamera.maxLeft = maxLeft;
       gameRef.gameCamera.maxTop = maxTop;
+
+      lastCameraX = -1;
+      lastCameraY = -1;
+
+      if (gameRef.player != null && !gameRef.player.usePositionInWorld) {
+        gameRef.player.usePositionInWorldToRender();
+      }
       gameRef.gameCamera.moveToPlayer();
     }
   }
