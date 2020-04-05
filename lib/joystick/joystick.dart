@@ -237,6 +237,7 @@ class Joystick extends JoystickController with PointerDetector {
   }
 
   void onPointerDown(PointerDownEvent event) {
+    if (_screenSize == null) return;
     if (!_dragging && event.position.dx < _screenSize.width / 2) {
       _dragging = true;
       currentGesturePointer = event.pointer;
@@ -244,6 +245,7 @@ class Joystick extends JoystickController with PointerDetector {
   }
 
   void onPointerMove(PointerMoveEvent event) {
+    if (_screenSize == null) return;
     if (event.pointer == currentGesturePointer &&
         event.position.dx < _screenSize.width / 2) {
       if (_dragging) {

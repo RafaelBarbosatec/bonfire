@@ -57,13 +57,12 @@ class Tile {
     );
   }
 
-  bool isVisible(RPGGame game) {
-    _game = game;
-    if (game.size == null) return false;
+  bool isVisible() {
+    if (_game.size == null) return false;
     return position.left > (size * -1) &&
-        position.left < game.size.width + size &&
+        position.left < _game.size.width + size &&
         position.top > (size * -1) &&
-        position.top < game.size.height + size;
+        position.top < _game.size.height + size;
   }
 
   Rect get positionInWorld => Rect.fromLTWH(
