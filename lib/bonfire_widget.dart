@@ -91,35 +91,52 @@ class _BonfireWidgetState extends State<BonfireWidget>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          _game.widget,
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onPanStart: _game.onPanStartLeftScreen,
-                  onPanUpdate: _game.onPanUpdateLeftScreen,
-                  onPanEnd: _game.onPanEndLeftScreen,
-                  onTapDown: _game.onTapDownLeftScreen,
-                  onTapUp: _game.onTapUpLeftScreen,
-                  child: Container(),
-                ),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTapDown: _game.onTapDown,
-                  onTapUp: _game.onTapUp,
-                  onTapCancel: _game.onTapCancel,
-                  child: Container(),
-                ),
-              )
-            ],
-          )
-        ],
+      body: Listener(
+        onPointerDown: (pointerDown) {
+          _game.onPointerDown(pointerDown);
+        },
+        onPointerMove: (pointerMove) {
+          _game.onPointerMove(pointerMove);
+        },
+        onPointerUp: (pointerUp) {
+          _game.onPointerUp(pointerUp);
+        },
+        onPointerCancel: (pointerCancel) {
+          _game.onPointerCancel(pointerCancel);
+        },
+        child: _game.widget,
       ),
     );
+//    return Scaffold(
+//      body: Stack(
+//        children: <Widget>[
+//          _game.widget,
+//          Row(
+//            children: <Widget>[
+//              Expanded(
+//                child: GestureDetector(
+//                  behavior: HitTestBehavior.opaque,
+//                  onPanStart: _game.onPanStartLeftScreen,
+//                  onPanUpdate: _game.onPanUpdateLeftScreen,
+//                  onPanEnd: _game.onPanEndLeftScreen,
+//                  onTapDown: _game.onTapDownLeftScreen,
+//                  onTapUp: _game.onTapUpLeftScreen,
+//                  child: Container(),
+//                ),
+//              ),
+//              Expanded(
+//                child: GestureDetector(
+//                  behavior: HitTestBehavior.opaque,
+//                  onTapDown: _game.onTapDown,
+//                  onTapUp: _game.onTapUp,
+//                  onTapCancel: _game.onTapCancel,
+//                  child: Container(),
+//                ),
+//              )
+//            ],
+//          )
+//        ],
+//      ),
+//    );
   }
 }

@@ -1,9 +1,10 @@
 import 'dart:ui';
 
 import 'package:bonfire/rpg_game.dart';
+import 'package:bonfire/util/gesture/ListenerPointer.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flutter/gestures.dart';
+import 'package:flame/gestures.dart';
 
 enum JoystickMoveDirectional {
   MOVE_TOP,
@@ -22,7 +23,8 @@ abstract class JoystickListener {
   void joystickAction(int action);
 }
 
-abstract class JoystickController extends Component with HasGameRef<RPGGame> {
+abstract class JoystickController extends Component
+    with HasGameRef<RPGGame>, TapDetector, PointerDetector {
   JoystickListener joystickListener;
   @override
   void render(Canvas c) {}
@@ -34,14 +36,4 @@ abstract class JoystickController extends Component with HasGameRef<RPGGame> {
   int priority() {
     return 20;
   }
-
-  void onPanStart(DragStartDetails details) {}
-  void onTapDown(TapDownDetails details) {}
-  void onTapUp(TapUpDetails details) {}
-  void onPanUpdate(DragUpdateDetails details) {}
-  void onPanEnd(DragEndDetails details) {}
-
-  void onTapDownAction(TapDownDetails details) {}
-  void onTapUpAction(TapUpDetails details) {}
-  void onTapCancelAction() {}
 }

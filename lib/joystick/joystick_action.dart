@@ -1,16 +1,14 @@
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
-enum JoystickActionAlign { TOP, BOTTOM }
+enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
 class JoystickAction {
   final int actionId;
   final String pathSprite;
   final String pathSpritePressed;
   final double size;
-  final double marginTop;
-  final double marginBottom;
-  final double marginRight;
+  final EdgeInsets margin;
   final JoystickActionAlign align;
 
   Rect rect;
@@ -21,10 +19,8 @@ class JoystickAction {
     @required this.pathSprite,
     this.pathSpritePressed,
     this.size = 20,
-    this.marginTop = 0,
-    this.marginBottom = 0,
-    this.marginRight = 0,
-    this.align = JoystickActionAlign.BOTTOM,
+    this.margin = EdgeInsets.zero,
+    this.align = JoystickActionAlign.BOTTOM_RIGHT,
   }) {
     _sprite = Sprite(pathSprite);
   }

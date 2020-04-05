@@ -3,10 +3,11 @@ import 'dart:ui';
 
 import 'package:bonfire/joystick/joystick_action.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
+import 'package:bonfire/util/gesture/ListenerPointer.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
-class Joystick extends JoystickController {
+class Joystick extends JoystickController with PointerDetector {
   double _backgroundAspectRatio = 2.2;
   Rect _backgroundRect;
   Sprite _backgroundSprite;
@@ -22,12 +23,13 @@ class Joystick extends JoystickController {
   double _tileSize;
   Size _screenSize;
 
+  int currentGesturePointer = 0;
+
   final double sizeDirectional;
   final double marginBottomDirectional;
   final double marginLeftDirectional;
   final String pathSpriteBackgroundDirectional;
   final String pathSpriteKnobDirectional;
-
   final List<JoystickAction> actions;
 
   Joystick({
@@ -59,14 +61,27 @@ class Joystick extends JoystickController {
     if (actions != null) {
       actions.forEach((action) {
         double radius = action.size / 2;
+        double dx = 0, dy = 0;
+        switch (action.align) {
+          case JoystickActionAlign.TOP_LEFT:
+            dx = action.margin.left + radius;
+            dy = action.margin.top + radius;
+            break;
+          case JoystickActionAlign.BOTTOM_LEFT:
+            dx = action.margin.left + radius;
+            dy = _screenSize.height - (action.margin.bottom + radius);
+            break;
+          case JoystickActionAlign.TOP_RIGHT:
+            dx = _screenSize.width - (action.margin.right + radius);
+            dy = action.margin.top + radius;
+            break;
+          case JoystickActionAlign.BOTTOM_RIGHT:
+            dx = _screenSize.width - (action.margin.right + radius);
+            dy = _screenSize.height - (action.margin.bottom + radius);
+            break;
+        }
         action.rect = Rect.fromCircle(
-          center: Offset(
-            _screenSize.width - (action.marginRight + radius),
-            (action.align == JoystickActionAlign.TOP ? 0 : _screenSize.height) +
-                (action.align == JoystickActionAlign.TOP
-                    ? (action.marginTop + radius)
-                    : ((action.marginBottom + radius) * -1)),
-          ),
+          center: Offset(dx, dy),
           radius: radius,
         );
       });
@@ -195,63 +210,60 @@ class Joystick extends JoystickController {
   }
 
   @override
-  void onPanStart(DragStartDetails details) {
-    _dragging = true;
-    super.onPanStart(details);
-  }
-
-  @override
   void onTapDown(TapDownDetails details) {
-    _dragging = true;
-    super.onTapDown(details);
-  }
-
-  @override
-  void onTapUp(TapUpDetails details) {
-    _dragging = false;
-    super.onTapUp(details);
-  }
-
-  @override
-  void onPanUpdate(DragUpdateDetails details) {
-    if (_dragging) {
-      _dragPosition = details.globalPosition;
-    }
-    super.onPanUpdate(details);
-  }
-
-  @override
-  void onPanEnd(DragEndDetails details) {
-    _dragging = false;
-    _dragPosition = _backgroundRect.center;
-    joystickListener.joystickChangeDirectional(JoystickMoveDirectional.IDLE);
-    super.onPanEnd(details);
-  }
-
-  @override
-  void onTapDownAction(TapDownDetails details) {
     actions
         .where((action) => action.rect.contains(details.globalPosition))
         .forEach((action) {
       action.pressed();
       joystickListener.joystickAction(action.actionId);
     });
-    super.onTapDownAction(details);
+    super.onTapDown(details);
   }
 
   @override
-  void onTapUpAction(TapUpDetails details) {
+  void onTapUp(TapUpDetails details) {
     actions.forEach((action) {
       action.unPressed();
     });
-    super.onTapUpAction(details);
+    super.onTapUp(details);
   }
 
   @override
-  void onTapCancelAction() {
+  void onTapCancel() {
     actions.forEach((action) {
       action.unPressed();
     });
-    super.onTapCancelAction();
+    super.onTapCancel();
+  }
+
+  void onPointerDown(PointerDownEvent event) {
+    if (!_dragging) {
+      _dragging = true;
+      currentGesturePointer = event.pointer;
+    }
+  }
+
+  void onPointerMove(PointerMoveEvent event) {
+    if (event.pointer == currentGesturePointer) {
+      if (_dragging) {
+        _dragPosition = event.position;
+      }
+    }
+  }
+
+  void onPointerUp(PointerUpEvent event) {
+    if (event.pointer == currentGesturePointer) {
+      _dragging = false;
+      _dragPosition = _backgroundRect.center;
+      joystickListener.joystickChangeDirectional(JoystickMoveDirectional.IDLE);
+    }
+  }
+
+  void onPointerCancel(PointerCancelEvent event) {
+    if (event.pointer == currentGesturePointer) {
+      _dragging = false;
+      _dragPosition = _backgroundRect.center;
+      joystickListener.joystickChangeDirectional(JoystickMoveDirectional.IDLE);
+    }
   }
 }
