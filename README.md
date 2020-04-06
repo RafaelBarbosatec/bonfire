@@ -360,7 +360,7 @@ Joystick is configurable by the following parameters:
         sizeDirectional: 100, // directional control size
         marginBottomDirectional: 100,
         marginLeftDirectional: 100,
-        actions: [     // List of actions that will be placed in the right side of the screen. Define the screen position for each action/ 
+        actions: [     // List of actions that will be placed the screen.
           JoystickAction(
             actionId: 0,      //(required) Action identifier, will be sent to 'void joystickAction(int action) {}' when pressed
             pathSprite: 'joystick_atack.png',     //(required) the action image

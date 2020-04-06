@@ -359,7 +359,7 @@ O componente default que existe para ser utilizado é configurável da seguinte 
         sizeDirectional: 100, // tamanho do direcional.
         marginBottomDirectional: 100,
         marginLeftDirectional: 100,
-        actions: [         // Você adicionará quantos actions desejar. Eles ficarão posicionados sempre no lado direito da tela e você poderá definir em que posição deseja que cada um fique.
+        actions: [         // Você adicionará quantos actions desejar.
           JoystickAction(
             actionId: 0,      //(required) Id que irá ser acionado ao Player no método 'void joystickAction(int action) {}' quando for clicado.
             pathSprite: 'joystick_atack.png',     //(required) imagem da ação.
