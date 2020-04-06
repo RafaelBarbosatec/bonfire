@@ -1,20 +1,20 @@
 import 'dart:ui';
 
-import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/animated_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/components/mixins/has_game_ref.dart';
 
-class AnimatedObjectOnce extends AnimatedObject with HasGameRef<RPGGame> {
+class AnimatedObjectOnce extends AnimatedObject {
   Rect position;
   final VoidCallback onFinish;
+  final VoidCallback onStartAnimation;
   final bool onlyUpdate;
-  bool _isDestroyed = false;
+  bool _notifyStart = false;
 
   AnimatedObjectOnce({
     this.position,
     FlameAnimation.Animation animation,
     this.onFinish,
+    this.onStartAnimation,
     this.onlyUpdate = false,
   }) {
     this.animation = animation;
@@ -29,21 +29,16 @@ class AnimatedObjectOnce extends AnimatedObject with HasGameRef<RPGGame> {
 
   @override
   void update(double dt) {
-    if (animation != null && !_isDestroyed) {
+    if (animation != null && !destroy()) {
       super.update(dt);
+      if (animation.currentIndex == 1 && !_notifyStart) {
+        _notifyStart = true;
+        if (onStartAnimation != null) onStartAnimation();
+      }
       if (animation.isLastFrame) {
         if (onFinish != null) onFinish();
         remove();
       }
     }
-  }
-
-  @override
-  bool destroy() {
-    return _isDestroyed;
-  }
-
-  void remove() {
-    _isDestroyed = true;
   }
 }

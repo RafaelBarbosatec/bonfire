@@ -92,6 +92,7 @@ GameDecoration(
     width: 18,
     height: 32,
   ),
+//  isTouchable: false, // if you want this component to receive touch interaction. You will be notified at 'void onTap()'
 //  animation: FlameAnimation(), // Optional param to create an animated decoration. When using this, do not specify spriteImg.
 //  frontFromPlayer: false // Define true if this decoration shall be rendered above the Player
 )
@@ -359,23 +360,21 @@ Joystick is configurable by the following parameters:
         sizeDirectional: 100, // directional control size
         marginBottomDirectional: 100,
         marginLeftDirectional: 100,
-        actions: [     // List of actions that will be placed in the right side of the screen. Define the screen position for each action/ 
+        actions: [     // List of actions that will be placed the screen.
           JoystickAction(
             actionId: 0,      //(required) Action identifier, will be sent to 'void joystickAction(int action) {}' when pressed
             pathSprite: 'joystick_atack.png',     //(required) the action image
             pathSpritePressed : 'joystick_atack.png', // Optional image to be shown when the action is fired
             size: 80,
-            marginBottom: 50,
-            marginRight: 50,
-            align = JoystickActionAlign.BOTTOM // Options to align on top or the bottom of the right side
+            margin: EdgeInsets.only(bottom: 50, right: 50),
+            align = JoystickActionAlign.BOTTOM_RIGHT,
           ),
           JoystickAction(
             actionId: 1,
             pathSprite: 'joystick_atack_range.png',
             size: 50,
-            marginBottom: 50,
-            marginRight: 160,
-            align = JoystickActionAlign.BOTTOM
+            margin: EdgeInsets.only(bottom: 50, right: 160),
+            align = JoystickActionAlign.BOTTOM_RIGHT,
           )
         ],
       )

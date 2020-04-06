@@ -39,16 +39,16 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
 
   Sprite _sprite;
 
-  GameDecoration({
-    this.spriteImg,
-    @required this.initPosition,
-    @required this.height,
-    @required this.width,
-    this.frontFromPlayer = false,
-    this.animation,
-    this.withCollision = false,
-    Collision collision,
-  }) {
+  GameDecoration(
+      {this.spriteImg,
+      @required this.initPosition,
+      @required this.height,
+      @required this.width,
+      this.frontFromPlayer = false,
+      this.animation,
+      this.withCollision = false,
+      Collision collision,
+      bool isTouchable = false}) {
     this.animation = animation;
     if (spriteImg != null && spriteImg.isNotEmpty) _sprite = Sprite(spriteImg);
     this.position = this.positionInWorld = Rect.fromLTWH(
@@ -60,6 +60,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     if (withCollision) {
       this.collision = collision ?? Collision(height: height, width: width);
     }
+    this.isTouchable = isTouchable;
   }
 
   @override
