@@ -27,3 +27,4 @@ export 'package:flame/animation.dart';
 export 'package:flame/components/text_component.dart';
 export 'package:flame/flame.dart';
 export 'package:flame/position.dart';
+export 'package:flame/sprite.dart';
