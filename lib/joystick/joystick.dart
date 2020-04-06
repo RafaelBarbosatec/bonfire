@@ -59,33 +59,44 @@ class Joystick extends JoystickController with PointerDetector {
     _dragPosition = _knobRect.center;
 
     if (actions != null) {
-      actions.forEach((action) {
-        double radius = action.size / 2;
-        double dx = 0, dy = 0;
-        switch (action.align) {
-          case JoystickActionAlign.TOP_LEFT:
-            dx = action.margin.left + radius;
-            dy = action.margin.top + radius;
-            break;
-          case JoystickActionAlign.BOTTOM_LEFT:
-            dx = action.margin.left + radius;
-            dy = _screenSize.height - (action.margin.bottom + radius);
-            break;
-          case JoystickActionAlign.TOP_RIGHT:
-            dx = _screenSize.width - (action.margin.right + radius);
-            dy = action.margin.top + radius;
-            break;
-          case JoystickActionAlign.BOTTOM_RIGHT:
-            dx = _screenSize.width - (action.margin.right + radius);
-            dy = _screenSize.height - (action.margin.bottom + radius);
-            break;
-        }
-        action.rect = Rect.fromCircle(
-          center: Offset(dx, dy),
-          radius: radius,
-        );
-      });
+      actions.forEach((action) => _setRectInAction(action));
     }
+  }
+
+  void _setRectInAction(JoystickAction action) {
+    double radius = action.size / 2;
+    double dx = 0, dy = 0;
+    switch (action.align) {
+      case JoystickActionAlign.TOP_LEFT:
+        dx = action.margin.left + radius;
+        dy = action.margin.top + radius;
+        break;
+      case JoystickActionAlign.BOTTOM_LEFT:
+        dx = action.margin.left + radius;
+        dy = _screenSize.height - (action.margin.bottom + radius);
+        break;
+      case JoystickActionAlign.TOP_RIGHT:
+        dx = _screenSize.width - (action.margin.right + radius);
+        dy = action.margin.top + radius;
+        break;
+      case JoystickActionAlign.BOTTOM_RIGHT:
+        dx = _screenSize.width - (action.margin.right + radius);
+        dy = _screenSize.height - (action.margin.bottom + radius);
+        break;
+    }
+    action.rect = Rect.fromCircle(
+      center: Offset(dx, dy),
+      radius: radius,
+    );
+  }
+
+  void addAction(JoystickAction action) {
+    _setRectInAction(action);
+    actions.add(action);
+  }
+
+  void removeAction(int actionId) {
+    actions.removeWhere((action) => action.actionId == actionId);
   }
 
   void render(Canvas canvas) {
