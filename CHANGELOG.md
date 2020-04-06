@@ -1,3 +1,9 @@
+## [0.1.1] - 6/04/2020
+
+* Improvements in gestures.
+* Improvements in joystick.
+* Decorations can now be touched.
+
 ## [0.1.0] - 3/04/2020
 
 * First version stable! Possible to create complete games like this: https://github.com/RafaelBarbosatec/darkness_dungeon
