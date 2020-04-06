@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:bonfire/joystick/joystick_action.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/util/gesture/ListenerPointer.dart';
+import 'package:bonfire/util/gesture/pointer_detector.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
