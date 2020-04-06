@@ -3,7 +3,7 @@ import 'package:example/decoration/potion_life.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 
-class Chest extends GameDecoration with Touchable {
+class Chest extends GameDecoration {
   final Position initPosition;
   bool _observedPlayer = false;
   Chest(this.initPosition)
@@ -17,6 +17,7 @@ class Chest extends GameDecoration with Touchable {
           width: 20,
           height: 20,
           initPosition: initPosition,
+          isTouchable: true,
         );
 
   @override
