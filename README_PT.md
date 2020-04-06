@@ -95,6 +95,7 @@ GameDecoration(
     width: 18,
     height: 32,
   ),
+//  isTouchable: false, // caso deseje que esse componente receba interação de toque. Será notificado em 'void onTap()'
 //  animation: FlameAnimation(), // caso você queira adicionar algo animado você pode passar sua animação aqui e não passar o 'spriteImg'.
 //  frontFromPlayer: false // caso queira forçar que esse elemento fique por cima do player ao passar por ele.
 )
@@ -364,17 +365,15 @@ O componente default que existe para ser utilizado é configurável da seguinte 
             pathSprite: 'joystick_atack.png',     //(required) imagem da ação.
             pathSpritePressed : 'joystick_atack.png', // caso queira, poderá adicionar uma imagem que será exibida quando for clicado.
             size: 80,
-            marginBottom: 50,
-            marginRight: 50,
-            align = JoystickActionAlign.BOTTOM // eles sempre estarão alinhados a direita da tela, com possibilidades de definir para cima ou para baixo (JoystickActionAlign.TOP/JoystickActionAlign.BOTTOM).
+            margin: EdgeInsets.only(bottom: 50, right: 50),
+            align = JoystickActionAlign.BOTTOM_RIGHT,
           ),
           JoystickAction(
             actionId: 1,
             pathSprite: 'joystick_atack_range.png',
             size: 50,
-            marginBottom: 50,
-            marginRight: 160,
-            align = JoystickActionAlign.BOTTOM
+            margin: EdgeInsets.only(bottom: 50, right: 160),
+            align = JoystickActionAlign.BOTTOM_RIGHT,
           )
         ],
       )
