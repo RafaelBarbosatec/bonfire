@@ -24,6 +24,7 @@ class MapWorld extends MapGame {
         gameRef.gameCamera.position.y != lastCameraY) {
       lastCameraX = gameRef.gameCamera.position.x;
       lastCameraY = gameRef.gameCamera.position.y;
+
       map.forEach((tile) {
         tile.gameRef = gameRef;
         tile.update(t);

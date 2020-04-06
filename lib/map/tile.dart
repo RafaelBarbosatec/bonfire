@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 class Tile extends SpriteObject {
   final bool collision;
   final double size;
-  Rect _initRectPosition;
   TextConfig _textConfig;
   Position _positionText;
   Paint _paintText = Paint()
@@ -19,13 +18,12 @@ class Tile extends SpriteObject {
 
   Tile(String spritePath, Position initPosition,
       {this.collision = false, this.size = 32}) {
-    _initRectPosition = Rect.fromLTWH(
+    position = positionInWorld = Rect.fromLTWH(
       (initPosition != null ? initPosition.x : 0.0) * size,
       (initPosition != null ? initPosition.y : 0.0) * size,
       size,
       size,
     );
-    position = positionInWorld = _initRectPosition;
     if (spritePath.isNotEmpty) sprite = Sprite(spritePath);
 
     _textConfig = TextConfig(

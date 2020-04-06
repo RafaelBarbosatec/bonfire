@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:bonfire/util/gesture/pointer_detector.dart';
-import 'package:bonfire/util/gesture/touchable.dart';
+import 'package:bonfire/util/rect_component.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/composed_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
@@ -29,8 +29,8 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   Iterable<TapDetector> get _tapAbleComponents =>
       components.where((c) => c is TapDetector).cast();
 
-  Iterable<Touchable> get _touchableComponents =>
-      components.where((c) => c is Touchable).cast();
+  Iterable<RectComponent> get _touchableComponents =>
+      components.where((c) => (c is RectComponent && c.isTouchable)).cast();
 
   void onPointerCancel(PointerCancelEvent event) {
     _tapAbleComponents.forEach((c) => c.onTapCancel());

@@ -19,7 +19,6 @@ export 'package:bonfire/util/direction.dart';
 export 'package:bonfire/util/flying_attack_object.dart';
 export 'package:bonfire/util/game_component.dart';
 export 'package:bonfire/util/game_interface.dart';
-export 'package:bonfire/util/gesture/touchable.dart';
 export 'package:bonfire/util/talk/say.dart';
 export 'package:bonfire/util/talk/talk_dialog.dart';
 export 'package:bonfire/util/text_damage.dart';

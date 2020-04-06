@@ -16,10 +16,12 @@ abstract class RectComponent extends Component with HasGameRef<RPGGame> {
   /// Variable used to control whether the component has been destroyed.
   bool _isDestroyed = false;
 
+  bool isTouchable = false;
+
+  int _pointer;
+
   @override
-  void render(Canvas c) {
-    // TODO: implement render
-  }
+  void render(Canvas c) {}
 
   @override
   void update(double t) {
@@ -37,23 +39,36 @@ abstract class RectComponent extends Component with HasGameRef<RPGGame> {
   }
 
   bool isVisibleInMap() {
-    if (gameRef.size != null) {
-      return position.top < (gameRef.size.height + position.height) &&
-          position.top > (position.height * -1) &&
-          position.left > (position.width * -1) &&
-          position.left < (gameRef.size.width + position.width) &&
-          !destroy();
-    } else {
-      return false;
-    }
+    if (gameRef == null || gameRef.size == null) return false;
+
+    return position.top < (gameRef.size.height + position.height) &&
+        position.top > (position.height * -1) &&
+        position.left > (position.width * -1) &&
+        position.left < (gameRef.size.width + position.width) &&
+        !destroy();
   }
 
   Rect positionInWordToPosition() {
+    if (gameRef == null) return positionInWorld;
     return Rect.fromLTWH(
       positionInWorld.left + gameRef.gameCamera.position.x,
       positionInWorld.top + gameRef.gameCamera.position.y,
       positionInWorld.width,
       positionInWorld.height,
     );
+  }
+
+  void onTap() {}
+
+  void handlerTabDown(int pointer, Offset position) {
+    if (this.position.contains(position)) {
+      this._pointer = pointer;
+    }
+  }
+
+  void handlerTabUp(int pointer, Offset position) {
+    if (this.position.contains(position) && pointer == this._pointer) {
+      this.onTap();
+    }
   }
 }
