@@ -24,6 +24,7 @@ class Game extends StatelessWidget {
         pathSpriteBackgroundDirectional: 'joystick_background.png',
         pathSpriteKnobDirectional: 'joystick_knob.png',
         sizeDirectional: 100,
+        marginLeftDirectional: 150,
         actions: [
           JoystickAction(
             actionId: 0,

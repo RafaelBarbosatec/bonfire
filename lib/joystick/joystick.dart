@@ -248,7 +248,13 @@ class Joystick extends JoystickController with PointerDetector {
   }
 
   void onPointerDown(PointerDownEvent event) {
-    if (!_dragging && _backgroundRect.contains(event.position)) {
+    Rect directional = Rect.fromLTWH(
+      _backgroundRect.left - 50,
+      _backgroundRect.top - 50,
+      _backgroundRect.width + 100,
+      _backgroundRect.height + 100,
+    );
+    if (!_dragging && directional.contains(event.position)) {
       _dragging = true;
       currentGesturePointer = event.pointer;
     }
