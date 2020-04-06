@@ -3,16 +3,15 @@ import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/base_game_point_detector.dart';
 import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_interface.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator.dart';
-import 'package:flame/game.dart';
-import 'package:flame/gestures.dart';
 import 'package:flutter/cupertino.dart';
 
-class RPGGame extends BaseGame with TapDetector {
+class RPGGame extends BaseGamePointerDetector {
   final BuildContext context;
   final TickerProvider vsync;
   final Player player;
@@ -71,61 +70,24 @@ class RPGGame extends BaseGame with TapDetector {
     add(decoration);
   }
 
-  @override
-  void onTapDown(TapDownDetails details) {
-    joystickController.onTapDownAction(details);
-    components
-        .where((item) => item is TapDetector)
-        .forEach((item) => (item as TapDetector).onTapDown(details));
+  void onPointerDown(PointerDownEvent event) {
+    joystickController.onPointerDown(event);
+    super.onPointerDown(event);
   }
 
-  @override
-  void onTapUp(TapUpDetails details) {
-    joystickController.onTapUpAction(details);
-    components
-        .where((item) => item is TapDetector)
-        .forEach((item) => (item as TapDetector).onTapUp(details));
+  void onPointerMove(PointerMoveEvent event) {
+    joystickController.onPointerMove(event);
+    super.onPointerMove(event);
   }
 
-  @override
-  void onTap() {
-    components
-        .where((item) => item is TapDetector)
-        .forEach((item) => (item as TapDetector).onTap());
+  void onPointerUp(PointerUpEvent event) {
+    joystickController.onPointerUp(event);
+    super.onPointerUp(event);
   }
 
-  @override
-  void onTapCancel() {
-    joystickController.onTapCancelAction();
-    components
-        .where((item) => item is TapDetector)
-        .forEach((item) => (item as TapDetector).onTapCancel());
-  }
-
-  void onPanStartLeftScreen(DragStartDetails details) {
-    joystickController.onPanStart(details);
-  }
-
-  void onPanUpdateLeftScreen(DragUpdateDetails details) {
-    joystickController.onPanUpdate(details);
-  }
-
-  void onPanEndLeftScreen(DragEndDetails details) {
-    joystickController.onPanEnd(details);
-  }
-
-  void onTapDownLeftScreen(TapDownDetails details) {
-    joystickController.onTapDown(details);
-    components
-        .where((item) => item is TapDetector)
-        .forEach((item) => (item as TapDetector).onTapDown(details));
-  }
-
-  void onTapUpLeftScreen(TapUpDetails details) {
-    joystickController.onTapUp(details);
-    components
-        .where((item) => item is TapDetector)
-        .forEach((item) => (item as TapDetector).onTapUp(details));
+  void onPointerCancel(PointerCancelEvent event) {
+    joystickController.onPointerCancel(event);
+    super.onPointerCancel(event);
   }
 
   List<Enemy> visibleEnemies() {

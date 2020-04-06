@@ -15,19 +15,21 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    tilesToRender
-        .forEach((tile) => tile.render(canvas, gameRef.gameCamera.position));
+    tilesToRender.forEach((tile) => tile.render(canvas));
   }
 
   @override
   void update(double t) {
-    verifyMaxTopAndLeft();
     if (lastCameraX != gameRef.gameCamera.position.x ||
         gameRef.gameCamera.position.y != lastCameraY) {
       lastCameraX = gameRef.gameCamera.position.x;
       lastCameraY = gameRef.gameCamera.position.y;
-      map.forEach((tile) => tile.update(gameRef));
-      tilesToRender = map.where((i) => i.isVisible(gameRef));
+
+      map.forEach((tile) {
+        tile.gameRef = gameRef;
+        tile.update(t);
+      });
+      tilesToRender = map.where((i) => i.isVisibleInMap());
       tilesCollisionsRendered = tilesToRender.where((i) => i.collision);
     }
   }
@@ -40,6 +42,12 @@ class MapWorld extends MapGame {
   @override
   List<Tile> getCollisionsRendered() {
     return tilesCollisionsRendered.toList();
+  }
+
+  @override
+  void resize(Size size) {
+    verifyMaxTopAndLeft();
+    super.resize(size);
   }
 
   void verifyMaxTopAndLeft() {
@@ -66,6 +74,13 @@ class MapWorld extends MapGame {
 
       gameRef.gameCamera.maxLeft = maxLeft;
       gameRef.gameCamera.maxTop = maxTop;
+
+      lastCameraX = -1;
+      lastCameraY = -1;
+
+      if (gameRef.player != null && !gameRef.player.usePositionInWorld) {
+        gameRef.player.usePositionInWorldToRender();
+      }
       gameRef.gameCamera.moveToPlayer();
     }
   }

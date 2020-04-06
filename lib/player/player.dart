@@ -410,5 +410,7 @@ class Player extends AnimatedObject
     );
   }
 
+  bool get usePositionInWorld => _usePositionInWorld;
+
   Rect get rectCollision => getRectCollision(position);
 }
