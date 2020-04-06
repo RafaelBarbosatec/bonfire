@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:bonfire/util/gesture/pointer_detector.dart';
+import 'package:bonfire/util/gesture/touchable.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/composed_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
@@ -28,11 +29,16 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   Iterable<TapDetector> get _tapAbleComponents =>
       components.where((c) => c is TapDetector).cast();
 
+  Iterable<Touchable> get _touchableComponents =>
+      components.where((c) => c is Touchable).cast();
+
   void onPointerCancel(PointerCancelEvent event) {
     _tapAbleComponents.forEach((c) => c.onTapCancel());
   }
 
   void onPointerUp(PointerUpEvent event) {
+    _touchableComponents
+        .forEach((c) => c.handlerTabUp(event.pointer, event.position));
     _tapAbleComponents.forEach((c) => c.onTapUp(TapUpDetails(
           globalPosition: event.position,
           localPosition: event.localPosition,
@@ -40,6 +46,8 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   }
 
   void onPointerDown(PointerDownEvent event) {
+    _touchableComponents
+        .forEach((c) => c.handlerTabDown(event.pointer, event.position));
     _tapAbleComponents.forEach((c) => c.onTapDown(TapDownDetails(
           globalPosition: event.position,
           localPosition: event.localPosition,

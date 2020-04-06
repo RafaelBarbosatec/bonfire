@@ -15,8 +15,7 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    tilesToRender
-        .forEach((tile) => tile.render(canvas, gameRef.gameCamera.position));
+    tilesToRender.forEach((tile) => tile.render(canvas));
   }
 
   @override
@@ -25,8 +24,11 @@ class MapWorld extends MapGame {
         gameRef.gameCamera.position.y != lastCameraY) {
       lastCameraX = gameRef.gameCamera.position.x;
       lastCameraY = gameRef.gameCamera.position.y;
-      map.forEach((tile) => tile.update(gameRef));
-      tilesToRender = map.where((i) => i.isVisible());
+      map.forEach((tile) {
+        tile.gameRef = gameRef;
+        tile.update(t);
+      });
+      tilesToRender = map.where((i) => i.isVisibleInMap());
       tilesCollisionsRendered = tilesToRender.where((i) => i.collision);
     }
   }

@@ -3,8 +3,9 @@ import 'package:example/decoration/potion_life.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 
-class Chest extends GameDecoration {
+class Chest extends GameDecoration with Touchable {
   final Position initPosition;
+  bool _observedPlayer = false;
   Chest(this.initPosition)
       : super(
           animation: FlameAnimation.Animation.sequenced(
@@ -22,54 +23,90 @@ class Chest extends GameDecoration {
   void update(double dt) {
     if (!this.isVisibleInMap()) return;
     this.seePlayer(
-        observed: (player) {
-          gameRef.addDecoration(
-            PotionLife(
-              Position(
-                positionInWorld.translate(width * 2, 0).left,
-                positionInWorld.top - height * 2,
-              ),
-              30,
-            ),
-          );
+      observed: (player) {
+        if (!_observedPlayer) {
+          _observedPlayer = true;
+          _showEmote();
+        }
+      },
+      notObserved: () {
+        _observedPlayer = false;
+      },
+      visionCells: 1,
+    );
 
-          gameRef.addDecoration(
-            PotionLife(
-              Position(
-                positionInWorld.translate(width * 2, 0).left,
-                positionInWorld.top + height * 2,
-              ),
-              30,
-            ),
-          );
-
-          gameRef.add(
-            AnimatedObjectOnce(
-              animation: FlameAnimation.Animation.sequenced(
-                "smoke_explosin.png",
-                6,
-                textureWidth: 16,
-                textureHeight: 16,
-              ),
-              position: positionInWorld.translate(width * 2, 0),
-            ),
-          );
-
-          gameRef.add(
-            AnimatedObjectOnce(
-              animation: FlameAnimation.Animation.sequenced(
-                "smoke_explosin.png",
-                6,
-                textureWidth: 16,
-                textureHeight: 16,
-              ),
-              position: positionInWorld.translate(width * 2, height * 2),
-            ),
-          );
-
-          remove();
-        },
-        visionCells: 1);
     super.update(dt);
+  }
+
+  @override
+  void onTap() {
+    if (_observedPlayer) {
+      _addPotions();
+      remove();
+    }
+    super.onTap();
+  }
+
+  void _addPotions() {
+    gameRef.addDecoration(
+      PotionLife(
+        Position(
+          positionInWorld.translate(width * 2, 0).left,
+          positionInWorld.top - height * 2,
+        ),
+        30,
+      ),
+    );
+
+    gameRef.addDecoration(
+      PotionLife(
+        Position(
+          positionInWorld.translate(width * 2, 0).left,
+          positionInWorld.top + height * 2,
+        ),
+        30,
+      ),
+    );
+
+    gameRef.add(
+      AnimatedObjectOnce(
+        animation: FlameAnimation.Animation.sequenced(
+          "smoke_explosin.png",
+          6,
+          textureWidth: 16,
+          textureHeight: 16,
+        ),
+        position: positionInWorld.translate(width * 2, 0),
+      ),
+    );
+
+    gameRef.add(
+      AnimatedObjectOnce(
+        animation: FlameAnimation.Animation.sequenced(
+          "smoke_explosin.png",
+          6,
+          textureWidth: 16,
+          textureHeight: 16,
+        ),
+        position: positionInWorld.translate(width * 2, height * 2),
+      ),
+    );
+  }
+
+  void _showEmote() {
+    gameRef.add(
+      AnimatedFollowerObject(
+        animation: FlameAnimation.Animation.sequenced(
+          'player/emote_exclamacao.png',
+          8,
+          textureWidth: 32,
+          textureHeight: 32,
+        ),
+        target: this,
+        width: 16,
+        height: 16,
+        positionFromTarget: Position(18, -6),
+      ),
+    );
   }
 }
