@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/animated_object_once.dart';
 import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/flying_attack_object.dart';
+import 'package:bonfire/util/objects/animated_object_once.dart';
+import 'package:bonfire/util/objects/flying_attack_object.dart';
 import 'package:bonfire/util/text_damage.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';

@@ -1,8 +1,8 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/animated_object.dart';
-import 'package:bonfire/util/animated_object_once.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
+import 'package:bonfire/util/objects/animated_object.dart';
+import 'package:bonfire/util/objects/animated_object_once.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';

@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:bonfire/util/animated_object.dart';
+import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
 class AnimatedObjectOnce extends AnimatedObject {

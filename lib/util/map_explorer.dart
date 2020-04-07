@@ -7,9 +7,7 @@ class MapExplorer implements JoystickListener {
   MapExplorer(this.camera);
 
   @override
-  void joystickAction(int action) {
-    // TODO: implement joystickAction
-  }
+  void joystickAction(int action) {}
 
   @override
   void joystickChangeDirectional(JoystickMoveDirectional directional) {

@@ -1,10 +1,8 @@
 import 'dart:ui';
 
-import 'package:bonfire/rpg_game.dart';
-import 'package:flame/components/component.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
+import 'package:bonfire/util/game_component.dart';
 
-abstract class RectComponent extends Component with HasGameRef<RPGGame> {
+abstract class RectComponent extends GameComponent {
   /// Position used to draw on the screen
   Rect position;
 

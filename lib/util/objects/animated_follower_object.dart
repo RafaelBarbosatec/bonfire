@@ -1,11 +1,12 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/animated_object.dart';
+import 'package:bonfire/util/objects/animated_object.dart';
+import 'package:bonfire/util/rect_component.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
 class AnimatedFollowerObject extends AnimatedObject {
-  final AnimatedObject target;
+  final RectComponent target;
   final Position positionFromTarget;
   final double height;
   final double width;

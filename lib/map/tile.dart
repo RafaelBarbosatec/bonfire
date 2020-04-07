@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:bonfire/util/sprite_object.dart';
+import 'package:bonfire/util/objects/sprite_object.dart';
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/text_config.dart';
