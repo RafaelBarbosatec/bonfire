@@ -1,3 +1,8 @@
+## [0.1.2] - 8/04/2020
+
+* Improvements in player and enemy extensions.
+* Add ShowAreaCollision.
+
 ## [0.1.1] - 6/04/2020
 
 * Improvements in gestures.
