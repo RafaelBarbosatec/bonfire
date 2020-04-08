@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/objects/animated_object_once.dart';
@@ -21,6 +21,7 @@ extension PlayerExtensions on Player {
     @required double damage,
     double heightArea = 32,
     double widthArea = 32,
+    bool withPush = true,
   }) {
     if (isDead) return;
 
@@ -60,8 +61,9 @@ extension PlayerExtensions on Player {
     gameRef.visibleEnemies().forEach((enemy) {
       if (enemy.positionInWorld.overlaps(positionAttack)) {
         enemy.receiveDamage(damage);
-        if (!this.isCollision(
-            enemy.position.translate(pushLeft, pushTop), this.gameRef)) {
+        if (withPush &&
+            !this.isCollision(
+                enemy.position.translate(pushLeft, pushTop), this.gameRef)) {
           enemy.translate(pushLeft, pushTop);
         }
       }

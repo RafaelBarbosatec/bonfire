@@ -105,6 +105,7 @@ extension EnemyExtensions on Enemy {
     @required double heightArea,
     @required double widthArea,
     int interval = 1000,
+    bool withPush = false,
     FlameAnimation.Animation attackEffectRightAnim,
     FlameAnimation.Animation attackEffectBottomAnim,
     FlameAnimation.Animation attackEffectLeftAnim,
@@ -139,6 +140,8 @@ extension EnemyExtensions on Enemy {
       playerDirection = diffY > 0 ? Direction.top : Direction.bottom;
     }
 
+    double pushLeft = 0;
+    double pushTop = 0;
     switch (playerDirection) {
       case Direction.top:
         positionAttack = Rect.fromLTWH(
@@ -148,6 +151,7 @@ extension EnemyExtensions on Enemy {
           heightArea,
         );
         if (attackEffectTopAnim != null) anim = attackEffectTopAnim;
+        pushTop = heightArea * -1;
         break;
       case Direction.right:
         positionAttack = Rect.fromLTWH(
@@ -157,6 +161,7 @@ extension EnemyExtensions on Enemy {
           heightArea,
         );
         if (attackEffectRightAnim != null) anim = attackEffectRightAnim;
+        pushLeft = widthArea;
         break;
       case Direction.bottom:
         positionAttack = Rect.fromLTWH(
@@ -166,6 +171,7 @@ extension EnemyExtensions on Enemy {
           heightArea,
         );
         if (attackEffectBottomAnim != null) anim = attackEffectBottomAnim;
+        pushTop = heightArea;
         break;
       case Direction.left:
         positionAttack = Rect.fromLTWH(
@@ -175,12 +181,19 @@ extension EnemyExtensions on Enemy {
           heightArea,
         );
         if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
+        pushLeft = widthArea * -1;
         break;
     }
 
     gameRef.add(AnimatedObjectOnce(animation: anim, position: positionAttack));
 
     player.receiveDamage(damage);
+
+    if (withPush &&
+        !this.isCollision(
+            player.position.translate(pushLeft, pushTop), this.gameRef)) {
+      player.position = player.position.translate(pushLeft, pushTop);
+    }
 
     if (execute != null) execute();
   }
