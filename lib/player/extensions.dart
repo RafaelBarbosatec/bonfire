@@ -80,6 +80,7 @@ extension PlayerExtensions on Player {
     @required double height,
     double speed = 1.5,
     double damage = 1,
+    bool withCollision = true,
     VoidCallback destroy,
   }) {
     if (isDead) return;
@@ -124,17 +125,17 @@ extension PlayerExtensions on Player {
 
     gameRef.add(
       FlyingAttackObject(
-        direction: lastDirection,
-        flyAnimation: attackRangeAnimation,
-        destroyAnimation: animationDestroy,
-        initPosition: startPosition,
-        height: height,
-        width: width,
-        damage: damage,
-        speed: speed,
-        damageInPlayer: false,
-        destroyedObject: destroy,
-      ),
+          direction: lastDirection,
+          flyAnimation: attackRangeAnimation,
+          destroyAnimation: animationDestroy,
+          initPosition: startPosition,
+          height: height,
+          width: width,
+          damage: damage,
+          speed: speed,
+          damageInPlayer: false,
+          destroyedObject: destroy,
+          withCollision: withCollision),
     );
   }
 

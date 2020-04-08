@@ -210,6 +210,7 @@ extension EnemyExtensions on Enemy {
     double damage = 1,
     Direction direction,
     int interval = 1000,
+    bool withCollision = true,
     VoidCallback destroy,
     VoidCallback execute,
   }) {
@@ -287,16 +288,18 @@ extension EnemyExtensions on Enemy {
 
     gameRef.add(
       FlyingAttackObject(
-          direction: finalDirection,
-          flyAnimation: attackRangeAnimation,
-          destroyAnimation: animationDestroy,
-          initPosition: startPosition,
-          height: height,
-          width: width,
-          damage: damage,
-          speed: speed,
-          damageInEnemy: false,
-          destroyedObject: destroy),
+        direction: finalDirection,
+        flyAnimation: attackRangeAnimation,
+        destroyAnimation: animationDestroy,
+        initPosition: startPosition,
+        height: height,
+        width: width,
+        damage: damage,
+        speed: speed,
+        damageInEnemy: false,
+        destroyedObject: destroy,
+        withCollision: withCollision,
+      ),
     );
 
     if (execute != null) execute();

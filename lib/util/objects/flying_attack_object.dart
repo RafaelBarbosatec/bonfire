@@ -18,6 +18,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
   final Position initPosition;
   final bool damageInPlayer;
   final bool damageInEnemy;
+  final bool withCollision;
   final VoidCallback destroyedObject;
 
   FlyingAttackObject({
@@ -31,6 +32,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
     this.damage = 1,
     this.damageInPlayer = true,
     this.damageInEnemy = true,
+    this.withCollision = true,
     this.destroyedObject,
     Collision collision,
   }) {
@@ -84,7 +86,8 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
   void _verifyCollision() {
     bool destroy = false;
 
-    destroy = isCollisionPositionInWorld(positionInWorld, gameRef);
+    if (withCollision)
+      destroy = isCollisionPositionInWorld(positionInWorld, gameRef);
 
     if (damageInPlayer) {
       if (position.overlaps(gameRef.player.position)) {
