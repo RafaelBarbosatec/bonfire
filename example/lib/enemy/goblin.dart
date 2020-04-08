@@ -11,36 +11,40 @@ class Goblin extends Enemy {
   Goblin({
     @required this.initPosition,
   }) : super(
-          animationIdleRight: FlameAnimation.Animation.sequenced(
-            "enemy/goblin_idle.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          animationIdleLeft: FlameAnimation.Animation.sequenced(
-            "enemy/goblin_idle_left.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          animationRunRight: FlameAnimation.Animation.sequenced(
-            "enemy/goblin_run_right.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          animationRunLeft: FlameAnimation.Animation.sequenced(
-            "enemy/goblin_run_left.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          initPosition: initPosition,
-          width: 25,
-          height: 25,
-          speed: 1.5,
-          life: 100,
-        );
+            animationIdleRight: FlameAnimation.Animation.sequenced(
+              "enemy/goblin_idle.png",
+              6,
+              textureWidth: 16,
+              textureHeight: 16,
+            ),
+            animationIdleLeft: FlameAnimation.Animation.sequenced(
+              "enemy/goblin_idle_left.png",
+              6,
+              textureWidth: 16,
+              textureHeight: 16,
+            ),
+            animationRunRight: FlameAnimation.Animation.sequenced(
+              "enemy/goblin_run_right.png",
+              6,
+              textureWidth: 16,
+              textureHeight: 16,
+            ),
+            animationRunLeft: FlameAnimation.Animation.sequenced(
+              "enemy/goblin_run_left.png",
+              6,
+              textureWidth: 16,
+              textureHeight: 16,
+            ),
+            initPosition: initPosition,
+            width: 25,
+            height: 25,
+            speed: 1.5,
+            life: 100,
+            collision: Collision(
+              height: 12,
+              width: 12,
+              align: CollisionAlign.CENTER,
+            ));
 
   @override
   void update(double dt) {

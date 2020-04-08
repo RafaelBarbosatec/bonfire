@@ -21,6 +21,7 @@ class BonfireWidget extends StatefulWidget {
   final int frequencyListener;
   final Function(BuildContext context, RPGGame) listener;
   final bool constructionMode;
+  final bool showCollisionArea;
 
   const BonfireWidget({
     Key key,
@@ -34,6 +35,7 @@ class BonfireWidget extends StatefulWidget {
     this.background,
     this.frequencyListener = 1000,
     this.constructionMode = false,
+    this.showCollisionArea = false,
   }) : super(key: key);
 
   @override
@@ -72,6 +74,7 @@ class _BonfireWidgetState extends State<BonfireWidget>
       enemies: widget.enemies,
       background: widget.background,
       constructionMode: widget.constructionMode,
+      showCollisionArea: widget.showCollisionArea,
     )..addListener(
         (game) {
           if (timerListener == null) {

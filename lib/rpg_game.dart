@@ -23,6 +23,7 @@ class RPGGame extends BaseGamePointerDetector {
   final GameComponent background;
   final Camera gameCamera = Camera();
   final bool constructionMode;
+  final bool showCollisionArea;
   Function(RPGGame) _gameListener;
 
   RPGGame({
@@ -36,6 +37,7 @@ class RPGGame extends BaseGamePointerDetector {
     this.decorations,
     this.background,
     this.constructionMode = false,
+    this.showCollisionArea = false,
   })  : assert(map != null),
         assert(context != null),
         assert(joystickController != null) {
