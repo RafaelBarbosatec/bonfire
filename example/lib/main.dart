@@ -1,8 +1,13 @@
+import 'dart:math';
+
 import 'package:bonfire/bonfire.dart';
+import 'package:example/enemy/goblin.dart';
 import 'package:example/map/dungeon_map.dart';
 import 'package:example/player/knight.dart';
 import 'package:example/player/knight_interface.dart';
+import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,8 +20,11 @@ void main() async {
   );
 }
 
-class Game extends StatelessWidget {
+class Game extends StatelessWidget implements GameListener {
   static const sizeTile = 32.0;
+
+  final GameController _controller = GameController();
+
   @override
   Widget build(BuildContext context) {
     return BonfireWidget(
@@ -48,9 +56,49 @@ class Game extends StatelessWidget {
       decorations: DungeonMap.decorations(),
       enemies: DungeonMap.enemies(),
       background: BackgroundColorGame(Colors.blueGrey[900]),
-      listener: (context, game) {
-        // TODO ANYTHING
-      },
+      gameController: _controller..setListener(this),
+    );
+  }
+
+  @override
+  void updateGame() {}
+
+  @override
+  void changeCountLiveEnemies(int count) {
+    if (count < 2) {
+      _addEnemyInWorld();
+    }
+  }
+
+  void _addEnemyInWorld() {
+    double x = sizeTile * (2 + Random().nextInt(27));
+    double y = sizeTile * (5 + Random().nextInt(3));
+
+    Position position = Position(
+      x,
+      y,
+    );
+    _controller.addComponent(
+      AnimatedObjectOnce(
+        animation: FlameAnimation.Animation.sequenced(
+          "smoke_explosin.png",
+          6,
+          textureWidth: 16,
+          textureHeight: 16,
+        ),
+        position: Rect.fromLTWH(
+          position.x,
+          position.y,
+          sizeTile,
+          sizeTile,
+        ),
+      ),
+    );
+
+    _controller.addEnemy(
+      Goblin(
+        initPosition: position,
+      ),
     );
   }
 }

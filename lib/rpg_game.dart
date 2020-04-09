@@ -6,6 +6,7 @@ import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/base_game_point_detector.dart';
 import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_component.dart';
+import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/game_interface.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator.dart';
@@ -24,7 +25,7 @@ class RPGGame extends BaseGamePointerDetector {
   final Camera gameCamera = Camera();
   final bool constructionMode;
   final bool showCollisionArea;
-  Function(RPGGame) _gameListener;
+  final GameController gameController;
 
   RPGGame({
     @required this.context,
@@ -38,9 +39,11 @@ class RPGGame extends BaseGamePointerDetector {
     this.background,
     this.constructionMode = false,
     this.showCollisionArea = false,
+    this.gameController,
   })  : assert(map != null),
         assert(context != null),
         assert(joystickController != null) {
+    if (gameController != null) gameController.setGame(this);
     gameCamera.gameRef = this;
     joystickController.joystickListener = player ?? MapExplorer(gameCamera);
     if (background != null) add(background);
@@ -55,11 +58,7 @@ class RPGGame extends BaseGamePointerDetector {
   @override
   void update(double t) {
     super.update(t);
-    if (_gameListener != null) _gameListener(this);
-  }
-
-  void addListener(Function(RPGGame) gameListener) {
-    this._gameListener = gameListener;
+    if (gameController != null) gameController.notifyListeners();
   }
 
   void addEnemy(Enemy enemy) {

@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 
 class Goblin extends Enemy {
   final Position initPosition;
-  double attack = 25;
+  double attack = 20;
   bool _seePlayerClose = false;
 
   Goblin({
@@ -146,7 +146,7 @@ class Goblin extends Enemy {
         heightArea: 20,
         widthArea: 20,
         damage: attack / 2,
-        interval: 300,
+        interval: 400,
         withPush: true,
         attackEffectBottomAnim: FlameAnimation.Animation.sequenced(
           'enemy/atack_effect_bottom.png',

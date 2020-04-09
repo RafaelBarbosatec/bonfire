@@ -13,6 +13,7 @@ export 'package:bonfire/player/player.dart';
 export 'package:bonfire/util/background_color_game.dart';
 export 'package:bonfire/util/collision/collision.dart';
 export 'package:bonfire/util/direction.dart';
+export 'package:bonfire/util/game_controller.dart';
 export 'package:bonfire/util/game_interface.dart';
 export 'package:bonfire/util/objects/animated_follower_object.dart';
 export 'package:bonfire/util/objects/animated_object.dart';
