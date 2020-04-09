@@ -49,9 +49,7 @@ Para executar o game com Bonfire, basta utilizar o seguinte widget:
       background: BackgroundColorGame(Colors.blueGrey[900]),
       constructionMode: false, // Se true ativa hot reload para facilitar construção do mapa e desenha grid.
       showCollisionArea: false, // Se true, exibe área de colisão dos objetos.
-      listener: (context, game) {
-        // TODO ANYTHING
-      },
+      gameController: GameController() // Caso deseja escutar modificações do game para fazer algo.
     );
   }
 ```

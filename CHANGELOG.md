@@ -1,3 +1,8 @@
+## [0.1.3] - 9/04/2020
+
+* Improvements in player and enemy extensions.
+* Add GameController.
+
 ## [0.1.2] - 8/04/2020
 
 * Improvements in player and enemy extensions.
