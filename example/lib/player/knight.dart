@@ -15,36 +15,36 @@ class Knight extends Player {
   Knight({
     this.initPosition,
   }) : super(
-          animIdleLeft: FlameAnimation.Animation.sequenced(
-            "player/knight_idle_left.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          animIdleRight: FlameAnimation.Animation.sequenced(
-            "player/knight_idle.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          animRunRight: FlameAnimation.Animation.sequenced(
-            "player/knight_run.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          animRunLeft: FlameAnimation.Animation.sequenced(
-            "player/knight_run_left.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          width: 32,
-          height: 32,
-          initPosition: initPosition,
-          life: 200,
-          speed: 2.5,
-        );
+            animIdleLeft: FlameAnimation.Animation.sequenced(
+              "player/knight_idle_left.png",
+              6,
+              textureWidth: 16,
+              textureHeight: 16,
+            ),
+            animIdleRight: FlameAnimation.Animation.sequenced(
+              "player/knight_idle.png",
+              6,
+              textureWidth: 16,
+              textureHeight: 16,
+            ),
+            animRunRight: FlameAnimation.Animation.sequenced(
+              "player/knight_run.png",
+              6,
+              textureWidth: 16,
+              textureHeight: 16,
+            ),
+            animRunLeft: FlameAnimation.Animation.sequenced(
+              "player/knight_run_left.png",
+              6,
+              textureWidth: 16,
+              textureHeight: 16,
+            ),
+            width: 32,
+            height: 32,
+            initPosition: initPosition,
+            life: 200,
+            speed: 2.5,
+            collision: Collision(height: 16, width: 16));
 
   @override
   void joystickAction(int action) {

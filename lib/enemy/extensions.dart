@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/objects/animated_object_once.dart';
 import 'package:bonfire/util/objects/flying_attack_object.dart';
@@ -211,6 +212,7 @@ extension EnemyExtensions on Enemy {
     Direction direction,
     int interval = 1000,
     bool withCollision = true,
+    Collision collision,
     VoidCallback destroy,
     VoidCallback execute,
   }) {
@@ -299,6 +301,12 @@ extension EnemyExtensions on Enemy {
         damageInEnemy: false,
         destroyedObject: destroy,
         withCollision: withCollision,
+        collision: collision ??
+            Collision(
+              width: width / 1.5,
+              height: height / 1.5,
+              align: CollisionAlign.CENTER,
+            ),
       ),
     );
 

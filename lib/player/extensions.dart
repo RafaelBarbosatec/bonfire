@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/direction.dart';
@@ -82,6 +83,7 @@ extension PlayerExtensions on Player {
     double damage = 1,
     bool withCollision = true,
     VoidCallback destroy,
+    Collision collision,
   }) {
     if (isDead) return;
 
@@ -125,17 +127,24 @@ extension PlayerExtensions on Player {
 
     gameRef.add(
       FlyingAttackObject(
-          direction: lastDirection,
-          flyAnimation: attackRangeAnimation,
-          destroyAnimation: animationDestroy,
-          initPosition: startPosition,
-          height: height,
-          width: width,
-          damage: damage,
-          speed: speed,
-          damageInPlayer: false,
-          destroyedObject: destroy,
-          withCollision: withCollision),
+        direction: lastDirection,
+        flyAnimation: attackRangeAnimation,
+        destroyAnimation: animationDestroy,
+        initPosition: startPosition,
+        height: height,
+        width: width,
+        damage: damage,
+        speed: speed,
+        damageInPlayer: false,
+        destroyedObject: destroy,
+        withCollision: withCollision,
+        collision: collision ??
+            Collision(
+              width: width / 1.5,
+              height: height / 1.5,
+              align: CollisionAlign.CENTER,
+            ),
+      ),
     );
   }
 
