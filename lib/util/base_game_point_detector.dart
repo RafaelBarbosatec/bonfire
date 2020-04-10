@@ -34,15 +34,33 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
 
   void onPointerCancel(PointerCancelEvent event) {
     _tapAbleComponents.forEach((c) => c.onTapCancel());
+    _touchableComponents.forEach((c) => c.onTapCancel(event.pointer));
   }
 
   void onPointerUp(PointerUpEvent event) {
-    _touchableComponents
-        .forEach((c) => c.handlerTabUp(event.pointer, event.position));
-    _tapAbleComponents.forEach((c) => c.onTapUp(TapUpDetails(
+    _touchableComponents.forEach(
+      (c) => c.handlerTabUp(
+        event.pointer,
+        event.position,
+      ),
+    );
+    _tapAbleComponents.forEach(
+      (c) => c.onTapUp(
+        TapUpDetails(
           globalPosition: event.position,
           localPosition: event.localPosition,
-        )));
+        ),
+      ),
+    );
+  }
+
+  void onPointerMove(PointerMoveEvent event) {
+    _touchableComponents.forEach(
+      (c) => c.onTapMove(
+        event.pointer,
+        event.position,
+      ),
+    );
   }
 
   void onPointerDown(PointerDownEvent event) {
