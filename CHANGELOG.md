@@ -1,5 +1,6 @@
 ## [0.1.4] - 10/04/2020
 
+* Update Flame.
 * Improvements in BonfireWidget.
 * Add onTapDown, onTapUp, onTapMove, onTapCancel in components isTouchable = true
 
