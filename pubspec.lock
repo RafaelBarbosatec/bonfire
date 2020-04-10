@@ -84,7 +84,7 @@ packages:
       name: flame
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.18.3"
+    version: "0.19.0"
   flare_dart:
     dependency: transitive
     description:
@@ -155,7 +155,7 @@ packages:
       name: ordered_set
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.5"
+    version: "2.0.0"
   path:
     dependency: transitive
     description:
