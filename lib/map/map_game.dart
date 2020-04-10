@@ -4,9 +4,9 @@ import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 
 abstract class MapGame extends Component with HasGameRef<RPGGame> {
-  Iterable<Tile> map;
+  Iterable<Tile> tiles;
 
-  MapGame(this.map);
+  MapGame(this.tiles);
 
   List<Tile> getRendered();
 

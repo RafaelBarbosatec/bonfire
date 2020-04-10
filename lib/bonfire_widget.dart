@@ -46,13 +46,15 @@ class _BonfireWidgetState extends State<BonfireWidget>
   @override
   void didUpdateWidget(BonfireWidget oldWidget) {
     if (widget.constructionMode) {
-      _game.map.updateTiles(widget.map.map);
+      _game.map.updateTiles(widget.map.tiles);
       _game.decorations.forEach((d) => d.remove());
       _game.decorations.clear();
-      widget.decorations.forEach((d) => _game.addDecoration(d));
+      if (widget.decorations != null)
+        widget.decorations.forEach((d) => _game.addDecoration(d));
       _game.enemies.forEach((e) => e.remove());
       _game.enemies.clear();
-      widget.enemies.forEach((e) => _game.addEnemy(e));
+      if (widget.enemies != null)
+        widget.enemies.forEach((e) => _game.addEnemy(e));
     }
     super.didUpdateWidget(oldWidget);
   }

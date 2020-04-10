@@ -11,7 +11,7 @@ class MapWorld extends MapGame {
   Iterable<Tile> tilesToRender = List();
   Iterable<Tile> tilesCollisionsRendered = List();
 
-  MapWorld(Iterable<Tile> map) : super(map);
+  MapWorld(Iterable<Tile> tiles) : super(tiles);
 
   @override
   void render(Canvas canvas) {
@@ -25,11 +25,11 @@ class MapWorld extends MapGame {
       lastCameraX = gameRef.gameCamera.position.x;
       lastCameraY = gameRef.gameCamera.position.y;
 
-      map.forEach((tile) {
+      tiles.forEach((tile) {
         tile.gameRef = gameRef;
         tile.update(t);
       });
-      tilesToRender = map.where((i) => i.isVisibleInMap());
+      tilesToRender = tiles.where((i) => i.isVisibleInMap());
       tilesCollisionsRendered = tilesToRender.where((i) => i.collision);
     }
   }
@@ -55,7 +55,7 @@ class MapWorld extends MapGame {
       double maxTop = 0;
       double maxLeft = 0;
       _sizeScreen = gameRef.size;
-      maxTop = map.fold(0, (max, tile) {
+      maxTop = tiles.fold(0, (max, tile) {
         if (tile.position.bottom > max)
           return tile.position.bottom;
         else
@@ -64,7 +64,7 @@ class MapWorld extends MapGame {
 
       maxTop -= _sizeScreen.height;
 
-      maxLeft = map.fold(0, (max, tile) {
+      maxLeft = tiles.fold(0, (max, tile) {
         if (tile.position.right > max)
           return tile.position.right;
         else
@@ -90,6 +90,6 @@ class MapWorld extends MapGame {
     lastCameraX = -1;
     lastCameraY = -1;
     _sizeScreen = null;
-    this.map = map;
+    this.tiles = map;
   }
 }
