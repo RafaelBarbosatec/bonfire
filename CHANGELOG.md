@@ -1,3 +1,8 @@
+## [0.1.4] - 10/04/2020
+
+* Improvements in BonfireWidget.
+* Add onTapDown, onTapUp, onTapMove, onTapCancel in components isTouchable = true
+
 ## [0.1.3] - 9/04/2020
 
 * Improvements in player and enemy extensions.
