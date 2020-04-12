@@ -108,8 +108,6 @@ class Knight extends Player {
         textureWidth: 16,
         textureHeight: 16,
       ),
-      widthArea: 16,
-      heightArea: 16,
     );
   }
 
