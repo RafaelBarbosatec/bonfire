@@ -85,7 +85,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   @override
   int priority() {
     if (frontFromPlayer) {
-      return 1;
+      return 15;
     } else {
       return super.priority();
     }

@@ -417,7 +417,5 @@ class Player extends AnimatedObject
   bool get usePositionInWorld => _usePositionInWorld;
 
   Rect get rectCollision => getRectCollision(position);
-
-  @override
-  int priority() => 10;
+  Rect get rectCollisionInWorld => getRectCollision(positionInWorld);
 }

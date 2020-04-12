@@ -93,7 +93,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
       destroy = isCollisionPositionInWorld(positionInWorld, gameRef);
 
     if (damageInPlayer) {
-      if (position.overlaps(gameRef.player.position)) {
+      if (position.overlaps(gameRef.player.rectCollision)) {
         gameRef.player.receiveDamage(damage);
         destroy = true;
       }
@@ -101,7 +101,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
 
     if (damageInEnemy) {
       gameRef.visibleEnemies().forEach((enemy) {
-        if (enemy.positionInWorld.overlaps(positionInWorld)) {
+        if (enemy.rectCollisionInWorld.overlaps(positionInWorld)) {
           enemy.receiveDamage(damage);
           destroy = true;
         }
