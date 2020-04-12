@@ -14,6 +14,7 @@ class AnimatedObject extends RectComponent {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     if (animation == null || position == null) return;
     if (animation.loaded()) {
       animation.getSprite().renderRect(canvas, position);
@@ -22,7 +23,7 @@ class AnimatedObject extends RectComponent {
 
   @override
   void update(double dt) {
-    if (animation != null) animation.update(dt);
     super.update(dt);
+    if (animation != null) animation.update(dt);
   }
 }

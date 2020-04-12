@@ -29,8 +29,8 @@ class AnimatedObjectOnce extends AnimatedObject {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (animation != null && !destroy()) {
-      super.update(dt);
       if (animation.currentIndex == 1 && !_notifyStart) {
         _notifyStart = true;
         if (onStartAnimation != null) onStartAnimation();
