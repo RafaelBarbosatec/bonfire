@@ -1,3 +1,8 @@
+## [0.1.5] - 13/04/2020
+
+* Improvements in enemy movements.
+* Improvements in map resize.
+
 ## [0.1.4] - 10/04/2020
 
 * Update Flame.
