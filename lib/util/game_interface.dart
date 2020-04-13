@@ -8,9 +8,7 @@ import 'package:flutter/widgets.dart';
 
 class GameInterface extends Component with HasGameRef<RPGGame>, TapDetector {
   @override
-  int priority() {
-    return 10;
-  }
+  int priority() => 20;
 
   @override
   void render(Canvas c) {}

@@ -11,18 +11,20 @@ class AnimatedFollowerObject extends AnimatedObject {
   final double height;
   final double width;
   final bool loopAnimation;
-  AnimatedFollowerObject(
-      {FlameAnimation.Animation animation,
-      this.target,
-      this.positionFromTarget,
-      this.height = 16,
-      this.width = 16,
-      this.loopAnimation = false}) {
+  AnimatedFollowerObject({
+    FlameAnimation.Animation animation,
+    this.target,
+    this.positionFromTarget,
+    this.height = 16,
+    this.width = 16,
+    this.loopAnimation = false,
+  }) {
     this.animation = animation;
   }
 
   @override
   void update(double dt) {
+    super.update(dt);
     Position newPosition = positionFromTarget ?? Position.empty();
     this.positionInWorld = Rect.fromLTWH(
       target.positionInWorld.left,
@@ -30,8 +32,6 @@ class AnimatedFollowerObject extends AnimatedObject {
       width,
       height,
     ).translate(newPosition.x, newPosition.y);
-
-    super.update(dt);
 
     if (!loopAnimation) {
       if (animation.isLastFrame) {

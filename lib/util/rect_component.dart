@@ -49,6 +49,7 @@ abstract class RectComponent extends GameComponent {
 
   Rect positionInWordToPosition() {
     if (gameRef == null) return positionInWorld;
+    if (positionInWorld == null) return Rect.zero;
     return Rect.fromLTWH(
       positionInWorld.left + gameRef.gameCamera.position.x,
       positionInWorld.top + gameRef.gameCamera.position.y,

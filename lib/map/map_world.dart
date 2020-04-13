@@ -7,7 +7,7 @@ import 'package:bonfire/map/tile.dart';
 class MapWorld extends MapGame {
   double lastCameraX = -1;
   double lastCameraY = -1;
-  Size _sizeScreen;
+  Size lastSize;
   Iterable<Tile> tilesToRender = List();
   Iterable<Tile> tilesCollisionsRendered = List();
 
@@ -46,50 +46,50 @@ class MapWorld extends MapGame {
 
   @override
   void resize(Size size) {
-    verifyMaxTopAndLeft();
+    verifyMaxTopAndLeft(size);
     super.resize(size);
   }
 
-  void verifyMaxTopAndLeft() {
-    if (gameRef.size != null && _sizeScreen != gameRef.size) {
-      double maxTop = 0;
-      double maxLeft = 0;
-      _sizeScreen = gameRef.size;
-      maxTop = tiles.fold(0, (max, tile) {
-        if (tile.position.bottom > max)
-          return tile.position.bottom;
-        else
-          return max;
-      });
+  void verifyMaxTopAndLeft(Size size) {
+    if (lastSize == size) return;
+    lastSize = size;
+    double maxTop = 0;
+    double maxLeft = 0;
+    maxTop = tiles.fold(0, (max, tile) {
+      if (tile.positionInWorld.bottom > max)
+        return tile.positionInWorld.bottom;
+      else
+        return max;
+    });
 
-      maxTop -= _sizeScreen.height;
+    maxTop -= size.height;
 
-      maxLeft = tiles.fold(0, (max, tile) {
-        if (tile.position.right > max)
-          return tile.position.right;
-        else
-          return max;
-      });
-      maxLeft -= _sizeScreen.width;
+    maxLeft = tiles.fold(0, (max, tile) {
+      if (tile.positionInWorld.right > max)
+        return tile.positionInWorld.right;
+      else
+        return max;
+    });
+    maxLeft -= size.width;
 
-      gameRef.gameCamera.maxLeft = maxLeft;
-      gameRef.gameCamera.maxTop = maxTop;
+    gameRef.gameCamera.maxLeft = maxLeft;
+    gameRef.gameCamera.maxTop = maxTop;
 
-      lastCameraX = -1;
-      lastCameraY = -1;
+    lastCameraX = -1;
+    lastCameraY = -1;
 
-      if (gameRef.player != null && !gameRef.player.usePositionInWorld) {
-        gameRef.player.usePositionInWorldToRender();
-      }
-      gameRef.gameCamera.moveToPlayer();
+    if (gameRef.player != null && !gameRef.player.usePositionInWorld) {
+      gameRef.player.usePositionInWorldToRender();
     }
+    gameRef.gameCamera.moveToPlayer();
   }
 
   @override
   void updateTiles(Iterable<Tile> map) {
     lastCameraX = -1;
     lastCameraY = -1;
-    _sizeScreen = null;
+    lastSize = null;
     this.tiles = map;
+    verifyMaxTopAndLeft(gameRef.size);
   }
 }

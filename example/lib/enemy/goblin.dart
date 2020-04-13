@@ -143,8 +143,8 @@ class Goblin extends Enemy {
 
   void execAttack() {
     this.simpleAttackMelee(
-        heightArea: 20,
-        widthArea: 20,
+        heightArea: 25,
+        widthArea: 25,
         damage: attack / 2,
         interval: 400,
         withPush: true,

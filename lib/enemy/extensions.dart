@@ -27,17 +27,17 @@ extension EnemyExtensions on Enemy {
       return;
     }
 
-    double visionWidth = position.width * visionCells * 2;
-    double visionHeight = position.height * visionCells * 2;
+    double visionWidth = this.position.width * visionCells * 2;
+    double visionHeight = this.position.height * visionCells * 2;
 
     Rect fieldOfVision = Rect.fromLTWH(
-      position.left - (visionWidth / 2),
-      position.top - (visionHeight / 2),
+      this.position.left - (visionWidth / 2),
+      this.position.top - (visionHeight / 2),
       visionWidth,
       visionHeight,
     );
 
-    if (fieldOfVision.overlaps(player.position)) {
+    if (fieldOfVision.overlaps(player.rectCollision)) {
       if (observed != null) observed(player);
     } else {
       if (notObserved != null) notObserved();
@@ -49,22 +49,24 @@ extension EnemyExtensions on Enemy {
     seePlayer(
       visionCells: visionCells,
       observed: (player) {
-        double centerXPlayer = player.position.center.dx;
-        double centerYPlayer = player.position.center.dy;
+        double centerXPlayer = player.rectCollision.center.dx;
+        double centerYPlayer = player.rectCollision.center.dy;
 
         double translateX = 0;
         double translateY = 0;
 
-        translateX = position.center.dx > centerXPlayer ? (-1 * speed) : speed;
+        translateX =
+            this.position.center.dx > centerXPlayer ? (-1 * speed) : speed;
         translateX = _adjustTranslate(
           translateX,
-          position.center.dx,
+          this.position.center.dx,
           centerXPlayer,
         );
-        translateY = position.center.dy > centerYPlayer ? (-1 * speed) : speed;
+        translateY =
+            this.position.center.dy > centerYPlayer ? (-1 * speed) : speed;
         translateY = _adjustTranslate(
           translateY,
-          position.center.dy,
+          this.position.center.dy,
           centerYPlayer,
         );
 
@@ -78,7 +80,7 @@ extension EnemyExtensions on Enemy {
           translateY = 0;
         }
 
-        if (position.overlaps(player.position)) {
+        if (this.position.overlaps(player.rectCollision)) {
           if (closePlayer != null) closePlayer(player);
           this.idle();
           return;
@@ -124,11 +126,11 @@ extension EnemyExtensions on Enemy {
 
     Direction playerDirection;
 
-    double centerXPlayer = player.position.center.dx;
-    double centerYPlayer = player.position.center.dy;
+    double centerXPlayer = player.rectCollision.center.dx;
+    double centerYPlayer = player.rectCollision.center.dy;
 
-    double centerYEnemy = position.center.dy;
-    double centerXEnemy = position.center.dx;
+    double centerYEnemy = rectCollision.center.dy;
+    double centerXEnemy = rectCollision.center.dx;
 
     double diffX = centerXEnemy - centerXPlayer;
     double diffY = centerYEnemy - centerYPlayer;
@@ -189,11 +191,9 @@ extension EnemyExtensions on Enemy {
     gameRef.add(AnimatedObjectOnce(animation: anim, position: positionAttack));
 
     player.receiveDamage(damage);
-
-    if (withPush &&
-        !this.isCollision(
-            player.position.translate(pushLeft, pushTop), this.gameRef)) {
-      player.position = player.position.translate(pushLeft, pushTop);
+    Rect rectAfterPush = player.position.translate(pushLeft, pushTop);
+    if (withPush && !player.isCollision(rectAfterPush, this.gameRef)) {
+      player.position = rectAfterPush;
     }
 
     if (execute != null) execute();
@@ -227,21 +227,22 @@ extension EnemyExtensions on Enemy {
 
     Direction ballDirection;
 
-    var diffX = position.center.dx - player.position.center.dx;
+    var diffX = this.rectCollision.center.dx - player.rectCollision.center.dx;
     var diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;
-    var diffY = position.center.dy - player.position.center.dy;
+    var diffY = this.rectCollision.center.dy - player.rectCollision.center.dy;
     var diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
 
     if (diffPositiveX > diffPositiveY) {
-      if (player.position.center.dx > position.center.dx) {
+      if (player.rectCollision.center.dx > this.rectCollision.center.dx) {
         ballDirection = Direction.right;
-      } else if (player.position.center.dx < position.center.dx) {
+      } else if (player.rectCollision.center.dx <
+          this.rectCollision.center.dx) {
         ballDirection = Direction.left;
       }
     } else {
-      if (player.position.center.dy > position.center.dy) {
+      if (player.rectCollision.center.dy > rectCollision.center.dy) {
         ballDirection = Direction.bottom;
-      } else if (player.position.center.dy < position.center.dy) {
+      } else if (player.rectCollision.center.dy < rectCollision.center.dy) {
         ballDirection = Direction.top;
       }
     }
@@ -252,33 +253,33 @@ extension EnemyExtensions on Enemy {
       case Direction.left:
         if (animationLeft != null) attackRangeAnimation = animationLeft;
         startPosition = Position(
-          this.positionInWorld.left - width,
-          (this.positionInWorld.top +
-              (this.positionInWorld.height - height) / 2),
+          this.rectCollisionInWorld.left - width,
+          (this.rectCollisionInWorld.top +
+              (this.rectCollisionInWorld.height - height) / 2),
         );
         break;
       case Direction.right:
         if (animationRight != null) attackRangeAnimation = animationRight;
         startPosition = Position(
-          this.positionInWorld.right,
-          (this.positionInWorld.top +
-              (this.positionInWorld.height - height) / 2),
+          this.rectCollisionInWorld.right,
+          (this.rectCollisionInWorld.top +
+              (this.rectCollisionInWorld.height - height) / 2),
         );
         break;
       case Direction.top:
         if (animationTop != null) attackRangeAnimation = animationTop;
         startPosition = Position(
-          (this.positionInWorld.left +
-              (this.positionInWorld.width - width) / 2),
-          this.positionInWorld.top - height,
+          (this.rectCollisionInWorld.left +
+              (this.rectCollisionInWorld.width - width) / 2),
+          this.rectCollisionInWorld.top - height,
         );
         break;
       case Direction.bottom:
         if (animationBottom != null) attackRangeAnimation = animationBottom;
         startPosition = Position(
-          (this.positionInWorld.left +
-              (this.positionInWorld.width - width) / 2),
-          this.positionInWorld.bottom,
+          (this.rectCollisionInWorld.left +
+              (this.rectCollisionInWorld.width - width) / 2),
+          this.rectCollisionInWorld.bottom,
         );
         break;
     }
@@ -304,7 +305,7 @@ extension EnemyExtensions on Enemy {
         collision: collision ??
             Collision(
               width: width / 1.5,
-              height: height / 1.5,
+              height: height / 2,
               align: CollisionAlign.CENTER,
             ),
       ),
@@ -318,79 +319,80 @@ extension EnemyExtensions on Enemy {
     if (!isVisibleInMap() || isDead) return;
 
     seePlayer(
-        visionCells: visionCells,
-        observed: (player) {
-          double centerXPlayer = player.position.center.dx;
-          double centerYPlayer = player.position.center.dy;
+      visionCells: visionCells,
+      observed: (player) {
+        double centerXPlayer = player.rectCollision.center.dx;
+        double centerYPlayer = player.rectCollision.center.dy;
 
-          double translateX = 0;
-          double translateY = 0;
+        double translateX = 0;
+        double translateY = 0;
 
-          translateX =
-              position.center.dx > centerXPlayer ? (-1 * speed) : speed;
-          translateX = _adjustTranslate(
-            translateX,
-            position.center.dx,
-            centerXPlayer,
-          );
+        translateX =
+            rectCollision.center.dx > centerXPlayer ? (-1 * speed) : speed;
+        translateX = _adjustTranslate(
+          translateX,
+          rectCollision.center.dx,
+          centerXPlayer,
+        );
 
-          translateY =
-              position.center.dy > centerYPlayer ? (-1 * speed) : speed;
-          translateY = _adjustTranslate(
-            translateY,
-            position.center.dy,
-            centerYPlayer,
-          );
+        translateY =
+            rectCollision.center.dy > centerYPlayer ? (-1 * speed) : speed;
+        translateY = _adjustTranslate(
+          translateY,
+          rectCollision.center.dy,
+          centerYPlayer,
+        );
 
-          if ((translateX < 0 && translateX > -0.1) ||
-              (translateX > 0 && translateX < 0.1)) {
-            translateX = 0;
-          }
+        if ((translateX < 0 && translateX > -0.1) ||
+            (translateX > 0 && translateX < 0.1)) {
+          translateX = 0;
+        }
 
-          if ((translateY < 0 && translateY > -0.1) ||
-              (translateY > 0 && translateY < 0.1)) {
-            translateY = 0;
-          }
+        if ((translateY < 0 && translateY > -0.1) ||
+            (translateY > 0 && translateY < 0.1)) {
+          translateY = 0;
+        }
 
-          if (translateX == 0 && translateY == 0) {
-            idle();
-            return;
-          }
+        if (translateX == 0 && translateY == 0) {
+          idle();
+          return;
+        }
 
-          double translateXPositive =
-              this.position.center.dx - player.position.center.dx;
-          translateXPositive = translateXPositive >= 0
-              ? translateXPositive
-              : translateXPositive * -1;
-          double translateYPositive =
-              this.position.center.dy - player.position.center.dy;
-          translateYPositive = translateYPositive >= 0
-              ? translateYPositive
-              : translateYPositive * -1;
+        double translateXPositive =
+            this.rectCollision.center.dx - player.rectCollision.center.dx;
+        translateXPositive = translateXPositive >= 0
+            ? translateXPositive
+            : translateXPositive * -1;
+        double translateYPositive =
+            this.rectCollision.center.dy - player.rectCollision.center.dy;
+        translateYPositive = translateYPositive >= 0
+            ? translateYPositive
+            : translateYPositive * -1;
 
-          if (translateXPositive > translateYPositive) {
-            if (translateY > 0) {
-              moveBottom(moveSpeed: translateY);
-            } else if (translateY < 0) {
-              moveTop(moveSpeed: (translateY * -1));
-            } else {
-              positioned(player);
-              this.idle();
-            }
+        if (translateXPositive > translateYPositive) {
+          if (translateY > 0) {
+            moveBottom(moveSpeed: translateY);
+          } else if (translateY < 0) {
+            moveTop(moveSpeed: (translateY * -1));
           } else {
-            if (translateX > 0) {
-              moveRight(moveSpeed: translateX);
-            } else if (translateX < 0) {
-              moveLeft(moveSpeed: (translateX * -1));
-            } else {
-              positioned(player);
-              this.idle();
-            }
+            positioned(player);
+            this.idle();
           }
-        },
-        notObserved: () {
-          this.idle();
-        });
+        } else {
+          if (translateX > 0) {
+            moveRight(moveSpeed: translateX);
+          } else if (translateX < 0) {
+            moveLeft(moveSpeed: (translateX * -1));
+          } else {
+            positioned(player);
+            this.idle();
+          }
+        }
+      },
+      notObserved: () {
+        this.idle();
+      },
+    );
   }
 
   double _adjustTranslate(

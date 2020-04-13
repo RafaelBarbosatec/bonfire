@@ -288,4 +288,5 @@ class Enemy extends AnimatedObject with ObjectCollision {
   }
 
   Rect get rectCollision => getRectCollision(position);
+  Rect get rectCollisionInWorld => getRectCollision(positionInWorld);
 }
