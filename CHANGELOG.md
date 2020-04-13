@@ -1,3 +1,7 @@
+## [0.1.6] - 13/04/2020
+
+* Improvements in enemy.
+
 ## [0.1.5] - 13/04/2020
 
 * Improvements in enemy movements.

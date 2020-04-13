@@ -93,7 +93,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
       height,
     );
 
-    this.collision = collision ?? Collision(width: width, height: height / 3);
+    this.collision = collision ?? Collision(width: width, height: height/2);
 
     lastDirectionHorizontal =
         initDirection == Direction.left ? Direction.left : Direction.right;
