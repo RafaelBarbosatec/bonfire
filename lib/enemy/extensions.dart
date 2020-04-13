@@ -44,7 +44,11 @@ extension EnemyExtensions on Enemy {
     }
   }
 
-  void seeAndMoveToPlayer({Function(Player) closePlayer, int visionCells = 3}) {
+  void seeAndMoveToPlayer({
+    Function(Player) closePlayer,
+    int visionCells = 3,
+    double margin = 10,
+  }) {
     if (!isVisibleInMap() || isDead) return;
     seePlayer(
       visionCells: visionCells,
@@ -80,7 +84,14 @@ extension EnemyExtensions on Enemy {
           translateY = 0;
         }
 
-        if (this.rectCollision.overlaps(player.rectCollision)) {
+        Rect rectPlayerCollision = Rect.fromLTWH(
+          player.rectCollision.left - margin,
+          player.rectCollision.top - margin,
+          player.rectCollision.width + (margin * 2),
+          player.rectCollision.height + (margin * 2),
+        );
+
+        if (this.rectCollision.overlaps(rectPlayerCollision)) {
           if (closePlayer != null) closePlayer(player);
           this.idle();
           return;

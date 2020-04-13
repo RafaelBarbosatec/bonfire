@@ -1,3 +1,7 @@
+## [0.1.7] - 13/04/2020
+
+* add margin in seeAndMoveToPlayer(Extension enemy).
+
 ## [0.1.6] - 13/04/2020
 
 * Improvements in enemy.
