@@ -56,17 +56,17 @@ extension EnemyExtensions on Enemy {
         double translateY = 0;
 
         translateX =
-            this.position.center.dx > centerXPlayer ? (-1 * speed) : speed;
+            this.rectCollision.center.dx > centerXPlayer ? (-1 * speed) : speed;
         translateX = _adjustTranslate(
           translateX,
-          this.position.center.dx,
+          this.rectCollision.center.dx,
           centerXPlayer,
         );
         translateY =
-            this.position.center.dy > centerYPlayer ? (-1 * speed) : speed;
+            this.rectCollision.center.dy > centerYPlayer ? (-1 * speed) : speed;
         translateY = _adjustTranslate(
           translateY,
-          this.position.center.dy,
+          this.rectCollision.center.dy,
           centerYPlayer,
         );
 
@@ -80,7 +80,7 @@ extension EnemyExtensions on Enemy {
           translateY = 0;
         }
 
-        if (this.position.overlaps(player.rectCollision)) {
+        if (this.rectCollision.overlaps(player.rectCollision)) {
           if (closePlayer != null) closePlayer(player);
           this.idle();
           return;
