@@ -222,6 +222,7 @@ class Joystick extends JoystickController with PointerDetector {
 
   @override
   void onTapDown(TapDownDetails details) {
+    if (actions == null || actions.isEmpty) return;
     actions
         .where((action) => action.rect.contains(details.globalPosition))
         .forEach((action) {
@@ -248,6 +249,7 @@ class Joystick extends JoystickController with PointerDetector {
   }
 
   void onPointerDown(PointerDownEvent event) {
+    if (_backgroundRect == null) return;
     Rect directional = Rect.fromLTWH(
       _backgroundRect.left - 50,
       _backgroundRect.top - 50,
