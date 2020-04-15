@@ -72,7 +72,7 @@ class Knight extends Player {
         ),
         height: 30,
         width: 30,
-        spriteImg: 'player/crypt.png',
+        sprite: Sprite('player/crypt.png'),
       ),
     );
     super.die();

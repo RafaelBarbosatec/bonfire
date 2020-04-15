@@ -22,14 +22,8 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   /// Width of the Decoration.
   final double width;
 
-  /// ImageSprite to draw.
-  final String spriteImg;
-
   /// Use to define if this decoration should be drawing on the player.
   final bool frontFromPlayer;
-
-  /// Use to define if this decoration contains collision.
-  final bool withCollision;
 
   /// Animation[FlameAnimation.Animation] to draw.
   final FlameAnimation.Animation animation;
@@ -40,26 +34,23 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   Sprite _sprite;
 
   GameDecoration(
-      {this.spriteImg,
+      {Sprite sprite,
       @required this.initPosition,
       @required this.height,
       @required this.width,
       this.frontFromPlayer = false,
       this.animation,
-      this.withCollision = false,
       Collision collision,
       bool isTouchable = false}) {
     this.animation = animation;
-    if (spriteImg != null && spriteImg.isNotEmpty) _sprite = Sprite(spriteImg);
+    _sprite = sprite;
     this.position = this.positionInWorld = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
       width,
       height,
     );
-    if (withCollision) {
-      this.collision = collision ?? Collision(height: height, width: width);
-    }
+    this.collision = collision;
     this.isTouchable = isTouchable;
   }
 

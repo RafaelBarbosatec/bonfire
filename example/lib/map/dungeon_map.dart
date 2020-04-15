@@ -89,11 +89,10 @@ class DungeonMap {
   static List<GameDecoration> decorations() {
     return [
       GameDecoration(
-        spriteImg: 'itens/barrel.png',
+        sprite: Sprite('itens/barrel.png'),
         initPosition: getRelativeTilePosition(10, 6),
         width: 32,
         height: 32,
-        withCollision: true,
         collision: Collision(
           width: 18,
           height: 32,
@@ -101,18 +100,18 @@ class DungeonMap {
       ),
       Chest(getRelativeTilePosition(18, 7)),
       GameDecoration(
-        spriteImg: 'itens/table.png',
+        sprite: Sprite('itens/table.png'),
         initPosition: getRelativeTilePosition(15, 7),
         width: 32,
         height: 32,
-        withCollision: true,
+        collision: Collision(height: 32, width: 32),
       ),
       GameDecoration(
-        spriteImg: 'itens/table.png',
+        sprite: Sprite('itens/table.png'),
         initPosition: getRelativeTilePosition(27, 6),
         width: 32,
         height: 32,
-        withCollision: true,
+        collision: Collision(height: 32, width: 32),
       ),
       GameDecoration(
         animation: FlameAnimation.Animation.sequenced(
@@ -159,19 +158,19 @@ class DungeonMap {
         height: 32,
       ),
       GameDecoration(
-        spriteImg: 'itens/flag_red.png',
+        sprite: Sprite('itens/flag_red.png'),
         initPosition: getRelativeTilePosition(6, 4),
         width: 32,
         height: 32,
       ),
       GameDecoration(
-        spriteImg: 'itens/prisoner.png',
+        sprite: Sprite('itens/prisoner.png'),
         initPosition: getRelativeTilePosition(10, 4),
         width: 32,
         height: 32,
       ),
       GameDecoration(
-        spriteImg: 'itens/flag_red.png',
+        sprite: Sprite('itens/flag_red.png'),
         initPosition: getRelativeTilePosition(14, 4),
         width: 32,
         height: 32,
