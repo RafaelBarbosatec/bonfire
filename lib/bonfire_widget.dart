@@ -87,14 +87,12 @@ class _BonfireWidgetState extends State<BonfireWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Listener(
-        onPointerDown: _game.onPointerDown,
-        onPointerMove: _game.onPointerMove,
-        onPointerUp: _game.onPointerUp,
-        onPointerCancel: _game.onPointerCancel,
-        child: _game.widget,
-      ),
+    return Listener(
+      onPointerDown: _game.onPointerDown,
+      onPointerMove: _game.onPointerMove,
+      onPointerUp: _game.onPointerUp,
+      onPointerCancel: _game.onPointerCancel,
+      child: _game.widget,
     );
   }
 }
