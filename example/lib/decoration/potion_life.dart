@@ -10,7 +10,7 @@ class PotionLife extends GameDecoration {
 
   PotionLife(this.initPosition, this.life)
       : super(
-          spriteImg: 'itens/potion_life.png',
+          sprite: Sprite('itens/potion_life.png'),
           initPosition: initPosition,
           width: 16,
           height: 16,

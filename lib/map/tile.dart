@@ -19,10 +19,12 @@ class Tile extends SpriteObject {
   Tile(String spritePath, Position initPosition,
       {this.collision = false, this.size = 32}) {
     position = positionInWorld = Rect.fromLTWH(
-      (initPosition != null ? initPosition.x : 0.0) * size,
-      (initPosition != null ? initPosition.y : 0.0) * size,
-      size,
-      size,
+      ((initPosition != null ? initPosition.x : 0.0) * size) -
+          (initPosition.x % 2 == 0 ? 0.5 : 0),
+      ((initPosition != null ? initPosition.y : 0.0) * size) -
+          (initPosition.y % 2 == 0 ? 0.5 : 0),
+      size + (initPosition.x % 2 == 0 ? 1 : 0),
+      size + (initPosition.y % 2 == 0 ? 1 : 0),
     );
     if (spritePath.isNotEmpty) sprite = Sprite(spritePath);
 

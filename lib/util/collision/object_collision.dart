@@ -23,7 +23,6 @@ mixin ObjectCollision {
       var collisionsDecorations = game.decorations
           .where((i) =>
               !i.destroy() &&
-              i.withCollision &&
               i.collision != null &&
               i.rectCollision.overlaps(rectCollision))
           .toList();
@@ -52,7 +51,6 @@ mixin ObjectCollision {
       var collisionsDecorations = game.decorations
           .where((i) =>
               !i.destroy() &&
-              i.withCollision &&
               i.collision != null &&
               i.rectCollisionInWorld.overlaps(rectCollision))
           .toList();
