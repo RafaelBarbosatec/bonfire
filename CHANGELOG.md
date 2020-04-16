@@ -1,3 +1,9 @@
+## [0.1.8] - 15/04/2020
+
+* update flame to 0.19.1.
+* add bleeding pixel in map.
+* modify parameter sprite in decoration.
+
 ## [0.1.7] - 13/04/2020
 
 * add margin in seeAndMoveToPlayer(Extension enemy).
