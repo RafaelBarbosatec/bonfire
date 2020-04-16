@@ -1,3 +1,7 @@
+## [0.1.9] - 15/04/2020
+
+* remove scaffold in BonfireWidget
+
 ## [0.1.8] - 15/04/2020
 
 * update flame to 0.19.1.
