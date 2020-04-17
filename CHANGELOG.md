@@ -1,3 +1,9 @@
+## [0.1.10] - 17/04/2020
+
+* add constructor Tile.fromSprite
+* add constructor GameDecoration.sprite
+* add constructor GameDecoration.animation
+
 ## [0.1.9] - 15/04/2020
 
 * remove scaffold in BonfireWidget

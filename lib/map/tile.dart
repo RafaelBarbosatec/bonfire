@@ -19,10 +19,8 @@ class Tile extends SpriteObject {
   Tile(String spritePath, Position initPosition,
       {this.collision = false, this.size = 32}) {
     position = positionInWorld = Rect.fromLTWH(
-      ((initPosition != null ? initPosition.x : 0.0) * size) -
-          (initPosition.x % 2 == 0 ? 0.5 : 0),
-      ((initPosition != null ? initPosition.y : 0.0) * size) -
-          (initPosition.y % 2 == 0 ? 0.5 : 0),
+      (initPosition.x * size) - (initPosition.x % 2 == 0 ? 0.5 : 0),
+      (initPosition.y * size) - (initPosition.y % 2 == 0 ? 0.5 : 0),
       size + (initPosition.x % 2 == 0 ? 1 : 0),
       size + (initPosition.y % 2 == 0 ? 1 : 0),
     );
@@ -32,7 +30,24 @@ class Tile extends SpriteObject {
       fontSize: size / 3.5,
       color: Colors.lightBlueAccent.withOpacity(0.4),
     );
-    _positionText = Position(position.left / size, position.top / size);
+    _positionText = Position(initPosition.x, initPosition.y);
+  }
+
+  Tile.fromSprite(Sprite sprite, Position initPosition,
+      {this.collision = false, this.size = 32}) {
+    this.sprite = sprite;
+    position = positionInWorld = Rect.fromLTWH(
+      (initPosition.x * size) - (initPosition.x % 2 == 0 ? 0.5 : 0),
+      (initPosition.y * size) - (initPosition.y % 2 == 0 ? 0.5 : 0),
+      size + (initPosition.x % 2 == 0 ? 1 : 0),
+      size + (initPosition.y % 2 == 0 ? 1 : 0),
+    );
+
+    _textConfig = TextConfig(
+      fontSize: size / 3.5,
+      color: Colors.lightBlueAccent.withOpacity(0.4),
+    );
+    _positionText = Position(initPosition.x, initPosition.y);
   }
 
   @override
