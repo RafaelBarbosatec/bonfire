@@ -7,8 +7,8 @@ class Chest extends GameDecoration {
   final Position initPosition;
   bool _observedPlayer = false;
   Chest(this.initPosition)
-      : super(
-          animation: FlameAnimation.Animation.sequenced(
+      : super.animation(
+          FlameAnimation.Animation.sequenced(
             "itens/chest_spritesheet.png",
             8,
             textureWidth: 16,

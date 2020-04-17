@@ -157,8 +157,8 @@ class DungeonMap {
         width: 32,
         height: 32,
       ),
-      GameDecoration(
-        sprite: Sprite('itens/flag_red.png'),
+      GameDecoration.sprite(
+        Sprite('itens/flag_red.png'),
         initPosition: getRelativeTilePosition(6, 4),
         width: 32,
         height: 32,

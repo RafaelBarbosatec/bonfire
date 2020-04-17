@@ -25,9 +25,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   /// Use to define if this decoration should be drawing on the player.
   final bool frontFromPlayer;
 
-  /// Animation[FlameAnimation.Animation] to draw.
-  final FlameAnimation.Animation animation;
-
   /// World position that this decoration must position yourself.
   final Position initPosition;
 
@@ -39,11 +36,51 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       @required this.height,
       @required this.width,
       this.frontFromPlayer = false,
-      this.animation,
+      FlameAnimation.Animation animation,
       Collision collision,
       bool isTouchable = false}) {
     this.animation = animation;
     _sprite = sprite;
+    this.position = this.positionInWorld = Rect.fromLTWH(
+      initPosition.x,
+      initPosition.y,
+      width,
+      height,
+    );
+    this.collision = collision;
+    this.isTouchable = isTouchable;
+  }
+
+  GameDecoration.sprite(
+    Sprite sprite, {
+    @required this.initPosition,
+    @required this.height,
+    @required this.width,
+    this.frontFromPlayer = false,
+    Collision collision,
+    bool isTouchable = false,
+  }) {
+    _sprite = sprite;
+    this.position = this.positionInWorld = Rect.fromLTWH(
+      initPosition.x,
+      initPosition.y,
+      width,
+      height,
+    );
+    this.collision = collision;
+    this.isTouchable = isTouchable;
+  }
+
+  GameDecoration.animation(
+    FlameAnimation.Animation animation, {
+    @required this.initPosition,
+    @required this.height,
+    @required this.width,
+    this.frontFromPlayer = false,
+    Collision collision,
+    bool isTouchable = false,
+  }) {
+    this.animation = animation;
     this.position = this.positionInWorld = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
