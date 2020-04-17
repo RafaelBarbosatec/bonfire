@@ -88,8 +88,8 @@ class DungeonMap {
 
   static List<GameDecoration> decorations() {
     return [
-      GameDecoration(
-        sprite: Sprite('itens/barrel.png'),
+      GameDecoration.sprite(
+        Sprite('itens/barrel.png'),
         initPosition: getRelativeTilePosition(10, 6),
         width: 32,
         height: 32,
@@ -99,22 +99,22 @@ class DungeonMap {
         ),
       ),
       Chest(getRelativeTilePosition(18, 7)),
-      GameDecoration(
-        sprite: Sprite('itens/table.png'),
+      GameDecoration.sprite(
+        Sprite('itens/table.png'),
         initPosition: getRelativeTilePosition(15, 7),
         width: 32,
         height: 32,
         collision: Collision(height: 32, width: 32),
       ),
-      GameDecoration(
-        sprite: Sprite('itens/table.png'),
+      GameDecoration.sprite(
+        Sprite('itens/table.png'),
         initPosition: getRelativeTilePosition(27, 6),
         width: 32,
         height: 32,
         collision: Collision(height: 32, width: 32),
       ),
-      GameDecoration(
-        animation: FlameAnimation.Animation.sequenced(
+      GameDecoration.animation(
+        FlameAnimation.Animation.sequenced(
           "itens/torch_spritesheet.png",
           6,
           textureWidth: 16,
@@ -124,8 +124,8 @@ class DungeonMap {
         width: 32,
         height: 32,
       ),
-      GameDecoration(
-        animation: FlameAnimation.Animation.sequenced(
+      GameDecoration.animation(
+        FlameAnimation.Animation.sequenced(
           "itens/torch_spritesheet.png",
           6,
           textureWidth: 16,
@@ -135,8 +135,8 @@ class DungeonMap {
         width: 32,
         height: 32,
       ),
-      GameDecoration(
-        animation: FlameAnimation.Animation.sequenced(
+      GameDecoration.animation(
+        FlameAnimation.Animation.sequenced(
           "itens/torch_spritesheet.png",
           6,
           textureWidth: 16,
@@ -146,8 +146,8 @@ class DungeonMap {
         width: 32,
         height: 32,
       ),
-      GameDecoration(
-        animation: FlameAnimation.Animation.sequenced(
+      GameDecoration.animation(
+        FlameAnimation.Animation.sequenced(
           "itens/torch_spritesheet.png",
           6,
           textureWidth: 16,
@@ -163,14 +163,14 @@ class DungeonMap {
         width: 32,
         height: 32,
       ),
-      GameDecoration(
-        sprite: Sprite('itens/prisoner.png'),
+      GameDecoration.sprite(
+        Sprite('itens/prisoner.png'),
         initPosition: getRelativeTilePosition(10, 4),
         width: 32,
         height: 32,
       ),
-      GameDecoration(
-        sprite: Sprite('itens/flag_red.png'),
+      GameDecoration.sprite(
+        Sprite('itens/flag_red.png'),
         initPosition: getRelativeTilePosition(14, 4),
         width: 32,
         height: 32,
