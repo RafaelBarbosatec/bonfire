@@ -12,59 +12,70 @@ class Tile extends SpriteObject {
   TextConfig _textConfig;
   Position _positionText;
   Paint _paintText = Paint()
-    ..color = Colors.lightBlueAccent.withOpacity(0.5)
     ..style = PaintingStyle.stroke
     ..strokeWidth = 1;
 
-  Tile(String spritePath, Position initPosition,
-      {this.collision = false, this.size = 32}) {
-    position = positionInWorld = Rect.fromLTWH(
-      (initPosition.x * size) - (initPosition.x % 2 == 0 ? 0.5 : 0),
-      (initPosition.y * size) - (initPosition.y % 2 == 0 ? 0.5 : 0),
-      size + (initPosition.x % 2 == 0 ? 1 : 0),
-      size + (initPosition.y % 2 == 0 ? 1 : 0),
-    );
+  Tile(
+    String spritePath,
+    Position position, {
+    this.collision = false,
+    this.size = 32,
+  }) {
+    this.position = positionInWorld = generateRectWithBleedingPixel(position);
     if (spritePath.isNotEmpty) sprite = Sprite(spritePath);
 
     _textConfig = TextConfig(
       fontSize: size / 3.5,
-      color: Colors.lightBlueAccent.withOpacity(0.4),
     );
-    _positionText = Position(initPosition.x, initPosition.y);
+    _positionText = Position(position.x, position.y);
   }
 
-  Tile.fromSprite(Sprite sprite, Position initPosition,
-      {this.collision = false, this.size = 32}) {
+  Tile.fromSprite(
+    Sprite sprite,
+    Position position, {
+    this.collision = false,
+    this.size = 32,
+  }) {
     this.sprite = sprite;
-    position = positionInWorld = Rect.fromLTWH(
-      (initPosition.x * size) - (initPosition.x % 2 == 0 ? 0.5 : 0),
-      (initPosition.y * size) - (initPosition.y % 2 == 0 ? 0.5 : 0),
-      size + (initPosition.x % 2 == 0 ? 1 : 0),
-      size + (initPosition.y % 2 == 0 ? 1 : 0),
-    );
+    this.position = positionInWorld = generateRectWithBleedingPixel(position);
 
     _textConfig = TextConfig(
       fontSize: size / 3.5,
-      color: Colors.lightBlueAccent.withOpacity(0.4),
     );
-    _positionText = Position(initPosition.x, initPosition.y);
+    _positionText = Position(position.x, position.y);
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (gameRef != null && gameRef.constructionMode) _drawGrid(canvas);
+    if (gameRef != null && gameRef.constructionMode && isVisibleInMap())
+      _drawGrid(canvas);
   }
 
   void _drawGrid(Canvas canvas) {
     canvas.drawRect(
       position,
-      _paintText,
+      _paintText..color = gameRef.map.colorConstructMode,
     );
-    _textConfig.render(
-      canvas,
-      '${_positionText.x.toInt()}:${_positionText.y.toInt()}',
-      Position(position.left + 2, position.top + 2),
+    if (_positionText.x % 2 == 0) {
+      _textConfig
+          .withColor(
+            gameRef.map.colorConstructMode,
+          )
+          .render(
+            canvas,
+            '${_positionText.x.toInt()}:${_positionText.y.toInt()}',
+            Position(position.left + 2, position.top + 2),
+          );
+    }
+  }
+
+  Rect generateRectWithBleedingPixel(Position position) {
+    return Rect.fromLTWH(
+      (position.x * size) - (position.x % 2 == 0 ? 0.5 : 0),
+      (position.y * size) - (position.y % 2 == 0 ? 0.5 : 0),
+      size + (position.x % 2 == 0 ? 1 : 0),
+      size + (position.y % 2 == 0 ? 1 : 0),
     );
   }
 }

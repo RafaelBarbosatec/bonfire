@@ -11,7 +11,10 @@ class MapWorld extends MapGame {
   Iterable<Tile> tilesToRender = List();
   Iterable<Tile> tilesCollisionsRendered = List();
 
-  MapWorld(Iterable<Tile> tiles) : super(tiles);
+  MapWorld(Iterable<Tile> tiles, {Color colorConstructMode}) : super(tiles) {
+    if (colorConstructMode != null)
+      this.colorConstructMode = colorConstructMode;
+  }
 
   @override
   void render(Canvas canvas) {
