@@ -59,12 +59,12 @@ class Tile extends SpriteObject {
     canvas.drawRect(
       position,
       _paintText
-        ..color = gameRef.colorConstructionMode ?? Colors.cyan.withOpacity(0.5),
+        ..color = gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
     );
     if (_positionText.x % 2 == 0) {
       _textConfig
           .withColor(
-            gameRef.colorConstructionMode ?? Colors.cyan.withOpacity(0.5),
+            gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
           )
           .render(
             canvas,
@@ -87,7 +87,7 @@ class Tile extends SpriteObject {
     canvas.drawRect(
       position,
       new Paint()
-        ..color = gameRef.colorCollisionArea ??
+        ..color = gameRef.collisionAreaColor ??
             Colors.lightGreenAccent.withOpacity(0.5),
     );
   }
