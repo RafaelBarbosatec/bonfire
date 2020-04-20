@@ -506,8 +506,4 @@ extension EnemyExtensions on Enemy {
       return Colors.red;
     }
   }
-
-  void drawPositionCollision(Canvas canvas) {
-    this.drawCollision(canvas, position);
-  }
 }

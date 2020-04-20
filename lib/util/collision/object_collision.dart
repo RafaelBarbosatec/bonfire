@@ -112,11 +112,11 @@ mixin ObjectCollision {
     return Rect.fromLTWH(left, top, collision.width, collision.height);
   }
 
-  void drawCollision(Canvas canvas, Rect currentPosition) {
+  void drawCollision(Canvas canvas, Rect currentPosition, Color color) {
     if (collision == null) return;
     canvas.drawRect(
       getRectCollision(currentPosition),
-      new Paint()..color = Colors.lightGreenAccent.withOpacity(0.5),
+      new Paint()..color = color ?? Colors.lightGreenAccent.withOpacity(0.5),
     );
   }
 }

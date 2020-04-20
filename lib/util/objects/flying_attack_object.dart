@@ -82,7 +82,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
       super.render(canvas);
     }
     if (gameRef != null && gameRef.showCollisionArea) {
-      drawCollision(canvas, position);
+      drawCollision(canvas, position, gameRef.colorCollisionArea);
     }
   }
 

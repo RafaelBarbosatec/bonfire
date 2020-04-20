@@ -197,8 +197,4 @@ extension PlayerExtensions on Player {
       if (notObserved != null) notObserved();
     }
   }
-
-  void drawPositionCollision(Canvas canvas) {
-    this.drawCollision(canvas, position);
-  }
 }
