@@ -113,9 +113,8 @@ class Player extends AnimatedObject
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-
     if (gameRef != null && gameRef.showCollisionArea) {
-      drawCollision(canvas, position);
+      drawCollision(canvas, position, gameRef.collisionAreaColor);
     }
   }
 
@@ -169,10 +168,11 @@ class Player extends AnimatedObject
   }
 
   void _moveTop({bool addAnimation = true, bool isDiagonal = false}) {
-    if (addAnimation) _addTopAnimation();
-
-    statusMoveDirectional = JoystickMoveDirectional.MOVE_TOP;
-    lastDirection = Direction.top;
+    if (addAnimation) {
+      _addTopAnimation();
+      statusMoveDirectional = JoystickMoveDirectional.MOVE_TOP;
+      lastDirection = Direction.top;
+    }
 
     if (position.top <= 0) return;
 
@@ -237,10 +237,11 @@ class Player extends AnimatedObject
   }
 
   void _moveBottom({bool addAnimation = true, bool isDiagonal = false}) {
-    if (addAnimation) _addBottomAnimation();
-
-    statusMoveDirectional = JoystickMoveDirectional.MOVE_BOTTOM;
-    lastDirection = Direction.bottom;
+    if (addAnimation) {
+      _addBottomAnimation();
+      statusMoveDirectional = JoystickMoveDirectional.MOVE_BOTTOM;
+      lastDirection = Direction.bottom;
+    }
 
     if (position.bottom >= gameRef.size.height) return;
 

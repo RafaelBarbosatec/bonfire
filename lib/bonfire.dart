@@ -30,3 +30,4 @@ export 'package:flame/components/text_component.dart';
 export 'package:flame/flame.dart';
 export 'package:flame/position.dart';
 export 'package:flame/sprite.dart';
+export 'package:flame/spritesheet.dart';

@@ -93,7 +93,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
       height,
     );
 
-    this.collision = collision ?? Collision(width: width, height: height/2);
+    this.collision = collision ?? Collision(width: width, height: height / 2);
 
     lastDirectionHorizontal =
         initDirection == Direction.left ? Direction.left : Direction.right;
@@ -107,9 +107,8 @@ class Enemy extends AnimatedObject with ObjectCollision {
   void render(Canvas canvas) {
     if (isVisibleInMap()) {
       super.render(canvas);
-
       if (gameRef != null && gameRef.showCollisionArea) {
-        drawCollision(canvas, position);
+        drawCollision(canvas, position, gameRef.collisionAreaColor);
       }
     }
   }

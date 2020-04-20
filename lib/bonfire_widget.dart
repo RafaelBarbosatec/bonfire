@@ -20,6 +20,8 @@ class BonfireWidget extends StatefulWidget {
   final bool constructionMode;
   final bool showCollisionArea;
   final GameController gameController;
+  final Color constructionModeColor;
+  final Color collisionAreaColor;
 
   const BonfireWidget({
     Key key,
@@ -33,6 +35,8 @@ class BonfireWidget extends StatefulWidget {
     this.background,
     this.constructionMode = false,
     this.showCollisionArea = false,
+    this.constructionModeColor,
+    this.collisionAreaColor,
   }) : super(key: key);
 
   @override
@@ -81,6 +85,10 @@ class _BonfireWidgetState extends State<BonfireWidget>
       constructionMode: widget.constructionMode,
       showCollisionArea: widget.showCollisionArea,
       gameController: widget.gameController,
+      constructionModeColor:
+          widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+      collisionAreaColor:
+          widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
     );
     super.initState();
   }

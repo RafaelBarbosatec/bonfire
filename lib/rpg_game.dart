@@ -26,6 +26,8 @@ class RPGGame extends BaseGamePointerDetector {
   final bool constructionMode;
   final bool showCollisionArea;
   final GameController gameController;
+  final Color constructionModeColor;
+  final Color collisionAreaColor;
 
   RPGGame({
     @required this.context,
@@ -40,6 +42,8 @@ class RPGGame extends BaseGamePointerDetector {
     this.constructionMode = false,
     this.showCollisionArea = false,
     this.gameController,
+    this.constructionModeColor,
+    this.collisionAreaColor,
   })  : assert(map != null),
         assert(context != null),
         assert(joystickController != null) {
