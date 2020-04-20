@@ -1,3 +1,8 @@
+## [0.1.11] - 20/04/2020
+
+* add customize collisionAreaColor and constructionModeColor
+* Improvements player
+
 ## [0.1.10] - 17/04/2020
 
 * add constructor Tile.fromSprite
