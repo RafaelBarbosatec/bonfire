@@ -113,6 +113,7 @@ mixin ObjectCollision {
   }
 
   void drawCollision(Canvas canvas, Rect currentPosition) {
+    if (collision == null) return;
     canvas.drawRect(
       getRectCollision(currentPosition),
       new Paint()..color = Colors.lightGreenAccent.withOpacity(0.5),

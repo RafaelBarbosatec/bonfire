@@ -48,6 +48,9 @@ class Tile extends SpriteObject {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+
+    if (gameRef != null && gameRef.showCollisionArea && collision)
+      _drawCollision(canvas);
     if (gameRef != null && gameRef.constructionMode && isVisibleInMap())
       _drawGrid(canvas);
   }
@@ -76,6 +79,13 @@ class Tile extends SpriteObject {
       (position.y * size) - (position.y % 2 == 0 ? 0.5 : 0),
       size + (position.x % 2 == 0 ? 1 : 0),
       size + (position.y % 2 == 0 ? 1 : 0),
+    );
+  }
+
+  void _drawCollision(Canvas canvas) {
+    canvas.drawRect(
+      position,
+      new Paint()..color = Colors.lightGreenAccent.withOpacity(0.5),
     );
   }
 }
