@@ -343,7 +343,7 @@ Ao perceber o toque nessas ações do joystick, você poderá executar outras a�
 
 Para criar sua interface você deverá criar uma classe e extender de ```GameInterface``` como nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/interface/knight_interface.dart).
 
-Para montar sua interface utilizamos ```InterfaceComponent``` como no exemplo:
+Para adicionar elementos na sua interface utilizamos ```InterfaceComponent``` como no exemplo:
 
 ```dart
     InterfaceComponent(
@@ -359,7 +359,7 @@ Para montar sua interface utilizamos ```InterfaceComponent``` como no exemplo:
     )
 ```
 
-Adicionamos eles à interface dessa forma:
+Adicionando a nossa interface:
 
 ```dart
 class MinhaInterface extends GameInterface {
