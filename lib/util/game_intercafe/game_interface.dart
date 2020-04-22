@@ -27,6 +27,7 @@ class GameInterface extends GameComponent {
   }
 
   void add(ComponentInterface component) {
+    removeById(component.id);
     _components.add(component);
   }
 
