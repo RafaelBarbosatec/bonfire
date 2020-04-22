@@ -49,6 +49,8 @@ To run a game with Bonfire, use the following widget:
       constructionMode: false, // If true, activates hot reload to ease the map constructions and draws the grid
       showCollisionArea: false, // If true, show collision area of the elements
       gameController: GameController() // If you want to hear changes to the game to do something.
+      constructionModeColor: Colors.blue, // If you wan customize the grid color.
+      collisionAreaColor: Colors.blue, // If you wan customize the collision area color.
     );
   }
 ```
@@ -343,9 +345,49 @@ Actions can be fired when a jopystck action is received. Just like `Enemy`, here
 
 The way you cand raw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
 
-Interfaces implementations shall be implemented on `GameInterface` subclasses, like this [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/player/knight_interface.dart).
+To create your interface you must create a class and extend it from ```GameInterface``` like this [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/interface/knight_interface.dart).
 
-Interfaces are drawn by overriding `update` and `render` methods. You can draw directly on canvas or use [FlameEngine](https://flame-engine.org/) components.
+To add elements to your interface we use ```InterfaceComponent```:
+
+```dart
+    InterfaceComponent(
+      sprite: Sprite('blue_button1.png'), // Sprite que será desenhada.
+      spriteSelected: Sprite('blue_button2.png'), // Sprite que será desenhada ao pressionar.
+      height: 40,
+      width: 40,
+      id: 5,
+      position: Position(150, 20), // Posição na tela que deseja desenhar.
+      onTapComponent: () {
+        print('Test button');
+      },
+    )
+```
+
+Adding them to the interface:
+
+```dart
+class MyInterface extends GameInterface {
+  @override
+  void resize(Size size) {
+    add(InterfaceComponent(
+      sprite: Sprite('blue_button1.png'),
+      spriteSelected: Sprite('blue_button2.png'),
+      height: 40,
+      width: 40,
+      id: 5,
+      position: Position(150, 20),
+      onTapComponent: () {
+        print('Test button');
+      },
+    ));
+    super.resize(size);
+  }
+}
+```
+
+OBS: It is recommended to add it to the ```resize```, there you will have access to ```size``` of the game to be able to calculate the position of its component on the screen if necessary.
+
+If you want to create a more complex and customizable interface component, just create your own extender class ```InterfaceComponent``` like this [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/interface/bar_life_component.dart).
 
 ### Joystick
 The player-controlling component. 
@@ -357,8 +399,9 @@ Joystick is configurable by the following parameters:
 ```dart
 
       Joystick(
-        pathSpriteBackgroundDirectional: 'joystick_background.png', //(required) directinal control background
-        pathSpriteKnobDirectional: 'joystick_knob.png', //(required) directional indicator circle background
+        pathSpriteBackgroundDirectional: 'joystick_background.png', //directinal control background
+        pathSpriteKnobDirectional: 'joystick_knob.png', // directional indicator circle background
+        directionalColor: Colors.blue, // if you do not pass  'pathSpriteBackgroundDirectional' or  'pathSpriteKnobDirectional' you can define a color for the directional.
         sizeDirectional: 100, // directional control size
         marginBottomDirectional: 100,
         marginLeftDirectional: 100,
