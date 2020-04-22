@@ -1,13 +1,12 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/gesture/pointer_detector.dart';
-import 'package:bonfire/util/rect_component.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/composed_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/game/game.dart';
-import 'package:flame/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
@@ -26,14 +25,10 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
-  Iterable<TapDetector> get _tapAbleComponents =>
-      components.where((c) => c is TapDetector).cast();
-
-  Iterable<RectComponent> get _touchableComponents =>
-      components.where((c) => (c is RectComponent && c.isTouchable)).cast();
+  Iterable<GameComponent> get _touchableComponents =>
+      components.where((c) => (c is GameComponent && c.isTouchable)).cast();
 
   void onPointerCancel(PointerCancelEvent event) {
-    _tapAbleComponents.forEach((c) => c.onTapCancel());
     _touchableComponents.forEach((c) => c.onTapCancel(event.pointer));
   }
 
@@ -42,14 +37,6 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
       (c) => c.handlerTabUp(
         event.pointer,
         event.position,
-      ),
-    );
-    _tapAbleComponents.forEach(
-      (c) => c.onTapUp(
-        TapUpDetails(
-          globalPosition: event.position,
-          localPosition: event.localPosition,
-        ),
       ),
     );
   }
@@ -66,11 +53,6 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   void onPointerDown(PointerDownEvent event) {
     _touchableComponents
         .forEach((c) => c.handlerTabDown(event.pointer, event.position));
-    _tapAbleComponents.forEach((c) => c.onTapDown(TapDownDetails(
-          globalPosition: event.position,
-          localPosition: event.localPosition,
-          kind: event.kind,
-        )));
   }
 
   /// This method is called for every component added, both via [add] and [addLater] methods.

@@ -1,12 +1,8 @@
 import 'dart:ui';
 
 import 'package:bonfire/util/game_component.dart';
-import 'package:flutter/gestures.dart';
 
 abstract class RectComponent extends GameComponent {
-  /// Position used to draw on the screen
-  Rect position;
-
   /// Position used to locate component in the world.
   ///
   /// This position takes into account the current position of the camera in the world.
@@ -14,10 +10,6 @@ abstract class RectComponent extends GameComponent {
 
   /// Variable used to control whether the component has been destroyed.
   bool _isDestroyed = false;
-
-  bool isTouchable = false;
-
-  int _pointer;
 
   @override
   void render(Canvas c) {}
@@ -56,25 +48,5 @@ abstract class RectComponent extends GameComponent {
       positionInWorld.width,
       positionInWorld.height,
     );
-  }
-
-  void onTap() {}
-  void onTapDown(int pointer, Offset position) {}
-  void onTapUp(int pointer, Offset position) {}
-  void onTapMove(int pointer, Offset position) {}
-  void onTapCancel(int pointer) {}
-
-  void handlerTabDown(int pointer, Offset position) {
-    this.onTapDown(pointer, position);
-    if (this.position.contains(position)) {
-      this._pointer = pointer;
-    }
-  }
-
-  void handlerTabUp(int pointer, Offset position) {
-    this.onTapUp(pointer, position);
-    if (this.position.contains(position) && pointer == this._pointer) {
-      this.onTap();
-    }
   }
 }
