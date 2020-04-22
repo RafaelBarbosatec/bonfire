@@ -220,35 +220,15 @@ class Joystick extends JoystickController with PointerDetector {
     }
   }
 
-  @override
-  void onTapDown(TapDownDetails details) {
+  void onPointerDown(PointerDownEvent event) {
     if (actions == null || actions.isEmpty) return;
     actions
-        .where((action) => action.rect.contains(details.globalPosition))
+        .where((action) => action.rect.contains(event.position))
         .forEach((action) {
       action.pressed();
       joystickListener.joystickAction(action.actionId);
     });
-    super.onTapDown(details);
-  }
 
-  @override
-  void onTapUp(TapUpDetails details) {
-    actions.forEach((action) {
-      action.unPressed();
-    });
-    super.onTapUp(details);
-  }
-
-  @override
-  void onTapCancel() {
-    actions.forEach((action) {
-      action.unPressed();
-    });
-    super.onTapCancel();
-  }
-
-  void onPointerDown(PointerDownEvent event) {
     if (_backgroundRect == null) return;
     Rect directional = Rect.fromLTWH(
       _backgroundRect.left - 50,
@@ -271,6 +251,10 @@ class Joystick extends JoystickController with PointerDetector {
   }
 
   void onPointerUp(PointerUpEvent event) {
+    actions.forEach((action) {
+      action.unPressed();
+    });
+
     if (event.pointer == currentGesturePointer) {
       _dragging = false;
       _dragPosition = _backgroundRect.center;

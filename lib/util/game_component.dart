@@ -20,6 +20,7 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
 
   void handlerTabDown(int pointer, Offset position) {
     this.onTapDown(pointer, position);
+    if (this.position == null) return;
     if (this.position.contains(position)) {
       this._pointer = pointer;
     }
@@ -27,6 +28,7 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
 
   void handlerTabUp(int pointer, Offset position) {
     this.onTapUp(pointer, position);
+    if (this.position == null) return;
     if (this.position.contains(position) && pointer == this._pointer) {
       this.onTap();
     }

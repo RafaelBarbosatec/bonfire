@@ -4,7 +4,7 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
 class ComponentInterface extends GameComponent {
-  Rect _rect;
+  final int id;
   final Sprite sprite;
   final Sprite spriteSelected;
   final VoidCallback onTapComponent;
@@ -14,29 +14,31 @@ class ComponentInterface extends GameComponent {
   Sprite _spriteRender;
 
   ComponentInterface({
-    Position position,
-    this.width,
-    this.height,
-    this.sprite,
+    @required this.id,
+    @required Position position,
+    @required this.width,
+    @required this.height,
+    @required this.sprite,
     this.spriteSelected,
     this.onTapComponent,
   }) {
-    _rect = Rect.fromLTWH(position.x, position.y, width, height);
+    this.position = Rect.fromLTWH(position.x, position.y, width, height);
     _spriteRender = sprite;
   }
 
   void render(Canvas canvas) {
-    if (_spriteRender != null && _rect != null && _spriteRender.loaded())
-      _spriteRender.renderRect(canvas, _rect);
+    if (_spriteRender != null &&
+        this.position != null &&
+        _spriteRender.loaded()) _spriteRender.renderRect(canvas, this.position);
   }
 
   @override
   void onTapDown(int pointer, Offset position) {
-    if (_rect.contains(position)) {
+    if (this.position.contains(position)) {
       _pointer = pointer;
-      _spriteRender = spriteSelected;
+      if (spriteSelected != null) _spriteRender = spriteSelected;
     }
-    super.handlerTabDown(pointer, position);
+    super.onTapDown(pointer, position);
   }
 
   @override
@@ -45,7 +47,7 @@ class ComponentInterface extends GameComponent {
       _pointer = -1;
       _spriteRender = sprite;
     }
-    super.handlerTabDown(pointer, position);
+    super.onTapUp(pointer, position);
   }
 
   @override
