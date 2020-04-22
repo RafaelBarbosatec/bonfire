@@ -2,6 +2,7 @@
 
 * Improvements in GameInterface (now it’s easier to add elements with 'InterfaceComponent')
 * Improvements in Joystick
+* Update readme
 
 ## [0.1.11] - 20/04/2020
 
