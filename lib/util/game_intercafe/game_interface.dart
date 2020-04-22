@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:bonfire/util/game_component.dart';
-import 'package:bonfire/util/game_intercafe/component_interface.dart';
+import 'package:bonfire/util/game_intercafe/interface_component.dart';
 import 'package:flutter/widgets.dart';
 
 class GameInterface extends GameComponent {
-  List<ComponentInterface> _components = List();
+  List<InterfaceComponent> _components = List();
 
   @override
   bool isTouchable = true;
@@ -26,7 +26,7 @@ class GameInterface extends GameComponent {
     });
   }
 
-  void add(ComponentInterface component) {
+  void add(InterfaceComponent component) {
     removeById(component.id);
     _components.add(component);
   }
