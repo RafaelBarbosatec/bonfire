@@ -76,8 +76,16 @@ Tile(
    'tile/wall_left.png', // Tile image
    Position(positionX, positionY), // Map coordinates of this tile
    collision: true, // Define if this tile will be not transpassable by players and enemies (ideal for walls and obstacles)
-   size: 16 // Tile size (width and height)
+   size: 32 // Tile size (width and height)
 )
+
+or 
+
+Tile.fromSprite(
+            Sprite('wall.png'),
+            getPosition(x, y),
+            size: 32,
+          )
 ```
 
 ### Decorations
