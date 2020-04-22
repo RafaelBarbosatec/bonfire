@@ -1,3 +1,9 @@
+## [0.2.0] - 22/04/2020
+
+* Improvements in GameInterface (now it’s easier to add elements with 'InterfaceComponent')
+* Improvements in Joystick
+* Update readme
+
 ## [0.1.11] - 20/04/2020
 
 * add customize collisionAreaColor and constructionModeColor

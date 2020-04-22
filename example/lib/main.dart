@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:example/enemy/goblin.dart';
+import 'package:example/interface/knight_interface.dart';
 import 'package:example/map/dungeon_map.dart';
 import 'package:example/player/knight.dart';
-import 'package:example/player/knight_interface.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -32,7 +32,6 @@ class Game extends StatelessWidget implements GameListener {
         pathSpriteBackgroundDirectional: 'joystick_background.png',
         pathSpriteKnobDirectional: 'joystick_knob.png',
         sizeDirectional: 100,
-        marginLeftDirectional: 150,
         actions: [
           JoystickAction(
             actionId: 0,

@@ -5,6 +5,7 @@ import 'package:bonfire/joystick/joystick_action.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/util/gesture/pointer_detector.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Joystick extends JoystickController with PointerDetector {
@@ -25,6 +26,9 @@ class Joystick extends JoystickController with PointerDetector {
 
   int currentGesturePointer = 0;
 
+  Paint _paintBackground;
+  Paint _paintKnob;
+
   final double sizeDirectional;
   final double marginBottomDirectional;
   final double marginLeftDirectional;
@@ -33,15 +37,30 @@ class Joystick extends JoystickController with PointerDetector {
   final List<JoystickAction> actions;
 
   Joystick({
-    @required this.pathSpriteBackgroundDirectional,
-    @required this.pathSpriteKnobDirectional,
+    this.pathSpriteBackgroundDirectional,
+    this.pathSpriteKnobDirectional,
+    Color directionalColor,
     this.actions,
     this.sizeDirectional = 80,
     this.marginBottomDirectional = 100,
     this.marginLeftDirectional = 100,
   }) {
-    _backgroundSprite = Sprite(pathSpriteBackgroundDirectional);
-    _knobSprite = Sprite(pathSpriteKnobDirectional);
+    Color color = directionalColor ?? Colors.blueGrey;
+    if (pathSpriteBackgroundDirectional != null) {
+      _backgroundSprite = Sprite(pathSpriteBackgroundDirectional);
+    } else {
+      _paintBackground = Paint()
+        ..color = color.withOpacity(0.5)
+        ..style = PaintingStyle.fill;
+    }
+    if (pathSpriteKnobDirectional != null) {
+      _knobSprite = Sprite(pathSpriteKnobDirectional);
+    } else {
+      _paintKnob = Paint()
+        ..color = color.withOpacity(0.8)
+        ..style = PaintingStyle.fill;
+    }
+
     _tileSize = sizeDirectional / 2;
   }
 
@@ -100,9 +119,32 @@ class Joystick extends JoystickController with PointerDetector {
   }
 
   void render(Canvas canvas) {
-    if (_backgroundSprite != null)
-      _backgroundSprite.renderRect(canvas, _backgroundRect);
-    if (_knobSprite != null) _knobSprite.renderRect(canvas, _knobRect);
+    if (_backgroundRect != null) {
+      if (_backgroundSprite != null) {
+        _backgroundSprite.renderRect(canvas, _backgroundRect);
+      } else {
+        double radiusBackground = _backgroundRect.width / 2;
+        canvas.drawCircle(
+          Offset(_backgroundRect.left + radiusBackground,
+              _backgroundRect.top + radiusBackground),
+          radiusBackground,
+          _paintBackground,
+        );
+      }
+    }
+
+    if (_knobRect != null) {
+      if (_knobSprite != null) {
+        _knobSprite.renderRect(canvas, _knobRect);
+      } else {
+        double radiusKnob = _knobRect.width / 2;
+        canvas.drawCircle(
+          Offset(_knobRect.left + radiusKnob, _knobRect.top + radiusKnob),
+          radiusKnob,
+          _paintKnob,
+        );
+      }
+    }
 
     if (actions != null) actions.forEach((action) => action.render(canvas));
   }
@@ -220,35 +262,15 @@ class Joystick extends JoystickController with PointerDetector {
     }
   }
 
-  @override
-  void onTapDown(TapDownDetails details) {
+  void onPointerDown(PointerDownEvent event) {
     if (actions == null || actions.isEmpty) return;
     actions
-        .where((action) => action.rect.contains(details.globalPosition))
+        .where((action) => action.rect.contains(event.position))
         .forEach((action) {
       action.pressed();
       joystickListener.joystickAction(action.actionId);
     });
-    super.onTapDown(details);
-  }
 
-  @override
-  void onTapUp(TapUpDetails details) {
-    actions.forEach((action) {
-      action.unPressed();
-    });
-    super.onTapUp(details);
-  }
-
-  @override
-  void onTapCancel() {
-    actions.forEach((action) {
-      action.unPressed();
-    });
-    super.onTapCancel();
-  }
-
-  void onPointerDown(PointerDownEvent event) {
     if (_backgroundRect == null) return;
     Rect directional = Rect.fromLTWH(
       _backgroundRect.left - 50,
@@ -271,6 +293,10 @@ class Joystick extends JoystickController with PointerDetector {
   }
 
   void onPointerUp(PointerUpEvent event) {
+    actions.forEach((action) {
+      action.unPressed();
+    });
+
     if (event.pointer == currentGesturePointer) {
       _dragging = false;
       _dragPosition = _backgroundRect.center;

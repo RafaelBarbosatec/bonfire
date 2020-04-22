@@ -50,6 +50,8 @@ Para executar o game com Bonfire, basta utilizar o seguinte widget:
       constructionMode: false, // Se true ativa hot reload para facilitar construção do mapa e desenha grid.
       showCollisionArea: false, // Se true, exibe área de colisão dos objetos.
       gameController: GameController() // Caso deseja escutar modificações do game para fazer algo.
+      constructionModeColor: Colors.blue, // Caso deseje customizar a cor do grid.
+      collisionAreaColor: Colors.blue, // Caso deseje customizar a cor da área de colisão.
     );
   }
 ```
@@ -74,8 +76,16 @@ Tile(
    'tile/wall_left.png', // Imagem que representa esse Tile.
    Position(positionX, positionY), // posição no mapa onde será renderizado.
    collision: true, // se ele possui colisão, ou seja, nem o player nem inimigos irão passar por ele (ideal para muros e obstáculos).
-   size: 16 // Tamanho do tile, nesse caso 16x16
+   size: 32 // Tamanho do tile, nesse caso 32x32
 )
+
+ou 
+
+Tile.fromSprite(
+            Sprite('wall.png'),
+            getPosition(x, y),
+            size: 32,
+          )
 ```
 
 ### Decorations
@@ -339,9 +349,49 @@ Ao perceber o toque nessas ações do joystick, você poderá executar outras a�
 ### Interface
 É um meio disponibilizado para você desenhar a interface do game, como barra de vida, stamina, configurações, ou seja, qualquer outra coisa que queira adicionar à tela.
 
-Para criar sua interface você deverá criar uma classe e extender de ```GameInterface``` como nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/player/knight_interface.dart). 
+Para criar sua interface você deverá criar uma classe e extender de ```GameInterface``` como nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/interface/knight_interface.dart).
 
-Sobrescrevendo os métodos ```Update``` e ```Render``` você poderá desenhar sua interface utilizando Canvas ou utilizando componentes disponibilizados pelo [FlameEngine](https://flame-engine.org/).
+Para adicionar elementos na sua interface utilizamos ```InterfaceComponent``` como no exemplo:
+
+```dart
+    InterfaceComponent(
+      sprite: Sprite('blue_button1.png'), // Sprite que será desenhada.
+      spriteSelected: Sprite('blue_button2.png'), // Sprite que será desenhada ao pressionar.
+      height: 40,
+      width: 40,
+      id: 5,
+      position: Position(150, 20), // Posição na tela que deseja desenhar.
+      onTapComponent: () {
+        print('Test button');
+      },
+    )
+```
+
+Adicionando a nossa interface:
+
+```dart
+class MinhaInterface extends GameInterface {
+  @override
+  void resize(Size size) {
+    add(InterfaceComponent(
+      sprite: Sprite('blue_button1.png'),
+      spriteSelected: Sprite('blue_button2.png'),
+      height: 40,
+      width: 40,
+      id: 5,
+      position: Position(150, 20),
+      onTapComponent: () {
+        print('Test button');
+      },
+    ));
+    super.resize(size);
+  }
+}
+```
+
+OBS: É recomendado adiciona-lo no ```resize```, poís alí terá acesso ao ```size``` do game para poder calcular a posição do seu componente na tela se necessário.
+
+Caso deseje criar um componente de interface mais complexo e customisável é somente criar a sua propria classe extender ```InterfaceComponent``` como nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/interface/bar_life_component.dart).
 
 ### Joystick
 É responsável por controlar seu personagem. Existe um componente totalmente pronto e configurável para você personalizar o visual e adicionar a quantidade de ações que achar necessário, ou você também poderá criar o seu próprio joystick utilizando nossa classe abstrata.
@@ -353,8 +403,9 @@ O componente default que existe para ser utilizado é configurável da seguinte 
 ```dart
 
       Joystick(
-        pathSpriteBackgroundDirectional: 'joystick_background.png', //(required) imagem do background do direcional.
-        pathSpriteKnobDirectional: 'joystick_knob.png', //(required) imagem da bolinha que indica a movimentação do direcional.
+        pathSpriteBackgroundDirectional: 'joystick_background.png', // imagem do background do direcional.
+        pathSpriteKnobDirectional: 'joystick_knob.png', // imagem da bolinha que indica a movimentação do direcional.
+        directionalColor: Colors.blue, // caso não passe 'pathSpriteBackgroundDirectional' ou  'pathSpriteKnobDirectional' você poderá definir uma cor para o direcional.
         sizeDirectional: 100, // tamanho do direcional.
         marginBottomDirectional: 100,
         marginLeftDirectional: 100,

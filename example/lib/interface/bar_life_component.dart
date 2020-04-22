@@ -2,22 +2,26 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:example/player/knight.dart';
-import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
-class KnightInterface extends GameInterface {
+class BarLifeComponent extends InterfaceComponent {
+  double padding = 20;
+  double widthBar = 90;
+  double strokeWidth = 12;
+
   double maxLife = 0;
   double life = 0;
   double maxStamina = 100;
   double stamina = 0;
 
-  double widthBar = 90;
-  double strokeWidth = 10;
-  double padding = 20;
-  Sprite healthBar;
-  KnightInterface() {
-    healthBar = Sprite('health_ui.png');
-  }
+  BarLifeComponent()
+      : super(
+          id: 1,
+          position: Position(20, 20),
+          sprite: Sprite('health_ui.png'),
+          width: 120,
+          height: 40,
+        );
 
   @override
   void update(double t) {
@@ -37,12 +41,11 @@ class KnightInterface extends GameInterface {
       _drawLife(c);
       _drawStamina(c);
     } catch (e) {}
-    _drawSprite(c);
     super.render(c);
   }
 
   void _drawLife(Canvas canvas) {
-    double xBar = 49;
+    double xBar = 48;
     double yBar = 31.5;
     canvas.drawLine(
         Offset(xBar, yBar),
@@ -64,8 +67,8 @@ class KnightInterface extends GameInterface {
   }
 
   void _drawStamina(Canvas canvas) {
-    double xBar = 49;
-    double yBar = 48;
+    double xBar = 48;
+    double yBar = 47;
 
     double currentBarStamina = (stamina * widthBar) / maxStamina;
 
@@ -87,11 +90,5 @@ class KnightInterface extends GameInterface {
     } else {
       return Colors.red;
     }
-  }
-
-  void _drawSprite(Canvas c) {
-    double w = 120;
-    double factor = 0.3375;
-    healthBar.renderRect(c, Rect.fromLTWH(padding, padding, w, w * factor));
   }
 }
