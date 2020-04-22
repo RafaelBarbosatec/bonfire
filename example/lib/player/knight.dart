@@ -165,7 +165,7 @@ class Knight extends Player {
       observed: (enemies) {
         if (showObserveEnemy) return;
         showObserveEnemy = true;
-        _showEmote();
+        showEmote();
         if (!showTalk) {
           showTalk = true;
           _showTalk();
@@ -208,7 +208,7 @@ class Knight extends Player {
     super.receiveDamage(damage);
   }
 
-  void _showEmote() {
+  void showEmote() {
     gameRef.add(
       AnimatedFollowerObject(
         animation: FlameAnimation.Animation.sequenced(

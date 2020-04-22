@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 
 class InterfaceComponent extends GameComponent {
   final int id;
-  final Sprite spriteUnSelected;
+  final Sprite sprite;
   final Sprite spriteSelected;
   final VoidCallback onTapComponent;
   final double width;
@@ -18,12 +18,12 @@ class InterfaceComponent extends GameComponent {
     @required Position position,
     @required this.width,
     @required this.height,
-    @required this.spriteUnSelected,
+    @required this.sprite,
     this.spriteSelected,
     this.onTapComponent,
   }) {
     this.position = Rect.fromLTWH(position.x, position.y, width, height);
-    spriteToRender = spriteUnSelected;
+    spriteToRender = sprite;
   }
 
   void render(Canvas canvas) {
@@ -46,7 +46,7 @@ class InterfaceComponent extends GameComponent {
   void onTapUp(int pointer, Offset position) {
     if (pointer == _pointer) {
       _pointer = -1;
-      spriteToRender = spriteUnSelected;
+      spriteToRender = sprite;
     }
     super.onTapUp(pointer, position);
   }
