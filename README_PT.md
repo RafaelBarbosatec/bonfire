@@ -76,8 +76,16 @@ Tile(
    'tile/wall_left.png', // Imagem que representa esse Tile.
    Position(positionX, positionY), // posição no mapa onde será renderizado.
    collision: true, // se ele possui colisão, ou seja, nem o player nem inimigos irão passar por ele (ideal para muros e obstáculos).
-   size: 16 // Tamanho do tile, nesse caso 16x16
+   size: 32 // Tamanho do tile, nesse caso 32x32
 )
+
+ou 
+
+Tile.fromSprite(
+            Sprite('wall.png'),
+            getPosition(x, y),
+            size: 32,
+          )
 ```
 
 ### Decorations
