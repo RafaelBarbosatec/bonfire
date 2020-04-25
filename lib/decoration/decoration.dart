@@ -41,14 +41,26 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       bool isTouchable = false}) {
     this.animation = animation;
     _sprite = sprite;
-    this.position = this.positionInWorld = Rect.fromLTWH(
-      initPosition.x,
-      initPosition.y,
+    this.position = this.positionInWorld = generateRectWithBleedingPixel(
+      initPosition,
       width,
       height,
     );
     this.collision = collision;
     this.isTouchable = isTouchable;
+  }
+
+  Rect generateRectWithBleedingPixel(
+    Position position,
+    double width,
+    double height,
+  ) {
+    return Rect.fromLTWH(
+      position.x - (position.x % 2 == 0 ? 0.5 : 0),
+      position.y - (position.y % 2 == 0 ? 0.5 : 0),
+      width + (position.x % 2 == 0 ? 1 : 0),
+      height + (position.y % 2 == 0 ? 1 : 0),
+    );
   }
 
   GameDecoration.sprite(
