@@ -97,15 +97,19 @@ extension EnemyExtensions on Enemy {
           return;
         }
 
+        bool isMoveHorizontal = false;
         if (translateX > 0) {
+          isMoveHorizontal = true;
           moveRight(moveSpeed: translateX);
-        } else {
+        } else if (translateX < 0) {
+          isMoveHorizontal = true;
           moveLeft(moveSpeed: (translateX * -1));
         }
         if (translateY > 0) {
-          moveBottom(moveSpeed: translateY);
-        } else {
-          moveTop(moveSpeed: (translateY * -1));
+          moveBottom(moveSpeed: translateY, addAnimation: !isMoveHorizontal);
+        } else if (translateY < 0) {
+          moveTop(
+              moveSpeed: (translateY * -1), addAnimation: !isMoveHorizontal);
         }
       },
       notObserved: () {

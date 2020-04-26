@@ -19,8 +19,6 @@ class Joystick extends JoystickController with PointerDetector {
   bool _dragging = false;
   Offset _dragPosition;
 
-  double _sensitivity = 6;
-
   double _tileSize;
   Size _screenSize;
 
@@ -35,6 +33,7 @@ class Joystick extends JoystickController with PointerDetector {
   final String pathSpriteBackgroundDirectional;
   final String pathSpriteKnobDirectional;
   final List<JoystickAction> actions;
+  final bool isFixedDirectional;
 
   Joystick({
     this.pathSpriteBackgroundDirectional,
@@ -44,6 +43,7 @@ class Joystick extends JoystickController with PointerDetector {
     this.sizeDirectional = 80,
     this.marginBottomDirectional = 100,
     this.marginLeftDirectional = 100,
+    this.isFixedDirectional = true,
   }) {
     Color color = directionalColor ?? Colors.blueGrey;
     if (pathSpriteBackgroundDirectional != null) {
@@ -162,81 +162,11 @@ class Joystick extends JoystickController with PointerDetector {
       double _radAngle = atan2(_dragPosition.dy - _backgroundRect.center.dy,
           _dragPosition.dx - _backgroundRect.center.dx);
 
+      double degrees = _radAngle * 180 / pi;
+
       // Distance between the center of joystick background & drag position
       Point p = Point(_backgroundRect.center.dx, _backgroundRect.center.dy);
       double dist = p.distanceTo(Point(_dragPosition.dx, _dragPosition.dy));
-
-      bool mRight = false;
-      bool mLeft = false;
-      bool mTop = false;
-      bool mBottom = false;
-
-      var diffY = _dragPosition.dy - _backgroundRect.center.dy;
-      var diffX = _dragPosition.dx - _backgroundRect.center.dx;
-      if (_dragPosition.dx > _backgroundRect.center.dx &&
-          diffX > _backgroundRect.width / _sensitivity) {
-        mRight = true;
-      }
-      if (_dragPosition.dx < _backgroundRect.center.dx &&
-          diffX < (-1 * _backgroundRect.width / _sensitivity)) {
-        mLeft = true;
-      }
-      if (_dragPosition.dy > _backgroundRect.center.dy &&
-          diffY > _backgroundRect.height / _sensitivity) {
-        mBottom = true;
-      }
-      if (_dragPosition.dy < _backgroundRect.center.dy &&
-          diffY < (-1 * _backgroundRect.height / _sensitivity)) {
-        mTop = true;
-      }
-
-      if (mRight && mTop) {
-        mRight = false;
-        mTop = false;
-        joystickListener
-            .joystickChangeDirectional(JoystickMoveDirectional.MOVE_TOP_RIGHT);
-      }
-
-      if (mRight && mBottom) {
-        mRight = false;
-        mBottom = false;
-        joystickListener.joystickChangeDirectional(
-            JoystickMoveDirectional.MOVE_BOTTOM_RIGHT);
-      }
-
-      if (mLeft && mTop) {
-        mLeft = false;
-        mTop = false;
-        joystickListener
-            .joystickChangeDirectional(JoystickMoveDirectional.MOVE_TOP_LEFT);
-      }
-
-      if (mLeft && mBottom) {
-        mLeft = false;
-        mBottom = false;
-        joystickListener.joystickChangeDirectional(
-            JoystickMoveDirectional.MOVE_BOTTOM_LEFT);
-      }
-
-      if (mRight) {
-        joystickListener
-            .joystickChangeDirectional(JoystickMoveDirectional.MOVE_RIGHT);
-      }
-
-      if (mLeft) {
-        joystickListener
-            .joystickChangeDirectional(JoystickMoveDirectional.MOVE_LEFT);
-      }
-
-      if (mBottom) {
-        joystickListener
-            .joystickChangeDirectional(JoystickMoveDirectional.MOVE_BOTTOM);
-      }
-
-      if (mTop) {
-        joystickListener
-            .joystickChangeDirectional(JoystickMoveDirectional.MOVE_TOP);
-      }
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the
@@ -254,6 +184,73 @@ class Joystick extends JoystickController with PointerDetector {
               _backgroundRect.center.dy + nextPoint.dy) -
           _knobRect.center;
       _knobRect = _knobRect.shift(diff);
+
+      double _intensity = dist / (_tileSize * _backgroundAspectRatio / 3);
+
+      if (degrees > -22.5 && degrees <= 22.5) {
+        joystickListener.joystickChangeDirectional(
+          JoystickMoveDirectional.MOVE_RIGHT,
+          _intensity,
+          _radAngle,
+        );
+      }
+
+      if (degrees > 22.5 && degrees <= 67.5) {
+        joystickListener.joystickChangeDirectional(
+          JoystickMoveDirectional.MOVE_BOTTOM_RIGHT,
+          _intensity,
+          _radAngle,
+        );
+      }
+
+      if (degrees > 67.5 && degrees <= 112.5) {
+        joystickListener.joystickChangeDirectional(
+          JoystickMoveDirectional.MOVE_BOTTOM,
+          _intensity,
+          _radAngle,
+        );
+      }
+
+      if (degrees > 112.5 && degrees <= 157.5) {
+        joystickListener.joystickChangeDirectional(
+          JoystickMoveDirectional.MOVE_BOTTOM_LEFT,
+          _intensity,
+          _radAngle,
+        );
+      }
+
+      if ((degrees > 157.5 && degrees <= 180) ||
+          (degrees >= -180 && degrees <= -157.5)) {
+        joystickListener.joystickChangeDirectional(
+          JoystickMoveDirectional.MOVE_LEFT,
+          _intensity,
+          _radAngle,
+        );
+      }
+
+      if (degrees > -157.5 && degrees <= -112.5) {
+        joystickListener.joystickChangeDirectional(
+          JoystickMoveDirectional.MOVE_TOP_LEFT,
+          _intensity,
+          _radAngle,
+        );
+      }
+
+      if (degrees > -112.5 && degrees <= -67.5) {
+        joystickListener.joystickChangeDirectional(
+          JoystickMoveDirectional.MOVE_TOP,
+          _intensity,
+          _radAngle,
+        );
+      }
+
+      if (degrees > -67.5 && degrees <= -22.5) {
+        joystickListener.joystickChangeDirectional(
+          JoystickMoveDirectional.MOVE_TOP_RIGHT,
+          _intensity,
+          _radAngle,
+        );
+      }
     } else {
       if (_knobRect != null) {
         Offset diff = _dragPosition - _knobRect.center;
@@ -263,6 +260,8 @@ class Joystick extends JoystickController with PointerDetector {
   }
 
   void onPointerDown(PointerDownEvent event) {
+    _updateDirectionalRect(event.position);
+
     if (actions == null || actions.isEmpty) return;
     actions
         .where((action) => action.rect.contains(event.position))
@@ -300,7 +299,8 @@ class Joystick extends JoystickController with PointerDetector {
     if (event.pointer == currentGesturePointer) {
       _dragging = false;
       _dragPosition = _backgroundRect.center;
-      joystickListener.joystickChangeDirectional(JoystickMoveDirectional.IDLE);
+      joystickListener.joystickChangeDirectional(
+          JoystickMoveDirectional.IDLE, 0, 0);
     }
   }
 
@@ -308,7 +308,24 @@ class Joystick extends JoystickController with PointerDetector {
     if (event.pointer == currentGesturePointer) {
       _dragging = false;
       _dragPosition = _backgroundRect.center;
-      joystickListener.joystickChangeDirectional(JoystickMoveDirectional.IDLE);
+      joystickListener.joystickChangeDirectional(
+          JoystickMoveDirectional.IDLE, 0, 0);
     }
+  }
+
+  void _updateDirectionalRect(Offset position) {
+    if (gameRef != null &&
+        (position.dx > gameRef.size.width / 3 ||
+            position.dy < gameRef.size.height / 3 ||
+            isFixedDirectional)) return;
+
+    _dragPosition = position;
+
+    _backgroundRect =
+        Rect.fromCircle(center: position, radius: sizeDirectional / 2);
+
+    Offset osKnob =
+        Offset(_backgroundRect.center.dx, _backgroundRect.center.dy);
+    _knobRect = Rect.fromCircle(center: osKnob, radius: sizeDirectional / 4);
   }
 }

@@ -8,6 +8,7 @@ class Knight extends Player {
   final Position initPosition;
   double attack = 20;
   double stamina = 100;
+  double initSpeed = 3;
   Timer _timerStamina;
   bool showObserveEnemy = false;
   bool showTalk = false;
@@ -43,8 +44,15 @@ class Knight extends Player {
             height: 32,
             initPosition: initPosition,
             life: 200,
-            speed: 2.5,
+            speed: 3,
             collision: Collision(height: 16, width: 16));
+
+  @override
+  void joystickChangeDirectional(
+      JoystickMoveDirectional directional, double intensity, double radAngle) {
+    this.speed = initSpeed * intensity;
+    super.joystickChangeDirectional(directional, intensity, radAngle);
+  }
 
   @override
   void joystickAction(int action) {
@@ -149,7 +157,7 @@ class Knight extends Player {
       width: 25,
       height: 25,
       damage: 10,
-      speed: speed * 1.5,
+      speed: initSpeed * 1.5,
     );
   }
 

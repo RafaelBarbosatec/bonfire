@@ -12,6 +12,8 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 abstract class BaseGamePointerDetector extends Game with PointerDetector {
+  bool _isPause = false;
+
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
       OrderedSet(Comparing.on((c) => c.priority()));
@@ -126,12 +128,23 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// You can override it further to add more custom behaviour.
   @override
   void update(double t) {
+    if (_isPause) return;
     components.addAll(_addLater);
     _addLater.clear();
 
     components.forEach((c) => c.update(t));
     components.removeWhere((c) => c.destroy());
   }
+
+  void pause() {
+    _isPause = true;
+  }
+
+  void resume() {
+    _isPause = false;
+  }
+
+  bool get isGamePaused => _isPause;
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.
   ///

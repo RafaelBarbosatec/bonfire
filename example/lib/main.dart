@@ -29,6 +29,7 @@ class Game extends StatelessWidget implements GameListener {
   Widget build(BuildContext context) {
     return BonfireWidget(
       joystick: Joystick(
+        isFixedDirectional: false,
         pathSpriteBackgroundDirectional: 'joystick_background.png',
         pathSpriteKnobDirectional: 'joystick_knob.png',
         sizeDirectional: 100,

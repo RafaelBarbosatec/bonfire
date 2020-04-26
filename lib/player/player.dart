@@ -73,6 +73,9 @@ class Player extends AnimatedObject
   bool _usePositionInWorld = true;
   bool _nextFrameUsePosition = false;
 
+  final Size sizeCentralMovementWindow;
+  Rect _rectCentralMovementWindow;
+
   Player({
     @required this.animIdleLeft,
     @required this.animIdleRight,
@@ -89,6 +92,7 @@ class Player extends AnimatedObject
     this.speed = 5,
     this.life = 10,
     Collision collision,
+    this.sizeCentralMovementWindow,
   }) {
     lastDirection = initDirection;
     if (initDirection == Direction.left || initDirection == Direction.right) {
@@ -134,7 +138,8 @@ class Player extends AnimatedObject
   }
 
   @override
-  void joystickChangeDirectional(JoystickMoveDirectional directional) {
+  void joystickChangeDirectional(
+      JoystickMoveDirectional directional, double intensity, double radAngle) {
     if (_isDead || _usePositionInWorld) return;
     switch (directional) {
       case JoystickMoveDirectional.MOVE_TOP:
@@ -183,7 +188,7 @@ class Player extends AnimatedObject
 
     if (isCollision(displacement, gameRef)) return;
 
-    if (position.top > gameRef.size.height / 2.9 ||
+    if (position.top >= _rectCentralMovementWindow.top ||
         gameRef.gameCamera.isMaxTop()) {
       position = displacement;
     } else {
@@ -221,7 +226,7 @@ class Player extends AnimatedObject
 
     if (isCollision(displacement, gameRef)) return;
 
-    if (position.left < gameRef.size.width / 1.5 ||
+    if (position.right <= _rectCentralMovementWindow.right ||
         gameRef.gameCamera.isMaxRight()) {
       position = displacement;
     } else {
@@ -252,7 +257,7 @@ class Player extends AnimatedObject
 
     if (isCollision(displacement, gameRef)) return;
 
-    if (position.top < gameRef.size.height / 1.9 ||
+    if (position.bottom <= _rectCentralMovementWindow.bottom ||
         gameRef.gameCamera.isMaxBottom()) {
       position = displacement;
     } else {
@@ -289,7 +294,7 @@ class Player extends AnimatedObject
 
     if (isCollision(displacement, gameRef)) return;
 
-    if (position.left > gameRef.size.width / 3 ||
+    if (position.left >= _rectCentralMovementWindow.left ||
         gameRef.gameCamera.isMaxLeft()) {
       position = displacement;
     } else {
@@ -372,6 +377,27 @@ class Player extends AnimatedObject
 
   void die() {
     _isDead = true;
+  }
+
+  @override
+  void resize(Size size) {
+    if (sizeCentralMovementWindow != null) {
+      _rectCentralMovementWindow = Rect.fromLTWH(
+        (size.width / 2) - (sizeCentralMovementWindow.width / 2),
+        (size.height / 2) - (sizeCentralMovementWindow.height / 2),
+        sizeCentralMovementWindow.width,
+        sizeCentralMovementWindow.height,
+      );
+    } else {
+      double sizeWidth = width * 3;
+      double sizeHeight = height * 3;
+      _rectCentralMovementWindow = Rect.fromLTWH(
+        (size.width / 2) - (sizeWidth / 2),
+        (size.height / 2) - (sizeHeight / 2),
+        sizeWidth,
+        sizeHeight,
+      );
+    }
   }
 
   bool get isDead => _isDead;
