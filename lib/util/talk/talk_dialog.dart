@@ -17,7 +17,7 @@ class TalkDialog extends StatefulWidget {
 
   static show(
     BuildContext context,
-    List<Say> talkList, {
+    List<Say> sayList, {
     VoidCallback finish,
     ValueChanged<int> onChangeTalk,
     TextStyle textStyle,
@@ -29,7 +29,7 @@ class TalkDialog extends StatefulWidget {
       context: context,
       builder: (BuildContext context) {
         return TalkDialog(
-          says: talkList,
+          says: sayList,
           finish: finish,
           onChangeTalk: onChangeTalk,
           textStyle: textStyle,

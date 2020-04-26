@@ -19,8 +19,6 @@ class Joystick extends JoystickController with PointerDetector {
   bool _dragging = false;
   Offset _dragPosition;
 
-  double _sensitivity = 6;
-
   double _tileSize;
   Size _screenSize;
 
@@ -35,6 +33,7 @@ class Joystick extends JoystickController with PointerDetector {
   final String pathSpriteBackgroundDirectional;
   final String pathSpriteKnobDirectional;
   final List<JoystickAction> actions;
+  final bool isFixedDirectional;
 
   Joystick({
     this.pathSpriteBackgroundDirectional,
@@ -44,6 +43,7 @@ class Joystick extends JoystickController with PointerDetector {
     this.sizeDirectional = 80,
     this.marginBottomDirectional = 100,
     this.marginLeftDirectional = 100,
+    this.isFixedDirectional = true,
   }) {
     Color color = directionalColor ?? Colors.blueGrey;
     if (pathSpriteBackgroundDirectional != null) {
@@ -260,6 +260,8 @@ class Joystick extends JoystickController with PointerDetector {
   }
 
   void onPointerDown(PointerDownEvent event) {
+    _updateDirectionalRect(event.position);
+
     if (actions == null || actions.isEmpty) return;
     actions
         .where((action) => action.rect.contains(event.position))
@@ -309,5 +311,21 @@ class Joystick extends JoystickController with PointerDetector {
       joystickListener.joystickChangeDirectional(
           JoystickMoveDirectional.IDLE, 0, 0);
     }
+  }
+
+  void _updateDirectionalRect(Offset position) {
+    if (gameRef != null &&
+        (position.dx > gameRef.size.width / 3 ||
+            position.dy < gameRef.size.height / 3 ||
+            isFixedDirectional)) return;
+
+    _dragPosition = position;
+
+    _backgroundRect =
+        Rect.fromCircle(center: position, radius: sizeDirectional / 2);
+
+    Offset osKnob =
+        Offset(_backgroundRect.center.dx, _backgroundRect.center.dy);
+    _knobRect = Rect.fromCircle(center: osKnob, radius: sizeDirectional / 4);
   }
 }
