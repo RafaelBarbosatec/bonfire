@@ -2,10 +2,13 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/decoration/potion_life.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
+import 'package:flutter/material.dart';
 
 class Chest extends GameDecoration {
   final Position initPosition;
   bool _observedPlayer = false;
+
+  TextConfig _textConfig;
   Chest(this.initPosition)
       : super.animation(
           FlameAnimation.Animation.sequenced(
@@ -18,7 +21,12 @@ class Chest extends GameDecoration {
           height: 20,
           initPosition: initPosition,
           isTouchable: true,
-        );
+        ) {
+    _textConfig = TextConfig(
+      color: Colors.white,
+      fontSize: 10,
+    );
+  }
 
   @override
   void update(double dt) {
@@ -37,6 +45,18 @@ class Chest extends GameDecoration {
     );
 
     super.update(dt);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    if (_observedPlayer) {
+      _textConfig.render(
+        canvas,
+        'Touch me !!!',
+        Position(position.left - 12, position.center.dy - (height + 5)),
+      );
+    }
   }
 
   @override

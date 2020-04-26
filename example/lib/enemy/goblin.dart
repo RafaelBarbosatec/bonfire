@@ -147,7 +147,6 @@ class Goblin extends Enemy {
         widthArea: 25,
         damage: attack / 2,
         interval: 400,
-        withPush: true,
         attackEffectBottomAnim: FlameAnimation.Animation.sequenced(
           'enemy/atack_effect_bottom.png',
           6,
