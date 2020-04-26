@@ -19,7 +19,8 @@ enum JoystickMoveDirectional {
 }
 
 abstract class JoystickListener {
-  void joystickChangeDirectional(JoystickMoveDirectional directional);
+  void joystickChangeDirectional(
+      JoystickMoveDirectional directional, double intensity, double radAngle);
   void joystickAction(int action);
 }
 

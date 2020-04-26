@@ -10,23 +10,25 @@ class MapExplorer implements JoystickListener {
   void joystickAction(int action) {}
 
   @override
-  void joystickChangeDirectional(JoystickMoveDirectional directional) {
-    camera.moveCamera(5, directional);
+  void joystickChangeDirectional(
+      JoystickMoveDirectional directional, double intensity, double radAngle) {
+    double speed = 8 * intensity;
+    camera.moveCamera(speed, directional);
     if (directional == JoystickMoveDirectional.MOVE_TOP_LEFT) {
-      camera.moveLeft(4);
-      camera.moveTop(4);
+      camera.moveLeft(speed * 0.8);
+      camera.moveTop(speed * 0.8);
     }
     if (directional == JoystickMoveDirectional.MOVE_TOP_RIGHT) {
-      camera.moveRight(4);
-      camera.moveTop(4);
+      camera.moveRight(speed * 0.8);
+      camera.moveTop(speed * 0.8);
     }
     if (directional == JoystickMoveDirectional.MOVE_BOTTOM_LEFT) {
-      camera.moveLeft(4);
-      camera.moveBottom(4);
+      camera.moveLeft(speed * 0.8);
+      camera.moveBottom(speed * 0.8);
     }
     if (directional == JoystickMoveDirectional.MOVE_BOTTOM_RIGHT) {
-      camera.moveRight(4);
-      camera.moveBottom(4);
+      camera.moveRight(speed * 0.8);
+      camera.moveBottom(speed * 0.8);
     }
   }
 }

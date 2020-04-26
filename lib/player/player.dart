@@ -134,7 +134,8 @@ class Player extends AnimatedObject
   }
 
   @override
-  void joystickChangeDirectional(JoystickMoveDirectional directional) {
+  void joystickChangeDirectional(
+      JoystickMoveDirectional directional, double intensity, double radAngle) {
     if (_isDead || _usePositionInWorld) return;
     switch (directional) {
       case JoystickMoveDirectional.MOVE_TOP:
