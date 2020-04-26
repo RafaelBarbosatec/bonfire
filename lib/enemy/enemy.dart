@@ -59,6 +59,8 @@ class Enemy extends AnimatedObject with ObjectCollision {
 
   bool _isDead = false;
 
+  bool _isIdle = true;
+
   /// Last position the enemy was in.
   Direction lastDirection;
 
@@ -122,7 +124,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
     positionInWorld = positionInWorld.translate(translateX, translateY);
   }
 
-  void moveTop({double moveSpeed}) {
+  void moveTop({double moveSpeed, bool addAnimation = true}) {
     double speed = moveSpeed ?? this.speed;
 
     var collision = isCollisionTranslate(
@@ -136,7 +138,8 @@ class Enemy extends AnimatedObject with ObjectCollision {
 
     positionInWorld = positionInWorld.translate(0, (speed * -1));
 
-    if (lastDirection != Direction.top) {
+    if ((lastDirection != Direction.top || _isIdle) && addAnimation) {
+      _isIdle = false;
       animation = animationRunTop ??
           (lastDirectionHorizontal == Direction.right
               ? animationRunRight
@@ -145,7 +148,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
     }
   }
 
-  void moveBottom({double moveSpeed}) {
+  void moveBottom({double moveSpeed, bool addAnimation = true}) {
     double speed = moveSpeed ?? this.speed;
 
     var collision = isCollisionTranslate(
@@ -158,7 +161,8 @@ class Enemy extends AnimatedObject with ObjectCollision {
 
     positionInWorld = positionInWorld.translate(0, speed);
 
-    if (lastDirection != Direction.bottom) {
+    if ((lastDirection != Direction.bottom || _isIdle) && addAnimation) {
+      _isIdle = false;
       animation = animationRunBottom ??
           (lastDirectionHorizontal == Direction.right
               ? animationRunRight
@@ -179,7 +183,8 @@ class Enemy extends AnimatedObject with ObjectCollision {
     if (collision) return;
 
     positionInWorld = positionInWorld.translate((speed * -1), 0);
-    if (lastDirection != Direction.left) {
+    if (lastDirection != Direction.left || _isIdle) {
+      _isIdle = false;
       animation = animationRunLeft;
       lastDirection = Direction.left;
     }
@@ -199,7 +204,8 @@ class Enemy extends AnimatedObject with ObjectCollision {
     if (collision) return;
 
     positionInWorld = positionInWorld.translate(speed, 0);
-    if (lastDirection != Direction.right) {
+    if (lastDirection != Direction.right || _isIdle) {
+      _isIdle = false;
       animation = animationRunRight;
       lastDirection = Direction.right;
     }
@@ -207,6 +213,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
   }
 
   void idle() {
+    _isIdle = true;
     switch (lastDirection) {
       case Direction.left:
         animation = animationIdleLeft;

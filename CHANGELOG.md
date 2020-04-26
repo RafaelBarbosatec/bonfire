@@ -1,3 +1,14 @@
+## [0.2.2] - 26/04/2020
+
+* Improvements Joystick
+    - better sensitivity
+    - possibility of obtaining intensity
+    - possibility of obtaining angle
+* Improvements player movement windows
+* Improvements enemy movement
+* Add TextInterfaceComponent
+* Add bleeding pixel in decorations
+
 ## [0.2.0] - 22/04/2020
 
 * Improvements in GameInterface (now it’s easier to add elements with 'InterfaceComponent')

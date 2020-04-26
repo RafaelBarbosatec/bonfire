@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 
 class Goblin extends Enemy {
   final Position initPosition;
-  double attack = 25;
+  double attack = 0;
   bool _seePlayerClose = false;
 
   Goblin({
@@ -172,7 +172,7 @@ class Goblin extends Enemy {
           textureHeight: 16,
         ),
         execute: () {
-          print('attack meele');
+          //print('attack meele');
         });
   }
 
