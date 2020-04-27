@@ -1,3 +1,7 @@
+## [0.2.4] - 27/04/2020
+
+* add bleeding pixel in GameDecoration.sprite and GameDecoration.animation.
+
 ## [0.2.3] - 27/04/2020
 
 * Fix bug Joystick fixed

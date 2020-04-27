@@ -50,19 +50,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.isTouchable = isTouchable;
   }
 
-  Rect generateRectWithBleedingPixel(
-    Position position,
-    double width,
-    double height,
-  ) {
-    return Rect.fromLTWH(
-      position.x - (position.x % 2 == 0 ? 0.5 : 0),
-      position.y - (position.y % 2 == 0 ? 0.5 : 0),
-      width + (position.x % 2 == 0 ? 1 : 0),
-      height + (position.y % 2 == 0 ? 1 : 0),
-    );
-  }
-
   GameDecoration.sprite(
     Sprite sprite, {
     @required this.initPosition,
@@ -73,9 +60,8 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     bool isTouchable = false,
   }) {
     _sprite = sprite;
-    this.position = this.positionInWorld = Rect.fromLTWH(
-      initPosition.x,
-      initPosition.y,
+    this.position = this.positionInWorld = generateRectWithBleedingPixel(
+      initPosition,
       width,
       height,
     );
@@ -93,9 +79,8 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     bool isTouchable = false,
   }) {
     this.animation = animation;
-    this.position = this.positionInWorld = Rect.fromLTWH(
-      initPosition.x,
-      initPosition.y,
+    this.position = this.positionInWorld = generateRectWithBleedingPixel(
+      initPosition,
       width,
       height,
     );
@@ -120,6 +105,19 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
         drawCollision(canvas, position, gameRef.collisionAreaColor);
       }
     }
+  }
+
+  Rect generateRectWithBleedingPixel(
+    Position position,
+    double width,
+    double height,
+  ) {
+    return Rect.fromLTWH(
+      position.x - (position.x % 2 == 0 ? 0.5 : 0),
+      position.y - (position.y % 2 == 0 ? 0.5 : 0),
+      width + (position.x % 2 == 0 ? 1 : 0),
+      height + (position.y % 2 == 0 ? 1 : 0),
+    );
   }
 
   @override
