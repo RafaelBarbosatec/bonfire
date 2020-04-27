@@ -1,3 +1,7 @@
+## [0.2.3] - 27/04/2020
+
+* Fix bug Joystick fixed
+
 ## [0.2.2] - 26/04/2020
 
 * Improvements Joystick

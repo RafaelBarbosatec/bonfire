@@ -279,6 +279,7 @@ class Joystick extends JoystickController with PointerDetector {
     );
     if (!_dragging && directional.contains(event.position)) {
       _dragging = true;
+      _dragPosition = event.position;
       currentGesturePointer = event.pointer;
     }
   }
@@ -318,8 +319,6 @@ class Joystick extends JoystickController with PointerDetector {
         (position.dx > gameRef.size.width / 3 ||
             position.dy < gameRef.size.height / 3 ||
             isFixedDirectional)) return;
-
-    _dragPosition = position;
 
     _backgroundRect =
         Rect.fromCircle(center: position, radius: sizeDirectional / 2);
