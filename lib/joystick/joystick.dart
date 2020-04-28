@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:bonfire/joystick/joystick_action.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
