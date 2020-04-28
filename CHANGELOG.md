@@ -1,3 +1,7 @@
+## [0.2.5] - 28/04/2020
+
+* Flutter Web test.
+
 ## [0.2.4] - 27/04/2020
 
 * add bleeding pixel in GameDecoration.sprite and GameDecoration.animation.

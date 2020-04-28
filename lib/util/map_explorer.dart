@@ -14,19 +14,19 @@ class MapExplorer implements JoystickListener {
       JoystickMoveDirectional directional, double intensity, double radAngle) {
     double speed = 8 * intensity;
     camera.moveCamera(speed, directional);
-    if (directional == JoystickMoveDirectional.MOVE_TOP_LEFT) {
+    if (directional == JoystickMoveDirectional.MOVE_UP_LEFT) {
       camera.moveLeft(speed * 0.8);
       camera.moveTop(speed * 0.8);
     }
-    if (directional == JoystickMoveDirectional.MOVE_TOP_RIGHT) {
+    if (directional == JoystickMoveDirectional.MOVE_UP_RIGHT) {
       camera.moveRight(speed * 0.8);
       camera.moveTop(speed * 0.8);
     }
-    if (directional == JoystickMoveDirectional.MOVE_BOTTOM_LEFT) {
+    if (directional == JoystickMoveDirectional.MOVE_DOWN_LEFT) {
       camera.moveLeft(speed * 0.8);
       camera.moveBottom(speed * 0.8);
     }
-    if (directional == JoystickMoveDirectional.MOVE_BOTTOM_RIGHT) {
+    if (directional == JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
       camera.moveRight(speed * 0.8);
       camera.moveBottom(speed * 0.8);
     }

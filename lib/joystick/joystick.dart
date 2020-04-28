@@ -1,14 +1,12 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:bonfire/joystick/joystick_action.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/util/gesture/pointer_detector.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class Joystick extends JoystickController with PointerDetector {
+class Joystick extends JoystickController {
   double _backgroundAspectRatio = 2.2;
   Rect _backgroundRect;
   Sprite _backgroundSprite;
@@ -197,7 +195,7 @@ class Joystick extends JoystickController with PointerDetector {
 
       if (degrees > 22.5 && degrees <= 67.5) {
         joystickListener.joystickChangeDirectional(
-          JoystickMoveDirectional.MOVE_BOTTOM_RIGHT,
+          JoystickMoveDirectional.MOVE_DOWN_RIGHT,
           _intensity,
           _radAngle,
         );
@@ -205,7 +203,7 @@ class Joystick extends JoystickController with PointerDetector {
 
       if (degrees > 67.5 && degrees <= 112.5) {
         joystickListener.joystickChangeDirectional(
-          JoystickMoveDirectional.MOVE_BOTTOM,
+          JoystickMoveDirectional.MOVE_DOWN,
           _intensity,
           _radAngle,
         );
@@ -213,7 +211,7 @@ class Joystick extends JoystickController with PointerDetector {
 
       if (degrees > 112.5 && degrees <= 157.5) {
         joystickListener.joystickChangeDirectional(
-          JoystickMoveDirectional.MOVE_BOTTOM_LEFT,
+          JoystickMoveDirectional.MOVE_DOWN_LEFT,
           _intensity,
           _radAngle,
         );
@@ -230,7 +228,7 @@ class Joystick extends JoystickController with PointerDetector {
 
       if (degrees > -157.5 && degrees <= -112.5) {
         joystickListener.joystickChangeDirectional(
-          JoystickMoveDirectional.MOVE_TOP_LEFT,
+          JoystickMoveDirectional.MOVE_UP_LEFT,
           _intensity,
           _radAngle,
         );
@@ -238,7 +236,7 @@ class Joystick extends JoystickController with PointerDetector {
 
       if (degrees > -112.5 && degrees <= -67.5) {
         joystickListener.joystickChangeDirectional(
-          JoystickMoveDirectional.MOVE_TOP,
+          JoystickMoveDirectional.MOVE_UP,
           _intensity,
           _radAngle,
         );
@@ -246,7 +244,7 @@ class Joystick extends JoystickController with PointerDetector {
 
       if (degrees > -67.5 && degrees <= -22.5) {
         joystickListener.joystickChangeDirectional(
-          JoystickMoveDirectional.MOVE_TOP_RIGHT,
+          JoystickMoveDirectional.MOVE_UP_RIGHT,
           _intensity,
           _radAngle,
         );

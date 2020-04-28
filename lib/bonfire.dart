@@ -3,6 +3,7 @@ library bonfire;
 export 'package:bonfire/bonfire_widget.dart';
 export 'package:bonfire/decoration/decoration.dart';
 export 'package:bonfire/enemy/enemy.dart';
+export 'package:bonfire/joystick/Joystick_keyboard.dart';
 export 'package:bonfire/joystick/joystick.dart';
 export 'package:bonfire/joystick/joystick_action.dart';
 export 'package:bonfire/joystick/joystick_controller.dart';

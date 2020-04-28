@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/gesture/pointer_detector.dart';

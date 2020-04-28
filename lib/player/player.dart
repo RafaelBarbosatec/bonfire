@@ -142,25 +142,25 @@ class Player extends AnimatedObject
       JoystickMoveDirectional directional, double intensity, double radAngle) {
     if (_isDead || _usePositionInWorld) return;
     switch (directional) {
-      case JoystickMoveDirectional.MOVE_TOP:
+      case JoystickMoveDirectional.MOVE_UP:
         _moveTop();
         break;
-      case JoystickMoveDirectional.MOVE_TOP_LEFT:
+      case JoystickMoveDirectional.MOVE_UP_LEFT:
         _moveTopLeft();
         break;
-      case JoystickMoveDirectional.MOVE_TOP_RIGHT:
+      case JoystickMoveDirectional.MOVE_UP_RIGHT:
         _moveTopRight();
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
         _moveRight();
         break;
-      case JoystickMoveDirectional.MOVE_BOTTOM:
+      case JoystickMoveDirectional.MOVE_DOWN:
         _moveBottom();
         break;
-      case JoystickMoveDirectional.MOVE_BOTTOM_RIGHT:
+      case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
         _moveBottomRight();
         break;
-      case JoystickMoveDirectional.MOVE_BOTTOM_LEFT:
+      case JoystickMoveDirectional.MOVE_DOWN_LEFT:
         _moveBottomLeft();
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
@@ -175,7 +175,7 @@ class Player extends AnimatedObject
   void _moveTop({bool addAnimation = true, bool isDiagonal = false}) {
     if (addAnimation) {
       _addTopAnimation();
-      statusMoveDirectional = JoystickMoveDirectional.MOVE_TOP;
+      statusMoveDirectional = JoystickMoveDirectional.MOVE_UP;
       lastDirection = Direction.top;
     }
 
@@ -192,12 +192,12 @@ class Player extends AnimatedObject
         gameRef.gameCamera.isMaxTop()) {
       position = displacement;
     } else {
-      gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_TOP);
+      gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_UP);
     }
   }
 
   void _addTopAnimation() {
-    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_TOP) {
+    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_UP) {
       if (animRunTop != null) {
         animation = animRunTop;
       } else {
@@ -244,7 +244,7 @@ class Player extends AnimatedObject
   void _moveBottom({bool addAnimation = true, bool isDiagonal = false}) {
     if (addAnimation) {
       _addBottomAnimation();
-      statusMoveDirectional = JoystickMoveDirectional.MOVE_BOTTOM;
+      statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN;
       lastDirection = Direction.bottom;
     }
 
@@ -261,12 +261,12 @@ class Player extends AnimatedObject
         gameRef.gameCamera.isMaxBottom()) {
       position = displacement;
     } else {
-      gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_BOTTOM);
+      gameRef.gameCamera.moveCamera(speed, JoystickMoveDirectional.MOVE_DOWN);
     }
   }
 
   void _addBottomAnimation() {
-    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_BOTTOM) {
+    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN) {
       if (animRunBottom != null) {
         animation = animRunBottom;
       } else {
