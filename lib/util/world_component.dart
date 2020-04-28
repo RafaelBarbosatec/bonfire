@@ -40,8 +40,8 @@ abstract class WorldComponent extends GameComponent {
   }
 
   Rect positionInWordToPosition() {
-    if (gameRef == null) return positionInWorld;
     if (positionInWorld == null) return Rect.zero;
+    if (gameRef == null) return positionInWorld;
     return Rect.fromLTWH(
       positionInWorld.left + gameRef.gameCamera.position.x,
       positionInWorld.top + gameRef.gameCamera.position.y,
