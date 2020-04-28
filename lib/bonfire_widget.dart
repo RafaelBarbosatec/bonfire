@@ -46,6 +46,7 @@ class BonfireWidget extends StatefulWidget {
 class _BonfireWidgetState extends State<BonfireWidget>
     with TickerProviderStateMixin {
   RPGGame _game;
+  FocusNode _focusNode;
 
   @override
   void didUpdateWidget(BonfireWidget oldWidget) {
@@ -72,6 +73,7 @@ class _BonfireWidgetState extends State<BonfireWidget>
 
   @override
   void initState() {
+    _focusNode = FocusNode();
     _game = RPGGame(
       context: context,
       vsync: this,
@@ -95,12 +97,18 @@ class _BonfireWidgetState extends State<BonfireWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Listener(
-      onPointerDown: _game.onPointerDown,
-      onPointerMove: _game.onPointerMove,
-      onPointerUp: _game.onPointerUp,
-      onPointerCancel: _game.onPointerCancel,
-      child: _game.widget,
+    FocusScope.of(context).requestFocus(_focusNode);
+    return RawKeyboardListener(
+      focusNode: _focusNode,
+      autofocus: true,
+      onKey: _game.onKeyboard,
+      child: Listener(
+        onPointerDown: _game.onPointerDown,
+        onPointerMove: _game.onPointerMove,
+        onPointerUp: _game.onPointerUp,
+        onPointerCancel: _game.onPointerCancel,
+        child: _game.widget,
+      ),
     );
   }
 }

@@ -90,6 +90,10 @@ class RPGGame extends BaseGamePointerDetector {
     super.onPointerUp(event);
   }
 
+  void onKeyboard(RawKeyEvent event) {
+    joystickController.onKeyboard(event);
+  }
+
   void onPointerCancel(PointerCancelEvent event) {
     joystickController.onPointerCancel(event);
     super.onPointerCancel(event);

@@ -58,25 +58,25 @@ class Camera with HasGameRef<RPGGame> {
 
   void moveCamera(double displacement, JoystickMoveDirectional directional) {
     switch (directional) {
-      case JoystickMoveDirectional.MOVE_TOP:
+      case JoystickMoveDirectional.MOVE_UP:
         gameRef.gameCamera.moveTop(displacement);
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
         gameRef.gameCamera.moveRight(displacement);
         break;
-      case JoystickMoveDirectional.MOVE_BOTTOM:
+      case JoystickMoveDirectional.MOVE_DOWN:
         gameRef.gameCamera.moveBottom(displacement);
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
         gameRef.gameCamera.moveLeft(displacement);
         break;
-      case JoystickMoveDirectional.MOVE_TOP_LEFT:
+      case JoystickMoveDirectional.MOVE_UP_LEFT:
         break;
-      case JoystickMoveDirectional.MOVE_TOP_RIGHT:
+      case JoystickMoveDirectional.MOVE_UP_RIGHT:
         break;
-      case JoystickMoveDirectional.MOVE_BOTTOM_RIGHT:
+      case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
         break;
-      case JoystickMoveDirectional.MOVE_BOTTOM_LEFT:
+      case JoystickMoveDirectional.MOVE_DOWN_LEFT:
         break;
       case JoystickMoveDirectional.IDLE:
         break;
