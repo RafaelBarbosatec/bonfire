@@ -225,7 +225,7 @@ extension EnemyExtensions on Enemy {
     @required FlameAnimation.Animation animationDestroy,
     @required double width,
     @required double height,
-    double speed = 1.5,
+    double speed = 150,
     double damage = 1,
     Direction direction,
     int interval = 1000,

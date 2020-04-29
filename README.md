@@ -134,7 +134,7 @@ Goblin() : super(
           initPosition: Position(x,y),
           width: 25,
           height: 25,
-          speed: 100, pt/seconds
+          speed: 100, // pt/seconds
           life: 100,
           collision: Collision(), // A custom collision area
         );
@@ -271,7 +271,7 @@ Knight() : super(
           initPosition: Position(x,y), //required
           initDirection: Direction.right,
           life: 200,
-          speed: 150,  pt/seconds
+          speed: 150,  //pt/seconds
           collision: Collision(), // A custom collision area
         );
 ```   

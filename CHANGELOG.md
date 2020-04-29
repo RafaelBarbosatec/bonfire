@@ -1,3 +1,7 @@
+## [0.2.6] - 28/04/2020
+
+* change of speed parameter to points / seconds.
+
 ## [0.2.5] - 28/04/2020
 
 * Flutter Web test.

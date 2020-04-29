@@ -78,7 +78,7 @@ extension PlayerExtensions on Player {
     @required FlameAnimation.Animation animationDestroy,
     @required double width,
     @required double height,
-    double speed = 1.5,
+    double speed = 150,
     double damage = 1,
     bool withCollision = true,
     VoidCallback destroy,
