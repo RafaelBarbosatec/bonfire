@@ -1,3 +1,7 @@
+## [0.2.7] - 29/04/2020
+
+* improvements pointer detector.
+
 ## [0.2.6] - 29/04/2020
 
 * improvements bleeding pixel.
