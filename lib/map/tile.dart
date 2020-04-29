@@ -21,7 +21,8 @@ class Tile extends SpriteObject {
     this.collision = false,
     this.size = 32,
   }) {
-    this.position = positionInWorld = generateRectWithBleedingPixel(position);
+    this.position =
+        positionInWorld = generateRectWithBleedingPixel(position, size);
     if (spritePath.isNotEmpty) sprite = Sprite(spritePath);
 
     _textConfig = TextConfig(
@@ -37,7 +38,8 @@ class Tile extends SpriteObject {
     this.size = 32,
   }) {
     this.sprite = sprite;
-    this.position = positionInWorld = generateRectWithBleedingPixel(position);
+    this.position =
+        positionInWorld = generateRectWithBleedingPixel(position, size);
 
     _textConfig = TextConfig(
       fontSize: size / 3.5,
@@ -74,12 +76,13 @@ class Tile extends SpriteObject {
     }
   }
 
-  Rect generateRectWithBleedingPixel(Position position) {
+  Rect generateRectWithBleedingPixel(Position position, double size) {
+    double bleendingPixel = size * 0.03;
     return Rect.fromLTWH(
-      (position.x * size) - (position.x % 2 == 0 ? 0.5 : 0),
-      (position.y * size) - (position.y % 2 == 0 ? 0.5 : 0),
-      size + (position.x % 2 == 0 ? 1 : 0),
-      size + (position.y % 2 == 0 ? 1 : 0),
+      (position.x * size) - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0),
+      (position.y * size) - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0),
+      size + (position.x % 2 == 0 ? bleendingPixel : 0),
+      size + (position.y % 2 == 0 ? bleendingPixel : 0),
     );
   }
 

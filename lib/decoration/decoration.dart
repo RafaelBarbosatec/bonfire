@@ -112,11 +112,12 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     double width,
     double height,
   ) {
+    double bleendingPixel = (width > height ? width : height) * 0.03;
     return Rect.fromLTWH(
-      position.x - (position.x % 2 == 0 ? 0.5 : 0),
-      position.y - (position.y % 2 == 0 ? 0.5 : 0),
-      width + (position.x % 2 == 0 ? 1 : 0),
-      height + (position.y % 2 == 0 ? 1 : 0),
+      position.x - (position.x % 2 == 0 ? (bleendingPixel/2) : 0),
+      position.y - (position.y % 2 == 0 ? (bleendingPixel/2) : 0),
+      width + (position.x % 2 == 0 ? bleendingPixel : 0),
+      height + (position.y % 2 == 0 ? bleendingPixel : 0),
     );
   }
 
