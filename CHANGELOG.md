@@ -1,6 +1,15 @@
-## [0.2.6] - 28/04/2020
+## [0.2.8] - 28/04/2020
 
 * change of speed parameter to points / seconds.
+
+## [0.2.7] - 29/04/2020
+
+* improvements pointer detector.
+
+## [0.2.6] - 29/04/2020
+
+* improvements bleeding pixel.
+* add support web in example
 
 ## [0.2.5] - 28/04/2020
 
