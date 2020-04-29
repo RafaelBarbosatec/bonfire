@@ -11,7 +11,6 @@ import 'package:flutter/rendering.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.util.setLandscape();
   await Flame.util.fullScreen();
   runApp(
     MaterialApp(
