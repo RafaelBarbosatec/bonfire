@@ -11,6 +11,7 @@ import 'package:bonfire/util/game_intercafe/game_interface.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 class RPGGame extends BaseGamePointerDetector {
   final BuildContext context;
