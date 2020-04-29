@@ -60,6 +60,7 @@ class Player extends AnimatedObject
 
   /// Variable that represents the current directional status of the joystick.
   JoystickMoveDirectional statusMoveDirectional;
+  JoystickMoveDirectional currentDirectional = JoystickMoveDirectional.IDLE;
 
   Direction lastDirection;
 
@@ -132,19 +133,9 @@ class Player extends AnimatedObject
       _usePositionInWorld = false;
     }
     dtUpdate = dt;
-  }
 
-  @override
-  void joystickAction(int action) {
-    if (_isDead) return;
-    lastJoystickAction = action;
-  }
-
-  @override
-  void joystickChangeDirectional(
-      JoystickMoveDirectional directional, double intensity, double radAngle) {
     if (_isDead || _usePositionInWorld) return;
-    switch (directional) {
+    switch (currentDirectional) {
       case JoystickMoveDirectional.MOVE_UP:
         _moveTop();
         break;
@@ -173,6 +164,18 @@ class Player extends AnimatedObject
         idle();
         break;
     }
+  }
+
+  @override
+  void joystickAction(int action) {
+    if (_isDead) return;
+    lastJoystickAction = action;
+  }
+
+  @override
+  void joystickChangeDirectional(
+      JoystickMoveDirectional directional, double intensity, double radAngle) {
+    currentDirectional = directional;
   }
 
   void _moveTop({bool addAnimation = true, bool isDiagonal = false}) {
