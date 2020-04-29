@@ -76,6 +76,8 @@ class Player extends AnimatedObject
   final Size sizeCentralMovementWindow;
   Rect _rectCentralMovementWindow;
 
+  double dtUpdate = 1;
+
   Player({
     @required this.animIdleLeft,
     @required this.animIdleRight,
@@ -89,7 +91,7 @@ class Player extends AnimatedObject
     this.height = 16,
     @required this.initPosition,
     this.initDirection = Direction.right,
-    this.speed = 5,
+    this.speed = 150,
     this.life = 10,
     Collision collision,
     this.sizeCentralMovementWindow,
@@ -129,6 +131,7 @@ class Player extends AnimatedObject
       _nextFrameUsePosition = false;
       _usePositionInWorld = false;
     }
+    dtUpdate = dt;
   }
 
   @override
@@ -182,7 +185,8 @@ class Player extends AnimatedObject
     if (position.top <= 0) return;
 
     double speed =
-        isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed;
+        (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed) *
+            dtUpdate;
 
     Rect displacement = position.translate(0, (speed * -1));
 
@@ -220,7 +224,8 @@ class Player extends AnimatedObject
     if (position.right >= gameRef.size.width) return;
 
     double speed =
-        isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed;
+        (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed) *
+            dtUpdate;
 
     Rect displacement = position.translate(speed, 0);
 
@@ -251,7 +256,8 @@ class Player extends AnimatedObject
     if (position.bottom >= gameRef.size.height) return;
 
     double speed =
-        isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed;
+        (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed) *
+            dtUpdate;
 
     Rect displacement = position.translate(0, speed);
 
@@ -289,7 +295,8 @@ class Player extends AnimatedObject
     if (position.left <= 0) return;
 
     double speed =
-        isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed;
+        (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed) *
+            dtUpdate;
     Rect displacement = position.translate(speed * -1, 0);
 
     if (isCollision(displacement, gameRef)) return;

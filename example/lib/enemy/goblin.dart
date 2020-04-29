@@ -38,7 +38,7 @@ class Goblin extends Enemy {
             initPosition: initPosition,
             width: 25,
             height: 25,
-            speed: 1.5,
+            speed: 100,
             life: 100,
             collision: Collision(
               height: 12,

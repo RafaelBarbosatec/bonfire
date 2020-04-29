@@ -134,7 +134,7 @@ Goblin() : super(
           initPosition: Position(x,y),
           width: 25,
           height: 25,
-          speed: 1.5,
+          speed: 100, pt/seconds
           life: 100,
           collision: Collision(), // A custom collision area
         );
@@ -194,7 +194,7 @@ void moveRight({double moveSpeed})
        @required FlameAnimation.Animation animationDestroy,
        @required double width,
        @required double height,
-       double speed = 1.5,
+       double speed = 150,
        double damage = 1,
        Direction direction,
        int interval = 1000,
@@ -271,7 +271,7 @@ Knight() : super(
           initPosition: Position(x,y), //required
           initDirection: Direction.right,
           life: 200,
-          speed: 2.5,
+          speed: 150,  pt/seconds
           collision: Collision(), // A custom collision area
         );
 ```   
@@ -310,7 +310,7 @@ Actions can be fired when a jopystck action is received. Just like `Enemy`, here
        @required FlameAnimation.Animation animationDestroy,
        @required double width,
        @required double height,
-       double speed = 1.5,
+       double speed = 150,
        double damage = 1,
      }
   )

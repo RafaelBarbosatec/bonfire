@@ -53,16 +53,16 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
 
     switch (direction) {
       case Direction.left:
-        positionInWorld = positionInWorld.translate(speed * -1, 0);
+        positionInWorld = positionInWorld.translate((speed * dt) * -1, 0);
         break;
       case Direction.right:
-        positionInWorld = positionInWorld.translate(speed, 0);
+        positionInWorld = positionInWorld.translate((speed * dt), 0);
         break;
       case Direction.top:
-        positionInWorld = positionInWorld.translate(0, speed * -1);
+        positionInWorld = positionInWorld.translate(0, (speed * dt) * -1);
         break;
       case Direction.bottom:
-        positionInWorld = positionInWorld.translate(0, speed);
+        positionInWorld = positionInWorld.translate(0, (speed * dt));
         break;
     }
 
