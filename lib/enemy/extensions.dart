@@ -58,6 +58,7 @@ extension EnemyExtensions on Enemy {
 
         double translateX = 0;
         double translateY = 0;
+        double speed = this.speed * this.dtUpdate;
 
         translateX =
             this.rectCollision.center.dx > centerXPlayer ? (-1 * speed) : speed;
@@ -65,6 +66,7 @@ extension EnemyExtensions on Enemy {
           translateX,
           this.rectCollision.center.dx,
           centerXPlayer,
+          speed,
         );
         translateY =
             this.rectCollision.center.dy > centerYPlayer ? (-1 * speed) : speed;
@@ -72,6 +74,7 @@ extension EnemyExtensions on Enemy {
           translateY,
           this.rectCollision.center.dy,
           centerYPlayer,
+          speed,
         );
 
         if ((translateX < 0 && translateX > -0.1) ||
@@ -222,7 +225,7 @@ extension EnemyExtensions on Enemy {
     @required FlameAnimation.Animation animationDestroy,
     @required double width,
     @required double height,
-    double speed = 1.5,
+    double speed = 150,
     double damage = 1,
     Direction direction,
     int interval = 1000,
@@ -342,12 +345,15 @@ extension EnemyExtensions on Enemy {
         double translateX = 0;
         double translateY = 0;
 
+        double speed = this.speed * this.dtUpdate;
+
         translateX =
             rectCollision.center.dx > centerXPlayer ? (-1 * speed) : speed;
         translateX = _adjustTranslate(
           translateX,
           rectCollision.center.dx,
           centerXPlayer,
+          speed,
         );
 
         translateY =
@@ -356,6 +362,7 @@ extension EnemyExtensions on Enemy {
           translateY,
           rectCollision.center.dy,
           centerYPlayer,
+          speed,
         );
 
         if ((translateX < 0 && translateX > -0.1) ||
@@ -411,16 +418,16 @@ extension EnemyExtensions on Enemy {
   }
 
   double _adjustTranslate(
-      double translate, double centerEnemy, double centerPlayer) {
+      double translate, double centerEnemy, double centerPlayer, double speed) {
     double innerTranslate = translate;
     if (innerTranslate > 0) {
       double diffX = centerPlayer - centerEnemy;
-      if (diffX < this.speed) {
+      if (diffX < speed) {
         innerTranslate = diffX;
       }
     } else if (innerTranslate < 0) {
       double diffX = centerPlayer - centerEnemy;
-      if (diffX > (this.speed * -1)) {
+      if (diffX > (speed * -1)) {
         innerTranslate = diffX;
       }
     }

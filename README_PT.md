@@ -133,7 +133,7 @@ Goblin() : super(
           initPosition: Position(x,y),
           width: 25,
           height: 25,
-          speed: 1.5,
+          speed: 100, //pt/segundos
           life: 100,
           collision: Collision(), // Caso deseje editar área de colisão
         );
@@ -192,7 +192,7 @@ void moveRight({double moveSpeed})
        @required FlameAnimation.Animation animationDestroy,
        @required double width,
        @required double height,
-       double speed = 1.5,
+       double speed = 150,
        double damage = 1,
        Direction direction,
        int interval = 1000,
@@ -268,7 +268,7 @@ Knight() : super(
           initPosition: Position(x,y), //required
           initDirection: Direction.right,
           life: 200,
-          speed: 2.5,
+          speed: 150, //pt/segundos
           collision: Collision(), // Caso deseje editar área de colisão
         );
 ```   
@@ -307,7 +307,7 @@ Ao perceber o toque nessas ações do joystick, você poderá executar outras a�
        @required FlameAnimation.Animation animationDestroy,
        @required double width,
        @required double height,
-       double speed = 1.5,
+       double speed = 150,
        double damage = 1,
      }
   )

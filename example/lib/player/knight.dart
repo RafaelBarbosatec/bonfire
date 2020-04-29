@@ -8,7 +8,7 @@ class Knight extends Player {
   final Position initPosition;
   double attack = 20;
   double stamina = 100;
-  double initSpeed = 3;
+  double initSpeed = 150;
   Timer _timerStamina;
   bool showObserveEnemy = false;
   bool showTalk = false;
@@ -16,36 +16,37 @@ class Knight extends Player {
   Knight({
     this.initPosition,
   }) : super(
-            animIdleLeft: FlameAnimation.Animation.sequenced(
-              "player/knight_idle_left.png",
-              6,
-              textureWidth: 16,
-              textureHeight: 16,
-            ),
-            animIdleRight: FlameAnimation.Animation.sequenced(
-              "player/knight_idle.png",
-              6,
-              textureWidth: 16,
-              textureHeight: 16,
-            ),
-            animRunRight: FlameAnimation.Animation.sequenced(
-              "player/knight_run.png",
-              6,
-              textureWidth: 16,
-              textureHeight: 16,
-            ),
-            animRunLeft: FlameAnimation.Animation.sequenced(
-              "player/knight_run_left.png",
-              6,
-              textureWidth: 16,
-              textureHeight: 16,
-            ),
-            width: 32,
-            height: 32,
-            initPosition: initPosition,
-            life: 200,
-            speed: 3,
-            collision: Collision(height: 16, width: 16));
+          animIdleLeft: FlameAnimation.Animation.sequenced(
+            "player/knight_idle_left.png",
+            6,
+            textureWidth: 16,
+            textureHeight: 16,
+          ),
+          animIdleRight: FlameAnimation.Animation.sequenced(
+            "player/knight_idle.png",
+            6,
+            textureWidth: 16,
+            textureHeight: 16,
+          ),
+          animRunRight: FlameAnimation.Animation.sequenced(
+            "player/knight_run.png",
+            6,
+            textureWidth: 16,
+            textureHeight: 16,
+          ),
+          animRunLeft: FlameAnimation.Animation.sequenced(
+            "player/knight_run_left.png",
+            6,
+            textureWidth: 16,
+            textureHeight: 16,
+          ),
+          width: 32,
+          height: 32,
+          initPosition: initPosition,
+          life: 200,
+          speed: 150,
+          collision: Collision(height: 16, width: 16),
+        );
 
   @override
   void joystickChangeDirectional(

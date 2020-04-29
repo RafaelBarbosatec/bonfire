@@ -70,6 +70,8 @@ class Enemy extends AnimatedObject with ObjectCollision {
   /// Map available to store times that can be used to control the frequency of any action.
   Map<String, Timer> timers = Map();
 
+  double dtUpdate = 0;
+
   Enemy(
       {@required this.animationIdleRight,
       @required this.animationIdleLeft,
@@ -83,7 +85,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
       @required this.height,
       @required this.width,
       Direction initDirection = Direction.right,
-      this.speed = 3,
+      this.speed = 100,
       this.life = 10,
       Collision collision}) {
     lastDirection = initDirection;
@@ -118,6 +120,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
   @override
   void update(double dt) {
     super.update(dt);
+    dtUpdate = dt;
   }
 
   void translate(double translateX, double translateY) {
@@ -125,7 +128,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
   }
 
   void moveTop({double moveSpeed, bool addAnimation = true}) {
-    double speed = moveSpeed ?? this.speed;
+    double speed = (moveSpeed ?? this.speed);
 
     var collision = isCollisionTranslate(
       position,
@@ -149,7 +152,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
   }
 
   void moveBottom({double moveSpeed, bool addAnimation = true}) {
-    double speed = moveSpeed ?? this.speed;
+    double speed = (moveSpeed ?? this.speed);
 
     var collision = isCollisionTranslate(
       position,
@@ -172,7 +175,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
   }
 
   void moveLeft({double moveSpeed}) {
-    double speed = moveSpeed ?? this.speed;
+    double speed = (moveSpeed ?? this.speed);
 
     var collision = isCollisionTranslate(
       position,
@@ -192,7 +195,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
   }
 
   void moveRight({double moveSpeed}) {
-    double speed = moveSpeed ?? this.speed;
+    double speed = (moveSpeed ?? this.speed);
 
     var collision = isCollisionTranslate(
       position,
