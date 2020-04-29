@@ -1,3 +1,8 @@
+## [0.2.6] - 29/04/2020
+
+* improvements bleeding pixel.
+* add support web in example
+
 ## [0.2.5] - 28/04/2020
 
 * Flutter Web test.
