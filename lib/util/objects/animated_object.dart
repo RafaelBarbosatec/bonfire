@@ -23,7 +23,7 @@ class AnimatedObject extends WorldComponent {
 
   @override
   void update(double dt) {
-    super.update(dt);
     if (animation != null) animation.update(dt);
+    super.update(dt);
   }
 }

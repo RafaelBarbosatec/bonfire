@@ -119,21 +119,6 @@ class Player extends AnimatedObject
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
-    if (gameRef != null && gameRef.showCollisionArea) {
-      drawCollision(canvas, position, gameRef.collisionAreaColor);
-    }
-  }
-
-  @override
-  void update(double dt) {
-    if (_nextFrameUsePosition) {
-      _nextFrameUsePosition = false;
-      _usePositionInWorld = false;
-    }
-
-    dtUpdate = dt;
-
     if (_isDead || _usePositionInWorld) return;
     switch (currentDirectional) {
       case JoystickMoveDirectional.MOVE_UP:
@@ -164,6 +149,20 @@ class Player extends AnimatedObject
         idle();
         break;
     }
+
+    super.render(canvas);
+    if (gameRef != null && gameRef.showCollisionArea) {
+      drawCollision(canvas, position, gameRef.collisionAreaColor);
+    }
+  }
+
+  @override
+  void update(double dt) {
+    if (_nextFrameUsePosition) {
+      _nextFrameUsePosition = false;
+      _usePositionInWorld = false;
+    }
+    dtUpdate = dt;
     super.update(dt);
   }
 

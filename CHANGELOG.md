@@ -1,3 +1,7 @@
+## [0.2.10] - 29/04/2020
+
+* Fix bug player;
+
 ## [0.2.9] - 29/04/2020
 
 * Fix bug player update
