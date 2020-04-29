@@ -1,3 +1,7 @@
+## [0.2.11] - 29/04/2020
+
+* Improvements change size map
+
 ## [0.2.10] - 29/04/2020
 
 * Fix bug player;

@@ -158,12 +158,12 @@ class Player extends AnimatedObject
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (_nextFrameUsePosition) {
       _nextFrameUsePosition = false;
       _usePositionInWorld = false;
     }
     dtUpdate = dt;
-    super.update(dt);
   }
 
   @override
