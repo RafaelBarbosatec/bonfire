@@ -1,3 +1,7 @@
+## [0.2.9] - 28/04/2020
+
+* Fix bug player update
+
 ## [0.2.8] - 28/04/2020
 
 * change of speed parameter to points / seconds.
