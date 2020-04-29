@@ -76,7 +76,7 @@ class Player extends AnimatedObject
   final Size sizeCentralMovementWindow;
   Rect _rectCentralMovementWindow;
 
-  double dtUpdate = 1;
+  double dtUpdate = 0;
 
   Player({
     @required this.animIdleLeft,
