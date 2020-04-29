@@ -258,11 +258,11 @@ class Joystick extends JoystickController {
   }
 
   void onPointerDown(PointerDownEvent event) {
-    _updateDirectionalRect(event.position);
+    _updateDirectionalRect(event.localPosition);
 
     if (actions == null || actions.isEmpty) return;
     actions
-        .where((action) => action.rect.contains(event.position))
+        .where((action) => action.rect.contains(event.localPosition))
         .forEach((action) {
       action.pressed();
       joystickListener.joystickAction(action.actionId);
@@ -275,9 +275,9 @@ class Joystick extends JoystickController {
       _backgroundRect.width + 100,
       _backgroundRect.height + 100,
     );
-    if (!_dragging && directional.contains(event.position)) {
+    if (!_dragging && directional.contains(event.localPosition)) {
       _dragging = true;
-      _dragPosition = event.position;
+      _dragPosition = event.localPosition;
       currentGesturePointer = event.pointer;
     }
   }
@@ -285,7 +285,7 @@ class Joystick extends JoystickController {
   void onPointerMove(PointerMoveEvent event) {
     if (event.pointer == currentGesturePointer) {
       if (_dragging) {
-        _dragPosition = event.position;
+        _dragPosition = event.localPosition;
       }
     }
   }

@@ -78,6 +78,9 @@ class Tile extends SpriteObject {
 
   Rect generateRectWithBleedingPixel(Position position, double size) {
     double bleendingPixel = size * 0.03;
+    if (bleendingPixel > 2) {
+      bleendingPixel = 2;
+    }
     return Rect.fromLTWH(
       (position.x * size) - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0),
       (position.y * size) - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0),

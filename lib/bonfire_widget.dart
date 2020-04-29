@@ -95,16 +95,18 @@ class _BonfireWidgetState extends State<BonfireWidget>
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
-      focusNode: FocusNode(),
-      autofocus: true,
-      onKey: _game.onKeyboard,
-      child: Listener(
-        onPointerDown: _game.onPointerDown,
-        onPointerMove: _game.onPointerMove,
-        onPointerUp: _game.onPointerUp,
-        onPointerCancel: _game.onPointerCancel,
-        child: _game.widget,
+    return ClipRRect(
+      child: RawKeyboardListener(
+        focusNode: FocusNode(),
+        autofocus: true,
+        onKey: _game.onKeyboard,
+        child: Listener(
+          onPointerDown: _game.onPointerDown,
+          onPointerMove: _game.onPointerMove,
+          onPointerUp: _game.onPointerUp,
+          onPointerCancel: _game.onPointerCancel,
+          child: _game.widget,
+        ),
       ),
     );
   }
