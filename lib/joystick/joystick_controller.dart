@@ -39,6 +39,6 @@ abstract class JoystickController extends Component
 
   @override
   int priority() {
-    return 20;
+    return 25;
   }
 }
