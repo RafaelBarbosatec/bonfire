@@ -1,3 +1,7 @@
+## [0.2.12] - 29/04/2020
+
+* Improvements on the JoystickKeyBoard.
+
 ## [0.2.11] - 29/04/2020
 
 * Improvements change size map
