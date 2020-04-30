@@ -1,4 +1,4 @@
-## [0.2.12] - 29/04/2020
+## [0.2.12] - 30/04/2020
 
 * Improvements on the JoystickKeyBoard.
 
