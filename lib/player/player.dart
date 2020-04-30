@@ -119,35 +119,36 @@ class Player extends AnimatedObject
 
   @override
   void render(Canvas canvas) {
-    if (_isDead || _usePositionInWorld) return;
-    switch (currentDirectional) {
-      case JoystickMoveDirectional.MOVE_UP:
-        _moveTop();
-        break;
-      case JoystickMoveDirectional.MOVE_UP_LEFT:
-        _moveTopLeft();
-        break;
-      case JoystickMoveDirectional.MOVE_UP_RIGHT:
-        _moveTopRight();
-        break;
-      case JoystickMoveDirectional.MOVE_RIGHT:
-        _moveRight();
-        break;
-      case JoystickMoveDirectional.MOVE_DOWN:
-        _moveBottom();
-        break;
-      case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-        _moveBottomRight();
-        break;
-      case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-        _moveBottomLeft();
-        break;
-      case JoystickMoveDirectional.MOVE_LEFT:
-        _moveLeft();
-        break;
-      case JoystickMoveDirectional.IDLE:
-        idle();
-        break;
+    if (!_isDead && !_usePositionInWorld) {
+      switch (currentDirectional) {
+        case JoystickMoveDirectional.MOVE_UP:
+          _moveTop();
+          break;
+        case JoystickMoveDirectional.MOVE_UP_LEFT:
+          _moveTopLeft();
+          break;
+        case JoystickMoveDirectional.MOVE_UP_RIGHT:
+          _moveTopRight();
+          break;
+        case JoystickMoveDirectional.MOVE_RIGHT:
+          _moveRight();
+          break;
+        case JoystickMoveDirectional.MOVE_DOWN:
+          _moveBottom();
+          break;
+        case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
+          _moveBottomRight();
+          break;
+        case JoystickMoveDirectional.MOVE_DOWN_LEFT:
+          _moveBottomLeft();
+          break;
+        case JoystickMoveDirectional.MOVE_LEFT:
+          _moveLeft();
+          break;
+        case JoystickMoveDirectional.IDLE:
+          idle();
+          break;
+      }
     }
 
     super.render(canvas);
