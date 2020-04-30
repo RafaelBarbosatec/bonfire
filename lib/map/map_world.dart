@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/map/tile.dart';
+import 'package:flutter/cupertino.dart';
 
 class MapWorld extends MapGame {
   double lastCameraX = -1;
@@ -10,8 +11,10 @@ class MapWorld extends MapGame {
   Size lastSize;
   Iterable<Tile> tilesToRender = List();
   Iterable<Tile> tilesCollisionsRendered = List();
+  bool _fistRenderComplete = false;
+  final ValueChanged<double> progressLoadMap;
 
-  MapWorld(Iterable<Tile> tiles) : super(tiles);
+  MapWorld(Iterable<Tile> tiles, {this.progressLoadMap}) : super(tiles);
 
   @override
   void render(Canvas canvas) {
@@ -31,6 +34,18 @@ class MapWorld extends MapGame {
       });
       tilesToRender = tiles.where((i) => i.isVisibleInMap());
       tilesCollisionsRendered = tilesToRender.where((i) => i.collision);
+    }
+    if (!_fistRenderComplete) {
+      int count = tilesToRender.length;
+      int countRendered =
+          tilesToRender.where((tile) => tile.sprite.loaded()).length;
+      double percent = countRendered / count;
+      if (!percent.isNaN && progressLoadMap != null) {
+        progressLoadMap(percent);
+      }
+      if (percent == 1) {
+        _fistRenderComplete = true;
+      }
     }
   }
 
