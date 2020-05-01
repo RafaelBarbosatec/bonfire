@@ -104,7 +104,6 @@ class DungeonMap {
         initPosition: getRelativeTilePosition(15, 7),
         width: 32,
         height: 32,
-        frontFromPlayer: true,
         collision: Collision(height: 32, width: 32),
       ),
       GameDecoration.sprite(

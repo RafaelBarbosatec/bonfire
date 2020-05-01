@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
-class Knight extends Player {
+class Knight extends SimplePlayer {
   final Position initPosition;
   double attack = 20;
   double stamina = 100;
