@@ -10,6 +10,7 @@ export 'package:bonfire/joystick/joystick_keyboard.dart';
 export 'package:bonfire/map/map_game.dart';
 export 'package:bonfire/map/map_world.dart';
 export 'package:bonfire/map/tile.dart';
+export 'package:bonfire/player/angle_player.dart';
 export 'package:bonfire/player/extensions.dart';
 export 'package:bonfire/player/player.dart';
 export 'package:bonfire/player/simple_player.dart';

@@ -4,7 +4,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/enemy/goblin.dart';
 import 'package:example/interface/knight_interface.dart';
 import 'package:example/map/dungeon_map.dart';
-import 'package:example/player/knight.dart';
+import 'package:example/player/teste_player.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -48,8 +48,8 @@ class Game extends StatelessWidget implements GameListener {
           )
         ],
       ),
-      player: Knight(
-        initPosition: Position(5 * sizeTile, 6 * sizeTile),
+      player: TestPlayer(
+        Position(5 * sizeTile, 6 * sizeTile),
       ),
       interface: KnightInterface(),
       map: DungeonMap.map(),

@@ -31,7 +31,7 @@ class Player extends AnimatedObject
   bool _nextFrameUsePosition = false;
 
   final Size sizeCentralMovementWindow;
-  Rect _rectCentralMovementWindow;
+  Rect rectCentralMovementWindow;
 
   double _dtUpdate = 0;
 
@@ -81,7 +81,7 @@ class Player extends AnimatedObject
 
     if (isCollision(displacement, gameRef)) return;
 
-    if (position.top >= _rectCentralMovementWindow.top ||
+    if (position.top >= rectCentralMovementWindow.top ||
         gameRef.gameCamera.isMaxTop()) {
       position = displacement;
     } else {
@@ -99,7 +99,7 @@ class Player extends AnimatedObject
 
     if (isCollision(displacement, gameRef)) return;
 
-    if (position.right <= _rectCentralMovementWindow.right ||
+    if (position.right <= rectCentralMovementWindow.right ||
         gameRef.gameCamera.isMaxRight()) {
       position = displacement;
     } else {
@@ -117,7 +117,7 @@ class Player extends AnimatedObject
 
     if (isCollision(displacement, gameRef)) return;
 
-    if (position.bottom <= _rectCentralMovementWindow.bottom ||
+    if (position.bottom <= rectCentralMovementWindow.bottom ||
         gameRef.gameCamera.isMaxBottom()) {
       position = displacement;
     } else {
@@ -135,7 +135,7 @@ class Player extends AnimatedObject
 
     if (isCollision(displacement, gameRef)) return;
 
-    if (position.left >= _rectCentralMovementWindow.left ||
+    if (position.left >= rectCentralMovementWindow.left ||
         gameRef.gameCamera.isMaxLeft()) {
       position = displacement;
     } else {
@@ -160,7 +160,7 @@ class Player extends AnimatedObject
   @override
   void resize(Size size) {
     if (sizeCentralMovementWindow != null) {
-      _rectCentralMovementWindow = Rect.fromLTWH(
+      rectCentralMovementWindow = Rect.fromLTWH(
         (size.width / 2) - (sizeCentralMovementWindow.width / 2),
         (size.height / 2) - (sizeCentralMovementWindow.height / 2),
         sizeCentralMovementWindow.width,
@@ -169,7 +169,7 @@ class Player extends AnimatedObject
     } else {
       double sizeWidth = width * 3;
       double sizeHeight = height * 3;
-      _rectCentralMovementWindow = Rect.fromLTWH(
+      rectCentralMovementWindow = Rect.fromLTWH(
         (size.width / 2) - (sizeWidth / 2),
         (size.height / 2) - (sizeHeight / 2),
         sizeWidth,
@@ -216,6 +216,5 @@ class Player extends AnimatedObject
   void joystickAction(int action) {}
 
   @override
-  void joystickChangeDirectional(
-      JoystickMoveDirectional directional, double intensity, double radAngle) {}
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {}
 }

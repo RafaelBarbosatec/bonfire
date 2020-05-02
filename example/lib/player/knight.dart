@@ -49,10 +49,9 @@ class Knight extends SimplePlayer {
         );
 
   @override
-  void joystickChangeDirectional(
-      JoystickMoveDirectional directional, double intensity, double radAngle) {
-    this.speed = initSpeed * intensity;
-    super.joystickChangeDirectional(directional, intensity, radAngle);
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    this.speed = initSpeed * event.intensity;
+    super.joystickChangeDirectional(event);
   }
 
   @override

@@ -73,9 +73,8 @@ class SimplePlayer extends Player {
   }
 
   @override
-  void joystickChangeDirectional(
-      JoystickMoveDirectional directional, double intensity, double radAngle) {
-    _currentDirectional = directional;
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    _currentDirectional = event.directional;
   }
 
   @override
