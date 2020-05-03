@@ -8,7 +8,7 @@ class RotationPlayer extends Player {
   final FlameAnimation.Animation animIdle;
   final FlameAnimation.Animation animRun;
   double speed;
-  double currentRadAngle = 0.0;
+  double currentRadAngle;
   bool _move = false;
 
   RotationPlayer({
@@ -16,6 +16,7 @@ class RotationPlayer extends Player {
     this.animIdle,
     this.animRun,
     this.speed = 150,
+    this.currentRadAngle = -1.55,
     double width = 32,
     double height = 32,
     double life = 100,
@@ -33,6 +34,7 @@ class RotationPlayer extends Player {
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    print(event.radAngle);
     if (event.directional != JoystickMoveDirectional.IDLE &&
         !isDead &&
         event.radAngle != 0.0) {

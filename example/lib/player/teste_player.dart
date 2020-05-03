@@ -45,6 +45,10 @@ class TestRotationPlayer extends RotationPlayer {
 
   @override
   void joystickAction(int action) {
+    if (action == 0) {
+      actionAttackMelee();
+    }
+
     if (action == 1) {
       actionAttackRange();
     }
@@ -69,6 +73,20 @@ class TestRotationPlayer extends RotationPlayer {
       height: 25,
       damage: 10,
       speed: initSpeed * 1.5,
+    );
+  }
+
+  void actionAttackMelee() {
+    this.simpleAttackMelee(
+      attackEffectTopAnim: FlameAnimation.Animation.sequenced(
+        'player/atack_effect_top.png',
+        6,
+        textureWidth: 16,
+        textureHeight: 16,
+      ),
+      heightArea: 20,
+      widthArea: 20,
+      damage: 20,
     );
   }
 }
