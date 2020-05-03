@@ -22,6 +22,10 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
   final bool withCollision;
   final VoidCallback destroyedObject;
 
+  double _cosAngle;
+  double _senAngle;
+  double _rotate;
+
   FlyingAttackAngleObject({
     @required this.initPosition,
     @required this.flyAnimation,
@@ -46,14 +50,17 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
     );
 
     this.collision = collision ?? Collision(width: width, height: height / 2);
+    _cosAngle = cos(radAngle);
+    _senAngle = sin(radAngle);
+    _rotate = radAngle == 0.0 ? 0.0 : radAngle + (pi / 2);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
 
-    double nextX = (speed * dt) * cos(radAngle);
-    double nextY = (speed * dt) * sin(radAngle);
+    double nextX = (speed * dt) * _cosAngle;
+    double nextY = (speed * dt) * _senAngle;
     Offset nextPoint = Offset(nextX, nextY);
 
     Offset diffBase = Offset(positionInWorld.center.dx + nextPoint.dx,
@@ -77,7 +84,7 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
     if (this.isVisibleInMap()) {
       canvas.save();
       canvas.translate(position.center.dx, position.center.dy);
-      canvas.rotate(radAngle == 0.0 ? 0.0 : radAngle + (pi / 2));
+      canvas.rotate(_rotate);
       canvas.translate(-position.center.dx, -position.center.dy);
       super.render(canvas);
       if (gameRef != null && gameRef.showCollisionArea) {
@@ -111,8 +118,8 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
 
     if (destroy) {
       if (destroyAnimation != null) {
-        double nextX = (width / 2) * cos(radAngle);
-        double nextY = (height / 2) * sin(radAngle);
+        double nextX = (width / 2) * _cosAngle;
+        double nextY = (height / 2) * _senAngle;
         Offset nextPoint = Offset(nextX, nextY);
 
         Offset diffBase = Offset(positionInWorld.center.dx + nextPoint.dx,
