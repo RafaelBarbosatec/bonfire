@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:math';
 
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/util/collision/collision.dart';
@@ -141,6 +141,74 @@ class Player extends AnimatedObject
     } else {
       gameRef.gameCamera
           .moveCamera(innerSpeed, JoystickMoveDirectional.MOVE_LEFT);
+    }
+  }
+
+  void moveFromAngle(double speed, double angle) {
+    double nextX = (speed * _dtUpdate) * cos(angle);
+    double nextY = (speed * _dtUpdate) * sin(angle);
+    Offset nextPoint = Offset(nextX, nextY);
+
+    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
+            position.center.dy + nextPoint.dy) -
+        position.center;
+
+    bool enableAxisX = false;
+    bool enableAxisY = false;
+
+    if (diffBase.dx > 0) {
+      if (position.right <= rectCentralMovementWindow.right ||
+          gameRef.gameCamera.isMaxRight()) {
+        enableAxisX = true;
+      }
+    } else if (diffBase.dx < 0) {
+      if (position.left >= rectCentralMovementWindow.left ||
+          gameRef.gameCamera.isMaxLeft()) {
+        enableAxisX = true;
+      }
+    }
+
+    if (diffBase.dy > 0) {
+      if (position.bottom <= rectCentralMovementWindow.bottom ||
+          gameRef.gameCamera.isMaxBottom()) {
+        enableAxisY = true;
+      }
+    } else if (diffBase.dy < 0) {
+      if (position.top >= rectCentralMovementWindow.top ||
+          gameRef.gameCamera.isMaxTop()) {
+        enableAxisY = true;
+      }
+    }
+
+    Offset newDiffBase = diffBase;
+    if (!enableAxisX) {
+      newDiffBase = Offset(0, diffBase.dy);
+    }
+
+    if (!enableAxisY) {
+      newDiffBase = Offset(diffBase.dx, 0);
+    }
+
+    Rect newPosition = position.shift(newDiffBase);
+    if (isCollision(newPosition, gameRef)) return;
+
+    position = newPosition;
+
+    if (!enableAxisX) {
+      print(diffBase.dx);
+      gameRef.gameCamera.moveCamera(
+          diffBase.dx < 0 ? (diffBase.dx * -1) : diffBase.dx,
+          diffBase.dx < 0
+              ? JoystickMoveDirectional.MOVE_LEFT
+              : JoystickMoveDirectional.MOVE_RIGHT);
+    }
+
+    if (!enableAxisY) {
+      gameRef.gameCamera.moveCamera(
+          diffBase.dy < 0 ? (diffBase.dy * 1) : diffBase.dy,
+          diffBase.dy < 0
+              ? JoystickMoveDirectional.MOVE_UP
+              : JoystickMoveDirectional.MOVE_DOWN);
     }
   }
 

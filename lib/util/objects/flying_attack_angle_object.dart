@@ -1,16 +1,17 @@
-import 'package:bonfire/bonfire.dart';
+import 'dart:math';
+
+import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:bonfire/util/objects/animated_object_once.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
 
-class FlyingAttackObject extends AnimatedObject with ObjectCollision {
+class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
   final FlameAnimation.Animation flyAnimation;
   final FlameAnimation.Animation destroyAnimation;
-  final Direction direction;
+  final double radAngle;
   final double speed;
   final double damage;
   final double width;
@@ -21,10 +22,10 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
   final bool withCollision;
   final VoidCallback destroyedObject;
 
-  FlyingAttackObject({
+  FlyingAttackAngleObject({
     @required this.initPosition,
     @required this.flyAnimation,
-    @required this.direction,
+    @required this.radAngle,
     @required this.width,
     @required this.height,
     this.destroyAnimation,
@@ -51,20 +52,15 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
   void update(double dt) {
     super.update(dt);
 
-    switch (direction) {
-      case Direction.left:
-        positionInWorld = positionInWorld.translate((speed * dt) * -1, 0);
-        break;
-      case Direction.right:
-        positionInWorld = positionInWorld.translate((speed * dt), 0);
-        break;
-      case Direction.top:
-        positionInWorld = positionInWorld.translate(0, (speed * dt) * -1);
-        break;
-      case Direction.bottom:
-        positionInWorld = positionInWorld.translate(0, (speed * dt));
-        break;
-    }
+    double nextX = (speed * dt) * cos(radAngle);
+    double nextY = (speed * dt) * sin(radAngle);
+    Offset nextPoint = Offset(nextX, nextY);
+
+    Offset diffBase = Offset(positionInWorld.center.dx + nextPoint.dx,
+            positionInWorld.center.dy + nextPoint.dy) -
+        positionInWorld.center;
+
+    positionInWorld = positionInWorld.shift(diffBase);
 
     if (position.right > gameRef.size.width * 1.5 ||
         position.left < gameRef.size.width * -0.5 ||
@@ -79,7 +75,12 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
   @override
   void render(Canvas canvas) {
     if (this.isVisibleInMap()) {
+      canvas.save();
+      canvas.translate(position.center.dx, position.center.dy);
+      canvas.rotate(radAngle == 0.0 ? 0.0 : radAngle + (pi / 2));
+      canvas.translate(-position.center.dx, -position.center.dy);
       super.render(canvas);
+      canvas.restore();
     }
     if (gameRef != null && gameRef.showCollisionArea) {
       drawCollision(canvas, position, gameRef.collisionAreaColor);
@@ -110,41 +111,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
 
     if (destroy) {
       if (destroyAnimation != null) {
-        Rect positionDestroy;
-        switch (direction) {
-          case Direction.left:
-            positionDestroy = Rect.fromLTWH(
-              positionInWorld.left - (width / 2),
-              positionInWorld.top,
-              width,
-              height,
-            );
-            break;
-          case Direction.right:
-            positionDestroy = Rect.fromLTWH(
-              positionInWorld.left + (width / 2),
-              positionInWorld.top,
-              width,
-              height,
-            );
-            break;
-          case Direction.top:
-            positionDestroy = Rect.fromLTWH(
-              positionInWorld.left,
-              positionInWorld.top - (height / 2),
-              width,
-              height,
-            );
-            break;
-          case Direction.bottom:
-            positionDestroy = Rect.fromLTWH(
-              positionInWorld.left,
-              positionInWorld.top + (height / 2),
-              width,
-              height,
-            );
-            break;
-        }
+        Rect positionDestroy = positionInWorld;
 
         gameRef.add(
           AnimatedObjectOnce(

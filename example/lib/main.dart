@@ -48,7 +48,7 @@ class Game extends StatelessWidget implements GameListener {
           )
         ],
       ),
-      player: TestPlayer(
+      player: TestRotationPlayer(
         Position(5 * sizeTile, 6 * sizeTile),
       ),
       interface: KnightInterface(),
