@@ -13,9 +13,8 @@ class Knight extends SimplePlayer {
   bool showObserveEnemy = false;
   bool showTalk = false;
 
-  Knight({
-    this.initPosition,
-  }) : super(
+  Knight(this.initPosition)
+      : super(
           animIdleLeft: FlameAnimation.Animation.sequenced(
             "player/knight_idle_left.png",
             6,
