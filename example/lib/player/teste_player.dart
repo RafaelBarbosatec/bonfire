@@ -52,24 +52,23 @@ class TestRotationPlayer extends RotationPlayer {
   }
 
   void actionAttackRange() {
-    gameRef.add(FlyingAttackAngleObject(
-        initPosition: Position(positionInWorld.left, positionInWorld.top),
-        radAngle: currentRadAngle,
-        width: 25,
-        height: 25,
-        damage: 10,
-        speed: initSpeed * 1.5,
-        flyAnimation: FlameAnimation.Animation.sequenced(
-          'player/fireball_top.png',
-          3,
-          textureWidth: 23,
-          textureHeight: 23,
-        ),
-        destroyAnimation: FlameAnimation.Animation.sequenced(
-          'player/explosion_fire.png',
-          6,
-          textureWidth: 32,
-          textureHeight: 32,
-        )));
+    this.simpleAttackRange(
+      animationTop: FlameAnimation.Animation.sequenced(
+        'player/fireball_top.png',
+        3,
+        textureWidth: 23,
+        textureHeight: 23,
+      ),
+      animationDestroy: FlameAnimation.Animation.sequenced(
+        'player/explosion_fire.png',
+        6,
+        textureWidth: 32,
+        textureHeight: 32,
+      ),
+      width: 25,
+      height: 25,
+      damage: 10,
+      speed: initSpeed * 1.5,
+    );
   }
 }

@@ -38,12 +38,22 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
     Collision collision,
   }) {
     animation = flyAnimation;
-    position = positionInWorld = Rect.fromLTWH(
+    Rect anglePosition = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
       width,
       height,
     );
+
+    double nextX = width * cos(radAngle);
+    double nextY = height * sin(radAngle);
+    Offset nextPoint = Offset(nextX, nextY);
+
+    Offset diffBase = Offset(anglePosition.center.dx + nextPoint.dx,
+            anglePosition.center.dy + nextPoint.dy) -
+        anglePosition.center;
+
+    position = positionInWorld = anglePosition.shift(diffBase);
 
     this.collision = collision ?? Collision(width: width, height: height / 2);
   }
@@ -111,7 +121,15 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
 
     if (destroy) {
       if (destroyAnimation != null) {
-        Rect positionDestroy = positionInWorld;
+        double nextX = (width / 2) * cos(radAngle);
+        double nextY = (height / 2) * sin(radAngle);
+        Offset nextPoint = Offset(nextX, nextY);
+
+        Offset diffBase = Offset(positionInWorld.center.dx + nextPoint.dx,
+                positionInWorld.center.dy + nextPoint.dy) -
+            positionInWorld.center;
+
+        Rect positionDestroy = positionInWorld.shift(diffBase);
 
         gameRef.add(
           AnimatedObjectOnce(

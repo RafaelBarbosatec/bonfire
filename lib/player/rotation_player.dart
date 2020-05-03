@@ -33,7 +33,9 @@ class RotationPlayer extends Player {
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    if (event.directional != JoystickMoveDirectional.IDLE && !isDead) {
+    if (event.directional != JoystickMoveDirectional.IDLE &&
+        !isDead &&
+        event.radAngle != 0.0) {
       currentRadAngle = event.radAngle;
       _move = true;
       this.animation = animRun;

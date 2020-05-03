@@ -13,6 +13,7 @@ export 'package:bonfire/map/tile.dart';
 export 'package:bonfire/player/extensions.dart';
 export 'package:bonfire/player/player.dart';
 export 'package:bonfire/player/rotation_player.dart';
+export 'package:bonfire/player/rotation_player_extensions.dart';
 export 'package:bonfire/player/simple_player.dart';
 export 'package:bonfire/player/simple_player_extensions.dart';
 export 'package:bonfire/util/background_color_game.dart';
