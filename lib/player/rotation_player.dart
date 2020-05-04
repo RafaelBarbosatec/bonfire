@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 
 class RotationPlayer extends Player {
   final FlameAnimation.Animation animIdle;
@@ -12,9 +13,9 @@ class RotationPlayer extends Player {
   bool _move = false;
 
   RotationPlayer({
-    Position initPosition,
-    this.animIdle,
-    this.animRun,
+    @required Position initPosition,
+    @required this.animIdle,
+    @required this.animRun,
     this.speed = 150,
     this.currentRadAngle = -1.55,
     double width = 32,

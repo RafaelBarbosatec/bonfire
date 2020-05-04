@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:ui';
+import 'dart:math';
 
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
@@ -115,6 +115,76 @@ class Enemy extends AnimatedObject with ObjectCollision {
     if (collision) return;
 
     positionInWorld = positionInWorld.translate(speed, 0);
+  }
+
+  void moveFromAngleDodgeObstacles(double speed, double angle,
+      {Function notMove}) {
+    double innerSpeed = (speed * dtUpdate);
+    double nextX = innerSpeed * cos(angle);
+    double nextY = innerSpeed * sin(angle);
+    Offset nextPoint = Offset(nextX, nextY);
+
+    Offset diffBase = Offset(positionInWorld.center.dx + nextPoint.dx,
+            positionInWorld.center.dy + nextPoint.dy) -
+        positionInWorld.center;
+
+    var collisionX = isCollisionTranslate(
+      position,
+      diffBase.dx,
+      0,
+      gameRef,
+    );
+
+    var collisionY = isCollisionTranslate(
+      position,
+      0,
+      diffBase.dy,
+      gameRef,
+    );
+    Offset newDiffBase = diffBase;
+    if (collisionX) {
+      newDiffBase = Offset(0, newDiffBase.dy);
+    }
+    if (collisionY) {
+      newDiffBase = Offset(newDiffBase.dx, 0);
+    }
+
+    if (collisionX && !collisionY && newDiffBase.dy != 0) {
+      var collisionY = isCollisionTranslate(
+        position,
+        0,
+        innerSpeed,
+        gameRef,
+      );
+      if (!collisionY) newDiffBase = Offset(0, innerSpeed);
+    }
+
+    if (collisionY && !collisionX && newDiffBase.dx != 0) {
+      var collisionX = isCollisionTranslate(
+        position,
+        innerSpeed,
+        0,
+        gameRef,
+      );
+      if (!collisionX) newDiffBase = Offset(innerSpeed, 0);
+    }
+
+    if (newDiffBase == Offset.zero && notMove != null) {
+      notMove();
+    }
+    this.positionInWorld = positionInWorld.shift(newDiffBase);
+  }
+
+  void moveFromAngle(double speed, double angle) {
+    double innerSpeed = (speed * dtUpdate);
+    double nextX = innerSpeed * cos(angle);
+    double nextY = innerSpeed * sin(angle);
+    Offset nextPoint = Offset(nextX, nextY);
+
+    Offset diffBase = Offset(positionInWorld.center.dx + nextPoint.dx,
+            positionInWorld.center.dy + nextPoint.dy) -
+        positionInWorld.center;
+    this.positionInWorld = positionInWorld.shift(diffBase);
   }
 
   void receiveDamage(double damage) {

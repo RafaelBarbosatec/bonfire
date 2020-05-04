@@ -4,6 +4,8 @@ export 'package:bonfire/bonfire_widget.dart';
 export 'package:bonfire/decoration/decoration.dart';
 export 'package:bonfire/enemy/enemy.dart';
 export 'package:bonfire/enemy/extensions.dart';
+export 'package:bonfire/enemy/rotation_enemy.dart';
+export 'package:bonfire/enemy/rotation_enemy_extensions.dart';
 export 'package:bonfire/enemy/simple_enemy.dart';
 export 'package:bonfire/enemy/simple_enemy_extensions.dart';
 export 'package:bonfire/joystick/joystick.dart';

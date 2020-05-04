@@ -195,7 +195,6 @@ class Player extends AnimatedObject
     position = newPosition;
 
     if (!enableAxisX) {
-      print(diffBase.dx);
       gameRef.gameCamera.moveCamera(
           diffBase.dx < 0 ? (diffBase.dx * -1) : diffBase.dx,
           diffBase.dx < 0
