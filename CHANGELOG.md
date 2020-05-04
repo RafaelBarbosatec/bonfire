@@ -1,3 +1,11 @@
+## [0.3.0] - 4/05/2020 [ BREAKING CHANGE ]
+
+* Improvements render components
+* the Player was dismembered in Player(base) ,SimplePlayer(similar old Player) and RotationPlayer
+* the Enemy was dismembered in Enemy(base) ,SimpleEnemy(similar old Player) and RotationEnemy
+* created FlyingAttackAngleObject
+* add 'rotateRadAngle' in AnimatedObjectOnce
+
 ## [0.2.12] - 30/04/2020
 
 * Improvements on the JoystickKeyBoard.

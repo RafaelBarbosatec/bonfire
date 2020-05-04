@@ -18,6 +18,10 @@ Build RPG games and similar with the power of [FlameEngine](https://flame-engine
 
 Find the complete code of this example [here](https://github.com/RafaelBarbosatec/bonfire/tree/master/example).
 
+Bonfire is ideal for building games from the following perspectives:
+
+![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/separate-player/media/perspectiva.jpg)
+
 ## Summary
 1. [How it works?](#how-it-works)
    - [Map](#map)
@@ -94,8 +98,25 @@ Anything that you may add to the scenery. For example a Barrel in the way or eve
 To create a decoration:
 
 ```dart
-GameDecoration(
-  spriteImg: 'itens/table.png', // Image to be rendered
+GameDecoration.sprite(
+  Sprite('itens/table.png'), // Image to be rendered
+  initPosition: getRelativeTilePosition(10, 6), // World coordinates in which this decoration will be positioned
+  width: 32,
+  height: 32,
+  withCollision: true, // Adds a default collision area
+  collision: Collision( // A custom collision area
+    width: 18,
+    height: 32,
+  ),
+//  isTouchable: false, // if you want this component to receive touch interaction. You will be notified at 'void onTap()'
+//  animation: FlameAnimation(), // Optional param to create an animated decoration. When using this, do not specify spriteImg.
+//  frontFromPlayer: false // Define true if this decoration shall be rendered above the Player
+)
+
+or
+
+GameDecoration.animation(
+   FlameAnimation.Animation.sequenced('sequence.png'), // Image to be rendered
   initPosition: getRelativeTilePosition(10, 6), // World coordinates in which this decoration will be positioned
   width: 32,
   height: 32,
@@ -117,10 +138,14 @@ In this component (like all others), you have access to `BuildContext` of the ga
 ### Enemy
 Represents enemies characters in the game. Instances of this class has actions and movements ready to be used and configured whenever you want. At the same time, you can customize  all actions and movements in the way that fits your needs.
 
-To create an enemy you shall create an `Enemy` subclass to represent it. Like in this [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/enemy/goblin.dart).
+There are currently two types of Enemies implemented: ```SimpleEnemy``` and ```RotationEnemy```.
+
+To create an enemy you shall create an `SimpleEnemy` or `RotationEnemy` subclass to represent it. Like in this [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/enemy/goblin.dart).
 
 The constructor looks like:
 ```dart
+
+// SimpleEnemy: For enemies with 45° or 67.5° perspective view. With animations IDLE, LEFT, RIGHT, TOP, BOTTOM
 Goblin() : super(
           animationIdleRight: FlameAnimation(), //required
           animationIdleLeft: FlameAnimation(), // required
@@ -132,6 +157,22 @@ Goblin() : super(
           animationRunBottom: FlameAnimation(),
           initDirection: Direction.right,
           initPosition: Position(x,y),
+          width: 25,
+          height: 25,
+          speed: 100, // pt/seconds
+          life: 100,
+          collision: Collision(), // A custom collision area
+        );
+
+or
+
+// RotationEnemy: For enemies with 90 ° perspective view. With IDLE and RUN animation.
+
+GoblinRotation() : super(
+          animIdle: FlameAnimation(), //required
+          animRun: FlameAnimation(), // required
+          initPosition: Position(x,y),
+          currentRadAngle: -1.55,
           width: 25,
           height: 25,
           speed: 100, // pt/seconds
@@ -253,10 +294,15 @@ void moveRight({double moveSpeed})
 ### Player
 Represents the character controlled by the user in the game. Instances of this class has actions and movements ready to be used and configured.
 
-To create an enemy you shall create an `Player` subclass to represent it. Like in this [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/player/knight.dart).
+There are currently two types of Enemies implemented: ```SimplePlayer``` and ```RotationPlayer```.
+
+To create an enemy you shall create an `SimplePlayer` or `RotationPlayer` subclass to represent it. Like in this [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/player/knight.dart).
 
 The constructor looks like:
 ```dart
+
+// SimplePlayer: For players with 45 ° or 67.5 ° perspective view. With animations IDLE, LEFT, RIGHT, TOP, BOTTOM
+
 Knight() : super(
           animIdleLeft: FlameAnimation(), // required
           animIdleRight: FlameAnimation(), //required
@@ -273,6 +319,23 @@ Knight() : super(
           life: 200,
           speed: 150,  //pt/seconds
           collision: Collision(), // A custom collision area
+          sizeCentralMovementWindow: Size(100,100); // player movement window in the center of the screen.
+        );
+
+// RotationPlayer: For players with 90° perspective view. With IDLE and RUN animations.
+
+RotationKnight() : super(
+          animIdle: FlameAnimation(), // required
+          animRun: FlameAnimation(), //required
+          animIdleTop: FlameAnimation(),
+          width: 32,
+          height: 32,
+          initPosition: Position(x,y), //required
+          currentRadAngle: -1.55,
+          life: 200,
+          speed: 150, //pt/seconds
+          collision: Collision(), // A custom collision area
+          sizeCentralMovementWindow: Size(100,100); // player movement window in the center of the screen.
         );
 ```   
 
@@ -283,7 +346,7 @@ Player instances can receive action configured on the Joystick (read more about 
   void joystickAction(int action) {}
 ```
 
-Actions can be fired when a jopystck action is received. Just like `Enemy`, here we have some pre-included actions:
+Actions can be fired when a joystick action is received. Just like `Enemy`, here we have some pre-included actions:
 
 ```dart
   

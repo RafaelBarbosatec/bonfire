@@ -11,38 +11,38 @@ class JoystickKeyBoard extends JoystickController {
       if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
         isDirectionalDown = true;
         currentDirectionalKey = event.logicalKey;
-        joystickListener.joystickChangeDirectional(
-          JoystickMoveDirectional.MOVE_DOWN,
-          1,
-          0,
-        );
+        joystickListener.joystickChangeDirectional(JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_DOWN,
+          intensity: 1.0,
+          radAngle: 0.0,
+        ));
       }
       if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
         isDirectionalDown = true;
         currentDirectionalKey = event.logicalKey;
-        joystickListener.joystickChangeDirectional(
-          JoystickMoveDirectional.MOVE_UP,
-          1,
-          0,
-        );
+        joystickListener.joystickChangeDirectional(JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_UP,
+          intensity: 1.0,
+          radAngle: 0.0,
+        ));
       }
       if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
         isDirectionalDown = true;
         currentDirectionalKey = event.logicalKey;
-        joystickListener.joystickChangeDirectional(
-          JoystickMoveDirectional.MOVE_LEFT,
-          1,
-          0,
-        );
+        joystickListener.joystickChangeDirectional(JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_LEFT,
+          intensity: 1.0,
+          radAngle: 0.0,
+        ));
       }
       if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
         isDirectionalDown = true;
         currentDirectionalKey = event.logicalKey;
-        joystickListener.joystickChangeDirectional(
-          JoystickMoveDirectional.MOVE_RIGHT,
-          1,
-          0,
-        );
+        joystickListener.joystickChangeDirectional(JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_RIGHT,
+          intensity: 1.0,
+          radAngle: 0.0,
+        ));
       }
 
       if (!isDirectionalDown) {
@@ -52,11 +52,11 @@ class JoystickKeyBoard extends JoystickController {
         isDirectionalDown &&
         currentDirectionalKey == event.logicalKey) {
       isDirectionalDown = false;
-      joystickListener.joystickChangeDirectional(
-        JoystickMoveDirectional.IDLE,
-        1,
-        0,
-      );
+      joystickListener.joystickChangeDirectional(JoystickDirectionalEvent(
+        directional: JoystickMoveDirectional.IDLE,
+        intensity: 0.0,
+        radAngle: 0.0,
+      ));
     }
   }
 }

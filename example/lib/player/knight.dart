@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
-class Knight extends Player {
+class Knight extends SimplePlayer {
   final Position initPosition;
   double attack = 20;
   double stamina = 100;
@@ -13,9 +13,8 @@ class Knight extends Player {
   bool showObserveEnemy = false;
   bool showTalk = false;
 
-  Knight({
-    this.initPosition,
-  }) : super(
+  Knight(this.initPosition)
+      : super(
           animIdleLeft: FlameAnimation.Animation.sequenced(
             "player/knight_idle_left.png",
             6,
@@ -49,10 +48,9 @@ class Knight extends Player {
         );
 
   @override
-  void joystickChangeDirectional(
-      JoystickMoveDirectional directional, double intensity, double radAngle) {
-    this.speed = initSpeed * intensity;
-    super.joystickChangeDirectional(directional, intensity, radAngle);
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    this.speed = initSpeed * event.intensity;
+    super.joystickChangeDirectional(event);
   }
 
   @override
