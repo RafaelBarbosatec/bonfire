@@ -3,7 +3,7 @@ import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 
-class Goblin extends Enemy {
+class Goblin extends SimpleEnemy {
   final Position initPosition;
   double attack = 0;
   bool _seePlayerClose = false;

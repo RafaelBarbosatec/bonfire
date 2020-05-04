@@ -262,7 +262,8 @@ class Joystick extends JoystickController {
 
     if (actions == null || actions.isEmpty) return;
     actions
-        .where((action) => action.rect.contains(event.localPosition))
+        .where((action) =>
+            action.rect != null && action.rect.contains(event.localPosition))
         .forEach((action) {
       action.pressed();
       joystickListener.joystickAction(action.actionId);
