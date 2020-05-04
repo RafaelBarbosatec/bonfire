@@ -3,6 +3,8 @@
 * Improvements render components
 * the Player was dismembered in Player(base) ,SimplePlayer(similar old Player) and RotationPlayer
 * the Enemy was dismembered in Enemy(base) ,SimpleEnemy(similar old Player) and RotationEnemy
+* created FlyingAttackAngleObject
+* add 'rotateRadAngle' in AnimatedObjectOnce
 
 ## [0.2.12] - 29/04/2020
 

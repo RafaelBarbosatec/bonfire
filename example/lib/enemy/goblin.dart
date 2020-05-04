@@ -4,7 +4,7 @@ import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 
 class Goblin extends SimpleEnemy {
-  double attack = 0;
+  double attack = 25;
   bool _seePlayerClose = false;
 
   Goblin(Position initPosition)
