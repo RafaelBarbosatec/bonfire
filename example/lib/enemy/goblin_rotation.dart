@@ -24,9 +24,28 @@ class GoblinRotation extends RotationEnemy {
   @override
   void update(double dt) {
     this.seeAndMoveToPlayer(
-      closePlayer: (player) {},
-      visionCells: 4,
-    );
+        closePlayer: (player) {
+          this.simpleAttackRange(
+              animationTop: FlameAnimation.Animation.sequenced(
+                'player/fireball_top.png',
+                3,
+                textureWidth: 23,
+                textureHeight: 23,
+              ),
+              animationDestroy: FlameAnimation.Animation.sequenced(
+                'player/explosion_fire.png',
+                6,
+                textureWidth: 32,
+                textureHeight: 32,
+              ),
+              width: 25,
+              height: 25,
+              damage: 10,
+              speed: speed * 1.5,
+              collision: Collision(height: 15, width: 15));
+        },
+        visionCells: 5,
+        margin: 64);
     super.update(dt);
   }
 }
