@@ -94,8 +94,25 @@ Representa qualquer coisa que você queira adicionar ao cenário, podendo ser um
 Você poderá criar seu decoration utilizando:
 
 ```dart
-GameDecoration(
-  spriteImg: 'itens/table.png', // imagem que será renderizada.
+GameDecoration.sprite(
+  Sprite('itens/table.png'), // imagem que será renderizada.
+  initPosition: getRelativeTilePosition(10, 6), // posição no mundo que será posicionado.
+  width: 32,
+  height: 32,
+  withCollision: true, // adiciona colisão default.
+  collision: Collision( // caso queira customizar a área de colisão.
+    width: 18,
+    height: 32,
+  ),
+//  isTouchable: false, // caso deseje que esse componente receba interação de toque. Será notificado em 'void onTap()'
+//  animation: FlameAnimation(), // caso você queira adicionar algo animado você pode passar sua animação aqui e não passar o 'spriteImg'.
+//  frontFromPlayer: false // caso queira forçar que esse elemento fique por cima do player ao passar por ele.
+)
+
+ou
+
+GameDecoration.animation(
+  FlameAnimation.Animation.sequenced('sequence.png'), // animação que será renderizada.
   initPosition: getRelativeTilePosition(10, 6), // posição no mundo que será posicionado.
   width: 32,
   height: 32,
@@ -269,6 +286,7 @@ void moveRight({double moveSpeed})
 Representa o seu personagem. Nele também existem ações e movimentos prontos para serem utilizados.
 
 Existe no momento dois tipos de Enemies implementados: ```SimplePlayer``` e ```RotationPlayer```.
+
 Para criar seu player, você deverá criar uma classe que o represente e extender de ```SimplePlayer``` ou ```RotationEnemyPlayer``` como nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/player/knight.dart). No construtor você terá os seguintes parâmetros de configuração:
 
 ```dart
