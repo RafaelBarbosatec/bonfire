@@ -19,6 +19,10 @@ Construa games do tipo RPG ou similares explorando o poder do [FlameEngine](http
 
 Você encontra o código completo desse exemplo [aqui](https://github.com/RafaelBarbosatec/bonfire/tree/master/example).
 
+O Bonfire é ideal para construir games nas seguintes perspectivas:
+
+![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/separate-player/media/perspectiva.jpg)
+
 ## Sumário
 1. [Como funciona?](#como-funciona)
    - [Map](#map)
