@@ -134,7 +134,7 @@ In this component (like all others), you have access to `BuildContext` of the ga
 ### Enemy
 Represents enemies characters in the game. Instances of this class has actions and movements ready to be used and configured whenever you want. At the same time, you can customize  all actions and movements in the way that fits your needs.
 
-There are currently two types of Enemies implemented: ```SimpleEnemy``` e ```RotationEnemy```.
+There are currently two types of Enemies implemented: ```SimpleEnemy``` and ```RotationEnemy```.
 
 To create an enemy you shall create an `SimpleEnemy` or `RotationEnemy` subclass to represent it. Like in this [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/enemy/goblin.dart).
 
@@ -315,9 +315,8 @@ Knight() : super(
           life: 200,
           speed: 150,  //pt/seconds
           collision: Collision(), // A custom collision area
+          sizeCentralMovementWindow: Size(100,100); // player movement window in the center of the screen.
         );
-
-        or
 
 // RotationPlayer: For players with 90° perspective view. With IDLE and RUN animations.
 
@@ -330,9 +329,9 @@ RotationKnight() : super(
           initPosition: Position(x,y), //required
           currentRadAngle: -1.55,
           life: 200,
-          speed: 150, //pt/segundos
-          collision: Collision(), // Caso deseje editar área de colisão
-          sizeCentralMovementWindow: Size(100,100); // janela de movimentação do player no centro da tela.
+          speed: 150, //pt/seconds
+          collision: Collision(), // A custom collision area
+          sizeCentralMovementWindow: Size(100,100); // player movement window in the center of the screen.
         );
 ```   
 
@@ -343,7 +342,7 @@ Player instances can receive action configured on the Joystick (read more about 
   void joystickAction(int action) {}
 ```
 
-Actions can be fired when a jopystck action is received. Just like `Enemy`, here we have some pre-included actions:
+Actions can be fired when a joystick action is received. Just like `Enemy`, here we have some pre-included actions:
 
 ```dart
   
