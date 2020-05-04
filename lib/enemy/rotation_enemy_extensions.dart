@@ -137,13 +137,4 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     if (execute != null) execute();
   }
-
-  double getAngleFomPlayer() {
-    Player player = this.gameRef.player;
-    if (player == null) return 0.0;
-    return atan2(
-      player.rectCollisionInWorld.center.dy - this.positionInWorld.center.dy,
-      player.rectCollisionInWorld.center.dx - this.positionInWorld.center.dx,
-    );
-  }
 }

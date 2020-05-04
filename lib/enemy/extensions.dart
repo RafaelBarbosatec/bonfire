@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:math';
 
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
@@ -122,5 +122,14 @@ extension EnemyExtensions on Enemy {
     } else {
       return Colors.red;
     }
+  }
+
+  double getAngleFomPlayer() {
+    Player player = this.gameRef.player;
+    if (player == null) return 0.0;
+    return atan2(
+      player.rectCollisionInWorld.center.dy - this.positionInWorld.center.dy,
+      player.rectCollisionInWorld.center.dx - this.positionInWorld.center.dx,
+    );
   }
 }
