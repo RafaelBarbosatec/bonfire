@@ -101,9 +101,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
 
       super.render(canvas);
 
-      if (gameRef != null &&
-          gameRef.showCollisionArea &&
-          this.position != null) {
+      if (gameRef != null && gameRef.showCollisionArea) {
         drawCollision(canvas, position, gameRef.collisionAreaColor);
       }
     }
