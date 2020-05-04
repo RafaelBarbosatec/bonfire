@@ -18,7 +18,7 @@ Build RPG games and similar with the power of [FlameEngine](https://flame-engine
 
 Find the complete code of this example [here](https://github.com/RafaelBarbosatec/bonfire/tree/master/example).
 
-Bonfire is ideal for building games under the following perspectives:
+Bonfire is ideal for building games from the following perspectives:
 
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/separate-player/media/perspectiva.jpg)
 
