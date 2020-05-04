@@ -4,13 +4,11 @@ import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 
 class Goblin extends SimpleEnemy {
-  final Position initPosition;
   double attack = 0;
   bool _seePlayerClose = false;
 
-  Goblin({
-    @required this.initPosition,
-  }) : super(
+  Goblin(Position initPosition)
+      : super(
             animationIdleRight: FlameAnimation.Animation.sequenced(
               "enemy/goblin_idle.png",
               6,

@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:example/decoration/chest.dart';
 import 'package:example/enemy/goblin.dart';
-import 'package:example/enemy/goblin_rotation.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 
@@ -181,9 +180,8 @@ class DungeonMap {
 
   static List<Enemy> enemies() {
     return [
-//      Goblin(initPosition: getRelativeTilePosition(14, 6)),
-      GoblinRotation(getRelativeTilePosition(14, 6)),
-      Goblin(initPosition: getRelativeTilePosition(25, 6)),
+      Goblin(getRelativeTilePosition(14, 6)),
+      Goblin(getRelativeTilePosition(25, 6)),
     ];
   }
 
