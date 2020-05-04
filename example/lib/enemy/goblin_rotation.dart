@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
@@ -20,6 +22,12 @@ class GoblinRotation extends RotationEnemy {
           width: 25,
           height: 25,
         );
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    this.drawDefaultLifeBar(canvas);
+  }
 
   @override
   void update(double dt) {
@@ -47,5 +55,27 @@ class GoblinRotation extends RotationEnemy {
         visionCells: 5,
         margin: 64);
     super.update(dt);
+  }
+
+  @override
+  void receiveDamage(double damage) {
+    this.showDamage(damage);
+    super.receiveDamage(damage);
+  }
+
+  @override
+  void die() {
+    gameRef.add(
+      AnimatedObjectOnce(
+          animation: FlameAnimation.Animation.sequenced(
+            "smoke_explosin.png",
+            6,
+            textureWidth: 16,
+            textureHeight: 16,
+          ),
+          position: positionInWorld),
+    );
+    remove();
+    super.die();
   }
 }
