@@ -42,7 +42,7 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
     Collision collision,
   }) {
     animation = flyAnimation;
-    position = positionInWorld = Rect.fromLTWH(
+    positionInWorld = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
       width,
@@ -69,6 +69,7 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
 
     positionInWorld = positionInWorld.shift(diffBase);
 
+    if (this.position == null) return;
     if (position.right > gameRef.size.width * 1.5 ||
         position.left < gameRef.size.width * -0.5 ||
         position.bottom > gameRef.size.height * 1.5 ||

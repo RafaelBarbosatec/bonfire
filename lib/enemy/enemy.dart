@@ -90,7 +90,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
       Collision collision}) {
     lastDirection = initDirection;
     maxLife = life;
-    this.position = this.positionInWorld = Rect.fromLTWH(
+    this.positionInWorld = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
       width,

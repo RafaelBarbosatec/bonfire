@@ -32,7 +32,7 @@ extension PlayerExtensions on Player {
     Function() notObserved,
     int visionCells = 3,
   }) {
-    if (isDead || position == null) return;
+    if (isDead || this.position == null) return;
 
     var enemiesInLife = this.gameRef.enemies.where((e) => !e.isDead);
     if (enemiesInLife.length == 0) {
@@ -51,7 +51,8 @@ extension PlayerExtensions on Player {
     );
 
     List<Enemy> enemiesObserved = enemiesInLife
-        .where((enemy) => fieldOfVision.overlaps(enemy.position))
+        .where((enemy) =>
+            enemy.position != null && fieldOfVision.overlaps(enemy.position))
         .toList();
 
     if (enemiesObserved.length > 0) {

@@ -57,7 +57,7 @@ class Player extends AnimatedObject
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (gameRef != null && gameRef.showCollisionArea) {
+    if (gameRef != null && gameRef.showCollisionArea && this.position != null) {
       drawCollision(canvas, position, gameRef.collisionAreaColor);
     }
   }

@@ -5,7 +5,6 @@ import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
 class AnimatedObjectOnce extends AnimatedObject {
-  Rect position;
   final VoidCallback onFinish;
   final VoidCallback onStartAnimation;
   final bool onlyUpdate;
@@ -13,7 +12,7 @@ class AnimatedObjectOnce extends AnimatedObject {
   bool _notifyStart = false;
 
   AnimatedObjectOnce({
-    this.position,
+    Rect position,
     FlameAnimation.Animation animation,
     this.onFinish,
     this.onStartAnimation,
@@ -26,7 +25,7 @@ class AnimatedObjectOnce extends AnimatedObject {
 
   @override
   void render(Canvas canvas) {
-    if (onlyUpdate) return;
+    if (onlyUpdate || this.position == null) return;
     if (rotateRadAngle != null) {
       canvas.save();
       canvas.translate(position.center.dx, position.center.dy);

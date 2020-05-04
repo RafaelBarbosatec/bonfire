@@ -20,7 +20,7 @@ extension EnemyExtensions on Enemy {
     int visionCells = 3,
   }) {
     Player player = gameRef.player;
-    if (!isVisibleInMap() || player == null) return;
+    if (!isVisibleInMap() || player == null || this.position == null) return;
 
     if (player.isDead) {
       if (notObserved != null) notObserved();
@@ -49,7 +49,7 @@ extension EnemyExtensions on Enemy {
     int visionCells = 3,
     double margin = 10,
   }) {
-    if (!isVisibleInMap() || isDead) return;
+    if (!isVisibleInMap() || isDead || this.position == null) return;
     seePlayer(
       visionCells: visionCells,
       observed: (player) {
@@ -137,7 +137,8 @@ extension EnemyExtensions on Enemy {
 
     Player player = gameRef.player;
 
-    if (player.isDead || !isVisibleInMap() || isDead) return;
+    if (player.isDead || !isVisibleInMap() || isDead || this.position == null)
+      return;
 
     Rect positionAttack;
     FlameAnimation.Animation anim = attackEffectRightAnim;
@@ -482,6 +483,7 @@ extension EnemyExtensions on Enemy {
     double padding = 5,
     double strokeWidth = 2,
   }) {
+    if (this.position == null) return;
     double yPosition = position.top - padding;
 
     if (drawInBottom) {
