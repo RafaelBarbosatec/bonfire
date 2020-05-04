@@ -117,9 +117,12 @@ Neste componente como em todos os demais, você tem acesso ao ```BuildContext```
 ### Enemy
 É utilizado para representar seus inimigos. Nesse componente existem ações e movimentos prontos para serem utilizados e configurados se quiser. Todavia, caso deseje algo diferente terá a total liberdade de customizar suas ações e movimentos.
 
-Para criar seu inimigo você deverá criar uma classe que o represente e extenda de ```Enemy``` como nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/enemy/goblin.dart). No construtor você terá os seguintes parâmetros de configuração:
+Existe no momento dois tipos de Enemies implementados: ```SimpleEnemy``` e ```RotationEnemy```.
+
+Para criar seu inimigo você deverá criar uma classe que o represente e extenda de ```SimpleEnemy``` ou ```RotationEnemy``` como nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/enemy/goblin.dart). No construtor você terá os seguintes parâmetros de configuração:
 
 ```dart
+// SimpleEnemy : Para enemies com visualização de perspectiva 45° ou 67.5°. Com animações IDLE,LEFT,RIGHT,TOP,BOTTOM
 Goblin() : super(
           animationIdleRight: FlameAnimation(), //required
           animationIdleLeft: FlameAnimation(), // required
@@ -131,6 +134,20 @@ Goblin() : super(
           animationRunBottom: FlameAnimation(),
           initDirection: Direction.right,
           initPosition: Position(x,y),
+          width: 25,
+          height: 25,
+          speed: 100, //pt/segundos
+          life: 100,
+          collision: Collision(), // Caso deseje editar área de colisão
+        );
+
+// RotationEnemy : Para enemies com visualização de perspectiva 90°. Com animações IDLE,RUN.
+GoblinRotation() : super(
+          animIdle: FlameAnimation(), //required
+          animRun: FlameAnimation(), // required
+          initPosition: Position(x,y),
+          initDirection: Direction.right,
+          currentRadAngle: -1.55,
           width: 25,
           height: 25,
           speed: 100, //pt/segundos
@@ -251,9 +268,11 @@ void moveRight({double moveSpeed})
 ### Player
 Representa o seu personagem. Nele também existem ações e movimentos prontos para serem utilizados.
 
-Para criar seu player, você deverá criar uma classe que o represente e extender de ```Player``` como nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/player/knight.dart). No construtor você terá os seguintes parâmetros de configuração:
+Existe no momento dois tipos de Enemies implementados: ```SimplePlayer``` e ```RotationPlayer```.
+Para criar seu player, você deverá criar uma classe que o represente e extender de ```SimplePlayer``` ou ```RotationEnemyPlayer``` como nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/player/knight.dart). No construtor você terá os seguintes parâmetros de configuração:
 
 ```dart
+//SimplePlayer: Para players com visualização de perspectiva 45° ou 67.5°. Com animações IDLE,LEFT,RIGHT,TOP,BOTTOM
 Knight() : super(
           animIdleLeft: FlameAnimation(), // required
           animIdleRight: FlameAnimation(), //required
@@ -270,6 +289,22 @@ Knight() : super(
           life: 200,
           speed: 150, //pt/segundos
           collision: Collision(), // Caso deseje editar área de colisão
+          sizeCentralMovementWindow: Size(100,100); // janela de movimentação do player no centro da tela.
+        );
+
+// RotationPlayer: Para players com visualização de perspectiva 90°. Com animações IDLE,RUN.
+RotationKnight() : super(
+          animIdle: FlameAnimation(), // required
+          animRun: FlameAnimation(), //required
+          animIdleTop: FlameAnimation(),
+          width: 32,
+          height: 32,
+          initPosition: Position(x,y), //required
+          currentRadAngle: -1.55,
+          life: 200,
+          speed: 150, //pt/segundos
+          collision: Collision(), // Caso deseje editar área de colisão
+          sizeCentralMovementWindow: Size(100,100); // janela de movimentação do player no centro da tela.
         );
 ```   
 
