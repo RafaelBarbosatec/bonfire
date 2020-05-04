@@ -163,7 +163,6 @@ GoblinRotation() : super(
           animIdle: FlameAnimation(), //required
           animRun: FlameAnimation(), // required
           initPosition: Position(x,y),
-          initDirection: Direction.right,
           currentRadAngle: -1.55,
           width: 25,
           height: 25,
@@ -290,7 +289,7 @@ Existe no momento dois tipos de Enemies implementados: ```SimplePlayer``` e ```R
 Para criar seu player, você deverá criar uma classe que o represente e extender de ```SimplePlayer``` ou ```RotationEnemyPlayer``` como nesse [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/player/knight.dart). No construtor você terá os seguintes parâmetros de configuração:
 
 ```dart
-//SimplePlayer: Para players com visualização de perspectiva 45° ou 67.5°. Com animações IDLE,LEFT,RIGHT,TOP,BOTTOM
+// SimplePlayer: Para players com visualização de perspectiva 45° ou 67.5°. Com animações IDLE,LEFT,RIGHT,TOP,BOTTOM
 Knight() : super(
           animIdleLeft: FlameAnimation(), // required
           animIdleRight: FlameAnimation(), //required
