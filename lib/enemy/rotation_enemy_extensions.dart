@@ -21,9 +21,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     seePlayer(
       visionCells: visionCells,
       observed: (player) {
-        double _radAngle = atan2(
-            player.positionInWorld.center.dy - this.positionInWorld.center.dy,
-            player.positionInWorld.center.dx - this.positionInWorld.center.dx);
+        double _radAngle = getAngleFomPlayer();
 
         Rect rectPlayerCollision = Rect.fromLTWH(
           player.rectCollision.left - margin,
@@ -110,9 +108,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     Player player = this.gameRef.player;
     if (isDead || player == null || player.isDead) return;
 
-    double _radAngle = atan2(
-        player.rectCollisionInWorld.center.dy - this.positionInWorld.center.dy,
-        player.rectCollisionInWorld.center.dx - this.positionInWorld.center.dx);
+    double _radAngle = getAngleFomPlayer();
 
     double nextX = this.height * cos(_radAngle);
     double nextY = this.height * sin(_radAngle);
@@ -140,5 +136,14 @@ extension RotationEnemyExtensions on RotationEnemy {
     ));
 
     if (execute != null) execute();
+  }
+
+  double getAngleFomPlayer() {
+    Player player = this.gameRef.player;
+    if (player == null) return 0.0;
+    return atan2(
+      player.rectCollisionInWorld.center.dy - this.positionInWorld.center.dy,
+      player.rectCollisionInWorld.center.dx - this.positionInWorld.center.dx,
+    );
   }
 }

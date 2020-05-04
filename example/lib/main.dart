@@ -97,7 +97,7 @@ class Game extends StatelessWidget implements GameListener {
 
     _controller.addEnemy(
       Goblin(
-        initPosition: position,
+        position,
       ),
     );
   }
