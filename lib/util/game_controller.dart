@@ -54,9 +54,11 @@ class GameController {
         _lastCountLiveEnemies = countLive;
         notifyChangeEnemy = true;
       }
-      _gameListener.updateGame();
-      if (notifyChangeEnemy)
-        _gameListener.changeCountLiveEnemies(_lastCountLiveEnemies);
+      if (_gameListener != null) {
+        _gameListener.updateGame();
+        if (notifyChangeEnemy)
+          _gameListener.changeCountLiveEnemies(_lastCountLiveEnemies);
+      }
     }
   }
 
