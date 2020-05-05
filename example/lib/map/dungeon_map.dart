@@ -104,7 +104,6 @@ class DungeonMap {
         initPosition: getRelativeTilePosition(15, 7),
         width: 32,
         height: 32,
-        frontFromPlayer: true,
         collision: Collision(height: 32, width: 32),
       ),
       GameDecoration.sprite(
@@ -181,8 +180,8 @@ class DungeonMap {
 
   static List<Enemy> enemies() {
     return [
-      Goblin(initPosition: getRelativeTilePosition(14, 6)),
-      Goblin(initPosition: getRelativeTilePosition(25, 6)),
+      Goblin(getRelativeTilePosition(14, 6)),
+      Goblin(getRelativeTilePosition(25, 6)),
     ];
   }
 

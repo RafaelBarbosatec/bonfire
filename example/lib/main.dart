@@ -49,7 +49,7 @@ class Game extends StatelessWidget implements GameListener {
         ],
       ),
       player: Knight(
-        initPosition: Position(5 * sizeTile, 6 * sizeTile),
+        Position(5 * sizeTile, 6 * sizeTile),
       ),
       interface: KnightInterface(),
       map: DungeonMap.map(),
@@ -97,7 +97,7 @@ class Game extends StatelessWidget implements GameListener {
 
     _controller.addEnemy(
       Goblin(
-        initPosition: position,
+        position,
       ),
     );
   }

@@ -30,7 +30,8 @@ abstract class WorldComponent extends GameComponent {
   }
 
   bool isVisibleInMap() {
-    if (gameRef == null || gameRef.size == null) return false;
+    if (gameRef == null || gameRef.size == null || position == null)
+      return false;
 
     return position.top < (gameRef.size.height + position.height) &&
         position.top > (position.height * -1) &&

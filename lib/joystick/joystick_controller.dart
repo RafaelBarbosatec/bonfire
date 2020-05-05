@@ -19,9 +19,17 @@ enum JoystickMoveDirectional {
   IDLE
 }
 
+class JoystickDirectionalEvent {
+  final JoystickMoveDirectional directional;
+  final double intensity;
+  final double radAngle;
+
+  JoystickDirectionalEvent(
+      {this.directional, this.intensity = 0.0, this.radAngle = 0.0});
+}
+
 abstract class JoystickListener {
-  void joystickChangeDirectional(
-      JoystickMoveDirectional directional, double intensity, double radAngle);
+  void joystickChangeDirectional(JoystickDirectionalEvent event);
   void joystickAction(int action);
 }
 
