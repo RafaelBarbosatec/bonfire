@@ -18,7 +18,7 @@ class InterfaceComponent extends GameComponent {
     @required Position position,
     @required this.width,
     @required this.height,
-    @required this.sprite,
+    this.sprite,
     this.spriteSelected,
     this.onTapComponent,
   }) {

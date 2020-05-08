@@ -69,7 +69,6 @@ class Goblin extends SimpleEnemy {
         visionCells: 8,
       );
     }
-
     super.update(dt);
   }
 
