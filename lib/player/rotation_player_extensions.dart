@@ -14,6 +14,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     @required FlameAnimation.Animation animationDestroy,
     @required double width,
     @required double height,
+    int id,
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
@@ -32,6 +33,7 @@ extension RotationPlayerExtensions on RotationPlayer {
 
     Rect position = this.positionInWorld.shift(diffBase);
     gameRef.add(FlyingAttackAngleObject(
+      id: id,
       initPosition: Position(position.left, position.top),
       radAngle: this.currentRadAngle,
       width: width,
@@ -51,6 +53,7 @@ extension RotationPlayerExtensions on RotationPlayer {
   void simpleAttackMelee({
     @required FlameAnimation.Animation attackEffectTopAnim,
     @required double damage,
+    int id,
     double heightArea = 32,
     double widthArea = 32,
     bool withPush = true,
@@ -75,7 +78,7 @@ extension RotationPlayerExtensions on RotationPlayer {
 
     gameRef.visibleEnemies().forEach((enemy) {
       if (enemy.rectCollisionInWorld.overlaps(positionAttack)) {
-        enemy.receiveDamage(damage);
+        enemy.receiveDamage(damage, id);
         Rect rectAfterPush = enemy.position.translate(diffBase.dx, diffBase.dy);
         if (withPush && !enemy.isCollision(rectAfterPush, this.gameRef)) {
           enemy.translate(diffBase.dx, diffBase.dy);

@@ -10,7 +10,7 @@ class TextInterfaceComponent extends InterfaceComponent {
   final TextConfig textConfig;
   TextInterfaceComponent({
     @required int id,
-    @required Position textPosition,
+    @required Position position,
     this.text = '',
     double width = 0,
     double height = 0,
@@ -18,11 +18,10 @@ class TextInterfaceComponent extends InterfaceComponent {
     this.textConfig = const TextConfig(),
   }) : super(
           id: id,
-          position: textPosition,
+          position: position,
           width: width,
           height: height,
           onTapComponent: onTapComponent,
-          sprite: null,
         );
 
   @override

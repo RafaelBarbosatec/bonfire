@@ -95,7 +95,7 @@ class DungeonMap {
         height: 32,
         collision: Collision(
           width: 18,
-          height: 32,
+          height: 15,
         ),
       ),
       Chest(getRelativeTilePosition(18, 7)),

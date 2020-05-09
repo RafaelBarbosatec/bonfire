@@ -69,7 +69,6 @@ class Goblin extends SimpleEnemy {
         visionCells: 8,
       );
     }
-
     super.update(dt);
   }
 
@@ -127,6 +126,7 @@ class Goblin extends SimpleEnemy {
           textureWidth: 32,
           textureHeight: 32,
         ),
+        id: 35,
         width: 25,
         height: 25,
         damage: attack,
@@ -175,8 +175,8 @@ class Goblin extends SimpleEnemy {
   }
 
   @override
-  void receiveDamage(double damage) {
+  void receiveDamage(double damage, int from) {
     this.showDamage(damage);
-    super.receiveDamage(damage);
+    super.receiveDamage(damage, from);
   }
 }

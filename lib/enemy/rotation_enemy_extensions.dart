@@ -50,6 +50,7 @@ extension RotationEnemyExtensions on RotationEnemy {
   void simpleAttackMelee({
     @required FlameAnimation.Animation attackEffectTopAnim,
     @required double damage,
+    int id,
     double heightArea = 32,
     double widthArea = 32,
     bool withPush = false,
@@ -79,7 +80,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       rotateRadAngle: this.currentRadAngle,
     ));
 
-    player.receiveDamage(damage);
+    player.receiveDamage(damage, id);
 
     if (withPush) {
       Rect rectAfterPush = player.position.translate(diffBase.dx, diffBase.dy);
@@ -96,6 +97,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     @required FlameAnimation.Animation animationDestroy,
     @required double width,
     @required double height,
+    int id,
     double speed = 150,
     double damage = 1,
     int interval = 1000,
@@ -120,6 +122,7 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     Rect position = this.positionInWorld.shift(diffBase);
     gameRef.add(FlyingAttackAngleObject(
+      id: id,
       initPosition: Position(position.left, position.top),
       radAngle: _radAngle,
       width: width,

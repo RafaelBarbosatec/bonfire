@@ -211,7 +211,7 @@ class Player extends AnimatedObject
     }
   }
 
-  void receiveDamage(double damage) {
+  void receiveDamage(double damage, int from) {
     if (life > 0) {
       life -= damage;
       if (life <= 0) {

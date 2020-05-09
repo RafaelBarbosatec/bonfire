@@ -14,6 +14,7 @@ extension SimplePlayerExtensions on SimplePlayer {
     @required FlameAnimation.Animation attackEffectLeftAnim,
     @required FlameAnimation.Animation attackEffectTopAnim,
     @required double damage,
+    int id,
     double heightArea = 32,
     double widthArea = 32,
     bool withPush = true,
@@ -55,7 +56,7 @@ extension SimplePlayerExtensions on SimplePlayer {
 
     gameRef.visibleEnemies().forEach((enemy) {
       if (enemy.rectCollisionInWorld.overlaps(positionAttack)) {
-        enemy.receiveDamage(damage);
+        enemy.receiveDamage(damage, id);
         Rect rectAfterPush = enemy.position.translate(pushLeft, pushTop);
         if (withPush && !enemy.isCollision(rectAfterPush, this.gameRef)) {
           enemy.translate(pushLeft, pushTop);
@@ -72,6 +73,7 @@ extension SimplePlayerExtensions on SimplePlayer {
     @required FlameAnimation.Animation animationDestroy,
     @required double width,
     @required double height,
+    int id,
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
@@ -120,6 +122,7 @@ extension SimplePlayerExtensions on SimplePlayer {
 
     gameRef.add(
       FlyingAttackObject(
+        id: id,
         direction: lastDirection,
         flyAnimation: attackRangeAnimation,
         destroyAnimation: animationDestroy,

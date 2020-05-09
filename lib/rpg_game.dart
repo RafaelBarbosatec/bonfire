@@ -10,10 +10,11 @@ import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/game_intercafe/game_interface.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator.dart';
+import 'package:flame/keyboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
-class RPGGame extends BaseGamePointerDetector {
+class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   final BuildContext context;
   final TickerProvider vsync;
   final Player player;
@@ -91,10 +92,6 @@ class RPGGame extends BaseGamePointerDetector {
     super.onPointerUp(event);
   }
 
-  void onKeyboard(RawKeyEvent event) {
-    joystickController.onKeyboard(event);
-  }
-
   void onPointerCancel(PointerCancelEvent event) {
     joystickController.onPointerCancel(event);
     super.onPointerCancel(event);
@@ -121,5 +118,10 @@ class RPGGame extends BaseGamePointerDetector {
       end: end,
       begin: begin,
     );
+  }
+
+  @override
+  void onKeyEvent(RawKeyEvent event) {
+    joystickController.onKeyboard(event);
   }
 }

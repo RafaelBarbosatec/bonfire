@@ -11,7 +11,7 @@ import 'package:flutter/rendering.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.util.setLandscape();
+//  await Flame.util.setLandscape();
   await Flame.util.fullScreen();
   runApp(
     MaterialApp(
@@ -57,6 +57,8 @@ class Game extends StatelessWidget implements GameListener {
       enemies: DungeonMap.enemies(),
       background: BackgroundColorGame(Colors.blueGrey[900]),
       gameController: _controller..setListener(this),
+//      constructionMode: true,
+//      showCollisionArea: true,
     );
   }
 
