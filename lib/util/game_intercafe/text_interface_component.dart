@@ -22,7 +22,6 @@ class TextInterfaceComponent extends InterfaceComponent {
           width: width,
           height: height,
           onTapComponent: onTapComponent,
-          sprite: null,
         );
 
   @override
