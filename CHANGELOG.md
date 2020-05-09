@@ -1,3 +1,8 @@
+## [0.3.1] - 9/05/2020
+
+* Update Flame.
+* Add identify in attacks.
+
 ## [0.3.0] - 4/05/2020 [ BREAKING CHANGE ]
 
 * Improvements render components
