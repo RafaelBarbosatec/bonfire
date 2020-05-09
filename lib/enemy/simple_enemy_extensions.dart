@@ -92,6 +92,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     @required double damage,
     @required double heightArea,
     @required double widthArea,
+    int id,
     int interval = 1000,
     bool withPush = false,
     FlameAnimation.Animation attackEffectRightAnim,
@@ -176,7 +177,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     gameRef.add(AnimatedObjectOnce(animation: anim, position: positionAttack));
 
-    player.receiveDamage(damage);
+    player.receiveDamage(damage, id);
 
     if (withPush) {
       Rect rectAfterPush = player.position.translate(pushLeft, pushTop);
@@ -196,6 +197,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     @required FlameAnimation.Animation animationDestroy,
     @required double width,
     @required double height,
+    int id,
     double speed = 150,
     double damage = 1,
     Direction direction,
@@ -280,6 +282,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     gameRef.add(
       FlyingAttackObject(
+        id: id,
         direction: finalDirection,
         flyAnimation: attackRangeAnimation,
         destroyAnimation: animationDestroy,

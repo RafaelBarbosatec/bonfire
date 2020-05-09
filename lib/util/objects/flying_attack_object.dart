@@ -8,6 +8,7 @@ import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
 
 class FlyingAttackObject extends AnimatedObject with ObjectCollision {
+  final int id;
   final FlameAnimation.Animation flyAnimation;
   final FlameAnimation.Animation destroyAnimation;
   final Direction direction;
@@ -27,6 +28,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
     @required this.direction,
     @required this.width,
     @required this.height,
+    this.id,
     this.destroyAnimation,
     this.speed = 150,
     this.damage = 1,
@@ -95,7 +97,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
 
     if (damageInPlayer) {
       if (position.overlaps(gameRef.player.rectCollision)) {
-        gameRef.player.receiveDamage(damage);
+        gameRef.player.receiveDamage(damage, id);
         destroy = true;
       }
     }
@@ -103,7 +105,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
     if (damageInEnemy) {
       gameRef.visibleEnemies().forEach((enemy) {
         if (enemy.rectCollisionInWorld.overlaps(positionInWorld)) {
-          enemy.receiveDamage(damage);
+          enemy.receiveDamage(damage, id);
           destroy = true;
         }
       });
