@@ -95,6 +95,7 @@ class Goblin extends SimpleEnemy {
   }
 
   void execAttackRange() {
+    if (gameRef.player != null && gameRef.player.isDead) return;
     this.simpleAttackRange(
         animationRight: FlameAnimation.Animation.sequenced(
           'player/fireball_right.png',
@@ -140,6 +141,7 @@ class Goblin extends SimpleEnemy {
   }
 
   void execAttack() {
+    if (gameRef.player != null && gameRef.player.isDead) return;
     this.simpleAttackMelee(
         heightArea: 25,
         widthArea: 25,

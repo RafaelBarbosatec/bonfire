@@ -1,3 +1,7 @@
+## [0.3.2] - 9/05/2020
+
+* Fix bug extension enemy.
+
 ## [0.3.1] - 9/05/2020
 
 * Update Flame.

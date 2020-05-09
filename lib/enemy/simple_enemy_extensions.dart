@@ -105,8 +105,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     Player player = gameRef.player;
 
-    if (player.isDead || !isVisibleInMap() || isDead || this.position == null)
-      return;
+    if (!isVisibleInMap() || isDead || this.position == null) return;
 
     Rect positionAttack;
     FlameAnimation.Animation anim = attackEffectRightAnim;
@@ -211,7 +210,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     Player player = this.gameRef.player;
 
-    if (player.isDead || !isVisibleInMap() || isDead) return;
+    if (!isVisibleInMap() || isDead) return;
 
     Position startPosition;
     FlameAnimation.Animation attackRangeAnimation;

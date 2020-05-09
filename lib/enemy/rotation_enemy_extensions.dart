@@ -61,8 +61,7 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     Player player = gameRef.player;
 
-    if (player.isDead || !isVisibleInMap() || isDead || this.position == null)
-      return;
+    if (!isVisibleInMap() || isDead || this.position == null) return;
 
     double nextX = this.height * cos(this.currentRadAngle);
     double nextY = this.height * sin(this.currentRadAngle);
@@ -108,7 +107,7 @@ extension RotationEnemyExtensions on RotationEnemy {
   }) {
     if (!this.checkPassedInterval('attackRange', interval)) return;
     Player player = this.gameRef.player;
-    if (isDead || player == null || player.isDead) return;
+    if (isDead || player == null) return;
 
     double _radAngle = getAngleFomPlayer();
 
