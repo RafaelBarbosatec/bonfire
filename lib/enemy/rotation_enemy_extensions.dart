@@ -99,6 +99,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     int id,
     double speed = 150,
     double damage = 1,
+    double radAngleDirection,
     int interval = 1000,
     bool withCollision = true,
     VoidCallback destroy,
@@ -109,7 +110,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     Player player = this.gameRef.player;
     if (isDead || player == null) return;
 
-    double _radAngle = getAngleFomPlayer();
+    double _radAngle = radAngleDirection ?? getAngleFomPlayer();
 
     double nextX = this.height * cos(_radAngle);
     double nextY = this.height * sin(_radAngle);
