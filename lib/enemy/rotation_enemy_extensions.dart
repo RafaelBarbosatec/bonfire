@@ -54,6 +54,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     double heightArea = 32,
     double widthArea = 32,
     bool withPush = false,
+    double radAngleDirection,
     VoidCallback execute,
     int interval = 1000,
   }) {
@@ -63,8 +64,10 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     if (!isVisibleInMap() || isDead || this.position == null) return;
 
-    double nextX = this.height * cos(this.currentRadAngle);
-    double nextY = this.height * sin(this.currentRadAngle);
+    double angle = radAngleDirection ?? this.currentRadAngle;
+
+    double nextX = this.height * cos(angle);
+    double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
     Offset diffBase = Offset(this.positionInWorld.center.dx + nextPoint.dx,
@@ -76,15 +79,18 @@ extension RotationEnemyExtensions on RotationEnemy {
     gameRef.add(AnimatedObjectOnce(
       animation: attackEffectTopAnim,
       position: positionAttack,
-      rotateRadAngle: this.currentRadAngle,
+      rotateRadAngle: angle,
     ));
 
-    player.receiveDamage(damage, id);
+    if (positionAttack.overlaps(player.positionInWorld)) {
+      player.receiveDamage(damage, id);
 
-    if (withPush) {
-      Rect rectAfterPush = player.position.translate(diffBase.dx, diffBase.dy);
-      if (!player.isCollision(rectAfterPush, this.gameRef)) {
-        player.position = rectAfterPush;
+      if (withPush) {
+        Rect rectAfterPush =
+            player.position.translate(diffBase.dx, diffBase.dy);
+        if (!player.isCollision(rectAfterPush, this.gameRef)) {
+          player.position = rectAfterPush;
+        }
       }
     }
 

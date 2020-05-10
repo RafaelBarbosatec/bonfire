@@ -17,14 +17,16 @@ extension RotationPlayerExtensions on RotationPlayer {
     int id,
     double speed = 150,
     double damage = 1,
+    double radAngleDirection,
     bool withCollision = true,
     VoidCallback destroy,
     Collision collision,
   }) {
     if (isDead || this.currentRadAngle == 0) return;
 
-    double nextX = this.height * cos(this.currentRadAngle);
-    double nextY = this.height * sin(this.currentRadAngle);
+    double angle = radAngleDirection ?? this.currentRadAngle;
+    double nextX = this.height * cos(angle);
+    double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
     Offset diffBase = Offset(this.positionInWorld.center.dx + nextPoint.dx,
@@ -35,7 +37,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     gameRef.add(FlyingAttackAngleObject(
       id: id,
       initPosition: Position(position.left, position.top),
-      radAngle: this.currentRadAngle,
+      radAngle: angle,
       width: width,
       height: height,
       damage: damage,
@@ -54,14 +56,17 @@ extension RotationPlayerExtensions on RotationPlayer {
     @required FlameAnimation.Animation attackEffectTopAnim,
     @required double damage,
     int id,
+    double radAngleDirection,
     double heightArea = 32,
     double widthArea = 32,
     bool withPush = true,
   }) {
     if (isDead) return;
 
-    double nextX = this.height * cos(this.currentRadAngle);
-    double nextY = this.height * sin(this.currentRadAngle);
+    double angle = radAngleDirection ?? this.currentRadAngle;
+
+    double nextX = this.height * cos(angle);
+    double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
     Offset diffBase = Offset(this.positionInWorld.center.dx + nextPoint.dx,
@@ -73,7 +78,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     gameRef.add(AnimatedObjectOnce(
       animation: attackEffectTopAnim,
       position: positionAttack,
-      rotateRadAngle: this.currentRadAngle,
+      rotateRadAngle: angle,
     ));
 
     gameRef.visibleEnemies().forEach((enemy) {
