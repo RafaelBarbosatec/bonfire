@@ -1,3 +1,7 @@
+## [0.3.3] - 13/05/2020
+
+* Improvements in FlyingAttackAngleObject.
+
 ## [0.3.2] - 9/05/2020
 
 * Fix bug extension enemy.
