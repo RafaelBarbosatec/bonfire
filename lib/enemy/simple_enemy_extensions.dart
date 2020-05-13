@@ -104,7 +104,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
   }) {
     if (!this.checkPassedInterval('attackMelee', interval)) return;
 
-    if (!isVisibleInMap() || isDead || this.position == null) return;
+    if (isDead || this.position == null) return;
 
     Rect positionAttack;
     FlameAnimation.Animation anim = attackEffectRightAnim;
@@ -217,7 +217,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     Player player = this.gameRef.player;
 
-    if (!isVisibleInMap() || isDead) return;
+    if (isDead) return;
 
     Position startPosition;
     FlameAnimation.Animation attackRangeAnimation;

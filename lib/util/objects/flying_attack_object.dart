@@ -68,11 +68,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
         break;
     }
 
-    if (this.position == null) return;
-    if (position.right > gameRef.size.width * 1.5 ||
-        position.left < gameRef.size.width * -0.5 ||
-        position.bottom > gameRef.size.height * 1.5 ||
-        position.top < gameRef.size.height * -0.5) {
+    if (!_verifyExistInWorld()) {
       remove();
     }
 
@@ -103,7 +99,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
     }
 
     if (damageInEnemy) {
-      gameRef.visibleEnemies().forEach((enemy) {
+      gameRef.livingEnemies().forEach((enemy) {
         if (enemy.rectCollisionInWorld.overlaps(positionInWorld)) {
           enemy.receiveDamage(damage, id);
           destroy = true;
@@ -159,5 +155,25 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
       remove();
       if (this.destroyedObject != null) this.destroyedObject();
     }
+  }
+
+  bool _verifyExistInWorld() {
+    bool result = true;
+    if (positionInWorld.left < 0) {
+      result = false;
+    }
+    if (positionInWorld.right >
+        gameRef.gameCamera.maxLeft + gameRef.size.width) {
+      result = false;
+    }
+    if (positionInWorld.top < 0) {
+      result = false;
+    }
+    if (positionInWorld.bottom >
+        gameRef.gameCamera.maxTop + gameRef.size.height) {
+      result = false;
+    }
+
+    return result;
   }
 }

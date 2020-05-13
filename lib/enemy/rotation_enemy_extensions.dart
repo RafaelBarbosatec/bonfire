@@ -62,7 +62,7 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     Player player = gameRef.player;
 
-    if (!isVisibleInMap() || isDead || this.position == null) return;
+    if (isDead || this.position == null) return;
 
     double angle = radAngleDirection ?? this.currentRadAngle;
 
@@ -113,8 +113,8 @@ extension RotationEnemyExtensions on RotationEnemy {
     VoidCallback execute,
   }) {
     if (!this.checkPassedInterval('attackRange', interval)) return;
-    Player player = this.gameRef.player;
-    if (isDead || player == null) return;
+
+    if (isDead) return;
 
     double _radAngle = radAngleDirection ?? getAngleFomPlayer();
 

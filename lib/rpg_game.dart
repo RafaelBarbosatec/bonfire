@@ -101,6 +101,10 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     return enemies.where((enemy) => enemy.isVisibleInMap()).toList();
   }
 
+  List<Enemy> livingEnemies() {
+    return enemies.where((enemy) => !enemy.isDead).toList();
+  }
+
   List<GameDecoration> visibleDecorations() {
     return decorations
         .where((decoration) => decoration.isVisibleInMap())
