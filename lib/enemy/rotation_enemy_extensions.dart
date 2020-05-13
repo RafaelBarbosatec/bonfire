@@ -17,7 +17,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     int visionCells = 3,
     double margin = 10,
   }) {
-    if (!isVisibleInMap() || isDead || this.position == null) return;
+    if (isDead || this.position == null) return;
     seePlayer(
       visionCells: visionCells,
       observed: (player) {
