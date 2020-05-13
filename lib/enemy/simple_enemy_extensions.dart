@@ -17,7 +17,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     int visionCells = 3,
     double margin = 10,
   }) {
-    if (!isVisibleInMap() || isDead || this.position == null) return;
+    if (isDead || this.position == null) return;
     seePlayer(
       visionCells: visionCells,
       observed: (player) {
@@ -95,6 +95,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     int id,
     int interval = 1000,
     bool withPush = false,
+    Direction direction,
     FlameAnimation.Animation attackEffectRightAnim,
     FlameAnimation.Animation attackEffectBottomAnim,
     FlameAnimation.Animation attackEffectLeftAnim,
@@ -103,30 +104,34 @@ extension SimpleEnemyExtensions on SimpleEnemy {
   }) {
     if (!this.checkPassedInterval('attackMelee', interval)) return;
 
-    Player player = gameRef.player;
-
-    if (!isVisibleInMap() || isDead || this.position == null) return;
+    if (isDead || this.position == null) return;
 
     Rect positionAttack;
     FlameAnimation.Animation anim = attackEffectRightAnim;
 
     Direction playerDirection;
 
-    double centerXPlayer = player.rectCollision.center.dx;
-    double centerYPlayer = player.rectCollision.center.dy;
+    Player player = gameRef.player;
 
-    double centerYEnemy = rectCollision.center.dy;
-    double centerXEnemy = rectCollision.center.dx;
+    if (direction == null) {
+      double centerXPlayer = player.rectCollision.center.dx;
+      double centerYPlayer = player.rectCollision.center.dy;
 
-    double diffX = centerXEnemy - centerXPlayer;
-    double diffY = centerYEnemy - centerYPlayer;
+      double centerYEnemy = rectCollision.center.dy;
+      double centerXEnemy = rectCollision.center.dx;
 
-    double positiveDiffX = diffX > 0 ? diffX : diffX * -1;
-    double positiveDiffY = diffY > 0 ? diffY : diffY * -1;
-    if (positiveDiffX > positiveDiffY) {
-      playerDirection = diffX > 0 ? Direction.left : Direction.right;
+      double diffX = centerXEnemy - centerXPlayer;
+      double diffY = centerYEnemy - centerYPlayer;
+
+      double positiveDiffX = diffX > 0 ? diffX : diffX * -1;
+      double positiveDiffY = diffY > 0 ? diffY : diffY * -1;
+      if (positiveDiffX > positiveDiffY) {
+        playerDirection = diffX > 0 ? Direction.left : Direction.right;
+      } else {
+        playerDirection = diffY > 0 ? Direction.top : Direction.bottom;
+      }
     } else {
-      playerDirection = diffY > 0 ? Direction.top : Direction.bottom;
+      playerDirection = direction;
     }
 
     double pushLeft = 0;
@@ -176,12 +181,14 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     gameRef.add(AnimatedObjectOnce(animation: anim, position: positionAttack));
 
-    player.receiveDamage(damage, id);
+    if (positionAttack.overlaps(player.positionInWorld)) {
+      player.receiveDamage(damage, id);
 
-    if (withPush) {
-      Rect rectAfterPush = player.position.translate(pushLeft, pushTop);
-      if (!player.isCollision(rectAfterPush, this.gameRef)) {
-        player.position = rectAfterPush;
+      if (withPush) {
+        Rect rectAfterPush = player.position.translate(pushLeft, pushTop);
+        if (!player.isCollision(rectAfterPush, this.gameRef)) {
+          player.position = rectAfterPush;
+        }
       }
     }
 
@@ -210,7 +217,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     Player player = this.gameRef.player;
 
-    if (!isVisibleInMap() || isDead) return;
+    if (isDead) return;
 
     Position startPosition;
     FlameAnimation.Animation attackRangeAnimation;

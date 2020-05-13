@@ -15,6 +15,7 @@ extension SimplePlayerExtensions on SimplePlayer {
     @required FlameAnimation.Animation attackEffectTopAnim,
     @required double damage,
     int id,
+    Direction direction,
     double heightArea = 32,
     double widthArea = 32,
     bool withPush = true,
@@ -25,7 +26,9 @@ extension SimplePlayerExtensions on SimplePlayer {
     FlameAnimation.Animation anim = attackEffectRightAnim;
     double pushLeft = 0;
     double pushTop = 0;
-    switch (lastDirection) {
+
+    Direction attackDirection = direction ?? this.lastDirection;
+    switch (attackDirection) {
       case Direction.top:
         positionAttack = Rect.fromLTWH(positionInWorld.left,
             positionInWorld.top - heightArea, widthArea, heightArea);
@@ -76,6 +79,7 @@ extension SimplePlayerExtensions on SimplePlayer {
     int id,
     double speed = 150,
     double damage = 1,
+    Direction direction,
     bool withCollision = true,
     VoidCallback destroy,
     Collision collision,
@@ -85,7 +89,9 @@ extension SimplePlayerExtensions on SimplePlayer {
     Position startPosition;
     FlameAnimation.Animation attackRangeAnimation;
 
-    switch (this.lastDirection) {
+    Direction attackDirection = direction ?? this.lastDirection;
+
+    switch (attackDirection) {
       case Direction.left:
         if (animationLeft != null) attackRangeAnimation = animationLeft;
         startPosition = Position(
@@ -123,7 +129,7 @@ extension SimplePlayerExtensions on SimplePlayer {
     gameRef.add(
       FlyingAttackObject(
         id: id,
-        direction: lastDirection,
+        direction: attackDirection,
         flyAnimation: attackRangeAnimation,
         destroyAnimation: animationDestroy,
         initPosition: startPosition,

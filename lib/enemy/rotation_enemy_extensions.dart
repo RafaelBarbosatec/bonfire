@@ -17,7 +17,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     int visionCells = 3,
     double margin = 10,
   }) {
-    if (!isVisibleInMap() || isDead || this.position == null) return;
+    if (isDead || this.position == null) return;
     seePlayer(
       visionCells: visionCells,
       observed: (player) {
@@ -54,6 +54,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     double heightArea = 32,
     double widthArea = 32,
     bool withPush = false,
+    double radAngleDirection,
     VoidCallback execute,
     int interval = 1000,
   }) {
@@ -61,10 +62,12 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     Player player = gameRef.player;
 
-    if (!isVisibleInMap() || isDead || this.position == null) return;
+    if (isDead || this.position == null) return;
 
-    double nextX = this.height * cos(this.currentRadAngle);
-    double nextY = this.height * sin(this.currentRadAngle);
+    double angle = radAngleDirection ?? this.currentRadAngle;
+
+    double nextX = this.height * cos(angle);
+    double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
     Offset diffBase = Offset(this.positionInWorld.center.dx + nextPoint.dx,
@@ -76,15 +79,18 @@ extension RotationEnemyExtensions on RotationEnemy {
     gameRef.add(AnimatedObjectOnce(
       animation: attackEffectTopAnim,
       position: positionAttack,
-      rotateRadAngle: this.currentRadAngle,
+      rotateRadAngle: angle,
     ));
 
-    player.receiveDamage(damage, id);
+    if (positionAttack.overlaps(player.positionInWorld)) {
+      player.receiveDamage(damage, id);
 
-    if (withPush) {
-      Rect rectAfterPush = player.position.translate(diffBase.dx, diffBase.dy);
-      if (!player.isCollision(rectAfterPush, this.gameRef)) {
-        player.position = rectAfterPush;
+      if (withPush) {
+        Rect rectAfterPush =
+            player.position.translate(diffBase.dx, diffBase.dy);
+        if (!player.isCollision(rectAfterPush, this.gameRef)) {
+          player.position = rectAfterPush;
+        }
       }
     }
 
@@ -99,6 +105,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     int id,
     double speed = 150,
     double damage = 1,
+    double radAngleDirection,
     int interval = 1000,
     bool withCollision = true,
     VoidCallback destroy,
@@ -106,10 +113,10 @@ extension RotationEnemyExtensions on RotationEnemy {
     VoidCallback execute,
   }) {
     if (!this.checkPassedInterval('attackRange', interval)) return;
-    Player player = this.gameRef.player;
-    if (isDead || player == null) return;
 
-    double _radAngle = getAngleFomPlayer();
+    if (isDead) return;
+
+    double _radAngle = radAngleDirection ?? getAngleFomPlayer();
 
     double nextX = this.height * cos(_radAngle);
     double nextY = this.height * sin(_radAngle);

@@ -16,7 +16,7 @@ extension EnemyExtensions on Enemy {
     int visionCells = 3,
   }) {
     Player player = gameRef.player;
-    if (!isVisibleInMap() || player == null || this.position == null) return;
+    if (player == null || this.position == null) return;
 
     if (player.isDead) {
       if (notObserved != null) notObserved();
