@@ -85,8 +85,10 @@ class JoystickAction {
     if (_rectBackgroundDirection != null && _dragging && enableDirection) {
       double radiusBackground = _rectBackgroundDirection.width / 2;
       c.drawCircle(
-        Offset(_rectBackgroundDirection.left + radiusBackground,
-            _rectBackgroundDirection.top + radiusBackground),
+        Offset(
+          _rectBackgroundDirection.left + radiusBackground,
+          _rectBackgroundDirection.top + radiusBackground,
+        ),
         radiusBackground,
         _paintBackground,
       );
@@ -97,14 +99,15 @@ class JoystickAction {
   void update(double dt) {
     if (_dragging) {
       double _radAngle = atan2(
-          _dragPosition.dy - _rectBackgroundDirection.center.dy,
-          _dragPosition.dx - _rectBackgroundDirection.center.dx);
-
-      double degrees = _radAngle * 180 / pi;
+        _dragPosition.dy - _rectBackgroundDirection.center.dy,
+        _dragPosition.dx - _rectBackgroundDirection.center.dx,
+      );
 
       // Distance between the center of joystick background & drag position
-      Point p = Point(_rectBackgroundDirection.center.dx,
-          _rectBackgroundDirection.center.dy);
+      Point p = Point(
+        _rectBackgroundDirection.center.dx,
+        _rectBackgroundDirection.center.dy,
+      );
       double dist = p.distanceTo(Point(_dragPosition.dx, _dragPosition.dy));
 
       // The maximum distance for the knob position the edge of
@@ -119,19 +122,23 @@ class JoystickAction {
       double nextY = dist * sin(_radAngle);
       Offset nextPoint = Offset(nextX, nextY);
 
-      Offset diff = Offset(_rectBackgroundDirection.center.dx + nextPoint.dx,
-              _rectBackgroundDirection.center.dy + nextPoint.dy) -
+      Offset diff = Offset(
+            _rectBackgroundDirection.center.dx + nextPoint.dx,
+            _rectBackgroundDirection.center.dy + nextPoint.dy,
+          ) -
           _rect.center;
       _rect = _rect.shift(diff);
 
       double _intensity = dist / (_tileSize * _backgroundAspectRatio / 3);
 
-      _joystickListener.joystickAction(JoystickActionEvent(
-        id: actionId,
-        event: ActionEvent.MOVE,
-        intensity: _intensity,
-        radAngle: _radAngle,
-      ));
+      _joystickListener.joystickAction(
+        JoystickActionEvent(
+          id: actionId,
+          event: ActionEvent.MOVE,
+          intensity: _intensity,
+          radAngle: _radAngle,
+        ),
+      );
     } else {
       if (_rect != null) {
         Offset diff = _dragPosition - _rect.center;
@@ -147,10 +154,12 @@ class JoystickAction {
         _dragPosition = localPosition;
         _dragging = true;
       }
-      _joystickListener.joystickAction(JoystickActionEvent(
-        id: actionId,
-        event: ActionEvent.DOWN,
-      ));
+      _joystickListener.joystickAction(
+        JoystickActionEvent(
+          id: actionId,
+          event: ActionEvent.DOWN,
+        ),
+      );
       pressed();
     }
   }
@@ -167,10 +176,12 @@ class JoystickAction {
     if (pointer == _pointerDragging) {
       _dragging = false;
       _dragPosition = _rectBackgroundDirection.center;
-      _joystickListener.joystickAction(JoystickActionEvent(
-        id: actionId,
-        event: ActionEvent.UP,
-      ));
+      _joystickListener.joystickAction(
+        JoystickActionEvent(
+          id: actionId,
+          event: ActionEvent.UP,
+        ),
+      );
       unPressed();
     }
   }
