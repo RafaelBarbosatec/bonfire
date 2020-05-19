@@ -21,8 +21,6 @@ void main() async {
 }
 
 class Game extends StatelessWidget implements GameListener {
-  static const sizeTile = 32.0;
-
   final GameController _controller = GameController();
 
   @override
@@ -50,7 +48,7 @@ class Game extends StatelessWidget implements GameListener {
         ],
       ),
       player: Knight(
-        Position(5 * sizeTile, 6 * sizeTile),
+        Position(5 * DungeonMap.tileSize, 6 * DungeonMap.tileSize),
       ),
       interface: KnightInterface(),
       map: DungeonMap.map(),
@@ -74,8 +72,8 @@ class Game extends StatelessWidget implements GameListener {
   }
 
   void _addEnemyInWorld() {
-    double x = sizeTile * (2 + Random().nextInt(27));
-    double y = sizeTile * (5 + Random().nextInt(3));
+    double x = DungeonMap.tileSize * (2 + Random().nextInt(27));
+    double y = DungeonMap.tileSize * (5 + Random().nextInt(3));
 
     Position position = Position(
       x,
@@ -92,8 +90,8 @@ class Game extends StatelessWidget implements GameListener {
         position: Rect.fromLTWH(
           position.x,
           position.y,
-          sizeTile,
-          sizeTile,
+          DungeonMap.tileSize,
+          DungeonMap.tileSize,
         ),
       ),
     );

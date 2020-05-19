@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/decoration/potion_life.dart';
+import 'package:example/map/dungeon_map.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,8 @@ class Chest extends GameDecoration {
             textureWidth: 16,
             textureHeight: 16,
           ),
-          width: 20,
-          height: 20,
+          width: DungeonMap.tileSize * 0.6,
+          height: DungeonMap.tileSize * 0.6,
           initPosition: initPosition,
           isTouchable: true,
         ) {
@@ -30,7 +31,6 @@ class Chest extends GameDecoration {
 
   @override
   void update(double dt) {
-    if (!this.isVisibleInMap()) return;
     this.seePlayer(
       observed: (player) {
         if (!_observedPlayer) {
