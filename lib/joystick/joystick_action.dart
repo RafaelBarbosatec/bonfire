@@ -17,7 +17,7 @@ class JoystickAction {
   final EdgeInsets margin;
   final JoystickActionAlign align;
   final bool enableDirection;
-  final Color colorBackgroundDirection;
+  final Color color;
 
   int _pointerDragging;
   Rect _rect;
@@ -28,18 +28,19 @@ class JoystickAction {
   double _tileSize;
   Offset _dragPosition;
   Paint _paintBackground;
+  Paint _paintAction;
   JoystickListener _joystickListener;
 
   JoystickAction({
     @required this.actionId,
-    @required this.sprite,
+    this.sprite,
     this.spritePressed,
     this.spriteBackgroundDirection,
     this.enableDirection = false,
-    this.size = 20,
+    this.size = 50,
     this.sizeBackgroundDirection,
     this.margin = EdgeInsets.zero,
-    this.colorBackgroundDirection = Colors.blueGrey,
+    this.color = Colors.blueGrey,
     this.align = JoystickActionAlign.BOTTOM_RIGHT,
   }) {
     _sprite = sprite;
@@ -77,9 +78,15 @@ class JoystickAction {
       center: Offset(dx, dy),
       radius: sizeBackgroundDirection / 2,
     );
+
     _paintBackground = Paint()
-      ..color = colorBackgroundDirection.withOpacity(0.5)
+      ..color = color.withOpacity(0.5)
       ..style = PaintingStyle.fill;
+
+    _paintAction = Paint()
+      ..color = color.withOpacity(0.8)
+      ..style = PaintingStyle.fill;
+
     _dragPosition = _rect.center;
   }
 
@@ -99,7 +106,20 @@ class JoystickAction {
         spriteBackgroundDirection.renderRect(c, _rectBackgroundDirection);
       }
     }
-    if (_rect != null) _sprite.renderRect(c, _rect);
+
+    if (_sprite != null) {
+      if (_rect != null) _sprite.renderRect(c, _rect);
+    } else {
+      double radiusAction = _rect.width / 2;
+      c.drawCircle(
+        Offset(
+          _rect.left + radiusAction,
+          _rect.top + radiusAction,
+        ),
+        radiusAction,
+        _paintAction,
+      );
+    }
   }
 
   void update(double dt) {
