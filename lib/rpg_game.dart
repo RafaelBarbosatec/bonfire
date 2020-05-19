@@ -77,26 +77,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     add(decoration);
   }
 
-  void onPointerDown(PointerDownEvent event) {
-    joystickController.onPointerDown(event);
-    super.onPointerDown(event);
-  }
-
-  void onPointerMove(PointerMoveEvent event) {
-    joystickController.onPointerMove(event);
-    super.onPointerMove(event);
-  }
-
-  void onPointerUp(PointerUpEvent event) {
-    joystickController.onPointerUp(event);
-    super.onPointerUp(event);
-  }
-
-  void onPointerCancel(PointerCancelEvent event) {
-    joystickController.onPointerCancel(event);
-    super.onPointerCancel(event);
-  }
-
   List<Enemy> visibleEnemies() {
     return enemies.where((enemy) => enemy.isVisibleInMap()).toList();
   }

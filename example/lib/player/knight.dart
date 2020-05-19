@@ -12,6 +12,7 @@ class Knight extends SimplePlayer {
   Timer _timerStamina;
   bool showObserveEnemy = false;
   bool showTalk = false;
+  double angleRadAttack = 0.0;
 
   Knight(this.initPosition)
       : super(
@@ -54,18 +55,23 @@ class Knight extends SimplePlayer {
   }
 
   @override
-  void joystickAction(int action) {
+  void joystickAction(JoystickActionEvent event) {
     if (isDead) return;
 
-    if (action == 0) {
+    if (event.id == 0 && event.event == ActionEvent.DOWN) {
       actionAttack();
     }
 
-    if (action == 1) {
-      actionAttackRange();
+    if (event.id == 1) {
+      if (event.event == ActionEvent.MOVE) {
+        angleRadAttack = event.radAngle;
+      }
+      if (event.event == ActionEvent.UP) {
+        actionAttackRange();
+      }
     }
 
-    super.joystickAction(action);
+    super.joystickAction(event);
   }
 
   @override
@@ -91,25 +97,25 @@ class Knight extends SimplePlayer {
     decrementStamina(15);
     this.simpleAttackMelee(
       damage: attack,
-      attackEffectBottomAnim: FlameAnimation.Animation.sequenced(
+      animationBottom: FlameAnimation.Animation.sequenced(
         'player/atack_effect_bottom.png',
         6,
         textureWidth: 16,
         textureHeight: 16,
       ),
-      attackEffectLeftAnim: FlameAnimation.Animation.sequenced(
+      animationLeft: FlameAnimation.Animation.sequenced(
         'player/atack_effect_left.png',
         6,
         textureWidth: 16,
         textureHeight: 16,
       ),
-      attackEffectRightAnim: FlameAnimation.Animation.sequenced(
+      animationRight: FlameAnimation.Animation.sequenced(
         'player/atack_effect_right.png',
         6,
         textureWidth: 16,
         textureHeight: 16,
       ),
-      attackEffectTopAnim: FlameAnimation.Animation.sequenced(
+      animationTop: FlameAnimation.Animation.sequenced(
         'player/atack_effect_top.png',
         6,
         textureWidth: 16,
@@ -122,27 +128,10 @@ class Knight extends SimplePlayer {
     if (stamina < 10) return;
 
     decrementStamina(10);
-    this.simpleAttackRange(
-      animationRight: FlameAnimation.Animation.sequenced(
-        'player/fireball_right.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationLeft: FlameAnimation.Animation.sequenced(
-        'player/fireball_left.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
+
+    this.simpleAttackRangeByAngle(
       animationTop: FlameAnimation.Animation.sequenced(
         'player/fireball_top.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationBottom: FlameAnimation.Animation.sequenced(
-        'player/fireball_bottom.png',
         3,
         textureWidth: 23,
         textureHeight: 23,
@@ -153,6 +142,7 @@ class Knight extends SimplePlayer {
         textureWidth: 32,
         textureHeight: 32,
       ),
+      radAngleDirection: angleRadAttack,
       width: 25,
       height: 25,
       damage: 10,

@@ -24,13 +24,28 @@ class JoystickDirectionalEvent {
   final double intensity;
   final double radAngle;
 
-  JoystickDirectionalEvent(
-      {this.directional, this.intensity = 0.0, this.radAngle = 0.0});
+  JoystickDirectionalEvent({
+    this.directional,
+    this.intensity = 0.0,
+    this.radAngle = 0.0,
+  });
+}
+
+enum ActionEvent { DOWN, UP, MOVE }
+
+class JoystickActionEvent {
+  final int id;
+  final double intensity;
+  final double radAngle;
+  final ActionEvent event;
+
+  JoystickActionEvent(
+      {this.id, this.intensity = 0.0, this.radAngle = 0.0, this.event});
 }
 
 abstract class JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);
-  void joystickAction(int action);
+  void joystickAction(JoystickActionEvent event);
 }
 
 abstract class JoystickController extends Component

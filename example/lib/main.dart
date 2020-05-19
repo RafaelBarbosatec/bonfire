@@ -43,6 +43,7 @@ class Game extends StatelessWidget implements GameListener {
           JoystickAction(
             actionId: 1,
             pathSprite: 'joystick_atack_range.png',
+            enableDirection: true,
             size: 50,
             margin: EdgeInsets.only(bottom: 50, right: 160),
           )

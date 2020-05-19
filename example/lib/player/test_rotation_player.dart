@@ -46,15 +46,15 @@ class TestRotationPlayer extends RotationPlayer {
   }
 
   @override
-  void joystickAction(int action) {
-    if (action == 0) {
+  void joystickAction(JoystickActionEvent event) {
+    if (event.id == 0 && event.event == ActionEvent.DOWN) {
       actionAttackMelee();
     }
 
-    if (action == 1) {
+    if (event.id == 1 && event.event == ActionEvent.DOWN) {
       actionAttackRange();
     }
-    super.joystickAction(action);
+    super.joystickAction(event);
   }
 
   void actionAttackRange() {
@@ -80,7 +80,7 @@ class TestRotationPlayer extends RotationPlayer {
 
   void actionAttackMelee() {
     this.simpleAttackMelee(
-      attackEffectTopAnim: FlameAnimation.Animation.sequenced(
+      animationTop: FlameAnimation.Animation.sequenced(
         'player/atack_effect_top.png',
         6,
         textureWidth: 16,

@@ -46,7 +46,9 @@ class JoystickKeyBoard extends JoystickController {
       }
 
       if (!isDirectionalDown) {
-        joystickListener.joystickAction(event.logicalKey.keyId);
+        joystickListener.joystickAction(JoystickActionEvent(
+          id: event.logicalKey.keyId,
+        ));
       }
     } else if (event is RawKeyUpEvent &&
         isDirectionalDown &&

@@ -75,45 +75,21 @@ class Joystick extends JoystickController {
 
     _dragPosition = _knobRect.center;
 
-    if (actions != null) {
-      actions.forEach((action) => _setRectInAction(action));
-    }
-  }
-
-  void _setRectInAction(JoystickAction action) {
-    double radius = action.size / 2;
-    double dx = 0, dy = 0;
-    switch (action.align) {
-      case JoystickActionAlign.TOP_LEFT:
-        dx = action.margin.left + radius;
-        dy = action.margin.top + radius;
-        break;
-      case JoystickActionAlign.BOTTOM_LEFT:
-        dx = action.margin.left + radius;
-        dy = _screenSize.height - (action.margin.bottom + radius);
-        break;
-      case JoystickActionAlign.TOP_RIGHT:
-        dx = _screenSize.width - (action.margin.right + radius);
-        dy = action.margin.top + radius;
-        break;
-      case JoystickActionAlign.BOTTOM_RIGHT:
-        dx = _screenSize.width - (action.margin.right + radius);
-        dy = _screenSize.height - (action.margin.bottom + radius);
-        break;
-    }
-    action.rect = Rect.fromCircle(
-      center: Offset(dx, dy),
-      radius: radius,
-    );
+    if (actions != null)
+      actions.forEach(
+          (action) => action.initialize(_screenSize, joystickListener));
   }
 
   void addAction(JoystickAction action) {
-    _setRectInAction(action);
-    actions.add(action);
+    if (actions != null) {
+      action.initialize(_screenSize, joystickListener);
+      actions.add(action);
+    }
   }
 
   void removeAction(int actionId) {
-    actions.removeWhere((action) => action.actionId == actionId);
+    if (actions != null)
+      actions.removeWhere((action) => action.actionId == actionId);
   }
 
   void render(Canvas canvas) {
@@ -151,6 +127,8 @@ class Joystick extends JoystickController {
     if (gameRef.size != null && _screenSize != gameRef.size) {
       initialize();
     }
+
+    if (actions != null) actions.forEach((action) => action.update(t));
 
     if (_backgroundRect == null) {
       return;
@@ -260,14 +238,17 @@ class Joystick extends JoystickController {
   void onPointerDown(PointerDownEvent event) {
     _updateDirectionalRect(event.localPosition);
 
-    if (actions == null || actions.isEmpty) return;
-    actions
-        .where((action) =>
-            action.rect != null && action.rect.contains(event.localPosition))
-        .forEach((action) {
-      action.pressed();
-      joystickListener.joystickAction(action.actionId);
-    });
+    if (actions != null)
+      actions.forEach(
+          (action) => action.actionDown(event.pointer, event.localPosition));
+//    if (actions == null || actions.isEmpty) return;
+//    actions
+//        .where((action) =>
+//            action.rect != null && action.rect.contains(event.localPosition))
+//        .forEach((action) {
+//      action.pressed();
+//      joystickListener.joystickAction(action.actionId);
+//    });
 
     if (_backgroundRect == null) return;
     Rect directional = Rect.fromLTWH(
@@ -284,6 +265,9 @@ class Joystick extends JoystickController {
   }
 
   void onPointerMove(PointerMoveEvent event) {
+    if (actions != null)
+      actions.forEach(
+          (action) => action.actionMove(event.pointer, event.localPosition));
     if (event.pointer == currentGesturePointer) {
       if (_dragging) {
         _dragPosition = event.localPosition;
@@ -292,9 +276,8 @@ class Joystick extends JoystickController {
   }
 
   void onPointerUp(PointerUpEvent event) {
-    actions.forEach((action) {
-      action.unPressed();
-    });
+    if (actions != null)
+      actions.forEach((action) => action.actionUp(event.pointer));
 
     if (event.pointer == currentGesturePointer) {
       _dragging = false;
@@ -308,6 +291,8 @@ class Joystick extends JoystickController {
   }
 
   void onPointerCancel(PointerCancelEvent event) {
+    if (actions != null)
+      actions.forEach((action) => action.actionUp(event.pointer));
     if (event.pointer == currentGesturePointer) {
       _dragging = false;
       _dragPosition = _backgroundRect.center;

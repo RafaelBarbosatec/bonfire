@@ -29,8 +29,12 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   Iterable<GameComponent> get _touchableComponents =>
       components.where((c) => (c is GameComponent && c.isTouchable)).cast();
 
+  Iterable<PointerDetector> get _pointerDetectorComponents =>
+      components.where((c) => (c is PointerDetector)).cast();
+
   void onPointerCancel(PointerCancelEvent event) {
     _touchableComponents.forEach((c) => c.onTapCancel(event.pointer));
+    _pointerDetectorComponents.forEach((c) => c.onPointerCancel(event));
   }
 
   void onPointerUp(PointerUpEvent event) {
@@ -40,6 +44,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
         event.localPosition,
       ),
     );
+    _pointerDetectorComponents.forEach((c) => c.onPointerUp(event));
   }
 
   void onPointerMove(PointerMoveEvent event) {
@@ -49,11 +54,13 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
         event.localPosition,
       ),
     );
+    _pointerDetectorComponents.forEach((c) => c.onPointerMove(event));
   }
 
   void onPointerDown(PointerDownEvent event) {
     _touchableComponents
         .forEach((c) => c.handlerTabDown(event.pointer, event.localPosition));
+    _pointerDetectorComponents.forEach((c) => c.onPointerDown(event));
   }
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
