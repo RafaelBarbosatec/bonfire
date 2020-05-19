@@ -24,6 +24,7 @@ export 'package:bonfire/player/simple_player_extensions.dart';
 export 'package:bonfire/util/background_color_game.dart';
 export 'package:bonfire/util/collision/collision.dart';
 export 'package:bonfire/util/direction.dart';
+export 'package:bonfire/util/functions.dart';
 export 'package:bonfire/util/game_controller.dart';
 export 'package:bonfire/util/game_intercafe/game_interface.dart';
 export 'package:bonfire/util/game_intercafe/interface_component.dart';

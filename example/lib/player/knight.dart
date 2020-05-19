@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
+import 'package:flutter/cupertino.dart';
 
 class Knight extends SimplePlayer {
   final Position initPosition;
@@ -13,6 +14,9 @@ class Knight extends SimplePlayer {
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
+  Rect rectDirectionAttack;
+  Sprite spriteDirectionAttack;
+  bool showDirection = false;
 
   Knight(this.initPosition)
       : super(
@@ -46,7 +50,9 @@ class Knight extends SimplePlayer {
           life: 200,
           speed: 150,
           collision: Collision(height: 16, width: 16),
-        );
+        ) {
+    spriteDirectionAttack = Sprite('direction_attack.png');
+  }
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
@@ -64,9 +70,11 @@ class Knight extends SimplePlayer {
 
     if (event.id == 1) {
       if (event.event == ActionEvent.MOVE) {
+        showDirection = true;
         angleRadAttack = event.radAngle;
       }
       if (event.event == ActionEvent.UP) {
+        showDirection = false;
         actionAttackRange();
       }
     }
@@ -174,6 +182,17 @@ class Knight extends SimplePlayer {
 
   @override
   void render(Canvas c) {
+    if (showDirection) {
+      double radius = position.height;
+      rectDirectionAttack = Rect.fromLTWH(position.center.dx - radius,
+          position.center.dy - radius, radius * 2, radius * 2);
+      renderSpriteByRadAngle(
+        c,
+        angleRadAttack,
+        rectDirectionAttack,
+        spriteDirectionAttack,
+      );
+    }
     super.render(c);
   }
 
