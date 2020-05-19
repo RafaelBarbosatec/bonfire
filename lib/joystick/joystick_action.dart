@@ -9,8 +9,9 @@ enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
 class JoystickAction {
   final int actionId;
-  final String pathSprite;
-  final String pathSpritePressed;
+  final Sprite sprite;
+  final Sprite spritePressed;
+  final Sprite spriteBackgroundDirection;
   final double size;
   double sizeBackgroundDirection;
   final EdgeInsets margin;
@@ -31,8 +32,9 @@ class JoystickAction {
 
   JoystickAction({
     @required this.actionId,
-    @required this.pathSprite,
-    this.pathSpritePressed,
+    @required this.sprite,
+    this.spritePressed,
+    this.spriteBackgroundDirection,
     this.enableDirection = false,
     this.size = 20,
     this.sizeBackgroundDirection,
@@ -40,7 +42,7 @@ class JoystickAction {
     this.colorBackgroundDirection = Colors.blueGrey,
     this.align = JoystickActionAlign.BOTTOM_RIGHT,
   }) {
-    _sprite = Sprite(pathSprite);
+    _sprite = sprite;
     sizeBackgroundDirection = sizeBackgroundDirection ?? size * 1.5;
     _tileSize = sizeBackgroundDirection;
   }
@@ -83,15 +85,19 @@ class JoystickAction {
 
   void render(Canvas c) {
     if (_rectBackgroundDirection != null && _dragging && enableDirection) {
-      double radiusBackground = _rectBackgroundDirection.width / 2;
-      c.drawCircle(
-        Offset(
-          _rectBackgroundDirection.left + radiusBackground,
-          _rectBackgroundDirection.top + radiusBackground,
-        ),
-        radiusBackground,
-        _paintBackground,
-      );
+      if (spriteBackgroundDirection == null) {
+        double radiusBackground = _rectBackgroundDirection.width / 2;
+        c.drawCircle(
+          Offset(
+            _rectBackgroundDirection.left + radiusBackground,
+            _rectBackgroundDirection.top + radiusBackground,
+          ),
+          radiusBackground,
+          _paintBackground,
+        );
+      } else {
+        spriteBackgroundDirection.renderRect(c, _rectBackgroundDirection);
+      }
     }
     if (_rect != null) _sprite.renderRect(c, _rect);
   }
@@ -187,12 +193,12 @@ class JoystickAction {
   }
 
   void pressed() {
-    if (pathSpritePressed != null) {
-      _sprite = Sprite(pathSpritePressed);
+    if (spritePressed != null) {
+      _sprite = spritePressed;
     }
   }
 
   void unPressed() {
-    _sprite = Sprite(pathSprite);
+    _sprite = sprite;
   }
 }

@@ -27,20 +27,23 @@ class Game extends StatelessWidget implements GameListener {
   Widget build(BuildContext context) {
     return BonfireWidget(
       joystick: Joystick(
-        isFixedDirectional: false,
-        pathSpriteBackgroundDirectional: 'joystick_background.png',
-        pathSpriteKnobDirectional: 'joystick_knob.png',
-        sizeDirectional: 100,
+        directional: JoystickDirectional(
+          spriteBackgroundDirectional: Sprite('joystick_background.png'),
+          spriteKnobDirectional: Sprite('joystick_knob.png'),
+          size: 100,
+          isFixed: false,
+        ),
         actions: [
           JoystickAction(
             actionId: 0,
-            pathSprite: 'joystick_atack.png',
+            sprite: Sprite('joystick_atack.png'),
             size: 80,
             margin: EdgeInsets.only(bottom: 50, right: 50),
           ),
           JoystickAction(
             actionId: 1,
-            pathSprite: 'joystick_atack_range.png',
+            sprite: Sprite('joystick_atack_range.png'),
+            spriteBackgroundDirection: Sprite('joystick_background.png'),
             enableDirection: true,
             size: 50,
             margin: EdgeInsets.only(bottom: 50, right: 160),
