@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:example/decoration/chest.dart';
+import 'package:example/decoration/torch.dart';
 import 'package:example/enemy/goblin.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 
 class DungeonMap {
@@ -99,50 +99,12 @@ class DungeonMap {
         height: tileSize,
         collision: Collision(height: 32, width: 32),
       ),
-      GameDecoration.animation(
-        FlameAnimation.Animation.sequenced(
-          "itens/torch_spritesheet.png",
-          6,
-          textureWidth: 16,
-          textureHeight: 16,
-        ),
-        initPosition: getRelativeTilePosition(4, 4),
-        width: tileSize,
-        height: tileSize,
-      ),
-      GameDecoration.animation(
-        FlameAnimation.Animation.sequenced(
-          "itens/torch_spritesheet.png",
-          6,
-          textureWidth: 16,
-          textureHeight: 16,
-        ),
-        initPosition: getRelativeTilePosition(8, 4),
-        width: tileSize,
-        height: tileSize,
-      ),
-      GameDecoration.animation(
-        FlameAnimation.Animation.sequenced(
-          "itens/torch_spritesheet.png",
-          6,
-          textureWidth: 16,
-          textureHeight: 16,
-        ),
-        initPosition: getRelativeTilePosition(12, 4),
-        width: tileSize,
-        height: tileSize,
-      ),
-      GameDecoration.animation(
-        FlameAnimation.Animation.sequenced(
-          "itens/torch_spritesheet.png",
-          6,
-          textureWidth: 16,
-          textureHeight: 16,
-        ),
-        initPosition: getRelativeTilePosition(16, 4),
-        width: tileSize,
-        height: tileSize,
-      ),
+      Torch(getRelativeTilePosition(4, 4)),
+      Torch(getRelativeTilePosition(8, 4)),
+      Torch(getRelativeTilePosition(12, 4)),
+      Torch(getRelativeTilePosition(16, 4)),
+      Torch(getRelativeTilePosition(20, 4)),
+      Torch(getRelativeTilePosition(24, 4)),
       GameDecoration.sprite(
         Sprite('itens/flag_red.png'),
         initPosition: getRelativeTilePosition(6, 4),

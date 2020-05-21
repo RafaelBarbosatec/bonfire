@@ -43,7 +43,6 @@ class Chest extends GameDecoration {
       },
       visionCells: 1,
     );
-
     super.update(dt);
   }
 

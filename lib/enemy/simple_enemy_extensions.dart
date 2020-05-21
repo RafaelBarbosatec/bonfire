@@ -5,6 +5,7 @@ import 'package:bonfire/enemy/simple_enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/direction.dart';
+import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/objects/animated_object_once.dart';
 import 'package:bonfire/util/objects/flying_attack_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
@@ -212,6 +213,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     Collision collision,
     VoidCallback destroy,
     VoidCallback execute,
+    LightingConfig lightingConfig,
   }) {
     if (!this.checkPassedInterval('attackRange', interval)) return;
 
@@ -300,12 +302,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         damageInEnemy: false,
         destroyedObject: destroy,
         withCollision: withCollision,
-        collision: collision ??
-            Collision(
-              width: width / 1.5,
-              height: height / 2,
-              align: CollisionAlign.CENTER,
-            ),
+        collision: collision,
+        lightingConfig: lightingConfig,
       ),
     );
 

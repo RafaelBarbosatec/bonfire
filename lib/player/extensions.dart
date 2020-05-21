@@ -76,6 +76,7 @@ extension PlayerExtensions on Player {
     bool withCollision = true,
     VoidCallback destroy,
     Collision collision,
+    LightingConfig lightingConfig,
   }) {
     if (isDead) return;
 
@@ -104,6 +105,7 @@ extension PlayerExtensions on Player {
       destroyedObject: destroy,
       flyAnimation: animationTop,
       destroyAnimation: animationDestroy,
+      lightingConfig: lightingConfig,
     ));
   }
 
@@ -122,6 +124,7 @@ extension PlayerExtensions on Player {
     bool withCollision = true,
     VoidCallback destroy,
     Collision collision,
+    LightingConfig lightingConfig,
   }) {
     if (isDead) return;
 
@@ -179,12 +182,8 @@ extension PlayerExtensions on Player {
         damageInPlayer: false,
         destroyedObject: destroy,
         withCollision: withCollision,
-        collision: collision ??
-            Collision(
-              width: width / 1.5,
-              height: height / 2,
-              align: CollisionAlign.CENTER,
-            ),
+        collision: collision,
+        lightingConfig: lightingConfig,
       ),
     );
   }

@@ -2,13 +2,16 @@ import 'dart:math';
 
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:bonfire/util/lighting/lighting_config.dart';
+import 'package:bonfire/util/lighting/with_lighting.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:bonfire/util/objects/animated_object_once.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
 
-class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
+class FlyingAttackAngleObject extends AnimatedObject
+    with ObjectCollision, WithLighting {
   final int id;
   final FlameAnimation.Animation flyAnimation;
   final FlameAnimation.Animation destroyAnimation;
@@ -22,6 +25,7 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
   final bool damageInEnemy;
   final bool withCollision;
   final VoidCallback destroyedObject;
+  final LightingConfig lightingConfig;
 
   double _cosAngle;
   double _senAngle;
@@ -41,8 +45,10 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
     this.damageInEnemy = true,
     this.withCollision = true,
     this.destroyedObject,
+    this.lightingConfig,
     Collision collision,
   }) {
+    if (lightingConfig != null) lightingConfig.gameComponent = this;
     animation = flyAnimation;
     positionInWorld = Rect.fromLTWH(
       initPosition.x,
@@ -133,6 +139,7 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
           AnimatedObjectOnce(
             animation: destroyAnimation,
             position: positionDestroy,
+            lightingConfig: lightingConfig,
           ),
         );
       }

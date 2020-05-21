@@ -4,8 +4,9 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class Knight extends SimplePlayer {
+class Knight extends SimplePlayer with WithLighting {
   final Position initPosition;
   double attack = 20;
   double stamina = 100;
@@ -52,6 +53,12 @@ class Knight extends SimplePlayer {
           collision: Collision(height: 16, width: 16),
         ) {
     spriteDirectionAttack = Sprite('direction_attack.png');
+    lightingConfig = LightingConfig(
+      gameComponent: this,
+      color: Colors.yellow.withOpacity(0.1),
+      radius: width * 1.5,
+      blurBorder: width * 1.5,
+    );
   }
 
   @override
@@ -155,6 +162,12 @@ class Knight extends SimplePlayer {
       height: 25,
       damage: 10,
       speed: initSpeed * 1.5,
+      lightingConfig: LightingConfig(
+        gameComponent: this,
+        color: Colors.orange.withOpacity(0.1),
+        radius: 25,
+        blurBorder: 25,
+      ),
     );
   }
 

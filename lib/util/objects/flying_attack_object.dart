@@ -7,7 +7,8 @@ import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
 
-class FlyingAttackObject extends AnimatedObject with ObjectCollision {
+class FlyingAttackObject extends AnimatedObject
+    with ObjectCollision, WithLighting {
   final int id;
   final FlameAnimation.Animation flyAnimation;
   final FlameAnimation.Animation destroyAnimation;
@@ -21,6 +22,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
   final bool damageInEnemy;
   final bool withCollision;
   final VoidCallback destroyedObject;
+  final LightingConfig lightingConfig;
 
   FlyingAttackObject({
     @required this.initPosition,
@@ -36,8 +38,10 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
     this.damageInEnemy = true,
     this.withCollision = true,
     this.destroyedObject,
+    this.lightingConfig,
     Collision collision,
   }) {
+    if (lightingConfig != null) lightingConfig.gameComponent = this;
     animation = flyAnimation;
     positionInWorld = Rect.fromLTWH(
       initPosition.x,
@@ -151,6 +155,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision {
           AnimatedObjectOnce(
             animation: destroyAnimation,
             position: positionDestroy,
+            lightingConfig: lightingConfig,
           ),
         );
       }

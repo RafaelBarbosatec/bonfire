@@ -30,6 +30,8 @@ export 'package:bonfire/util/game_controller.dart';
 export 'package:bonfire/util/game_intercafe/game_interface.dart';
 export 'package:bonfire/util/game_intercafe/interface_component.dart';
 export 'package:bonfire/util/game_intercafe/text_interface_component.dart';
+export 'package:bonfire/util/lighting/lighting_config.dart';
+export 'package:bonfire/util/lighting/with_lighting.dart';
 export 'package:bonfire/util/objects/animated_follower_object.dart';
 export 'package:bonfire/util/objects/animated_object.dart';
 export 'package:bonfire/util/objects/animated_object_once.dart';
