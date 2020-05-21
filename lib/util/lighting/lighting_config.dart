@@ -31,5 +31,5 @@ class LightingConfig {
     _pulseAnimation.update(t);
   }
 
-  double get valuePulse => _pulseAnimation.value;
+  double get valuePulse => _pulseAnimation.value ?? 0.0;
 }

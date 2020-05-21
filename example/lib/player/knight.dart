@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:example/map/dungeon_map.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class Knight extends SimplePlayer with WithLighting {
   final Position initPosition;
   double attack = 20;
   double stamina = 100;
-  double initSpeed = 150;
+  double initSpeed = DungeonMap.tileSize * 3;
   Timer _timerStamina;
   bool showObserveEnemy = false;
   bool showTalk = false;
@@ -45,12 +46,13 @@ class Knight extends SimplePlayer with WithLighting {
             textureWidth: 16,
             textureHeight: 16,
           ),
-          width: 32,
-          height: 32,
+          width: DungeonMap.tileSize,
+          height: DungeonMap.tileSize,
           initPosition: initPosition,
           life: 200,
-          speed: 150,
-          collision: Collision(height: 16, width: 16),
+          speed: DungeonMap.tileSize * 3,
+          collision: Collision(
+              height: DungeonMap.tileSize / 2, width: DungeonMap.tileSize / 2),
         ) {
     spriteDirectionAttack = Sprite('direction_attack.png');
     lightingConfig = LightingConfig(
@@ -136,6 +138,8 @@ class Knight extends SimplePlayer with WithLighting {
         textureWidth: 16,
         textureHeight: 16,
       ),
+      heightArea: DungeonMap.tileSize,
+      widthArea: DungeonMap.tileSize,
     );
   }
 
@@ -158,10 +162,10 @@ class Knight extends SimplePlayer with WithLighting {
         textureHeight: 32,
       ),
       radAngleDirection: angleRadAttack,
-      width: 25,
-      height: 25,
+      width: width * 0.7,
+      height: width * 0.7,
       damage: 10,
-      speed: initSpeed * 1.5,
+      speed: initSpeed * 2,
       lightingConfig: LightingConfig(
         gameComponent: this,
         color: Colors.orange.withOpacity(0.1),
@@ -247,8 +251,8 @@ class Knight extends SimplePlayer with WithLighting {
           textureHeight: 32,
         ),
         target: this,
-        width: 16,
-        height: 16,
+        width: width / 2,
+        height: width / 2,
         positionFromTarget: Position(18, -6),
       ),
     );

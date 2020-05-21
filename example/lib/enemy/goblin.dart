@@ -1,7 +1,9 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/map/dungeon_map.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class Goblin extends SimpleEnemy {
   double attack = 25;
@@ -34,9 +36,9 @@ class Goblin extends SimpleEnemy {
               textureHeight: 16,
             ),
             initPosition: initPosition,
-            width: 25,
-            height: 25,
-            speed: 100,
+            width: DungeonMap.tileSize * 0.8,
+            height: DungeonMap.tileSize * 0.8,
+            speed: DungeonMap.tileSize * 2,
             life: 100,
             collision: Collision(
               height: 12,
@@ -46,6 +48,7 @@ class Goblin extends SimpleEnemy {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (this.isDead) return;
 
     _seePlayerClose = false;
@@ -69,7 +72,6 @@ class Goblin extends SimpleEnemy {
         visionCells: 8,
       );
     }
-    super.update(dt);
   }
 
   @override
@@ -128,10 +130,16 @@ class Goblin extends SimpleEnemy {
           textureHeight: 32,
         ),
         id: 35,
-        width: 25,
-        height: 25,
+        width: width * 0.9,
+        height: width * 0.9,
         damage: attack,
-        speed: speed * 1.5,
+        speed: speed * 2,
+        lightingConfig: LightingConfig(
+          gameComponent: this,
+          color: Colors.orange.withOpacity(0.1),
+          radius: 25,
+          blurBorder: 25,
+        ),
         execute: () {
           print('attack range');
         },
@@ -143,8 +151,8 @@ class Goblin extends SimpleEnemy {
   void execAttack() {
     if (gameRef.player != null && gameRef.player.isDead) return;
     this.simpleAttackMelee(
-        heightArea: 25,
-        widthArea: 25,
+        heightArea: width,
+        widthArea: width,
         damage: attack / 2,
         interval: 400,
         attackEffectBottomAnim: FlameAnimation.Animation.sequenced(
@@ -179,6 +187,7 @@ class Goblin extends SimpleEnemy {
   @override
   void receiveDamage(double damage, int from) {
     this.showDamage(damage);
+    print('recebe dano!');
     super.receiveDamage(damage, from);
   }
 }

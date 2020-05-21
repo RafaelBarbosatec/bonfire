@@ -174,7 +174,7 @@ class JoystickAction {
   }
 
   void actionDown(int pointer, Offset localPosition) {
-    if (!_dragging && _rect.contains(localPosition)) {
+    if (!_dragging && _rect != null && _rect.contains(localPosition)) {
       _pointerDragging = pointer;
       if (enableDirection) {
         _dragPosition = localPosition;
