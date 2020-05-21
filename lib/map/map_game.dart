@@ -8,9 +8,9 @@ abstract class MapGame extends Component with HasGameRef<RPGGame> {
 
   MapGame(this.tiles);
 
-  List<Tile> getRendered();
+  Iterable<Tile> getRendered();
 
-  List<Tile> getCollisionsRendered();
+  Iterable<Tile> getCollisionsRendered();
 
   void updateTiles(Iterable<Tile> map);
 }

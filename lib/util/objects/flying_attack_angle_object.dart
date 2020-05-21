@@ -73,9 +73,9 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
 
     if (!_verifyExistInWorld()) {
       remove();
+    } else {
+      _verifyCollision();
     }
-
-    _verifyCollision();
   }
 
   @override
@@ -107,11 +107,13 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision {
     }
 
     if (damageInEnemy) {
-      gameRef.livingEnemies().forEach((enemy) {
-        if (enemy.rectCollisionInWorld.overlaps(positionInWorld)) {
-          enemy.receiveDamage(damage, id);
-          destroy = true;
-        }
+      gameRef
+          .livingEnemies()
+          .where(
+              (enemy) => enemy.rectCollisionInWorld.overlaps(positionInWorld))
+          .forEach((enemy) {
+        enemy.receiveDamage(damage, id);
+        destroy = true;
       });
     }
 

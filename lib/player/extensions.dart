@@ -36,7 +36,7 @@ extension PlayerExtensions on Player {
   }) {
     if (isDead || this.position == null) return;
 
-    var enemiesInLife = this.gameRef.enemies.where((e) => !e.isDead);
+    var enemiesInLife = this.gameRef.livingEnemies();
     if (enemiesInLife.length == 0) {
       if (notObserved != null) notObserved();
       return;
@@ -235,15 +235,19 @@ extension PlayerExtensions on Player {
         break;
     }
 
-    gameRef.add(AnimatedObjectOnce(animation: anim, position: positionAttack));
+    gameRef.add(AnimatedObjectOnce(
+      animation: anim,
+      position: positionAttack,
+    ));
 
-    gameRef.visibleEnemies().forEach((enemy) {
-      if (enemy.rectCollisionInWorld.overlaps(positionAttack)) {
-        enemy.receiveDamage(damage, id);
-        Rect rectAfterPush = enemy.position.translate(pushLeft, pushTop);
-        if (withPush && !enemy.isCollision(rectAfterPush, this.gameRef)) {
-          enemy.translate(pushLeft, pushTop);
-        }
+    gameRef
+        .visibleEnemies()
+        .where((enemy) => enemy.rectCollisionInWorld.overlaps(positionAttack))
+        .forEach((enemy) {
+      enemy.receiveDamage(damage, id);
+      Rect rectAfterPush = enemy.position.translate(pushLeft, pushTop);
+      if (withPush && !enemy.isCollision(rectAfterPush, this.gameRef)) {
+        enemy.translate(pushLeft, pushTop);
       }
     });
   }
@@ -277,13 +281,14 @@ extension PlayerExtensions on Player {
       rotateRadAngle: angle,
     ));
 
-    gameRef.visibleEnemies().forEach((enemy) {
-      if (enemy.rectCollisionInWorld.overlaps(positionAttack)) {
-        enemy.receiveDamage(damage, id);
-        Rect rectAfterPush = enemy.position.translate(diffBase.dx, diffBase.dy);
-        if (withPush && !enemy.isCollision(rectAfterPush, this.gameRef)) {
-          enemy.translate(diffBase.dx, diffBase.dy);
-        }
+    gameRef
+        .visibleEnemies()
+        .where((enemy) => enemy.rectCollisionInWorld.overlaps(positionAttack))
+        .forEach((enemy) {
+      enemy.receiveDamage(damage, id);
+      Rect rectAfterPush = enemy.position.translate(diffBase.dx, diffBase.dy);
+      if (withPush && !enemy.isCollision(rectAfterPush, this.gameRef)) {
+        enemy.translate(diffBase.dx, diffBase.dy);
       }
     });
   }

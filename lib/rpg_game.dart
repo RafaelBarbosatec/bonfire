@@ -64,6 +64,8 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   @override
   void update(double t) {
     super.update(t);
+    enemies.removeWhere((enemy) => enemy.destroy());
+    decorations.removeWhere((enemy) => enemy.destroy());
     if (gameController != null) gameController.notifyListeners();
   }
 
@@ -77,18 +79,16 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     add(decoration);
   }
 
-  List<Enemy> visibleEnemies() {
-    return enemies.where((enemy) => enemy.isVisibleInMap()).toList();
+  Iterable<Enemy> visibleEnemies() {
+    return enemies.where((enemy) => enemy.isVisibleInMap());
   }
 
-  List<Enemy> livingEnemies() {
-    return enemies.where((enemy) => !enemy.isDead).toList();
+  Iterable<Enemy> livingEnemies() {
+    return enemies.where((enemy) => !enemy.isDead);
   }
 
-  List<GameDecoration> visibleDecorations() {
-    return decorations
-        .where((decoration) => decoration.isVisibleInMap())
-        .toList();
+  Iterable<GameDecoration> visibleDecorations() {
+    return decorations.where((decoration) => decoration.isVisibleInMap());
   }
 
   ValueGenerator getValueGenerator(

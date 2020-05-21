@@ -12,20 +12,17 @@ mixin ObjectCollision {
 
     var collisions = game.map
         .getCollisionsRendered()
-        .where((i) => i.collision && i.position.overlaps(rectCollision))
-        .toList();
+        .where((i) => i.collision && i.position.overlaps(rectCollision));
 
     if (collisions.length > 0) {
       return true;
     }
 
     if (game.decorations != null) {
-      var collisionsDecorations = game.decorations
-          .where((i) =>
-              !i.destroy() &&
-              i.collision != null &&
-              i.rectCollision.overlaps(rectCollision))
-          .toList();
+      var collisionsDecorations = game.decorations.where((i) =>
+          !i.destroy() &&
+          i.collision != null &&
+          i.rectCollision.overlaps(rectCollision));
 
       if (collisionsDecorations.length > 0) {
         return true;
@@ -40,20 +37,17 @@ mixin ObjectCollision {
 
     var collisions = game.map
         .getCollisionsRendered()
-        .where((i) => i.collision && i.positionInWorld.overlaps(rectCollision))
-        .toList();
+        .where((i) => i.collision && i.positionInWorld.overlaps(rectCollision));
 
     if (collisions.length > 0) {
       return true;
     }
 
     if (game.decorations != null) {
-      var collisionsDecorations = game.decorations
-          .where((i) =>
-              !i.destroy() &&
-              i.collision != null &&
-              i.rectCollisionInWorld.overlaps(rectCollision))
-          .toList();
+      var collisionsDecorations = game.decorations.where((i) =>
+          !i.destroy() &&
+          i.collision != null &&
+          i.rectCollisionInWorld.overlaps(rectCollision));
 
       if (collisionsDecorations.length > 0) {
         return true;
