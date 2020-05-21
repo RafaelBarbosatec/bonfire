@@ -60,7 +60,7 @@ class DungeonMap {
               collision: true, size: tileSize));
         }
 
-        if (indexRow == 9 && indexColumm == 31) {
+        if (indexRow == 13 && indexColumm == 31) {
           tileList.add(Tile(
               '', Position(indexColumm.toDouble(), indexRow.toDouble()),
               size: tileSize));
