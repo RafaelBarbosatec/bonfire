@@ -4,7 +4,6 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/enemy/goblin.dart';
 import 'package:example/interface/knight_interface.dart';
 import 'package:example/map/dungeon_map.dart';
-import 'package:example/player/knight.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -50,9 +49,9 @@ class Game extends StatelessWidget implements GameListener {
           )
         ],
       ),
-      player: Knight(
-        Position(5 * DungeonMap.tileSize, 6 * DungeonMap.tileSize),
-      ),
+//      player: Knight(
+//        Position(5 * DungeonMap.tileSize, 6 * DungeonMap.tileSize),
+//      ),
       interface: KnightInterface(),
       map: DungeonMap.map(),
       decorations: DungeonMap.decorations(),
@@ -60,8 +59,6 @@ class Game extends StatelessWidget implements GameListener {
       background: BackgroundColorGame(Colors.blueGrey[900]),
       gameController: _controller..setListener(this),
       lightingColorGame: Colors.black.withOpacity(0.4),
-//      constructionMode: true,
-//      showCollisionArea: true,
     );
   }
 

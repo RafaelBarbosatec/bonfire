@@ -41,8 +41,8 @@ class Goblin extends SimpleEnemy {
             speed: DungeonMap.tileSize * 2,
             life: 100,
             collision: Collision(
-              height: 12,
-              width: 12,
+              height: DungeonMap.tileSize * 0.4,
+              width: DungeonMap.tileSize * 0.4,
               align: CollisionAlign.CENTER,
             ));
 
