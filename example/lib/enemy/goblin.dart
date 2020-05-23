@@ -84,13 +84,14 @@ class Goblin extends SimpleEnemy {
   void die() {
     gameRef.add(
       AnimatedObjectOnce(
-          animation: FlameAnimation.Animation.sequenced(
-            "smoke_explosin.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          position: positionInWorld),
+        animation: FlameAnimation.Animation.sequenced(
+          "smoke_explosin.png",
+          6,
+          textureWidth: 16,
+          textureHeight: 16,
+        ),
+        position: positionInWorld,
+      ),
     );
     remove();
     super.die();
@@ -99,95 +100,87 @@ class Goblin extends SimpleEnemy {
   void execAttackRange() {
     if (gameRef.player != null && gameRef.player.isDead) return;
     this.simpleAttackRange(
-        animationRight: FlameAnimation.Animation.sequenced(
-          'player/fireball_right.png',
-          3,
-          textureWidth: 23,
-          textureHeight: 23,
-        ),
-        animationLeft: FlameAnimation.Animation.sequenced(
-          'player/fireball_left.png',
-          3,
-          textureWidth: 23,
-          textureHeight: 23,
-        ),
-        animationTop: FlameAnimation.Animation.sequenced(
-          'player/fireball_top.png',
-          3,
-          textureWidth: 23,
-          textureHeight: 23,
-        ),
-        animationBottom: FlameAnimation.Animation.sequenced(
-          'player/fireball_bottom.png',
-          3,
-          textureWidth: 23,
-          textureHeight: 23,
-        ),
-        animationDestroy: FlameAnimation.Animation.sequenced(
-          'player/explosion_fire.png',
-          6,
-          textureWidth: 32,
-          textureHeight: 32,
-        ),
-        id: 35,
-        width: width * 0.9,
-        height: width * 0.9,
-        damage: attack,
-        speed: speed * 2,
-        lightingConfig: LightingConfig(
-          gameComponent: this,
-          color: Colors.orange.withOpacity(0.1),
-          radius: 25,
-          blurBorder: 25,
-        ),
-        execute: () {
-          print('attack range');
-        },
-        destroy: () {
-          print('destroy attack range');
-        });
+      animationRight: FlameAnimation.Animation.sequenced(
+        'player/fireball_right.png',
+        3,
+        textureWidth: 23,
+        textureHeight: 23,
+      ),
+      animationLeft: FlameAnimation.Animation.sequenced(
+        'player/fireball_left.png',
+        3,
+        textureWidth: 23,
+        textureHeight: 23,
+      ),
+      animationTop: FlameAnimation.Animation.sequenced(
+        'player/fireball_top.png',
+        3,
+        textureWidth: 23,
+        textureHeight: 23,
+      ),
+      animationBottom: FlameAnimation.Animation.sequenced(
+        'player/fireball_bottom.png',
+        3,
+        textureWidth: 23,
+        textureHeight: 23,
+      ),
+      animationDestroy: FlameAnimation.Animation.sequenced(
+        'player/explosion_fire.png',
+        6,
+        textureWidth: 32,
+        textureHeight: 32,
+      ),
+      id: 35,
+      width: width * 0.9,
+      height: width * 0.9,
+      damage: attack,
+      speed: speed * 2,
+      lightingConfig: LightingConfig(
+        gameComponent: this,
+        color: Colors.orange.withOpacity(0.1),
+        radius: 25,
+        blurBorder: 25,
+      ),
+    );
   }
 
   void execAttack() {
     if (gameRef.player != null && gameRef.player.isDead) return;
     this.simpleAttackMelee(
-        heightArea: width,
-        widthArea: width,
-        damage: attack / 2,
-        interval: 400,
-        attackEffectBottomAnim: FlameAnimation.Animation.sequenced(
-          'enemy/atack_effect_bottom.png',
-          6,
-          textureWidth: 16,
-          textureHeight: 16,
-        ),
-        attackEffectLeftAnim: FlameAnimation.Animation.sequenced(
-          'enemy/atack_effect_left.png',
-          6,
-          textureWidth: 16,
-          textureHeight: 16,
-        ),
-        attackEffectRightAnim: FlameAnimation.Animation.sequenced(
-          'enemy/atack_effect_right.png',
-          6,
-          textureWidth: 16,
-          textureHeight: 16,
-        ),
-        attackEffectTopAnim: FlameAnimation.Animation.sequenced(
-          'enemy/atack_effect_top.png',
-          6,
-          textureWidth: 16,
-          textureHeight: 16,
-        ),
-        execute: () {
-          //print('attack meele');
-        });
+      heightArea: width,
+      widthArea: width,
+      damage: attack / 2,
+      interval: 400,
+      attackEffectBottomAnim: FlameAnimation.Animation.sequenced(
+        'enemy/atack_effect_bottom.png',
+        6,
+        textureWidth: 16,
+        textureHeight: 16,
+      ),
+      attackEffectLeftAnim: FlameAnimation.Animation.sequenced(
+        'enemy/atack_effect_left.png',
+        6,
+        textureWidth: 16,
+        textureHeight: 16,
+      ),
+      attackEffectRightAnim: FlameAnimation.Animation.sequenced(
+        'enemy/atack_effect_right.png',
+        6,
+        textureWidth: 16,
+        textureHeight: 16,
+      ),
+      attackEffectTopAnim: FlameAnimation.Animation.sequenced(
+        'enemy/atack_effect_top.png',
+        6,
+        textureWidth: 16,
+        textureHeight: 16,
+      ),
+    );
   }
 
   @override
   void receiveDamage(double damage, int from) {
     this.showDamage(damage);
-    print('recebe dano!');
     super.receiveDamage(damage, from);
   }
 }
