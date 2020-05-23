@@ -7,7 +7,7 @@ import 'package:example/enemy/goblin.dart';
 import 'package:flame/position.dart';
 
 class DungeonMap {
-  static const double tileSize = 40;
+  static const double tileSize = 45;
 
   static MapWorld map() {
     List<Tile> tileList = List();
@@ -100,11 +100,15 @@ class DungeonMap {
         collision: Collision(height: 32, width: 32),
       ),
       Torch(getRelativeTilePosition(4, 4)),
-      Torch(getRelativeTilePosition(8, 4)),
       Torch(getRelativeTilePosition(12, 4)),
-      Torch(getRelativeTilePosition(16, 4)),
       Torch(getRelativeTilePosition(20, 4)),
-      Torch(getRelativeTilePosition(24, 4)),
+      Torch(getRelativeTilePosition(28, 4)),
+      GameDecoration.sprite(
+        Sprite('itens/flag_red.png'),
+        initPosition: getRelativeTilePosition(24, 4),
+        width: tileSize,
+        height: tileSize,
+      ),
       GameDecoration.sprite(
         Sprite('itens/flag_red.png'),
         initPosition: getRelativeTilePosition(6, 4),
