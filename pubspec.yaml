@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flame: ^0.20.1
+  flame: ^0.21.0
   ordered_set: ^2.0.0
 
 dev_dependencies:

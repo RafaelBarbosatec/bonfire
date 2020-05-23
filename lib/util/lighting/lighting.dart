@@ -36,7 +36,7 @@ class Lighting extends GameComponent {
             ..maskFilter = MaskFilter.blur(
                 BlurStyle.normal, convertRadiusToSigma(light.blurBorder)));
 
-      final Paint paint = new Paint()
+      final Paint paint = Paint()
         ..color = light.color
         ..maskFilter = MaskFilter.blur(
             BlurStyle.normal, convertRadiusToSigma(light.blurBorder));
@@ -63,8 +63,7 @@ class Lighting extends GameComponent {
             element is WithLighting &&
             (element as WithLighting).lightingConfig != null &&
             _lightingIsVisible((element as WithLighting).lightingConfig))
-        .map((e) => (e as WithLighting).lightingConfig);
-    _lightToRender.forEach((element) => element.update(dt));
+        .map((e) => (e as WithLighting).lightingConfig..update(dt));
   }
 
   bool _lightingIsVisible(LightingConfig lightingConfig) {

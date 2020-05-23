@@ -28,12 +28,18 @@ class MapWorld extends MapGame {
       lastCameraX = gameRef.gameCamera.position.x;
       lastCameraY = gameRef.gameCamera.position.y;
 
+      List<Tile> tilesRender = List();
+      List<Tile> tilesCollision = List();
       tiles.forEach((tile) {
         tile.gameRef = gameRef;
         tile.update(t);
+        if (tile.isVisibleInMap()) {
+          tilesRender.add(tile);
+          if (tile.collision) tilesCollision.add(tile);
+        }
       });
-      _tilesToRender = tiles.where((i) => i.isVisibleInMap());
-      _tilesCollisionsRendered = _tilesToRender.where((i) => i.collision);
+      _tilesToRender = tilesRender;
+      _tilesCollisionsRendered = tilesCollision;
     }
     if (!_fistRenderComplete) {
       int count = _tilesToRender.length;
