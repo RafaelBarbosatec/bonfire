@@ -139,7 +139,7 @@ class Goblin extends SimpleEnemy {
         gameComponent: this,
         color: Colors.orange.withOpacity(0.1),
         radius: 25,
-        blurBorder: 25,
+        blurBorder: 20,
       ),
     );
   }
