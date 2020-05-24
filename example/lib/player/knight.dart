@@ -59,7 +59,7 @@ class Knight extends SimplePlayer with WithLighting {
       gameComponent: this,
       color: Colors.yellow.withOpacity(0.1),
       radius: width * 1.5,
-      blurBorder: 20,
+      blurBorder: width / 2,
     );
   }
 
@@ -170,7 +170,7 @@ class Knight extends SimplePlayer with WithLighting {
         gameComponent: this,
         color: Colors.orange.withOpacity(0.1),
         radius: 25,
-        blurBorder: 20,
+        blurBorder: 15,
       ),
     );
   }
