@@ -1,3 +1,6 @@
+## [0.4.1] - 23/05/2020
+* add lightingConfig in extensions
+
 ## [0.4.0] - 23/05/2020
 * BREAKING CHANGES in joystick and player in 'void joystickAction(JoystickActionEvent event)'
 * adds support for direction in actions of the joystick

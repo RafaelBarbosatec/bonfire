@@ -1,6 +1,7 @@
 import 'package:bonfire/player/extensions.dart';
 import 'package:bonfire/player/rotation_player.dart';
 import 'package:bonfire/util/collision/collision.dart';
+import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/widgets.dart';
 
@@ -17,6 +18,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     bool withCollision = true,
     VoidCallback destroy,
     Collision collision,
+    LightingConfig lightingConfig,
   }) {
     if (this.currentRadAngle == 0) return;
 
@@ -34,6 +36,7 @@ extension RotationPlayerExtensions on RotationPlayer {
       withCollision: withCollision,
       destroy: destroy,
       collision: collision,
+      lightingConfig: lightingConfig,
     );
   }
 
