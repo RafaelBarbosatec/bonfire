@@ -214,7 +214,7 @@ class Knight extends SimplePlayer with WithLighting {
   }
 
   void _verifyStamina() {
-    if (_timerStamina == null) {
+    if (_timerStamina == null && stamina < 100) {
       _timerStamina = Timer(Duration(milliseconds: 150), () {
         _timerStamina = null;
       });
