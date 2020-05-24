@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:example/map/dungeon_map.dart';
 import 'package:flame/position.dart';
 
 class PotionLife extends GameDecoration {
@@ -12,13 +13,13 @@ class PotionLife extends GameDecoration {
       : super.sprite(
           Sprite('itens/potion_life.png'),
           initPosition: initPosition,
-          width: 16,
-          height: 16,
+          width: DungeonMap.tileSize * 0.5,
+          height: DungeonMap.tileSize * 0.5,
         );
 
   @override
   void update(double dt) {
-    if (!this.isVisibleInMap()) return;
+    super.update(dt);
     if (position.overlaps(gameRef.player.position)) {
       Timer.periodic(Duration(milliseconds: 100), (timer) {
         if (_lifeDistributed >= life) {
@@ -30,6 +31,5 @@ class PotionLife extends GameDecoration {
       });
       remove();
     }
-    super.update(dt);
   }
 }

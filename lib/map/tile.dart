@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 class Tile extends SpriteObject {
   final bool collision;
   final double size;
-  TextConfig _textConfig;
   Position _positionText;
   Paint _paintText = Paint()
     ..style = PaintingStyle.stroke
@@ -25,9 +24,6 @@ class Tile extends SpriteObject {
         positionInWorld = generateRectWithBleedingPixel(position, size);
     if (spritePath.isNotEmpty) sprite = Sprite(spritePath);
 
-    _textConfig = TextConfig(
-      fontSize: size / 3.5,
-    );
     _positionText = Position(position.x, position.y);
   }
 
@@ -41,9 +37,6 @@ class Tile extends SpriteObject {
     this.position =
         positionInWorld = generateRectWithBleedingPixel(position, size);
 
-    _textConfig = TextConfig(
-      fontSize: size / 3.5,
-    );
     _positionText = Position(position.x, position.y);
   }
 
@@ -64,7 +57,9 @@ class Tile extends SpriteObject {
         ..color = gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
     );
     if (_positionText.x % 2 == 0) {
-      _textConfig
+      TextConfig(
+        fontSize: size / 3.5,
+      )
           .withColor(
             gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
           )

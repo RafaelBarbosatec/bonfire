@@ -8,10 +8,12 @@ import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/game_intercafe/game_interface.dart';
+import 'package:bonfire/util/lighting/lighting.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator.dart';
 import 'package:flame/keyboard.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
@@ -29,6 +31,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   final bool showCollisionArea;
   final GameController gameController;
   final Color constructionModeColor;
+  final Color lightingColorGame;
   final Color collisionAreaColor;
 
   RPGGame({
@@ -46,6 +49,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     this.gameController,
     this.constructionModeColor,
     this.collisionAreaColor,
+    this.lightingColorGame,
   })  : assert(map != null),
         assert(context != null),
         assert(joystickController != null) {
@@ -57,6 +61,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     decorations?.forEach((decoration) => add(decoration));
     enemies?.forEach((enemy) => add(enemy));
     if (player != null) add(player);
+    if (lightingColorGame != null) add(Lighting(color: lightingColorGame));
     add(joystickController);
     if (interface != null) add(interface);
   }
@@ -77,38 +82,16 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     add(decoration);
   }
 
-  void onPointerDown(PointerDownEvent event) {
-    joystickController.onPointerDown(event);
-    super.onPointerDown(event);
+  Iterable<Enemy> visibleEnemies() {
+    return enemies.where((enemy) => !enemy.isDead && enemy.isVisibleInMap());
   }
 
-  void onPointerMove(PointerMoveEvent event) {
-    joystickController.onPointerMove(event);
-    super.onPointerMove(event);
+  Iterable<Enemy> livingEnemies() {
+    return enemies.where((enemy) => !enemy.isDead);
   }
 
-  void onPointerUp(PointerUpEvent event) {
-    joystickController.onPointerUp(event);
-    super.onPointerUp(event);
-  }
-
-  void onPointerCancel(PointerCancelEvent event) {
-    joystickController.onPointerCancel(event);
-    super.onPointerCancel(event);
-  }
-
-  List<Enemy> visibleEnemies() {
-    return enemies.where((enemy) => enemy.isVisibleInMap()).toList();
-  }
-
-  List<Enemy> livingEnemies() {
-    return enemies.where((enemy) => !enemy.isDead).toList();
-  }
-
-  List<GameDecoration> visibleDecorations() {
-    return decorations
-        .where((decoration) => decoration.isVisibleInMap())
-        .toList();
+  Iterable<GameDecoration> visibleDecorations() {
+    return decorations.where((decoration) => decoration.isVisibleInMap());
   }
 
   ValueGenerator getValueGenerator(

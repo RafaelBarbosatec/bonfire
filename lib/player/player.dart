@@ -280,7 +280,7 @@ class Player extends AnimatedObject
   Rect get rectCollisionInWorld => getRectCollision(positionInWorld);
 
   @override
-  void joystickAction(int action) {}
+  void joystickAction(JoystickActionEvent event) {}
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {}

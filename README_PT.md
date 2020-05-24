@@ -56,6 +56,7 @@ Para executar o game com Bonfire, basta utilizar o seguinte widget:
       gameController: GameController() // Caso deseja escutar modificações do game para fazer algo.
       constructionModeColor: Colors.blue, // Caso deseje customizar a cor do grid.
       collisionAreaColor: Colors.blue, // Caso deseje customizar a cor da área de colisão.
+      lightingColorGame: Colors.black.withOpacity(0.4), // caso deseje adicionar iluminação geral do game
     );
   }
 ```
@@ -458,31 +459,28 @@ O componente default que existe para ser utilizado é configurável da seguinte 
 
 ```dart
 
-      Joystick(
-        pathSpriteBackgroundDirectional: 'joystick_background.png', // imagem do background do direcional.
-        pathSpriteKnobDirectional: 'joystick_knob.png', // imagem da bolinha que indica a movimentação do direcional.
-        directionalColor: Colors.blue, // caso não passe 'pathSpriteBackgroundDirectional' ou  'pathSpriteKnobDirectional' você poderá definir uma cor para o direcional.
-        sizeDirectional: 100, // tamanho do direcional.
-        marginBottomDirectional: 100,
-        marginLeftDirectional: 100,
-        actions: [         // Você adicionará quantos actions desejar.
-          JoystickAction(
-            actionId: 0,      //(required) Id que irá ser acionado ao Player no método 'void joystickAction(int action) {}' quando for clicado.
-            pathSprite: 'joystick_atack.png',     //(required) imagem da ação.
-            pathSpritePressed : 'joystick_atack.png', // caso queira, poderá adicionar uma imagem que será exibida quando for clicado.
-            size: 80,
-            margin: EdgeInsets.only(bottom: 50, right: 50),
-            align = JoystickActionAlign.BOTTOM_RIGHT,
-          ),
-          JoystickAction(
-            actionId: 1,
-            pathSprite: 'joystick_atack_range.png',
-            size: 50,
-            margin: EdgeInsets.only(bottom: 50, right: 160),
-            align = JoystickActionAlign.BOTTOM_RIGHT,
-          )
-        ],
-      )
+     Joystick(
+         directional: JoystickDirectional(
+           spriteBackgroundDirectional: Sprite('joystick_background.png'), //directinal control background
+           spriteKnobDirectional: Sprite('joystick_knob.png'), // directional indicator circle background
+           color: Colors.black, // if you do not pass  'pathSpriteBackgroundDirectional' or  'pathSpriteKnobDirectional' you can define a color for the directional.
+           size: 100, // directional control size
+           isFixed: false, // enables directional with dynamic position in relation to the first touch on the screen
+         ),
+         actions: [
+           JoystickAction(
+             actionId: 1, //(required) Action identifier, will be sent to 'void joystickAction(JoystickActionEvent event) {}' when pressed
+             sprite: Sprite('joystick_atack_range.png'), // the action image
+             spritePressed: Sprite('joystick_atack_range.png'), // Optional image to be shown when the action is fired
+             spriteBackgroundDirection: Sprite('joystick_background.png'), //directinal control background
+             enableDirection: true, // enable directional in action
+             align: JoystickActionAlign.BOTTOM_RIGHT,
+             color: Colors.blue,
+             size: 50,
+             margin: EdgeInsets.only(bottom: 50, right: 160),
+           )
+         ],
+       )
       
 ```
 
@@ -560,6 +558,21 @@ this.gameRef.addDecoration(DECORATION);
  gameRef.gameCamera.moveToPlayer();
  gameRef.gameCamera.moveToPositionAnimated(Position(X,Y));
  gameRef.gameCamera.moveToPlayerAnimated();
+```
+
+### Lighting (in tests)
+
+Ao setar a propriedade 'lightingColorGame'no BofireWidget automaticamente vc habilita esse sistema de iluminacao. e para adicionar luz aos objetos, basta adiconar o mixin 'WithLighting' ao componente e configurar sua luz sobescrevendo a variavel 'lightingConfig':
+
+```dart
+ lightingConfig = LightingConfig(
+       gameComponent: this,
+       color: Colors.yellow.withOpacity(0.1),
+       radius: 40,
+       blurBorder: 20,
+       withPulse: true,
+       pulseVariation: 0.1,
+     );
 ```
 
 ## Próximos passos

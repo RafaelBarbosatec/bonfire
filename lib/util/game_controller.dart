@@ -48,7 +48,7 @@ class GameController {
       );
 
       bool notifyChangeEnemy = false;
-      int countLive = allEnemies.where((i) => !i.isDead).length;
+      int countLive = livingEnemies.length;
 
       if (_lastCountLiveEnemies != countLive) {
         _lastCountLiveEnemies = countLive;
@@ -65,6 +65,7 @@ class GameController {
   Iterable<GameDecoration> get visibleDecorations => _game.visibleDecorations();
   Iterable<GameDecoration> get allDecorations => _game.decorations;
   Iterable<Enemy> get visibleEnemies => _game.visibleEnemies();
+  Iterable<Enemy> get livingEnemies => _game.livingEnemies();
   Iterable<Enemy> get allEnemies => _game.enemies;
   Player get player => _game.player;
   Camera get camera => _game.gameCamera;

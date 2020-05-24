@@ -1,15 +1,18 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
-class AnimatedObjectOnce extends AnimatedObject {
+class AnimatedObjectOnce extends AnimatedObject with WithLighting {
   final VoidCallback onFinish;
   final VoidCallback onStartAnimation;
   final bool onlyUpdate;
   final double rotateRadAngle;
   bool _notifyStart = false;
+  final LightingConfig lightingConfig;
 
   AnimatedObjectOnce({
     Rect position,
@@ -18,6 +21,7 @@ class AnimatedObjectOnce extends AnimatedObject {
     this.onStartAnimation,
     this.onlyUpdate = false,
     this.rotateRadAngle,
+    this.lightingConfig,
   }) {
     this.animation = animation;
     positionInWorld = position;

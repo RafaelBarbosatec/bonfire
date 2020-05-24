@@ -2,16 +2,23 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:example/map/dungeon_map.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class Knight extends SimplePlayer {
+class Knight extends SimplePlayer with WithLighting {
   final Position initPosition;
   double attack = 20;
   double stamina = 100;
-  double initSpeed = 150;
+  double initSpeed = DungeonMap.tileSize * 3;
   Timer _timerStamina;
   bool showObserveEnemy = false;
   bool showTalk = false;
+  double angleRadAttack = 0.0;
+  Rect rectDirectionAttack;
+  Sprite spriteDirectionAttack;
+  bool showDirection = false;
 
   Knight(this.initPosition)
       : super(
@@ -39,13 +46,22 @@ class Knight extends SimplePlayer {
             textureWidth: 16,
             textureHeight: 16,
           ),
-          width: 32,
-          height: 32,
+          width: DungeonMap.tileSize,
+          height: DungeonMap.tileSize,
           initPosition: initPosition,
           life: 200,
-          speed: 150,
-          collision: Collision(height: 16, width: 16),
-        );
+          speed: DungeonMap.tileSize * 3,
+          collision: Collision(
+              height: DungeonMap.tileSize / 2, width: DungeonMap.tileSize / 2),
+        ) {
+    spriteDirectionAttack = Sprite('direction_attack.png');
+    lightingConfig = LightingConfig(
+      gameComponent: this,
+      color: Colors.yellow.withOpacity(0.1),
+      radius: width * 1.5,
+      blurBorder: width / 2,
+    );
+  }
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
@@ -54,18 +70,25 @@ class Knight extends SimplePlayer {
   }
 
   @override
-  void joystickAction(int action) {
+  void joystickAction(JoystickActionEvent event) {
     if (isDead) return;
 
-    if (action == 0) {
+    if (event.id == 0 && event.event == ActionEvent.DOWN) {
       actionAttack();
     }
 
-    if (action == 1) {
-      actionAttackRange();
+    if (event.id == 1) {
+      if (event.event == ActionEvent.MOVE) {
+        showDirection = true;
+        angleRadAttack = event.radAngle;
+      }
+      if (event.event == ActionEvent.UP) {
+        showDirection = false;
+        actionAttackRange();
+      }
     }
 
-    super.joystickAction(action);
+    super.joystickAction(event);
   }
 
   @override
@@ -91,30 +114,32 @@ class Knight extends SimplePlayer {
     decrementStamina(15);
     this.simpleAttackMelee(
       damage: attack,
-      attackEffectBottomAnim: FlameAnimation.Animation.sequenced(
+      animationBottom: FlameAnimation.Animation.sequenced(
         'player/atack_effect_bottom.png',
         6,
         textureWidth: 16,
         textureHeight: 16,
       ),
-      attackEffectLeftAnim: FlameAnimation.Animation.sequenced(
+      animationLeft: FlameAnimation.Animation.sequenced(
         'player/atack_effect_left.png',
         6,
         textureWidth: 16,
         textureHeight: 16,
       ),
-      attackEffectRightAnim: FlameAnimation.Animation.sequenced(
+      animationRight: FlameAnimation.Animation.sequenced(
         'player/atack_effect_right.png',
         6,
         textureWidth: 16,
         textureHeight: 16,
       ),
-      attackEffectTopAnim: FlameAnimation.Animation.sequenced(
+      animationTop: FlameAnimation.Animation.sequenced(
         'player/atack_effect_top.png',
         6,
         textureWidth: 16,
         textureHeight: 16,
       ),
+      heightArea: DungeonMap.tileSize,
+      widthArea: DungeonMap.tileSize,
     );
   }
 
@@ -122,27 +147,10 @@ class Knight extends SimplePlayer {
     if (stamina < 10) return;
 
     decrementStamina(10);
-    this.simpleAttackRange(
-      animationRight: FlameAnimation.Animation.sequenced(
-        'player/fireball_right.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationLeft: FlameAnimation.Animation.sequenced(
-        'player/fireball_left.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
+
+    this.simpleAttackRangeByAngle(
       animationTop: FlameAnimation.Animation.sequenced(
         'player/fireball_top.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationBottom: FlameAnimation.Animation.sequenced(
-        'player/fireball_bottom.png',
         3,
         textureWidth: 23,
         textureHeight: 23,
@@ -153,10 +161,17 @@ class Knight extends SimplePlayer {
         textureWidth: 32,
         textureHeight: 32,
       ),
-      width: 25,
-      height: 25,
+      radAngleDirection: angleRadAttack,
+      width: width * 0.7,
+      height: width * 0.7,
       damage: 10,
-      speed: initSpeed * 1.5,
+      speed: initSpeed * 2,
+      lightingConfig: LightingConfig(
+        gameComponent: this,
+        color: Colors.orange.withOpacity(0.1),
+        radius: 25,
+        blurBorder: 15,
+      ),
     );
   }
 
@@ -184,11 +199,22 @@ class Knight extends SimplePlayer {
 
   @override
   void render(Canvas c) {
+    if (showDirection) {
+      double radius = position.height;
+      rectDirectionAttack = Rect.fromLTWH(position.center.dx - radius,
+          position.center.dy - radius, radius * 2, radius * 2);
+      renderSpriteByRadAngle(
+        c,
+        angleRadAttack,
+        rectDirectionAttack,
+        spriteDirectionAttack,
+      );
+    }
     super.render(c);
   }
 
   void _verifyStamina() {
-    if (_timerStamina == null) {
+    if (_timerStamina == null && stamina < 100) {
       _timerStamina = Timer(Duration(milliseconds: 150), () {
         _timerStamina = null;
       });
@@ -225,8 +251,8 @@ class Knight extends SimplePlayer {
           textureHeight: 32,
         ),
         target: this,
-        width: 16,
-        height: 16,
+        width: width / 2,
+        height: width / 2,
         positionFromTarget: Position(18, -6),
       ),
     );

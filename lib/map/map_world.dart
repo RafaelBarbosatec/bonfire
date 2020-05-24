@@ -9,8 +9,8 @@ class MapWorld extends MapGame {
   double lastCameraX = -1;
   double lastCameraY = -1;
   Size lastSize;
-  Iterable<Tile> tilesToRender = List();
-  Iterable<Tile> tilesCollisionsRendered = List();
+  Iterable<Tile> _tilesToRender = List();
+  Iterable<Tile> _tilesCollisionsRendered = List();
   bool _fistRenderComplete = false;
   final ValueChanged<double> progressLoadMap;
 
@@ -18,7 +18,7 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    tilesToRender.forEach((tile) => tile.render(canvas));
+    _tilesToRender.forEach((tile) => tile.render(canvas));
   }
 
   @override
@@ -28,17 +28,23 @@ class MapWorld extends MapGame {
       lastCameraX = gameRef.gameCamera.position.x;
       lastCameraY = gameRef.gameCamera.position.y;
 
+      List<Tile> tilesRender = List();
+      List<Tile> tilesCollision = List();
       tiles.forEach((tile) {
         tile.gameRef = gameRef;
         tile.update(t);
+        if (tile.isVisibleInMap()) {
+          tilesRender.add(tile);
+          if (tile.collision) tilesCollision.add(tile);
+        }
       });
-      tilesToRender = tiles.where((i) => i.isVisibleInMap());
-      tilesCollisionsRendered = tilesToRender.where((i) => i.collision);
+      _tilesToRender = tilesRender;
+      _tilesCollisionsRendered = tilesCollision;
     }
     if (!_fistRenderComplete) {
-      int count = tilesToRender.length;
+      int count = _tilesToRender.length;
       int countRendered =
-          tilesToRender.where((tile) => tile.sprite.loaded()).length;
+          _tilesToRender.where((tile) => tile.sprite.loaded()).length;
       double percent = countRendered / count;
       if (!percent.isNaN && progressLoadMap != null) {
         progressLoadMap(percent);
@@ -50,13 +56,13 @@ class MapWorld extends MapGame {
   }
 
   @override
-  List<Tile> getRendered() {
-    return tilesToRender.toList();
+  Iterable<Tile> getRendered() {
+    return _tilesToRender;
   }
 
   @override
-  List<Tile> getCollisionsRendered() {
-    return tilesCollisionsRendered.toList();
+  Iterable<Tile> getCollisionsRendered() {
+    return _tilesCollisionsRendered;
   }
 
   @override

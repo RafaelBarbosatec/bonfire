@@ -11,7 +11,7 @@ import 'package:flutter/rendering.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-//  await Flame.util.setLandscape();
+  await Flame.util.setLandscape();
   await Flame.util.fullScreen();
   runApp(
     MaterialApp(
@@ -21,35 +21,38 @@ void main() async {
 }
 
 class Game extends StatelessWidget implements GameListener {
-  static const sizeTile = 32.0;
-
   final GameController _controller = GameController();
 
   @override
   Widget build(BuildContext context) {
     return BonfireWidget(
       joystick: Joystick(
-        isFixedDirectional: false,
-        pathSpriteBackgroundDirectional: 'joystick_background.png',
-        pathSpriteKnobDirectional: 'joystick_knob.png',
-        sizeDirectional: 100,
+        directional: JoystickDirectional(
+          spriteBackgroundDirectional: Sprite('joystick_background.png'),
+          spriteKnobDirectional: Sprite('joystick_knob.png'),
+          size: 100,
+          isFixed: false,
+        ),
         actions: [
           JoystickAction(
             actionId: 0,
-            pathSprite: 'joystick_atack.png',
+            sprite: Sprite('joystick_atack.png'),
+            align: JoystickActionAlign.BOTTOM_RIGHT,
             size: 80,
             margin: EdgeInsets.only(bottom: 50, right: 50),
           ),
           JoystickAction(
             actionId: 1,
-            pathSprite: 'joystick_atack_range.png',
+            sprite: Sprite('joystick_atack_range.png'),
+            spriteBackgroundDirection: Sprite('joystick_background.png'),
+            enableDirection: true,
             size: 50,
             margin: EdgeInsets.only(bottom: 50, right: 160),
           )
         ],
       ),
       player: Knight(
-        Position(5 * sizeTile, 6 * sizeTile),
+        Position(5 * DungeonMap.tileSize, 6 * DungeonMap.tileSize),
       ),
       interface: KnightInterface(),
       map: DungeonMap.map(),
@@ -57,8 +60,7 @@ class Game extends StatelessWidget implements GameListener {
       enemies: DungeonMap.enemies(),
       background: BackgroundColorGame(Colors.blueGrey[900]),
       gameController: _controller..setListener(this),
-//      constructionMode: true,
-//      showCollisionArea: true,
+      lightingColorGame: Colors.black.withOpacity(0.4),
     );
   }
 
@@ -73,8 +75,8 @@ class Game extends StatelessWidget implements GameListener {
   }
 
   void _addEnemyInWorld() {
-    double x = sizeTile * (2 + Random().nextInt(27));
-    double y = sizeTile * (5 + Random().nextInt(3));
+    double x = DungeonMap.tileSize * (2 + Random().nextInt(27));
+    double y = DungeonMap.tileSize * (5 + Random().nextInt(3));
 
     Position position = Position(
       x,
@@ -91,8 +93,8 @@ class Game extends StatelessWidget implements GameListener {
         position: Rect.fromLTWH(
           position.x,
           position.y,
-          sizeTile,
-          sizeTile,
+          DungeonMap.tileSize,
+          DungeonMap.tileSize,
         ),
       ),
     );
