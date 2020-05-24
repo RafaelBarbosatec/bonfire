@@ -1,3 +1,11 @@
+## [0.4.0] - 23/05/2020
+* BREAKING CHANGES in joystick and player in 'void joystickAction(JoystickActionEvent event)'
+* adds support for direction in actions of the joystick
+* adds support for basic lighting
+* update Flame to 0.21.0
+* performance improvements
+
+
 ## [0.3.3] - 13/05/2020
 
 * Improvements in FlyingAttackAngleObject.

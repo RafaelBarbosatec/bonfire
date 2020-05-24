@@ -55,6 +55,7 @@ To run a game with Bonfire, use the following widget:
       gameController: GameController() // If you want to hear changes to the game to do something.
       constructionModeColor: Colors.blue, // If you wan customize the grid color.
       collisionAreaColor: Colors.blue, // If you wan customize the collision area color.
+      lightingColorGame: Colors.black.withOpacity(0.4), if you want to add general lighting for the game
     );
   }
 ```
@@ -469,34 +470,31 @@ Or you can implement `JoystickController` yourself and emit event trough a `Joys
 Joystick is configurable by the following parameters:
 ```dart
 
-      Joystick(
-        pathSpriteBackgroundDirectional: 'joystick_background.png', //directinal control background
-        pathSpriteKnobDirectional: 'joystick_knob.png', // directional indicator circle background
-        directionalColor: Colors.blue, // if you do not pass  'pathSpriteBackgroundDirectional' or  'pathSpriteKnobDirectional' you can define a color for the directional.
-        sizeDirectional: 100, // directional control size
-        marginBottomDirectional: 100,
-        marginLeftDirectional: 100,
-        actions: [     // List of actions that will be placed the screen.
+        Joystick(
+        directional: JoystickDirectional(
+          spriteBackgroundDirectional: Sprite('joystick_background.png'), //directinal control background
+          spriteKnobDirectional: Sprite('joystick_knob.png'), // directional indicator circle background
+          color: Colors.black, // if you do not pass  'pathSpriteBackgroundDirectional' or  'pathSpriteKnobDirectional' you can define a color for the directional.
+          size: 100, // directional control size
+          isFixed: false, // enables directional with dynamic position in relation to the first touch on the screen
+        ),
+        actions: [
           JoystickAction(
-            actionId: 0,      //(required) Action identifier, will be sent to 'void joystickAction(int action) {}' when pressed
-            pathSprite: 'joystick_atack.png',     //(required) the action image
-            pathSpritePressed : 'joystick_atack.png', // Optional image to be shown when the action is fired
-            size: 80,
-            margin: EdgeInsets.only(bottom: 50, right: 50),
-            align = JoystickActionAlign.BOTTOM_RIGHT,
-          ),
-          JoystickAction(
-            actionId: 1,
-            pathSprite: 'joystick_atack_range.png',
+            actionId: 1, //(required) Action identifier, will be sent to 'void joystickAction(JoystickActionEvent event) {}' when pressed
+            sprite: Sprite('joystick_atack_range.png'), // the action image
+            spritePressed: Sprite('joystick_atack_range.png'), // Optional image to be shown when the action is fired
+            spriteBackgroundDirection: Sprite('joystick_background.png'), //directinal control background
+            enableDirection: true, // enable directional in action
+            align: JoystickActionAlign.BOTTOM_RIGHT,
+            color: Colors.blue,
             size: 50,
             margin: EdgeInsets.only(bottom: 50, right: 160),
-            align = JoystickActionAlign.BOTTOM_RIGHT,
           )
         ],
       )
-      
+
 ```
-n
+
 Check a [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/main.dart).
 
 ### Observations:
@@ -572,6 +570,21 @@ It is possible to move the camera to some position and go back to the player aft
  gameRef.gameCamera.moveToPlayer();
  gameRef.gameCamera.moveToPositionAnimated(Position(X,Y));
  gameRef.gameCamera.moveToPlayerAnimated();
+```
+
+### Lighting (in tests)
+
+By setting the 'lightingColorGame' property on BofireWidget you automatically enable this lighting system. and to add light to the objects, just add the 'WithLighting' mixin to the component and configure its light by overwriting the 'lightingConfig' variable:
+
+```dart
+ lightingConfig = LightingConfig(
+       gameComponent: this,
+       color: Colors.yellow.withOpacity(0.1),
+       radius: 40,
+       blurBorder: 20,
+       withPulse: true,
+       pulseVariation: 0.1,
+     );
 ```
 
 ## Next steps

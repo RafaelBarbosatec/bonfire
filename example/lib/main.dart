@@ -37,6 +37,7 @@ class Game extends StatelessWidget implements GameListener {
           JoystickAction(
             actionId: 0,
             sprite: Sprite('joystick_atack.png'),
+            align: JoystickActionAlign.BOTTOM_RIGHT,
             size: 80,
             margin: EdgeInsets.only(bottom: 50, right: 50),
           ),
