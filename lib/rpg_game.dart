@@ -11,6 +11,7 @@ import 'package:bonfire/util/game_intercafe/game_interface.dart';
 import 'package:bonfire/util/lighting/lighting.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator.dart';
+import 'package:flame/components/component.dart';
 import 'package:flame/keyboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +71,19 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   void update(double t) {
     super.update(t);
     if (gameController != null) gameController.notifyListeners();
+  }
+
+  @override
+  void renderComponent(Canvas canvas, Component comp) {
+    if (!comp.loaded()) {
+      return;
+    }
+    canvas.save();
+    if (!comp.isHud()) {
+      canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
+    }
+    comp.render(canvas);
+    canvas.restore();
   }
 
   void addEnemy(Enemy enemy) {

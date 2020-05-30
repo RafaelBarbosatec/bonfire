@@ -8,6 +8,9 @@ class GameInterface extends GameComponent {
   List<InterfaceComponent> _components = List();
 
   @override
+  bool isHud() => true;
+
+  @override
   bool isTouchable = true;
 
   @override
