@@ -27,7 +27,7 @@ class Player extends AnimatedObject
 
   bool _isDead = false;
 
-  bool _usePositionInWorld = true;
+  bool _usePositionInWorld = false;
   bool _nextFrameUsePosition = false;
 
   final Size sizeCentralMovementWindow;
@@ -73,75 +73,44 @@ class Player extends AnimatedObject
   }
 
   void moveTop(double speed) {
-    if (position.top <= 0) return;
-
     double innerSpeed = speed * _dtUpdate;
 
     Rect displacement = position.translate(0, (innerSpeed * -1));
 
     if (isCollision(displacement, gameRef)) return;
 
-    if (position.top >= rectCentralMovementWindow.top ||
-        gameRef.gameCamera.isMaxTop()) {
-      position = displacement;
-    } else {
-      gameRef.gameCamera
-          .moveCamera(innerSpeed, JoystickMoveDirectional.MOVE_UP);
-    }
+    position = displacement;
   }
 
   void moveRight(double speed) {
-    if (position.right >= gameRef.size.width) return;
-
     double innerSpeed = speed * _dtUpdate;
 
     Rect displacement = position.translate(innerSpeed, 0);
 
     if (isCollision(displacement, gameRef)) return;
 
-    if (position.right <= rectCentralMovementWindow.right ||
-        gameRef.gameCamera.isMaxRight()) {
-      position = displacement;
-    } else {
-      gameRef.gameCamera
-          .moveCamera(innerSpeed, JoystickMoveDirectional.MOVE_RIGHT);
-    }
+    position = displacement;
+
   }
 
   void moveBottom(double speed) {
-    if (position.bottom >= gameRef.size.height) return;
-
     double innerSpeed = speed * _dtUpdate;
 
     Rect displacement = position.translate(0, innerSpeed);
 
     if (isCollision(displacement, gameRef)) return;
 
-    if (position.bottom <= rectCentralMovementWindow.bottom ||
-        gameRef.gameCamera.isMaxBottom()) {
-      position = displacement;
-    } else {
-      gameRef.gameCamera
-          .moveCamera(innerSpeed, JoystickMoveDirectional.MOVE_DOWN);
-    }
+    position = displacement;
   }
 
   void moveLeft(double speed) {
-    if (position.left <= 0) return;
-
     double innerSpeed = speed * _dtUpdate;
 
     Rect displacement = position.translate(innerSpeed * -1, 0);
 
     if (isCollision(displacement, gameRef)) return;
 
-    if (position.left >= rectCentralMovementWindow.left ||
-        gameRef.gameCamera.isMaxLeft()) {
-      position = displacement;
-    } else {
-      gameRef.gameCamera
-          .moveCamera(innerSpeed, JoystickMoveDirectional.MOVE_LEFT);
-    }
+    position = displacement;
   }
 
   void moveFromAngle(double speed, double angle) {
@@ -255,7 +224,7 @@ class Player extends AnimatedObject
   }
 
   void usePositionInWorldToRender() {
-    _usePositionInWorld = true;
+    _usePositionInWorld = false;
   }
 
   void usePositionToRender() {
@@ -264,7 +233,7 @@ class Player extends AnimatedObject
 
   @override
   get positionInWorld {
-    if (_usePositionInWorld) return super.positionInWorld;
+    if (_usePositionInWorld) return super.position;
 
     return super.positionInWorld = Rect.fromLTWH(
       position.left - gameRef.gameCamera.position.x,
