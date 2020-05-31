@@ -11,10 +11,13 @@ class MapWorld extends MapGame {
   Size lastSize;
   Iterable<Tile> _tilesToRender = List();
   Iterable<Tile> _tilesCollisionsRendered = List();
+  Iterable<Tile> _tilesCollisions = List();
   bool _fistRenderComplete = false;
   final ValueChanged<double> progressLoadMap;
 
-  MapWorld(Iterable<Tile> tiles, {this.progressLoadMap}) : super(tiles);
+  MapWorld(Iterable<Tile> tiles, {this.progressLoadMap}) : super(tiles) {
+    _tilesCollisions = tiles.where((element) => element.collision);
+  }
 
   @override
   void render(Canvas canvas) {
@@ -63,6 +66,11 @@ class MapWorld extends MapGame {
   @override
   Iterable<Tile> getCollisionsRendered() {
     return _tilesCollisionsRendered;
+  }
+
+  @override
+  Iterable<Tile> getCollisions() {
+    return _tilesCollisions;
   }
 
   @override

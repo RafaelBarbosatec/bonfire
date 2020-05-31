@@ -103,7 +103,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     bool destroy = false;
 
     if (withCollision)
-      destroy = isCollision(position, gameRef);
+      destroy = isCollision(position, gameRef, onlyVisible: false);
 
     if (damageInPlayer) {
       if (position.overlaps(gameRef.player.rectCollision)) {
