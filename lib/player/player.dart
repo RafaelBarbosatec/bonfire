@@ -27,8 +27,6 @@ class Player extends AnimatedObject
 
   bool _isDead = false;
 
-  bool _nextFrameUsePosition = false;
-
   final Size sizeCentralMovementWindow;
   Rect rectCentralMovementWindow;
 
@@ -64,9 +62,7 @@ class Player extends AnimatedObject
   @override
   void update(double dt) {
     super.update(dt);
-    if (_nextFrameUsePosition) {
-      _nextFrameUsePosition = false;
-    }
+
     _dtUpdate = dt;
   }
 
@@ -219,10 +215,6 @@ class Player extends AnimatedObject
     if (this.life > maxLife) {
       this.life = maxLife;
     }
-  }
-
-  void usePositionToRender() {
-    _nextFrameUsePosition = true;
   }
 
   Rect get rectCollision => getRectCollision(position);

@@ -150,7 +150,6 @@ class Camera with HasGameRef<RPGGame> {
     moveToPositionAnimated(
       Position(_positionPlayer.left, _positionPlayer.top),
       finish: () {
-        gameRef.player.usePositionToRender();
         if (finish != null) finish();
       },
       duration: duration,
@@ -161,7 +160,6 @@ class Camera with HasGameRef<RPGGame> {
     if (gameRef.player == null) return;
     Rect _positionPlayer = gameRef.player.position;
     moveToPosition(Position(_positionPlayer.left, _positionPlayer.top));
-    gameRef.player.usePositionToRender();
   }
 
   bool isComponentOnCamera(GameComponent c) {
