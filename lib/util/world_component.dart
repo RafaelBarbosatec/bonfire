@@ -3,11 +3,6 @@ import 'dart:ui';
 import 'package:bonfire/util/game_component.dart';
 
 abstract class WorldComponent extends GameComponent {
-  /// Position used to locate component in the world.
-  ///
-  /// This position takes into account the current position of the camera in the world.
-  Rect positionInWorld;
-
   /// Variable used to control whether the component has been destroyed.
   bool _isDestroyed = false;
 
@@ -16,7 +11,7 @@ abstract class WorldComponent extends GameComponent {
 
   @override
   void update(double t) {
-    position ??= positionInWorld ?? Rect.zero;
+    position ??= Rect.zero;
   }
 
   @override

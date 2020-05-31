@@ -29,7 +29,8 @@ class Lighting extends GameComponent {
     canvas.drawColor(color, BlendMode.dstATop);
     _lightToRender.forEach((light) {
       canvas.save();
-      canvas.translate(-gameRef.gameCamera.position.x, -gameRef.gameCamera.position.y);
+      canvas.translate(
+          -gameRef.gameCamera.position.x, -gameRef.gameCamera.position.y);
       canvas.drawCircle(
           Offset(light.gameComponent.position.center.dx,
               light.gameComponent.position.center.dy),
@@ -74,9 +75,8 @@ class Lighting extends GameComponent {
   }
 
   bool _lightingIsVisible(LightingConfig lightingConfig) {
-    if (gameRef == null ||
-        gameRef.size == null ||
-        lightingConfig.gameComponent.position == null) return false;
+    if (gameRef?.size == null || lightingConfig.gameComponent.position == null)
+      return false;
 
     Rect rectLight = Rect.fromLTWH(
       lightingConfig.gameComponent.position.left - lightingConfig.radius,
@@ -85,9 +85,6 @@ class Lighting extends GameComponent {
       lightingConfig.radius * 2,
     );
 
-    return rectLight.top < (gameRef.size.height + rectLight.height) &&
-        rectLight.top > (rectLight.height * -1) &&
-        rectLight.left > (rectLight.width * -1) &&
-        rectLight.left < (gameRef.size.width + rectLight.width);
+    return gameRef.gameCamera.cameraRect.overlaps(rectLight);
   }
 }

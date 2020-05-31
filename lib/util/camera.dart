@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/rpg_game.dart';
+import 'package:bonfire/util/game_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flutter/widgets.dart';
 
@@ -7,6 +8,8 @@ class Camera with HasGameRef<RPGGame> {
   double maxTop = 0;
   double maxLeft = 0;
   Position position = Position.empty();
+
+  Rect get cameraRect => Rect.fromLTWH(position.x, position.y, gameRef.size.width, gameRef.size.height);
 
   bool isMaxBottom() {
     return (position.y * -1) >= maxTop;
@@ -89,7 +92,6 @@ class Camera with HasGameRef<RPGGame> {
     Duration duration,
     Curve curve = Curves.decelerate,
   }) {
-    gameRef.player.usePositionInWorldToRender();
     double distanceLeft = gameRef.size.width / 2;
     double distanceTop = gameRef.size.height / 2;
 
@@ -123,7 +125,6 @@ class Camera with HasGameRef<RPGGame> {
   }
 
   void moveToPosition(Position position) {
-    gameRef.player.usePositionInWorldToRender();
     double distanceLeft = gameRef.size.width / 2;
     double distanceTop = gameRef.size.height / 2;
 
@@ -145,7 +146,7 @@ class Camera with HasGameRef<RPGGame> {
 
   void moveToPlayerAnimated({Duration duration, VoidCallback finish}) {
     if (gameRef.player == null) return;
-    Rect _positionPlayer = gameRef.player.positionInWorld;
+    Rect _positionPlayer = gameRef.player.position;
     moveToPositionAnimated(
       Position(_positionPlayer.left, _positionPlayer.top),
       finish: () {
@@ -158,8 +159,14 @@ class Camera with HasGameRef<RPGGame> {
 
   void moveToPlayer() {
     if (gameRef.player == null) return;
-    Rect _positionPlayer = gameRef.player.positionInWorld;
+    Rect _positionPlayer = gameRef.player.position;
     moveToPosition(Position(_positionPlayer.left, _positionPlayer.top));
     gameRef.player.usePositionToRender();
+  }
+
+  bool isComponentOnCamera(GameComponent c) {
+    if (gameRef?.size == null) return false;
+
+    return cameraRect.overlaps(c.position);
   }
 }

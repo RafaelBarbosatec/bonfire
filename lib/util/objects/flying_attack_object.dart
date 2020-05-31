@@ -43,7 +43,7 @@ class FlyingAttackObject extends AnimatedObject
   }) {
     if (lightingConfig != null) lightingConfig.gameComponent = this;
     animation = flyAnimation;
-    positionInWorld = Rect.fromLTWH(
+    position = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
       width,
@@ -53,26 +53,28 @@ class FlyingAttackObject extends AnimatedObject
     this.collision = collision ?? Collision(width: width, height: height / 2);
   }
 
+  bool _verifyIsOnScreen() => gameRef?.gameCamera?.isComponentOnCamera(this) ?? false;
+
   @override
   void update(double dt) {
     super.update(dt);
 
     switch (direction) {
       case Direction.left:
-        positionInWorld = positionInWorld.translate((speed * dt) * -1, 0);
+        position = position.translate((speed * dt) * -1, 0);
         break;
       case Direction.right:
-        positionInWorld = positionInWorld.translate((speed * dt), 0);
+        position = position.translate((speed * dt), 0);
         break;
       case Direction.top:
-        positionInWorld = positionInWorld.translate(0, (speed * dt) * -1);
+        position = position.translate(0, (speed * dt) * -1);
         break;
       case Direction.bottom:
-        positionInWorld = positionInWorld.translate(0, (speed * dt));
+        position = position.translate(0, (speed * dt));
         break;
     }
 
-    if (!_verifyExistInWorld()) {
+    if (!_verifyIsOnScreen()) {
       remove();
     } else {
       _verifyCollision();
@@ -93,7 +95,7 @@ class FlyingAttackObject extends AnimatedObject
     bool destroy = false;
 
     if (withCollision)
-      destroy = isCollisionPositionInWorld(positionInWorld, gameRef);
+      destroy = isCollision(position, gameRef);
 
     if (damageInPlayer) {
       if (position.overlaps(gameRef.player.rectCollision)) {
@@ -106,7 +108,7 @@ class FlyingAttackObject extends AnimatedObject
       gameRef
           .livingEnemies()
           .where(
-              (enemy) => enemy.rectCollisionInWorld.overlaps(positionInWorld))
+              (enemy) => enemy.rectCollision.overlaps(position))
           .forEach((enemy) {
         enemy.receiveDamage(damage, id);
         destroy = true;
@@ -119,32 +121,32 @@ class FlyingAttackObject extends AnimatedObject
         switch (direction) {
           case Direction.left:
             positionDestroy = Rect.fromLTWH(
-              positionInWorld.left - (width / 2),
-              positionInWorld.top,
+              position.left - (width / 2),
+              position.top,
               width,
               height,
             );
             break;
           case Direction.right:
             positionDestroy = Rect.fromLTWH(
-              positionInWorld.left + (width / 2),
-              positionInWorld.top,
+              position.left + (width / 2),
+              position.top,
               width,
               height,
             );
             break;
           case Direction.top:
             positionDestroy = Rect.fromLTWH(
-              positionInWorld.left,
-              positionInWorld.top - (height / 2),
+              position.left,
+              position.top - (height / 2),
               width,
               height,
             );
             break;
           case Direction.bottom:
             positionDestroy = Rect.fromLTWH(
-              positionInWorld.left,
-              positionInWorld.top + (height / 2),
+              position.left,
+              position.top + (height / 2),
               width,
               height,
             );
@@ -162,25 +164,5 @@ class FlyingAttackObject extends AnimatedObject
       remove();
       if (this.destroyedObject != null) this.destroyedObject();
     }
-  }
-
-  bool _verifyExistInWorld() {
-    bool result = true;
-    if (positionInWorld.left < 0) {
-      result = false;
-    }
-    if (positionInWorld.right >
-        gameRef.gameCamera.maxLeft + gameRef.size.width) {
-      result = false;
-    }
-    if (positionInWorld.top < 0) {
-      result = false;
-    }
-    if (positionInWorld.bottom >
-        gameRef.gameCamera.maxTop + gameRef.size.height) {
-      result = false;
-    }
-
-    return result;
   }
 }

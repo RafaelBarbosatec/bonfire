@@ -27,7 +27,6 @@ class Player extends AnimatedObject
 
   bool _isDead = false;
 
-  bool _usePositionInWorld = false;
   bool _nextFrameUsePosition = false;
 
   final Size sizeCentralMovementWindow;
@@ -43,7 +42,7 @@ class Player extends AnimatedObject
     Collision collision,
     this.sizeCentralMovementWindow,
   }) {
-    position = positionInWorld = Rect.fromLTWH(
+    position = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
       width,
@@ -67,7 +66,6 @@ class Player extends AnimatedObject
     super.update(dt);
     if (_nextFrameUsePosition) {
       _nextFrameUsePosition = false;
-      _usePositionInWorld = false;
     }
     _dtUpdate = dt;
   }
@@ -223,30 +221,11 @@ class Player extends AnimatedObject
     }
   }
 
-  void usePositionInWorldToRender() {
-    _usePositionInWorld = false;
-  }
-
   void usePositionToRender() {
     _nextFrameUsePosition = true;
   }
 
-  @override
-  get positionInWorld {
-    if (_usePositionInWorld) return super.position;
-
-    return super.positionInWorld = Rect.fromLTWH(
-      position.left - gameRef.gameCamera.position.x,
-      position.top - gameRef.gameCamera.position.y,
-      position.width,
-      position.height,
-    );
-  }
-
-  bool get usePositionInWorld => _usePositionInWorld;
-
   Rect get rectCollision => getRectCollision(position);
-  Rect get rectCollisionInWorld => getRectCollision(positionInWorld);
 
   @override
   void joystickAction(JoystickActionEvent event) {}

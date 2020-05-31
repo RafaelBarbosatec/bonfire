@@ -77,8 +77,8 @@ class MapWorld extends MapGame {
     double maxTop = 0;
     double maxLeft = 0;
     maxTop = tiles.fold(0, (max, tile) {
-      if (tile.positionInWorld.bottom > max)
-        return tile.positionInWorld.bottom;
+      if (tile.position.bottom > max)
+        return tile.position.bottom;
       else
         return max;
     });
@@ -86,8 +86,8 @@ class MapWorld extends MapGame {
     maxTop -= size.height;
 
     maxLeft = tiles.fold(0, (max, tile) {
-      if (tile.positionInWorld.right > max)
-        return tile.positionInWorld.right;
+      if (tile.position.right > max)
+        return tile.position.right;
       else
         return max;
     });
@@ -99,9 +99,6 @@ class MapWorld extends MapGame {
     lastCameraX = -1;
     lastCameraY = -1;
 
-    if (gameRef.player != null && !gameRef.player.usePositionInWorld) {
-      gameRef.player.usePositionInWorldToRender();
-    }
     gameRef.gameCamera.moveToPlayer();
   }
 

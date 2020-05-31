@@ -10,7 +10,7 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
   final TextConfig config;
   final Position initPosition;
   bool destroyed = false;
-  Position positionInWorld;
+  Position position;
   double initialY;
   double velocity = -4;
   double gravity = 0.5;
@@ -18,23 +18,26 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
   TextDamage(this.text, this.initPosition,
       {this.config = const TextConfig(fontSize: 10)})
       : super(text, config: config) {
-    positionInWorld = initPosition;
-    initialY = positionInWorld.y;
+    position = initPosition;
+    initialY = position.y;
     moveAxisX = Random().nextInt(100) % 2 == 0 ? -1 : 1;
-    setByPosition(positionInWorld);
+    setByPosition(position);
   }
+
+  @override
+  bool destroy() => destroyed;
 
   @override
   void update(double t) {
     setByPosition(Position(
-      positionInWorld.x + gameRef.gameCamera.position.x,
-      positionInWorld.y + gameRef.gameCamera.position.y,
+      position.x,
+      position.y,
     ));
-    positionInWorld.y += velocity;
-    positionInWorld.x += moveAxisX;
+    position.y += velocity;
+    position.x += moveAxisX;
     velocity += gravity;
 
-    if (positionInWorld.y > initialY + 16) {
+    if (position.y > initialY + 16) {
       remove();
     }
 
@@ -43,10 +46,5 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
 
   void remove() {
     destroyed = true;
-  }
-
-  @override
-  bool destroy() {
-    return destroyed;
   }
 }

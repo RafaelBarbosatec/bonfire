@@ -140,8 +140,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     switch (playerDirection) {
       case Direction.top:
         positionAttack = Rect.fromLTWH(
-          this.positionInWorld.left + (this.width - widthArea) / 2,
-          this.positionInWorld.top - this.height,
+          this.position.left + (this.width - widthArea) / 2,
+          this.position.top - this.height,
           widthArea,
           heightArea,
         );
@@ -150,8 +150,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.right:
         positionAttack = Rect.fromLTWH(
-          this.positionInWorld.right,
-          this.positionInWorld.top + (this.height - heightArea) / 2,
+          this.position.right,
+          this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -160,8 +160,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.bottom:
         positionAttack = Rect.fromLTWH(
-          this.positionInWorld.left + (this.width - widthArea) / 2,
-          this.positionInWorld.bottom,
+          this.position.left + (this.width - widthArea) / 2,
+          this.position.bottom,
           widthArea,
           heightArea,
         );
@@ -170,8 +170,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.left:
         positionAttack = Rect.fromLTWH(
-          this.positionInWorld.left - this.width,
-          this.positionInWorld.top + (this.height - heightArea) / 2,
+          this.position.left - this.width,
+          this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -182,7 +182,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     gameRef.add(AnimatedObjectOnce(animation: anim, position: positionAttack));
 
-    if (positionAttack.overlaps(player.positionInWorld)) {
+    if (positionAttack.overlaps(player.position)) {
       player.receiveDamage(damage, id);
 
       if (withPush) {
@@ -252,33 +252,33 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       case Direction.left:
         if (animationLeft != null) attackRangeAnimation = animationLeft;
         startPosition = Position(
-          this.rectCollisionInWorld.left - width,
-          (this.rectCollisionInWorld.top +
-              (this.rectCollisionInWorld.height - height) / 2),
+          this.rectCollision.left - width,
+          (this.rectCollision.top +
+              (this.rectCollision.height - height) / 2),
         );
         break;
       case Direction.right:
         if (animationRight != null) attackRangeAnimation = animationRight;
         startPosition = Position(
-          this.rectCollisionInWorld.right,
-          (this.rectCollisionInWorld.top +
-              (this.rectCollisionInWorld.height - height) / 2),
+          this.rectCollision.right,
+          (this.rectCollision.top +
+              (this.rectCollision.height - height) / 2),
         );
         break;
       case Direction.top:
         if (animationTop != null) attackRangeAnimation = animationTop;
         startPosition = Position(
-          (this.rectCollisionInWorld.left +
-              (this.rectCollisionInWorld.width - width) / 2),
-          this.rectCollisionInWorld.top - height,
+          (this.rectCollision.left +
+              (this.rectCollision.width - width) / 2),
+          this.rectCollision.top - height,
         );
         break;
       case Direction.bottom:
         if (animationBottom != null) attackRangeAnimation = animationBottom;
         startPosition = Position(
-          (this.rectCollisionInWorld.left +
-              (this.rectCollisionInWorld.width - width) / 2),
-          this.rectCollisionInWorld.bottom,
+          (this.rectCollision.left +
+              (this.rectCollision.width - width) / 2),
+          this.rectCollision.bottom,
         );
         break;
     }

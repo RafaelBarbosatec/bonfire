@@ -73,7 +73,7 @@ class GoblinRotation extends RotationEnemy {
             textureWidth: 16,
             textureHeight: 16,
           ),
-          position: positionInWorld),
+          position: position),
     );
     remove();
     super.die();

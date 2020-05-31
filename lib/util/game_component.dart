@@ -18,19 +18,45 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
   void onTapMove(int pointer, Offset position) {}
   void onTapCancel(int pointer) {}
 
-  void handlerTabDown(int pointer, Offset position) {
-    this.onTapDown(pointer, position);
+  void handlerTapDown(int pointer, Offset position) {
     if (this.position == null) return;
-    if (this.position.contains(position)) {
-      this._pointer = pointer;
+
+    final absolutePosition = Offset(
+      position.dx + gameRef.gameCamera.position.x,
+      position.dy + gameRef.gameCamera.position.y,
+    );
+
+    if (this.isHud()) {
+      this.onTapDown(pointer, position);
+      if (this.position.contains(position)) {
+        this._pointer = pointer;
+      }
+    } else {
+      this.onTapDown(pointer, absolutePosition);
+      if (this.position.contains(absolutePosition)) {
+        this._pointer = pointer;
+      }
     }
   }
 
-  void handlerTabUp(int pointer, Offset position) {
-    this.onTapUp(pointer, position);
+  void handlerTapUp(int pointer, Offset position) {
     if (this.position == null) return;
-    if (this.position.contains(position) && pointer == this._pointer) {
-      this.onTap();
+
+    final absolutePosition = Offset(
+      position.dx + gameRef.gameCamera.position.x,
+      position.dy + gameRef.gameCamera.position.y,
+    );
+
+    if (this.isHud()) {
+      this.onTapUp(pointer, position);
+      if (this.position.contains(position) && pointer == this._pointer) {
+        this.onTap();
+      }
+    } else {
+      this.onTapUp(pointer, absolutePosition);
+      if (this.position.contains(absolutePosition) && pointer == this._pointer) {
+        this.onTap();
+      }
     }
   }
 }
