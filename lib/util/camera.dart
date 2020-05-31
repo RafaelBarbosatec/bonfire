@@ -156,15 +156,27 @@ class Camera with HasGameRef<RPGGame> {
     );
   }
 
-  void moveToPlayer() {
-    if (gameRef.player == null) return;
-    Rect _positionPlayer = gameRef.player.position;
-    moveToPosition(Position(_positionPlayer.left, _positionPlayer.top));
+  void moveToPlayer({double horizontal = 50, double vertical = 50}) {
+    if (gameRef?.player == null || gameRef?.size == null) return;
+    final screenCenter = Offset(gameRef.size.width / 2, gameRef.size.height / 2);
+    final positionPlayer = worldPositionToScreen(gameRef.player.position.center);
+    final horizontalDistance = screenCenter.dx - positionPlayer.dx;
+    final verticalDistance = screenCenter.dy - positionPlayer.dy;
+    if (horizontalDistance.abs() > horizontal) {
+      this.gameRef.gameCamera.position.x += horizontalDistance > 0 ? horizontal - horizontalDistance : -horizontalDistance - horizontal;
+    }
+    if (verticalDistance.abs() > vertical) {
+      this.gameRef.gameCamera.position.y += verticalDistance > 0 ? vertical - verticalDistance : -verticalDistance - vertical;
+    }
   }
 
   bool isComponentOnCamera(GameComponent c) {
     if (gameRef?.size == null) return false;
 
     return cameraRect.overlaps(c.position);
+  }
+
+  Offset worldPositionToScreen(Offset position) {
+    return position.translate(-gameRef.gameCamera.position.x, -gameRef.gameCamera.position.y);
   }
 }

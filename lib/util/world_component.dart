@@ -28,13 +28,6 @@ abstract class WorldComponent extends GameComponent {
     if (gameRef?.size == null || position == null || destroy() == true)
       return false;
 
-    final cameraRect = Rect.fromLTWH(
-      gameRef.gameCamera.position.x,
-      gameRef.gameCamera.position.y,
-      gameRef.size.width,
-      gameRef.size.height,
-    );
-
-    return position.overlaps(cameraRect);
+    return position.overlaps(gameRef.gameCamera.cameraRect);
   }
 }
