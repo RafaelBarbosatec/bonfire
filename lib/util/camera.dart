@@ -60,23 +60,10 @@ class Camera with HasGameRef<RPGGame> {
     Duration duration,
     Curve curve = Curves.decelerate,
   }) {
-    double distanceLeft = gameRef.size.width / 2;
-    double distanceTop = gameRef.size.height / 2;
+    final screenCenter = Position(gameRef.size.width / 2, gameRef.size.height / 2);
 
-    double positionLeftCamera = position.x - distanceLeft;
-    double positionTopCamera = position.y - distanceTop;
-
-    if (positionLeftCamera > maxLeft) positionLeftCamera = maxLeft;
-
-    positionLeftCamera *= -1;
-    if (positionLeftCamera > 0) positionLeftCamera = 0;
-
-    if (positionTopCamera * -1 > maxTop) positionTopCamera = maxTop;
-    positionTopCamera *= -1;
-    if (positionTopCamera > 0) positionTopCamera = 0;
-
-    double diffX = this.position.x - positionLeftCamera;
-    double diffY = this.position.y - positionTopCamera;
+    double diffX = this.position.x - (position.x - screenCenter.x);
+    double diffY = this.position.y - (position.y - screenCenter.y);
     double originX = this.position.x;
     double originY = this.position.y;
 
