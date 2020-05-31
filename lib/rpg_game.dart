@@ -10,6 +10,8 @@ import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/game_intercafe/game_interface.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/lighting/lighting.dart';
+import 'package:bonfire/util/lighting/lighting_config.dart';
+import 'package:bonfire/util/lighting/with_lighting.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator.dart';
 import 'package:flame/keyboard.dart';
@@ -38,6 +40,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   Iterable<Enemy> _livingEnemies = List();
   Iterable<GameDecoration> _decorations = List();
   Iterable<GameDecoration> _visibleDecorations = List();
+  Iterable<LightingConfig> _lightToRender = List();
 
   IntervalTick _interval;
 
@@ -112,6 +115,10 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     return _decorations;
   }
 
+  Iterable<LightingConfig> lightVisible() {
+    return _lightToRender;
+  }
+
   ValueGenerator getValueGenerator(
     Duration duration, {
     double begin = 0.0,
@@ -140,5 +147,13 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     _livingEnemies = _enemies.where((element) => !element.isDead).cast();
     _visibleEnemies =
         _livingEnemies.where((element) => element.isVisibleInMap());
+
+    if (lightingColorGame != null) {
+      _lightToRender = components
+          .where((element) =>
+              element is WithLighting &&
+              (element as WithLighting).isVisible(size))
+          .map((e) => (e as WithLighting).lightingConfig);
+    }
   }
 }

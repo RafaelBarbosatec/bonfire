@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 class IntervalTick {
   final double timesPerSeconds;
   double _timeMax;
-  double _baseNumber = 5.0;
+  double _baseNumber = 100.0;
   final VoidCallback tick;
   double _currentTime = 0;
 
@@ -13,8 +13,9 @@ class IntervalTick {
 
   void update(double dt) {
     _currentTime += dt * _timeMax;
-    if (_currentTime.round() % _baseNumber == 0) {
+    if (_currentTime >= _baseNumber) {
       tick();
+      _currentTime = 0;
     }
   }
 }
