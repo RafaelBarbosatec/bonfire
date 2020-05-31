@@ -8,6 +8,7 @@ import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/game_intercafe/game_interface.dart';
+import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/lighting/lighting.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator.dart';
@@ -37,6 +38,8 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   Iterable<Enemy> _livingEnemies = List();
   Iterable<GameDecoration> _decorations = List();
   Iterable<GameDecoration> _visibleDecorations = List();
+
+  IntervalTick _interval;
 
   RPGGame({
     @required this.context,
@@ -68,20 +71,15 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     if (lightingColorGame != null) add(Lighting(color: lightingColorGame));
     add(joystickController);
     if (interface != null) add(interface);
+
+    _interval = IntervalTick(10, () {
+      _updateList();
+    });
   }
 
   @override
   void update(double t) {
-    _decorations =
-        components.where((element) => (element is GameDecoration)).cast();
-    _visibleDecorations =
-        _decorations.where((element) => element.isVisibleInMap());
-
-    _enemies = components.where((element) => (element is Enemy)).cast();
-    _livingEnemies = _enemies.where((element) => !element.isDead).cast();
-    _visibleEnemies =
-        _livingEnemies.where((element) => element.isVisibleInMap());
-
+    _interval.update(t);
     super.update(t);
     if (gameController != null) gameController.notifyListeners();
   }
@@ -130,5 +128,17 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   @override
   void onKeyEvent(RawKeyEvent event) {
     joystickController.onKeyboard(event);
+  }
+
+  void _updateList() {
+    _decorations =
+        components.where((element) => (element is GameDecoration)).cast();
+    _visibleDecorations =
+        _decorations.where((element) => element.isVisibleInMap());
+
+    _enemies = components.where((element) => (element is Enemy)).cast();
+    _livingEnemies = _enemies.where((element) => !element.isDead).cast();
+    _visibleEnemies =
+        _livingEnemies.where((element) => element.isVisibleInMap());
   }
 }

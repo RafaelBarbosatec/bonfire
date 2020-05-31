@@ -8,23 +8,23 @@ import 'package:flutter/material.dart';
 mixin ObjectCollision {
   Collision collision = Collision();
 
-  bool isCollision(Rect displacement, RPGGame game) {
+  bool isCollision(Rect displacement, RPGGame game, {bool onlyVisible = true}) {
     Rect rectCollision = getRectCollision(displacement);
 
-    var collisions = game.map
-        .getCollisionsRendered()
-        .where((i) => i.collision && i.position.overlaps(rectCollision));
+    var collisions = (onlyVisible
+            ? game.map.getCollisionsRendered()
+            : game.map.getCollisions())
+        .where((i) => i.position.overlaps(rectCollision));
 
     if (collisions.length > 0) {
       return true;
     }
 
-    var collisionsDecorations = game.components
-        .where((i) =>
-            i is GameDecoration &&
-            i.collision != null &&
-            i.rectCollision.overlaps(rectCollision))
-        .cast();
+    var collisionsDecorations =
+        (onlyVisible ? game.visibleDecorations() : game.decorations())
+            .where((i) =>
+                i.collision != null && i.rectCollision.overlaps(rectCollision))
+            .cast();
 
     if (collisionsDecorations.length > 0) {
       return true;
@@ -33,21 +33,24 @@ mixin ObjectCollision {
     return false;
   }
 
-  bool isCollisionPositionInWorld(Rect displacement, RPGGame game) {
+  bool isCollisionPositionInWorld(Rect displacement, RPGGame game,
+      {bool onlyVisible = true}) {
     Rect rectCollision = getRectCollision(displacement);
 
-    var collisions = game.map
-        .getCollisionsRendered()
-        .where((i) => i.collision && i.positionInWorld.overlaps(rectCollision));
+    var collisions = (onlyVisible
+            ? game.map.getCollisionsRendered()
+            : game.map.getCollisions())
+        .where((i) => i.positionInWorld.overlaps(rectCollision));
 
     if (collisions.length > 0) {
       return true;
     }
 
-    var collisionsDecorations = game.components.where((i) =>
-        i is GameDecoration &&
-        i.collision != null &&
-        i.rectCollisionInWorld.overlaps(rectCollision));
+    var collisionsDecorations =
+        (onlyVisible ? game.visibleDecorations() : game.decorations()).where(
+            (i) =>
+                i.collision != null &&
+                i.rectCollisionInWorld.overlaps(rectCollision));
 
     if (collisionsDecorations.length > 0) {
       return true;
@@ -57,7 +60,11 @@ mixin ObjectCollision {
   }
 
   bool isCollisionTranslate(
-      Rect position, double translateX, double translateY, RPGGame game) {
+    Rect position,
+    double translateX,
+    double translateY,
+    RPGGame game,
+  ) {
     var moveToCurrent = position.translate(translateX, translateY);
     return isCollision(moveToCurrent, game);
   }
