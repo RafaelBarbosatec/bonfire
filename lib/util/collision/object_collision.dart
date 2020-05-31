@@ -60,13 +60,10 @@ mixin ObjectCollision {
   }
 
   bool isCollisionTranslate(
-    Rect position,
-    double translateX,
-    double translateY,
-    RPGGame game,
-  ) {
+      Rect position, double translateX, double translateY, RPGGame game,
+      {bool onlyVisible = true}) {
     var moveToCurrent = position.translate(translateX, translateY);
-    return isCollision(moveToCurrent, game);
+    return isCollision(moveToCurrent, game, onlyVisible: onlyVisible);
   }
 
   Rect getRectCollision(Rect displacement) {

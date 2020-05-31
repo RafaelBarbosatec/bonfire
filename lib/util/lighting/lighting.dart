@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/util/game_component.dart';
+import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/lighting/with_lighting.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,13 @@ class Lighting extends GameComponent {
   Color color;
   Paint _paintFocus;
   Iterable<LightingConfig> _lightToRender = List();
+  IntervalTick _intervalTick;
 
   Lighting({this.color = Colors.transparent}) {
     _paintFocus = Paint()
       ..color = Colors.transparent
       ..blendMode = BlendMode.clear;
+    _intervalTick = IntervalTick(10, updateListLight);
   }
 
   @override
@@ -58,12 +61,8 @@ class Lighting extends GameComponent {
 
   @override
   void update(double dt) {
-    _lightToRender = gameRef.components
-        .where((element) =>
-            element is WithLighting &&
-            (element as WithLighting).lightingConfig != null &&
-            _lightingIsVisible((element as WithLighting).lightingConfig))
-        .map((e) => (e as WithLighting).lightingConfig..update(dt));
+    _intervalTick.update(dt);
+    _lightToRender.forEach((element) => element.update(dt));
   }
 
   bool _lightingIsVisible(LightingConfig lightingConfig) {
@@ -82,5 +81,14 @@ class Lighting extends GameComponent {
         rectLight.top > (rectLight.height * -1) &&
         rectLight.left > (rectLight.width * -1) &&
         rectLight.left < (gameRef.size.width + rectLight.width);
+  }
+
+  void updateListLight() {
+    _lightToRender = gameRef.components
+        .where((element) =>
+            element is WithLighting &&
+            (element as WithLighting).lightingConfig != null &&
+            _lightingIsVisible((element as WithLighting).lightingConfig))
+        .map((e) => (e as WithLighting).lightingConfig);
   }
 }
