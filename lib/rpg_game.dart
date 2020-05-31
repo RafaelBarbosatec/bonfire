@@ -84,7 +84,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   void update(double t) {
     _interval.update(t);
     super.update(t);
-    if (gameController != null) gameController.notifyListeners();
   }
 
   void addEnemy(Enemy enemy) {
@@ -155,5 +154,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
               (element as WithLighting).isVisible(size))
           .map((e) => (e as WithLighting).lightingConfig);
     }
+
+    if (gameController != null) gameController.notifyListeners();
   }
 }
