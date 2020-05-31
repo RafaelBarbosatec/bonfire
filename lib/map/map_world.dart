@@ -97,4 +97,17 @@ class MapWorld extends MapGame {
     this.tiles = map;
     verifyMaxTopAndLeft(gameRef.size);
   }
+
+  @override
+  Size getMapSize() {
+    double height = 0;
+    double width = 0;
+
+    this.tiles.forEach((tile) {
+      if (tile.position.right > width) width = tile.position.right;
+      if (tile.position.bottom > height) height = tile.position.bottom;
+    });
+
+    return Size(width, height);
+  }
 }
