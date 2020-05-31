@@ -72,9 +72,7 @@ class Camera with HasGameRef<RPGGame> {
         this.position.x = originX - (diffX * value);
         this.position.y = originY - (diffY * value);
       })
-      ..addListenerFinish(() {
-        if (finish != null) finish();
-      })
+      ..addListenerFinish(finish)
       ..addCurve(curve)
       ..start();
   }
@@ -88,12 +86,10 @@ class Camera with HasGameRef<RPGGame> {
 
   void moveToPlayerAnimated({Duration duration, VoidCallback finish}) {
     if (gameRef.player == null) return;
-    Rect _positionPlayer = gameRef.player.position;
+    final _positionPlayer = gameRef.player.position;
     moveToPositionAnimated(
-      Position(_positionPlayer.left, _positionPlayer.top),
-      finish: () {
-        if (finish != null) finish();
-      },
+      Position(_positionPlayer.center.dx, _positionPlayer.center.dy),
+      finish: finish,
       duration: duration,
     );
   }
