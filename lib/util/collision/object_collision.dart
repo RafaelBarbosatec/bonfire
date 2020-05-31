@@ -8,10 +8,22 @@ import 'package:flutter/material.dart';
 mixin ObjectCollision {
   Collision collision = Collision();
 
+  void triggerSensors(Rect displacement, RPGGame game) {
+    Rect rectCollision = getRectCollision(displacement);
+
+    final sensors = game.visibleDecorations().where(
+          (decoration) => decoration.isSensor,
+        );
+
+    sensors.forEach((decoration) {
+      if (decoration.rectCollision.overlaps(rectCollision)) decoration.onContact(this);
+    });
+  }
+
   bool isCollision(Rect displacement, RPGGame game, {bool onlyVisible = true}) {
     Rect rectCollision = getRectCollision(displacement);
 
-    var collisions = (onlyVisible
+    final collisions = (onlyVisible
             ? game.map.getCollisionsRendered()
             : game.map.getCollisions())
         .where((i) => i.position.overlaps(rectCollision));
@@ -20,11 +32,12 @@ mixin ObjectCollision {
       return true;
     }
 
-    var collisionsDecorations =
-        (onlyVisible ? game.visibleDecorations() : game.decorations())
-            .where((i) =>
-                i.collision != null && i.rectCollision.overlaps(rectCollision))
-            .cast();
+    final collisionsDecorations =
+        (onlyVisible ? game.visibleDecorations() : game.decorations()).where(
+            (i) =>
+                !i.isSensor &&
+                i.collision != null &&
+                i.rectCollision.overlaps(rectCollision));
 
     if (collisionsDecorations.length > 0) {
       return true;
