@@ -74,27 +74,6 @@ class MapWorld extends MapGame {
   void verifyMaxTopAndLeft(Size size) {
     if (lastSize == size) return;
     lastSize = size;
-    double maxTop = 0;
-    double maxLeft = 0;
-    maxTop = tiles.fold(0, (max, tile) {
-      if (tile.position.bottom > max)
-        return tile.position.bottom;
-      else
-        return max;
-    });
-
-    maxTop -= size.height;
-
-    maxLeft = tiles.fold(0, (max, tile) {
-      if (tile.position.right > max)
-        return tile.position.right;
-      else
-        return max;
-    });
-    maxLeft -= size.width;
-
-    gameRef.gameCamera.maxLeft = maxLeft;
-    gameRef.gameCamera.maxTop = maxTop;
 
     lastCameraX = -1;
     lastCameraY = -1;
