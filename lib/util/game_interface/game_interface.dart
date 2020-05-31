@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/util/game_component.dart';
-import 'package:bonfire/util/game_intercafe/interface_component.dart';
+import 'package:bonfire/util/game_interface/interface_component.dart';
 import 'package:flutter/widgets.dart';
 
 class GameInterface extends GameComponent {

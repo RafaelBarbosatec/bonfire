@@ -7,7 +7,7 @@ import 'package:bonfire/util/base_game_point_detector.dart';
 import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_controller.dart';
-import 'package:bonfire/util/game_intercafe/game_interface.dart';
+import 'package:bonfire/util/game_interface/game_interface.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/lighting/lighting.dart';
 import 'package:bonfire/util/map_explorer.dart';
