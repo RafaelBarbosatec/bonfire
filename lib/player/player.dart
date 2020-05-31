@@ -120,25 +120,21 @@ class Player extends AnimatedObject
     bool enableAxisY = false;
 
     if (diffBase.dx > 0) {
-      if (position.right <= rectCentralMovementWindow.right ||
-          gameRef.gameCamera.isMaxRight()) {
+      if (position.right <= rectCentralMovementWindow.right) {
         enableAxisX = true;
       }
     } else if (diffBase.dx < 0) {
-      if (position.left >= rectCentralMovementWindow.left ||
-          gameRef.gameCamera.isMaxLeft()) {
+      if (position.left >= rectCentralMovementWindow.left) {
         enableAxisX = true;
       }
     }
 
     if (diffBase.dy > 0) {
-      if (position.bottom <= rectCentralMovementWindow.bottom ||
-          gameRef.gameCamera.isMaxBottom()) {
+      if (position.bottom <= rectCentralMovementWindow.bottom) {
         enableAxisY = true;
       }
     } else if (diffBase.dy < 0) {
-      if (position.top >= rectCentralMovementWindow.top ||
-          gameRef.gameCamera.isMaxTop()) {
+      if (position.top >= rectCentralMovementWindow.top) {
         enableAxisY = true;
       }
     }

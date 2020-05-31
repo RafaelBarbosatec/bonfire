@@ -11,67 +11,35 @@ class Camera with HasGameRef<RPGGame> {
 
   Rect get cameraRect => Rect.fromLTWH(position.x, position.y, gameRef.size.width, gameRef.size.height);
 
-  bool isMaxBottom() {
-    return (position.y * -1) >= maxTop;
-  }
-
-  bool isMaxLeft() {
-    return position.x == 0;
-  }
-
-  bool isMaxRight() {
-    return (position.x * -1) >= maxLeft;
-  }
-
-  bool isMaxTop() {
-    return position.y == 0;
-  }
-
   void moveTop(double displacement) {
-    if (position.y < 0) {
-      position.y = position.y + displacement;
-    }
-    if (position.y > 0) {
-      position.y = 0;
-    }
+    position.y = position.y - displacement;
   }
 
   void moveRight(double displacement) {
-    if (!isMaxRight()) {
-      gameRef.gameCamera.position.x =
-          gameRef.gameCamera.position.x - displacement;
-    }
+    position.x = position.x + displacement;
   }
 
   void moveBottom(double displacement) {
-    if (!isMaxBottom()) {
-      gameRef.gameCamera.position.y =
-          gameRef.gameCamera.position.y - displacement;
-    }
+    position.y = position.y + displacement;
   }
 
   void moveLeft(double displacement) {
-    if (!isMaxLeft()) {
-      position.x = position.x + displacement;
-    }
-    if (position.x > 0) {
-      position.x = 0;
-    }
+    position.x = position.x - displacement;
   }
 
   void moveCamera(double displacement, JoystickMoveDirectional directional) {
     switch (directional) {
       case JoystickMoveDirectional.MOVE_UP:
-        gameRef.gameCamera.moveTop(displacement);
+        moveTop(displacement);
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
-        gameRef.gameCamera.moveRight(displacement);
+        moveRight(displacement);
         break;
       case JoystickMoveDirectional.MOVE_DOWN:
-        gameRef.gameCamera.moveBottom(displacement);
+        moveBottom(displacement);
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
-        gameRef.gameCamera.moveLeft(displacement);
+        moveLeft(displacement);
         break;
       case JoystickMoveDirectional.MOVE_UP_LEFT:
         break;
@@ -125,23 +93,10 @@ class Camera with HasGameRef<RPGGame> {
   }
 
   void moveToPosition(Position position) {
-    double distanceLeft = gameRef.size.width / 2;
-    double distanceTop = gameRef.size.height / 2;
+    if (gameRef?.size == null) return;
+    final screenCenter = Position(gameRef.size.width / 2, gameRef.size.height / 2);
 
-    double positionLeftCamera = position.x - distanceLeft;
-    double positionTopCamera = position.y - distanceTop;
-
-    if (positionLeftCamera > maxLeft) positionLeftCamera = maxLeft;
-
-    positionLeftCamera *= -1;
-    if (positionLeftCamera > 0) positionLeftCamera = 0;
-
-    if (positionTopCamera * -1 > maxTop) positionTopCamera = maxTop;
-    positionTopCamera *= -1;
-    if (positionTopCamera > 0) positionTopCamera = 0;
-
-    this.position.x = positionLeftCamera;
-    this.position.y = positionTopCamera;
+    this.position = position - screenCenter;
   }
 
   void moveToPlayerAnimated({Duration duration, VoidCallback finish}) {
@@ -157,7 +112,7 @@ class Camera with HasGameRef<RPGGame> {
   }
 
   void moveToPlayer({double horizontal = 50, double vertical = 50}) {
-    if (gameRef?.player == null || gameRef?.size == null) return;
+    if (gameRef?.player == null || gameRef?.size == null) return print("but null...");
     final screenCenter = Offset(gameRef.size.width / 2, gameRef.size.height / 2);
     final positionPlayer = worldPositionToScreen(gameRef.player.position.center);
     final horizontalDistance = screenCenter.dx - positionPlayer.dx;

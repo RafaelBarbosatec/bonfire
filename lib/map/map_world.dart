@@ -99,7 +99,7 @@ class MapWorld extends MapGame {
     lastCameraX = -1;
     lastCameraY = -1;
 
-    gameRef.gameCamera.moveToPlayer();
+    gameRef.gameCamera.moveToPlayer(horizontal: 0, vertical: 0);
   }
 
   @override
