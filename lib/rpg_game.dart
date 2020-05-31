@@ -22,8 +22,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   final Player player;
   final GameInterface interface;
   final MapGame map;
-  final List<Enemy> enemies;
-  final List<GameDecoration> decorations;
   final JoystickController joystickController;
   final GameComponent background;
   final Camera gameCamera = Camera();
@@ -34,6 +32,12 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   final Color lightingColorGame;
   final Color collisionAreaColor;
 
+  Iterable<Enemy> _enemies = List();
+  Iterable<Enemy> _visibleEnemies = List();
+  Iterable<Enemy> _livingEnemies = List();
+  Iterable<GameDecoration> _decorations = List();
+  Iterable<GameDecoration> _visibleDecorations = List();
+
   RPGGame({
     @required this.context,
     @required this.vsync,
@@ -41,8 +45,8 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     @required this.joystickController,
     this.player,
     this.interface,
-    this.enemies,
-    this.decorations,
+    List<Enemy> enemies,
+    List<GameDecoration> decorations,
     this.background,
     this.constructionMode = false,
     this.showCollisionArea = false,
@@ -68,30 +72,46 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
   @override
   void update(double t) {
+    _decorations =
+        components.where((element) => (element is GameDecoration)).cast();
+    _visibleDecorations =
+        _decorations.where((element) => element.isVisibleInMap());
+
+    _enemies = components.where((element) => (element is Enemy)).cast();
+    _livingEnemies = _enemies.where((element) => !element.isDead).cast();
+    _visibleEnemies =
+        _livingEnemies.where((element) => element.isVisibleInMap());
+
     super.update(t);
     if (gameController != null) gameController.notifyListeners();
   }
 
   void addEnemy(Enemy enemy) {
-    enemies.add(enemy);
     add(enemy);
   }
 
   void addDecoration(GameDecoration decoration) {
-    decorations.add(decoration);
     add(decoration);
   }
 
   Iterable<Enemy> visibleEnemies() {
-    return enemies.where((enemy) => !enemy.isDead && enemy.isVisibleInMap());
+    return _visibleEnemies;
   }
 
   Iterable<Enemy> livingEnemies() {
-    return enemies.where((enemy) => !enemy.isDead);
+    return _livingEnemies;
   }
 
   Iterable<GameDecoration> visibleDecorations() {
-    return decorations.where((decoration) => decoration.isVisibleInMap());
+    return _visibleDecorations;
+  }
+
+  Iterable<Enemy> enemies() {
+    return _enemies;
+  }
+
+  Iterable<GameDecoration> decorations() {
+    return _decorations;
   }
 
   ValueGenerator getValueGenerator(

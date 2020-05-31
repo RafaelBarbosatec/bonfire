@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:flutter/material.dart';
@@ -18,15 +19,15 @@ mixin ObjectCollision {
       return true;
     }
 
-    if (game.decorations != null) {
-      var collisionsDecorations = game.decorations.where((i) =>
-          !i.destroy() &&
-          i.collision != null &&
-          i.rectCollision.overlaps(rectCollision));
+    var collisionsDecorations = game.components
+        .where((i) =>
+            i is GameDecoration &&
+            i.collision != null &&
+            i.rectCollision.overlaps(rectCollision))
+        .cast();
 
-      if (collisionsDecorations.length > 0) {
-        return true;
-      }
+    if (collisionsDecorations.length > 0) {
+      return true;
     }
 
     return false;
@@ -43,15 +44,13 @@ mixin ObjectCollision {
       return true;
     }
 
-    if (game.decorations != null) {
-      var collisionsDecorations = game.decorations.where((i) =>
-          !i.destroy() &&
-          i.collision != null &&
-          i.rectCollisionInWorld.overlaps(rectCollision));
+    var collisionsDecorations = game.components.where((i) =>
+        i is GameDecoration &&
+        i.collision != null &&
+        i.rectCollisionInWorld.overlaps(rectCollision));
 
-      if (collisionsDecorations.length > 0) {
-        return true;
-      }
+    if (collisionsDecorations.length > 0) {
+      return true;
     }
 
     return false;
