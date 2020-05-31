@@ -95,7 +95,7 @@ class Camera with HasGameRef<RPGGame> {
   }
 
   void moveToPlayer({double horizontal = 50, double vertical = 50}) {
-    if (gameRef?.player == null || gameRef?.size == null) return print("but null...");
+    if (gameRef?.player == null || gameRef?.size == null) return;
     final screenCenter = Offset(gameRef.size.width / 2, gameRef.size.height / 2);
     final positionPlayer = worldPositionToScreen(gameRef.player.position.center);
     final horizontalDistance = screenCenter.dx - positionPlayer.dx;
