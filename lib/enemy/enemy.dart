@@ -29,6 +29,8 @@ class Enemy extends AnimatedObject with ObjectCollision {
 
   double dtUpdate = 0;
 
+  bool collisionOnlyVisibleScreen = true;
+
   Enemy(
       {@required Position initPosition,
       @required this.height,
@@ -73,6 +75,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
       0,
       (speed * -1),
       gameRef,
+      onlyVisible: collisionOnlyVisibleScreen,
     );
 
     if (collision) return;
@@ -86,6 +89,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
       0,
       speed,
       gameRef,
+      onlyVisible: collisionOnlyVisibleScreen,
     );
     if (collision) return;
 
@@ -98,6 +102,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
       (speed * -1),
       0,
       gameRef,
+      onlyVisible: collisionOnlyVisibleScreen,
     );
     if (collision) return;
 
@@ -110,6 +115,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
       speed,
       0,
       gameRef,
+      onlyVisible: collisionOnlyVisibleScreen,
     );
 
     if (collision) return;

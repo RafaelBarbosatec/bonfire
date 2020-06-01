@@ -64,11 +64,17 @@ extension EnemyExtensions on Enemy {
     return Direction.left;
   }
 
-  void showDamage(double damage,
-      {TextConfig config = const TextConfig(
-        fontSize: 10,
-        color: Colors.white,
-      )}) {
+  void showDamage(
+    double damage, {
+    TextConfig config = const TextConfig(
+      fontSize: 14,
+      color: Colors.white,
+    ),
+    double initVelocityTop = -5,
+    double gravity = 0.5,
+    DirectionTextDamage direction = DirectionTextDamage.RANDOM,
+    bool onlyUp = false,
+  }) {
     gameRef.add(
       TextDamage(
         damage.toInt().toString(),
@@ -77,6 +83,10 @@ extension EnemyExtensions on Enemy {
           positionInWorld.top,
         ),
         config: config,
+        initVelocityTop: initVelocityTop,
+        gravity: gravity,
+        direction: direction,
+        onlyUp: onlyUp,
       ),
     );
   }
