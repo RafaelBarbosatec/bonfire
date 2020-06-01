@@ -12,11 +12,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 extension PlayerExtensions on Player {
-  void showDamage(double damage,
-      {TextConfig config = const TextConfig(
-        fontSize: 10,
-        color: Colors.red,
-      )}) {
+  void showDamage(
+    double damage, {
+    TextConfig config = const TextConfig(
+      fontSize: 14,
+      color: Colors.red,
+    ),
+    double initVelocityTop = -5,
+    double gravity = 0.5,
+    DirectionTextDamage direction = DirectionTextDamage.RANDOM,
+  }) {
     gameRef.add(
       TextDamage(
         damage.toInt().toString(),
@@ -25,6 +30,9 @@ extension PlayerExtensions on Player {
           positionInWorld.top,
         ),
         config: config,
+        initVelocityTop: initVelocityTop,
+        gravity: gravity,
+        direction: direction,
       ),
     );
   }
