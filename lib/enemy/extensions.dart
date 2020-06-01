@@ -73,6 +73,7 @@ extension EnemyExtensions on Enemy {
     double initVelocityTop = -5,
     double gravity = 0.5,
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
+    bool onlyUp = false,
   }) {
     gameRef.add(
       TextDamage(
@@ -85,6 +86,7 @@ extension EnemyExtensions on Enemy {
         initVelocityTop: initVelocityTop,
         gravity: gravity,
         direction: direction,
+        onlyUp: onlyUp,
       ),
     );
   }

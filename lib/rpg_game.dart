@@ -72,8 +72,8 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     enemies?.forEach((enemy) => add(enemy));
     if (player != null) add(player);
     if (lightingColorGame != null) add(Lighting(color: lightingColorGame));
-    add(joystickController);
     if (interface != null) add(interface);
+    add(joystickController);
 
     _interval = IntervalTick(10, () {
       _updateList();

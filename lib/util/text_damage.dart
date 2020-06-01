@@ -18,10 +18,12 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
   double _velocity;
   final double gravity;
   double _moveAxisX = 0;
+  final bool onlyUp;
 
   TextDamage(
     this.text,
     this.initPosition, {
+    this.onlyUp = false,
     this.config = const TextConfig(fontSize: 10),
     double initVelocityTop = -4,
     this.gravity = 0.5,
@@ -56,6 +58,9 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
     positionInWorld.x += _moveAxisX;
     _velocity += gravity;
 
+    if (onlyUp && _velocity >= 0) {
+      remove();
+    }
     if (positionInWorld.y > _initialY + 20) {
       remove();
     }

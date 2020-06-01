@@ -20,6 +20,7 @@ extension PlayerExtensions on Player {
     ),
     double initVelocityTop = -5,
     double gravity = 0.5,
+    bool onlyUp = false,
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
   }) {
     gameRef.add(
@@ -33,6 +34,7 @@ extension PlayerExtensions on Player {
         initVelocityTop: initVelocityTop,
         gravity: gravity,
         direction: direction,
+        onlyUp: onlyUp,
       ),
     );
   }
