@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -12,7 +11,7 @@ class Knight extends SimplePlayer with WithLighting {
   double attack = 20;
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
-  Timer _timerStamina;
+  IntervalTick _timerStamina;
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
@@ -55,6 +54,7 @@ class Knight extends SimplePlayer with WithLighting {
               height: DungeonMap.tileSize / 2, width: DungeonMap.tileSize / 2),
         ) {
     spriteDirectionAttack = Sprite('direction_attack.png');
+    _timerStamina = IntervalTick(100);
     lightingConfig = LightingConfig(
       gameComponent: this,
       color: Colors.yellow.withOpacity(0.1),
@@ -178,7 +178,7 @@ class Knight extends SimplePlayer with WithLighting {
   @override
   void update(double dt) {
     if (this.isDead) return;
-    _verifyStamina();
+    _verifyStamina(dt);
     this.seeEnemy(
       visionCells: 8,
       notObserved: () {
@@ -213,18 +213,12 @@ class Knight extends SimplePlayer with WithLighting {
     super.render(c);
   }
 
-  void _verifyStamina() {
-    if (_timerStamina == null && stamina < 100) {
-      _timerStamina = Timer(Duration(milliseconds: 150), () {
-        _timerStamina = null;
-      });
-    } else {
-      return;
-    }
-
-    stamina += 2;
-    if (stamina > 100) {
-      stamina = 100;
+  void _verifyStamina(double dt) {
+    if (_timerStamina.update(dt) && stamina < 100) {
+      stamina += 2;
+      if (stamina > 100) {
+        stamina = 100;
+      }
     }
   }
 

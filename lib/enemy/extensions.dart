@@ -14,6 +14,7 @@ extension EnemyExtensions on Enemy {
     Function(Player) observed,
     Function() notObserved,
     int visionCells = 3,
+    int interval = 500,
   }) {
     Player player = gameRef.player;
     if (player == null || this.position == null) return;

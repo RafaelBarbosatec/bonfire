@@ -1,8 +1,8 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +25,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
   bool _isDead = false;
 
   /// Map available to store times that can be used to control the frequency of any action.
-  Map<String, Timer> timers = Map();
+  Map<String, IntervalTick> timers = Map();
 
   double dtUpdate = 0;
 
@@ -213,17 +213,14 @@ class Enemy extends AnimatedObject with ObjectCollision {
     _isDead = true;
   }
 
-  bool checkPassedInterval(String name, int intervalInMilli) {
-    if (this.timers[name] == null) {
-      this.timers[name] = Timer(
-        Duration(milliseconds: intervalInMilli),
-        () {
-          this.timers[name] = null;
-        },
-      );
+  bool checkPassedInterval(String name, int intervalInMilli, double dt) {
+    if (this.timers[name] == null ||
+        (this.timers[name] != null &&
+            this.timers[name].interval != intervalInMilli)) {
+      this.timers[name] = IntervalTick(intervalInMilli);
       return true;
     } else {
-      return false;
+      return this.timers[name].update(dt);
     }
   }
 

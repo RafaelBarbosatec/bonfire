@@ -43,6 +43,7 @@ extension PlayerExtensions on Player {
     Function(List<Enemy>) observed,
     Function() notObserved,
     int visionCells = 3,
+    int interval = 500,
   }) {
     if (isDead || this.position == null) return;
 

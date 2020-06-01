@@ -64,14 +64,14 @@ class Goblin extends SimpleEnemy {
         },
         visionCells: 3);
 
-    if (!_seePlayerClose) {
-      this.seeAndMoveToAttackRange(
-        positioned: (p) {
-          execAttackRange();
-        },
-        visionCells: 8,
-      );
-    }
+//    if (!_seePlayerClose) {
+//      this.seeAndMoveToAttackRange(
+//        positioned: (p) {
+//          execAttackRange();
+//        },
+//        visionCells: 8,
+//      );
+//    }
   }
 
   @override

@@ -74,7 +74,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     if (interface != null) add(interface);
     add(joystickController);
 
-    _interval = IntervalTick(10, _updateTempList);
+    _interval = IntervalTick(100, tick: _updateTempList);
   }
 
   @override
