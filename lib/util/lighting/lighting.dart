@@ -31,15 +31,18 @@ class Lighting extends GameComponent {
         -gameRef.gameCamera.position.y,
       );
       canvas.drawCircle(
-          Offset(light.gameComponent.position.center.dx,
-              light.gameComponent.position.center.dy),
-          light.radius *
-              (light.withPulse
-                  ? (1 - light.valuePulse * light.pulseVariation)
-                  : 1),
-          _paintFocus
-            ..maskFilter = MaskFilter.blur(
-                BlurStyle.normal, convertRadiusToSigma(light.blurBorder)));
+        Offset(light.gameComponent.position.center.dx,
+            light.gameComponent.position.center.dy),
+        light.radius *
+            (light.withPulse
+                ? (1 - light.valuePulse * light.pulseVariation)
+                : 1),
+        _paintFocus
+          ..maskFilter = MaskFilter.blur(
+            BlurStyle.normal,
+            convertRadiusToSigma(light.blurBorder),
+          ),
+      );
 
       if (light.color != null) {
         final Paint paint = Paint()
