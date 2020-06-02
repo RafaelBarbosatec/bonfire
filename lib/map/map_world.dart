@@ -12,10 +12,8 @@ class MapWorld extends MapGame {
   Iterable<Tile> _tilesToRender = List();
   Iterable<Tile> _tilesCollisionsRendered = List();
   Iterable<Tile> _tilesCollisions = List();
-  bool _fistRenderComplete = false;
-  final ValueChanged<double> progressLoadMap;
 
-  MapWorld(Iterable<Tile> tiles, {this.progressLoadMap}) : super(tiles) {
+  MapWorld(Iterable<Tile> tiles) : super(tiles) {
     _tilesCollisions = tiles.where((element) => element.collision);
   }
 
@@ -43,18 +41,6 @@ class MapWorld extends MapGame {
       });
       _tilesToRender = tilesRender;
       _tilesCollisionsRendered = tilesCollision;
-    }
-    if (!_fistRenderComplete) {
-      int count = _tilesToRender.length;
-      int countRendered =
-          _tilesToRender.where((tile) => tile.sprite.loaded()).length;
-      double percent = countRendered / count;
-      if (!percent.isNaN && progressLoadMap != null) {
-        progressLoadMap(percent);
-      }
-      if (percent == 1) {
-        _fistRenderComplete = true;
-      }
     }
   }
 

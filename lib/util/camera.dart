@@ -10,7 +10,11 @@ class Camera with HasGameRef<RPGGame> {
   Position position = Position.empty();
 
   Rect get cameraRect => Rect.fromLTWH(
-      position.x, position.y, gameRef.size.width, gameRef.size.height);
+        position.x - 25,
+        position.y - 25,
+        gameRef.size.width + 50,
+        gameRef.size.height + 50,
+      );
 
   void moveTop(double displacement) {
     position.y = position.y - displacement;
