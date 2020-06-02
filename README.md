@@ -499,9 +499,7 @@ Check a [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/exampl
 
 ### Observations:
 
-Since all of these elements uses the ´HasGameRef´ mixin, it is possible to acess all components internally. This will be useful for any kind of interaction between elements or the creation of a new one programatically. 
-
-If it is necessary to get the position of a component in the map, use `positionInWorld`.  This is useful for doing some stuff like adding components on the map. While this is the position of the component in relation to the map, `position` is the coordinates relative to the screen. 
+Since all of these elements uses the ´HasGameRef´ mixin, it is possible to acess all components internally. This will be useful for any kind of interaction between elements or the creation of a new one programatically.
 
 ## Utility components
 
@@ -563,7 +561,7 @@ this.gameRef.addDecoration(DECORATION);
 
 ### Camera
 
-It is possible to move the camera to some position and go back to the player afterwards. Beware that the player will be blocked from taking any action and from moving until the camera has focused on it again.
+It is possible to move the camera to some position and go back to the player afterwards. To make the camera always follow the player you should call `moveToPlayer(horizontal: 0, vertical: 0)`, so that it keeps the player centralized on screen. If you want the player to be able to move a bit before you call `moveToPlayer` with horizontal and vertical set to how much you want the player to be able to distance from the center of screen on each direction.
 
 ```dart
  gameRef.gameCamera.moveToPosition(Position(X,Y));
