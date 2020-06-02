@@ -75,6 +75,10 @@ class SimplePlayer extends Player {
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     _currentDirectional = event.directional;
+  }
+
+  @override
+  void render(Canvas canvas) {
     if (!this.isDead && !this.usePositionInWorld) {
       switch (_currentDirectional) {
         case JoystickMoveDirectional.MOVE_UP:
@@ -110,6 +114,7 @@ class SimplePlayer extends Player {
           break;
       }
     }
+    super.render(canvas);
   }
 
   void addFastAnimation(FlameAnimation.Animation animation) {

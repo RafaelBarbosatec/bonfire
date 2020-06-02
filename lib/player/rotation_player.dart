@@ -10,6 +10,7 @@ class RotationPlayer extends Player {
   final FlameAnimation.Animation animRun;
   double speed;
   double currentRadAngle;
+  bool _move = false;
 
   RotationPlayer({
     @required Position initPosition,
@@ -38,9 +39,10 @@ class RotationPlayer extends Player {
         !isDead &&
         event.radAngle != 0.0) {
       currentRadAngle = event.radAngle;
+      _move = true;
       this.animation = animRun;
-      moveFromAngle(speed, currentRadAngle);
     } else {
+      _move = false;
       this.animation = animIdle;
     }
     super.joystickChangeDirectional(event);
@@ -48,6 +50,9 @@ class RotationPlayer extends Player {
 
   @override
   void render(Canvas canvas) {
+    if (_move && !isDead) {
+      moveFromAngle(speed, currentRadAngle);
+    }
     canvas.save();
     canvas.translate(position.center.dx, position.center.dy);
     canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));

@@ -74,16 +74,16 @@ class DungeonMap {
 
   static List<GameDecoration> decorations() {
     return [
-      GameDecoration.sprite(Sprite('itens/barrel.png'),
-          initPosition: getRelativeTilePosition(10, 6),
-          width: tileSize,
-          height: tileSize,
-          frontFromPlayer: true
-//        collision: Collision(
-//            width: tileSize / 1.5,
-//            height: tileSize / 1.5,
-//            align: CollisionAlign.CENTER),
-          ),
+      GameDecoration.sprite(
+        Sprite('itens/barrel.png'),
+        initPosition: getRelativeTilePosition(10, 6),
+        width: tileSize,
+        height: tileSize,
+        collision: Collision(
+            width: tileSize / 1.5,
+            height: tileSize / 1.5,
+            align: CollisionAlign.CENTER),
+      ),
       Chest(getRelativeTilePosition(18, 7)),
       GameDecoration.sprite(
         Sprite('itens/table.png'),
