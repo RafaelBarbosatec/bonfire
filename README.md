@@ -572,7 +572,7 @@ It is possible to move the camera to some position and go back to the player aft
  gameRef.gameCamera.moveToPlayerAnimated();
 ```
 
-### Lighting (in tests)
+### Lighting (experimental)
 
 By setting the 'lightingColorGame' property on BofireWidget you automatically enable this lighting system. and to add light to the objects, just add the 'WithLighting' mixin to the component and configure its light by overwriting the 'lightingConfig' variable:
 
