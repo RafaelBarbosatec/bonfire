@@ -28,9 +28,9 @@ class Player extends AnimatedObject
   bool _isDead = false;
 
   final Size sizeCentralMovementWindow;
-  Rect rectCentralMovementWindow;
 
   double dtUpdate = 0;
+  bool focusCamera = true;
 
   Player({
     @required this.initPosition,
@@ -62,30 +62,32 @@ class Player extends AnimatedObject
   @override
   void update(double dt) {
     super.update(dt);
-
     dtUpdate = dt;
+    if (focusCamera)
+      this.gameRef.gameCamera.moveToPlayer(
+            horizontal: sizeCentralMovementWindow?.width ?? 50,
+            vertical: sizeCentralMovementWindow?.height ?? 50,
+          );
   }
 
   void moveTop(double speed) {
     double innerSpeed = speed * dtUpdate;
 
-
     Rect displacement = position.translate(0, (-innerSpeed));
 
-    if (isCollision(displacement, gameRef)) return;
+    if (isCollision(displacement, gameRef, onlyVisible: focusCamera)) return;
 
     position = displacement;
   }
 
   void moveRight(double speed) {
     double innerSpeed = speed * dtUpdate;
-  
+
     Rect displacement = position.translate(innerSpeed, 0);
 
-    if (isCollision(displacement, gameRef)) return;
+    if (isCollision(displacement, gameRef, onlyVisible: focusCamera)) return;
 
     position = displacement;
-
   }
 
   void moveBottom(double speed) {
@@ -93,7 +95,7 @@ class Player extends AnimatedObject
 
     Rect displacement = position.translate(0, innerSpeed);
 
-    if (isCollision(displacement, gameRef)) return;
+    if (isCollision(displacement, gameRef, onlyVisible: focusCamera)) return;
 
     position = displacement;
   }
@@ -103,7 +105,7 @@ class Player extends AnimatedObject
 
     Rect displacement = position.translate(-innerSpeed, 0);
 
-    if (isCollision(displacement, gameRef)) return;
+    if (isCollision(displacement, gameRef, onlyVisible: focusCamera)) return;
 
     position = displacement;
   }
@@ -117,58 +119,12 @@ class Player extends AnimatedObject
             position.center.dy + nextPoint.dy) -
         position.center;
 
-    bool enableAxisX = false;
-    bool enableAxisY = false;
-
-    if (diffBase.dx > 0) {
-      if (position.right <= rectCentralMovementWindow.right) {
-        enableAxisX = true;
-      }
-    } else if (diffBase.dx < 0) {
-      if (position.left >= rectCentralMovementWindow.left) {
-        enableAxisX = true;
-      }
-    }
-
-    if (diffBase.dy > 0) {
-      if (position.bottom <= rectCentralMovementWindow.bottom) {
-        enableAxisY = true;
-      }
-    } else if (diffBase.dy < 0) {
-      if (position.top >= rectCentralMovementWindow.top) {
-        enableAxisY = true;
-      }
-    }
-
     Offset newDiffBase = diffBase;
-    if (!enableAxisX) {
-      newDiffBase = Offset(0, diffBase.dy);
-    }
-
-    if (!enableAxisY) {
-      newDiffBase = Offset(diffBase.dx, 0);
-    }
 
     Rect newPosition = position.shift(newDiffBase);
-    if (isCollision(newPosition, gameRef)) return;
+    if (isCollision(newPosition, gameRef, onlyVisible: focusCamera)) return;
 
     position = newPosition;
-
-    if (!enableAxisX) {
-      gameRef.gameCamera.moveCamera(
-          diffBase.dx < 0 ? (diffBase.dx * -1) : diffBase.dx,
-          diffBase.dx < 0
-              ? JoystickMoveDirectional.MOVE_LEFT
-              : JoystickMoveDirectional.MOVE_RIGHT);
-    }
-
-    if (!enableAxisY) {
-      gameRef.gameCamera.moveCamera(
-          diffBase.dy < 0 ? (diffBase.dy * 1) : diffBase.dy,
-          diffBase.dy < 0
-              ? JoystickMoveDirectional.MOVE_UP
-              : JoystickMoveDirectional.MOVE_DOWN);
-    }
   }
 
   void receiveDamage(double damage, int from) {
@@ -182,27 +138,6 @@ class Player extends AnimatedObject
 
   void die() {
     _isDead = true;
-  }
-
-  @override
-  void resize(Size size) {
-    if (sizeCentralMovementWindow != null) {
-      rectCentralMovementWindow = Rect.fromLTWH(
-        (size.width / 2) - (sizeCentralMovementWindow.width / 2),
-        (size.height / 2) - (sizeCentralMovementWindow.height / 2),
-        sizeCentralMovementWindow.width,
-        sizeCentralMovementWindow.height,
-      );
-    } else {
-      double sizeWidth = width * 3;
-      double sizeHeight = height * 3;
-      rectCentralMovementWindow = Rect.fromLTWH(
-        (size.width / 2) - (sizeWidth / 2),
-        (size.height / 2) - (sizeHeight / 2),
-        sizeWidth,
-        sizeHeight,
-      );
-    }
   }
 
   bool get isDead => _isDead;

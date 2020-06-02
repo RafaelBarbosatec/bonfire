@@ -9,7 +9,8 @@ class Camera with HasGameRef<RPGGame> {
   double maxLeft = 0;
   Position position = Position.empty();
 
-  Rect get cameraRect => Rect.fromLTWH(position.x, position.y, gameRef.size.width, gameRef.size.height);
+  Rect get cameraRect => Rect.fromLTWH(
+      position.x, position.y, gameRef.size.width, gameRef.size.height);
 
   void moveTop(double displacement) {
     position.y = position.y - displacement;
@@ -60,7 +61,10 @@ class Camera with HasGameRef<RPGGame> {
     Duration duration,
     Curve curve = Curves.decelerate,
   }) {
-    final screenCenter = Position(gameRef.size.width / 2, gameRef.size.height / 2);
+    if (gameRef?.size == null) return;
+    final screenCenter =
+        Position(gameRef.size.width / 2, gameRef.size.height / 2);
+    if (gameRef?.player != null) gameRef.player.focusCamera = false;
 
     double diffX = this.position.x - (position.x - screenCenter.x);
     double diffY = this.position.y - (position.y - screenCenter.y);
@@ -79,8 +83,9 @@ class Camera with HasGameRef<RPGGame> {
 
   void moveToPosition(Position position) {
     if (gameRef?.size == null) return;
-    final screenCenter = Position(gameRef.size.width / 2, gameRef.size.height / 2);
-
+    if (gameRef?.player != null) gameRef.player.focusCamera = false;
+    final screenCenter =
+        Position(gameRef.size.width / 2, gameRef.size.height / 2);
     this.position = position - screenCenter;
   }
 
@@ -89,23 +94,33 @@ class Camera with HasGameRef<RPGGame> {
     final _positionPlayer = gameRef.player.position;
     moveToPositionAnimated(
       Position(_positionPlayer.center.dx, _positionPlayer.center.dy),
-      finish: finish,
+      finish: () {
+        gameRef.player.focusCamera = true;
+        if (finish != null) finish();
+      },
       duration: duration,
     );
   }
 
   void moveToPlayer({double horizontal = 50, double vertical = 50}) {
     if (gameRef?.player == null || gameRef?.size == null) return;
-    final screenCenter = Offset(gameRef.size.width / 2, gameRef.size.height / 2);
-    final positionPlayer = worldPositionToScreen(gameRef.player.position.center);
+    final screenCenter =
+        Offset(gameRef.size.width / 2, gameRef.size.height / 2);
+    final positionPlayer =
+        worldPositionToScreen(gameRef.player.position.center);
     final horizontalDistance = screenCenter.dx - positionPlayer.dx;
     final verticalDistance = screenCenter.dy - positionPlayer.dy;
     if (horizontalDistance.abs() > horizontal) {
-      this.gameRef.gameCamera.position.x += horizontalDistance > 0 ? horizontal - horizontalDistance : -horizontalDistance - horizontal;
+      this.gameRef.gameCamera.position.x += horizontalDistance > 0
+          ? horizontal - horizontalDistance
+          : -horizontalDistance - horizontal;
     }
     if (verticalDistance.abs() > vertical) {
-      this.gameRef.gameCamera.position.y += verticalDistance > 0 ? vertical - verticalDistance : -verticalDistance - vertical;
+      this.gameRef.gameCamera.position.y += verticalDistance > 0
+          ? vertical - verticalDistance
+          : -verticalDistance - vertical;
     }
+    gameRef.player.focusCamera = true;
   }
 
   bool isComponentOnCamera(GameComponent c) {
@@ -115,10 +130,12 @@ class Camera with HasGameRef<RPGGame> {
   }
 
   Offset worldPositionToScreen(Offset position) {
-    return position.translate(-gameRef.gameCamera.position.x, -gameRef.gameCamera.position.y);
+    return position.translate(
+        -gameRef.gameCamera.position.x, -gameRef.gameCamera.position.y);
   }
 
   Offset cameraPositionToWorld(Offset position) {
-    return position.translate(gameRef.gameCamera.position.x, gameRef.gameCamera.position.y);
+    return position.translate(
+        gameRef.gameCamera.position.x, gameRef.gameCamera.position.y);
   }
 }

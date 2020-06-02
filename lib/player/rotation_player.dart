@@ -49,10 +49,15 @@ class RotationPlayer extends Player {
   }
 
   @override
-  void render(Canvas canvas) {
+  void update(double dt) {
     if (_move && !isDead) {
       moveFromAngle(speed, currentRadAngle);
     }
+    super.update(dt);
+  }
+
+  @override
+  void render(Canvas canvas) {
     canvas.save();
     canvas.translate(position.center.dx, position.center.dy);
     canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));

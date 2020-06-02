@@ -180,7 +180,6 @@ class Knight extends SimplePlayer with WithLighting {
   void update(double dt) {
     if (this.isDead || gameRef?.size == null) return;
     _verifyStamina(dt);
-    this.gameRef.gameCamera.moveToPlayer();
     this.seeEnemy(
       visionCells: 8,
       notObserved: () {
