@@ -489,8 +489,6 @@ Veja o [exemplo](https://github.com/RafaelBarbosatec/bonfire/blob/master/example
 ### OBS:
 Esses elementos do game utilizam o mixin ´HasGameRef´, então você terá acesso a todos esses componentes (Map,Decoration,Enemy,Player,...) internamente, que serão úteis para a criação de qualquer tipo de interação ou adição de novos componentes programaticamente.
 
-Se for necessário obter a posição de um componente para ser utilizado como base para adicionar outros componentes no mapa ou coisa do tipo, sempre utilize o ```positionInWorld```, ele é a posição atual do componente no mapa. A variável ```position``` refere-se a posição na tela para ser renderizado.
-
 ## Componentes úteis
 
 São componentes que executam algum tipo de comportamento e podem ser úteis. Assim como qualquer outro componente criado por você que extenda de ```Component``` do flame ou ```AnimatedObject``` do Bonfire, você pode utilizá-lo no seu game programaticamente dessa forma:
@@ -551,7 +549,7 @@ this.gameRef.addDecoration(DECORATION);
 ```
 
 ### Câmera
-É possível movimentar a câmera de forma animada para uma determinada posição do mapa e depois voltar para o personagem. Lembrando que ao movimentar a câmera para uma determinada posição, o player fica bloqueado de ações e movimentos e só é desbloqueado quando a câmera volta a focar nele.
+É possível movimentar a câmera de forma animada para uma determinada posição do mapa e depois voltar para o personagem. Se você quiser manter o player centralizado na câmera sempre, é só chamar a função `moveToPlayer(horizontal: 0, vertical: 0)` no update. Se você quiser que o player possa se afastar um pouco do centro da tela antes da câmera seguí-lo, chame o método `moveToPlayer` com os valores de horizontal e vertical de acordo com o quanto você quer que ele possa se afastar do centro da tela em cada direção.
 
 ```dart
  gameRef.gameCamera.moveToPosition(Position(X,Y));

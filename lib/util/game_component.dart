@@ -21,10 +21,7 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
   void handlerTapDown(int pointer, Offset position) {
     if (this.position == null) return;
 
-    final absolutePosition = Offset(
-      position.dx + gameRef.gameCamera.position.x,
-      position.dy + gameRef.gameCamera.position.y,
-    );
+    final absolutePosition = gameRef.gameCamera.cameraPositionToWorld(position);
 
     if (this.isHud()) {
       this.onTapDown(pointer, position);
@@ -42,10 +39,7 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
   void handlerTapUp(int pointer, Offset position) {
     if (this.position == null) return;
 
-    final absolutePosition = Offset(
-      position.dx + gameRef.gameCamera.position.x,
-      position.dy + gameRef.gameCamera.position.y,
-    );
+    final absolutePosition = gameRef.gameCamera.cameraPositionToWorld(position);
 
     if (this.isHud()) {
       this.onTapUp(pointer, position);
