@@ -1,3 +1,7 @@
+## [0.4.2] - 23/05/2020
+* improvements in TextDamage
+* performance improvements
+
 ## [0.4.1] - 23/05/2020
 * add lightingConfig in extensions
 

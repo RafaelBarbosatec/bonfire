@@ -80,9 +80,10 @@ class DungeonMap {
         width: tileSize,
         height: tileSize,
         collision: Collision(
-            width: tileSize / 1.5,
-            height: tileSize / 1.5,
-            align: CollisionAlign.CENTER),
+          width: tileSize / 1.5,
+          height: tileSize / 1.5,
+          align: CollisionAlign.CENTER,
+        ),
       ),
       Chest(getRelativeTilePosition(18, 7)),
       GameDecoration.sprite(

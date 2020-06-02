@@ -30,7 +30,7 @@ class Player extends AnimatedObject
   final Size sizeCentralMovementWindow;
   Rect rectCentralMovementWindow;
 
-  double _dtUpdate = 0;
+  double dtUpdate = 0;
 
   Player({
     @required this.initPosition,
@@ -63,13 +63,14 @@ class Player extends AnimatedObject
   void update(double dt) {
     super.update(dt);
 
-    _dtUpdate = dt;
+    dtUpdate = dt;
   }
 
   void moveTop(double speed) {
-    double innerSpeed = speed * _dtUpdate;
+    double innerSpeed = speed * dtUpdate;
 
-    Rect displacement = position.translate(0, (innerSpeed * -1));
+
+    Rect displacement = position.translate(0, (-innerSpeed));
 
     if (isCollision(displacement, gameRef)) return;
 
@@ -77,8 +78,8 @@ class Player extends AnimatedObject
   }
 
   void moveRight(double speed) {
-    double innerSpeed = speed * _dtUpdate;
-
+    double innerSpeed = speed * dtUpdate;
+  
     Rect displacement = position.translate(innerSpeed, 0);
 
     if (isCollision(displacement, gameRef)) return;
@@ -88,7 +89,7 @@ class Player extends AnimatedObject
   }
 
   void moveBottom(double speed) {
-    double innerSpeed = speed * _dtUpdate;
+    double innerSpeed = speed * dtUpdate;
 
     Rect displacement = position.translate(0, innerSpeed);
 
@@ -98,9 +99,9 @@ class Player extends AnimatedObject
   }
 
   void moveLeft(double speed) {
-    double innerSpeed = speed * _dtUpdate;
+    double innerSpeed = speed * dtUpdate;
 
-    Rect displacement = position.translate(innerSpeed * -1, 0);
+    Rect displacement = position.translate(-innerSpeed, 0);
 
     if (isCollision(displacement, gameRef)) return;
 
@@ -108,8 +109,8 @@ class Player extends AnimatedObject
   }
 
   void moveFromAngle(double speed, double angle) {
-    double nextX = (speed * _dtUpdate) * cos(angle);
-    double nextY = (speed * _dtUpdate) * sin(angle);
+    double nextX = (speed * dtUpdate) * cos(angle);
+    double nextY = (speed * dtUpdate) * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
     Offset diffBase = Offset(position.center.dx + nextPoint.dx,

@@ -10,6 +10,8 @@ import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/game_interface/game_interface.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/lighting/lighting.dart';
+import 'package:bonfire/util/lighting/lighting_config.dart';
+import 'package:bonfire/util/lighting/with_lighting.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator.dart';
 import 'package:flame/components/component.dart';
@@ -39,7 +41,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   Iterable<Enemy> _livingEnemies = List();
   Iterable<GameDecoration> _decorations = List();
   Iterable<GameDecoration> _visibleDecorations = List();
-
+  Iterable<LightingConfig> _lightToRender = List();
   IntervalTick _interval;
 
   RPGGame({
@@ -61,28 +63,25 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   })  : assert(map != null),
         assert(context != null),
         assert(joystickController != null) {
-    if (gameController != null) gameController.setGame(this);
     gameCamera.gameRef = this;
     joystickController.joystickListener = player ?? MapExplorer(gameCamera);
+    if (gameController != null) gameController.setGame(this);
     if (background != null) add(background);
     add(map);
     decorations?.forEach((decoration) => add(decoration));
     enemies?.forEach((enemy) => add(enemy));
     if (player != null) add(player);
     if (lightingColorGame != null) add(Lighting(color: lightingColorGame));
-    add(joystickController);
     if (interface != null) add(interface);
+    add(joystickController);
 
-    _interval = IntervalTick(10, () {
-      _updateList();
-    });
+    _interval = IntervalTick(100, tick: _updateTempList);
   }
 
   @override
   void update(double t) {
     _interval.update(t);
     super.update(t);
-    if (gameController != null) gameController.notifyListeners();
   }
 
   @override
@@ -126,6 +125,10 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     return _decorations;
   }
 
+  Iterable<LightingConfig> lightVisible() {
+    return _lightToRender;
+  }
+
   ValueGenerator getValueGenerator(
     Duration duration, {
     double begin = 0.0,
@@ -144,7 +147,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     joystickController.onKeyboard(event);
   }
 
-  void _updateList() {
+  void _updateTempList() {
     _decorations =
         components.where((element) => (element is GameDecoration)).cast();
     _visibleDecorations =
@@ -154,5 +157,15 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     _livingEnemies = _enemies.where((element) => !element.isDead).cast();
     _visibleEnemies =
         _livingEnemies.where((element) => element.isVisibleInMap());
+
+    if (lightingColorGame != null) {
+      _lightToRender = components
+          .where((element) =>
+              element is WithLighting &&
+              (element as WithLighting).isVisible(size))
+          .map((e) => (e as WithLighting).lightingConfig);
+    }
+
+    if (gameController != null) gameController.notifyListeners();
   }
 }

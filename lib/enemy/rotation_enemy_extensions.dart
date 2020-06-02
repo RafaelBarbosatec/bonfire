@@ -59,7 +59,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     VoidCallback execute,
     int interval = 1000,
   }) {
-    if (!this.checkPassedInterval('attackMelee', interval)) return;
+    if (!this.checkPassedInterval('attackMelee', interval, dtUpdate)) return;
 
     Player player = gameRef.player;
 
@@ -114,7 +114,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     VoidCallback execute,
     LightingConfig lightingConfig,
   }) {
-    if (!this.checkPassedInterval('attackRange', interval)) return;
+    if (!this.checkPassedInterval('attackRange', interval, dtUpdate)) return;
 
     if (isDead) return;
 

@@ -103,7 +103,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     FlameAnimation.Animation attackEffectTopAnim,
     VoidCallback execute,
   }) {
-    if (!this.checkPassedInterval('attackMelee', interval)) return;
+    if (!this.checkPassedInterval('attackMelee', interval, dtUpdate)) return;
 
     if (isDead || this.position == null) return;
 
@@ -215,7 +215,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     VoidCallback execute,
     LightingConfig lightingConfig,
   }) {
-    if (!this.checkPassedInterval('attackRange', interval)) return;
+    if (!this.checkPassedInterval('attackRange', interval, dtUpdate)) return;
 
     Player player = this.gameRef.player;
 
