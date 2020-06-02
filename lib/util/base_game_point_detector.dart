@@ -39,7 +39,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
 
   void onPointerUp(PointerUpEvent event) {
     _touchableComponents.forEach(
-      (c) => c.handlerTabUp(
+      (c) => c.handlerTapUp(
         event.pointer,
         event.localPosition,
       ),
@@ -59,7 +59,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
 
   void onPointerDown(PointerDownEvent event) {
     _touchableComponents
-        .forEach((c) => c.handlerTabDown(event.pointer, event.localPosition));
+        .forEach((c) => c.handlerTapDown(event.pointer, event.localPosition));
     _pointerDetectorComponents.forEach((c) => c.onPointerDown(event));
   }
 

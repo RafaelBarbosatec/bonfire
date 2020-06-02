@@ -26,9 +26,9 @@ class AnimatedFollowerObject extends AnimatedObject {
   void update(double dt) {
     super.update(dt);
     Position newPosition = positionFromTarget ?? Position.empty();
-    this.positionInWorld = Rect.fromLTWH(
-      target.positionInWorld.left,
-      target.positionInWorld.top,
+    this.position = Rect.fromLTWH(
+      target.position.left,
+      target.position.top,
       width,
       height,
     ).translate(newPosition.x, newPosition.y);

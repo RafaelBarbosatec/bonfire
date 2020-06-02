@@ -50,7 +50,7 @@ class FlyingAttackAngleObject extends AnimatedObject
   }) {
     if (lightingConfig != null) lightingConfig.gameComponent = this;
     animation = flyAnimation;
-    positionInWorld = Rect.fromLTWH(
+    position = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
       width,
@@ -71,11 +71,11 @@ class FlyingAttackAngleObject extends AnimatedObject
     double nextY = (speed * dt) * _senAngle;
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(positionInWorld.center.dx + nextPoint.dx,
-            positionInWorld.center.dy + nextPoint.dy) -
-        positionInWorld.center;
+    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
+            position.center.dy + nextPoint.dy) -
+        position.center;
 
-    positionInWorld = positionInWorld.shift(diffBase);
+    position = position.shift(diffBase);
 
     if (!_verifyExistInWorld()) {
       remove();
@@ -103,8 +103,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     bool destroy = false;
 
     if (withCollision)
-      destroy = isCollisionPositionInWorld(positionInWorld, gameRef,
-          onlyVisible: false);
+      destroy = isCollision(position, gameRef, onlyVisible: false);
 
     if (damageInPlayer) {
       if (position.overlaps(gameRef.player.rectCollision)) {
@@ -117,7 +116,7 @@ class FlyingAttackAngleObject extends AnimatedObject
       gameRef
           .livingEnemies()
           .where(
-              (enemy) => enemy.rectCollisionInWorld.overlaps(positionInWorld))
+              (enemy) => enemy.rectCollision.overlaps(position))
           .forEach((enemy) {
         enemy.receiveDamage(damage, id);
         destroy = true;
@@ -130,11 +129,11 @@ class FlyingAttackAngleObject extends AnimatedObject
         double nextY = (height / 2) * _senAngle;
         Offset nextPoint = Offset(nextX, nextY);
 
-        Offset diffBase = Offset(positionInWorld.center.dx + nextPoint.dx,
-                positionInWorld.center.dy + nextPoint.dy) -
-            positionInWorld.center;
+        Offset diffBase = Offset(position.center.dx + nextPoint.dx,
+                position.center.dy + nextPoint.dy) -
+            position.center;
 
-        Rect positionDestroy = positionInWorld.shift(diffBase);
+        Rect positionDestroy = position.shift(diffBase);
 
         gameRef.add(
           AnimatedObjectOnce(
@@ -150,19 +149,19 @@ class FlyingAttackAngleObject extends AnimatedObject
   }
 
   bool _verifyExistInWorld() {
+    final mapSize = gameRef.map.getMapSize();
+
     bool result = true;
-    if (positionInWorld.left < 0) {
+    if (position.left < 0) {
       result = false;
     }
-    if (positionInWorld.right >
-        gameRef.gameCamera.maxLeft + gameRef.size.width) {
+    if (position.right > mapSize.width) {
       result = false;
     }
-    if (positionInWorld.top < 0) {
+    if (position.top < 0) {
       result = false;
     }
-    if (positionInWorld.bottom >
-        gameRef.gameCamera.maxTop + gameRef.size.height) {
+    if (position.bottom > mapSize.height) {
       result = false;
     }
 

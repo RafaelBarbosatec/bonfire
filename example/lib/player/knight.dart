@@ -98,8 +98,8 @@ class Knight extends SimplePlayer with WithLighting {
     gameRef.addDecoration(
       GameDecoration(
         initPosition: Position(
-          positionInWorld.left,
-          positionInWorld.top,
+          position.center.dx,
+          position.center.dy,
         ),
         height: 30,
         width: 30,
@@ -178,8 +178,9 @@ class Knight extends SimplePlayer with WithLighting {
 
   @override
   void update(double dt) {
-    if (this.isDead) return;
+    if (this.isDead || gameRef?.size == null) return;
     _verifyStamina(dt);
+    this.gameRef.gameCamera.moveToPlayer();
     this.seeEnemy(
       visionCells: 8,
       notObserved: () {

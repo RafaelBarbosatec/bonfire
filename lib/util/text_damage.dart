@@ -13,7 +13,7 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
   final Position initPosition;
   final DirectionTextDamage direction;
   bool destroyed = false;
-  Position positionInWorld;
+  Position position;
   double _initialY;
   double _velocity;
   final double gravity;
@@ -29,8 +29,8 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
     this.gravity = 0.5,
     this.direction = DirectionTextDamage.RANDOM,
   }) : super(text, config: config) {
-    positionInWorld = initPosition;
-    _initialY = positionInWorld.y;
+    position = initPosition;
+    _initialY = position.y;
     _velocity = initVelocityTop;
     switch (direction) {
       case DirectionTextDamage.LEFT:
@@ -45,23 +45,27 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
       case DirectionTextDamage.NONE:
         break;
     }
-    setByPosition(positionInWorld);
+    setByPosition(position);
   }
+
+  @override
+  bool destroy() => destroyed;
 
   @override
   void update(double t) {
     setByPosition(Position(
-      positionInWorld.x + gameRef.gameCamera.position.x,
-      positionInWorld.y + gameRef.gameCamera.position.y,
+      position.x,
+      position.y,
     ));
-    positionInWorld.y += _velocity;
-    positionInWorld.x += _moveAxisX;
+
+    position.y += _velocity;
+    position.x += _moveAxisX;
     _velocity += gravity;
 
     if (onlyUp && _velocity >= 0) {
       remove();
     }
-    if (positionInWorld.y > _initialY + 20) {
+    if (position.y > _initialY + 20) {
       remove();
     }
 
@@ -70,10 +74,5 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
 
   void remove() {
     destroyed = true;
-  }
-
-  @override
-  bool destroy() {
-    return destroyed;
   }
 }

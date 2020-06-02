@@ -41,7 +41,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       bool isTouchable = false}) {
     this.animation = animation;
     _sprite = sprite;
-    this.positionInWorld = generateRectWithBleedingPixel(
+    this.position = generateRectWithBleedingPixel(
       initPosition,
       width,
       height,
@@ -60,7 +60,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     bool isTouchable = false,
   }) {
     _sprite = sprite;
-    this.positionInWorld = generateRectWithBleedingPixel(
+    this.position = generateRectWithBleedingPixel(
       initPosition,
       width,
       height,
@@ -79,7 +79,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     bool isTouchable = false,
   }) {
     this.animation = animation;
-    this.positionInWorld = generateRectWithBleedingPixel(
+    this.position = generateRectWithBleedingPixel(
       initPosition,
       width,
       height,
@@ -134,5 +134,4 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   }
 
   Rect get rectCollision => getRectCollision(position);
-  Rect get rectCollisionInWorld => getRectCollision(positionInWorld);
 }

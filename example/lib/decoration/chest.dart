@@ -71,8 +71,8 @@ class Chest extends GameDecoration {
     gameRef.addDecoration(
       PotionLife(
         Position(
-          positionInWorld.translate(width * 2, 0).left,
-          positionInWorld.top - height * 2,
+          position.translate(width * 2, 0).left,
+          position.top - height * 2,
         ),
         30,
       ),
@@ -81,8 +81,8 @@ class Chest extends GameDecoration {
     gameRef.addDecoration(
       PotionLife(
         Position(
-          positionInWorld.translate(width * 2, 0).left,
-          positionInWorld.top + height * 2,
+          position.translate(width * 2, 0).left,
+          position.top + height * 2,
         ),
         30,
       ),
@@ -96,7 +96,7 @@ class Chest extends GameDecoration {
           textureWidth: 16,
           textureHeight: 16,
         ),
-        position: positionInWorld.translate(width * 2, 0),
+        position: position.translate(width * 2, 0),
       ),
     );
 
@@ -108,7 +108,7 @@ class Chest extends GameDecoration {
           textureWidth: 16,
           textureHeight: 16,
         ),
-        position: positionInWorld.translate(width * 2, height * 2),
+        position: position.translate(width * 2, height * 2),
       ),
     );
   }
