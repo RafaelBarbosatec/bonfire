@@ -1,9 +1,9 @@
 import 'dart:ui';
 
-import 'package:bonfire/util/world_component.dart';
+import 'package:bonfire/util/game_component.dart';
 import 'package:flame/sprite.dart';
 
-class SpriteObject extends WorldComponent {
+class SpriteObject extends GameComponent {
   Sprite sprite;
 
   @override

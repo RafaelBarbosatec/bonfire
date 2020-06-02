@@ -12,6 +12,9 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
 
   bool isTouchable = false;
 
+  /// Variable used to control whether the component has been destroyed.
+  bool _isDestroyed = false;
+
   void onTap() {}
   void onTapDown(int pointer, Offset position) {}
   void onTapUp(int pointer, Offset position) {}
@@ -48,9 +51,35 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
       }
     } else {
       this.onTapUp(pointer, absolutePosition);
-      if (this.position.contains(absolutePosition) && pointer == this._pointer) {
+      if (this.position.contains(absolutePosition) &&
+          pointer == this._pointer) {
         this.onTap();
       }
     }
+  }
+
+  @override
+  void render(Canvas c) {}
+
+  @override
+  void update(double t) {
+    position ??= Rect.zero;
+  }
+
+  @override
+  bool destroy() {
+    return _isDestroyed;
+  }
+
+  /// This method destroy of the component
+  void remove() {
+    _isDestroyed = true;
+  }
+
+  bool isVisibleInMap() {
+    if (gameRef?.size == null || position == null || destroy() == true)
+      return false;
+
+    return position.overlaps(gameRef.gameCamera.cameraRect);
   }
 }
