@@ -168,7 +168,6 @@ class Knight extends SimplePlayer with WithLighting {
       speed: initSpeed * 2,
       lightingConfig: LightingConfig(
         gameComponent: this,
-        color: Colors.orange.withOpacity(0.1),
         radius: 25,
         blurBorder: 15,
       ),
