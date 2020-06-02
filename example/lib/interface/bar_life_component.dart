@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/game_interface/interface_component.dart';
 import 'package:example/player/knight.dart';
 import 'package:flutter/material.dart';
 

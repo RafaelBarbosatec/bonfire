@@ -28,9 +28,7 @@ mixin ObjectCollision {
             : game.map.getCollisions())
         .where((i) => i.position.overlaps(rectCollision));
 
-    if (collisions.length > 0) {
-      return true;
-    }
+    if (collisions.length > 0) return true;
 
     final collisionsDecorations =
         (onlyVisible ? game.visibleDecorations() : game.decorations()).where(
@@ -39,9 +37,7 @@ mixin ObjectCollision {
                 i.collision != null &&
                 i.rectCollision.overlaps(rectCollision));
 
-    if (collisionsDecorations.length > 0) {
-      return true;
-    }
+    if (collisionsDecorations.length > 0) return true;
 
     return false;
   }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
@@ -13,15 +11,13 @@ abstract class GameListener {
 }
 
 class GameController {
-  Timer _timerListener;
-  int frequencyListener = 1000;
   GameListener _gameListener;
   RPGGame _game;
   int _lastCountLiveEnemies = 0;
 
   void setGame(RPGGame game) {
     _game = game;
-    _lastCountLiveEnemies = _game.livingEnemies().length;
+    _lastCountLiveEnemies = livingEnemies.length;
   }
 
   void addEnemy(Enemy enemy) {
@@ -41,24 +37,17 @@ class GameController {
   }
 
   void notifyListeners() {
-    if (_timerListener == null) {
-      _timerListener = Timer(
-        Duration(milliseconds: frequencyListener),
-        () => _timerListener = null,
-      );
+    bool notifyChangeEnemy = false;
+    int countLive = livingEnemies.length;
 
-      bool notifyChangeEnemy = false;
-      int countLive = livingEnemies.length;
-
-      if (_lastCountLiveEnemies != countLive) {
-        _lastCountLiveEnemies = countLive;
-        notifyChangeEnemy = true;
-      }
-      if (_gameListener != null) {
-        _gameListener.updateGame();
-        if (notifyChangeEnemy)
-          _gameListener.changeCountLiveEnemies(_lastCountLiveEnemies);
-      }
+    if (_lastCountLiveEnemies != countLive) {
+      _lastCountLiveEnemies = countLive;
+      notifyChangeEnemy = true;
+    }
+    if (_gameListener != null) {
+      _gameListener.updateGame();
+      if (notifyChangeEnemy)
+        _gameListener.changeCountLiveEnemies(_lastCountLiveEnemies);
     }
   }
 

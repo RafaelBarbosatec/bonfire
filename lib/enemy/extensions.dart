@@ -14,6 +14,7 @@ extension EnemyExtensions on Enemy {
     Function(Player) observed,
     Function() notObserved,
     int visionCells = 3,
+    int interval = 500,
   }) {
     Player player = gameRef.player;
     if (player == null || this.position == null) return;
@@ -64,11 +65,17 @@ extension EnemyExtensions on Enemy {
     return Direction.left;
   }
 
-  void showDamage(double damage,
-      {TextConfig config = const TextConfig(
-        fontSize: 10,
-        color: Colors.white,
-      )}) {
+  void showDamage(
+    double damage, {
+    TextConfig config = const TextConfig(
+      fontSize: 14,
+      color: Colors.white,
+    ),
+    double initVelocityTop = -5,
+    double gravity = 0.5,
+    DirectionTextDamage direction = DirectionTextDamage.RANDOM,
+    bool onlyUp = false,
+  }) {
     gameRef.add(
       TextDamage(
         damage.toInt().toString(),
@@ -77,6 +84,10 @@ extension EnemyExtensions on Enemy {
           position.top,
         ),
         config: config,
+        initVelocityTop: initVelocityTop,
+        gravity: gravity,
+        direction: direction,
+        onlyUp: onlyUp,
       ),
     );
   }
