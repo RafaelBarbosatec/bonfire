@@ -11,6 +11,7 @@ abstract class MapGame extends Component with HasGameRef<RPGGame> {
   Iterable<Tile> getRendered();
 
   Iterable<Tile> getCollisionsRendered();
+  Iterable<Tile> getCollisions();
 
   void updateTiles(Iterable<Tile> map);
 }

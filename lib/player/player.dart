@@ -33,7 +33,7 @@ class Player extends AnimatedObject
   final Size sizeCentralMovementWindow;
   Rect rectCentralMovementWindow;
 
-  double _dtUpdate = 0;
+  double dtUpdate = 0;
 
   Player({
     @required this.initPosition,
@@ -69,13 +69,13 @@ class Player extends AnimatedObject
       _nextFrameUsePosition = false;
       _usePositionInWorld = false;
     }
-    _dtUpdate = dt;
+    dtUpdate = dt;
   }
 
   void moveTop(double speed) {
     if (position.top <= 0) return;
 
-    double innerSpeed = speed * _dtUpdate;
+    double innerSpeed = speed * dtUpdate;
 
     Rect displacement = position.translate(0, (innerSpeed * -1));
 
@@ -93,7 +93,7 @@ class Player extends AnimatedObject
   void moveRight(double speed) {
     if (position.right >= gameRef.size.width) return;
 
-    double innerSpeed = speed * _dtUpdate;
+    double innerSpeed = speed * dtUpdate;
 
     Rect displacement = position.translate(innerSpeed, 0);
 
@@ -111,7 +111,7 @@ class Player extends AnimatedObject
   void moveBottom(double speed) {
     if (position.bottom >= gameRef.size.height) return;
 
-    double innerSpeed = speed * _dtUpdate;
+    double innerSpeed = speed * dtUpdate;
 
     Rect displacement = position.translate(0, innerSpeed);
 
@@ -129,7 +129,7 @@ class Player extends AnimatedObject
   void moveLeft(double speed) {
     if (position.left <= 0) return;
 
-    double innerSpeed = speed * _dtUpdate;
+    double innerSpeed = speed * dtUpdate;
 
     Rect displacement = position.translate(innerSpeed * -1, 0);
 
@@ -145,8 +145,8 @@ class Player extends AnimatedObject
   }
 
   void moveFromAngle(double speed, double angle) {
-    double nextX = (speed * _dtUpdate) * cos(angle);
-    double nextY = (speed * _dtUpdate) * sin(angle);
+    double nextX = (speed * dtUpdate) * cos(angle);
+    double nextY = (speed * dtUpdate) * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
     Offset diffBase = Offset(position.center.dx + nextPoint.dx,

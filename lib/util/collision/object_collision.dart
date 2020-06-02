@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:flutter/material.dart';
@@ -7,60 +8,54 @@ import 'package:flutter/material.dart';
 mixin ObjectCollision {
   Collision collision = Collision();
 
-  bool isCollision(Rect displacement, RPGGame game) {
+  bool isCollision(Rect displacement, RPGGame game, {bool onlyVisible = true}) {
     Rect rectCollision = getRectCollision(displacement);
 
-    var collisions = game.map
-        .getCollisionsRendered()
-        .where((i) => i.collision && i.position.overlaps(rectCollision));
+    var collisions = (onlyVisible
+            ? game.map.getCollisionsRendered()
+            : game.map.getCollisions())
+        .where((i) => i.position.overlaps(rectCollision));
 
-    if (collisions.length > 0) {
-      return true;
-    }
+    if (collisions.length > 0) return true;
 
-    if (game.decorations != null) {
-      var collisionsDecorations = game.decorations.where((i) =>
-          !i.destroy() &&
-          i.collision != null &&
-          i.rectCollision.overlaps(rectCollision));
+    var collisionsDecorations =
+        (onlyVisible ? game.visibleDecorations() : game.decorations())
+            .where((i) =>
+                i.collision != null && i.rectCollision.overlaps(rectCollision))
+            .cast();
 
-      if (collisionsDecorations.length > 0) {
-        return true;
-      }
-    }
+    if (collisionsDecorations.length > 0) return true;
 
     return false;
   }
 
-  bool isCollisionPositionInWorld(Rect displacement, RPGGame game) {
+  bool isCollisionPositionInWorld(Rect displacement, RPGGame game,
+      {bool onlyVisible = true}) {
     Rect rectCollision = getRectCollision(displacement);
 
-    var collisions = game.map
-        .getCollisionsRendered()
-        .where((i) => i.collision && i.positionInWorld.overlaps(rectCollision));
+    var collisions = (onlyVisible
+            ? game.map.getCollisionsRendered()
+            : game.map.getCollisions())
+        .where((i) => i.positionInWorld.overlaps(rectCollision));
 
-    if (collisions.length > 0) {
-      return true;
-    }
+    if (collisions.length > 0) return true;
 
-    if (game.decorations != null) {
-      var collisionsDecorations = game.decorations.where((i) =>
-          !i.destroy() &&
-          i.collision != null &&
-          i.rectCollisionInWorld.overlaps(rectCollision));
+    var collisionsDecorations =
+        (onlyVisible ? game.visibleDecorations() : game.decorations()).where(
+            (i) =>
+                i.collision != null &&
+                i.rectCollisionInWorld.overlaps(rectCollision));
 
-      if (collisionsDecorations.length > 0) {
-        return true;
-      }
-    }
+    if (collisionsDecorations.length > 0) return true;
 
     return false;
   }
 
   bool isCollisionTranslate(
-      Rect position, double translateX, double translateY, RPGGame game) {
+      Rect position, double translateX, double translateY, RPGGame game,
+      {bool onlyVisible = true}) {
     var moveToCurrent = position.translate(translateX, translateY);
-    return isCollision(moveToCurrent, game);
+    return isCollision(moveToCurrent, game, onlyVisible: onlyVisible);
   }
 
   Rect getRectCollision(Rect displacement) {

@@ -4,7 +4,6 @@ import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/gesture/pointer_detector.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/gestures.dart';
 import 'package:flutter/services.dart';
 
 enum JoystickMoveDirectional {
@@ -49,7 +48,7 @@ abstract class JoystickListener {
 }
 
 abstract class JoystickController extends Component
-    with HasGameRef<RPGGame>, TapDetector, PointerDetector {
+    with HasGameRef<RPGGame>, PointerDetector {
   JoystickListener joystickListener;
 
   void onKeyboard(RawKeyEvent event) {}
