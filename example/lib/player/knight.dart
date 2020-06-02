@@ -81,6 +81,7 @@ class Knight extends SimplePlayer with WithLighting {
       if (event.event == ActionEvent.MOVE) {
         showDirection = true;
         angleRadAttack = event.radAngle;
+        actionAttackRange();
       }
       if (event.event == ActionEvent.UP) {
         showDirection = false;
@@ -146,7 +147,7 @@ class Knight extends SimplePlayer with WithLighting {
   void actionAttackRange() {
     if (stamina < 10) return;
 
-    decrementStamina(10);
+//    decrementStamina(10);
 
     this.simpleAttackRangeByAngle(
       animationTop: FlameAnimation.Animation.sequenced(
