@@ -12,6 +12,7 @@ class Knight extends SimplePlayer with WithLighting {
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
   IntervalTick _timerStamina;
+  IntervalTick _timerAtackRange;
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
@@ -55,6 +56,7 @@ class Knight extends SimplePlayer with WithLighting {
         ) {
     spriteDirectionAttack = Sprite('direction_attack.png');
     _timerStamina = IntervalTick(100);
+    _timerAtackRange = IntervalTick(100);
     lightingConfig = LightingConfig(
       gameComponent: this,
       radius: width * 1.5,
@@ -80,7 +82,7 @@ class Knight extends SimplePlayer with WithLighting {
       if (event.event == ActionEvent.MOVE) {
         showDirection = true;
         angleRadAttack = event.radAngle;
-        actionAttackRange();
+        if (_timerAtackRange.update(dtUpdate)) actionAttackRange();
       }
       if (event.event == ActionEvent.UP) {
         showDirection = false;
