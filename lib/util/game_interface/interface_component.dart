@@ -13,6 +13,9 @@ class InterfaceComponent extends GameComponent {
   int _pointer;
   Sprite spriteToRender;
 
+  @override
+  bool isHud() => true;
+
   InterfaceComponent({
     @required this.id,
     @required Position position,

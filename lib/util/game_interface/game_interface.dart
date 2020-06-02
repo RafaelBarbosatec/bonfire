@@ -1,11 +1,14 @@
 import 'dart:ui';
 
 import 'package:bonfire/util/game_component.dart';
-import 'package:bonfire/util/game_intercafe/interface_component.dart';
+import 'package:bonfire/util/game_interface/interface_component.dart';
 import 'package:flutter/widgets.dart';
 
 class GameInterface extends GameComponent {
   List<InterfaceComponent> _components = List();
+
+  @override
+  bool isHud() => true;
 
   @override
   bool isTouchable = true;
@@ -37,14 +40,14 @@ class GameInterface extends GameComponent {
   }
 
   @override
-  void handlerTabDown(int pointer, Offset position) {
-    _components.forEach((i) => i.handlerTabDown(pointer, position));
-    super.handlerTabDown(pointer, position);
+  void handlerTapDown(int pointer, Offset position) {
+    _components.forEach((i) => i.handlerTapDown(pointer, position));
+    super.handlerTapDown(pointer, position);
   }
 
   @override
-  void handlerTabUp(int pointer, Offset position) {
-    _components.forEach((i) => i.handlerTabUp(pointer, position));
-    super.handlerTabUp(pointer, position);
+  void handlerTapUp(int pointer, Offset position) {
+    _components.forEach((i) => i.handlerTapUp(pointer, position));
+    super.handlerTapUp(pointer, position);
   }
 }

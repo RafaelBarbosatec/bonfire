@@ -27,8 +27,8 @@ extension PlayerExtensions on Player {
       TextDamage(
         damage.toInt().toString(),
         Position(
-          positionInWorld.center.dx,
-          positionInWorld.top,
+          position.center.dx,
+          position.top,
         ),
         config: config,
         initVelocityTop: initVelocityTop,
@@ -96,11 +96,11 @@ extension PlayerExtensions on Player {
     double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.positionInWorld.center.dx + nextPoint.dx,
-            this.positionInWorld.center.dy + nextPoint.dy) -
-        this.positionInWorld.center;
+    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
+            this.position.center.dy + nextPoint.dy) -
+        this.position.center;
 
-    Rect position = this.positionInWorld.shift(diffBase);
+    Rect position = this.position.shift(diffBase);
     gameRef.add(FlyingAttackAngleObject(
       id: id,
       initPosition: Position(position.left, position.top),
@@ -148,33 +148,33 @@ extension PlayerExtensions on Player {
       case Direction.left:
         if (animationLeft != null) attackRangeAnimation = animationLeft;
         startPosition = Position(
-          this.rectCollisionInWorld.left - width,
-          (this.rectCollisionInWorld.top +
-              (this.rectCollisionInWorld.height - height) / 2),
+          this.rectCollision.left - width,
+          (this.rectCollision.top +
+              (this.rectCollision.height - height) / 2),
         );
         break;
       case Direction.right:
         if (animationRight != null) attackRangeAnimation = animationRight;
         startPosition = Position(
-          this.rectCollisionInWorld.right,
-          (this.rectCollisionInWorld.top +
-              (this.rectCollisionInWorld.height - height) / 2),
+          this.rectCollision.right,
+          (this.rectCollision.top +
+              (this.rectCollision.height - height) / 2),
         );
         break;
       case Direction.top:
         if (animationTop != null) attackRangeAnimation = animationTop;
         startPosition = Position(
-          (this.rectCollisionInWorld.left +
-              (this.rectCollisionInWorld.width - width) / 2),
-          this.rectCollisionInWorld.top - height,
+          (this.rectCollision.left +
+              (this.rectCollision.width - width) / 2),
+          this.rectCollision.top - height,
         );
         break;
       case Direction.bottom:
         if (animationBottom != null) attackRangeAnimation = animationBottom;
         startPosition = Position(
-          (this.rectCollisionInWorld.left +
-              (this.rectCollisionInWorld.width - width) / 2),
-          this.rectCollisionInWorld.bottom,
+          (this.rectCollision.left +
+              (this.rectCollision.width - width) / 2),
+          this.rectCollision.bottom,
         );
         break;
     }
@@ -220,26 +220,26 @@ extension PlayerExtensions on Player {
     Direction attackDirection = direction;
     switch (attackDirection) {
       case Direction.top:
-        positionAttack = Rect.fromLTWH(positionInWorld.left,
-            positionInWorld.top - heightArea, widthArea, heightArea);
+        positionAttack = Rect.fromLTWH(position.left,
+            position.top - heightArea, widthArea, heightArea);
         if (animationTop != null) anim = animationTop;
         pushTop = heightArea * -1;
         break;
       case Direction.right:
-        positionAttack = Rect.fromLTWH(positionInWorld.left + widthArea,
-            positionInWorld.top, widthArea, heightArea);
+        positionAttack = Rect.fromLTWH(position.left + widthArea,
+            position.top, widthArea, heightArea);
         if (animationRight != null) anim = animationRight;
         pushLeft = widthArea;
         break;
       case Direction.bottom:
-        positionAttack = Rect.fromLTWH(positionInWorld.left,
-            positionInWorld.top + heightArea, widthArea, heightArea);
+        positionAttack = Rect.fromLTWH(position.left,
+            position.top + heightArea, widthArea, heightArea);
         if (animationBottom != null) anim = animationBottom;
         pushTop = heightArea;
         break;
       case Direction.left:
-        positionAttack = Rect.fromLTWH(positionInWorld.left - widthArea,
-            positionInWorld.top, widthArea, heightArea);
+        positionAttack = Rect.fromLTWH(position.left - widthArea,
+            position.top, widthArea, heightArea);
         if (animationLeft != null) anim = animationLeft;
         pushLeft = widthArea * -1;
         break;
@@ -252,7 +252,7 @@ extension PlayerExtensions on Player {
 
     gameRef
         .visibleEnemies()
-        .where((enemy) => enemy.rectCollisionInWorld.overlaps(positionAttack))
+        .where((enemy) => enemy.rectCollision.overlaps(positionAttack))
         .forEach((enemy) {
       enemy.receiveDamage(damage, id);
       Rect rectAfterPush = enemy.position.translate(pushLeft, pushTop);
@@ -279,11 +279,11 @@ extension PlayerExtensions on Player {
     double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.positionInWorld.center.dx + nextPoint.dx,
-            this.positionInWorld.center.dy + nextPoint.dy) -
-        this.positionInWorld.center;
+    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
+            this.position.center.dy + nextPoint.dy) -
+        this.position.center;
 
-    Rect positionAttack = this.positionInWorld.shift(diffBase);
+    Rect positionAttack = this.position.shift(diffBase);
 
     gameRef.add(AnimatedObjectOnce(
       animation: animationTop,
@@ -293,7 +293,7 @@ extension PlayerExtensions on Player {
 
     gameRef
         .visibleEnemies()
-        .where((enemy) => enemy.rectCollisionInWorld.overlaps(positionAttack))
+        .where((enemy) => enemy.rectCollision.overlaps(positionAttack))
         .forEach((enemy) {
       enemy.receiveDamage(damage, id);
       Rect rectAfterPush = enemy.position.translate(diffBase.dx, diffBase.dy);

@@ -79,7 +79,7 @@ class SimplePlayer extends Player {
 
   @override
   void render(Canvas canvas) {
-    if (!this.isDead && !this.usePositionInWorld) {
+    if (!this.isDead) {
       switch (_currentDirectional) {
         case JoystickMoveDirectional.MOVE_UP:
           customMoveTop();

@@ -24,7 +24,7 @@ class AnimatedObjectOnce extends AnimatedObject with WithLighting {
     this.lightingConfig,
   }) {
     this.animation = animation;
-    positionInWorld = position;
+    this.position = position;
   }
 
   @override

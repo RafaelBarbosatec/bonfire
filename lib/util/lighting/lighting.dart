@@ -7,6 +7,9 @@ class Lighting extends GameComponent {
   Color color;
   Paint _paintFocus;
 
+  @override
+  bool isHud() => true;
+
   Lighting({this.color = Colors.transparent}) {
     _paintFocus = Paint()
       ..color = Colors.transparent
@@ -22,6 +25,11 @@ class Lighting extends GameComponent {
     canvas.saveLayer(Offset.zero & size, Paint());
     canvas.drawColor(color, BlendMode.dstATop);
     gameRef.lightVisible().forEach((light) {
+      canvas.save();
+      canvas.translate(
+        -gameRef.gameCamera.position.x,
+        -gameRef.gameCamera.position.y,
+      );
       canvas.drawCircle(
           Offset(light.gameComponent.position.center.dx,
               light.gameComponent.position.center.dy),
@@ -46,7 +54,9 @@ class Lighting extends GameComponent {
                 : 1),
         paint,
       );
+      canvas.restore();
     });
+    canvas.restore();
   }
 
   static double convertRadiusToSigma(double radius) {

@@ -29,28 +29,6 @@ mixin ObjectCollision {
     return false;
   }
 
-  bool isCollisionPositionInWorld(Rect displacement, RPGGame game,
-      {bool onlyVisible = true}) {
-    Rect rectCollision = getRectCollision(displacement);
-
-    var collisions = (onlyVisible
-            ? game.map.getCollisionsRendered()
-            : game.map.getCollisions())
-        .where((i) => i.positionInWorld.overlaps(rectCollision));
-
-    if (collisions.length > 0) return true;
-
-    var collisionsDecorations =
-        (onlyVisible ? game.visibleDecorations() : game.decorations()).where(
-            (i) =>
-                i.collision != null &&
-                i.rectCollisionInWorld.overlaps(rectCollision));
-
-    if (collisionsDecorations.length > 0) return true;
-
-    return false;
-  }
-
   bool isCollisionTranslate(
       Rect position, double translateX, double translateY, RPGGame game,
       {bool onlyVisible = true}) {
