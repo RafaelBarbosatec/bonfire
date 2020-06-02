@@ -162,7 +162,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
       _lightToRender = components
           .where((element) =>
               element is WithLighting &&
-              (element as WithLighting).isVisible(size))
+              (element as WithLighting).isVisible(gameCamera))
           .map((e) => (e as WithLighting).lightingConfig);
     }
 
