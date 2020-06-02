@@ -41,19 +41,21 @@ class Lighting extends GameComponent {
             ..maskFilter = MaskFilter.blur(
                 BlurStyle.normal, convertRadiusToSigma(light.blurBorder)));
 
-      final Paint paint = Paint()
-        ..color = light.color
-        ..maskFilter = MaskFilter.blur(
-            BlurStyle.normal, convertRadiusToSigma(light.blurBorder));
-      canvas.drawCircle(
-        Offset(light.gameComponent.position.center.dx,
-            light.gameComponent.position.center.dy),
-        light.radius *
-            (light.withPulse
-                ? (1 - light.valuePulse * light.pulseVariation)
-                : 1),
-        paint,
-      );
+      if (light.color != null) {
+        final Paint paint = Paint()
+          ..color = light.color
+          ..maskFilter = MaskFilter.blur(
+              BlurStyle.normal, convertRadiusToSigma(light.blurBorder));
+        canvas.drawCircle(
+          Offset(light.gameComponent.position.center.dx,
+              light.gameComponent.position.center.dy),
+          light.radius *
+              (light.withPulse
+                  ? (1 - light.valuePulse * light.pulseVariation)
+                  : 1),
+          paint,
+        );
+      }
       canvas.restore();
     });
     canvas.restore();

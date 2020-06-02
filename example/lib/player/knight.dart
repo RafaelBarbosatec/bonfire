@@ -57,7 +57,6 @@ class Knight extends SimplePlayer with WithLighting {
     _timerStamina = IntervalTick(100);
     lightingConfig = LightingConfig(
       gameComponent: this,
-      color: Colors.white.withOpacity(0.1),
       radius: width * 1.5,
       blurBorder: width / 2,
     );

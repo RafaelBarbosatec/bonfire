@@ -1,7 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/map/dungeon_map.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flutter/material.dart';
 
 class Torch extends GameDecoration with WithLighting {
   Torch(Position position)
@@ -19,7 +18,6 @@ class Torch extends GameDecoration with WithLighting {
         ) {
     lightingConfig = LightingConfig(
       gameComponent: this,
-      color: Colors.yellowAccent.withOpacity(0.1),
       radius: width * 1.5,
       blurBorder: width / 2,
     );
