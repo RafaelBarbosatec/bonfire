@@ -104,7 +104,6 @@ GameDecoration.sprite(
   initPosition: getRelativeTilePosition(10, 6), // posição no mundo que será posicionado.
   width: 32,
   height: 32,
-  withCollision: true, // adiciona colisão default.
   collision: Collision( // caso queira customizar a área de colisão.
     width: 18,
     height: 32,
@@ -112,6 +111,7 @@ GameDecoration.sprite(
 //  isTouchable: false, // caso deseje que esse componente receba interação de toque. Será notificado em 'void onTap()'
 //  animation: FlameAnimation(), // caso você queira adicionar algo animado você pode passar sua animação aqui e não passar o 'spriteImg'.
 //  frontFromPlayer: false // caso queira forçar que esse elemento fique por cima do player ao passar por ele.
+// isSensor: false, // se você quer que o componente seja apenas um sensor. Quando a colisão ocorrer, ela irá chamar o método onContact. É útil para coisas tipo espinhos, lava ou botões no chão, onde é necessária apenas detectar a colisão sem impedir que o player se mova.
 )
 
 ou
@@ -121,7 +121,6 @@ GameDecoration.animation(
   initPosition: getRelativeTilePosition(10, 6), // posição no mundo que será posicionado.
   width: 32,
   height: 32,
-  withCollision: true, // adiciona colisão default.
   collision: Collision( // caso queira customizar a área de colisão.
     width: 18,
     height: 32,

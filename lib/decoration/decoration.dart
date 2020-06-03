@@ -28,17 +28,22 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   /// World position that this decoration must position yourself.
   final Position initPosition;
 
+  /// If set to true, won't be triggered on collision, but will trigger onContact()
+  final bool isSensor;
+
   Sprite _sprite;
 
-  GameDecoration(
-      {Sprite sprite,
-      @required this.initPosition,
-      @required this.height,
-      @required this.width,
-      this.frontFromPlayer = false,
-      FlameAnimation.Animation animation,
-      Collision collision,
-      bool isTouchable = false}) {
+  GameDecoration({
+    Sprite sprite,
+    @required this.initPosition,
+    @required this.height,
+    @required this.width,
+    this.frontFromPlayer = false,
+    this.isSensor = false,
+    FlameAnimation.Animation animation,
+    Collision collision,
+    bool isTouchable = false,
+  }) {
     this.animation = animation;
     _sprite = sprite;
     this.position = generateRectWithBleedingPixel(
@@ -56,6 +61,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
+    this.isSensor = false,
     Collision collision,
     bool isTouchable = false,
   }) {
@@ -74,6 +80,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     @required this.initPosition,
     @required this.height,
     @required this.width,
+    this.isSensor = false,
     this.frontFromPlayer = false,
     Collision collision,
     bool isTouchable = false,
@@ -106,6 +113,8 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       }
     }
   }
+
+  void onContact(ObjectCollision collision) { }
 
   Rect generateRectWithBleedingPixel(
     Position position,

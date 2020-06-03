@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 class Chest extends GameDecoration {
   final Position initPosition;
   bool _observedPlayer = false;
+  IntervalTick _timer = IntervalTick(300);
 
   TextConfig _textConfig;
   Chest(this.initPosition)

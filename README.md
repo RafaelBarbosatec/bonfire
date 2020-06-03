@@ -104,7 +104,6 @@ GameDecoration.sprite(
   initPosition: getRelativeTilePosition(10, 6), // World coordinates in which this decoration will be positioned
   width: 32,
   height: 32,
-  withCollision: true, // Adds a default collision area
   collision: Collision( // A custom collision area
     width: 18,
     height: 32,
@@ -112,6 +111,7 @@ GameDecoration.sprite(
 //  isTouchable: false, // if you want this component to receive touch interaction. You will be notified at 'void onTap()'
 //  animation: FlameAnimation(), // Optional param to create an animated decoration. When using this, do not specify spriteImg.
 //  frontFromPlayer: false // Define true if this decoration shall be rendered above the Player
+//  isSensor: false, // if you want this component to be only a sensor. It will trigger the onContact method when collision occurs. Useful to make things like spikes, lava or ground buttons, where you need to detect collision without stopping player from moving.
 )
 
 or
@@ -129,12 +129,13 @@ GameDecoration.animation(
 //  isTouchable: false, // if you want this component to receive touch interaction. You will be notified at 'void onTap()'
 //  animation: FlameAnimation(), // Optional param to create an animated decoration. When using this, do not specify spriteImg.
 //  frontFromPlayer: false // Define true if this decoration shall be rendered above the Player
+//  isSensor: false, // if you want this component to be only a sensor. It will trigger the onContact method when collision occurs. Useful to make things like spikes, lava or ground buttons.
 )
 ```   
 
 You can also create your own decoration class by extending `GameDecoration` and implement `update` and `render`  methods with your own behavior. As this [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/decoration/chest.dart): A treasure chest that opens when a player gets close, removes itself from the game and puts two life potions in its place (being the life portions a `GameDecoration` as well).
 
-In this component (like all others), you have access to `BuildContext` of the game widget. Therefore, is possible to opebn dialogis, show overlays and other Flutter components that may depend on that.  
+In this component (like all others), you have access to `BuildContext` of the game widget. Therefore, is possible to open dialogs, show overlays and other Flutter components that may depend on that.  
 
 ### Enemy
 Represents enemies characters in the game. Instances of this class has actions and movements ready to be used and configured whenever you want. At the same time, you can customize  all actions and movements in the way that fits your needs.

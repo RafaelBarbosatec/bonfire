@@ -74,7 +74,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     if (lightingColorGame != null) add(Lighting(color: lightingColorGame));
     if (interface != null) add(interface);
     add(joystickController);
-
     _interval = IntervalTick(100, tick: _updateTempList);
   }
 
@@ -145,6 +144,12 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   @override
   void onKeyEvent(RawKeyEvent event) {
     joystickController.onKeyboard(event);
+  }
+
+  @override
+  void resize(Size size) {
+    super.resize(size);
+    _updateTempList();
   }
 
   void _updateTempList() {
