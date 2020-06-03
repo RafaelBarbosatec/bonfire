@@ -1,5 +1,6 @@
 ## [0.5.1] - 03/06/2020
 * hotfix in FlyingAttackObject
+* adds sensor functionality to GameDecoration
 
 ## [0.5.0] - 03/06/2020
 * BREAKING CHANGES: remove 'positionInWorld', everything uses 'position' now.
