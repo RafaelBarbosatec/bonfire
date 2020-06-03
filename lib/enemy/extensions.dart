@@ -14,6 +14,7 @@ extension EnemyExtensions on Enemy {
     Function(Player) observed,
     Function() notObserved,
     int visionCells = 3,
+    int interval = 500,
   }) {
     Player player = gameRef.player;
     if (player == null || this.position == null) return;
@@ -79,8 +80,8 @@ extension EnemyExtensions on Enemy {
       TextDamage(
         damage.toInt().toString(),
         Position(
-          positionInWorld.center.dx,
-          positionInWorld.top,
+          position.center.dx,
+          position.top,
         ),
         config: config,
         initVelocityTop: initVelocityTop,
@@ -138,8 +139,8 @@ extension EnemyExtensions on Enemy {
     Player player = this.gameRef.player;
     if (player == null) return 0.0;
     return atan2(
-      player.rectCollisionInWorld.center.dy - this.positionInWorld.center.dy,
-      player.rectCollisionInWorld.center.dx - this.positionInWorld.center.dx,
+      player.rectCollision.center.dy - this.position.center.dy,
+      player.rectCollision.center.dx - this.position.center.dx,
     );
   }
 }

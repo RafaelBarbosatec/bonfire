@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:bonfire/map/tile.dart';
 import 'package:bonfire/rpg_game.dart';
 import 'package:flame/components/component.dart';
@@ -14,4 +15,6 @@ abstract class MapGame extends Component with HasGameRef<RPGGame> {
   Iterable<Tile> getCollisions();
 
   void updateTiles(Iterable<Tile> map);
+
+  Size getMapSize();
 }

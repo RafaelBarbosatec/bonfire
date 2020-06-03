@@ -7,13 +7,14 @@ import 'package:bonfire/util/base_game_point_detector.dart';
 import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_controller.dart';
-import 'package:bonfire/util/game_intercafe/game_interface.dart';
+import 'package:bonfire/util/game_interface/game_interface.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/lighting/lighting.dart';
 import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/lighting/with_lighting.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator.dart';
+import 'package:flame/components/component.dart';
 import 'package:flame/keyboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -74,13 +75,26 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     if (interface != null) add(interface);
     add(joystickController);
 
-    _interval = IntervalTick(10, _updateTempList);
+    _interval = IntervalTick(100, tick: _updateTempList);
   }
 
   @override
   void update(double t) {
     _interval.update(t);
     super.update(t);
+  }
+
+  @override
+  void renderComponent(Canvas canvas, Component comp) {
+    if (!comp.loaded()) {
+      return;
+    }
+    canvas.save();
+    if (!comp.isHud()) {
+      canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
+    }
+    comp.render(canvas);
+    canvas.restore();
   }
 
   void addEnemy(Enemy enemy) {
@@ -148,7 +162,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
       _lightToRender = components
           .where((element) =>
               element is WithLighting &&
-              (element as WithLighting).isVisible(size))
+              (element as WithLighting).isVisible(gameCamera))
           .map((e) => (e as WithLighting).lightingConfig);
     }
 

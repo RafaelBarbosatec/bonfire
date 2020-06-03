@@ -16,8 +16,8 @@ class LightingConfig {
 
   LightingConfig({
     @required this.gameComponent,
-    @required this.color,
     @required this.radius,
+    this.color,
     this.withPulse = false,
     this.pulseCurve = Curves.decelerate,
     this.pulseVariation = 0.1,

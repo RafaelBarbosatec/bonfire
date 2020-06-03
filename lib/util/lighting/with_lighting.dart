@@ -1,12 +1,13 @@
+import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:flutter/material.dart';
 
 mixin WithLighting {
   LightingConfig lightingConfig;
 
-  bool isVisible(Size sizeScreen) {
+  bool isVisible(Camera camera) {
     if (lightingConfig == null ||
-        sizeScreen == null ||
+        camera == null ||
         lightingConfig?.gameComponent?.position == null) return false;
 
     Rect rectLight = Rect.fromLTWH(
@@ -16,9 +17,6 @@ mixin WithLighting {
       lightingConfig.radius * 2,
     );
 
-    return rectLight.top < (sizeScreen.height + rectLight.height) &&
-        rectLight.top > (rectLight.height * -1) &&
-        rectLight.left > (rectLight.width * -1) &&
-        rectLight.left < (sizeScreen.width + rectLight.width);
+    return camera.cameraRect.overlaps(rectLight) ?? false;
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -12,7 +11,8 @@ class Knight extends SimplePlayer with WithLighting {
   double attack = 20;
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
-  Timer _timerStamina;
+  IntervalTick _timerStamina = IntervalTick(100);
+  IntervalTick _timerAttackRange = IntervalTick(100);
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
@@ -57,7 +57,6 @@ class Knight extends SimplePlayer with WithLighting {
     spriteDirectionAttack = Sprite('direction_attack.png');
     lightingConfig = LightingConfig(
       gameComponent: this,
-      color: Colors.yellow.withOpacity(0.1),
       radius: width * 1.5,
       blurBorder: width / 2,
     );
@@ -81,6 +80,7 @@ class Knight extends SimplePlayer with WithLighting {
       if (event.event == ActionEvent.MOVE) {
         showDirection = true;
         angleRadAttack = event.radAngle;
+        if (_timerAttackRange.update(dtUpdate)) actionAttackRange();
       }
       if (event.event == ActionEvent.UP) {
         showDirection = false;
@@ -97,8 +97,8 @@ class Knight extends SimplePlayer with WithLighting {
     gameRef.addDecoration(
       GameDecoration(
         initPosition: Position(
-          positionInWorld.left,
-          positionInWorld.top,
+          position.center.dx,
+          position.center.dy,
         ),
         height: 30,
         width: 30,
@@ -146,7 +146,7 @@ class Knight extends SimplePlayer with WithLighting {
   void actionAttackRange() {
     if (stamina < 10) return;
 
-    decrementStamina(10);
+//    decrementStamina(10);
 
     this.simpleAttackRangeByAngle(
       animationTop: FlameAnimation.Animation.sequenced(
@@ -168,7 +168,6 @@ class Knight extends SimplePlayer with WithLighting {
       speed: initSpeed * 2,
       lightingConfig: LightingConfig(
         gameComponent: this,
-        color: Colors.orange.withOpacity(0.1),
         radius: 25,
         blurBorder: 15,
       ),
@@ -177,8 +176,8 @@ class Knight extends SimplePlayer with WithLighting {
 
   @override
   void update(double dt) {
-    if (this.isDead) return;
-    _verifyStamina();
+    if (this.isDead || gameRef?.size == null) return;
+    _verifyStamina(dt);
     this.seeEnemy(
       visionCells: 8,
       notObserved: () {
@@ -213,18 +212,12 @@ class Knight extends SimplePlayer with WithLighting {
     super.render(c);
   }
 
-  void _verifyStamina() {
-    if (_timerStamina == null && stamina < 100) {
-      _timerStamina = Timer(Duration(milliseconds: 150), () {
-        _timerStamina = null;
-      });
-    } else {
-      return;
-    }
-
-    stamina += 2;
-    if (stamina > 100) {
-      stamina = 100;
+  void _verifyStamina(double dt) {
+    if (_timerStamina.update(dt) && stamina < 100) {
+      stamina += 2;
+      if (stamina > 100) {
+        stamina = 100;
+      }
     }
   }
 

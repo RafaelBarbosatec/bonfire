@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/rpg_game.dart';
+import 'package:bonfire/util/game_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flutter/widgets.dart';
 
@@ -8,67 +9,42 @@ class Camera with HasGameRef<RPGGame> {
   double maxLeft = 0;
   Position position = Position.empty();
 
-  bool isMaxBottom() {
-    return (position.y * -1) >= maxTop;
-  }
-
-  bool isMaxLeft() {
-    return position.x == 0;
-  }
-
-  bool isMaxRight() {
-    return (position.x * -1) >= maxLeft;
-  }
-
-  bool isMaxTop() {
-    return position.y == 0;
-  }
+  Rect get cameraRect => Rect.fromLTWH(
+        position.x - 25,
+        position.y - 25,
+        gameRef.size.width + 50,
+        gameRef.size.height + 50,
+      );
 
   void moveTop(double displacement) {
-    if (position.y < 0) {
-      position.y = position.y + displacement;
-    }
-    if (position.y > 0) {
-      position.y = 0;
-    }
+    position.y = position.y - displacement;
   }
 
   void moveRight(double displacement) {
-    if (!isMaxRight()) {
-      gameRef.gameCamera.position.x =
-          gameRef.gameCamera.position.x - displacement;
-    }
+    position.x = position.x + displacement;
   }
 
   void moveBottom(double displacement) {
-    if (!isMaxBottom()) {
-      gameRef.gameCamera.position.y =
-          gameRef.gameCamera.position.y - displacement;
-    }
+    position.y = position.y + displacement;
   }
 
   void moveLeft(double displacement) {
-    if (!isMaxLeft()) {
-      position.x = position.x + displacement;
-    }
-    if (position.x > 0) {
-      position.x = 0;
-    }
+    position.x = position.x - displacement;
   }
 
   void moveCamera(double displacement, JoystickMoveDirectional directional) {
     switch (directional) {
       case JoystickMoveDirectional.MOVE_UP:
-        gameRef.gameCamera.moveTop(displacement);
+        moveTop(displacement);
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
-        gameRef.gameCamera.moveRight(displacement);
+        moveRight(displacement);
         break;
       case JoystickMoveDirectional.MOVE_DOWN:
-        gameRef.gameCamera.moveBottom(displacement);
+        moveBottom(displacement);
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
-        gameRef.gameCamera.moveLeft(displacement);
+        moveLeft(displacement);
         break;
       case JoystickMoveDirectional.MOVE_UP_LEFT:
         break;
@@ -89,24 +65,13 @@ class Camera with HasGameRef<RPGGame> {
     Duration duration,
     Curve curve = Curves.decelerate,
   }) {
-    gameRef.player.usePositionInWorldToRender();
-    double distanceLeft = gameRef.size.width / 2;
-    double distanceTop = gameRef.size.height / 2;
+    if (gameRef?.size == null) return;
+    final screenCenter =
+        Position(gameRef.size.width / 2, gameRef.size.height / 2);
+    if (gameRef?.player != null) gameRef.player.focusCamera = false;
 
-    double positionLeftCamera = position.x - distanceLeft;
-    double positionTopCamera = position.y - distanceTop;
-
-    if (positionLeftCamera > maxLeft) positionLeftCamera = maxLeft;
-
-    positionLeftCamera *= -1;
-    if (positionLeftCamera > 0) positionLeftCamera = 0;
-
-    if (positionTopCamera * -1 > maxTop) positionTopCamera = maxTop;
-    positionTopCamera *= -1;
-    if (positionTopCamera > 0) positionTopCamera = 0;
-
-    double diffX = this.position.x - positionLeftCamera;
-    double diffY = this.position.y - positionTopCamera;
+    double diffX = this.position.x - (position.x - screenCenter.x);
+    double diffY = this.position.y - (position.y - screenCenter.y);
     double originX = this.position.x;
     double originY = this.position.y;
 
@@ -115,51 +80,66 @@ class Camera with HasGameRef<RPGGame> {
         this.position.x = originX - (diffX * value);
         this.position.y = originY - (diffY * value);
       })
-      ..addListenerFinish(() {
-        if (finish != null) finish();
-      })
+      ..addListenerFinish(finish)
       ..addCurve(curve)
       ..start();
   }
 
   void moveToPosition(Position position) {
-    gameRef.player.usePositionInWorldToRender();
-    double distanceLeft = gameRef.size.width / 2;
-    double distanceTop = gameRef.size.height / 2;
-
-    double positionLeftCamera = position.x - distanceLeft;
-    double positionTopCamera = position.y - distanceTop;
-
-    if (positionLeftCamera > maxLeft) positionLeftCamera = maxLeft;
-
-    positionLeftCamera *= -1;
-    if (positionLeftCamera > 0) positionLeftCamera = 0;
-
-    if (positionTopCamera * -1 > maxTop) positionTopCamera = maxTop;
-    positionTopCamera *= -1;
-    if (positionTopCamera > 0) positionTopCamera = 0;
-
-    this.position.x = positionLeftCamera;
-    this.position.y = positionTopCamera;
+    if (gameRef?.size == null) return;
+    if (gameRef?.player != null) gameRef.player.focusCamera = false;
+    final screenCenter =
+        Position(gameRef.size.width / 2, gameRef.size.height / 2);
+    this.position = position - screenCenter;
   }
 
   void moveToPlayerAnimated({Duration duration, VoidCallback finish}) {
     if (gameRef.player == null) return;
-    Rect _positionPlayer = gameRef.player.positionInWorld;
+    final _positionPlayer = gameRef.player.position;
     moveToPositionAnimated(
-      Position(_positionPlayer.left, _positionPlayer.top),
+      Position(_positionPlayer.center.dx, _positionPlayer.center.dy),
       finish: () {
-        gameRef.player.usePositionToRender();
+        gameRef.player.focusCamera = true;
         if (finish != null) finish();
       },
       duration: duration,
     );
   }
 
-  void moveToPlayer() {
-    if (gameRef.player == null) return;
-    Rect _positionPlayer = gameRef.player.positionInWorld;
-    moveToPosition(Position(_positionPlayer.left, _positionPlayer.top));
-    gameRef.player.usePositionToRender();
+  void moveToPlayer({double horizontal = 50, double vertical = 50}) {
+    if (gameRef?.player == null || gameRef?.size == null) return;
+    final screenCenter =
+        Offset(gameRef.size.width / 2, gameRef.size.height / 2);
+    final positionPlayer =
+        worldPositionToScreen(gameRef.player.position.center);
+    final horizontalDistance = screenCenter.dx - positionPlayer.dx;
+    final verticalDistance = screenCenter.dy - positionPlayer.dy;
+    if (horizontalDistance.abs() > horizontal) {
+      this.gameRef.gameCamera.position.x += horizontalDistance > 0
+          ? horizontal - horizontalDistance
+          : -horizontalDistance - horizontal;
+    }
+    if (verticalDistance.abs() > vertical) {
+      this.gameRef.gameCamera.position.y += verticalDistance > 0
+          ? vertical - verticalDistance
+          : -verticalDistance - vertical;
+    }
+    gameRef.player.focusCamera = true;
+  }
+
+  bool isComponentOnCamera(GameComponent c) {
+    if (gameRef?.size == null) return false;
+
+    return cameraRect.overlaps(c.position);
+  }
+
+  Offset worldPositionToScreen(Offset position) {
+    return position.translate(
+        -gameRef.gameCamera.position.x, -gameRef.gameCamera.position.y);
+  }
+
+  Offset cameraPositionToWorld(Offset position) {
+    return position.translate(
+        gameRef.gameCamera.position.x, gameRef.gameCamera.position.y);
   }
 }

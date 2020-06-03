@@ -59,7 +59,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     VoidCallback execute,
     int interval = 1000,
   }) {
-    if (!this.checkPassedInterval('attackMelee', interval)) return;
+    if (!this.checkPassedInterval('attackMelee', interval, dtUpdate)) return;
 
     Player player = gameRef.player;
 
@@ -71,11 +71,11 @@ extension RotationEnemyExtensions on RotationEnemy {
     double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.positionInWorld.center.dx + nextPoint.dx,
-            this.positionInWorld.center.dy + nextPoint.dy) -
-        this.positionInWorld.center;
+    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
+            this.position.center.dy + nextPoint.dy) -
+        this.position.center;
 
-    Rect positionAttack = this.positionInWorld.shift(diffBase);
+    Rect positionAttack = this.position.shift(diffBase);
 
     gameRef.add(AnimatedObjectOnce(
       animation: attackEffectTopAnim,
@@ -83,7 +83,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       rotateRadAngle: angle,
     ));
 
-    if (positionAttack.overlaps(player.positionInWorld)) {
+    if (positionAttack.overlaps(player.position)) {
       player.receiveDamage(damage, id);
 
       if (withPush) {
@@ -114,7 +114,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     VoidCallback execute,
     LightingConfig lightingConfig,
   }) {
-    if (!this.checkPassedInterval('attackRange', interval)) return;
+    if (!this.checkPassedInterval('attackRange', interval, dtUpdate)) return;
 
     if (isDead) return;
 
@@ -124,11 +124,11 @@ extension RotationEnemyExtensions on RotationEnemy {
     double nextY = this.height * sin(_radAngle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.positionInWorld.center.dx + nextPoint.dx,
-            this.positionInWorld.center.dy + nextPoint.dy) -
-        this.positionInWorld.center;
+    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
+            this.position.center.dy + nextPoint.dy) -
+        this.position.center;
 
-    Rect position = this.positionInWorld.shift(diffBase);
+    Rect position = this.position.shift(diffBase);
     gameRef.add(FlyingAttackAngleObject(
       id: id,
       initPosition: Position(position.left, position.top),

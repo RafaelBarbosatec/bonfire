@@ -20,8 +20,7 @@ class Tile extends SpriteObject {
     this.collision = false,
     this.size = 32,
   }) {
-    this.position =
-        positionInWorld = generateRectWithBleedingPixel(position, size);
+    this.position = generateRectWithBleedingPixel(position, size);
     if (spritePath.isNotEmpty) sprite = Sprite(spritePath);
 
     _positionText = Position(position.x, position.y);
@@ -34,8 +33,7 @@ class Tile extends SpriteObject {
     this.size = 32,
   }) {
     this.sprite = sprite;
-    this.position =
-        positionInWorld = generateRectWithBleedingPixel(position, size);
+    this.position = generateRectWithBleedingPixel(position, size);
 
     _positionText = Position(position.x, position.y);
   }

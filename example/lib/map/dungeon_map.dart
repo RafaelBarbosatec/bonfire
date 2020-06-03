@@ -80,9 +80,10 @@ class DungeonMap {
         width: tileSize,
         height: tileSize,
         collision: Collision(
-            width: tileSize / 1.5,
-            height: tileSize / 1.5,
-            align: CollisionAlign.CENTER),
+          width: tileSize / 1.5,
+          height: tileSize / 1.5,
+          align: CollisionAlign.CENTER,
+        ),
       ),
       Chest(getRelativeTilePosition(18, 7)),
       GameDecoration.sprite(
@@ -90,14 +91,22 @@ class DungeonMap {
         initPosition: getRelativeTilePosition(15, 7),
         width: tileSize,
         height: tileSize,
-        collision: Collision(height: 32, width: 32),
+        collision: Collision(
+          height: tileSize * 0.8,
+          width: tileSize,
+          align: CollisionAlign.TOP_CENTER,
+        ),
       ),
       GameDecoration.sprite(
         Sprite('itens/table.png'),
         initPosition: getRelativeTilePosition(27, 6),
         width: tileSize,
         height: tileSize,
-        collision: Collision(height: 32, width: 32),
+        collision: Collision(
+          height: tileSize * 0.8,
+          width: tileSize,
+          align: CollisionAlign.TOP_CENTER,
+        ),
       ),
       Torch(getRelativeTilePosition(4, 4)),
       Torch(getRelativeTilePosition(12, 4)),

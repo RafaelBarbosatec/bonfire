@@ -78,8 +78,8 @@ class SimplePlayer extends Player {
   }
 
   @override
-  void render(Canvas canvas) {
-    if (!this.isDead && !this.usePositionInWorld) {
+  void update(double dt) {
+    if (!this.isDead) {
       switch (_currentDirectional) {
         case JoystickMoveDirectional.MOVE_UP:
           customMoveTop();
@@ -114,7 +114,7 @@ class SimplePlayer extends Player {
           break;
       }
     }
-    super.render(canvas);
+    super.update(dt);
   }
 
   void addFastAnimation(FlameAnimation.Animation animation) {

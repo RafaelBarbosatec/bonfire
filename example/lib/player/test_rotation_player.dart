@@ -34,8 +34,8 @@ class TestRotationPlayer extends RotationPlayer {
     gameRef.addDecoration(
       GameDecoration(
         initPosition: Position(
-          positionInWorld.left,
-          positionInWorld.top,
+          position.left,
+          position.top,
         ),
         height: 30,
         width: 30,

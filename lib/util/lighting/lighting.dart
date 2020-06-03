@@ -7,6 +7,9 @@ class Lighting extends GameComponent {
   Color color;
   Paint _paintFocus;
 
+  @override
+  bool isHud() => true;
+
   Lighting({this.color = Colors.transparent}) {
     _paintFocus = Paint()
       ..color = Colors.transparent
@@ -22,21 +25,11 @@ class Lighting extends GameComponent {
     canvas.saveLayer(Offset.zero & size, Paint());
     canvas.drawColor(color, BlendMode.dstATop);
     gameRef.lightVisible().forEach((light) {
-      canvas.drawCircle(
-          Offset(light.gameComponent.position.center.dx,
-              light.gameComponent.position.center.dy),
-          light.radius *
-              (light.withPulse
-                  ? (1 - light.valuePulse * light.pulseVariation)
-                  : 1),
-          _paintFocus
-            ..maskFilter = MaskFilter.blur(
-                BlurStyle.normal, convertRadiusToSigma(light.blurBorder)));
-
-      final Paint paint = Paint()
-        ..color = light.color
-        ..maskFilter = MaskFilter.blur(
-            BlurStyle.normal, convertRadiusToSigma(light.blurBorder));
+      canvas.save();
+      canvas.translate(
+        -gameRef.gameCamera.position.x,
+        -gameRef.gameCamera.position.y,
+      );
       canvas.drawCircle(
         Offset(light.gameComponent.position.center.dx,
             light.gameComponent.position.center.dy),
@@ -44,9 +37,31 @@ class Lighting extends GameComponent {
             (light.withPulse
                 ? (1 - light.valuePulse * light.pulseVariation)
                 : 1),
-        paint,
+        _paintFocus
+          ..maskFilter = MaskFilter.blur(
+            BlurStyle.normal,
+            convertRadiusToSigma(light.blurBorder),
+          ),
       );
+
+      if (light.color != null) {
+        final Paint paint = Paint()
+          ..color = light.color
+          ..maskFilter = MaskFilter.blur(
+              BlurStyle.normal, convertRadiusToSigma(light.blurBorder));
+        canvas.drawCircle(
+          Offset(light.gameComponent.position.center.dx,
+              light.gameComponent.position.center.dy),
+          light.radius *
+              (light.withPulse
+                  ? (1 - light.valuePulse * light.pulseVariation)
+                  : 1),
+          paint,
+        );
+      }
+      canvas.restore();
     });
+    canvas.restore();
   }
 
   static double convertRadiusToSigma(double radius) {

@@ -1,8 +1,8 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +25,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
   bool _isDead = false;
 
   /// Map available to store times that can be used to control the frequency of any action.
-  Map<String, Timer> timers = Map();
+  Map<String, IntervalTick> timers = Map();
 
   double dtUpdate = 0;
 
@@ -38,7 +38,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
       this.life = 10,
       Collision collision}) {
     maxLife = life;
-    this.positionInWorld = Rect.fromLTWH(
+    this.position = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,
       width,
@@ -66,7 +66,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
   }
 
   void translate(double translateX, double translateY) {
-    positionInWorld = positionInWorld.translate(translateX, translateY);
+    position = position.translate(translateX, translateY);
   }
 
   void moveTop(double speed) {
@@ -80,7 +80,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
 
     if (collision) return;
 
-    positionInWorld = positionInWorld.translate(0, (speed * -1));
+    position = position.translate(0, (speed * -1));
   }
 
   void moveBottom(double speed) {
@@ -93,7 +93,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
     );
     if (collision) return;
 
-    positionInWorld = positionInWorld.translate(0, speed);
+    position = position.translate(0, speed);
   }
 
   void moveLeft(double speed) {
@@ -106,7 +106,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
     );
     if (collision) return;
 
-    positionInWorld = positionInWorld.translate((speed * -1), 0);
+    position = position.translate((speed * -1), 0);
   }
 
   void moveRight(double speed) {
@@ -120,7 +120,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
 
     if (collision) return;
 
-    positionInWorld = positionInWorld.translate(speed, 0);
+    position = position.translate(speed, 0);
   }
 
   void moveFromAngleDodgeObstacles(double speed, double angle,
@@ -130,9 +130,9 @@ class Enemy extends AnimatedObject with ObjectCollision {
     double nextY = innerSpeed * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(positionInWorld.center.dx + nextPoint.dx,
-            positionInWorld.center.dy + nextPoint.dy) -
-        positionInWorld.center;
+    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
+            position.center.dy + nextPoint.dy) -
+        position.center;
 
     var collisionX = isCollisionTranslate(
       position,
@@ -178,7 +178,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
     if (newDiffBase == Offset.zero && notMove != null) {
       notMove();
     }
-    this.positionInWorld = positionInWorld.shift(newDiffBase);
+    this.position = position.shift(newDiffBase);
   }
 
   void moveFromAngle(double speed, double angle) {
@@ -187,10 +187,10 @@ class Enemy extends AnimatedObject with ObjectCollision {
     double nextY = innerSpeed * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(positionInWorld.center.dx + nextPoint.dx,
-            positionInWorld.center.dy + nextPoint.dy) -
-        positionInWorld.center;
-    this.positionInWorld = positionInWorld.shift(diffBase);
+    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
+            position.center.dy + nextPoint.dy) -
+        position.center;
+    this.position = position.shift(diffBase);
   }
 
   void receiveDamage(double damage, int from) {
@@ -213,20 +213,16 @@ class Enemy extends AnimatedObject with ObjectCollision {
     _isDead = true;
   }
 
-  bool checkPassedInterval(String name, int intervalInMilli) {
-    if (this.timers[name] == null) {
-      this.timers[name] = Timer(
-        Duration(milliseconds: intervalInMilli),
-        () {
-          this.timers[name] = null;
-        },
-      );
+  bool checkPassedInterval(String name, int intervalInMilli, double dt) {
+    if (this.timers[name] == null ||
+        (this.timers[name] != null &&
+            this.timers[name].interval != intervalInMilli)) {
+      this.timers[name] = IntervalTick(intervalInMilli);
       return true;
     } else {
-      return false;
+      return this.timers[name].update(dt);
     }
   }
 
   Rect get rectCollision => getRectCollision(position);
-  Rect get rectCollisionInWorld => getRectCollision(positionInWorld);
 }

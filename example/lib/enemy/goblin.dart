@@ -90,7 +90,7 @@ class Goblin extends SimpleEnemy {
           textureWidth: 16,
           textureHeight: 16,
         ),
-        position: positionInWorld,
+        position: position,
       ),
     );
     remove();
@@ -137,7 +137,6 @@ class Goblin extends SimpleEnemy {
       speed: speed * 2,
       lightingConfig: LightingConfig(
         gameComponent: this,
-        color: Colors.orange.withOpacity(0.1),
         radius: 25,
         blurBorder: 20,
       ),

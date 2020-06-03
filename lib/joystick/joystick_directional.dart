@@ -133,6 +133,15 @@ class JoystickDirectional {
 
       double _intensity = dist / (_tileSize * _backgroundAspectRatio / 3);
 
+      if (_intensity == 0) {
+        _joystickListener.joystickChangeDirectional(JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.IDLE,
+          intensity: _intensity,
+          radAngle: _radAngle,
+        ));
+        return;
+      }
+
       if (degrees > -22.5 && degrees <= 22.5) {
         _joystickListener.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_RIGHT,

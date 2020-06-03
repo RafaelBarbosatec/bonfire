@@ -6,7 +6,7 @@ import 'package:bonfire/player/player.dart';
 import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_controller.dart';
-import 'package:bonfire/util/game_intercafe/game_interface.dart';
+import 'package:bonfire/util/game_interface/game_interface.dart';
 import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {

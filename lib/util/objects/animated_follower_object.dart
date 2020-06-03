@@ -1,12 +1,12 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
-import 'package:bonfire/util/world_component.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
 class AnimatedFollowerObject extends AnimatedObject {
-  final WorldComponent target;
+  final GameComponent target;
   final Position positionFromTarget;
   final double height;
   final double width;
@@ -26,9 +26,9 @@ class AnimatedFollowerObject extends AnimatedObject {
   void update(double dt) {
     super.update(dt);
     Position newPosition = positionFromTarget ?? Position.empty();
-    this.positionInWorld = Rect.fromLTWH(
-      target.positionInWorld.left,
-      target.positionInWorld.top,
+    this.position = Rect.fromLTWH(
+      target.position.left,
+      target.position.top,
       width,
       height,
     ).translate(newPosition.x, newPosition.y);

@@ -12,10 +12,8 @@ class MapWorld extends MapGame {
   Iterable<Tile> _tilesToRender = List();
   Iterable<Tile> _tilesCollisionsRendered = List();
   Iterable<Tile> _tilesCollisions = List();
-  bool _fistRenderComplete = false;
-  final ValueChanged<double> progressLoadMap;
 
-  MapWorld(Iterable<Tile> tiles, {this.progressLoadMap}) : super(tiles) {
+  MapWorld(Iterable<Tile> tiles) : super(tiles) {
     _tilesCollisions = tiles.where((element) => element.collision);
   }
 
@@ -44,18 +42,6 @@ class MapWorld extends MapGame {
       _tilesToRender = tilesRender;
       _tilesCollisionsRendered = tilesCollision;
     }
-    if (!_fistRenderComplete) {
-      int count = _tilesToRender.length;
-      int countRendered =
-          _tilesToRender.where((tile) => tile.sprite.loaded()).length;
-      double percent = countRendered / count;
-      if (!percent.isNaN && progressLoadMap != null) {
-        progressLoadMap(percent);
-      }
-      if (percent == 1) {
-        _fistRenderComplete = true;
-      }
-    }
   }
 
   @override
@@ -82,35 +68,11 @@ class MapWorld extends MapGame {
   void verifyMaxTopAndLeft(Size size) {
     if (lastSize == size) return;
     lastSize = size;
-    double maxTop = 0;
-    double maxLeft = 0;
-    maxTop = tiles.fold(0, (max, tile) {
-      if (tile.positionInWorld.bottom > max)
-        return tile.positionInWorld.bottom;
-      else
-        return max;
-    });
-
-    maxTop -= size.height;
-
-    maxLeft = tiles.fold(0, (max, tile) {
-      if (tile.positionInWorld.right > max)
-        return tile.positionInWorld.right;
-      else
-        return max;
-    });
-    maxLeft -= size.width;
-
-    gameRef.gameCamera.maxLeft = maxLeft;
-    gameRef.gameCamera.maxTop = maxTop;
 
     lastCameraX = -1;
     lastCameraY = -1;
 
-    if (gameRef.player != null && !gameRef.player.usePositionInWorld) {
-      gameRef.player.usePositionInWorldToRender();
-    }
-    gameRef.gameCamera.moveToPlayer();
+    gameRef.gameCamera.moveToPlayer(horizontal: 0, vertical: 0);
   }
 
   @override
@@ -120,5 +82,18 @@ class MapWorld extends MapGame {
     lastSize = null;
     this.tiles = map;
     verifyMaxTopAndLeft(gameRef.size);
+  }
+
+  @override
+  Size getMapSize() {
+    double height = 0;
+    double width = 0;
+
+    this.tiles.forEach((tile) {
+      if (tile.position.right > width) width = tile.position.right;
+      if (tile.position.bottom > height) height = tile.position.bottom;
+    });
+
+    return Size(width, height);
   }
 }
