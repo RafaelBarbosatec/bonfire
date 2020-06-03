@@ -61,6 +61,8 @@ class Game extends StatelessWidget implements GameListener {
       background: BackgroundColorGame(Colors.blueGrey[900]),
       gameController: _controller..setListener(this),
       lightingColorGame: Colors.black.withOpacity(0.5),
+      constructionMode: true,
+      showCollisionArea: true,
     );
   }
 

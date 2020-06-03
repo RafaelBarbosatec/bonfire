@@ -16,12 +16,19 @@ mixin ObjectCollision {
         );
 
     sensors.forEach((decoration) {
-      if (decoration.rectCollision.overlaps(rectCollision)) decoration.onContact(this);
+      if (decoration.rectCollision.overlaps(rectCollision))
+        decoration.onContact(this);
     });
   }
 
-  bool isCollision(Rect displacement, RPGGame game, {bool onlyVisible = true}) {
+  bool isCollision(
+    Rect displacement,
+    RPGGame game, {
+    bool onlyVisible = true,
+    bool shouldTriggerSensors = true,
+  }) {
     Rect rectCollision = getRectCollision(displacement);
+    if (shouldTriggerSensors) triggerSensors(displacement, game);
 
     final collisions = (onlyVisible
             ? game.map.getCollisionsRendered()

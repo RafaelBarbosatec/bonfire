@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:example/decoration/chest.dart';
+import 'package:example/decoration/spikes.dart';
 import 'package:example/decoration/torch.dart';
 import 'package:example/enemy/goblin.dart';
 import 'package:flame/position.dart';
@@ -74,6 +75,9 @@ class DungeonMap {
 
   static List<GameDecoration> decorations() {
     return [
+      Spikes(
+        getRelativeTilePosition(7, 7),
+      ),
       GameDecoration.sprite(
         Sprite('itens/barrel.png'),
         initPosition: getRelativeTilePosition(10, 6),

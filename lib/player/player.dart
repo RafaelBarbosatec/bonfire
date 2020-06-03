@@ -74,8 +74,6 @@ class Player extends AnimatedObject
 
     if (isCollision(displacement, gameRef)) return;
 
-    triggerSensors(displacement, gameRef);
-
     position = displacement;
   }
 
@@ -85,8 +83,6 @@ class Player extends AnimatedObject
     Rect displacement = position.translate(innerSpeed, 0);
 
     if (isCollision(displacement, gameRef)) return;
-
-    triggerSensors(displacement, gameRef);
 
     position = displacement;
 
@@ -99,8 +95,6 @@ class Player extends AnimatedObject
 
     if (isCollision(displacement, gameRef)) return;
 
-    triggerSensors(displacement, gameRef);
-
     position = displacement;
   }
 
@@ -110,8 +104,6 @@ class Player extends AnimatedObject
     Rect displacement = position.translate(-innerSpeed, 0);
 
     if (isCollision(displacement, gameRef)) return;
-
-    triggerSensors(displacement, gameRef);
 
     position = displacement;
   }
