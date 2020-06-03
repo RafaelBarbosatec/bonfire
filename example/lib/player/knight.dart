@@ -11,7 +11,8 @@ class Knight extends SimplePlayer with WithLighting {
   double attack = 20;
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
-  IntervalTick _timerStamina;
+  IntervalTick _timerStamina = IntervalTick(100);
+  IntervalTick _timerAttackRange = IntervalTick(100);
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
@@ -54,10 +55,8 @@ class Knight extends SimplePlayer with WithLighting {
               height: DungeonMap.tileSize / 2, width: DungeonMap.tileSize / 2),
         ) {
     spriteDirectionAttack = Sprite('direction_attack.png');
-    _timerStamina = IntervalTick(100);
     lightingConfig = LightingConfig(
       gameComponent: this,
-      color: Colors.white.withOpacity(0.1),
       radius: width * 1.5,
       blurBorder: width / 2,
     );
@@ -81,7 +80,7 @@ class Knight extends SimplePlayer with WithLighting {
       if (event.event == ActionEvent.MOVE) {
         showDirection = true;
         angleRadAttack = event.radAngle;
-        actionAttackRange();
+        if (_timerAttackRange.update(dtUpdate)) actionAttackRange();
       }
       if (event.event == ActionEvent.UP) {
         showDirection = false;
@@ -169,7 +168,6 @@ class Knight extends SimplePlayer with WithLighting {
       speed: initSpeed * 2,
       lightingConfig: LightingConfig(
         gameComponent: this,
-        color: Colors.orange.withOpacity(0.1),
         radius: 25,
         blurBorder: 15,
       ),
@@ -180,7 +178,6 @@ class Knight extends SimplePlayer with WithLighting {
   void update(double dt) {
     if (this.isDead || gameRef?.size == null) return;
     _verifyStamina(dt);
-    this.gameRef.gameCamera.moveToPlayer();
     this.seeEnemy(
       visionCells: 8,
       notObserved: () {

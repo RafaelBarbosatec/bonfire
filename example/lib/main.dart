@@ -60,7 +60,7 @@ class Game extends StatelessWidget implements GameListener {
       enemies: DungeonMap.enemies(),
       background: BackgroundColorGame(Colors.blueGrey[900]),
       gameController: _controller..setListener(this),
-      lightingColorGame: Colors.black.withOpacity(0.5),
+      lightingColorGame: Colors.black.withOpacity(0.4),
     );
   }
 
@@ -75,7 +75,7 @@ class Game extends StatelessWidget implements GameListener {
   }
 
   void _addEnemyInWorld() {
-    double x = DungeonMap.tileSize * (2 + Random().nextInt(27));
+    double x = DungeonMap.tileSize * (4 + Random().nextInt(27));
     double y = DungeonMap.tileSize * (5 + Random().nextInt(3));
 
     Position position = Position(
