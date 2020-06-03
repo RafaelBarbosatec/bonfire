@@ -47,7 +47,7 @@ extension PlayerExtensions on Player {
   }) {
     if (isDead || this.position == null) return;
 
-    var enemiesInLife = this.gameRef.livingEnemies();
+    var enemiesInLife = this.gameRef.visibleEnemies();
     if (enemiesInLife.length == 0) {
       if (notObserved != null) notObserved();
       return;
@@ -149,31 +149,27 @@ extension PlayerExtensions on Player {
         if (animationLeft != null) attackRangeAnimation = animationLeft;
         startPosition = Position(
           this.rectCollision.left - width,
-          (this.rectCollision.top +
-              (this.rectCollision.height - height) / 2),
+          (this.rectCollision.top + (this.rectCollision.height - height) / 2),
         );
         break;
       case Direction.right:
         if (animationRight != null) attackRangeAnimation = animationRight;
         startPosition = Position(
           this.rectCollision.right,
-          (this.rectCollision.top +
-              (this.rectCollision.height - height) / 2),
+          (this.rectCollision.top + (this.rectCollision.height - height) / 2),
         );
         break;
       case Direction.top:
         if (animationTop != null) attackRangeAnimation = animationTop;
         startPosition = Position(
-          (this.rectCollision.left +
-              (this.rectCollision.width - width) / 2),
+          (this.rectCollision.left + (this.rectCollision.width - width) / 2),
           this.rectCollision.top - height,
         );
         break;
       case Direction.bottom:
         if (animationBottom != null) attackRangeAnimation = animationBottom;
         startPosition = Position(
-          (this.rectCollision.left +
-              (this.rectCollision.width - width) / 2),
+          (this.rectCollision.left + (this.rectCollision.width - width) / 2),
           this.rectCollision.bottom,
         );
         break;
@@ -220,26 +216,26 @@ extension PlayerExtensions on Player {
     Direction attackDirection = direction;
     switch (attackDirection) {
       case Direction.top:
-        positionAttack = Rect.fromLTWH(position.left,
-            position.top - heightArea, widthArea, heightArea);
+        positionAttack = Rect.fromLTWH(
+            position.left, position.top - heightArea, widthArea, heightArea);
         if (animationTop != null) anim = animationTop;
         pushTop = heightArea * -1;
         break;
       case Direction.right:
-        positionAttack = Rect.fromLTWH(position.left + widthArea,
-            position.top, widthArea, heightArea);
+        positionAttack = Rect.fromLTWH(
+            position.left + widthArea, position.top, widthArea, heightArea);
         if (animationRight != null) anim = animationRight;
         pushLeft = widthArea;
         break;
       case Direction.bottom:
-        positionAttack = Rect.fromLTWH(position.left,
-            position.top + heightArea, widthArea, heightArea);
+        positionAttack = Rect.fromLTWH(
+            position.left, position.top + heightArea, widthArea, heightArea);
         if (animationBottom != null) anim = animationBottom;
         pushTop = heightArea;
         break;
       case Direction.left:
-        positionAttack = Rect.fromLTWH(position.left - widthArea,
-            position.top, widthArea, heightArea);
+        positionAttack = Rect.fromLTWH(
+            position.left - widthArea, position.top, widthArea, heightArea);
         if (animationLeft != null) anim = animationLeft;
         pushLeft = widthArea * -1;
         break;
