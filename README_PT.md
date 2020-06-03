@@ -13,7 +13,7 @@
 
 Construa games do tipo RPG ou similares explorando o poder do [FlameEngine](https://flame-engine.org/)!
 
-![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/video_example.gif)
+![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/video.gif)
 
 [Download Demo](https://github.com/RafaelBarbosatec/bonfire/raw/master/demo/demo.apk)
 

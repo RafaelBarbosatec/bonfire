@@ -12,7 +12,7 @@ EN | [PT](https://github.com/RafaelBarbosatec/bonfire/blob/master/README_PT.md)
 
 Build RPG games and similar with the power of [FlameEngine](https://flame-engine.org/)!
 
-![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/video_example.gif)
+![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/video.gif)
 
 [Download Demo](https://github.com/RafaelBarbosatec/bonfire/raw/master/demo/demo.apk)
 
