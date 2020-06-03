@@ -13,6 +13,7 @@ class Knight extends SimplePlayer with WithLighting {
   double initSpeed = DungeonMap.tileSize * 3;
   IntervalTick _timerStamina = IntervalTick(100);
   IntervalTick _timerAttackRange = IntervalTick(100);
+  IntervalTick _timerSeeEnemy = IntervalTick(500);
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
@@ -178,21 +179,24 @@ class Knight extends SimplePlayer with WithLighting {
   void update(double dt) {
     if (this.isDead || gameRef?.size == null) return;
     _verifyStamina(dt);
-    this.seeEnemy(
-      visionCells: 8,
-      notObserved: () {
-        showObserveEnemy = false;
-      },
-      observed: (enemies) {
-        if (showObserveEnemy) return;
-        showObserveEnemy = true;
-        showEmote();
-        if (!showTalk) {
-          showTalk = true;
-          _showTalk();
-        }
-      },
-    );
+
+    if (_timerSeeEnemy.update(dt)) {
+      this.seeEnemy(
+        visionCells: 8,
+        notObserved: () {
+          showObserveEnemy = false;
+        },
+        observed: (enemies) {
+          if (showObserveEnemy) return;
+          showObserveEnemy = true;
+          showEmote();
+          if (!showTalk) {
+            showTalk = true;
+            _showTalk();
+          }
+        },
+      );
+    }
     super.update(dt);
   }
 
