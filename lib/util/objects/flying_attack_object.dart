@@ -24,6 +24,8 @@ class FlyingAttackObject extends AnimatedObject
   final VoidCallback destroyedObject;
   final LightingConfig lightingConfig;
 
+  final IntervalTick _timerVerifyCollision = IntervalTick(40);
+
   FlyingAttackObject({
     @required this.initPosition,
     @required this.flyAnimation,
@@ -53,8 +55,6 @@ class FlyingAttackObject extends AnimatedObject
     this.collision = collision ?? Collision(width: width, height: height / 2);
   }
 
-  bool _verifyIsOnScreen() => gameRef?.gameCamera?.isComponentOnCamera(this) ?? false;
-
   @override
   void update(double dt) {
     super.update(dt);
@@ -74,10 +74,10 @@ class FlyingAttackObject extends AnimatedObject
         break;
     }
 
-    if (!_verifyIsOnScreen()) {
+    if (!_verifyExistInWorld()) {
       remove();
     } else {
-      _verifyCollision();
+      _verifyCollision(dt);
     }
   }
 
@@ -91,7 +91,9 @@ class FlyingAttackObject extends AnimatedObject
     }
   }
 
-  void _verifyCollision() {
+  void _verifyCollision(double dt) {
+    if (!_timerVerifyCollision.update(dt)) return;
+
     bool destroy = false;
 
     if (withCollision)
@@ -107,8 +109,7 @@ class FlyingAttackObject extends AnimatedObject
     if (damageInEnemy) {
       gameRef
           .livingEnemies()
-          .where(
-              (enemy) => enemy.rectCollision.overlaps(position))
+          .where((enemy) => enemy.rectCollision.overlaps(position))
           .forEach((enemy) {
         enemy.receiveDamage(damage, id);
         destroy = true;
@@ -164,5 +165,25 @@ class FlyingAttackObject extends AnimatedObject
       remove();
       if (this.destroyedObject != null) this.destroyedObject();
     }
+  }
+
+  bool _verifyExistInWorld() {
+    bool result = true;
+    if (position.left < gameRef.gameCamera.position.x) {
+      result = false;
+    }
+    if (position.right >
+        gameRef.gameCamera.position.x + gameRef.map.mapSize.width) {
+      result = false;
+    }
+    if (position.top < gameRef.gameCamera.position.y) {
+      result = false;
+    }
+    if (position.bottom >
+        gameRef.gameCamera.position.y + gameRef.map.mapSize.height) {
+      result = false;
+    }
+
+    return result;
   }
 }

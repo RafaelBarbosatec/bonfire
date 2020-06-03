@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/lighting/with_lighting.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
@@ -30,6 +31,8 @@ class FlyingAttackAngleObject extends AnimatedObject
   double _cosAngle;
   double _senAngle;
   double _rotate;
+
+  final IntervalTick _timerVerifyCollision = IntervalTick(40);
 
   FlyingAttackAngleObject({
     @required this.initPosition,
@@ -80,7 +83,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     if (!_verifyExistInWorld()) {
       remove();
     } else {
-      _verifyCollision();
+      _verifyCollision(dt);
     }
   }
 
@@ -99,7 +102,9 @@ class FlyingAttackAngleObject extends AnimatedObject
     }
   }
 
-  void _verifyCollision() {
+  void _verifyCollision(double dt) {
+    if (!_timerVerifyCollision.update(dt)) return;
+
     bool destroy = false;
 
     if (withCollision)
@@ -115,8 +120,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     if (damageInEnemy) {
       gameRef
           .livingEnemies()
-          .where(
-              (enemy) => enemy.rectCollision.overlaps(position))
+          .where((enemy) => enemy.rectCollision.overlaps(position))
           .forEach((enemy) {
         enemy.receiveDamage(damage, id);
         destroy = true;
@@ -149,22 +153,20 @@ class FlyingAttackAngleObject extends AnimatedObject
   }
 
   bool _verifyExistInWorld() {
-    final mapSize = gameRef.map.getMapSize();
-
     bool result = true;
-    if (position.left < 0) {
+    Size mapSize = gameRef.map.mapSize;
+    if (position.left < gameRef.gameCamera.position.x) {
       result = false;
     }
-    if (position.right > mapSize.width) {
+    if (position.right > gameRef.gameCamera.position.x + mapSize.width) {
       result = false;
     }
-    if (position.top < 0) {
+    if (position.top < gameRef.gameCamera.position.y) {
       result = false;
     }
-    if (position.bottom > mapSize.height) {
+    if (position.bottom > gameRef.gameCamera.position.y + mapSize.height) {
       result = false;
     }
-
     return result;
   }
 }
