@@ -32,20 +32,18 @@ class Chest extends GameDecoration {
 
   @override
   void update(double dt) {
-    if (_timer.update(dt) && this.isVisibleInMap()) {
-      this.seePlayer(
-        observed: (player) {
-          if (!_observedPlayer) {
-            _observedPlayer = true;
-            _showEmote();
-          }
-        },
-        notObserved: () {
-          _observedPlayer = false;
-        },
-        visionCells: 1,
-      );
-    }
+    this.seePlayer(
+      observed: (player) {
+        if (!_observedPlayer) {
+          _observedPlayer = true;
+          _showEmote();
+        }
+      },
+      notObserved: () {
+        _observedPlayer = false;
+      },
+      visionCells: 1,
+    );
     super.update(dt);
   }
 
