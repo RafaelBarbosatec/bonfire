@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 class Chest extends GameDecoration {
   final Position initPosition;
   bool _observedPlayer = false;
+  IntervalTick _timer = IntervalTick(300);
 
   TextConfig _textConfig;
   Chest(this.initPosition)
@@ -31,18 +32,20 @@ class Chest extends GameDecoration {
 
   @override
   void update(double dt) {
-    this.seePlayer(
-      observed: (player) {
-        if (!_observedPlayer) {
-          _observedPlayer = true;
-          _showEmote();
-        }
-      },
-      notObserved: () {
-        _observedPlayer = false;
-      },
-      visionCells: 1,
-    );
+    if (_timer.update(dt) && this.isVisibleInMap()) {
+      this.seePlayer(
+        observed: (player) {
+          if (!_observedPlayer) {
+            _observedPlayer = true;
+            _showEmote();
+          }
+        },
+        notObserved: () {
+          _observedPlayer = false;
+        },
+        visionCells: 1,
+      );
+    }
     super.update(dt);
   }
 
