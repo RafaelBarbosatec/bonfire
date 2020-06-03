@@ -1,3 +1,8 @@
+## [0.5.0] - 03/06/2020
+* BREAKING CHANGES: remove 'positionInWorld', everything uses 'position' now.
+* improvements in Camera system by [rezendegc](https://github.com/rezendegc)
+* improvements in JoystickDirectional
+
 ## [0.4.2] - 23/05/2020
 * improvements in TextDamage
 * performance improvements
