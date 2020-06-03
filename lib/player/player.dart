@@ -122,6 +122,7 @@ class Player extends AnimatedObject
     Offset newDiffBase = diffBase;
 
     Rect newPosition = position.shift(newDiffBase);
+
     if (isCollision(newPosition, gameRef, onlyVisible: focusCamera)) return;
 
     position = newPosition;
