@@ -98,11 +98,11 @@ class Knight extends SimplePlayer with WithLighting {
     gameRef.addDecoration(
       GameDecoration(
         initPosition: Position(
-          position.center.dx,
-          position.center.dy,
+          position.left,
+          position.top,
         ),
-        height: 30,
-        width: 30,
+        height: DungeonMap.tileSize,
+        width: DungeonMap.tileSize,
         sprite: Sprite('player/crypt.png'),
       ),
     );

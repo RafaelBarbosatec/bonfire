@@ -8,7 +8,7 @@ import 'package:example/enemy/goblin.dart';
 import 'package:flame/position.dart';
 
 class DungeonMap {
-  static const double tileSize = 45;
+  static const double tileSize = 32;
 
   static MapWorld map() {
     List<Tile> tileList = List();
