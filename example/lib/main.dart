@@ -75,7 +75,7 @@ class Game extends StatelessWidget implements GameListener {
   }
 
   void _addEnemyInWorld() {
-    double x = DungeonMap.tileSize * (4 + Random().nextInt(27));
+    double x = DungeonMap.tileSize * (4 + Random().nextInt(25));
     double y = DungeonMap.tileSize * (5 + Random().nextInt(3));
 
     Position position = Position(
