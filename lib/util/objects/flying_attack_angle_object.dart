@@ -89,17 +89,15 @@ class FlyingAttackAngleObject extends AnimatedObject
 
   @override
   void render(Canvas canvas) {
-    if (this.isVisibleInMap()) {
-      canvas.save();
-      canvas.translate(position.center.dx, position.center.dy);
-      canvas.rotate(_rotate);
-      canvas.translate(-position.center.dx, -position.center.dy);
-      super.render(canvas);
-      if (gameRef != null && gameRef.showCollisionArea) {
-        drawCollision(canvas, position, gameRef.collisionAreaColor);
-      }
-      canvas.restore();
+    canvas.save();
+    canvas.translate(position.center.dx, position.center.dy);
+    canvas.rotate(_rotate);
+    canvas.translate(-position.center.dx, -position.center.dy);
+    super.render(canvas);
+    if (gameRef != null && gameRef.showCollisionArea) {
+      drawCollision(canvas, position, gameRef.collisionAreaColor);
     }
+    canvas.restore();
   }
 
   void _verifyCollision(double dt) {
@@ -110,14 +108,14 @@ class FlyingAttackAngleObject extends AnimatedObject
     if (withCollision)
       destroy = isCollision(position, gameRef, onlyVisible: false);
 
-    if (damageInPlayer) {
+    if (damageInPlayer && !destroy) {
       if (position.overlaps(gameRef.player.rectCollision)) {
         gameRef.player.receiveDamage(damage, id);
         destroy = true;
       }
     }
 
-    if (damageInEnemy) {
+    if (damageInEnemy && !destroy) {
       gameRef
           .livingEnemies()
           .where((enemy) => enemy.rectCollision.overlaps(position))

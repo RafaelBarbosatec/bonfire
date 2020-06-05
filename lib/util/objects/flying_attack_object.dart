@@ -83,9 +83,7 @@ class FlyingAttackObject extends AnimatedObject
 
   @override
   void render(Canvas canvas) {
-    if (this.isVisibleInMap()) {
-      super.render(canvas);
-    }
+    super.render(canvas);
     if (gameRef != null && gameRef.showCollisionArea) {
       drawCollision(canvas, position, gameRef.collisionAreaColor);
     }
@@ -99,14 +97,14 @@ class FlyingAttackObject extends AnimatedObject
     if (withCollision)
       destroy = isCollision(position, gameRef, onlyVisible: false);
 
-    if (damageInPlayer) {
+    if (damageInPlayer && !destroy) {
       if (position.overlaps(gameRef.player.rectCollision)) {
         gameRef.player.receiveDamage(damage, id);
         destroy = true;
       }
     }
 
-    if (damageInEnemy) {
+    if (damageInEnemy && !destroy) {
       gameRef
           .livingEnemies()
           .where((enemy) => enemy.rectCollision.overlaps(position))
