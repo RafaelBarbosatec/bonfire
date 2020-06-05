@@ -35,6 +35,13 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   final Color constructionModeColor;
   final Color lightingColorGame;
   final Color collisionAreaColor;
+
+  Iterable<Enemy> _enemies = List();
+  Iterable<Enemy> _visibleEnemies = List();
+  Iterable<Enemy> _livingEnemies = List();
+  Iterable<GameDecoration> _decorations = List();
+  Iterable<GameDecoration> _visibleDecorations = List();
+  Iterable<LightingConfig> _visibleLights = List();
   IntervalTick _interval;
 
   RPGGame({
@@ -67,7 +74,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     if (lightingColorGame != null) add(Lighting(color: lightingColorGame));
     if (interface != null) add(interface);
     add(joystickController);
-    _interval = IntervalTick(200, tick: gameController?.notifyListeners);
+    _interval = IntervalTick(200, tick: _updateTempList);
   }
 
   @override
@@ -97,40 +104,17 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     add(decoration);
   }
 
-  Iterable<Enemy> visibleEnemies() {
-    return components
-        .where((element) => (element is Enemy) && element.isVisibleInMap())
-        .cast();
-  }
+  Iterable<Enemy> visibleEnemies() => _visibleEnemies;
 
-  Iterable<Enemy> livingEnemies() {
-    return components
-        .where((element) => (element is Enemy) && !element.isDead)
-        .cast();
-  }
+  Iterable<Enemy> livingEnemies() => _livingEnemies;
 
-  Iterable<GameDecoration> visibleDecorations() {
-    return components
-        .where((element) =>
-            (element is GameDecoration) && element.isVisibleInMap())
-        .cast();
-  }
+  Iterable<GameDecoration> visibleDecorations() => _visibleDecorations;
 
-  Iterable<Enemy> enemies() {
-    return components.where((element) => (element is Enemy)).cast();
-  }
+  Iterable<Enemy> enemies() => _enemies;
 
-  Iterable<GameDecoration> decorations() {
-    return components.where((element) => (element is GameDecoration)).cast();
-  }
+  Iterable<GameDecoration> decorations() => _decorations;
 
-  Iterable<LightingConfig> lightVisible() {
-    return components
-        .where((element) =>
-            element is WithLighting &&
-            (element as WithLighting).isVisible(gameCamera))
-        .map((e) => (e as WithLighting).lightingConfig);
-  }
+  Iterable<LightingConfig> lightVisible() => _visibleLights;
 
   ValueGenerator getValueGenerator(
     Duration duration, {
@@ -148,5 +132,33 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   @override
   void onKeyEvent(RawKeyEvent event) {
     joystickController.onKeyboard(event);
+  }
+
+  @override
+  void resize(Size size) {
+    super.resize(size);
+    _updateTempList();
+  }
+
+  void _updateTempList() {
+    _decorations =
+        components.where((element) => (element is GameDecoration)).cast();
+    _visibleDecorations =
+        _decorations.where((element) => element.isVisibleInMap());
+
+    _enemies = components.where((element) => (element is Enemy)).cast();
+    _livingEnemies = _enemies.where((element) => !element.isDead).cast();
+    _visibleEnemies =
+        _livingEnemies.where((element) => element.isVisibleInMap());
+
+    if (lightingColorGame != null) {
+      _visibleLights = components
+          .where((element) =>
+              element is WithLighting &&
+              (element as WithLighting).isVisible(gameCamera))
+          .map((e) => (e as WithLighting).lightingConfig);
+    }
+
+    if (gameController != null) gameController.notifyListeners();
   }
 }

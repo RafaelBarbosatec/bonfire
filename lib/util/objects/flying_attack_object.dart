@@ -24,7 +24,7 @@ class FlyingAttackObject extends AnimatedObject
   final VoidCallback destroyedObject;
   final LightingConfig lightingConfig;
 
-  final IntervalTick _timerVerifyCollision = IntervalTick(40);
+  final IntervalTick _timerVerifyCollision = IntervalTick(50);
 
   FlyingAttackObject({
     @required this.initPosition,
