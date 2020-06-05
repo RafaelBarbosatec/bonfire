@@ -1,19 +1,20 @@
 import 'dart:ui';
 
 import 'package:bonfire/util/game_component.dart';
+import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:flutter/material.dart';
 
 class Lighting extends GameComponent {
   Color color;
   Paint _paintFocus;
+  Iterable<LightingConfig> _visibleLight = List();
+  double _dtUpdate = 0.0;
 
   @override
   bool isHud() => true;
 
   Lighting({this.color = Colors.transparent}) {
-    _paintFocus = Paint()
-      ..color = Colors.transparent
-      ..blendMode = BlendMode.clear;
+    _paintFocus = Paint()..blendMode = BlendMode.clear;
   }
 
   @override
@@ -24,7 +25,8 @@ class Lighting extends GameComponent {
     Size size = gameRef.size;
     canvas.saveLayer(Offset.zero & size, Paint());
     canvas.drawColor(color, BlendMode.dstATop);
-    gameRef.lightVisible().forEach((light) {
+    _visibleLight.forEach((light) {
+      light.update(_dtUpdate);
       canvas.save();
       canvas.translate(
         -gameRef.gameCamera.position.x,
@@ -70,6 +72,7 @@ class Lighting extends GameComponent {
 
   @override
   void update(double dt) {
-    gameRef.lightVisible().forEach((element) => element.update(dt));
+    _dtUpdate = dt;
+    _visibleLight = gameRef.lightVisible();
   }
 }
