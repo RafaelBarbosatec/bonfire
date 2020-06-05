@@ -127,6 +127,8 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   void renderComponent(Canvas canvas, Component comp) {
     if (!comp.loaded()) {
       return;
+    } else if (comp is GameComponent) {
+      if (!comp.isHud() && !gameCamera.isComponentOnCamera(comp)) return;
     }
     canvas.save();
   
