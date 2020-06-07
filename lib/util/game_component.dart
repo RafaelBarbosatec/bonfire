@@ -39,7 +39,7 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
   }
 
   void handlerTapUp(int pointer, Offset position) {
-    if (this.position == null) return;
+    if (this.position == null || this._pointer == null) return;
 
     if (this.isHud()) {
       this.onTapUp(pointer, position);
@@ -55,6 +55,8 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
         this.onTap();
       }
     }
+
+    this._pointer = null;
   }
 
   @override

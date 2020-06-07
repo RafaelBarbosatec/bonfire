@@ -30,8 +30,10 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
-  Iterable<GameComponent> get _touchableComponents =>
-      components.where((c) => (c is GameComponent && c.isTouchable)).cast();
+  Iterable<GameComponent> get _touchableComponents => components
+      .where(
+          (c) => (c is GameComponent && c.isTouchable & c.isVisibleInCamera()))
+      .cast();
 
   Iterable<PointerDetector> get _pointerDetectorComponents =>
       components.where((c) => (c is PointerDetector)).cast();
