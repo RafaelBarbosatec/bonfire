@@ -102,7 +102,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
 
   @override
   void render(Canvas canvas) {
-    if (isVisibleInMap()) {
+    if (isVisibleInCamera()) {
       if (_sprite != null && _sprite.loaded())
         _sprite.renderRect(canvas, position);
 
@@ -114,7 +114,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     }
   }
 
-  void onContact(ObjectCollision collision) { }
+  void onContact(ObjectCollision collision) {}
 
   Rect generateRectWithBleedingPixel(
     Position position,

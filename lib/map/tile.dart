@@ -44,7 +44,7 @@ class Tile extends SpriteObject {
 
     if (gameRef != null && gameRef.showCollisionArea && collision)
       _drawCollision(canvas);
-    if (gameRef != null && gameRef.constructionMode && isVisibleInMap())
+    if (gameRef != null && gameRef.constructionMode && isVisibleInCamera())
       _drawGrid(canvas);
   }
 

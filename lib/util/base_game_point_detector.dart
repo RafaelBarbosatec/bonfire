@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/gesture/pointer_detector.dart';
 import 'package:flame/components/component.dart';
@@ -9,7 +10,6 @@ import 'package:flame/game/game.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
-import 'package:bonfire/util/camera.dart';
 
 abstract class BaseGamePointerDetector extends Game with PointerDetector {
   bool _isPause = false;
@@ -113,10 +113,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   @override
   void render(Canvas canvas) {
     canvas.save();
-
-    canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
     components.forEach((comp) => renderComponent(canvas, comp));
-
     canvas.restore();
   }
 
@@ -128,16 +125,16 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
     if (!comp.loaded()) {
       return;
     } else if (comp is GameComponent) {
-      if (!comp.isHud() && !gameCamera.isComponentOnCamera(comp)) return;
+      if (!comp.isHud() && !comp.isVisibleInCamera()) return;
     }
-    canvas.save();
-  
-    if (comp.isHud()) {
-      canvas.translate(gameCamera.position.x, gameCamera.position.y);
+
+    if (!comp.isHud()) {
+      canvas.save();
+      canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
     }
     comp.render(canvas);
-
     canvas.restore();
+    canvas.save();
   }
 
   /// This implementation of update updates every component in the list.

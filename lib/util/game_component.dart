@@ -22,7 +22,7 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
   void onTapCancel(int pointer) {}
 
   void handlerTapDown(int pointer, Offset position) {
-    if (this.position == null) return;
+    if (this.position == null || gameRef == null) return;
 
     final absolutePosition = gameRef.gameCamera.cameraPositionToWorld(position);
 
@@ -76,10 +76,12 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
     _isDestroyed = true;
   }
 
-  bool isVisibleInMap() {
-    if (gameRef?.size == null || position == null || destroy() == true)
-      return false;
+  bool isVisibleInCamera() {
+    if (gameRef == null ||
+        gameRef?.size == null ||
+        position == null ||
+        destroy() == true) return false;
 
-    return position.overlaps(gameRef.gameCamera.cameraRect);
+    return gameRef.gameCamera.isComponentOnCamera(this);
   }
 }

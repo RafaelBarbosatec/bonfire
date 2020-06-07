@@ -43,7 +43,7 @@ class RotationEnemy extends Enemy {
 
   @override
   void render(Canvas canvas) {
-    if (this.isVisibleInMap()) {
+    if (this.isVisibleInCamera()) {
       canvas.save();
       canvas.translate(position.center.dx, position.center.dy);
       canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));
