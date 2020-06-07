@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:bonfire/util/camera.dart';
+import 'package:bonfire/util/custom_widget_builder.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/gesture/pointer_detector.dart';
 import 'package:flame/components/component.dart';
@@ -13,6 +14,7 @@ import 'package:ordered_set/ordered_set.dart';
 
 abstract class BaseGamePointerDetector extends Game with PointerDetector {
   bool _isPause = false;
+  final CustomWidgetBuilder widgetBuilder = CustomWidgetBuilder();
   final Camera gameCamera = Camera();
 
   /// The list of components to be updated and rendered by the base game.
@@ -50,12 +52,6 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   }
 
   void onPointerMove(PointerMoveEvent event) {
-    _touchableComponents.forEach(
-      (c) => c.onTapMove(
-        event.pointer,
-        event.localPosition,
-      ),
-    );
     _pointerDetectorComponents.forEach((c) => c.onPointerMove(event));
   }
 
@@ -217,4 +213,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
     return DateTime.now().microsecondsSinceEpoch.toDouble() /
         Duration.microsecondsPerSecond;
   }
+
+  @override
+  Widget get widget => widgetBuilder.build(this);
 }

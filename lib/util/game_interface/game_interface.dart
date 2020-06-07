@@ -69,11 +69,11 @@ class GameInterface extends GameComponent {
   Color getColorFps(double fps) {
     Color color = Colors.red;
 
-    if (fps >= 40) {
+    if (fps >= 50) {
       color = Colors.orange;
     }
 
-    if (fps >= 60) {
+    if (fps >= 58) {
       color = Colors.green;
     }
 
