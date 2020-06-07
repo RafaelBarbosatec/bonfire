@@ -51,11 +51,9 @@ class Enemy extends AnimatedObject with ObjectCollision {
 
   @override
   void render(Canvas canvas) {
-    if (isVisibleInCamera()) {
-      super.render(canvas);
-      if (gameRef != null && gameRef.showCollisionArea) {
-        drawCollision(canvas, position, gameRef.collisionAreaColor);
-      }
+    super.render(canvas);
+    if (gameRef != null && gameRef.showCollisionArea) {
+      drawCollision(canvas, position, gameRef.collisionAreaColor);
     }
   }
 
