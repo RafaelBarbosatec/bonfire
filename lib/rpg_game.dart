@@ -4,7 +4,6 @@ import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/base_game_point_detector.dart';
-import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/game_interface/game_interface.dart';
@@ -14,7 +13,6 @@ import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/lighting/with_lighting.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator.dart';
-import 'package:flame/components/component.dart';
 import 'package:flame/keyboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +26,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   final MapGame map;
   final JoystickController joystickController;
   final GameComponent background;
-  final Camera gameCamera = Camera();
   final bool constructionMode;
   final bool showCollisionArea;
   final GameController gameController;
@@ -81,19 +78,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   void update(double t) {
     _interval.update(t);
     super.update(t);
-  }
-
-  @override
-  void renderComponent(Canvas canvas, Component comp) {
-    if (!comp.loaded()) {
-      return;
-    }
-    canvas.save();
-    if (!comp.isHud()) {
-      canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
-    }
-    comp.render(canvas);
-    canvas.restore();
   }
 
   void addEnemy(Enemy enemy) {

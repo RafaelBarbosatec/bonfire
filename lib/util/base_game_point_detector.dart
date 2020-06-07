@@ -9,9 +9,11 @@ import 'package:flame/game/game.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
+import 'package:bonfire/util/camera.dart';
 
 abstract class BaseGamePointerDetector extends Game with PointerDetector {
   bool _isPause = false;
+  final Camera gameCamera = Camera();
 
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
@@ -111,7 +113,10 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   @override
   void render(Canvas canvas) {
     canvas.save();
+
+    canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
     components.forEach((comp) => renderComponent(canvas, comp));
+
     canvas.restore();
   }
 
@@ -119,13 +124,20 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   ///
   /// It translates the camera unless hud, call the render method and restore the canvas.
   /// This makes sure the canvas is not messed up by one component and all components render independently.
-  void renderComponent(Canvas canvas, Component c) {
-    if (!c.loaded()) {
+  void renderComponent(Canvas canvas, Component comp) {
+    if (!comp.loaded()) {
       return;
+    } else if (comp is GameComponent) {
+      if (!comp.isHud() && !gameCamera.isComponentOnCamera(comp)) return;
     }
-    c.render(canvas);
-    canvas.restore();
     canvas.save();
+  
+    if (comp.isHud()) {
+      canvas.translate(gameCamera.position.x, gameCamera.position.y);
+    }
+    comp.render(canvas);
+
+    canvas.restore();
   }
 
   /// This implementation of update updates every component in the list.
@@ -179,7 +191,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// This is a hook that comes from the RenderBox to allow recording of render times and statistics.
   @override
   void recordDt(double dt) {
-    if (debugMode()) {
+    if (recordFps()) {
       _dts.add(dt);
     }
   }
