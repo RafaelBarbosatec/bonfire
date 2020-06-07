@@ -167,22 +167,20 @@ class FlyingAttackObject extends AnimatedObject
   }
 
   bool _verifyExistInWorld() {
-    bool result = true;
-    if (position.left < gameRef.gameCamera.position.x) {
-      result = false;
+    Size mapSize = gameRef.map.mapSize;
+    if (position.left < 0) {
+      return false;
     }
-    if (position.right >
-        gameRef.gameCamera.position.x + gameRef.map.mapSize.width) {
-      result = false;
+    if (position.right > mapSize.width) {
+      return false;
     }
-    if (position.top < gameRef.gameCamera.position.y) {
-      result = false;
+    if (position.top < 0) {
+      return false;
     }
-    if (position.bottom >
-        gameRef.gameCamera.position.y + gameRef.map.mapSize.height) {
-      result = false;
+    if (position.bottom > mapSize.height) {
+      return false;
     }
 
-    return result;
+    return true;
   }
 }
