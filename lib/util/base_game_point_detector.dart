@@ -113,6 +113,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   @override
   void render(Canvas canvas) {
     canvas.save();
+    canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
     components.forEach((comp) => renderComponent(canvas, comp));
     canvas.restore();
   }
@@ -128,8 +129,9 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
       if (!comp.isHud() && !comp.isVisibleInCamera()) return;
     }
 
-    if (!comp.isHud()) {
-      canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
+    if (comp.isHud()) {
+      canvas.save();
+      canvas.translate(gameCamera.position.x, gameCamera.position.y);
     }
     comp.render(canvas);
     canvas.restore();
