@@ -20,7 +20,6 @@ class Torch extends GameDecoration with WithLighting {
       gameComponent: this,
       radius: width * 1.5,
       blurBorder: width / 2,
-      withPulse: true,
     );
   }
 }
