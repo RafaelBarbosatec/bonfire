@@ -129,7 +129,6 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
     }
 
     if (!comp.isHud()) {
-      canvas.save();
       canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
     }
     comp.render(canvas);
