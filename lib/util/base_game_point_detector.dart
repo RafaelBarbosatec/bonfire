@@ -31,8 +31,8 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   final List<double> _dts = [];
 
   Iterable<GameComponent> get _touchableComponents => components
-      .where(
-          (c) => (c is GameComponent && c.isTouchable & c.isVisibleInCamera()))
+      .where((c) => (c is GameComponent &&
+          c.isTouchable & (c.isVisibleInCamera() || c.isHud())))
       .cast();
 
   Iterable<PointerDetector> get _pointerDetectorComponents =>
