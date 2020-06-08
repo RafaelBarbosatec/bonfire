@@ -1,10 +1,13 @@
 import 'dart:ui';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_interface/interface_component.dart';
+import 'package:flame/text_config.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class GameInterface extends GameComponent {
+class GameInterface extends GameComponent with TapGesture {
   List<InterfaceComponent> _components = List();
 
   @override
@@ -19,6 +22,7 @@ class GameInterface extends GameComponent {
   @override
   void render(Canvas c) {
     _components.forEach((i) => i.render(c));
+    _drawFPS(c);
   }
 
   @override
@@ -40,14 +44,39 @@ class GameInterface extends GameComponent {
   }
 
   @override
-  void handlerTapDown(int pointer, Offset position) {
-    _components.forEach((i) => i.handlerTapDown(pointer, position));
-    super.handlerTapDown(pointer, position);
+  void handlerPointerDown(int pointer, Offset position) {
+    _components.forEach((i) => i.handlerPointerDown(pointer, position));
+    super.handlerPointerDown(pointer, position);
   }
 
   @override
-  void handlerTapUp(int pointer, Offset position) {
-    _components.forEach((i) => i.handlerTapUp(pointer, position));
-    super.handlerTapUp(pointer, position);
+  void handlerPointerUp(int pointer, Offset position) {
+    _components.forEach((i) => i.handlerPointerUp(pointer, position));
+    super.handlerPointerUp(pointer, position);
+  }
+
+  void _drawFPS(Canvas c) {
+    if (gameRef?.showFPS == true && gameRef?.size != null) {
+      double fps = gameRef.fps(100);
+      TextConfig(color: getColorFps(fps), fontSize: 14).render(
+        c,
+        'FPS: ${fps.toStringAsFixed(2)}',
+        Position(gameRef.size.width - 100, 20),
+      );
+    }
+  }
+
+  Color getColorFps(double fps) {
+    Color color = Colors.red;
+
+    if (fps >= 50) {
+      color = Colors.orange;
+    }
+
+    if (fps >= 58) {
+      color = Colors.green;
+    }
+
+    return color;
   }
 }

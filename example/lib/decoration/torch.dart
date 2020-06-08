@@ -14,13 +14,11 @@ class Torch extends GameDecoration with WithLighting {
           width: DungeonMap.tileSize,
           height: DungeonMap.tileSize,
           initPosition: position,
-          isTouchable: true,
         ) {
     lightingConfig = LightingConfig(
       gameComponent: this,
       radius: width * 1.5,
-      blurBorder: width / 2,
-      withPulse: true,
+      blurBorder: width,
     );
   }
 }

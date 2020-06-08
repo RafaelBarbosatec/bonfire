@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/rpg_game.dart';
-import 'package:bonfire/util/gesture/pointer_detector.dart';
+import 'package:bonfire/util/gestures.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flutter/services.dart';

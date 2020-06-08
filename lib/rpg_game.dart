@@ -28,6 +28,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   final GameComponent background;
   final bool constructionMode;
   final bool showCollisionArea;
+  final bool showFPS;
   final GameController gameController;
   final Color constructionModeColor;
   final Color lightingColorGame;
@@ -53,6 +54,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     this.background,
     this.constructionMode = false,
     this.showCollisionArea = false,
+    this.showFPS = false,
     this.gameController,
     this.constructionModeColor,
     this.collisionAreaColor,
@@ -128,12 +130,12 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     _decorations =
         components.where((element) => (element is GameDecoration)).cast();
     _visibleDecorations =
-        _decorations.where((element) => element.isVisibleInMap());
+        _decorations.where((element) => element.isVisibleInCamera());
 
     _enemies = components.where((element) => (element is Enemy)).cast();
     _livingEnemies = _enemies.where((element) => !element.isDead).cast();
     _visibleEnemies =
-        _livingEnemies.where((element) => element.isVisibleInMap());
+        _livingEnemies.where((element) => element.isVisibleInCamera());
 
     if (lightingColorGame != null) {
       _visibleLights = components
@@ -145,4 +147,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
     if (gameController != null) gameController.notifyListeners();
   }
+
+  @override
+  bool recordFps() => showFPS;
 }

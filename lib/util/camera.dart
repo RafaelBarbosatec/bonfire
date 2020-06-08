@@ -128,7 +128,7 @@ class Camera with HasGameRef<RPGGame> {
   }
 
   bool isComponentOnCamera(GameComponent c) {
-    if (gameRef?.size == null) return false;
+    if (gameRef?.size == null || c.position == null) return false;
 
     return cameraRect.overlaps(c.position);
   }

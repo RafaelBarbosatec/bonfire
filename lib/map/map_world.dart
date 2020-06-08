@@ -34,7 +34,7 @@ class MapWorld extends MapGame {
       tiles.forEach((tile) {
         tile.gameRef = gameRef;
         tile.update(t);
-        if (tile.isVisibleInMap()) {
+        if (tile.isVisibleInCamera()) {
           tilesRender.add(tile);
           if (tile.collision) tilesCollision.add(tile);
         }

@@ -1,7 +1,9 @@
 import 'dart:math' as math;
 
+import 'package:bonfire/util/camera.dart';
+import 'package:bonfire/util/custom_widget_builder.dart';
 import 'package:bonfire/util/game_component.dart';
-import 'package:bonfire/util/gesture/pointer_detector.dart';
+import 'package:bonfire/util/gestures.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/composed_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
@@ -9,10 +11,10 @@ import 'package:flame/game/game.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
-import 'package:bonfire/util/camera.dart';
 
 abstract class BaseGamePointerDetector extends Game with PointerDetector {
   bool _isPause = false;
+  final CustomWidgetBuilder widgetBuilder = CustomWidgetBuilder();
   final Camera gameCamera = Camera();
 
   /// The list of components to be updated and rendered by the base game.
@@ -28,20 +30,23 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
-  Iterable<GameComponent> get _touchableComponents =>
-      components.where((c) => (c is GameComponent && c.isTouchable)).cast();
+  Iterable<GameComponent> get _gesturesComponents => components
+      .where((c) =>
+          ((c is GameComponent && (c.isVisibleInCamera() || c.isHud())) &&
+              ((c is TapGesture && (c as TapGesture).enableTab) ||
+                  (c is DragGesture && (c as DragGesture).enableDrag))))
+      .cast<GameComponent>();
 
   Iterable<PointerDetector> get _pointerDetectorComponents =>
       components.where((c) => (c is PointerDetector)).cast();
 
   void onPointerCancel(PointerCancelEvent event) {
-    _touchableComponents.forEach((c) => c.onTapCancel(event.pointer));
     _pointerDetectorComponents.forEach((c) => c.onPointerCancel(event));
   }
 
   void onPointerUp(PointerUpEvent event) {
-    _touchableComponents.forEach(
-      (c) => c.handlerTapUp(
+    _gesturesComponents.forEach(
+      (c) => c.handlerPointerUp(
         event.pointer,
         event.localPosition,
       ),
@@ -50,18 +55,15 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   }
 
   void onPointerMove(PointerMoveEvent event) {
-    _touchableComponents.forEach(
-      (c) => c.onTapMove(
-        event.pointer,
-        event.localPosition,
-      ),
-    );
+    _gesturesComponents.where((element) => element is DragGesture).forEach(
+        (element) =>
+            element.handlerPointerMove(event.pointer, event.localPosition));
     _pointerDetectorComponents.forEach((c) => c.onPointerMove(event));
   }
 
   void onPointerDown(PointerDownEvent event) {
-    _touchableComponents
-        .forEach((c) => c.handlerTapDown(event.pointer, event.localPosition));
+    _gesturesComponents.forEach(
+        (c) => c.handlerPointerDown(event.pointer, event.localPosition));
     _pointerDetectorComponents.forEach((c) => c.onPointerDown(event));
   }
 
@@ -113,10 +115,8 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   @override
   void render(Canvas canvas) {
     canvas.save();
-
     canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
     components.forEach((comp) => renderComponent(canvas, comp));
-
     canvas.restore();
   }
 
@@ -128,16 +128,16 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
     if (!comp.loaded()) {
       return;
     } else if (comp is GameComponent) {
-      if (!comp.isHud() && !gameCamera.isComponentOnCamera(comp)) return;
+      if (!comp.isHud() && !comp.isVisibleInCamera()) return;
     }
-    canvas.save();
-  
+
     if (comp.isHud()) {
+      canvas.save();
       canvas.translate(gameCamera.position.x, gameCamera.position.y);
     }
     comp.render(canvas);
-
     canvas.restore();
+    canvas.save();
   }
 
   /// This implementation of update updates every component in the list.
@@ -219,4 +219,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
     return DateTime.now().microsecondsSinceEpoch.toDouble() /
         Duration.microsecondsPerSecond;
   }
+
+  @override
+  Widget get widget => widgetBuilder.build(this);
 }

@@ -253,31 +253,27 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         if (animationLeft != null) attackRangeAnimation = animationLeft;
         startPosition = Position(
           this.rectCollision.left - width,
-          (this.rectCollision.top +
-              (this.rectCollision.height - height) / 2),
+          (this.rectCollision.top + (this.rectCollision.height - height) / 2),
         );
         break;
       case Direction.right:
         if (animationRight != null) attackRangeAnimation = animationRight;
         startPosition = Position(
           this.rectCollision.right,
-          (this.rectCollision.top +
-              (this.rectCollision.height - height) / 2),
+          (this.rectCollision.top + (this.rectCollision.height - height) / 2),
         );
         break;
       case Direction.top:
         if (animationTop != null) attackRangeAnimation = animationTop;
         startPosition = Position(
-          (this.rectCollision.left +
-              (this.rectCollision.width - width) / 2),
+          (this.rectCollision.left + (this.rectCollision.width - width) / 2),
           this.rectCollision.top - height,
         );
         break;
       case Direction.bottom:
         if (animationBottom != null) attackRangeAnimation = animationBottom;
         startPosition = Position(
-          (this.rectCollision.left +
-              (this.rectCollision.width - width) / 2),
+          (this.rectCollision.left + (this.rectCollision.width - width) / 2),
           this.rectCollision.bottom,
         );
         break;
@@ -312,7 +308,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
   void seeAndMoveToAttackRange(
       {Function(Player) positioned, int visionCells = 5}) {
-    if (!isVisibleInMap() || isDead) return;
+    if (!isVisibleInCamera() || isDead) return;
 
     seePlayer(
       visionCells: visionCells,

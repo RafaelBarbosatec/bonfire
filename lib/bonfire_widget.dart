@@ -19,6 +19,7 @@ class BonfireWidget extends StatefulWidget {
   final GameComponent background;
   final bool constructionMode;
   final bool showCollisionArea;
+  final bool showFPS;
   final GameController gameController;
   final Color constructionModeColor;
   final Color collisionAreaColor;
@@ -36,6 +37,7 @@ class BonfireWidget extends StatefulWidget {
     this.background,
     this.constructionMode = false,
     this.showCollisionArea = false,
+    this.showFPS = false,
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
@@ -79,6 +81,7 @@ class _BonfireWidgetState extends State<BonfireWidget>
       background: widget.background,
       constructionMode: widget.constructionMode,
       showCollisionArea: widget.showCollisionArea,
+      showFPS: widget.showFPS,
       gameController: widget.gameController,
       constructionModeColor:
           widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
@@ -91,14 +94,6 @@ class _BonfireWidgetState extends State<BonfireWidget>
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      child: Listener(
-        onPointerDown: _game.onPointerDown,
-        onPointerMove: _game.onPointerMove,
-        onPointerUp: _game.onPointerUp,
-        onPointerCancel: _game.onPointerCancel,
-        child: _game.widget,
-      ),
-    );
+    return _game.widget;
   }
 }

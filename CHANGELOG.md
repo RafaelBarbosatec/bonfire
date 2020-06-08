@@ -1,5 +1,7 @@
 ## [NEXT]
 * add tiled json support
+* gestures improvements
+* add support drag gestures
 
 ## [0.5.1] - 03/06/2020
 * hotfix in FlyingAttackObject
