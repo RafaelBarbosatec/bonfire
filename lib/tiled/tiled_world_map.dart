@@ -16,6 +16,7 @@ class TiledWorldMap {
   String _basePath;
   String _basePathFlame = 'assets/images/';
   TiledMap _tiledMap;
+  SpriteSheet spriteSheet;
 
   TiledWorldMap(this.pathFile, {this.tileSize}) {
     _basePath = pathFile.replaceAll(pathFile.split('/').last, '');
@@ -83,22 +84,27 @@ class TiledWorldMap {
     });
 
     if (tileSetContain != null) {
-      final spriteSheet = SpriteSheet(
-        imageName:
-            '${_basePath.replaceAll(_basePathFlame, '')}${tileSetContain.image}',
-        textureWidth: tileSetContain.tileWidth.toInt(),
-        textureHeight: tileSetContain.tileHeight.toInt(),
-        columns: tileSetContain.columns,
-        rows: tileSetContain.tileCount ~/ tileSetContain.columns,
-      );
+      if (spriteSheet == null)
+        spriteSheet = SpriteSheet(
+          imageName:
+              '${_basePath.replaceAll(_basePathFlame, '')}${tileSetContain.image}',
+          textureWidth: tileSetContain.tileWidth.toInt(),
+          textureHeight: tileSetContain.tileHeight.toInt(),
+          columns: tileSetContain.columns,
+          rows: tileSetContain.tileCount ~/ tileSetContain.columns,
+        );
 
       final int widthCount =
           tileSetContain.imageWidth ~/ tileSetContain.tileWidth;
 
+      print(index);
+      int row = _getY(index, widthCount).toInt();
+      int columm = _getX(index, widthCount).toInt();
+      print('$row / $columm');
       return ItemTileSet(
         sprite: spriteSheet.getSprite(
-          _getX(index, widthCount).toInt() - 1,
-          _getY(index, widthCount).toInt() - 1,
+          row,
+          columm,
         ),
         collision: tileSetContain.tiles
             .where((element) => element.id == index)
