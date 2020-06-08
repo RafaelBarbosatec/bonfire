@@ -7,7 +7,7 @@ import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class GameInterface extends GameComponent {
+class GameInterface extends GameComponent with TapGesture {
   List<InterfaceComponent> _components = List();
 
   @override
@@ -44,15 +44,15 @@ class GameInterface extends GameComponent {
   }
 
   @override
-  void handlerTapDown(int pointer, Offset position) {
-    _components.forEach((i) => i.handlerTapDown(pointer, position));
-    super.handlerTapDown(pointer, position);
+  void handlerPointerDown(int pointer, Offset position) {
+    _components.forEach((i) => i.handlerPointerDown(pointer, position));
+    super.handlerPointerDown(pointer, position);
   }
 
   @override
-  void handlerTapUp(int pointer, Offset position) {
-    _components.forEach((i) => i.handlerTapUp(pointer, position));
-    super.handlerTapUp(pointer, position);
+  void handlerPointerUp(int pointer, Offset position) {
+    _components.forEach((i) => i.handlerPointerUp(pointer, position));
+    super.handlerPointerUp(pointer, position);
   }
 
   void _drawFPS(Canvas c) {

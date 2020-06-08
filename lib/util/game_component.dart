@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/rpg_game.dart';
+import 'package:bonfire/util/gestures.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 
@@ -10,49 +11,115 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
 
   int _pointer;
 
-  bool isTouchable = false;
+  Offset _startDragOffset;
+  Rect _startDragPosition;
 
   /// Variable used to control whether the component has been destroyed.
   bool _isDestroyed = false;
 
-  void onTap() {}
-  void onTapDown(int pointer, Offset position) {}
-  void onTapUp(int pointer, Offset position) {}
-  void onTapCancel(int pointer) {}
-
-  void handlerTapDown(int pointer, Offset position) {
+  void handlerPointerDown(int pointer, Offset position) {
     if (this.position == null || gameRef == null) return;
 
     if (this.isHud()) {
-      this.onTapDown(pointer, position);
       if (this.position.contains(position)) {
+        if (this is TapGesture) {
+          (this as TapGesture).onTapDown(pointer);
+        }
+        if (this is DragGesture) {
+          _startDragOffset = position;
+          _startDragPosition = this.position;
+          (this as DragGesture).startDrag();
+        }
         this._pointer = pointer;
       }
     } else {
       final absolutePosition =
           gameRef.gameCamera.cameraPositionToWorld(position);
-      this.onTapDown(pointer, absolutePosition);
       if (this.position.contains(absolutePosition)) {
+        if (this is TapGesture) {
+          (this as TapGesture).onTapDown(pointer);
+        }
+        if (this is DragGesture) {
+          _startDragOffset = absolutePosition;
+          _startDragPosition = this.position;
+          (this as DragGesture).startDrag();
+        }
         this._pointer = pointer;
       }
     }
   }
 
-  void handlerTapUp(int pointer, Offset position) {
+  void handlerPointerMove(int pointer, Offset position) {
+    if (_startDragOffset != null) {
+      if (this.isHud()) {
+        if (this is DragGesture) {
+          this.position = Rect.fromLTWH(
+            _startDragPosition.left + (position.dx - _startDragOffset.dx),
+            _startDragPosition.top + (position.dy - _startDragOffset.dy),
+            _startDragPosition.width,
+            _startDragPosition.height,
+          );
+          (this as DragGesture).moveDrag(position);
+        }
+      } else {
+        if (this is DragGesture) {
+          final absolutePosition =
+              gameRef.gameCamera.cameraPositionToWorld(position);
+          this.position = Rect.fromLTWH(
+            _startDragPosition.left +
+                (absolutePosition.dx - _startDragOffset.dx),
+            _startDragPosition.top +
+                (absolutePosition.dy - _startDragOffset.dy),
+            _startDragPosition.width,
+            _startDragPosition.height,
+          );
+          (this as DragGesture).moveDrag(absolutePosition);
+        }
+      }
+    }
+  }
+
+  void handlerPointerUp(int pointer, Offset position) {
     if (this.position == null || this._pointer == null) return;
 
     if (this.isHud()) {
-      this.onTapUp(pointer, position);
+      if (this is TapGesture) {
+        (this as TapGesture).onTapUp(pointer, position);
+      }
       if (this.position.contains(position) && pointer == this._pointer) {
-        this.onTap();
+        if (this is TapGesture) {
+          (this as TapGesture).onTap();
+        }
+      } else {
+        if (this is TapGesture) {
+          (this as TapGesture).onTapCancel(pointer);
+        }
+      }
+      if (this is DragGesture) {
+        _startDragPosition = null;
+        _startDragOffset = null;
+        (this as DragGesture).endDrag(position);
       }
     } else {
       final absolutePosition =
           gameRef.gameCamera.cameraPositionToWorld(position);
-      this.onTapUp(pointer, absolutePosition);
+      if (this is TapGesture) {
+        (this as TapGesture).onTapUp(pointer, position);
+      }
       if (this.position.contains(absolutePosition) &&
           pointer == this._pointer) {
-        this.onTap();
+        if (this is TapGesture) {
+          (this as TapGesture).onTap();
+        }
+      } else {
+        if (this is TapGesture) {
+          (this as TapGesture).onTapCancel(pointer);
+        }
+      }
+      if (this is DragGesture) {
+        _startDragPosition = null;
+        _startDragOffset = null;
+        (this as DragGesture).endDrag(absolutePosition);
       }
     }
 

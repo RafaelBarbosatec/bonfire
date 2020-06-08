@@ -42,7 +42,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.isSensor = false,
     FlameAnimation.Animation animation,
     Collision collision,
-    bool isTouchable = false,
   }) {
     this.animation = animation;
     _sprite = sprite;
@@ -52,7 +51,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       height,
     );
     this.collision = collision;
-    this.isTouchable = isTouchable;
   }
 
   GameDecoration.sprite(
@@ -63,7 +61,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.frontFromPlayer = false,
     this.isSensor = false,
     Collision collision,
-    bool isTouchable = false,
   }) {
     _sprite = sprite;
     this.position = generateRectWithBleedingPixel(
@@ -72,7 +69,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       height,
     );
     this.collision = collision;
-    this.isTouchable = isTouchable;
   }
 
   GameDecoration.animation(
@@ -83,7 +79,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.isSensor = false,
     this.frontFromPlayer = false,
     Collision collision,
-    bool isTouchable = false,
   }) {
     this.animation = animation;
     this.position = generateRectWithBleedingPixel(
@@ -92,7 +87,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       height,
     );
     this.collision = collision;
-    this.isTouchable = isTouchable;
   }
 
   @override

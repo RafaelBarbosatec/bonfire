@@ -1,4 +1,4 @@
-import 'package:bonfire/util/gesture/pointer_detector.dart';
+import 'package:bonfire/util/gestures.dart';
 import 'package:flame/game.dart';
 import 'package:flame/game/embedded_game_widget.dart';
 import 'package:flutter/widgets.dart';

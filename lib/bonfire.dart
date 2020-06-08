@@ -30,6 +30,7 @@ export 'package:bonfire/util/game_component.dart';
 export 'package:bonfire/util/game_controller.dart';
 export 'package:bonfire/util/game_interface/interface_component.dart';
 export 'package:bonfire/util/game_interface/text_interface_component.dart';
+export 'package:bonfire/util/gestures.dart';
 export 'package:bonfire/util/interval_tick.dart';
 export 'package:bonfire/util/lighting/lighting_config.dart';
 export 'package:bonfire/util/lighting/with_lighting.dart';
