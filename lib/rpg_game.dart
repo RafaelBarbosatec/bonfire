@@ -3,6 +3,7 @@ import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/tiled/tiled_world_map.dart';
 import 'package:bonfire/util/base_game_point_detector.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_controller.dart';
@@ -33,6 +34,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   final Color constructionModeColor;
   final Color lightingColorGame;
   final Color collisionAreaColor;
+  final TiledWorldMap tiledMap;
 
   Iterable<Enemy> _enemies = List();
   Iterable<Enemy> _visibleEnemies = List();
@@ -58,21 +60,36 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     this.gameController,
     this.constructionModeColor,
     this.collisionAreaColor,
+    this.tiledMap,
     this.lightingColorGame,
-  })  : assert(map != null),
-        assert(context != null),
+  })  : assert(context != null),
         assert(joystickController != null) {
     gameCamera.gameRef = this;
     joystickController.joystickListener = player ?? MapExplorer(gameCamera);
     if (gameController != null) gameController.setGame(this);
     if (background != null) add(background);
-    add(map);
-    decorations?.forEach((decoration) => add(decoration));
-    enemies?.forEach((enemy) => add(enemy));
-    if (player != null) add(player);
-    if (lightingColorGame != null) add(Lighting(color: lightingColorGame));
-    if (interface != null) add(interface);
-    add(joystickController);
+    if (tiledMap != null) {
+      tiledMap.build().then((tiled) {
+        add(tiled.map);
+        tiled.decorations?.forEach((decoration) => add(decoration));
+        decorations?.forEach((decoration) => add(decoration));
+        tiled.enemies?.forEach((enemy) => add(enemy));
+        enemies?.forEach((enemy) => add(enemy));
+        if (player != null) add(player);
+        if (lightingColorGame != null) add(Lighting(color: lightingColorGame));
+        if (interface != null) add(interface);
+        add(joystickController);
+      });
+    } else {
+      if (map != null) add(map);
+      decorations?.forEach((decoration) => add(decoration));
+      enemies?.forEach((enemy) => add(enemy));
+      if (player != null) add(player);
+      if (lightingColorGame != null) add(Lighting(color: lightingColorGame));
+      if (interface != null) add(interface);
+      add(joystickController);
+    }
+
     _interval = IntervalTick(200, tick: _updateTempList);
   }
 

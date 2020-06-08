@@ -4,6 +4,7 @@ import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/rpg_game.dart';
+import 'package:bonfire/tiled/tiled_world_map.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/game_interface/game_interface.dart';
@@ -24,6 +25,7 @@ class BonfireWidget extends StatefulWidget {
   final Color constructionModeColor;
   final Color collisionAreaColor;
   final Color lightingColorGame;
+  final TiledWorldMap tiledMap;
 
   const BonfireWidget({
     Key key,
@@ -41,6 +43,7 @@ class BonfireWidget extends StatefulWidget {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
+    this.tiledMap,
   }) : super(key: key);
 
   @override
@@ -83,6 +86,7 @@ class _BonfireWidgetState extends State<BonfireWidget>
       showCollisionArea: widget.showCollisionArea,
       showFPS: widget.showFPS,
       gameController: widget.gameController,
+      tiledMap: widget.tiledMap,
       constructionModeColor:
           widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
       collisionAreaColor:
