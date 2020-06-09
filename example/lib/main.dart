@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/tiled/tiled_world_map.dart';
+import 'package:example/decoration/barrel_dragable.dart';
+import 'package:example/decoration/torch.dart';
 import 'package:example/enemy/goblin.dart';
 import 'package:example/interface/knight_interface.dart';
 import 'package:example/map/dungeon_map.dart';
@@ -52,13 +54,15 @@ class Game extends StatelessWidget implements GameListener {
         ],
       ),
 //      player: Knight(
-//        Position((8 * 40).toDouble(), (12 * 40).toDouble()),
+//        Position((8 * DungeonMap.tileSize), (12 * DungeonMap.tileSize)),
 //      ),
       interface: KnightInterface(),
 //      map: DungeonMap.map(),
-      tiledMap:
-          TiledWorldMap('assets/images/tiled/mapa1.json', forceTileSize: 40)
-            ..registerObject('goblin', (x, y) => Goblin(Position(x, y))),
+      tiledMap: TiledWorldMap('assets/images/tiled/mapa1.json',
+          forceTileSize: DungeonMap.tileSize)
+        ..registerObject('goblin', (x, y) => Goblin(Position(x, y)))
+        ..registerObject('torch', (x, y) => Torch(Position(x, y)))
+        ..registerObject('barrel', (x, y) => BarrelDraggable(Position(x, y))),
 //      decorations: DungeonMap.decorations(),
 //      enemies: DungeonMap.enemies(),
       background: BackgroundColorGame(Colors.blueGrey[900]),
