@@ -52,11 +52,13 @@ class Game extends StatelessWidget implements GameListener {
         ],
       ),
 //      player: Knight(
-//        Position(5 * DungeonMap.tileSize, 6 * DungeonMap.tileSize),
+//        Position((8 * 40).toDouble(), (12 * 40).toDouble()),
 //      ),
       interface: KnightInterface(),
 //      map: DungeonMap.map(),
-      tiledMap: TiledWorldMap('assets/images/tiled/mapa1.json'),
+      tiledMap:
+          TiledWorldMap('assets/images/tiled/mapa1.json', forceTileSize: 40)
+            ..registerObject('goblin', (x, y) => Goblin(Position(x, y))),
 //      decorations: DungeonMap.decorations(),
 //      enemies: DungeonMap.enemies(),
       background: BackgroundColorGame(Colors.blueGrey[900]),

@@ -43,6 +43,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   Iterable<GameDecoration> _visibleDecorations = List();
   Iterable<LightingConfig> _visibleLights = List();
   IntervalTick _interval;
+  MapGame _currentMapGame;
 
   RPGGame({
     @required this.context,
@@ -79,6 +80,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
         if (lightingColorGame != null) add(Lighting(color: lightingColorGame));
         if (interface != null) add(interface);
         add(joystickController);
+        if (this.size != null) resize(this.size);
       });
     } else {
       if (map != null) add(map);
@@ -106,6 +108,8 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   void addDecoration(GameDecoration decoration) {
     add(decoration);
   }
+
+  MapGame getMap() => _currentMapGame;
 
   Iterable<Enemy> visibleEnemies() => _visibleEnemies;
 
@@ -144,6 +148,9 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   }
 
   void _updateTempList() {
+    try {
+      _currentMapGame = components.firstWhere((value) => value is MapGame);
+    } catch (e) {}
     _decorations =
         components.where((element) => (element is GameDecoration)).cast();
     _visibleDecorations =

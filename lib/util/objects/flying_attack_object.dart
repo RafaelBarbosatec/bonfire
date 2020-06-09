@@ -167,7 +167,9 @@ class FlyingAttackObject extends AnimatedObject
   }
 
   bool _verifyExistInWorld() {
-    Size mapSize = gameRef.map.mapSize;
+    Size mapSize = gameRef.getMap()?.mapSize;
+    if (mapSize == null) return true;
+
     if (position.left < 0) {
       return false;
     }

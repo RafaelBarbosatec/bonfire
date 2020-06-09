@@ -8,57 +8,70 @@ import 'package:tiledjsonreader/map/tiled_map.dart';
 import 'package:tiledjsonreader/tile_set/tile_set.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
+typedef ObjectBuilder = GameComponent Function(double x, double y);
+
 class TiledWorldMap {
   final String pathFile;
-  final int tileSize;
+  final double forceTileSize;
   TiledJsonReader _reader;
   List<Tile> _tiles = List();
+  List<Enemy> _enemies = List();
+  List<GameDecoration> _decorations = List();
   String _basePath;
   String _basePathFlame = 'assets/images/';
   TiledMap _tiledMap;
-  SpriteSheet spriteSheet;
+  double _tileSize;
+  double _tileSizeOrigin;
+  Map<String, SpriteSheet> spriteSheets = Map();
+  Map<String, ObjectBuilder> _objectsBuilder = Map();
 
-  TiledWorldMap(this.pathFile, {this.tileSize}) {
+  TiledWorldMap(this.pathFile, {this.forceTileSize}) {
     _basePath = pathFile.replaceAll(pathFile.split('/').last, '');
     _reader = TiledJsonReader(pathFile);
   }
 
+  void registerObject(String name, ObjectBuilder builder) {
+    _objectsBuilder[name] = builder;
+  }
+
   Future<TiledWorldData> build() async {
     _tiledMap = await _reader.read();
+    _tileSizeOrigin = _tiledMap.tileWidth.toDouble();
+    _tileSize = forceTileSize ?? _tileSizeOrigin;
     _load(_tiledMap);
     return Future.value(TiledWorldData(
       map: MapWorld(_tiles),
-      decorations: [],
-      enemies: [],
+      decorations: _decorations,
+      enemies: _enemies,
     ));
   }
 
   void _load(TiledMap tiledMap) {
     tiledMap.layers.forEach((layer) {
       if (layer is TileLayer) {
-        addTileLayer(layer);
+        _addTileLayer(layer);
       }
       if (layer is ObjectGroup) {
-        addObjects(layer);
+        _addObjects(layer);
       }
     });
   }
 
-  void addTileLayer(TileLayer tileLayer) {
+  void _addTileLayer(TileLayer tileLayer) {
     int count = 0;
-    tileLayer.data.forEach((element) {
-      if (element != 0) {
-        var data = getDataTile(element);
+    tileLayer.data.forEach((tile) {
+      if (tile != 0) {
+        var data = getDataTile(tile);
         if (data != null) {
           _tiles.add(
             Tile.fromSprite(
               data.sprite,
               Position(
-                _getX(count, tileLayer.width.toInt()) * _tiledMap.tileWidth,
-                _getY(count, tileLayer.width.toInt()) * _tiledMap.tileHeight,
+                _getX(count, tileLayer.width.toInt()),
+                _getY(count, tileLayer.width.toInt()),
               ),
               collision: data.collision,
-              size: data.size,
+              size: _tileSize.toDouble(),
             ),
           );
         }
@@ -72,7 +85,7 @@ class TiledWorldMap {
   }
 
   double _getY(int index, int width) {
-    return index / width;
+    return (index / width).floor().toDouble();
   }
 
   ItemTileSet getDataTile(int index) {
@@ -84,8 +97,8 @@ class TiledWorldMap {
     });
 
     if (tileSetContain != null) {
-      if (spriteSheet == null)
-        spriteSheet = SpriteSheet(
+      if (spriteSheets[tileSetContain.image] == null) {
+        spriteSheets[tileSetContain.image] = SpriteSheet(
           imageName:
               '${_basePath.replaceAll(_basePathFlame, '')}${tileSetContain.image}',
           textureWidth: tileSetContain.tileWidth.toInt(),
@@ -93,51 +106,42 @@ class TiledWorldMap {
           columns: tileSetContain.columns,
           rows: tileSetContain.tileCount ~/ tileSetContain.columns,
         );
+      }
 
       final int widthCount =
           tileSetContain.imageWidth ~/ tileSetContain.tileWidth;
 
-      print(index);
-      int row = _getY(index, widthCount).toInt();
-      int columm = _getX(index, widthCount).toInt();
-      print('$row / $columm');
+      int row = _getY(index - 1, widthCount).toInt();
+      int column = _getX(index - 1, widthCount).toInt();
       return ItemTileSet(
-        sprite: spriteSheet.getSprite(
+        sprite: spriteSheets[tileSetContain.image].getSprite(
           row,
-          columm,
+          column,
         ),
         collision: tileSetContain.tiles
-            .where((element) => element.id == index)
+            .where((element) => element.id == (index - 1))
             .isNotEmpty,
-        size: tileSetContain.tileWidth,
       );
     } else {
       return null;
     }
   }
 
-  void addObjects(ObjectGroup layer) {}
+  void _addObjects(ObjectGroup layer) {
+    layer.objects.forEach((element) {
+      double x = (element.x * _tileSize) / _tileSizeOrigin;
+      double y = (element.y * _tileSize) / _tileSizeOrigin;
+      var object = _objectsBuilder[element.name](x, y);
 
-//  void _loadTileSets(TiledMap tiledMap) {
-//    tiledMap.tileSets.forEach((tileSet){
-//      final spriteSheet = SpriteSheet(
-//        imageName: '${_basePath.replaceAll(_basePathFlame, '')}${tileSet.tileSet.image}',
-//        textureWidth: tileSet.tileSet.tileWidth.toInt(),
-//        textureHeight: tileSet.tileSet.tileHeight.toInt(),
-//        columns: tileSet.tileSet.columns,
-//        rows: tileSet.tileSet.tileCount ~/ tileSet.tileSet.columns,
-//      );
-//
-//      _tiles.add(Tile.fromSprite(spriteSheet.getSprite(row, column), position))
-//
-//    });
-//  }
+      if (object is Enemy) _enemies.add(object);
+      if (object is GameDecoration) _decorations.add(object);
+    });
+  }
 }
 
 class ItemTileSet {
   final Sprite sprite;
   final bool collision;
-  final double size;
 
-  ItemTileSet({this.sprite, this.collision = false, this.size});
+  ItemTileSet({this.sprite, this.collision = false});
 }
