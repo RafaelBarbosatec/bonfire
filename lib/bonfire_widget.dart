@@ -53,6 +53,10 @@ class BonfireWidget extends StatefulWidget {
 class _BonfireWidgetState extends State<BonfireWidget>
     with TickerProviderStateMixin {
   RPGGame _game;
+  List<Enemy> _enemies;
+  List<GameDecoration> _decorations;
+  MapGame _map;
+  bool _loading = true;
 
   @override
   void didUpdateWidget(BonfireWidget oldWidget) {
@@ -72,32 +76,52 @@ class _BonfireWidgetState extends State<BonfireWidget>
 
   @override
   void initState() {
+    _enemies = widget.enemies ?? [];
+    _decorations = widget.decorations ?? [];
+    _map = widget.map;
+    _loadGame();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _loading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : _game.widget;
+  }
+
+  void _loadGame() async {
+    if (widget.tiledMap != null) {
+      final tiled = await widget.tiledMap.build();
+      _map = tiled.map;
+      _enemies.addAll(tiled.enemies);
+      _decorations.addAll(tiled.decorations);
+    }
+
     _game = RPGGame(
       context: context,
       vsync: this,
       joystickController: widget.joystick,
       player: widget.player,
       interface: widget.interface,
-      map: widget.map,
-      decorations: widget.decorations ?? List(),
-      enemies: widget.enemies ?? List(),
+      map: _map,
+      decorations: _decorations,
+      enemies: _enemies,
       background: widget.background,
       constructionMode: widget.constructionMode,
       showCollisionArea: widget.showCollisionArea,
       showFPS: widget.showFPS,
       gameController: widget.gameController,
-      tiledMap: widget.tiledMap,
       constructionModeColor:
           widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
       collisionAreaColor:
           widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
       lightingColorGame: widget.lightingColorGame,
     );
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _game.widget;
+    setState(() {
+      _loading = false;
+    });
   }
 }

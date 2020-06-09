@@ -98,17 +98,6 @@ class TiledWorldMap {
     });
 
     if (tileSetContain != null) {
-      if (_spriteSheetsCache[tileSetContain.image] == null) {
-        _spriteSheetsCache[tileSetContain.image] = SpriteSheet(
-          imageName:
-              '${_basePath.replaceAll(_basePathFlame, '')}${tileSetContain.image}',
-          textureWidth: tileSetContain.tileWidth.toInt(),
-          textureHeight: tileSetContain.tileHeight.toInt(),
-          columns: tileSetContain.columns,
-          rows: tileSetContain.tileCount ~/ tileSetContain.columns,
-        );
-      }
-
       final int widthCount =
           tileSetContain.imageWidth ~/ tileSetContain.tileWidth;
 
@@ -117,11 +106,14 @@ class TiledWorldMap {
 
       Sprite sprite = _spriteCache['${tileSetContain.image}/$row/$column'];
       if (sprite == null) {
-        sprite = _spriteCache['${tileSetContain.image}/$row/$column'] =
-            _spriteSheetsCache[tileSetContain.image].getSprite(
+        sprite = getSprite(
+          '${_basePath.replaceAll(_basePathFlame, '')}${tileSetContain.image}',
           row,
           column,
+          tileSetContain.tileWidth,
+          tileSetContain.tileHeight,
         );
+        _spriteCache['${tileSetContain.image}/$row/$column'] = sprite;
       }
       return ItemTileSet(
         sprite: sprite,
@@ -145,6 +137,17 @@ class TiledWorldMap {
         if (object is GameDecoration) _decorations.add(object);
       }
     });
+  }
+
+  Sprite getSprite(
+      String image, int row, int column, double tileWidth, double tileHeight) {
+    return Sprite(
+      image,
+      x: (column * tileWidth).toDouble(),
+      y: (row * tileHeight).toDouble(),
+      width: tileWidth,
+      height: tileHeight,
+    );
   }
 }
 
