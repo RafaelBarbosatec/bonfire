@@ -1,22 +1,10 @@
-enum CollisionAlign {
-  BOTTOM_CENTER,
-  CENTER,
-  TOP_CENTER,
-  LEFT_CENTER,
-  RIGHT_CENTER,
-  TOP_LEFT,
-  TOP_RIGHT,
-  BOTTOM_LEFT,
-  BOTTOM_RIGHT,
-}
+import 'package:flutter/widgets.dart';
 
 class Collision {
   final double height;
   final double width;
-  final CollisionAlign align;
+  final Offset align;
 
   Collision(
-      {this.height = 0.0,
-      this.width = 0.0,
-      this.align = CollisionAlign.BOTTOM_CENTER});
+      {this.height = 0.0, this.width = 0.0, this.align = const Offset(0, 0)});
 }

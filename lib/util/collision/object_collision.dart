@@ -6,7 +6,7 @@ import 'package:bonfire/util/collision/collision.dart';
 import 'package:flutter/material.dart';
 
 mixin ObjectCollision {
-  Collision collision = Collision();
+  Collision collision;
 
   void triggerSensors(Rect displacement, RPGGame game) {
     Rect rectCollision = getRectCollision(displacement);
@@ -27,6 +27,7 @@ mixin ObjectCollision {
     bool onlyVisible = true,
     bool shouldTriggerSensors = true,
   }) {
+    if (this.collision == null) return false;
     Rect rectCollision = getRectCollision(displacement);
     if (shouldTriggerSensors) triggerSensors(displacement, game);
 
@@ -57,45 +58,10 @@ mixin ObjectCollision {
   }
 
   Rect getRectCollision(Rect displacement) {
-    double left =
-        displacement.left + (displacement.width - collision.width) / 2;
+    if (this.collision == null) return displacement;
+    double left = displacement.left + collision.align.dx;
+    double top = displacement.top + collision.align.dy;
 
-    double top =
-        displacement.top + (displacement.height - collision.height) / 2;
-
-    switch (collision.align) {
-      case CollisionAlign.BOTTOM_CENTER:
-        top = displacement.bottom - collision.height;
-        break;
-      case CollisionAlign.CENTER:
-        top = displacement.top + (displacement.height - collision.height) / 2;
-        break;
-      case CollisionAlign.TOP_CENTER:
-        top = displacement.top;
-        break;
-      case CollisionAlign.LEFT_CENTER:
-        left = displacement.left;
-        break;
-      case CollisionAlign.RIGHT_CENTER:
-        left = displacement.right - collision.width;
-        break;
-      case CollisionAlign.TOP_LEFT:
-        top = displacement.top;
-        left = displacement.left;
-        break;
-      case CollisionAlign.TOP_RIGHT:
-        top = displacement.top;
-        left = displacement.right - collision.width;
-        break;
-      case CollisionAlign.BOTTOM_LEFT:
-        top = displacement.bottom - collision.height;
-        left = displacement.left;
-        break;
-      case CollisionAlign.BOTTOM_RIGHT:
-        top = displacement.bottom - collision.height;
-        left = displacement.right - collision.width;
-        break;
-    }
     return Rect.fromLTWH(left, top, collision.width, collision.height);
   }
 

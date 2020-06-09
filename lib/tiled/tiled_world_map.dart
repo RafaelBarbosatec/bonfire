@@ -136,12 +136,14 @@ class TiledWorldMap {
 
   void _addObjects(ObjectGroup layer) {
     layer.objects.forEach((element) {
-      double x = (element.x * _tileSize) / _tileSizeOrigin;
-      double y = (element.y * _tileSize) / _tileSizeOrigin;
-      var object = _objectsBuilder[element.name](x, y);
+      if (_objectsBuilder[element.name] != null) {
+        double x = (element.x * _tileSize) / _tileSizeOrigin;
+        double y = (element.y * _tileSize) / _tileSizeOrigin;
+        var object = _objectsBuilder[element.name](x, y);
 
-      if (object is Enemy) _enemies.add(object);
-      if (object is GameDecoration) _decorations.add(object);
+        if (object is Enemy) _enemies.add(object);
+        if (object is GameDecoration) _decorations.add(object);
+      }
     });
   }
 }
