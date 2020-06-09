@@ -18,20 +18,20 @@ class DungeonMap {
         if (indexRow == 3 && indexColumm > 2 && indexColumm < 30) {
           tileList.add(Tile('tile/wall_bottom.png',
               Position(indexColumm.toDouble(), indexRow.toDouble()),
-              collision: true, size: tileSize));
+              collision: true, width: tileSize, height: tileSize));
           return;
         }
         if (indexRow == 4 && indexColumm > 2 && indexColumm < 30) {
           tileList.add(Tile('tile/wall.png',
               Position(indexColumm.toDouble(), indexRow.toDouble()),
-              collision: true, size: tileSize));
+              collision: true, width: tileSize, height: tileSize));
           return;
         }
 
         if (indexRow == 9 && indexColumm > 2 && indexColumm < 30) {
           tileList.add(Tile('tile/wall_top.png',
               Position(indexColumm.toDouble(), indexRow.toDouble()),
-              collision: true, size: tileSize));
+              collision: true, width: tileSize, height: tileSize));
           return;
         }
 
@@ -41,31 +41,31 @@ class DungeonMap {
             indexColumm < 30) {
           tileList.add(Tile(randomFloor(),
               Position(indexColumm.toDouble(), indexRow.toDouble()),
-              size: tileSize));
+              width: tileSize, height: tileSize));
           return;
         }
 
         if (indexRow > 3 && indexRow < 9 && indexColumm == 2) {
           tileList.add(Tile('tile/wall_left.png',
               Position(indexColumm.toDouble(), indexRow.toDouble()),
-              collision: true, size: tileSize));
+              collision: true, width: tileSize, height: tileSize));
         }
         if (indexRow == 9 && indexColumm == 2) {
           tileList.add(Tile('tile/wall_bottom_left.png',
               Position(indexColumm.toDouble(), indexRow.toDouble()),
-              collision: true, size: tileSize));
+              collision: true, width: tileSize, height: tileSize));
         }
 
         if (indexRow > 3 && indexRow < 9 && indexColumm == 30) {
           tileList.add(Tile('tile/wall_right.png',
               Position(indexColumm.toDouble(), indexRow.toDouble()),
-              collision: true, size: tileSize));
+              collision: true, width: tileSize, height: tileSize));
         }
 
         if (indexRow == 13 && indexColumm == 31) {
           tileList.add(Tile(
               '', Position(indexColumm.toDouble(), indexRow.toDouble()),
-              size: tileSize));
+              width: tileSize, height: tileSize));
           return;
         }
       });
