@@ -22,7 +22,8 @@ class TiledWorldMap {
   TiledMap _tiledMap;
   double _tileSize;
   double _tileSizeOrigin;
-  Map<String, SpriteSheet> spriteSheets = Map();
+  Map<String, SpriteSheet> _spriteSheetsCache = Map();
+  Map<String, Sprite> _spriteCache = Map();
   Map<String, ObjectBuilder> _objectsBuilder = Map();
 
   TiledWorldMap(this.pathFile, {this.forceTileSize}) {
@@ -97,8 +98,8 @@ class TiledWorldMap {
     });
 
     if (tileSetContain != null) {
-      if (spriteSheets[tileSetContain.image] == null) {
-        spriteSheets[tileSetContain.image] = SpriteSheet(
+      if (_spriteSheetsCache[tileSetContain.image] == null) {
+        _spriteSheetsCache[tileSetContain.image] = SpriteSheet(
           imageName:
               '${_basePath.replaceAll(_basePathFlame, '')}${tileSetContain.image}',
           textureWidth: tileSetContain.tileWidth.toInt(),
@@ -113,11 +114,17 @@ class TiledWorldMap {
 
       int row = _getY(index - 1, widthCount).toInt();
       int column = _getX(index - 1, widthCount).toInt();
-      return ItemTileSet(
-        sprite: spriteSheets[tileSetContain.image].getSprite(
+
+      Sprite sprite = _spriteCache['${tileSetContain.image}/$row/$column'];
+      if (sprite == null) {
+        sprite = _spriteCache['${tileSetContain.image}/$row/$column'] =
+            _spriteSheetsCache[tileSetContain.image].getSprite(
           row,
           column,
-        ),
+        );
+      }
+      return ItemTileSet(
+        sprite: sprite,
         collision: tileSetContain.tiles
             .where((element) => element.id == (index - 1))
             .isNotEmpty,
