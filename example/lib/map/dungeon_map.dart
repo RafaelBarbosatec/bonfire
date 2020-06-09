@@ -88,7 +88,6 @@ class DungeonMap {
         collision: Collision(
           width: tileSize / 1.5,
           height: tileSize / 1.5,
-          align: CollisionAlign.CENTER,
         ),
       ),
       Chest(getRelativeTilePosition(18, 7)),
@@ -100,7 +99,6 @@ class DungeonMap {
         collision: Collision(
           height: tileSize * 0.8,
           width: tileSize,
-          align: CollisionAlign.TOP_CENTER,
         ),
       ),
       GameDecoration.sprite(
@@ -111,7 +109,6 @@ class DungeonMap {
         collision: Collision(
           height: tileSize * 0.8,
           width: tileSize,
-          align: CollisionAlign.TOP_CENTER,
         ),
       ),
       Torch(getRelativeTilePosition(4, 4)),

@@ -7,6 +7,7 @@ import 'package:example/decoration/torch.dart';
 import 'package:example/enemy/goblin.dart';
 import 'package:example/interface/knight_interface.dart';
 import 'package:example/map/dungeon_map.dart';
+import 'package:example/player/knight.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -53,14 +54,14 @@ class Game extends StatelessWidget implements GameListener {
           )
         ],
       ),
-//      player: Knight(
-//        Position((8 * DungeonMap.tileSize), (12 * DungeonMap.tileSize)),
-//      ),
+      player: Knight(
+        Position((8 * DungeonMap.tileSize), (12 * DungeonMap.tileSize)),
+      ),
       interface: KnightInterface(),
 //      map: DungeonMap.map(),
       tiledMap: TiledWorldMap('assets/images/tiled/mapa1.json',
           forceTileSize: DungeonMap.tileSize)
-        ..registerObject('goblin', (x, y) => Goblin(Position(x, y)))
+//        ..registerObject('goblin', (x, y) => Goblin(Position(x, y)))
         ..registerObject('torch', (x, y) => Torch(Position(x, y)))
         ..registerObject('barrel', (x, y) => BarrelDraggable(Position(x, y))),
 //      decorations: DungeonMap.decorations(),
