@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 
 class Tile extends SpriteObject {
   final bool collision;
-  final double size;
+  final double width;
+  final double height;
   Position _positionText;
   Paint _paintText = Paint()
     ..style = PaintingStyle.stroke
@@ -18,9 +19,10 @@ class Tile extends SpriteObject {
     String spritePath,
     Position position, {
     this.collision = false,
-    this.size = 32,
+    this.width = 32,
+    this.height = 32,
   }) {
-    this.position = generateRectWithBleedingPixel(position, size);
+    this.position = generateRectWithBleedingPixel(position, width, height);
     if (spritePath.isNotEmpty) sprite = Sprite(spritePath);
 
     _positionText = Position(position.x, position.y);
@@ -30,10 +32,11 @@ class Tile extends SpriteObject {
     Sprite sprite,
     Position position, {
     this.collision = false,
-    this.size = 32,
+    this.width = 32,
+    this.height = 32,
   }) {
     this.sprite = sprite;
-    this.position = generateRectWithBleedingPixel(position, size);
+    this.position = generateRectWithBleedingPixel(position, width, height);
 
     _positionText = Position(position.x, position.y);
   }
@@ -56,7 +59,7 @@ class Tile extends SpriteObject {
     );
     if (_positionText.x % 2 == 0) {
       TextConfig(
-        fontSize: size / 3.5,
+        fontSize: width / 3.5,
       )
           .withColor(
             gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
@@ -69,16 +72,23 @@ class Tile extends SpriteObject {
     }
   }
 
-  Rect generateRectWithBleedingPixel(Position position, double size) {
-    double bleendingPixel = size * 0.03;
-    if (bleendingPixel > 2) {
-      bleendingPixel = 2;
+  Rect generateRectWithBleedingPixel(
+      Position position, double width, double height) {
+    double bleendingWidthPixel = width * 0.03;
+    if (bleendingWidthPixel > 2) {
+      bleendingWidthPixel = 2;
+    }
+    double bleendingHeightPixel = width * 0.03;
+    if (bleendingHeightPixel > 2) {
+      bleendingHeightPixel = 2;
     }
     return Rect.fromLTWH(
-      (position.x * size) - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0),
-      (position.y * size) - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0),
-      size + (position.x % 2 == 0 ? bleendingPixel : 0),
-      size + (position.y % 2 == 0 ? bleendingPixel : 0),
+      (position.x * width) -
+          (position.x % 2 == 0 ? (bleendingWidthPixel / 2) : 0),
+      (position.y * height) -
+          (position.y % 2 == 0 ? (bleendingHeightPixel / 2) : 0),
+      width + (position.x % 2 == 0 ? bleendingWidthPixel : 0),
+      height + (position.y % 2 == 0 ? bleendingHeightPixel : 0),
     );
   }
 

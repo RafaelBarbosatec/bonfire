@@ -4,7 +4,6 @@ import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/rpg_game.dart';
-import 'package:bonfire/tiled/tiled_world_map.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/game_interface/game_interface.dart';
@@ -25,7 +24,6 @@ class BonfireWidget extends StatefulWidget {
   final Color constructionModeColor;
   final Color collisionAreaColor;
   final Color lightingColorGame;
-  final TiledWorldMap tiledMap;
 
   const BonfireWidget({
     Key key,
@@ -43,7 +41,6 @@ class BonfireWidget extends StatefulWidget {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
-    this.tiledMap,
   }) : super(key: key);
 
   @override
@@ -53,14 +50,10 @@ class BonfireWidget extends StatefulWidget {
 class _BonfireWidgetState extends State<BonfireWidget>
     with TickerProviderStateMixin {
   RPGGame _game;
-  List<Enemy> _enemies;
-  List<GameDecoration> _decorations;
-  MapGame _map;
-  bool _loading = true;
 
   @override
   void didUpdateWidget(BonfireWidget oldWidget) {
-    if (widget.constructionMode && widget.tiledMap == null) {
+    if (widget.constructionMode) {
       if (_game.map != null) _game.map.updateTiles(widget.map.tiles);
 
       _game.decorations().forEach((d) => d.remove());
@@ -76,39 +69,15 @@ class _BonfireWidgetState extends State<BonfireWidget>
 
   @override
   void initState() {
-    _enemies = widget.enemies ?? [];
-    _decorations = widget.decorations ?? [];
-    _map = widget.map;
-    _loadGame();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _loading
-        ? Center(
-            child: CircularProgressIndicator(),
-          )
-        : _game.widget;
-  }
-
-  void _loadGame() async {
-    if (widget.tiledMap != null) {
-      final tiled = await widget.tiledMap.build();
-      _map = tiled.map;
-      _enemies.addAll(tiled.enemies);
-      _decorations.addAll(tiled.decorations);
-    }
-
     _game = RPGGame(
       context: context,
       vsync: this,
       joystickController: widget.joystick,
       player: widget.player,
       interface: widget.interface,
-      map: _map,
-      decorations: _decorations,
-      enemies: _enemies,
+      map: widget.map,
+      decorations: widget.decorations,
+      enemies: widget.enemies,
       background: widget.background,
       constructionMode: widget.constructionMode,
       showCollisionArea: widget.showCollisionArea,
@@ -120,8 +89,11 @@ class _BonfireWidgetState extends State<BonfireWidget>
           widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
       lightingColorGame: widget.lightingColorGame,
     );
-    setState(() {
-      _loading = false;
-    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _game.widget;
   }
 }

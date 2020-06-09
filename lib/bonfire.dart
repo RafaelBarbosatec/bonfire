@@ -1,5 +1,6 @@
 library bonfire;
 
+export 'package:bonfire/bonfire_tiled_widget.dart';
 export 'package:bonfire/bonfire_widget.dart';
 export 'package:bonfire/decoration/decoration.dart';
 export 'package:bonfire/enemy/enemy.dart';

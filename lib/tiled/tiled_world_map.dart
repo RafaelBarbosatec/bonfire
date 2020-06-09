@@ -20,9 +20,10 @@ class TiledWorldMap {
   String _basePath;
   String _basePathFlame = 'assets/images/';
   TiledMap _tiledMap;
-  double _tileSize;
-  double _tileSizeOrigin;
-  Map<String, SpriteSheet> _spriteSheetsCache = Map();
+  double _tileWidth;
+  double _tileHeight;
+  double _tileWidthOrigin;
+  double _tileHeightOrigin;
   Map<String, Sprite> _spriteCache = Map();
   Map<String, ObjectBuilder> _objectsBuilder = Map();
 
@@ -37,8 +38,10 @@ class TiledWorldMap {
 
   Future<TiledWorldData> build() async {
     _tiledMap = await _reader.read();
-    _tileSizeOrigin = _tiledMap.tileWidth.toDouble();
-    _tileSize = forceTileSize ?? _tileSizeOrigin;
+    _tileWidthOrigin = _tiledMap.tileWidth.toDouble();
+    _tileHeightOrigin = _tiledMap.tileHeight.toDouble();
+    _tileWidth = forceTileSize ?? _tileWidthOrigin;
+    _tileHeight = forceTileSize ?? _tileHeightOrigin;
     _load(_tiledMap);
     return Future.value(TiledWorldData(
       map: MapWorld(_tiles),
@@ -72,7 +75,8 @@ class TiledWorldMap {
                 _getY(count, tileLayer.width.toInt()),
               ),
               collision: data.collision,
-              size: _tileSize.toDouble(),
+              width: _tileWidth,
+              height: _tileHeight,
             ),
           );
         }
@@ -117,6 +121,8 @@ class TiledWorldMap {
       }
       return ItemTileSet(
         sprite: sprite,
+        width: tileSetContain.tileWidth,
+        height: tileSetContain.tileHeight,
         collision: tileSetContain.tiles
             .where((element) => element.id == (index - 1))
             .isNotEmpty,
@@ -129,8 +135,8 @@ class TiledWorldMap {
   void _addObjects(ObjectGroup layer) {
     layer.objects.forEach((element) {
       if (_objectsBuilder[element.name] != null) {
-        double x = (element.x * _tileSize) / _tileSizeOrigin;
-        double y = (element.y * _tileSize) / _tileSizeOrigin;
+        double x = (element.x * _tileWidth) / _tileWidthOrigin;
+        double y = (element.y * _tileHeight) / _tileHeightOrigin;
         var object = _objectsBuilder[element.name](x, y);
 
         if (object is Enemy) _enemies.add(object);
@@ -154,6 +160,8 @@ class TiledWorldMap {
 class ItemTileSet {
   final Sprite sprite;
   final bool collision;
+  final double width;
+  final double height;
 
-  ItemTileSet({this.sprite, this.collision = false});
+  ItemTileSet({this.sprite, this.collision = false, this.width, this.height});
 }
