@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:bonfire/rpg_game.dart';
-import 'package:bonfire/util/PriorityLayer.dart';
 import 'package:bonfire/util/gestures.dart';
+import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flutter/services.dart';

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/rpg_game.dart';
+import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/text_config.dart';
 
@@ -75,4 +76,7 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
   void remove() {
     destroyed = true;
   }
+
+  @override
+  int priority() => PriorityLayer.OBJECTS;
 }
