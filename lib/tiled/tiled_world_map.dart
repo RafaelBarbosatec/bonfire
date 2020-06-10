@@ -62,7 +62,6 @@ class TiledWorldMap {
       if (layer is ObjectGroup) {
         _addObjects(layer);
         _countObjects++;
-        if (_countObjects > 9) _countObjects = 9;
       }
     });
   }
@@ -130,8 +129,6 @@ class TiledWorldMap {
 
       return ItemTileSet(
         sprite: sprite,
-        width: tileSetContain.tileWidth,
-        height: tileSetContain.tileHeight,
         collision: collision,
       );
     } else {
@@ -195,8 +192,6 @@ class TiledWorldMap {
 class ItemTileSet {
   final Sprite sprite;
   final Collision collision;
-  final double width;
-  final double height;
 
-  ItemTileSet({this.sprite, this.collision, this.width, this.height});
+  ItemTileSet({this.sprite, this.collision});
 }
