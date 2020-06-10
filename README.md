@@ -629,7 +629,7 @@ return BonfireTiledWidget(
 
 ## Print result
 
-![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/tiled-support/media/print_result_tiled.jpg)
+![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/tiled-support/media/print_result_tiled.png)
 
 
 ## Next steps
