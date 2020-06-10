@@ -27,6 +27,7 @@ class TiledWorldMap {
   double _tileHeight;
   double _tileWidthOrigin;
   double _tileHeightOrigin;
+  int _countObjects = 0;
   Map<String, Sprite> _spriteCache = Map();
   Map<String, ObjectBuilder> _objectsBuilder = Map();
 
@@ -60,6 +61,8 @@ class TiledWorldMap {
       }
       if (layer is ObjectGroup) {
         _addObjects(layer);
+        _countObjects++;
+        if (_countObjects > 9) _countObjects = 9;
       }
     });
   }
@@ -144,7 +147,8 @@ class TiledWorldMap {
         var object = _objectsBuilder[element.name](x, y);
 
         if (object is Enemy) _enemies.add(object);
-        if (object is GameDecoration) _decorations.add(object);
+        if (object is GameDecoration)
+          _decorations.add(object..additionalPriority = _countObjects);
       }
     });
   }

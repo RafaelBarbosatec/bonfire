@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bonfire/util/PriorityLayer.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:flame/sprite.dart';
 
@@ -11,4 +12,7 @@ class SpriteObject extends GameComponent {
     if (sprite != null && position != null && sprite.loaded())
       sprite.renderRect(canvas, position);
   }
+
+  @override
+  int priority() => PriorityLayer.OBJECTS;
 }
