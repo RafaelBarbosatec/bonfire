@@ -34,7 +34,7 @@ mixin ObjectCollision {
     final collisions = (onlyVisible
             ? game.getMap()?.getCollisionsRendered() ?? []
             : game.getMap()?.getCollisions() ?? [])
-        .where((i) => i.position.overlaps(rectCollision));
+        .where((i) => i.rectCollision.overlaps(rectCollision));
 
     if (collisions.length > 0) return true;
 

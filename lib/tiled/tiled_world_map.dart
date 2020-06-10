@@ -2,10 +2,13 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tile.dart';
 import 'package:bonfire/tiled/tiled_world_data.dart';
 import 'package:flame/sprite.dart';
+import 'package:flutter/material.dart';
 import 'package:tiledjsonreader/map/layer/object_group.dart';
 import 'package:tiledjsonreader/map/layer/tile_layer.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
 import 'package:tiledjsonreader/tile_set/tile_set.dart';
+import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
+import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
 typedef ObjectBuilder = GameComponent Function(double x, double y);
@@ -119,13 +122,14 @@ class TiledWorldMap {
         );
         _spriteCache['${tileSetContain.image}/$row/$column'] = sprite;
       }
+
+      Collision collision = _getCollision(tileSetContain, index);
+
       return ItemTileSet(
         sprite: sprite,
         width: tileSetContain.tileWidth,
         height: tileSetContain.tileHeight,
-        collision: tileSetContain.tiles
-            .where((element) => element.id == (index - 1))
-            .isNotEmpty,
+        collision: collision,
       );
     } else {
       return null;
@@ -155,13 +159,40 @@ class TiledWorldMap {
       height: tileHeight,
     );
   }
+
+  Collision _getCollision(TileSet tileSetContain, int index) {
+    try {
+      TileSetItem tileSetItemList = tileSetContain.tiles
+          .firstWhere((element) => element.id == (index - 1));
+      List<TileSetObject> tileSetObjectList =
+          tileSetItemList.objectGroup.objects;
+      if (tileSetObjectList.isNotEmpty) {
+        double width =
+            (tileSetObjectList[0].width * _tileWidth) / _tileWidthOrigin;
+        double height =
+            (tileSetObjectList[0].height * _tileHeight) / _tileHeightOrigin;
+
+        double x = (tileSetObjectList[0].x * _tileWidth) / _tileWidthOrigin;
+        double y = (tileSetObjectList[0].y * _tileHeight) / _tileHeightOrigin;
+        return Collision(
+          width: width,
+          height: height,
+          align: Offset(x, y),
+        );
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 class ItemTileSet {
   final Sprite sprite;
-  final bool collision;
+  final Collision collision;
   final double width;
   final double height;
 
-  ItemTileSet({this.sprite, this.collision = false, this.width, this.height});
+  ItemTileSet({this.sprite, this.collision, this.width, this.height});
 }

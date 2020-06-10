@@ -1,13 +1,15 @@
 import 'dart:ui';
 
+import 'package:bonfire/util/collision/collision.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/objects/sprite_object.dart';
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
-class Tile extends SpriteObject {
-  final bool collision;
+class Tile extends SpriteObject with ObjectCollision {
+  final Collision collision;
   final double width;
   final double height;
   Position _positionText;
@@ -18,7 +20,7 @@ class Tile extends SpriteObject {
   Tile(
     String spritePath,
     Position position, {
-    this.collision = false,
+    this.collision,
     this.width = 32,
     this.height = 32,
   }) {
@@ -31,7 +33,7 @@ class Tile extends SpriteObject {
   Tile.fromSprite(
     Sprite sprite,
     Position position, {
-    this.collision = false,
+    this.collision,
     this.width = 32,
     this.height = 32,
   }) {
@@ -45,7 +47,7 @@ class Tile extends SpriteObject {
   void render(Canvas canvas) {
     super.render(canvas);
 
-    if (gameRef != null && gameRef.showCollisionArea && collision)
+    if (gameRef != null && gameRef.showCollisionArea && collision != null)
       _drawCollision(canvas);
     if (gameRef != null && gameRef.constructionMode && isVisibleInCamera())
       _drawGrid(canvas);
@@ -94,10 +96,12 @@ class Tile extends SpriteObject {
 
   void _drawCollision(Canvas canvas) {
     canvas.drawRect(
-      position,
+      getRectCollision(position),
       new Paint()
         ..color = gameRef.collisionAreaColor ??
             Colors.lightGreenAccent.withOpacity(0.5),
     );
   }
+
+  Rect get rectCollision => getRectCollision(position);
 }
