@@ -57,6 +57,7 @@ Para executar o game com Bonfire, basta utilizar o seguinte widget:
       constructionModeColor: Colors.blue, // Caso deseje customizar a cor do grid.
       collisionAreaColor: Colors.blue, // Caso deseje customizar a cor da área de colisão.
       lightingColorGame: Colors.black.withOpacity(0.4), // caso deseje adicionar iluminação geral do game
+      zoom: 1, // aqui voce pode colocar o zoom padrao do jogo. Caso precise, voce pode mudar o zoom do jogo pela propria camera depois
     );
   }
 ```
