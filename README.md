@@ -605,8 +605,10 @@ flutter:
 For maps built with Tiled we must use the Widget `BonfireTiledWidget`:
 
 ```dart
-TiledWorldMap map = TiledWorldMap('tiled/mapa1.json',
-          forceTileSize: DungeonMap.tileSize)
+TiledWorldMap map = TiledWorldMap(
+        'tiled/mapa.json', // main file path
+        forceTileSize: DungeonMap.tileSize, // if you want to force the size of the Tile to be larger or smaller than the original
+      )
         ..registerObject('goblin', (x, y) => Goblin(Position(x, y))) // Records objects that will be placed on the map when the name is found.
         ..registerObject('torch', (x, y) => Torch(Position(x, y)))
         ..registerObject('barrel', (x, y) => BarrelDraggable(Position(x, y)));
@@ -622,6 +624,13 @@ return BonfireTiledWidget(
 ```
 
 ## Print example of Tiled
+
+![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/tiled-support/media/print_exemplo_tiled.png)
+
+## Print result
+
+![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/tiled-support/media/print_result_tiled.jpg)
+
 
 ## Next steps
 - [ ] Component docs
