@@ -60,7 +60,7 @@ abstract class JoystickController extends Component
   void update(double t) {}
 
   @override
-  int priority() => 25;
+  int priority() => 100;
 
   @override
   bool isHud() => true;

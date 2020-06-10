@@ -14,10 +14,7 @@ class GameInterface extends GameComponent with TapGesture {
   bool isHud() => true;
 
   @override
-  bool isTouchable = true;
-
-  @override
-  int priority() => 20;
+  int priority() => 90;
 
   @override
   void render(Canvas c) {

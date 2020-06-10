@@ -18,7 +18,7 @@ class Lighting extends GameComponent {
   }
 
   @override
-  int priority() => 19;
+  int priority() => 80;
 
   @override
   void render(Canvas canvas) {
