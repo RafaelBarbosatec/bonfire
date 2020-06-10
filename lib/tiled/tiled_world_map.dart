@@ -32,7 +32,7 @@ class TiledWorldMap {
 
   TiledWorldMap(this.pathFile, {this.forceTileSize}) {
     _basePath = pathFile.replaceAll(pathFile.split('/').last, '');
-    _reader = TiledJsonReader(pathFile);
+    _reader = TiledJsonReader(_basePathFlame + pathFile);
   }
 
   void registerObject(String name, ObjectBuilder builder) {
@@ -114,7 +114,7 @@ class TiledWorldMap {
       Sprite sprite = _spriteCache['${tileSetContain.image}/$row/$column'];
       if (sprite == null) {
         sprite = getSprite(
-          '${_basePath.replaceAll(_basePathFlame, '')}${tileSetContain.image}',
+          '$_basePath${tileSetContain.image}',
           row,
           column,
           tileSetContain.tileWidth,

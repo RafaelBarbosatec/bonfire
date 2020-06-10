@@ -58,7 +58,7 @@ class Game extends StatelessWidget implements GameListener {
         Position((8 * DungeonMap.tileSize), (12 * DungeonMap.tileSize)),
       ),
       interface: KnightInterface(),
-      tiledMap: TiledWorldMap('assets/images/tiled/mapa1.json',
+      tiledMap: TiledWorldMap('tiled/mapa1.json',
           forceTileSize: DungeonMap.tileSize)
 //        ..registerObject('goblin', (x, y) => Goblin(Position(x, y)))
         ..registerObject('torch', (x, y) => Torch(Position(x, y)))
