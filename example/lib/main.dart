@@ -67,7 +67,6 @@ class Game extends StatelessWidget implements GameListener {
       //gameController: _controller..setListener(this),
       lightingColorGame: Colors.black.withOpacity(0.5),
       showFPS: true,
-      showCollisionArea: true,
     );
   }
 
