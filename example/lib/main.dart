@@ -62,6 +62,7 @@ class Game extends StatelessWidget implements GameListener {
       gameController: _controller..setListener(this),
       lightingColorGame: Colors.black.withOpacity(0.5),
       showFPS: true,
+      zoom: 1, // you can change this to change the game zoom or directly on the camera
     );
   }
 
