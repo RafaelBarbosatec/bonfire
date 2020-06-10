@@ -153,7 +153,7 @@ class FlyingAttackObject extends AnimatedObject
             break;
         }
 
-        gameRef.add(
+        gameRef.addLater(
           AnimatedObjectOnce(
             animation: destroyAnimation,
             position: positionDestroy,

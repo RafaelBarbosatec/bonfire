@@ -138,7 +138,7 @@ class FlyingAttackAngleObject extends AnimatedObject
 
         Rect positionDestroy = position.shift(diffBase);
 
-        gameRef.add(
+        gameRef.addLater(
           AnimatedObjectOnce(
             animation: destroyAnimation,
             position: positionDestroy,
