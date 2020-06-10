@@ -620,6 +620,7 @@ return BonfireTiledWidget(
           isFixed: false,
         ),
       tiledMap: map,
+      lightingColorGame: Colors.black.withOpacity(0.5),
     );
 ```
 
