@@ -82,11 +82,11 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   }
 
   void addEnemy(Enemy enemy) {
-    add(enemy);
+    addLater(enemy);
   }
 
   void addDecoration(GameDecoration decoration) {
-    add(decoration);
+    addLater(decoration);
   }
 
   MapGame getMap() => map;

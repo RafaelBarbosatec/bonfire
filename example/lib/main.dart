@@ -64,7 +64,7 @@ class Game extends StatelessWidget implements GameListener {
         ..registerObject('torch', (x, y) => Torch(Position(x, y)))
         ..registerObject('barrel', (x, y) => BarrelDraggable(Position(x, y))),
       background: BackgroundColorGame(Colors.blueGrey[900]),
-      //gameController: _controller..setListener(this),
+//      gameController: _controller..setListener(this),
       lightingColorGame: Colors.black.withOpacity(0.5),
       showFPS: true,
     );
