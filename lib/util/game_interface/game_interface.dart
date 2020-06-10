@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/PriorityLayer.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_interface/interface_component.dart';
 import 'package:flame/text_config.dart';
@@ -14,7 +15,7 @@ class GameInterface extends GameComponent with TapGesture {
   bool isHud() => true;
 
   @override
-  int priority() => 90;
+  int priority() => PriorityLayer.GAME_INTERFACE;
 
   @override
   void render(Canvas c) {

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bonfire/util/PriorityLayer.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
@@ -223,4 +224,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
   }
 
   Rect get rectCollision => getRectCollision(position);
+
+  @override
+  int priority() => PriorityLayer.ENEMY;
 }

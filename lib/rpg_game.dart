@@ -13,6 +13,7 @@ import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/lighting/with_lighting.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator.dart';
+import 'package:flame/components/component.dart';
 import 'package:flame/keyboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -64,14 +65,15 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     gameCamera.gameRef = this;
     joystickController.joystickListener = player ?? MapExplorer(gameCamera);
     if (gameController != null) gameController.setGame(this);
-    if (background != null) add(background);
-    if (map != null) add(map);
-    decorations?.forEach((decoration) => add(decoration));
-    enemies?.forEach((enemy) => add(enemy));
-    if (player != null) add(player);
-    if (lightingColorGame != null) add(Lighting(color: lightingColorGame));
-    if (interface != null) add(interface);
-    add(joystickController);
+    if (background != null) super.add(background);
+    if (map != null) super.add(map);
+    decorations?.forEach((decoration) => super.add(decoration));
+    enemies?.forEach((enemy) => super.add(enemy));
+    if (player != null) super.add(player);
+    if (lightingColorGame != null)
+      super.add(Lighting(color: lightingColorGame));
+    if (interface != null) super.add(interface);
+    super.add(joystickController);
     _interval = IntervalTick(200, tick: _updateTempList);
   }
 
@@ -87,6 +89,15 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
   void addDecoration(GameDecoration decoration) {
     addLater(decoration);
+  }
+
+  void addGameComponent(GameComponent component) {
+    addLater(component);
+  }
+
+  @override
+  void add(Component c) {
+    addLater(c);
   }
 
   MapGame getMap() => map;

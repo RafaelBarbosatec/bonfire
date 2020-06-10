@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bonfire/util/PriorityLayer.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class Lighting extends GameComponent {
   }
 
   @override
-  int priority() => 80;
+  int priority() => PriorityLayer.LIGHTING;
 
   @override
   void render(Canvas canvas) {

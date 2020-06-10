@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/PriorityLayer.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
@@ -128,9 +129,9 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   @override
   int priority() {
     if (frontFromPlayer) {
-      return 15;
+      return PriorityLayer.PLAYER + 1;
     } else {
-      return super.priority();
+      return PriorityLayer.DECORATION;
     }
   }
 

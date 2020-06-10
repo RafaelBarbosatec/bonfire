@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/joystick/joystick_controller.dart';
+import 'package:bonfire/util/PriorityLayer.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
@@ -157,4 +158,7 @@ class Player extends AnimatedObject
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {}
+
+  @override
+  int priority() => PriorityLayer.PLAYER;
 }
