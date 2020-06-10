@@ -30,8 +30,11 @@ Bonfire is ideal for building games from the following perspectives:
    - [Player](#player)
    - [Interface](#interface)
    - [Joystick](#joystick)
-4. [Utility Components](#utility-components)
-3. [Next steps](#next-steps)
+2. [Utility Components](#utility-components)
+   - [Camera](#camera)
+   - [Lighting](#lighting-experimental)
+3. [Tiled support](#tiled-support)
+4. [Next steps](#next-steps)
 
 ## How it works?
 
@@ -624,11 +627,11 @@ return BonfireTiledWidget(
     );
 ```
 
-## Print example of Tiled
+### Print example of Tiled
 
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/tiled-support/media/print_exemplo_tiled.png)
 
-## Print result
+### Print result
 
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/tiled-support/media/print_result_tiled.png)
 
