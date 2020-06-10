@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 class MapWorld extends MapGame {
   double lastCameraX = -1;
   double lastCameraY = -1;
+  double lastZoom = -1;
   Size lastSizeScreen;
   Iterable<Tile> _tilesToRender = List();
   Iterable<Tile> _tilesCollisionsRendered = List();
@@ -25,9 +26,11 @@ class MapWorld extends MapGame {
   @override
   void update(double t) {
     if (lastCameraX != gameRef.gameCamera.position.x ||
-        gameRef.gameCamera.position.y != lastCameraY) {
+        lastCameraY != gameRef.gameCamera.position.y ||
+        lastZoom != gameRef.gameCamera.zoom) {
       lastCameraX = gameRef.gameCamera.position.x;
       lastCameraY = gameRef.gameCamera.position.y;
+      lastZoom = gameRef.gameCamera.zoom;
 
       List<Tile> tilesRender = List();
       List<Tile> tilesCollision = List();
@@ -71,6 +74,7 @@ class MapWorld extends MapGame {
 
     lastCameraX = -1;
     lastCameraY = -1;
+    lastZoom = -1;
     mapSize = getMapSize();
     gameRef.gameCamera.moveToPlayer(horizontal: 0, vertical: 0);
   }
@@ -79,6 +83,7 @@ class MapWorld extends MapGame {
   void updateTiles(Iterable<Tile> map) {
     lastCameraX = -1;
     lastCameraY = -1;
+    lastZoom = -1;
     lastSizeScreen = null;
     this.tiles = map;
     verifyMaxTopAndLeft(gameRef.size);

@@ -128,6 +128,27 @@ class Camera with HasGameRef<RPGGame> {
     gameRef.player.focusCamera = true;
   }
 
+  void animateZoom({
+    double zoom,
+    Duration duration,
+    VoidCallback finish,
+    Curve curve = Curves.decelerate,
+  }) {
+    if (gameRef?.size == null) return;
+    if (zoom <= 0.0) return;
+
+    double diffZoom = this.zoom - (zoom);
+    double initialZoom = this.zoom;
+
+    gameRef.getValueGenerator(duration ?? Duration(seconds: 1))
+      ..addListenerValue((value) {
+        this.zoom = initialZoom - (diffZoom * value);
+      })
+      ..addListenerFinish(finish)
+      ..addCurve(curve)
+      ..start();
+  }
+
   bool isComponentOnCamera(GameComponent c) {
     if (gameRef?.size == null || c.position == null) return false;
 
