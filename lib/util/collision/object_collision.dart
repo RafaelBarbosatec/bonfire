@@ -28,14 +28,14 @@ mixin ObjectCollision {
     bool shouldTriggerSensors = true,
   }) {
     if (this.collision == null) return false;
+
     Rect rectCollision = getRectCollision(displacement);
     if (shouldTriggerSensors) triggerSensors(displacement, game);
 
     final collisions = (onlyVisible
             ? game.getMap()?.getCollisionsRendered() ?? []
             : game.getMap()?.getCollisions() ?? [])
-        .where((i) => i.rectCollision.overlaps(rectCollision));
-
+        .where((i) => i.containCollision(rectCollision));
     if (collisions.length > 0) return true;
 
     final collisionsDecorations =
@@ -58,11 +58,8 @@ mixin ObjectCollision {
   }
 
   Rect getRectCollision(Rect displacement) {
-    if (this.collision == null) return displacement;
-    double left = displacement.left + collision.align.dx;
-    double top = displacement.top + collision.align.dy;
-
-    return Rect.fromLTWH(left, top, collision.width, collision.height);
+    if (collision == null) return displacement;
+    return collision.calculateRectCollision(displacement);
   }
 
   void drawCollision(Canvas canvas, Rect currentPosition, Color color) {

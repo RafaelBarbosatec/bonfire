@@ -73,13 +73,13 @@ class TiledWorldMap {
         var data = getDataTile(tile);
         if (data != null) {
           _tiles.add(
-            Tile.fromSprite(
+            Tile.fromSpriteMultiCollision(
               data.sprite,
               Position(
                 _getX(count, tileLayer.width.toInt()),
                 _getY(count, tileLayer.width.toInt()),
               ),
-              collision: data.collision,
+              collisions: data.collisions,
               width: _tileWidth,
               height: _tileHeight,
             ),
@@ -125,11 +125,9 @@ class TiledWorldMap {
         _spriteCache['${tileSetContain.image}/$row/$column'] = sprite;
       }
 
-      Collision collision = _getCollision(tileSetContain, index);
-
       return ItemTileSet(
         sprite: sprite,
-        collision: collision,
+        collisions: _getCollision(tileSetContain, index),
       );
     } else {
       return null;
@@ -161,37 +159,40 @@ class TiledWorldMap {
     );
   }
 
-  Collision _getCollision(TileSet tileSetContain, int index) {
+  List<Collision> _getCollision(TileSet tileSetContain, int index) {
+    List<Collision> collisions = List();
     try {
       TileSetItem tileSetItemList = tileSetContain.tiles
           .firstWhere((element) => element.id == (index - 1));
       List<TileSetObject> tileSetObjectList =
           tileSetItemList.objectGroup.objects;
       if (tileSetObjectList.isNotEmpty) {
-        double width =
-            (tileSetObjectList[0].width * _tileWidth) / _tileWidthOrigin;
-        double height =
-            (tileSetObjectList[0].height * _tileHeight) / _tileHeightOrigin;
+        tileSetObjectList.forEach((object) {
+          double width = (object.width * _tileWidth) / _tileWidthOrigin;
+          double height = (object.height * _tileHeight) / _tileHeightOrigin;
 
-        double x = (tileSetObjectList[0].x * _tileWidth) / _tileWidthOrigin;
-        double y = (tileSetObjectList[0].y * _tileHeight) / _tileHeightOrigin;
-        return Collision(
-          width: width,
-          height: height,
-          align: Offset(x, y),
-        );
+          double x = (object.x * _tileWidth) / _tileWidthOrigin;
+          double y = (object.y * _tileHeight) / _tileHeightOrigin;
+
+          collisions.add(Collision(
+            width: width,
+            height: height,
+            align: Offset(x, y),
+          ));
+        });
+        return collisions;
       } else {
-        return null;
+        return collisions;
       }
     } catch (e) {
-      return null;
+      return collisions;
     }
   }
 }
 
 class ItemTileSet {
   final Sprite sprite;
-  final Collision collision;
+  final List<Collision> collisions;
 
-  ItemTileSet({this.sprite, this.collision});
+  ItemTileSet({this.sprite, this.collisions});
 }
