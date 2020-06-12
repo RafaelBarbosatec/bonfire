@@ -659,7 +659,7 @@ return BonfireTiledWidget(
 
 ## Credits
 
- * The entire FlameEgine team, especially [Erick](https://github.com/erickzanardo).
+ * The entire FlameEngine team, especially [Erick](https://github.com/erickzanardo).
  * [Renan](https://github.com/renancaraujo) That helped in the translation of the readme.
  * And all those who were able to contribute as they could.
  
