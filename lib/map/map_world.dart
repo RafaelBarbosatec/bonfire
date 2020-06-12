@@ -14,7 +14,8 @@ class MapWorld extends MapGame {
   Iterable<Tile> _tilesCollisions = List();
 
   MapWorld(Iterable<Tile> tiles) : super(tiles) {
-    _tilesCollisions = tiles.where((element) => element.collisions.isNotEmpty);
+    _tilesCollisions = tiles.where((element) =>
+        element.collisions != null && element.collisions.isNotEmpty);
   }
 
   @override
@@ -36,7 +37,8 @@ class MapWorld extends MapGame {
         tile.update(t);
         if (tile.isVisibleInCamera()) {
           tilesRender.add(tile);
-          if (tile.collisions.isNotEmpty) tilesCollision.add(tile);
+          if (tile.collisions != null && tile.collisions.isNotEmpty)
+            tilesCollision.add(tile);
         }
       });
       _tilesToRender = tilesRender;

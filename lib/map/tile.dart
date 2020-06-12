@@ -8,7 +8,7 @@ import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
 class Tile extends SpriteObject {
-  List<Collision> collisions = List();
+  List<Collision> collisions;
   final double width;
   final double height;
   Position _positionText;
@@ -23,7 +23,7 @@ class Tile extends SpriteObject {
     this.width = 32,
     this.height = 32,
   }) {
-    collisions.add(collision);
+    collisions = [collision];
     this.position = generateRectWithBleedingPixel(position, width, height);
     if (spritePath.isNotEmpty) sprite = Sprite(spritePath);
 
@@ -37,7 +37,7 @@ class Tile extends SpriteObject {
     this.width = 32,
     this.height = 32,
   }) {
-    collisions.add(collision);
+    collisions = [collision];
     this.sprite = sprite;
     this.position = generateRectWithBleedingPixel(position, width, height);
 
@@ -51,7 +51,7 @@ class Tile extends SpriteObject {
     this.width = 32,
     this.height = 32,
   }) {
-    this.collisions.addAll(collisions);
+    this.collisions = [...collisions];
     this.sprite = sprite;
     this.position = generateRectWithBleedingPixel(position, width, height);
 
@@ -123,7 +123,8 @@ class Tile extends SpriteObject {
   }
 
   bool containCollision(Rect displacement) {
-    if (collisions.isEmpty || position == null) return false;
+    if (collisions == null || collisions.isEmpty || position == null)
+      return false;
     try {
       return collisions
               .where((element) => element
