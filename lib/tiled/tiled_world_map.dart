@@ -1,11 +1,13 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tile.dart';
 import 'package:bonfire/tiled/tiled_world_data.dart';
+import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:tiledjsonreader/map/layer/object_group.dart';
 import 'package:tiledjsonreader/map/layer/tile_layer.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
+import 'package:tiledjsonreader/tile_set/frame_animation.dart';
 import 'package:tiledjsonreader/tile_set/tile_set.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
@@ -72,18 +74,33 @@ class TiledWorldMap {
       if (tile != 0) {
         var data = getDataTile(tile);
         if (data != null) {
-          _tiles.add(
-            Tile.fromSpriteMultiCollision(
-              data.sprite,
-              Position(
-                _getX(count, tileLayer.width.toInt()),
-                _getY(count, tileLayer.width.toInt()),
+          if (data.animation == null) {
+            _tiles.add(
+              Tile.fromSpriteMultiCollision(
+                data.sprite,
+                Position(
+                  _getX(count, tileLayer.width.toInt()),
+                  _getY(count, tileLayer.width.toInt()),
+                ),
+                collisions: data.collisions,
+                width: _tileWidth,
+                height: _tileHeight,
               ),
-              collisions: data.collisions,
-              width: _tileWidth,
-              height: _tileHeight,
-            ),
-          );
+            );
+          } else {
+            _tiles.add(
+              Tile.fromAnimationMultiCollision(
+                data.animation,
+                Position(
+                  _getX(count, tileLayer.width.toInt()),
+                  _getY(count, tileLayer.width.toInt()),
+                ),
+                collisions: data.collisions,
+                width: _tileWidth,
+                height: _tileHeight,
+              ),
+            );
+          }
         }
       }
       count++;
@@ -113,19 +130,19 @@ class TiledWorldMap {
       int row = _getY(index - 1, widthCount).toInt();
       int column = _getX(index - 1, widthCount).toInt();
 
-      Sprite sprite = _spriteCache['${tileSetContain.image}/$row/$column'];
-      if (sprite == null) {
-        sprite = getSprite(
-          '$_basePath${tileSetContain.image}',
-          row,
-          column,
-          tileSetContain.tileWidth,
-          tileSetContain.tileHeight,
-        );
-        _spriteCache['${tileSetContain.image}/$row/$column'] = sprite;
-      }
+      Sprite sprite = getSprite(
+        '$_basePath${tileSetContain.image}',
+        row,
+        column,
+        tileSetContain.tileWidth,
+        tileSetContain.tileHeight,
+      );
+
+      FlameAnimation.Animation animation =
+          getAnimation(tileSetContain, index, widthCount);
 
       return ItemTileSet(
+        animation: animation,
         sprite: sprite,
         collisions: _getCollision(tileSetContain, index),
       );
@@ -150,13 +167,17 @@ class TiledWorldMap {
 
   Sprite getSprite(
       String image, int row, int column, double tileWidth, double tileHeight) {
-    return Sprite(
-      image,
-      x: (column * tileWidth).toDouble(),
-      y: (row * tileHeight).toDouble(),
-      width: tileWidth,
-      height: tileHeight,
-    );
+    Sprite sprite = _spriteCache['$image/$row/$column'];
+    if (sprite == null) {
+      _spriteCache['$image/$row/$column'] = Sprite(
+        image,
+        x: (column * tileWidth).toDouble(),
+        y: (row * tileHeight).toDouble(),
+        width: tileWidth,
+        height: tileHeight,
+      );
+    }
+    return _spriteCache['$image/$row/$column'];
   }
 
   List<Collision> _getCollision(TileSet tileSetContain, int index) {
@@ -188,11 +209,45 @@ class TiledWorldMap {
       return collisions;
     }
   }
+
+  FlameAnimation.Animation getAnimation(
+      TileSet tileSetContain, int index, int widthCount) {
+    try {
+      TileSetItem tileSetItemList = tileSetContain.tiles
+          .firstWhere((element) => element.id == (index - 1));
+      List<FrameAnimation> animationFrames = tileSetItemList.animation;
+      if (animationFrames != null || animationFrames.isNotEmpty) {
+        List<Sprite> spriteList = List();
+        double stepTime = animationFrames[0].duration / 1000;
+        animationFrames.forEach((frame) {
+          int row = _getY(frame.tileid, widthCount).toInt();
+          int column = _getX(frame.tileid, widthCount).toInt();
+
+          Sprite sprite = getSprite(
+            '$_basePath${tileSetContain.image}',
+            row,
+            column,
+            tileSetContain.tileWidth,
+            tileSetContain.tileHeight,
+          );
+          spriteList.add(sprite);
+        });
+
+        return FlameAnimation.Animation.spriteList(spriteList,
+            stepTime: stepTime);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 class ItemTileSet {
+  final FlameAnimation.Animation animation;
   final Sprite sprite;
   final List<Collision> collisions;
 
-  ItemTileSet({this.sprite, this.collisions});
+  ItemTileSet({this.sprite, this.collisions, this.animation});
 }

@@ -34,7 +34,6 @@ class MapWorld extends MapGame {
       List<Tile> tilesCollision = List();
       tiles.forEach((tile) {
         tile.gameRef = gameRef;
-        tile.update(t);
         if (tile.isVisibleInCamera()) {
           tilesRender.add(tile);
           if (tile.collisions != null && tile.collisions.isNotEmpty)
@@ -44,6 +43,7 @@ class MapWorld extends MapGame {
       _tilesToRender = tilesRender;
       _tilesCollisionsRendered = tilesCollision;
     }
+    _tilesToRender.forEach((tile) => tile.update(t));
   }
 
   @override

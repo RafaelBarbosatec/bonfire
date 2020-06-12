@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/objects/sprite_object.dart';
+import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/text_config.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 
 class Tile extends SpriteObject {
   List<Collision> collisions;
+  FlameAnimation.Animation animation;
   final double width;
   final double height;
   Position _positionText;
@@ -58,9 +60,29 @@ class Tile extends SpriteObject {
     _positionText = Position(position.x, position.y);
   }
 
+  Tile.fromAnimationMultiCollision(
+    FlameAnimation.Animation animation,
+    Position position, {
+    List<Collision> collisions,
+    this.width = 32,
+    this.height = 32,
+  }) {
+    this.animation = animation;
+    this.collisions = [...collisions];
+    this.position = generateRectWithBleedingPixel(position, width, height);
+
+    _positionText = Position(position.x, position.y);
+  }
+
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
+    if (position == null) return;
+
+    if (animation != null && animation.loaded()) {
+      animation.getSprite().renderRect(canvas, position);
+    } else {
+      super.render(canvas);
+    }
 
     if (gameRef != null && gameRef.showCollisionArea && collisions.isNotEmpty) {
       collisions.forEach((c) {
@@ -135,5 +157,11 @@ class Tile extends SpriteObject {
     } catch (e) {
       return false;
     }
+  }
+
+  @override
+  void update(double dt) {
+    if (animation != null) animation.update(dt);
+    super.update(dt);
   }
 }
