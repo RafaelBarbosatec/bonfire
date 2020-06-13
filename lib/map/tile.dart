@@ -1,15 +1,16 @@
 import 'dart:ui';
 
 import 'package:bonfire/util/collision/collision.dart';
-import 'package:bonfire/util/objects/sprite_object.dart';
+import 'package:bonfire/util/game_component.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
-class Tile extends SpriteObject {
+class Tile extends GameComponent {
   List<Collision> collisions;
+  Sprite sprite;
   FlameAnimation.Animation animation;
   final double width;
   final double height;
@@ -94,8 +95,8 @@ class Tile extends SpriteObject {
 
     if (animation != null && animation.loaded()) {
       animation.getSprite().renderRect(canvas, position);
-    } else {
-      super.render(canvas);
+    } else if (sprite != null && sprite.loaded()) {
+      sprite.renderRect(canvas, position);
     }
 
     if (gameRef != null && gameRef.showCollisionArea && collisions.isNotEmpty) {

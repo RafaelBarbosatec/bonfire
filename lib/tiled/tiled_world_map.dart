@@ -13,7 +13,8 @@ import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
-typedef ObjectBuilder = GameComponent Function(double x, double y);
+typedef ObjectBuilder = GameComponent Function(
+    double x, double y, double width, double height);
 
 class TiledWorldMap {
   final String pathFile;
@@ -156,7 +157,9 @@ class TiledWorldMap {
       if (_objectsBuilder[element.name] != null) {
         double x = (element.x * _tileWidth) / _tileWidthOrigin;
         double y = (element.y * _tileHeight) / _tileHeightOrigin;
-        var object = _objectsBuilder[element.name](x, y);
+        double width = (element.width * _tileWidth) / _tileWidthOrigin;
+        double height = (element.height * _tileHeight) / _tileHeightOrigin;
+        var object = _objectsBuilder[element.name](x, y, width, height);
 
         if (object is Enemy) _enemies.add(object);
         if (object is GameDecoration)
