@@ -45,9 +45,12 @@ class GameTiledMap extends StatelessWidget {
         'tiled/mapa1.json',
         forceTileSize: DungeonMap.tileSize,
       )
-        ..registerObject('goblin', (x, y) => Goblin(Position(x, y)))
-        ..registerObject('torch', (x, y) => Torch(Position(x, y)))
-        ..registerObject('barrel', (x, y) => BarrelDraggable(Position(x, y))),
+        ..registerObject(
+            'goblin', (x, y, width, height) => Goblin(Position(x, y)))
+        ..registerObject(
+            'torch', (x, y, width, height) => Torch(Position(x, y)))
+        ..registerObject(
+            'barrel', (x, y, width, height) => BarrelDraggable(Position(x, y))),
       background: BackgroundColorGame(Colors.blueGrey[900]),
       lightingColorGame: Colors.black.withOpacity(0.6),
       showFPS: true,
