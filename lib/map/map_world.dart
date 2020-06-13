@@ -10,6 +10,7 @@ class MapWorld extends MapGame {
   double lastCameraY = -1;
   Size lastSizeScreen;
   Iterable<Tile> _tilesToRender = List();
+  Iterable<Tile> _tilesToRenderAndUpdate = List();
   Iterable<Tile> _tilesCollisionsRendered = List();
   Iterable<Tile> _tilesCollisions = List();
 
@@ -31,19 +32,22 @@ class MapWorld extends MapGame {
       lastCameraY = gameRef.gameCamera.position.y;
 
       List<Tile> tilesRender = List();
+      List<Tile> tilesRenderUpdate = List();
       List<Tile> tilesCollision = List();
       tiles.forEach((tile) {
         tile.gameRef = gameRef;
         if (tile.isVisibleInCamera()) {
           tilesRender.add(tile);
+          if (tile.animation != null) tilesRenderUpdate.add(tile);
           if (tile.collisions != null && tile.collisions.isNotEmpty)
             tilesCollision.add(tile);
         }
       });
       _tilesToRender = tilesRender;
       _tilesCollisionsRendered = tilesCollision;
+      _tilesToRenderAndUpdate = tilesRenderUpdate;
     }
-    _tilesToRender.forEach((tile) => tile.update(t));
+    _tilesToRenderAndUpdate.forEach((tile) => tile.update(t));
   }
 
   @override
