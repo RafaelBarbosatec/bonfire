@@ -163,10 +163,9 @@ class Tile extends GameComponent {
     if (collisions == null || collisions.isEmpty || position == null)
       return false;
     return collisions
-            .where((element) =>
-                element.calculateRectCollision(position).overlaps(displacement))
-            .length >
-        0;
+        .where((element) =>
+            element.calculateRectCollision(position).overlaps(displacement))
+        .isNotEmpty;
   }
 
   @override
