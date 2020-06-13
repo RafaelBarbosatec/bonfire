@@ -33,8 +33,8 @@ mixin ObjectCollision {
     if (shouldTriggerSensors) triggerSensors(displacement, game);
 
     final collisions = (onlyVisible
-            ? game.getMap()?.getCollisionsRendered() ?? []
-            : game.getMap()?.getCollisions() ?? [])
+            ? game.map?.getCollisionsRendered() ?? []
+            : game.map?.getCollisions() ?? [])
         .where((i) => i.containCollision(rectCollision));
     if (collisions.length > 0) return true;
 

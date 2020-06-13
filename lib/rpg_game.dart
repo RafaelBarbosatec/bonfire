@@ -100,8 +100,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     addLater(c);
   }
 
-  MapGame getMap() => map;
-
   Iterable<Enemy> visibleEnemies() => _visibleEnemies;
 
   Iterable<Enemy> livingEnemies() => _livingEnemies;

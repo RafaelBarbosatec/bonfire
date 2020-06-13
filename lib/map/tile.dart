@@ -25,7 +25,7 @@ class Tile extends SpriteObject {
     this.width = 32,
     this.height = 32,
   }) {
-    collisions = [collision];
+    if (collision != null) collisions = [collision];
     this.position = generateRectWithBleedingPixel(position, width, height);
     if (spritePath.isNotEmpty) sprite = Sprite(spritePath);
 
@@ -39,7 +39,7 @@ class Tile extends SpriteObject {
     this.width = 32,
     this.height = 32,
   }) {
-    collisions = [collision];
+    if (collision != null) collisions = [collision];
     this.sprite = sprite;
     this.position = generateRectWithBleedingPixel(position, width, height);
 
@@ -53,8 +53,22 @@ class Tile extends SpriteObject {
     this.width = 32,
     this.height = 32,
   }) {
-    this.collisions = [...collisions];
+    if (collisions != null) this.collisions = [...collisions];
     this.sprite = sprite;
+    this.position = generateRectWithBleedingPixel(position, width, height);
+
+    _positionText = Position(position.x, position.y);
+  }
+
+  Tile.fromAnimation(
+    FlameAnimation.Animation animation,
+    Position position, {
+    Collision collision,
+    this.width = 32,
+    this.height = 32,
+  }) {
+    this.animation = animation;
+    if (collision != null) collisions = [collision];
     this.position = generateRectWithBleedingPixel(position, width, height);
 
     _positionText = Position(position.x, position.y);
@@ -68,7 +82,7 @@ class Tile extends SpriteObject {
     this.height = 32,
   }) {
     this.animation = animation;
-    this.collisions = [...collisions];
+    if (collisions != null) this.collisions = [...collisions];
     this.position = generateRectWithBleedingPixel(position, width, height);
 
     _positionText = Position(position.x, position.y);
@@ -147,16 +161,11 @@ class Tile extends SpriteObject {
   bool containCollision(Rect displacement) {
     if (collisions == null || collisions.isEmpty || position == null)
       return false;
-    try {
-      return collisions
-              .where((element) => element
-                  .calculateRectCollision(position)
-                  .overlaps(displacement))
-              .length >
-          0;
-    } catch (e) {
-      return false;
-    }
+    return collisions
+            .where((element) =>
+                element.calculateRectCollision(position).overlaps(displacement))
+            .length >
+        0;
   }
 
   @override
