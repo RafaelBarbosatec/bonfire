@@ -48,7 +48,7 @@ extension PlayerExtensions on Player {
     if (isDead || this.position == null) return;
 
     var enemiesInLife = this.gameRef.visibleEnemies();
-    if (enemiesInLife.length == 0) {
+    if (enemiesInLife.isEmpty) {
       if (notObserved != null) notObserved();
       return;
     }
@@ -68,7 +68,7 @@ extension PlayerExtensions on Player {
             enemy.position != null && fieldOfVision.overlaps(enemy.position))
         .toList();
 
-    if (enemiesObserved.length > 0) {
+    if (enemiesObserved.isNotEmpty) {
       if (observed != null) observed(enemiesObserved);
     } else {
       if (notObserved != null) notObserved();
