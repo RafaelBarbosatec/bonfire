@@ -639,11 +639,11 @@ return BonfireTiledWidget(
     );
 ```
 
-### Print example of Tiled
+### Tiled map example
 
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/tiled-support/media/print_exemplo_tiled.png)
 
-### Print result
+### Result
 
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/tiled-support/media/print_result_tiled.png)
 
