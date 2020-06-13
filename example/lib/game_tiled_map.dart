@@ -38,7 +38,7 @@ class GameTiledMap extends StatelessWidget {
         ],
       ),
       player: Knight(
-        Position((8 * DungeonMap.tileSize), (12 * DungeonMap.tileSize)),
+        Position((8 * DungeonMap.tileSize), (5 * DungeonMap.tileSize)),
       ),
       interface: KnightInterface(),
       tiledMap: TiledWorldMap(
@@ -49,7 +49,8 @@ class GameTiledMap extends StatelessWidget {
         ..registerObject('torch', (x, y) => Torch(Position(x, y)))
         ..registerObject('barrel', (x, y) => BarrelDraggable(Position(x, y))),
       background: BackgroundColorGame(Colors.blueGrey[900]),
-      lightingColorGame: Colors.black.withOpacity(0.5),
+      lightingColorGame: Colors.black.withOpacity(0.6),
+      showFPS: true,
     );
   }
 }
