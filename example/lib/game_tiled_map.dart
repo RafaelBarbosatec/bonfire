@@ -1,6 +1,8 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/tiled/tiled_world_map.dart';
 import 'package:example/decoration/barrel_dragable.dart';
+import 'package:example/decoration/chest.dart';
+import 'package:example/decoration/spikes.dart';
 import 'package:example/decoration/torch.dart';
 import 'package:example/enemy/goblin.dart';
 import 'package:example/interface/knight_interface.dart';
@@ -50,7 +52,11 @@ class GameTiledMap extends StatelessWidget {
         ..registerObject(
             'torch', (x, y, width, height) => Torch(Position(x, y)))
         ..registerObject(
-            'barrel', (x, y, width, height) => BarrelDraggable(Position(x, y))),
+            'barrel', (x, y, width, height) => BarrelDraggable(Position(x, y)))
+        ..registerObject(
+            'spike', (x, y, width, height) => Spikes(Position(x, y)))
+        ..registerObject(
+            'chest', (x, y, width, height) => Chest(Position(x, y))),
       background: BackgroundColorGame(Colors.blueGrey[900]),
       lightingColorGame: Colors.black.withOpacity(0.6),
       showFPS: true,

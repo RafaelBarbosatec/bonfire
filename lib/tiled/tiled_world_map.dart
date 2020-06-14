@@ -185,11 +185,11 @@ class TiledWorldMap {
 
   List<Collision> _getCollision(TileSet tileSetContain, int index) {
     List<Collision> collisions = List();
-    try {
-      TileSetItem tileSetItemList = tileSetContain.tiles
-          .firstWhere((element) => element.id == (index - 1));
+    Iterable<TileSetItem> tileSetItemList =
+        tileSetContain.tiles.where((element) => element.id == (index - 1));
+    if (tileSetItemList.isNotEmpty) {
       List<TileSetObject> tileSetObjectList =
-          tileSetItemList.objectGroup.objects;
+          tileSetItemList.first.objectGroup.objects;
       if (tileSetObjectList.isNotEmpty) {
         tileSetObjectList.forEach((object) {
           double width = (object.width * _tileWidth) / _tileWidthOrigin;
@@ -205,12 +205,9 @@ class TiledWorldMap {
           ));
         });
         return collisions;
-      } else {
-        return collisions;
       }
-    } catch (e) {
-      return collisions;
     }
+    return collisions;
   }
 
   FlameAnimation.Animation getAnimation(

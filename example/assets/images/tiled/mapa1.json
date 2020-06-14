@@ -433,6 +433,50 @@
                  "width":16,
                  "x":192.17652250662,
                  "y":528.098852603707
+                }, 
+                {
+                 "height":16,
+                 "id":53,
+                 "name":"spike",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":87.6568766981498,
+                 "y":140.056928451287
+                }, 
+                {
+                 "height":16,
+                 "id":54,
+                 "name":"spike",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":182.192780437314,
+                 "y":264.35088627248
+                }, 
+                {
+                 "height":16,
+                 "id":55,
+                 "name":"spike",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":297.020054340794,
+                 "y":263.380514943718
+                }, 
+                {
+                 "height":16,
+                 "id":56,
+                 "name":"chest",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":662.763617544314,
+                 "y":89.2741622460862
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -441,7 +485,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":53,
+ "nextobjectid":57,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.5",
