@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
+import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
@@ -33,6 +34,8 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
 
   Sprite _sprite;
 
+  int additionalPriority = 0;
+
   GameDecoration({
     Sprite sprite,
     @required this.initPosition,
@@ -43,6 +46,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     FlameAnimation.Animation animation,
     Collision collision,
   }) {
+    if (frontFromPlayer) additionalPriority = 1;
     this.animation = animation;
     _sprite = sprite;
     this.position = generateRectWithBleedingPixel(
@@ -62,6 +66,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.isSensor = false,
     Collision collision,
   }) {
+    if (frontFromPlayer) additionalPriority = 1;
     _sprite = sprite;
     this.position = generateRectWithBleedingPixel(
       initPosition,
@@ -80,6 +85,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.frontFromPlayer = false,
     Collision collision,
   }) {
+    if (frontFromPlayer) additionalPriority = 1;
     this.animation = animation;
     this.position = generateRectWithBleedingPixel(
       initPosition,
@@ -127,10 +133,10 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
 
   @override
   int priority() {
-    if (frontFromPlayer) {
-      return 15;
+    if (additionalPriority == 0) {
+      return PriorityLayer.DECORATION;
     } else {
-      return super.priority();
+      return PriorityLayer.PLAYER + additionalPriority;
     }
   }
 

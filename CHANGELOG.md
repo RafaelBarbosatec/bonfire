@@ -1,4 +1,5 @@
 ## [NEXT]
+* add tiled json support
 * gestures improvements
 * add support drag gestures
 

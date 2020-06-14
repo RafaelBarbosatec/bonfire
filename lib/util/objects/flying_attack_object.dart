@@ -153,7 +153,7 @@ class FlyingAttackObject extends AnimatedObject
             break;
         }
 
-        gameRef.add(
+        gameRef.addLater(
           AnimatedObjectOnce(
             animation: destroyAnimation,
             position: positionDestroy,
@@ -167,7 +167,9 @@ class FlyingAttackObject extends AnimatedObject
   }
 
   bool _verifyExistInWorld() {
-    Size mapSize = gameRef.map.mapSize;
+    Size mapSize = gameRef.map?.mapSize;
+    if (mapSize == null) return true;
+
     if (position.left < 0) {
       return false;
     }

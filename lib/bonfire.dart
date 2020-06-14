@@ -1,5 +1,6 @@
 library bonfire;
 
+export 'package:bonfire/bonfire_tiled_widget.dart';
 export 'package:bonfire/bonfire_widget.dart';
 export 'package:bonfire/decoration/decoration.dart';
 export 'package:bonfire/enemy/enemy.dart';
@@ -22,6 +23,7 @@ export 'package:bonfire/player/rotation_player.dart';
 export 'package:bonfire/player/rotation_player_extensions.dart';
 export 'package:bonfire/player/simple_player.dart';
 export 'package:bonfire/player/simple_player_extensions.dart';
+export 'package:bonfire/tiled/tiled_world_map.dart';
 export 'package:bonfire/util/background_color_game.dart';
 export 'package:bonfire/util/collision/collision.dart';
 export 'package:bonfire/util/direction.dart';

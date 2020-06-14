@@ -53,7 +53,10 @@ class Knight extends SimplePlayer with WithLighting {
           life: 200,
           speed: DungeonMap.tileSize * 3,
           collision: Collision(
-              height: DungeonMap.tileSize / 2, width: DungeonMap.tileSize / 2),
+            height: DungeonMap.tileSize / 2,
+            width: DungeonMap.tileSize / 1.8,
+            align: Offset(DungeonMap.tileSize / 3.5, DungeonMap.tileSize / 2),
+          ),
         ) {
     spriteDirectionAttack = Sprite('direction_attack.png');
     lightingConfig = LightingConfig(
@@ -167,6 +170,11 @@ class Knight extends SimplePlayer with WithLighting {
       height: width * 0.7,
       damage: 10,
       speed: initSpeed * 2,
+      collision: Collision(
+        width: width / 2,
+        height: width / 2,
+        align: Offset(width * 0.1, 0),
+      ),
       lightingConfig: LightingConfig(
         gameComponent: this,
         radius: 25,
@@ -190,10 +198,10 @@ class Knight extends SimplePlayer with WithLighting {
           if (showObserveEnemy) return;
           showObserveEnemy = true;
           showEmote();
-          if (!showTalk) {
-            showTalk = true;
-            _showTalk();
-          }
+//          if (!showTalk) {
+//            showTalk = true;
+//            _showTalk();
+//          }
         },
       );
     }

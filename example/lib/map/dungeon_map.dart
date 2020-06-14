@@ -10,28 +10,44 @@ import 'package:flame/position.dart';
 
 class DungeonMap {
   static const double tileSize = 45;
+  static final Sprite wall_bottom = Sprite('tile/wall_bottom.png');
+  static final Sprite wall = Sprite('tile/wall.png');
+  static final Sprite wall_top = Sprite('tile/wall_top.png');
+  static final Sprite wall_left = Sprite('tile/wall_left.png');
+  static final Sprite wall_bottom_left = Sprite('tile/wall_bottom_left.png');
+  static final Sprite wall_right = Sprite('tile/wall_right.png');
+  static final Sprite floor_1 = Sprite('tile/floor_1.png');
+  static final Sprite floor_2 = Sprite('tile/floor_2.png');
+  static final Sprite floor_3 = Sprite('tile/floor_3.png');
+  static final Sprite floor_4 = Sprite('tile/floor_4.png');
 
   static MapWorld map() {
     List<Tile> tileList = List();
     List.generate(35, (indexRow) {
       List.generate(70, (indexColumm) {
         if (indexRow == 3 && indexColumm > 2 && indexColumm < 30) {
-          tileList.add(Tile('tile/wall_bottom.png',
+          tileList.add(Tile.fromSprite(wall_bottom,
               Position(indexColumm.toDouble(), indexRow.toDouble()),
-              collision: true, size: tileSize));
+              collision: Collision.fromSize(tileSize),
+              width: tileSize,
+              height: tileSize));
           return;
         }
         if (indexRow == 4 && indexColumm > 2 && indexColumm < 30) {
-          tileList.add(Tile('tile/wall.png',
-              Position(indexColumm.toDouble(), indexRow.toDouble()),
-              collision: true, size: tileSize));
+          tileList.add(Tile.fromSprite(
+              wall, Position(indexColumm.toDouble(), indexRow.toDouble()),
+              collision: Collision.fromSize(tileSize),
+              width: tileSize,
+              height: tileSize));
           return;
         }
 
         if (indexRow == 9 && indexColumm > 2 && indexColumm < 30) {
-          tileList.add(Tile('tile/wall_top.png',
-              Position(indexColumm.toDouble(), indexRow.toDouble()),
-              collision: true, size: tileSize));
+          tileList.add(Tile.fromSprite(
+              wall_top, Position(indexColumm.toDouble(), indexRow.toDouble()),
+              collision: Collision.fromSize(tileSize),
+              width: tileSize,
+              height: tileSize));
           return;
         }
 
@@ -39,33 +55,39 @@ class DungeonMap {
             indexRow < 9 &&
             indexColumm > 2 &&
             indexColumm < 30) {
-          tileList.add(Tile(randomFloor(),
+          tileList.add(Tile.fromSprite(randomFloor(),
               Position(indexColumm.toDouble(), indexRow.toDouble()),
-              size: tileSize));
+              width: tileSize, height: tileSize));
           return;
         }
 
         if (indexRow > 3 && indexRow < 9 && indexColumm == 2) {
-          tileList.add(Tile('tile/wall_left.png',
-              Position(indexColumm.toDouble(), indexRow.toDouble()),
-              collision: true, size: tileSize));
+          tileList.add(Tile.fromSprite(
+              wall_left, Position(indexColumm.toDouble(), indexRow.toDouble()),
+              collision: Collision.fromSize(tileSize),
+              width: tileSize,
+              height: tileSize));
         }
         if (indexRow == 9 && indexColumm == 2) {
-          tileList.add(Tile('tile/wall_bottom_left.png',
+          tileList.add(Tile.fromSprite(wall_bottom_left,
               Position(indexColumm.toDouble(), indexRow.toDouble()),
-              collision: true, size: tileSize));
+              collision: Collision.fromSize(tileSize),
+              width: tileSize,
+              height: tileSize));
         }
 
         if (indexRow > 3 && indexRow < 9 && indexColumm == 30) {
-          tileList.add(Tile('tile/wall_right.png',
-              Position(indexColumm.toDouble(), indexRow.toDouble()),
-              collision: true, size: tileSize));
+          tileList.add(Tile.fromSprite(
+              wall_right, Position(indexColumm.toDouble(), indexRow.toDouble()),
+              collision: Collision.fromSize(tileSize),
+              width: tileSize,
+              height: tileSize));
         }
 
         if (indexRow == 13 && indexColumm == 31) {
           tileList.add(Tile(
               '', Position(indexColumm.toDouble(), indexRow.toDouble()),
-              size: tileSize));
+              width: tileSize, height: tileSize));
           return;
         }
       });
@@ -88,7 +110,6 @@ class DungeonMap {
         collision: Collision(
           width: tileSize / 1.5,
           height: tileSize / 1.5,
-          align: CollisionAlign.CENTER,
         ),
       ),
       Chest(getRelativeTilePosition(18, 7)),
@@ -100,7 +121,6 @@ class DungeonMap {
         collision: Collision(
           height: tileSize * 0.8,
           width: tileSize,
-          align: CollisionAlign.TOP_CENTER,
         ),
       ),
       GameDecoration.sprite(
@@ -111,7 +131,6 @@ class DungeonMap {
         collision: Collision(
           height: tileSize * 0.8,
           width: tileSize,
-          align: CollisionAlign.TOP_CENTER,
         ),
       ),
       Torch(getRelativeTilePosition(4, 4)),
@@ -152,30 +171,30 @@ class DungeonMap {
     ];
   }
 
-  static String randomFloor() {
+  static Sprite randomFloor() {
     int p = Random().nextInt(6);
-    String sprite = "";
     switch (p) {
       case 0:
-        sprite = 'tile/floor_1.png';
+        return floor_1;
         break;
       case 1:
-        sprite = 'tile/floor_1.png';
+        return floor_2;
         break;
       case 2:
-        sprite = 'tile/floor_2.png';
+        return floor_3;
         break;
       case 3:
-        sprite = 'tile/floor_2.png';
+        return floor_4;
         break;
       case 4:
-        sprite = 'tile/floor_3.png';
+        return floor_3;
         break;
       case 5:
-        sprite = 'tile/floor_4.png';
+        return floor_4;
         break;
+      default:
+        return floor_1;
     }
-    return sprite;
   }
 
   static Position getRelativeTilePosition(int x, int y) {
