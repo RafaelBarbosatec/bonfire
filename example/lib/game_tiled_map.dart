@@ -13,56 +13,61 @@ import 'package:flutter/material.dart';
 class GameTiledMap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    DungeonMap.tileSize =
-        ((size.height > size.width) ? size.height : size.width) / 14;
-    return BonfireTiledWidget(
-      joystick: Joystick(
-        directional: JoystickDirectional(
-          spriteBackgroundDirectional: Sprite('joystick_background.png'),
-          spriteKnobDirectional: Sprite('joystick_knob.png'),
-          size: 100,
-          isFixed: false,
-        ),
-        actions: [
-          JoystickAction(
-            actionId: 0,
-            sprite: Sprite('joystick_atack.png'),
-            align: JoystickActionAlign.BOTTOM_RIGHT,
-            size: 80,
-            margin: EdgeInsets.only(bottom: 50, right: 50),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        DungeonMap.tileSize = ((constraints.maxHeight < constraints.maxWidth)
+                ? constraints.maxHeight
+                : constraints.maxWidth) /
+            12;
+        return BonfireTiledWidget(
+          joystick: Joystick(
+            directional: JoystickDirectional(
+              spriteBackgroundDirectional: Sprite('joystick_background.png'),
+              spriteKnobDirectional: Sprite('joystick_knob.png'),
+              size: 100,
+              isFixed: false,
+            ),
+            actions: [
+              JoystickAction(
+                actionId: 0,
+                sprite: Sprite('joystick_atack.png'),
+                align: JoystickActionAlign.BOTTOM_RIGHT,
+                size: 80,
+                margin: EdgeInsets.only(bottom: 50, right: 50),
+              ),
+              JoystickAction(
+                actionId: 1,
+                sprite: Sprite('joystick_atack_range.png'),
+                spriteBackgroundDirection: Sprite('joystick_background.png'),
+                enableDirection: true,
+                size: 50,
+                margin: EdgeInsets.only(bottom: 50, right: 160),
+              )
+            ],
           ),
-          JoystickAction(
-            actionId: 1,
-            sprite: Sprite('joystick_atack_range.png'),
-            spriteBackgroundDirection: Sprite('joystick_background.png'),
-            enableDirection: true,
-            size: 50,
-            margin: EdgeInsets.only(bottom: 50, right: 160),
+          player: Knight(
+            Position((8 * DungeonMap.tileSize), (5 * DungeonMap.tileSize)),
+          ),
+          interface: KnightInterface(),
+          tiledMap: TiledWorldMap(
+            'tiled/mapa1.json',
+            forceTileSize: DungeonMap.tileSize,
           )
-        ],
-      ),
-      player: Knight(
-        Position((8 * DungeonMap.tileSize), (5 * DungeonMap.tileSize)),
-      ),
-      interface: KnightInterface(),
-      tiledMap: TiledWorldMap(
-        'tiled/mapa1.json',
-        forceTileSize: DungeonMap.tileSize,
-      )
-        ..registerObject(
-            'goblin', (x, y, width, height) => Goblin(Position(x, y)))
-        ..registerObject(
-            'torch', (x, y, width, height) => Torch(Position(x, y)))
-        ..registerObject(
-            'barrel', (x, y, width, height) => BarrelDraggable(Position(x, y)))
-        ..registerObject(
-            'spike', (x, y, width, height) => Spikes(Position(x, y)))
-        ..registerObject(
-            'chest', (x, y, width, height) => Chest(Position(x, y))),
-      background: BackgroundColorGame(Colors.blueGrey[900]),
-      lightingColorGame: Colors.black.withOpacity(0.6),
-      showFPS: true,
+            ..registerObject(
+                'goblin', (x, y, width, height) => Goblin(Position(x, y)))
+            ..registerObject(
+                'torch', (x, y, width, height) => Torch(Position(x, y)))
+            ..registerObject('barrel',
+                (x, y, width, height) => BarrelDraggable(Position(x, y)))
+            ..registerObject(
+                'spike', (x, y, width, height) => Spikes(Position(x, y)))
+            ..registerObject(
+                'chest', (x, y, width, height) => Chest(Position(x, y))),
+          background: BackgroundColorGame(Colors.blueGrey[900]),
+          lightingColorGame: Colors.black.withOpacity(0.6),
+          showFPS: true,
+        );
+      },
     );
   }
 }

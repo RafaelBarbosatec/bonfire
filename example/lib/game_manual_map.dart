@@ -15,47 +15,50 @@ class GameManualMap extends StatelessWidget implements GameListener {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    DungeonMap.tileSize =
-        ((size.height > size.width) ? size.height : size.width) / 14;
-    return BonfireWidget(
-      joystick: Joystick(
-        directional: JoystickDirectional(
-          spriteBackgroundDirectional: Sprite('joystick_background.png'),
-          spriteKnobDirectional: Sprite('joystick_knob.png'),
-          size: 100,
-          isFixed: false,
-        ),
-        actions: [
-          JoystickAction(
-            actionId: 0,
-            sprite: Sprite('joystick_atack.png'),
-            align: JoystickActionAlign.BOTTOM_RIGHT,
-            size: 80,
-            margin: EdgeInsets.only(bottom: 50, right: 50),
+    return LayoutBuilder(builder: (context, constraints) {
+      DungeonMap.tileSize = ((constraints.maxHeight < constraints.maxWidth)
+              ? constraints.maxHeight
+              : constraints.maxWidth) /
+          12;
+      return BonfireWidget(
+        joystick: Joystick(
+          directional: JoystickDirectional(
+            spriteBackgroundDirectional: Sprite('joystick_background.png'),
+            spriteKnobDirectional: Sprite('joystick_knob.png'),
+            size: 100,
+            isFixed: false,
           ),
-          JoystickAction(
-            actionId: 1,
-            sprite: Sprite('joystick_atack_range.png'),
-            spriteBackgroundDirection: Sprite('joystick_background.png'),
-            enableDirection: true,
-            size: 50,
-            margin: EdgeInsets.only(bottom: 50, right: 160),
-          )
-        ],
-      ),
-      player: Knight(
-        Position((4 * DungeonMap.tileSize), (6 * DungeonMap.tileSize)),
-      ),
-      interface: KnightInterface(),
-      map: DungeonMap.map(),
-      enemies: DungeonMap.enemies(),
-      decorations: DungeonMap.decorations(),
-      background: BackgroundColorGame(Colors.blueGrey[900]),
-      gameController: _controller..setListener(this),
-      lightingColorGame: Colors.black.withOpacity(0.5),
-      showFPS: true,
-    );
+          actions: [
+            JoystickAction(
+              actionId: 0,
+              sprite: Sprite('joystick_atack.png'),
+              align: JoystickActionAlign.BOTTOM_RIGHT,
+              size: 80,
+              margin: EdgeInsets.only(bottom: 50, right: 50),
+            ),
+            JoystickAction(
+              actionId: 1,
+              sprite: Sprite('joystick_atack_range.png'),
+              spriteBackgroundDirection: Sprite('joystick_background.png'),
+              enableDirection: true,
+              size: 50,
+              margin: EdgeInsets.only(bottom: 50, right: 160),
+            )
+          ],
+        ),
+        player: Knight(
+          Position((4 * DungeonMap.tileSize), (6 * DungeonMap.tileSize)),
+        ),
+        interface: KnightInterface(),
+        map: DungeonMap.map(),
+        enemies: DungeonMap.enemies(),
+        decorations: DungeonMap.decorations(),
+        background: BackgroundColorGame(Colors.blueGrey[900]),
+        gameController: _controller..setListener(this),
+        lightingColorGame: Colors.black.withOpacity(0.5),
+        showFPS: true,
+      );
+    });
   }
 
   @override
