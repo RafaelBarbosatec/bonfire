@@ -15,6 +15,9 @@ class GameManualMap extends StatelessWidget implements GameListener {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    DungeonMap.tileSize =
+        ((size.height < size.width) ? size.height : size.width) / 12;
     return BonfireWidget(
       joystick: Joystick(
         directional: JoystickDirectional(

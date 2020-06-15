@@ -9,7 +9,7 @@ import 'package:example/enemy/goblin.dart';
 import 'package:flame/position.dart';
 
 class DungeonMap {
-  static const double tileSize = 45;
+  static double tileSize = 45;
   static final Sprite wall_bottom = Sprite('tile/wall_bottom.png');
   static final Sprite wall = Sprite('tile/wall.png');
   static final Sprite wall_top = Sprite('tile/wall_top.png');

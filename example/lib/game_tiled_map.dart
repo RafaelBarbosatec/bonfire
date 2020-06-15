@@ -13,6 +13,9 @@ import 'package:flutter/material.dart';
 class GameTiledMap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    DungeonMap.tileSize =
+        ((size.height < size.width) ? size.height : size.width) / 12;
     return BonfireTiledWidget(
       joystick: Joystick(
         directional: JoystickDirectional(

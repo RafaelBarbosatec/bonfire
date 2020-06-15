@@ -6,8 +6,8 @@ import 'package:flutter/rendering.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.util.setLandscape();
-  await Flame.util.fullScreen();
+  await Flame.util.setLandscape(); //TODO Comment when running for web
+  await Flame.util.fullScreen(); //TODO Comment when running for web
   runApp(
     MaterialApp(
       home: Menu(),
