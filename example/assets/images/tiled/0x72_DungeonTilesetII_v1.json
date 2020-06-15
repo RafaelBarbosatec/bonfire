@@ -298,7 +298,6 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
@@ -421,7 +420,15 @@
             }
         }, 
         {
+         "id":165,
+         "type":"above"
+        }, 
+        {
          "id":197,
+         "type":"above"
+        }, 
+        {
+         "id":198,
          "objectgroup":
             {
              "draworder":"index",
@@ -446,14 +453,15 @@
             }
         }, 
         {
-         "id":198,
+         "id":229,
          "objectgroup":
             {
              "draworder":"index",
+             "id":2,
              "name":"",
              "objects":[
                     {
-                     "height":16,
+                     "height":9.426783037997,
                      "id":1,
                      "name":"",
                      "rotation":0,
@@ -525,7 +533,6 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {

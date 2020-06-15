@@ -17,6 +17,8 @@ typedef ObjectBuilder = GameComponent Function(
     double x, double y, double width, double height);
 
 class TiledWorldMap {
+  static const TYPE_TILE_ABOVE = 'above';
+
   final String pathFile;
   final double forceTileSize;
   TiledJsonReader _reader;
@@ -76,31 +78,59 @@ class TiledWorldMap {
         var data = getDataTile(tile);
         if (data != null) {
           if (data.animation == null) {
-            _tiles.add(
-              Tile.fromSpriteMultiCollision(
+            if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
+              print('add Decoration ${_getX(count, tileLayer.width.toInt())}');
+              _decorations.add(GameDecoration.spriteMultiCollision(
                 data.sprite,
-                Position(
-                  _getX(count, tileLayer.width.toInt()),
-                  _getY(count, tileLayer.width.toInt()),
+                initPosition: Position(
+                  _getX(count, tileLayer.width.toInt()) * _tileWidth,
+                  _getY(count, tileLayer.width.toInt()) * _tileHeight,
                 ),
-                collisions: data.collisions,
-                width: _tileWidth,
                 height: _tileHeight,
-              ),
-            );
+                width: _tileWidth,
+                collisions: data.collisions,
+                frontFromPlayer: true,
+              ));
+            } else {
+              _tiles.add(
+                Tile.fromSpriteMultiCollision(
+                  data.sprite,
+                  Position(
+                    _getX(count, tileLayer.width.toInt()),
+                    _getY(count, tileLayer.width.toInt()),
+                  ),
+                  collisions: data.collisions,
+                  width: _tileWidth,
+                  height: _tileHeight,
+                ),
+              );
+            }
           } else {
-            _tiles.add(
-              Tile.fromAnimationMultiCollision(
-                data.animation,
-                Position(
-                  _getX(count, tileLayer.width.toInt()),
-                  _getY(count, tileLayer.width.toInt()),
+            if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
+              _decorations
+                  .add(GameDecoration.animationMultiCollision(data.animation,
+                      initPosition: Position(
+                        _getX(count, tileLayer.width.toInt()) * _tileWidth,
+                        _getY(count, tileLayer.width.toInt()) * _tileHeight,
+                      ),
+                      height: _tileHeight,
+                      width: _tileWidth,
+                      collisions: data.collisions,
+                      frontFromPlayer: true));
+            } else {
+              _tiles.add(
+                Tile.fromAnimationMultiCollision(
+                  data.animation,
+                  Position(
+                    _getX(count, tileLayer.width.toInt()),
+                    _getY(count, tileLayer.width.toInt()),
+                  ),
+                  collisions: data.collisions,
+                  width: _tileWidth,
+                  height: _tileHeight,
                 ),
-                collisions: data.collisions,
-                width: _tileWidth,
-                height: _tileHeight,
-              ),
-            );
+              );
+            }
           }
         }
       }
@@ -142,10 +172,13 @@ class TiledWorldMap {
       FlameAnimation.Animation animation =
           getAnimation(tileSetContain, index, widthCount);
 
+      DataObjectCollision object = _getCollision(tileSetContain, index);
+
       return ItemTileSet(
         animation: animation,
         sprite: sprite,
-        collisions: _getCollision(tileSetContain, index),
+        type: object.type,
+        collisions: object.collisions,
       );
     } else {
       return null;
@@ -183,13 +216,14 @@ class TiledWorldMap {
     return _spriteCache['$image/$row/$column'];
   }
 
-  List<Collision> _getCollision(TileSet tileSetContain, int index) {
+  DataObjectCollision _getCollision(TileSet tileSetContain, int index) {
     List<Collision> collisions = List();
     Iterable<TileSetItem> tileSetItemList =
         tileSetContain.tiles.where((element) => element.id == (index - 1));
     if (tileSetItemList.isNotEmpty) {
       List<TileSetObject> tileSetObjectList =
-          tileSetItemList.first.objectGroup.objects;
+          tileSetItemList.first.objectGroup?.objects ?? [];
+      String type = tileSetItemList.first?.type ?? '';
       if (tileSetObjectList.isNotEmpty) {
         tileSetObjectList.forEach((object) {
           double width = (object.width * _tileWidth) / _tileWidthOrigin;
@@ -204,10 +238,10 @@ class TiledWorldMap {
             align: Offset(x, y),
           ));
         });
-        return collisions;
       }
+      return DataObjectCollision(collisions: collisions, type: type);
     }
-    return collisions;
+    return DataObjectCollision();
   }
 
   FlameAnimation.Animation getAnimation(
@@ -248,6 +282,19 @@ class ItemTileSet {
   final FlameAnimation.Animation animation;
   final Sprite sprite;
   final List<Collision> collisions;
+  final String type;
 
-  ItemTileSet({this.sprite, this.collisions, this.animation});
+  ItemTileSet({
+    this.sprite,
+    this.collisions,
+    this.animation,
+    this.type,
+  });
+}
+
+class DataObjectCollision {
+  final List<Collision> collisions;
+  final String type;
+
+  DataObjectCollision({this.collisions, this.type = ''});
 }
