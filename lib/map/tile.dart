@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/util/collision/collision.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
@@ -8,8 +9,7 @@ import 'package:flame/sprite.dart';
 import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
-class Tile extends GameComponent {
-  List<Collision> collisions;
+class Tile extends GameComponent with ObjectCollision {
   Sprite sprite;
   FlameAnimation.Animation animation;
   final double width;
@@ -40,7 +40,7 @@ class Tile extends GameComponent {
     this.width = 32,
     this.height = 32,
   }) {
-    if (collision != null) collisions = [collision];
+    if (collision != null) this.collisions = [collision];
     this.sprite = sprite;
     this.position = generateRectWithBleedingPixel(position, width, height);
 
@@ -69,7 +69,7 @@ class Tile extends GameComponent {
     this.height = 32,
   }) {
     this.animation = animation;
-    if (collision != null) collisions = [collision];
+    if (collision != null) this.collisions = [collision];
     this.position = generateRectWithBleedingPixel(position, width, height);
 
     _positionText = Position(position.x, position.y);
@@ -99,10 +99,8 @@ class Tile extends GameComponent {
       sprite.renderRect(canvas, position);
     }
 
-    if (gameRef != null && gameRef.showCollisionArea && collisions.isNotEmpty) {
-      collisions.forEach((c) {
-        _drawCollision(c, canvas);
-      });
+    if (gameRef != null && gameRef.showCollisionArea) {
+      drawCollision(canvas, position, gameRef?.collisionAreaColor);
     }
 
     if (gameRef != null && gameRef.constructionMode && isVisibleInCamera())
@@ -148,24 +146,6 @@ class Tile extends GameComponent {
       width + (position.x % 2 == 0 ? bleendingWidthPixel : 0),
       height + (position.y % 2 == 0 ? bleendingHeightPixel : 0),
     );
-  }
-
-  void _drawCollision(Collision collision, Canvas canvas) {
-    canvas.drawRect(
-      collision.calculateRectCollision(position),
-      new Paint()
-        ..color = gameRef.collisionAreaColor ??
-            Colors.lightGreenAccent.withOpacity(0.5),
-    );
-  }
-
-  bool containCollision(Rect displacement) {
-    if (collisions == null || collisions.isEmpty || position == null)
-      return false;
-    return collisions
-        .where((element) =>
-            element.calculateRectCollision(position).overlaps(displacement))
-        .isNotEmpty;
   }
 
   @override

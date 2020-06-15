@@ -52,7 +52,9 @@ class FlyingAttackObject extends AnimatedObject
       height,
     );
 
-    this.collision = collision ?? Collision(width: width, height: height / 2);
+    this.collisions = [
+      collision ?? Collision(width: width, height: height / 2)
+    ];
   }
 
   @override

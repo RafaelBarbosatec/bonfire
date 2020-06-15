@@ -624,6 +624,8 @@ return BonfireTiledWidget(
 
 ### Exemplo do mapa no Tiled
 
+Caso deseje que o Tile seja desenhado por cima do player adicione tipo: `above` em seu tileSet.
+
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/tiled-support/media/print_exemplo_tiled.png)
 
 ### Resultado

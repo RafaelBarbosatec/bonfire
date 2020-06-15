@@ -45,7 +45,9 @@ class Enemy extends AnimatedObject with ObjectCollision {
       width,
       height,
     );
-    this.collision = collision ?? Collision(width: width, height: height / 2);
+    this.collisions = [
+      collision ?? Collision(width: width, height: height / 2)
+    ];
   }
 
   bool get isDead => _isDead;
@@ -223,7 +225,10 @@ class Enemy extends AnimatedObject with ObjectCollision {
     }
   }
 
-  Rect get rectCollision => getRectCollision(position);
+  Rect get rectCollision {
+    if (containCollision()) return getRectCollisions(position).first;
+    return Rect.zero;
+  }
 
   @override
   int priority() => PriorityLayer.ENEMY;

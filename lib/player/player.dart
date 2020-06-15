@@ -48,7 +48,9 @@ class Player extends AnimatedObject
       height,
     );
 
-    this.collision = collision ?? Collision(width: width, height: height / 2);
+    this.collisions = [
+      collision ?? Collision(width: width, height: height / 2)
+    ];
     maxLife = life;
   }
 
@@ -151,7 +153,10 @@ class Player extends AnimatedObject
     }
   }
 
-  Rect get rectCollision => getRectCollision(position);
+  Rect get rectCollision {
+    if (containCollision()) return getRectCollisions(position).first;
+    return Rect.zero;
+  }
 
   @override
   void joystickAction(JoystickActionEvent event) {}

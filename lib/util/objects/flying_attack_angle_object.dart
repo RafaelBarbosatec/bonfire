@@ -60,7 +60,9 @@ class FlyingAttackAngleObject extends AnimatedObject
       height,
     );
 
-    this.collision = collision ?? Collision(width: width, height: height / 2);
+    this.collisions = [
+      collision ?? Collision(width: width, height: height / 2)
+    ];
     _cosAngle = cos(radAngle);
     _senAngle = sin(radAngle);
     _rotate = radAngle == 0.0 ? 0.0 : radAngle + (pi / 2);
