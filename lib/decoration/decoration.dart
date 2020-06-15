@@ -54,7 +54,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       width,
       height,
     );
-    this.collision = collision;
+    if (collision != null) this.collisions = [collision];
   }
 
   GameDecoration.sprite(
@@ -73,7 +73,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       width,
       height,
     );
-    this.collision = collision;
+    if (collision != null) this.collisions = [collision];
   }
 
   GameDecoration.animation(
@@ -92,7 +92,45 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       width,
       height,
     );
-    this.collision = collision;
+    if (collision != null) this.collisions = [collision];
+  }
+
+  GameDecoration.spriteMultiCollision(
+    Sprite sprite, {
+    @required this.initPosition,
+    @required this.height,
+    @required this.width,
+    this.frontFromPlayer = false,
+    this.isSensor = false,
+    List<Collision> collisions,
+  }) {
+    if (frontFromPlayer) additionalPriority = 1;
+    _sprite = sprite;
+    this.position = generateRectWithBleedingPixel(
+      initPosition,
+      width,
+      height,
+    );
+    this.collisions = collisions;
+  }
+
+  GameDecoration.animationMultiCollision(
+    FlameAnimation.Animation animation, {
+    @required this.initPosition,
+    @required this.height,
+    @required this.width,
+    this.isSensor = false,
+    this.frontFromPlayer = false,
+    List<Collision> collisions,
+  }) {
+    if (frontFromPlayer) additionalPriority = 1;
+    this.animation = animation;
+    this.position = generateRectWithBleedingPixel(
+      initPosition,
+      width,
+      height,
+    );
+    this.collisions = collisions;
   }
 
   @override
@@ -139,6 +177,4 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       return PriorityLayer.PLAYER + additionalPriority;
     }
   }
-
-  Rect get rectCollision => getRectCollision(position);
 }
