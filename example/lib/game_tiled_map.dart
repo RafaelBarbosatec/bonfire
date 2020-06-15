@@ -15,7 +15,7 @@ class GameTiledMap extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     DungeonMap.tileSize =
-        ((size.height < size.width) ? size.height : size.width) / 12;
+        ((size.height > size.width) ? size.height : size.width) / 14;
     return BonfireTiledWidget(
       joystick: Joystick(
         directional: JoystickDirectional(
