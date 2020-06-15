@@ -641,6 +641,8 @@ return BonfireTiledWidget(
 
 ### Tiled map example
 
+If you want the Tile to be drawn above the player add type: `above` in your tileSet.
+
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/tiled-support/media/print_exemplo_tiled.png)
 
 ### Result
