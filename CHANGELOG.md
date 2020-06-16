@@ -1,6 +1,10 @@
+## [0.6.2]
+* hotfix render.
+
 ## [0.6.1]
 * add [Tiled](https://www.mapeditor.org/) json support (BonfireTiledWidget)
 * BREAKING CHANGES: gestures improvements (now use mixin TapGesture or DragGesture)
+* BREAKING CHANGES: align collision
 * add support drag gestures
 * add support multiCollision to Decoration and Tile.
 * add support Tile animated.
