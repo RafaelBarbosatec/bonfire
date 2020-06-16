@@ -18,7 +18,6 @@ class Spikes extends GameDecoration {
           collision: Collision(
             width: DungeonMap.tileSize / 2,
             height: DungeonMap.tileSize / 2,
-            align: CollisionAlign.CENTER,
           ),
         );
 

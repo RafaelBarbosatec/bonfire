@@ -19,6 +19,7 @@ class BonfireWidget extends StatefulWidget {
   final GameComponent background;
   final bool constructionMode;
   final bool showCollisionArea;
+  final bool showFPS;
   final GameController gameController;
   final Color constructionModeColor;
   final Color collisionAreaColor;
@@ -36,6 +37,7 @@ class BonfireWidget extends StatefulWidget {
     this.background,
     this.constructionMode = false,
     this.showCollisionArea = false,
+    this.showFPS = false,
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
@@ -56,11 +58,11 @@ class _BonfireWidgetState extends State<BonfireWidget>
 
       _game.decorations().forEach((d) => d.remove());
       if (widget.decorations != null)
-        widget.decorations.forEach((d) => _game.addDecoration(d));
+        widget.decorations.forEach((d) => _game.addGameComponent(d));
 
       _game.enemies().forEach((e) => e.remove());
       if (widget.enemies != null)
-        widget.enemies.forEach((e) => _game.addEnemy(e));
+        widget.enemies.forEach((e) => _game.addGameComponent(e));
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -74,11 +76,12 @@ class _BonfireWidgetState extends State<BonfireWidget>
       player: widget.player,
       interface: widget.interface,
       map: widget.map,
-      decorations: widget.decorations ?? List(),
-      enemies: widget.enemies ?? List(),
+      decorations: widget.decorations,
+      enemies: widget.enemies,
       background: widget.background,
       constructionMode: widget.constructionMode,
       showCollisionArea: widget.showCollisionArea,
+      showFPS: widget.showFPS,
       gameController: widget.gameController,
       constructionModeColor:
           widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
@@ -91,14 +94,6 @@ class _BonfireWidgetState extends State<BonfireWidget>
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      child: Listener(
-        onPointerDown: _game.onPointerDown,
-        onPointerMove: _game.onPointerMove,
-        onPointerUp: _game.onPointerUp,
-        onPointerCancel: _game.onPointerCancel,
-        child: _game.widget,
-      ),
-    );
+    return _game.widget;
   }
 }

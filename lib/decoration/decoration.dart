@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
+import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
@@ -33,6 +34,8 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
 
   Sprite _sprite;
 
+  int additionalPriority = 0;
+
   GameDecoration({
     Sprite sprite,
     @required this.initPosition,
@@ -42,8 +45,8 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.isSensor = false,
     FlameAnimation.Animation animation,
     Collision collision,
-    bool isTouchable = false,
   }) {
+    if (frontFromPlayer) additionalPriority = 1;
     this.animation = animation;
     _sprite = sprite;
     this.position = generateRectWithBleedingPixel(
@@ -51,8 +54,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       width,
       height,
     );
-    this.collision = collision;
-    this.isTouchable = isTouchable;
+    if (collision != null) this.collisions = [collision];
   }
 
   GameDecoration.sprite(
@@ -63,16 +65,15 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.frontFromPlayer = false,
     this.isSensor = false,
     Collision collision,
-    bool isTouchable = false,
   }) {
+    if (frontFromPlayer) additionalPriority = 1;
     _sprite = sprite;
     this.position = generateRectWithBleedingPixel(
       initPosition,
       width,
       height,
     );
-    this.collision = collision;
-    this.isTouchable = isTouchable;
+    if (collision != null) this.collisions = [collision];
   }
 
   GameDecoration.animation(
@@ -83,16 +84,53 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.isSensor = false,
     this.frontFromPlayer = false,
     Collision collision,
-    bool isTouchable = false,
   }) {
+    if (frontFromPlayer) additionalPriority = 1;
     this.animation = animation;
     this.position = generateRectWithBleedingPixel(
       initPosition,
       width,
       height,
     );
-    this.collision = collision;
-    this.isTouchable = isTouchable;
+    if (collision != null) this.collisions = [collision];
+  }
+
+  GameDecoration.spriteMultiCollision(
+    Sprite sprite, {
+    @required this.initPosition,
+    @required this.height,
+    @required this.width,
+    this.frontFromPlayer = false,
+    this.isSensor = false,
+    List<Collision> collisions,
+  }) {
+    if (frontFromPlayer) additionalPriority = 1;
+    _sprite = sprite;
+    this.position = generateRectWithBleedingPixel(
+      initPosition,
+      width,
+      height,
+    );
+    this.collisions = collisions;
+  }
+
+  GameDecoration.animationMultiCollision(
+    FlameAnimation.Animation animation, {
+    @required this.initPosition,
+    @required this.height,
+    @required this.width,
+    this.isSensor = false,
+    this.frontFromPlayer = false,
+    List<Collision> collisions,
+  }) {
+    if (frontFromPlayer) additionalPriority = 1;
+    this.animation = animation;
+    this.position = generateRectWithBleedingPixel(
+      initPosition,
+      width,
+      height,
+    );
+    this.collisions = collisions;
   }
 
   @override
@@ -102,19 +140,17 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
 
   @override
   void render(Canvas canvas) {
-    if (isVisibleInMap()) {
-      if (_sprite != null && _sprite.loaded())
-        _sprite.renderRect(canvas, position);
+    if (_sprite != null && _sprite.loaded())
+      _sprite.renderRect(canvas, position);
 
-      super.render(canvas);
+    super.render(canvas);
 
-      if (gameRef != null && gameRef.showCollisionArea) {
-        drawCollision(canvas, position, gameRef.collisionAreaColor);
-      }
+    if (gameRef != null && gameRef.showCollisionArea) {
+      drawCollision(canvas, position, gameRef.collisionAreaColor);
     }
   }
 
-  void onContact(ObjectCollision collision) { }
+  void onContact(ObjectCollision collision) {}
 
   Rect generateRectWithBleedingPixel(
     Position position,
@@ -135,12 +171,10 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
 
   @override
   int priority() {
-    if (frontFromPlayer) {
-      return 15;
+    if (additionalPriority == 0) {
+      return PriorityLayer.DECORATION;
     } else {
-      return super.priority();
+      return PriorityLayer.OBJECTS + additionalPriority;
     }
   }
-
-  Rect get rectCollision => getRectCollision(position);
 }

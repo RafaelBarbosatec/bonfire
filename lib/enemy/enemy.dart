@@ -4,6 +4,7 @@ import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
+import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,18 +45,18 @@ class Enemy extends AnimatedObject with ObjectCollision {
       width,
       height,
     );
-    this.collision = collision ?? Collision(width: width, height: height / 2);
+    this.collisions = [
+      collision ?? Collision(width: width, height: height / 2)
+    ];
   }
 
   bool get isDead => _isDead;
 
   @override
   void render(Canvas canvas) {
-    if (isVisibleInMap()) {
-      super.render(canvas);
-      if (gameRef != null && gameRef.showCollisionArea) {
-        drawCollision(canvas, position, gameRef.collisionAreaColor);
-      }
+    super.render(canvas);
+    if (gameRef != null && gameRef.showCollisionArea) {
+      drawCollision(canvas, position, gameRef.collisionAreaColor);
     }
   }
 
@@ -224,5 +225,11 @@ class Enemy extends AnimatedObject with ObjectCollision {
     }
   }
 
-  Rect get rectCollision => getRectCollision(position);
+  Rect get rectCollision {
+    if (containCollision()) return getRectCollisions(position).first;
+    return Rect.zero;
+  }
+
+  @override
+  int priority() => PriorityLayer.ENEMY;
 }

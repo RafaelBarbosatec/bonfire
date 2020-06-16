@@ -5,7 +5,7 @@ import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/material.dart';
 
-class Chest extends GameDecoration {
+class Chest extends GameDecoration with TapGesture {
   final Position initPosition;
   bool _observedPlayer = false;
   IntervalTick _timer = IntervalTick(300);
@@ -22,7 +22,6 @@ class Chest extends GameDecoration {
           width: DungeonMap.tileSize * 0.6,
           height: DungeonMap.tileSize * 0.6,
           initPosition: initPosition,
-          isTouchable: true,
         ) {
     _textConfig = TextConfig(
       color: Colors.white,
@@ -69,7 +68,7 @@ class Chest extends GameDecoration {
   }
 
   void _addPotions() {
-    gameRef.addDecoration(
+    gameRef.addGameComponent(
       PotionLife(
         Position(
           position.translate(width * 2, 0).left,
@@ -79,7 +78,7 @@ class Chest extends GameDecoration {
       ),
     );
 
-    gameRef.addDecoration(
+    gameRef.addGameComponent(
       PotionLife(
         Position(
           position.translate(width * 2, 0).left,

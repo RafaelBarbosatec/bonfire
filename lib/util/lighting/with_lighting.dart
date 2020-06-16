@@ -8,7 +8,8 @@ mixin WithLighting {
   bool isVisible(Camera camera) {
     if (lightingConfig == null ||
         camera == null ||
-        lightingConfig?.gameComponent?.position == null) return false;
+        lightingConfig?.gameComponent?.position == null ||
+        camera.gameRef.size == null) return false;
 
     Rect rectLight = Rect.fromLTWH(
       lightingConfig.gameComponent.position.left - lightingConfig.radius,

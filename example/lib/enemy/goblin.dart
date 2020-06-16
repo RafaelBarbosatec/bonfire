@@ -41,10 +41,12 @@ class Goblin extends SimpleEnemy {
             speed: DungeonMap.tileSize * 2,
             life: 100,
             collision: Collision(
-              height: DungeonMap.tileSize * 0.4,
-              width: DungeonMap.tileSize * 0.4,
-              align: CollisionAlign.CENTER,
-            ));
+                height: DungeonMap.tileSize * 0.4,
+                width: DungeonMap.tileSize * 0.4,
+                align: Offset(
+                  DungeonMap.tileSize * 0.2,
+                  DungeonMap.tileSize * 0.4,
+                )));
 
   @override
   void update(double dt) {
@@ -135,6 +137,14 @@ class Goblin extends SimpleEnemy {
       height: width * 0.9,
       damage: attack,
       speed: speed * 2,
+      collision: Collision(
+        width: width / 2,
+        height: width / 2,
+        align: Offset(
+          width * 0.2,
+          width * 0.2,
+        ),
+      ),
       lightingConfig: LightingConfig(
         gameComponent: this,
         radius: 25,

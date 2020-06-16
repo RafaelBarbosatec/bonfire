@@ -540,11 +540,10 @@ FlyingAttackObject(
   
 ```
 
-Se for necessário adicionar qualquer um dos componentes que fazem parte da base do game no Bonfire(Decorations ou Enemy), deverá ser adicionado com seus métodos específicos:
+Se for necessário adicionar qualquer um dos componentes que fazem parte da base do game no Bonfire(Decorations, Enemy, etc), deverá ser adicionado assim:
 
 ```dart
-this.gameRef.addEnemy(ENEMY);
-this.gameRef.addDecoration(DECORATION);
+this.gameRef.addGameComponent(COMPONENT);
 ```
 
 ### Câmera
@@ -572,9 +571,69 @@ Ao setar a propriedade 'lightingColorGame'no BofireWidget automaticamente vc hab
      );
 ```
 
+## Suporte a mapas construídos com Tiled.
+
+Suporte para mapas criados com o Tiled usando a extensão .json.
+
+- [x] Multi TileLayer
+- [x] Multi ObjectLayer
+- [x] TileSet
+- [x] Tile Animated
+
+Collision
+   - [x] MultiCollision
+   - [x] Retangle Collision
+   - [ ] Point Collision
+   - [ ] Ellipse Collision
+   - [ ] Polygon Collision
+
+### Get Started
+
+Inclua os arquivos gerados pelo Tiled no projeto seguindo a base: `assets / images /`
+
+```yaml
+flutter:
+  assets:
+    - assets/images/tiled/map.json
+    - assets/images/tiled/tile_set.json
+    - assets/images/tiled/img_tile_set.png
+```
+
+Para mapas construídos com o Tiled, devemos usar o Widget `BonfireTiledWidget`:
+
+```dart
+TiledWorldMap map = TiledWorldMap(
+        'tiled/mapa.json', // main file path
+        forceTileSize: DungeonMap.tileSize, // if you want to force the size of the Tile to be larger or smaller than the original
+      )
+        ..registerObject('goblin', (x, y, width, height) => Goblin(Position(x, y))) // Records objects that will be placed on the map when the name is found.
+        ..registerObject('torch', (x, y, width, height) => Torch(Position(x, y)))
+        ..registerObject('barrel', (x, y, width, height) => BarrelDraggable(Position(x, y)));
+
+return BonfireTiledWidget(
+      joystick: Joystick(
+        directional: JoystickDirectional(
+          size: 100,
+          isFixed: false,
+        ),
+      tiledMap: map,
+      lightingColorGame: Colors.black.withOpacity(0.5),
+    );
+```
+
+### Exemplo do mapa no Tiled
+
+Caso deseje que o Tile seja desenhado por cima do player adicione tipo: `above` em seu tileSet.
+
+![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/tiled-support/media/print_exemplo_tiled.png)
+
+### Resultado
+
+![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/tiled-support/media/print_result_tiled.png)
+
 ## Próximos passos
 - [ ] Documentação detalhada dos componentes.
-- [ ] Support with [Tiled](https://www.mapeditor.org/)
+- [x] Support with [Tiled](https://www.mapeditor.org/)
 - [ ] Using Box2D
 
 ## Game exemplo

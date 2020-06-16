@@ -24,7 +24,7 @@ class FlyingAttackObject extends AnimatedObject
   final VoidCallback destroyedObject;
   final LightingConfig lightingConfig;
 
-  final IntervalTick _timerVerifyCollision = IntervalTick(40);
+  final IntervalTick _timerVerifyCollision = IntervalTick(50);
 
   FlyingAttackObject({
     @required this.initPosition,
@@ -52,7 +52,9 @@ class FlyingAttackObject extends AnimatedObject
       height,
     );
 
-    this.collision = collision ?? Collision(width: width, height: height / 2);
+    this.collisions = [
+      collision ?? Collision(width: width, height: height / 2)
+    ];
   }
 
   @override
@@ -83,9 +85,7 @@ class FlyingAttackObject extends AnimatedObject
 
   @override
   void render(Canvas canvas) {
-    if (this.isVisibleInMap()) {
-      super.render(canvas);
-    }
+    super.render(canvas);
     if (gameRef != null && gameRef.showCollisionArea) {
       drawCollision(canvas, position, gameRef.collisionAreaColor);
     }
@@ -97,16 +97,17 @@ class FlyingAttackObject extends AnimatedObject
     bool destroy = false;
 
     if (withCollision)
-      destroy = isCollision(position, gameRef, onlyVisible: false);
+      destroy = isCollision(position, gameRef,
+          onlyVisible: false, shouldTriggerSensors: false);
 
-    if (damageInPlayer) {
+    if (damageInPlayer && !destroy) {
       if (position.overlaps(gameRef.player.rectCollision)) {
         gameRef.player.receiveDamage(damage, id);
         destroy = true;
       }
     }
 
-    if (damageInEnemy) {
+    if (damageInEnemy && !destroy) {
       gameRef
           .livingEnemies()
           .where((enemy) => enemy.rectCollision.overlaps(position))
@@ -154,7 +155,7 @@ class FlyingAttackObject extends AnimatedObject
             break;
         }
 
-        gameRef.add(
+        gameRef.addLater(
           AnimatedObjectOnce(
             animation: destroyAnimation,
             position: positionDestroy,
@@ -168,22 +169,22 @@ class FlyingAttackObject extends AnimatedObject
   }
 
   bool _verifyExistInWorld() {
-    bool result = true;
-    if (position.left < gameRef.gameCamera.position.x) {
-      result = false;
+    Size mapSize = gameRef.map?.mapSize;
+    if (mapSize == null) return true;
+
+    if (position.left < 0) {
+      return false;
     }
-    if (position.right >
-        gameRef.gameCamera.position.x + gameRef.map.mapSize.width) {
-      result = false;
+    if (position.right > mapSize.width) {
+      return false;
     }
-    if (position.top < gameRef.gameCamera.position.y) {
-      result = false;
+    if (position.top < 0) {
+      return false;
     }
-    if (position.bottom >
-        gameRef.gameCamera.position.y + gameRef.map.mapSize.height) {
-      result = false;
+    if (position.bottom > mapSize.height) {
+      return false;
     }
 
-    return result;
+    return true;
   }
 }
