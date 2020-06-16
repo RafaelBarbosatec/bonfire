@@ -432,7 +432,7 @@
              "name":"",
              "objects":[
                     {
-                     "height":3.73869803137985,
+                     "height":5.10106491678209,
                      "id":1,
                      "name":"",
                      "rotation":0,
@@ -440,7 +440,7 @@
                      "visible":true,
                      "width":16,
                      "x":0,
-                     "y":12.2613019686201
+                     "y":10.8989350832179
                     }],
              "opacity":1,
              "type":"objectgroup",
