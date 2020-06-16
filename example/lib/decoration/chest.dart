@@ -68,7 +68,7 @@ class Chest extends GameDecoration with TapGesture {
   }
 
   void _addPotions() {
-    gameRef.addDecoration(
+    gameRef.addGameComponent(
       PotionLife(
         Position(
           position.translate(width * 2, 0).left,
@@ -78,7 +78,7 @@ class Chest extends GameDecoration with TapGesture {
       ),
     );
 
-    gameRef.addDecoration(
+    gameRef.addGameComponent(
       PotionLife(
         Position(
           position.translate(width * 2, 0).left,

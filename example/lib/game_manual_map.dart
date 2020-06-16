@@ -79,7 +79,7 @@ class GameManualMap extends StatelessWidget implements GameListener {
       x,
       y,
     );
-    _controller.addComponent(
+    _controller.addGameComponent(
       AnimatedObjectOnce(
         animation: FlameAnimation.Animation.sequenced(
           "smoke_explosin.png",
@@ -96,7 +96,7 @@ class GameManualMap extends StatelessWidget implements GameListener {
       ),
     );
 
-    _controller.addEnemy(
+    _controller.addGameComponent(
       Goblin(
         position,
       ),

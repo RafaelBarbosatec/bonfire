@@ -58,10 +58,10 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
         _game.map.updateTiles(value.map.tiles);
 
         _game.decorations().forEach((d) => d.remove());
-        value.decorations.forEach((d) => _game.addDecoration(d));
+        value.decorations.forEach((d) => _game.addGameComponent(d));
 
         _game.enemies().forEach((e) => e.remove());
-        value.enemies.forEach((e) => _game.addEnemy(e));
+        value.enemies.forEach((e) => _game.addGameComponent(e));
 
         setState(() {
           _loading = false;

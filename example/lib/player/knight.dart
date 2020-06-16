@@ -98,7 +98,7 @@ class Knight extends SimplePlayer with WithLighting {
   @override
   void die() {
     remove();
-    gameRef.addDecoration(
+    gameRef.addGameComponent(
       GameDecoration(
         initPosition: Position(
           position.left,

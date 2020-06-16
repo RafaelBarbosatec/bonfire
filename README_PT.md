@@ -540,11 +540,10 @@ FlyingAttackObject(
   
 ```
 
-Se for necessário adicionar qualquer um dos componentes que fazem parte da base do game no Bonfire(Decorations ou Enemy), deverá ser adicionado com seus métodos específicos:
+Se for necessário adicionar qualquer um dos componentes que fazem parte da base do game no Bonfire(Decorations, Enemy, etc), deverá ser adicionado assim:
 
 ```dart
-this.gameRef.addEnemy(ENEMY);
-this.gameRef.addDecoration(DECORATION);
+this.gameRef.addGameComponent(COMPONENT);
 ```
 
 ### Câmera

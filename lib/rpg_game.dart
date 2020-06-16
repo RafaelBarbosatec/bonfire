@@ -83,14 +83,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     super.update(t);
   }
 
-  void addEnemy(Enemy enemy) {
-    addLater(enemy);
-  }
-
-  void addDecoration(GameDecoration decoration) {
-    addLater(decoration);
-  }
-
   void addGameComponent(GameComponent component) {
     addLater(component);
   }

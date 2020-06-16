@@ -557,10 +557,9 @@ FlyingAttackObject(
   
 ```
 
-If it is necesssary to add a instance of a Bonfire's basic component class (Decorations or Enemy), one shall use its specific methods:
+If it is necesssary to add a instance of a Bonfire's basic component class (Decorations, Enemy, etc), one shall use:
 ```dart
-this.gameRef.addEnemy(ENEMY);
-this.gameRef.addDecoration(DECORATION);
+this.gameRef.addGameComponent(COMPONENT);
 ```
 
 ### Camera
