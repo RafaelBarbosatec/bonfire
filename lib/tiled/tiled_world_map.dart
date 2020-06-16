@@ -79,7 +79,6 @@ class TiledWorldMap {
         if (data != null) {
           if (data.animation == null) {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
-              print('add Decoration ${_getX(count, tileLayer.width.toInt())}');
               _decorations.add(GameDecoration.spriteMultiCollision(
                 data.sprite,
                 initPosition: Position(
