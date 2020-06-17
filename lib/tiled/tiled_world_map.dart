@@ -216,13 +216,13 @@ class TiledWorldMap {
   }
 
   DataObjectCollision _getCollision(TileSet tileSetContain, int index) {
-    List<Collision> collisions = List();
     Iterable<TileSetItem> tileSetItemList =
-        tileSetContain.tiles.where((element) => element.id == (index - 1));
-    if (tileSetItemList.isNotEmpty) {
+        tileSetContain?.tiles?.where((element) => element.id == (index - 1));
+    if (tileSetItemList != null && tileSetItemList.isNotEmpty) {
       List<TileSetObject> tileSetObjectList =
           tileSetItemList.first.objectGroup?.objects ?? [];
       String type = tileSetItemList.first?.type ?? '';
+      List<Collision> collisions = List();
       if (tileSetObjectList.isNotEmpty) {
         tileSetObjectList.forEach((object) {
           double width = (object.width * _tileWidth) / _tileWidthOrigin;
