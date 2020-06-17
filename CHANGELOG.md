@@ -1,3 +1,6 @@
+## [0.6.3]
+* hotfix Tiled with tile null in TileSet.
+
 ## [0.6.2]
 * hotfix render.
 
