@@ -51,21 +51,13 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   @override
   void didUpdateWidget(BonfireTiledWidget oldWidget) {
     if (widget.constructionMode) {
-      setState(() {
-        _loading = true;
-      });
       widget.tiledMap.build().then((value) {
         _game.map.updateTiles(value.map.tiles);
 
         _game.decorations().forEach((d) => d.remove());
-        value.decorations.forEach((d) => _game.addGameComponent(d));
-
         _game.enemies().forEach((e) => e.remove());
-        value.enemies.forEach((e) => _game.addGameComponent(e));
 
-        setState(() {
-          _loading = false;
-        });
+        value.components.forEach((d) => _game.addGameComponent(d));
       });
     }
     super.didUpdateWidget(oldWidget);
@@ -96,8 +88,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       player: widget.player,
       interface: widget.interface,
       map: tiled.map,
-      decorations: tiled.decorations,
-      enemies: tiled.enemies,
+      components: tiled.components,
       background: widget.background,
       constructionMode: widget.constructionMode,
       showCollisionArea: widget.showCollisionArea,

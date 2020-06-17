@@ -52,6 +52,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     this.interface,
     List<Enemy> enemies,
     List<GameDecoration> decorations,
+    List<GameComponent> components,
     this.background,
     this.constructionMode = false,
     this.showCollisionArea = false,
@@ -69,6 +70,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     if (map != null) super.add(map);
     decorations?.forEach((decoration) => super.add(decoration));
     enemies?.forEach((enemy) => super.add(enemy));
+    components?.forEach((comp) => super.add(comp));
     if (player != null) super.add(player);
     if (lightingColorGame != null)
       super.add(Lighting(color: lightingColorGame));

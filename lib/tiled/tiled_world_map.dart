@@ -23,8 +23,7 @@ class TiledWorldMap {
   final double forceTileSize;
   TiledJsonReader _reader;
   List<Tile> _tiles = List();
-  List<Enemy> _enemies = List();
-  List<GameDecoration> _decorations = List();
+  List<GameComponent> _components = List();
   String _basePath;
   String _basePathFlame = 'assets/images/';
   TiledMap _tiledMap;
@@ -54,8 +53,7 @@ class TiledWorldMap {
     _load(_tiledMap);
     return Future.value(TiledWorldData(
       map: MapWorld(_tiles),
-      decorations: _decorations,
-      enemies: _enemies,
+      components: _components,
     ));
   }
 
@@ -79,7 +77,7 @@ class TiledWorldMap {
         if (data != null) {
           if (data.animation == null) {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
-              _decorations.add(GameDecoration.spriteMultiCollision(
+              _components.add(GameDecoration.spriteMultiCollision(
                 data.sprite,
                 initPosition: Position(
                   _getX(count, tileLayer.width.toInt()) * _tileWidth,
@@ -106,7 +104,7 @@ class TiledWorldMap {
             }
           } else {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
-              _decorations
+              _components
                   .add(GameDecoration.animationMultiCollision(data.animation,
                       initPosition: Position(
                         _getX(count, tileLayer.width.toInt()) * _tileWidth,
@@ -193,9 +191,11 @@ class TiledWorldMap {
         double height = (element.height * _tileHeight) / _tileHeightOrigin;
         var object = _objectsBuilder[element.name](x, y, width, height);
 
-        if (object is Enemy) _enemies.add(object);
-        if (object is GameDecoration)
-          _decorations.add(object..additionalPriority = _countObjects);
+        if (object is GameDecoration) {
+          _components.add(object..additionalPriority = _countObjects);
+        } else {
+          _components.add(object);
+        }
       }
     });
   }
