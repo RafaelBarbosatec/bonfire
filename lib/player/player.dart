@@ -4,6 +4,7 @@ import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
+import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,9 @@ class Player extends AnimatedObject
       height,
     );
 
-    this.collision = collision ?? Collision(width: width, height: height / 2);
+    this.collisions = [
+      collision ?? Collision(width: width, height: height / 2)
+    ];
     maxLife = life;
   }
 
@@ -150,11 +153,17 @@ class Player extends AnimatedObject
     }
   }
 
-  Rect get rectCollision => getRectCollision(position);
+  Rect get rectCollision {
+    if (containCollision()) return getRectCollisions(position).first;
+    return Rect.zero;
+  }
 
   @override
   void joystickAction(JoystickActionEvent event) {}
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {}
+
+  @override
+  int priority() => PriorityLayer.PLAYER;
 }

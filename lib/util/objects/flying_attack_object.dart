@@ -52,7 +52,9 @@ class FlyingAttackObject extends AnimatedObject
       height,
     );
 
-    this.collision = collision ?? Collision(width: width, height: height / 2);
+    this.collisions = [
+      collision ?? Collision(width: width, height: height / 2)
+    ];
   }
 
   @override
@@ -153,7 +155,7 @@ class FlyingAttackObject extends AnimatedObject
             break;
         }
 
-        gameRef.add(
+        gameRef.addLater(
           AnimatedObjectOnce(
             animation: destroyAnimation,
             position: positionDestroy,
@@ -167,7 +169,9 @@ class FlyingAttackObject extends AnimatedObject
   }
 
   bool _verifyExistInWorld() {
-    Size mapSize = gameRef.map.mapSize;
+    Size mapSize = gameRef.map?.mapSize;
+    if (mapSize == null) return true;
+
     if (position.left < 0) {
       return false;
     }

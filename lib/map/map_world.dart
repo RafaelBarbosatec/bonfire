@@ -11,11 +11,12 @@ class MapWorld extends MapGame {
   double lastZoom = -1;
   Size lastSizeScreen;
   Iterable<Tile> _tilesToRender = List();
+  Iterable<Tile> _tilesToRenderAndUpdate = List();
   Iterable<Tile> _tilesCollisionsRendered = List();
   Iterable<Tile> _tilesCollisions = List();
 
   MapWorld(Iterable<Tile> tiles) : super(tiles) {
-    _tilesCollisions = tiles.where((element) => element.collision);
+    _tilesCollisions = tiles.where((element) => element.containCollision());
   }
 
   @override
@@ -33,18 +34,21 @@ class MapWorld extends MapGame {
       lastZoom = gameRef.gameCamera.zoom;
 
       List<Tile> tilesRender = List();
+      List<Tile> tilesRenderUpdate = List();
       List<Tile> tilesCollision = List();
       tiles.forEach((tile) {
         tile.gameRef = gameRef;
-        tile.update(t);
         if (tile.isVisibleInCamera()) {
           tilesRender.add(tile);
-          if (tile.collision) tilesCollision.add(tile);
+          if (tile.animation != null) tilesRenderUpdate.add(tile);
+          if (tile.containCollision()) tilesCollision.add(tile);
         }
       });
       _tilesToRender = tilesRender;
       _tilesCollisionsRendered = tilesCollision;
+      _tilesToRenderAndUpdate = tilesRenderUpdate;
     }
+    _tilesToRenderAndUpdate.forEach((tile) => tile.update(t));
   }
 
   @override

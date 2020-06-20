@@ -60,11 +60,11 @@ class _BonfireWidgetState extends State<BonfireWidget>
 
       _game.decorations().forEach((d) => d.remove());
       if (widget.decorations != null)
-        widget.decorations.forEach((d) => _game.addDecoration(d));
+        widget.decorations.forEach((d) => _game.addGameComponent(d));
 
       _game.enemies().forEach((e) => e.remove());
       if (widget.enemies != null)
-        widget.enemies.forEach((e) => _game.addEnemy(e));
+        widget.enemies.forEach((e) => _game.addGameComponent(e));
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -78,8 +78,8 @@ class _BonfireWidgetState extends State<BonfireWidget>
       player: widget.player,
       interface: widget.interface,
       map: widget.map,
-      decorations: widget.decorations ?? List(),
-      enemies: widget.enemies ?? List(),
+      decorations: widget.decorations,
+      enemies: widget.enemies,
       background: widget.background,
       constructionMode: widget.constructionMode,
       showCollisionArea: widget.showCollisionArea,

@@ -180,7 +180,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
     }
 
-    gameRef.add(AnimatedObjectOnce(animation: anim, position: positionAttack));
+    gameRef.addLater(
+        AnimatedObjectOnce(animation: anim, position: positionAttack));
 
     if (positionAttack.overlaps(player.position)) {
       player.receiveDamage(damage, id);
@@ -284,7 +285,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       this.lastDirectionHorizontal = finalDirection;
     }
 
-    gameRef.add(
+    gameRef.addLater(
       FlyingAttackObject(
         id: id,
         direction: finalDirection,

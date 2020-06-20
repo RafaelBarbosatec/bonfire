@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/game_component.dart';
+import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
 /// This represents a Component for your game in bonfire.
@@ -26,4 +27,7 @@ class AnimatedObject extends GameComponent {
     if (animation != null) animation.update(dt);
     super.update(dt);
   }
+
+  @override
+  int priority() => PriorityLayer.OBJECTS;
 }

@@ -3,7 +3,6 @@ import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/camera.dart';
-import 'package:flame/components/component.dart';
 
 abstract class GameListener {
   void updateGame();
@@ -20,16 +19,8 @@ class GameController {
     _lastCountLiveEnemies = livingEnemies.length;
   }
 
-  void addEnemy(Enemy enemy) {
-    _game.addEnemy(enemy);
-  }
-
-  void addDecoration(GameDecoration decoration) {
-    _game.addDecoration(decoration);
-  }
-
-  void addComponent(Component component) {
-    _game.add(component);
+  void addGameComponent(GameComponent component) {
+    _game.addGameComponent(component);
   }
 
   void setListener(GameListener listener) {

@@ -1,6 +1,9 @@
-## [NEXT]
-* gestures improvements
+## [0.6.1]
+* add [Tiled](https://www.mapeditor.org/) json support (BonfireTiledWidget)
+* BREAKING CHANGES: gestures improvements (now use mixin TapGesture or DragGesture)
 * add support drag gestures
+* add support multiCollision to Decoration and Tile.
+* add support Tile animated.
 
 ## [0.5.1] - 03/06/2020
 * hotfix in FlyingAttackObject
