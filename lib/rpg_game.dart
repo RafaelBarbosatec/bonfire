@@ -4,6 +4,7 @@ import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/base_game_point_detector.dart';
+import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/game_interface/game_interface.dart';
@@ -60,8 +61,10 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
+    double zoom,
   })  : assert(context != null),
         assert(joystickController != null) {
+    if (zoom != null) gameCamera = Camera(zoom: zoom);
     gameCamera.gameRef = this;
     joystickController.joystickListener = player ?? MapExplorer(gameCamera);
     if (gameController != null) gameController.setGame(this);

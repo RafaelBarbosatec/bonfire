@@ -29,10 +29,11 @@ class Lighting extends GameComponent {
     _visibleLight.forEach((light) {
       light.update(_dtUpdate);
       canvas.save();
-      canvas.translate(
-        -gameRef.gameCamera.position.x,
-        -gameRef.gameCamera.position.y,
-      );
+      
+      canvas.translate(size.width/2, size.height/2);
+      canvas.scale(gameRef.gameCamera.zoom);
+      canvas.translate(-gameRef.gameCamera.position.x, -gameRef.gameCamera.position.y);
+
       canvas.drawCircle(
         Offset(light.gameComponent.position.center.dx,
             light.gameComponent.position.center.dy),
