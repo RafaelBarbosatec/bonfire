@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:bonfire/rpg_game.dart';
+import 'package:bonfire/util/base_game_point_detector.dart';
 import 'package:bonfire/util/gestures.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components/component.dart';
@@ -49,10 +49,22 @@ abstract class JoystickListener {
 }
 
 abstract class JoystickController extends Component
-    with HasGameRef<RPGGame>, PointerDetector {
-  JoystickListener joystickListener;
+    with HasGameRef<BaseGamePointerDetector>, PointerDetector {
+  List<JoystickListener> _observers = List();
 
   void onKeyboard(RawKeyEvent event) {}
+
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    _observers.forEach((o) => o.joystickChangeDirectional(event));
+  }
+
+  void joystickAction(JoystickActionEvent event) {
+    _observers.forEach((o) => o.joystickAction(event));
+  }
+
+  void addObserver(JoystickListener listener) {
+    _observers.add(listener);
+  }
 
   @override
   void render(Canvas c) {}

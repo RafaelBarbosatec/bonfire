@@ -85,6 +85,7 @@ extension PlayerExtensions on Player {
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
+    bool collisionOnlyVisibleObjects = true,
     VoidCallback destroy,
     Collision collision,
     LightingConfig lightingConfig,
@@ -117,6 +118,7 @@ extension PlayerExtensions on Player {
       flyAnimation: animationTop,
       destroyAnimation: animationDestroy,
       lightingConfig: lightingConfig,
+      collisionOnlyVisibleObjects: collisionOnlyVisibleObjects,
     ));
   }
 
@@ -133,6 +135,7 @@ extension PlayerExtensions on Player {
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
+    bool collisionOnlyVisibleObjects = true,
     VoidCallback destroy,
     Collision collision,
     LightingConfig lightingConfig,
@@ -191,6 +194,7 @@ extension PlayerExtensions on Player {
         withCollision: withCollision,
         collision: collision,
         lightingConfig: lightingConfig,
+        collisionOnlyVisibleObjects: collisionOnlyVisibleObjects,
       ),
     );
   }

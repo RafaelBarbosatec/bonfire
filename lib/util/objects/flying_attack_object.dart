@@ -21,6 +21,7 @@ class FlyingAttackObject extends AnimatedObject
   final bool damageInPlayer;
   final bool damageInEnemy;
   final bool withCollision;
+  final bool collisionOnlyVisibleObjects;
   final VoidCallback destroyedObject;
   final LightingConfig lightingConfig;
 
@@ -39,6 +40,7 @@ class FlyingAttackObject extends AnimatedObject
     this.damageInPlayer = true,
     this.damageInEnemy = true,
     this.withCollision = true,
+    this.collisionOnlyVisibleObjects = true,
     this.destroyedObject,
     this.lightingConfig,
     Collision collision,
@@ -98,7 +100,8 @@ class FlyingAttackObject extends AnimatedObject
 
     if (withCollision)
       destroy = isCollision(position, gameRef,
-          onlyVisible: false, shouldTriggerSensors: false);
+          onlyVisible: collisionOnlyVisibleObjects,
+          shouldTriggerSensors: false);
 
     if (damageInPlayer && !destroy) {
       if (position.overlaps(gameRef.player.rectCollision)) {

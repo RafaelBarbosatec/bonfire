@@ -211,6 +211,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     Direction direction,
     int interval = 1000,
     bool withCollision = true,
+    bool collisionOnlyVisibleObjects = true,
     Collision collision,
     VoidCallback destroy,
     VoidCallback execute,
@@ -301,6 +302,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         withCollision: withCollision,
         collision: collision,
         lightingConfig: lightingConfig,
+        collisionOnlyVisibleObjects: collisionOnlyVisibleObjects,
       ),
     );
 

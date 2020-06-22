@@ -7,25 +7,21 @@ import 'package:flutter/widgets.dart';
 class Joystick extends JoystickController {
   final List<JoystickAction> actions;
   final JoystickDirectional directional;
-  Size _screenSize;
 
   Joystick({
     this.actions,
     this.directional,
   });
 
-  void initialize() async {
-    _screenSize = gameRef.size;
-    if (directional != null)
-      directional.initialize(_screenSize, joystickListener);
+  void initialize(Size size) async {
+    if (directional != null) directional.initialize(size, this);
     if (actions != null)
-      actions.forEach(
-          (action) => action.initialize(_screenSize, joystickListener));
+      actions.forEach((action) => action.initialize(size, this));
   }
 
   void addAction(JoystickAction action) {
-    if (actions != null) {
-      action.initialize(_screenSize, joystickListener);
+    if (actions != null && gameRef?.size != null) {
+      action.initialize(gameRef.size, this);
       actions.add(action);
     }
   }
@@ -41,12 +37,14 @@ class Joystick extends JoystickController {
   }
 
   void update(double t) {
-    if (gameRef.size != null && _screenSize != gameRef.size) {
-      initialize();
-    }
-
     if (directional != null) directional.update(t);
     if (actions != null) actions.forEach((action) => action.update(t));
+  }
+
+  @override
+  void resize(Size size) {
+    initialize(size);
+    super.resize(size);
   }
 
   void onPointerDown(PointerDownEvent event) {

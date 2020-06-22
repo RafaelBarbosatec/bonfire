@@ -29,7 +29,7 @@ class JoystickAction {
   Offset _dragPosition;
   Paint _paintBackground;
   Paint _paintAction;
-  JoystickListener _joystickListener;
+  JoystickController _joystickController;
 
   JoystickAction({
     @required this.actionId,
@@ -48,8 +48,8 @@ class JoystickAction {
     _tileSize = sizeBackgroundDirection;
   }
 
-  void initialize(Size _screenSize, JoystickListener joystickListener) {
-    _joystickListener = joystickListener;
+  void initialize(Size _screenSize, JoystickController joystickController) {
+    _joystickController = joystickController;
     double radius = size / 2;
     double dx = 0, dy = 0;
     switch (align) {
@@ -157,7 +157,7 @@ class JoystickAction {
 
       double _intensity = dist / (_tileSize * _backgroundAspectRatio / 3);
 
-      _joystickListener.joystickAction(
+      _joystickController.joystickAction(
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.MOVE,
@@ -180,7 +180,7 @@ class JoystickAction {
         _dragPosition = localPosition;
         _dragging = true;
       }
-      _joystickListener.joystickAction(
+      _joystickController.joystickAction(
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.DOWN,
@@ -202,7 +202,7 @@ class JoystickAction {
     if (pointer == _pointerDragging) {
       _dragging = false;
       _dragPosition = _rectBackgroundDirection.center;
-      _joystickListener.joystickAction(
+      _joystickController.joystickAction(
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.UP,

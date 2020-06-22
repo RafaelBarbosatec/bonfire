@@ -109,6 +109,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     double radAngleDirection,
     int interval = 1000,
     bool withCollision = true,
+    bool collisionOnlyVisibleObjects = true,
     VoidCallback destroy,
     Collision collision,
     VoidCallback execute,
@@ -145,6 +146,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       flyAnimation: animationTop,
       destroyAnimation: animationDestroy,
       lightingConfig: lightingConfig,
+      collisionOnlyVisibleObjects: collisionOnlyVisibleObjects,
     ));
 
     if (execute != null) execute();
