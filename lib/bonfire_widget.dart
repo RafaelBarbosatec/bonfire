@@ -24,6 +24,7 @@ class BonfireWidget extends StatefulWidget {
   final Color constructionModeColor;
   final Color collisionAreaColor;
   final Color lightingColorGame;
+  final double zoom;
 
   const BonfireWidget({
     Key key,
@@ -41,6 +42,7 @@ class BonfireWidget extends StatefulWidget {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
+    this.zoom,
   }) : super(key: key);
 
   @override
@@ -88,6 +90,7 @@ class _BonfireWidgetState extends State<BonfireWidget>
       collisionAreaColor:
           widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
       lightingColorGame: widget.lightingColorGame,
+      zoom: widget.zoom,
     );
     super.initState();
   }
