@@ -19,7 +19,6 @@ class KnightInterface extends GameInterface {
       id: 5,
       position: Position(150, 20),
       onTapComponent: () {
-        print('Test button');
         if (gameRef.player != null) {
           (gameRef.player as Knight).showEmote();
         }
