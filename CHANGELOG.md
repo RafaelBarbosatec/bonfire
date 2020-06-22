@@ -1,5 +1,5 @@
 ## [0.6.4]
-* add Zoom camera.
+* add Zoom camera by [rezendegc](https://github.com/rezendegc).
 * improvements TiledObjects.
 * improvements Joystick.
 

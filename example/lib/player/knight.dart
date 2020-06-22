@@ -198,10 +198,10 @@ class Knight extends SimplePlayer with WithLighting {
           if (showObserveEnemy) return;
           showObserveEnemy = true;
           showEmote();
-         if (!showTalk) {
-           showTalk = true;
-           _showTalk();
-         }
+          if (!showTalk) {
+            showTalk = true;
+            _showTalk();
+          }
         },
       );
     }
