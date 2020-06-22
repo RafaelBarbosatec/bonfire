@@ -58,7 +58,8 @@ To run a game with Bonfire, use the following widget:
       gameController: GameController() // If you want to hear changes to the game to do something.
       constructionModeColor: Colors.blue, // If you wan customize the grid color.
       collisionAreaColor: Colors.blue, // If you wan customize the collision area color.
-      lightingColorGame: Colors.black.withOpacity(0.4), if you want to add general lighting for the game
+      lightingColorGame: Colors.black.withOpacity(0.4), // if you want to add general lighting for the game
+      zoom: 1, // here you can set the default zoom for the camera. You can still zoom directly on the camera
     );
   }
 ```

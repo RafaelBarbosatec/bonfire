@@ -1,3 +1,8 @@
+## [0.6.4]
+* add Zoom camera by [rezendegc](https://github.com/rezendegc).
+* improvements TiledObjects.
+* improvements Joystick.
+
 ## [0.6.3]
 * hotfix Tiled with tile null in TileSet.
 

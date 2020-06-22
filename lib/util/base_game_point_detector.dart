@@ -15,7 +15,7 @@ import 'package:ordered_set/ordered_set.dart';
 abstract class BaseGamePointerDetector extends Game with PointerDetector {
   bool _isPause = false;
   final CustomWidgetBuilder widgetBuilder = CustomWidgetBuilder();
-  final Camera gameCamera = Camera();
+  Camera gameCamera = Camera();
 
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
@@ -115,7 +115,11 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   @override
   void render(Canvas canvas) {
     canvas.save();
+
+    canvas.translate(size.width / 2, size.height / 2);
+    canvas.scale(gameCamera.zoom);
     canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
+
     components.forEach((comp) => renderComponent(canvas, comp));
     canvas.restore();
   }
@@ -135,11 +139,12 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
 
     if (comp.isHud()) {
       canvas.translate(gameCamera.position.x, gameCamera.position.y);
+      canvas.scale(1 / gameCamera.zoom);
+      canvas.translate(-size.width / 2, -size.height / 2);
     }
 
     comp.render(canvas);
     canvas.restore();
-    canvas.save();
   }
 
   /// This implementation of update updates every component in the list.

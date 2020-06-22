@@ -22,23 +22,25 @@ class BonfireTiledWidget extends StatefulWidget {
   final Color lightingColorGame;
   final TiledWorldMap tiledMap;
   final Widget progress;
+  final double zoom;
 
-  const BonfireTiledWidget(
-      {Key key,
-      this.joystick,
-      this.player,
-      this.interface,
-      this.background,
-      this.constructionMode = false,
-      this.showCollisionArea = false,
-      this.showFPS = false,
-      this.gameController,
-      this.constructionModeColor,
-      this.collisionAreaColor,
-      this.lightingColorGame,
-      this.tiledMap,
-      this.progress})
-      : super(key: key);
+  const BonfireTiledWidget({
+    Key key,
+    this.joystick,
+    this.player,
+    this.interface,
+    this.background,
+    this.constructionMode = false,
+    this.showCollisionArea = false,
+    this.showFPS = false,
+    this.gameController,
+    this.constructionModeColor,
+    this.collisionAreaColor,
+    this.lightingColorGame,
+    this.tiledMap,
+    this.progress,
+    this.zoom,
+  }) : super(key: key);
   @override
   _BonfireTiledWidgetState createState() => _BonfireTiledWidgetState();
 }
@@ -99,6 +101,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       collisionAreaColor:
           widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
       lightingColorGame: widget.lightingColorGame,
+      zoom: widget.zoom,
     );
     setState(() {
       _loading = false;
