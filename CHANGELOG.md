@@ -1,3 +1,6 @@
+## [0.6.5]
+* Optimizations when loading maps built with Tiled
+
 ## [0.6.4]
 * add Zoom camera by [rezendegc](https://github.com/rezendegc).
 * improvements TiledObjects.
