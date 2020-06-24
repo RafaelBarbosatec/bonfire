@@ -18,7 +18,7 @@ class GameTiledMap extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         DungeonMap.tileSize =
-            min(constraints.maxHeight, constraints.maxWidth) / 12;
+            max(constraints.maxHeight, constraints.maxWidth) / 20;
         return BonfireTiledWidget(
           joystick: Joystick(
             directional: JoystickDirectional(
