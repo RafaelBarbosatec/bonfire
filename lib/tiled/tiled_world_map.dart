@@ -79,17 +79,19 @@ class TiledWorldMap {
         if (data != null) {
           if (data.animation == null) {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
-              _components.add(GameDecoration.spriteMultiCollision(
-                data.sprite,
-                initPosition: Position(
-                  _getX(count, tileLayer.width.toInt()) * _tileWidth,
-                  _getY(count, tileLayer.width.toInt()) * _tileHeight,
+              _components.add(
+                GameDecoration.spriteMultiCollision(
+                  data.sprite,
+                  initPosition: Position(
+                    _getX(count, tileLayer.width.toInt()) * _tileWidth,
+                    _getY(count, tileLayer.width.toInt()) * _tileHeight,
+                  ),
+                  height: _tileHeight,
+                  width: _tileWidth,
+                  collisions: data.collisions,
+                  frontFromPlayer: true,
                 ),
-                height: _tileHeight,
-                width: _tileWidth,
-                collisions: data.collisions,
-                frontFromPlayer: true,
-              ));
+              );
             } else {
               _tiles.add(
                 Tile.fromSpriteMultiCollision(
@@ -106,16 +108,17 @@ class TiledWorldMap {
             }
           } else {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
-              _components
-                  .add(GameDecoration.animationMultiCollision(data.animation,
-                      initPosition: Position(
-                        _getX(count, tileLayer.width.toInt()) * _tileWidth,
-                        _getY(count, tileLayer.width.toInt()) * _tileHeight,
-                      ),
-                      height: _tileHeight,
-                      width: _tileWidth,
-                      collisions: data.collisions,
-                      frontFromPlayer: true));
+              _components.add(
+                GameDecoration.animationMultiCollision(data.animation,
+                    initPosition: Position(
+                      _getX(count, tileLayer.width.toInt()) * _tileWidth,
+                      _getY(count, tileLayer.width.toInt()) * _tileHeight,
+                    ),
+                    height: _tileHeight,
+                    width: _tileWidth,
+                    collisions: data.collisions,
+                    frontFromPlayer: true),
+              );
             } else {
               _tiles.add(
                 Tile.fromAnimationMultiCollision(
@@ -147,11 +150,13 @@ class TiledWorldMap {
 
   Future<ItemTileSet> getDataTile(int index) async {
     TileSet tileSetContain;
-    _tiledMap.tileSets.forEach((tileSet) {
-      if (tileSet.tileSet != null && index <= tileSet.tileSet.tileCount) {
-        tileSetContain = tileSet.tileSet;
-      }
-    });
+    _tiledMap.tileSets.forEach(
+      (tileSet) {
+        if (tileSet.tileSet != null && index <= tileSet.tileSet.tileCount) {
+          tileSetContain = tileSet.tileSet;
+        }
+      },
+    );
 
     if (tileSetContain != null) {
       final int widthCount =
@@ -168,42 +173,54 @@ class TiledWorldMap {
         tileSetContain.tileHeight,
       );
 
-      FlameAnimation.Animation animation =
-          await getAnimation(tileSetContain, index, widthCount);
+      FlameAnimation.Animation animation = await getAnimation(
+        tileSetContain,
+        index,
+        widthCount,
+      );
 
       DataObjectCollision object = _getCollision(tileSetContain, index);
 
-      return Future.value(ItemTileSet(
-        animation: animation,
-        sprite: sprite,
-        type: object.type,
-        collisions: object.collisions,
-      ));
+      return Future.value(
+        ItemTileSet(
+          animation: animation,
+          sprite: sprite,
+          type: object.type,
+          collisions: object.collisions,
+        ),
+      );
     } else {
       return null;
     }
   }
 
   void _addObjects(ObjectGroup layer) {
-    layer.objects.forEach((element) {
-      if (_objectsBuilder[element.name] != null) {
-        double x = (element.x * _tileWidth) / _tileWidthOrigin;
-        double y = (element.y * _tileHeight) / _tileHeightOrigin;
-        double width = (element.width * _tileWidth) / _tileWidthOrigin;
-        double height = (element.height * _tileHeight) / _tileHeightOrigin;
-        var object = _objectsBuilder[element.name](x, y, width, height);
+    layer.objects.forEach(
+      (element) {
+        if (_objectsBuilder[element.name] != null) {
+          double x = (element.x * _tileWidth) / _tileWidthOrigin;
+          double y = (element.y * _tileHeight) / _tileHeightOrigin;
+          double width = (element.width * _tileWidth) / _tileWidthOrigin;
+          double height = (element.height * _tileHeight) / _tileHeightOrigin;
+          var object = _objectsBuilder[element.name](x, y, width, height);
 
-        if (object is GameDecoration) {
-          _components.add(object..additionalPriority = _countObjects);
-        } else {
-          _components.add(object);
+          if (object is GameDecoration) {
+            _components.add(object..additionalPriority = _countObjects);
+          } else {
+            _components.add(object);
+          }
         }
-      }
-    });
+      },
+    );
   }
 
-  Future<Sprite> getSprite(String image, int row, int column, double tileWidth,
-      double tileHeight) async {
+  Future<Sprite> getSprite(
+    String image,
+    int row,
+    int column,
+    double tileWidth,
+    double tileHeight,
+  ) async {
     Image imageData = _imageCache[image];
     if (imageData == null) {
       _imageCache[image] = await Flame.images.load(image);
@@ -224,11 +241,15 @@ class TiledWorldMap {
   DataObjectCollision _getCollision(TileSet tileSetContain, int index) {
     Iterable<TileSetItem> tileSetItemList =
         tileSetContain?.tiles?.where((element) => element.id == (index - 1));
-    if (tileSetItemList != null && tileSetItemList.isNotEmpty) {
+
+    if ((tileSetItemList?.isNotEmpty ?? false)) {
       List<TileSetObject> tileSetObjectList =
           tileSetItemList.first.objectGroup?.objects ?? [];
+
       String type = tileSetItemList.first?.type ?? '';
+
       List<Collision> collisions = List();
+
       if (tileSetObjectList.isNotEmpty) {
         tileSetObjectList.forEach((object) {
           double width = (object.width * _tileWidth) / _tileWidthOrigin;
@@ -250,12 +271,17 @@ class TiledWorldMap {
   }
 
   Future<FlameAnimation.Animation> getAnimation(
-      TileSet tileSetContain, int index, int widthCount) async {
+    TileSet tileSetContain,
+    int index,
+    int widthCount,
+  ) async {
     try {
       TileSetItem tileSetItemList = tileSetContain.tiles
           .firstWhere((element) => element.id == (index - 1));
+
       List<FrameAnimation> animationFrames = tileSetItemList.animation;
-      if (animationFrames != null || animationFrames.isNotEmpty) {
+
+      if ((animationFrames?.isNotEmpty ?? false)) {
         List<Sprite> spriteList = List();
         double stepTime = animationFrames[0].duration / 1000;
         await Future.forEach(animationFrames, (frame) async {
