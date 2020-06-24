@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/joystick/joystick_controller.dart';
+import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,6 @@ class JoystickDirectional {
   Paint _paintBackground;
   Paint _paintKnob;
 
-  double _backgroundAspectRatio = 2.2;
   Rect _backgroundRect;
   Sprite _backgroundSprite;
 
@@ -63,13 +63,23 @@ class JoystickDirectional {
   void initialize(Size _screenSize, JoystickController joystickController) {
     this._screenSize = _screenSize;
     _joystickController = joystickController;
-    Offset osBackground =
-        Offset(margin.left, _screenSize.height - margin.bottom);
-    _backgroundRect = Rect.fromCircle(center: osBackground, radius: size / 2);
+    Offset osBackground = Offset(
+      margin.left,
+      _screenSize.height - margin.bottom,
+    );
+    _backgroundRect = Rect.fromCircle(
+      center: osBackground,
+      radius: size / 2,
+    );
 
-    Offset osKnob =
-        Offset(_backgroundRect.center.dx, _backgroundRect.center.dy);
-    _knobRect = Rect.fromCircle(center: osKnob, radius: size / 4);
+    Offset osKnob = Offset(
+      _backgroundRect.center.dx,
+      _backgroundRect.center.dy,
+    );
+    _knobRect = Rect.fromCircle(
+      center: osKnob,
+      radius: size / 4,
+    );
 
     _dragPosition = _knobRect.center;
   }
@@ -111,27 +121,28 @@ class JoystickDirectional {
       double degrees = _radAngle * 180 / pi;
 
       // Distance between the center of joystick background & drag position
-      Point p = Point(_backgroundRect.center.dx, _backgroundRect.center.dy);
-      double dist = p.distanceTo(Point(_dragPosition.dx, _dragPosition.dy));
+      Position centerPosition = Position.fromOffset(_backgroundRect.center);
+      Position dragPosition = Position.fromOffset(_dragPosition);
+      double dist = centerPosition.distance(dragPosition);
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the
       // background image, but not outside.
-      dist = dist < (_tileSize * _backgroundAspectRatio / 3)
-          ? dist
-          : (_tileSize * _backgroundAspectRatio / 3);
+      dist = min(dist, _tileSize);
 
       // Calculation the knob position
       double nextX = dist * cos(_radAngle);
       double nextY = dist * sin(_radAngle);
       Offset nextPoint = Offset(nextX, nextY);
 
-      Offset diff = Offset(_backgroundRect.center.dx + nextPoint.dx,
-              _backgroundRect.center.dy + nextPoint.dy) -
+      Offset diff = Offset(
+            _backgroundRect.center.dx + nextPoint.dx,
+            _backgroundRect.center.dy + nextPoint.dy,
+          ) -
           _knobRect.center;
       _knobRect = _knobRect.shift(diff);
 
-      double _intensity = dist / (_tileSize * _backgroundAspectRatio / 3);
+      double _intensity = dist / _tileSize;
 
       if (_intensity == 0) {
         _joystickController.joystickChangeDirectional(JoystickDirectionalEvent(

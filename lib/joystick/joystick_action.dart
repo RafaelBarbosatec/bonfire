@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/joystick/joystick_controller.dart';
+import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -24,7 +25,6 @@ class JoystickAction {
   Rect _rectBackgroundDirection;
   bool _dragging = false;
   Sprite _sprite;
-  double _backgroundAspectRatio = 1;
   double _tileSize;
   Offset _dragPosition;
   Paint _paintBackground;
@@ -45,7 +45,7 @@ class JoystickAction {
   }) {
     _sprite = sprite;
     sizeBackgroundDirection = sizeBackgroundDirection ?? size * 1.5;
-    _tileSize = sizeBackgroundDirection;
+    _tileSize = sizeBackgroundDirection / 2;
   }
 
   void initialize(Size _screenSize, JoystickController joystickController) {
@@ -130,18 +130,15 @@ class JoystickAction {
       );
 
       // Distance between the center of joystick background & drag position
-      Point p = Point(
-        _rectBackgroundDirection.center.dx,
-        _rectBackgroundDirection.center.dy,
-      );
-      double dist = p.distanceTo(Point(_dragPosition.dx, _dragPosition.dy));
+      Position centerPosition =
+          Position.fromOffset(_rectBackgroundDirection.center);
+      Position dragPosition = Position.fromOffset(_dragPosition);
+      double dist = centerPosition.distance(dragPosition);
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the
       // background image, but not outside.
-      dist = dist < (_tileSize * _backgroundAspectRatio / 3)
-          ? dist
-          : (_tileSize * _backgroundAspectRatio / 3);
+      dist = min(dist, _tileSize);
 
       // Calculation the knob position
       double nextX = dist * cos(_radAngle);
@@ -155,7 +152,7 @@ class JoystickAction {
           _rect.center;
       _rect = _rect.shift(diff);
 
-      double _intensity = dist / (_tileSize * _backgroundAspectRatio / 3);
+      double _intensity = dist / _tileSize;
 
       _joystickController.joystickAction(
         JoystickActionEvent(
