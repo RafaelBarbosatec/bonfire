@@ -53,9 +53,6 @@ class TiledWorldMap {
     _tileWidth = forceTileSize ?? _tileWidthOrigin;
     _tileHeight = forceTileSize ?? _tileHeightOrigin;
     await _load(_tiledMap);
-    print(_imageCache.length);
-    print(_spriteCache.length);
-    print(_tiles.length);
     return Future.value(TiledWorldData(
       map: MapWorld(_tiles),
       components: _components,
