@@ -73,12 +73,15 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
 
   @override
   Widget build(BuildContext context) {
-    return _loading
-        ? (widget.progress ??
-            Center(
-              child: CircularProgressIndicator(),
-            ))
-        : _game.widget;
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 600),
+      child: _loading
+          ? (widget.progress ??
+              Center(
+                child: CircularProgressIndicator(),
+              ))
+          : _game.widget,
+    );
   }
 
   void _loadGame() async {
@@ -103,6 +106,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       lightingColorGame: widget.lightingColorGame,
       zoom: widget.zoom,
     );
+    await Future.delayed(Duration(milliseconds: 500));
     setState(() {
       _loading = false;
     });
