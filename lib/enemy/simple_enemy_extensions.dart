@@ -371,13 +371,15 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         if (translateXPositive >= distance) {
           translateX = 0;
         } else if (translateXPositive > translateYPositive) {
-          translateX = translateX * -0.6;
+          translateX = translateX * -0.5;
+          positioned(player);
         }
 
         if (translateYPositive >= distance) {
           translateY = 0;
         } else if (translateXPositive < translateYPositive) {
-          translateY = translateY * -0.6;
+          translateY = translateY * -0.5;
+          positioned(player);
         }
 
         if (translateX == 0 && translateY == 0) {
