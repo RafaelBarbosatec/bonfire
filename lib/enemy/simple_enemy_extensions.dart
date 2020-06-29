@@ -310,8 +310,12 @@ extension SimpleEnemyExtensions on SimpleEnemy {
   }
 
   void seeAndMoveToAttackRange(
-      {Function(Player) positioned, int visionCells = 5}) {
+      {Function(Player) positioned,
+      int visionCells = 5,
+      double distanceCells}) {
     if (!isVisibleInCamera() || isDead) return;
+
+    double distance = this.position.width * (distanceCells ?? visionCells);
 
     seePlayer(
       visionCells: visionCells,
@@ -352,40 +356,58 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           translateY = 0;
         }
 
-        if (translateX == 0 && translateY == 0) {
-          idle();
-          return;
-        }
-
         double translateXPositive =
             this.rectCollision.center.dx - player.rectCollision.center.dx;
         translateXPositive = translateXPositive >= 0
             ? translateXPositive
             : translateXPositive * -1;
+
         double translateYPositive =
             this.rectCollision.center.dy - player.rectCollision.center.dy;
         translateYPositive = translateYPositive >= 0
             ? translateYPositive
             : translateYPositive * -1;
 
-        if (translateXPositive > translateYPositive) {
-          if (translateY > 0) {
-            customMoveBottom(translateY);
-          } else if (translateY < 0) {
-            customMoveTop((translateY * -1));
-          } else {
-            positioned(player);
-            this.idle();
-          }
+        if (translateXPositive >= distance) {
+          translateX = 0;
+        } else if (translateXPositive > translateYPositive) {
+          translateX = translateX * -0.6;
+        }
+
+        if (translateYPositive >= distance) {
+          translateY = 0;
+        } else if (translateXPositive < translateYPositive) {
+          translateY = translateY * -0.6;
+        }
+
+        if (translateX == 0 && translateY == 0) {
+          idle();
+          positioned(player);
+          return;
+        }
+
+        bool idleY = false;
+        bool idleX = false;
+
+        if (translateY > 0) {
+          customMoveBottom(translateY);
+        } else if (translateY < 0) {
+          customMoveTop((translateY * -1));
         } else {
-          if (translateX > 0) {
-            customMoveRight(translateX);
-          } else if (translateX < 0) {
-            customMoveLeft((translateX * -1));
-          } else {
-            positioned(player);
-            this.idle();
-          }
+          idleY = true;
+        }
+
+        if (translateX > 0) {
+          customMoveRight(translateX);
+        } else if (translateX < 0) {
+          customMoveLeft((translateX * -1));
+        } else {
+          idleX = true;
+        }
+
+        if (idleX && idleY) {
+          positioned(player);
+          this.idle();
         }
       },
       notObserved: () {
