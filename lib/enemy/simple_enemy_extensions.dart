@@ -372,14 +372,14 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         if (translateXPositive >= distance) {
           translateX = 0;
         } else if (translateXPositive > translateYPositive) {
-          translateX = translateX;
+          translateX = translateX * -1;
           positioned(player);
         }
 
         if (translateYPositive >= distance) {
           translateY = 0;
         } else if (translateXPositive < translateYPositive) {
-          translateY = translateY;
+          translateY = translateY * -1;
           positioned(player);
         }
 
