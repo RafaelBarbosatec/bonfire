@@ -48,6 +48,42 @@ extension RotationEnemyExtensions on RotationEnemy {
     );
   }
 
+  void seeAndMoveToAttackRange(
+      {Function(Player) positioned,
+      int visionCells = 3,
+      double minDistanceCellsFromPlayer}) {
+    if (isDead || this.position == null) return;
+    seePlayer(
+      visionCells: visionCells,
+      observed: (player) {
+        if (positioned != null) positioned(player);
+
+        double distance =
+            this.position.width * (minDistanceCellsFromPlayer ?? visionCells);
+        double _radAngle = getAngleFomPlayer();
+
+        Position myPosition = Position.fromOffset(this.position.center);
+        Position playerPosition =
+            Position.fromOffset(player.rectCollision.center);
+        double dist = myPosition.distance(playerPosition);
+
+        if (dist >= distance) {
+          this.moveFromAngleDodgeObstacles(0, _radAngle);
+          this.idle();
+          return;
+        }
+
+        this.moveFromAngleDodgeObstacles(speed, getInverseAngleFomPlayer(),
+            notMove: () {
+          this.idle();
+        });
+      },
+      notObserved: () {
+        this.idle();
+      },
+    );
+  }
+
   void simpleAttackMelee({
     @required FlameAnimation.Animation attackEffectTopAnim,
     @required double damage,

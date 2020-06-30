@@ -312,10 +312,11 @@ extension SimpleEnemyExtensions on SimpleEnemy {
   void seeAndMoveToAttackRange(
       {Function(Player) positioned,
       int visionCells = 5,
-      double distanceCells}) {
-    if (!isVisibleInCamera() || isDead) return;
+      double minDistanceCellsFromPlayer}) {
+    if (isDead || this.position == null) return;
 
-    double distance = this.position.width * (distanceCells ?? visionCells);
+    double distance =
+        this.position.width * (minDistanceCellsFromPlayer ?? visionCells);
 
     seePlayer(
       visionCells: visionCells,
@@ -371,14 +372,14 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         if (translateXPositive >= distance) {
           translateX = 0;
         } else if (translateXPositive > translateYPositive) {
-          translateX = translateX * -0.5;
+          translateX = translateX;
           positioned(player);
         }
 
         if (translateYPositive >= distance) {
           translateY = 0;
         } else if (translateXPositive < translateYPositive) {
-          translateY = translateY * -0.5;
+          translateY = translateY;
           positioned(player);
         }
 

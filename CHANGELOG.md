@@ -1,3 +1,7 @@
+## [0.6.6]
+* Add zoom in moveToPlayerAnimated and moveToPositionAnimated.
+* improvements in seeAndMoveToAttackRange.
+
 ## [0.6.5]
 * Optimizations when loading maps built with Tiled
 

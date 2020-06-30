@@ -31,8 +31,8 @@ class GoblinRotation extends RotationEnemy {
 
   @override
   void update(double dt) {
-    this.seeAndMoveToPlayer(
-        closePlayer: (player) {
+    this.seeAndMoveToAttackRange(
+        positioned: (player) {
           this.simpleAttackRange(
               animationTop: FlameAnimation.Animation.sequenced(
                 'player/fireball_top.png',
@@ -52,8 +52,8 @@ class GoblinRotation extends RotationEnemy {
               speed: speed * 1.5,
               collision: Collision(height: 15, width: 15));
         },
-        visionCells: 5,
-        margin: 64);
+        visionCells: 4,
+        minDistanceCellsFromPlayer: 3);
     super.update(dt);
   }
 
