@@ -88,7 +88,6 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
     final tiled = await widget.tiledMap.build();
     _game = RPGGame(
       context: context,
-      vsync: this,
       joystickController: widget.joystick,
       player: widget.player,
       interface: widget.interface,

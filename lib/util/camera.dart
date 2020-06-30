@@ -63,26 +63,33 @@ class Camera with HasGameRef<RPGGame> {
 
   void moveToPositionAnimated(
     Position position, {
+    double zoom = 1,
     VoidCallback finish,
     Duration duration,
     Curve curve = Curves.decelerate,
   }) {
     if (gameRef?.size == null) return;
     if (gameRef?.player != null) gameRef.player.focusCamera = false;
+    if (zoom <= 0.0) return;
 
     double diffX = this.position.x - (position.x);
     double diffY = this.position.y - (position.y);
     double originX = this.position.x;
     double originY = this.position.y;
 
-    gameRef.getValueGenerator(duration ?? Duration(seconds: 1))
-      ..addListenerValue((value) {
+    double diffZoom = this.zoom - (zoom);
+    double initialZoom = this.zoom;
+
+    gameRef.getValueGenerator(
+      duration ?? Duration(seconds: 1),
+      onChange: (value) {
         this.position.x = originX - (diffX * value);
         this.position.y = originY - (diffY * value);
-      })
-      ..addListenerFinish(finish)
-      ..addCurve(curve)
-      ..start();
+        this.zoom = initialZoom - (diffZoom * value);
+      },
+      onFinish: finish,
+      curve: curve,
+    )..start();
   }
 
   void moveToPosition(Position position) {
@@ -92,11 +99,13 @@ class Camera with HasGameRef<RPGGame> {
     this.position = position;
   }
 
-  void moveToPlayerAnimated({Duration duration, VoidCallback finish}) {
+  void moveToPlayerAnimated(
+      {Duration duration, VoidCallback finish, double zoom = 1}) {
     if (gameRef.player == null) return;
     final _positionPlayer = gameRef.player.position;
     moveToPositionAnimated(
       Position(_positionPlayer.center.dx, _positionPlayer.center.dy),
+      zoom: zoom,
       finish: () {
         gameRef.player.focusCamera = true;
         if (finish != null) finish();
@@ -140,13 +149,14 @@ class Camera with HasGameRef<RPGGame> {
     double diffZoom = this.zoom - (zoom);
     double initialZoom = this.zoom;
 
-    gameRef.getValueGenerator(duration ?? Duration(seconds: 1))
-      ..addListenerValue((value) {
+    gameRef.getValueGenerator(
+      duration ?? Duration(seconds: 1),
+      onChange: (value) {
         this.zoom = initialZoom - (diffZoom * value);
-      })
-      ..addListenerFinish(finish)
-      ..addCurve(curve)
-      ..start();
+      },
+      onFinish: finish,
+      curve: curve,
+    )..start();
   }
 
   bool isComponentOnCamera(GameComponent c) {

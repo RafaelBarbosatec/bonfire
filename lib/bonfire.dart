@@ -45,7 +45,7 @@ export 'package:bonfire/util/objects/sprite_object.dart';
 export 'package:bonfire/util/talk/say.dart';
 export 'package:bonfire/util/talk/talk_dialog.dart';
 export 'package:bonfire/util/text_damage.dart';
-export 'package:bonfire/util/value_generator.dart';
+export 'package:bonfire/util/value_generator_component.dart';
 export 'package:flame/animation.dart';
 export 'package:flame/components/text_component.dart';
 export 'package:flame/flame.dart';
