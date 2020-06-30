@@ -1,3 +1,6 @@
+## [0.6.7]
+* hotfix seeAndMoveToAttackRange.
+
 ## [0.6.6]
 * Add zoom in moveToPlayerAnimated and moveToPositionAnimated.
 * improvements in seeAndMoveToAttackRange.

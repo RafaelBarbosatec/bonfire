@@ -313,7 +313,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       {Function(Player) positioned,
       int visionCells = 5,
       double minDistanceCellsFromPlayer}) {
-    if (isDead || this.position == null) return;
+    if (!isVisibleInCamera() || isDead || this.position == null) return;
 
     double distance =
         this.position.width * (minDistanceCellsFromPlayer ?? visionCells);
