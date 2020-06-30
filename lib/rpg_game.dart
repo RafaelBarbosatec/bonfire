@@ -13,7 +13,7 @@ import 'package:bonfire/util/lighting/lighting.dart';
 import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/lighting/with_lighting.dart';
 import 'package:bonfire/util/map_explorer.dart';
-import 'package:bonfire/util/value_generator.dart';
+import 'package:bonfire/util/value_generator_component.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/keyboard.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,7 +22,6 @@ import 'package:flutter/services.dart';
 
 class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   final BuildContext context;
-  final TickerProvider vsync;
   final Player player;
   final GameInterface interface;
   final MapGame map;
@@ -46,7 +45,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
   RPGGame({
     @required this.context,
-    @required this.vsync,
     @required this.map,
     @required this.joystickController,
     this.player,
@@ -109,17 +107,24 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
   Iterable<LightingConfig> lightVisible() => _visibleLights;
 
-  ValueGenerator getValueGenerator(
+  ValueGeneratorComponent getValueGenerator(
     Duration duration, {
     double begin = 0.0,
     double end = 1.0,
+    Curve curve = Curves.decelerate,
+    VoidCallback onFinish,
+    ValueChanged<double> onChange,
   }) {
-    return ValueGenerator(
-      vsync,
+    final valueGenerator = ValueGeneratorComponent(
       duration,
       end: end,
       begin: begin,
+      curve: curve,
+      onFinish: onFinish,
+      onChange: onChange,
     );
+    add(valueGenerator);
+    return valueGenerator;
   }
 
   @override

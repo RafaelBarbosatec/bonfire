@@ -143,4 +143,13 @@ extension EnemyExtensions on Enemy {
       player.rectCollision.center.dx - this.position.center.dx,
     );
   }
+
+  double getInverseAngleFomPlayer() {
+    Player player = this.gameRef.player;
+    if (player == null) return 0.0;
+    return atan2(
+      this.position.center.dy - player.rectCollision.center.dy,
+      this.position.center.dx - player.rectCollision.center.dx,
+    );
+  }
 }
