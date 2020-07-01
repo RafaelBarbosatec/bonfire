@@ -18,7 +18,9 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     int visionCells = 3,
     double margin = 10,
   }) {
-    if (isDead || this.position == null) return;
+    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
+        isDead ||
+        this.position == null) return;
     seePlayer(
       visionCells: visionCells,
       observed: (player) {
@@ -313,7 +315,9 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       {Function(Player) positioned,
       int visionCells = 5,
       double minDistanceCellsFromPlayer}) {
-    if (!isVisibleInCamera() || isDead || this.position == null) return;
+    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
+        isDead ||
+        this.position == null) return;
 
     double distance =
         this.position.width * (minDistanceCellsFromPlayer ?? visionCells);
