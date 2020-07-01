@@ -297,6 +297,8 @@ void moveRight({double moveSpeed})
     
 ```
 
+OBS: Enemies only move if visible on the camera. if you want to disable this add `false` in `collisionOnlyVisibleScreen`.
+
 ### Player
 Represents the character controlled by the user in the game. Instances of this class has actions and movements ready to be used and configured.
 

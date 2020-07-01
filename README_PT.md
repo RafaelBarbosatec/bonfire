@@ -286,6 +286,8 @@ void moveRight({double moveSpeed})
     
 ```
 
+OBS: Inimigos somente realizam movimentos se visiveis na camera. caso deseje desabilitar isso adicione `false` in `collisionOnlyVisibleScreen`.
+
 ### Player
 Representa o seu personagem. Nele também existem ações e movimentos prontos para serem utilizados.
 
