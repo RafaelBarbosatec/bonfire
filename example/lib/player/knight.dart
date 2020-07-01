@@ -188,19 +188,18 @@ class Knight extends SimplePlayer with WithLighting {
     if (this.isDead || gameRef?.size == null) return;
     _verifyStamina(dt);
 
-    if (_timerSeeEnemy.update(dt)) {
+    if (_timerSeeEnemy.update(dt) && !showObserveEnemy) {
       this.seeEnemy(
         visionCells: 8,
         notObserved: () {
           showObserveEnemy = false;
         },
         observed: (enemies) {
-          if (showObserveEnemy) return;
           showObserveEnemy = true;
           showEmote();
           if (!showTalk) {
             showTalk = true;
-            _showTalk();
+            _showTalk(enemies.first);
           }
         },
       );
@@ -263,10 +262,11 @@ class Knight extends SimplePlayer with WithLighting {
     );
   }
 
-  void _showTalk() {
-    TalkDialog.show(
-      gameRef.context,
-      [
+  void _showTalk(Enemy first) {
+    gameRef.gameCamera.moveToPositionAnimated(
+        Position(first.position.center.dx, first.position.center.dy),
+        zoom: 2, finish: () {
+      TalkDialog.show(gameRef.context, [
         Say(
           "Look at this! It seems that I'm not alone here ...",
           Flame.util.animationAsWidget(
@@ -274,7 +274,9 @@ class Knight extends SimplePlayer with WithLighting {
             animation,
           ),
         ),
-      ],
-    );
+      ], finish: () {
+        gameRef.gameCamera.moveToPlayerAnimated();
+      });
+    });
   }
 }
