@@ -52,7 +52,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       {Function(Player) positioned,
       int visionCells = 3,
       double minDistanceCellsFromPlayer}) {
-    if (isDead || this.position == null) return;
+    if (!isVisibleInCamera() || isDead || this.position == null) return;
     seePlayer(
       visionCells: visionCells,
       observed: (player) {
