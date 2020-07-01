@@ -11,7 +11,6 @@ class InterfaceComponent extends GameComponent with TapGesture {
   final VoidCallback onTapComponent;
   final double width;
   final double height;
-  int _pointer;
   Sprite spriteToRender;
 
   @override
