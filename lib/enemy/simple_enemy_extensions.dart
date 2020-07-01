@@ -373,14 +373,16 @@ extension SimpleEnemyExtensions on SimpleEnemy {
             ? translateYPositive
             : translateYPositive * -1;
 
-        if (translateXPositive >= distance) {
+        if (translateXPositive >= distance &&
+            translateXPositive > translateYPositive) {
           translateX = 0;
         } else if (translateXPositive > translateYPositive) {
           translateX = translateX * -1;
           positioned(player);
         }
 
-        if (translateYPositive >= distance) {
+        if (translateYPositive >= distance &&
+            translateXPositive < translateYPositive) {
           translateY = 0;
         } else if (translateXPositive < translateYPositive) {
           translateY = translateY * -1;

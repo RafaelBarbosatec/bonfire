@@ -68,7 +68,7 @@ class Goblin extends SimpleEnemy {
 
     if (!_seePlayerClose) {
       this.seeAndMoveToAttackRange(
-        minDistanceCellsFromPlayer: 6,
+        minDistanceCellsFromPlayer: 5,
         positioned: (p) {
           execAttackRange();
         },
