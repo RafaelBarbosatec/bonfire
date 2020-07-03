@@ -51,6 +51,7 @@ abstract class JoystickListener {
 abstract class JoystickController extends Component
     with HasGameRef<BaseGamePointerDetector>, PointerDetector {
   List<JoystickListener> _observers = List();
+  bool keyboardEnable = false;
 
   void onKeyboard(RawKeyEvent event) {}
 

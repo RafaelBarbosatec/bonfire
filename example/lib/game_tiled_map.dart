@@ -21,6 +21,7 @@ class GameTiledMap extends StatelessWidget {
             max(constraints.maxHeight, constraints.maxWidth) / 25;
         return BonfireTiledWidget(
           joystick: Joystick(
+            keyboardEnable: true,
             directional: JoystickDirectional(
               spriteBackgroundDirectional: Sprite('joystick_background.png'),
               spriteKnobDirectional: Sprite('joystick_knob.png'),

@@ -77,7 +77,7 @@ class Knight extends SimplePlayer with WithLighting {
   void joystickAction(JoystickActionEvent event) {
     if (isDead) return;
 
-    if (gameRef.joystickController is JoystickKeyBoard) {
+    if (gameRef.joystickController.keyboardEnable) {
       if (event.id == LogicalKeyboardKey.space.keyId) {
         actionAttack();
       }

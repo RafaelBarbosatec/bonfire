@@ -13,7 +13,6 @@ export 'package:bonfire/joystick/joystick.dart';
 export 'package:bonfire/joystick/joystick_action.dart';
 export 'package:bonfire/joystick/joystick_controller.dart';
 export 'package:bonfire/joystick/joystick_directional.dart';
-export 'package:bonfire/joystick/joystick_keyboard.dart';
 export 'package:bonfire/map/map_game.dart';
 export 'package:bonfire/map/map_world.dart';
 export 'package:bonfire/map/tile.dart';
