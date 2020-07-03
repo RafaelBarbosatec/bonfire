@@ -10,6 +10,9 @@ import 'package:flutter/widgets.dart';
 
 class GameInterface extends GameComponent with TapGesture {
   List<InterfaceComponent> _components = List();
+  final textConfigGreen = TextConfig(color: Colors.green, fontSize: 14);
+  final textConfigYellow = TextConfig(color: Colors.yellow, fontSize: 14);
+  final textConfigRed = TextConfig(color: Colors.red, fontSize: 14);
 
   @override
   bool isHud() => true;
@@ -56,7 +59,7 @@ class GameInterface extends GameComponent with TapGesture {
   void _drawFPS(Canvas c) {
     if (gameRef?.showFPS == true && gameRef?.size != null) {
       double fps = gameRef.fps(100);
-      TextConfig(color: getColorFps(fps), fontSize: 14).render(
+      getTextConfigFps(fps).render(
         c,
         'FPS: ${fps.toStringAsFixed(2)}',
         Position(gameRef.size.width - 100, 20),
@@ -64,17 +67,15 @@ class GameInterface extends GameComponent with TapGesture {
     }
   }
 
-  Color getColorFps(double fps) {
-    Color color = Colors.red;
-
-    if (fps >= 50) {
-      color = Colors.orange;
-    }
-
+  TextConfig getTextConfigFps(double fps) {
     if (fps >= 58) {
-      color = Colors.green;
+      return textConfigGreen;
     }
 
-    return color;
+    if (fps >= 48) {
+      return textConfigYellow;
+    }
+
+    return textConfigRed;
   }
 }

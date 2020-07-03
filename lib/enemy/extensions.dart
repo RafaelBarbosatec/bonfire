@@ -24,14 +24,13 @@ extension EnemyExtensions on Enemy {
       return;
     }
 
-    double visionWidth = this.position.width * visionCells * 2;
-    double visionHeight = this.position.height * visionCells * 2;
+    double vision = this.position.width * visionCells * 2;
 
     Rect fieldOfVision = Rect.fromLTWH(
-      this.position.left - (visionWidth / 2),
-      this.position.top - (visionHeight / 2),
-      visionWidth,
-      visionHeight,
+      this.position.left - (vision / 2),
+      this.position.top - (vision / 2),
+      vision,
+      vision,
     );
 
     if (fieldOfVision.overlaps(player.rectCollision)) {
@@ -67,10 +66,7 @@ extension EnemyExtensions on Enemy {
 
   void showDamage(
     double damage, {
-    TextConfig config = const TextConfig(
-      fontSize: 14,
-      color: Colors.white,
-    ),
+    TextConfig config,
     double initVelocityTop = -5,
     double gravity = 0.5,
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
@@ -83,7 +79,11 @@ extension EnemyExtensions on Enemy {
           position.center.dx,
           position.top,
         ),
-        config: config,
+        config: config ??
+            TextConfig(
+              fontSize: 14,
+              color: Colors.white,
+            ),
         initVelocityTop: initVelocityTop,
         gravity: gravity,
         direction: direction,

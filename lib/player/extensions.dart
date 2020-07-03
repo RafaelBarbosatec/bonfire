@@ -14,10 +14,7 @@ import 'package:flutter/widgets.dart';
 extension PlayerExtensions on Player {
   void showDamage(
     double damage, {
-    TextConfig config = const TextConfig(
-      fontSize: 14,
-      color: Colors.red,
-    ),
+    TextConfig config,
     double initVelocityTop = -5,
     double gravity = 0.5,
     bool onlyUp = false,
@@ -30,7 +27,11 @@ extension PlayerExtensions on Player {
           position.center.dx,
           position.top,
         ),
-        config: config,
+        config: config ??
+            TextConfig(
+              fontSize: 14,
+              color: Colors.red,
+            ),
         initVelocityTop: initVelocityTop,
         gravity: gravity,
         direction: direction,

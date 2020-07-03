@@ -15,6 +15,7 @@ Build RPG games and similar with the power of [FlameEngine](https://flame-engine
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/video.gif)
 
 [Download Demo](https://github.com/RafaelBarbosatec/bonfire/raw/master/demo/demo.apk)
+[Download Web](http://rafaelbarbosatec.github.io/bonfire/)
 
 Find the complete code of this example [here](https://github.com/RafaelBarbosatec/bonfire/tree/master/example).
 
@@ -35,6 +36,8 @@ Bonfire is ideal for building games from the following perspectives:
    - [Lighting](#lighting-experimental)
 3. [Tiled support](#tiled-support)
 4. [Next steps](#next-steps)
+
+OBS: To use package remove `flutter_test` of the `dev_dependencies` and add `test: any`.
 
 ## How it works?
 
@@ -296,6 +299,8 @@ void moveRight({double moveSpeed})
     )
     
 ```
+
+OBS: Enemies only move if visible on the camera. if you want to disable this add `false` in `collisionOnlyVisibleScreen`.
 
 ### Player
 Represents the character controlled by the user in the game. Instances of this class has actions and movements ready to be used and configured.

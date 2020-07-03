@@ -1,3 +1,9 @@
+## [0.6.8]
+* improvements show FPS
+* update example
+* update extensions enemy.
+* update Flame.
+
 ## [0.6.7]
 * hotfix seeAndMoveToAttackRange.
 

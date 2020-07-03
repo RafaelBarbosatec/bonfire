@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 class TextInterfaceComponent extends InterfaceComponent {
   String text;
-  final TextConfig textConfig;
+  TextConfig textConfig;
   TextInterfaceComponent({
     @required int id,
     @required Position position,
@@ -16,14 +16,16 @@ class TextInterfaceComponent extends InterfaceComponent {
     double width = 0,
     double height = 0,
     VoidCallback onTapComponent,
-    this.textConfig = const TextConfig(),
+    TextConfig textConfig,
   }) : super(
           id: id,
           position: position,
           width: width,
           height: height,
           onTapComponent: onTapComponent,
-        );
+        ) {
+    this.textConfig = textConfig ?? TextConfig();
+  }
 
   @override
   void render(Canvas canvas) {

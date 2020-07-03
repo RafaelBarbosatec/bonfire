@@ -18,7 +18,9 @@ extension RotationEnemyExtensions on RotationEnemy {
     int visionCells = 3,
     double margin = 10,
   }) {
-    if (isDead || this.position == null) return;
+    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
+        isDead ||
+        this.position == null) return;
     seePlayer(
       visionCells: visionCells,
       observed: (player) {
@@ -52,7 +54,9 @@ extension RotationEnemyExtensions on RotationEnemy {
       {Function(Player) positioned,
       int visionCells = 3,
       double minDistanceCellsFromPlayer}) {
-    if (!isVisibleInCamera() || isDead || this.position == null) return;
+    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
+        isDead ||
+        this.position == null) return;
     seePlayer(
       visionCells: visionCells,
       observed: (player) {

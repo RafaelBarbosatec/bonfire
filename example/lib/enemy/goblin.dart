@@ -55,24 +55,25 @@ class Goblin extends SimpleEnemy {
 
     _seePlayerClose = false;
     this.seePlayer(
-        observed: (player) {
-          _seePlayerClose = true;
-          this.seeAndMoveToPlayer(
-            closePlayer: (player) {
-              execAttack();
-            },
-            visionCells: 3,
-          );
-        },
-        visionCells: 3);
+      observed: (player) {
+        _seePlayerClose = true;
+        this.seeAndMoveToPlayer(
+          closePlayer: (player) {
+            execAttack();
+          },
+          visionCells: 2,
+        );
+      },
+      visionCells: 2,
+    );
 
     if (!_seePlayerClose) {
       this.seeAndMoveToAttackRange(
-        minDistanceCellsFromPlayer: 6,
+        minDistanceCellsFromPlayer: 4,
         positioned: (p) {
           execAttackRange();
         },
-        visionCells: 8,
+        visionCells: 5,
       );
     }
   }
@@ -148,8 +149,8 @@ class Goblin extends SimpleEnemy {
       ),
       lightingConfig: LightingConfig(
         gameComponent: this,
-        radius: 25,
-        blurBorder: 20,
+        radius: width,
+        blurBorder: width * 0.5,
       ),
     );
   }
@@ -190,7 +191,11 @@ class Goblin extends SimpleEnemy {
 
   @override
   void receiveDamage(double damage, int from) {
-    this.showDamage(damage);
+    this.showDamage(damage,
+        config: TextConfig(
+          fontSize: width / 3,
+          color: Colors.white,
+        ));
     super.receiveDamage(damage, from);
   }
 }

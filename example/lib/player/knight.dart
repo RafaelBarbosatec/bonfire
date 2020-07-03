@@ -5,6 +5,7 @@ import 'package:example/map/dungeon_map.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Knight extends SimplePlayer with WithLighting {
   final Position initPosition;
@@ -75,6 +76,12 @@ class Knight extends SimplePlayer with WithLighting {
   @override
   void joystickAction(JoystickActionEvent event) {
     if (isDead) return;
+
+    if (gameRef.joystickController.keyboardEnable) {
+      if (event.id == LogicalKeyboardKey.space.keyId) {
+        actionAttack();
+      }
+    }
 
     if (event.id == 0 && event.event == ActionEvent.DOWN) {
       actionAttack();
@@ -177,8 +184,8 @@ class Knight extends SimplePlayer with WithLighting {
       ),
       lightingConfig: LightingConfig(
         gameComponent: this,
-        radius: 25,
-        blurBorder: 15,
+        radius: width * 0.8,
+        blurBorder: width * 0.4,
       ),
     );
   }
@@ -188,19 +195,18 @@ class Knight extends SimplePlayer with WithLighting {
     if (this.isDead || gameRef?.size == null) return;
     _verifyStamina(dt);
 
-    if (_timerSeeEnemy.update(dt)) {
+    if (_timerSeeEnemy.update(dt) && !showObserveEnemy) {
       this.seeEnemy(
-        visionCells: 8,
+        visionCells: 5,
         notObserved: () {
           showObserveEnemy = false;
         },
         observed: (enemies) {
-          if (showObserveEnemy) return;
           showObserveEnemy = true;
           showEmote();
           if (!showTalk) {
             showTalk = true;
-            _showTalk();
+            _showTalk(enemies.first);
           }
         },
       );
@@ -242,7 +248,11 @@ class Knight extends SimplePlayer with WithLighting {
 
   @override
   void receiveDamage(double damage, int from) {
-    this.showDamage(damage);
+    this.showDamage(damage,
+        config: TextConfig(
+          fontSize: width / 3,
+          color: Colors.red,
+        ));
     super.receiveDamage(damage, from);
   }
 
@@ -263,10 +273,11 @@ class Knight extends SimplePlayer with WithLighting {
     );
   }
 
-  void _showTalk() {
-    TalkDialog.show(
-      gameRef.context,
-      [
+  void _showTalk(Enemy first) {
+    gameRef.gameCamera.moveToPositionAnimated(
+        Position(first.position.center.dx, first.position.center.dy),
+        zoom: 2, finish: () {
+      TalkDialog.show(gameRef.context, [
         Say(
           "Look at this! It seems that I'm not alone here ...",
           Flame.util.animationAsWidget(
@@ -274,7 +285,9 @@ class Knight extends SimplePlayer with WithLighting {
             animation,
           ),
         ),
-      ],
-    );
+      ], finish: () {
+        gameRef.gameCamera.moveToPlayerAnimated();
+      });
+    });
   }
 }

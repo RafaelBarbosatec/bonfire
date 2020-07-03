@@ -2,15 +2,20 @@ import 'package:bonfire/joystick/joystick_action.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/joystick/joystick_directional.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class Joystick extends JoystickController {
   final List<JoystickAction> actions;
   final JoystickDirectional directional;
+  final bool keyboardEnable;
+  bool _isDirectionalDownKeyboard = false;
+  LogicalKeyboardKey _currentDirectionalKey;
 
   Joystick({
     this.actions,
     this.directional,
+    this.keyboardEnable = false,
   });
 
   void initialize(Size size) async {
@@ -74,5 +79,63 @@ class Joystick extends JoystickController {
     if (actions != null)
       actions.forEach((action) => action.actionUp(event.pointer));
     if (directional != null) directional.directionalUp(event.pointer);
+  }
+
+  @override
+  void onKeyboard(RawKeyEvent event) {
+    if (!keyboardEnable) return;
+    if (event is RawKeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+        _isDirectionalDownKeyboard = true;
+        _currentDirectionalKey = event.logicalKey;
+        joystickChangeDirectional(JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_DOWN,
+          intensity: 1.0,
+          radAngle: 0.0,
+        ));
+      }
+      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+        _isDirectionalDownKeyboard = true;
+        _currentDirectionalKey = event.logicalKey;
+        joystickChangeDirectional(JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_UP,
+          intensity: 1.0,
+          radAngle: 0.0,
+        ));
+      }
+      if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        _isDirectionalDownKeyboard = true;
+        _currentDirectionalKey = event.logicalKey;
+        joystickChangeDirectional(JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_LEFT,
+          intensity: 1.0,
+          radAngle: 0.0,
+        ));
+      }
+      if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        _isDirectionalDownKeyboard = true;
+        _currentDirectionalKey = event.logicalKey;
+        joystickChangeDirectional(JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_RIGHT,
+          intensity: 1.0,
+          radAngle: 0.0,
+        ));
+      }
+
+      if (!_isDirectionalDownKeyboard) {
+        joystickAction(JoystickActionEvent(
+          id: event.logicalKey.keyId,
+        ));
+      }
+    } else if (event is RawKeyUpEvent &&
+        _isDirectionalDownKeyboard &&
+        _currentDirectionalKey == event.logicalKey) {
+      _isDirectionalDownKeyboard = false;
+      joystickChangeDirectional(JoystickDirectionalEvent(
+        directional: JoystickMoveDirectional.IDLE,
+        intensity: 0.0,
+        radAngle: 0.0,
+      ));
+    }
   }
 }

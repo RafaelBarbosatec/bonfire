@@ -24,7 +24,7 @@ class Chest extends GameDecoration with TapGesture {
         ) {
     _textConfig = TextConfig(
       color: Colors.white,
-      fontSize: 10,
+      fontSize: width / 2,
     );
   }
 
@@ -51,8 +51,9 @@ class Chest extends GameDecoration with TapGesture {
     if (_observedPlayer) {
       _textConfig.render(
         canvas,
-        'Touch me !!!',
-        Position(position.left - 12, position.center.dy - (height + 5)),
+        'Touch me !!',
+        Position(
+            position.left - width / 1.5, position.center.dy - (height + 5)),
       );
     }
   }
