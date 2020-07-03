@@ -68,11 +68,11 @@ class Goblin extends SimpleEnemy {
 
     if (!_seePlayerClose) {
       this.seeAndMoveToAttackRange(
-        minDistanceCellsFromPlayer: 5,
+        minDistanceCellsFromPlayer: 4,
         positioned: (p) {
           execAttackRange();
         },
-        visionCells: 8,
+        visionCells: 5,
       );
     }
   }
@@ -148,8 +148,8 @@ class Goblin extends SimpleEnemy {
       ),
       lightingConfig: LightingConfig(
         gameComponent: this,
-        radius: 25,
-        blurBorder: 20,
+        radius: width,
+        blurBorder: width * 0.5,
       ),
     );
   }
@@ -190,7 +190,11 @@ class Goblin extends SimpleEnemy {
 
   @override
   void receiveDamage(double damage, int from) {
-    this.showDamage(damage);
+    this.showDamage(damage,
+        config: TextConfig(
+          fontSize: width / 3,
+          color: Colors.white,
+        ));
     super.receiveDamage(damage, from);
   }
 }

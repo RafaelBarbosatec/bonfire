@@ -5,6 +5,7 @@ import 'package:example/map/dungeon_map.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Knight extends SimplePlayer with WithLighting {
   final Position initPosition;
@@ -75,6 +76,12 @@ class Knight extends SimplePlayer with WithLighting {
   @override
   void joystickAction(JoystickActionEvent event) {
     if (isDead) return;
+
+    if (gameRef.joystickController is JoystickKeyBoard) {
+      if (event.id == LogicalKeyboardKey.space.keyId) {
+        actionAttack();
+      }
+    }
 
     if (event.id == 0 && event.event == ActionEvent.DOWN) {
       actionAttack();
@@ -177,8 +184,8 @@ class Knight extends SimplePlayer with WithLighting {
       ),
       lightingConfig: LightingConfig(
         gameComponent: this,
-        radius: 25,
-        blurBorder: 15,
+        radius: width * 0.8,
+        blurBorder: width * 0.4,
       ),
     );
   }
@@ -190,7 +197,7 @@ class Knight extends SimplePlayer with WithLighting {
 
     if (_timerSeeEnemy.update(dt) && !showObserveEnemy) {
       this.seeEnemy(
-        visionCells: 8,
+        visionCells: 5,
         notObserved: () {
           showObserveEnemy = false;
         },
@@ -241,7 +248,11 @@ class Knight extends SimplePlayer with WithLighting {
 
   @override
   void receiveDamage(double damage, int from) {
-    this.showDamage(damage);
+    this.showDamage(damage,
+        config: TextConfig(
+          fontSize: width / 3,
+          color: Colors.red,
+        ));
     super.receiveDamage(damage, from);
   }
 

@@ -17,7 +17,7 @@ class GameManualMap extends StatelessWidget implements GameListener {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       DungeonMap.tileSize =
-          max(constraints.maxHeight, constraints.maxWidth) / 20;
+          max(constraints.maxHeight, constraints.maxWidth) / 25;
       return BonfireWidget(
         joystick: Joystick(
           directional: JoystickDirectional(
