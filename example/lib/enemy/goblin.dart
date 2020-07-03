@@ -55,16 +55,17 @@ class Goblin extends SimpleEnemy {
 
     _seePlayerClose = false;
     this.seePlayer(
-        observed: (player) {
-          _seePlayerClose = true;
-          this.seeAndMoveToPlayer(
-            closePlayer: (player) {
-              execAttack();
-            },
-            visionCells: 3,
-          );
-        },
-        visionCells: 3);
+      observed: (player) {
+        _seePlayerClose = true;
+        this.seeAndMoveToPlayer(
+          closePlayer: (player) {
+            execAttack();
+          },
+          visionCells: 2,
+        );
+      },
+      visionCells: 2,
+    );
 
     if (!_seePlayerClose) {
       this.seeAndMoveToAttackRange(
