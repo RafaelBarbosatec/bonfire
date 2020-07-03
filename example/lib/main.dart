@@ -64,6 +64,15 @@ class Menu extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: Container(
+        height: 40,
+        child: Center(
+          child: Text(
+            'Keyboard: directional and Space Bar to attack',
+            style: TextStyle(fontSize: 18),
+          ),
+        ),
+      ),
     );
   }
 }
