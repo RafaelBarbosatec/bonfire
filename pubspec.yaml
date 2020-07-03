@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flame: ^0.22.0
+  flame: ^0.24.0
   tiledjsonreader: ^0.0.5
 
 dev_dependencies:

@@ -36,6 +36,8 @@ Bonfire is ideal for building games from the following perspectives:
 3. [Tiled support](#tiled-support)
 4. [Next steps](#next-steps)
 
+OBS: To use package remove `flutter_test` of the `dev_dependencies` and add `test: any`.
+
 ## How it works?
 
 This tool was built over [FlameEngine](https://flame-engine.org/) and all its resources and classes are available to be used along with Bonfire. With that said, it is recommended to give a look into [FlameEngine](https://flame-engine.org/) before start rocking with Bonfire.  

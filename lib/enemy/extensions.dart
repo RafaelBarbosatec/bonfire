@@ -66,10 +66,7 @@ extension EnemyExtensions on Enemy {
 
   void showDamage(
     double damage, {
-    TextConfig config = const TextConfig(
-      fontSize: 14,
-      color: Colors.white,
-    ),
+    TextConfig config,
     double initVelocityTop = -5,
     double gravity = 0.5,
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
@@ -82,7 +79,11 @@ extension EnemyExtensions on Enemy {
           position.center.dx,
           position.top,
         ),
-        config: config,
+        config: config ??
+            TextConfig(
+              fontSize: 14,
+              color: Colors.white,
+            ),
         initVelocityTop: initVelocityTop,
         gravity: gravity,
         direction: direction,

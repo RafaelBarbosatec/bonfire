@@ -25,11 +25,11 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
     this.text,
     this.initPosition, {
     this.onlyUp = false,
-    this.config = const TextConfig(fontSize: 10),
+    this.config,
     double initVelocityTop = -4,
     this.gravity = 0.5,
     this.direction = DirectionTextDamage.RANDOM,
-  }) : super(text, config: config) {
+  }) : super(text, config: (config ?? TextConfig(fontSize: 10))) {
     position = initPosition;
     _initialY = position.y;
     _velocity = initVelocityTop;
