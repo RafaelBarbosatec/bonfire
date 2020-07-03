@@ -229,7 +229,7 @@ packages:
     source: hosted
     version: "1.4.12"
   ordered_set:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: ordered_set
       url: "https://pub.dartlang.org"
