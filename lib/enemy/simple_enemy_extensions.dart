@@ -71,18 +71,25 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           return;
         }
 
-        bool isMoveHorizontal = false;
-        if (translateX > 0) {
-          isMoveHorizontal = true;
-          this.customMoveRight(translateX);
-        } else if (translateX < 0) {
-          isMoveHorizontal = true;
-          customMoveLeft((translateX * -1));
-        }
-        if (translateY > 0) {
-          customMoveBottom(translateY, addAnimation: !isMoveHorizontal);
-        } else if (translateY < 0) {
-          customMoveTop((translateY * -1), addAnimation: !isMoveHorizontal);
+        if (translateX > 0 && translateY > 0) {
+          this.customMoveBottomRight(translateX, translateY);
+        } else if (translateX < 0 && translateY < 0) {
+          this.customMoveTopLeft(translateX * -1, translateY * -1);
+        } else if (translateX > 0 && translateY < 0) {
+          this.customMoveTopRight(translateX, translateY * -1);
+        } else if (translateX < 0 && translateY > 0) {
+          this.customMoveBottomLeft(translateX * -1, translateY);
+        } else {
+          if (translateX > 0) {
+            this.customMoveRight(translateX);
+          } else {
+            customMoveLeft((translateX * -1));
+          }
+          if (translateY > 0) {
+            customMoveBottom(translateY);
+          } else {
+            customMoveTop((translateY * -1));
+          }
         }
       },
       notObserved: () {
@@ -395,28 +402,25 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           return;
         }
 
-        bool idleY = false;
-        bool idleX = false;
-
-        if (translateY > 0) {
-          customMoveBottom(translateY);
-        } else if (translateY < 0) {
-          customMoveTop((translateY * -1));
+        if (translateX > 0 && translateY > 0) {
+          this.customMoveBottomRight(translateX, translateY);
+        } else if (translateX < 0 && translateY < 0) {
+          this.customMoveTopLeft(translateX * -1, translateY * -1);
+        } else if (translateX > 0 && translateY < 0) {
+          this.customMoveTopRight(translateX, translateY * -1);
+        } else if (translateX < 0 && translateY > 0) {
+          this.customMoveBottomLeft(translateX * -1, translateY);
         } else {
-          idleY = true;
-        }
-
-        if (translateX > 0) {
-          customMoveRight(translateX);
-        } else if (translateX < 0) {
-          customMoveLeft((translateX * -1));
-        } else {
-          idleX = true;
-        }
-
-        if (idleX && idleY) {
-          positioned(player);
-          this.idle();
+          if (translateX > 0) {
+            this.customMoveRight(translateX);
+          } else {
+            customMoveLeft((translateX * -1));
+          }
+          if (translateY > 0) {
+            customMoveBottom(translateY);
+          } else {
+            customMoveTop((translateY * -1));
+          }
         }
       },
       notObserved: () {

@@ -27,6 +27,12 @@ class SimpleEnemy extends Enemy {
   /// Animation used when the enemy walks to the bottom.
   final FlameAnimation.Animation animationRunBottom;
 
+  final FlameAnimation.Animation animRunTopLeft;
+  final FlameAnimation.Animation animRunBottomLeft;
+
+  final FlameAnimation.Animation animRunTopRight;
+  final FlameAnimation.Animation animRunBottomRight;
+
   /// Variable that represents the speed of the enemy.
   final double speed;
 
@@ -46,11 +52,15 @@ class SimpleEnemy extends Enemy {
     @required this.animationIdleLeft,
     @required this.animationRunRight,
     @required this.animationRunLeft,
-    double life = 100,
+    this.animRunTopLeft,
+    this.animRunBottomLeft,
+    this.animRunTopRight,
+    this.animRunBottomRight,
     this.animationIdleTop,
     this.animationIdleBottom,
     this.animationRunTop,
     this.animationRunBottom,
+    double life = 100,
     this.speed = 100,
     Collision collision,
     Direction initDirection = Direction.right,
@@ -91,24 +101,56 @@ class SimpleEnemy extends Enemy {
     }
   }
 
-  void customMoveLeft(double speed) {
+  void customMoveLeft(double speed, {bool addAnimation = true}) {
     this.moveLeft(speed);
-    if (lastDirection != Direction.left || _isIdle) {
+    if ((lastDirection != Direction.left || _isIdle) && addAnimation) {
       _isIdle = false;
       animation = animationRunLeft;
-      lastDirection = Direction.left;
     }
+    lastDirection = Direction.left;
     lastDirectionHorizontal = Direction.left;
   }
 
-  void customMoveRight(double speed) {
+  void customMoveRight(double speed, {bool addAnimation = true}) {
     this.moveRight(speed);
-    if (lastDirection != Direction.right || _isIdle) {
+    if ((lastDirection != Direction.right || _isIdle) && addAnimation) {
       _isIdle = false;
       animation = animationRunRight;
-      lastDirection = Direction.right;
     }
+    lastDirection = Direction.right;
     lastDirectionHorizontal = Direction.right;
+  }
+
+  void customMoveTopRight(double speedX, double speedY) {
+    if (animRunTopRight != null) {
+      animation = animRunTopRight;
+    }
+    this.customMoveRight(speedX, addAnimation: animRunTopRight == null);
+    this.customMoveTop(speedY, addAnimation: false);
+  }
+
+  void customMoveTopLeft(double speedX, double speedY) {
+    if (animRunTopLeft != null) {
+      animation = animRunTopLeft;
+    }
+    this.customMoveLeft(speedX, addAnimation: animRunTopLeft == null);
+    this.customMoveTop(speedY, addAnimation: false);
+  }
+
+  void customMoveBottomRight(double speedX, double speedY) {
+    if (animRunBottomRight != null) {
+      animation = animRunBottomRight;
+    }
+    this.customMoveRight(speedX, addAnimation: animRunBottomRight == null);
+    this.customMoveBottom(speedY, addAnimation: false);
+  }
+
+  void customMoveBottomLeft(double speedX, double speedY) {
+    if (animRunBottomLeft != null) {
+      animation = animRunBottomLeft;
+    }
+    this.customMoveLeft(speedX, addAnimation: animRunBottomLeft == null);
+    this.customMoveBottom(speedY, addAnimation: false);
   }
 
   void idle() {
@@ -141,7 +183,6 @@ class SimpleEnemy extends Enemy {
             animation = animationIdleRight;
           }
         }
-
         break;
     }
   }
