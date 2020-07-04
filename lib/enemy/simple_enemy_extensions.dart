@@ -100,8 +100,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
   void simpleAttackMelee({
     @required double damage,
-    @required double heightArea,
-    @required double widthArea,
+    double heightArea = 32,
+    double widthArea = 32,
     int id,
     int interval = 1000,
     bool withPush = false,
@@ -117,7 +117,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     if (isDead || this.position == null) return;
 
     Rect positionAttack;
-    FlameAnimation.Animation anim = attackEffectRightAnim;
+    FlameAnimation.Animation anim;
 
     Direction playerDirection;
 
@@ -150,7 +150,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       case Direction.top:
         positionAttack = Rect.fromLTWH(
           this.position.left + (this.width - widthArea) / 2,
-          this.position.top - this.height,
+          this.rectCollision.top - this.height,
           widthArea,
           heightArea,
         );
@@ -159,7 +159,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.right:
         positionAttack = Rect.fromLTWH(
-          this.position.right,
+          this.rectCollision.right,
           this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
@@ -170,7 +170,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       case Direction.bottom:
         positionAttack = Rect.fromLTWH(
           this.position.left + (this.width - widthArea) / 2,
-          this.position.bottom,
+          this.rectCollision.bottom,
           widthArea,
           heightArea,
         );
@@ -179,7 +179,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.left:
         positionAttack = Rect.fromLTWH(
-          this.position.left - this.width,
+          this.rectCollision.left - this.width,
           this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
@@ -189,10 +189,13 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
     }
 
-    gameRef.addLater(
-        AnimatedObjectOnce(animation: anim, position: positionAttack));
+    if (anim != null) {
+      gameRef.addLater(
+        AnimatedObjectOnce(animation: anim, position: positionAttack),
+      );
+    }
 
-    if (positionAttack.overlaps(player.position)) {
+    if (positionAttack.overlaps(player.rectCollision)) {
       player.receiveDamage(damage, id);
 
       if (withPush) {

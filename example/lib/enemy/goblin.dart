@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Goblin extends SimpleEnemy {
-  double attack = 25;
+  double attack = 0;
   bool _seePlayerClose = false;
 
   Goblin(Position initPosition)

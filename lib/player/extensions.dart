@@ -201,10 +201,10 @@ extension PlayerExtensions on Player {
   }
 
   void simpleAttackMeleeByDirection({
-    @required FlameAnimation.Animation animationRight,
-    @required FlameAnimation.Animation animationBottom,
-    @required FlameAnimation.Animation animationLeft,
-    @required FlameAnimation.Animation animationTop,
+    FlameAnimation.Animation animationRight,
+    FlameAnimation.Animation animationBottom,
+    FlameAnimation.Animation animationLeft,
+    FlameAnimation.Animation animationTop,
     @required double damage,
     @required Direction direction,
     int id,
@@ -215,41 +215,59 @@ extension PlayerExtensions on Player {
     if (isDead) return;
 
     Rect positionAttack;
-    FlameAnimation.Animation anim = animationRight;
+    FlameAnimation.Animation anim;
     double pushLeft = 0;
     double pushTop = 0;
     Direction attackDirection = direction;
     switch (attackDirection) {
       case Direction.top:
         positionAttack = Rect.fromLTWH(
-            position.left, position.top - heightArea, widthArea, heightArea);
+          this.position.left + (this.width - widthArea) / 2,
+          rectCollision.top - heightArea,
+          widthArea,
+          heightArea,
+        );
         if (animationTop != null) anim = animationTop;
         pushTop = heightArea * -1;
         break;
       case Direction.right:
         positionAttack = Rect.fromLTWH(
-            position.left + widthArea, position.top, widthArea, heightArea);
+          rectCollision.right,
+          this.position.top + (this.height - heightArea) / 2,
+          widthArea,
+          heightArea,
+        );
         if (animationRight != null) anim = animationRight;
         pushLeft = widthArea;
         break;
       case Direction.bottom:
         positionAttack = Rect.fromLTWH(
-            position.left, position.top + heightArea, widthArea, heightArea);
+          this.position.left + (this.width - widthArea) / 2,
+          this.rectCollision.bottom,
+          widthArea,
+          heightArea,
+        );
         if (animationBottom != null) anim = animationBottom;
         pushTop = heightArea;
         break;
       case Direction.left:
         positionAttack = Rect.fromLTWH(
-            position.left - widthArea, position.top, widthArea, heightArea);
+          this.rectCollision.left - this.width,
+          this.position.top + (this.height - heightArea) / 2,
+          widthArea,
+          heightArea,
+        );
         if (animationLeft != null) anim = animationLeft;
         pushLeft = widthArea * -1;
         break;
     }
 
-    gameRef.addLater(AnimatedObjectOnce(
-      animation: anim,
-      position: positionAttack,
-    ));
+    if (anim != null) {
+      gameRef.addLater(AnimatedObjectOnce(
+        animation: anim,
+        position: positionAttack,
+      ));
+    }
 
     gameRef
         .visibleEnemies()

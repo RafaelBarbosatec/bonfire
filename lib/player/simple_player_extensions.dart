@@ -8,10 +8,10 @@ import 'package:flutter/widgets.dart';
 
 extension SimplePlayerExtensions on SimplePlayer {
   void simpleAttackMelee({
-    @required FlameAnimation.Animation animationRight,
-    @required FlameAnimation.Animation animationBottom,
-    @required FlameAnimation.Animation animationLeft,
-    @required FlameAnimation.Animation animationTop,
+    FlameAnimation.Animation animationRight,
+    FlameAnimation.Animation animationBottom,
+    FlameAnimation.Animation animationLeft,
+    FlameAnimation.Animation animationTop,
     @required double damage,
     int id,
     Direction direction,
