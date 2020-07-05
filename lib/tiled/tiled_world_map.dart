@@ -298,10 +298,12 @@ class TiledWorldMap {
           spriteList.add(sprite);
         });
 
-        return Future.value(FlameAnimation.Animation.spriteList(
-          spriteList,
-          stepTime: stepTime,
-        ));
+        return Future.value(
+          FlameAnimation.Animation.spriteList(
+            spriteList,
+            stepTime: stepTime,
+          ),
+        );
       } else {
         return null;
       }
