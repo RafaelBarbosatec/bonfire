@@ -1,3 +1,7 @@
+## [0.6.9]
+* update extensions.
+* add animation in diagonal in SimpleEnemy and SimplePlayer.
+
 ## [0.6.8]
 * improvements show FPS
 * update example
