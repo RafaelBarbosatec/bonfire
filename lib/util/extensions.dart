@@ -29,4 +29,19 @@ extension ImageExtension on Image {
       stepTime: stepTime,
     );
   }
+
+  Sprite getSprite(
+    double x,
+    double y,
+    double width,
+    double height,
+  ) {
+    return Sprite.fromImage(
+      this,
+      x: x,
+      y: y,
+      width: width,
+      height: height,
+    );
+  }
 }
