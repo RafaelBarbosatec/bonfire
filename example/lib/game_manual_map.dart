@@ -6,6 +6,7 @@ import 'package:example/enemy/goblin.dart';
 import 'package:example/map/dungeon_map.dart';
 import 'package:example/player/knight.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import 'interface/knight_interface.dart';
@@ -17,7 +18,7 @@ class GameManualMap extends StatelessWidget implements GameListener {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       DungeonMap.tileSize =
-          max(constraints.maxHeight, constraints.maxWidth) / 25;
+          max(constraints.maxHeight, constraints.maxWidth) / (kIsWeb ? 25 : 22);
       return BonfireWidget(
         joystick: Joystick(
           keyboardEnable: true,
@@ -54,7 +55,7 @@ class GameManualMap extends StatelessWidget implements GameListener {
         decorations: DungeonMap.decorations(),
         background: BackgroundColorGame(Colors.blueGrey[900]),
         gameController: _controller..setListener(this),
-        lightingColorGame: Colors.black.withOpacity(0.5),
+        lightingColorGame: Colors.black.withOpacity(0.75),
         zoom: 1.0, // you can change the game zoom here or directly on camera
       );
     });

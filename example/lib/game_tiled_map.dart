@@ -10,6 +10,7 @@ import 'package:example/enemy/goblin.dart';
 import 'package:example/interface/knight_interface.dart';
 import 'package:example/map/dungeon_map.dart';
 import 'package:example/player/knight.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class GameTiledMap extends StatelessWidget {
@@ -17,8 +18,8 @@ class GameTiledMap extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        DungeonMap.tileSize =
-            max(constraints.maxHeight, constraints.maxWidth) / 25;
+        DungeonMap.tileSize = max(constraints.maxHeight, constraints.maxWidth) /
+            (kIsWeb ? 25 : 22);
         return BonfireTiledWidget(
           joystick: Joystick(
             keyboardEnable: true,
@@ -65,7 +66,7 @@ class GameTiledMap extends StatelessWidget {
             ..registerObject(
                 'chest', (x, y, width, height) => Chest(Position(x, y))),
           background: BackgroundColorGame(Colors.blueGrey[900]),
-          lightingColorGame: Colors.black.withOpacity(0.6),
+          lightingColorGame: Colors.black.withOpacity(0.75),
           zoom: 1.0, // you can change the game zoom here or directly on camera
         );
       },

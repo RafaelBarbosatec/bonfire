@@ -29,14 +29,19 @@ class Lighting extends GameComponent {
     _visibleLight.forEach((light) {
       light.update(_dtUpdate);
       canvas.save();
-      
-      canvas.translate(size.width/2, size.height/2);
+
+      canvas.translate(size.width / 2, size.height / 2);
       canvas.scale(gameRef.gameCamera.zoom);
-      canvas.translate(-gameRef.gameCamera.position.x, -gameRef.gameCamera.position.y);
+      canvas.translate(
+        -gameRef.gameCamera.position.x,
+        -gameRef.gameCamera.position.y,
+      );
 
       canvas.drawCircle(
-        Offset(light.gameComponent.position.center.dx,
-            light.gameComponent.position.center.dy),
+        Offset(
+          light.gameComponent.position.center.dx,
+          light.gameComponent.position.center.dy,
+        ),
         light.radius *
             (light.withPulse
                 ? (1 - light.valuePulse * light.pulseVariation)
@@ -52,7 +57,9 @@ class Lighting extends GameComponent {
         final Paint paint = Paint()
           ..color = light.color
           ..maskFilter = MaskFilter.blur(
-              BlurStyle.normal, convertRadiusToSigma(light.blurBorder));
+            BlurStyle.normal,
+            convertRadiusToSigma(light.blurBorder),
+          );
         canvas.drawCircle(
           Offset(light.gameComponent.position.center.dx,
               light.gameComponent.position.center.dy),

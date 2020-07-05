@@ -29,6 +29,12 @@ class SimplePlayer extends Player {
   /// Animation used when the player walks to the left.
   final FlameAnimation.Animation animRunLeft;
 
+  final FlameAnimation.Animation animRunTopLeft;
+  final FlameAnimation.Animation animRunBottomLeft;
+
+  final FlameAnimation.Animation animRunTopRight;
+  final FlameAnimation.Animation animRunBottomRight;
+
   /// Variable that represents the current directional status of the joystick.
   JoystickMoveDirectional statusMoveDirectional;
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
@@ -48,6 +54,10 @@ class SimplePlayer extends Player {
     this.animIdleBottom,
     this.animRunTop,
     this.animRunBottom,
+    this.animRunTopLeft,
+    this.animRunBottomLeft,
+    this.animRunTopRight,
+    this.animRunBottomRight,
     Direction initDirection = Direction.right,
     this.speed = 150,
     double width = 32,
@@ -85,12 +95,11 @@ class SimplePlayer extends Player {
           customMoveTop();
           break;
         case JoystickMoveDirectional.MOVE_UP_LEFT:
-          customMoveLeft(isDiagonal: true);
-          customMoveTop(addAnimation: false, isDiagonal: true);
+          customMoveUpLeft();
+
           break;
         case JoystickMoveDirectional.MOVE_UP_RIGHT:
-          customMoveRight(isDiagonal: true);
-          customMoveTop(addAnimation: false, isDiagonal: true);
+          customMoveUpRight();
           break;
         case JoystickMoveDirectional.MOVE_RIGHT:
           customMoveRight();
@@ -99,12 +108,10 @@ class SimplePlayer extends Player {
           customMoveBottom();
           break;
         case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-          customMoveRight(isDiagonal: true);
-          customMoveBottom(addAnimation: false, isDiagonal: true);
+          customMoveDownRight();
           break;
         case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-          customMoveLeft(isDiagonal: true);
-          customMoveBottom(addAnimation: false, isDiagonal: true);
+          customMoveDownLeft();
           break;
         case JoystickMoveDirectional.MOVE_LEFT:
           customMoveLeft();
@@ -156,13 +163,14 @@ class SimplePlayer extends Player {
     }
   }
 
-  void customMoveRight({bool isDiagonal = false}) {
+  void customMoveRight({bool addAnimation = true, bool isDiagonal = false}) {
     if (statusMoveDirectional != JoystickMoveDirectional.MOVE_RIGHT &&
-        animRunRight != null) {
+        animRunRight != null &&
+        addAnimation) {
       animation = animRunRight;
+      statusMoveDirectional = JoystickMoveDirectional.MOVE_RIGHT;
     }
 
-    statusMoveDirectional = JoystickMoveDirectional.MOVE_RIGHT;
     lastDirection = Direction.right;
     _lastDirectionHorizontal = Direction.right;
 
@@ -199,12 +207,13 @@ class SimplePlayer extends Player {
     }
   }
 
-  void customMoveLeft({bool isDiagonal = false}) {
+  void customMoveLeft({bool addAnimation = true, bool isDiagonal = false}) {
     if (statusMoveDirectional != JoystickMoveDirectional.MOVE_LEFT &&
-        animRunLeft != null) {
+        animRunLeft != null &&
+        addAnimation) {
       animation = animRunLeft;
+      statusMoveDirectional = JoystickMoveDirectional.MOVE_LEFT;
     }
-    statusMoveDirectional = JoystickMoveDirectional.MOVE_LEFT;
     lastDirection = Direction.left;
     _lastDirectionHorizontal = Direction.left;
 
@@ -249,5 +258,45 @@ class SimplePlayer extends Player {
       }
     }
     statusMoveDirectional = JoystickMoveDirectional.IDLE;
+  }
+
+  void customMoveUpLeft() {
+    if (animRunTopLeft != null &&
+        statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_LEFT) {
+      animation = animRunTopLeft;
+      statusMoveDirectional = JoystickMoveDirectional.MOVE_UP_LEFT;
+    }
+    customMoveLeft(addAnimation: animRunTopLeft == null, isDiagonal: true);
+    customMoveTop(addAnimation: false, isDiagonal: true);
+  }
+
+  void customMoveUpRight() {
+    if (animRunTopRight != null &&
+        statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_RIGHT) {
+      animation = animRunTopRight;
+      statusMoveDirectional = JoystickMoveDirectional.MOVE_UP_RIGHT;
+    }
+    customMoveRight(addAnimation: animRunTopRight == null, isDiagonal: true);
+    customMoveTop(addAnimation: false, isDiagonal: true);
+  }
+
+  void customMoveDownRight() {
+    if (animRunBottomRight != null &&
+        statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
+      animation = animRunBottomRight;
+      statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN_RIGHT;
+    }
+    customMoveRight(addAnimation: animRunBottomRight == null, isDiagonal: true);
+    customMoveBottom(addAnimation: false, isDiagonal: true);
+  }
+
+  void customMoveDownLeft() {
+    if (animRunBottomLeft != null &&
+        statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_LEFT) {
+      animation = animRunBottomLeft;
+      statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN_LEFT;
+    }
+    customMoveLeft(addAnimation: animRunBottomLeft == null, isDiagonal: true);
+    customMoveBottom(addAnimation: false, isDiagonal: true);
   }
 }
