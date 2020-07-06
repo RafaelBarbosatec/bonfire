@@ -2,12 +2,13 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
+import 'package:flutter/foundation.dart';
 
 extension ImageExtension on Image {
-  FlameAnimation.Animation getAnimation(
-    double width,
-    double height,
-    double count, {
+  FlameAnimation.Animation getAnimation({
+    @required double width,
+    @required double height,
+    @required double count,
     int startDx = 0,
     int startDy = 0,
     double stepTime = 0.1,
@@ -30,12 +31,12 @@ extension ImageExtension on Image {
     );
   }
 
-  Sprite getSprite(
-    double x,
-    double y,
-    double width,
-    double height,
-  ) {
+  Sprite getSprite({
+    @required double x,
+    @required double y,
+    @required double width,
+    @required double height,
+  }) {
     return Sprite.fromImage(
       this,
       x: x,

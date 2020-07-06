@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tile.dart';
 import 'package:bonfire/tiled/tiled_world_data.dart';
+import 'package:bonfire/util/extensions.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/sprite.dart';
 import 'package:tiledjsonreader/map/layer/object_group.dart';
@@ -221,14 +222,11 @@ class TiledWorldMap {
     double tileWidth,
     double tileHeight,
   ) async {
-    Image imageData = _imageCache[image];
-    if (imageData == null) {
+    if (_imageCache[image] == null) {
       _imageCache[image] = await Flame.images.load(image);
     }
-    Sprite sprite = _spriteCache['$image/$row/$column'];
-    if (sprite == null) {
-      sprite = _spriteCache['$image/$row/$column'] = Sprite.fromImage(
-        _imageCache[image],
+    if (_spriteCache['$image/$row/$column'] == null) {
+      _spriteCache['$image/$row/$column'] = _imageCache[image].getSprite(
         x: (column * tileWidth).toDouble(),
         y: (row * tileHeight).toDouble(),
         width: tileWidth,
