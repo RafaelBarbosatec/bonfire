@@ -124,11 +124,13 @@ class SimplePlayer extends Player {
     super.update(dt);
   }
 
-  void addFastAnimation(FlameAnimation.Animation animation) {
+  void addFastAnimation(FlameAnimation.Animation animation,
+      {VoidCallback onFinish}) {
     AnimatedObjectOnce fastAnimation = AnimatedObjectOnce(
       animation: animation,
       onlyUpdate: true,
       onFinish: () {
+        if (onFinish != null) onFinish();
         idle(forceAddAnimation: true);
       },
     );

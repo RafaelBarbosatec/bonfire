@@ -187,11 +187,13 @@ class SimpleEnemy extends Enemy {
     }
   }
 
-  void addFastAnimation(FlameAnimation.Animation animation) {
+  void addFastAnimation(FlameAnimation.Animation animation,
+      {VoidCallback onFinish}) {
     AnimatedObjectOnce fastAnimation = AnimatedObjectOnce(
       animation: animation,
       onlyUpdate: true,
       onFinish: () {
+        if (onFinish != null) onFinish();
         idle();
       },
     );
