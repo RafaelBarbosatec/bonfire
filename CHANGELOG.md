@@ -1,3 +1,6 @@
+## [0.6.11]
+* hotfix addFastAnimation.
+
 ## [0.6.10]
 * hotfix addFastAnimation.
 

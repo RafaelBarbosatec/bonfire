@@ -135,6 +135,7 @@ class SimplePlayer extends Player {
       onFinish: () {
         if (onFinish != null) onFinish();
         _runFastAnimation = false;
+        idle(forceAddAnimation: true);
       },
     );
     this.animation = fastAnimation.animation;
