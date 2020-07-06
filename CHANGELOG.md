@@ -1,3 +1,6 @@
+## [0.6.12]
+* add diagonal in Direction(enum).
+
 ## [0.6.11]
 * hotfix addFastAnimation.
 
