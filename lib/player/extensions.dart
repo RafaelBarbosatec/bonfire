@@ -177,6 +177,34 @@ extension PlayerExtensions on Player {
           this.rectCollision.bottom,
         );
         break;
+      case Direction.topLeft:
+        if (animationLeft != null) attackRangeAnimation = animationLeft;
+        startPosition = Position(
+          this.rectCollision.left - width,
+          (this.rectCollision.top + (this.rectCollision.height - height) / 2),
+        );
+        break;
+      case Direction.topRight:
+        if (animationRight != null) attackRangeAnimation = animationRight;
+        startPosition = Position(
+          this.rectCollision.right,
+          (this.rectCollision.top + (this.rectCollision.height - height) / 2),
+        );
+        break;
+      case Direction.bottomLeft:
+        if (animationLeft != null) attackRangeAnimation = animationLeft;
+        startPosition = Position(
+          this.rectCollision.left - width,
+          (this.rectCollision.top + (this.rectCollision.height - height) / 2),
+        );
+        break;
+      case Direction.bottomRight:
+        if (animationRight != null) attackRangeAnimation = animationRight;
+        startPosition = Position(
+          this.rectCollision.right,
+          (this.rectCollision.top + (this.rectCollision.height - height) / 2),
+        );
+        break;
     }
 
     gameRef.addLater(
@@ -259,6 +287,46 @@ extension PlayerExtensions on Player {
         );
         if (animationLeft != null) anim = animationLeft;
         pushLeft = widthArea * -1;
+        break;
+      case Direction.topLeft:
+        positionAttack = Rect.fromLTWH(
+          this.rectCollision.left - this.width,
+          this.position.top + (this.height - heightArea) / 2,
+          widthArea,
+          heightArea,
+        );
+        if (animationLeft != null) anim = animationLeft;
+        pushLeft = widthArea * -1;
+        break;
+      case Direction.topRight:
+        positionAttack = Rect.fromLTWH(
+          rectCollision.right,
+          this.position.top + (this.height - heightArea) / 2,
+          widthArea,
+          heightArea,
+        );
+        if (animationRight != null) anim = animationRight;
+        pushLeft = widthArea;
+        break;
+      case Direction.bottomLeft:
+        positionAttack = Rect.fromLTWH(
+          this.rectCollision.left - this.width,
+          this.position.top + (this.height - heightArea) / 2,
+          widthArea,
+          heightArea,
+        );
+        if (animationLeft != null) anim = animationLeft;
+        pushLeft = widthArea * -1;
+        break;
+      case Direction.bottomRight:
+        positionAttack = Rect.fromLTWH(
+          rectCollision.right,
+          this.position.top + (this.height - heightArea) / 2,
+          widthArea,
+          heightArea,
+        );
+        if (animationRight != null) anim = animationRight;
+        pushLeft = widthArea;
         break;
     }
 

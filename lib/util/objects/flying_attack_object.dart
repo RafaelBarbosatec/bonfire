@@ -76,6 +76,18 @@ class FlyingAttackObject extends AnimatedObject
       case Direction.bottom:
         position = position.translate(0, (speed * dt));
         break;
+      case Direction.topLeft:
+        position = position.translate((speed * dt) * -1, 0);
+        break;
+      case Direction.topRight:
+        position = position.translate((speed * dt), 0);
+        break;
+      case Direction.bottomLeft:
+        position = position.translate((speed * dt) * -1, 0);
+        break;
+      case Direction.bottomRight:
+        position = position.translate((speed * dt), 0);
+        break;
     }
 
     if (!_verifyExistInWorld()) {
@@ -152,6 +164,38 @@ class FlyingAttackObject extends AnimatedObject
             positionDestroy = Rect.fromLTWH(
               position.left,
               position.top + (height / 2),
+              width,
+              height,
+            );
+            break;
+          case Direction.topLeft:
+            positionDestroy = Rect.fromLTWH(
+              position.left - (width / 2),
+              position.top,
+              width,
+              height,
+            );
+            break;
+          case Direction.topRight:
+            positionDestroy = Rect.fromLTWH(
+              position.left + (width / 2),
+              position.top,
+              width,
+              height,
+            );
+            break;
+          case Direction.bottomLeft:
+            positionDestroy = Rect.fromLTWH(
+              position.left - (width / 2),
+              position.top,
+              width,
+              height,
+            );
+            break;
+          case Direction.bottomRight:
+            positionDestroy = Rect.fromLTWH(
+              position.left + (width / 2),
+              position.top,
               width,
               height,
             );

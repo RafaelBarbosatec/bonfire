@@ -111,9 +111,9 @@ class SimpleEnemy extends Enemy {
     if ((lastDirection != Direction.left || _isIdle) && addAnimation) {
       _isIdle = false;
       animation = animationRunLeft;
+      lastDirection = Direction.left;
+      lastDirectionHorizontal = Direction.left;
     }
-    lastDirection = Direction.left;
-    lastDirectionHorizontal = Direction.left;
   }
 
   void customMoveRight(double speed, {bool addAnimation = true}) {
@@ -122,9 +122,9 @@ class SimpleEnemy extends Enemy {
     if ((lastDirection != Direction.right || _isIdle) && addAnimation) {
       _isIdle = false;
       animation = animationRunRight;
+      lastDirection = Direction.right;
+      lastDirectionHorizontal = Direction.right;
     }
-    lastDirection = Direction.right;
-    lastDirectionHorizontal = Direction.right;
   }
 
   void customMoveTopRight(double speedX, double speedY) {
@@ -132,6 +132,7 @@ class SimpleEnemy extends Enemy {
     if (animRunTopRight != null) {
       animation = animRunTopRight;
     }
+    lastDirection = Direction.topRight;
     this.customMoveRight(speedX, addAnimation: animRunTopRight == null);
     this.customMoveTop(speedY, addAnimation: false);
   }
@@ -141,6 +142,7 @@ class SimpleEnemy extends Enemy {
     if (animRunTopLeft != null) {
       animation = animRunTopLeft;
     }
+    lastDirection = Direction.topLeft;
     this.customMoveLeft(speedX, addAnimation: animRunTopLeft == null);
     this.customMoveTop(speedY, addAnimation: false);
   }
@@ -150,6 +152,7 @@ class SimpleEnemy extends Enemy {
     if (animRunBottomRight != null) {
       animation = animRunBottomRight;
     }
+    lastDirection = Direction.bottomRight;
     this.customMoveRight(speedX, addAnimation: animRunBottomRight == null);
     this.customMoveBottom(speedY, addAnimation: false);
   }
@@ -159,6 +162,7 @@ class SimpleEnemy extends Enemy {
     if (animRunBottomLeft != null) {
       animation = animRunBottomLeft;
     }
+    lastDirection = Direction.bottomLeft;
     this.customMoveLeft(speedX, addAnimation: animRunBottomLeft == null);
     this.customMoveBottom(speedY, addAnimation: false);
   }
@@ -194,6 +198,18 @@ class SimpleEnemy extends Enemy {
             animation = animationIdleRight;
           }
         }
+        break;
+      case Direction.topLeft:
+        animation = animationIdleLeft;
+        break;
+      case Direction.topRight:
+        animation = animationIdleRight;
+        break;
+      case Direction.bottomLeft:
+        animation = animationIdleLeft;
+        break;
+      case Direction.bottomRight:
+        animation = animationIdleRight;
         break;
     }
   }

@@ -187,6 +187,46 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
         pushLeft = widthArea * -1;
         break;
+      case Direction.topLeft:
+        positionAttack = Rect.fromLTWH(
+          this.rectCollision.left - this.width,
+          this.position.top + (this.height - heightArea) / 2,
+          widthArea,
+          heightArea,
+        );
+        if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
+        pushLeft = widthArea * -1;
+        break;
+      case Direction.topRight:
+        positionAttack = Rect.fromLTWH(
+          this.rectCollision.right,
+          this.position.top + (this.height - heightArea) / 2,
+          widthArea,
+          heightArea,
+        );
+        if (attackEffectRightAnim != null) anim = attackEffectRightAnim;
+        pushLeft = widthArea;
+        break;
+      case Direction.bottomLeft:
+        positionAttack = Rect.fromLTWH(
+          this.rectCollision.left - this.width,
+          this.position.top + (this.height - heightArea) / 2,
+          widthArea,
+          heightArea,
+        );
+        if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
+        pushLeft = widthArea * -1;
+        break;
+      case Direction.bottomRight:
+        positionAttack = Rect.fromLTWH(
+          this.rectCollision.right,
+          this.position.top + (this.height - heightArea) / 2,
+          widthArea,
+          heightArea,
+        );
+        if (attackEffectRightAnim != null) anim = attackEffectRightAnim;
+        pushLeft = widthArea;
+        break;
     }
 
     if (anim != null) {
@@ -289,6 +329,34 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         startPosition = Position(
           (this.rectCollision.left + (this.rectCollision.width - width) / 2),
           this.rectCollision.bottom,
+        );
+        break;
+      case Direction.topLeft:
+        if (animationLeft != null) attackRangeAnimation = animationLeft;
+        startPosition = Position(
+          this.rectCollision.left - width,
+          (this.rectCollision.top + (this.rectCollision.height - height) / 2),
+        );
+        break;
+      case Direction.topRight:
+        if (animationRight != null) attackRangeAnimation = animationRight;
+        startPosition = Position(
+          this.rectCollision.right,
+          (this.rectCollision.top + (this.rectCollision.height - height) / 2),
+        );
+        break;
+      case Direction.bottomLeft:
+        if (animationLeft != null) attackRangeAnimation = animationLeft;
+        startPosition = Position(
+          this.rectCollision.left - width,
+          (this.rectCollision.top + (this.rectCollision.height - height) / 2),
+        );
+        break;
+      case Direction.bottomRight:
+        if (animationRight != null) attackRangeAnimation = animationRight;
+        startPosition = Position(
+          this.rectCollision.right,
+          (this.rectCollision.top + (this.rectCollision.height - height) / 2),
         );
         break;
     }
