@@ -1,6 +1,7 @@
 ## [0.6.9]
 * update extensions.
 * add animation in diagonal in SimpleEnemy and SimplePlayer.
+* add extensions getAnimation and getSprite in Image (dart:ui).
 
 ## [0.6.8]
 * improvements show FPS
