@@ -176,11 +176,9 @@ class SimplePlayer extends Player {
         !_runFastAnimation) {
       animation = animRunRight;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_RIGHT;
+      lastDirection = Direction.right;
+      _lastDirectionHorizontal = Direction.right;
     }
-
-    lastDirection = Direction.right;
-    _lastDirectionHorizontal = Direction.right;
-
     double speed =
         (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
 
@@ -221,9 +219,9 @@ class SimplePlayer extends Player {
         !_runFastAnimation) {
       animation = animRunLeft;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_LEFT;
+      lastDirection = Direction.left;
+      _lastDirectionHorizontal = Direction.left;
     }
-    lastDirection = Direction.left;
-    _lastDirectionHorizontal = Direction.left;
 
     double speed =
         (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
