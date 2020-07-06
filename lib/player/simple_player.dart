@@ -44,6 +44,8 @@ class SimplePlayer extends Player {
 
   double speed;
 
+  bool _runFastAnimation = false;
+
   SimplePlayer({
     @required Position initPosition,
     @required this.animIdleLeft,
@@ -126,12 +128,13 @@ class SimplePlayer extends Player {
 
   void addFastAnimation(FlameAnimation.Animation animation,
       {VoidCallback onFinish}) {
+    _runFastAnimation = true;
     AnimatedObjectOnce fastAnimation = AnimatedObjectOnce(
       animation: animation,
       onlyUpdate: true,
       onFinish: () {
         if (onFinish != null) onFinish();
-        idle(forceAddAnimation: true);
+        _runFastAnimation = false;
       },
     );
     this.animation = fastAnimation.animation;
@@ -139,7 +142,7 @@ class SimplePlayer extends Player {
   }
 
   void customMoveTop({bool addAnimation = true, bool isDiagonal = false}) {
-    if (addAnimation) {
+    if (addAnimation && !_runFastAnimation) {
       _addTopAnimation();
       statusMoveDirectional = JoystickMoveDirectional.MOVE_UP;
       lastDirection = Direction.top;
@@ -168,7 +171,8 @@ class SimplePlayer extends Player {
   void customMoveRight({bool addAnimation = true, bool isDiagonal = false}) {
     if (statusMoveDirectional != JoystickMoveDirectional.MOVE_RIGHT &&
         animRunRight != null &&
-        addAnimation) {
+        addAnimation &&
+        !_runFastAnimation) {
       animation = animRunRight;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_RIGHT;
     }
@@ -183,7 +187,7 @@ class SimplePlayer extends Player {
   }
 
   void customMoveBottom({bool addAnimation = true, bool isDiagonal = false}) {
-    if (addAnimation) {
+    if (addAnimation && !_runFastAnimation) {
       _addBottomAnimation();
       statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN;
       lastDirection = Direction.bottom;
@@ -212,7 +216,8 @@ class SimplePlayer extends Player {
   void customMoveLeft({bool addAnimation = true, bool isDiagonal = false}) {
     if (statusMoveDirectional != JoystickMoveDirectional.MOVE_LEFT &&
         animRunLeft != null &&
-        addAnimation) {
+        addAnimation &&
+        !_runFastAnimation) {
       animation = animRunLeft;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_LEFT;
     }
@@ -226,6 +231,7 @@ class SimplePlayer extends Player {
   }
 
   void idle({bool forceAddAnimation = false}) {
+    if (_runFastAnimation) return;
     if (statusMoveDirectional != JoystickMoveDirectional.IDLE ||
         forceAddAnimation) {
       switch (lastDirection) {
@@ -264,7 +270,8 @@ class SimplePlayer extends Player {
 
   void customMoveUpLeft() {
     if (animRunTopLeft != null &&
-        statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_LEFT) {
+        statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_LEFT &&
+        !_runFastAnimation) {
       animation = animRunTopLeft;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_UP_LEFT;
     }
@@ -274,7 +281,8 @@ class SimplePlayer extends Player {
 
   void customMoveUpRight() {
     if (animRunTopRight != null &&
-        statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_RIGHT) {
+        statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_RIGHT &&
+        !_runFastAnimation) {
       animation = animRunTopRight;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_UP_RIGHT;
     }
@@ -284,7 +292,8 @@ class SimplePlayer extends Player {
 
   void customMoveDownRight() {
     if (animRunBottomRight != null &&
-        statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
+        statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_RIGHT &&
+        !_runFastAnimation) {
       animation = animRunBottomRight;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN_RIGHT;
     }
@@ -294,7 +303,8 @@ class SimplePlayer extends Player {
 
   void customMoveDownLeft() {
     if (animRunBottomLeft != null &&
-        statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_LEFT) {
+        statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_LEFT &&
+        !_runFastAnimation) {
       animation = animRunBottomLeft;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN_LEFT;
     }

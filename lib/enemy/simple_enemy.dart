@@ -44,6 +44,8 @@ class SimpleEnemy extends Enemy {
 
   bool _isIdle = true;
 
+  bool _runFastAnimation = false;
+
   SimpleEnemy({
     @required Position initPosition,
     @required double height,
@@ -77,6 +79,7 @@ class SimpleEnemy extends Enemy {
   }
 
   void customMoveTop(double moveSpeed, {bool addAnimation = true}) {
+    if (_runFastAnimation) return;
     this.moveTop(moveSpeed);
 
     if ((lastDirection != Direction.top || _isIdle) && addAnimation) {
@@ -90,6 +93,7 @@ class SimpleEnemy extends Enemy {
   }
 
   void customMoveBottom(double speed, {bool addAnimation = true}) {
+    if (_runFastAnimation) return;
     this.moveBottom(speed);
     if ((lastDirection != Direction.bottom || _isIdle) && addAnimation) {
       _isIdle = false;
@@ -102,6 +106,7 @@ class SimpleEnemy extends Enemy {
   }
 
   void customMoveLeft(double speed, {bool addAnimation = true}) {
+    if (_runFastAnimation) return;
     this.moveLeft(speed);
     if ((lastDirection != Direction.left || _isIdle) && addAnimation) {
       _isIdle = false;
@@ -112,6 +117,7 @@ class SimpleEnemy extends Enemy {
   }
 
   void customMoveRight(double speed, {bool addAnimation = true}) {
+    if (_runFastAnimation) return;
     this.moveRight(speed);
     if ((lastDirection != Direction.right || _isIdle) && addAnimation) {
       _isIdle = false;
@@ -122,6 +128,7 @@ class SimpleEnemy extends Enemy {
   }
 
   void customMoveTopRight(double speedX, double speedY) {
+    if (_runFastAnimation) return;
     if (animRunTopRight != null) {
       animation = animRunTopRight;
     }
@@ -130,6 +137,7 @@ class SimpleEnemy extends Enemy {
   }
 
   void customMoveTopLeft(double speedX, double speedY) {
+    if (_runFastAnimation) return;
     if (animRunTopLeft != null) {
       animation = animRunTopLeft;
     }
@@ -138,6 +146,7 @@ class SimpleEnemy extends Enemy {
   }
 
   void customMoveBottomRight(double speedX, double speedY) {
+    if (_runFastAnimation) return;
     if (animRunBottomRight != null) {
       animation = animRunBottomRight;
     }
@@ -146,6 +155,7 @@ class SimpleEnemy extends Enemy {
   }
 
   void customMoveBottomLeft(double speedX, double speedY) {
+    if (_runFastAnimation) return;
     if (animRunBottomLeft != null) {
       animation = animRunBottomLeft;
     }
@@ -154,6 +164,7 @@ class SimpleEnemy extends Enemy {
   }
 
   void idle() {
+    if (_runFastAnimation) return;
     _isIdle = true;
     switch (lastDirection) {
       case Direction.left:
@@ -189,11 +200,13 @@ class SimpleEnemy extends Enemy {
 
   void addFastAnimation(FlameAnimation.Animation animation,
       {VoidCallback onFinish}) {
+    _runFastAnimation = true;
     AnimatedObjectOnce fastAnimation = AnimatedObjectOnce(
       animation: animation,
       onlyUpdate: true,
       onFinish: () {
         if (onFinish != null) onFinish();
+        _runFastAnimation = false;
         idle();
       },
     );
