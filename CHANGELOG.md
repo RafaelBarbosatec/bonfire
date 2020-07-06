@@ -1,3 +1,6 @@
+## [0.6.10]
+* hotfix addFastAnimation.
+
 ## [0.6.9]
 * update extensions.
 * add animation in diagonal in SimpleEnemy and SimplePlayer.
