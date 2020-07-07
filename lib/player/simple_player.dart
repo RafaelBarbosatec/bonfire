@@ -35,6 +35,12 @@ class SimplePlayer extends Player {
   final FlameAnimation.Animation animRunTopRight;
   final FlameAnimation.Animation animRunBottomRight;
 
+  final FlameAnimation.Animation animIdleTopLeft;
+  final FlameAnimation.Animation animIdleBottomLeft;
+
+  final FlameAnimation.Animation animIdleTopRight;
+  final FlameAnimation.Animation animIdleBottomRight;
+
   /// Variable that represents the current directional status of the joystick.
   JoystickMoveDirectional statusMoveDirectional;
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
@@ -60,6 +66,10 @@ class SimplePlayer extends Player {
     this.animRunBottomLeft,
     this.animRunTopRight,
     this.animRunBottomRight,
+    this.animIdleTopLeft,
+    this.animIdleBottomLeft,
+    this.animIdleTopRight,
+    this.animIdleBottomRight,
     Direction initDirection = Direction.right,
     this.speed = 150,
     double width = 32,
@@ -263,16 +273,32 @@ class SimplePlayer extends Player {
           }
           break;
         case Direction.topLeft:
-          if (animIdleLeft != null) animation = animIdleLeft;
+          if (animIdleTopLeft != null) {
+            animation = animIdleTopLeft;
+          } else {
+            if (animIdleLeft != null) animation = animIdleLeft;
+          }
           break;
         case Direction.topRight:
-          if (animIdleRight != null) animation = animIdleRight;
+          if (animIdleTopRight != null) {
+            animation = animIdleTopRight;
+          } else {
+            if (animIdleRight != null) animation = animIdleRight;
+          }
           break;
         case Direction.bottomLeft:
-          if (animIdleLeft != null) animation = animIdleLeft;
+          if (animIdleBottomLeft != null) {
+            animation = animIdleBottomLeft;
+          } else {
+            if (animIdleLeft != null) animation = animIdleLeft;
+          }
           break;
         case Direction.bottomRight:
-          if (animIdleRight != null) animation = animIdleRight;
+          if (animIdleBottomRight != null) {
+            animation = animIdleBottomRight;
+          } else {
+            if (animIdleRight != null) animation = animIdleRight;
+          }
           break;
       }
     }
