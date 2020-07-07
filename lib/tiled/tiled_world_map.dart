@@ -48,12 +48,17 @@ class TiledWorldMap {
   }
 
   Future<TiledWorldData> build() async {
-    _tiledMap = await _reader.read();
-    _tileWidthOrigin = _tiledMap.tileWidth.toDouble();
-    _tileHeightOrigin = _tiledMap.tileHeight.toDouble();
-    _tileWidth = forceTileSize ?? _tileWidthOrigin;
-    _tileHeight = forceTileSize ?? _tileHeightOrigin;
-    await _load(_tiledMap);
+    try {
+      _tiledMap = await _reader.read();
+      _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble();
+      _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble();
+      _tileWidth = forceTileSize ?? _tileWidthOrigin;
+      _tileHeight = forceTileSize ?? _tileHeightOrigin;
+      await _load(_tiledMap);
+    } catch (e) {
+      print('(TiledWorldMap): not found map');
+    }
+
     return Future.value(TiledWorldData(
       map: MapWorld(_tiles),
       components: _components,

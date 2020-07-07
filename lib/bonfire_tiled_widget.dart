@@ -20,7 +20,7 @@ class BonfireTiledWidget extends StatefulWidget {
   final Color constructionModeColor;
   final Color collisionAreaColor;
   final Color lightingColorGame;
-  final TiledWorldMap tiledMap;
+  final TiledWorldMap map;
   final Widget progress;
   final double zoom;
 
@@ -37,7 +37,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
-    this.tiledMap,
+    this.map,
     this.progress,
     this.zoom,
   }) : super(key: key);
@@ -53,7 +53,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   @override
   void didUpdateWidget(BonfireTiledWidget oldWidget) {
     if (widget.constructionMode) {
-      widget.tiledMap.build().then((value) {
+      widget.map.build().then((value) {
         _game.map.updateTiles(value.map.tiles);
 
         _game.decorations().forEach((d) => d.remove());
@@ -85,7 +85,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   }
 
   void _loadGame() async {
-    final tiled = await widget.tiledMap.build();
+    final tiled = await widget.map.build();
     _game = RPGGame(
       context: context,
       joystickController: widget.joystick,
