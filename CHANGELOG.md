@@ -1,3 +1,7 @@
+## [0.6.13]
+* improvements in TiledWorldMap.
+* add animIdleTopLeft, animIdleBottomLeft, animIdleTopRight, animIdleBottomRight in SimplePlayer and SimpleEnemy.
+
 ## [0.6.12]
 * add diagonal in Direction(enum).
 
