@@ -108,7 +108,6 @@ class SimplePlayer extends Player {
           break;
         case JoystickMoveDirectional.MOVE_UP_LEFT:
           customMoveUpLeft();
-
           break;
         case JoystickMoveDirectional.MOVE_UP_RIGHT:
           customMoveUpRight();

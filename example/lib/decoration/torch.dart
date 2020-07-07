@@ -3,7 +3,7 @@ import 'package:example/map/dungeon_map.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/material.dart';
 
-class Torch extends GameDecoration with WithLighting {
+class Torch extends GameDecoration with Lighting {
   Torch(Position position)
       : super.animation(
           FlameAnimation.Animation.sequenced(

@@ -6,7 +6,7 @@ import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
-class AnimatedObjectOnce extends AnimatedObject with WithLighting {
+class AnimatedObjectOnce extends AnimatedObject with Lighting {
   final VoidCallback onFinish;
   final VoidCallback onStartAnimation;
   final bool onlyUpdate;

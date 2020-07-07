@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
+import 'package:bonfire/util/lighting/lighting.dart';
 import 'package:bonfire/util/lighting/lighting_config.dart';
-import 'package:bonfire/util/lighting/with_lighting.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:bonfire/util/objects/animated_object_once.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
@@ -12,7 +12,7 @@ import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
 
 class FlyingAttackAngleObject extends AnimatedObject
-    with ObjectCollision, WithLighting {
+    with ObjectCollision, Lighting {
   final int id;
   final FlameAnimation.Animation flyAnimation;
   final FlameAnimation.Animation destroyAnimation;
