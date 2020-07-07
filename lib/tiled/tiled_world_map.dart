@@ -48,12 +48,17 @@ class TiledWorldMap {
   }
 
   Future<TiledWorldData> build() async {
-    _tiledMap = await _reader.read();
-    _tileWidthOrigin = _tiledMap.tileWidth.toDouble();
-    _tileHeightOrigin = _tiledMap.tileHeight.toDouble();
-    _tileWidth = forceTileSize ?? _tileWidthOrigin;
-    _tileHeight = forceTileSize ?? _tileHeightOrigin;
-    await _load(_tiledMap);
+    try {
+      _tiledMap = await _reader.read();
+      _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble();
+      _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble();
+      _tileWidth = forceTileSize ?? _tileWidthOrigin;
+      _tileHeight = forceTileSize ?? _tileHeightOrigin;
+      await _load(_tiledMap);
+    } catch (e) {
+      print('(TiledWorldMap): not found map');
+    }
+
     return Future.value(TiledWorldData(
       map: MapWorld(_tiles),
       components: _components,
@@ -76,7 +81,7 @@ class TiledWorldMap {
     int count = 0;
     await Future.forEach(tileLayer.data, (tile) async {
       if (tile != 0) {
-        var data = await getDataTile(tile);
+        var data = await _getDataTile(tile);
         if (data != null) {
           if (data.animation == null) {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
@@ -149,7 +154,7 @@ class TiledWorldMap {
     return (index / width).floor().toDouble();
   }
 
-  Future<ItemTileSet> getDataTile(int index) async {
+  Future<ItemTileSet> _getDataTile(int index) async {
     TileSet tileSetContain;
     _tiledMap.tileSets.forEach(
       (tileSet) {
@@ -166,7 +171,7 @@ class TiledWorldMap {
       int row = _getY(index - 1, widthCount).toInt();
       int column = _getX(index - 1, widthCount).toInt();
 
-      Sprite sprite = await getSprite(
+      Sprite sprite = await _getSprite(
         '$_basePath${tileSetContain.image}',
         row,
         column,
@@ -174,7 +179,7 @@ class TiledWorldMap {
         tileSetContain.tileHeight,
       );
 
-      FlameAnimation.Animation animation = await getAnimation(
+      FlameAnimation.Animation animation = await _getAnimation(
         tileSetContain,
         index,
         widthCount,
@@ -215,7 +220,7 @@ class TiledWorldMap {
     );
   }
 
-  Future<Sprite> getSprite(
+  Future<Sprite> _getSprite(
     String image,
     int row,
     int column,
@@ -268,7 +273,7 @@ class TiledWorldMap {
     return DataObjectCollision();
   }
 
-  Future<FlameAnimation.Animation> getAnimation(
+  Future<FlameAnimation.Animation> _getAnimation(
     TileSet tileSetContain,
     int index,
     int widthCount,
@@ -286,7 +291,7 @@ class TiledWorldMap {
           int row = _getY(frame.tileid, widthCount).toInt();
           int column = _getX(frame.tileid, widthCount).toInt();
 
-          Sprite sprite = await getSprite(
+          Sprite sprite = await _getSprite(
             '$_basePath${tileSetContain.image}',
             row,
             column,

@@ -7,8 +7,7 @@ import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
 
-class FlyingAttackObject extends AnimatedObject
-    with ObjectCollision, WithLighting {
+class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final int id;
   final FlameAnimation.Animation flyAnimation;
   final FlameAnimation.Animation destroyAnimation;

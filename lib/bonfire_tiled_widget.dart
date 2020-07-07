@@ -20,9 +20,11 @@ class BonfireTiledWidget extends StatefulWidget {
   final Color constructionModeColor;
   final Color collisionAreaColor;
   final Color lightingColorGame;
-  final TiledWorldMap tiledMap;
+  final TiledWorldMap map;
   final Widget progress;
   final double zoom;
+  final AnimatedSwitcherTransitionBuilder transitionBuilder;
+  final Duration durationShowAnimation;
 
   const BonfireTiledWidget({
     Key key,
@@ -37,9 +39,11 @@ class BonfireTiledWidget extends StatefulWidget {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
-    this.tiledMap,
+    this.map,
     this.progress,
     this.zoom,
+    this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
+    this.durationShowAnimation,
   }) : super(key: key);
   @override
   _BonfireTiledWidgetState createState() => _BonfireTiledWidgetState();
@@ -53,7 +57,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   @override
   void didUpdateWidget(BonfireTiledWidget oldWidget) {
     if (widget.constructionMode) {
-      widget.tiledMap.build().then((value) {
+      widget.map.build().then((value) {
         _game.map.updateTiles(value.map.tiles);
 
         _game.decorations().forEach((d) => d.remove());
@@ -74,7 +78,8 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 600),
+      duration: widget.durationShowAnimation ?? Duration(milliseconds: 300),
+      transitionBuilder: widget.transitionBuilder,
       child: _loading
           ? (widget.progress ??
               Center(
@@ -85,7 +90,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   }
 
   void _loadGame() async {
-    final tiled = await widget.tiledMap.build();
+    final tiled = await widget.map.build();
     _game = RPGGame(
       context: context,
       joystickController: widget.joystick,

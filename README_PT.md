@@ -146,14 +146,22 @@ Para criar seu inimigo você deverá criar uma classe que o represente e extenda
 ```dart
 // SimpleEnemy : Para enemies com visualização de perspectiva 45° ou 67.5°. Com animações IDLE,LEFT,RIGHT,TOP,BOTTOM
 Goblin() : super(
-          animationIdleRight: FlameAnimation(), //required
-          animationIdleLeft: FlameAnimation(), // required
-          animationIdleTop: FlameAnimation(),
-          animationIdleBottom: FlameAnimation(),
-          animationRunRight: FlameAnimation(), //required
-          animationRunLeft: FlameAnimation(), //required
-          animationRunTop: FlameAnimation(),
-          animationRunBottom: FlameAnimation(),
+          animIdleRight: FlameAnimation(), //required
+          animIdleLeft: FlameAnimation(), // required
+          animIdleTop: FlameAnimation(),
+          animIdleBottom: FlameAnimation(),
+          animIdleTopLeft: FlameAnimation(),
+          animIdleTopRight: FlameAnimation(),
+          animIdleBottomLeft: FlameAnimation(),
+          animIdleBottomRight: FlameAnimation(),
+          animRunRight: FlameAnimation(), //required
+          animRunLeft: FlameAnimation(), //required
+          animRunTop: FlameAnimation(),
+          animRunBottom: FlameAnimation(),
+          animRunTopLeft: FlameAnimation(),
+          animRunTopRight: FlameAnimation(),
+          animRunBottomLeft: FlameAnimation(),
+          animRunBottomRight: FlameAnimation(),
           initDirection: Direction.right,
           initPosition: Position(x,y),
           width: 25,
@@ -302,10 +310,18 @@ Knight() : super(
           animIdleRight: FlameAnimation(), //required
           animIdleTop: FlameAnimation(),
           animIdleBottom: FlameAnimation(),
+          animIdleTopLeft: FlameAnimation(),
+          animIdleTopRight: FlameAnimation(),
+          animIdleBottomLeft: FlameAnimation(),
+          animIdleBottomRight: FlameAnimation(),
           animRunRight: FlameAnimation(), //required
           animRunLeft: FlameAnimation(), //required
           animRunTop: FlameAnimation(),
           animRunBottom: FlameAnimation(),
+          animRunTopLeft: FlameAnimation(),
+          animRunTopRight: FlameAnimation(),
+          animRunBottomLeft: FlameAnimation(),
+          animRunBottomRight: FlameAnimation(),
           width: 32,
           height: 32,
           initPosition: Position(x,y), //required
@@ -561,7 +577,7 @@ this.gameRef.addGameComponent(COMPONENT);
 
 ### Lighting (in tests)
 
-Ao setar a propriedade 'lightingColorGame'no BofireWidget automaticamente vc habilita esse sistema de iluminacao. e para adicionar luz aos objetos, basta adiconar o mixin 'WithLighting' ao componente e configurar sua luz sobescrevendo a variavel 'lightingConfig':
+Ao setar a propriedade 'lightingColorGame'no BofireWidget automaticamente vc habilita esse sistema de iluminacao. e para adicionar luz aos objetos, basta adiconar o mixin `Lighting` ao componente e configurar sua luz sobescrevendo a variavel 'lightingConfig':
 
 ```dart
  lightingConfig = LightingConfig(
@@ -619,7 +635,7 @@ return BonfireTiledWidget(
           size: 100,
           isFixed: false,
         ),
-      tiledMap: map,
+      map: map,
       lightingColorGame: Colors.black.withOpacity(0.5),
     );
 ```
@@ -637,7 +653,6 @@ Caso deseje que o Tile seja desenhado por cima do player adicione tipo: `above` 
 ## Próximos passos
 - [ ] Documentação detalhada dos componentes.
 - [x] Support with [Tiled](https://www.mapeditor.org/)
-- [ ] Using Box2D
 
 ## Game exemplo
 [![](https://github.com/RafaelBarbosatec/darkness_dungeon/blob/master/icone/icone_small.png)](https://github.com/RafaelBarbosatec/darkness_dungeon)

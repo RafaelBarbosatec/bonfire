@@ -4,34 +4,40 @@ import 'package:flutter/widgets.dart';
 
 class SimpleEnemy extends Enemy {
   /// Animation that was used when enemy stay stopped on the right.
-  final FlameAnimation.Animation animationIdleRight;
+  final FlameAnimation.Animation animIdleRight;
 
   /// Animation that was used when enemy stay stopped on the left.
-  final FlameAnimation.Animation animationIdleLeft;
+  final FlameAnimation.Animation animIdleLeft;
 
   /// Animation that was used when enemy stay stopped on the top.
-  final FlameAnimation.Animation animationIdleTop;
+  final FlameAnimation.Animation animIdleTop;
 
   /// Animation that was used when enemy stay stopped on the bottom.
-  final FlameAnimation.Animation animationIdleBottom;
+  final FlameAnimation.Animation animIdleBottom;
 
   /// Animation used when the enemy walks to the top.
-  final FlameAnimation.Animation animationRunTop;
+  final FlameAnimation.Animation animRunTop;
 
   /// Animation used when the enemy walks to the right.
-  final FlameAnimation.Animation animationRunRight;
+  final FlameAnimation.Animation animRunRight;
 
   /// Animation used when the enemy walks to the left.
-  final FlameAnimation.Animation animationRunLeft;
+  final FlameAnimation.Animation animRunLeft;
 
   /// Animation used when the enemy walks to the bottom.
-  final FlameAnimation.Animation animationRunBottom;
+  final FlameAnimation.Animation animRunBottom;
 
   final FlameAnimation.Animation animRunTopLeft;
   final FlameAnimation.Animation animRunBottomLeft;
 
   final FlameAnimation.Animation animRunTopRight;
   final FlameAnimation.Animation animRunBottomRight;
+
+  final FlameAnimation.Animation animIdleTopLeft;
+  final FlameAnimation.Animation animIdleBottomLeft;
+
+  final FlameAnimation.Animation animIdleTopRight;
+  final FlameAnimation.Animation animIdleBottomRight;
 
   /// Variable that represents the speed of the enemy.
   final double speed;
@@ -50,18 +56,22 @@ class SimpleEnemy extends Enemy {
     @required Position initPosition,
     @required double height,
     @required double width,
-    @required this.animationIdleRight,
-    @required this.animationIdleLeft,
-    @required this.animationRunRight,
-    @required this.animationRunLeft,
+    @required this.animIdleRight,
+    @required this.animIdleLeft,
+    @required this.animRunRight,
+    @required this.animRunLeft,
     this.animRunTopLeft,
     this.animRunBottomLeft,
     this.animRunTopRight,
     this.animRunBottomRight,
-    this.animationIdleTop,
-    this.animationIdleBottom,
-    this.animationRunTop,
-    this.animationRunBottom,
+    this.animIdleTop,
+    this.animIdleBottom,
+    this.animRunTop,
+    this.animRunBottom,
+    this.animIdleTopLeft,
+    this.animIdleBottomLeft,
+    this.animIdleTopRight,
+    this.animIdleBottomRight,
     double life = 100,
     this.speed = 100,
     Collision collision,
@@ -84,10 +94,10 @@ class SimpleEnemy extends Enemy {
 
     if ((lastDirection != Direction.top || _isIdle) && addAnimation) {
       _isIdle = false;
-      animation = animationRunTop ??
+      animation = animRunTop ??
           (lastDirectionHorizontal == Direction.right
-              ? animationRunRight
-              : animationRunLeft);
+              ? animRunRight
+              : animRunLeft);
       lastDirection = Direction.top;
     }
   }
@@ -97,10 +107,10 @@ class SimpleEnemy extends Enemy {
     this.moveBottom(speed);
     if ((lastDirection != Direction.bottom || _isIdle) && addAnimation) {
       _isIdle = false;
-      animation = animationRunBottom ??
+      animation = animRunBottom ??
           (lastDirectionHorizontal == Direction.right
-              ? animationRunRight
-              : animationRunLeft);
+              ? animRunRight
+              : animRunLeft);
       lastDirection = Direction.bottom;
     }
   }
@@ -110,7 +120,7 @@ class SimpleEnemy extends Enemy {
     this.moveLeft(speed);
     if ((lastDirection != Direction.left || _isIdle) && addAnimation) {
       _isIdle = false;
-      animation = animationRunLeft;
+      animation = animRunLeft;
       lastDirection = Direction.left;
       lastDirectionHorizontal = Direction.left;
     }
@@ -121,7 +131,7 @@ class SimpleEnemy extends Enemy {
     this.moveRight(speed);
     if ((lastDirection != Direction.right || _isIdle) && addAnimation) {
       _isIdle = false;
-      animation = animationRunRight;
+      animation = animRunRight;
       lastDirection = Direction.right;
       lastDirectionHorizontal = Direction.right;
     }
@@ -172,44 +182,60 @@ class SimpleEnemy extends Enemy {
     _isIdle = true;
     switch (lastDirection) {
       case Direction.left:
-        animation = animationIdleLeft;
+        animation = animIdleLeft;
         break;
       case Direction.right:
-        animation = animationIdleRight;
+        animation = animIdleRight;
         break;
       case Direction.top:
-        if (animationIdleTop != null) {
-          animation = animationIdleTop;
+        if (animIdleTop != null) {
+          animation = animIdleTop;
         } else {
           if (lastDirectionHorizontal == Direction.left) {
-            animation = animationIdleLeft;
+            animation = animIdleLeft;
           } else {
-            animation = animationIdleRight;
+            animation = animIdleRight;
           }
         }
         break;
       case Direction.bottom:
-        if (animationIdleBottom != null) {
-          animation = animationIdleBottom;
+        if (animIdleBottom != null) {
+          animation = animIdleBottom;
         } else {
           if (lastDirectionHorizontal == Direction.left) {
-            animation = animationIdleLeft;
+            animation = animIdleLeft;
           } else {
-            animation = animationIdleRight;
+            animation = animIdleRight;
           }
         }
         break;
       case Direction.topLeft:
-        animation = animationIdleLeft;
+        if (animIdleTopLeft != null) {
+          animation = animIdleTopLeft;
+        } else {
+          if (animIdleLeft != null) animation = animIdleLeft;
+        }
         break;
       case Direction.topRight:
-        animation = animationIdleRight;
+        if (animIdleTopRight != null) {
+          animation = animIdleTopRight;
+        } else {
+          if (animIdleRight != null) animation = animIdleRight;
+        }
         break;
       case Direction.bottomLeft:
-        animation = animationIdleLeft;
+        if (animIdleBottomLeft != null) {
+          animation = animIdleBottomLeft;
+        } else {
+          if (animIdleLeft != null) animation = animIdleLeft;
+        }
         break;
       case Direction.bottomRight:
-        animation = animationIdleRight;
+        if (animIdleBottomRight != null) {
+          animation = animIdleBottomRight;
+        } else {
+          if (animIdleRight != null) animation = animIdleRight;
+        }
         break;
     }
   }

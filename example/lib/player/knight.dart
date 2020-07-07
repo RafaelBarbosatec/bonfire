@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Knight extends SimplePlayer with WithLighting {
+class Knight extends SimplePlayer with Lighting {
   final Position initPosition;
   double attack = 20;
   double stamina = 100;

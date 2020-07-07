@@ -1,3 +1,12 @@
+## [0.6.13]
+* improvements in TiledWorldMap.
+* BREAKING CHANGES: rename prams with `animation` to `anim` in SimpleEnemy.
+* BREAKING CHANGES: rename mixin `WithLighting` to `Lighting`.
+* BREAKING CHANGES: rename param `tiledMap` to `map` in BonfireTiledWidget.
+* add animIdleTopLeft, animIdleBottomLeft, animIdleTopRight, animIdleBottomRight in SimplePlayer and SimpleEnemy.
+* add `transitionBuilder` in BonfireTiledWidget if desired to add a custom display animation
+* add `durationShowAnimation` in BonfireTiledWidget
+
 ## [0.6.12]
 * add diagonal in Direction(enum).
 

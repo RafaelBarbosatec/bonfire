@@ -157,14 +157,22 @@ The constructor looks like:
 
 // SimpleEnemy: For enemies with 45° or 67.5° perspective view. With animations IDLE, LEFT, RIGHT, TOP, BOTTOM
 Goblin() : super(
-          animationIdleRight: FlameAnimation(), //required
-          animationIdleLeft: FlameAnimation(), // required
-          animationIdleTop: FlameAnimation(),
-          animationIdleBottom: FlameAnimation(),
-          animationRunRight: FlameAnimation(), //required
-          animationRunLeft: FlameAnimation(), //required
-          animationRunTop: FlameAnimation(),
-          animationRunBottom: FlameAnimation(),
+          animIdleRight: FlameAnimation(), //required
+          animIdleLeft: FlameAnimation(), // required
+          animIdleTop: FlameAnimation(),
+          animIdleBottom: FlameAnimation(),
+          animIdleTopLeft: FlameAnimation(),
+          animIdleTopRight: FlameAnimation(),
+          animIdleBottomLeft: FlameAnimation(),
+          animIdleBottomRight: FlameAnimation(),
+          animRunRight: FlameAnimation(), //required
+          animRunLeft: FlameAnimation(), //required
+          animRunTop: FlameAnimation(),
+          animRunBottom: FlameAnimation(),
+          animRunTopLeft: FlameAnimation(),
+          animRunTopRight: FlameAnimation(),
+          animRunBottomLeft: FlameAnimation(),
+          animRunBottomRight: FlameAnimation(),
           initDirection: Direction.right,
           initPosition: Position(x,y),
           width: 25,
@@ -320,10 +328,18 @@ Knight() : super(
           animIdleRight: FlameAnimation(), //required
           animIdleTop: FlameAnimation(),
           animIdleBottom: FlameAnimation(),
+          animIdleTopLeft: FlameAnimation(),
+          animIdleTopRight: FlameAnimation(),
+          animIdleBottomLeft: FlameAnimation(),
+          animIdleBottomRight: FlameAnimation(),
           animRunRight: FlameAnimation(), //required
           animRunLeft: FlameAnimation(), //required
           animRunTop: FlameAnimation(),
           animRunBottom: FlameAnimation(),
+          animRunTopLeft: FlameAnimation(),
+          animRunTopRight: FlameAnimation(),
+          animRunBottomLeft: FlameAnimation(),
+          animRunBottomRight: FlameAnimation(),
           width: 32,
           height: 32,
           initPosition: Position(x,y), //required
@@ -582,7 +598,7 @@ It is possible to move the camera to some position and go back to the player aft
 
 ### Lighting (experimental)
 
-By setting the `lightingColorGame` property on BofireWidget you automatically enable this lighting system. and to add light to the objects, just add the `WithLighting` mixin to the component and configure its light by overwriting the `lightingConfig` variable:
+By setting the `lightingColorGame` property on BofireWidget you automatically enable this lighting system. and to add light to the objects, just add the `Lighting` mixin to the component and configure its light by overwriting the `lightingConfig` variable:
 
 ```dart
  lightingConfig = LightingConfig(
@@ -640,7 +656,7 @@ return BonfireTiledWidget(
           size: 100,
           isFixed: false,
         ),
-      tiledMap: map,
+      map: map,
       lightingColorGame: Colors.black.withOpacity(0.5),
     );
 ```
@@ -659,7 +675,6 @@ If you want the Tile to be drawn above the player add type: `above` in your tile
 ## Next steps
 - [ ] Component docs
 - [x] [Tiled](https://www.mapeditor.org/) support
-- [ ] Using Box2D
 
 
 ## Example game

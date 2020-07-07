@@ -10,8 +10,8 @@ import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/game_interface/game_interface.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/lighting/lighting.dart';
+import 'package:bonfire/util/lighting/lighting_component.dart';
 import 'package:bonfire/util/lighting/lighting_config.dart';
-import 'package:bonfire/util/lighting/with_lighting.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/value_generator_component.dart';
 import 'package:flame/components/component.dart';
@@ -74,7 +74,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     components?.forEach((comp) => super.add(comp));
     if (player != null) super.add(player);
     if (lightingColorGame != null)
-      super.add(Lighting(color: lightingColorGame));
+      super.add(LightingComponent(color: lightingColorGame));
     if (interface != null) super.add(interface);
     super.add(joystickController);
     _interval = IntervalTick(200, tick: _updateTempList);
@@ -152,9 +152,9 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     if (lightingColorGame != null) {
       _visibleLights = components
           .where((element) =>
-              element is WithLighting &&
-              (element as WithLighting).isVisible(gameCamera))
-          .map((e) => (e as WithLighting).lightingConfig);
+              element is Lighting &&
+              (element as Lighting).isVisible(gameCamera))
+          .map((e) => (e as Lighting).lightingConfig);
     }
 
     if (gameController != null) gameController.notifyListeners();
