@@ -23,6 +23,8 @@ class BonfireTiledWidget extends StatefulWidget {
   final TiledWorldMap map;
   final Widget progress;
   final double zoom;
+  final AnimatedSwitcherTransitionBuilder transitionBuilder;
+  final Duration durationShowAnimation;
 
   const BonfireTiledWidget({
     Key key,
@@ -40,6 +42,8 @@ class BonfireTiledWidget extends StatefulWidget {
     this.map,
     this.progress,
     this.zoom,
+    this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
+    this.durationShowAnimation,
   }) : super(key: key);
   @override
   _BonfireTiledWidgetState createState() => _BonfireTiledWidgetState();
@@ -74,7 +78,8 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 600),
+      duration: widget.durationShowAnimation ?? Duration(milliseconds: 300),
+      transitionBuilder: widget.transitionBuilder,
       child: _loading
           ? (widget.progress ??
               Center(
