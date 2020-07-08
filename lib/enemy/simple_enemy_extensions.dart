@@ -82,12 +82,12 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         } else {
           if (translateX > 0) {
             this.customMoveRight(translateX);
-          } else {
+          } else if (translateX < 0) {
             customMoveLeft((translateX * -1));
           }
           if (translateY > 0) {
             customMoveBottom(translateY);
-          } else {
+          } else if (translateY < 0) {
             customMoveTop((translateY * -1));
           }
         }
