@@ -280,7 +280,7 @@ extension PlayerExtensions on Player {
         break;
       case Direction.left:
         positionAttack = Rect.fromLTWH(
-          this.rectCollision.left - this.width,
+          this.rectCollision.left - widthArea,
           this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
@@ -290,7 +290,7 @@ extension PlayerExtensions on Player {
         break;
       case Direction.topLeft:
         positionAttack = Rect.fromLTWH(
-          this.rectCollision.left - this.width,
+          this.rectCollision.left - widthArea,
           this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
@@ -310,7 +310,7 @@ extension PlayerExtensions on Player {
         break;
       case Direction.bottomLeft:
         positionAttack = Rect.fromLTWH(
-          this.rectCollision.left - this.width,
+          this.rectCollision.left - widthArea,
           this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
