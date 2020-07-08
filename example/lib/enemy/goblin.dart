@@ -61,19 +61,19 @@ class Goblin extends SimpleEnemy {
           closePlayer: (player) {
             execAttack();
           },
-          visionCells: 2,
+          radiusVision: DungeonMap.tileSize * 2,
         );
       },
-      visionCells: 2,
+      radiusVision: DungeonMap.tileSize * 2,
     );
 
     if (!_seePlayerClose) {
       this.seeAndMoveToAttackRange(
-        minDistanceCellsFromPlayer: 4,
+        minDistanceCellsFromPlayer: DungeonMap.tileSize * 4,
         positioned: (p) {
           execAttackRange();
         },
-        visionCells: 5,
+        radiusVision: DungeonMap.tileSize * 5,
       );
     }
   }

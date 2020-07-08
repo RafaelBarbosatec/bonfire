@@ -15,14 +15,14 @@ import 'package:flutter/widgets.dart';
 extension SimpleEnemyExtensions on SimpleEnemy {
   void seeAndMoveToPlayer({
     Function(Player) closePlayer,
-    int visionCells = 3,
+    double radiusVision = 32,
     double margin = 10,
   }) {
     if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
         isDead ||
         this.position == null) return;
     seePlayer(
-      visionCells: visionCells,
+      radiusVision: radiusVision,
       observed: (player) {
         double centerXPlayer = player.rectCollision.center.dx;
         double centerYPlayer = player.rectCollision.center.dy;
@@ -392,17 +392,16 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
   void seeAndMoveToAttackRange(
       {Function(Player) positioned,
-      int visionCells = 5,
+      double radiusVision = 32,
       double minDistanceCellsFromPlayer}) {
     if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
         isDead ||
         this.position == null) return;
 
-    double distance =
-        this.position.width * (minDistanceCellsFromPlayer ?? visionCells);
+    double distance = (minDistanceCellsFromPlayer ?? radiusVision);
 
     seePlayer(
-      visionCells: visionCells,
+      radiusVision: radiusVision,
       observed: (player) {
         double centerXPlayer = player.rectCollision.center.dx;
         double centerYPlayer = player.rectCollision.center.dy;

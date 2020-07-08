@@ -13,7 +13,7 @@ extension EnemyExtensions on Enemy {
   void seePlayer({
     Function(Player) observed,
     Function() notObserved,
-    int visionCells = 3,
+    double radiusVision = 32,
     int interval = 500,
   }) {
     Player player = gameRef.player;
@@ -24,11 +24,11 @@ extension EnemyExtensions on Enemy {
       return;
     }
 
-    double vision = this.position.width * visionCells * 2;
+    double vision = radiusVision * 2;
 
     Rect fieldOfVision = Rect.fromLTWH(
-      this.position.left - (vision / 2),
-      this.position.top - (vision / 2),
+      this.rectCollision.center.dx - radiusVision,
+      this.rectCollision.center.dy - radiusVision,
       vision,
       vision,
     );

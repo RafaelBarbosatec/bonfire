@@ -197,7 +197,7 @@ class Knight extends SimplePlayer with Lighting {
 
     if (_timerSeeEnemy.update(dt) && !showObserveEnemy) {
       this.seeEnemy(
-        visionCells: 5,
+        radiusVision: width * 5,
         notObserved: () {
           showObserveEnemy = false;
         },
