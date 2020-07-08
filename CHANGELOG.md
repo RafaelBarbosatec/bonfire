@@ -1,3 +1,7 @@
+## [0.6.15]
+* improvement in `seeEnemy` and `seePlayer`
+* BREAKING CHANGES: rename prams `visionCells` to `radiusVision` in `seeEnemy` and `seePlayer`
+
 ## [0.6.14]
 * hotfix extension simpleAttackMeleeByDirection and simpleAttackMelee
 
