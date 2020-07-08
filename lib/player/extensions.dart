@@ -239,6 +239,7 @@ extension PlayerExtensions on Player {
     double heightArea = 32,
     double widthArea = 32,
     bool withPush = true,
+    double sizePush,
   }) {
     if (isDead) return;
 
@@ -256,7 +257,7 @@ extension PlayerExtensions on Player {
           heightArea,
         );
         if (animationTop != null) anim = animationTop;
-        pushTop = heightArea * -1;
+        pushTop = (sizePush ?? heightArea) * -1;
         break;
       case Direction.right:
         positionAttack = Rect.fromLTWH(
@@ -266,7 +267,7 @@ extension PlayerExtensions on Player {
           heightArea,
         );
         if (animationRight != null) anim = animationRight;
-        pushLeft = widthArea;
+        pushLeft = (sizePush ?? widthArea);
         break;
       case Direction.bottom:
         positionAttack = Rect.fromLTWH(
@@ -276,7 +277,7 @@ extension PlayerExtensions on Player {
           heightArea,
         );
         if (animationBottom != null) anim = animationBottom;
-        pushTop = heightArea;
+        pushTop = (sizePush ?? heightArea);
         break;
       case Direction.left:
         positionAttack = Rect.fromLTWH(
@@ -286,7 +287,7 @@ extension PlayerExtensions on Player {
           heightArea,
         );
         if (animationLeft != null) anim = animationLeft;
-        pushLeft = widthArea * -1;
+        pushLeft = (sizePush ?? widthArea) * -1;
         break;
       case Direction.topLeft:
         positionAttack = Rect.fromLTWH(
@@ -296,7 +297,7 @@ extension PlayerExtensions on Player {
           heightArea,
         );
         if (animationLeft != null) anim = animationLeft;
-        pushLeft = widthArea * -1;
+        pushLeft = (sizePush ?? widthArea) * -1;
         break;
       case Direction.topRight:
         positionAttack = Rect.fromLTWH(
@@ -306,7 +307,7 @@ extension PlayerExtensions on Player {
           heightArea,
         );
         if (animationRight != null) anim = animationRight;
-        pushLeft = widthArea;
+        pushLeft = (sizePush ?? widthArea);
         break;
       case Direction.bottomLeft:
         positionAttack = Rect.fromLTWH(
@@ -316,7 +317,7 @@ extension PlayerExtensions on Player {
           heightArea,
         );
         if (animationLeft != null) anim = animationLeft;
-        pushLeft = widthArea * -1;
+        pushLeft = (sizePush ?? widthArea) * -1;
         break;
       case Direction.bottomRight:
         positionAttack = Rect.fromLTWH(
@@ -326,7 +327,7 @@ extension PlayerExtensions on Player {
           heightArea,
         );
         if (animationRight != null) anim = animationRight;
-        pushLeft = widthArea;
+        pushLeft = (sizePush ?? widthArea);
         break;
     }
 
