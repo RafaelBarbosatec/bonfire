@@ -1,3 +1,6 @@
+## [0.6.14]
+* hotfix extension simpleAttackMeleeByDirection and simpleAttackMelee
+
 ## [0.6.13]
 * improvements in TiledWorldMap.
 * BREAKING CHANGES: rename prams with `animation` to `anim` in SimpleEnemy.

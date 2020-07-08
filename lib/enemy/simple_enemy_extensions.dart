@@ -105,6 +105,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     int id,
     int interval = 1000,
     bool withPush = false,
+    double sizePush,
     Direction direction,
     FlameAnimation.Animation attackEffectRightAnim,
     FlameAnimation.Animation attackEffectBottomAnim,
@@ -150,12 +151,12 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       case Direction.top:
         positionAttack = Rect.fromLTWH(
           this.position.left + (this.width - widthArea) / 2,
-          this.rectCollision.top - this.height,
+          this.rectCollision.top - heightArea,
           widthArea,
           heightArea,
         );
         if (attackEffectTopAnim != null) anim = attackEffectTopAnim;
-        pushTop = heightArea * -1;
+        pushTop = (sizePush ?? heightArea) * -1;
         break;
       case Direction.right:
         positionAttack = Rect.fromLTWH(
@@ -165,7 +166,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           heightArea,
         );
         if (attackEffectRightAnim != null) anim = attackEffectRightAnim;
-        pushLeft = widthArea;
+        pushLeft = (sizePush ?? widthArea);
         break;
       case Direction.bottom:
         positionAttack = Rect.fromLTWH(
@@ -175,27 +176,27 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           heightArea,
         );
         if (attackEffectBottomAnim != null) anim = attackEffectBottomAnim;
-        pushTop = heightArea;
+        pushTop = (sizePush ?? heightArea);
         break;
       case Direction.left:
         positionAttack = Rect.fromLTWH(
-          this.rectCollision.left - this.width,
+          this.rectCollision.left - widthArea,
           this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
         if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
-        pushLeft = widthArea * -1;
+        pushLeft = (sizePush ?? widthArea) * -1;
         break;
       case Direction.topLeft:
         positionAttack = Rect.fromLTWH(
-          this.rectCollision.left - this.width,
+          this.rectCollision.left - widthArea,
           this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
         if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
-        pushLeft = widthArea * -1;
+        pushLeft = (sizePush ?? widthArea) * -1;
         break;
       case Direction.topRight:
         positionAttack = Rect.fromLTWH(
@@ -205,17 +206,17 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           heightArea,
         );
         if (attackEffectRightAnim != null) anim = attackEffectRightAnim;
-        pushLeft = widthArea;
+        pushLeft = (sizePush ?? widthArea);
         break;
       case Direction.bottomLeft:
         positionAttack = Rect.fromLTWH(
-          this.rectCollision.left - this.width,
+          this.rectCollision.left - widthArea,
           this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
         if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
-        pushLeft = widthArea * -1;
+        pushLeft = (sizePush ?? widthArea) * -1;
         break;
       case Direction.bottomRight:
         positionAttack = Rect.fromLTWH(
@@ -225,7 +226,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           heightArea,
         );
         if (attackEffectRightAnim != null) anim = attackEffectRightAnim;
-        pushLeft = widthArea;
+        pushLeft = (sizePush ?? widthArea);
         break;
     }
 
