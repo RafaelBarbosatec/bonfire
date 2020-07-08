@@ -212,12 +212,12 @@ void moveTop({double moveSpeed})
 void moveLeft({double moveSpeed})
 void moveRight({double moveSpeed})
     
-  // Will observe the player when within the radius (visionCells)
+  // Will observe the player when within the radius (radiusVision)
   void seePlayer(
         {
          Function(Player) observed,
          Function() notObserved,
-         int visionCells = 3,
+         int radiusVision = 32,
         }
   )
   
@@ -225,7 +225,7 @@ void moveRight({double moveSpeed})
   void seeAndMoveToPlayer(
      {
       Function(Player) closePlayer,
-      int visionCells = 3
+      int radiusVision = 32
      }
   )
   
@@ -263,7 +263,7 @@ void moveRight({double moveSpeed})
   void seeAndMoveToAttackRange(
       {
         Function(Player) positioned,
-        int visionCells = 5
+        int radiusVision = 32
       }
   )
   
@@ -417,12 +417,12 @@ Actions can be fired when a joystick action is received. Just like `Enemy`, here
       }
     )
     
-    // Will observe enemies when within the radius (visionCells)
+    // Will observe enemies when within the radius (radiusVision)
     void seeEnemy(
        {
           Function(List<Enemy>) observed,
           Function() notObserved,
-          int visionCells = 3,
+          int radiusVision = 32,
        }
     )
     

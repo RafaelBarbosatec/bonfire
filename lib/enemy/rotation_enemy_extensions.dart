@@ -15,14 +15,14 @@ import 'package:flutter/widgets.dart';
 extension RotationEnemyExtensions on RotationEnemy {
   void seeAndMoveToPlayer({
     Function(Player) closePlayer,
-    int visionCells = 3,
+    double radiusVision = 32,
     double margin = 10,
   }) {
     if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
         isDead ||
         this.position == null) return;
     seePlayer(
-      visionCells: visionCells,
+      radiusVision: radiusVision,
       observed: (player) {
         double _radAngle = getAngleFomPlayer();
 
@@ -52,18 +52,17 @@ extension RotationEnemyExtensions on RotationEnemy {
 
   void seeAndMoveToAttackRange(
       {Function(Player) positioned,
-      int visionCells = 3,
+      double radiusVision = 32,
       double minDistanceCellsFromPlayer}) {
     if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
         isDead ||
         this.position == null) return;
     seePlayer(
-      visionCells: visionCells,
+      radiusVision: radiusVision,
       observed: (player) {
         if (positioned != null) positioned(player);
 
-        double distance =
-            this.position.width * (minDistanceCellsFromPlayer ?? visionCells);
+        double distance = (minDistanceCellsFromPlayer ?? radiusVision);
         double _radAngle = getAngleFomPlayer();
 
         Position myPosition = Position.fromOffset(this.position.center);

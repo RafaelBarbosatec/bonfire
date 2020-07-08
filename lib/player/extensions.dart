@@ -43,8 +43,7 @@ extension PlayerExtensions on Player {
   void seeEnemy({
     Function(List<Enemy>) observed,
     Function() notObserved,
-    int visionCells = 3,
-    int interval = 500,
+    double radiusVision = 32,
   }) {
     if (isDead || this.position == null) return;
 
@@ -54,12 +53,12 @@ extension PlayerExtensions on Player {
       return;
     }
 
-    double visionWidth = position.width * visionCells * 2;
-    double visionHeight = position.height * visionCells * 2;
+    double visionWidth = radiusVision * 2;
+    double visionHeight = radiusVision * 2;
 
     Rect fieldOfVision = Rect.fromLTWH(
-      position.left - (visionWidth / 2),
-      position.top - (visionHeight / 2),
+      this.position.center.dx - radiusVision,
+      this.position.center.dy - radiusVision,
       visionWidth,
       visionHeight,
     );
