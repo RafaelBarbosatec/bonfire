@@ -202,7 +202,7 @@ void moveRight({double moveSpeed})
         {
          Function(Player) observed,
          Function() notObserved,
-         int radiusVision = 3,
+         int radiusVision = 32,
         }
   )
   
@@ -210,7 +210,7 @@ void moveRight({double moveSpeed})
   void seeAndMoveToPlayer(
      {
       Function(Player) closePlayer,
-      int radiusVision = 3
+      int radiusVision = 32
      }
   )
  
@@ -249,7 +249,7 @@ void moveRight({double moveSpeed})
   void seeAndMoveToAttackRange(
       {
         Function(Player) positioned,
-        int radiusVision = 5
+        int radiusVision = 32
       }
   )
   
@@ -403,7 +403,7 @@ Ao perceber o toque nessas ações do joystick, você poderá executar outras a�
        {
           Function(List<Enemy>) observed,
           Function() notObserved,
-          int radiusVision = 3,
+          int radiusVision = 32,
        }
     )
     
