@@ -27,8 +27,8 @@ extension EnemyExtensions on Enemy {
     double vision = radiusVision * 2;
 
     Rect fieldOfVision = Rect.fromLTWH(
-      this.rectCollision.center.dx - radiusVision,
-      this.rectCollision.center.dy - radiusVision,
+      this.position.center.dx - radiusVision,
+      this.position.center.dy - radiusVision,
       vision,
       vision,
     );

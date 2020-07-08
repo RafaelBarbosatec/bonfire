@@ -57,8 +57,8 @@ extension PlayerExtensions on Player {
     double visionHeight = radiusVision * 2;
 
     Rect fieldOfVision = Rect.fromLTWH(
-      rectCollision.center.dx - radiusVision,
-      rectCollision.center.dy - radiusVision,
+      this.position.center.dx - radiusVision,
+      this.position.center.dy - radiusVision,
       visionWidth,
       visionHeight,
     );
