@@ -1,3 +1,7 @@
+## [0.6.16]
+* improvement in JoystickActions
+* improvement in seeAndMoveToPlayer (Enemy)
+
 ## [0.6.15]
 * improvement in `seeEnemy` and `seePlayer`
 * BREAKING CHANGES: rename prams `visionCells` to `radiusVision` in `seeEnemy` and `seePlayer`

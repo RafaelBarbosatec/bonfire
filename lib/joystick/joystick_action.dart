@@ -13,12 +13,16 @@ class JoystickAction {
   final Sprite sprite;
   final Sprite spritePressed;
   final Sprite spriteBackgroundDirection;
+  final double sizeFactorBackgroundDirection;
   final double size;
-  double sizeBackgroundDirection;
   final EdgeInsets margin;
   final JoystickActionAlign align;
   final bool enableDirection;
   final Color color;
+  final double opacityBackground;
+  final double opacityKnob;
+
+  double _sizeBackgroundDirection;
 
   int _pointerDragging;
   Rect _rect;
@@ -29,7 +33,9 @@ class JoystickAction {
   Offset _dragPosition;
   Paint _paintBackground;
   Paint _paintAction;
+  Paint _paintActionPressed;
   JoystickController _joystickController;
+  bool isPressed = false;
 
   JoystickAction({
     @required this.actionId,
@@ -38,14 +44,16 @@ class JoystickAction {
     this.spriteBackgroundDirection,
     this.enableDirection = false,
     this.size = 50,
-    this.sizeBackgroundDirection,
+    this.sizeFactorBackgroundDirection = 1.5,
     this.margin = EdgeInsets.zero,
     this.color = Colors.blueGrey,
     this.align = JoystickActionAlign.BOTTOM_RIGHT,
+    this.opacityBackground = 0.5,
+    this.opacityKnob = 0.8,
   }) {
     _sprite = sprite;
-    sizeBackgroundDirection = sizeBackgroundDirection ?? size * 1.5;
-    _tileSize = sizeBackgroundDirection / 2;
+    _sizeBackgroundDirection = sizeFactorBackgroundDirection * size;
+    _tileSize = _sizeBackgroundDirection / 2;
   }
 
   void initialize(Size _screenSize, JoystickController joystickController) {
@@ -76,17 +84,26 @@ class JoystickAction {
     );
     _rectBackgroundDirection = Rect.fromCircle(
       center: Offset(dx, dy),
-      radius: sizeBackgroundDirection / 2,
+      radius: _sizeBackgroundDirection / 2,
     );
 
-    _paintBackground = Paint()
-      ..color = color.withOpacity(0.5)
-      ..style = PaintingStyle.fill;
+    if (spriteBackgroundDirection == null) {
+      _paintBackground = Paint()
+        ..color = color.withOpacity(opacityBackground)
+        ..style = PaintingStyle.fill;
+    }
 
-    _paintAction = Paint()
-      ..color = color.withOpacity(0.8)
-      ..style = PaintingStyle.fill;
+    if (sprite == null) {
+      _paintAction = Paint()
+        ..color = color.withOpacity(opacityKnob)
+        ..style = PaintingStyle.fill;
+    }
 
+    if (spritePressed == null) {
+      _paintActionPressed = Paint()
+        ..color = color.withOpacity(opacityBackground)
+        ..style = PaintingStyle.fill;
+    }
     _dragPosition = _rect.center;
   }
 
@@ -117,7 +134,7 @@ class JoystickAction {
           _rect.top + radiusAction,
         ),
         radiusAction,
-        _paintAction,
+        isPressed ? _paintActionPressed : _paintAction,
       );
     }
   }
@@ -210,12 +227,14 @@ class JoystickAction {
   }
 
   void pressed() {
+    isPressed = true;
     if (spritePressed != null) {
       _sprite = spritePressed;
     }
   }
 
   void unPressed() {
+    isPressed = false;
     _sprite = sprite;
   }
 }
