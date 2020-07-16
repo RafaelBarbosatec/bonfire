@@ -16,7 +16,7 @@ Build RPG games and similar with the power of [FlameEngine](https://flame-engine
 
 [Download Demo](https://github.com/RafaelBarbosatec/bonfire/raw/master/demo/demo.apk)
 
-[Demo Web](http://rafaelbarbosatec.github.io/bonfire/)
+[Demo Web](https://rafaelbarbosatec.github.io/bonfire/)
 
 Find the complete code of this example [here](https://github.com/RafaelBarbosatec/bonfire/tree/master/example).
 
