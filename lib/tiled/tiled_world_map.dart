@@ -156,9 +156,12 @@ class TiledWorldMap {
 
   Future<ItemTileSet> _getDataTile(int index) async {
     TileSet tileSetContain;
+    int firsTgId = 0;
+
     _tiledMap.tileSets.forEach(
       (tileSet) {
-        if (tileSet.tileSet != null && index <= tileSet.tileSet.tileCount) {
+        if (tileSet.tileSet != null && index >= tileSet.firsTgId) {
+          firsTgId = tileSet.firsTgId;
           tileSetContain = tileSet.tileSet;
         }
       },
@@ -168,8 +171,8 @@ class TiledWorldMap {
       final int widthCount =
           tileSetContain.imageWidth ~/ tileSetContain.tileWidth;
 
-      int row = _getY(index - 1, widthCount).toInt();
-      int column = _getX(index - 1, widthCount).toInt();
+      int row = _getY((index - firsTgId), widthCount).toInt();
+      int column = _getX((index - firsTgId), widthCount).toInt();
 
       Sprite sprite = await _getSprite(
         '$_basePath${tileSetContain.image}',
@@ -181,11 +184,14 @@ class TiledWorldMap {
 
       FlameAnimation.Animation animation = await _getAnimation(
         tileSetContain,
-        index,
+        (index - firsTgId),
         widthCount,
       );
 
-      DataObjectCollision object = _getCollision(tileSetContain, index);
+      DataObjectCollision object = _getCollision(
+        tileSetContain,
+        (index - firsTgId),
+      );
 
       return Future.value(
         ItemTileSet(
@@ -243,7 +249,7 @@ class TiledWorldMap {
 
   DataObjectCollision _getCollision(TileSet tileSetContain, int index) {
     Iterable<TileSetItem> tileSetItemList =
-        tileSetContain?.tiles?.where((element) => element.id == (index - 1));
+        tileSetContain?.tiles?.where((element) => element.id == index);
 
     if ((tileSetItemList?.isNotEmpty ?? false)) {
       List<TileSetObject> tileSetObjectList =
@@ -279,8 +285,8 @@ class TiledWorldMap {
     int widthCount,
   ) async {
     try {
-      TileSetItem tileSetItemList = tileSetContain.tiles
-          .firstWhere((element) => element.id == (index - 1));
+      TileSetItem tileSetItemList =
+          tileSetContain.tiles.firstWhere((element) => element.id == index);
 
       List<FrameAnimation> animationFrames = tileSetItemList.animation;
 

@@ -1,3 +1,6 @@
+## [0.6.17]
+* hotfix Tiled - Support multiTileset.
+
 ## [0.6.16]
 * improvement in JoystickActions
 * improvement in seeAndMoveToPlayer (Enemy)
