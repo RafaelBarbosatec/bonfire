@@ -677,8 +677,12 @@ If you want the Tile to be drawn above the player add type: `above` in your tile
 - [x] [Tiled](https://www.mapeditor.org/) support
 
 
-## Example game
+## Example games
 [![](https://github.com/RafaelBarbosatec/darkness_dungeon/blob/master/icone/icone_small.png)](https://github.com/RafaelBarbosatec/darkness_dungeon)
+
+[Mountain Fight](https://github.com/RafaelBarbosatec/mountain_fight) (Multiplayer)
+
+[Mini Fantasy](https://github.com/RafaelBarbosatec/mini_fantasy)
 
 ## Credits
 
