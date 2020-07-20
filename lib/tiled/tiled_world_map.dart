@@ -22,7 +22,7 @@ class TiledWorldMap {
   static const TYPE_TILE_ABOVE = 'above';
 
   final String pathFile;
-  final double forceTileSize;
+  final Size forceTileSize;
   TiledJsonReader _reader;
   List<Tile> _tiles = List();
   List<GameComponent> _components = List();
@@ -52,8 +52,8 @@ class TiledWorldMap {
       _tiledMap = await _reader.read();
       _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble();
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble();
-      _tileWidth = forceTileSize ?? _tileWidthOrigin;
-      _tileHeight = forceTileSize ?? _tileHeightOrigin;
+      _tileWidth = forceTileSize?.width ?? _tileWidthOrigin;
+      _tileHeight = forceTileSize?.height ?? _tileHeightOrigin;
       await _load(_tiledMap);
     } catch (e) {
       print('(TiledWorldMap): not found map');

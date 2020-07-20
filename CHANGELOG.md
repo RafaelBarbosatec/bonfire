@@ -1,3 +1,6 @@
+## [NEXT]
+* BREAKING CHANGES: change `forceTileSize` type double to Size.
+
 ## [0.6.17]
 * hotfix Tiled - Support multiTileset.
 
