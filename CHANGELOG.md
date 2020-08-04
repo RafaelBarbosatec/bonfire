@@ -1,3 +1,7 @@
+## [0.6.18]
+* BREAKING CHANGES: change `forceTileSize` type double to Size.
+* Add support to offsetX and offsetY in TileMap layers.
+
 ## [0.6.17]
 * hotfix Tiled - Support multiTileset.
 

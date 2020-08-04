@@ -73,9 +73,10 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     enemies?.forEach((enemy) => super.add(enemy));
     components?.forEach((comp) => super.add(comp));
     if (player != null) super.add(player);
-    if (lightingColorGame != null)
+    if (lightingColorGame != null) {
       super.add(LightingComponent(color: lightingColorGame));
-    if (interface != null) super.add(interface);
+    }
+    super.add((interface ?? GameInterface()));
     super.add(joystickController);
     _interval = IntervalTick(200, tick: _updateTempList);
   }
@@ -139,22 +140,24 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   }
 
   void _updateTempList() {
-    _decorations =
-        components.where((element) => (element is GameDecoration)).cast();
-    _visibleDecorations =
-        _decorations.where((element) => element.isVisibleInCamera());
+    _decorations = components.where((element) {
+      return (element is GameDecoration);
+    }).cast();
+    _visibleDecorations = _decorations.where((element) {
+      return element.isVisibleInCamera();
+    });
 
     _enemies = components.where((element) => (element is Enemy)).cast();
     _livingEnemies = _enemies.where((element) => !element.isDead).cast();
-    _visibleEnemies =
-        _livingEnemies.where((element) => element.isVisibleInCamera());
+    _visibleEnemies = _livingEnemies.where((element) {
+      return element.isVisibleInCamera();
+    });
 
     if (lightingColorGame != null) {
-      _visibleLights = components
-          .where((element) =>
-              element is Lighting &&
-              (element as Lighting).isVisible(gameCamera))
-          .map((e) => (e as Lighting).lightingConfig);
+      _visibleLights = components.where((element) {
+        return element is Lighting &&
+            (element as Lighting).isVisible(gameCamera);
+      }).map((e) => (e as Lighting).lightingConfig);
     }
 
     if (gameController != null) gameController.notifyListeners();

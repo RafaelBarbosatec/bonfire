@@ -22,7 +22,7 @@ class TiledWorldMap {
   static const TYPE_TILE_ABOVE = 'above';
 
   final String pathFile;
-  final double forceTileSize;
+  final Size forceTileSize;
   TiledJsonReader _reader;
   List<Tile> _tiles = List();
   List<GameComponent> _components = List();
@@ -52,8 +52,8 @@ class TiledWorldMap {
       _tiledMap = await _reader.read();
       _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble();
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble();
-      _tileWidth = forceTileSize ?? _tileWidthOrigin;
-      _tileHeight = forceTileSize ?? _tileHeightOrigin;
+      _tileWidth = forceTileSize?.width ?? _tileWidthOrigin;
+      _tileHeight = forceTileSize?.height ?? _tileHeightOrigin;
       await _load(_tiledMap);
     } catch (e) {
       print('(TiledWorldMap): not found map');
@@ -78,7 +78,10 @@ class TiledWorldMap {
   }
 
   Future<void> _addTileLayer(TileLayer tileLayer) async {
+    if (!tileLayer.visible) return;
     int count = 0;
+    double offsetX = (tileLayer.offsetX * _tileWidth) / _tileWidthOrigin;
+    double offsetY = (tileLayer.offsetY * _tileHeight) / _tileHeightOrigin;
     await Future.forEach(tileLayer.data, (tile) async {
       if (tile != 0) {
         var data = await _getDataTile(tile);
@@ -89,8 +92,10 @@ class TiledWorldMap {
                 GameDecoration.spriteMultiCollision(
                   data.sprite,
                   initPosition: Position(
-                    _getX(count, tileLayer.width.toInt()) * _tileWidth,
-                    _getY(count, tileLayer.width.toInt()) * _tileHeight,
+                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
+                        offsetX,
+                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
+                        offsetY,
                   ),
                   height: _tileHeight,
                   width: _tileWidth,
@@ -106,6 +111,8 @@ class TiledWorldMap {
                     _getX(count, tileLayer.width.toInt()),
                     _getY(count, tileLayer.width.toInt()),
                   ),
+                  offsetX: offsetX,
+                  offsetY: offsetY,
                   collisions: data.collisions,
                   width: _tileWidth,
                   height: _tileHeight,
@@ -117,8 +124,10 @@ class TiledWorldMap {
               _components.add(
                 GameDecoration.animationMultiCollision(data.animation,
                     initPosition: Position(
-                      _getX(count, tileLayer.width.toInt()) * _tileWidth,
-                      _getY(count, tileLayer.width.toInt()) * _tileHeight,
+                      (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
+                          offsetX,
+                      (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
+                          offsetY,
                     ),
                     height: _tileHeight,
                     width: _tileWidth,
@@ -133,6 +142,8 @@ class TiledWorldMap {
                     _getX(count, tileLayer.width.toInt()),
                     _getY(count, tileLayer.width.toInt()),
                   ),
+                  offsetX: offsetX,
+                  offsetY: offsetY,
                   collisions: data.collisions,
                   width: _tileWidth,
                   height: _tileHeight,
@@ -207,11 +218,14 @@ class TiledWorldMap {
   }
 
   void _addObjects(ObjectGroup layer) {
+    if (!layer.visible) return;
+    double offsetX = (layer.offsetX * _tileWidth) / _tileWidthOrigin;
+    double offsetY = (layer.offsetY * _tileHeight) / _tileHeightOrigin;
     layer.objects.forEach(
       (element) {
         if (_objectsBuilder[element.name] != null) {
-          double x = (element.x * _tileWidth) / _tileWidthOrigin;
-          double y = (element.y * _tileHeight) / _tileHeightOrigin;
+          double x = ((element.x * _tileWidth) / _tileWidthOrigin) + offsetX;
+          double y = ((element.y * _tileHeight) / _tileHeightOrigin) + offsetY;
           double width = (element.width * _tileWidth) / _tileWidthOrigin;
           double height = (element.height * _tileHeight) / _tileHeightOrigin;
           var object = _objectsBuilder[element.name](x, y, width, height);
