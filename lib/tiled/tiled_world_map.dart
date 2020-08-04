@@ -79,6 +79,9 @@ class TiledWorldMap {
 
   Future<void> _addTileLayer(TileLayer tileLayer) async {
     int count = 0;
+    double offsetX = (tileLayer.offsetX * _tileWidth) / _tileWidthOrigin;
+    double offsetY = (tileLayer.offsetY * _tileHeight) / _tileHeightOrigin;
+    if (!tileLayer.visible) return;
     await Future.forEach(tileLayer.data, (tile) async {
       if (tile != 0) {
         var data = await _getDataTile(tile);
@@ -89,8 +92,10 @@ class TiledWorldMap {
                 GameDecoration.spriteMultiCollision(
                   data.sprite,
                   initPosition: Position(
-                    _getX(count, tileLayer.width.toInt()) * _tileWidth,
-                    _getY(count, tileLayer.width.toInt()) * _tileHeight,
+                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
+                        offsetX,
+                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
+                        offsetY,
                   ),
                   height: _tileHeight,
                   width: _tileWidth,
@@ -106,6 +111,8 @@ class TiledWorldMap {
                     _getX(count, tileLayer.width.toInt()),
                     _getY(count, tileLayer.width.toInt()),
                   ),
+                  offsetX: offsetX,
+                  offsetY: offsetY,
                   collisions: data.collisions,
                   width: _tileWidth,
                   height: _tileHeight,
@@ -117,8 +124,10 @@ class TiledWorldMap {
               _components.add(
                 GameDecoration.animationMultiCollision(data.animation,
                     initPosition: Position(
-                      _getX(count, tileLayer.width.toInt()) * _tileWidth,
-                      _getY(count, tileLayer.width.toInt()) * _tileHeight,
+                      (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
+                          offsetX,
+                      (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
+                          offsetY,
                     ),
                     height: _tileHeight,
                     width: _tileWidth,
@@ -133,6 +142,8 @@ class TiledWorldMap {
                     _getX(count, tileLayer.width.toInt()),
                     _getY(count, tileLayer.width.toInt()),
                   ),
+                  offsetX: offsetX,
+                  offsetY: offsetY,
                   collisions: data.collisions,
                   width: _tileWidth,
                   height: _tileHeight,
@@ -207,6 +218,7 @@ class TiledWorldMap {
   }
 
   void _addObjects(ObjectGroup layer) {
+    if (!layer.visible) return;
     layer.objects.forEach(
       (element) {
         if (_objectsBuilder[element.name] != null) {

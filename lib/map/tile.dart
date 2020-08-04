@@ -53,10 +53,18 @@ class Tile extends GameComponent with ObjectCollision {
     List<Collision> collisions,
     this.width = 32,
     this.height = 32,
+    double offsetX = 0,
+    double offsetY = 0,
   }) {
     if (collisions != null) this.collisions = [...collisions];
     this.sprite = sprite;
-    this.position = generateRectWithBleedingPixel(position, width, height);
+    this.position = generateRectWithBleedingPixel(
+      position,
+      width,
+      height,
+      offsetX: offsetX,
+      offsetY: offsetY,
+    );
 
     _positionText = Position(position.x, position.y);
   }
@@ -81,10 +89,18 @@ class Tile extends GameComponent with ObjectCollision {
     List<Collision> collisions,
     this.width = 32,
     this.height = 32,
+    double offsetX = 0,
+    double offsetY = 0,
   }) {
     this.animation = animation;
     if (collisions != null) this.collisions = [...collisions];
-    this.position = generateRectWithBleedingPixel(position, width, height);
+    this.position = generateRectWithBleedingPixel(
+      position,
+      width,
+      height,
+      offsetX: offsetX,
+      offsetY: offsetY,
+    );
 
     _positionText = Position(position.x, position.y);
   }
@@ -129,7 +145,8 @@ class Tile extends GameComponent with ObjectCollision {
   }
 
   Rect generateRectWithBleedingPixel(
-      Position position, double width, double height) {
+      Position position, double width, double height,
+      {double offsetX = 0, double offsetY = 0}) {
     double bleendingWidthPixel = width * 0.03;
     if (bleendingWidthPixel > 2) {
       bleendingWidthPixel = 2;
@@ -140,9 +157,11 @@ class Tile extends GameComponent with ObjectCollision {
     }
     return Rect.fromLTWH(
       (position.x * width) -
-          (position.x % 2 == 0 ? (bleendingWidthPixel / 2) : 0),
+          (position.x % 2 == 0 ? (bleendingWidthPixel / 2) : 0) +
+          offsetX,
       (position.y * height) -
-          (position.y % 2 == 0 ? (bleendingHeightPixel / 2) : 0),
+          (position.y % 2 == 0 ? (bleendingHeightPixel / 2) : 0) +
+          offsetY,
       width + (position.x % 2 == 0 ? bleendingWidthPixel : 0),
       height + (position.y % 2 == 0 ? bleendingHeightPixel : 0),
     );
