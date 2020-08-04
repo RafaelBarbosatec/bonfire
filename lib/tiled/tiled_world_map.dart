@@ -78,10 +78,10 @@ class TiledWorldMap {
   }
 
   Future<void> _addTileLayer(TileLayer tileLayer) async {
+    if (!tileLayer.visible) return;
     int count = 0;
     double offsetX = (tileLayer.offsetX * _tileWidth) / _tileWidthOrigin;
     double offsetY = (tileLayer.offsetY * _tileHeight) / _tileHeightOrigin;
-    if (!tileLayer.visible) return;
     await Future.forEach(tileLayer.data, (tile) async {
       if (tile != 0) {
         var data = await _getDataTile(tile);
@@ -219,11 +219,13 @@ class TiledWorldMap {
 
   void _addObjects(ObjectGroup layer) {
     if (!layer.visible) return;
+    double offsetX = (layer.offsetX * _tileWidth) / _tileWidthOrigin;
+    double offsetY = (layer.offsetY * _tileHeight) / _tileHeightOrigin;
     layer.objects.forEach(
       (element) {
         if (_objectsBuilder[element.name] != null) {
-          double x = (element.x * _tileWidth) / _tileWidthOrigin;
-          double y = (element.y * _tileHeight) / _tileHeightOrigin;
+          double x = ((element.x * _tileWidth) / _tileWidthOrigin) + offsetX;
+          double y = ((element.y * _tileHeight) / _tileHeightOrigin) + offsetY;
           double width = (element.width * _tileWidth) / _tileWidthOrigin;
           double height = (element.height * _tileHeight) / _tileHeightOrigin;
           var object = _objectsBuilder[element.name](x, y, width, height);
