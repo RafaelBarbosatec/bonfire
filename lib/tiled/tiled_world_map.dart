@@ -231,7 +231,7 @@ class TiledWorldMap {
           var object = _objectsBuilder[element.name](x, y, width, height);
 
           if (object is GameDecoration) {
-            _components.add(object..additionalPriority = _countObjects);
+            _components.add(object..additionalPriority += _countObjects);
           } else {
             _components.add(object);
           }
