@@ -27,6 +27,10 @@ Bonfire is ideal for building games from the following perspectives:
 
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/separate-player/media/perspectiva.jpg)
 
+## WARN
+
+Due to changes in the Flutter engine in the latest versions that caused a loss of performance. We recommend using the `Channel stable version, v1.17.5`!
+
 ## Summary
 1. [How it works?](#how-it-works)
    - [Map](#map)
