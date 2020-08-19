@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/util/collision/collision.dart';
@@ -147,23 +148,20 @@ class Tile extends GameComponent with ObjectCollision {
   Rect generateRectWithBleedingPixel(
       Position position, double width, double height,
       {double offsetX = 0, double offsetY = 0}) {
-    double bleendingWidthPixel = width * 0.03;
-    if (bleendingWidthPixel > 2) {
-      bleendingWidthPixel = 2;
-    }
-    double bleendingHeightPixel = width * 0.03;
-    if (bleendingHeightPixel > 2) {
-      bleendingHeightPixel = 2;
+    double sizeMax = max(width, height);
+    double bleendingPixel = sizeMax * 0.04;
+    if (bleendingPixel > 3) {
+      bleendingPixel = 3;
     }
     return Rect.fromLTWH(
       (position.x * width) -
-          (position.x % 2 == 0 ? (bleendingWidthPixel / 2) : 0) +
+          (position.x % 2 == 0 ? (bleendingPixel / 2) : 0) +
           offsetX,
       (position.y * height) -
-          (position.y % 2 == 0 ? (bleendingHeightPixel / 2) : 0) +
+          (position.y % 2 == 0 ? (bleendingPixel / 2) : 0) +
           offsetY,
-      width + (position.x % 2 == 0 ? bleendingWidthPixel : 0),
-      height + (position.y % 2 == 0 ? bleendingHeightPixel : 0),
+      width + (position.x % 2 == 0 ? bleendingPixel : 0),
+      height + (position.y % 2 == 0 ? bleendingPixel : 0),
     );
   }
 

@@ -1,3 +1,7 @@
+## [0.6.19]
+* Fix issue [#55](https://github.com/RafaelBarbosatec/bonfire/issues/55)
+* Update Flame to 0.25.0
+
 ## [0.6.18]
 * BREAKING CHANGES: change `forceTileSize` type double to Size.
 * Add support to offsetX and offsetY in TileMap layers.
