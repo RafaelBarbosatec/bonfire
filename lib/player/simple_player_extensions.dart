@@ -39,7 +39,7 @@ extension SimplePlayerExtensions on SimplePlayer {
     @required FlameAnimation.Animation animationLeft,
     @required FlameAnimation.Animation animationTop,
     @required FlameAnimation.Animation animationBottom,
-    @required FlameAnimation.Animation animationDestroy,
+    FlameAnimation.Animation animationDestroy,
     @required double width,
     @required double height,
     int id,

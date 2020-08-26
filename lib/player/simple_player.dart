@@ -78,12 +78,13 @@ class SimplePlayer extends Player {
     Collision collision,
     Size sizeCentralMovementWindow,
   }) : super(
-            initPosition: initPosition,
-            width: width,
-            height: height,
-            life: life,
-            collision: collision,
-            sizeCentralMovementWindow: sizeCentralMovementWindow) {
+          initPosition: initPosition,
+          width: width,
+          height: height,
+          life: life,
+          collision: collision,
+          sizeCentralMovementWindow: sizeCentralMovementWindow,
+        ) {
     lastDirection = initDirection;
     if (initDirection == Direction.left || initDirection == Direction.right) {
       _lastDirectionHorizontal = initDirection;

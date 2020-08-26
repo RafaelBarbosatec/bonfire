@@ -127,7 +127,7 @@ extension PlayerExtensions on Player {
     @required FlameAnimation.Animation animationLeft,
     @required FlameAnimation.Animation animationTop,
     @required FlameAnimation.Animation animationBottom,
-    @required FlameAnimation.Animation animationDestroy,
+    FlameAnimation.Animation animationDestroy,
     @required double width,
     @required double height,
     @required Direction direction,
