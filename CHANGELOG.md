@@ -1,3 +1,6 @@
+## [NEXT]
+* Add mixin `Attackable`.
+
 ## [0.6.19]
 * Fix issue [#55](https://github.com/RafaelBarbosatec/bonfire/issues/55)
 * Update Flame to 0.25.0
