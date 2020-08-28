@@ -180,7 +180,6 @@ extension RotationEnemyExtensions on RotationEnemy {
       damageInPlayer: true,
       collision: collision,
       withCollision: withCollision,
-      damageInEnemy: false,
       destroyedObject: destroy,
       flyAnimation: animationTop,
       destroyAnimation: animationDestroy,
