@@ -152,4 +152,8 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
 
     return gameRef.gameCamera.isComponentOnCamera(this);
   }
+
+  void translate(double translateX, double translateY) {
+    position = position.translate(translateX, translateY);
+  }
 }

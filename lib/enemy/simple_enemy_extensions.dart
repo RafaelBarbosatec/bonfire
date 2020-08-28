@@ -378,7 +378,6 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         width: width,
         damage: damage,
         speed: speed,
-        damageInEnemy: false,
         destroyedObject: destroy,
         withCollision: withCollision,
         collision: collision,

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/joystick/joystick_controller.dart';
+import 'package:bonfire/util/attackable.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Player extends AnimatedObject
-    with ObjectCollision
+    with ObjectCollision, Attackable
     implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
@@ -32,6 +33,9 @@ class Player extends AnimatedObject
 
   double dtUpdate = 0;
   bool focusCamera = true;
+
+  @override
+  get isAttackablePlayer => true;
 
   Player({
     @required this.initPosition,
@@ -131,6 +135,7 @@ class Player extends AnimatedObject
     position = newPosition;
   }
 
+  @override
   void receiveDamage(double damage, int from) {
     if (life > 0) {
       life -= damage;
@@ -166,4 +171,7 @@ class Player extends AnimatedObject
 
   @override
   int priority() => PriorityLayer.PLAYER;
+
+  @override
+  Rect rectAttackable() => rectCollision;
 }

@@ -57,6 +57,13 @@ mixin ObjectCollision {
     return collisions.map<Rect>((e) => e.calculateRectCollision(displacement));
   }
 
+  Rect getRectCollision(Rect displacement) {
+    if (!containCollision()) return Rect.zero;
+    return collisions
+        .map<Rect>((e) => e.calculateRectCollision(displacement))
+        .first;
+  }
+
   void drawCollision(Canvas canvas, Rect currentPosition, Color color) {
     if (!containCollision()) return;
     collisions.forEach((element) {
