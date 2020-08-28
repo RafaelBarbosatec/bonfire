@@ -226,10 +226,7 @@ class Enemy extends AnimatedObject with ObjectCollision, Attackable {
     }
   }
 
-  Rect get rectCollision {
-    if (containCollision()) return getRectCollisions(position).first;
-    return Rect.zero;
-  }
+  Rect get rectCollision => getRectCollision(position);
 
   @override
   int priority() => PriorityLayer.ENEMY;
