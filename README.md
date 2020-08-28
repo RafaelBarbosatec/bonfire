@@ -614,6 +614,12 @@ By setting the `lightingColorGame` property on BofireWidget you automatically en
      );
 ```
 
+### Mixin
+
+* Attackable // Will make your component attackable. Player and Enemy already have this mixin
+* TapGesture // will make your component clickable
+* DragGesture // will make your component draggable
+
 ## Tiled support
 
 Support for maps built with Tiled using the extension .json.
