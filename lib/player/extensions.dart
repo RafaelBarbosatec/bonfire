@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/text_damage.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
@@ -113,7 +114,6 @@ extension PlayerExtensions on Player {
       damageInPlayer: false,
       collision: collision,
       withCollision: withCollision,
-      damageInEnemy: true,
       destroyedObject: destroy,
       flyAnimation: animationTop,
       destroyAnimation: animationDestroy,
@@ -127,7 +127,7 @@ extension PlayerExtensions on Player {
     @required FlameAnimation.Animation animationLeft,
     @required FlameAnimation.Animation animationTop,
     @required FlameAnimation.Animation animationBottom,
-    @required FlameAnimation.Animation animationDestroy,
+    FlameAnimation.Animation animationDestroy,
     @required double width,
     @required double height,
     @required Direction direction,
@@ -338,15 +338,23 @@ extension PlayerExtensions on Player {
     }
 
     gameRef
-        .visibleEnemies()
-        .where((enemy) => enemy.rectCollision.overlaps(positionAttack))
-        .forEach((enemy) {
-      enemy.receiveDamage(damage, id);
-      Rect rectAfterPush = enemy.position.translate(pushLeft, pushTop);
-      if (withPush && !enemy.isCollision(rectAfterPush, this.gameRef)) {
-        enemy.translate(pushLeft, pushTop);
-      }
-    });
+        .attackables()
+        .where((a) =>
+            !a.isAttackablePlayer &&
+            a.rectAttackable().overlaps(positionAttack))
+        .forEach(
+      (enemy) {
+        enemy.receiveDamage(damage, id);
+        Rect rectAfterPush =
+            (enemy as GameComponent).position.translate(pushLeft, pushTop);
+        if (withPush &&
+            (enemy is ObjectCollision &&
+                !(enemy as ObjectCollision)
+                    .isCollision(rectAfterPush, this.gameRef))) {
+          (enemy as GameComponent).translate(pushLeft, pushTop);
+        }
+      },
+    );
   }
 
   void simpleAttackMeleeByAngle({
@@ -379,13 +387,19 @@ extension PlayerExtensions on Player {
     ));
 
     gameRef
-        .visibleEnemies()
-        .where((enemy) => enemy.rectCollision.overlaps(positionAttack))
+        .attackables()
+        .where((a) =>
+            !a.isAttackablePlayer &&
+            a.rectAttackable().overlaps(positionAttack))
         .forEach((enemy) {
       enemy.receiveDamage(damage, id);
-      Rect rectAfterPush = enemy.position.translate(diffBase.dx, diffBase.dy);
-      if (withPush && !enemy.isCollision(rectAfterPush, this.gameRef)) {
-        enemy.translate(diffBase.dx, diffBase.dy);
+      Rect rectAfterPush =
+          (enemy as GameComponent).position.translate(diffBase.dx, diffBase.dy);
+      if (withPush &&
+          (enemy is ObjectCollision &&
+              !(enemy as ObjectCollision)
+                  .isCollision(rectAfterPush, this.gameRef))) {
+        (enemy as GameComponent).translate(diffBase.dx, diffBase.dy);
       }
     });
   }

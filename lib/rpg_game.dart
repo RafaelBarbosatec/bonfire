@@ -3,6 +3,7 @@ import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/attackable.dart';
 import 'package:bonfire/util/base_game_point_detector.dart';
 import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_component.dart';
@@ -38,6 +39,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   Iterable<Enemy> _enemies = List();
   Iterable<Enemy> _visibleEnemies = List();
   Iterable<Enemy> _livingEnemies = List();
+  Iterable<Attackable> _attackables = List();
   Iterable<GameDecoration> _decorations = List();
   Iterable<GameDecoration> _visibleDecorations = List();
   Iterable<LightingConfig> _visibleLights = List();
@@ -108,6 +110,8 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
   Iterable<LightingConfig> lightVisible() => _visibleLights;
 
+  Iterable<Attackable> attackables() => _attackables;
+
   ValueGeneratorComponent getValueGenerator(
     Duration duration, {
     double begin = 0.0,
@@ -152,6 +156,13 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     _visibleEnemies = _livingEnemies.where((element) {
       return element.isVisibleInCamera();
     });
+
+    _attackables = components
+        .where((element) =>
+            (element is GameComponent) &&
+            (element is Attackable) &&
+            element.isVisibleInCamera())
+        .cast();
 
     if (lightingColorGame != null) {
       _visibleLights = components.where((element) {

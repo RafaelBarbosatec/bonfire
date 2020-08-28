@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bonfire/util/attackable.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// It is used to represent your enemies.
-class Enemy extends AnimatedObject with ObjectCollision {
+class Enemy extends AnimatedObject with ObjectCollision, Attackable {
   /// Height of the Enemy.
   final double height;
 
@@ -31,6 +32,9 @@ class Enemy extends AnimatedObject with ObjectCollision {
   double dtUpdate = 0;
 
   bool collisionOnlyVisibleScreen = true;
+
+  @override
+  get isAttackableEnemy => true;
 
   Enemy(
       {@required Position initPosition,
@@ -64,10 +68,6 @@ class Enemy extends AnimatedObject with ObjectCollision {
   void update(double dt) {
     super.update(dt);
     dtUpdate = dt;
-  }
-
-  void translate(double translateX, double translateY) {
-    position = position.translate(translateX, translateY);
   }
 
   void moveTop(double speed) {
@@ -194,6 +194,7 @@ class Enemy extends AnimatedObject with ObjectCollision {
     this.position = position.shift(diffBase);
   }
 
+  @override
   void receiveDamage(double damage, int from) {
     if (life > 0) {
       life -= damage;
@@ -225,11 +226,11 @@ class Enemy extends AnimatedObject with ObjectCollision {
     }
   }
 
-  Rect get rectCollision {
-    if (containCollision()) return getRectCollisions(position).first;
-    return Rect.zero;
-  }
+  Rect get rectCollision => getRectCollision(position);
 
   @override
   int priority() => PriorityLayer.ENEMY;
+
+  @override
+  Rect rectAttackable() => rectCollision;
 }

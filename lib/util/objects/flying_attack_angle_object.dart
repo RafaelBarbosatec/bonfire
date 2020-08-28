@@ -23,7 +23,6 @@ class FlyingAttackAngleObject extends AnimatedObject
   final double height;
   final Position initPosition;
   final bool damageInPlayer;
-  final bool damageInEnemy;
   final bool withCollision;
   final bool collisionOnlyVisibleObjects;
   final VoidCallback destroyedObject;
@@ -46,7 +45,6 @@ class FlyingAttackAngleObject extends AnimatedObject
     this.speed = 150,
     this.damage = 1,
     this.damageInPlayer = true,
-    this.damageInEnemy = true,
     this.withCollision = true,
     this.collisionOnlyVisibleObjects = true,
     this.destroyedObject,
@@ -119,12 +117,11 @@ class FlyingAttackAngleObject extends AnimatedObject
         gameRef.player.receiveDamage(damage, id);
         destroy = true;
       }
-    }
-
-    if (damageInEnemy && !destroy) {
+    } else {
       gameRef
-          .livingEnemies()
-          .where((enemy) => enemy.rectCollision.overlaps(position))
+          .attackables()
+          .where((a) =>
+              !a.isAttackablePlayer && a.rectAttackable().overlaps(position))
           .forEach((enemy) {
         enemy.receiveDamage(damage, id);
         destroy = true;
