@@ -1,4 +1,4 @@
-## [NEXT]
+## [0.6.20]
 * Add mixin `Attackable`.
 
 ## [0.6.19]
