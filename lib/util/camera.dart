@@ -138,9 +138,6 @@ class Camera with HasGameRef<RPGGame> {
       this.gameRef.gameCamera.position.y += verticalDistance > 0
           ? vertical - verticalDistance
           : -verticalDistance - vertical;
-      if (this.gameRef.gameCamera.position.y < 0) {
-        this.gameRef.gameCamera.position.y = 0;
-      }
     }
     gameRef.player.focusCamera = true;
   }
