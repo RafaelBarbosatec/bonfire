@@ -5,10 +5,13 @@ import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flutter/widgets.dart';
 
 class Camera with HasGameRef<RPGGame> {
-  double maxTop = 0;
-  double maxLeft = 0;
+  double mapStartX = 0;
+  double mapStartY = 0;
+  double mapEndX = 0;
+  double mapEndY = 0;
   Position position = Position.empty();
   double zoom;
+  Offset _lastPlayerOffset = Offset.zero;
 
   Camera({this.zoom = 1.0});
 
@@ -116,6 +119,8 @@ class Camera with HasGameRef<RPGGame> {
 
   void moveToPlayer({double horizontal = 50, double vertical = 50}) {
     if (gameRef?.player == null || gameRef?.size == null) return;
+    if (_lastPlayerOffset == gameRef.player.position.center) return;
+    _lastPlayerOffset = gameRef.player.position.center;
     final screenCenter =
         Offset(gameRef.size.width / 2, gameRef.size.height / 2);
     final positionPlayer =
@@ -133,6 +138,9 @@ class Camera with HasGameRef<RPGGame> {
       this.gameRef.gameCamera.position.y += verticalDistance > 0
           ? vertical - verticalDistance
           : -verticalDistance - vertical;
+      if (this.gameRef.gameCamera.position.y < 0) {
+        this.gameRef.gameCamera.position.y = 0;
+      }
     }
     gameRef.player.focusCamera = true;
   }
