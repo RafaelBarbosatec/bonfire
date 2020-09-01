@@ -184,8 +184,8 @@ class Knight extends SimplePlayer with Lighting {
       ),
       lightingConfig: LightingConfig(
         gameComponent: this,
-        radius: width * 0.8,
-        blurBorder: width * 0.4,
+        radius: width * 0.5,
+        blurBorder: width,
       ),
     );
   }
