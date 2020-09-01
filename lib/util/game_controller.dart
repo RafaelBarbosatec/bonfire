@@ -3,24 +3,19 @@ import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/camera.dart';
+import 'package:flame/components/mixins/has_game_ref.dart';
 
 abstract class GameListener {
   void updateGame();
   void changeCountLiveEnemies(int count);
 }
 
-class GameController {
+class GameController with HasGameRef<RPGGame> {
   GameListener _gameListener;
-  RPGGame _game;
   int _lastCountLiveEnemies = 0;
 
-  void setGame(RPGGame game) {
-    _game = game;
-    _lastCountLiveEnemies = livingEnemies.length;
-  }
-
   void addGameComponent(GameComponent component) {
-    _game.addGameComponent(component);
+    gameRef.addGameComponent(component);
   }
 
   void setListener(GameListener listener) {
@@ -42,10 +37,11 @@ class GameController {
     }
   }
 
-  Iterable<GameDecoration> get visibleDecorations => _game.visibleDecorations();
-  Iterable<GameDecoration> get allDecorations => _game.decorations();
-  Iterable<Enemy> get visibleEnemies => _game.visibleEnemies();
-  Iterable<Enemy> get livingEnemies => _game.livingEnemies();
-  Player get player => _game.player;
-  Camera get camera => _game.gameCamera;
+  Iterable<GameDecoration> get visibleDecorations =>
+      gameRef.visibleDecorations();
+  Iterable<GameDecoration> get allDecorations => gameRef.decorations();
+  Iterable<Enemy> get visibleEnemies => gameRef.visibleEnemies();
+  Iterable<Enemy> get livingEnemies => gameRef.livingEnemies();
+  Player get player => gameRef.player;
+  Camera get camera => gameRef.gameCamera;
 }

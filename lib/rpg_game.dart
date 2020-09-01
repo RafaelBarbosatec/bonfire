@@ -73,7 +73,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     );
     gameCamera.gameRef = this;
     joystickController.addObserver(player ?? MapExplorer(gameCamera));
-    if (gameController != null) gameController.setGame(this);
+    gameController?.gameRef = this;
     if (background != null) super.add(background);
     if (map != null) super.add(map);
     decorations?.forEach((decoration) => super.add(decoration));
