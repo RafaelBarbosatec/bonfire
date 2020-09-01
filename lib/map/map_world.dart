@@ -107,14 +107,18 @@ class MapWorld extends MapGame {
   }
 
   Position getStartPosition() {
-    double x = this.tiles.first.position.left;
-    double y = this.tiles.first.position.top;
+    try {
+      double x = this.tiles.first.position.left;
+      double y = this.tiles.first.position.top;
 
-    this.tiles.forEach((tile) {
-      if (tile.position.left < x) x = tile.position.left;
-      if (tile.position.top < y) y = tile.position.top;
-    });
+      this.tiles.forEach((tile) {
+        if (tile.position.left < x) x = tile.position.left;
+        if (tile.position.top < y) y = tile.position.top;
+      });
 
-    return Position(x, y);
+      return Position(x, y);
+    } catch (e) {
+      return Position.empty();
+    }
   }
 }
