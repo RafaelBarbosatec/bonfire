@@ -1,3 +1,7 @@
+## [0.6.21]
+* improvement in camera system.
+* update flame.
+
 ## [0.6.20]
 * Add mixin `Attackable`.
 

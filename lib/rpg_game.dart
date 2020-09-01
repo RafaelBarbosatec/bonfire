@@ -3,7 +3,6 @@ import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/attackable.dart';
 import 'package:bonfire/util/base_game_point_detector.dart';
 import 'package:bonfire/util/camera.dart';
 import 'package:bonfire/util/game_component.dart';
@@ -14,6 +13,7 @@ import 'package:bonfire/util/lighting/lighting.dart';
 import 'package:bonfire/util/lighting/lighting_component.dart';
 import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/map_explorer.dart';
+import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/value_generator_component.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/keyboard.dart';
@@ -62,13 +62,20 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
-    double zoom,
+    double cameraZoom,
+    Size cameraSizeMovementWindow = const Size(50, 50),
+    bool cameraMoveOnlyMapArea = false,
   })  : assert(context != null),
         assert(joystickController != null) {
-    if (zoom != null) gameCamera = Camera(zoom: zoom);
+    gameCamera = Camera(
+      zoom: cameraZoom ?? 1.0,
+      sizeMovementWindow: cameraSizeMovementWindow,
+      moveOnlyMapArea: cameraMoveOnlyMapArea,
+      target: player,
+    );
     gameCamera.gameRef = this;
     joystickController.addObserver(player ?? MapExplorer(gameCamera));
-    if (gameController != null) gameController.setGame(this);
+    gameController?.gameRef = this;
     if (background != null) super.add(background);
     if (map != null) super.add(map);
     decorations?.forEach((decoration) => super.add(decoration));

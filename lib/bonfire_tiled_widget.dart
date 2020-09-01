@@ -22,7 +22,9 @@ class BonfireTiledWidget extends StatefulWidget {
   final Color lightingColorGame;
   final TiledWorldMap map;
   final Widget progress;
-  final double zoom;
+  final double cameraZoom;
+  final Size cameraSizeMovementWindow;
+  final bool cameraMoveOnlyMapArea;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
   final Duration durationShowAnimation;
 
@@ -41,7 +43,9 @@ class BonfireTiledWidget extends StatefulWidget {
     this.lightingColorGame,
     this.map,
     this.progress,
-    this.zoom,
+    this.cameraZoom,
+    this.cameraMoveOnlyMapArea = false,
+    this.cameraSizeMovementWindow = const Size(50, 50),
     this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
     this.durationShowAnimation,
   }) : super(key: key);
@@ -108,7 +112,9 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       collisionAreaColor:
           widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
       lightingColorGame: widget.lightingColorGame,
-      zoom: widget.zoom,
+      cameraZoom: widget.cameraZoom,
+      cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
+      cameraMoveOnlyMapArea: widget.cameraMoveOnlyMapArea,
     );
     await Future.delayed(Duration(milliseconds: 500));
     setState(() {

@@ -184,8 +184,8 @@ class Knight extends SimplePlayer with Lighting {
       ),
       lightingConfig: LightingConfig(
         gameComponent: this,
-        radius: width * 0.8,
-        blurBorder: width * 0.4,
+        radius: width * 0.5,
+        blurBorder: width,
       ),
     );
   }
@@ -274,15 +274,17 @@ class Knight extends SimplePlayer with Lighting {
   }
 
   void _showTalk(Enemy first) {
-    gameRef.gameCamera.moveToPositionAnimated(
-        Position(first.position.center.dx, first.position.center.dy),
-        zoom: 2, finish: () {
+    gameRef.gameCamera.moveToTargetAnimated(first, zoom: 2, finish: () {
       TalkDialog.show(gameRef.context, [
         Say(
           "Look at this! It seems that I'm not alone here ...",
-          Flame.util.animationAsWidget(
-            Position(100, 100),
-            animation,
+          Container(
+            width: 50,
+            height: 50,
+            child: AnimationWidget(
+              animation: animation,
+              playing: true,
+            ),
           ),
         ),
       ], finish: () {
