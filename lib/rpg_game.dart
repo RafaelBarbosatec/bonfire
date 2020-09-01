@@ -64,11 +64,13 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     this.lightingColorGame,
     double cameraZoom,
     Size cameraSizeMovementWindow = const Size(50, 50),
+    bool cameraMoveOnlyMapArea = false,
   })  : assert(context != null),
         assert(joystickController != null) {
     gameCamera = Camera(
       zoom: cameraZoom ?? 1.0,
       sizeMovementWindow: cameraSizeMovementWindow,
+      moveOnlyMapArea: cameraMoveOnlyMapArea,
       target: player,
     );
     gameCamera.gameRef = this;

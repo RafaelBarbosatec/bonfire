@@ -5,10 +5,12 @@ import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
+import 'package:flame/position.dart';
 
 abstract class MapGame extends Component with HasGameRef<RPGGame> {
   Iterable<Tile> tiles;
   Size mapSize;
+  Position mapStartPosition;
 
   MapGame(this.tiles);
 

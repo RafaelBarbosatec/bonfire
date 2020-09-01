@@ -80,6 +80,7 @@ class MapWorld extends MapGame {
     lastCameraY = -1;
     lastZoom = -1;
     mapSize = getMapSize();
+    mapStartPosition = getStartPosition();
   }
 
   @override
@@ -103,5 +104,17 @@ class MapWorld extends MapGame {
     });
 
     return Size(width, height);
+  }
+
+  Position getStartPosition() {
+    double x = this.tiles.first.position.left;
+    double y = this.tiles.first.position.top;
+
+    this.tiles.forEach((tile) {
+      if (tile.position.left < x) x = tile.position.left;
+      if (tile.position.top < y) y = tile.position.top;
+    });
+
+    return Position(x, y);
   }
 }

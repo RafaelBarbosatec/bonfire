@@ -24,6 +24,7 @@ class BonfireTiledWidget extends StatefulWidget {
   final Widget progress;
   final double cameraZoom;
   final Size cameraSizeMovementWindow;
+  final bool cameraMoveOnlyMapArea;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
   final Duration durationShowAnimation;
 
@@ -43,6 +44,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.map,
     this.progress,
     this.cameraZoom,
+    this.cameraMoveOnlyMapArea = false,
     this.cameraSizeMovementWindow = const Size(50, 50),
     this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
     this.durationShowAnimation,
@@ -112,6 +114,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       lightingColorGame: widget.lightingColorGame,
       cameraZoom: widget.cameraZoom,
       cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
+      cameraMoveOnlyMapArea: widget.cameraMoveOnlyMapArea,
     );
     await Future.delayed(Duration(milliseconds: 500));
     setState(() {

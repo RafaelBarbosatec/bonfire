@@ -26,6 +26,7 @@ class BonfireWidget extends StatefulWidget {
   final Color lightingColorGame;
   final double cameraZoom;
   final Size cameraSizeMovementWindow;
+  final bool cameraMoveOnlyMapArea;
 
   const BonfireWidget({
     Key key,
@@ -44,6 +45,7 @@ class BonfireWidget extends StatefulWidget {
     this.collisionAreaColor,
     this.lightingColorGame,
     this.cameraZoom,
+    this.cameraMoveOnlyMapArea = false,
     this.cameraSizeMovementWindow = const Size(50, 50),
   }) : super(key: key);
 
@@ -92,6 +94,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       lightingColorGame: widget.lightingColorGame,
       cameraZoom: widget.cameraZoom,
       cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
+      cameraMoveOnlyMapArea: widget.cameraMoveOnlyMapArea,
     );
     super.initState();
   }

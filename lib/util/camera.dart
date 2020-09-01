@@ -10,10 +10,12 @@ class Camera with HasGameRef<RPGGame> {
   Offset _lastTargetOffset = Offset.zero;
   GameComponent target;
   final Size sizeMovementWindow;
+  final bool moveOnlyMapArea;
 
   Camera({
     this.zoom = 1.0,
     this.target,
+    this.moveOnlyMapArea = false,
     this.sizeMovementWindow = const Size(50, 50),
   });
 
@@ -176,6 +178,10 @@ class Camera with HasGameRef<RPGGame> {
           ? vertical - verticalDistance
           : -verticalDistance - vertical;
     }
+
+    if (moveOnlyMapArea) {
+      _keepInMapArea();
+    }
   }
 
   void animateZoom({
@@ -225,5 +231,28 @@ class Camera with HasGameRef<RPGGame> {
       vertical: sizeMovementWindow.height,
       horizontal: sizeMovementWindow.width,
     );
+  }
+
+  void _keepInMapArea() {
+    final startPosition = gameRef.map.mapStartPosition;
+    final sizeMap = gameRef.map.mapSize;
+    final limitX = (startPosition.x + gameRef.size.width / 2);
+    final limitY = (startPosition.y + gameRef.size.height / 2);
+    final limitMaxX = (sizeMap.width - gameRef.size.width / 2);
+    final limitMaxY = (sizeMap.height - gameRef.size.height / 2);
+
+    if (this.position.x > limitMaxX) {
+      this.position.x = limitMaxX;
+    }
+    if (this.position.y > limitMaxY) {
+      this.position.y = limitMaxY;
+    }
+
+    if (this.position.x < limitX) {
+      this.position.x = limitX;
+    }
+    if (this.position.y < limitY) {
+      this.position.y = limitY;
+    }
   }
 }
