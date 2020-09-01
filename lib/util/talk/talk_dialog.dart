@@ -178,7 +178,11 @@ class _TalkDialogState extends State<TalkDialog> {
           SizedBox(
             width: 10,
           ),
-        currentSay.person,
+        Container(
+          height: widget.boxTextHeight,
+          width: widget.boxTextHeight,
+          child: currentSay.person,
+        ),
         if (direction == PersonDirection.LEFT)
           SizedBox(
             width: 10,

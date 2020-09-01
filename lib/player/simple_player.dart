@@ -83,7 +83,6 @@ class SimplePlayer extends Player {
           height: height,
           life: life,
           collision: collision,
-          sizeCentralMovementWindow: sizeCentralMovementWindow,
         ) {
     lastDirection = initDirection;
     if (initDirection == Direction.left || initDirection == Direction.right) {

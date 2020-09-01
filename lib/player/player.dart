@@ -29,10 +29,8 @@ class Player extends AnimatedObject
 
   bool _isDead = false;
 
-  final Size sizeCentralMovementWindow;
-
   double dtUpdate = 0;
-  bool focusCamera = true;
+  bool isFocusCamera = true;
 
   @override
   get isAttackablePlayer => true;
@@ -43,7 +41,6 @@ class Player extends AnimatedObject
     this.height = 32,
     this.life = 100,
     Collision collision,
-    this.sizeCentralMovementWindow,
   }) {
     position = Rect.fromLTWH(
       initPosition.x,
@@ -68,13 +65,9 @@ class Player extends AnimatedObject
 
   @override
   void update(double dt) {
-    super.update(dt);
     dtUpdate = dt;
-    if (focusCamera)
-      this.gameRef.gameCamera.moveToPlayer(
-            horizontal: sizeCentralMovementWindow?.width ?? 50,
-            vertical: sizeCentralMovementWindow?.height ?? 50,
-          );
+    isFocusCamera = (gameRef?.gameCamera?.target is Player);
+    super.update(dt);
   }
 
   void moveTop(double speed) {
@@ -82,7 +75,7 @@ class Player extends AnimatedObject
 
     Rect displacement = position.translate(0, (-innerSpeed));
 
-    if (isCollision(displacement, gameRef, onlyVisible: focusCamera)) return;
+    if (isCollision(displacement, gameRef, onlyVisible: isFocusCamera)) return;
 
     position = displacement;
   }
@@ -92,7 +85,7 @@ class Player extends AnimatedObject
 
     Rect displacement = position.translate(innerSpeed, 0);
 
-    if (isCollision(displacement, gameRef, onlyVisible: focusCamera)) return;
+    if (isCollision(displacement, gameRef, onlyVisible: isFocusCamera)) return;
 
     position = displacement;
   }
@@ -102,7 +95,7 @@ class Player extends AnimatedObject
 
     Rect displacement = position.translate(0, innerSpeed);
 
-    if (isCollision(displacement, gameRef, onlyVisible: focusCamera)) return;
+    if (isCollision(displacement, gameRef, onlyVisible: isFocusCamera)) return;
 
     position = displacement;
   }
@@ -112,7 +105,7 @@ class Player extends AnimatedObject
 
     Rect displacement = position.translate(-innerSpeed, 0);
 
-    if (isCollision(displacement, gameRef, onlyVisible: focusCamera)) return;
+    if (isCollision(displacement, gameRef, onlyVisible: isFocusCamera)) return;
 
     position = displacement;
   }
@@ -130,7 +123,7 @@ class Player extends AnimatedObject
 
     Rect newPosition = position.shift(newDiffBase);
 
-    if (isCollision(newPosition, gameRef, onlyVisible: focusCamera)) return;
+    if (isCollision(newPosition, gameRef, onlyVisible: isFocusCamera)) return;
 
     position = newPosition;
   }

@@ -80,7 +80,6 @@ class MapWorld extends MapGame {
     lastCameraY = -1;
     lastZoom = -1;
     mapSize = getMapSize();
-    gameRef.gameCamera.moveToPlayer(horizontal: 0, vertical: 0);
   }
 
   @override

@@ -154,6 +154,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   @override
   void update(double t) {
     if (_isPause) return;
+    gameCamera.update();
     components.addAll(_addLater);
     _addLater.clear();
 

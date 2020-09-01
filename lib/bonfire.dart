@@ -54,3 +54,4 @@ export 'package:flame/position.dart';
 export 'package:flame/sprite.dart';
 export 'package:flame/spritesheet.dart';
 export 'package:flame/text_config.dart';
+export 'package:flame/widgets/animation_widget.dart';
