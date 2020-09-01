@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/util/base_game_point_detector.dart';
-import 'package:bonfire/util/gestures.dart';
+import 'package:bonfire/util/mixins/gestures.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
