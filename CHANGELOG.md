@@ -1,3 +1,6 @@
+## [0.6.22]
+* fix update Camera.
+
 ## [0.6.21]
 * improvement in camera system.
 * update flame.
