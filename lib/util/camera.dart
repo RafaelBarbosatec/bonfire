@@ -77,24 +77,26 @@ class Camera with HasGameRef<RPGGame> {
     if (zoom <= 0.0) return;
     target = null;
 
-    double diffX = this.position.x - (position.x);
-    double diffY = this.position.y - (position.y);
+    double diffX = this.position.x - position.x;
+    double diffY = this.position.y - position.y;
     double originX = this.position.x;
     double originY = this.position.y;
 
-    double diffZoom = this.zoom - (zoom);
+    double diffZoom = this.zoom - zoom;
     double initialZoom = this.zoom;
 
-    gameRef.getValueGenerator(
-      duration ?? Duration(seconds: 1),
-      onChange: (value) {
-        this.position.x = originX - (diffX * value);
-        this.position.y = originY - (diffY * value);
-        this.zoom = initialZoom - (diffZoom * value);
-      },
-      onFinish: finish,
-      curve: curve,
-    ).start();
+    gameRef
+        .getValueGenerator(
+          duration ?? Duration(seconds: 1),
+          onChange: (value) {
+            this.position.x = originX - (diffX * value);
+            this.position.y = originY - (diffY * value);
+            this.zoom = initialZoom - (diffZoom * value);
+          },
+          onFinish: () => finish?.call(),
+          curve: curve,
+        )
+        .start();
   }
 
   void moveToTargetAnimated(
@@ -108,12 +110,12 @@ class Camera with HasGameRef<RPGGame> {
     if (zoom <= 0.0) return;
     this.target = null;
 
-    double diffX = this.position.x - (target.position.center.dx);
-    double diffY = this.position.y - (target.position.center.dy);
+    double diffX = this.position.x - target.position.center.dx;
+    double diffY = this.position.y - target.position.center.dy;
     double originX = this.position.x;
     double originY = this.position.y;
 
-    double diffZoom = this.zoom - (zoom);
+    double diffZoom = this.zoom - zoom;
     double initialZoom = this.zoom;
 
     gameRef.getValueGenerator(
@@ -125,7 +127,7 @@ class Camera with HasGameRef<RPGGame> {
       },
       onFinish: () {
         this.target = target;
-        finish();
+        finish?.call();
       },
       curve: curve,
     ).start();
@@ -146,7 +148,7 @@ class Camera with HasGameRef<RPGGame> {
     moveToTargetAnimated(
       gameRef.player,
       zoom: zoom,
-      finish: () => finish?.call(),
+      finish: finish,
       duration: duration,
     );
   }

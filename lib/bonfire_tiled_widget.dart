@@ -43,7 +43,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.map,
     this.progress,
     this.cameraZoom,
-    this.cameraSizeMovementWindow,
+    this.cameraSizeMovementWindow = const Size(50, 50),
     this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
     this.durationShowAnimation,
   }) : super(key: key);
