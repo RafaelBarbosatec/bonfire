@@ -35,6 +35,7 @@ class TiledWorldMap {
   double _tileHeightOrigin;
   int _countObjects = 0;
   Map<String, Sprite> _spriteCache = Map();
+  Map<String, FlameAnimation.Animation> _animationCache = Map();
   Map<String, ObjectBuilder> _objectsBuilder = Map();
 
   TiledWorldMap(this.pathFile, {this.forceTileSize}) {
@@ -247,14 +248,15 @@ class TiledWorldMap {
     double tileHeight,
   ) async {
     final spriteSheetImg = await Flame.images.load(image);
-    if (!_spriteCache.containsKey('$image/$row/$column')) {
-      _spriteCache['$image/$row/$column'] = spriteSheetImg.getSprite(
-        x: (column * tileWidth).toDouble(),
-        y: (row * tileHeight).toDouble(),
-        width: tileWidth,
-        height: tileHeight,
-      );
+    if (_spriteCache.containsKey('$image/$row/$column')) {
+      return Future.value(_spriteCache['$image/$row/$column']);
     }
+    _spriteCache['$image/$row/$column'] = spriteSheetImg.getSprite(
+      x: (column * tileWidth).toDouble(),
+      y: (row * tileHeight).toDouble(),
+      width: tileWidth,
+      height: tileHeight,
+    );
     return Future.value(_spriteCache['$image/$row/$column']);
   }
 
@@ -304,6 +306,10 @@ class TiledWorldMap {
       List<FrameAnimation> animationFrames = tileSetItemList.animation;
 
       if ((animationFrames?.isNotEmpty ?? false)) {
+        String animationKey = '${tileSetContain.name}/$index';
+        if (_animationCache.containsKey(animationKey)) {
+          return Future.value(_animationCache[animationKey]);
+        }
         List<Sprite> spriteList = List();
         double stepTime = animationFrames[0].duration / 1000;
         await Future.forEach(animationFrames, (frame) async {
@@ -320,12 +326,12 @@ class TiledWorldMap {
           spriteList.add(sprite);
         });
 
-        return Future.value(
-          FlameAnimation.Animation.spriteList(
-            spriteList,
-            stepTime: stepTime,
-          ),
+        _animationCache[animationKey] = FlameAnimation.Animation.spriteList(
+          spriteList,
+          stepTime: stepTime,
         );
+
+        return _animationCache[animationKey];
       } else {
         return null;
       }
