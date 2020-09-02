@@ -114,7 +114,6 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// Beware of however you are rendering components if not using this; you must be careful to save and restore the canvas to avoid components messing up with each other.
   @override
   void render(Canvas canvas) {
-    gameCamera.update();
     canvas.save();
 
     canvas.translate(size.width / 2, size.height / 2);
@@ -160,6 +159,8 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
 
     components.forEach((c) => c.update(t));
     components.removeWhere((c) => c.destroy());
+
+    gameCamera.update();
   }
 
   void pause() {

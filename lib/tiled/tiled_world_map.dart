@@ -35,7 +35,6 @@ class TiledWorldMap {
   double _tileHeightOrigin;
   int _countObjects = 0;
   Map<String, Sprite> _spriteCache = Map();
-  Map<String, Image> _imageCache = Map();
   Map<String, ObjectBuilder> _objectsBuilder = Map();
 
   TiledWorldMap(this.pathFile, {this.forceTileSize}) {
@@ -56,7 +55,7 @@ class TiledWorldMap {
       _tileHeight = forceTileSize?.height ?? _tileHeightOrigin;
       await _load(_tiledMap);
     } catch (e) {
-      print('(TiledWorldMap): not found map');
+      print('(TiledWorldMap) Error: $e');
     }
 
     return Future.value(TiledWorldData(
@@ -247,11 +246,9 @@ class TiledWorldMap {
     double tileWidth,
     double tileHeight,
   ) async {
-    if (_imageCache[image] == null) {
-      _imageCache[image] = await Flame.images.load(image);
-    }
-    if (_spriteCache['$image/$row/$column'] == null) {
-      _spriteCache['$image/$row/$column'] = _imageCache[image].getSprite(
+    final spriteSheetImg = await Flame.images.load(image);
+    if (!_spriteCache.containsKey('$image/$row/$column')) {
+      _spriteCache['$image/$row/$column'] = spriteSheetImg.getSprite(
         x: (column * tileWidth).toDouble(),
         y: (row * tileHeight).toDouble(),
         width: tileWidth,
@@ -262,8 +259,9 @@ class TiledWorldMap {
   }
 
   DataObjectCollision _getCollision(TileSet tileSetContain, int index) {
-    Iterable<TileSetItem> tileSetItemList =
-        tileSetContain?.tiles?.where((element) => element.id == index);
+    Iterable<TileSetItem> tileSetItemList = tileSetContain?.tiles?.where(
+      (element) => element.id == index,
+    );
 
     if ((tileSetItemList?.isNotEmpty ?? false)) {
       List<TileSetObject> tileSetObjectList =
@@ -299,8 +297,9 @@ class TiledWorldMap {
     int widthCount,
   ) async {
     try {
-      TileSetItem tileSetItemList =
-          tileSetContain.tiles.firstWhere((element) => element.id == index);
+      TileSetItem tileSetItemList = tileSetContain.tiles.firstWhere(
+        (element) => element.id == index,
+      );
 
       List<FrameAnimation> animationFrames = tileSetItemList.animation;
 
