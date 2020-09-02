@@ -78,4 +78,7 @@ class GameInterface extends GameComponent with TapGesture {
 
     return textConfigRed;
   }
+
+  @override
+  void onTap() {}
 }

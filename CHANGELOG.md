@@ -1,5 +1,6 @@
 ## [NEXT]
 * improvement in map.
+* BREAKING CHANGE: remove param `isSensor` from `GameDecoration` an create mixin `Sensor`
 
 ## [0.6.22]
 * fix update Camera.

@@ -11,7 +11,7 @@ mixin PointerDetector {
 
 mixin TapGesture {
   bool enableTab = true;
-  void onTap() {}
+  void onTap();
   void onTapDown(int pointer) {}
   void onTapUp(int pointer, Offset position) {}
   void onTapCancel(int pointer) {}

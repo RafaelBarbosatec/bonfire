@@ -52,7 +52,6 @@ class InterfaceComponent extends GameComponent with TapGesture {
   void onTap() {
     if (onTapComponent != null) onTapComponent();
     spriteToRender = sprite;
-    super.onTap();
   }
 
   @override
