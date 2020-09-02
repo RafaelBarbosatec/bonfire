@@ -42,6 +42,7 @@ class GameController with HasGameRef<RPGGame> {
   Iterable<GameDecoration> get allDecorations => gameRef.decorations();
   Iterable<Enemy> get visibleEnemies => gameRef.visibleEnemies();
   Iterable<Enemy> get livingEnemies => gameRef.livingEnemies();
+  Iterable<GameComponent> get visibleComponents => gameRef.visibleComponents();
   Player get player => gameRef.player;
   Camera get camera => gameRef.gameCamera;
 }

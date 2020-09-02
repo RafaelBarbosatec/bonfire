@@ -3,19 +3,24 @@ import 'dart:ui';
 import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/collision.dart';
+import 'package:bonfire/util/mixins/sensor.dart';
 import 'package:flutter/material.dart';
 
 mixin ObjectCollision {
   Iterable<Collision> collisions;
 
   void triggerSensors(Iterable<Rect> rectCollisions, RPGGame game) {
-    final sensors = game.visibleDecorations().where(
-          (decoration) => decoration.isSensor,
-        );
+    final Iterable<Sensor> sensors = game
+        .visibleComponents()
+        .where(
+          (decoration) => decoration is Sensor,
+        )
+        .cast();
 
-    sensors.forEach((decoration) {
-      if (decoration.detectCollision(rectCollisions))
-        decoration.onContact(this);
+    sensors.forEach((sensor) {
+      if (sensor.areaSensor.overlaps(rectCollisions.first)) {
+        sensor.onContact(this);
+      }
     });
   }
 
@@ -38,7 +43,7 @@ mixin ObjectCollision {
 
     final collisionsDecorations =
         (onlyVisible ? game.visibleDecorations() : game.decorations())
-            .where((i) => !i.isSensor && i.detectCollision(rectCollisions));
+            .where((i) => i.detectCollision(rectCollisions));
 
     if (collisionsDecorations.isNotEmpty) return true;
 
@@ -46,8 +51,12 @@ mixin ObjectCollision {
   }
 
   bool isCollisionTranslate(
-      Rect position, double translateX, double translateY, RPGGame game,
-      {bool onlyVisible = true}) {
+    Rect position,
+    double translateX,
+    double translateY,
+    RPGGame game, {
+    bool onlyVisible = true,
+  }) {
     var moveToCurrent = position.translate(translateX, translateY);
     return isCollision(moveToCurrent, game, onlyVisible: onlyVisible);
   }

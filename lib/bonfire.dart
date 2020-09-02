@@ -42,6 +42,7 @@ export 'package:bonfire/util/game_controller.dart';
 export 'package:bonfire/util/interval_tick.dart';
 export 'package:bonfire/util/mixins/attackable.dart';
 export 'package:bonfire/util/mixins/gestures.dart';
+export 'package:bonfire/util/mixins/sensor.dart';
 export 'package:bonfire/util/talk/say.dart';
 export 'package:bonfire/util/talk/talk_dialog.dart';
 export 'package:bonfire/util/text_damage_component.dart';

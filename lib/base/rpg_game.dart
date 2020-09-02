@@ -43,6 +43,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   Iterable<GameDecoration> _decorations = List();
   Iterable<GameDecoration> _visibleDecorations = List();
   Iterable<LightingConfig> _visibleLights = List();
+  Iterable<GameComponent> _visibleComponents = List();
   IntervalTick _interval;
 
   RPGGame({
@@ -105,6 +106,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     addLater(c);
   }
 
+  Iterable<GameComponent> visibleComponents() => _visibleComponents;
   Iterable<Enemy> visibleEnemies() => _visibleEnemies;
 
   Iterable<Enemy> livingEnemies() => _livingEnemies;
@@ -151,6 +153,10 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   }
 
   void _updateTempList() {
+    _visibleComponents = components.where((element) {
+      return (element is GameComponent) && (element).isVisibleInCamera();
+    }).cast();
+
     _decorations = components.where((element) {
       return (element is GameDecoration);
     }).cast();
@@ -164,12 +170,8 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
       return element.isVisibleInCamera();
     });
 
-    _attackables = components
-        .where((element) =>
-            (element is GameComponent) &&
-            (element is Attackable) &&
-            element.isVisibleInCamera())
-        .cast();
+    _attackables =
+        _visibleComponents.where((element) => (element is Attackable)).cast();
 
     if (lightingColorGame != null) {
       _visibleLights = components.where((element) {
