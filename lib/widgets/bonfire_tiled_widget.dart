@@ -1,11 +1,11 @@
+import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/tiled/tiled_world_map.dart';
-import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_controller.dart';
-import 'package:bonfire/util/game_interface/game_interface.dart';
 import 'package:flutter/material.dart';
 
 class BonfireTiledWidget extends StatefulWidget {

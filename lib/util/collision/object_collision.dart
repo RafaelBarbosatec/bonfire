@@ -1,7 +1,7 @@
 import 'dart:ui';
 
+import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:flutter/material.dart';
 

@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:bonfire/enemy/extensions.dart';
 import 'package:bonfire/enemy/rotation_enemy.dart';
+import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/collision/collision.dart';
-import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/objects/animated_object_once.dart';
 import 'package:bonfire/util/objects/flying_attack_angle_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;

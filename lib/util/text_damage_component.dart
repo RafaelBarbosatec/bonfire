@@ -1,14 +1,14 @@
 import 'dart:math';
 
+import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/text_config.dart';
 
 enum DirectionTextDamage { LEFT, RIGHT, RANDOM, NONE }
 
-class TextDamage extends TextComponent with HasGameRef<RPGGame> {
+class TextDamageComponent extends TextComponent with HasGameRef<RPGGame> {
   final String text;
   final TextConfig config;
   final Position initPosition;
@@ -21,7 +21,7 @@ class TextDamage extends TextComponent with HasGameRef<RPGGame> {
   double _moveAxisX = 0;
   final bool onlyUp;
 
-  TextDamage(
+  TextDamageComponent(
     this.text,
     this.initPosition, {
     this.onlyUp = false,

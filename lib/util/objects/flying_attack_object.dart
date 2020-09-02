@@ -1,4 +1,6 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/lighting/lighting.dart';
+import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/objects/animated_object.dart';

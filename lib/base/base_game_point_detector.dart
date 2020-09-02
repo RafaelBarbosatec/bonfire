@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:bonfire/base/custom_widget_builder.dart';
+import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/camera.dart';
-import 'package:bonfire/util/custom_widget_builder.dart';
-import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/mixins/gestures.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/composed_component.dart';

@@ -1,6 +1,6 @@
+import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/rpg_game.dart';
-import 'package:bonfire/util/game_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flutter/widgets.dart';
 

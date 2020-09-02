@@ -1,9 +1,9 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:bonfire/util/game_component.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';

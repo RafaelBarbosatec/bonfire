@@ -1,10 +1,10 @@
 import 'dart:math';
 
+import 'package:bonfire/lighting/lighting.dart';
+import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
-import 'package:bonfire/util/lighting/lighting.dart';
-import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:bonfire/util/objects/animated_object_once.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
