@@ -1,3 +1,6 @@
+## [NEXT]
+* improvement in map.
+
 ## [0.6.22]
 * fix update Camera.
 
