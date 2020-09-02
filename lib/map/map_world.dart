@@ -35,7 +35,7 @@ class MapWorld extends MapGame {
       List<Tile> tilesRender = List();
       List<Tile> tilesCollision = List();
       tiles.where((tile) {
-        if (tile.gameRef == null) tile.gameRef = gameRef;
+        tile.gameRef ??= gameRef;
         return tile.isVisibleInCamera();
       }).forEach((tile) {
         tilesRender.add(tile);

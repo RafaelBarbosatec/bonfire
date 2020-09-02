@@ -16,9 +16,7 @@ class Tile extends GameComponent with ObjectCollision {
   final double width;
   final double height;
   Position _positionText;
-  Paint _paintText = Paint()
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 1;
+  Paint _paintText;
 
   Tile(
     String spritePath,
@@ -120,11 +118,17 @@ class Tile extends GameComponent with ObjectCollision {
       drawCollision(canvas, position, gameRef?.collisionAreaColor);
     }
 
-    if (gameRef != null && gameRef.constructionMode && isVisibleInCamera())
+    if (gameRef != null && gameRef.constructionMode && isVisibleInCamera()) {
       _drawGrid(canvas);
+    }
   }
 
   void _drawGrid(Canvas canvas) {
+    if (_paintText == null) {
+      _paintText = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1;
+    }
     canvas.drawRect(
       position,
       _paintText
@@ -167,7 +171,7 @@ class Tile extends GameComponent with ObjectCollision {
 
   @override
   void update(double dt) {
-    if (animation != null) animation.update(dt);
+    animation?.update(dt);
     super.update(dt);
   }
 }
