@@ -11,7 +11,7 @@ mixin ObjectCollision {
 
   void triggerSensors(Iterable<Rect> rectCollisions, RPGGame game) {
     final Iterable<Sensor> sensors = game
-        .visibleComponents()
+        .visibleSensors()
         .where(
           (decoration) => decoration is Sensor,
         )
