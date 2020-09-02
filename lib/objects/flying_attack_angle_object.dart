@@ -1,19 +1,22 @@
-import 'package:bonfire/bonfire.dart';
+import 'dart:math';
+
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
+import 'package:bonfire/objects/animated_object.dart';
+import 'package:bonfire/objects/animated_object_once.dart';
+import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/objects/animated_object.dart';
-import 'package:bonfire/util/objects/animated_object_once.dart';
+import 'package:bonfire/util/interval_tick.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
 
-class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
+class FlyingAttackAngleObject extends AnimatedObject
+    with ObjectCollision, Lighting {
   final int id;
   final FlameAnimation.Animation flyAnimation;
   final FlameAnimation.Animation destroyAnimation;
-  final Direction direction;
+  final double radAngle;
   final double speed;
   final double damage;
   final double width;
@@ -25,12 +28,16 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final VoidCallback destroyedObject;
   final LightingConfig lightingConfig;
 
-  final IntervalTick _timerVerifyCollision = IntervalTick(50);
+  double _cosAngle;
+  double _senAngle;
+  double _rotate;
 
-  FlyingAttackObject({
+  final IntervalTick _timerVerifyCollision = IntervalTick(40);
+
+  FlyingAttackAngleObject({
     @required this.initPosition,
     @required this.flyAnimation,
-    @required this.direction,
+    @required this.radAngle,
     @required this.width,
     @required this.height,
     this.id,
@@ -56,38 +63,24 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     this.collisions = [
       collision ?? Collision(width: width, height: height / 2)
     ];
+    _cosAngle = cos(radAngle);
+    _senAngle = sin(radAngle);
+    _rotate = radAngle == 0.0 ? 0.0 : radAngle + (pi / 2);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
 
-    switch (direction) {
-      case Direction.left:
-        position = position.translate((speed * dt) * -1, 0);
-        break;
-      case Direction.right:
-        position = position.translate((speed * dt), 0);
-        break;
-      case Direction.top:
-        position = position.translate(0, (speed * dt) * -1);
-        break;
-      case Direction.bottom:
-        position = position.translate(0, (speed * dt));
-        break;
-      case Direction.topLeft:
-        position = position.translate((speed * dt) * -1, 0);
-        break;
-      case Direction.topRight:
-        position = position.translate((speed * dt), 0);
-        break;
-      case Direction.bottomLeft:
-        position = position.translate((speed * dt) * -1, 0);
-        break;
-      case Direction.bottomRight:
-        position = position.translate((speed * dt), 0);
-        break;
-    }
+    double nextX = (speed * dt) * _cosAngle;
+    double nextY = (speed * dt) * _senAngle;
+    Offset nextPoint = Offset(nextX, nextY);
+
+    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
+            position.center.dy + nextPoint.dy) -
+        position.center;
+
+    position = position.shift(diffBase);
 
     if (!_verifyExistInWorld()) {
       remove();
@@ -98,10 +91,15 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
   @override
   void render(Canvas canvas) {
+    canvas.save();
+    canvas.translate(position.center.dx, position.center.dy);
+    canvas.rotate(_rotate);
+    canvas.translate(-position.center.dx, -position.center.dy);
     super.render(canvas);
     if (gameRef != null && gameRef.showCollisionArea) {
       drawCollision(canvas, position, gameRef.collisionAreaColor);
     }
+    canvas.restore();
   }
 
   void _verifyCollision(double dt) {
@@ -132,73 +130,15 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
     if (destroy) {
       if (destroyAnimation != null) {
-        Rect positionDestroy;
-        switch (direction) {
-          case Direction.left:
-            positionDestroy = Rect.fromLTWH(
-              position.left - (width / 2),
-              position.top,
-              width,
-              height,
-            );
-            break;
-          case Direction.right:
-            positionDestroy = Rect.fromLTWH(
-              position.left + (width / 2),
-              position.top,
-              width,
-              height,
-            );
-            break;
-          case Direction.top:
-            positionDestroy = Rect.fromLTWH(
-              position.left,
-              position.top - (height / 2),
-              width,
-              height,
-            );
-            break;
-          case Direction.bottom:
-            positionDestroy = Rect.fromLTWH(
-              position.left,
-              position.top + (height / 2),
-              width,
-              height,
-            );
-            break;
-          case Direction.topLeft:
-            positionDestroy = Rect.fromLTWH(
-              position.left - (width / 2),
-              position.top,
-              width,
-              height,
-            );
-            break;
-          case Direction.topRight:
-            positionDestroy = Rect.fromLTWH(
-              position.left + (width / 2),
-              position.top,
-              width,
-              height,
-            );
-            break;
-          case Direction.bottomLeft:
-            positionDestroy = Rect.fromLTWH(
-              position.left - (width / 2),
-              position.top,
-              width,
-              height,
-            );
-            break;
-          case Direction.bottomRight:
-            positionDestroy = Rect.fromLTWH(
-              position.left + (width / 2),
-              position.top,
-              width,
-              height,
-            );
-            break;
-        }
+        double nextX = (width / 2) * _cosAngle;
+        double nextY = (height / 2) * _senAngle;
+        Offset nextPoint = Offset(nextX, nextY);
+
+        Offset diffBase = Offset(position.center.dx + nextPoint.dx,
+                position.center.dy + nextPoint.dy) -
+            position.center;
+
+        Rect positionDestroy = position.shift(diffBase);
 
         gameRef.addLater(
           AnimatedObjectOnce(
@@ -216,7 +156,6 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   bool _verifyExistInWorld() {
     Size mapSize = gameRef.map?.mapSize;
     if (mapSize == null) return true;
-
     if (position.left < 0) {
       return false;
     }
