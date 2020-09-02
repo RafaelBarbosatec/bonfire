@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
@@ -29,9 +29,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   /// World position that this decoration must position yourself.
   final Position initPosition;
 
-  /// If set to true, won't be triggered on collision, but will trigger onContact()
-  final bool isSensor;
-
   Sprite _sprite;
 
   int additionalPriority = 0;
@@ -42,7 +39,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
-    this.isSensor = false,
     FlameAnimation.Animation animation,
     Collision collision,
   }) {
@@ -63,7 +59,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
-    this.isSensor = false,
     Collision collision,
   }) {
     if (frontFromPlayer) additionalPriority = 1;
@@ -81,7 +76,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     @required this.initPosition,
     @required this.height,
     @required this.width,
-    this.isSensor = false,
     this.frontFromPlayer = false,
     Collision collision,
   }) {
@@ -101,7 +95,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
-    this.isSensor = false,
     List<Collision> collisions,
   }) {
     if (frontFromPlayer) additionalPriority = 1;
@@ -119,7 +112,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     @required this.initPosition,
     @required this.height,
     @required this.width,
-    this.isSensor = false,
     this.frontFromPlayer = false,
     List<Collision> collisions,
   }) {
@@ -149,8 +141,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
       drawCollision(canvas, position, gameRef.collisionAreaColor);
     }
   }
-
-  void onContact(ObjectCollision collision) {}
 
   Rect generateRectWithBleedingPixel(
     Position position,

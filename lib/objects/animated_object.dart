@@ -1,8 +1,8 @@
 import 'dart:ui';
 
+import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 

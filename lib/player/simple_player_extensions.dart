@@ -1,8 +1,8 @@
+import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/player/extensions.dart';
 import 'package:bonfire/player/simple_player.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/widgets.dart';
 

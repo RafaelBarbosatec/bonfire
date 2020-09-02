@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:bonfire/util/game_component.dart';
+import 'package:bonfire/base/game_component.dart';
 
 class BackgroundColorGame extends GameComponent {
   final Color color;

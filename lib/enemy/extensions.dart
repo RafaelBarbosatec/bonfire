@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/text_damage.dart';
+import 'package:bonfire/util/text_damage_component.dart';
 import 'package:flame/position.dart';
 import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +73,7 @@ extension EnemyExtensions on Enemy {
     bool onlyUp = false,
   }) {
     gameRef.addLater(
-      TextDamage(
+      TextDamageComponent(
         damage.toInt().toString(),
         Position(
           position.center.dx,

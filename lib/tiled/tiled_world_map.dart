@@ -35,7 +35,7 @@ class TiledWorldMap {
   double _tileHeightOrigin;
   int _countObjects = 0;
   Map<String, Sprite> _spriteCache = Map();
-  Map<String, Image> _imageCache = Map();
+  Map<String, FlameAnimation.Animation> _animationCache = Map();
   Map<String, ObjectBuilder> _objectsBuilder = Map();
 
   TiledWorldMap(this.pathFile, {this.forceTileSize}) {
@@ -56,7 +56,7 @@ class TiledWorldMap {
       _tileHeight = forceTileSize?.height ?? _tileHeightOrigin;
       await _load(_tiledMap);
     } catch (e) {
-      print('(TiledWorldMap): not found map');
+      print('(TiledWorldMap) Error: $e');
     }
 
     return Future.value(TiledWorldData(
@@ -247,23 +247,23 @@ class TiledWorldMap {
     double tileWidth,
     double tileHeight,
   ) async {
-    if (_imageCache[image] == null) {
-      _imageCache[image] = await Flame.images.load(image);
+    final spriteSheetImg = await Flame.images.load(image);
+    if (_spriteCache.containsKey('$image/$row/$column')) {
+      return Future.value(_spriteCache['$image/$row/$column']);
     }
-    if (_spriteCache['$image/$row/$column'] == null) {
-      _spriteCache['$image/$row/$column'] = _imageCache[image].getSprite(
-        x: (column * tileWidth).toDouble(),
-        y: (row * tileHeight).toDouble(),
-        width: tileWidth,
-        height: tileHeight,
-      );
-    }
+    _spriteCache['$image/$row/$column'] = spriteSheetImg.getSprite(
+      x: (column * tileWidth).toDouble(),
+      y: (row * tileHeight).toDouble(),
+      width: tileWidth,
+      height: tileHeight,
+    );
     return Future.value(_spriteCache['$image/$row/$column']);
   }
 
   DataObjectCollision _getCollision(TileSet tileSetContain, int index) {
-    Iterable<TileSetItem> tileSetItemList =
-        tileSetContain?.tiles?.where((element) => element.id == index);
+    Iterable<TileSetItem> tileSetItemList = tileSetContain?.tiles?.where(
+      (element) => element.id == index,
+    );
 
     if ((tileSetItemList?.isNotEmpty ?? false)) {
       List<TileSetObject> tileSetObjectList =
@@ -299,12 +299,17 @@ class TiledWorldMap {
     int widthCount,
   ) async {
     try {
-      TileSetItem tileSetItemList =
-          tileSetContain.tiles.firstWhere((element) => element.id == index);
+      TileSetItem tileSetItemList = tileSetContain.tiles.firstWhere(
+        (element) => element.id == index,
+      );
 
       List<FrameAnimation> animationFrames = tileSetItemList.animation;
 
       if ((animationFrames?.isNotEmpty ?? false)) {
+        String animationKey = '${tileSetContain.name}/$index';
+        if (_animationCache.containsKey(animationKey)) {
+          return Future.value(_animationCache[animationKey]);
+        }
         List<Sprite> spriteList = List();
         double stepTime = animationFrames[0].duration / 1000;
         await Future.forEach(animationFrames, (frame) async {
@@ -321,12 +326,12 @@ class TiledWorldMap {
           spriteList.add(sprite);
         });
 
-        return Future.value(
-          FlameAnimation.Animation.spriteList(
-            spriteList,
-            stepTime: stepTime,
-          ),
+        _animationCache[animationKey] = FlameAnimation.Animation.spriteList(
+          spriteList,
+          stepTime: stepTime,
         );
+
+        return _animationCache[animationKey];
       } else {
         return null;
       }

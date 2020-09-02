@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import 'package:bonfire/enemy/extensions.dart';
 import 'package:bonfire/enemy/simple_enemy.dart';
+import 'package:bonfire/lighting/lighting_config.dart';
+import 'package:bonfire/objects/animated_object_once.dart';
+import 'package:bonfire/objects/flying_attack_object.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/lighting/lighting_config.dart';
-import 'package:bonfire/util/objects/animated_object_once.dart';
-import 'package:bonfire/util/objects/flying_attack_object.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';

@@ -1,5 +1,5 @@
+import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/util/camera.dart';
-import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:flutter/material.dart';
 
 mixin Lighting {

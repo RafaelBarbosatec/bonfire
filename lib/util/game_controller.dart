@@ -1,7 +1,7 @@
+import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
-import 'package:bonfire/rpg_game.dart';
 import 'package:bonfire/util/camera.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 
@@ -42,6 +42,7 @@ class GameController with HasGameRef<RPGGame> {
   Iterable<GameDecoration> get allDecorations => gameRef.decorations();
   Iterable<Enemy> get visibleEnemies => gameRef.visibleEnemies();
   Iterable<Enemy> get livingEnemies => gameRef.livingEnemies();
+  Iterable<GameComponent> get visibleComponents => gameRef.visibleComponents();
   Player get player => gameRef.player;
   Camera get camera => gameRef.gameCamera;
 }

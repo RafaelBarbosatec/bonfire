@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/widgets.dart';
 

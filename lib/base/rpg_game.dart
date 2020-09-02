@@ -1,17 +1,18 @@
+import 'package:bonfire/base/base_game_point_detector.dart';
+import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
+import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
+import 'package:bonfire/lighting/lighting.dart';
+import 'package:bonfire/lighting/lighting_component.dart';
+import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/base_game_point_detector.dart';
 import 'package:bonfire/util/camera.dart';
-import 'package:bonfire/util/game_component.dart';
 import 'package:bonfire/util/game_controller.dart';
-import 'package:bonfire/util/game_interface/game_interface.dart';
 import 'package:bonfire/util/interval_tick.dart';
-import 'package:bonfire/util/lighting/lighting.dart';
-import 'package:bonfire/util/lighting/lighting_component.dart';
-import 'package:bonfire/util/lighting/lighting_config.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/value_generator_component.dart';
@@ -43,6 +44,8 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   Iterable<GameDecoration> _decorations = List();
   Iterable<GameDecoration> _visibleDecorations = List();
   Iterable<LightingConfig> _visibleLights = List();
+  Iterable<GameComponent> _visibleComponents = List();
+  Iterable<Sensor> _visibleSensors = List();
   IntervalTick _interval;
 
   RPGGame({
@@ -105,6 +108,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     addLater(c);
   }
 
+  Iterable<GameComponent> visibleComponents() => _visibleComponents;
   Iterable<Enemy> visibleEnemies() => _visibleEnemies;
 
   Iterable<Enemy> livingEnemies() => _livingEnemies;
@@ -118,6 +122,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   Iterable<LightingConfig> lightVisible() => _visibleLights;
 
   Iterable<Attackable> attackables() => _attackables;
+  Iterable<Sensor> visibleSensors() => _visibleSensors;
 
   ValueGeneratorComponent getValueGenerator(
     Duration duration, {
@@ -151,6 +156,10 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   }
 
   void _updateTempList() {
+    _visibleComponents = components.where((element) {
+      return (element is GameComponent) && (element).isVisibleInCamera();
+    }).cast();
+
     _decorations = components.where((element) {
       return (element is GameDecoration);
     }).cast();
@@ -164,12 +173,10 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
       return element.isVisibleInCamera();
     });
 
-    _attackables = components
-        .where((element) =>
-            (element is GameComponent) &&
-            (element is Attackable) &&
-            element.isVisibleInCamera())
-        .cast();
+    _visibleSensors =
+        _visibleComponents.where((element) => (element is Sensor)).cast();
+    _attackables =
+        _visibleComponents.where((element) => (element is Attackable)).cast();
 
     if (lightingColorGame != null) {
       _visibleLights = components.where((element) {

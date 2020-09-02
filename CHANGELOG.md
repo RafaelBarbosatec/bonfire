@@ -1,3 +1,8 @@
+## [0.6.23]
+* improvement in map.
+* BREAKING CHANGE: remove param `isSensor` from `GameDecoration` an create mixin `Sensor`.
+* update example (Potion,Spikes).
+
 ## [0.6.22]
 * fix update Camera.
 

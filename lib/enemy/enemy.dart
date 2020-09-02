@@ -1,10 +1,10 @@
 import 'dart:math';
 
+import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
-import 'package:bonfire/util/objects/animated_object.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';

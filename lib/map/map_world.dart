@@ -11,7 +11,6 @@ class MapWorld extends MapGame {
   double lastZoom = -1;
   Size lastSizeScreen;
   Iterable<Tile> _tilesToRender = List();
-  Iterable<Tile> _tilesToRenderAndUpdate = List();
   Iterable<Tile> _tilesCollisionsRendered = List();
   Iterable<Tile> _tilesCollisions = List();
 
@@ -34,21 +33,18 @@ class MapWorld extends MapGame {
       lastZoom = gameRef.gameCamera.zoom;
 
       List<Tile> tilesRender = List();
-      List<Tile> tilesRenderUpdate = List();
       List<Tile> tilesCollision = List();
-      tiles.forEach((tile) {
-        tile.gameRef = gameRef;
-        if (tile.isVisibleInCamera()) {
-          tilesRender.add(tile);
-          if (tile.animation != null) tilesRenderUpdate.add(tile);
-          if (tile.containCollision()) tilesCollision.add(tile);
-        }
+      tiles.where((tile) {
+        tile.gameRef ??= gameRef;
+        return tile.isVisibleInCamera();
+      }).forEach((tile) {
+        tilesRender.add(tile);
+        if (tile.containCollision()) tilesCollision.add(tile);
       });
       _tilesToRender = tilesRender;
       _tilesCollisionsRendered = tilesCollision;
-      _tilesToRenderAndUpdate = tilesRenderUpdate;
     }
-    _tilesToRenderAndUpdate.forEach((tile) => tile.update(t));
+    _tilesToRender.forEach((tile) => tile.update(t));
   }
 
   @override
@@ -107,14 +103,18 @@ class MapWorld extends MapGame {
   }
 
   Position getStartPosition() {
-    double x = this.tiles.first.position.left;
-    double y = this.tiles.first.position.top;
+    try {
+      double x = this.tiles.first.position.left;
+      double y = this.tiles.first.position.top;
 
-    this.tiles.forEach((tile) {
-      if (tile.position.left < x) x = tile.position.left;
-      if (tile.position.top < y) y = tile.position.top;
-    });
+      this.tiles.forEach((tile) {
+        if (tile.position.left < x) x = tile.position.left;
+        if (tile.position.top < y) y = tile.position.top;
+      });
 
-    return Position(x, y);
+      return Position(x, y);
+    } catch (e) {
+      return Position.empty();
+    }
   }
 }

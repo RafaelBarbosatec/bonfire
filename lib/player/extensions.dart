@@ -3,9 +3,13 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/enemy/enemy.dart';
+import 'package:bonfire/lighting/lighting_config.dart';
+import 'package:bonfire/objects/animated_object_once.dart';
+import 'package:bonfire/objects/flying_attack_angle_object.dart';
+import 'package:bonfire/objects/flying_attack_object.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:bonfire/util/text_damage.dart';
+import 'package:bonfire/util/text_damage_component.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flame/text_config.dart';
@@ -22,7 +26,7 @@ extension PlayerExtensions on Player {
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
   }) {
     gameRef.addLater(
-      TextDamage(
+      TextDamageComponent(
         damage.toInt().toString(),
         Position(
           position.center.dx,

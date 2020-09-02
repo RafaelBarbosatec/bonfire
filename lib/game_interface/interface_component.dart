@@ -1,4 +1,4 @@
-import 'package:bonfire/util/game_component.dart';
+import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/mixins/gestures.dart';
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
@@ -52,7 +52,6 @@ class InterfaceComponent extends GameComponent with TapGesture {
   void onTap() {
     if (onTapComponent != null) onTapComponent();
     spriteToRender = sprite;
-    super.onTap();
   }
 
   @override
