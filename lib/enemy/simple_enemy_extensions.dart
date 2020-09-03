@@ -392,12 +392,12 @@ extension SimpleEnemyExtensions on SimpleEnemy {
   void seeAndMoveToAttackRange(
       {Function(Player) positioned,
       double radiusVision = 32,
-      double minDistanceCellsFromPlayer}) {
+      double minDistanceFromPlayer}) {
     if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
         isDead ||
         this.position == null) return;
 
-    double distance = (minDistanceCellsFromPlayer ?? radiusVision);
+    double distance = (minDistanceFromPlayer ?? radiusVision);
 
     seePlayer(
       radiusVision: radiusVision,
