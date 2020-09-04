@@ -153,6 +153,17 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
     return gameRef.gameCamera.isComponentOnCamera(this);
   }
 
+  String typeTileBelow() {
+    final map = gameRef?.map;
+    if (map != null && map.tiles.isNotEmpty) {
+      final tiles = map
+          .getRendered()
+          .where((element) => element.position.overlaps(position));
+      if (tiles.isNotEmpty) return tiles.first.type;
+    }
+    return null;
+  }
+
   void translate(double translateX, double translateY) {
     position = position.translate(translateX, translateY);
   }

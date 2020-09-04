@@ -21,6 +21,7 @@ class Knight extends SimplePlayer with Lighting {
   Rect rectDirectionAttack;
   Sprite spriteDirectionAttack;
   bool showDirection = false;
+  final _paintFocus = Paint()..blendMode = BlendMode.clear;
 
   Knight(this.initPosition)
       : super(
@@ -216,17 +217,7 @@ class Knight extends SimplePlayer with Lighting {
 
   @override
   void render(Canvas c) {
-    if (showDirection) {
-      double radius = position.height;
-      rectDirectionAttack = Rect.fromLTWH(position.center.dx - radius,
-          position.center.dy - radius, radius * 2, radius * 2);
-      renderSpriteByRadAngle(
-        c,
-        angleRadAttack,
-        rectDirectionAttack,
-        spriteDirectionAttack,
-      );
-    }
+    _drawDirectionAttack(c);
     super.render(c);
   }
 
@@ -291,5 +282,19 @@ class Knight extends SimplePlayer with Lighting {
         gameRef.gameCamera.moveToPlayerAnimated();
       });
     });
+  }
+
+  void _drawDirectionAttack(Canvas c) {
+    if (showDirection) {
+      double radius = position.height;
+      rectDirectionAttack = Rect.fromLTWH(position.center.dx - radius,
+          position.center.dy - radius, radius * 2, radius * 2);
+      renderSpriteByRadAngle(
+        c,
+        angleRadAttack,
+        rectDirectionAttack,
+        spriteDirectionAttack,
+      );
+    }
   }
 }
