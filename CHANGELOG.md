@@ -1,3 +1,6 @@
+## [0.6.25]
+* fix `tileTypeBelow()` and add `tileTypesBelow()`;
+
 ## [0.6.24]
 * add method `tileTypeBelow()` in `GameComponent` to get type tile;
 * improvements in gestures mixin;
