@@ -1,5 +1,5 @@
 ## [next]
-* add method `typeTileBelow()` in `GameComponent` to get type tile;
+* add method `tileTypeBelow()` in `GameComponent` to get type tile;
 
 ## [0.6.23]
 * improvement in map.

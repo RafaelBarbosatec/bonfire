@@ -153,7 +153,7 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
     return gameRef.gameCamera.isComponentOnCamera(this);
   }
 
-  String typeTileBelow() {
+  String tileTypeBelow() {
     final map = gameRef?.map;
     if (map != null && map.tiles.isNotEmpty) {
       final tiles = map
