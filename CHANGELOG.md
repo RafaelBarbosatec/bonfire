@@ -1,5 +1,6 @@
 ## [next]
 * add method `tileTypeBelow()` in `GameComponent` to get type tile;
+* improvements in gestures mixin;
 
 ## [0.6.23]
 * improvement in map.
