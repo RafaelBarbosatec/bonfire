@@ -357,6 +357,18 @@
             }
         }, 
         {
+         "id":129,
+         "type":"ground"
+        }, 
+        {
+         "id":130,
+         "type":"ground_crash"
+        }, 
+        {
+         "id":131,
+         "type":"ground_bad_condition"
+        }, 
+        {
          "animation":[
                 {
                  "duration":100,

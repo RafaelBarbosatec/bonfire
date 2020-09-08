@@ -1,4 +1,4 @@
-import 'package:bonfire/util/mixins/gestures.dart';
+import 'package:bonfire/util/mixins/pointer_detector_mixin.dart';
 import 'package:flame/game.dart';
 import 'package:flame/game/embedded_game_widget.dart';
 import 'package:flutter/widgets.dart';

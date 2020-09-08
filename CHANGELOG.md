@@ -1,3 +1,7 @@
+## [0.6.24]
+* add method `tileTypeBelow()` in `GameComponent` to get type tile;
+* improvements in gestures mixin;
+
 ## [0.6.23]
 * improvement in map.
 * BREAKING CHANGE: remove param `isSensor` from `GameDecoration` an create mixin `Sensor`.

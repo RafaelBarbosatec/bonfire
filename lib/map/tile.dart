@@ -15,6 +15,7 @@ class Tile extends GameComponent with ObjectCollision {
   FlameAnimation.Animation animation;
   final double width;
   final double height;
+  final String type;
   Position _positionText;
   Paint _paintText;
 
@@ -24,6 +25,7 @@ class Tile extends GameComponent with ObjectCollision {
     Collision collision,
     this.width = 32,
     this.height = 32,
+    this.type,
   }) {
     if (collision != null) collisions = [collision];
     this.position = generateRectWithBleedingPixel(position, width, height);
@@ -38,6 +40,7 @@ class Tile extends GameComponent with ObjectCollision {
     Collision collision,
     this.width = 32,
     this.height = 32,
+    this.type,
   }) {
     if (collision != null) this.collisions = [collision];
     this.sprite = sprite;
@@ -52,6 +55,7 @@ class Tile extends GameComponent with ObjectCollision {
     List<Collision> collisions,
     this.width = 32,
     this.height = 32,
+    this.type,
     double offsetX = 0,
     double offsetY = 0,
   }) {
@@ -74,6 +78,7 @@ class Tile extends GameComponent with ObjectCollision {
     Collision collision,
     this.width = 32,
     this.height = 32,
+    this.type,
   }) {
     this.animation = animation;
     if (collision != null) this.collisions = [collision];
@@ -88,6 +93,7 @@ class Tile extends GameComponent with ObjectCollision {
     List<Collision> collisions,
     this.width = 32,
     this.height = 32,
+    this.type,
     double offsetX = 0,
     double offsetY = 0,
   }) {

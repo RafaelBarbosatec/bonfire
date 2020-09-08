@@ -10,7 +10,7 @@ import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/camera.dart';
+import 'package:bonfire/util/camera/camera.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/map_explorer.dart';

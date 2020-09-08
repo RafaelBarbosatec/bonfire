@@ -155,7 +155,7 @@ class Camera with HasGameRef<RPGGame> {
     );
   }
 
-  void _moveToTarget({double horizontal = 50, double vertical = 50}) {
+  void _followTarget({double horizontal = 50, double vertical = 50}) {
     if (target == null || gameRef?.size == null) return;
     if (_lastTargetOffset == target.position.center) return;
     _lastTargetOffset = target.position.center;
@@ -169,12 +169,12 @@ class Camera with HasGameRef<RPGGame> {
     final verticalDistance = screenCenter.dy - positionTarget.dy;
 
     if (horizontalDistance.abs() > horizontal) {
-      this.gameRef.gameCamera.position.x += horizontalDistance > 0
+      this.position.x += horizontalDistance > 0
           ? horizontal - horizontalDistance
           : -horizontalDistance - horizontal;
     }
     if (verticalDistance.abs() > vertical) {
-      this.gameRef.gameCamera.position.y += verticalDistance > 0
+      this.position.y += verticalDistance > 0
           ? vertical - verticalDistance
           : -verticalDistance - vertical;
     }
@@ -214,20 +214,20 @@ class Camera with HasGameRef<RPGGame> {
 
   Offset worldPositionToScreen(Offset position) {
     return position.translate(
-      -gameRef.gameCamera.position.x + gameRef.size.width / 2,
-      -gameRef.gameCamera.position.y + gameRef.size.height / 2,
+      -this.position.x + gameRef.size.width / 2,
+      -this.position.y + gameRef.size.height / 2,
     );
   }
 
   Offset cameraPositionToWorld(Offset position) {
     return position.translate(
-      gameRef.gameCamera.position.x - gameRef.size.width / 2,
-      gameRef.gameCamera.position.y - gameRef.size.height / 2,
+      this.position.x - gameRef.size.width / 2,
+      this.position.y - gameRef.size.height / 2,
     );
   }
 
   void update() {
-    _moveToTarget(
+    _followTarget(
       vertical: sizeMovementWindow.height,
       horizontal: sizeMovementWindow.width,
     );

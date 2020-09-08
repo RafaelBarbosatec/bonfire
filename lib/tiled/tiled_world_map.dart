@@ -116,23 +116,26 @@ class TiledWorldMap {
                   collisions: data.collisions,
                   width: _tileWidth,
                   height: _tileHeight,
+                  type: data.type,
                 ),
               );
             }
           } else {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
               _components.add(
-                GameDecoration.animationMultiCollision(data.animation,
-                    initPosition: Position(
-                      (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
-                          offsetX,
-                      (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
-                          offsetY,
-                    ),
-                    height: _tileHeight,
-                    width: _tileWidth,
-                    collisions: data.collisions,
-                    frontFromPlayer: true),
+                GameDecoration.animationMultiCollision(
+                  data.animation,
+                  initPosition: Position(
+                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
+                        offsetX,
+                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
+                        offsetY,
+                  ),
+                  height: _tileHeight,
+                  width: _tileWidth,
+                  collisions: data.collisions,
+                  frontFromPlayer: true,
+                ),
               );
             } else {
               _tiles.add(
@@ -147,6 +150,7 @@ class TiledWorldMap {
                   collisions: data.collisions,
                   width: _tileWidth,
                   height: _tileHeight,
+                  type: data.type,
                 ),
               );
             }

@@ -42,7 +42,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.6.22"
+    version: "0.6.23"
   boolean_selector:
     dependency: transitive
     description:

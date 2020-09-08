@@ -2,7 +2,7 @@ import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
-import 'package:bonfire/util/camera.dart';
+import 'package:bonfire/util/camera/camera.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 
 abstract class GameListener {

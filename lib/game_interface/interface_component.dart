@@ -1,5 +1,5 @@
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/util/mixins/gestures.dart';
+import 'package:bonfire/util/gestures/tap_gesture.dart';
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
@@ -37,15 +37,15 @@ class InterfaceComponent extends GameComponent with TapGesture {
   }
 
   @override
-  void onTapDown(int pointer) {
+  void onTapDown(int pointer, Offset position) {
     if (spriteSelected != null) spriteToRender = spriteSelected;
-    super.onTapDown(pointer);
+    super.onTapDown(pointer, position);
   }
 
   @override
-  void onTapCancel(int pointer) {
+  void onTapCancel() {
     spriteToRender = sprite;
-    super.onTapCancel(pointer);
+    super.onTapCancel();
   }
 
   @override
