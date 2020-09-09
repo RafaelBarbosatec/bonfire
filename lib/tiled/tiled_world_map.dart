@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tile.dart';
 import 'package:bonfire/tiled/tiled_world_data.dart';
+import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:bonfire/util/extensions.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/sprite.dart';
@@ -35,7 +36,7 @@ class TiledWorldMap {
   double _tileHeightOrigin;
   int _countObjects = 0;
   Map<String, Sprite> _spriteCache = Map();
-  Map<String, FlameAnimation.Animation> _animationCache = Map();
+  Map<String, ControlledUpdateAnimation> _animationCache = Map();
   Map<String, ObjectBuilder> _objectsBuilder = Map();
 
   TiledWorldMap(this.pathFile, {this.forceTileSize}) {
@@ -124,7 +125,7 @@ class TiledWorldMap {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
               _components.add(
                 GameDecoration.animationMultiCollision(
-                  data.animation,
+                  data.animation.animation,
                   initPosition: Position(
                     (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
                         offsetX,
@@ -197,7 +198,7 @@ class TiledWorldMap {
         tileSetContain.tileHeight,
       );
 
-      FlameAnimation.Animation animation = await _getAnimation(
+      final animation = await _getAnimation(
         tileSetContain,
         (index - firsTgId),
         widthCount,
@@ -297,7 +298,7 @@ class TiledWorldMap {
     return DataObjectCollision();
   }
 
-  Future<FlameAnimation.Animation> _getAnimation(
+  Future<ControlledUpdateAnimation> _getAnimation(
     TileSet tileSetContain,
     int index,
     int widthCount,
@@ -330,9 +331,11 @@ class TiledWorldMap {
           spriteList.add(sprite);
         });
 
-        _animationCache[animationKey] = FlameAnimation.Animation.spriteList(
-          spriteList,
-          stepTime: stepTime,
+        _animationCache[animationKey] = ControlledUpdateAnimation(
+          FlameAnimation.Animation.spriteList(
+            spriteList,
+            stepTime: stepTime,
+          ),
         );
 
         return _animationCache[animationKey];
@@ -346,7 +349,7 @@ class TiledWorldMap {
 }
 
 class ItemTileSet {
-  final FlameAnimation.Animation animation;
+  final ControlledUpdateAnimation animation;
   final Sprite sprite;
   final List<Collision> collisions;
   final String type;

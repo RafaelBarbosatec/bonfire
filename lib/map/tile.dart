@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
+import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:flame/position.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/text_config.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 
 class Tile extends GameComponent with ObjectCollision {
   Sprite sprite;
-  FlameAnimation.Animation animation;
+  ControlledUpdateAnimation animation;
   final double width;
   final double height;
   final String type;
@@ -73,7 +73,7 @@ class Tile extends GameComponent with ObjectCollision {
   }
 
   Tile.fromAnimation(
-    FlameAnimation.Animation animation,
+    ControlledUpdateAnimation animation,
     Position position, {
     Collision collision,
     this.width = 32,
@@ -88,7 +88,7 @@ class Tile extends GameComponent with ObjectCollision {
   }
 
   Tile.fromAnimationMultiCollision(
-    FlameAnimation.Animation animation,
+    ControlledUpdateAnimation animation,
     Position position, {
     List<Collision> collisions,
     this.width = 32,
@@ -113,20 +113,19 @@ class Tile extends GameComponent with ObjectCollision {
   @override
   void render(Canvas canvas) {
     if (position == null) return;
-
-    if (animation != null && animation.loaded()) {
-      animation.getSprite().renderRect(canvas, position);
-    } else if (sprite != null && sprite.loaded()) {
+    animation?.render(canvas, position);
+    if (sprite?.loaded() ?? false) {
       sprite.renderRect(canvas, position);
     }
 
-    if (gameRef != null && gameRef.showCollisionArea) {
+    if (gameRef?.showCollisionArea ?? false) {
       drawCollision(canvas, position, gameRef?.collisionAreaColor);
     }
 
-    if (gameRef != null && gameRef.constructionMode && isVisibleInCamera()) {
+    if ((gameRef?.constructionMode ?? false) && isVisibleInCamera()) {
       _drawGrid(canvas);
     }
+    super.render(canvas);
   }
 
   void _drawGrid(Canvas canvas) {
