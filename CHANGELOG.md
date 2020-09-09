@@ -1,3 +1,6 @@
+## [0.6.26]
+* improvements image cache in map load by Tiled;
+
 ## [0.6.25]
 * fix `tileTypeBelow()` and add `tileTypesBelow()`;
 
