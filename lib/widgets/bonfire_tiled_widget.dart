@@ -116,7 +116,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
       cameraMoveOnlyMapArea: widget.cameraMoveOnlyMapArea,
     );
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(Duration(milliseconds: 300));
     setState(() {
       _loading = false;
     });
