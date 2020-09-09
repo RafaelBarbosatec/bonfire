@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/animation.dart' as FlameAnimation;
 
 class ControlledUpdateAnimation {
-  bool alreadyUpdate = false;
+  bool _alreadyUpdate = false;
   final FlameAnimation.Animation animation;
 
   ControlledUpdateAnimation(this.animation);
@@ -13,12 +13,12 @@ class ControlledUpdateAnimation {
     if (animation != null && animation.loaded()) {
       animation.getSprite().renderRect(canvas, position);
     }
-    alreadyUpdate = false;
+    _alreadyUpdate = false;
   }
 
   void update(double dt) {
-    if (!alreadyUpdate) {
-      alreadyUpdate = true;
+    if (!_alreadyUpdate) {
+      _alreadyUpdate = true;
       animation?.update(dt);
     }
   }
