@@ -41,7 +41,7 @@ Bonfire is ideal for building games from the following perspectives:
 3. [Tiled support](#tiled-support)
 4. [Next steps](#next-steps)
 
-OBS: To use package remove `flutter_test` of the `dev_dependencies` and add `test: any`.
+OBS: Use this command to run in flutter web `flutter run -d chrome --release --dart-define=FLUTTER_WEB_USE_SKIA=true`
 
 ## How it works?
 
