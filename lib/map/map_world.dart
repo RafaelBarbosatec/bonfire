@@ -34,13 +34,13 @@ class MapWorld extends MapGame {
 
       List<Tile> tilesRender = List();
       List<Tile> tilesCollision = List();
-      tiles.where((tile) {
+      for (final tile in tiles) {
         tile.gameRef ??= gameRef;
-        return tile.isVisibleInCamera();
-      }).forEach((tile) {
-        tilesRender.add(tile);
-        if (tile.containCollision()) tilesCollision.add(tile);
-      });
+        if (tile.isVisibleInCamera()) {
+          tilesRender.add(tile);
+          if (tile.containCollision()) tilesCollision.add(tile);
+        }
+      }
       _tilesToRender = tilesRender;
       _tilesCollisionsRendered = tilesCollision;
     }
