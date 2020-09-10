@@ -45,6 +45,7 @@ class SimplePlayerAnimation {
   final SimplePlayerAnimationEnum init;
 
   Animation _current;
+  SimplePlayerAnimationEnum _currentType;
   AnimatedObjectOnce _fastAnimation;
 
   SimplePlayerAnimation({
@@ -71,6 +72,7 @@ class SimplePlayerAnimation {
   }
 
   void play(SimplePlayerAnimationEnum animation) {
+    _currentType = animation;
     switch (animation) {
       case SimplePlayerAnimationEnum.idleLeft:
         if (idleLeft != null) _current = idleLeft;
@@ -164,4 +166,5 @@ class SimplePlayerAnimation {
   }
 
   Animation get current => _current;
+  SimplePlayerAnimationEnum get currentType => _currentType;
 }
