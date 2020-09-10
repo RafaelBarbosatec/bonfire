@@ -1,3 +1,7 @@
+## [next]
+* little performance improvement;
+* remove mandatory joystick in widget;
+
 ## [0.6.26]
 * improvements image cache in map load by Tiled;
 
