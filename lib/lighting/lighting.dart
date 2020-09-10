@@ -12,10 +12,10 @@ mixin Lighting {
         camera.gameRef.size == null) return false;
 
     Rect rectLight = Rect.fromLTWH(
-      lightingConfig.gameComponent.position.left - lightingConfig.radius,
-      lightingConfig.gameComponent.position.top - lightingConfig.radius,
-      lightingConfig.radius * 2,
-      lightingConfig.radius * 2,
+      lightingConfig.gameComponent.position.left - (lightingConfig.radius + 10),
+      lightingConfig.gameComponent.position.top - (lightingConfig.radius + 10),
+      (lightingConfig.radius * 2) + 20,
+      (lightingConfig.radius * 2) + 20,
     );
 
     return camera.cameraRect.overlaps(rectLight) ?? false;
