@@ -47,6 +47,7 @@ class SimplePlayerAnimation {
   Animation _current;
   SimplePlayerAnimationEnum _currentType;
   AnimatedObjectOnce _fastAnimation;
+  bool runToTheEndFastAnimation = false;
 
   SimplePlayerAnimation({
     @required this.idleLeft,
@@ -73,6 +74,9 @@ class SimplePlayerAnimation {
 
   void play(SimplePlayerAnimationEnum animation) {
     _currentType = animation;
+    if (!runToTheEndFastAnimation) {
+      _fastAnimation = null;
+    }
     switch (animation) {
       case SimplePlayerAnimationEnum.idleLeft:
         if (idleLeft != null) _current = idleLeft;
@@ -127,6 +131,9 @@ class SimplePlayerAnimation {
 
   void playOther(String key) {
     if (others?.containsKey(key) == true) {
+      if (!runToTheEndFastAnimation) {
+        _fastAnimation = null;
+      }
       _current = others[key];
     }
   }
@@ -134,7 +141,9 @@ class SimplePlayerAnimation {
   void playOnce(
     Animation animation, {
     VoidCallback onFinish,
+    bool runToTheEnd = false,
   }) {
+    runToTheEndFastAnimation = runToTheEnd;
     _fastAnimation = AnimatedObjectOnce(
       animation: animation,
       onlyUpdate: true,

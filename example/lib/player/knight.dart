@@ -169,8 +169,6 @@ class Knight extends SimplePlayer with Lighting {
       heightArea: DungeonMap.tileSize,
       widthArea: DungeonMap.tileSize,
     );
-
-    newAnimation.playOnce(explosionAnimation);
   }
 
   void actionAttackRange() {
