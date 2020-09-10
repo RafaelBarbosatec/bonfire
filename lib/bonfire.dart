@@ -31,6 +31,7 @@ export 'package:bonfire/player/player.dart';
 export 'package:bonfire/player/rotation/rotation_player.dart';
 export 'package:bonfire/player/rotation/rotation_player_extensions.dart';
 export 'package:bonfire/player/simple/simple_player.dart';
+export 'package:bonfire/player/simple/simple_player_animation.dart';
 export 'package:bonfire/player/simple/simple_player_extensions.dart';
 export 'package:bonfire/tiled/tiled_world_map.dart';
 export 'package:bonfire/util/background_color_game.dart';

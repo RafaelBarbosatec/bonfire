@@ -39,29 +39,31 @@ class Knight extends SimplePlayer with Lighting {
 
   Knight(this.initPosition)
       : super(
-          animIdleLeft: FlameAnimation.Animation.sequenced(
-            "player/knight_idle_left.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          animIdleRight: FlameAnimation.Animation.sequenced(
-            "player/knight_idle.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          animRunRight: FlameAnimation.Animation.sequenced(
-            "player/knight_run.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          animRunLeft: FlameAnimation.Animation.sequenced(
-            "player/knight_run_left.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
+          newAnimation: SimplePlayerAnimation(
+            idleLeft: FlameAnimation.Animation.sequenced(
+              "player/knight_idle_left.png",
+              6,
+              textureWidth: 16,
+              textureHeight: 16,
+            ),
+            idleRight: FlameAnimation.Animation.sequenced(
+              "player/knight_idle.png",
+              6,
+              textureWidth: 16,
+              textureHeight: 16,
+            ),
+            runRight: FlameAnimation.Animation.sequenced(
+              "player/knight_run.png",
+              6,
+              textureWidth: 16,
+              textureHeight: 16,
+            ),
+            runLeft: FlameAnimation.Animation.sequenced(
+              "player/knight_run_left.png",
+              6,
+              textureWidth: 16,
+              textureHeight: 16,
+            ),
           ),
           width: DungeonMap.tileSize,
           height: DungeonMap.tileSize,
@@ -167,12 +169,12 @@ class Knight extends SimplePlayer with Lighting {
       heightArea: DungeonMap.tileSize,
       widthArea: DungeonMap.tileSize,
     );
+
+    newAnimation.playOnce(explosionAnimation);
   }
 
   void actionAttackRange() {
     if (stamina < 10) return;
-
-//    decrementStamina(10);
 
     this.simpleAttackRangeByAngle(
       animationTop: fireBallAnimation,
@@ -277,7 +279,7 @@ class Knight extends SimplePlayer with Lighting {
             width: 50,
             height: 50,
             child: AnimationWidget(
-              animation: animation,
+              animation: newAnimation.current,
               playing: true,
             ),
           ),
