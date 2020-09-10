@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/enemy/extensions.dart';
-import 'package:bonfire/enemy/simple_enemy.dart';
+import 'package:bonfire/enemy/simple/simple_enemy.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/objects/flying_attack_object.dart';

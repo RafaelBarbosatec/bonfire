@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/enemy/extensions.dart';
-import 'package:bonfire/enemy/rotation_enemy.dart';
+import 'package:bonfire/enemy/rotation/rotation_enemy.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/objects/flying_attack_angle_object.dart';
