@@ -47,26 +47,36 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   }
 
   void onPointerUp(PointerUpEvent event) {
-    _gesturesComponents.forEach(
-      (c) => c.handlerPointerUp(
+    for (final c in _gesturesComponents) {
+      c.handlerPointerUp(
         event.pointer,
         event.localPosition,
-      ),
-    );
-    _pointerDetectorComponents.forEach((c) => c.onPointerUp(event));
+      );
+    }
+    for (final c in _pointerDetectorComponents) {
+      c.onPointerUp(event);
+    }
   }
 
   void onPointerMove(PointerMoveEvent event) {
-    _gesturesComponents.where((element) => element is DragGesture).forEach(
-        (element) =>
-            element.handlerPointerMove(event.pointer, event.localPosition));
-    _pointerDetectorComponents.forEach((c) => c.onPointerMove(event));
+    _gesturesComponents
+        .where((element) => element is DragGesture)
+        .forEach((element) {
+      element.handlerPointerMove(event.pointer, event.localPosition);
+    });
+    for (final c in _pointerDetectorComponents) {
+      c.onPointerMove(event);
+    }
   }
 
   void onPointerDown(PointerDownEvent event) {
-    _gesturesComponents.forEach(
-        (c) => c.handlerPointerDown(event.pointer, event.localPosition));
-    _pointerDetectorComponents.forEach((c) => c.onPointerDown(event));
+    for (final c in _gesturesComponents) {
+      c.handlerPointerDown(event.pointer, event.localPosition);
+    }
+
+    for (final c in _pointerDetectorComponents) {
+      c.onPointerDown(event);
+    }
   }
 
   /// This method is called for every component added, both via [add] and [addLater] methods.

@@ -13,7 +13,7 @@ class Collision {
     height = size;
   }
 
-  Rect calculateRectCollision(Rect displacement) {
+  Rect getRect(Rect displacement) {
     double left = displacement.left + align.dx;
     double top = displacement.top + align.dy;
     return Rect.fromLTWH(left, top, width, height);

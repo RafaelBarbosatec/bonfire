@@ -20,7 +20,9 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    _tilesToRender.forEach((tile) => tile.render(canvas));
+    for (final tile in _tilesToRender) {
+      tile.render(canvas);
+    }
   }
 
   @override
@@ -44,7 +46,9 @@ class MapWorld extends MapGame {
       _tilesToRender = tilesRender;
       _tilesCollisionsRendered = tilesCollision;
     }
-    _tilesToRender.forEach((tile) => tile.update(t));
+    for (final tile in _tilesToRender) {
+      tile.update(t);
+    }
   }
 
   @override

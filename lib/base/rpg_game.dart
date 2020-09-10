@@ -51,7 +51,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   RPGGame({
     @required this.context,
     @required this.map,
-    @required this.joystickController,
+    this.joystickController,
     this.player,
     this.interface,
     List<Enemy> enemies,
@@ -89,7 +89,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
       super.add(LightingComponent(color: lightingColorGame));
     }
     super.add((interface ?? GameInterface()));
-    super.add(joystickController);
+    if (joystickController != null) super.add(joystickController);
     _interval = IntervalTick(200, tick: _updateTempList);
   }
 
