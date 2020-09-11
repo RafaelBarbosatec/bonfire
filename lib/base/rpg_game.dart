@@ -7,7 +7,6 @@ import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
-import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/camera/camera.dart';
@@ -43,7 +42,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   Iterable<Attackable> _attackables = List();
   Iterable<GameDecoration> _decorations = List();
   Iterable<GameDecoration> _visibleDecorations = List();
-  Iterable<LightingConfig> _visibleLights = List();
+  Iterable<Lighting> _visibleLights = List();
   Iterable<GameComponent> _visibleComponents = List();
   Iterable<Sensor> _visibleSensors = List();
   IntervalTick _interval;
@@ -119,7 +118,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
   Iterable<GameDecoration> decorations() => _decorations;
 
-  Iterable<LightingConfig> lightVisible() => _visibleLights;
+  Iterable<Lighting> lightVisible() => _visibleLights;
 
   Iterable<Attackable> attackables() => _attackables;
   Iterable<Sensor> visibleSensors() => _visibleSensors;
@@ -182,7 +181,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
       _visibleLights = components.where((element) {
         return element is Lighting &&
             (element as Lighting).isVisible(gameCamera);
-      }).map((e) => (e as Lighting).lightingConfig);
+      }).cast();
     }
 
     if (gameController != null) gameController.notifyListeners();

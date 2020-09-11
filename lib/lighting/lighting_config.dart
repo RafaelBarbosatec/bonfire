@@ -1,10 +1,8 @@
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/pulse_value.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
 class LightingConfig {
-  GameComponent gameComponent;
   final double radius;
   final Color color;
   final bool withPulse;
@@ -15,7 +13,6 @@ class LightingConfig {
   PulseValue _pulseAnimation;
 
   LightingConfig({
-    @required this.gameComponent,
     @required this.radius,
     this.color,
     this.withPulse = false,
