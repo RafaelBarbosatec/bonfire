@@ -1,6 +1,7 @@
 ## [next]
 * little performance improvement;
 * remove mandatory joystick in widget;
+* remove param gameComponent in `LightingConfig`;
 
 ## [0.6.26]
 * improvements image cache in map load by Tiled;
