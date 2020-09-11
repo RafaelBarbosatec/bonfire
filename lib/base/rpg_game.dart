@@ -144,7 +144,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
   @override
   void onKeyEvent(RawKeyEvent event) {
-    joystickController.onKeyboard(event);
+    joystickController?.onKeyboard(event);
   }
 
   @override
