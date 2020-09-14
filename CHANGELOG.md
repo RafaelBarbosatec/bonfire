@@ -1,4 +1,4 @@
-## [next]
+## [0.6.27]
 * little performance improvement;
 * remove mandatory joystick in widget;
 * remove param gameComponent in `LightingConfig`;
