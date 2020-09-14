@@ -17,11 +17,11 @@ mixin ObjectCollision {
         )
         .cast();
 
-    sensors.forEach((sensor) {
+    for (final sensor in sensors) {
       if (sensor.areaSensor.overlaps(rectCollisions.first)) {
         sensor.onContact(this);
       }
-    });
+    }
   }
 
   bool isCollision(
@@ -35,17 +35,22 @@ mixin ObjectCollision {
     final rectCollisions = getRectCollisions(displacement);
     if (shouldTriggerSensors) triggerSensors(rectCollisions, game);
 
-    final collisions = (onlyVisible
+    final collisionMap = (onlyVisible
             ? game.map?.getCollisionsRendered() ?? []
             : game.map?.getCollisions() ?? [])
-        .where((i) => i.detectCollision(rectCollisions));
-    if (collisions.isNotEmpty) return true;
+        .firstWhere(
+      (i) => i.detectCollision(rectCollisions),
+      orElse: () => null,
+    );
+    if (collisionMap != null) return true;
 
-    final collisionsDecorations =
+    final collisionDecorations =
         (onlyVisible ? game.visibleDecorations() : game.decorations())
-            .where((i) => i.detectCollision(rectCollisions));
-
-    if (collisionsDecorations.isNotEmpty) return true;
+            .firstWhere(
+      (i) => i.detectCollision(rectCollisions),
+      orElse: () => null,
+    );
+    if (collisionDecorations != null) return true;
 
     return false;
   }
@@ -63,21 +68,19 @@ mixin ObjectCollision {
 
   Iterable<Rect> getRectCollisions(Rect displacement) {
     if (!containCollision()) return [];
-    return collisions.map<Rect>((e) => e.calculateRectCollision(displacement));
+    return collisions.map<Rect>((e) => e.getRect(displacement));
   }
 
   Rect getRectCollision(Rect displacement) {
     if (!containCollision()) return Rect.zero;
-    return collisions
-        .map<Rect>((e) => e.calculateRectCollision(displacement))
-        .first;
+    return collisions.map<Rect>((e) => e.getRect(displacement)).first;
   }
 
   void drawCollision(Canvas canvas, Rect currentPosition, Color color) {
     if (!containCollision()) return;
     collisions.forEach((element) {
       canvas.drawRect(
-        element.calculateRectCollision(currentPosition),
+        element.getRect(currentPosition),
         Paint()..color = color ?? Colors.lightGreenAccent.withOpacity(0.5),
       );
     });
@@ -89,13 +92,21 @@ mixin ObjectCollision {
 
   bool detectCollision(Iterable<Rect> displacements) {
     if (!containCollision() || !(this is GameComponent)) return false;
-    return displacements
-        .where((displacement) => this
-            .collisions
-            .where((element) => element
-                .calculateRectCollision((this as GameComponent).position)
-                .overlaps(displacement))
-            .isNotEmpty)
-        .isNotEmpty;
+    final collision = displacements.firstWhere(
+      (displacement) {
+        return this.collisions.firstWhere(
+              (element) {
+                return element
+                    .getRect((this as GameComponent).position)
+                    .overlaps(displacement);
+              },
+              orElse: () => null,
+            ) !=
+            null;
+      },
+      orElse: () => null,
+    );
+
+    return collision != null;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/util/camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -8,16 +9,18 @@ mixin Lighting {
   bool isVisible(Camera camera) {
     if (lightingConfig == null ||
         camera == null ||
-        lightingConfig?.gameComponent?.position == null ||
+        gameComponent?.position == null ||
         camera.gameRef.size == null) return false;
 
     Rect rectLight = Rect.fromLTWH(
-      lightingConfig.gameComponent.position.left - lightingConfig.radius,
-      lightingConfig.gameComponent.position.top - lightingConfig.radius,
-      lightingConfig.radius * 2,
-      lightingConfig.radius * 2,
+      gameComponent.position.left - (lightingConfig.radius + 10),
+      gameComponent.position.top - (lightingConfig.radius + 10),
+      (lightingConfig.radius * 2) + 20,
+      (lightingConfig.radius * 2) + 20,
     );
 
     return camera.cameraRect.overlaps(rectLight) ?? false;
   }
+
+  GameComponent get gameComponent => (this as GameComponent);
 }

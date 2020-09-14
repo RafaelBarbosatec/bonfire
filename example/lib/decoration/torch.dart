@@ -17,7 +17,6 @@ class Torch extends GameDecoration with Lighting {
           initPosition: position,
         ) {
     lightingConfig = LightingConfig(
-      gameComponent: this,
       radius: width * 1.5,
       blurBorder: width * 1.5,
       color: Colors.deepOrangeAccent.withOpacity(0.2),

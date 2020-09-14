@@ -21,7 +21,21 @@ class Knight extends SimplePlayer with Lighting {
   Rect rectDirectionAttack;
   Sprite spriteDirectionAttack;
   bool showDirection = false;
-  final _paintFocus = Paint()..blendMode = BlendMode.clear;
+  FlameAnimation.Animation get fireBallAnimation =>
+      FlameAnimation.Animation.sequenced(
+        'player/fireball_top.png',
+        3,
+        textureWidth: 23,
+        textureHeight: 23,
+      );
+
+  FlameAnimation.Animation get explosionAnimation =>
+      FlameAnimation.Animation.sequenced(
+        'player/explosion_fire.png',
+        6,
+        textureWidth: 32,
+        textureHeight: 32,
+      );
 
   Knight(this.initPosition)
       : super(
@@ -62,7 +76,6 @@ class Knight extends SimplePlayer with Lighting {
         ) {
     spriteDirectionAttack = Sprite('direction_attack.png');
     lightingConfig = LightingConfig(
-      gameComponent: this,
       radius: width * 1.5,
       blurBorder: width * 1.5,
     );
@@ -161,18 +174,8 @@ class Knight extends SimplePlayer with Lighting {
 //    decrementStamina(10);
 
     this.simpleAttackRangeByAngle(
-      animationTop: FlameAnimation.Animation.sequenced(
-        'player/fireball_top.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationDestroy: FlameAnimation.Animation.sequenced(
-        'player/explosion_fire.png',
-        6,
-        textureWidth: 32,
-        textureHeight: 32,
-      ),
+      animationTop: fireBallAnimation,
+      animationDestroy: explosionAnimation,
       radAngleDirection: angleRadAttack,
       width: width * 0.7,
       height: width * 0.7,
@@ -184,7 +187,6 @@ class Knight extends SimplePlayer with Lighting {
         align: Offset(width * 0.1, 0),
       ),
       lightingConfig: LightingConfig(
-        gameComponent: this,
         radius: width * 0.5,
         blurBorder: width,
       ),

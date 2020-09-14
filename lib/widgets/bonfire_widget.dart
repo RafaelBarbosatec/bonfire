@@ -30,8 +30,8 @@ class BonfireWidget extends StatefulWidget {
 
   const BonfireWidget({
     Key key,
-    @required this.joystick,
     @required this.map,
+    this.joystick,
     this.player,
     this.interface,
     this.enemies,

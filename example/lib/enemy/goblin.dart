@@ -148,7 +148,6 @@ class Goblin extends SimpleEnemy {
         ),
       ),
       lightingConfig: LightingConfig(
-        gameComponent: this,
         radius: width,
         blurBorder: width * 0.5,
       ),

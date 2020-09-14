@@ -1,14 +1,14 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/lighting/lighting_config.dart';
+import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flutter/material.dart';
 
 class LightingComponent extends GameComponent {
   Color color;
   Paint _paintFocus;
-  Iterable<LightingConfig> _visibleLight = List();
+  Iterable<Lighting> _visibleLight = List();
   double _dtUpdate = 0.0;
 
   @override
@@ -27,7 +27,8 @@ class LightingComponent extends GameComponent {
     canvas.saveLayer(Offset.zero & size, Paint());
     canvas.drawColor(color, BlendMode.dstATop);
     _visibleLight.forEach((light) {
-      light.update(_dtUpdate);
+      final config = light.lightingConfig;
+      config.update(_dtUpdate);
       canvas.save();
 
       canvas.translate(size.width / 2, size.height / 2);
@@ -42,30 +43,30 @@ class LightingComponent extends GameComponent {
           light.gameComponent.position.center.dx,
           light.gameComponent.position.center.dy,
         ),
-        light.radius *
-            (light.withPulse
-                ? (1 - light.valuePulse * light.pulseVariation)
+        light.lightingConfig.radius *
+            (light.lightingConfig.withPulse
+                ? (1 - config.valuePulse * config.pulseVariation)
                 : 1),
         _paintFocus
           ..maskFilter = MaskFilter.blur(
             BlurStyle.normal,
-            convertRadiusToSigma(light.blurBorder),
+            convertRadiusToSigma(config.blurBorder),
           ),
       );
 
-      if (light.color != null) {
+      if (config.color != null) {
         final Paint paint = Paint()
-          ..color = light.color
+          ..color = config.color
           ..maskFilter = MaskFilter.blur(
             BlurStyle.normal,
-            convertRadiusToSigma(light.blurBorder),
+            convertRadiusToSigma(config.blurBorder),
           );
         canvas.drawCircle(
           Offset(light.gameComponent.position.center.dx,
               light.gameComponent.position.center.dy),
-          light.radius *
-              (light.withPulse
-                  ? (1 - light.valuePulse * light.pulseVariation)
+          config.radius *
+              (config.withPulse
+                  ? (1 - config.valuePulse * config.pulseVariation)
                   : 1),
           paint,
         );

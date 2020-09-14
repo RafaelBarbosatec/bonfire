@@ -30,6 +30,7 @@ class BonfireTiledWidget extends StatefulWidget {
 
   const BonfireTiledWidget({
     Key key,
+    @required this.map,
     this.joystick,
     this.player,
     this.interface,
@@ -41,7 +42,6 @@ class BonfireTiledWidget extends StatefulWidget {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
-    this.map,
     this.progress,
     this.cameraZoom,
     this.cameraMoveOnlyMapArea = false,

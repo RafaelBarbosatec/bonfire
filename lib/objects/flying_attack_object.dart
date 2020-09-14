@@ -44,7 +44,6 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     this.lightingConfig,
     Collision collision,
   }) {
-    if (lightingConfig != null) lightingConfig.gameComponent = this;
     animation = flyAnimation;
     position = Rect.fromLTWH(
       initPosition.x,

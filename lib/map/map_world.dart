@@ -20,7 +20,9 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    _tilesToRender.forEach((tile) => tile.render(canvas));
+    for (final tile in _tilesToRender) {
+      tile.render(canvas);
+    }
   }
 
   @override
@@ -34,17 +36,19 @@ class MapWorld extends MapGame {
 
       List<Tile> tilesRender = List();
       List<Tile> tilesCollision = List();
-      tiles.where((tile) {
+      for (final tile in tiles) {
         tile.gameRef ??= gameRef;
-        return tile.isVisibleInCamera();
-      }).forEach((tile) {
-        tilesRender.add(tile);
-        if (tile.containCollision()) tilesCollision.add(tile);
-      });
+        if (tile.isVisibleInCamera()) {
+          tilesRender.add(tile);
+          if (tile.containCollision()) tilesCollision.add(tile);
+        }
+      }
       _tilesToRender = tilesRender;
       _tilesCollisionsRendered = tilesCollision;
     }
-    _tilesToRender.forEach((tile) => tile.update(t));
+    for (final tile in _tilesToRender) {
+      tile.update(t);
+    }
   }
 
   @override
