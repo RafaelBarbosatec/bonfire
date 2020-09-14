@@ -605,7 +605,6 @@ By setting the `lightingColorGame` property on BofireWidget you automatically en
 
 ```dart
  lightingConfig = LightingConfig(
-       gameComponent: this,
        color: Colors.yellow.withOpacity(0.1),
        radius: 40,
        blurBorder: 20,
