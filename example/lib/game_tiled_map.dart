@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/tiled/tiled_world_map.dart';
 import 'package:example/decoration/barrel_dragable.dart';
 import 'package:example/decoration/chest.dart';
 import 'package:example/decoration/spikes.dart';

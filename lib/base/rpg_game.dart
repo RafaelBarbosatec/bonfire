@@ -49,7 +49,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
   RPGGame({
     @required this.context,
-    @required this.map,
+    this.map,
     this.joystickController,
     this.player,
     this.interface,
