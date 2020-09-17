@@ -1,6 +1,6 @@
 ## [0.7.0]
 * BREAKING CHANGE: improvement in animations to SimplePlayer and SimpleEnemy. Now use `SimpleDirectionAnimation` to manipulate animations.
-* add `GameColorFilter` it is now possible to add color filter in the game.
+* add `GameColorFilter`. It is now possible to add color filter in the game.
 * Possible to load maps made by Tiled from url. Just pass the link as path.
 
 ## [0.6.27]
