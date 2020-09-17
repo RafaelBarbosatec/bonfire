@@ -2,7 +2,8 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:example/map/dungeon_map.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
+import 'package:example/util/common_sprite_sheet.dart';
+import 'package:example/util/player_sprite_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,48 +22,10 @@ class Knight extends SimplePlayer with Lighting {
   Rect rectDirectionAttack;
   Sprite spriteDirectionAttack;
   bool showDirection = false;
-  FlameAnimation.Animation get fireBallAnimation =>
-      FlameAnimation.Animation.sequenced(
-        'player/fireball_top.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      );
-
-  FlameAnimation.Animation get explosionAnimation =>
-      FlameAnimation.Animation.sequenced(
-        'player/explosion_fire.png',
-        6,
-        textureWidth: 32,
-        textureHeight: 32,
-      );
 
   Knight(this.initPosition)
       : super(
-          animIdleLeft: FlameAnimation.Animation.sequenced(
-            "player/knight_idle_left.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          animIdleRight: FlameAnimation.Animation.sequenced(
-            "player/knight_idle.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          animRunRight: FlameAnimation.Animation.sequenced(
-            "player/knight_run.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
-          animRunLeft: FlameAnimation.Animation.sequenced(
-            "player/knight_run_left.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
-          ),
+          animation: PlayerSpriteSheet.simpleDirectionAnimation,
           width: DungeonMap.tileSize,
           height: DungeonMap.tileSize,
           initPosition: initPosition,
@@ -139,30 +102,10 @@ class Knight extends SimplePlayer with Lighting {
     decrementStamina(15);
     this.simpleAttackMelee(
       damage: attack,
-      animationBottom: FlameAnimation.Animation.sequenced(
-        'player/atack_effect_bottom.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
-      ),
-      animationLeft: FlameAnimation.Animation.sequenced(
-        'player/atack_effect_left.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
-      ),
-      animationRight: FlameAnimation.Animation.sequenced(
-        'player/atack_effect_right.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
-      ),
-      animationTop: FlameAnimation.Animation.sequenced(
-        'player/atack_effect_top.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
-      ),
+      animationBottom: CommonSpriteSheet.whiteAttackEffectBottom,
+      animationLeft: CommonSpriteSheet.whiteAttackEffectLeft,
+      animationRight: CommonSpriteSheet.whiteAttackEffectRight,
+      animationTop: CommonSpriteSheet.whiteAttackEffectTop,
       heightArea: DungeonMap.tileSize,
       widthArea: DungeonMap.tileSize,
     );
@@ -171,11 +114,9 @@ class Knight extends SimplePlayer with Lighting {
   void actionAttackRange() {
     if (stamina < 10) return;
 
-//    decrementStamina(10);
-
     this.simpleAttackRangeByAngle(
-      animationTop: fireBallAnimation,
-      animationDestroy: explosionAnimation,
+      animationTop: CommonSpriteSheet.fireBallTop,
+      animationDestroy: CommonSpriteSheet.explosionAnimation,
       radAngleDirection: angleRadAttack,
       width: width * 0.7,
       height: width * 0.7,
@@ -252,12 +193,7 @@ class Knight extends SimplePlayer with Lighting {
   void showEmote() {
     gameRef.add(
       AnimatedFollowerObject(
-        animation: FlameAnimation.Animation.sequenced(
-          'player/emote_exclamacao.png',
-          8,
-          textureWidth: 32,
-          textureHeight: 32,
-        ),
+        animation: CommonSpriteSheet.emote,
         target: this,
         width: width / 2,
         height: width / 2,
@@ -275,7 +211,7 @@ class Knight extends SimplePlayer with Lighting {
             width: 50,
             height: 50,
             child: AnimationWidget(
-              animation: animation,
+              animation: animation.current,
               playing: true,
             ),
           ),

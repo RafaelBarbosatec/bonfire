@@ -10,6 +10,7 @@ import 'package:flame/components/component.dart';
 import 'package:flame/components/composed_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/game/game.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';

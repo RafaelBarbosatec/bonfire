@@ -6,6 +6,7 @@ import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +28,7 @@ class BonfireWidget extends StatefulWidget {
   final double cameraZoom;
   final Size cameraSizeMovementWindow;
   final bool cameraMoveOnlyMapArea;
+  final GameColorFilter colorFilter;
 
   const BonfireWidget({
     Key key,
@@ -45,6 +47,7 @@ class BonfireWidget extends StatefulWidget {
     this.collisionAreaColor,
     this.lightingColorGame,
     this.cameraZoom,
+    this.colorFilter,
     this.cameraMoveOnlyMapArea = false,
     this.cameraSizeMovementWindow = const Size(50, 50),
   }) : super(key: key);
@@ -95,6 +98,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       cameraZoom: widget.cameraZoom,
       cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
       cameraMoveOnlyMapArea: widget.cameraMoveOnlyMapArea,
+      colorFilter: widget.colorFilter,
     );
     super.initState();
   }

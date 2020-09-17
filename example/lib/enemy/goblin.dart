@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/map/dungeon_map.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
+import 'package:example/util/common_sprite_sheet.dart';
+import 'package:example/util/enemy_sprite_sheet.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,30 +12,7 @@ class Goblin extends SimpleEnemy {
 
   Goblin(Position initPosition)
       : super(
-            animIdleRight: FlameAnimation.Animation.sequenced(
-              "enemy/goblin_idle.png",
-              6,
-              textureWidth: 16,
-              textureHeight: 16,
-            ),
-            animIdleLeft: FlameAnimation.Animation.sequenced(
-              "enemy/goblin_idle_left.png",
-              6,
-              textureWidth: 16,
-              textureHeight: 16,
-            ),
-            animRunRight: FlameAnimation.Animation.sequenced(
-              "enemy/goblin_run_right.png",
-              6,
-              textureWidth: 16,
-              textureHeight: 16,
-            ),
-            animRunLeft: FlameAnimation.Animation.sequenced(
-              "enemy/goblin_run_left.png",
-              6,
-              textureWidth: 16,
-              textureHeight: 16,
-            ),
+            animation: EnemySpriteSheet.simpleDirectionAnimation,
             initPosition: initPosition,
             width: DungeonMap.tileSize * 0.8,
             height: DungeonMap.tileSize * 0.8,
@@ -88,12 +66,7 @@ class Goblin extends SimpleEnemy {
   void die() {
     gameRef.add(
       AnimatedObjectOnce(
-        animation: FlameAnimation.Animation.sequenced(
-          "smoke_explosin.png",
-          6,
-          textureWidth: 16,
-          textureHeight: 16,
-        ),
+        animation: CommonSpriteSheet.smokeExplosion,
         position: position,
       ),
     );
@@ -104,36 +77,11 @@ class Goblin extends SimpleEnemy {
   void execAttackRange() {
     if (gameRef.player != null && gameRef.player.isDead) return;
     this.simpleAttackRange(
-      animationRight: FlameAnimation.Animation.sequenced(
-        'player/fireball_right.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationLeft: FlameAnimation.Animation.sequenced(
-        'player/fireball_left.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationTop: FlameAnimation.Animation.sequenced(
-        'player/fireball_top.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationBottom: FlameAnimation.Animation.sequenced(
-        'player/fireball_bottom.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
-      ),
-      animationDestroy: FlameAnimation.Animation.sequenced(
-        'player/explosion_fire.png',
-        6,
-        textureWidth: 32,
-        textureHeight: 32,
-      ),
+      animationRight: CommonSpriteSheet.fireBallRight,
+      animationLeft: CommonSpriteSheet.fireBallLeft,
+      animationTop: CommonSpriteSheet.fireBallTop,
+      animationBottom: CommonSpriteSheet.fireBallBottom,
+      animationDestroy: CommonSpriteSheet.explosionAnimation,
       id: 35,
       width: width * 0.9,
       height: width * 0.9,
@@ -161,30 +109,10 @@ class Goblin extends SimpleEnemy {
       widthArea: width,
       damage: attack / 2,
       interval: 400,
-      attackEffectBottomAnim: FlameAnimation.Animation.sequenced(
-        'enemy/atack_effect_bottom.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
-      ),
-      attackEffectLeftAnim: FlameAnimation.Animation.sequenced(
-        'enemy/atack_effect_left.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
-      ),
-      attackEffectRightAnim: FlameAnimation.Animation.sequenced(
-        'enemy/atack_effect_right.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
-      ),
-      attackEffectTopAnim: FlameAnimation.Animation.sequenced(
-        'enemy/atack_effect_top.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
-      ),
+      attackEffectBottomAnim: CommonSpriteSheet.blackAttackEffectBottom,
+      attackEffectLeftAnim: CommonSpriteSheet.blackAttackEffectLeft,
+      attackEffectRightAnim: CommonSpriteSheet.blackAttackEffectRight,
+      attackEffectTopAnim: CommonSpriteSheet.blackAttackEffectTop,
     );
   }
 

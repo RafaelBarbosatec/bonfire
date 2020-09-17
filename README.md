@@ -288,7 +288,7 @@ void moveRight({double moveSpeed})
     Direction directionThatPlayerIs()
     
     // Executes an animation once.
-    void addFastAnimation(FlameAnimation.Animation animation)
+    animation.playOnce(FlameAnimation.Animation animation)
     
     // Applies damage to the enemy
     void receiveDamage(double damage)
@@ -433,7 +433,7 @@ Actions can be fired when a joystick action is received. Just like `Enemy`, here
     void drawPositionCollision(Canvas canvas)
     
     // Executes an animation once.
-    void addFastAnimation(FlameAnimation.Animation animation)
+    animation.playOnce(FlameAnimation.Animation animation)
     
     // Applies damage to the enemy
     void receiveDamage(double damage)

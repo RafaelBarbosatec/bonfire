@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:bonfire/objects/animated_object.dart';
+import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
@@ -11,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// It is used to represent your enemies.
-class Enemy extends AnimatedObject with ObjectCollision, Attackable {
+class Enemy extends GameComponent with ObjectCollision, Attackable {
   /// Height of the Enemy.
   final double height;
 
