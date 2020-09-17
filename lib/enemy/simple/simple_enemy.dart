@@ -196,13 +196,17 @@ class SimpleEnemy extends Enemy {
 
   @override
   void update(double dt) {
-    animation?.update(dt);
+    if (isVisibleInCamera()) {
+      animation?.update(dt);
+    }
     super.update(dt);
   }
 
   @override
   void render(Canvas canvas) {
-    animation?.render(canvas, position);
+    if (isVisibleInCamera()) {
+      animation?.render(canvas, position);
+    }
     super.render(canvas);
   }
 }

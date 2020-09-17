@@ -57,7 +57,9 @@ class RotationEnemy extends Enemy {
 
   @override
   void update(double dt) {
-    animation?.update(dt);
+    if (isVisibleInCamera()) {
+      animation?.update(dt);
+    }
     super.update(dt);
   }
 
