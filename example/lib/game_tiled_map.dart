@@ -51,7 +51,7 @@ class GameTiledMap extends StatelessWidget {
           ),
           interface: KnightInterface(),
           map: TiledWorldMap(
-            'http://rafaelbarbosatec.github.io/tiled/my_map.json',
+            'tiled/mapa1.json',
             forceTileSize: Size(DungeonMap.tileSize, DungeonMap.tileSize),
           )
             ..registerObject(
