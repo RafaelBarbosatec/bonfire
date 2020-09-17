@@ -1,6 +1,10 @@
 ## [next]
+* BREAKING CHANGE: improvement in animations to SimplePlayer and SimpleEnemy. Now use `SimpleDirectionAnimation` to manipulate animations.
+
+## [0.6.27]
 * little performance improvement;
 * remove mandatory joystick in widget;
+* remove param gameComponent in `LightingConfig`;
 
 ## [0.6.26]
 * improvements image cache in map load by Tiled;

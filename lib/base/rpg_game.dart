@@ -7,7 +7,6 @@ import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
-import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/camera/camera.dart';
@@ -43,14 +42,14 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   Iterable<Attackable> _attackables = List();
   Iterable<GameDecoration> _decorations = List();
   Iterable<GameDecoration> _visibleDecorations = List();
-  Iterable<LightingConfig> _visibleLights = List();
+  Iterable<Lighting> _visibleLights = List();
   Iterable<GameComponent> _visibleComponents = List();
   Iterable<Sensor> _visibleSensors = List();
   IntervalTick _interval;
 
   RPGGame({
     @required this.context,
-    @required this.map,
+    this.map,
     this.joystickController,
     this.player,
     this.interface,
@@ -68,8 +67,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     double cameraZoom,
     Size cameraSizeMovementWindow = const Size(50, 50),
     bool cameraMoveOnlyMapArea = false,
-  })  : assert(context != null),
-        assert(joystickController != null) {
+  }) : assert(context != null) {
     gameCamera = Camera(
       zoom: cameraZoom ?? 1.0,
       sizeMovementWindow: cameraSizeMovementWindow,
@@ -77,7 +75,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
       target: player,
     );
     gameCamera.gameRef = this;
-    joystickController.addObserver(player ?? MapExplorer(gameCamera));
     gameController?.gameRef = this;
     if (background != null) super.add(background);
     if (map != null) super.add(map);
@@ -89,7 +86,8 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
       super.add(LightingComponent(color: lightingColorGame));
     }
     super.add((interface ?? GameInterface()));
-    if (joystickController != null) super.add(joystickController);
+    super.add(joystickController ?? Joystick());
+    joystickController?.addObserver(player ?? MapExplorer(gameCamera));
     _interval = IntervalTick(200, tick: _updateTempList);
   }
 
@@ -119,7 +117,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
   Iterable<GameDecoration> decorations() => _decorations;
 
-  Iterable<LightingConfig> lightVisible() => _visibleLights;
+  Iterable<Lighting> lightVisible() => _visibleLights;
 
   Iterable<Attackable> attackables() => _attackables;
   Iterable<Sensor> visibleSensors() => _visibleSensors;
@@ -146,7 +144,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
   @override
   void onKeyEvent(RawKeyEvent event) {
-    joystickController.onKeyboard(event);
+    joystickController?.onKeyboard(event);
   }
 
   @override
@@ -182,7 +180,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
       _visibleLights = components.where((element) {
         return element is Lighting &&
             (element as Lighting).isVisible(gameCamera);
-      }).map((e) => (e as Lighting).lightingConfig);
+      }).cast();
     }
 
     if (gameController != null) gameController.notifyListeners();

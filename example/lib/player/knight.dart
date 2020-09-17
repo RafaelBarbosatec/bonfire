@@ -78,7 +78,6 @@ class Knight extends SimplePlayer with Lighting {
         ) {
     spriteDirectionAttack = Sprite('direction_attack.png');
     lightingConfig = LightingConfig(
-      gameComponent: this,
       radius: width * 1.5,
       blurBorder: width * 1.5,
     );
@@ -188,7 +187,6 @@ class Knight extends SimplePlayer with Lighting {
         align: Offset(width * 0.1, 0),
       ),
       lightingConfig: LightingConfig(
-        gameComponent: this,
         radius: width * 0.5,
         blurBorder: width,
       ),
