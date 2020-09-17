@@ -1,6 +1,7 @@
 import 'package:bonfire/base/rpg_game.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 class GameColorFilter with HasGameRef<RPGGame> {
@@ -19,7 +20,7 @@ class GameColorFilter with HasGameRef<RPGGame> {
     Curve curve = Curves.decelerate,
   }) {
     this.blendMode = blendMode;
-    _tween = ColorTween(begin: this.color, end: color);
+    _tween = ColorTween(begin: this.color ?? Colors.transparent, end: color);
 
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
