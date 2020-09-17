@@ -651,7 +651,7 @@ For maps built with Tiled we must use the Widget `BonfireTiledWidget` (example [
 
 ```dart
 TiledWorldMap map = TiledWorldMap(
-        'tiled/mapa.json', // main file path
+        'tiled/mapa.json', // main file path or server url (example: http://rafaelbarbosatec.github.io/tiled/my_map.json)
         forceTileSize: DungeonMap.tileSize, // if you want to force the size of the Tile to be larger or smaller than the original
       )
         ..registerObject('goblin', (x, y, width, height) => Goblin(Position(x, y))) // Records objects that will be placed on the map when the name is found.

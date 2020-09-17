@@ -1,12 +1,14 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tile.dart';
+import 'package:bonfire/tiled/map_cahe.dart';
 import 'package:bonfire/tiled/tiled_world_data.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:bonfire/util/extensions.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/sprite.dart';
+import 'package:http/http.dart' as http;
 import 'package:tiledjsonreader/map/layer/object_group.dart';
 import 'package:tiledjsonreader/map/layer/tile_layer.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
@@ -22,8 +24,9 @@ typedef ObjectBuilder = GameComponent Function(
 class TiledWorldMap {
   static const TYPE_TILE_ABOVE = 'above';
 
-  final String pathFile;
+  final String path;
   final Size forceTileSize;
+  final bool enableServerCache;
   TiledJsonReader _reader;
   List<Tile> _tiles = List();
   List<GameComponent> _components = List();
@@ -35,13 +38,21 @@ class TiledWorldMap {
   double _tileWidthOrigin;
   double _tileHeightOrigin;
   int _countObjects = 0;
+  bool fromServer = false;
   Map<String, Sprite> _spriteCache = Map();
   Map<String, ControlledUpdateAnimation> _animationCache = Map();
   Map<String, ObjectBuilder> _objectsBuilder = Map();
+  MapCache _mapCache = MapCache();
 
-  TiledWorldMap(this.pathFile, {this.forceTileSize}) {
-    _basePath = pathFile.replaceAll(pathFile.split('/').last, '');
-    _reader = TiledJsonReader(_basePathFlame + pathFile);
+  TiledWorldMap(this.path,
+      {this.forceTileSize, this.enableServerCache = false}) {
+    _basePath = path.replaceAll(path.split('/').last, '');
+    fromServer = path.contains('http://') || path.contains('https://');
+    if (fromServer) {
+      _basePath = path.replaceAll(path.split('/').last, '');
+    } else {
+      _reader = TiledJsonReader(_basePathFlame + path);
+    }
   }
 
   void registerObject(String name, ObjectBuilder builder) {
@@ -50,7 +61,7 @@ class TiledWorldMap {
 
   Future<TiledWorldData> build() async {
     try {
-      _tiledMap = await _reader.read();
+      _tiledMap = await _readMap();
       _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble();
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble();
       _tileWidth = forceTileSize?.width ?? _tileWidthOrigin;
@@ -252,10 +263,10 @@ class TiledWorldMap {
     double tileWidth,
     double tileHeight,
   ) async {
-    final spriteSheetImg = await Flame.images.load(image);
     if (_spriteCache.containsKey('$image/$row/$column')) {
       return Future.value(_spriteCache['$image/$row/$column']);
     }
+    final spriteSheetImg = await _loadImage(image);
     _spriteCache['$image/$row/$column'] = spriteSheetImg.getSprite(
       x: (column * tileWidth).toDouble(),
       y: (row * tileHeight).toDouble(),
@@ -332,7 +343,7 @@ class TiledWorldMap {
         });
 
         _animationCache[animationKey] = ControlledUpdateAnimation(
-          FlameAnimation.Animation.spriteList(
+          Animation.spriteList(
             spriteList,
             stepTime: stepTime,
           ),
@@ -344,6 +355,58 @@ class TiledWorldMap {
       }
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<TiledMap> _readMap() async {
+    if (fromServer) {
+      try {
+        TiledMap tiledMap;
+        if (enableServerCache) {
+          tiledMap = await _mapCache.getMap(path);
+          if (tiledMap != null) {
+            return Future.value(tiledMap);
+          }
+        }
+        final mapResponse = await http.get(path);
+        tiledMap = TiledMap.fromJson(jsonDecode(mapResponse.body));
+        await Future.forEach(tiledMap.tileSets, (tileSet) async {
+          if (!tileSet.source.contains('.json')) {
+            throw Exception('Invalid TileSet source: only supports json files');
+          }
+          final tileSetResponse = await http.get('$_basePath${tileSet.source}');
+          if (tileSetResponse != null) {
+            Map<String, dynamic> _result = jsonDecode(tileSetResponse.body);
+            tileSet.tileSet = TileSet.fromJson(_result);
+          }
+        });
+        _mapCache.saveMap(path, tiledMap);
+        return Future.value(tiledMap);
+      } catch (e) {
+        return Future.value(TiledMap());
+      }
+    } else {
+      return _reader.read();
+    }
+  }
+
+  Future<Image> _loadImage(String image) async {
+    if (fromServer) {
+      if (Flame.images.loadedFiles.containsKey(image)) {
+        return Flame.images.loadedFiles[image].retreive();
+      }
+      if (enableServerCache) {
+        final base64 = await _mapCache.getBase64(image);
+        if (base64?.isNotEmpty == true) {
+          return Flame.images.fromBase64(image, base64);
+        }
+      }
+      final response = await http.get(image);
+      String img64 = base64Encode(response.bodyBytes);
+      _mapCache.saveBase64(image, img64);
+      return Flame.images.fromBase64(image, img64);
+    } else {
+      return Flame.images.load(image);
     }
   }
 }
