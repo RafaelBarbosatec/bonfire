@@ -12,12 +12,13 @@ class GameColorFilter with HasGameRef<RPGGame> {
 
   bool get enable => color != null && blendMode != null;
 
-  void animateToColor(
-    Color color, {
-    BlendMode blendMode,
+  void animateTo(
+    Color color,
+    BlendMode blendMode, {
     Duration duration = const Duration(milliseconds: 500),
+    Curve curve = Curves.decelerate,
   }) {
-    this.blendMode = blendMode ?? this.blendMode;
+    this.blendMode = blendMode;
     _tween = ColorTween(begin: this.color, end: color);
 
     gameRef.getValueGenerator(
@@ -28,6 +29,7 @@ class GameColorFilter with HasGameRef<RPGGame> {
       onFinish: () {
         this.color = color;
       },
+      curve: curve,
     ).start();
   }
 }
