@@ -1,7 +1,7 @@
 import 'dart:math';
 
+import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
@@ -10,7 +10,7 @@ import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Player extends AnimatedObject
+class Player extends GameComponent
     with ObjectCollision, Attackable
     implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;

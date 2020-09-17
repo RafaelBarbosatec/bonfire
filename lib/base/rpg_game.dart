@@ -10,6 +10,8 @@ import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/camera/camera.dart';
+import 'package:bonfire/util/color_filter_component.dart';
+import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/map_explorer.dart';
@@ -46,10 +48,12 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   Iterable<GameComponent> _visibleComponents = List();
   Iterable<Sensor> _visibleSensors = List();
   IntervalTick _interval;
+  ColorFilterComponent _colorFilterComponent =
+      ColorFilterComponent(GameColorFilter());
 
   RPGGame({
     @required this.context,
-    @required this.map,
+    this.map,
     this.joystickController,
     this.player,
     this.interface,
@@ -64,10 +68,15 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
+    GameColorFilter colorFilter,
     double cameraZoom,
     Size cameraSizeMovementWindow = const Size(50, 50),
     bool cameraMoveOnlyMapArea = false,
   }) : assert(context != null) {
+    if (colorFilter != null)
+      _colorFilterComponent = ColorFilterComponent(colorFilter);
+    _colorFilterComponent.gameRef = this;
+    super.add(_colorFilterComponent);
     gameCamera = Camera(
       zoom: cameraZoom ?? 1.0,
       sizeMovementWindow: cameraSizeMovementWindow,
@@ -188,4 +197,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
   @override
   bool recordFps() => showFPS;
+
+  GameColorFilter get colorFilter => _colorFilterComponent.colorFilter;
 }

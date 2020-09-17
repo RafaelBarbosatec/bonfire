@@ -4,7 +4,9 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/tiled/tiled_world_data.dart';
 import 'package:bonfire/tiled/tiled_world_map.dart';
+import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -27,10 +29,11 @@ class BonfireTiledWidget extends StatefulWidget {
   final bool cameraMoveOnlyMapArea;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
   final Duration durationShowAnimation;
+  final GameColorFilter colorFilter;
 
   const BonfireTiledWidget({
     Key key,
-    @required this.map,
+    this.map,
     this.joystick,
     this.player,
     this.interface,
@@ -48,6 +51,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.cameraSizeMovementWindow = const Size(50, 50),
     this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
     this.durationShowAnimation,
+    this.colorFilter,
   }) : super(key: key);
   @override
   _BonfireTiledWidgetState createState() => _BonfireTiledWidgetState();
@@ -61,6 +65,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   @override
   void didUpdateWidget(BonfireTiledWidget oldWidget) {
     if (widget.constructionMode) {
+      if (widget.map == null) return;
       widget.map.build().then((value) {
         _game.map.updateTiles(value.map.tiles);
 
@@ -94,14 +99,18 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   }
 
   void _loadGame() async {
-    final tiled = await widget.map.build();
+    TiledWorldData tiled;
+    if (widget.map != null) {
+      tiled = await widget.map.build();
+    }
+
     _game = RPGGame(
       context: context,
       joystickController: widget.joystick,
       player: widget.player,
       interface: widget.interface,
-      map: tiled.map,
-      components: tiled.components,
+      map: tiled?.map,
+      components: tiled?.components ?? [],
       background: widget.background,
       constructionMode: widget.constructionMode,
       showCollisionArea: widget.showCollisionArea,
@@ -115,6 +124,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       cameraZoom: widget.cameraZoom,
       cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
       cameraMoveOnlyMapArea: widget.cameraMoveOnlyMapArea,
+      colorFilter: widget.colorFilter,
     );
     await Future.delayed(Duration(milliseconds: 300));
     setState(() {
