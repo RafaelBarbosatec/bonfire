@@ -1,5 +1,6 @@
 ## [next]
 * BREAKING CHANGE: improvement in animations to SimplePlayer and SimpleEnemy. Now use `SimpleDirectionAnimation` to manipulate animations.
+* add `GameColorFilter` it is now possible to add color filter in the game.
 
 ## [0.6.27]
 * little performance improvement;
