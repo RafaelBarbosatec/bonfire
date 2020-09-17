@@ -49,10 +49,10 @@ class SimpleEnemy extends Enemy {
 
     if ((lastDirection != Direction.top || _isIdle) && addAnimation) {
       _isIdle = false;
-      if (animation.runTop != null) {
-        animation.play(SimpleAnimationEnum.runTop);
+      if (animation?.runTop != null) {
+        animation?.play(SimpleAnimationEnum.runTop);
       } else {
-        animation.play(lastDirectionHorizontal == Direction.right
+        animation?.play(lastDirectionHorizontal == Direction.right
             ? SimpleAnimationEnum.runRight
             : SimpleAnimationEnum.runLeft);
       }
@@ -65,10 +65,10 @@ class SimpleEnemy extends Enemy {
     this.moveBottom(speed);
     if ((lastDirection != Direction.bottom || _isIdle) && addAnimation) {
       _isIdle = false;
-      if (animation.runBottom != null) {
-        animation.play(SimpleAnimationEnum.runBottom);
+      if (animation?.runBottom != null) {
+        animation?.play(SimpleAnimationEnum.runBottom);
       } else {
-        animation.play(lastDirectionHorizontal == Direction.right
+        animation?.play(lastDirectionHorizontal == Direction.right
             ? SimpleAnimationEnum.runRight
             : SimpleAnimationEnum.runLeft);
       }
@@ -81,7 +81,7 @@ class SimpleEnemy extends Enemy {
     this.moveLeft(speed);
     if ((lastDirection != Direction.left || _isIdle) && addAnimation) {
       _isIdle = false;
-      animation.play(SimpleAnimationEnum.runLeft);
+      animation?.play(SimpleAnimationEnum.runLeft);
       lastDirection = Direction.left;
       lastDirectionHorizontal = Direction.left;
     }
@@ -92,7 +92,7 @@ class SimpleEnemy extends Enemy {
     this.moveRight(speed);
     if ((lastDirection != Direction.right || _isIdle) && addAnimation) {
       _isIdle = false;
-      animation.play(SimpleAnimationEnum.runRight);
+      animation?.play(SimpleAnimationEnum.runRight);
       lastDirection = Direction.right;
       lastDirectionHorizontal = Direction.right;
     }
@@ -100,34 +100,34 @@ class SimpleEnemy extends Enemy {
 
   void customMoveTopRight(double speedX, double speedY) {
     if (_runFastAnimation) return;
-    animation.play(SimpleAnimationEnum.runTopRight);
+    animation?.play(SimpleAnimationEnum.runTopRight);
     lastDirection = Direction.topRight;
-    this.customMoveRight(speedX, addAnimation: animation.runTopRight == null);
+    this.customMoveRight(speedX, addAnimation: animation?.runTopRight == null);
     this.customMoveTop(speedY, addAnimation: false);
   }
 
   void customMoveTopLeft(double speedX, double speedY) {
     if (_runFastAnimation) return;
-    animation.play(SimpleAnimationEnum.runTopLeft);
+    animation?.play(SimpleAnimationEnum.runTopLeft);
     lastDirection = Direction.topLeft;
-    this.customMoveLeft(speedX, addAnimation: animation.runTopLeft == null);
+    this.customMoveLeft(speedX, addAnimation: animation?.runTopLeft == null);
     this.customMoveTop(speedY, addAnimation: false);
   }
 
   void customMoveBottomRight(double speedX, double speedY) {
     if (_runFastAnimation) return;
-    animation.play(SimpleAnimationEnum.runBottomRight);
+    animation?.play(SimpleAnimationEnum.runBottomRight);
     lastDirection = Direction.bottomRight;
     this.customMoveRight(speedX,
-        addAnimation: animation.runBottomRight == null);
+        addAnimation: animation?.runBottomRight == null);
     this.customMoveBottom(speedY, addAnimation: false);
   }
 
   void customMoveBottomLeft(double speedX, double speedY) {
     if (_runFastAnimation) return;
-    animation.play(SimpleAnimationEnum.runBottomLeft);
+    animation?.play(SimpleAnimationEnum.runBottomLeft);
     lastDirection = Direction.bottomLeft;
-    this.customMoveLeft(speedX, addAnimation: animation.runBottomLeft == null);
+    this.customMoveLeft(speedX, addAnimation: animation?.runBottomLeft == null);
     this.customMoveBottom(speedY, addAnimation: false);
   }
 
@@ -136,59 +136,59 @@ class SimpleEnemy extends Enemy {
     _isIdle = true;
     switch (lastDirection) {
       case Direction.left:
-        animation.play(SimpleAnimationEnum.idleLeft);
+        animation?.play(SimpleAnimationEnum.idleLeft);
         break;
       case Direction.right:
-        animation.play(SimpleAnimationEnum.idleRight);
+        animation?.play(SimpleAnimationEnum.idleRight);
         break;
       case Direction.top:
-        if (animation.idleTop != null) {
-          animation.play(SimpleAnimationEnum.idleTop);
+        if (animation?.idleTop != null) {
+          animation?.play(SimpleAnimationEnum.idleTop);
         } else {
           if (lastDirectionHorizontal == Direction.left) {
-            animation.play(SimpleAnimationEnum.idleLeft);
+            animation?.play(SimpleAnimationEnum.idleLeft);
           } else {
-            animation.play(SimpleAnimationEnum.idleRight);
+            animation?.play(SimpleAnimationEnum.idleRight);
           }
         }
         break;
       case Direction.bottom:
-        if (animation.idleBottom != null) {
-          animation.play(SimpleAnimationEnum.idleBottom);
+        if (animation?.idleBottom != null) {
+          animation?.play(SimpleAnimationEnum.idleBottom);
         } else {
           if (lastDirectionHorizontal == Direction.left) {
-            animation.play(SimpleAnimationEnum.idleLeft);
+            animation?.play(SimpleAnimationEnum.idleLeft);
           } else {
-            animation.play(SimpleAnimationEnum.idleRight);
+            animation?.play(SimpleAnimationEnum.idleRight);
           }
         }
         break;
       case Direction.topLeft:
-        if (animation.idleTopLeft != null) {
-          animation.play(SimpleAnimationEnum.idleTopLeft);
+        if (animation?.idleTopLeft != null) {
+          animation?.play(SimpleAnimationEnum.idleTopLeft);
         } else {
-          animation.play(SimpleAnimationEnum.idleLeft);
+          animation?.play(SimpleAnimationEnum.idleLeft);
         }
         break;
       case Direction.topRight:
-        if (animation.idleTopRight != null) {
-          animation.play(SimpleAnimationEnum.idleTopRight);
+        if (animation?.idleTopRight != null) {
+          animation?.play(SimpleAnimationEnum.idleTopRight);
         } else {
-          animation.play(SimpleAnimationEnum.idleRight);
+          animation?.play(SimpleAnimationEnum.idleRight);
         }
         break;
       case Direction.bottomLeft:
-        if (animation.idleBottomLeft != null) {
-          animation.play(SimpleAnimationEnum.idleBottomLeft);
+        if (animation?.idleBottomLeft != null) {
+          animation?.play(SimpleAnimationEnum.idleBottomLeft);
         } else {
-          animation.play(SimpleAnimationEnum.idleLeft);
+          animation?.play(SimpleAnimationEnum.idleLeft);
         }
         break;
       case Direction.bottomRight:
-        if (animation.idleBottomRight != null) {
-          animation.play(SimpleAnimationEnum.idleBottomRight);
+        if (animation?.idleBottomRight != null) {
+          animation?.play(SimpleAnimationEnum.idleBottomRight);
         } else {
-          animation.play(SimpleAnimationEnum.idleRight);
+          animation?.play(SimpleAnimationEnum.idleRight);
         }
         break;
     }
