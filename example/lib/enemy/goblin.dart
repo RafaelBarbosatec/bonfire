@@ -11,29 +11,31 @@ class Goblin extends SimpleEnemy {
 
   Goblin(Position initPosition)
       : super(
-            animIdleRight: FlameAnimation.Animation.sequenced(
-              "enemy/goblin_idle.png",
-              6,
-              textureWidth: 16,
-              textureHeight: 16,
-            ),
-            animIdleLeft: FlameAnimation.Animation.sequenced(
-              "enemy/goblin_idle_left.png",
-              6,
-              textureWidth: 16,
-              textureHeight: 16,
-            ),
-            animRunRight: FlameAnimation.Animation.sequenced(
-              "enemy/goblin_run_right.png",
-              6,
-              textureWidth: 16,
-              textureHeight: 16,
-            ),
-            animRunLeft: FlameAnimation.Animation.sequenced(
-              "enemy/goblin_run_left.png",
-              6,
-              textureWidth: 16,
-              textureHeight: 16,
+            animation: SimpleDirectionAnimation(
+              idleRight: FlameAnimation.Animation.sequenced(
+                "enemy/goblin_idle.png",
+                6,
+                textureWidth: 16,
+                textureHeight: 16,
+              ),
+              idleLeft: FlameAnimation.Animation.sequenced(
+                "enemy/goblin_idle_left.png",
+                6,
+                textureWidth: 16,
+                textureHeight: 16,
+              ),
+              runRight: FlameAnimation.Animation.sequenced(
+                "enemy/goblin_run_right.png",
+                6,
+                textureWidth: 16,
+                textureHeight: 16,
+              ),
+              runLeft: FlameAnimation.Animation.sequenced(
+                "enemy/goblin_run_left.png",
+                6,
+                textureWidth: 16,
+                textureHeight: 16,
+              ),
             ),
             initPosition: initPosition,
             width: DungeonMap.tileSize * 0.8,

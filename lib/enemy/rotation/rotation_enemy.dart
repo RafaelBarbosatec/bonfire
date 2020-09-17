@@ -10,6 +10,8 @@ class RotationEnemy extends Enemy {
   final FlameAnimation.Animation animIdle;
   final FlameAnimation.Animation animRun;
 
+  FlameAnimation.Animation animation;
+
   /// Variable that represents the speed of the enemy.
   final double speed;
   double currentRadAngle;
@@ -48,12 +50,25 @@ class RotationEnemy extends Enemy {
       canvas.translate(position.center.dx, position.center.dy);
       canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));
       canvas.translate(-position.center.dx, -position.center.dy);
-      super.render(canvas);
+      _renderAnimation(canvas);
       canvas.restore();
     }
   }
 
+  @override
+  void update(double dt) {
+    animation?.update(dt);
+    super.update(dt);
+  }
+
   void idle() {
     this.animation = animIdle;
+  }
+
+  void _renderAnimation(Canvas canvas) {
+    if (animation == null || position == null) return;
+    if (animation.loaded()) {
+      animation.getSprite().renderRect(canvas, position);
+    }
   }
 }

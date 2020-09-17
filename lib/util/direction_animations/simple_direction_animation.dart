@@ -2,29 +2,11 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
+import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 import 'package:flame/animation.dart';
 import 'package:flutter/foundation.dart';
 
-enum SimplePlayerAnimationEnum {
-  idleLeft,
-  idleRight,
-  idleTop,
-  idleBottom,
-  idleTopLeft,
-  idleTopRight,
-  idleBottomLeft,
-  idleBottomRight,
-  runTop,
-  runRight,
-  runBottom,
-  runLeft,
-  runTopLeft,
-  runTopRight,
-  runBottomLeft,
-  runBottomRight,
-}
-
-class SimplePlayerAnimation {
+class SimpleDirectionAnimation {
   final Animation idleLeft;
   final Animation idleRight;
   final Animation idleTop;
@@ -42,14 +24,14 @@ class SimplePlayerAnimation {
   final Animation runBottomLeft;
   final Animation runBottomRight;
   final Map<String, Animation> others;
-  final SimplePlayerAnimationEnum init;
+  final SimpleAnimationEnum init;
 
-  Animation _current;
-  SimplePlayerAnimationEnum _currentType;
+  Animation current;
+  SimpleAnimationEnum _currentType;
   AnimatedObjectOnce _fastAnimation;
   bool runToTheEndFastAnimation = false;
 
-  SimplePlayerAnimation({
+  SimpleDirectionAnimation({
     @required this.idleLeft,
     @required this.idleRight,
     this.idleTop,
@@ -67,64 +49,64 @@ class SimplePlayerAnimation {
     this.runBottomLeft,
     this.runBottomRight,
     this.others,
-    this.init = SimplePlayerAnimationEnum.idleRight,
+    this.init = SimpleAnimationEnum.idleRight,
   }) {
     play(init);
   }
 
-  void play(SimplePlayerAnimationEnum animation) {
+  void play(SimpleAnimationEnum animation) {
     _currentType = animation;
     if (!runToTheEndFastAnimation) {
       _fastAnimation = null;
     }
     switch (animation) {
-      case SimplePlayerAnimationEnum.idleLeft:
-        if (idleLeft != null) _current = idleLeft;
+      case SimpleAnimationEnum.idleLeft:
+        if (idleLeft != null) current = idleLeft;
         break;
-      case SimplePlayerAnimationEnum.idleRight:
-        if (idleRight != null) _current = idleRight;
+      case SimpleAnimationEnum.idleRight:
+        if (idleRight != null) current = idleRight;
         break;
-      case SimplePlayerAnimationEnum.idleTop:
-        if (idleTop != null) _current = idleTop;
+      case SimpleAnimationEnum.idleTop:
+        if (idleTop != null) current = idleTop;
         break;
-      case SimplePlayerAnimationEnum.idleBottom:
-        if (idleBottom != null) _current = idleBottom;
+      case SimpleAnimationEnum.idleBottom:
+        if (idleBottom != null) current = idleBottom;
         break;
-      case SimplePlayerAnimationEnum.idleTopLeft:
-        if (idleTopLeft != null) _current = idleTopLeft;
+      case SimpleAnimationEnum.idleTopLeft:
+        if (idleTopLeft != null) current = idleTopLeft;
         break;
-      case SimplePlayerAnimationEnum.idleTopRight:
-        if (idleTopRight != null) _current = idleTopRight;
+      case SimpleAnimationEnum.idleTopRight:
+        if (idleTopRight != null) current = idleTopRight;
         break;
-      case SimplePlayerAnimationEnum.idleBottomLeft:
-        if (idleBottomLeft != null) _current = idleBottomLeft;
+      case SimpleAnimationEnum.idleBottomLeft:
+        if (idleBottomLeft != null) current = idleBottomLeft;
         break;
-      case SimplePlayerAnimationEnum.idleBottomRight:
-        if (idleBottomRight != null) _current = idleBottomRight;
+      case SimpleAnimationEnum.idleBottomRight:
+        if (idleBottomRight != null) current = idleBottomRight;
         break;
-      case SimplePlayerAnimationEnum.runTop:
-        if (runTop != null) _current = runTop;
+      case SimpleAnimationEnum.runTop:
+        if (runTop != null) current = runTop;
         break;
-      case SimplePlayerAnimationEnum.runRight:
-        if (runRight != null) _current = runRight;
+      case SimpleAnimationEnum.runRight:
+        if (runRight != null) current = runRight;
         break;
-      case SimplePlayerAnimationEnum.runBottom:
-        if (runBottom != null) _current = runBottom;
+      case SimpleAnimationEnum.runBottom:
+        if (runBottom != null) current = runBottom;
         break;
-      case SimplePlayerAnimationEnum.runLeft:
-        if (runLeft != null) _current = runLeft;
+      case SimpleAnimationEnum.runLeft:
+        if (runLeft != null) current = runLeft;
         break;
-      case SimplePlayerAnimationEnum.runTopLeft:
-        if (runTopLeft != null) _current = runTopLeft;
+      case SimpleAnimationEnum.runTopLeft:
+        if (runTopLeft != null) current = runTopLeft;
         break;
-      case SimplePlayerAnimationEnum.runTopRight:
-        if (runTopRight != null) _current = runTopRight;
+      case SimpleAnimationEnum.runTopRight:
+        if (runTopRight != null) current = runTopRight;
         break;
-      case SimplePlayerAnimationEnum.runBottomLeft:
-        if (runBottomLeft != null) _current = runBottomLeft;
+      case SimpleAnimationEnum.runBottomLeft:
+        if (runBottomLeft != null) current = runBottomLeft;
         break;
-      case SimplePlayerAnimationEnum.runBottomRight:
-        if (runBottomRight != null) _current = runBottomRight;
+      case SimpleAnimationEnum.runBottomRight:
+        if (runBottomRight != null) current = runBottomRight;
         break;
     }
   }
@@ -134,7 +116,7 @@ class SimplePlayerAnimation {
       if (!runToTheEndFastAnimation) {
         _fastAnimation = null;
       }
-      _current = others[key];
+      current = others[key];
     }
   }
 
@@ -160,8 +142,8 @@ class SimplePlayerAnimation {
         _fastAnimation.animation.getSprite().renderRect(canvas, position);
       }
     } else {
-      if (_current?.loaded() == true) {
-        _current.getSprite().renderRect(canvas, position);
+      if (current?.loaded() == true) {
+        current.getSprite().renderRect(canvas, position);
       }
     }
   }
@@ -170,10 +152,9 @@ class SimplePlayerAnimation {
     if (_fastAnimation != null) {
       _fastAnimation.update(dt);
     } else {
-      _current?.update(dt);
+      current?.update(dt);
     }
   }
 
-  Animation get current => _current;
-  SimplePlayerAnimationEnum get currentType => _currentType;
+  SimpleAnimationEnum get currentType => _currentType;
 }

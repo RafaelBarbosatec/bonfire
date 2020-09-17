@@ -39,7 +39,7 @@ class Knight extends SimplePlayer with Lighting {
 
   Knight(this.initPosition)
       : super(
-          newAnimation: SimplePlayerAnimation(
+          animation: SimpleDirectionAnimation(
             idleLeft: FlameAnimation.Animation.sequenced(
               "player/knight_idle_left.png",
               6,
@@ -277,7 +277,7 @@ class Knight extends SimplePlayer with Lighting {
             width: 50,
             height: 50,
             child: AnimationWidget(
-              animation: newAnimation.current,
+              animation: animation.current,
               playing: true,
             ),
           ),

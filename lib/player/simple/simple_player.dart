@@ -1,10 +1,10 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/player/simple/simple_player_animation.dart';
+import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
 import 'package:flutter/widgets.dart';
 
 class SimplePlayer extends Player {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
-  SimplePlayerAnimation newAnimation;
+  SimpleDirectionAnimation animation;
 
   /// Variable that represents the current directional status of the joystick.
   JoystickMoveDirectional statusMoveDirectional;
@@ -17,7 +17,7 @@ class SimplePlayer extends Player {
 
   SimplePlayer({
     @required Position initPosition,
-    @required this.newAnimation,
+    @required this.animation,
     Direction initDirection = Direction.right,
     this.speed = 150,
     double width = 32,
@@ -49,7 +49,7 @@ class SimplePlayer extends Player {
 
   @override
   void render(Canvas canvas) {
-    newAnimation.render(canvas, position);
+    animation.render(canvas, position);
     super.render(canvas);
   }
 
@@ -86,7 +86,7 @@ class SimplePlayer extends Player {
           break;
       }
     }
-    newAnimation.update(dt);
+    animation.update(dt);
     super.update(dt);
   }
 
@@ -105,13 +105,13 @@ class SimplePlayer extends Player {
 
   void _addTopAnimation() {
     if (statusMoveDirectional != JoystickMoveDirectional.MOVE_UP) {
-      if (newAnimation.runTop != null) {
-        newAnimation.play(SimplePlayerAnimationEnum.runTop);
+      if (animation.runTop != null) {
+        animation.play(SimpleAnimationEnum.runTop);
       } else {
         if (_lastDirectionHorizontal == Direction.left) {
-          newAnimation.play(SimplePlayerAnimationEnum.runLeft);
+          animation.play(SimpleAnimationEnum.runLeft);
         } else {
-          newAnimation.play(SimplePlayerAnimationEnum.runRight);
+          animation.play(SimpleAnimationEnum.runRight);
         }
       }
     }
@@ -119,9 +119,9 @@ class SimplePlayer extends Player {
 
   void customMoveRight({bool addAnimation = true, bool isDiagonal = false}) {
     if (statusMoveDirectional != JoystickMoveDirectional.MOVE_RIGHT &&
-        newAnimation.runRight != null &&
+        animation.runRight != null &&
         addAnimation) {
-      newAnimation.play(SimplePlayerAnimationEnum.runRight);
+      animation.play(SimpleAnimationEnum.runRight);
       statusMoveDirectional = JoystickMoveDirectional.MOVE_RIGHT;
       lastDirection = Direction.right;
       _lastDirectionHorizontal = Direction.right;
@@ -147,13 +147,13 @@ class SimplePlayer extends Player {
 
   void _addBottomAnimation() {
     if (statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN) {
-      if (newAnimation.runBottom != null) {
-        newAnimation.play(SimplePlayerAnimationEnum.runBottom);
+      if (animation.runBottom != null) {
+        animation.play(SimpleAnimationEnum.runBottom);
       } else {
         if (_lastDirectionHorizontal == Direction.left) {
-          newAnimation.play(SimplePlayerAnimationEnum.runLeft);
+          animation.play(SimpleAnimationEnum.runLeft);
         } else {
-          newAnimation.play(SimplePlayerAnimationEnum.runRight);
+          animation.play(SimpleAnimationEnum.runRight);
         }
       }
     }
@@ -161,9 +161,9 @@ class SimplePlayer extends Player {
 
   void customMoveLeft({bool addAnimation = true, bool isDiagonal = false}) {
     if (statusMoveDirectional != JoystickMoveDirectional.MOVE_LEFT &&
-        newAnimation.runLeft != null &&
+        animation.runLeft != null &&
         addAnimation) {
-      newAnimation.play(SimplePlayerAnimationEnum.runLeft);
+      animation.play(SimpleAnimationEnum.runLeft);
       statusMoveDirectional = JoystickMoveDirectional.MOVE_LEFT;
       lastDirection = Direction.left;
       _lastDirectionHorizontal = Direction.left;
@@ -176,14 +176,14 @@ class SimplePlayer extends Player {
   }
 
   void customMoveUpLeft() {
-    if (newAnimation.runTopLeft != null &&
+    if (animation.runTopLeft != null &&
         statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_LEFT) {
-      newAnimation.play(SimplePlayerAnimationEnum.runTopLeft);
+      animation.play(SimpleAnimationEnum.runTopLeft);
       lastDirection = Direction.topLeft;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_UP_LEFT;
     }
     customMoveLeft(
-      addAnimation: newAnimation.runTopLeft == null,
+      addAnimation: animation.runTopLeft == null,
       isDiagonal: true,
     );
     customMoveTop(
@@ -193,14 +193,14 @@ class SimplePlayer extends Player {
   }
 
   void customMoveUpRight() {
-    if (newAnimation.runTopRight != null &&
+    if (animation.runTopRight != null &&
         statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_RIGHT) {
-      newAnimation.play(SimplePlayerAnimationEnum.runTopRight);
+      animation.play(SimpleAnimationEnum.runTopRight);
       lastDirection = Direction.topRight;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_UP_RIGHT;
     }
     customMoveRight(
-      addAnimation: newAnimation.runTopRight == null,
+      addAnimation: animation.runTopRight == null,
       isDiagonal: true,
     );
     customMoveTop(
@@ -210,14 +210,14 @@ class SimplePlayer extends Player {
   }
 
   void customMoveDownRight() {
-    if (newAnimation.runBottomRight != null &&
+    if (animation.runBottomRight != null &&
         statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
-      newAnimation.play(SimplePlayerAnimationEnum.runBottomRight);
+      animation.play(SimpleAnimationEnum.runBottomRight);
       lastDirection = Direction.bottomRight;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN_RIGHT;
     }
     customMoveRight(
-      addAnimation: newAnimation.runBottomRight == null,
+      addAnimation: animation.runBottomRight == null,
       isDiagonal: true,
     );
     customMoveBottom(
@@ -227,14 +227,14 @@ class SimplePlayer extends Player {
   }
 
   void customMoveDownLeft() {
-    if (newAnimation.runBottomLeft != null &&
+    if (animation.runBottomLeft != null &&
         statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_LEFT) {
-      newAnimation.play(SimplePlayerAnimationEnum.runBottomLeft);
+      animation.play(SimpleAnimationEnum.runBottomLeft);
       lastDirection = Direction.bottomLeft;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN_LEFT;
     }
     customMoveLeft(
-        addAnimation: newAnimation.runBottomLeft == null, isDiagonal: true);
+        addAnimation: animation.runBottomLeft == null, isDiagonal: true);
     customMoveBottom(addAnimation: false, isDiagonal: true);
   }
 
@@ -243,59 +243,59 @@ class SimplePlayer extends Player {
         forceAddAnimation) {
       switch (lastDirection) {
         case Direction.left:
-          newAnimation.play(SimplePlayerAnimationEnum.idleLeft);
+          animation.play(SimpleAnimationEnum.idleLeft);
           break;
         case Direction.right:
-          newAnimation.play(SimplePlayerAnimationEnum.idleRight);
+          animation.play(SimpleAnimationEnum.idleRight);
           break;
         case Direction.top:
-          if (newAnimation.idleTop != null) {
-            newAnimation.play(SimplePlayerAnimationEnum.idleTop);
+          if (animation.idleTop != null) {
+            animation.play(SimpleAnimationEnum.idleTop);
           } else {
             if (_lastDirectionHorizontal == Direction.left) {
-              newAnimation.play(SimplePlayerAnimationEnum.idleLeft);
+              animation.play(SimpleAnimationEnum.idleLeft);
             } else {
-              newAnimation.play(SimplePlayerAnimationEnum.idleRight);
+              animation.play(SimpleAnimationEnum.idleRight);
             }
           }
           break;
         case Direction.bottom:
-          if (newAnimation.idleBottom != null) {
-            newAnimation.play(SimplePlayerAnimationEnum.idleBottom);
+          if (animation.idleBottom != null) {
+            animation.play(SimpleAnimationEnum.idleBottom);
           } else {
             if (_lastDirectionHorizontal == Direction.left) {
-              newAnimation.play(SimplePlayerAnimationEnum.idleLeft);
+              animation.play(SimpleAnimationEnum.idleLeft);
             } else {
-              newAnimation.play(SimplePlayerAnimationEnum.idleRight);
+              animation.play(SimpleAnimationEnum.idleRight);
             }
           }
           break;
         case Direction.topLeft:
-          if (newAnimation.idleTopLeft != null) {
-            newAnimation.play(SimplePlayerAnimationEnum.idleTopLeft);
+          if (animation.idleTopLeft != null) {
+            animation.play(SimpleAnimationEnum.idleTopLeft);
           } else {
-            newAnimation.play(SimplePlayerAnimationEnum.idleLeft);
+            animation.play(SimpleAnimationEnum.idleLeft);
           }
           break;
         case Direction.topRight:
-          if (newAnimation.idleTopRight != null) {
-            newAnimation.play(SimplePlayerAnimationEnum.idleTopRight);
+          if (animation.idleTopRight != null) {
+            animation.play(SimpleAnimationEnum.idleTopRight);
           } else {
-            newAnimation.play(SimplePlayerAnimationEnum.idleRight);
+            animation.play(SimpleAnimationEnum.idleRight);
           }
           break;
         case Direction.bottomLeft:
-          if (newAnimation.idleBottomLeft != null) {
-            newAnimation.play(SimplePlayerAnimationEnum.idleBottomLeft);
+          if (animation.idleBottomLeft != null) {
+            animation.play(SimpleAnimationEnum.idleBottomLeft);
           } else {
-            newAnimation.play(SimplePlayerAnimationEnum.idleLeft);
+            animation.play(SimpleAnimationEnum.idleLeft);
           }
           break;
         case Direction.bottomRight:
-          if (newAnimation.idleBottomRight != null) {
-            newAnimation.play(SimplePlayerAnimationEnum.idleBottomRight);
+          if (animation.idleBottomRight != null) {
+            animation.play(SimpleAnimationEnum.idleBottomRight);
           } else {
-            newAnimation.play(SimplePlayerAnimationEnum.idleRight);
+            animation.play(SimpleAnimationEnum.idleRight);
           }
           break;
       }

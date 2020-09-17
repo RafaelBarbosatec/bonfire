@@ -11,6 +11,7 @@ class RotationPlayer extends Player {
   double speed;
   double currentRadAngle;
   bool _move = false;
+  FlameAnimation.Animation animation;
 
   RotationPlayer({
     @required Position initPosition,
@@ -51,6 +52,7 @@ class RotationPlayer extends Player {
     if (_move && !isDead) {
       moveFromAngle(speed, currentRadAngle);
     }
+    animation?.update(dt);
     super.update(dt);
   }
 
@@ -60,7 +62,14 @@ class RotationPlayer extends Player {
     canvas.translate(position.center.dx, position.center.dy);
     canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));
     canvas.translate(-position.center.dx, -position.center.dy);
-    super.render(canvas);
+    _renderAnimation(canvas);
     canvas.restore();
+  }
+
+  void _renderAnimation(Canvas canvas) {
+    if (animation == null || position == null) return;
+    if (animation.loaded()) {
+      animation.getSprite().renderRect(canvas, position);
+    }
   }
 }
