@@ -40,6 +40,7 @@ export 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 export 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
 export 'package:bonfire/util/extensions.dart';
 export 'package:bonfire/util/functions.dart';
+export 'package:bonfire/util/game_color_filter.dart';
 export 'package:bonfire/util/game_controller.dart';
 export 'package:bonfire/util/gestures/gestures.dart';
 export 'package:bonfire/util/interval_tick.dart';
