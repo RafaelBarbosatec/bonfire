@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:bonfire/base/custom_widget_builder.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/camera/camera.dart';
+import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/gestures/drag_gesture.dart';
 import 'package:bonfire/util/gestures/tap_gesture.dart';
 import 'package:bonfire/util/mixins/pointer_detector_mixin.dart';
@@ -10,6 +11,7 @@ import 'package:flame/components/component.dart';
 import 'package:flame/components/composed_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flame/game/game.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
@@ -18,6 +20,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   bool _isPause = false;
   final CustomWidgetBuilder widgetBuilder = CustomWidgetBuilder();
   Camera gameCamera = Camera();
+  GameColorFilter colorFilter;
 
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
@@ -134,6 +137,12 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
 
     components.forEach((comp) => renderComponent(canvas, comp));
     canvas.restore();
+
+    if (colorFilter?.enable == true) {
+      canvas.save();
+      canvas.drawColor(colorFilter.color, colorFilter.blendMode);
+      canvas.restore();
+    }
   }
 
   /// This renders a single component obeying BaseGame rules.

@@ -10,6 +10,7 @@ import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/camera/camera.dart';
+import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/map_explorer.dart';
@@ -64,10 +65,13 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
+    GameColorFilter colorFilter,
     double cameraZoom,
     Size cameraSizeMovementWindow = const Size(50, 50),
     bool cameraMoveOnlyMapArea = false,
   }) : assert(context != null) {
+    this.colorFilter = colorFilter ?? GameColorFilter();
+    this.colorFilter.gameRef = this;
     gameCamera = Camera(
       zoom: cameraZoom ?? 1.0,
       sizeMovementWindow: cameraSizeMovementWindow,
