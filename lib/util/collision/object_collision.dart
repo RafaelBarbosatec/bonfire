@@ -6,7 +6,7 @@ import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/mixins/sensor.dart';
 import 'package:flutter/material.dart';
 
-mixin ObjectCollision {
+mixin ObjectCollision on GameComponent {
   Iterable<Collision> collisions;
 
   void triggerSensors(Iterable<Rect> rectCollisions, RPGGame game) {
@@ -91,14 +91,12 @@ mixin ObjectCollision {
   }
 
   bool detectCollision(Iterable<Rect> displacements) {
-    if (!containCollision() || !(this is GameComponent)) return false;
+    if (!containCollision()) return false;
     final collision = displacements.firstWhere(
       (displacement) {
         return this.collisions.firstWhere(
               (element) {
-                return element
-                    .getRect((this as GameComponent).position)
-                    .overlaps(displacement);
+                return element.getRect(this.position).overlaps(displacement);
               },
               orElse: () => null,
             ) !=
