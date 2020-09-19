@@ -207,6 +207,7 @@ class Knight extends SimplePlayer with Lighting {
   }
 
   void _showTalk(Enemy first) {
+    gameRef.pause();
     gameRef.gameCamera.moveToTargetAnimated(first, zoom: 2, finish: () {
       TalkDialog.show(gameRef.context, [
         Say(
@@ -222,6 +223,7 @@ class Knight extends SimplePlayer with Lighting {
         ),
       ], finish: () {
         gameRef.gameCamera.moveToPlayerAnimated();
+        gameRef.resume();
       });
     });
   }
