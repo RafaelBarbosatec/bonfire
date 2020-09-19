@@ -1,3 +1,6 @@
+## [0.7.2]
+* hotfix render last frame in `AnimatedObjectOnce`.
+
 ## [0.7.1]
 * makes `lighting` accessible through the `gameRef`.
 * create `FollowerObject`.

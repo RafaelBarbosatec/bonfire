@@ -30,6 +30,7 @@ class SimpleDirectionAnimation {
   SimpleAnimationEnum _currentType;
   AnimatedObjectOnce _fastAnimation;
   bool runToTheEndFastAnimation = false;
+  Rect position;
 
   SimpleDirectionAnimation({
     @required this.idleLeft,
@@ -128,7 +129,6 @@ class SimpleDirectionAnimation {
     runToTheEndFastAnimation = runToTheEnd;
     _fastAnimation = AnimatedObjectOnce(
       animation: animation,
-      onlyUpdate: true,
       onFinish: () {
         onFinish?.call();
         _fastAnimation = null;
@@ -136,11 +136,10 @@ class SimpleDirectionAnimation {
     );
   }
 
-  void render(Canvas canvas, Rect position) {
+  void render(Canvas canvas) {
+    if (position == null) return;
     if (_fastAnimation != null) {
-      if (_fastAnimation.loaded()) {
-        _fastAnimation.animation.getSprite().renderRect(canvas, position);
-      }
+      _fastAnimation.render(canvas);
     } else {
       if (current?.loaded() == true) {
         current.getSprite().renderRect(canvas, position);
@@ -148,8 +147,10 @@ class SimpleDirectionAnimation {
     }
   }
 
-  void update(double dt) {
+  void update(double dt, Rect position) {
+    this.position = position;
     if (_fastAnimation != null) {
+      _fastAnimation.position = position;
       _fastAnimation.update(dt);
     } else {
       current?.update(dt);

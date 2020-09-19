@@ -49,7 +49,7 @@ class SimplePlayer extends Player {
 
   @override
   void render(Canvas canvas) {
-    animation?.render(canvas, position);
+    animation?.render(canvas);
     super.render(canvas);
   }
 
@@ -86,7 +86,7 @@ class SimplePlayer extends Player {
           break;
       }
     }
-    animation?.update(dt);
+    animation?.update(dt, position);
     super.update(dt);
   }
 

@@ -10,9 +10,9 @@ import 'package:flame/animation.dart' as FlameAnimation;
 class AnimatedObjectOnce extends AnimatedObject with Lighting {
   final VoidCallback onFinish;
   final VoidCallback onStartAnimation;
-  final bool onlyUpdate;
   final double rotateRadAngle;
   bool _notifyStart = false;
+  bool _destroy = false;
   final LightingConfig lightingConfig;
 
   AnimatedObjectOnce({
@@ -20,7 +20,6 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     FlameAnimation.Animation animation,
     this.onFinish,
     this.onStartAnimation,
-    this.onlyUpdate = false,
     this.rotateRadAngle,
     this.lightingConfig,
   }) {
@@ -30,7 +29,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
 
   @override
   void render(Canvas canvas) {
-    if (onlyUpdate || this.position == null) return;
+    if (this.position == null) return;
     if (rotateRadAngle != null) {
       canvas.save();
       canvas.translate(position.center.dx, position.center.dy);
@@ -45,6 +44,10 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
 
   @override
   void update(double dt) {
+    if (_destroy) {
+      if (onFinish != null) onFinish();
+      remove();
+    }
     super.update(dt);
     if (animation != null && !destroy()) {
       if (animation.currentIndex == 1 && !_notifyStart) {
@@ -52,8 +55,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
         if (onStartAnimation != null) onStartAnimation();
       }
       if (animation.isLastFrame) {
-        if (onFinish != null) onFinish();
-        remove();
+        _destroy = true;
       }
     }
   }
