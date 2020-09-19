@@ -10,11 +10,12 @@ class LightingComponent extends GameComponent {
   Paint _paintFocus;
   Iterable<Lighting> _visibleLight = List();
   double _dtUpdate = 0.0;
+  ColorTween _tween;
 
   @override
   bool isHud() => true;
 
-  LightingComponent({this.color = Colors.transparent}) {
+  LightingComponent({this.color}) {
     _paintFocus = Paint()..blendMode = BlendMode.clear;
   }
 
@@ -23,11 +24,13 @@ class LightingComponent extends GameComponent {
 
   @override
   void render(Canvas canvas) {
+    if (color == null) return;
     Size size = gameRef.size;
     canvas.saveLayer(Offset.zero & size, Paint());
     canvas.drawColor(color, BlendMode.dstATop);
     _visibleLight.forEach((light) {
       final config = light.lightingConfig;
+      final sigma = _convertRadiusToSigma(config.blurBorder);
       config.update(_dtUpdate);
       canvas.save();
 
@@ -50,7 +53,7 @@ class LightingComponent extends GameComponent {
         _paintFocus
           ..maskFilter = MaskFilter.blur(
             BlurStyle.normal,
-            convertRadiusToSigma(config.blurBorder),
+            sigma,
           ),
       );
 
@@ -59,11 +62,13 @@ class LightingComponent extends GameComponent {
           ..color = config.color
           ..maskFilter = MaskFilter.blur(
             BlurStyle.normal,
-            convertRadiusToSigma(config.blurBorder),
+            sigma,
           );
         canvas.drawCircle(
-          Offset(light.gameComponent.position.center.dx,
-              light.gameComponent.position.center.dy),
+          Offset(
+            light.gameComponent.position.center.dx,
+            light.gameComponent.position.center.dy,
+          ),
           config.radius *
               (config.withPulse
                   ? (1 - config.valuePulse * config.pulseVariation)
@@ -76,13 +81,33 @@ class LightingComponent extends GameComponent {
     canvas.restore();
   }
 
-  static double convertRadiusToSigma(double radius) {
+  static double _convertRadiusToSigma(double radius) {
     return radius * 0.57735 + 0.5;
   }
 
   @override
   void update(double dt) {
+    if (color == null) return;
     _dtUpdate = dt;
     _visibleLight = gameRef.lightVisible();
+  }
+
+  void animateColorTo(
+    Color color, {
+    Duration duration = const Duration(milliseconds: 500),
+    Curve curve = Curves.decelerate,
+  }) {
+    _tween = ColorTween(begin: this.color ?? Colors.transparent, end: color);
+
+    gameRef.getValueGenerator(
+      duration ?? Duration(seconds: 1),
+      onChange: (value) {
+        this.color = _tween.transform(value);
+      },
+      onFinish: () {
+        this.color = color;
+      },
+      curve: curve,
+    ).start();
   }
 }
