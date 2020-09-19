@@ -17,7 +17,6 @@ class KnightInterface extends GameInterface {
       id: 5,
       position: Position(150, 20),
       onTapComponent: () {
-        gameRef.lighting.animateColorTo(Colors.black.withOpacity(0.8));
         if (gameRef.player != null) {
           (gameRef.player as Knight).showEmote();
         }
