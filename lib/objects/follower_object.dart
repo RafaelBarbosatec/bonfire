@@ -6,23 +6,23 @@ import 'package:flame/position.dart';
 
 abstract class FollowerObject extends GameComponent {
   final GameComponent target;
-  final Position positionFromTarget;
-  final double height;
-  final double width;
+  final Rect positionFromTarget;
 
-  FollowerObject(
-      {this.target, this.positionFromTarget, this.height, this.width});
+  FollowerObject({
+    this.target,
+    this.positionFromTarget,
+  });
 
   @override
   void update(double dt) {
     super.update(dt);
-    Position newPosition = positionFromTarget ?? Position.empty();
+    Rect newPosition = positionFromTarget ?? Position.empty();
     this.position = Rect.fromLTWH(
       target.position.left,
       target.position.top,
-      width,
-      height,
-    ).translate(newPosition.x, newPosition.y);
+      newPosition.width,
+      newPosition.height,
+    ).translate(newPosition.left, newPosition.top);
   }
 
   @override
