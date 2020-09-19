@@ -558,9 +558,7 @@ AnimatedFollowerObject(
     {
       FlameAnimation.Animation animation,
       AnimatedObject target,
-      Position positionFromTarget,
-      double height = 16,
-      double width = 16,
+      Rect positionFromTarget,
       bool loopAnimation = false
    }
 )

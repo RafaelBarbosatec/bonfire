@@ -195,9 +195,7 @@ class Knight extends SimplePlayer with Lighting {
       AnimatedFollowerObject(
         animation: CommonSpriteSheet.emote,
         target: this,
-        width: width / 2,
-        height: width / 2,
-        positionFromTarget: Position(18, -6),
+        positionFromTarget: Rect.fromLTWH(18, -6, width / 2, height / 2),
       ),
     );
   }

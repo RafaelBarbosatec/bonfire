@@ -50,6 +50,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   IntervalTick _interval;
   ColorFilterComponent _colorFilterComponent =
       ColorFilterComponent(GameColorFilter());
+  LightingComponent lighting;
 
   RPGGame({
     @required this.context,
@@ -91,9 +92,8 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     enemies?.forEach((enemy) => super.add(enemy));
     components?.forEach((comp) => super.add(comp));
     if (player != null) super.add(player);
-    if (lightingColorGame != null) {
-      super.add(LightingComponent(color: lightingColorGame));
-    }
+    lighting = LightingComponent(color: lightingColorGame);
+    super.add(lighting);
     super.add((interface ?? GameInterface()));
     super.add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(gameCamera));

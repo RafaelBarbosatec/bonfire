@@ -1,3 +1,7 @@
+## [0.7.1]
+* makes `lighting` accessible through the `gameRef`.
+* create `FollowerObject`.
+
 ## [0.7.0]
 * BREAKING CHANGE: improvement in animations to SimplePlayer and SimpleEnemy. Now use `SimpleDirectionAnimation` to manipulate animations.
 * add `GameColorFilter`. It is now possible to add color filter in the game.

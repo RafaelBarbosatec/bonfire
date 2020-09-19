@@ -2,37 +2,34 @@ import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/objects/animated_object.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
+import 'package:bonfire/objects/follower_object.dart';
 
-class AnimatedFollowerObject extends AnimatedObject {
+class AnimatedFollowerObject extends FollowerObject {
   final GameComponent target;
-  final Position positionFromTarget;
-  final double height;
-  final double width;
+  final Rect positionFromTarget;
   final bool loopAnimation;
+  final Animation animation;
+
   AnimatedFollowerObject({
-    FlameAnimation.Animation animation,
+    this.animation,
     this.target,
     this.positionFromTarget,
-    this.height = 16,
-    this.width = 16,
     this.loopAnimation = false,
-  }) {
-    this.animation = animation;
+  });
+
+  @override
+  void render(Canvas canvas) {
+    if (animation == null || position == null) return;
+    if (animation.loaded()) {
+      animation.getSprite().renderRect(canvas, position);
+    }
+    super.render(canvas);
   }
 
   @override
   void update(double dt) {
+    animation?.update(dt);
     super.update(dt);
-    Position newPosition = positionFromTarget ?? Position.empty();
-    this.position = Rect.fromLTWH(
-      target.position.left,
-      target.position.top,
-      width,
-      height,
-    ).translate(newPosition.x, newPosition.y);
-
     if (!loopAnimation) {
       if (animation.isLastFrame) {
         remove();

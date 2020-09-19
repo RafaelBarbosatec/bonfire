@@ -122,9 +122,7 @@ class Chest extends GameDecoration with TapGesture {
           textureHeight: 32,
         ),
         target: this,
-        width: 16,
-        height: 16,
-        positionFromTarget: Position(18, -6),
+        positionFromTarget: Rect.fromLTWH(18, -6, 16, 16),
       ),
     );
   }
