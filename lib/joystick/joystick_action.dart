@@ -9,7 +9,7 @@ import 'package:flutter/widgets.dart';
 enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
 class JoystickAction {
-  final int actionId;
+  final dynamic actionId;
   final Sprite sprite;
   final Sprite spritePressed;
   final Sprite spriteBackgroundDirection;
@@ -147,8 +147,7 @@ class JoystickAction {
       );
 
       // Distance between the center of joystick background & drag position
-      Position centerPosition =
-          Position.fromOffset(_rectBackgroundDirection.center);
+      Position centerPosition = Position.fromOffset(_rectBackgroundDirection.center);
       Position dragPosition = Position.fromOffset(_dragPosition);
       double dist = centerPosition.distance(dragPosition);
 
