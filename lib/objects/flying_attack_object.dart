@@ -10,7 +10,7 @@ import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
 
 class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
-  final int id;
+  final dynamic id;
   final FlameAnimation.Animation flyAnimation;
   final FlameAnimation.Animation destroyAnimation;
   final Direction direction;

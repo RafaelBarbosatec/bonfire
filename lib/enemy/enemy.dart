@@ -195,7 +195,7 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
   }
 
   @override
-  void receiveDamage(double damage, int from) {
+  void receiveDamage(double damage, dynamic from) {
     if (life > 0) {
       life -= damage;
       if (life <= 0) {

@@ -129,7 +129,7 @@ class Player extends GameComponent
   }
 
   @override
-  void receiveDamage(double damage, int from) {
+  void receiveDamage(double damage, dynamic from) {
     if (life > 0) {
       life -= damage;
       if (life <= 0) {

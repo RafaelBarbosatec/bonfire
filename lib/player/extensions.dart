@@ -86,7 +86,7 @@ extension PlayerExtensions on Player {
     @required double height,
     @required double radAngleDirection,
     FlameAnimation.Animation animationDestroy,
-    int id,
+    dynamic id,
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
@@ -135,7 +135,7 @@ extension PlayerExtensions on Player {
     @required double width,
     @required double height,
     @required Direction direction,
-    int id,
+    dynamic id,
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
@@ -238,7 +238,7 @@ extension PlayerExtensions on Player {
     FlameAnimation.Animation animationTop,
     @required double damage,
     @required Direction direction,
-    int id,
+    dynamic id,
     double heightArea = 32,
     double widthArea = 32,
     bool withPush = true,
@@ -349,13 +349,12 @@ extension PlayerExtensions on Player {
         .forEach(
       (enemy) {
         enemy.receiveDamage(damage, id);
-        Rect rectAfterPush =
-            (enemy as GameComponent).position.translate(pushLeft, pushTop);
+        Rect rectAfterPush = enemy.position.translate(pushLeft, pushTop);
         if (withPush &&
             (enemy is ObjectCollision &&
                 !(enemy as ObjectCollision)
                     .isCollision(rectAfterPush, this.gameRef))) {
-          (enemy as GameComponent).translate(pushLeft, pushTop);
+          enemy.translate(pushLeft, pushTop);
         }
       },
     );
@@ -365,7 +364,7 @@ extension PlayerExtensions on Player {
     @required FlameAnimation.Animation animationTop,
     @required double damage,
     @required double radAngleDirection,
-    int id,
+    dynamic id,
     double heightArea = 32,
     double widthArea = 32,
     bool withPush = true,

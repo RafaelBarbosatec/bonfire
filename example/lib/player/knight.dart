@@ -115,6 +115,7 @@ class Knight extends SimplePlayer with Lighting {
     if (stamina < 10) return;
 
     this.simpleAttackRangeByAngle(
+      id: {'ddd': 'kkkkk'},
       animationTop: CommonSpriteSheet.fireBallTop,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       radAngleDirection: angleRadAttack,
@@ -181,7 +182,7 @@ class Knight extends SimplePlayer with Lighting {
   }
 
   @override
-  void receiveDamage(double damage, int from) {
+  void receiveDamage(double damage, dynamic from) {
     this.showDamage(damage,
         config: TextConfig(
           fontSize: width / 3,

@@ -59,7 +59,7 @@ class GoblinRotation extends RotationEnemy {
   }
 
   @override
-  void receiveDamage(double damage, int from) {
+  void receiveDamage(double damage, dynamic from) {
     this.showDamage(damage);
     super.receiveDamage(damage, from);
   }
