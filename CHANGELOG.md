@@ -1,3 +1,6 @@
+## [0.7.3]
+* hotfix: notify finish in `AnimatedObjectOnce`.
+
 ## [0.7.2]
 * hotfix render last frame in `AnimatedObjectOnce`.
 

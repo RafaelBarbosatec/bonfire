@@ -12,7 +12,6 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
   final VoidCallback onStartAnimation;
   final double rotateRadAngle;
   bool _notifyStart = false;
-  bool _destroy = false;
   final LightingConfig lightingConfig;
 
   AnimatedObjectOnce({
@@ -23,7 +22,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     this.rotateRadAngle,
     this.lightingConfig,
   }) {
-    this.animation = animation;
+    this.animation = animation..loop = false;
     this.position = position;
   }
 
@@ -40,22 +39,19 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     } else {
       super.render(canvas);
     }
+    if (animation.done()) {
+      if (onFinish != null) onFinish();
+      remove();
+    }
   }
 
   @override
   void update(double dt) {
-    if (_destroy) {
-      if (onFinish != null) onFinish();
-      remove();
-    }
     super.update(dt);
     if (animation != null && !destroy()) {
       if (animation.currentIndex == 1 && !_notifyStart) {
         _notifyStart = true;
         if (onStartAnimation != null) onStartAnimation();
-      }
-      if (animation.isLastFrame) {
-        _destroy = true;
       }
     }
   }
