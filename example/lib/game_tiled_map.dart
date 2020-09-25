@@ -65,7 +65,7 @@ class GameTiledMap extends StatelessWidget {
             ..registerObject(
                 'chest', (x, y, width, height) => Chest(Position(x, y))),
           background: BackgroundColorGame(Colors.blueGrey[900]),
-          lightingColorGame: Colors.black.withOpacity(0.75),
+          lightingColorGame: Colors.black.withOpacity(0.5),
           cameraZoom:
               1.0, // you can change the game zoom here or directly on camera
         );
