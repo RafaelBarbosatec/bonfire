@@ -29,12 +29,12 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   /// World position that this decoration must position yourself.
   final Position initPosition;
 
-  Sprite _sprite;
+  Sprite sprite;
 
   int additionalPriority = 0;
 
   GameDecoration({
-    Sprite sprite,
+    this.sprite,
     @required this.initPosition,
     @required this.height,
     @required this.width,
@@ -44,7 +44,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   }) {
     if (frontFromPlayer) additionalPriority = 1;
     this.animation = animation;
-    _sprite = sprite;
     this.position = generateRectWithBleedingPixel(
       initPosition,
       width,
@@ -54,7 +53,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   }
 
   GameDecoration.sprite(
-    Sprite sprite, {
+    this.sprite, {
     @required this.initPosition,
     @required this.height,
     @required this.width,
@@ -62,7 +61,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     Collision collision,
   }) {
     if (frontFromPlayer) additionalPriority = 1;
-    _sprite = sprite;
     this.position = generateRectWithBleedingPixel(
       initPosition,
       width,
@@ -90,7 +88,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   }
 
   GameDecoration.spriteMultiCollision(
-    Sprite sprite, {
+    this.sprite, {
     @required this.initPosition,
     @required this.height,
     @required this.width,
@@ -98,7 +96,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     List<Collision> collisions,
   }) {
     if (frontFromPlayer) additionalPriority = 1;
-    _sprite = sprite;
     this.position = generateRectWithBleedingPixel(
       initPosition,
       width,
@@ -132,8 +129,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
 
   @override
   void render(Canvas canvas) {
-    if (_sprite != null && _sprite.loaded())
-      _sprite.renderRect(canvas, position);
+    if (sprite != null && sprite.loaded()) sprite.renderRect(canvas, position);
 
     super.render(canvas);
 

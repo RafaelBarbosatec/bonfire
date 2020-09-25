@@ -1,3 +1,7 @@
+## [0.7.4]
+* makes Sprite public in GameDecoration
+* update `id` to dynamic in `receiveDamage`  and `JoystickAction`.
+
 ## [0.7.3]
 * hotfix: notify finish in `AnimatedObjectOnce`.
 * update `id` to dynamic in `receiveDamage`  and `JoystickAction`.

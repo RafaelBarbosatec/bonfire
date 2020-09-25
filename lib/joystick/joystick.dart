@@ -31,7 +31,7 @@ class Joystick extends JoystickController {
     }
   }
 
-  void removeAction(int actionId) {
+  void removeAction(dynamic actionId) {
     if (actions != null)
       actions.removeWhere((action) => action.actionId == actionId);
   }
