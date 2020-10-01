@@ -128,7 +128,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       if (withPush) {
         Rect rectAfterPush =
             player.position.translate(diffBase.dx, diffBase.dy);
-        if (!player.isCollision(rectAfterPush, this.gameRef)) {
+        if (!player.isCollision(displacement: rectAfterPush)) {
           player.position = rectAfterPush;
         }
       }

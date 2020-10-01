@@ -75,7 +75,8 @@ class Player extends GameComponent
 
     Rect displacement = position.translate(0, (-innerSpeed));
 
-    if (isCollision(displacement, gameRef, onlyVisible: isFocusCamera)) return;
+    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera))
+      return;
 
     position = displacement;
   }
@@ -85,7 +86,8 @@ class Player extends GameComponent
 
     Rect displacement = position.translate(innerSpeed, 0);
 
-    if (isCollision(displacement, gameRef, onlyVisible: isFocusCamera)) return;
+    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera))
+      return;
 
     position = displacement;
   }
@@ -95,7 +97,8 @@ class Player extends GameComponent
 
     Rect displacement = position.translate(0, innerSpeed);
 
-    if (isCollision(displacement, gameRef, onlyVisible: isFocusCamera)) return;
+    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera))
+      return;
 
     position = displacement;
   }
@@ -105,7 +108,8 @@ class Player extends GameComponent
 
     Rect displacement = position.translate(-innerSpeed, 0);
 
-    if (isCollision(displacement, gameRef, onlyVisible: isFocusCamera)) return;
+    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera))
+      return;
 
     position = displacement;
   }
@@ -123,7 +127,8 @@ class Player extends GameComponent
 
     Rect newPosition = position.shift(newDiffBase);
 
-    if (isCollision(newPosition, gameRef, onlyVisible: isFocusCamera)) return;
+    if (isCollision(displacement: newPosition, onlyVisible: isFocusCamera))
+      return;
 
     position = newPosition;
   }
