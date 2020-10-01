@@ -241,7 +241,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
       if (withPush) {
         Rect rectAfterPush = player.position.translate(pushLeft, pushTop);
-        if (!player.isCollision(rectAfterPush, this.gameRef)) {
+        if (!player.isCollision(displacement: rectAfterPush)) {
           player.position = rectAfterPush;
         }
       }

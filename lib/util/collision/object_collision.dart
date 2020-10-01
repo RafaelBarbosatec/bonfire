@@ -24,20 +24,19 @@ mixin ObjectCollision on GameComponent {
     }
   }
 
-  bool isCollision(
+  bool isCollision({
     Rect displacement,
-    RPGGame game, {
     bool onlyVisible = true,
     bool shouldTriggerSensors = true,
   }) {
     if (!containCollision()) return false;
 
-    final rectCollisions = getRectCollisions(displacement);
-    if (shouldTriggerSensors) triggerSensors(rectCollisions, game);
+    final rectCollisions = getRectCollisions(displacement ?? position);
+    if (shouldTriggerSensors) triggerSensors(rectCollisions, gameRef);
 
     final collisionMap = (onlyVisible
-            ? game.map?.getCollisionsRendered() ?? []
-            : game.map?.getCollisions() ?? [])
+            ? gameRef?.map?.getCollisionsRendered() ?? []
+            : gameRef?.map?.getCollisions() ?? [])
         .firstWhere(
       (i) => i.detectCollision(rectCollisions),
       orElse: () => null,
@@ -45,9 +44,9 @@ mixin ObjectCollision on GameComponent {
     if (collisionMap != null) return true;
 
     final collisionDecorations =
-        (onlyVisible ? game.visibleDecorations() : game.decorations())
+        (onlyVisible ? gameRef?.visibleDecorations() : gameRef?.decorations())
             .firstWhere(
-      (i) => i.detectCollision(rectCollisions),
+      (i) => i.detectCollision(rectCollisions) && i != this,
       orElse: () => null,
     );
     if (collisionDecorations != null) return true;
@@ -63,7 +62,7 @@ mixin ObjectCollision on GameComponent {
     bool onlyVisible = true,
   }) {
     var moveToCurrent = position.translate(translateX, translateY);
-    return isCollision(moveToCurrent, game, onlyVisible: onlyVisible);
+    return isCollision(displacement: moveToCurrent, onlyVisible: onlyVisible);
   }
 
   Iterable<Rect> getRectCollisions(Rect displacement) {

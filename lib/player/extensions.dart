@@ -353,7 +353,7 @@ extension PlayerExtensions on Player {
         if (withPush &&
             (enemy is ObjectCollision &&
                 !(enemy as ObjectCollision)
-                    .isCollision(rectAfterPush, this.gameRef))) {
+                    .isCollision(displacement: rectAfterPush))) {
           enemy.translate(pushLeft, pushTop);
         }
       },
@@ -396,13 +396,12 @@ extension PlayerExtensions on Player {
             a.rectAttackable().overlaps(positionAttack))
         .forEach((enemy) {
       enemy.receiveDamage(damage, id);
-      Rect rectAfterPush =
-          (enemy as GameComponent).position.translate(diffBase.dx, diffBase.dy);
+      Rect rectAfterPush = position.translate(diffBase.dx, diffBase.dy);
       if (withPush &&
           (enemy is ObjectCollision &&
               !(enemy as ObjectCollision)
-                  .isCollision(rectAfterPush, this.gameRef))) {
-        (enemy as GameComponent).translate(diffBase.dx, diffBase.dy);
+                  .isCollision(displacement: rectAfterPush))) {
+        translate(diffBase.dx, diffBase.dy);
       }
     });
   }

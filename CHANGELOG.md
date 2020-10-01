@@ -1,3 +1,7 @@
+## [0.7.5]
+* Fix collision in GameDecoration.
+* Update Flame to 0.27.0
+
 ## [0.7.4]
 * makes Sprite public in GameDecoration
 * update `id` to dynamic in `receiveDamage`  and `JoystickAction`.
