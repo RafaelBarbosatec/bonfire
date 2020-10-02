@@ -156,8 +156,6 @@ class Player extends GameComponent
     }
   }
 
-  Rect get rectCollision => getRectCollision(position);
-
   @override
   void joystickAction(JoystickActionEvent event) {}
 
