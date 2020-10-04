@@ -25,6 +25,7 @@ export 'package:bonfire/objects/animated_object.dart';
 export 'package:bonfire/objects/animated_object_once.dart';
 export 'package:bonfire/objects/flying_attack_angle_object.dart';
 export 'package:bonfire/objects/flying_attack_object.dart';
+export 'package:bonfire/objects/follower_object.dart';
 export 'package:bonfire/objects/sprite_object.dart';
 export 'package:bonfire/player/extensions.dart';
 export 'package:bonfire/player/player.dart';
