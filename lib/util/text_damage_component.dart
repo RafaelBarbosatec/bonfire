@@ -13,6 +13,7 @@ class TextDamageComponent extends TextComponent with HasGameRef<RPGGame> {
   final TextConfig config;
   final Position initPosition;
   final DirectionTextDamage direction;
+  final double maxDownSize;
   bool destroyed = false;
   Position position;
   double _initialY;
@@ -27,6 +28,7 @@ class TextDamageComponent extends TextComponent with HasGameRef<RPGGame> {
     this.onlyUp = false,
     this.config,
     double initVelocityTop = -4,
+    this.maxDownSize = 20,
     this.gravity = 0.5,
     this.direction = DirectionTextDamage.RANDOM,
   }) : super(text, config: (config ?? TextConfig(fontSize: 10))) {
@@ -66,7 +68,7 @@ class TextDamageComponent extends TextComponent with HasGameRef<RPGGame> {
     if (onlyUp && _velocity >= 0) {
       remove();
     }
-    if (position.y > _initialY + 20) {
+    if (position.y > _initialY + maxDownSize) {
       remove();
     }
 

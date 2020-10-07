@@ -22,6 +22,7 @@ extension PlayerExtensions on Player {
     TextConfig config,
     double initVelocityTop = -5,
     double gravity = 0.5,
+    double maxDownSize = 20,
     bool onlyUp = false,
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
   }) {
@@ -41,6 +42,7 @@ extension PlayerExtensions on Player {
         gravity: gravity,
         direction: direction,
         onlyUp: onlyUp,
+        maxDownSize: maxDownSize,
       ),
     );
   }
