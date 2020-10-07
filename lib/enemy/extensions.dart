@@ -69,6 +69,7 @@ extension EnemyExtensions on Enemy {
     TextConfig config,
     double initVelocityTop = -5,
     double gravity = 0.5,
+    double maxDownSize = 20,
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
     bool onlyUp = false,
   }) {
@@ -88,6 +89,7 @@ extension EnemyExtensions on Enemy {
         gravity: gravity,
         direction: direction,
         onlyUp: onlyUp,
+        maxDownSize: maxDownSize,
       ),
     );
   }

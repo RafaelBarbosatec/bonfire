@@ -106,4 +106,6 @@ mixin ObjectCollision on GameComponent {
 
     return collision != null;
   }
+
+  Rect get rectCollision => getRectCollision(position);
 }

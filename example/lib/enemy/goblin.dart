@@ -118,12 +118,13 @@ class Goblin extends SimpleEnemy {
 
   @override
   void receiveDamage(double damage, dynamic from) {
-    print(from);
-    this.showDamage(damage,
-        config: TextConfig(
-          fontSize: width / 3,
-          color: Colors.white,
-        ));
+    this.showDamage(
+      damage,
+      config: TextConfig(
+        fontSize: width / 3,
+        color: Colors.white,
+      ),
+    );
     super.receiveDamage(damage, from);
   }
 }
