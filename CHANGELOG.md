@@ -1,3 +1,7 @@
+# next
+
+- add resize in `InterfaceComponent`
+
 # 0.7.6
 
 - add `maxDownSize` in `TextDamageComponent`
