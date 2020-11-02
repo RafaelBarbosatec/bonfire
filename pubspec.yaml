@@ -14,7 +14,7 @@ dependencies:
   ordered_set: ^2.0.0
   tiledjsonreader: ^0.0.8
   http: ^0.12.2
-  shared_preferences: ^0.5.12
+  shared_preferences: ^0.5.12+2
 
 dev_dependencies:
   test: any
