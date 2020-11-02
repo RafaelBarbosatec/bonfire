@@ -17,6 +17,7 @@ class BonfireWidget extends StatefulWidget {
   final MapGame map;
   final List<Enemy> enemies;
   final List<GameDecoration> decorations;
+  final List<GameComponent> components;
   final GameComponent background;
   final bool constructionMode;
   final bool showCollisionArea;
@@ -50,6 +51,7 @@ class BonfireWidget extends StatefulWidget {
     this.colorFilter,
     this.cameraMoveOnlyMapArea = false,
     this.cameraSizeMovementWindow = const Size(50, 50),
+    this.components,
   }) : super(key: key);
 
   @override
@@ -65,12 +67,10 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       if (_game.map != null) _game.map.updateTiles(widget.map.tiles);
 
       _game.decorations().forEach((d) => d.remove());
-      if (widget.decorations != null)
-        widget.decorations.forEach((d) => _game.addGameComponent(d));
+      if (widget.decorations != null) widget.decorations.forEach((d) => _game.addGameComponent(d));
 
       _game.enemies().forEach((e) => e.remove());
-      if (widget.enemies != null)
-        widget.enemies.forEach((e) => _game.addGameComponent(e));
+      if (widget.enemies != null) widget.enemies.forEach((e) => _game.addGameComponent(e));
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -85,15 +85,14 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       map: widget.map,
       decorations: widget.decorations,
       enemies: widget.enemies,
+      components: widget.components ?? [],
       background: widget.background,
       constructionMode: widget.constructionMode,
       showCollisionArea: widget.showCollisionArea,
       showFPS: widget.showFPS,
       gameController: widget.gameController,
-      constructionModeColor:
-          widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
-      collisionAreaColor:
-          widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
+      constructionModeColor: widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+      collisionAreaColor: widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
       lightingColorGame: widget.lightingColorGame,
       cameraZoom: widget.cameraZoom,
       cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
