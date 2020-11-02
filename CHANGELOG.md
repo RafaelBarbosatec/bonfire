@@ -1,3 +1,10 @@
+# 0.7.7
+
+- add resize in `InterfaceComponent`
+- add param `components` in `BonfireTiledWidget` and `BonfireWidget`
+- disable `isAntiAlias` in render `tile` in map.
+- update flame to `0.28.0`
+
 # 0.7.6
 
 - add `maxDownSize` in `TextDamageComponent`

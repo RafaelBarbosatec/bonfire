@@ -23,6 +23,7 @@ typedef ObjectBuilder = GameComponent Function(
 
 class TiledWorldMap {
   static const TYPE_TILE_ABOVE = 'above';
+  static const TILED_VERSION_SUPPORTED = '1.3.5';
 
   final String path;
   final Size forceTileSize;
@@ -62,6 +63,11 @@ class TiledWorldMap {
   Future<TiledWorldData> build() async {
     try {
       _tiledMap = await _readMap();
+      if (_tiledMap.tiledVersion != TILED_VERSION_SUPPORTED) {
+        throw Exception(
+          'Tiled version(${_tiledMap.tiledVersion}) not supported. please use version $TILED_VERSION_SUPPORTED}',
+        );
+      }
       _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble();
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble();
       _tileWidth = forceTileSize?.width ?? _tileWidthOrigin;

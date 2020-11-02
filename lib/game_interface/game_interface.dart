@@ -34,6 +34,12 @@ class GameInterface extends GameComponent with TapGesture {
     });
   }
 
+  @override
+  void resize(Size size) {
+    _components.forEach((i) => i.resize(size));
+    super.resize(size);
+  }
+
   void add(InterfaceComponent component) {
     removeById(component.id);
     _components.add(component);

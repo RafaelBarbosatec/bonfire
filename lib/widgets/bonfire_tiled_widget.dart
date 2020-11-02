@@ -15,6 +15,7 @@ class BonfireTiledWidget extends StatefulWidget {
   final Player player;
   final GameInterface interface;
   final GameComponent background;
+  final List<GameComponent> components;
   final bool constructionMode;
   final bool showCollisionArea;
   final bool showFPS;
@@ -52,13 +53,13 @@ class BonfireTiledWidget extends StatefulWidget {
     this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
     this.durationShowAnimation,
     this.colorFilter,
+    this.components,
   }) : super(key: key);
   @override
   _BonfireTiledWidgetState createState() => _BonfireTiledWidgetState();
 }
 
-class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
-    with TickerProviderStateMixin {
+class _BonfireTiledWidgetState extends State<BonfireTiledWidget> with TickerProviderStateMixin {
   RPGGame _game;
   bool _loading = true;
 
@@ -104,22 +105,22 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       tiled = await widget.map.build();
     }
 
+    List<GameComponent> components = (tiled?.components ?? []);
+    if (widget.components != null) components.addAll(widget.components);
     _game = RPGGame(
       context: context,
       joystickController: widget.joystick,
       player: widget.player,
       interface: widget.interface,
       map: tiled?.map,
-      components: tiled?.components ?? [],
+      components: components,
       background: widget.background,
       constructionMode: widget.constructionMode,
       showCollisionArea: widget.showCollisionArea,
       showFPS: widget.showFPS,
       gameController: widget.gameController,
-      constructionModeColor:
-          widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
-      collisionAreaColor:
-          widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
+      constructionModeColor: widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+      collisionAreaColor: widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
       lightingColorGame: widget.lightingColorGame,
       cameraZoom: widget.cameraZoom,
       cameraSizeMovementWindow: widget.cameraSizeMovementWindow,

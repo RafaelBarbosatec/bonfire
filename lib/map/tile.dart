@@ -11,6 +11,7 @@ import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
 class Tile extends GameComponent with ObjectCollision {
+  Paint _paint = Paint()..isAntiAlias = false;
   Sprite sprite;
   ControlledUpdateAnimation animation;
   final double width;
@@ -115,7 +116,7 @@ class Tile extends GameComponent with ObjectCollision {
     if (position == null) return;
     animation?.render(canvas, position);
     if (sprite?.loaded() ?? false) {
-      sprite.renderRect(canvas, position);
+      sprite.renderRect(canvas, position, overridePaint: _paint);
     }
 
     if (gameRef?.showCollisionArea ?? false) {
@@ -136,8 +137,7 @@ class Tile extends GameComponent with ObjectCollision {
     }
     canvas.drawRect(
       position,
-      _paintText
-        ..color = gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+      _paintText..color = gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
     );
     if (_positionText.x % 2 == 0) {
       TextConfig(
@@ -154,8 +154,7 @@ class Tile extends GameComponent with ObjectCollision {
     }
   }
 
-  Rect generateRectWithBleedingPixel(
-      Position position, double width, double height,
+  Rect generateRectWithBleedingPixel(Position position, double width, double height,
       {double offsetX = 0, double offsetY = 0}) {
     double sizeMax = max(width, height);
     double bleendingPixel = sizeMax * 0.04;
@@ -163,12 +162,8 @@ class Tile extends GameComponent with ObjectCollision {
       bleendingPixel = 3;
     }
     return Rect.fromLTWH(
-      (position.x * width) -
-          (position.x % 2 == 0 ? (bleendingPixel / 2) : 0) +
-          offsetX,
-      (position.y * height) -
-          (position.y % 2 == 0 ? (bleendingPixel / 2) : 0) +
-          offsetY,
+      (position.x * width) - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0) + offsetX,
+      (position.y * height) - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0) + offsetY,
       width + (position.x % 2 == 0 ? bleendingPixel : 0),
       height + (position.y % 2 == 0 ? bleendingPixel : 0),
     );
