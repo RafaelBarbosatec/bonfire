@@ -5,6 +5,7 @@ import 'package:bonfire/util/mixins/pointer_detector_mixin.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
+import 'package:flame/position.dart';
 import 'package:flutter/services.dart';
 
 enum JoystickMoveDirectional {
@@ -50,10 +51,10 @@ class JoystickActionEvent {
 abstract class JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);
   void joystickAction(JoystickActionEvent event);
+  void moveTo(Position position);
 }
 
-abstract class JoystickController extends Component
-    with HasGameRef<BaseGamePointerDetector>, PointerDetector {
+abstract class JoystickController extends Component with HasGameRef<BaseGamePointerDetector>, PointerDetector {
   List<JoystickListener> _observers = List();
   bool keyboardEnable = false;
 
@@ -65,6 +66,10 @@ abstract class JoystickController extends Component
 
   void joystickAction(JoystickActionEvent event) {
     _observers.forEach((o) => o.joystickAction(event));
+  }
+
+  void moveTo(Position event) {
+    _observers.forEach((o) => o.moveTo(event));
   }
 
   void addObserver(JoystickListener listener) {

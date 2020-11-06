@@ -15,6 +15,7 @@ export 'package:bonfire/joystick/joystick.dart';
 export 'package:bonfire/joystick/joystick_action.dart';
 export 'package:bonfire/joystick/joystick_controller.dart';
 export 'package:bonfire/joystick/joystick_directional.dart';
+export 'package:bonfire/joystick/touch_to_position.dart';
 export 'package:bonfire/lighting/lighting.dart';
 export 'package:bonfire/lighting/lighting_config.dart';
 export 'package:bonfire/map/map_game.dart';
