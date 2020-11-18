@@ -21,8 +21,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   Camera gameCamera = Camera();
 
   /// The list of components to be updated and rendered by the base game.
-  OrderedSet<Component> components =
-      OrderedSet(Comparing.on((c) => c.priority()));
+  OrderedSet<Component> components = OrderedSet(Comparing.on((c) => c.priority()));
 
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
@@ -34,14 +33,11 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   final List<double> _dts = [];
 
   Iterable<GameComponent> get _gesturesComponents => components
-      .where((c) =>
-          ((c is GameComponent && (c.isVisibleInCamera() || c.isHud())) &&
-              ((c is TapGesture && (c as TapGesture).enableTab) ||
-                  (c is DragGesture && (c as DragGesture).enableDrag))))
+      .where((c) => ((c is GameComponent && (c.isVisibleInCamera() || c.isHud())) &&
+          ((c is TapGesture && (c as TapGesture).enableTab) || (c is DragGesture && (c as DragGesture).enableDrag))))
       .cast<GameComponent>();
 
-  Iterable<PointerDetector> get _pointerDetectorComponents =>
-      components.where((c) => (c is PointerDetector)).cast();
+  Iterable<PointerDetector> get _pointerDetectorComponents => components.where((c) => (c is PointerDetector)).cast();
 
   void onPointerCancel(PointerCancelEvent event) {
     _pointerDetectorComponents.forEach((c) => c.onPointerCancel(event));
@@ -60,9 +56,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   }
 
   void onPointerMove(PointerMoveEvent event) {
-    _gesturesComponents
-        .where((element) => element is DragGesture)
-        .forEach((element) {
+    _gesturesComponents.where((element) => element is DragGesture).forEach((element) {
       element.handlerPointerMove(event.pointer, event.localPosition);
     });
     for (final c in _pointerDetectorComponents) {
@@ -238,8 +232,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   ///
   /// This is compatible with the `dt` value used in the [update] method.
   double currentTime() {
-    return DateTime.now().microsecondsSinceEpoch.toDouble() /
-        Duration.microsecondsPerSecond;
+    return DateTime.now().microsecondsSinceEpoch.toDouble() / Duration.microsecondsPerSecond;
   }
 
   @override

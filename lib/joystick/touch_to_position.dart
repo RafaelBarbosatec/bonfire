@@ -5,6 +5,7 @@ import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:flutter/gestures.dart';
 
 class TouchToPosition extends JoystickController {
+  Offset position;
   @override
   void render(Canvas c) {}
 
@@ -12,8 +13,16 @@ class TouchToPosition extends JoystickController {
   void update(double t) {}
 
   @override
+  void onPointerDown(PointerDownEvent event) {
+    position = event.position;
+    super.onPointerDown(event);
+  }
+
+  @override
   void onPointerUp(PointerUpEvent event) {
-    final absolutePosition = this.gameRef.gameCamera.cameraPositionToWorld(event.position);
-    moveTo(Position.fromOffset(absolutePosition));
+    if (position == event.position) {
+      final absolutePosition = this.gameRef.gameCamera.cameraPositionToWorld(event.position);
+      moveTo(Position.fromOffset(absolutePosition));
+    }
   }
 }

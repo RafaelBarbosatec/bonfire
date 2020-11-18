@@ -169,14 +169,10 @@ class Camera with HasGameRef<RPGGame> {
     final verticalDistance = screenCenter.dy - positionTarget.dy;
 
     if (horizontalDistance.abs() > horizontal) {
-      this.position.x += horizontalDistance > 0
-          ? horizontal - horizontalDistance
-          : -horizontalDistance - horizontal;
+      this.position.x += horizontalDistance > 0 ? horizontal - horizontalDistance : -horizontalDistance - horizontal;
     }
     if (verticalDistance.abs() > vertical) {
-      this.position.y += verticalDistance > 0
-          ? vertical - verticalDistance
-          : -verticalDistance - vertical;
+      this.position.y += verticalDistance > 0 ? vertical - verticalDistance : -verticalDistance - vertical;
     }
 
     if (moveOnlyMapArea) {

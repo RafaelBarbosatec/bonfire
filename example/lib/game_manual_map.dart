@@ -6,7 +6,7 @@ import 'package:example/enemy/goblin.dart';
 import 'package:example/map/dungeon_map.dart';
 import 'package:example/player/knight.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'interface/knight_interface.dart';
@@ -56,7 +56,7 @@ class GameManualMap extends StatelessWidget implements GameListener {
         background: BackgroundColorGame(Colors.blueGrey[900]),
         gameController: _controller..setListener(this),
         lightingColorGame: Colors.black.withOpacity(0.75),
-        cameraZoom: 1.0, // you can change the game zoom here or directly on camera
+        cameraZoom: 1, // you can change the game zoom here or directly on camera
       );
     });
   }
