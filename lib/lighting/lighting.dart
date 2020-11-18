@@ -7,19 +7,17 @@ mixin Lighting {
   LightingConfig lightingConfig;
 
   bool isVisible(Camera camera) {
-    if (lightingConfig == null ||
-        camera == null ||
-        gameComponent?.position == null ||
-        camera.gameRef.size == null) return false;
+    if (lightingConfig == null || camera == null || gameComponent?.position == null || camera.gameRef.size == null)
+      return false;
 
     Rect rectLight = Rect.fromLTWH(
-      gameComponent.position.left - (lightingConfig.radius + 10),
-      gameComponent.position.top - (lightingConfig.radius + 10),
-      (lightingConfig.radius * 2) + 20,
-      (lightingConfig.radius * 2) + 20,
+      gameComponent.position.center.dx - (lightingConfig.radius + lightingConfig.blurBorder / 2),
+      gameComponent.position.center.dy - (lightingConfig.radius + lightingConfig.blurBorder / 2),
+      (lightingConfig.radius * 2) + lightingConfig.blurBorder,
+      (lightingConfig.radius * 2) + lightingConfig.blurBorder,
     );
 
-    return camera.cameraRect.overlaps(rectLight) ?? false;
+    return camera.isRectOnCamera(rectLight) ?? false;
   }
 
   GameComponent get gameComponent => (this as GameComponent);

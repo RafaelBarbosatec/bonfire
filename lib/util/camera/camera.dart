@@ -2,6 +2,7 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Camera with HasGameRef<RPGGame> {
@@ -21,8 +22,14 @@ class Camera with HasGameRef<RPGGame> {
 
   Rect get cameraRect => Rect.fromCenter(
         center: Offset(position.x, position.y),
-        width: gameRef.size.width / zoom + 80,
-        height: gameRef.size.height / zoom + 80,
+        width: gameRef.size.width,
+        height: gameRef.size.height,
+      );
+
+  Rect get cameraRectWithMargin => Rect.fromCenter(
+        center: Offset(position.x, position.y),
+        width: gameRef.size.width + 20,
+        height: gameRef.size.height + 20,
       );
 
   void moveTop(double displacement) {
@@ -205,20 +212,26 @@ class Camera with HasGameRef<RPGGame> {
   bool isComponentOnCamera(GameComponent c) {
     if (gameRef?.size == null || c.position == null) return false;
 
-    return cameraRect.overlaps(c.position);
+    return cameraRectWithMargin.overlaps(c.position);
+  }
+
+  bool isRectOnCamera(Rect c) {
+    if (gameRef?.size == null || c == null) return false;
+
+    return cameraRectWithMargin.overlaps(c);
   }
 
   Offset worldPositionToScreen(Offset position) {
     return position.translate(
-      -this.position.x + gameRef.size.width / 2,
-      -this.position.y + gameRef.size.height / 2,
+      this.cameraRect.left * -1,
+      this.cameraRect.top * -1,
     );
   }
 
   Offset screenPositionToWorld(Offset position) {
     return position.translate(
-      this.position.x - gameRef.size.width / 2,
-      this.position.y - gameRef.size.height / 2,
+      this.cameraRect.left,
+      this.cameraRect.top,
     );
   }
 
