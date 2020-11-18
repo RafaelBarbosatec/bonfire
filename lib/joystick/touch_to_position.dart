@@ -21,7 +21,7 @@ class TouchToPosition extends JoystickController {
   @override
   void onPointerUp(PointerUpEvent event) {
     if (position == event.position) {
-      final absolutePosition = this.gameRef.gameCamera.cameraPositionToWorld(event.position);
+      final absolutePosition = this.gameRef.gameCamera.screenPositionToWorld(event.position);
       moveTo(Position.fromOffset(absolutePosition));
     }
   }

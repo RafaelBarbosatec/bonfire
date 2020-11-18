@@ -215,7 +215,7 @@ class Camera with HasGameRef<RPGGame> {
     );
   }
 
-  Offset cameraPositionToWorld(Offset position) {
+  Offset screenPositionToWorld(Offset position) {
     return position.translate(
       this.position.x - gameRef.size.width / 2,
       this.position.y - gameRef.size.height / 2,
