@@ -19,6 +19,11 @@ class KnightInterface extends GameInterface {
         if (gameRef.player != null) {
           (gameRef.player as Knight).showEmote();
         }
+        if (gameRef.gameCamera.zoom == 2) {
+          gameRef.gameCamera.animateZoom(zoom: 1);
+        } else {
+          gameRef.gameCamera.animateZoom(zoom: 2);
+        }
       },
     ));
     super.resize(size);

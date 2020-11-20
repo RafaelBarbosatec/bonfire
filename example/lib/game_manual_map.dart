@@ -56,7 +56,7 @@ class GameManualMap extends StatelessWidget implements GameListener {
         background: BackgroundColorGame(Colors.blueGrey[900]),
         gameController: _controller..setListener(this),
         lightingColorGame: Colors.black.withOpacity(0.75),
-        cameraZoom: 1.0, // you can change the game zoom here or directly on camera
+        cameraZoom: 2.0, // you can change the game zoom here or directly on camera
       );
     });
   }
