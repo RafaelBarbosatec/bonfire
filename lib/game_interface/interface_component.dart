@@ -30,15 +30,15 @@ class InterfaceComponent extends GameComponent with TapGesture {
   }
 
   void render(Canvas canvas) {
-    if (spriteToRender != null &&
-        this.position != null &&
-        spriteToRender.loaded())
+    if (spriteToRender != null && this.position != null && spriteToRender.loaded())
       spriteToRender.renderRect(canvas, this.position);
   }
 
   @override
   void onTapDown(int pointer, Offset position) {
-    if (spriteSelected != null) spriteToRender = spriteSelected;
+    if (this.position.contains(position)) {
+      spriteToRender = spriteSelected ?? spriteToRender;
+    }
     super.onTapDown(pointer, position);
   }
 

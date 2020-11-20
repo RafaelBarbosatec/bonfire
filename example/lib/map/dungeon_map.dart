@@ -57,10 +57,7 @@ class DungeonMap {
           return;
         }
 
-        if (indexRow > 4 &&
-            indexRow < 9 &&
-            indexColumm > 2 &&
-            indexColumm < 30) {
+        if (indexRow > 4 && indexRow < 9 && indexColumm > 2 && indexColumm < 30) {
           tileList.add(Tile.fromSprite(
             randomFloor(),
             Position(indexColumm.toDouble(), indexRow.toDouble()),

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/map/map_paint.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
@@ -11,7 +12,6 @@ import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
 class Tile extends GameComponent with ObjectCollision {
-  Paint _paint = Paint()..isAntiAlias = false;
   Sprite sprite;
   ControlledUpdateAnimation animation;
   final double width;
@@ -116,7 +116,7 @@ class Tile extends GameComponent with ObjectCollision {
     if (position == null) return;
     animation?.render(canvas, position);
     if (sprite?.loaded() ?? false) {
-      sprite.renderRect(canvas, position, overridePaint: _paint);
+      sprite.renderRect(canvas, position, overridePaint: MapPaint.instance.paint);
     }
 
     if (gameRef?.showCollisionArea ?? false) {
