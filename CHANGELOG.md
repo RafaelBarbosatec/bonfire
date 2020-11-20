@@ -2,7 +2,7 @@
 
 - Fix issue [#79](https://github.com/RafaelBarbosatec/bonfire/issues/79).
 - Fix Handle gestures to take into account the camera zoom.
-- Adds basic implementation suggested in issue [#64](https://github.com/RafaelBarbosatec/bonfire/issues/64). Moving the player based on touch. To do this, use `TouchToPosition ()` in `Joystick`.
+- Adds basic implementation suggested in issue [#64](https://github.com/RafaelBarbosatec/bonfire/issues/64). Moving the player based on touch. To do this, use `TouchToPosition()` in `Joystick`.
 
 # 0.7.7
 
