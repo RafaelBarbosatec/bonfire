@@ -108,12 +108,10 @@ class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision, Light
       );
 
     if (!destroy) {
-      gameRef
-          .attackables()
-          .where((a) =>
-              (damageInPlayer ? a.receivesAttackFromEnemy() : a.receivesAttackFromPlayer()) &&
-              a.rectAttackable().overlaps(position))
-          .forEach((enemy) {
+      gameRef.attackables().where((a) {
+        return (damageInPlayer ? a.receivesAttackFromEnemy() : a.receivesAttackFromPlayer()) &&
+            a.rectAttackable().overlaps(position);
+      }).forEach((enemy) {
         enemy.receiveDamage(damage, id);
         destroy = true;
       });

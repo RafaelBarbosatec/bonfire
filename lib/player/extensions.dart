@@ -387,10 +387,10 @@ extension PlayerExtensions on Player {
         .where((a) => a.receivesAttackFromPlayer() && a.rectAttackable().overlaps(positionAttack))
         .forEach((enemy) {
       enemy.receiveDamage(damage, id);
-      Rect rectAfterPush = position.translate(diffBase.dx, diffBase.dy);
+      Rect rectAfterPush = enemy.position.translate(diffBase.dx, diffBase.dy);
       if (withPush &&
           (enemy is ObjectCollision && !(enemy as ObjectCollision).isCollision(displacement: rectAfterPush))) {
-        translate(diffBase.dx, diffBase.dy);
+        enemy.translate(diffBase.dx, diffBase.dy);
       }
     });
   }

@@ -109,6 +109,7 @@ class Goblin extends SimpleEnemy {
       widthArea: width,
       damage: attack / 2,
       interval: 400,
+      withPush: true,
       attackEffectBottomAnim: CommonSpriteSheet.blackAttackEffectBottom,
       attackEffectLeftAnim: CommonSpriteSheet.blackAttackEffectLeft,
       attackEffectRightAnim: CommonSpriteSheet.blackAttackEffectRight,
