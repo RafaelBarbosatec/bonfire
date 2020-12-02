@@ -32,9 +32,6 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
   double dtUpdate = 0;
   bool isFocusCamera = true;
 
-  @override
-  get isAttackablePlayer => true;
-
   Player({
     @required this.initPosition,
     this.width = 32,
@@ -43,6 +40,7 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
     this.speed = 100,
     Collision collision,
   }) {
+    receivesAttackFrom = ReceivesAttackFromEnum.ENEMY;
     position = Rect.fromLTWH(
       initPosition.x,
       initPosition.y,

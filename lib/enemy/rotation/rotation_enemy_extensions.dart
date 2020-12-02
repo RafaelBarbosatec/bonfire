@@ -7,6 +7,7 @@ import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/objects/flying_attack_angle_object.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/collision/collision.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/rendering.dart';
@@ -18,9 +19,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     double radiusVision = 32,
     double margin = 10,
   }) {
-    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
-        isDead ||
-        this.position == null) return;
+    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) || isDead || this.position == null) return;
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
@@ -50,13 +49,12 @@ extension RotationEnemyExtensions on RotationEnemy {
     );
   }
 
-  void seeAndMoveToAttackRange(
-      {Function(Player) positioned,
-      double radiusVision = 32,
-      double minDistanceCellsFromPlayer}) {
-    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
-        isDead ||
-        this.position == null) return;
+  void seeAndMoveToAttackRange({
+    Function(Player) positioned,
+    double radiusVision = 32,
+    double minDistanceCellsFromPlayer,
+  }) {
+    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) || isDead || this.position == null) return;
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
@@ -66,8 +64,7 @@ extension RotationEnemyExtensions on RotationEnemy {
         double _radAngle = getAngleFomPlayer();
 
         Position myPosition = Position.fromOffset(this.position.center);
-        Position playerPosition =
-            Position.fromOffset(player.rectCollision.center);
+        Position playerPosition = Position.fromOffset(player.rectCollision.center);
         double dist = myPosition.distance(playerPosition);
 
         if (dist >= distance) {
@@ -76,8 +73,7 @@ extension RotationEnemyExtensions on RotationEnemy {
           return;
         }
 
-        this.moveFromAngleDodgeObstacles(speed, getInverseAngleFomPlayer(),
-            notMove: () {
+        this.moveFromAngleDodgeObstacles(speed, getInverseAngleFomPlayer(), notMove: () {
           this.idle();
         });
       },
@@ -110,9 +106,8 @@ extension RotationEnemyExtensions on RotationEnemy {
     double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
-            this.position.center.dy + nextPoint.dy) -
-        this.position.center;
+    Offset diffBase =
+        Offset(this.position.center.dx + nextPoint.dx, this.position.center.dy + nextPoint.dy) - this.position.center;
 
     Rect positionAttack = this.position.shift(diffBase);
 
@@ -122,17 +117,18 @@ extension RotationEnemyExtensions on RotationEnemy {
       rotateRadAngle: angle,
     ));
 
-    if (positionAttack.overlaps(player.position)) {
-      player.receiveDamage(damage, id);
-
-      if (withPush) {
-        Rect rectAfterPush =
-            player.position.translate(diffBase.dx, diffBase.dy);
-        if (!player.isCollision(displacement: rectAfterPush)) {
-          player.position = rectAfterPush;
-        }
+    gameRef
+        .attackables()
+        .where((a) => a.receivesAttackFromEnemy() && a.rectAttackable().overlaps(positionAttack))
+        .forEach((attackable) {
+      attackable.receiveDamage(damage, id);
+      Rect rectAfterPush = attackable.position.translate(diffBase.dx, diffBase.dy);
+      if (withPush &&
+          (attackable is ObjectCollision &&
+              !(attackable as ObjectCollision).isCollision(displacement: rectAfterPush))) {
+        attackable.position = rectAfterPush;
       }
-    }
+    });
 
     if (execute != null) execute();
   }
@@ -164,9 +160,8 @@ extension RotationEnemyExtensions on RotationEnemy {
     double nextY = this.height * sin(_radAngle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
-            this.position.center.dy + nextPoint.dy) -
-        this.position.center;
+    Offset diffBase =
+        Offset(this.position.center.dx + nextPoint.dx, this.position.center.dy + nextPoint.dy) - this.position.center;
 
     Rect position = this.position.shift(diffBase);
     gameRef.addLater(FlyingAttackAngleObject(

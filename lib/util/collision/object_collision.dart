@@ -7,6 +7,8 @@ import 'package:bonfire/util/mixins/sensor.dart';
 import 'package:flutter/material.dart';
 
 mixin ObjectCollision on GameComponent {
+  bool collisionWithEnemy = false;
+  bool collisionWithPlayer = false;
   Iterable<Collision> collisions;
 
   void triggerSensors(Iterable<Rect> rectCollisions, RPGGame game) {
@@ -34,22 +36,29 @@ mixin ObjectCollision on GameComponent {
     final rectCollisions = getRectCollisions(displacement ?? position);
     if (shouldTriggerSensors) triggerSensors(rectCollisions, gameRef);
 
-    final collisionMap = (onlyVisible
-            ? gameRef?.map?.getCollisionsRendered() ?? []
-            : gameRef?.map?.getCollisions() ?? [])
-        .firstWhere(
+    final collisionMap =
+        (onlyVisible ? gameRef?.map?.getCollisionsRendered() ?? [] : gameRef?.map?.getCollisions() ?? []).firstWhere(
       (i) => i.detectCollision(rectCollisions),
       orElse: () => null,
     );
     if (collisionMap != null) return true;
 
-    final collisionDecorations =
-        (onlyVisible ? gameRef?.visibleDecorations() : gameRef?.decorations())
-            .firstWhere(
+    final collisionDecorations = (onlyVisible ? gameRef?.visibleDecorations() : gameRef?.decorations()).firstWhere(
       (i) => i.detectCollision(rectCollisions) && i != this,
       orElse: () => null,
     );
     if (collisionDecorations != null) return true;
+
+    if (collisionWithEnemy) {
+      final collisionEnemy = gameRef
+          ?.visibleEnemies()
+          ?.firstWhere((i) => i.detectCollision(rectCollisions) && i != this, orElse: () => null);
+      if (collisionEnemy != null) return true;
+    }
+
+    if (collisionWithPlayer) {
+      if (gameRef?.player?.detectCollision(rectCollisions) == true) return true;
+    }
 
     return false;
   }

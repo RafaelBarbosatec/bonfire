@@ -1,3 +1,10 @@
+# 0.8.1
+
+- Fix issue [#79](https://github.com/RafaelBarbosatec/bonfire/issues/79).
+- Improvements in mixin `Attackable`. It is now possible to determine from whom you can take damage (player, enemy, all) using `receivesAttackFrom`.
+- Improvements in mixin `ObjectCollision`.
+It is now possible to enable and disable collision with the player and enemies using `collisionWithEnemy` and `collisionWithPlayer`.
+
 # 0.8.0
 
 - Fix issue [#79](https://github.com/RafaelBarbosatec/bonfire/issues/79).

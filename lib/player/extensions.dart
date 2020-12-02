@@ -70,10 +70,8 @@ extension PlayerExtensions on Player {
       visionHeight,
     );
 
-    List<Enemy> enemiesObserved = enemiesInLife
-        .where((enemy) =>
-            enemy.position != null && fieldOfVision.overlaps(enemy.position))
-        .toList();
+    List<Enemy> enemiesObserved =
+        enemiesInLife.where((enemy) => enemy.position != null && fieldOfVision.overlaps(enemy.position)).toList();
 
     if (enemiesObserved.isNotEmpty) {
       if (observed != null) observed(enemiesObserved);
@@ -104,9 +102,8 @@ extension PlayerExtensions on Player {
     double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
-            this.position.center.dy + nextPoint.dy) -
-        this.position.center;
+    Offset diffBase =
+        Offset(this.position.center.dx + nextPoint.dx, this.position.center.dy + nextPoint.dy) - this.position.center;
 
     Rect position = this.position.shift(diffBase);
     gameRef.addLater(FlyingAttackAngleObject(
@@ -343,19 +340,14 @@ extension PlayerExtensions on Player {
       ));
     }
 
-    gameRef
-        .attackables()
-        .where((a) =>
-            !a.isAttackablePlayer &&
-            a.rectAttackable().overlaps(positionAttack))
-        .forEach(
+    gameRef.attackables().where((a) {
+      return a.receivesAttackFromPlayer() && a.rectAttackable().overlaps(positionAttack);
+    }).forEach(
       (enemy) {
         enemy.receiveDamage(damage, id);
         Rect rectAfterPush = enemy.position.translate(pushLeft, pushTop);
         if (withPush &&
-            (enemy is ObjectCollision &&
-                !(enemy as ObjectCollision)
-                    .isCollision(displacement: rectAfterPush))) {
+            (enemy is ObjectCollision && !(enemy as ObjectCollision).isCollision(displacement: rectAfterPush))) {
           enemy.translate(pushLeft, pushTop);
         }
       },
@@ -379,9 +371,8 @@ extension PlayerExtensions on Player {
     double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
-            this.position.center.dy + nextPoint.dy) -
-        this.position.center;
+    Offset diffBase =
+        Offset(this.position.center.dx + nextPoint.dx, this.position.center.dy + nextPoint.dy) - this.position.center;
 
     Rect positionAttack = this.position.shift(diffBase);
 
@@ -393,17 +384,13 @@ extension PlayerExtensions on Player {
 
     gameRef
         .attackables()
-        .where((a) =>
-            !a.isAttackablePlayer &&
-            a.rectAttackable().overlaps(positionAttack))
+        .where((a) => a.receivesAttackFromPlayer() && a.rectAttackable().overlaps(positionAttack))
         .forEach((enemy) {
       enemy.receiveDamage(damage, id);
-      Rect rectAfterPush = position.translate(diffBase.dx, diffBase.dy);
+      Rect rectAfterPush = enemy.position.translate(diffBase.dx, diffBase.dy);
       if (withPush &&
-          (enemy is ObjectCollision &&
-              !(enemy as ObjectCollision)
-                  .isCollision(displacement: rectAfterPush))) {
-        translate(diffBase.dx, diffBase.dy);
+          (enemy is ObjectCollision && !(enemy as ObjectCollision).isCollision(displacement: rectAfterPush))) {
+        enemy.translate(diffBase.dx, diffBase.dy);
       }
     });
   }

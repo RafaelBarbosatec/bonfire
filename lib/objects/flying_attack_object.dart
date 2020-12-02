@@ -52,9 +52,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
       height,
     );
 
-    this.collisions = [
-      collision ?? Collision(width: width, height: height / 2)
-    ];
+    this.collisions = [collision ?? Collision(width: width, height: height / 2)];
   }
 
   @override
@@ -114,17 +112,11 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
         shouldTriggerSensors: false,
       );
 
-    if (damageInPlayer && !destroy) {
-      if (position.overlaps(gameRef.player.rectCollision)) {
-        gameRef.player.receiveDamage(damage, id);
-        destroy = true;
-      }
-    } else {
-      gameRef
-          .attackables()
-          .where((a) =>
-              !a.isAttackablePlayer && a.rectAttackable().overlaps(position))
-          .forEach((enemy) {
+    if (!destroy) {
+      gameRef.attackables().where((a) {
+        return (damageInPlayer ? a.receivesAttackFromEnemy() : a.receivesAttackFromPlayer()) &&
+            a.rectAttackable().overlaps(rectCollision);
+      }).forEach((enemy) {
         enemy.receiveDamage(damage, id);
         destroy = true;
       });
