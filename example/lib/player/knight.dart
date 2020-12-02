@@ -224,8 +224,8 @@ class Knight extends SimplePlayer with Lighting {
   void _drawDirectionAttack(Canvas c) {
     if (showDirection) {
       double radius = position.height;
-      rectDirectionAttack = Rect.fromLTWH(position.center.dx - radius,
-          position.center.dy - radius, radius * 2, radius * 2);
+      rectDirectionAttack =
+          Rect.fromLTWH(position.center.dx - radius, position.center.dy - radius, radius * 2, radius * 2);
       renderSpriteByRadAngle(
         c,
         angleRadAttack,

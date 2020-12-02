@@ -115,7 +115,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     if (!destroy) {
       gameRef.attackables().where((a) {
         return (damageInPlayer ? a.receivesAttackFromEnemy() : a.receivesAttackFromPlayer()) &&
-            a.rectAttackable().overlaps(position);
+            a.rectAttackable().overlaps(rectCollision);
       }).forEach((enemy) {
         enemy.receiveDamage(damage, id);
         destroy = true;

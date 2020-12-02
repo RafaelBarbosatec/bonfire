@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Goblin extends SimpleEnemy {
-  double attack = 25;
+  double attack = 0;
   bool _seePlayerClose = false;
 
   Goblin(Position initPosition)
@@ -24,7 +24,9 @@ class Goblin extends SimpleEnemy {
                 align: Offset(
                   DungeonMap.tileSize * 0.2,
                   DungeonMap.tileSize * 0.4,
-                )));
+                ))) {
+    receivesAttackFrom = ReceivesAttackFromEnum.ALL;
+  }
 
   @override
   void update(double dt) {
@@ -109,7 +111,6 @@ class Goblin extends SimpleEnemy {
       widthArea: width,
       damage: attack / 2,
       interval: 400,
-      withPush: true,
       attackEffectBottomAnim: CommonSpriteSheet.blackAttackEffectBottom,
       attackEffectLeftAnim: CommonSpriteSheet.blackAttackEffectLeft,
       attackEffectRightAnim: CommonSpriteSheet.blackAttackEffectRight,

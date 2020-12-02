@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER }
 mixin Attackable on GameComponent {
-  ReceivesAttackFromEnum receivesAttackFrom = ReceivesAttackFromEnum.ALL;
+  ReceivesAttackFromEnum receivesAttackFrom;
   void receiveDamage(double damage, dynamic from);
   Rect rectAttackable();
 

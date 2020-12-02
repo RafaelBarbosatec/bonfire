@@ -33,15 +33,13 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
 
   bool collisionOnlyVisibleScreen = true;
 
-  @override
-  get receivesAttackFrom => ReceivesAttackFromEnum.PLAYER;
-
   Enemy(
       {@required Position initPosition,
       @required this.height,
       @required this.width,
       this.life = 10,
       Collision collision}) {
+    receivesAttackFrom = ReceivesAttackFromEnum.PLAYER;
     maxLife = life;
     this.position = Rect.fromLTWH(
       initPosition.x,
