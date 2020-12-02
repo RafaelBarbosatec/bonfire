@@ -49,8 +49,11 @@ extension RotationEnemyExtensions on RotationEnemy {
     );
   }
 
-  void seeAndMoveToAttackRange(
-      {Function(Player) positioned, double radiusVision = 32, double minDistanceCellsFromPlayer}) {
+  void seeAndMoveToAttackRange({
+    Function(Player) positioned,
+    double radiusVision = 32,
+    double minDistanceCellsFromPlayer,
+  }) {
     if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) || isDead || this.position == null) return;
     seePlayer(
       radiusVision: radiusVision,
