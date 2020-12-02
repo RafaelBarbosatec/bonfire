@@ -24,9 +24,7 @@ class Goblin extends SimpleEnemy {
                 align: Offset(
                   DungeonMap.tileSize * 0.2,
                   DungeonMap.tileSize * 0.4,
-                ))) {
-    receivesAttackFrom = ReceivesAttackFromEnum.ALL;
-  }
+                )));
 
   @override
   void update(double dt) {
