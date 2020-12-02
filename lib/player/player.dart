@@ -33,7 +33,7 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
   bool isFocusCamera = true;
 
   @override
-  get isAttackablePlayer => true;
+  get receivesAttackFrom => ReceivesAttackFromEnum.ENEMY;
 
   Player({
     @required this.initPosition,

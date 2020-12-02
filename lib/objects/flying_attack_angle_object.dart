@@ -11,8 +11,7 @@ import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
 
-class FlyingAttackAngleObject extends AnimatedObject
-    with ObjectCollision, Lighting {
+class FlyingAttackAngleObject extends AnimatedObject with ObjectCollision, Lighting {
   final dynamic id;
   final FlameAnimation.Animation flyAnimation;
   final FlameAnimation.Animation destroyAnimation;
@@ -59,9 +58,7 @@ class FlyingAttackAngleObject extends AnimatedObject
       height,
     );
 
-    this.collisions = [
-      collision ?? Collision(width: width, height: height / 2)
-    ];
+    this.collisions = [collision ?? Collision(width: width, height: height / 2)];
     _cosAngle = cos(radAngle);
     _senAngle = sin(radAngle);
     _rotate = radAngle == 0.0 ? 0.0 : radAngle + (pi / 2);
@@ -75,9 +72,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     double nextY = (speed * dt) * _senAngle;
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
-            position.center.dy + nextPoint.dy) -
-        position.center;
+    Offset diffBase = Offset(position.center.dx + nextPoint.dx, position.center.dy + nextPoint.dy) - position.center;
 
     position = position.shift(diffBase);
 
@@ -112,16 +107,12 @@ class FlyingAttackAngleObject extends AnimatedObject
         shouldTriggerSensors: false,
       );
 
-    if (damageInPlayer && !destroy) {
-      if (position.overlaps(gameRef.player.rectCollision)) {
-        gameRef.player.receiveDamage(damage, id);
-        destroy = true;
-      }
-    } else {
+    if (!destroy) {
       gameRef
           .attackables()
           .where((a) =>
-              !a.isAttackablePlayer && a.rectAttackable().overlaps(position))
+              (damageInPlayer ? a.receivesAttackFromEnemy() : a.receivesAttackFromPlayer()) &&
+              a.rectAttackable().overlaps(position))
           .forEach((enemy) {
         enemy.receiveDamage(damage, id);
         destroy = true;
@@ -134,9 +125,8 @@ class FlyingAttackAngleObject extends AnimatedObject
         double nextY = (height / 2) * _senAngle;
         Offset nextPoint = Offset(nextX, nextY);
 
-        Offset diffBase = Offset(position.center.dx + nextPoint.dx,
-                position.center.dy + nextPoint.dy) -
-            position.center;
+        Offset diffBase =
+            Offset(position.center.dx + nextPoint.dx, position.center.dy + nextPoint.dy) - position.center;
 
         Rect positionDestroy = position.shift(diffBase);
 
