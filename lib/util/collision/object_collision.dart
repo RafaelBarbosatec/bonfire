@@ -29,6 +29,8 @@ mixin ObjectCollision on GameComponent {
     bool onlyVisible = true,
     bool shouldTriggerSensors = true,
   }) {
+    if (!containCollision()) return false;
+
     final rectCollisions = getRectCollisions(displacement ?? position);
 
     if (shouldTriggerSensors) triggerSensors(rectCollisions);
