@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Camera with HasGameRef<RPGGame> {
+  static const SPACING_MAP = 20.0;
   Position position = Position.empty();
   double zoom;
   Offset _lastTargetOffset = Offset.zero;
@@ -22,14 +23,14 @@ class Camera with HasGameRef<RPGGame> {
 
   Rect get cameraRect => Rect.fromCenter(
         center: Offset(position.x, position.y),
-        width: gameRef.size.width,
-        height: gameRef.size.height,
+        width: gameRef.size.width * _zoomFactor(),
+        height: gameRef.size.height * _zoomFactor(),
       );
 
-  Rect get cameraRectWithMargin => Rect.fromCenter(
-        center: Offset(position.x, position.y),
-        width: gameRef.size.width + 20,
-        height: gameRef.size.height + 20,
+  Rect get cameraRectWithSpacing => Rect.fromCenter(
+        center: Offset(cameraRect.center.dx, cameraRect.center.dy),
+        width: cameraRect.width + SPACING_MAP,
+        height: cameraRect.height + SPACING_MAP,
       );
 
   void moveTop(double displacement) {
@@ -212,13 +213,13 @@ class Camera with HasGameRef<RPGGame> {
   bool isComponentOnCamera(GameComponent c) {
     if (gameRef?.size == null || c.position == null) return false;
 
-    return cameraRectWithMargin.overlaps(c.position);
+    return cameraRectWithSpacing.overlaps(c.position);
   }
 
   bool isRectOnCamera(Rect c) {
     if (gameRef?.size == null || c == null) return false;
 
-    return cameraRectWithMargin.overlaps(c);
+    return cameraRectWithSpacing.overlaps(c);
   }
 
   Offset worldPositionToScreen(Offset position) {
@@ -265,5 +266,10 @@ class Camera with HasGameRef<RPGGame> {
     if (this.position.y < limitY) {
       this.position.y = limitY;
     }
+  }
+
+  double _zoomFactor() {
+    if (zoom > 1) return 1;
+    return 1 / zoom;
   }
 }

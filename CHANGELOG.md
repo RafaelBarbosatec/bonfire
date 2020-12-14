@@ -1,3 +1,7 @@
+# 0.8.2
+
+- Fix camera zoom-out.
+
 # 0.8.1
 
 - Fix issue [#79](https://github.com/RafaelBarbosatec/bonfire/issues/79).
