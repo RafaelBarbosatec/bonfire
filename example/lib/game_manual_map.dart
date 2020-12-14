@@ -40,6 +40,7 @@ class GameManualMap extends StatelessWidget implements GameListener {
               sprite: Sprite('joystick_atack_range.png'),
               spriteBackgroundDirection: Sprite('joystick_background.png'),
               size: 50,
+              enableDirection: true,
               margin: EdgeInsets.only(bottom: 50, right: 160),
             )
           ],

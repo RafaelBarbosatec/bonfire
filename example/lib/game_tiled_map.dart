@@ -59,7 +59,7 @@ class GameTiledMap extends StatelessWidget {
             ..registerObject('spike', (x, y, width, height) => Spikes(Position(x, y)))
             ..registerObject('chest', (x, y, width, height) => Chest(Position(x, y))),
           background: BackgroundColorGame(Colors.blueGrey[900]),
-          lightingColorGame: Colors.black.withOpacity(0.5),
+          lightingColorGame: Colors.black.withOpacity(0.3),
           cameraZoom: 1.0, // you can change the game zoom here or directly on camera
         );
       },
