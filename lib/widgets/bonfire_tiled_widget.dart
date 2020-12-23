@@ -29,7 +29,7 @@ class BonfireTiledWidget extends StatefulWidget {
   final Size cameraSizeMovementWindow;
   final bool cameraMoveOnlyMapArea;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
-  final Duration durationShowAnimation;
+  final Duration progressTransitionDuration;
   final GameColorFilter colorFilter;
 
   const BonfireTiledWidget({
@@ -51,7 +51,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.cameraMoveOnlyMapArea = false,
     this.cameraSizeMovementWindow = const Size(50, 50),
     this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
-    this.durationShowAnimation,
+    this.progressTransitionDuration,
     this.colorFilter,
     this.components,
   }) : super(key: key);
@@ -88,14 +88,9 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget> with TickerProv
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: widget.durationShowAnimation ?? Duration(milliseconds: 300),
+      duration: widget.progressTransitionDuration ?? Duration(milliseconds: 300),
       transitionBuilder: widget.transitionBuilder,
-      child: _loading
-          ? (widget.progress ??
-              Center(
-                child: CircularProgressIndicator(),
-              ))
-          : _game.widget,
+      child: _loading ? widget.progress ?? _defaultProgress() : _game.widget,
     );
   }
 
@@ -131,5 +126,14 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget> with TickerProv
     setState(() {
       _loading = false;
     });
+  }
+
+  Widget _defaultProgress() {
+    return Container(
+      color: Colors.black,
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 }
