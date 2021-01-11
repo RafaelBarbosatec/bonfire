@@ -13,6 +13,9 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class GameTiledMap extends StatelessWidget {
+  final int map;
+
+  const GameTiledMap({Key key, this.map = 1}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -50,7 +53,7 @@ class GameTiledMap extends StatelessWidget {
           ),
           interface: KnightInterface(),
           map: TiledWorldMap(
-            'tiled/mapa1.json',
+            'tiled/mapa$map.json',
             forceTileSize: Size(DungeonMap.tileSize, DungeonMap.tileSize),
           )
             ..registerObject('goblin', (x, y, width, height) => Goblin(Position(x, y)))
