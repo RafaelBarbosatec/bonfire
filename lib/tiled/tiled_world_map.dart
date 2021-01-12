@@ -18,8 +18,7 @@ import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
-typedef ObjectBuilder = GameComponent Function(
-    double x, double y, double width, double height);
+typedef ObjectBuilder = GameComponent Function(double x, double y, double width, double height);
 
 class TiledWorldMap {
   static const TYPE_TILE_ABOVE = 'above';
@@ -45,13 +44,10 @@ class TiledWorldMap {
   Map<String, ObjectBuilder> _objectsBuilder = Map();
   MapCache _mapCache = MapCache();
 
-  TiledWorldMap(this.path,
-      {this.forceTileSize, this.enableServerCache = false}) {
+  TiledWorldMap(this.path, {this.forceTileSize, this.enableServerCache = false}) {
     _basePath = path.replaceAll(path.split('/').last, '');
     fromServer = path.contains('http://') || path.contains('https://');
-    if (fromServer) {
-      _basePath = path.replaceAll(path.split('/').last, '');
-    } else {
+    if (!fromServer) {
       _reader = TiledJsonReader(_basePathFlame + path);
     }
   }
@@ -110,10 +106,8 @@ class TiledWorldMap {
                 GameDecoration.spriteMultiCollision(
                   data.sprite,
                   initPosition: Position(
-                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
-                        offsetX,
-                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
-                        offsetY,
+                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) + offsetX,
+                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) + offsetY,
                   ),
                   height: _tileHeight,
                   width: _tileWidth,
@@ -144,10 +138,8 @@ class TiledWorldMap {
                 GameDecoration.animationMultiCollision(
                   data.animation.animation,
                   initPosition: Position(
-                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
-                        offsetX,
-                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
-                        offsetY,
+                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) + offsetX,
+                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) + offsetY,
                   ),
                   height: _tileHeight,
                   width: _tileWidth,
@@ -201,8 +193,7 @@ class TiledWorldMap {
     );
 
     if (tileSetContain != null) {
-      final int widthCount =
-          tileSetContain.imageWidth ~/ tileSetContain.tileWidth;
+      final int widthCount = tileSetContain.imageWidth ~/ tileSetContain.tileWidth;
 
       int row = _getY((index - firsTgId), widthCount).toInt();
       int column = _getX((index - firsTgId), widthCount).toInt();
@@ -288,8 +279,7 @@ class TiledWorldMap {
     );
 
     if ((tileSetItemList?.isNotEmpty ?? false)) {
-      List<TileSetObject> tileSetObjectList =
-          tileSetItemList.first.objectGroup?.objects ?? [];
+      List<TileSetObject> tileSetObjectList = tileSetItemList.first.objectGroup?.objects ?? [];
 
       String type = tileSetItemList.first?.type ?? '';
 

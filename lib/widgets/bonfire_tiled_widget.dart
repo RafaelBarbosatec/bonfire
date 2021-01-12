@@ -29,7 +29,7 @@ class BonfireTiledWidget extends StatefulWidget {
   final Size cameraSizeMovementWindow;
   final bool cameraMoveOnlyMapArea;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
-  final Duration durationShowAnimation;
+  final Duration progressTransitionDuration;
   final GameColorFilter colorFilter;
 
   const BonfireTiledWidget({
@@ -51,7 +51,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.cameraMoveOnlyMapArea = false,
     this.cameraSizeMovementWindow = const Size(50, 50),
     this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
-    this.durationShowAnimation,
+    this.progressTransitionDuration,
     this.colorFilter,
     this.components,
   }) : super(key: key);
@@ -88,48 +88,56 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget> with TickerProv
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: widget.durationShowAnimation ?? Duration(milliseconds: 300),
+      duration: widget.progressTransitionDuration ?? Duration(milliseconds: 500),
       transitionBuilder: widget.transitionBuilder,
-      child: _loading
-          ? (widget.progress ??
-              Center(
-                child: CircularProgressIndicator(),
-              ))
-          : _game.widget,
+      child: _loading ? widget.progress ?? _defaultProgress() : _game?.widget ?? SizedBox.shrink(),
     );
   }
 
   void _loadGame() async {
-    TiledWorldData tiled;
-    if (widget.map != null) {
-      tiled = await widget.map.build();
-    }
+    try {
+      TiledWorldData tiled;
+      if (widget.map != null) {
+        tiled = await widget.map.build();
+      }
 
-    List<GameComponent> components = (tiled?.components ?? []);
-    if (widget.components != null) components.addAll(widget.components);
-    _game = RPGGame(
-      context: context,
-      joystickController: widget.joystick,
-      player: widget.player,
-      interface: widget.interface,
-      map: tiled?.map,
-      components: components,
-      background: widget.background,
-      constructionMode: widget.constructionMode,
-      showCollisionArea: widget.showCollisionArea,
-      showFPS: widget.showFPS,
-      gameController: widget.gameController,
-      constructionModeColor: widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
-      collisionAreaColor: widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
-      lightingColorGame: widget.lightingColorGame,
-      cameraZoom: widget.cameraZoom,
-      cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
-      cameraMoveOnlyMapArea: widget.cameraMoveOnlyMapArea,
-      colorFilter: widget.colorFilter,
+      List<GameComponent> components = (tiled?.components ?? []);
+      if (widget.components != null) components.addAll(widget.components);
+      _game = RPGGame(
+        context: context,
+        joystickController: widget.joystick,
+        player: widget.player,
+        interface: widget.interface,
+        map: tiled?.map,
+        components: components,
+        background: widget.background,
+        constructionMode: widget.constructionMode,
+        showCollisionArea: widget.showCollisionArea,
+        showFPS: widget.showFPS,
+        gameController: widget.gameController,
+        constructionModeColor: widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+        collisionAreaColor: widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
+        lightingColorGame: widget.lightingColorGame,
+        cameraZoom: widget.cameraZoom,
+        cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
+        cameraMoveOnlyMapArea: widget.cameraMoveOnlyMapArea,
+        colorFilter: widget.colorFilter,
+      );
+      await Future.delayed(Duration.zero);
+      setState(() {
+        _loading = false;
+      });
+    } catch (e) {
+      print('(BonfireTiledWidget) Error: $e');
+    }
+  }
+
+  Widget _defaultProgress() {
+    return Container(
+      color: Colors.black,
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
-    await Future.delayed(Duration(milliseconds: 300));
-    setState(() {
-      _loading = false;
-    });
   }
 }

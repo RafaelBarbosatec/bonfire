@@ -1,3 +1,7 @@
+# 0.8.3
+
+- improvements in `BonfireTiledWidget`.
+
 # 0.8.2
 
 - Fix camera zoom-out.
