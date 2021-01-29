@@ -35,14 +35,14 @@ packages:
       name: audioplayers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.1"
+    version: "0.17.3"
   bonfire:
     dependency: "direct main"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.8.2"
+    version: "0.8.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -126,7 +126,7 @@ packages:
       name: flame
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.28.0"
+    version: "0.29.0"
   flare_dart:
     dependency: transitive
     description:
@@ -283,7 +283,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.5"
+    version: "1.6.27"
   path_provider_linux:
     dependency: transitive
     description:
@@ -526,7 +526,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.4"
+    version: "2.2.2"
   vector_math:
     dependency: transitive
     description:
