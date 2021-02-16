@@ -66,47 +66,58 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
     super.update(dt);
   }
 
-  void moveTop(double speed) {
+  void moveTop(double speed, {VoidCallback onCollision}) {
     double innerSpeed = speed * dtUpdate;
 
     Rect displacement = position.translate(0, (-innerSpeed));
 
-    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera)) return;
-
+    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera)) {
+      onCollision?.call();
+      return;
+    }
     position = displacement;
   }
 
-  void moveRight(double speed) {
+  void moveRight(double speed, {VoidCallback onCollision}) {
     double innerSpeed = speed * dtUpdate;
 
     Rect displacement = position.translate(innerSpeed, 0);
 
-    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera)) return;
+    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera)) {
+      onCollision?.call();
+      return;
+    }
 
     position = displacement;
   }
 
-  void moveBottom(double speed) {
+  void moveBottom(double speed, {VoidCallback onCollision}) {
     double innerSpeed = speed * dtUpdate;
 
     Rect displacement = position.translate(0, innerSpeed);
 
-    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera)) return;
+    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera)) {
+      onCollision?.call();
+      return;
+    }
 
     position = displacement;
   }
 
-  void moveLeft(double speed) {
+  void moveLeft(double speed, {VoidCallback onCollision}) {
     double innerSpeed = speed * dtUpdate;
 
     Rect displacement = position.translate(-innerSpeed, 0);
 
-    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera)) return;
+    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera)) {
+      onCollision?.call();
+      return;
+    }
 
     position = displacement;
   }
 
-  void moveFromAngle(double speed, double angle) {
+  void moveFromAngle(double speed, double angle, {VoidCallback onCollision}) {
     double nextX = (speed * dtUpdate) * cos(angle);
     double nextY = (speed * dtUpdate) * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
@@ -117,7 +128,10 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
 
     Rect newPosition = position.shift(newDiffBase);
 
-    if (isCollision(displacement: newPosition, onlyVisible: isFocusCamera)) return;
+    if (isCollision(displacement: newPosition, onlyVisible: isFocusCamera)) {
+      onCollision?.call();
+      return;
+    }
 
     position = newPosition;
   }

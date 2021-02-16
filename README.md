@@ -527,6 +527,8 @@ Joystick is configurable by the following parameters:
 
 Check a [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/main.dart).
 
+[Experimental]: You can use the `TouchToPosition()` joystick to move the player by touching the map.
+
 ### Observations:
 
 Since all of these elements uses the ´HasGameRef´ mixin, it is possible to acess all components internally. This will be useful for any kind of interaction between elements or the creation of a new one programatically.

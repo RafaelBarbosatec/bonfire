@@ -94,7 +94,7 @@ class SimplePlayer extends Player {
     super.update(dt);
   }
 
-  void customMoveTop({bool addAnimation = true, bool isDiagonal = false}) {
+  void customMoveTop({bool addAnimation = true, bool isDiagonal = false, VoidCallback onCollision}) {
     if (addAnimation) {
       _addTopAnimation();
       statusMoveDirectional = JoystickMoveDirectional.MOVE_UP;
@@ -103,7 +103,7 @@ class SimplePlayer extends Player {
 
     double speed = (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
 
-    this.moveTop(speed);
+    this.moveTop(speed, onCollision: onCollision);
   }
 
   void _addTopAnimation() {
@@ -120,7 +120,7 @@ class SimplePlayer extends Player {
     }
   }
 
-  void customMoveRight({bool addAnimation = true, bool isDiagonal = false}) {
+  void customMoveRight({bool addAnimation = true, bool isDiagonal = false, VoidCallback onCollision}) {
     if (statusMoveDirectional != JoystickMoveDirectional.MOVE_RIGHT && animation?.runRight != null && addAnimation) {
       animation?.play(SimpleAnimationEnum.runRight);
       statusMoveDirectional = JoystickMoveDirectional.MOVE_RIGHT;
@@ -129,10 +129,10 @@ class SimplePlayer extends Player {
     }
     double speed = (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
 
-    this.moveRight(speed);
+    this.moveRight(speed, onCollision: onCollision);
   }
 
-  void customMoveBottom({bool addAnimation = true, bool isDiagonal = false}) {
+  void customMoveBottom({bool addAnimation = true, bool isDiagonal = false, VoidCallback onCollision}) {
     if (addAnimation) {
       _addBottomAnimation();
       statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN;
@@ -141,7 +141,7 @@ class SimplePlayer extends Player {
 
     double speed = (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
 
-    this.moveBottom(speed);
+    this.moveBottom(speed, onCollision: onCollision);
   }
 
   void _addBottomAnimation() {
@@ -158,7 +158,7 @@ class SimplePlayer extends Player {
     }
   }
 
-  void customMoveLeft({bool addAnimation = true, bool isDiagonal = false}) {
+  void customMoveLeft({bool addAnimation = true, bool isDiagonal = false, VoidCallback onCollision}) {
     if (statusMoveDirectional != JoystickMoveDirectional.MOVE_LEFT && animation.runLeft != null && addAnimation) {
       animation?.play(SimpleAnimationEnum.runLeft);
       statusMoveDirectional = JoystickMoveDirectional.MOVE_LEFT;
@@ -168,7 +168,7 @@ class SimplePlayer extends Player {
 
     double speed = (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
 
-    this.moveLeft(speed);
+    this.moveLeft(speed, onCollision: onCollision);
   }
 
   void customMoveUpLeft() {
@@ -301,22 +301,44 @@ class SimplePlayer extends Player {
 
   void moveToPosition() {
     bool move = false;
+
     if (_positionToMove.x > position.center.dx && _positionToMove.x - position.center.dx > 1) {
       move = true;
-      customMoveRight();
+      customMoveRight(
+        onCollision: () {
+          _positionToMove = null;
+        },
+      );
     }
+    if (_positionToMove == null) return;
     if (_positionToMove.x < position.center.dx && position.center.dx - _positionToMove.x > 1) {
       move = true;
-      customMoveLeft();
+      customMoveLeft(
+        onCollision: () {
+          _positionToMove = null;
+          return;
+        },
+      );
     }
-
+    if (_positionToMove == null) return;
     if (_positionToMove.y > position.center.dy && _positionToMove.y - position.center.dy > 1) {
       move = true;
-      customMoveBottom();
+      customMoveBottom(
+        onCollision: () {
+          _positionToMove = null;
+          return;
+        },
+      );
     }
+    if (_positionToMove == null) return;
     if (_positionToMove.y < position.center.dy && position.center.dy - _positionToMove.y > 1) {
       move = true;
-      customMoveTop();
+      customMoveTop(
+        onCollision: () {
+          _positionToMove = null;
+          return;
+        },
+      );
     }
     if (!move) {
       idle(forceAddAnimation: true);
