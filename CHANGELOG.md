@@ -1,3 +1,8 @@
+# 0.8.4
+
+- update Flame to `0.29.2`.
+- add joystick `TouchToPosition`.
+
 # 0.8.3
 
 - improvements in `BonfireTiledWidget`.
