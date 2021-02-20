@@ -1,3 +1,7 @@
+# 0.8.5
+
+- update Flame to `0.29.3`.
+
 # 0.8.4
 
 - update Flame to `0.29.2`.
