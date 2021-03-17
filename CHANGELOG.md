@@ -1,6 +1,6 @@
-# Next
+# 0.8.6
 
-- update dependencies.
+- update dependencies an README.
 
 # 0.8.5
 
