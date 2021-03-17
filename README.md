@@ -21,12 +21,11 @@ For more information and [examples](https://bonfire-engine.github.io/#/examples)
 
 ## Credits
 
- * The entire FlameEngine team, especially [Erick](https://github.com/erickzanardo).
- * [Renan](https://github.com/renancaraujo) That helped in the translation of the readme.
+ * The entire FlameEngine team, especially [Erick](https://github.com/erickzanardo and [Renan](https://github.com/renancaraujo).
  * And all those who were able to contribute as they could.
 
- ## Encourage my work
+## Encourage my work
 
- [![buymeacoffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/rafaelbarbosa)
+[![buymeacoffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/rafaelbarbosa)
 
  
