@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
 
   flame: ^0.29.3
+  ordered_set: ^2.0.1
   tiledjsonreader: ^0.0.8
   http: ^0.13.0
   shared_preferences: ^0.5.12+4
