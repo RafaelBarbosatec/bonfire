@@ -366,13 +366,14 @@ class TiledWorldMap {
             return Future.value(tiledMap);
           }
         }
-        final mapResponse = await http.get(path);
+        final mapResponse = await http.get(Uri.parse(path));
         tiledMap = TiledMap.fromJson(jsonDecode(mapResponse.body));
         await Future.forEach(tiledMap.tileSets, (tileSet) async {
           if (!tileSet.source.contains('.json')) {
             throw Exception('Invalid TileSet source: only supports json files');
           }
-          final tileSetResponse = await http.get('$_basePath${tileSet.source}');
+          final tileSetResponse =
+              await http.get(Uri.parse('$_basePath${tileSet.source}'));
           if (tileSetResponse != null) {
             Map<String, dynamic> _result = jsonDecode(tileSetResponse.body);
             tileSet.tileSet = TileSet.fromJson(_result);
@@ -399,7 +400,7 @@ class TiledWorldMap {
           return Flame.images.fromBase64(image, base64);
         }
       }
-      final response = await http.get(image);
+      final response = await http.get(Uri.parse(image));
       String img64 = base64Encode(response.bodyBytes);
       _mapCache.saveBase64(image, img64);
       return Flame.images.fromBase64(image, img64);

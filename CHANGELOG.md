@@ -1,3 +1,7 @@
+# Next
+
+- update dependencies.
+
 # 0.8.5
 
 - update Flame to `0.29.3`.
