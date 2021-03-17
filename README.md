@@ -22,7 +22,7 @@ For more information and [examples](https://bonfire-engine.github.io/#/examples)
 ## Credits
 
  * The entire FlameEngine team, especially [Erick](https://github.com/erickzanardo) and [Renan](https://github.com/renancaraujo).
- * And all those who were able to contribute as they could.
+ * And thanks to everyone who contributes and has already contributed.
 
 ## Encourage my work
 
