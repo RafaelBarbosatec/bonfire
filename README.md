@@ -42,4 +42,9 @@ For more information see the [Documentation](https://bonfire-engine.github.io/).
  * The entire FlameEngine team, especially [Erick](https://github.com/erickzanardo).
  * [Renan](https://github.com/renancaraujo) That helped in the translation of the readme.
  * And all those who were able to contribute as they could.
+
+ ## Encourage my work
+
+ [![buymeacoffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/rafaelbarbosa)
+
  
