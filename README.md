@@ -13,29 +13,11 @@ Build RPG games and similar with the power of [FlameEngine](https://flame-engine
 
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/video.gif)
 
-[Download Demo](https://github.com/RafaelBarbosatec/bonfire/raw/master/demo/demo.apk)
-
-[Demo Web](https://rafaelbarbosatec.github.io/bonfire/)
-
-Find the complete code of this example [here](https://github.com/RafaelBarbosatec/bonfire/tree/master/example).
-
 Bonfire is ideal for building games from the following perspectives:
 
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/separate-player/media/perspectiva.jpg)
 
-For more information see the [Documentation](https://bonfire-engine.github.io/).
-
-## Next steps
-- [ ] Component docs
-- [x] [Tiled](https://www.mapeditor.org/) support
-
-
-## Example games
-[![](https://github.com/RafaelBarbosatec/darkness_dungeon/blob/master/icone/icone_small.png)](https://github.com/RafaelBarbosatec/darkness_dungeon)
-
-[Mountain Fight](https://github.com/RafaelBarbosatec/mountain_fight) (Multiplayer)
-
-[Mini Fantasy](https://github.com/RafaelBarbosatec/mini_fantasy)
+For more information and examples see the [Documentation](https://bonfire-engine.github.io/).
 
 ## Credits
 
