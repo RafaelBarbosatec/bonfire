@@ -149,10 +149,19 @@ class Camera with HasGameRef<RPGGame> {
     this.position = position;
   }
 
+  void moveToPlayer() {
+    this.target = gameRef.player;
+  }
+
+  void moveToTarget(GameComponent target) {
+    this.target = target;
+  }
+
   void moveToPlayerAnimated({
     Duration duration,
     VoidCallback finish,
     double zoom = 1,
+    Curve curve = Curves.decelerate,
   }) {
     if (gameRef.player == null) return;
     moveToTargetAnimated(
@@ -160,6 +169,7 @@ class Camera with HasGameRef<RPGGame> {
       zoom: zoom,
       finish: finish,
       duration: duration,
+      curve: curve,
     );
   }
 
@@ -177,10 +187,14 @@ class Camera with HasGameRef<RPGGame> {
     final verticalDistance = screenCenter.dy - positionTarget.dy;
 
     if (horizontalDistance.abs() > horizontal) {
-      this.position.x += horizontalDistance > 0 ? horizontal - horizontalDistance : -horizontalDistance - horizontal;
+      this.position.x += horizontalDistance > 0
+          ? horizontal - horizontalDistance
+          : -horizontalDistance - horizontal;
     }
     if (verticalDistance.abs() > vertical) {
-      this.position.y += verticalDistance > 0 ? vertical - verticalDistance : -verticalDistance - vertical;
+      this.position.y += verticalDistance > 0
+          ? vertical - verticalDistance
+          : -verticalDistance - vertical;
     }
 
     if (moveOnlyMapArea) {
