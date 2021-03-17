@@ -26,6 +26,6 @@ For more information and [examples](https://bonfire-engine.github.io/#/examples)
 
 ## Encourage my work
 
-[![buymeacoffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/rafaelbarbosa)
+[![buymeacoffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/rafaelbarbosa)
 
  
