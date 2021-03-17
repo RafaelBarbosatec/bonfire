@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class LightingComponent extends GameComponent {
   Color color;
   Paint _paintFocus;
-  Iterable<Lighting> _visibleLight = List();
+  Iterable<Lighting> _visibleLight = [];
   double _dtUpdate = 0.0;
   ColorTween _tween;
 

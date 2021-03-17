@@ -54,8 +54,9 @@ abstract class JoystickListener {
   void moveTo(Position position);
 }
 
-abstract class JoystickController extends Component with HasGameRef<BaseGamePointerDetector>, PointerDetector {
-  List<JoystickListener> _observers = List();
+abstract class JoystickController extends Component
+    with HasGameRef<BaseGamePointerDetector>, PointerDetector {
+  List<JoystickListener> _observers = [];
   bool keyboardEnable = false;
 
   void onKeyboard(RawKeyEvent event) {}

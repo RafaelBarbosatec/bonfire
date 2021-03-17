@@ -10,9 +10,9 @@ class MapWorld extends MapGame {
   double lastCameraY = -1;
   double lastZoom = -1;
   Size lastSizeScreen;
-  Iterable<Tile> _tilesToRender = List();
-  Iterable<Tile> _tilesCollisionsRendered = List();
-  Iterable<Tile> _tilesCollisions = List();
+  Iterable<Tile> _tilesToRender = [];
+  Iterable<Tile> _tilesCollisionsRendered = [];
+  Iterable<Tile> _tilesCollisions = [];
 
   MapWorld(Iterable<Tile> tiles) : super(tiles) {
     _tilesCollisions = tiles.where((element) => element.containCollision());
@@ -34,8 +34,8 @@ class MapWorld extends MapGame {
       lastCameraY = gameRef.gameCamera.position.y;
       lastZoom = gameRef.gameCamera.zoom;
 
-      List<Tile> tilesRender = List();
-      List<Tile> tilesCollision = List();
+      List<Tile> tilesRender = [];
+      List<Tile> tilesCollision = [];
       for (final tile in tiles) {
         tile.gameRef ??= gameRef;
         if (tile.isVisibleInCamera()) {

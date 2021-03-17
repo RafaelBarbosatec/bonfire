@@ -29,8 +29,8 @@ class TiledWorldMap {
   final Size forceTileSize;
   final bool enableServerCache;
   TiledJsonReader _reader;
-  List<Tile> _tiles = List();
-  List<GameComponent> _components = List();
+  List<Tile> _tiles = [];
+  List<GameComponent> _components = [];
   String _basePath;
   String _basePathFlame = 'assets/images/';
   TiledMap _tiledMap;
@@ -285,7 +285,7 @@ class TiledWorldMap {
 
       String type = tileSetItemList.first?.type ?? '';
 
-      List<Collision> collisions = List();
+      List<Collision> collisions = [];
 
       if (tileSetObjectList.isNotEmpty) {
         tileSetObjectList.forEach((object) {
@@ -324,7 +324,7 @@ class TiledWorldMap {
         if (_animationCache.containsKey(animationKey)) {
           return Future.value(_animationCache[animationKey]);
         }
-        List<Sprite> spriteList = List();
+        List<Sprite> spriteList = [];
         double stepTime = animationFrames[0].duration / 1000;
         await Future.forEach(animationFrames, (frame) async {
           int row = _getY(frame.tileid, widthCount).toInt();

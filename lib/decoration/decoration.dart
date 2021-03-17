@@ -157,10 +157,5 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     } else {
       return PriorityLayer.DECORATION + additionalPriority;
     }
-    if (additionalPriority == 0) {
-      return PriorityLayer.DECORATION;
-    } else {
-      return PriorityLayer.OBJECTS + additionalPriority;
-    }
   }
 }
