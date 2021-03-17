@@ -14,12 +14,16 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 extension RotationEnemyExtensions on RotationEnemy {
+  static const ATTACK_MELEE = "attackMelee";
+  static const ATTACK_RANGE = "attackRange";
   void seeAndMoveToPlayer({
     Function(Player) closePlayer,
     double radiusVision = 32,
     double margin = 10,
   }) {
-    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) || isDead || this.position == null) return;
+    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
+        isDead ||
+        this.position == null) return;
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
@@ -54,7 +58,9 @@ extension RotationEnemyExtensions on RotationEnemy {
     double radiusVision = 32,
     double minDistanceCellsFromPlayer,
   }) {
-    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) || isDead || this.position == null) return;
+    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
+        isDead ||
+        this.position == null) return;
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
@@ -64,7 +70,8 @@ extension RotationEnemyExtensions on RotationEnemy {
         double _radAngle = getAngleFomPlayer();
 
         Position myPosition = Position.fromOffset(this.position.center);
-        Position playerPosition = Position.fromOffset(player.rectCollision.center);
+        Position playerPosition =
+            Position.fromOffset(player.rectCollision.center);
         double dist = myPosition.distance(playerPosition);
 
         if (dist >= distance) {
@@ -73,7 +80,8 @@ extension RotationEnemyExtensions on RotationEnemy {
           return;
         }
 
-        this.moveFromAngleDodgeObstacles(speed, getInverseAngleFomPlayer(), notMove: () {
+        this.moveFromAngleDodgeObstacles(speed, getInverseAngleFomPlayer(),
+            notMove: () {
           this.idle();
         });
       },
@@ -94,9 +102,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     VoidCallback execute,
     int interval = 1000,
   }) {
-    if (!this.checkPassedInterval('attackMelee', interval, dtUpdate)) return;
-
-    Player player = gameRef.player;
+    if (!this.checkPassedInterval(ATTACK_MELEE, interval, dtUpdate)) return;
 
     if (isDead || this.position == null) return;
 
@@ -106,8 +112,9 @@ extension RotationEnemyExtensions on RotationEnemy {
     double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase =
-        Offset(this.position.center.dx + nextPoint.dx, this.position.center.dy + nextPoint.dy) - this.position.center;
+    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
+            this.position.center.dy + nextPoint.dy) -
+        this.position.center;
 
     Rect positionAttack = this.position.shift(diffBase);
 
@@ -119,13 +126,17 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     gameRef
         .attackables()
-        .where((a) => a.receivesAttackFromEnemy() && a.rectAttackable().overlaps(positionAttack))
+        .where((a) =>
+            a.receivesAttackFromEnemy() &&
+            a.rectAttackable().overlaps(positionAttack))
         .forEach((attackable) {
       attackable.receiveDamage(damage, id);
-      Rect rectAfterPush = attackable.position.translate(diffBase.dx, diffBase.dy);
+      Rect rectAfterPush =
+          attackable.position.translate(diffBase.dx, diffBase.dy);
       if (withPush &&
           (attackable is ObjectCollision &&
-              !(attackable as ObjectCollision).isCollision(displacement: rectAfterPush))) {
+              !(attackable as ObjectCollision)
+                  .isCollision(displacement: rectAfterPush))) {
         attackable.position = rectAfterPush;
       }
     });
@@ -150,7 +161,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     VoidCallback execute,
     LightingConfig lightingConfig,
   }) {
-    if (!this.checkPassedInterval('attackRange', interval, dtUpdate)) return;
+    if (!this.checkPassedInterval(ATTACK_RANGE, interval, dtUpdate)) return;
 
     if (isDead) return;
 
@@ -160,27 +171,30 @@ extension RotationEnemyExtensions on RotationEnemy {
     double nextY = this.height * sin(_radAngle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase =
-        Offset(this.position.center.dx + nextPoint.dx, this.position.center.dy + nextPoint.dy) - this.position.center;
+    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
+            this.position.center.dy + nextPoint.dy) -
+        this.position.center;
 
     Rect position = this.position.shift(diffBase);
-    gameRef.addLater(FlyingAttackAngleObject(
-      id: id,
-      initPosition: Position(position.left, position.top),
-      radAngle: _radAngle,
-      width: width,
-      height: height,
-      damage: damage,
-      speed: speed,
-      damageInPlayer: true,
-      collision: collision,
-      withCollision: withCollision,
-      destroyedObject: destroy,
-      flyAnimation: animationTop,
-      destroyAnimation: animationDestroy,
-      lightingConfig: lightingConfig,
-      collisionOnlyVisibleObjects: collisionOnlyVisibleObjects,
-    ));
+    gameRef.addLater(
+      FlyingAttackAngleObject(
+        id: id,
+        initPosition: Position(position.left, position.top),
+        radAngle: _radAngle,
+        width: width,
+        height: height,
+        damage: damage,
+        speed: speed,
+        damageInPlayer: true,
+        collision: collision,
+        withCollision: withCollision,
+        destroyedObject: destroy,
+        flyAnimation: animationTop,
+        destroyAnimation: animationDestroy,
+        lightingConfig: lightingConfig,
+        collisionOnlyVisibleObjects: collisionOnlyVisibleObjects,
+      ),
+    );
 
     if (execute != null) execute();
   }

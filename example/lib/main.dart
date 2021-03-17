@@ -32,8 +32,14 @@ class Menu extends StatelessWidget {
             ),
             SizedBox(
               width: 200,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ),
                 child: Text('Manual Map'),
                 onPressed: () {
                   Navigator.push(
@@ -48,8 +54,14 @@ class Menu extends StatelessWidget {
             ),
             SizedBox(
               width: 200,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ),
                 child: Text('Tiled Map'),
                 onPressed: () {
                   Navigator.push(

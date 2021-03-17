@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class GameInterface extends GameComponent with TapGesture {
-  List<InterfaceComponent> _components = List();
+  List<InterfaceComponent> _components = [];
   final textConfigGreen = TextConfig(color: Colors.green, fontSize: 14);
   final textConfigYellow = TextConfig(color: Colors.yellow, fontSize: 14);
   final textConfigRed = TextConfig(color: Colors.red, fontSize: 14);

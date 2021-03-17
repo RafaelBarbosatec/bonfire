@@ -18,7 +18,8 @@ import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
-typedef ObjectBuilder = GameComponent Function(double x, double y, double width, double height);
+typedef ObjectBuilder = GameComponent Function(
+    double x, double y, double width, double height);
 
 class TiledWorldMap {
   static const TYPE_TILE_ABOVE = 'above';
@@ -28,8 +29,8 @@ class TiledWorldMap {
   final Size forceTileSize;
   final bool enableServerCache;
   TiledJsonReader _reader;
-  List<Tile> _tiles = List();
-  List<GameComponent> _components = List();
+  List<Tile> _tiles = [];
+  List<GameComponent> _components = [];
   String _basePath;
   String _basePathFlame = 'assets/images/';
   TiledMap _tiledMap;
@@ -37,14 +38,17 @@ class TiledWorldMap {
   double _tileHeight;
   double _tileWidthOrigin;
   double _tileHeightOrigin;
-  int _countObjects = 0;
   bool fromServer = false;
   Map<String, Sprite> _spriteCache = Map();
   Map<String, ControlledUpdateAnimation> _animationCache = Map();
   Map<String, ObjectBuilder> _objectsBuilder = Map();
   MapCache _mapCache = MapCache();
 
-  TiledWorldMap(this.path, {this.forceTileSize, this.enableServerCache = false}) {
+  TiledWorldMap(
+    this.path, {
+    this.forceTileSize,
+    this.enableServerCache = false,
+  }) {
     _basePath = path.replaceAll(path.split('/').last, '');
     fromServer = path.contains('http://') || path.contains('https://');
     if (!fromServer) {
@@ -86,7 +90,6 @@ class TiledWorldMap {
       }
       if (layer is ObjectGroup) {
         _addObjects(layer);
-        _countObjects++;
       }
     });
   }
@@ -106,8 +109,10 @@ class TiledWorldMap {
                 GameDecoration.spriteMultiCollision(
                   data.sprite,
                   initPosition: Position(
-                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) + offsetX,
-                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) + offsetY,
+                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
+                        offsetX,
+                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
+                        offsetY,
                   ),
                   height: _tileHeight,
                   width: _tileWidth,
@@ -138,8 +143,10 @@ class TiledWorldMap {
                 GameDecoration.animationMultiCollision(
                   data.animation.animation,
                   initPosition: Position(
-                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) + offsetX,
-                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) + offsetY,
+                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
+                        offsetX,
+                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
+                        offsetY,
                   ),
                   height: _tileHeight,
                   width: _tileWidth,
@@ -193,7 +200,8 @@ class TiledWorldMap {
     );
 
     if (tileSetContain != null) {
-      final int widthCount = tileSetContain.imageWidth ~/ tileSetContain.tileWidth;
+      final int widthCount =
+          tileSetContain.imageWidth ~/ tileSetContain.tileWidth;
 
       int row = _getY((index - firsTgId), widthCount).toInt();
       int column = _getX((index - firsTgId), widthCount).toInt();
@@ -243,11 +251,7 @@ class TiledWorldMap {
           double height = (element.height * _tileHeight) / _tileHeightOrigin;
           var object = _objectsBuilder[element.name](x, y, width, height);
 
-          if (object is GameDecoration) {
-            _components.add(object..additionalPriority += _countObjects);
-          } else {
-            _components.add(object);
-          }
+          _components.add(object);
         }
       },
     );
@@ -279,11 +283,12 @@ class TiledWorldMap {
     );
 
     if ((tileSetItemList?.isNotEmpty ?? false)) {
-      List<TileSetObject> tileSetObjectList = tileSetItemList.first.objectGroup?.objects ?? [];
+      List<TileSetObject> tileSetObjectList =
+          tileSetItemList.first.objectGroup?.objects ?? [];
 
       String type = tileSetItemList.first?.type ?? '';
 
-      List<Collision> collisions = List();
+      List<Collision> collisions = [];
 
       if (tileSetObjectList.isNotEmpty) {
         tileSetObjectList.forEach((object) {
@@ -322,7 +327,7 @@ class TiledWorldMap {
         if (_animationCache.containsKey(animationKey)) {
           return Future.value(_animationCache[animationKey]);
         }
-        List<Sprite> spriteList = List();
+        List<Sprite> spriteList = [];
         double stepTime = animationFrames[0].duration / 1000;
         await Future.forEach(animationFrames, (frame) async {
           int row = _getY(frame.tileid, widthCount).toInt();
@@ -364,13 +369,14 @@ class TiledWorldMap {
             return Future.value(tiledMap);
           }
         }
-        final mapResponse = await http.get(path);
+        final mapResponse = await http.get(Uri.parse(path));
         tiledMap = TiledMap.fromJson(jsonDecode(mapResponse.body));
         await Future.forEach(tiledMap.tileSets, (tileSet) async {
           if (!tileSet.source.contains('.json')) {
             throw Exception('Invalid TileSet source: only supports json files');
           }
-          final tileSetResponse = await http.get('$_basePath${tileSet.source}');
+          final tileSetResponse =
+              await http.get(Uri.parse('$_basePath${tileSet.source}'));
           if (tileSetResponse != null) {
             Map<String, dynamic> _result = jsonDecode(tileSetResponse.body);
             tileSet.tileSet = TileSet.fromJson(_result);
@@ -397,7 +403,7 @@ class TiledWorldMap {
           return Flame.images.fromBase64(image, base64);
         }
       }
-      final response = await http.get(image);
+      final response = await http.get(Uri.parse(image));
       String img64 = base64Encode(response.bodyBytes);
       _mapCache.saveBase64(image, img64);
       return Flame.images.fromBase64(image, img64);

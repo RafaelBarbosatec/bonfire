@@ -38,15 +38,15 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   final Color lightingColorGame;
   final Color collisionAreaColor;
 
-  Iterable<Enemy> _enemies = List();
-  Iterable<Enemy> _visibleEnemies = List();
-  Iterable<Enemy> _livingEnemies = List();
-  Iterable<Attackable> _attackables = List();
-  Iterable<GameDecoration> _decorations = List();
-  Iterable<GameDecoration> _visibleDecorations = List();
-  Iterable<Lighting> _visibleLights = List();
-  Iterable<GameComponent> _visibleComponents = List();
-  Iterable<Sensor> _visibleSensors = List();
+  Iterable<Enemy> _enemies = [];
+  Iterable<Enemy> _visibleEnemies = [];
+  Iterable<Enemy> _livingEnemies = [];
+  Iterable<Attackable> _attackables = [];
+  Iterable<GameDecoration> _decorations = [];
+  Iterable<GameDecoration> _visibleDecorations = [];
+  Iterable<Lighting> _visibleLights = [];
+  Iterable<GameComponent> _visibleComponents = [];
+  Iterable<Sensor> _visibleSensors = [];
   IntervalTick _interval;
   ColorFilterComponent _colorFilterComponent =
       ColorFilterComponent(GameColorFilter());

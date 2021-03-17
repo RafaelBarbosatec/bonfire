@@ -1,3 +1,7 @@
+# 0.8.6
+
+- update dependencies an README.
+
 # 0.8.5
 
 - update Flame to `0.29.3`.

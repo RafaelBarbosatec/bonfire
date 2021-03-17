@@ -10,24 +10,24 @@ import 'package:flame/position.dart';
 
 class DungeonMap {
   static double tileSize = 45;
-  static final Sprite wall_bottom = Sprite('tile/wall_bottom.png');
+  static final Sprite wallBottom = Sprite('tile/wall_bottom.png');
   static final Sprite wall = Sprite('tile/wall.png');
-  static final Sprite wall_top = Sprite('tile/wall_top.png');
-  static final Sprite wall_left = Sprite('tile/wall_left.png');
-  static final Sprite wall_bottom_left = Sprite('tile/wall_bottom_left.png');
-  static final Sprite wall_right = Sprite('tile/wall_right.png');
+  static final Sprite wallTop = Sprite('tile/wall_top.png');
+  static final Sprite wallLeft = Sprite('tile/wall_left.png');
+  static final Sprite wallBottomLeft = Sprite('tile/wall_bottom_left.png');
+  static final Sprite wallRight = Sprite('tile/wall_right.png');
   static final Sprite floor_1 = Sprite('tile/floor_1.png');
   static final Sprite floor_2 = Sprite('tile/floor_2.png');
   static final Sprite floor_3 = Sprite('tile/floor_3.png');
   static final Sprite floor_4 = Sprite('tile/floor_4.png');
 
   static MapWorld map() {
-    List<Tile> tileList = List();
+    List<Tile> tileList = [];
     List.generate(35, (indexRow) {
       List.generate(70, (indexColumm) {
         if (indexRow == 3 && indexColumm > 2 && indexColumm < 30) {
           tileList.add(Tile.fromSprite(
-            wall_bottom,
+            wallBottom,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
             collision: Collision.fromSize(tileSize),
             width: tileSize,
@@ -48,7 +48,7 @@ class DungeonMap {
 
         if (indexRow == 9 && indexColumm > 2 && indexColumm < 30) {
           tileList.add(Tile.fromSprite(
-            wall_top,
+            wallTop,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
             collision: Collision.fromSize(tileSize),
             width: tileSize,
@@ -57,7 +57,10 @@ class DungeonMap {
           return;
         }
 
-        if (indexRow > 4 && indexRow < 9 && indexColumm > 2 && indexColumm < 30) {
+        if (indexRow > 4 &&
+            indexRow < 9 &&
+            indexColumm > 2 &&
+            indexColumm < 30) {
           tileList.add(Tile.fromSprite(
             randomFloor(),
             Position(indexColumm.toDouble(), indexRow.toDouble()),
@@ -69,7 +72,7 @@ class DungeonMap {
 
         if (indexRow > 3 && indexRow < 9 && indexColumm == 2) {
           tileList.add(Tile.fromSprite(
-            wall_left,
+            wallLeft,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
             collision: Collision.fromSize(tileSize),
             width: tileSize,
@@ -78,7 +81,7 @@ class DungeonMap {
         }
         if (indexRow == 9 && indexColumm == 2) {
           tileList.add(Tile.fromSprite(
-            wall_bottom_left,
+            wallBottomLeft,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
             collision: Collision.fromSize(tileSize),
             width: tileSize,
@@ -88,7 +91,7 @@ class DungeonMap {
 
         if (indexRow > 3 && indexRow < 9 && indexColumm == 30) {
           tileList.add(Tile.fromSprite(
-            wall_right,
+            wallRight,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
             collision: Collision.fromSize(tileSize),
             width: tileSize,

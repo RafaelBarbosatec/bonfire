@@ -42,7 +42,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     FlameAnimation.Animation animation,
     Collision collision,
   }) {
-    if (frontFromPlayer) additionalPriority = 1;
     this.animation = animation;
     this.position = generateRectWithBleedingPixel(
       initPosition,
@@ -60,7 +59,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.frontFromPlayer = false,
     Collision collision,
   }) {
-    if (frontFromPlayer) additionalPriority = 1;
     this.position = generateRectWithBleedingPixel(
       initPosition,
       width,
@@ -77,7 +75,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.frontFromPlayer = false,
     Collision collision,
   }) {
-    if (frontFromPlayer) additionalPriority = 1;
     this.animation = animation;
     this.position = generateRectWithBleedingPixel(
       initPosition,
@@ -95,7 +92,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.frontFromPlayer = false,
     List<Collision> collisions,
   }) {
-    if (frontFromPlayer) additionalPriority = 1;
     this.position = generateRectWithBleedingPixel(
       initPosition,
       width,
@@ -112,7 +108,6 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
     this.frontFromPlayer = false,
     List<Collision> collisions,
   }) {
-    if (frontFromPlayer) additionalPriority = 1;
     this.animation = animation;
     this.position = generateRectWithBleedingPixel(
       initPosition,
@@ -157,10 +152,10 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
 
   @override
   int priority() {
-    if (additionalPriority == 0) {
-      return PriorityLayer.DECORATION;
+    if (frontFromPlayer) {
+      return PriorityLayer.OBJECTS;
     } else {
-      return PriorityLayer.OBJECTS + additionalPriority;
+      return PriorityLayer.DECORATION + additionalPriority;
     }
   }
 }

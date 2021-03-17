@@ -14,7 +14,7 @@ extension ImageExtension on Image {
     double stepTime = 0.1,
     bool loop = true,
   }) {
-    List<Sprite> spriteList = List();
+    List<Sprite> spriteList = [];
     for (int i = 0; i < count; i++) {
       spriteList.add(Sprite.fromImage(
         this,
