@@ -44,8 +44,11 @@ class TiledWorldMap {
   Map<String, ObjectBuilder> _objectsBuilder = Map();
   MapCache _mapCache = MapCache();
 
-  TiledWorldMap(this.path,
-      {this.forceTileSize, this.enableServerCache = false}) {
+  TiledWorldMap(
+    this.path, {
+    this.forceTileSize,
+    this.enableServerCache = false,
+  }) {
     _basePath = path.replaceAll(path.split('/').last, '');
     fromServer = path.contains('http://') || path.contains('https://');
     if (!fromServer) {
