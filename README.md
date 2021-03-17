@@ -623,6 +623,8 @@ By setting the `lightingColorGame` property on BofireWidget you automatically en
 
 Support for maps built with Tiled using the extension .json.
 
+Suported Tiled version: [<b>1.3.5</b>](https://github.com/mapeditor/tiled/releases/tag/v1.3.5)
+
 - [x] Multi TileLayer
 - [x] Multi ObjectLayer
 - [x] TileSet
