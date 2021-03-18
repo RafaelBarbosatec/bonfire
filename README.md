@@ -4,7 +4,8 @@
 [![pub package](https://img.shields.io/pub/v/bonfire.svg)](https://pub.dev/packages/bonfire)
 
 
-![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/bonfire.gif)
+[![bonfire](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/bonfire.gif)](https://bonfire-engine.github.io/)
+
 
 # Bonfire
 
