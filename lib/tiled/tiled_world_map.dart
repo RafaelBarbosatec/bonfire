@@ -2,7 +2,11 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/map/tile.dart';
+import 'package:bonfire/decoration/decoration_animated_with_collision.dart';
+import 'package:bonfire/decoration/decoration_with_collision.dart';
+import 'package:bonfire/map/tile/tile.dart';
+import 'package:bonfire/map/tile/tile_animated_with_collision.dart';
+import 'package:bonfire/map/tile/tile_with_collision.dart';
 import 'package:bonfire/tiled/map_cahe.dart';
 import 'package:bonfire/tiled/tiled_world_data.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
@@ -106,9 +110,9 @@ class TiledWorldMap {
           if (data.animation == null) {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
               _components.add(
-                GameDecoration.spriteMultiCollision(
+                DecorationWithCollision(
                   data.sprite,
-                  initPosition: Position(
+                  Position(
                     (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
                         offsetX,
                     (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
@@ -122,7 +126,7 @@ class TiledWorldMap {
               );
             } else {
               _tiles.add(
-                Tile.fromSpriteMultiCollision(
+                TileWithCollision(
                   data.sprite,
                   Position(
                     _getX(count, tileLayer.width.toInt()),
@@ -140,9 +144,9 @@ class TiledWorldMap {
           } else {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
               _components.add(
-                GameDecoration.animationMultiCollision(
+                DecorationAnimatedWithCollision(
                   data.animation.animation,
-                  initPosition: Position(
+                  Position(
                     (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
                         offsetX,
                     (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
@@ -156,7 +160,7 @@ class TiledWorldMap {
               );
             } else {
               _tiles.add(
-                Tile.fromAnimationMultiCollision(
+                TileAnimatedWithCollision(
                   data.animation,
                   Position(
                     _getX(count, tileLayer.width.toInt()),
@@ -288,7 +292,7 @@ class TiledWorldMap {
 
       String type = tileSetItemList.first?.type ?? '';
 
-      List<Collision> collisions = [];
+      List<CollisionArea> collisions = [];
 
       if (tileSetObjectList.isNotEmpty) {
         tileSetObjectList.forEach((object) {
@@ -298,7 +302,7 @@ class TiledWorldMap {
           double x = (object.x * _tileWidth) / _tileWidthOrigin;
           double y = (object.y * _tileHeight) / _tileHeightOrigin;
 
-          collisions.add(Collision(
+          collisions.add(CollisionArea(
             width: width,
             height: height,
             align: Offset(x, y),
@@ -416,7 +420,7 @@ class TiledWorldMap {
 class ItemTileSet {
   final ControlledUpdateAnimation animation;
   final Sprite sprite;
-  final List<Collision> collisions;
+  final List<CollisionArea> collisions;
   final String type;
 
   ItemTileSet({
@@ -428,7 +432,7 @@ class ItemTileSet {
 }
 
 class DataObjectCollision {
-  final List<Collision> collisions;
+  final List<CollisionArea> collisions;
   final String type;
 
   DataObjectCollision({this.collisions, this.type = ''});

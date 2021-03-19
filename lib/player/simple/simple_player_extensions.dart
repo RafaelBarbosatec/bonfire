@@ -48,7 +48,7 @@ extension SimplePlayerExtensions on SimplePlayer {
     Direction direction,
     bool withCollision = true,
     VoidCallback destroy,
-    Collision collision,
+    CollisionArea collision,
     LightingConfig lightingConfig,
   }) {
     Direction attackDirection = direction ?? this.lastDirection;

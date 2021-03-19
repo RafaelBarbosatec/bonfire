@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/animated_object.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
@@ -16,7 +15,7 @@ export 'package:bonfire/decoration/extensions.dart';
 /// player.
 ///
 /// You can use ImageSprite or Animation[FlameAnimation.Animation]
-class GameDecoration extends AnimatedObject with ObjectCollision {
+class GameDecoration extends AnimatedObject {
   /// Height of the Decoration.
   final double height;
 
@@ -26,95 +25,53 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   /// Use to define if this decoration should be drawing on the player.
   final bool frontFromPlayer;
 
-  /// World position that this decoration must position yourself.
-  final Position initPosition;
-
   Sprite sprite;
 
   int additionalPriority = 0;
 
   GameDecoration({
     this.sprite,
-    @required this.initPosition,
+    @required Position position,
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
     FlameAnimation.Animation animation,
-    Collision collision,
   }) {
     this.animation = animation;
     this.position = generateRectWithBleedingPixel(
-      initPosition,
+      position,
       width,
       height,
     );
-    if (collision != null) this.collisions = [collision];
   }
 
   GameDecoration.sprite(
     this.sprite, {
-    @required this.initPosition,
+    @required Position position,
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
-    Collision collision,
   }) {
     this.position = generateRectWithBleedingPixel(
-      initPosition,
+      position,
       width,
       height,
     );
-    if (collision != null) this.collisions = [collision];
   }
 
   GameDecoration.animation(
     FlameAnimation.Animation animation, {
-    @required this.initPosition,
+    @required Position position,
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
-    Collision collision,
   }) {
     this.animation = animation;
     this.position = generateRectWithBleedingPixel(
-      initPosition,
+      position,
       width,
       height,
     );
-    if (collision != null) this.collisions = [collision];
-  }
-
-  GameDecoration.spriteMultiCollision(
-    this.sprite, {
-    @required this.initPosition,
-    @required this.height,
-    @required this.width,
-    this.frontFromPlayer = false,
-    List<Collision> collisions,
-  }) {
-    this.position = generateRectWithBleedingPixel(
-      initPosition,
-      width,
-      height,
-    );
-    this.collisions = collisions;
-  }
-
-  GameDecoration.animationMultiCollision(
-    FlameAnimation.Animation animation, {
-    @required this.initPosition,
-    @required this.height,
-    @required this.width,
-    this.frontFromPlayer = false,
-    List<Collision> collisions,
-  }) {
-    this.animation = animation;
-    this.position = generateRectWithBleedingPixel(
-      initPosition,
-      width,
-      height,
-    );
-    this.collisions = collisions;
   }
 
   @override
@@ -125,12 +82,7 @@ class GameDecoration extends AnimatedObject with ObjectCollision {
   @override
   void render(Canvas canvas) {
     if (sprite != null && sprite.loaded()) sprite.renderRect(canvas, position);
-
     super.render(canvas);
-
-    if (gameRef != null && gameRef.showCollisionArea) {
-      drawCollision(canvas, position, gameRef.collisionAreaColor);
-    }
   }
 
   Rect generateRectWithBleedingPixel(

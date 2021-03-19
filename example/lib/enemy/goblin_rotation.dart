@@ -51,7 +51,7 @@ class GoblinRotation extends RotationEnemy {
               height: 25,
               damage: 10,
               speed: speed * 1.5,
-              collision: Collision(height: 15, width: 15));
+              collision: CollisionArea(height: 15, width: 15));
         },
         radiusVision: DungeonMap.tileSize * 4,
         minDistanceCellsFromPlayer: 3);

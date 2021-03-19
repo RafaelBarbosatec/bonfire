@@ -2,7 +2,8 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_game.dart';
-import 'package:bonfire/map/tile.dart';
+import 'package:bonfire/map/tile/tile.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:flutter/cupertino.dart';
 
 class MapWorld extends MapGame {
@@ -15,7 +16,9 @@ class MapWorld extends MapGame {
   Iterable<Tile> _tilesCollisions = [];
 
   MapWorld(Iterable<Tile> tiles) : super(tiles) {
-    _tilesCollisions = tiles.where((element) => element.containCollision());
+    _tilesCollisions = tiles.where((element) =>
+        (element is ObjectCollision) &&
+        (element as ObjectCollision).containCollision());
   }
 
   @override
@@ -40,7 +43,9 @@ class MapWorld extends MapGame {
         tile.gameRef ??= gameRef;
         if (tile.isVisibleInCamera()) {
           tilesRender.add(tile);
-          if (tile.containCollision()) tilesCollision.add(tile);
+          if ((tile is ObjectCollision) &&
+              (tile as ObjectCollision).containCollision())
+            tilesCollision.add(tile);
         }
       }
       _tilesToRender = tilesRender;

@@ -42,7 +42,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     this.collisionOnlyVisibleObjects = true,
     this.destroyedObject,
     this.lightingConfig,
-    Collision collision,
+    CollisionArea collision,
   }) {
     animation = flyAnimation;
     position = Rect.fromLTWH(
@@ -52,7 +52,14 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
       height,
     );
 
-    this.collisions = [collision ?? Collision(width: width, height: height / 2)];
+    setupCollision(
+      CollisionConfig(
+        collisions: [
+          collision ?? CollisionArea(width: width, height: height / 2)
+        ],
+        collisionOnlyVisibleScreen: collisionOnlyVisibleObjects,
+      ),
+    );
   }
 
   @override
@@ -108,13 +115,14 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
     if (withCollision)
       destroy = isCollision(
-        onlyVisible: collisionOnlyVisibleObjects,
         shouldTriggerSensors: false,
       );
 
     if (!destroy) {
       gameRef.attackables().where((a) {
-        return (damageInPlayer ? a.receivesAttackFromEnemy() : a.receivesAttackFromPlayer()) &&
+        return (damageInPlayer
+                ? a.receivesAttackFromEnemy()
+                : a.receivesAttackFromPlayer()) &&
             a.rectAttackable().overlaps(rectCollision);
       }).forEach((enemy) {
         enemy.receiveDamage(damage, id);

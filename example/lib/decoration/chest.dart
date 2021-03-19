@@ -20,7 +20,7 @@ class Chest extends GameDecoration with TapGesture {
           ),
           width: DungeonMap.tileSize * 0.6,
           height: DungeonMap.tileSize * 0.6,
-          initPosition: initPosition,
+          position: initPosition,
         ) {
     _textConfig = TextConfig(
       color: Colors.white,

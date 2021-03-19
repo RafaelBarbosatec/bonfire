@@ -14,7 +14,7 @@ class Spikes extends GameDecoration with Sensor {
   Spikes(this.initPosition)
       : super.sprite(
           Sprite('itens/spikes.png'),
-          initPosition: initPosition,
+          position: initPosition,
           width: DungeonMap.tileSize / 1.5,
           height: DungeonMap.tileSize / 1.5,
         );

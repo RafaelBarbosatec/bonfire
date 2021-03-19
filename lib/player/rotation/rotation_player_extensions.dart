@@ -17,7 +17,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     double radAngleDirection,
     bool withCollision = true,
     VoidCallback destroy,
-    Collision collision,
+    CollisionArea collision,
     LightingConfig lightingConfig,
   }) {
     if (this.currentRadAngle == 0) return;

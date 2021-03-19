@@ -13,7 +13,7 @@ class PotionLife extends GameDecoration with Sensor {
   PotionLife(this.initPosition, this.life)
       : super.sprite(
           Sprite('itens/potion_life.png'),
-          initPosition: initPosition,
+          position: initPosition,
           width: DungeonMap.tileSize * 0.5,
           height: DungeonMap.tileSize * 0.5,
         );

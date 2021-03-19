@@ -23,7 +23,6 @@ class SimplePlayer extends Player {
     double width = 32,
     double height = 32,
     double life = 100,
-    Collision collision,
     Size sizeCentralMovementWindow,
   }) : super(
           initPosition: initPosition,
@@ -31,13 +30,13 @@ class SimplePlayer extends Player {
           height: height,
           life: life,
           speed: speed,
-          collision: collision,
         ) {
     lastDirection = initDirection;
     if (initDirection == Direction.left || initDirection == Direction.right) {
       lastDirectionHorizontal = initDirection;
-      statusMoveDirectional =
-          initDirection == Direction.left ? JoystickMoveDirectional.MOVE_LEFT : JoystickMoveDirectional.MOVE_RIGHT;
+      statusMoveDirectional = initDirection == Direction.left
+          ? JoystickMoveDirectional.MOVE_LEFT
+          : JoystickMoveDirectional.MOVE_RIGHT;
     }
     idle();
   }
@@ -94,14 +93,18 @@ class SimplePlayer extends Player {
     super.update(dt);
   }
 
-  void customMoveTop({bool addAnimation = true, bool isDiagonal = false, VoidCallback onCollision}) {
+  void customMoveTop(
+      {bool addAnimation = true,
+      bool isDiagonal = false,
+      VoidCallback onCollision}) {
     if (addAnimation) {
       _addTopAnimation();
       statusMoveDirectional = JoystickMoveDirectional.MOVE_UP;
       lastDirection = Direction.top;
     }
 
-    double speed = (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
+    double speed =
+        (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
 
     this.moveTop(speed, onCollision: onCollision);
   }
@@ -120,26 +123,36 @@ class SimplePlayer extends Player {
     }
   }
 
-  void customMoveRight({bool addAnimation = true, bool isDiagonal = false, VoidCallback onCollision}) {
-    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_RIGHT && animation?.runRight != null && addAnimation) {
+  void customMoveRight(
+      {bool addAnimation = true,
+      bool isDiagonal = false,
+      VoidCallback onCollision}) {
+    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_RIGHT &&
+        animation?.runRight != null &&
+        addAnimation) {
       animation?.play(SimpleAnimationEnum.runRight);
       statusMoveDirectional = JoystickMoveDirectional.MOVE_RIGHT;
       lastDirection = Direction.right;
       lastDirectionHorizontal = Direction.right;
     }
-    double speed = (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
+    double speed =
+        (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
 
     this.moveRight(speed, onCollision: onCollision);
   }
 
-  void customMoveBottom({bool addAnimation = true, bool isDiagonal = false, VoidCallback onCollision}) {
+  void customMoveBottom(
+      {bool addAnimation = true,
+      bool isDiagonal = false,
+      VoidCallback onCollision}) {
     if (addAnimation) {
       _addBottomAnimation();
       statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN;
       lastDirection = Direction.bottom;
     }
 
-    double speed = (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
+    double speed =
+        (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
 
     this.moveBottom(speed, onCollision: onCollision);
   }
@@ -158,21 +171,28 @@ class SimplePlayer extends Player {
     }
   }
 
-  void customMoveLeft({bool addAnimation = true, bool isDiagonal = false, VoidCallback onCollision}) {
-    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_LEFT && animation.runLeft != null && addAnimation) {
+  void customMoveLeft(
+      {bool addAnimation = true,
+      bool isDiagonal = false,
+      VoidCallback onCollision}) {
+    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_LEFT &&
+        animation.runLeft != null &&
+        addAnimation) {
       animation?.play(SimpleAnimationEnum.runLeft);
       statusMoveDirectional = JoystickMoveDirectional.MOVE_LEFT;
       lastDirection = Direction.left;
       lastDirectionHorizontal = Direction.left;
     }
 
-    double speed = (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
+    double speed =
+        (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
 
     this.moveLeft(speed, onCollision: onCollision);
   }
 
   void customMoveUpLeft() {
-    if (animation.runTopLeft != null && statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_LEFT) {
+    if (animation.runTopLeft != null &&
+        statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_LEFT) {
       animation?.play(SimpleAnimationEnum.runTopLeft);
       lastDirection = Direction.topLeft;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_UP_LEFT;
@@ -188,7 +208,8 @@ class SimplePlayer extends Player {
   }
 
   void customMoveUpRight() {
-    if (animation?.runTopRight != null && statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_RIGHT) {
+    if (animation?.runTopRight != null &&
+        statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_RIGHT) {
       animation?.play(SimpleAnimationEnum.runTopRight);
       lastDirection = Direction.topRight;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_UP_RIGHT;
@@ -204,7 +225,8 @@ class SimplePlayer extends Player {
   }
 
   void customMoveDownRight() {
-    if (animation?.runBottomRight != null && statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
+    if (animation?.runBottomRight != null &&
+        statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
       animation?.play(SimpleAnimationEnum.runBottomRight);
       lastDirection = Direction.bottomRight;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN_RIGHT;
@@ -220,17 +242,20 @@ class SimplePlayer extends Player {
   }
 
   void customMoveDownLeft() {
-    if (animation?.runBottomLeft != null && statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_LEFT) {
+    if (animation?.runBottomLeft != null &&
+        statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_LEFT) {
       animation?.play(SimpleAnimationEnum.runBottomLeft);
       lastDirection = Direction.bottomLeft;
       statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN_LEFT;
     }
-    customMoveLeft(addAnimation: animation?.runBottomLeft == null, isDiagonal: true);
+    customMoveLeft(
+        addAnimation: animation?.runBottomLeft == null, isDiagonal: true);
     customMoveBottom(addAnimation: false, isDiagonal: true);
   }
 
   void idle({bool forceAddAnimation = false}) {
-    if (statusMoveDirectional != JoystickMoveDirectional.IDLE || forceAddAnimation) {
+    if (statusMoveDirectional != JoystickMoveDirectional.IDLE ||
+        forceAddAnimation) {
       switch (lastDirection) {
         case Direction.left:
           animation?.play(SimpleAnimationEnum.idleLeft);
@@ -302,7 +327,8 @@ class SimplePlayer extends Player {
   void moveToPosition() {
     bool move = false;
 
-    if (_positionToMove.x > position.center.dx && _positionToMove.x - position.center.dx > 1) {
+    if (_positionToMove.x > position.center.dx &&
+        _positionToMove.x - position.center.dx > 1) {
       move = true;
       customMoveRight(
         onCollision: () {
@@ -311,7 +337,8 @@ class SimplePlayer extends Player {
       );
     }
     if (_positionToMove == null) return;
-    if (_positionToMove.x < position.center.dx && position.center.dx - _positionToMove.x > 1) {
+    if (_positionToMove.x < position.center.dx &&
+        position.center.dx - _positionToMove.x > 1) {
       move = true;
       customMoveLeft(
         onCollision: () {
@@ -321,7 +348,8 @@ class SimplePlayer extends Player {
       );
     }
     if (_positionToMove == null) return;
-    if (_positionToMove.y > position.center.dy && _positionToMove.y - position.center.dy > 1) {
+    if (_positionToMove.y > position.center.dy &&
+        _positionToMove.y - position.center.dy > 1) {
       move = true;
       customMoveBottom(
         onCollision: () {
@@ -331,7 +359,8 @@ class SimplePlayer extends Player {
       );
     }
     if (_positionToMove == null) return;
-    if (_positionToMove.y < position.center.dy && position.center.dy - _positionToMove.y > 1) {
+    if (_positionToMove.y < position.center.dy &&
+        position.center.dy - _positionToMove.y > 1) {
       move = true;
       customMoveTop(
         onCollision: () {

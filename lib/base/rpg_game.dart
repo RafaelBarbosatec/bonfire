@@ -170,6 +170,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     _decorations = components.where((element) {
       return (element is GameDecoration);
     }).cast();
+
     _visibleDecorations = _decorations.where((element) {
       return element.isVisibleInCamera();
     });

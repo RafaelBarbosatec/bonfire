@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
@@ -11,7 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// It is used to represent your enemies.
-class Enemy extends GameComponent with ObjectCollision, Attackable {
+class Enemy extends GameComponent with Attackable {
   /// Height of the Enemy.
   final double height;
 
@@ -31,14 +30,12 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
 
   double dtUpdate = 0;
 
-  bool collisionOnlyVisibleScreen = true;
-
-  Enemy(
-      {@required Position initPosition,
-      @required this.height,
-      @required this.width,
-      this.life = 10,
-      Collision collision}) {
+  Enemy({
+    @required Position initPosition,
+    @required this.height,
+    @required this.width,
+    this.life = 10,
+  }) {
     receivesAttackFrom = ReceivesAttackFromEnum.PLAYER;
     maxLife = life;
     this.position = Rect.fromLTWH(
@@ -47,20 +44,9 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
       width,
       height,
     );
-    this.collisions = [
-      collision ?? Collision(width: width, height: height / 2)
-    ];
   }
 
   bool get isDead => _isDead;
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    if (gameRef != null && gameRef.showCollisionArea) {
-      drawCollision(canvas, position, gameRef.collisionAreaColor);
-    }
-  }
 
   @override
   void update(double dt) {
@@ -69,11 +55,10 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
   }
 
   void moveTop(double speed) {
-    var collision = isCollisionPositionTranslate(
+    var collision = verifyEnemyCollision(
       position,
       0,
       (speed * -1),
-      onlyVisible: collisionOnlyVisibleScreen,
     );
 
     if (collision) return;
@@ -82,11 +67,10 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
   }
 
   void moveBottom(double speed) {
-    var collision = isCollisionPositionTranslate(
+    var collision = verifyEnemyCollision(
       position,
       0,
       speed,
-      onlyVisible: collisionOnlyVisibleScreen,
     );
     if (collision) return;
 
@@ -94,11 +78,10 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
   }
 
   void moveLeft(double speed) {
-    var collision = isCollisionPositionTranslate(
+    var collision = verifyEnemyCollision(
       position,
       (speed * -1),
       0,
-      onlyVisible: collisionOnlyVisibleScreen,
     );
     if (collision) return;
 
@@ -106,11 +89,10 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
   }
 
   void moveRight(double speed) {
-    var collision = isCollisionPositionTranslate(
+    var collision = verifyEnemyCollision(
       position,
       speed,
       0,
-      onlyVisible: collisionOnlyVisibleScreen,
     );
 
     if (collision) return;
@@ -129,18 +111,19 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
             position.center.dy + nextPoint.dy) -
         position.center;
 
-    var collisionX = isCollisionPositionTranslate(
+    var collisionX = verifyEnemyCollision(
       position,
       diffBase.dx,
       0,
     );
-
-    var collisionY = isCollisionPositionTranslate(
+    var collisionY = verifyEnemyCollision(
       position,
       0,
       diffBase.dy,
     );
+
     Offset newDiffBase = diffBase;
+
     if (collisionX) {
       newDiffBase = Offset(0, newDiffBase.dy);
     }
@@ -149,7 +132,7 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
     }
 
     if (collisionX && !collisionY && newDiffBase.dy != 0) {
-      var collisionY = isCollisionPositionTranslate(
+      var collisionY = verifyEnemyCollision(
         position,
         0,
         innerSpeed,
@@ -158,7 +141,7 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
     }
 
     if (collisionY && !collisionX && newDiffBase.dx != 0) {
-      var collisionX = isCollisionPositionTranslate(
+      var collisionX = verifyEnemyCollision(
         position,
         innerSpeed,
         0,
@@ -216,11 +199,25 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
     }
   }
 
-  Rect get rectCollision => getRectCollision(position);
-
   @override
   int priority() => PriorityLayer.ENEMY;
 
   @override
-  Rect rectAttackable() => rectCollision;
+  Rect rectAttackable() => this is ObjectCollision
+      ? (this as ObjectCollision).rectCollision
+      : position;
+
+  bool verifyEnemyCollision(
+    Rect position,
+    double translateX,
+    double translateY,
+  ) {
+    var collision = false;
+    collision = (this as ObjectCollision).isCollisionPositionTranslate(
+      position,
+      translateX,
+      translateY,
+    );
+    return collision;
+  }
 }

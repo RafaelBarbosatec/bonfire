@@ -1,7 +1,8 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
-class TestRotationPlayer extends RotationPlayer {
+class TestRotationPlayer extends RotationPlayer with ObjectCollision {
   double initSpeed = 150;
   TestRotationPlayer(Position position)
       : super(
@@ -19,8 +20,13 @@ class TestRotationPlayer extends RotationPlayer {
             textureHeight: 16,
           ),
           speed: 150,
-          collision: Collision(height: 16, width: 16),
-        );
+        ) {
+    setupCollision(
+      CollisionConfig(
+        collisions: [CollisionArea(height: 16, width: 16)],
+      ),
+    );
+  }
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
@@ -33,7 +39,7 @@ class TestRotationPlayer extends RotationPlayer {
     remove();
     gameRef.addGameComponent(
       GameDecoration(
-        initPosition: Position(
+        position: Position(
           position.left,
           position.top,
         ),
@@ -75,7 +81,7 @@ class TestRotationPlayer extends RotationPlayer {
         height: 25,
         damage: 10,
         speed: initSpeed * 1.5,
-        collision: Collision(height: 15, width: 15));
+        collision: CollisionArea(height: 15, width: 15));
   }
 
   void actionAttackMelee() {

@@ -5,15 +5,40 @@ import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/mixins/sensor.dart';
 import 'package:flutter/material.dart';
 
-mixin ObjectCollision on GameComponent {
+class CollisionConfig {
   /// Used to enable or disable collision with enemy
-  bool collisionWithEnemy = false;
+  final bool collisionWithEnemy;
 
   /// Used to enable or disable collision with player
-  bool collisionWithPlayer = false;
+  final bool collisionWithPlayer;
+
+  bool collisionOnlyVisibleScreen;
 
   /// Representing the collision area
-  Iterable<Collision> collisions;
+  final Iterable<CollisionArea> collisions;
+
+  CollisionConfig({
+    @required this.collisions,
+    this.collisionWithEnemy = false,
+    this.collisionWithPlayer = false,
+    this.collisionOnlyVisibleScreen = true,
+  });
+}
+
+mixin ObjectCollision on GameComponent {
+  CollisionConfig _collisionConfig;
+
+  void setupCollision(CollisionConfig collisionConfig) {
+    _collisionConfig = collisionConfig;
+  }
+
+  void removeCollision() {
+    _collisionConfig = null;
+  }
+
+  void setCollisionOnlyVisibleScreen(bool onlyVisible) {
+    _collisionConfig.collisionOnlyVisibleScreen = onlyVisible;
+  }
 
   void triggerSensors(Iterable<Rect> rectCollisions) {
     final Iterable<Sensor> sensors = gameRef
@@ -29,7 +54,6 @@ mixin ObjectCollision on GameComponent {
 
   bool isCollision({
     Rect displacement,
-    bool onlyVisible = true,
     bool shouldTriggerSensors = true,
   }) {
     if (!containCollision()) return false;
@@ -38,14 +62,13 @@ mixin ObjectCollision on GameComponent {
 
     if (shouldTriggerSensors) triggerSensors(rectCollisions);
 
-    if (_containsCollisionWithMap(rectCollisions, onlyVisible)) return true;
+    if (_containsCollisionWithMap(rectCollisions)) return true;
 
-    if (_containsCollisionWithDecoration(rectCollisions, onlyVisible))
-      return true;
+    if (_containsCollisionWithDecoration(rectCollisions)) return true;
 
-    if (_containsCollisionWithEnemies(rectCollisions, onlyVisible)) return true;
+    if (_containsCollisionWithEnemies(rectCollisions)) return true;
 
-    if (_containsCollisionWithPlayer(rectCollisions, onlyVisible)) return true;
+    if (_containsCollisionWithPlayer(rectCollisions)) return true;
 
     return false;
   }
@@ -53,26 +76,28 @@ mixin ObjectCollision on GameComponent {
   bool isCollisionPositionTranslate(
     Rect position,
     double translateX,
-    double translateY, {
-    bool onlyVisible = true,
-  }) {
+    double translateY,
+  ) {
     var moveToCurrent = position.translate(translateX, translateY);
-    return isCollision(displacement: moveToCurrent, onlyVisible: onlyVisible);
+    return isCollision(displacement: moveToCurrent);
   }
 
   Iterable<Rect> getRectCollisions(Rect displacement) {
     if (!containCollision()) return [];
-    return collisions.map<Rect>((e) => e.getRect(displacement));
+    return _collisionConfig?.collisions
+        ?.map<Rect>((e) => e.getRect(displacement));
   }
 
   Rect getRectCollision(Rect displacement) {
     if (!containCollision()) return Rect.zero;
-    return collisions.map<Rect>((e) => e.getRect(displacement)).first;
+    return _collisionConfig?.collisions
+        ?.map<Rect>((e) => e.getRect(displacement))
+        ?.first;
   }
 
   void drawCollision(Canvas canvas, Rect currentPosition, Color color) {
     if (!containCollision()) return;
-    collisions.forEach((element) {
+    _collisionConfig?.collisions?.forEach((element) {
       canvas.drawRect(
         element.getRect(currentPosition),
         Paint()..color = color ?? Colors.lightGreenAccent.withOpacity(0.5),
@@ -84,11 +109,10 @@ mixin ObjectCollision on GameComponent {
     if (!containCollision()) return false;
     final collision = displacements.firstWhere(
       (displacement) {
-        final c = this.collisions.firstWhere(
-              (element) =>
-                  element.getRect(this.position).overlaps(displacement),
-              orElse: () => null,
-            );
+        final c = _collisionConfig?.collisions?.firstWhere(
+          (element) => element.getRect(this.position).overlaps(displacement),
+          orElse: () => null,
+        );
         return c != null;
       },
       orElse: () => null,
@@ -98,41 +122,51 @@ mixin ObjectCollision on GameComponent {
   }
 
   bool containCollision() =>
-      this.collisions != null && this.collisions.isNotEmpty;
+      _collisionConfig?.collisions != null &&
+      _collisionConfig?.collisions?.isNotEmpty == true;
 
   Rect get rectCollision => getRectCollision(position);
 
-  bool _containsCollisionWithMap(
-      Iterable<Rect> rectCollisions, bool onlyVisible) {
-    final tiledCollisions = (onlyVisible
-        ? gameRef?.map?.getCollisionsRendered() ?? []
-        : gameRef?.map?.getCollisions() ?? []);
+  bool _containsCollisionWithMap(Iterable<Rect> rectCollisions) {
+    final tiledCollisions =
+        ((_collisionConfig?.collisionOnlyVisibleScreen ?? false)
+            ? gameRef?.map?.getCollisionsRendered() ?? []
+            : gameRef?.map?.getCollisions() ?? []);
     final collisionMap = tiledCollisions.firstWhere(
-      (i) => i.detectCollision(rectCollisions),
+      (i) =>
+          (i is ObjectCollision) &&
+          (i as ObjectCollision).detectCollision(rectCollisions),
       orElse: () => null,
     );
     return collisionMap != null;
   }
 
-  bool _containsCollisionWithDecoration(
-      Iterable<Rect> rectCollisions, bool onlyVisible) {
+  bool _containsCollisionWithDecoration(Iterable<Rect> rectCollisions) {
     final collisionDecorations =
-        (onlyVisible ? gameRef?.visibleDecorations() : gameRef?.decorations())
+        ((_collisionConfig?.collisionOnlyVisibleScreen ?? false)
+                ? gameRef?.visibleDecorations()
+                : gameRef?.decorations())
             .firstWhere(
-      (i) => i.detectCollision(rectCollisions) && i != this,
+      (i) =>
+          i is ObjectCollision &&
+          (i as ObjectCollision).detectCollision(rectCollisions) &&
+          (i as ObjectCollision) != this,
       orElse: () => null,
     );
     return collisionDecorations != null;
   }
 
-  bool _containsCollisionWithEnemies(
-      Iterable<Rect> rectCollisions, bool onlyVisible) {
-    if (collisionWithEnemy) {
+  bool _containsCollisionWithEnemies(Iterable<Rect> rectCollisions) {
+    if (_collisionConfig?.collisionWithEnemy == true) {
       final collisionEnemy =
-          (onlyVisible ? gameRef?.visibleEnemies() : gameRef?.enemies())
+          ((_collisionConfig?.collisionOnlyVisibleScreen ?? false)
+                  ? gameRef?.visibleEnemies()
+                  : gameRef?.enemies())
               ?.firstWhere(
         (i) {
-          return i.detectCollision(rectCollisions) && i != this;
+          return i is ObjectCollision &&
+              (i as ObjectCollision).detectCollision(rectCollisions) &&
+              (i as ObjectCollision) != this;
         },
         orElse: () => null,
       );
@@ -142,12 +176,27 @@ mixin ObjectCollision on GameComponent {
     }
   }
 
-  bool _containsCollisionWithPlayer(
-      Iterable<Rect> rectCollisions, bool onlyVisible) {
-    if (collisionWithPlayer) {
-      return gameRef?.player?.detectCollision(rectCollisions) == true;
+  bool _containsCollisionWithPlayer(Iterable<Rect> rectCollisions) {
+    var player = gameRef?.player;
+    if (_collisionConfig?.collisionWithPlayer == true &&
+        player is ObjectCollision) {
+      return (player as ObjectCollision)?.detectCollision(rectCollisions) ==
+          true;
     } else {
       return false;
     }
+  }
+
+  @override
+  void render(Canvas canvas) {
+    if (gameRef != null && gameRef.showCollisionArea) {
+      drawCollision(canvas, position, gameRef.collisionAreaColor);
+    }
+    super.render(canvas);
+  }
+
+  bool notVisibleAndCollisionOnlyScreen() {
+    return (_collisionConfig?.collisionOnlyVisibleScreen ?? false) &&
+        !isVisibleInCamera();
   }
 }
