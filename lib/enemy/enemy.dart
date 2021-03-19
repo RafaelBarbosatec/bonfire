@@ -47,7 +47,9 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
       width,
       height,
     );
-    this.collisions = [collision ?? Collision(width: width, height: height / 2)];
+    this.collisions = [
+      collision ?? Collision(width: width, height: height / 2)
+    ];
   }
 
   bool get isDead => _isDead;
@@ -67,11 +69,10 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
   }
 
   void moveTop(double speed) {
-    var collision = isCollisionTranslate(
+    var collision = isCollisionPositionTranslate(
       position,
       0,
       (speed * -1),
-      gameRef,
       onlyVisible: collisionOnlyVisibleScreen,
     );
 
@@ -81,11 +82,10 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
   }
 
   void moveBottom(double speed) {
-    var collision = isCollisionTranslate(
+    var collision = isCollisionPositionTranslate(
       position,
       0,
       speed,
-      gameRef,
       onlyVisible: collisionOnlyVisibleScreen,
     );
     if (collision) return;
@@ -94,11 +94,10 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
   }
 
   void moveLeft(double speed) {
-    var collision = isCollisionTranslate(
+    var collision = isCollisionPositionTranslate(
       position,
       (speed * -1),
       0,
-      gameRef,
       onlyVisible: collisionOnlyVisibleScreen,
     );
     if (collision) return;
@@ -107,11 +106,10 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
   }
 
   void moveRight(double speed) {
-    var collision = isCollisionTranslate(
+    var collision = isCollisionPositionTranslate(
       position,
       speed,
       0,
-      gameRef,
       onlyVisible: collisionOnlyVisibleScreen,
     );
 
@@ -120,26 +118,27 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
     position = position.translate(speed, 0);
   }
 
-  void moveFromAngleDodgeObstacles(double speed, double angle, {Function notMove}) {
+  void moveFromAngleDodgeObstacles(double speed, double angle,
+      {Function notMove}) {
     double innerSpeed = (speed * dtUpdate);
     double nextX = innerSpeed * cos(angle);
     double nextY = innerSpeed * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(position.center.dx + nextPoint.dx, position.center.dy + nextPoint.dy) - position.center;
+    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
+            position.center.dy + nextPoint.dy) -
+        position.center;
 
-    var collisionX = isCollisionTranslate(
+    var collisionX = isCollisionPositionTranslate(
       position,
       diffBase.dx,
       0,
-      gameRef,
     );
 
-    var collisionY = isCollisionTranslate(
+    var collisionY = isCollisionPositionTranslate(
       position,
       0,
       diffBase.dy,
-      gameRef,
     );
     Offset newDiffBase = diffBase;
     if (collisionX) {
@@ -150,21 +149,19 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
     }
 
     if (collisionX && !collisionY && newDiffBase.dy != 0) {
-      var collisionY = isCollisionTranslate(
+      var collisionY = isCollisionPositionTranslate(
         position,
         0,
         innerSpeed,
-        gameRef,
       );
       if (!collisionY) newDiffBase = Offset(0, innerSpeed);
     }
 
     if (collisionY && !collisionX && newDiffBase.dx != 0) {
-      var collisionX = isCollisionTranslate(
+      var collisionX = isCollisionPositionTranslate(
         position,
         innerSpeed,
         0,
-        gameRef,
       );
       if (!collisionX) newDiffBase = Offset(innerSpeed, 0);
     }
@@ -181,7 +178,9 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
     double nextY = innerSpeed * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(position.center.dx + nextPoint.dx, position.center.dy + nextPoint.dy) - position.center;
+    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
+            position.center.dy + nextPoint.dy) -
+        position.center;
     this.position = position.shift(diffBase);
   }
 
@@ -207,7 +206,9 @@ class Enemy extends GameComponent with ObjectCollision, Attackable {
   }
 
   bool checkPassedInterval(String name, int intervalInMilli, double dt) {
-    if (this.timers[name] == null || (this.timers[name] != null && this.timers[name].interval != intervalInMilli)) {
+    if (this.timers[name] == null ||
+        (this.timers[name] != null &&
+            this.timers[name].interval != intervalInMilli)) {
       this.timers[name] = IntervalTick(intervalInMilli);
       return true;
     } else {

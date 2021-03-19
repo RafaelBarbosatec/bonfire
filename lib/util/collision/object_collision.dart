@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/mixins/sensor.dart';
@@ -17,10 +16,14 @@ mixin ObjectCollision on GameComponent {
   Iterable<Collision> collisions;
 
   void triggerSensors(Iterable<Rect> rectCollisions) {
-    final Iterable<Sensor> sensors = gameRef.visibleSensors().where((decoration) => decoration is Sensor).cast();
+    final Iterable<Sensor> sensors = gameRef
+        .visibleSensors()
+        .where((decoration) => decoration is Sensor)
+        .cast();
 
     sensors.forEach((sensor) {
-      if (sensor.areaSensor.overlaps(rectCollisions.first)) sensor.onContact(this);
+      if (sensor.areaSensor.overlaps(rectCollisions.first))
+        sensor.onContact(this);
     });
   }
 
@@ -37,7 +40,8 @@ mixin ObjectCollision on GameComponent {
 
     if (_containsCollisionWithMap(rectCollisions, onlyVisible)) return true;
 
-    if (_containsCollisionWithDecoration(rectCollisions, onlyVisible)) return true;
+    if (_containsCollisionWithDecoration(rectCollisions, onlyVisible))
+      return true;
 
     if (_containsCollisionWithEnemies(rectCollisions, onlyVisible)) return true;
 
@@ -46,11 +50,10 @@ mixin ObjectCollision on GameComponent {
     return false;
   }
 
-  bool isCollisionTranslate(
+  bool isCollisionPositionTranslate(
     Rect position,
     double translateX,
-    double translateY,
-    RPGGame game, {
+    double translateY, {
     bool onlyVisible = true,
   }) {
     var moveToCurrent = position.translate(translateX, translateY);
@@ -82,7 +85,8 @@ mixin ObjectCollision on GameComponent {
     final collision = displacements.firstWhere(
       (displacement) {
         final c = this.collisions.firstWhere(
-              (element) => element.getRect(this.position).overlaps(displacement),
+              (element) =>
+                  element.getRect(this.position).overlaps(displacement),
               orElse: () => null,
             );
         return c != null;
@@ -93,13 +97,16 @@ mixin ObjectCollision on GameComponent {
     return collision != null;
   }
 
-  bool containCollision() => this.collisions != null && this.collisions.isNotEmpty;
+  bool containCollision() =>
+      this.collisions != null && this.collisions.isNotEmpty;
 
   Rect get rectCollision => getRectCollision(position);
 
-  bool _containsCollisionWithMap(Iterable<Rect> rectCollisions, bool onlyVisible) {
-    final tiledCollisions =
-        (onlyVisible ? gameRef?.map?.getCollisionsRendered() ?? [] : gameRef?.map?.getCollisions() ?? []);
+  bool _containsCollisionWithMap(
+      Iterable<Rect> rectCollisions, bool onlyVisible) {
+    final tiledCollisions = (onlyVisible
+        ? gameRef?.map?.getCollisionsRendered() ?? []
+        : gameRef?.map?.getCollisions() ?? []);
     final collisionMap = tiledCollisions.firstWhere(
       (i) => i.detectCollision(rectCollisions),
       orElse: () => null,
@@ -107,17 +114,23 @@ mixin ObjectCollision on GameComponent {
     return collisionMap != null;
   }
 
-  bool _containsCollisionWithDecoration(Iterable<Rect> rectCollisions, bool onlyVisible) {
-    final collisionDecorations = (onlyVisible ? gameRef?.visibleDecorations() : gameRef?.decorations()).firstWhere(
+  bool _containsCollisionWithDecoration(
+      Iterable<Rect> rectCollisions, bool onlyVisible) {
+    final collisionDecorations =
+        (onlyVisible ? gameRef?.visibleDecorations() : gameRef?.decorations())
+            .firstWhere(
       (i) => i.detectCollision(rectCollisions) && i != this,
       orElse: () => null,
     );
     return collisionDecorations != null;
   }
 
-  bool _containsCollisionWithEnemies(Iterable<Rect> rectCollisions, bool onlyVisible) {
+  bool _containsCollisionWithEnemies(
+      Iterable<Rect> rectCollisions, bool onlyVisible) {
     if (collisionWithEnemy) {
-      final collisionEnemy = (onlyVisible ? gameRef?.visibleEnemies() : gameRef?.enemies())?.firstWhere(
+      final collisionEnemy =
+          (onlyVisible ? gameRef?.visibleEnemies() : gameRef?.enemies())
+              ?.firstWhere(
         (i) {
           return i.detectCollision(rectCollisions) && i != this;
         },
@@ -129,7 +142,8 @@ mixin ObjectCollision on GameComponent {
     }
   }
 
-  bool _containsCollisionWithPlayer(Iterable<Rect> rectCollisions, bool onlyVisible) {
+  bool _containsCollisionWithPlayer(
+      Iterable<Rect> rectCollisions, bool onlyVisible) {
     if (collisionWithPlayer) {
       return gameRef?.player?.detectCollision(rectCollisions) == true;
     } else {
