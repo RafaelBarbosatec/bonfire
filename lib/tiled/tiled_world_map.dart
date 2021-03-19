@@ -110,7 +110,7 @@ class TiledWorldMap {
           if (data.animation == null) {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
               _components.add(
-                DecorationWithCollision(
+                GameDecorationWithCollision(
                   data.sprite,
                   Position(
                     (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
@@ -144,7 +144,7 @@ class TiledWorldMap {
           } else {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
               _components.add(
-                DecorationAnimatedWithCollision(
+                GameDecorationAnimatedWithCollision(
                   data.animation.animation,
                   Position(
                     (_getX(count, tileLayer.width.toInt()) * _tileWidth) +

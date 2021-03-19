@@ -1,8 +1,8 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 
-class DecorationWithCollision extends GameDecoration with ObjectCollision {
-  DecorationWithCollision(
+class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
+  GameDecorationWithCollision(
     Sprite sprite,
     Position position, {
     double width = 32,

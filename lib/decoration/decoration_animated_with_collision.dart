@@ -2,9 +2,9 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
-class DecorationAnimatedWithCollision extends GameDecoration
+class GameDecorationAnimatedWithCollision extends GameDecoration
     with ObjectCollision {
-  DecorationAnimatedWithCollision(
+  GameDecorationAnimatedWithCollision(
     FlameAnimation.Animation animation,
     Position position, {
     double width = 32,

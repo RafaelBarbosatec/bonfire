@@ -1,3 +1,7 @@
+# NEXT
+
+- BREAKING CHANGE: Collision system.
+
 # 0.8.6
 
 - update dependencies an README.

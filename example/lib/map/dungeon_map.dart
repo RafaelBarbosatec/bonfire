@@ -122,7 +122,7 @@ class DungeonMap {
         getRelativeTilePosition(7, 7),
       ),
       BarrelDraggable(getRelativeTilePosition(8, 6)),
-      DecorationWithCollision(
+      GameDecorationWithCollision(
         Sprite('itens/barrel.png'),
         getRelativeTilePosition(10, 6),
         width: tileSize,
@@ -135,7 +135,7 @@ class DungeonMap {
         ],
       ),
       Chest(getRelativeTilePosition(18, 7)),
-      DecorationWithCollision(
+      GameDecorationWithCollision(
         Sprite('itens/table.png'),
         getRelativeTilePosition(15, 7),
         width: tileSize,
@@ -147,7 +147,7 @@ class DungeonMap {
           ),
         ],
       ),
-      DecorationWithCollision(
+      GameDecorationWithCollision(
         Sprite('itens/table.png'),
         getRelativeTilePosition(27, 6),
         width: tileSize,
