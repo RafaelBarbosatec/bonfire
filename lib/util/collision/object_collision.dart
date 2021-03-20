@@ -64,11 +64,7 @@ mixin ObjectCollision on GameComponent {
 
     if (_containsCollisionWithMap(rectCollisions)) return true;
 
-    if (_containsCollisionWithDecoration(rectCollisions)) return true;
-
-    if (_containsCollisionWithEnemies(rectCollisions)) return true;
-
-    if (_containsCollisionWithPlayer(rectCollisions)) return true;
+    if (_containsCollision(rectCollisions)) return true;
 
     return false;
   }
@@ -156,24 +152,17 @@ mixin ObjectCollision on GameComponent {
     return collisionDecorations != null;
   }
 
-  bool _containsCollisionWithEnemies(Iterable<Rect> rectCollisions) {
-    if (_collisionConfig?.collisionWithEnemy == true) {
-      final collisionEnemy =
-          ((_collisionConfig?.collisionOnlyVisibleScreen ?? false)
-                  ? gameRef?.visibleEnemies()
-                  : gameRef?.enemies())
-              ?.firstWhere(
-        (i) {
-          return i is ObjectCollision &&
-              (i as ObjectCollision).detectCollision(rectCollisions) &&
-              (i as ObjectCollision) != this;
-        },
-        orElse: () => null,
-      );
-      return collisionEnemy != null;
-    } else {
-      return false;
-    }
+  bool _containsCollision(Iterable<Rect> rectCollisions) {
+    final collisions = ((_collisionConfig?.collisionOnlyVisibleScreen ?? true)
+            ? gameRef?.visibleCollisions()
+            : gameRef?.collisions())
+        ?.firstWhere(
+      (i) {
+        return i.detectCollision(rectCollisions) && i != this;
+      },
+      orElse: () => null,
+    );
+    return collisions != null;
   }
 
   bool _containsCollisionWithPlayer(Iterable<Rect> rectCollisions) {
@@ -196,7 +185,7 @@ mixin ObjectCollision on GameComponent {
   }
 
   bool notVisibleAndCollisionOnlyScreen() {
-    return (_collisionConfig?.collisionOnlyVisibleScreen ?? false) &&
+    return (_collisionConfig?.collisionOnlyVisibleScreen ?? true) &&
         !isVisibleInCamera();
   }
 }

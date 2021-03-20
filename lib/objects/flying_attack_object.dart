@@ -113,11 +113,6 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
     bool destroy = false;
 
-    if (withCollision)
-      destroy = isCollision(
-        shouldTriggerSensors: false,
-      );
-
     if (!destroy) {
       gameRef.attackables().where((a) {
         return (damageInPlayer
@@ -129,6 +124,11 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
         destroy = true;
       });
     }
+
+    if (withCollision)
+      destroy = isCollision(
+        shouldTriggerSensors: false,
+      );
 
     if (destroy) {
       if (destroyAnimation != null) {

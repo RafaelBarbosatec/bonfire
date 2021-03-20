@@ -23,7 +23,7 @@ extension RotationEnemyExtensions on RotationEnemy {
   }) {
     if (isDead || this.position == null) return;
     if (this is ObjectCollision &&
-        !(this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
+        (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
 
     seePlayer(
       radiusVision: radiusVision,
@@ -68,7 +68,7 @@ extension RotationEnemyExtensions on RotationEnemy {
   }) {
     if (isDead || this.position == null) return;
     if (this is ObjectCollision &&
-        !(this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
+        (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
 
     seePlayer(
       radiusVision: radiusVision,

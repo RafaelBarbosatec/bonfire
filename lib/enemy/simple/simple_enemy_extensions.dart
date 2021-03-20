@@ -21,7 +21,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
   }) {
     if (isDead || this.position == null) return;
     if (this is ObjectCollision &&
-        !(this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
+        (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
 
     seePlayer(
       radiusVision: radiusVision,
@@ -410,7 +410,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       double minDistanceFromPlayer}) {
     if (isDead || this.position == null) return;
     if (this is ObjectCollision &&
-        !(this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
+        (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
 
     double distance = (minDistanceFromPlayer ?? radiusVision);
 
