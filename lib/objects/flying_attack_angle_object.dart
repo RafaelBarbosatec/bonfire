@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object.dart';
@@ -7,21 +8,21 @@ import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/position.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
 class FlyingAttackAngleObject extends AnimatedObject
     with ObjectCollision, Lighting {
   final dynamic id;
-  final FlameAnimation.Animation flyAnimation;
-  final FlameAnimation.Animation destroyAnimation;
+  final SpriteAnimation flyAnimation;
+  final SpriteAnimation destroyAnimation;
   final double radAngle;
   final double speed;
   final double damage;
   final double width;
   final double height;
-  final Position initPosition;
+  final Vector2 initPosition;
   final bool damageInPlayer;
   final bool withCollision;
   final bool collisionOnlyVisibleObjects;
@@ -52,11 +53,9 @@ class FlyingAttackAngleObject extends AnimatedObject
     CollisionConfig collision,
   }) {
     animation = flyAnimation;
-    position = Rect.fromLTWH(
-      initPosition.x,
-      initPosition.y,
-      width,
-      height,
+    position = Vector2Rect(
+      initPosition,
+      Vector2(width, height),
     );
 
     setupCollision(
@@ -82,11 +81,11 @@ class FlyingAttackAngleObject extends AnimatedObject
     double nextY = (speed * dt) * _senAngle;
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
-            position.center.dy + nextPoint.dy) -
-        position.center;
+    Offset diffBase = Offset(position.rect.center.dx + nextPoint.dx,
+            position.rect.center.dy + nextPoint.dy) -
+        position.rect.center;
 
-    position = position.shift(diffBase);
+    position = Vector2Rect.fromRect(position.rect.shift(diffBase));
 
     if (!_verifyExistInWorld()) {
       remove();
@@ -98,9 +97,9 @@ class FlyingAttackAngleObject extends AnimatedObject
   @override
   void render(Canvas canvas) {
     canvas.save();
-    canvas.translate(position.center.dx, position.center.dy);
+    canvas.translate(position.rect.center.dx, position.rect.center.dy);
     canvas.rotate(_rotate);
-    canvas.translate(-position.center.dx, -position.center.dy);
+    canvas.translate(-position.rect.center.dx, -position.rect.center.dy);
     super.render(canvas);
     canvas.restore();
   }
@@ -114,7 +113,7 @@ class FlyingAttackAngleObject extends AnimatedObject
       return (damageInPlayer
               ? a.receivesAttackFromEnemy()
               : a.receivesAttackFromPlayer()) &&
-          a.rectAttackable().overlaps(position);
+          a.rectAttackable().overlaps(position.rect);
     }).forEach((enemy) {
       enemy.receiveDamage(damage, id);
       destroy = true;
@@ -131,11 +130,11 @@ class FlyingAttackAngleObject extends AnimatedObject
         double nextY = (height / 2) * _senAngle;
         Offset nextPoint = Offset(nextX, nextY);
 
-        Offset diffBase = Offset(position.center.dx + nextPoint.dx,
-                position.center.dy + nextPoint.dy) -
-            position.center;
+        Offset diffBase = Offset(position.rect.center.dx + nextPoint.dx,
+                position.rect.center.dy + nextPoint.dy) -
+            position.rect.center;
 
-        Rect positionDestroy = position.shift(diffBase);
+        final positionDestroy = Vector2Rect.fromRect(position.rect.shift(diffBase));
 
         gameRef.addLater(
           AnimatedObjectOnce(
@@ -153,16 +152,16 @@ class FlyingAttackAngleObject extends AnimatedObject
   bool _verifyExistInWorld() {
     Size mapSize = gameRef.map?.mapSize;
     if (mapSize == null) return true;
-    if (position.left < 0) {
+    if (position.rect.left < 0) {
       return false;
     }
-    if (position.right > mapSize.width) {
+    if (position.rect.right > mapSize.width) {
       return false;
     }
-    if (position.top < 0) {
+    if (position.rect.top < 0) {
       return false;
     }
-    if (position.bottom > mapSize.height) {
+    if (position.rect.bottom > mapSize.height) {
       return false;
     }
 

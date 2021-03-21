@@ -95,7 +95,7 @@ mixin ObjectCollision on GameComponent {
     if (!containCollision()) return;
     _collisionConfig?.collisions?.forEach((element) {
       canvas.drawRect(
-        element.getRect(position),
+        element.getRect(position.rect),
         Paint()..color = color ?? Colors.lightGreenAccent.withOpacity(0.5),
       );
     });
@@ -106,7 +106,7 @@ mixin ObjectCollision on GameComponent {
     final collision = displacements.firstWhere(
       (displacement) {
         final c = _collisionConfig?.collisions?.firstWhere(
-          (element) => element.getRect(this.position).overlaps(displacement),
+          (element) => element.getRect(this.position.rect).overlaps(displacement),
           orElse: () => null,
         );
         return c != null;
@@ -121,7 +121,7 @@ mixin ObjectCollision on GameComponent {
       _collisionConfig?.collisions != null &&
       _collisionConfig?.collisions?.isNotEmpty == true;
 
-  Rect get rectCollision => getRectCollision(position);
+  Rect get rectCollision => getRectCollision(position.rect);
 
   bool _containsCollisionWithMap(Iterable<Rect> rectCollisions) {
     final tiledCollisions =

@@ -2,11 +2,10 @@ import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/position.dart';
 
 abstract class FollowerObject extends GameComponent {
   final GameComponent target;
-  final Rect positionFromTarget;
+  final Vector2Rect positionFromTarget;
 
   FollowerObject({
     this.target,
@@ -16,15 +15,15 @@ abstract class FollowerObject extends GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    Rect newPosition = positionFromTarget ?? Position.empty();
-    this.position = Rect.fromLTWH(
-      target.position.left,
-      target.position.top,
-      newPosition.width,
-      newPosition.height,
-    ).translate(newPosition.left, newPosition.top);
+    final newPosition = positionFromTarget ?? Vector2Rect.zero();
+    this.position = Vector2Rect.fromRect(Rect.fromLTWH(
+      target.position.rect.left,
+      target.position.rect.top,
+      newPosition.rect.width,
+      newPosition.rect.height,
+    ).translate(newPosition.rect.left, newPosition.rect.top));
   }
 
   @override
-  int priority() => PriorityLayer.OBJECTS;
+  int priority = PriorityLayer.OBJECTS;
 }

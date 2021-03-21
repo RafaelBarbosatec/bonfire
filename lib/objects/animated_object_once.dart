@@ -5,7 +5,8 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
+
+import 'package:flame/sprite.dart';
 
 class AnimatedObjectOnce extends AnimatedObject with Lighting {
   final VoidCallback onFinish;
@@ -15,8 +16,8 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
   final LightingConfig lightingConfig;
 
   AnimatedObjectOnce({
-    Rect position,
-    FlameAnimation.Animation animation,
+    Vector2Rect position,
+    SpriteAnimation animation,
     this.onFinish,
     this.onStartAnimation,
     this.rotateRadAngle,
@@ -31,9 +32,9 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     if (this.position == null) return;
     if (rotateRadAngle != null) {
       canvas.save();
-      canvas.translate(position.center.dx, position.center.dy);
+      canvas.translate(position.rect.center.dx, position.rect.center.dy);
       canvas.rotate(rotateRadAngle == 0.0 ? 0.0 : rotateRadAngle + (pi / 2));
-      canvas.translate(-position.center.dx, -position.center.dy);
+      canvas.translate(-position.rect.center.dx, -position.rect.center.dy);
       super.render(canvas);
       canvas.restore();
     } else {
@@ -48,7 +49,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
   @override
   void update(double dt) {
     super.update(dt);
-    if (animation != null && !destroy()) {
+    if (animation != null && !shouldRemove) {
       if (animation.currentIndex == 1 && !_notifyStart) {
         _notifyStart = true;
         if (onStartAnimation != null) onStartAnimation();
