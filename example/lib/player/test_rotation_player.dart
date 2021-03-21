@@ -81,7 +81,8 @@ class TestRotationPlayer extends RotationPlayer with ObjectCollision {
         height: 25,
         damage: 10,
         speed: initSpeed * 1.5,
-        collision: CollisionArea(height: 15, width: 15));
+        collision: CollisionConfig(
+            collisions: [CollisionArea(height: 15, width: 15)]));
   }
 
   void actionAttackMelee() {

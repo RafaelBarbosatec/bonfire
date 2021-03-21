@@ -97,13 +97,17 @@ class Goblin extends SimpleEnemy with ObjectCollision {
       height: width * 0.9,
       damage: attack,
       speed: DungeonMap.tileSize * 3,
-      collision: CollisionArea(
-        width: width / 2,
-        height: width / 2,
-        align: Offset(
-          width * 0.2,
-          width * 0.2,
-        ),
+      collision: CollisionConfig(
+        collisions: [
+          CollisionArea(
+            width: width / 2,
+            height: width / 2,
+            align: Offset(
+              width * 0.2,
+              width * 0.2,
+            ),
+          ),
+        ],
       ),
       lightingConfig: LightingConfig(
         radius: width,

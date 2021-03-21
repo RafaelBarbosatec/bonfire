@@ -130,10 +130,14 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
       height: width * 0.7,
       damage: 10,
       speed: initSpeed * 2,
-      collision: CollisionArea(
-        width: width / 2,
-        height: width / 2,
-        align: Offset(width * 0.1, 0),
+      collision: CollisionConfig(
+        collisions: [
+          CollisionArea(
+            width: width / 2,
+            height: width / 2,
+            align: Offset(width * 0.1, 0),
+          ),
+        ],
       ),
       lightingConfig: LightingConfig(
         radius: width * 0.5,
