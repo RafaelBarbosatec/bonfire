@@ -8,7 +8,7 @@ class AnimatedFollowerObject extends FollowerObject {
   final GameComponent target;
   final Rect positionFromTarget;
   final bool loopAnimation;
-  final Animation animation;
+  final SpriteAnimation animation;
 
   AnimatedFollowerObject({
     this.animation,
@@ -20,9 +20,7 @@ class AnimatedFollowerObject extends FollowerObject {
   @override
   void render(Canvas canvas) {
     if (animation == null || position == null) return;
-    if (animation.loaded()) {
-      animation.getSprite().renderRect(canvas, position);
-    }
+    animation.getSprite().render(canvas, position: position.position, size: position.size);
     super.render(canvas);
   }
 

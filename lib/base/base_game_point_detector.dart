@@ -6,10 +6,8 @@ import 'package:bonfire/util/camera/camera.dart';
 import 'package:bonfire/util/gestures/drag_gesture.dart';
 import 'package:bonfire/util/gestures/tap_gesture.dart';
 import 'package:bonfire/util/mixins/pointer_detector_mixin.dart';
-import 'package:flame/components/component.dart';
-import 'package:flame/components/composed_component.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/game/game.dart';
+import 'package:flame/components.dart';
+import 'package:flame/game.dart' hide Camera;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ordered_set/comparing.dart';
@@ -22,20 +20,14 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
 
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components =
-      OrderedSet(Comparing.on((c) => c.priority()));
+      OrderedSet(Comparing.on((c) => c.priority));
 
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
 
-  /// Current screen size, updated every resize via the [resize] method hook
-  Size size;
-
-  /// List of deltas used in debug mode to calculate FPS
-  final List<double> _dts = [];
-
   Iterable<GameComponent> get _gesturesComponents => components
       .where((c) =>
-          ((c is GameComponent && (c.isVisibleInCamera() || c.isHud())) &&
+          ((c is GameComponent && (c.isVisibleInCamera() || c.isHud)) &&
               ((c is TapGesture && c.enableTab) ||
                   (c is DragGesture && (c).enableDrag))))
       .cast<GameComponent>();
@@ -96,11 +88,11 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
 
     // first time resize
     if (size != null) {
-      c.resize(size);
+      c.onGameResize(size);
     }
 
-    if (c is ComposedComponent) {
-      c.components.forEach(preAdd);
+    if (c is PositionComponent) {
+      c.children.forEach(preAdd);
     }
   }
 
@@ -129,7 +121,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   void render(Canvas canvas) {
     canvas.save();
 
-    canvas.translate(size.width / 2, size.height / 2);
+    canvas.translate(size.x / 2, size.y / 2);
     canvas.scale(gameCamera.zoom);
     canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
 
@@ -142,18 +134,16 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// It translates the camera unless hud, call the render method and restore the canvas.
   /// This makes sure the canvas is not messed up by one component and all components render independently.
   void renderComponent(Canvas canvas, Component comp) {
-    if (!comp.loaded()) {
-      return;
-    } else if (comp is GameComponent) {
-      if (!comp.isHud() && !comp.isVisibleInCamera()) return;
+    if (comp is GameComponent) {
+      if (!comp.isHud && !comp.isVisibleInCamera()) return;
     }
 
     canvas.save();
 
-    if (comp.isHud()) {
+    if (comp.isHud) {
       canvas.translate(gameCamera.position.x, gameCamera.position.y);
       canvas.scale(1 / gameCamera.zoom);
-      canvas.translate(-size.width / 2, -size.height / 2);
+      canvas.translate(-size.x / 2, -size.y / 2);
     }
 
     comp.render(canvas);
@@ -171,7 +161,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
     _addLater.clear();
 
     components.forEach((c) => c.update(t));
-    components.removeWhere((c) => c.destroy());
+    components.removeWhere((c) => c.shouldRemove);
 
     gameCamera.update();
   }
@@ -192,9 +182,9 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// You can override it further to add more custom behaviour, but you should seriously consider calling the super implementation as well.
   @override
   @mustCallSuper
-  void resize(Size size) {
-    this.size = size;
-    components.forEach((c) => c.resize(size));
+  void onResize(Vector2 size) {
+    super.onResize(size);
+    components.forEach((c) => c.onGameResize(size));
   }
 
   /// Returns whether this [Game] is in debug mode or not.
@@ -203,37 +193,6 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// You can use this value to enable debug behaviors for your game, many components show extra information on screen when on debug mode
   bool debugMode() => false;
 
-  /// Returns whether this [Game] is should record fps or not
-  ///
-  /// Returns `false` by default. Override to use the `fps` counter method.
-  /// In recording fps, the [recordDt] method actually records every `dt` for statistics.
-  /// Then, you can use the [fps] method to check the game FPS.
-  bool recordFps() => false;
-
-  /// This is a hook that comes from the RenderBox to allow recording of render times and statistics.
-  @override
-  void recordDt(double dt) {
-    if (recordFps()) {
-      _dts.add(dt);
-    }
-  }
-
-  /// Returns the average FPS for the last [average] measures.
-  ///
-  /// The values are only saved if in debug mode (override [recordFps] to use this).
-  /// Selects the last [average] dts, averages then, and returns the inverse value.
-  /// So it's technically updates per second, but the relation between updates and renders is 1:1.
-  /// Returns 0 if empty.
-  double fps([int average = 1]) {
-    final List<double> dts = _dts.sublist(math.max(0, _dts.length - average));
-    if (dts.isEmpty) {
-      return 0.0;
-    }
-    final double dtSum = dts.reduce((s, t) => s + t);
-    final double averageDt = dtSum / average;
-    return 1 / averageDt;
-  }
-
   /// Returns the current time in seconds with microseconds precision.
   ///
   /// This is compatible with the `dt` value used in the [update] method.
@@ -241,7 +200,4 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
     return DateTime.now().microsecondsSinceEpoch.toDouble() /
         Duration.microsecondsPerSecond;
   }
-
-  @override
-  Widget get widget => widgetBuilder.build(this);
 }

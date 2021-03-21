@@ -18,7 +18,7 @@ import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/value_generator_component.dart';
-import 'package:flame/components/component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/keyboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   final GameComponent background;
   final bool constructionMode;
   final bool showCollisionArea;
-  final bool showFPS;
   final GameController gameController;
   final Color constructionModeColor;
   final Color lightingColorGame;
@@ -163,8 +162,8 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   }
 
   @override
-  void resize(Size size) {
-    super.resize(size);
+  void onResize(Vector2 size) {
+    super.onResize(size);
     _updateTempList();
   }
 
@@ -207,9 +206,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
 
     if (gameController != null) gameController.notifyListeners();
   }
-
-  @override
-  bool recordFps() => showFPS;
 
   GameColorFilter get colorFilter => _colorFilterComponent.colorFilter;
 }

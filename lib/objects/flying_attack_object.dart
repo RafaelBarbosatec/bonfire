@@ -5,20 +5,20 @@ import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/position.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
 class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final dynamic id;
-  final FlameAnimation.Animation flyAnimation;
-  final FlameAnimation.Animation destroyAnimation;
+  final SpriteAnimation flyAnimation;
+  final SpriteAnimation destroyAnimation;
   final Direction direction;
   final double speed;
   final double damage;
   final double width;
   final double height;
-  final Position initPosition;
+  final Vector2 initPosition;
   final AttackFromEnum attackFrom;
   final bool withDecorationCollision;
   final VoidCallback destroyedObject;
@@ -43,11 +43,9 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     CollisionConfig collision,
   }) {
     animation = flyAnimation;
-    position = Rect.fromLTWH(
-      initPosition.x,
-      initPosition.y,
-      width,
-      height,
+    position = Vector2Rect(
+      initPosition,
+      Vector2(width, height),
     );
 
     setupCollision(
@@ -66,28 +64,28 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
     switch (direction) {
       case Direction.left:
-        position = position.translate((speed * dt) * -1, 0);
+        position = Vector2Rect.fromRect(position.rect.translate((speed * dt) * -1, 0));
         break;
       case Direction.right:
-        position = position.translate((speed * dt), 0);
+        position = Vector2Rect.fromRect(position.rect.translate((speed * dt), 0));
         break;
       case Direction.top:
-        position = position.translate(0, (speed * dt) * -1);
+        position = Vector2Rect.fromRect(position.rect.translate(0, (speed * dt) * -1));
         break;
       case Direction.bottom:
-        position = position.translate(0, (speed * dt));
+        position = Vector2Rect.fromRect(position.rect.translate(0, (speed * dt)));
         break;
       case Direction.topLeft:
-        position = position.translate((speed * dt) * -1, 0);
+        position = Vector2Rect.fromRect(position.rect.translate((speed * dt) * -1, 0));
         break;
       case Direction.topRight:
-        position = position.translate((speed * dt), 0);
+        position = Vector2Rect.fromRect(position.rect.translate((speed * dt), 0));
         break;
       case Direction.bottomLeft:
-        position = position.translate((speed * dt) * -1, 0);
+        position = Vector2Rect.fromRect(position.rect.translate((speed * dt) * -1, 0));
         break;
       case Direction.bottomRight:
-        position = position.translate((speed * dt), 0);
+        position = Vector2Rect.fromRect(position.rect.translate((speed * dt), 0));
         break;
     }
 
@@ -124,70 +122,54 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
     if (destroy) {
       if (destroyAnimation != null) {
-        Rect positionDestroy;
+        Vector2Rect positionDestroy;
         switch (direction) {
           case Direction.left:
-            positionDestroy = Rect.fromLTWH(
-              position.left - (width / 2),
-              position.top,
-              width,
-              height,
+            positionDestroy = Vector2Rect(
+              Vector2(position.position.x - (width / 2), position.position.y),
+              Vector2(width, height),
             );
             break;
           case Direction.right:
-            positionDestroy = Rect.fromLTWH(
-              position.left + (width / 2),
-              position.top,
-              width,
-              height,
+            positionDestroy = Vector2Rect(
+              Vector2(position.position.x + (width / 2), position.position.y),
+              Vector2(width, height),
             );
             break;
           case Direction.top:
-            positionDestroy = Rect.fromLTWH(
-              position.left,
-              position.top - (height / 2),
-              width,
-              height,
+            positionDestroy = Vector2Rect(
+              Vector2(position.position.x, position.position.y - (height / 2)),
+              Vector2(width, height),
             );
             break;
           case Direction.bottom:
-            positionDestroy = Rect.fromLTWH(
-              position.left,
-              position.top + (height / 2),
-              width,
-              height,
+            positionDestroy = Vector2Rect(
+              Vector2(position.position.x, position.position.y + (height / 2)),
+              Vector2(width, height),
             );
             break;
           case Direction.topLeft:
-            positionDestroy = Rect.fromLTWH(
-              position.left - (width / 2),
-              position.top,
-              width,
-              height,
+            positionDestroy = Vector2Rect(
+              Vector2(position.position.x - (width / 2), position.position.y),
+              Vector2(width, height),
             );
             break;
           case Direction.topRight:
-            positionDestroy = Rect.fromLTWH(
-              position.left + (width / 2),
-              position.top,
-              width,
-              height,
+            positionDestroy = Vector2Rect(
+              Vector2(position.position.x + (width / 2), position.position.y),
+              Vector2(width, height),
             );
             break;
           case Direction.bottomLeft:
-            positionDestroy = Rect.fromLTWH(
-              position.left - (width / 2),
-              position.top,
-              width,
-              height,
+            positionDestroy = Vector2Rect(
+              Vector2(position.position.x - (width / 2), position.position.y),
+              Vector2(width, height),
             );
             break;
           case Direction.bottomRight:
-            positionDestroy = Rect.fromLTWH(
-              position.left + (width / 2),
-              position.top,
-              width,
-              height,
+            positionDestroy = Vector2Rect(
+              Vector2(position.position.x + (width / 2), position.position.y),
+              Vector2(width, height),
             );
             break;
         }
@@ -209,16 +191,16 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     Size mapSize = gameRef.map?.mapSize;
     if (mapSize == null) return true;
 
-    if (position.left < 0) {
+    if (position.rect.left < 0) {
       return false;
     }
-    if (position.right > mapSize.width) {
+    if (position.rect.right > mapSize.width) {
       return false;
     }
-    if (position.top < 0) {
+    if (position.rect.top < 0) {
       return false;
     }
-    if (position.bottom > mapSize.height) {
+    if (position.rect.bottom > mapSize.height) {
       return false;
     }
 
