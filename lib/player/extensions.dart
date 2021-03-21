@@ -94,7 +94,7 @@ extension PlayerExtensions on Player {
     bool withCollision = true,
     bool collisionOnlyVisibleObjects = true,
     VoidCallback destroy,
-    CollisionArea collision,
+    CollisionConfig collision,
     LightingConfig lightingConfig,
   }) {
     if (isDead) return;
@@ -143,7 +143,7 @@ extension PlayerExtensions on Player {
     bool withCollision = true,
     bool collisionOnlyVisibleObjects = true,
     VoidCallback destroy,
-    CollisionArea collision,
+    CollisionConfig collision,
     LightingConfig lightingConfig,
   }) {
     if (isDead) return;
@@ -227,12 +227,11 @@ extension PlayerExtensions on Player {
         width: width,
         damage: damage,
         speed: speed,
-        damageInPlayer: false,
+        attackFrom: AttackFromEnum.PLAYER,
         destroyedObject: destroy,
-        withCollision: withCollision,
+        withDecorationCollision: withCollision,
         collision: collision,
         lightingConfig: lightingConfig,
-        collisionOnlyVisibleObjects: collisionOnlyVisibleObjects,
       ),
     );
   }

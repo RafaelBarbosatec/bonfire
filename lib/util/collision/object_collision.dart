@@ -91,11 +91,11 @@ mixin ObjectCollision on GameComponent {
         ?.first;
   }
 
-  void drawCollision(Canvas canvas, Rect currentPosition, Color color) {
+  void drawCollision(Canvas canvas, Color color) {
     if (!containCollision()) return;
     _collisionConfig?.collisions?.forEach((element) {
       canvas.drawRect(
-        element.getRect(currentPosition),
+        element.getRect(position),
         Paint()..color = color ?? Colors.lightGreenAccent.withOpacity(0.5),
       );
     });
@@ -137,21 +137,6 @@ mixin ObjectCollision on GameComponent {
     return collisionMap != null;
   }
 
-  bool _containsCollisionWithDecoration(Iterable<Rect> rectCollisions) {
-    final collisionDecorations =
-        ((_collisionConfig?.collisionOnlyVisibleScreen ?? false)
-                ? gameRef?.visibleDecorations()
-                : gameRef?.decorations())
-            .firstWhere(
-      (i) =>
-          i is ObjectCollision &&
-          (i as ObjectCollision).detectCollision(rectCollisions) &&
-          (i as ObjectCollision) != this,
-      orElse: () => null,
-    );
-    return collisionDecorations != null;
-  }
-
   bool _containsCollision(Iterable<Rect> rectCollisions) {
     final collisions = ((_collisionConfig?.collisionOnlyVisibleScreen ?? true)
             ? gameRef?.visibleCollisions()
@@ -165,23 +150,12 @@ mixin ObjectCollision on GameComponent {
     return collisions != null;
   }
 
-  bool _containsCollisionWithPlayer(Iterable<Rect> rectCollisions) {
-    var player = gameRef?.player;
-    if (_collisionConfig?.collisionWithPlayer == true &&
-        player is ObjectCollision) {
-      return (player as ObjectCollision)?.detectCollision(rectCollisions) ==
-          true;
-    } else {
-      return false;
-    }
-  }
-
   @override
   void render(Canvas canvas) {
-    if (gameRef != null && gameRef.showCollisionArea) {
-      drawCollision(canvas, position, gameRef.collisionAreaColor);
-    }
     super.render(canvas);
+    if (gameRef != null && gameRef.showCollisionArea) {
+      drawCollision(canvas, gameRef.collisionAreaColor);
+    }
   }
 
   bool notVisibleAndCollisionOnlyScreen() {

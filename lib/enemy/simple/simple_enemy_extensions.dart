@@ -6,7 +6,6 @@ import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/objects/flying_attack_object.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
@@ -278,8 +277,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     Direction direction,
     int interval = 1000,
     bool withCollision = true,
-    bool collisionOnlyVisibleObjects = true,
-    CollisionArea collision,
+    CollisionConfig collision,
     VoidCallback destroy,
     VoidCallback execute,
     LightingConfig lightingConfig,
@@ -394,10 +392,9 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         damage: damage,
         speed: speed,
         destroyedObject: destroy,
-        withCollision: withCollision,
+        withDecorationCollision: withCollision,
         collision: collision,
         lightingConfig: lightingConfig,
-        collisionOnlyVisibleObjects: collisionOnlyVisibleObjects,
       ),
     );
 

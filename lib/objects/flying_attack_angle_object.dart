@@ -49,7 +49,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     this.collisionOnlyVisibleObjects = true,
     this.destroyedObject,
     this.lightingConfig,
-    CollisionArea collision,
+    CollisionConfig collision,
   }) {
     animation = flyAnimation;
     position = Rect.fromLTWH(
@@ -60,12 +60,13 @@ class FlyingAttackAngleObject extends AnimatedObject
     );
 
     setupCollision(
-      CollisionConfig(
-        collisions: [
-          collision ?? CollisionArea(width: width, height: height / 2)
-        ],
-        collisionOnlyVisibleScreen: collisionOnlyVisibleObjects,
-      ),
+      collision ??
+          CollisionConfig(
+            collisions: [
+              collision ?? CollisionArea(width: width, height: height / 2)
+            ],
+            collisionOnlyVisibleScreen: collisionOnlyVisibleObjects,
+          ),
     );
 
     _cosAngle = cos(radAngle);
@@ -101,9 +102,6 @@ class FlyingAttackAngleObject extends AnimatedObject
     canvas.rotate(_rotate);
     canvas.translate(-position.center.dx, -position.center.dy);
     super.render(canvas);
-    if (gameRef != null && gameRef.showCollisionArea) {
-      drawCollision(canvas, position, gameRef.collisionAreaColor);
-    }
     canvas.restore();
   }
 
@@ -112,22 +110,20 @@ class FlyingAttackAngleObject extends AnimatedObject
 
     bool destroy = false;
 
-    if (withCollision)
+    gameRef.attackables().where((a) {
+      return (damageInPlayer
+              ? a.receivesAttackFromEnemy()
+              : a.receivesAttackFromPlayer()) &&
+          a.rectAttackable().overlaps(position);
+    }).forEach((enemy) {
+      enemy.receiveDamage(damage, id);
+      destroy = true;
+    });
+
+    if (withCollision && !destroy)
       destroy = isCollision(
         shouldTriggerSensors: false,
       );
-
-    if (!destroy) {
-      gameRef.attackables().where((a) {
-        return (damageInPlayer
-                ? a.receivesAttackFromEnemy()
-                : a.receivesAttackFromPlayer()) &&
-            a.rectAttackable().overlaps(position);
-      }).forEach((enemy) {
-        enemy.receiveDamage(damage, id);
-        destroy = true;
-      });
-    }
 
     if (destroy) {
       if (destroyAnimation != null) {

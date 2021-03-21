@@ -1,6 +1,7 @@
 # NEXT
 
-- BREAKING CHANGE: Collision system.
+- BREAKING CHANGE: Collision system. Remove param `collision` from Enemy, Player and GameDecoration. If you need add collision in your component
+use the mixin 'Collision' and settings your properties using 'setupCollision()' method.
 
 # 0.8.6
 

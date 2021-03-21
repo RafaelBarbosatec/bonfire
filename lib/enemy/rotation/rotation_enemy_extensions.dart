@@ -6,7 +6,6 @@ import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/objects/flying_attack_angle_object.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
@@ -168,7 +167,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     bool withCollision = true,
     bool collisionOnlyVisibleObjects = true,
     VoidCallback destroy,
-    CollisionArea collision,
+    CollisionConfig collision,
     VoidCallback execute,
     LightingConfig lightingConfig,
   }) {
