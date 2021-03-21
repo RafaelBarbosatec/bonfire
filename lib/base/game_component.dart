@@ -2,8 +2,6 @@ import 'dart:ui';
 
 import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:bonfire/util/gestures/drag_gesture.dart';
-import 'package:bonfire/util/gestures/tap_gesture.dart';
 import 'package:flame/components.dart';
 
 // Flame v1 relies a lot on Vector2 for position and dimensions
@@ -15,51 +13,24 @@ class Vector2Rect {
 
   final Rect rect;
 
-  Vector2Rect(this.position, this.size) : rect = Rect.fromLTWH(
-      position.x,
-      position.y,
-      size.x,
-      size.y,
-  );
+  Vector2Rect(this.position, this.size)
+      : rect = Rect.fromLTWH(
+          position.x,
+          position.y,
+          size.x,
+          size.y,
+        );
 
-  Vector2Rect.fromRect(this.rect) :
-    position = Vector2(rect.top, rect.left),
-    size = Vector2(rect.width, rect.height);
+  Vector2Rect.fromRect(this.rect)
+      : position = Vector2(rect.top, rect.left),
+        size = Vector2(rect.width, rect.height);
 
-  Vector2Rect.zero(): this(Vector2.zero(), Vector2.zero());
+  Vector2Rect.zero() : this(Vector2.zero(), Vector2.zero());
 }
 
 abstract class GameComponent extends Component with HasGameRef<RPGGame> {
   /// Position used to draw on the screen
   Vector2Rect position;
-
-  void handlerPointerDown(int pointer, Offset position) {
-    if (this.position == null || gameRef == null) return;
-
-    if (this is TapGesture) {
-      (this as TapGesture).onTapDown(pointer, position);
-    }
-    if (this is DragGesture) {
-      (this as DragGesture).startDrag(pointer, position);
-    }
-  }
-
-  void handlerPointerMove(int pointer, Offset position) {
-    if (this is DragGesture) {
-      (this as DragGesture).moveDrag(pointer, position);
-    }
-  }
-
-  void handlerPointerUp(int pointer, Offset position) {
-    if (this.position == null) return;
-    if (this is TapGesture) {
-      (this as TapGesture).onTapUp(pointer, position);
-    }
-
-    if (this is DragGesture) {
-      (this as DragGesture).endDrag(pointer);
-    }
-  }
 
   @override
   void render(Canvas c) {}
@@ -115,6 +86,7 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
   }
 
   void translate(double translateX, double translateY) {
-    position = Vector2Rect.fromRect(position.rect.translate(translateX, translateY));
+    position =
+        Vector2Rect.fromRect(position.rect.translate(translateX, translateY));
   }
 }

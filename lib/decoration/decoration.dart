@@ -80,7 +80,8 @@ class GameDecoration extends AnimatedObject {
 
   @override
   void render(Canvas canvas) {
-    if (sprite != null) sprite.render(canvas, position: position.position, size: position.size);
+    if (sprite != null)
+      sprite.render(canvas, position: position.position, size: position.size);
     super.render(canvas);
   }
 
@@ -102,7 +103,7 @@ class GameDecoration extends AnimatedObject {
   }
 
   @override
-  int priority() {
+  int get priority {
     if (frontFromPlayer) {
       return PriorityLayer.OBJECTS;
     } else {

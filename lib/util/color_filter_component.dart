@@ -3,8 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/components/component.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
+import 'package:flame/components.dart';
 
 class ColorFilterComponent extends Component with HasGameRef<RPGGame> {
   final GameColorFilter colorFilter;
@@ -23,10 +22,11 @@ class ColorFilterComponent extends Component with HasGameRef<RPGGame> {
   }
 
   @override
-  void update(double t) {
+  void onGameResize(Vector2 gameSize) {
     colorFilter.gameRef = gameRef;
+    super.onGameResize(gameSize);
   }
 
   @override
-  int priority() => PriorityLayer.LIGHTING + 1;
+  int get priority => PriorityLayer.LIGHTING + 1;
 }

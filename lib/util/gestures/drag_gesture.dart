@@ -8,51 +8,55 @@ mixin DragGesture on GameComponent {
   int _pointer;
   bool enableDrag = true;
 
-  void startDrag(int pointer, Offset position) {
-    if (!(this is GameComponent) || !enableDrag) return;
-    if (this.isHud()) {
-      if (this.position.contains(position)) {
+  void dragStart(int pointer, Offset position) {
+    if (!enableDrag) return;
+    if (this.isHud) {
+      if (this.position.rect.contains(position)) {
         _pointer = pointer;
         _startDragOffset = position;
-        _startDragPosition = this.position;
+        _startDragPosition = this.position.rect;
       }
     } else {
-      final absolutePosition = this.gameRef.gameCamera.screenPositionToWorld(position);
-      if (this.position.contains(absolutePosition)) {
+      final absolutePosition =
+          this.gameRef.gameCamera.screenPositionToWorld(position);
+      if (this.position.rect.contains(absolutePosition)) {
         _pointer = pointer;
         _startDragOffset = absolutePosition;
-        _startDragPosition = this.position;
+        _startDragPosition = this.position.rect;
       }
     }
   }
 
-  void moveDrag(int pointer, Offset position) {
+  void dragMove(int pointer, Offset position) {
     if (!enableDrag || pointer != _pointer) return;
     if (_startDragOffset != null && this is GameComponent) {
-      if (this.isHud()) {
-        this.position = Rect.fromLTWH(
+      if (this.isHud) {
+        this.position = Vector2Rect.fromRect(Rect.fromLTWH(
           _startDragPosition.left + (position.dx - _startDragOffset.dx),
           _startDragPosition.top + (position.dy - _startDragOffset.dy),
           _startDragPosition.width,
           _startDragPosition.height,
-        );
+        ));
       } else {
-        final absolutePosition = this.gameRef.gameCamera.screenPositionToWorld(position);
-        this.position = Rect.fromLTWH(
+        final absolutePosition =
+            this.gameRef.gameCamera.screenPositionToWorld(position);
+        this.position = Vector2Rect.fromRect(Rect.fromLTWH(
           _startDragPosition.left + (absolutePosition.dx - _startDragOffset.dx),
           _startDragPosition.top + (absolutePosition.dy - _startDragOffset.dy),
           _startDragPosition.width,
           _startDragPosition.height,
-        );
+        ));
       }
     }
   }
 
-  void endDrag(int pointer) {
+  void dragEnd(int pointer) {
     if (pointer == _pointer) {
       _startDragPosition = null;
       _startDragOffset = null;
       _pointer = null;
     }
   }
+
+  void dragCancel(int pointerId) {}
 }

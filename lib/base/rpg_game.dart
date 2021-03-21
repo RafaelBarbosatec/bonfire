@@ -18,7 +18,7 @@ import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/value_generator_component.dart';
-import 'package:flame/components.dart';
+import 'package:flame/components.dart' hide JoystickController;
 import 'package:flame/keyboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +66,6 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     this.background,
     this.constructionMode = false,
     this.showCollisionArea = false,
-    this.showFPS = false,
     this.gameController,
     this.constructionModeColor,
     this.collisionAreaColor,

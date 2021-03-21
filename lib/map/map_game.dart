@@ -3,9 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/map/tile/tile.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/components/component.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/position.dart';
+import 'package:flame/components.dart';
 
 abstract class MapGame extends Component with HasGameRef<RPGGame> {
   Iterable<Tile> tiles;
@@ -24,5 +22,5 @@ abstract class MapGame extends Component with HasGameRef<RPGGame> {
   Size getMapSize();
 
   @override
-  int priority() => PriorityLayer.MAP;
+  int get priority => PriorityLayer.MAP;
 }

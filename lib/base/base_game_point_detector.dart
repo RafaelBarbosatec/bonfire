@@ -1,21 +1,18 @@
-import 'dart:math' as math;
-
-import 'package:bonfire/base/custom_widget_builder.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/camera/camera.dart';
 import 'package:bonfire/util/gestures/drag_gesture.dart';
 import 'package:bonfire/util/gestures/tap_gesture.dart';
-import 'package:bonfire/util/mixins/pointer_detector_mixin.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart' hide Camera;
+import 'package:flame/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
-abstract class BaseGamePointerDetector extends Game with PointerDetector {
+abstract class BaseGamePointerDetector extends Game
+    with MultiTouchDragDetector, MultiTouchTapDetector {
   bool _isPause = false;
-  final CustomWidgetBuilder widgetBuilder = CustomWidgetBuilder();
   Camera gameCamera = Camera();
 
   /// The list of components to be updated and rendered by the base game.
@@ -25,51 +22,87 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
 
-  Iterable<GameComponent> get _gesturesComponents => components
+  Iterable<TapGesture> get _tapGestureComponents => components
       .where((c) =>
           ((c is GameComponent && (c.isVisibleInCamera() || c.isHud)) &&
-              ((c is TapGesture && c.enableTab) ||
-                  (c is DragGesture && (c).enableDrag))))
-      .cast<GameComponent>();
+              ((c is TapGesture && c.enableTab))))
+      .cast<TapGesture>();
 
-  Iterable<PointerDetector> get _pointerDetectorComponents =>
-      components.where((c) => (c is PointerDetector)).cast();
+  Iterable<DragGesture> get _dragGestureComponents => components
+      .where((c) =>
+          ((c is GameComponent && (c.isVisibleInCamera() || c.isHud)) &&
+              (c is DragGesture && (c).enableDrag)))
+      .cast<DragGesture>();
 
-  void onPointerCancel(PointerCancelEvent event) {
-    _pointerDetectorComponents.forEach((c) => c.onPointerCancel(event));
+  Iterable<MultiTouchDragDetector> get _multiTouchComponents =>
+      components.where((c) => (c is MultiTouchDragDetector)).cast();
+
+  @override
+  void onTapDown(int pointerId, TapDownDetails details) {
+    for (final c in _tapGestureComponents) {
+      c.handleTapDown(pointerId, details.localPosition);
+    }
+    super.onTapDown(pointerId, details);
   }
 
-  void onPointerUp(PointerUpEvent event) {
-    for (final c in _gesturesComponents) {
-      c.handlerPointerUp(
-        event.pointer,
-        event.localPosition,
-      );
+  @override
+  void onTapUp(int pointerId, TapUpDetails details) {
+    for (final c in _tapGestureComponents) {
+      c.handleTapUp(pointerId, details.localPosition);
     }
-    for (final c in _pointerDetectorComponents) {
-      c.onPointerUp(event);
-    }
+    super.onTapUp(pointerId, details);
   }
 
-  void onPointerMove(PointerMoveEvent event) {
-    _gesturesComponents
-        .where((element) => element is DragGesture)
-        .forEach((element) {
-      element.handlerPointerMove(event.pointer, event.localPosition);
-    });
-    for (final c in _pointerDetectorComponents) {
-      c.onPointerMove(event);
+  @override
+  void onTapCancel(int pointerId) {
+    for (final c in _tapGestureComponents) {
+      c.handleTapCancel(pointerId);
     }
+    super.onTapCancel(pointerId);
   }
 
-  void onPointerDown(PointerDownEvent event) {
-    for (final c in _gesturesComponents) {
-      c.handlerPointerDown(event.pointer, event.localPosition);
+  @override
+  void onDragStart(int pointerId, Vector2 startPosition) {
+    for (final c in _dragGestureComponents) {
+      c.dragStart(pointerId, startPosition.toOffset());
     }
+    for (final c in _multiTouchComponents) {
+      c.onDragStart(pointerId, startPosition);
+    }
+    super.onDragStart(pointerId, startPosition);
+  }
 
-    for (final c in _pointerDetectorComponents) {
-      c.onPointerDown(event);
+  @override
+  void onDragCancel(int pointerId) {
+    for (final c in _dragGestureComponents) {
+      c.dragCancel(pointerId);
     }
+    for (final c in _multiTouchComponents) {
+      c.onDragCancel(pointerId);
+    }
+    super.onDragCancel(pointerId);
+  }
+
+  @override
+  void onDragEnd(int pointerId, DragEndDetails details) {
+    for (final c in _dragGestureComponents) {
+      c.dragEnd(pointerId);
+    }
+    for (final c in _multiTouchComponents) {
+      c.onDragEnd(pointerId, details);
+    }
+    super.onDragEnd(pointerId, details);
+  }
+
+  @override
+  void onDragUpdate(int pointerId, DragUpdateDetails details) {
+    for (final c in _dragGestureComponents) {
+      c.dragMove(pointerId, details.localPosition);
+    }
+    for (final c in _multiTouchComponents) {
+      c.onDragUpdate(pointerId, details);
+    }
+    super.onDragUpdate(pointerId, details);
   }
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
@@ -123,7 +156,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
 
     canvas.translate(size.x / 2, size.y / 2);
     canvas.scale(gameCamera.zoom);
-    canvas.translate(-gameCamera.position.x, -gameCamera.position.y);
+    canvas.translate(-gameCamera.position.dx, -gameCamera.position.dy);
 
     components.forEach((comp) => renderComponent(canvas, comp));
     canvas.restore();
@@ -141,7 +174,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
     canvas.save();
 
     if (comp.isHud) {
-      canvas.translate(gameCamera.position.x, gameCamera.position.y);
+      canvas.translate(gameCamera.position.dx, gameCamera.position.dy);
       canvas.scale(1 / gameCamera.zoom);
       canvas.translate(-size.x / 2, -size.y / 2);
     }

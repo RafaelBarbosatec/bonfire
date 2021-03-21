@@ -46,3 +46,9 @@ extension ImageExtension on Image {
     );
   }
 }
+
+extension OffSetExt on Offset {
+  Offset copyWith({double x, double y}) {
+    return Offset(x ?? this.dx, y ?? this.dy);
+  }
+}

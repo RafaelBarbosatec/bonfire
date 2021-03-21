@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 class ValueGeneratorComponent extends Component {
