@@ -22,7 +22,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   double angleRadAttack = 0.0;
   Rect rectDirectionAttack;
   Sprite spriteDirectionAttack;
-  bool showDirection = false;
+  bool execAttackRange = false;
 
   Knight(this.initPosition)
       : super(
@@ -73,12 +73,11 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
 
     if (event.id == 1) {
       if (event.event == ActionEvent.MOVE) {
-        showDirection = true;
+        execAttackRange = true;
         angleRadAttack = event.radAngle;
-        if (_timerAttackRange.update(dtUpdate)) actionAttackRange();
       }
       if (event.event == ActionEvent.UP) {
-        showDirection = false;
+        execAttackRange = false;
         actionAttackRange();
       }
     }
@@ -167,6 +166,8 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
         },
       );
     }
+
+    if (execAttackRange && _timerAttackRange.update(dt)) actionAttackRange();
     super.update(dt);
   }
 
@@ -233,7 +234,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   }
 
   void _drawDirectionAttack(Canvas c) {
-    if (showDirection) {
+    if (execAttackRange) {
       double radius = position.height;
       rectDirectionAttack = Rect.fromLTWH(position.center.dx - radius,
           position.center.dy - radius, radius * 2, radius * 2);

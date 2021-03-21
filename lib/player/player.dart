@@ -28,7 +28,8 @@ class Player extends GameComponent with Attackable implements JoystickListener {
 
   bool _isDead = false;
 
-  double dtUpdate = 0;
+  double _dtUpdate = 0;
+
   bool isFocusCamera = true;
 
   Player({
@@ -51,12 +52,12 @@ class Player extends GameComponent with Attackable implements JoystickListener {
 
   @override
   void update(double dt) {
-    dtUpdate = dt;
+    _dtUpdate = dt;
     super.update(dt);
   }
 
   void moveTop(double speed, {VoidCallback onCollision}) {
-    double innerSpeed = speed * dtUpdate;
+    double innerSpeed = speed * _dtUpdate;
 
     Rect displacement = position.translate(0, (-innerSpeed));
 
@@ -69,7 +70,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   }
 
   void moveRight(double speed, {VoidCallback onCollision}) {
-    double innerSpeed = speed * dtUpdate;
+    double innerSpeed = speed * _dtUpdate;
 
     Rect displacement = position.translate(innerSpeed, 0);
 
@@ -83,7 +84,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   }
 
   void moveBottom(double speed, {VoidCallback onCollision}) {
-    double innerSpeed = speed * dtUpdate;
+    double innerSpeed = speed * _dtUpdate;
 
     Rect displacement = position.translate(0, innerSpeed);
 
@@ -97,7 +98,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   }
 
   void moveLeft(double speed, {VoidCallback onCollision}) {
-    double innerSpeed = speed * dtUpdate;
+    double innerSpeed = speed * _dtUpdate;
 
     Rect displacement = position.translate(-innerSpeed, 0);
 
@@ -111,8 +112,8 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   }
 
   void moveFromAngle(double speed, double angle, {VoidCallback onCollision}) {
-    double nextX = (speed * dtUpdate) * cos(angle);
-    double nextY = (speed * dtUpdate) * sin(angle);
+    double nextX = (speed * _dtUpdate) * cos(angle);
+    double nextY = (speed * _dtUpdate) * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
     Offset diffBase = Offset(position.center.dx + nextPoint.dx,
@@ -163,11 +164,6 @@ class Player extends GameComponent with Attackable implements JoystickListener {
 
   @override
   int priority() => PriorityLayer.PLAYER;
-
-  @override
-  Rect rectAttackable() => this is ObjectCollision
-      ? (this as ObjectCollision).rectCollision
-      : position;
 
   @override
   void moveTo(Position position) {}

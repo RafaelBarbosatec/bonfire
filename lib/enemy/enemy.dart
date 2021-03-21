@@ -202,11 +202,6 @@ class Enemy extends GameComponent with Attackable {
   @override
   int priority() => PriorityLayer.ENEMY;
 
-  @override
-  Rect rectAttackable() => this is ObjectCollision
-      ? (this as ObjectCollision).rectCollision
-      : position;
-
   bool verifyEnemyCollision(
     Rect position,
     double translateX,
