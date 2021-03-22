@@ -8,6 +8,7 @@ import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {
@@ -67,10 +68,12 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       if (_game.map != null) _game.map.updateTiles(widget.map.tiles);
 
       _game.decorations().forEach((d) => d.remove());
-      if (widget.decorations != null) widget.decorations.forEach((d) => _game.addGameComponent(d));
+      if (widget.decorations != null)
+        widget.decorations.forEach((d) => _game.addGameComponent(d));
 
       _game.enemies().forEach((e) => e.remove());
-      if (widget.enemies != null) widget.enemies.forEach((e) => _game.addGameComponent(e));
+      if (widget.enemies != null)
+        widget.enemies.forEach((e) => _game.addGameComponent(e));
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -91,8 +94,10 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       showCollisionArea: widget.showCollisionArea,
       showFPS: widget.showFPS,
       gameController: widget.gameController,
-      constructionModeColor: widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
-      collisionAreaColor: widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
+      constructionModeColor:
+          widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+      collisionAreaColor:
+          widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
       lightingColorGame: widget.lightingColorGame,
       cameraZoom: widget.cameraZoom,
       cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
@@ -104,6 +109,8 @@ class _BonfireWidgetState extends State<BonfireWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _game.widget;
+    return GameWidget(
+      game: _game,
+    );
   }
 }

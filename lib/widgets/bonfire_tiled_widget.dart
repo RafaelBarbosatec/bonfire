@@ -8,6 +8,7 @@ import 'package:bonfire/tiled/tiled_world_data.dart';
 import 'package:bonfire/tiled/tiled_world_map.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class BonfireTiledWidget extends StatefulWidget {
@@ -59,7 +60,8 @@ class BonfireTiledWidget extends StatefulWidget {
   _BonfireTiledWidgetState createState() => _BonfireTiledWidgetState();
 }
 
-class _BonfireTiledWidgetState extends State<BonfireTiledWidget> with TickerProviderStateMixin {
+class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
+    with TickerProviderStateMixin {
   RPGGame _game;
   bool _loading = true;
 
@@ -88,9 +90,15 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget> with TickerProv
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: widget.progressTransitionDuration ?? Duration(milliseconds: 500),
+      duration:
+          widget.progressTransitionDuration ?? Duration(milliseconds: 500),
       transitionBuilder: widget.transitionBuilder,
-      child: _loading ? widget.progress ?? _defaultProgress() : _game?.widget ?? SizedBox.shrink(),
+      child: _loading
+          ? widget.progress ?? _defaultProgress()
+          : GameWidget(
+                game: _game,
+              ) ??
+              SizedBox.shrink(),
     );
   }
 
@@ -115,8 +123,10 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget> with TickerProv
         showCollisionArea: widget.showCollisionArea,
         showFPS: widget.showFPS,
         gameController: widget.gameController,
-        constructionModeColor: widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
-        collisionAreaColor: widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
+        constructionModeColor:
+            widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+        collisionAreaColor: widget.collisionAreaColor ??
+            Colors.lightGreenAccent.withOpacity(0.5),
         lightingColorGame: widget.lightingColorGame,
         cameraZoom: widget.cameraZoom,
         cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
