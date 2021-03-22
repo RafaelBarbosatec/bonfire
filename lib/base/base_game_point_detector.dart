@@ -40,7 +40,7 @@ abstract class BaseGamePointerDetector extends Game
   @override
   void onTapDown(int pointerId, TapDownDetails details) {
     for (final c in _tapGestureComponents) {
-      c.handleTapDown(pointerId, details.localPosition);
+      c.handlerTapDown(pointerId, details.localPosition);
     }
     super.onTapDown(pointerId, details);
   }
@@ -48,7 +48,7 @@ abstract class BaseGamePointerDetector extends Game
   @override
   void onTapUp(int pointerId, TapUpDetails details) {
     for (final c in _tapGestureComponents) {
-      c.handleTapUp(pointerId, details.localPosition);
+      c.handlerTapUp(pointerId, details.localPosition);
     }
     super.onTapUp(pointerId, details);
   }
@@ -56,7 +56,7 @@ abstract class BaseGamePointerDetector extends Game
   @override
   void onTapCancel(int pointerId) {
     for (final c in _tapGestureComponents) {
-      c.handleTapCancel(pointerId);
+      c.handlerTapCancel(pointerId);
     }
     super.onTapCancel(pointerId);
   }

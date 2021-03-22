@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/game_interface/interface_component.dart';
-import 'package:flame/text_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +10,7 @@ class TextInterfaceComponent extends InterfaceComponent {
   TextConfig textConfig;
   TextInterfaceComponent({
     @required int id,
-    @required Position position,
+    @required Vector2 position,
     this.text = '',
     double width = 0,
     double height = 0,
@@ -33,7 +32,7 @@ class TextInterfaceComponent extends InterfaceComponent {
     textConfig.render(
       canvas,
       text,
-      Position(this.position.left, this.position.top),
+      Vector2(this.position.rect.left, this.position.rect.top),
     );
   }
 }

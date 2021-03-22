@@ -4,7 +4,6 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/game_interface/interface_component.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -15,10 +14,10 @@ class GameInterface extends GameComponent with TapGesture {
   final textConfigRed = TextConfig(color: Colors.red, fontSize: 14);
 
   @override
-  bool isHud() => true;
+  bool get isHud => true;
 
   @override
-  int priority() => PriorityLayer.GAME_INTERFACE;
+  int get priority => PriorityLayer.GAME_INTERFACE;
 
   @override
   void render(Canvas c) {
@@ -35,9 +34,9 @@ class GameInterface extends GameComponent with TapGesture {
   }
 
   @override
-  void resize(Size size) {
-    _components.forEach((i) => i.resize(size));
-    super.resize(size);
+  void onGameResize(Vector2 size) {
+    _components.forEach((i) => i.onGameResize(size));
+    super.onGameResize(size);
   }
 
   void add(InterfaceComponent component) {
@@ -68,7 +67,7 @@ class GameInterface extends GameComponent with TapGesture {
       getTextConfigFps(fps).render(
         c,
         'FPS: ${fps.toStringAsFixed(2)}',
-        Position(gameRef.size.width - 100, 20),
+        Vector2(gameRef.size.x - 100, 20),
       );
     }
   }
@@ -87,4 +86,7 @@ class GameInterface extends GameComponent with TapGesture {
 
   @override
   void onTap() {}
+
+  @override
+  void onTapCancel() {}
 }

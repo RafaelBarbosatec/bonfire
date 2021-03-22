@@ -1,6 +1,7 @@
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/gestures/tap_gesture.dart';
-import 'package:flame/position.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
@@ -14,38 +15,48 @@ class InterfaceComponent extends GameComponent with TapGesture {
   Sprite spriteToRender;
 
   @override
-  bool isHud() => true;
+  bool get isHud => true;
 
   InterfaceComponent({
     @required this.id,
-    @required Position position,
+    @required Vector2 position,
     @required this.width,
     @required this.height,
     this.sprite,
     this.spriteSelected,
     this.onTapComponent,
   }) {
-    this.position = Rect.fromLTWH(position.x, position.y, width, height);
+    this.position = Vector2Rect.fromRect(
+      Rect.fromLTWH(
+        position.x,
+        position.y,
+        width,
+        height,
+      ),
+    );
     spriteToRender = sprite;
   }
 
   void render(Canvas canvas) {
-    if (spriteToRender != null && this.position != null && spriteToRender.loaded())
-      spriteToRender.renderRect(canvas, this.position);
+    if (spriteToRender != null && this.position != null)
+      spriteToRender.render(
+        canvas,
+        position: this.position.position,
+        size: this.position.size,
+      );
   }
 
   @override
-  void onTapDown(int pointer, Offset position) {
-    if (this.position.contains(position)) {
+  void handlerTapDown(int pointer, Offset position) {
+    if (this.position.rect.contains(position)) {
       spriteToRender = spriteSelected ?? spriteToRender;
     }
-    super.onTapDown(pointer, position);
+    super.handlerTapDown(pointer, position);
   }
 
   @override
   void onTapCancel() {
     spriteToRender = sprite;
-    super.onTapCancel();
   }
 
   @override
