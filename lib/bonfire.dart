@@ -2,7 +2,6 @@ library bonfire;
 
 export 'package:bonfire/base/game_component.dart';
 export 'package:bonfire/decoration/decoration.dart';
-export 'package:bonfire/decoration/decoration_animated_with_collision.dart';
 export 'package:bonfire/decoration/decoration_with_collision.dart';
 export 'package:bonfire/enemy/enemy.dart';
 export 'package:bonfire/enemy/extensions.dart';
@@ -59,11 +58,17 @@ export 'package:bonfire/util/text_damage_component.dart';
 export 'package:bonfire/util/value_generator_component.dart';
 export 'package:bonfire/widgets/bonfire_tiled_widget.dart';
 export 'package:bonfire/widgets/bonfire_widget.dart';
-export 'package:flame/animation.dart';
-export 'package:flame/components/text_component.dart';
+export 'package:flame/components.dart'
+    hide
+        JoystickController,
+        JoystickAction,
+        JoystickActionEvent,
+        JoystickDirectional,
+        JoystickDirectionalEvent,
+        JoystickComponent,
+        JoystickListener,
+        JoystickMoveDirectional,
+        JoystickActionAlign,
+        ActionEvent;
 export 'package:flame/flame.dart';
-export 'package:flame/position.dart';
 export 'package:flame/sprite.dart';
-export 'package:flame/spritesheet.dart';
-export 'package:flame/text_config.dart';
-export 'package:flame/widgets/animation_widget.dart';
