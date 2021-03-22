@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/util/vector2rect.dart';
 
 mixin DragGesture on GameComponent {
   Offset _startDragOffset;
@@ -31,21 +32,27 @@ mixin DragGesture on GameComponent {
     if (!enableDrag || pointer != _pointer) return;
     if (_startDragOffset != null && this is GameComponent) {
       if (this.isHud) {
-        this.position = Vector2Rect.fromRect(Rect.fromLTWH(
-          _startDragPosition.left + (position.dx - _startDragOffset.dx),
-          _startDragPosition.top + (position.dy - _startDragOffset.dy),
-          _startDragPosition.width,
-          _startDragPosition.height,
-        ));
+        this.position = Vector2Rect.fromRect(
+          Rect.fromLTWH(
+            _startDragPosition.left + (position.dx - _startDragOffset.dx),
+            _startDragPosition.top + (position.dy - _startDragOffset.dy),
+            this.position.size.x,
+            this.position.size.y,
+          ),
+        );
       } else {
         final absolutePosition =
             this.gameRef.gameCamera.screenPositionToWorld(position);
-        this.position = Vector2Rect.fromRect(Rect.fromLTWH(
-          _startDragPosition.left + (absolutePosition.dx - _startDragOffset.dx),
-          _startDragPosition.top + (absolutePosition.dy - _startDragOffset.dy),
-          _startDragPosition.width,
-          _startDragPosition.height,
-        ));
+        this.position = Vector2Rect.fromRect(
+          Rect.fromLTWH(
+            _startDragPosition.left +
+                (absolutePosition.dx - _startDragOffset.dx),
+            _startDragPosition.top +
+                (absolutePosition.dy - _startDragOffset.dy),
+            this.position.size.x,
+            this.position.size.y,
+          ),
+        );
       }
     }
   }
