@@ -1,7 +1,7 @@
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:flame/components.dart';
+import 'package:flame/components.dart' hide JoystickMoveDirectional;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -49,33 +49,32 @@ class Camera with HasGameRef<RPGGame> {
     position.translate(displacement * -1, 0);
   }
 
-  //TODO Verificar qual joystick vai utilizar
-  // void moveCamera(double displacement, JoystickMoveDirectional directional) {
-  //   switch (directional) {
-  //     case JoystickMoveDirectional.MOVE_UP:
-  //       moveTop(displacement);
-  //       break;
-  //     case JoystickMoveDirectional.MOVE_RIGHT:
-  //       moveRight(displacement);
-  //       break;
-  //     case JoystickMoveDirectional.MOVE_DOWN:
-  //       moveBottom(displacement);
-  //       break;
-  //     case JoystickMoveDirectional.MOVE_LEFT:
-  //       moveLeft(displacement);
-  //       break;
-  //     case JoystickMoveDirectional.MOVE_UP_LEFT:
-  //       break;
-  //     case JoystickMoveDirectional.MOVE_UP_RIGHT:
-  //       break;
-  //     case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-  //       break;
-  //     case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-  //       break;
-  //     case JoystickMoveDirectional.IDLE:
-  //       break;
-  //   }
-  // }
+  void moveCamera(double displacement, JoystickMoveDirectional directional) {
+    switch (directional) {
+      case JoystickMoveDirectional.MOVE_UP:
+        moveTop(displacement);
+        break;
+      case JoystickMoveDirectional.MOVE_RIGHT:
+        moveRight(displacement);
+        break;
+      case JoystickMoveDirectional.MOVE_DOWN:
+        moveBottom(displacement);
+        break;
+      case JoystickMoveDirectional.MOVE_LEFT:
+        moveLeft(displacement);
+        break;
+      case JoystickMoveDirectional.MOVE_UP_LEFT:
+        break;
+      case JoystickMoveDirectional.MOVE_UP_RIGHT:
+        break;
+      case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
+        break;
+      case JoystickMoveDirectional.MOVE_DOWN_LEFT:
+        break;
+      case JoystickMoveDirectional.IDLE:
+        break;
+    }
+  }
 
   void moveToPositionAnimated(
     Offset position, {
