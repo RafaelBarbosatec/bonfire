@@ -22,7 +22,6 @@ export 'package:bonfire/lighting/lighting_config.dart';
 export 'package:bonfire/map/map_game.dart';
 export 'package:bonfire/map/map_world.dart';
 export 'package:bonfire/map/tile/tile.dart';
-export 'package:bonfire/map/tile/tile_animated_with_collision.dart';
 export 'package:bonfire/map/tile/tile_with_collision.dart';
 export 'package:bonfire/objects/animated_follower_object.dart';
 export 'package:bonfire/objects/animated_object.dart';
