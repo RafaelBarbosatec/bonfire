@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/mixins/sensor.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/material.dart';
 
 class CollisionConfig {
@@ -40,7 +41,7 @@ mixin ObjectCollision on GameComponent {
     _collisionConfig.collisionOnlyVisibleScreen = onlyVisible;
   }
 
-  void triggerSensors(Iterable<Rect> rectCollisions) {
+  void triggerSensors(Iterable<Vector2Rect> rectCollisions) {
     final Iterable<Sensor> sensors = gameRef
         .visibleSensors()
         .where((decoration) => decoration is Sensor)
@@ -78,16 +79,16 @@ mixin ObjectCollision on GameComponent {
     return isCollision(displacement: moveToCurrent);
   }
 
-  Iterable<Rect> getRectCollisions(Rect displacement) {
+  Iterable<Vector2Rect> getRectCollisions(Vector2Rect displacement) {
     if (!containCollision()) return [];
     return _collisionConfig?.collisions
-        ?.map<Rect>((e) => e.getRect(displacement));
+        ?.map<Vector2Rect>((e) => e.getVectorCollision(displacement));
   }
 
-  Rect getRectCollision(Rect displacement) {
-    if (!containCollision()) return Rect.zero;
+  Vector2Rect getRectCollision(Vector2Rect displacement) {
+    if (!containCollision()) return Vector2Rect.zero();
     return _collisionConfig?.collisions
-        ?.map<Rect>((e) => e.getRect(displacement))
+        ?.map<Vector2Rect>((e) => e.getVectorCollision(displacement))
         ?.first;
   }
 
@@ -95,18 +96,19 @@ mixin ObjectCollision on GameComponent {
     if (!containCollision()) return;
     _collisionConfig?.collisions?.forEach((element) {
       canvas.drawRect(
-        element.getRect(position.rect),
+        element.getVectorCollision(position).rect,
         Paint()..color = color ?? Colors.lightGreenAccent.withOpacity(0.5),
       );
     });
   }
 
-  bool detectCollision(Iterable<Rect> displacements) {
+  bool detectCollision(Iterable<Vector2Rect> displacements) {
     if (!containCollision()) return false;
     final collision = displacements.firstWhere(
       (displacement) {
         final c = _collisionConfig?.collisions?.firstWhere(
-          (element) => element.getRect(this.position.rect).overlaps(displacement),
+          (element) =>
+              element.getVectorCollision(this.position).overlaps(displacement),
           orElse: () => null,
         );
         return c != null;
@@ -121,9 +123,9 @@ mixin ObjectCollision on GameComponent {
       _collisionConfig?.collisions != null &&
       _collisionConfig?.collisions?.isNotEmpty == true;
 
-  Rect get rectCollision => getRectCollision(position.rect);
+  Vector2Rect get rectCollision => getRectCollision(position);
 
-  bool _containsCollisionWithMap(Iterable<Rect> rectCollisions) {
+  bool _containsCollisionWithMap(Iterable<Vector2Rect> rectCollisions) {
     final tiledCollisions =
         ((_collisionConfig?.collisionOnlyVisibleScreen ?? false)
             ? gameRef?.map?.getCollisionsRendered() ?? []
@@ -137,7 +139,7 @@ mixin ObjectCollision on GameComponent {
     return collisionMap != null;
   }
 
-  bool _containsCollision(Iterable<Rect> rectCollisions) {
+  bool _containsCollision(Iterable<Vector2Rect> rectCollisions) {
     final collisions = ((_collisionConfig?.collisionOnlyVisibleScreen ?? true)
             ? gameRef?.visibleCollisions()
             : gameRef?.collisions())

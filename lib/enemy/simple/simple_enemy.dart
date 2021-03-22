@@ -2,6 +2,7 @@ import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 class SimpleEnemy extends Enemy {
@@ -21,7 +22,7 @@ class SimpleEnemy extends Enemy {
   bool _runFastAnimation = false;
 
   SimpleEnemy({
-    @required Offset position,
+    @required Vector2 position,
     @required double height,
     @required double width,
     @required this.animation,

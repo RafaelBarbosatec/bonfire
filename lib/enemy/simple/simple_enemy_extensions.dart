@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/enemy/extensions.dart';
 import 'package:bonfire/enemy/simple/simple_enemy.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
@@ -9,8 +10,7 @@ import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/vector2rect.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/position.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 extension SimpleEnemyExtensions on SimpleEnemy {
@@ -33,24 +33,24 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         double translateY = 0;
         double speed = this.speed * this.dtUpdate;
 
-        Rect rectToMove = this is ObjectCollision
+        Vector2Rect rectToMove = this is ObjectCollision
             ? (this as ObjectCollision).rectCollision
             : position;
 
         translateX =
-            rectToMove.center.dx > centerXPlayer ? (-1 * speed) : speed;
+            rectToMove.rect.center.dx > centerXPlayer ? (-1 * speed) : speed;
 
         translateX = _adjustTranslate(
           translateX,
-          rectToMove.center.dx,
+          rectToMove.rect.center.dx,
           centerXPlayer,
           speed,
         );
         translateY =
-            rectToMove.center.dy > centerYPlayer ? (-1 * speed) : speed;
+            rectToMove.rect.center.dy > centerYPlayer ? (-1 * speed) : speed;
         translateY = _adjustTranslate(
           translateY,
-          rectToMove.center.dy,
+          rectToMove.rect.center.dy,
           centerYPlayer,
           speed,
         );
@@ -72,7 +72,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           playerRect.height + (margin * 2),
         );
 
-        if (rectToMove.overlaps(rectPlayerCollision)) {
+        if (rectToMove.rect.overlaps(rectPlayerCollision)) {
           if (closePlayer != null) closePlayer(player);
           this.idle();
           return;
@@ -114,10 +114,10 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     bool withPush = false,
     double sizePush,
     Direction direction,
-    FlameAnimation.Animation attackEffectRightAnim,
-    FlameAnimation.Animation attackEffectBottomAnim,
-    FlameAnimation.Animation attackEffectLeftAnim,
-    FlameAnimation.Animation attackEffectTopAnim,
+    SpriteAnimation attackEffectRightAnim,
+    SpriteAnimation attackEffectBottomAnim,
+    SpriteAnimation attackEffectLeftAnim,
+    SpriteAnimation attackEffectTopAnim,
     VoidCallback execute,
   }) {
     if (!this.checkPassedInterval('attackMelee', interval, dtUpdate)) return;
@@ -125,11 +125,11 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     if (isDead || this.position == null) return;
 
     Rect positionAttack;
-    FlameAnimation.Animation anim;
+    SpriteAnimation anim;
 
     Direction playerDirection;
 
-    Rect rectToMove = this is ObjectCollision
+    Vector2Rect rectToMove = this is ObjectCollision
         ? (this as ObjectCollision).rectCollision
         : position;
 
@@ -137,8 +137,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       double centerXPlayer = playerRect.center.dx;
       double centerYPlayer = playerRect.center.dy;
 
-      double centerYEnemy = rectToMove.center.dy;
-      double centerXEnemy = rectToMove.center.dx;
+      double centerYEnemy = rectToMove.rect.center.dy;
+      double centerXEnemy = rectToMove.rect.center.dx;
 
       double diffX = centerXEnemy - centerXPlayer;
       double diffY = centerYEnemy - centerYPlayer;
@@ -159,8 +159,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     switch (playerDirection) {
       case Direction.top:
         positionAttack = Rect.fromLTWH(
-          this.position.left + (this.width - widthArea) / 2,
-          rectToMove.top - heightArea,
+          this.position.rect.left + (this.width - widthArea) / 2,
+          rectToMove.rect.top - heightArea,
           widthArea,
           heightArea,
         );
@@ -169,8 +169,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.right:
         positionAttack = Rect.fromLTWH(
-          rectToMove.right,
-          this.position.top + (this.height - heightArea) / 2,
+          rectToMove.rect.right,
+          this.position.rect.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -179,8 +179,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.bottom:
         positionAttack = Rect.fromLTWH(
-          this.position.left + (this.width - widthArea) / 2,
-          rectToMove.bottom,
+          this.position.rect.left + (this.width - widthArea) / 2,
+          rectToMove.rect.bottom,
           widthArea,
           heightArea,
         );
@@ -189,8 +189,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.left:
         positionAttack = Rect.fromLTWH(
-          rectToMove.left - widthArea,
-          this.position.top + (this.height - heightArea) / 2,
+          rectToMove.rect.left - widthArea,
+          this.position.rect.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -199,8 +199,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.topLeft:
         positionAttack = Rect.fromLTWH(
-          rectToMove.left - widthArea,
-          this.position.top + (this.height - heightArea) / 2,
+          rectToMove.rect.left - widthArea,
+          this.position.rect.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -209,8 +209,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.topRight:
         positionAttack = Rect.fromLTWH(
-          rectToMove.right,
-          this.position.top + (this.height - heightArea) / 2,
+          rectToMove.rect.right,
+          this.position.rect.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -219,8 +219,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.bottomLeft:
         positionAttack = Rect.fromLTWH(
-          rectToMove.left - widthArea,
-          this.position.top + (this.height - heightArea) / 2,
+          rectToMove.rect.left - widthArea,
+          this.position.rect.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -229,8 +229,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.bottomRight:
         positionAttack = Rect.fromLTWH(
-          rectToMove.right,
-          this.position.top + (this.height - heightArea) / 2,
+          rectToMove.rect.right,
+          this.position.rect.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -249,7 +249,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         .attackables()
         .where((a) =>
             a.receivesAttackFromEnemy() &&
-            a.rectAttackable().overlaps(positionAttack))
+            a.rectAttackable().rect.overlaps(positionAttack))
         .forEach((attackable) {
       attackable.receiveDamage(damage, id);
       Vector2Rect rectAfterPush =
@@ -266,11 +266,11 @@ extension SimpleEnemyExtensions on SimpleEnemy {
   }
 
   void simpleAttackRange({
-    @required FlameAnimation.Animation animationRight,
-    @required FlameAnimation.Animation animationLeft,
-    @required FlameAnimation.Animation animationTop,
-    @required FlameAnimation.Animation animationBottom,
-    @required FlameAnimation.Animation animationDestroy,
+    @required SpriteAnimation animationRight,
+    @required SpriteAnimation animationLeft,
+    @required SpriteAnimation animationTop,
+    @required SpriteAnimation animationBottom,
+    @required SpriteAnimation animationDestroy,
     @required double width,
     @required double height,
     int id,
@@ -288,30 +288,30 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     if (isDead) return;
 
-    Position startPosition;
-    FlameAnimation.Animation attackRangeAnimation;
+    Vector2 startPosition;
+    SpriteAnimation attackRangeAnimation;
 
     Direction ballDirection;
 
-    Rect rectToMove = this is ObjectCollision
+    Vector2Rect rectToMove = this is ObjectCollision
         ? (this as ObjectCollision).rectCollision
         : position;
 
-    var diffX = rectToMove.center.dx - playerRect.center.dx;
+    var diffX = rectToMove.rect.center.dx - playerRect.center.dx;
     var diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;
-    var diffY = rectToMove.center.dy - playerRect.center.dy;
+    var diffY = rectToMove.rect.center.dy - playerRect.center.dy;
     var diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
 
     if (diffPositiveX > diffPositiveY) {
-      if (playerRect.center.dx > rectToMove.center.dx) {
+      if (playerRect.center.dx > rectToMove.rect.center.dx) {
         ballDirection = Direction.right;
-      } else if (playerRect.center.dx < rectToMove.center.dx) {
+      } else if (playerRect.center.dx < rectToMove.rect.center.dx) {
         ballDirection = Direction.left;
       }
     } else {
-      if (playerRect.center.dy > rectToMove.center.dy) {
+      if (playerRect.center.dy > rectToMove.rect.center.dy) {
         ballDirection = Direction.bottom;
-      } else if (playerRect.center.dy < rectToMove.center.dy) {
+      } else if (playerRect.center.dy < rectToMove.rect.center.dy) {
         ballDirection = Direction.top;
       }
     }
@@ -321,58 +321,58 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     switch (finalDirection) {
       case Direction.left:
         if (animationLeft != null) attackRangeAnimation = animationLeft;
-        startPosition = Position(
-          rectToMove.left - width,
-          (rectToMove.top + (rectToMove.height - height) / 2),
+        startPosition = Vector2(
+          rectToMove.rect.left - width,
+          (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
       case Direction.right:
         if (animationRight != null) attackRangeAnimation = animationRight;
-        startPosition = Position(
-          rectToMove.right,
-          (rectToMove.top + (rectToMove.height - height) / 2),
+        startPosition = Vector2(
+          rectToMove.rect.right,
+          (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
       case Direction.top:
         if (animationTop != null) attackRangeAnimation = animationTop;
-        startPosition = Position(
-          (rectToMove.left + (rectToMove.width - width) / 2),
-          rectToMove.top - height,
+        startPosition = Vector2(
+          (rectToMove.rect.left + (rectToMove.rect.width - width) / 2),
+          rectToMove.rect.top - height,
         );
         break;
       case Direction.bottom:
         if (animationBottom != null) attackRangeAnimation = animationBottom;
-        startPosition = Position(
-          (rectToMove.left + (rectToMove.width - width) / 2),
-          rectToMove.bottom,
+        startPosition = Vector2(
+          (rectToMove.rect.left + (rectToMove.rect.width - width) / 2),
+          rectToMove.rect.bottom,
         );
         break;
       case Direction.topLeft:
         if (animationLeft != null) attackRangeAnimation = animationLeft;
-        startPosition = Position(
-          rectToMove.left - width,
-          (rectToMove.top + (rectToMove.height - height) / 2),
+        startPosition = Vector2(
+          rectToMove.rect.left - width,
+          (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
       case Direction.topRight:
         if (animationRight != null) attackRangeAnimation = animationRight;
-        startPosition = Position(
-          rectToMove.right,
-          (rectToMove.top + (rectToMove.height - height) / 2),
+        startPosition = Vector2(
+          rectToMove.rect.right,
+          (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
       case Direction.bottomLeft:
         if (animationLeft != null) attackRangeAnimation = animationLeft;
-        startPosition = Position(
-          rectToMove.left - width,
-          (rectToMove.top + (rectToMove.height - height) / 2),
+        startPosition = Vector2(
+          rectToMove.rect.left - width,
+          (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
       case Direction.bottomRight:
         if (animationRight != null) attackRangeAnimation = animationRight;
-        startPosition = Position(
-          rectToMove.right,
-          (rectToMove.top + (rectToMove.height - height) / 2),
+        startPosition = Vector2(
+          rectToMove.rect.right,
+          (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
     }
@@ -424,24 +424,24 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
         double speed = this.speed * this.dtUpdate;
 
-        Rect rectToMove = this is ObjectCollision
+        Vector2Rect rectToMove = this is ObjectCollision
             ? (this as ObjectCollision).rectCollision
             : position;
 
         translateX =
-            rectToMove.center.dx > centerXPlayer ? (-1 * speed) : speed;
+            rectToMove.rect.center.dx > centerXPlayer ? (-1 * speed) : speed;
         translateX = _adjustTranslate(
           translateX,
-          rectToMove.center.dx,
+          rectToMove.rect.center.dx,
           centerXPlayer,
           speed,
         );
 
         translateY =
-            rectToMove.center.dy > centerYPlayer ? (-1 * speed) : speed;
+            rectToMove.rect.center.dy > centerYPlayer ? (-1 * speed) : speed;
         translateY = _adjustTranslate(
           translateY,
-          rectToMove.center.dy,
+          rectToMove.rect.center.dy,
           centerYPlayer,
           speed,
         );
@@ -456,12 +456,14 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           translateY = 0;
         }
 
-        double translateXPositive = rectToMove.center.dx - playerRect.center.dx;
+        double translateXPositive =
+            rectToMove.rect.center.dx - playerRect.center.dx;
         translateXPositive = translateXPositive >= 0
             ? translateXPositive
             : translateXPositive * -1;
 
-        double translateYPositive = rectToMove.center.dy - playerRect.center.dy;
+        double translateYPositive =
+            rectToMove.rect.center.dy - playerRect.center.dy;
         translateYPositive = translateYPositive >= 0
             ? translateYPositive
             : translateYPositive * -1;

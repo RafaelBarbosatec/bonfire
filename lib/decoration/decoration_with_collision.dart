@@ -1,12 +1,10 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:flame/components.dart';
 
 class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
   GameDecorationWithCollision(
-    Offset position, {
+    Vector2 position, {
     Sprite sprite,
     SpriteAnimation animation,
     double width = 32,
@@ -33,7 +31,7 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
 
   GameDecorationWithCollision.withSprite(
     Sprite sprite,
-    Offset position, {
+    Vector2 position, {
     double width = 32,
     double height = 32,
     String type,
@@ -57,7 +55,7 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
 
   GameDecorationWithCollision.withAnimation(
     SpriteAnimation animation,
-    Offset position, {
+    Vector2 position, {
     double width = 32,
     double height = 32,
     String type,

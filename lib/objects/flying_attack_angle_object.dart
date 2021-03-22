@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object.dart';
@@ -8,6 +7,7 @@ import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
@@ -22,7 +22,6 @@ class FlyingAttackAngleObject extends AnimatedObject
   final double damage;
   final double width;
   final double height;
-  final Vector2 initPosition;
   final bool damageInPlayer;
   final bool withCollision;
   final bool collisionOnlyVisibleObjects;
@@ -36,7 +35,7 @@ class FlyingAttackAngleObject extends AnimatedObject
   final IntervalTick _timerVerifyCollision = IntervalTick(40);
 
   FlyingAttackAngleObject({
-    @required this.initPosition,
+    @required Vector2 position,
     @required this.flyAnimation,
     @required this.radAngle,
     @required this.width,
@@ -53,8 +52,8 @@ class FlyingAttackAngleObject extends AnimatedObject
     CollisionConfig collision,
   }) {
     animation = flyAnimation;
-    position = Vector2Rect(
-      initPosition,
+    this.position = Vector2Rect(
+      position,
       Vector2(width, height),
     );
 
@@ -113,7 +112,7 @@ class FlyingAttackAngleObject extends AnimatedObject
       return (damageInPlayer
               ? a.receivesAttackFromEnemy()
               : a.receivesAttackFromPlayer()) &&
-          a.rectAttackable().overlaps(position.rect);
+          a.rectAttackable().rect.overlaps(position.rect);
     }).forEach((enemy) {
       enemy.receiveDamage(damage, id);
       destroy = true;
@@ -134,7 +133,8 @@ class FlyingAttackAngleObject extends AnimatedObject
                 position.rect.center.dy + nextPoint.dy) -
             position.rect.center;
 
-        final positionDestroy = Vector2Rect.fromRect(position.rect.shift(diffBase));
+        final positionDestroy =
+            Vector2Rect.fromRect(position.rect.shift(diffBase));
 
         gameRef.addLater(
           AnimatedObjectOnce(

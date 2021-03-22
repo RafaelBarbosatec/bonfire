@@ -34,11 +34,11 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
   String tileTypeBelow() {
     final map = gameRef?.map;
     if (map != null && map.tiles.isNotEmpty) {
-      Rect position = (this is ObjectCollision)
-          ? (this as ObjectCollision).getRectCollision(this.position.rect)
+      Vector2Rect position = (this is ObjectCollision)
+          ? (this as ObjectCollision).getRectCollision(this.position)
           : this.position;
       final tiles = map.getRendered().where((element) {
-        return (element.position.rect.overlaps(position) &&
+        return (element.position.overlaps(position) &&
             (element?.type?.isNotEmpty ?? false));
       });
       if (tiles.isNotEmpty) return tiles.first.type;
@@ -49,12 +49,12 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
   List<String> tileTypesBelow() {
     final map = gameRef?.map;
     if (map != null && map.tiles.isNotEmpty) {
-      Rect position = (this is ObjectCollision)
-          ? (this as ObjectCollision).getRectCollision(this.position.rect)
+      Vector2Rect position = (this is ObjectCollision)
+          ? (this as ObjectCollision).getRectCollision(this.position)
           : this.position;
       return map
           .getRendered()
-          .where((element) => (element.position.rect.overlaps(position) &&
+          .where((element) => (element.position.overlaps(position) &&
               (element?.type?.isNotEmpty ?? false)))
           .map<String>((e) => e.type)
           .toList();

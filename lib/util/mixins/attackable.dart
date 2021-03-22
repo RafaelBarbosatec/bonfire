@@ -1,6 +1,6 @@
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:flutter/widgets.dart';
+import 'package:bonfire/util/vector2rect.dart';
 
 enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER }
 enum AttackFromEnum { ENEMY, PLAYER }
@@ -11,7 +11,7 @@ mixin Attackable on GameComponent {
 
   void receiveDamage(double damage, dynamic from);
 
-  Rect rectAttackable() => this is ObjectCollision
+  Vector2Rect rectAttackable() => this is ObjectCollision
       ? (this as ObjectCollision).rectCollision
       : position;
 

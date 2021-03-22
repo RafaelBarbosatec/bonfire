@@ -32,6 +32,11 @@ class Vector2Rect {
     );
   }
 
+  /// Whether `other` has a nonzero area of overlap with this rectangle.
+  bool overlaps(Vector2Rect vector) {
+    return this.rect.overlaps(vector.rect);
+  }
+
   Vector2Rect shift(Offset offset) {
     return Vector2Rect(
       Vector2(this.position.x + offset.dx, this.position.y + offset.dy),

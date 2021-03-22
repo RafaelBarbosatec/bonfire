@@ -34,19 +34,19 @@ class Camera with HasGameRef<RPGGame> {
       );
 
   void moveTop(double displacement) {
-    position.translate(0, displacement * -1);
+    position = position.translate(0, displacement * -1);
   }
 
   void moveRight(double displacement) {
-    position.translate(displacement, 0);
+    position = position.translate(displacement, 0);
   }
 
   void moveBottom(double displacement) {
-    position.translate(0, displacement);
+    position = position.translate(0, displacement);
   }
 
   void moveLeft(double displacement) {
-    position.translate(displacement * -1, 0);
+    position = position.translate(displacement * -1, 0);
   }
 
   void moveCamera(double displacement, JoystickMoveDirectional directional) {
@@ -189,14 +189,14 @@ class Camera with HasGameRef<RPGGame> {
     final verticalDistance = screenCenter.dy - positionTarget.dy;
 
     if (horizontalDistance.abs() > horizontal) {
-      this.position.translate(
+      this.position = this.position.translate(
           horizontalDistance > 0
               ? horizontal - horizontalDistance
               : -horizontalDistance - horizontal,
           0);
     }
     if (verticalDistance.abs() > vertical) {
-      this.position.translate(
+      this.position = this.position.translate(
           0,
           verticalDistance > 0
               ? vertical - verticalDistance

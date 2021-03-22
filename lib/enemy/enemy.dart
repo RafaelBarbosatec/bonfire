@@ -6,6 +6,7 @@ import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/vector2rect.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,7 @@ class Enemy extends GameComponent with Attackable {
   double dtUpdate = 0;
 
   Enemy({
-    @required Offset position,
+    @required Vector2 position,
     @required this.height,
     @required this.width,
     this.life = 10,
@@ -40,8 +41,8 @@ class Enemy extends GameComponent with Attackable {
     maxLife = life;
     this.position = Vector2Rect.fromRect(
       Rect.fromLTWH(
-        position.dx,
-        position.dy,
+        position.x,
+        position.y,
         width,
         height,
       ),

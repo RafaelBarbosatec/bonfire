@@ -31,7 +31,7 @@ class GameDecoration extends AnimatedObject {
 
   GameDecoration({
     this.sprite,
-    @required Offset position,
+    @required Vector2 position,
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
@@ -47,7 +47,7 @@ class GameDecoration extends AnimatedObject {
 
   GameDecoration.sprite(
     this.sprite, {
-    @required Offset position,
+    @required Vector2 position,
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
@@ -61,7 +61,7 @@ class GameDecoration extends AnimatedObject {
 
   GameDecoration.animation(
     SpriteAnimation animation, {
-    @required Offset position,
+    @required Vector2 position,
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
@@ -87,7 +87,7 @@ class GameDecoration extends AnimatedObject {
   }
 
   Vector2Rect generateRectWithBleedingPixel(
-    Offset position,
+    Vector2 position,
     double width,
     double height,
   ) {
@@ -97,10 +97,10 @@ class GameDecoration extends AnimatedObject {
     }
     return Vector2Rect.fromRect(
       Rect.fromLTWH(
-        position.dx - (position.dx % 2 == 0 ? (bleendingPixel / 2) : 0),
-        position.dy - (position.dy % 2 == 0 ? (bleendingPixel / 2) : 0),
-        width + (position.dx % 2 == 0 ? bleendingPixel : 0),
-        height + (position.dy % 2 == 0 ? bleendingPixel : 0),
+        position.x - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0),
+        position.y - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0),
+        width + (position.x % 2 == 0 ? bleendingPixel : 0),
+        height + (position.y % 2 == 0 ? bleendingPixel : 0),
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/enemy/enemy.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 class RotationEnemy extends Enemy {
@@ -15,7 +16,7 @@ class RotationEnemy extends Enemy {
   double currentRadAngle;
 
   RotationEnemy({
-    @required Offset position,
+    @required Vector2 position,
     @required this.animIdle,
     @required this.animRun,
     double height = 32,

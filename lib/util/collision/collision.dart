@@ -1,3 +1,4 @@
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/widgets.dart';
 
 class CollisionArea {
@@ -13,9 +14,9 @@ class CollisionArea {
     height = size;
   }
 
-  Rect getRect(Rect displacement) {
-    double left = displacement.left + align.dx;
-    double top = displacement.top + align.dy;
-    return Rect.fromLTWH(left, top, width, height);
+  Vector2Rect getVectorCollision(Vector2Rect displacement) {
+    double left = displacement.rect.left + align.dx;
+    double top = displacement.rect.top + align.dy;
+    return Vector2Rect.fromRect(Rect.fromLTWH(left, top, width, height));
   }
 }
