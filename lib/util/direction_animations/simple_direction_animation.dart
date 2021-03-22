@@ -140,7 +140,7 @@ class SimpleDirectionAnimation {
     if (position == null) return;
     if (_fastAnimation != null) {
       _fastAnimation.render(canvas);
-    } else {
+    } else if (current?.getSprite()?.loaded() == true) {
       current.getSprite().render(
             canvas,
             position: position.position,

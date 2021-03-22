@@ -81,8 +81,9 @@ class GameDecoration extends AnimatedObject {
 
   @override
   void render(Canvas canvas) {
-    if (sprite != null)
+    if (sprite?.loaded() == true) {
       sprite.render(canvas, position: position.position, size: position.size);
+    }
     super.render(canvas);
   }
 

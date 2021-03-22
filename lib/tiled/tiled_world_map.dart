@@ -2,10 +2,8 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/decoration/decoration_animated_with_collision.dart';
 import 'package:bonfire/decoration/decoration_with_collision.dart';
 import 'package:bonfire/map/tile/tile.dart';
-import 'package:bonfire/map/tile/tile_animated_with_collision.dart';
 import 'package:bonfire/map/tile/tile_with_collision.dart';
 import 'package:bonfire/tiled/map_cahe.dart';
 import 'package:bonfire/tiled/tiled_world_data.dart';
@@ -112,7 +110,7 @@ class TiledWorldMap {
               _components.add(
                 GameDecorationWithCollision.withSprite(
                   data.sprite,
-                  Position(
+                  Vector2(
                     (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
                         offsetX,
                     (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
@@ -126,9 +124,9 @@ class TiledWorldMap {
               );
             } else {
               _tiles.add(
-                TileWithCollision(
+                TileWithCollision.withSprite(
                   data.sprite,
-                  Position(
+                  Vector2(
                     _getX(count, tileLayer.width.toInt()),
                     _getY(count, tileLayer.width.toInt()),
                   ),
@@ -146,7 +144,7 @@ class TiledWorldMap {
               _components.add(
                 GameDecorationWithCollision.withAnimation(
                   data.animation.animation,
-                  Position(
+                  Vector2(
                     (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
                         offsetX,
                     (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
@@ -160,9 +158,9 @@ class TiledWorldMap {
               );
             } else {
               _tiles.add(
-                TileAnimatedWithCollision(
+                TileWithCollision.withAnimation(
                   data.animation,
-                  Position(
+                  Vector2(
                     _getX(count, tileLayer.width.toInt()),
                     _getY(count, tileLayer.width.toInt()),
                   ),
@@ -348,7 +346,7 @@ class TiledWorldMap {
         });
 
         _animationCache[animationKey] = ControlledUpdateAnimation(
-          Animation.spriteList(
+          SpriteAnimation.spriteList(
             spriteList,
             stepTime: stepTime,
           ),
@@ -398,8 +396,9 @@ class TiledWorldMap {
 
   Future<Image> _loadImage(String image) async {
     if (fromServer) {
-      if (Flame.images.loadedFiles.containsKey(image)) {
-        return Flame.images.loadedFiles[image].retreive();
+      final imageCache = getImageFromCache(image);
+      if (imageCache != null) {
+        return imageCache;
       }
       if (enableServerCache) {
         final base64 = await _mapCache.getBase64(image);
@@ -413,6 +412,14 @@ class TiledWorldMap {
       return Flame.images.fromBase64(image, img64);
     } else {
       return Flame.images.load(image);
+    }
+  }
+
+  Image getImageFromCache(String image) {
+    try {
+      return Flame.images.fromCache(image);
+    } catch (e) {
+      return null;
     }
   }
 }

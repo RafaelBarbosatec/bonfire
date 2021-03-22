@@ -8,7 +8,7 @@ import 'package:flame/components.dart';
 abstract class MapGame extends Component with HasGameRef<RPGGame> {
   Iterable<Tile> tiles;
   Size mapSize;
-  Position mapStartPosition;
+  Vector2 mapStartPosition;
 
   MapGame(this.tiles);
 

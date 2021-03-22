@@ -2,11 +2,11 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_paint.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
-import 'package:flame/position.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
 class Tile extends GameComponent {
@@ -15,25 +15,28 @@ class Tile extends GameComponent {
   final double width;
   final double height;
   final String type;
-  Position _positionText;
+  Vector2 _positionText;
   Paint _paintText;
 
   Tile(
     String spritePath,
-    Position position, {
+    Vector2 position, {
     this.width = 32,
     this.height = 32,
     this.type,
   }) {
     this.position = generateRectWithBleedingPixel(position, width, height);
-    if (spritePath.isNotEmpty) sprite = Sprite(spritePath);
+    if (spritePath.isNotEmpty) {
+      Sprite.load(spritePath).then((value) => sprite = value);
+    }
+    ;
 
-    _positionText = Position(position.x, position.y);
+    _positionText = position;
   }
 
   Tile.fromSprite(
     Sprite sprite,
-    Position position, {
+    Vector2 position, {
     this.width = 32,
     this.height = 32,
     this.type,
@@ -44,12 +47,12 @@ class Tile extends GameComponent {
     this.position = generateRectWithBleedingPixel(position, width, height,
         offsetX: offsetX, offsetY: offsetY);
 
-    _positionText = Position(position.x, position.y);
+    _positionText = position;
   }
 
   Tile.fromAnimation(
     ControlledUpdateAnimation animation,
-    Position position, {
+    Vector2 position, {
     this.width = 32,
     this.height = 32,
     this.type,
@@ -57,16 +60,20 @@ class Tile extends GameComponent {
     this.animation = animation;
     this.position = generateRectWithBleedingPixel(position, width, height);
 
-    _positionText = Position(position.x, position.y);
+    _positionText = position;
   }
 
   @override
   void render(Canvas canvas) {
     if (position == null) return;
-    animation?.render(canvas, position);
+    animation?.render(canvas, position.rect);
     if (sprite?.loaded() ?? false) {
-      sprite.renderRect(canvas, position,
-          overridePaint: MapPaint.instance.paint);
+      sprite.render(
+        canvas,
+        position: position.position,
+        size: position.size,
+        overridePaint: MapPaint.instance.paint,
+      );
     }
 
     if ((gameRef?.constructionMode ?? false) && isVisibleInCamera()) {
@@ -82,7 +89,7 @@ class Tile extends GameComponent {
         ..strokeWidth = 1;
     }
     canvas.drawRect(
-      position,
+      position.rect,
       _paintText
         ..color = gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
     );
@@ -96,13 +103,13 @@ class Tile extends GameComponent {
           .render(
             canvas,
             '${_positionText.x.toInt()}:${_positionText.y.toInt()}',
-            Position(position.left + 2, position.top + 2),
+            Vector2(position.rect.left + 2, position.rect.top + 2),
           );
     }
   }
 
-  Rect generateRectWithBleedingPixel(
-    Position position,
+  Vector2Rect generateRectWithBleedingPixel(
+    Vector2 position,
     double width,
     double height, {
     double offsetX = 0,
@@ -122,7 +129,7 @@ class Tile extends GameComponent {
           offsetY,
       width + (position.x % 2 == 0 ? bleendingPixel : 0),
       height + (position.y % 2 == 0 ? bleendingPixel : 0),
-    );
+    ).toVector2Rect();
   }
 
   @override

@@ -239,9 +239,12 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
     }
 
-    if (anim != null) {
+    if (anim != null && positionAttack != null) {
       gameRef.addLater(
-        AnimatedObjectOnce(animation: anim, position: positionAttack),
+        AnimatedObjectOnce(
+          animation: anim,
+          position: positionAttack.toVector2Rect(),
+        ),
       );
     }
 

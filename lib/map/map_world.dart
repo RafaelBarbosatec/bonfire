@@ -10,7 +10,7 @@ class MapWorld extends MapGame {
   double lastCameraX = -1;
   double lastCameraY = -1;
   double lastZoom = -1;
-  Size lastSizeScreen;
+  Vector2 lastSizeScreen;
   Iterable<Tile> _tilesToRender = [];
   Iterable<Tile> _tilesCollisionsRendered = [];
   Iterable<Tile> _tilesCollisions = [];
@@ -30,11 +30,11 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    if (lastCameraX != gameRef.gameCamera.position.x ||
-        lastCameraY != gameRef.gameCamera.position.y ||
+    if (lastCameraX != gameRef.gameCamera.position.dx ||
+        lastCameraY != gameRef.gameCamera.position.dy ||
         lastZoom != gameRef.gameCamera.zoom) {
-      lastCameraX = gameRef.gameCamera.position.x;
-      lastCameraY = gameRef.gameCamera.position.y;
+      lastCameraX = gameRef.gameCamera.position.dx;
+      lastCameraY = gameRef.gameCamera.position.dy;
       lastZoom = gameRef.gameCamera.zoom;
 
       List<Tile> tilesRender = [];
@@ -72,12 +72,12 @@ class MapWorld extends MapGame {
   }
 
   @override
-  void resize(Size size) {
+  void onGameResize(Vector2 size) {
     verifyMaxTopAndLeft(size);
-    super.resize(size);
+    super.onGameResize(size);
   }
 
-  void verifyMaxTopAndLeft(Size size) {
+  void verifyMaxTopAndLeft(Vector2 size) {
     if (lastSizeScreen == size) return;
     lastSizeScreen = size;
 
@@ -104,26 +104,27 @@ class MapWorld extends MapGame {
     double width = 0;
 
     this.tiles.forEach((tile) {
-      if (tile.position.right > width) width = tile.position.right;
-      if (tile.position.bottom > height) height = tile.position.bottom;
+      if (tile.position.rect.right > width) width = tile.position.rect.right;
+      if (tile.position.rect.bottom > height)
+        height = tile.position.rect.bottom;
     });
 
     return Size(width, height);
   }
 
-  Position getStartPosition() {
+  Vector2 getStartPosition() {
     try {
-      double x = this.tiles.first.position.left;
-      double y = this.tiles.first.position.top;
+      double x = this.tiles.first.position.rect.left;
+      double y = this.tiles.first.position.rect.top;
 
       this.tiles.forEach((tile) {
-        if (tile.position.left < x) x = tile.position.left;
-        if (tile.position.top < y) y = tile.position.top;
+        if (tile.position.rect.left < x) x = tile.position.rect.left;
+        if (tile.position.rect.top < y) y = tile.position.rect.top;
       });
 
-      return Position(x, y);
+      return Vector2(x, y);
     } catch (e) {
-      return Position.empty();
+      return Vector2.zero();
     }
   }
 }

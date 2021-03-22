@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/foundation.dart';
 
 extension ImageExtension on Image {
-  FlameAnimation.Animation getAnimation({
+  SpriteAnimation getAnimation({
     @required double width,
     @required double height,
     @required double count,
@@ -16,15 +16,19 @@ extension ImageExtension on Image {
   }) {
     List<Sprite> spriteList = [];
     for (int i = 0; i < count; i++) {
-      spriteList.add(Sprite.fromImage(
+      spriteList.add(Sprite(
         this,
-        x: (startDx + (i * width)).toDouble(),
-        y: startDy.toDouble(),
-        width: width,
-        height: height,
+        srcPosition: Vector2(
+          (startDx + (i * width)).toDouble(),
+          startDy.toDouble(),
+        ),
+        srcSize: Vector2(
+          width,
+          height,
+        ),
       ));
     }
-    return FlameAnimation.Animation.spriteList(
+    return SpriteAnimation.spriteList(
       spriteList,
       loop: loop,
       stepTime: stepTime,
@@ -37,12 +41,10 @@ extension ImageExtension on Image {
     @required double width,
     @required double height,
   }) {
-    return Sprite.fromImage(
+    return Sprite(
       this,
-      x: x,
-      y: y,
-      width: width,
-      height: height,
+      srcPosition: Vector2(x, y),
+      srcSize: Vector2(width, height),
     );
   }
 }
@@ -50,5 +52,17 @@ extension ImageExtension on Image {
 extension OffSetExt on Offset {
   Offset copyWith({double x, double y}) {
     return Offset(x ?? this.dx, y ?? this.dy);
+  }
+}
+
+extension RectExt on Rect {
+  Vector2Rect toVector2Rect() {
+    return Vector2Rect.fromRect(this);
+  }
+}
+
+extension SpriteExt on Sprite {
+  bool loaded() {
+    return this.image != null;
   }
 }

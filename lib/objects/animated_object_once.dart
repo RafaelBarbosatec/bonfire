@@ -5,7 +5,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object.dart';
-
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 
 class AnimatedObjectOnce extends AnimatedObject with Lighting {

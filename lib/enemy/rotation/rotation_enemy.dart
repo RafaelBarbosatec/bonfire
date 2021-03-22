@@ -66,11 +66,13 @@ class RotationEnemy extends Enemy {
   }
 
   void _renderAnimation(Canvas canvas) {
-    if (animation == null || position == null) return;
-    animation.getSprite().render(
-          canvas,
-          position: position.position,
-          size: position.size,
-        );
+    if (position == null) return;
+    if (animation?.getSprite()?.loaded() == true) {
+      animation.getSprite().render(
+            canvas,
+            position: position.position,
+            size: position.size,
+          );
+    }
   }
 }
