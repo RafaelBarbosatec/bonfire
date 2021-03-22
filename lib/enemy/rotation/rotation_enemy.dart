@@ -1,22 +1,21 @@
 import 'dart:math';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/enemy/enemy.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
 
 class RotationEnemy extends Enemy {
-  final FlameAnimation.Animation animIdle;
-  final FlameAnimation.Animation animRun;
+  final SpriteAnimation animIdle;
+  final SpriteAnimation animRun;
 
-  FlameAnimation.Animation animation;
+  SpriteAnimation animation;
 
   /// Variable that represents the speed of the enemy.
   final double speed;
   double currentRadAngle;
 
   RotationEnemy({
-    @required Position initPosition,
+    @required Offset position,
     @required this.animIdle,
     @required this.animRun,
     double height = 32,
@@ -25,7 +24,7 @@ class RotationEnemy extends Enemy {
     this.speed = 100,
     double life = 100,
   }) : super(
-          initPosition: initPosition,
+          position: position,
           height: height,
           width: width,
           life: life,
@@ -45,9 +44,9 @@ class RotationEnemy extends Enemy {
   void render(Canvas canvas) {
     if (this.isVisibleInCamera()) {
       canvas.save();
-      canvas.translate(position.center.dx, position.center.dy);
+      canvas.translate(position.rect.center.dx, position.rect.center.dy);
       canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));
-      canvas.translate(-position.center.dx, -position.center.dy);
+      canvas.translate(-position.rect.center.dx, -position.rect.center.dy);
       _renderAnimation(canvas);
       canvas.restore();
     }
@@ -67,8 +66,10 @@ class RotationEnemy extends Enemy {
 
   void _renderAnimation(Canvas canvas) {
     if (animation == null || position == null) return;
-    if (animation.loaded()) {
-      animation.getSprite().renderRect(canvas, position);
-    }
+    animation.getSprite().render(
+          canvas,
+          position: position.position,
+          size: position.size,
+        );
   }
 }

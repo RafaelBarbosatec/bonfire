@@ -3,34 +3,34 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
-import 'package:flame/animation.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/foundation.dart';
 
 class SimpleDirectionAnimation {
-  final Animation idleLeft;
-  final Animation idleRight;
-  final Animation idleTop;
-  final Animation idleBottom;
-  final Animation idleTopLeft;
-  final Animation idleTopRight;
-  final Animation idleBottomLeft;
-  final Animation idleBottomRight;
-  final Animation runTop;
-  final Animation runRight;
-  final Animation runBottom;
-  final Animation runLeft;
-  final Animation runTopLeft;
-  final Animation runTopRight;
-  final Animation runBottomLeft;
-  final Animation runBottomRight;
-  final Map<String, Animation> others;
+  final SpriteAnimation idleLeft;
+  final SpriteAnimation idleRight;
+  final SpriteAnimation idleTop;
+  final SpriteAnimation idleBottom;
+  final SpriteAnimation idleTopLeft;
+  final SpriteAnimation idleTopRight;
+  final SpriteAnimation idleBottomLeft;
+  final SpriteAnimation idleBottomRight;
+  final SpriteAnimation runTop;
+  final SpriteAnimation runRight;
+  final SpriteAnimation runBottom;
+  final SpriteAnimation runLeft;
+  final SpriteAnimation runTopLeft;
+  final SpriteAnimation runTopRight;
+  final SpriteAnimation runBottomLeft;
+  final SpriteAnimation runBottomRight;
+  final Map<String, SpriteAnimation> others;
   final SimpleAnimationEnum init;
 
-  Animation current;
+  SpriteAnimation current;
   SimpleAnimationEnum _currentType;
   AnimatedObjectOnce _fastAnimation;
   bool runToTheEndFastAnimation = false;
-  Rect position;
+  Vector2Rect position;
 
   SimpleDirectionAnimation({
     @required this.idleLeft,
@@ -122,7 +122,7 @@ class SimpleDirectionAnimation {
   }
 
   void playOnce(
-    Animation animation, {
+    SpriteAnimation animation, {
     VoidCallback onFinish,
     bool runToTheEnd = false,
   }) {
@@ -141,13 +141,15 @@ class SimpleDirectionAnimation {
     if (_fastAnimation != null) {
       _fastAnimation.render(canvas);
     } else {
-      if (current?.loaded() == true) {
-        current.getSprite().renderRect(canvas, position);
-      }
+      current.getSprite().render(
+            canvas,
+            position: position.position,
+            size: position.size,
+          );
     }
   }
 
-  void update(double dt, Rect position) {
+  void update(double dt, Vector2Rect position) {
     this.position = position;
     if (_fastAnimation != null) {
       _fastAnimation.position = position;

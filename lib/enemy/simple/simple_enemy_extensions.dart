@@ -8,6 +8,7 @@ import 'package:bonfire/objects/flying_attack_object.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
@@ -251,11 +252,12 @@ extension SimpleEnemyExtensions on SimpleEnemy {
             a.rectAttackable().overlaps(positionAttack))
         .forEach((attackable) {
       attackable.receiveDamage(damage, id);
-      Rect rectAfterPush = attackable.position.translate(pushLeft, pushTop);
+      Vector2Rect rectAfterPush =
+          attackable.position.translate(pushLeft, pushTop);
       if (withPush &&
           (attackable is ObjectCollision &&
               !(attackable as ObjectCollision)
-                  .isCollision(displacement: rectAfterPush))) {
+                  .isCollision(displacement: rectAfterPush.rect))) {
         attackable.position = rectAfterPush;
       }
     });

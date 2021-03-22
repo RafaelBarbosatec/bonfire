@@ -12,9 +12,9 @@ mixin Sensor on GameComponent {
       return _areaSensor;
     } else {
       if (this is ObjectCollision) {
-        return (this as ObjectCollision).getRectCollision(this.position);
+        return (this as ObjectCollision).getRectCollision(this.position.rect);
       } else {
-        return this.position;
+        return this.position.rect;
       }
     }
   }

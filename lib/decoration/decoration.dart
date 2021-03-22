@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/util/priority_layer.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
@@ -30,7 +31,7 @@ class GameDecoration extends AnimatedObject {
 
   GameDecoration({
     this.sprite,
-    @required Vector2 position,
+    @required Offset position,
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
@@ -46,7 +47,7 @@ class GameDecoration extends AnimatedObject {
 
   GameDecoration.sprite(
     this.sprite, {
-    @required Vector2 position,
+    @required Offset position,
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
@@ -60,7 +61,7 @@ class GameDecoration extends AnimatedObject {
 
   GameDecoration.animation(
     SpriteAnimation animation, {
-    @required Vector2 position,
+    @required Offset position,
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
@@ -86,7 +87,7 @@ class GameDecoration extends AnimatedObject {
   }
 
   Vector2Rect generateRectWithBleedingPixel(
-    Vector2 position,
+    Offset position,
     double width,
     double height,
   ) {
@@ -94,12 +95,14 @@ class GameDecoration extends AnimatedObject {
     if (bleendingPixel > 2) {
       bleendingPixel = 2;
     }
-    return Vector2Rect.fromRect(Rect.fromLTWH(
-      position.x - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0),
-      position.y - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0),
-      width + (position.x % 2 == 0 ? bleendingPixel : 0),
-      height + (position.y % 2 == 0 ? bleendingPixel : 0),
-    ));
+    return Vector2Rect.fromRect(
+      Rect.fromLTWH(
+        position.dx - (position.dx % 2 == 0 ? (bleendingPixel / 2) : 0),
+        position.dy - (position.dy % 2 == 0 ? (bleendingPixel / 2) : 0),
+        width + (position.dx % 2 == 0 ? bleendingPixel : 0),
+        height + (position.dy % 2 == 0 ? bleendingPixel : 0),
+      ),
+    );
   }
 
   @override

@@ -5,7 +5,7 @@ import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/position.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -31,18 +31,20 @@ class Enemy extends GameComponent with Attackable {
   double dtUpdate = 0;
 
   Enemy({
-    @required Position initPosition,
+    @required Offset position,
     @required this.height,
     @required this.width,
     this.life = 10,
   }) {
     receivesAttackFrom = ReceivesAttackFromEnum.PLAYER;
     maxLife = life;
-    this.position = Rect.fromLTWH(
-      initPosition.x,
-      initPosition.y,
-      width,
-      height,
+    this.position = Vector2Rect.fromRect(
+      Rect.fromLTWH(
+        position.dx,
+        position.dy,
+        width,
+        height,
+      ),
     );
   }
 
@@ -107,9 +109,9 @@ class Enemy extends GameComponent with Attackable {
     double nextY = innerSpeed * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
-            position.center.dy + nextPoint.dy) -
-        position.center;
+    Offset diffBase = Offset(position.rect.center.dx + nextPoint.dx,
+            position.rect.center.dy + nextPoint.dy) -
+        position.rect.center;
 
     var collisionX = verifyEnemyCollision(
       position,
@@ -161,9 +163,11 @@ class Enemy extends GameComponent with Attackable {
     double nextY = innerSpeed * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
-            position.center.dy + nextPoint.dy) -
-        position.center;
+    Offset diffBase = Offset(
+          position.rect.center.dx + nextPoint.dx,
+          position.rect.center.dy + nextPoint.dy,
+        ) -
+        position.rect.center;
     this.position = position.shift(diffBase);
   }
 
@@ -200,16 +204,16 @@ class Enemy extends GameComponent with Attackable {
   }
 
   @override
-  int priority() => PriorityLayer.ENEMY;
+  int get priority => PriorityLayer.ENEMY;
 
   bool verifyEnemyCollision(
-    Rect position,
+    Vector2Rect position,
     double translateX,
     double translateY,
   ) {
     var collision = false;
     collision = (this as ObjectCollision).isCollisionPositionTranslate(
-      position,
+      position.rect,
       translateX,
       translateY,
     );

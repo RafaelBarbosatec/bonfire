@@ -1,21 +1,18 @@
 import 'dart:math';
 
 import 'package:bonfire/base/rpg_game.dart';
-import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/text_config.dart';
+import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 
 enum DirectionTextDamage { LEFT, RIGHT, RANDOM, NONE }
 
 class TextDamageComponent extends TextComponent with HasGameRef<RPGGame> {
   final String text;
   final TextConfig config;
-  final Position initPosition;
   final DirectionTextDamage direction;
   final double maxDownSize;
   bool destroyed = false;
-  Position position;
   double _initialY;
   double _velocity;
   final double gravity;
@@ -24,16 +21,19 @@ class TextDamageComponent extends TextComponent with HasGameRef<RPGGame> {
 
   TextDamageComponent(
     this.text,
-    this.initPosition, {
+    Offset position, {
     this.onlyUp = false,
     this.config,
     double initVelocityTop = -4,
     this.maxDownSize = 20,
     this.gravity = 0.5,
     this.direction = DirectionTextDamage.RANDOM,
-  }) : super(text, config: (config ?? TextConfig(fontSize: 10))) {
-    position = initPosition;
-    _initialY = position.y;
+  }) : super(
+          text,
+          config: (config ?? TextConfig(fontSize: 10)),
+          position: Vector2(position.dx, position.dy),
+        ) {
+    _initialY = position.dy;
     _velocity = initVelocityTop;
     switch (direction) {
       case DirectionTextDamage.LEFT:
@@ -48,7 +48,6 @@ class TextDamageComponent extends TextComponent with HasGameRef<RPGGame> {
       case DirectionTextDamage.NONE:
         break;
     }
-    setByPosition(position);
   }
 
   @override
@@ -56,11 +55,6 @@ class TextDamageComponent extends TextComponent with HasGameRef<RPGGame> {
 
   @override
   void update(double t) {
-    setByPosition(Position(
-      position.x,
-      position.y,
-    ));
-
     position.y += _velocity;
     position.x += _moveAxisX;
     _velocity += gravity;
@@ -80,5 +74,5 @@ class TextDamageComponent extends TextComponent with HasGameRef<RPGGame> {
   }
 
   @override
-  int priority() => PriorityLayer.OBJECTS;
+  int get priority => PriorityLayer.OBJECTS;
 }
