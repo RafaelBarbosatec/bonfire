@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flutter/material.dart';
@@ -13,20 +14,20 @@ class LightingComponent extends GameComponent {
   ColorTween _tween;
 
   @override
-  bool isHud() => true;
+  bool get isHud => true;
 
   LightingComponent({this.color}) {
     _paintFocus = Paint()..blendMode = BlendMode.clear;
   }
 
   @override
-  int priority() => PriorityLayer.LIGHTING;
+  int get priority => PriorityLayer.LIGHTING;
 
   @override
   void render(Canvas canvas) {
     if (color == null) return;
-    Size size = gameRef.size;
-    canvas.saveLayer(Offset.zero & size, Paint());
+    Vector2 size = gameRef.size;
+    canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
     canvas.drawColor(color, BlendMode.dstATop);
     _visibleLight.forEach((light) {
       final config = light.lightingConfig;
@@ -34,17 +35,17 @@ class LightingComponent extends GameComponent {
       config.update(_dtUpdate);
       canvas.save();
 
-      canvas.translate(size.width / 2, size.height / 2);
+      canvas.translate(size.x / 2, size.y / 2);
       canvas.scale(gameRef.gameCamera.zoom);
       canvas.translate(
-        -gameRef.gameCamera.position.x,
-        -gameRef.gameCamera.position.y,
+        -gameRef.gameCamera.position.dx,
+        -gameRef.gameCamera.position.dy,
       );
 
       canvas.drawCircle(
         Offset(
-          light.gameComponent.position.center.dx,
-          light.gameComponent.position.center.dy,
+          light.gameComponent.position.rect.center.dx,
+          light.gameComponent.position.rect.center.dy,
         ),
         light.lightingConfig.radius *
             (light.lightingConfig.withPulse
@@ -66,8 +67,8 @@ class LightingComponent extends GameComponent {
           );
         canvas.drawCircle(
           Offset(
-            light.gameComponent.position.center.dx,
-            light.gameComponent.position.center.dy,
+            light.gameComponent.position.rect.center.dx,
+            light.gameComponent.position.rect.center.dy,
           ),
           config.radius *
               (config.withPulse
