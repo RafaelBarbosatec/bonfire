@@ -11,7 +11,7 @@ import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
 abstract class BaseGamePointerDetector extends Game
-    with MultiTouchDragDetector, MultiTouchTapDetector {
+    with MultiTouchDragDetector, MultiTouchTapDetector, FPSCounter {
   bool _isPause = false;
   Camera gameCamera = Camera();
 

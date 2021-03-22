@@ -37,6 +37,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   final Color constructionModeColor;
   final Color lightingColorGame;
   final Color collisionAreaColor;
+  final bool showFPS;
 
   Iterable<Enemy> _enemies = [];
   Iterable<Enemy> _visibleEnemies = [];
@@ -70,6 +71,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
+    this.showFPS = false,
     GameColorFilter colorFilter,
     double cameraZoom,
     Size cameraSizeMovementWindow = const Size(50, 50),
