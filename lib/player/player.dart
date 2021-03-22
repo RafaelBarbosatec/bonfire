@@ -1,11 +1,12 @@
 import 'dart:math';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/position.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,9 +18,6 @@ class Player extends GameComponent with Attackable implements JoystickListener {
 
   /// Height of the Player.
   final double height;
-
-  /// World position that this Player must position yourself.
-  final Position initPosition;
 
   double speed;
 
@@ -33,19 +31,19 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   bool isFocusCamera = true;
 
   Player({
-    @required this.initPosition,
+    @required Vector2 position,
     this.width = 32,
     this.height = 32,
     this.life = 100,
     this.speed = 100,
   }) {
     receivesAttackFrom = ReceivesAttackFromEnum.ENEMY;
-    position = Rect.fromLTWH(
-      initPosition.x,
-      initPosition.y,
+    this.position = Rect.fromLTWH(
+      position.x,
+      position.y,
       width,
       height,
-    );
+    ).toVector2Rect();
 
     maxLife = life;
   }
@@ -59,7 +57,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   void moveTop(double speed, {VoidCallback onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
-    Rect displacement = position.translate(0, (-innerSpeed));
+    Vector2Rect displacement = position.translate(0, (-innerSpeed));
 
     if (_playerIsCollision(
         displacement: displacement, onlyVisible: isFocusCamera)) {
@@ -72,7 +70,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   void moveRight(double speed, {VoidCallback onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
-    Rect displacement = position.translate(innerSpeed, 0);
+    Vector2Rect displacement = position.translate(innerSpeed, 0);
 
     if (_playerIsCollision(
         displacement: displacement, onlyVisible: isFocusCamera)) {
@@ -86,7 +84,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   void moveBottom(double speed, {VoidCallback onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
-    Rect displacement = position.translate(0, innerSpeed);
+    Vector2Rect displacement = position.translate(0, innerSpeed);
 
     if (_playerIsCollision(
         displacement: displacement, onlyVisible: isFocusCamera)) {
@@ -100,7 +98,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   void moveLeft(double speed, {VoidCallback onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
-    Rect displacement = position.translate(-innerSpeed, 0);
+    Vector2Rect displacement = position.translate(-innerSpeed, 0);
 
     if (_playerIsCollision(
         displacement: displacement, onlyVisible: isFocusCamera)) {
@@ -116,13 +114,13 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     double nextY = (speed * _dtUpdate) * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
-            position.center.dy + nextPoint.dy) -
-        position.center;
+    Offset diffBase = Offset(position.rect.center.dx + nextPoint.dx,
+            position.rect.center.dy + nextPoint.dy) -
+        position.rect.center;
 
     Offset newDiffBase = diffBase;
 
-    Rect newPosition = position.shift(newDiffBase);
+    Vector2Rect newPosition = position.shift(newDiffBase);
 
     if (_playerIsCollision(
         displacement: newPosition, onlyVisible: isFocusCamera)) {
@@ -163,12 +161,12 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event) {}
 
   @override
-  int priority() => PriorityLayer.PLAYER;
+  int get priority => PriorityLayer.PLAYER;
 
   @override
-  void moveTo(Position position) {}
+  void moveTo(Vector2 position) {}
 
-  bool _playerIsCollision({Rect displacement, bool onlyVisible}) {
+  bool _playerIsCollision({Vector2Rect displacement, bool onlyVisible}) {
     var collision = false;
     if (this is ObjectCollision) {
       (this as ObjectCollision).setCollisionOnlyVisibleScreen(onlyVisible);

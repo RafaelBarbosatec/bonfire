@@ -260,7 +260,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       if (withPush &&
           (attackable is ObjectCollision &&
               !(attackable as ObjectCollision)
-                  .isCollision(displacement: rectAfterPush.rect))) {
+                  .isCollision(displacement: rectAfterPush))) {
         attackable.position = rectAfterPush;
       }
     });

@@ -54,7 +54,7 @@ mixin ObjectCollision on GameComponent {
   }
 
   bool isCollision({
-    Rect displacement,
+    Vector2Rect displacement,
     bool shouldTriggerSensors = true,
   }) {
     if (!containCollision()) return false;

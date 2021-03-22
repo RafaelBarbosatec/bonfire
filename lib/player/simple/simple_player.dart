@@ -319,7 +319,7 @@ class SimplePlayer extends Player {
   }
 
   @override
-  void moveTo(Position position) {
+  void moveTo(Vector2 position) {
     _positionToMove = position;
     super.moveTo(position);
   }

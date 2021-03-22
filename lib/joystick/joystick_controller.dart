@@ -49,7 +49,7 @@ class JoystickActionEvent {
 abstract class JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);
   void joystickAction(JoystickActionEvent event);
-  void moveTo(Position position);
+  void moveTo(Vector2 position);
 }
 
 abstract class JoystickController extends Component
@@ -67,7 +67,7 @@ abstract class JoystickController extends Component
     _observers.forEach((o) => o.joystickAction(event));
   }
 
-  void moveTo(Position event) {
+  void moveTo(Vector2 event) {
     _observers.forEach((o) => o.moveTo(event));
   }
 
@@ -82,8 +82,8 @@ abstract class JoystickController extends Component
   void update(double t) {}
 
   @override
-  int priority() => PriorityLayer.JOYSTICK;
+  int get priority => PriorityLayer.JOYSTICK;
 
   @override
-  bool isHud() => true;
+  bool get isHud => true;
 }

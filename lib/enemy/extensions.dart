@@ -76,7 +76,7 @@ extension EnemyExtensions on Enemy {
     gameRef.addLater(
       TextDamageComponent(
         damage.toInt().toString(),
-        Offset(
+        Vector2(
           position.rect.center.dx,
           position.rect.top,
         ),

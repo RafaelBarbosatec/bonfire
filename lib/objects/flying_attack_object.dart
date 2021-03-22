@@ -5,6 +5,7 @@ import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
@@ -64,28 +65,36 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
     switch (direction) {
       case Direction.left:
-        position = Vector2Rect.fromRect(position.rect.translate((speed * dt) * -1, 0));
+        position =
+            Vector2Rect.fromRect(position.rect.translate((speed * dt) * -1, 0));
         break;
       case Direction.right:
-        position = Vector2Rect.fromRect(position.rect.translate((speed * dt), 0));
+        position =
+            Vector2Rect.fromRect(position.rect.translate((speed * dt), 0));
         break;
       case Direction.top:
-        position = Vector2Rect.fromRect(position.rect.translate(0, (speed * dt) * -1));
+        position =
+            Vector2Rect.fromRect(position.rect.translate(0, (speed * dt) * -1));
         break;
       case Direction.bottom:
-        position = Vector2Rect.fromRect(position.rect.translate(0, (speed * dt)));
+        position =
+            Vector2Rect.fromRect(position.rect.translate(0, (speed * dt)));
         break;
       case Direction.topLeft:
-        position = Vector2Rect.fromRect(position.rect.translate((speed * dt) * -1, 0));
+        position =
+            Vector2Rect.fromRect(position.rect.translate((speed * dt) * -1, 0));
         break;
       case Direction.topRight:
-        position = Vector2Rect.fromRect(position.rect.translate((speed * dt), 0));
+        position =
+            Vector2Rect.fromRect(position.rect.translate((speed * dt), 0));
         break;
       case Direction.bottomLeft:
-        position = Vector2Rect.fromRect(position.rect.translate((speed * dt) * -1, 0));
+        position =
+            Vector2Rect.fromRect(position.rect.translate((speed * dt) * -1, 0));
         break;
       case Direction.bottomRight:
-        position = Vector2Rect.fromRect(position.rect.translate((speed * dt), 0));
+        position =
+            Vector2Rect.fromRect(position.rect.translate((speed * dt), 0));
         break;
     }
 

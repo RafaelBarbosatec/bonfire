@@ -53,4 +53,6 @@ class Vector2Rect {
       size ?? this.size,
     );
   }
+
+  Offset get center => rect.center;
 }
