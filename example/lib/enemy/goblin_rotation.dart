@@ -3,24 +3,27 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:example/map/dungeon_map.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
 
 class GoblinRotation extends RotationEnemy {
-  GoblinRotation(Position initPosition)
-      : super(
-          animIdle: FlameAnimation.Animation.sequenced(
+  GoblinRotation(Vector2 position)
+      : super.futureAnimation(
+          animIdle: SpriteAnimation.load(
             "enemy/goblin_idle.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
+            SpriteAnimationData.sequenced(
+              amount: 6,
+              stepTime: 0.1,
+              textureSize: Vector2(16, 16),
+            ),
           ),
-          animRun: FlameAnimation.Animation.sequenced(
+          animRun: SpriteAnimation.load(
             "enemy/goblin_run_left.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
+            SpriteAnimationData.sequenced(
+              amount: 6,
+              stepTime: 0.1,
+              textureSize: Vector2(16, 16),
+            ),
           ),
-          initPosition: initPosition,
+          position: position,
           width: 25,
           height: 25,
         );
@@ -36,17 +39,21 @@ class GoblinRotation extends RotationEnemy {
     this.seeAndMoveToAttackRange(
         positioned: (player) {
           this.simpleAttackRange(
-              animationTop: FlameAnimation.Animation.sequenced(
-                'player/fireball_top.png',
-                3,
-                textureWidth: 23,
-                textureHeight: 23,
+              animationTop: SpriteAnimation.load(
+                "player/fireball_top.png",
+                SpriteAnimationData.sequenced(
+                  amount: 3,
+                  stepTime: 0.1,
+                  textureSize: Vector2(23, 23),
+                ),
               ),
-              animationDestroy: FlameAnimation.Animation.sequenced(
-                'player/explosion_fire.png',
-                6,
-                textureWidth: 32,
-                textureHeight: 32,
+              animationDestroy: SpriteAnimation.load(
+                "player/explosion_fire.png",
+                SpriteAnimationData.sequenced(
+                  amount: 6,
+                  stepTime: 0.1,
+                  textureSize: Vector2(32, 32),
+                ),
               ),
               width: 25,
               height: 25,
@@ -69,14 +76,17 @@ class GoblinRotation extends RotationEnemy {
   @override
   void die() {
     gameRef.add(
-      AnimatedObjectOnce(
-          animation: FlameAnimation.Animation.sequenced(
-            "smoke_explosin.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
+      AnimatedObjectOnce.futureAnimation(
+        animation: SpriteAnimation.load(
+          "smoke_explosin.png",
+          SpriteAnimationData.sequenced(
+            amount: 6,
+            stepTime: 0.1,
+            textureSize: Vector2(16, 16),
           ),
-          position: position),
+        ),
+        position: position,
+      ),
     );
     remove();
     super.die();

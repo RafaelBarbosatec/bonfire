@@ -7,8 +7,8 @@ import 'package:flutter/widgets.dart';
 
 class InterfaceComponent extends GameComponent with TapGesture {
   final int id;
-  final Sprite sprite;
-  final Sprite spriteSelected;
+  Sprite sprite;
+  Sprite spriteSelected;
   final VoidCallback onTapComponent;
   final double width;
   final double height;
@@ -22,10 +22,17 @@ class InterfaceComponent extends GameComponent with TapGesture {
     @required Vector2 position,
     @required this.width,
     @required this.height,
-    this.sprite,
-    this.spriteSelected,
+    Future<Sprite> sprite,
+    Future<Sprite> spriteSelected,
     this.onTapComponent,
   }) {
+    sprite?.then((value) {
+      this.sprite = value;
+      spriteToRender = this.sprite;
+    });
+    spriteSelected?.then((value) {
+      this.spriteSelected = value;
+    });
     this.position = Vector2Rect.fromRect(
       Rect.fromLTWH(
         position.x,
@@ -34,16 +41,12 @@ class InterfaceComponent extends GameComponent with TapGesture {
         height,
       ),
     );
-    spriteToRender = sprite;
   }
 
   void render(Canvas canvas) {
-    if (spriteToRender != null && this.position != null)
-      spriteToRender.render(
-        canvas,
-        position: this.position.position,
-        size: this.position.size,
-      );
+    if (spriteToRender != null && this.position != null) {
+      spriteToRender.renderFromVector2Rect(canvas, this.position);
+    }
   }
 
   @override

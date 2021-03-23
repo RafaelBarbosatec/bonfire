@@ -114,10 +114,10 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     bool withPush = false,
     double sizePush,
     Direction direction,
-    SpriteAnimation attackEffectRightAnim,
-    SpriteAnimation attackEffectBottomAnim,
-    SpriteAnimation attackEffectLeftAnim,
-    SpriteAnimation attackEffectTopAnim,
+    Future<SpriteAnimation> attackEffectRightAnim,
+    Future<SpriteAnimation> attackEffectBottomAnim,
+    Future<SpriteAnimation> attackEffectLeftAnim,
+    Future<SpriteAnimation> attackEffectTopAnim,
     VoidCallback execute,
   }) {
     if (!this.checkPassedInterval('attackMelee', interval, dtUpdate)) return;
@@ -125,7 +125,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     if (isDead || this.position == null) return;
 
     Rect positionAttack;
-    SpriteAnimation anim;
+    Future<SpriteAnimation> anim;
 
     Direction playerDirection;
 
@@ -241,7 +241,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     if (anim != null && positionAttack != null) {
       gameRef.addLater(
-        AnimatedObjectOnce(
+        AnimatedObjectOnce.futureAnimation(
           animation: anim,
           position: positionAttack.toVector2Rect(),
         ),
@@ -269,11 +269,11 @@ extension SimpleEnemyExtensions on SimpleEnemy {
   }
 
   void simpleAttackRange({
-    @required SpriteAnimation animationRight,
-    @required SpriteAnimation animationLeft,
-    @required SpriteAnimation animationTop,
-    @required SpriteAnimation animationBottom,
-    @required SpriteAnimation animationDestroy,
+    @required Future<SpriteAnimation> animationRight,
+    @required Future<SpriteAnimation> animationLeft,
+    @required Future<SpriteAnimation> animationTop,
+    @required Future<SpriteAnimation> animationBottom,
+    @required Future<SpriteAnimation> animationDestroy,
     @required double width,
     @required double height,
     int id,
@@ -292,7 +292,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     if (isDead) return;
 
     Vector2 startPosition;
-    SpriteAnimation attackRangeAnimation;
+    Future<SpriteAnimation> attackRangeAnimation;
 
     Direction ballDirection;
 
@@ -391,7 +391,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         direction: finalDirection,
         flyAnimation: attackRangeAnimation,
         destroyAnimation: animationDestroy,
-        initPosition: startPosition,
+        position: startPosition,
         height: height,
         width: width,
         damage: damage,

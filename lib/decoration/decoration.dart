@@ -53,7 +53,7 @@ class GameDecoration extends AnimatedObject {
     this.frontFromPlayer = false,
     SpriteAnimation animation,
   }) {
-    Sprite.load(spritePath).then((value) => this.sprite = value);
+    sprite.then((value) => this.sprite = value);
     this.position = generateRectWithBleedingPixel(
       position,
       width,
@@ -113,7 +113,7 @@ class GameDecoration extends AnimatedObject {
   @override
   void render(Canvas canvas) {
     if (sprite?.loaded() == true) {
-      sprite.render(canvas, position: position.position, size: position.size);
+      sprite.renderFromVector2Rect(canvas, this.position);
     }
     super.render(canvas);
   }

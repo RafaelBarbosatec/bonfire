@@ -7,24 +7,24 @@ import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/foundation.dart';
 
 class SimpleDirectionAnimation {
-  final SpriteAnimation idleLeft;
-  final SpriteAnimation idleRight;
-  final SpriteAnimation idleTop;
-  final SpriteAnimation idleBottom;
-  final SpriteAnimation idleTopLeft;
-  final SpriteAnimation idleTopRight;
-  final SpriteAnimation idleBottomLeft;
-  final SpriteAnimation idleBottomRight;
-  final SpriteAnimation runTop;
-  final SpriteAnimation runRight;
-  final SpriteAnimation runBottom;
-  final SpriteAnimation runLeft;
-  final SpriteAnimation runTopLeft;
-  final SpriteAnimation runTopRight;
-  final SpriteAnimation runBottomLeft;
-  final SpriteAnimation runBottomRight;
-  final Map<String, SpriteAnimation> others;
-  final SimpleAnimationEnum init;
+  SpriteAnimation idleLeft;
+  SpriteAnimation idleRight;
+  SpriteAnimation idleTop;
+  SpriteAnimation idleBottom;
+  SpriteAnimation idleTopLeft;
+  SpriteAnimation idleTopRight;
+  SpriteAnimation idleBottomLeft;
+  SpriteAnimation idleBottomRight;
+  SpriteAnimation runTop;
+  SpriteAnimation runRight;
+  SpriteAnimation runBottom;
+  SpriteAnimation runLeft;
+  SpriteAnimation runTopLeft;
+  SpriteAnimation runTopRight;
+  SpriteAnimation runBottomLeft;
+  SpriteAnimation runBottomRight;
+  Map<String, SpriteAnimation> others = {};
+  SimpleAnimationEnum init;
 
   SpriteAnimation current;
   SimpleAnimationEnum _currentType;
@@ -33,25 +33,46 @@ class SimpleDirectionAnimation {
   Vector2Rect position;
 
   SimpleDirectionAnimation({
-    @required this.idleLeft,
-    @required this.idleRight,
-    this.idleTop,
-    this.idleBottom,
-    this.idleTopLeft,
-    this.idleTopRight,
-    this.idleBottomLeft,
-    this.idleBottomRight,
-    this.runTop,
-    @required this.runRight,
-    this.runBottom,
-    @required this.runLeft,
-    this.runTopLeft,
-    this.runTopRight,
-    this.runBottomLeft,
-    this.runBottomRight,
-    this.others,
+    @required Future<SpriteAnimation> idleLeft,
+    @required Future<SpriteAnimation> idleRight,
+    Future<SpriteAnimation> idleTop,
+    Future<SpriteAnimation> idleBottom,
+    Future<SpriteAnimation> idleTopLeft,
+    Future<SpriteAnimation> idleTopRight,
+    Future<SpriteAnimation> idleBottomLeft,
+    Future<SpriteAnimation> idleBottomRight,
+    Future<SpriteAnimation> runTop,
+    @required Future<SpriteAnimation> runRight,
+    Future<SpriteAnimation> runBottom,
+    @required Future<SpriteAnimation> runLeft,
+    Future<SpriteAnimation> runTopLeft,
+    Future<SpriteAnimation> runTopRight,
+    Future<SpriteAnimation> runBottomLeft,
+    Future<SpriteAnimation> runBottomRight,
+    Map<String, Future<SpriteAnimation>> others,
     this.init = SimpleAnimationEnum.idleRight,
   }) {
+    idleLeft?.then((value) => this.idleLeft = value);
+    idleRight?.then((value) => this.idleRight = value);
+    idleTop?.then((value) => this.idleTop = value);
+    idleBottom?.then((value) => this.idleBottom = value);
+    idleTopLeft?.then((value) => this.idleTopLeft = value);
+    idleTopRight?.then((value) => this.idleTopRight = value);
+    idleBottomLeft?.then((value) => this.idleBottomLeft = value);
+    idleBottomRight?.then((value) => this.idleBottomRight = value);
+    runTop?.then((value) => this.runTop = value);
+    runRight?.then((value) => this.runRight = value);
+    runBottom?.then((value) => this.runBottom = value);
+    runLeft?.then((value) => this.runLeft = value);
+    runTopLeft?.then((value) => this.runTopLeft = value);
+    runTopRight?.then((value) => this.runTopRight = value);
+    runBottomLeft?.then((value) => this.runBottomLeft = value);
+    runBottomRight?.then((value) => this.runBottomRight = value);
+    others?.forEach((key, anim) {
+      anim.then((value) {
+        this.others[key] = value;
+      });
+    });
     play(init);
   }
 

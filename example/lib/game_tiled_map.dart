@@ -26,23 +26,25 @@ class GameTiledMap extends StatelessWidget {
           joystick: Joystick(
             keyboardEnable: true,
             directional: JoystickDirectional(
-              spriteBackgroundDirectional: Sprite('joystick_background.png'),
-              spriteKnobDirectional: Sprite('joystick_knob.png'),
+              spriteBackgroundDirectional:
+                  Sprite.load('joystick_background.png'),
+              spriteKnobDirectional: Sprite.load('joystick_knob.png'),
               size: 100,
               isFixed: false,
             ),
             actions: [
               JoystickAction(
                 actionId: 0,
-                sprite: Sprite('joystick_atack.png'),
+                sprite: Sprite.load('joystick_atack.png'),
                 align: JoystickActionAlign.BOTTOM_RIGHT,
                 size: 80,
                 margin: EdgeInsets.only(bottom: 50, right: 50),
               ),
               JoystickAction(
                 actionId: 1,
-                sprite: Sprite('joystick_atack_range.png'),
-                spriteBackgroundDirection: Sprite('joystick_background.png'),
+                sprite: Sprite.load('joystick_atack_range.png'),
+                spriteBackgroundDirection:
+                    Sprite.load('joystick_background.png'),
                 enableDirection: true,
                 size: 50,
                 margin: EdgeInsets.only(bottom: 50, right: 160),
@@ -50,7 +52,7 @@ class GameTiledMap extends StatelessWidget {
             ],
           ),
           player: Knight(
-            Position((8 * DungeonMap.tileSize), (5 * DungeonMap.tileSize)),
+            Vector2((8 * DungeonMap.tileSize), (5 * DungeonMap.tileSize)),
           ),
           interface: KnightInterface(),
           map: TiledWorldMap(
@@ -58,15 +60,15 @@ class GameTiledMap extends StatelessWidget {
             forceTileSize: Size(DungeonMap.tileSize, DungeonMap.tileSize),
           )
             ..registerObject(
-                'goblin', (x, y, width, height) => Goblin(Position(x, y)))
+                'goblin', (x, y, width, height) => Goblin(Vector2(x, y)))
             ..registerObject(
-                'torch', (x, y, width, height) => Torch(Position(x, y)))
+                'torch', (x, y, width, height) => Torch(Vector2(x, y)))
             ..registerObject('barrel',
-                (x, y, width, height) => BarrelDraggable(Position(x, y)))
+                (x, y, width, height) => BarrelDraggable(Vector2(x, y)))
             ..registerObject(
-                'spike', (x, y, width, height) => Spikes(Position(x, y)))
+                'spike', (x, y, width, height) => Spikes(Vector2(x, y)))
             ..registerObject(
-                'chest', (x, y, width, height) => Chest(Position(x, y))),
+                'chest', (x, y, width, height) => Chest(Vector2(x, y))),
           background: BackgroundColorGame(Colors.blueGrey[900]),
           lightingColorGame: Colors.black.withOpacity(0.3),
           cameraZoom:

@@ -82,11 +82,11 @@ extension PlayerExtensions on Player {
   }
 
   void simpleAttackRangeByAngle({
-    @required SpriteAnimation animationTop,
+    @required Future<SpriteAnimation> animationTop,
     @required double width,
     @required double height,
     @required double radAngleDirection,
-    SpriteAnimation animationDestroy,
+    Future<SpriteAnimation> animationDestroy,
     dynamic id,
     double speed = 150,
     double damage = 1,
@@ -128,11 +128,11 @@ extension PlayerExtensions on Player {
   }
 
   void simpleAttackRangeByDirection({
-    @required SpriteAnimation animationRight,
-    @required SpriteAnimation animationLeft,
-    @required SpriteAnimation animationTop,
-    @required SpriteAnimation animationBottom,
-    SpriteAnimation animationDestroy,
+    @required Future<SpriteAnimation> animationRight,
+    @required Future<SpriteAnimation> animationLeft,
+    @required Future<SpriteAnimation> animationTop,
+    @required Future<SpriteAnimation> animationBottom,
+    Future<SpriteAnimation> animationDestroy,
     @required double width,
     @required double height,
     @required Direction direction,
@@ -148,7 +148,7 @@ extension PlayerExtensions on Player {
     if (isDead) return;
 
     Vector2 startPosition;
-    SpriteAnimation attackRangeAnimation;
+    Future<SpriteAnimation> attackRangeAnimation;
 
     Direction attackDirection = direction;
 
@@ -221,7 +221,7 @@ extension PlayerExtensions on Player {
         direction: attackDirection,
         flyAnimation: attackRangeAnimation,
         destroyAnimation: animationDestroy,
-        initPosition: startPosition,
+        position: startPosition,
         height: height,
         width: width,
         damage: damage,
@@ -236,10 +236,10 @@ extension PlayerExtensions on Player {
   }
 
   void simpleAttackMeleeByDirection({
-    SpriteAnimation animationRight,
-    SpriteAnimation animationBottom,
-    SpriteAnimation animationLeft,
-    SpriteAnimation animationTop,
+    Future<SpriteAnimation> animationRight,
+    Future<SpriteAnimation> animationBottom,
+    Future<SpriteAnimation> animationLeft,
+    Future<SpriteAnimation> animationTop,
     @required double damage,
     @required Direction direction,
     dynamic id,
@@ -251,7 +251,7 @@ extension PlayerExtensions on Player {
     if (isDead) return;
 
     Rect positionAttack;
-    SpriteAnimation anim;
+    Future<SpriteAnimation> anim;
     double pushLeft = 0;
     double pushTop = 0;
     Direction attackDirection = direction;
@@ -344,7 +344,7 @@ extension PlayerExtensions on Player {
     }
 
     if (anim != null) {
-      gameRef.addLater(AnimatedObjectOnce(
+      gameRef.addLater(AnimatedObjectOnce.futureAnimation(
         animation: anim,
         position: positionAttack.toVector2Rect(),
       ));

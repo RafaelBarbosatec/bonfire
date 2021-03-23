@@ -52,13 +52,11 @@ class GameInterface extends GameComponent with TapGesture {
   @override
   void handlerTapDown(int pointer, Offset position) {
     _components.forEach((i) => i.handlerTapDown(pointer, position));
-    super.handlerTapDown(pointer, position);
   }
 
   @override
   void handlerTapUp(int pointer, Offset position) {
     _components.forEach((i) => i.handlerTapUp(pointer, position));
-    super.handlerTapUp(pointer, position);
   }
 
   void _drawFPS(Canvas c) {

@@ -12,14 +12,13 @@ import 'package:flutter/widgets.dart';
 
 class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final dynamic id;
-  final SpriteAnimation flyAnimation;
-  final SpriteAnimation destroyAnimation;
+  SpriteAnimation flyAnimation;
+  SpriteAnimation destroyAnimation;
   final Direction direction;
   final double speed;
   final double damage;
   final double width;
   final double height;
-  final Vector2 initPosition;
   final AttackFromEnum attackFrom;
   final bool withDecorationCollision;
   final VoidCallback destroyedObject;
@@ -28,13 +27,13 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final IntervalTick _timerVerifyCollision = IntervalTick(50);
 
   FlyingAttackObject({
-    @required this.initPosition,
-    @required this.flyAnimation,
+    @required Vector2 position,
+    @required Future<SpriteAnimation> flyAnimation,
     @required this.direction,
     @required this.width,
     @required this.height,
     this.id,
-    this.destroyAnimation,
+    Future<SpriteAnimation> destroyAnimation,
     this.speed = 150,
     this.damage = 1,
     this.attackFrom = AttackFromEnum.ENEMY,
@@ -43,9 +42,13 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     this.lightingConfig,
     CollisionConfig collision,
   }) {
-    animation = flyAnimation;
-    position = Vector2Rect(
-      initPosition,
+    flyAnimation.then((value) {
+      this.flyAnimation = value;
+      animation = this.flyAnimation;
+    });
+
+    this.position = Vector2Rect(
+      position,
       Vector2(width, height),
     );
 

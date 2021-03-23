@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 
 class JoystickDirectional {
   final double size;
-  final Sprite spriteBackgroundDirectional;
-  final Sprite spriteKnobDirectional;
   final bool isFixed;
   final EdgeInsets margin;
   final Color color;
@@ -36,22 +34,26 @@ class JoystickDirectional {
   Vector2 _screenSize;
 
   JoystickDirectional({
-    this.spriteBackgroundDirectional,
-    this.spriteKnobDirectional,
+    Future<Sprite> spriteBackgroundDirectional,
+    Future<Sprite> spriteKnobDirectional,
     this.isFixed = true,
     this.margin = const EdgeInsets.only(left: 100, bottom: 100),
     this.size = 80,
     this.color = Colors.blueGrey,
   }) {
     if (spriteBackgroundDirectional != null) {
-      _backgroundSprite = spriteBackgroundDirectional;
+      spriteBackgroundDirectional.then((value) {
+        _backgroundSprite = value;
+      });
     } else {
       _paintBackground = Paint()
         ..color = color.withOpacity(0.5)
         ..style = PaintingStyle.fill;
     }
     if (spriteKnobDirectional != null) {
-      _knobSprite = spriteKnobDirectional;
+      spriteKnobDirectional.then((value) {
+        _knobSprite = value;
+      });
     } else {
       _paintKnob = Paint()
         ..color = color.withOpacity(0.8)
@@ -106,8 +108,8 @@ class JoystickDirectional {
 
     if (_knobRect != null) {
       if (_knobSprite != null) {
-        _knobSprite.render(canvas,
-            position: _knobRect.position, size: _knobRect.size);
+        _knobSprite.renderFromVector2Rect(canvas,
+            _knobRect);
       } else {
         double radiusKnob = _knobRect.rect.width / 2;
         canvas.drawCircle(

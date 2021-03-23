@@ -69,4 +69,16 @@ extension SpriteExt on Sprite {
   bool loaded() {
     return this.image != null;
   }
+
+  void renderFromVector2Rect(Canvas canvas, Vector2Rect vector,
+      {Paint overridePaint}) {
+    if (this.image != null) {
+      canvas.drawImageRect(
+        this.image,
+        this.src,
+        vector.rect,
+        overridePaint ?? this.paint,
+      );
+    }
+  }
 }

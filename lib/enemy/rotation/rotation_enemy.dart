@@ -6,8 +6,8 @@ import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 class RotationEnemy extends Enemy {
-  final SpriteAnimation animIdle;
-  final SpriteAnimation animRun;
+  SpriteAnimation animIdle;
+  SpriteAnimation animRun;
 
   SpriteAnimation animation;
 
@@ -30,6 +30,26 @@ class RotationEnemy extends Enemy {
           width: width,
           life: life,
         ) {
+    idle();
+  }
+
+  RotationEnemy.futureAnimation({
+    @required Vector2 position,
+    @required Future<SpriteAnimation> animIdle,
+    @required Future<SpriteAnimation> animRun,
+    double height = 32,
+    double width = 32,
+    this.currentRadAngle = -1.55,
+    this.speed = 100,
+    double life = 100,
+  }) : super(
+          position: position,
+          height: height,
+          width: width,
+          life: life,
+        ) {
+    animIdle.then((value) => this.animIdle = value);
+    animRun.then((value) => this.animRun = value);
     idle();
   }
 
@@ -68,10 +88,9 @@ class RotationEnemy extends Enemy {
   void _renderAnimation(Canvas canvas) {
     if (position == null) return;
     if (animation?.getSprite()?.loaded() == true) {
-      animation.getSprite().render(
+      animation.getSprite().renderFromVector2Rect(
             canvas,
-            position: position.position,
-            size: position.size,
+            this.position,
           );
     }
   }

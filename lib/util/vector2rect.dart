@@ -59,4 +59,6 @@ class Vector2Rect {
   double get right => rect.right;
   double get top => rect.top;
   double get bottom => rect.bottom;
+  double get height => rect.height;
+  double get width => rect.width;
 }

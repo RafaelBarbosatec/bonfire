@@ -1,4 +1,3 @@
-import 'package:example/game_manual_map.dart';
 import 'package:example/game_tiled_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -30,28 +29,28 @@ class Menu extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-                child: Text('Manual Map'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => GameManualMap()),
-                  );
-                },
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
+            // SizedBox(
+            //   width: 200,
+            //   child: ElevatedButton(
+            //     style: ButtonStyle(
+            //       shape: MaterialStateProperty.all(
+            //         RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(20),
+            //         ),
+            //       ),
+            //     ),
+            //     child: Text('Manual Map'),
+            //     onPressed: () {
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(builder: (context) => GameManualMap()),
+            //       );
+            //     },
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: 10,
+            // ),
             SizedBox(
               width: 200,
               child: ElevatedButton(

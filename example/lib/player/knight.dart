@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Knight extends SimplePlayer with Lighting, ObjectCollision {
-  final Position initPosition;
   double attack = 20;
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
@@ -24,16 +23,18 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   Sprite spriteDirectionAttack;
   bool execAttackRange = false;
 
-  Knight(this.initPosition)
+  Knight(Vector2 position)
       : super(
           animation: PlayerSpriteSheet.simpleDirectionAnimation,
           width: DungeonMap.tileSize,
           height: DungeonMap.tileSize,
-          initPosition: initPosition,
+          position: position,
           life: 200,
           speed: DungeonMap.tileSize * 3,
         ) {
-    spriteDirectionAttack = Sprite('direction_attack.png');
+    Sprite.load('direction_attack.png').then((value) {
+      spriteDirectionAttack = value;
+    });
     lightingConfig = LightingConfig(
       radius: width * 1.5,
       blurBorder: width * 1.5,
@@ -89,14 +90,14 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   void die() {
     remove();
     gameRef.addGameComponent(
-      GameDecoration(
-        position: Position(
+      GameDecoration.futureSprite(
+        Sprite.load('player/crypt.png'),
+        position: Vector2(
           position.left,
           position.top,
         ),
         height: DungeonMap.tileSize,
         width: DungeonMap.tileSize,
-        sprite: Sprite('player/crypt.png'),
       ),
     );
     super.die();
@@ -205,10 +206,11 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
 
   void showEmote() {
     gameRef.add(
-      AnimatedFollowerObject(
+      AnimatedFollowerObject.futureAnimation(
         animation: CommonSpriteSheet.emote,
         target: this,
-        positionFromTarget: Rect.fromLTWH(18, -6, width / 2, height / 2),
+        positionFromTarget:
+            Rect.fromLTWH(18, -6, width / 2, height / 2).toVector2Rect(),
       ),
     );
   }
@@ -221,10 +223,10 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
           Container(
             width: 50,
             height: 50,
-            child: AnimationWidget(
-              animation: animation.current,
-              playing: true,
-            ),
+            // child: AnimationWidget(
+            //   animation: animation.current,
+            //   playing: true,
+            // ),
           ),
         ),
       ], finish: () {
@@ -236,12 +238,16 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   void _drawDirectionAttack(Canvas c) {
     if (execAttackRange) {
       double radius = position.height;
-      rectDirectionAttack = Rect.fromLTWH(position.center.dx - radius,
-          position.center.dy - radius, radius * 2, radius * 2);
+      rectDirectionAttack = Rect.fromLTWH(
+        position.center.dx - radius,
+        position.center.dy - radius,
+        radius * 2,
+        radius * 2,
+      );
       renderSpriteByRadAngle(
         c,
         angleRadAttack,
-        rectDirectionAttack,
+        rectDirectionAttack.toVector2Rect(),
         spriteDirectionAttack,
       );
     }

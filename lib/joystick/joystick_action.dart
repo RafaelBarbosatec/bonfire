@@ -11,9 +11,9 @@ enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
 class JoystickAction {
   final dynamic actionId;
-  final Sprite sprite;
-  final Sprite spritePressed;
-  final Sprite spriteBackgroundDirection;
+  Sprite sprite;
+  Sprite spritePressed;
+  Sprite spriteBackgroundDirection;
   final double sizeFactorBackgroundDirection;
   final double size;
   final EdgeInsets margin;
@@ -29,7 +29,7 @@ class JoystickAction {
   Vector2Rect _rect;
   Vector2Rect _rectBackgroundDirection;
   bool _dragging = false;
-  Sprite _sprite;
+  Sprite _spriteToRender;
   double _tileSize;
   Offset _dragPosition;
   Paint _paintBackground;
@@ -40,9 +40,9 @@ class JoystickAction {
 
   JoystickAction({
     @required this.actionId,
-    this.sprite,
-    this.spritePressed,
-    this.spriteBackgroundDirection,
+    Future<Sprite> sprite,
+    Future<Sprite> spritePressed,
+    Future<Sprite> spriteBackgroundDirection,
     this.enableDirection = false,
     this.size = 50,
     this.sizeFactorBackgroundDirection = 1.5,
@@ -52,7 +52,10 @@ class JoystickAction {
     this.opacityBackground = 0.5,
     this.opacityKnob = 0.8,
   }) {
-    _sprite = sprite;
+    sprite?.then((value) => this.sprite = value);
+    spritePressed?.then((value) => this.spritePressed = value);
+    spriteBackgroundDirection
+        ?.then((value) => this.spriteBackgroundDirection = value);
     _sizeBackgroundDirection = sizeFactorBackgroundDirection * size;
     _tileSize = _sizeBackgroundDirection / 2;
   }
@@ -94,7 +97,7 @@ class JoystickAction {
         ..style = PaintingStyle.fill;
     }
 
-    if (sprite == null) {
+    if (spritePressed == null) {
       _paintAction = Paint()
         ..color = color.withOpacity(opacityKnob)
         ..style = PaintingStyle.fill;
@@ -129,9 +132,9 @@ class JoystickAction {
       }
     }
 
-    if (_sprite != null) {
+    if (_spriteToRender != null) {
       if (_rect != null)
-        _sprite.render(
+        _spriteToRender.render(
           c,
           position: _rect.position,
           size: _rect.size,
@@ -238,12 +241,12 @@ class JoystickAction {
   void pressed() {
     isPressed = true;
     if (spritePressed != null) {
-      _sprite = spritePressed;
+      _spriteToRender = spritePressed;
     }
   }
 
   void unPressed() {
     isPressed = false;
-    _sprite = sprite;
+    _spriteToRender = sprite;
   }
 }

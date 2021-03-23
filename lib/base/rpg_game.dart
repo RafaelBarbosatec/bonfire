@@ -55,6 +55,15 @@ class RPGGame extends CustomBaseGame with KeyboardEvents {
       ColorFilterComponent(GameColorFilter());
   LightingComponent lighting;
 
+  List<Enemy> _initialEnemies;
+  List<GameDecoration> _initialDecorations;
+  List<GameComponent> _initialComponents;
+
+  GameColorFilter _colorFilter;
+  double _cameraZoom;
+  Size _cameraSizeMovementWindow = const Size(50, 50);
+  bool _cameraMoveOnlyMapArea = false;
+
   RPGGame({
     @required this.context,
     this.map,
@@ -77,23 +86,35 @@ class RPGGame extends CustomBaseGame with KeyboardEvents {
     Size cameraSizeMovementWindow = const Size(50, 50),
     bool cameraMoveOnlyMapArea = false,
   }) : assert(context != null) {
-    if (colorFilter != null)
-      _colorFilterComponent = ColorFilterComponent(colorFilter);
+    _initialEnemies = enemies;
+    _initialDecorations = decorations;
+    _initialComponents = components;
+    _colorFilter = colorFilter;
+    _cameraZoom = cameraZoom;
+    _cameraSizeMovementWindow = cameraSizeMovementWindow;
+    _cameraMoveOnlyMapArea = cameraMoveOnlyMapArea;
+  }
+
+  @override
+  Future<void> onLoad() {
+    if (_colorFilter != null) {
+      _colorFilterComponent = ColorFilterComponent(_colorFilter);
+    }
     _colorFilterComponent.gameRef = this;
     super.add(_colorFilterComponent);
     gameCamera = Camera(
-      zoom: cameraZoom ?? 1.0,
-      sizeMovementWindow: cameraSizeMovementWindow,
-      moveOnlyMapArea: cameraMoveOnlyMapArea,
+      zoom: _cameraZoom ?? 1.0,
+      sizeMovementWindow: _cameraSizeMovementWindow,
+      moveOnlyMapArea: _cameraMoveOnlyMapArea,
       target: player,
     );
     gameCamera.gameRef = this;
     gameController?.gameRef = this;
     if (background != null) super.add(background);
     if (map != null) super.add(map);
-    decorations?.forEach((decoration) => super.add(decoration));
-    enemies?.forEach((enemy) => super.add(enemy));
-    components?.forEach((comp) => super.add(comp));
+    _initialDecorations?.forEach((decoration) => super.add(decoration));
+    _initialEnemies?.forEach((enemy) => super.add(enemy));
+    _initialComponents?.forEach((comp) => super.add(comp));
     if (player != null) super.add(player);
     lighting = LightingComponent(color: lightingColorGame);
     super.add(lighting);
@@ -101,6 +122,7 @@ class RPGGame extends CustomBaseGame with KeyboardEvents {
     super.add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(gameCamera));
     _interval = IntervalTick(200, tick: _updateTempList);
+    return super.onLoad();
   }
 
   @override

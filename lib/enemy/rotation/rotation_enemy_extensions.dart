@@ -161,8 +161,8 @@ extension RotationEnemyExtensions on RotationEnemy {
   }
 
   void simpleAttackRange({
-    @required SpriteAnimation animationTop,
-    @required SpriteAnimation animationDestroy,
+    @required Future<SpriteAnimation> animationTop,
+    @required Future<SpriteAnimation> animationDestroy,
     @required double width,
     @required double height,
     int id,

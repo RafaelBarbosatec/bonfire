@@ -1,107 +1,145 @@
 import 'package:bonfire/bonfire.dart';
 
 class CommonSpriteSheet {
-  static Animation get explosionAnimation => Animation.sequenced(
-        'player/explosion_fire.png',
-        6,
-        textureWidth: 32,
-        textureHeight: 32,
+  static Future<SpriteAnimation> get explosionAnimation => SpriteAnimation.load(
+        "player/explosion_fire.png",
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: 0.1,
+          textureSize: Vector2(32, 32),
+        ),
       );
 
-  static Animation get emote => Animation.sequenced(
-        'player/emote_exclamacao.png',
-        8,
-        textureWidth: 32,
-        textureHeight: 32,
+  static Future<SpriteAnimation> get emote => SpriteAnimation.load(
+        "player/emote_exclamacao.png",
+        SpriteAnimationData.sequenced(
+          amount: 8,
+          stepTime: 0.1,
+          textureSize: Vector2(32, 32),
+        ),
       );
-  static Animation get smokeExplosion => Animation.sequenced(
+  static Future<SpriteAnimation> get smokeExplosion => SpriteAnimation.load(
         "smoke_explosin.png",
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+        ),
       );
 
-  static Animation get whiteAttackEffectBottom => Animation.sequenced(
-        'player/atack_effect_bottom.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
+  static Future<SpriteAnimation> get whiteAttackEffectBottom =>
+      SpriteAnimation.load(
+        "player/atack_effect_bottom.png",
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+        ),
       );
 
-  static Animation get whiteAttackEffectLeft => Animation.sequenced(
-        'player/atack_effect_left.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
+  static Future<SpriteAnimation> get whiteAttackEffectLeft =>
+      SpriteAnimation.load(
+        "player/atack_effect_left.png",
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+        ),
       );
 
-  static Animation get whiteAttackEffectRight => Animation.sequenced(
-        'player/atack_effect_right.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
+  static Future<SpriteAnimation> get whiteAttackEffectRight =>
+      SpriteAnimation.load(
+        "player/atack_effect_right.png",
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+        ),
       );
 
-  static Animation get whiteAttackEffectTop => Animation.sequenced(
-        'player/atack_effect_top.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
+  static Future<SpriteAnimation> get whiteAttackEffectTop =>
+      SpriteAnimation.load(
+        "player/atack_effect_top.png",
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+        ),
       );
 
-  static Animation get blackAttackEffectBottom => Animation.sequenced(
-        'enemy/atack_effect_bottom.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
+  static Future<SpriteAnimation> get blackAttackEffectBottom =>
+      SpriteAnimation.load(
+        "enemy/atack_effect_bottom.png",
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+        ),
       );
 
-  static Animation get blackAttackEffectLeft => Animation.sequenced(
-        'enemy/atack_effect_left.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
+  static Future<SpriteAnimation> get blackAttackEffectLeft =>
+      SpriteAnimation.load(
+        "enemy/atack_effect_left.png",
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+        ),
       );
 
-  static Animation get blackAttackEffectRight => Animation.sequenced(
-        'enemy/atack_effect_right.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
+  static Future<SpriteAnimation> get blackAttackEffectRight =>
+      SpriteAnimation.load(
+        "enemy/atack_effect_right.png",
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+        ),
       );
 
-  static Animation get blackAttackEffectTop => Animation.sequenced(
-        'enemy/atack_effect_top.png',
-        6,
-        textureWidth: 16,
-        textureHeight: 16,
+  static Future<SpriteAnimation> get blackAttackEffectTop =>
+      SpriteAnimation.load(
+        "enemy/atack_effect_top.png",
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+        ),
       );
 
-  static Animation get fireBallRight => Animation.sequenced(
-        'player/fireball_right.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
+  static Future<SpriteAnimation> get fireBallRight => SpriteAnimation.load(
+        "player/fireball_right.png",
+        SpriteAnimationData.sequenced(
+          amount: 3,
+          stepTime: 0.1,
+          textureSize: Vector2(23, 23),
+        ),
       );
 
-  static Animation get fireBallLeft => Animation.sequenced(
-        'player/fireball_left.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
+  static Future<SpriteAnimation> get fireBallLeft => SpriteAnimation.load(
+        "player/fireball_left.png",
+        SpriteAnimationData.sequenced(
+          amount: 3,
+          stepTime: 0.1,
+          textureSize: Vector2(23, 23),
+        ),
       );
 
-  static Animation get fireBallBottom => Animation.sequenced(
-        'player/fireball_bottom.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
+  static Future<SpriteAnimation> get fireBallBottom => SpriteAnimation.load(
+        "player/fireball_bottom.png",
+        SpriteAnimationData.sequenced(
+          amount: 3,
+          stepTime: 0.1,
+          textureSize: Vector2(23, 23),
+        ),
       );
 
-  static Animation get fireBallTop => Animation.sequenced(
-        'player/fireball_top.png',
-        3,
-        textureWidth: 23,
-        textureHeight: 23,
+  static Future<SpriteAnimation> get fireBallTop => SpriteAnimation.load(
+        "player/fireball_top.png",
+        SpriteAnimationData.sequenced(
+          amount: 3,
+          stepTime: 0.1,
+          textureSize: Vector2(23, 23),
+        ),
       );
 }

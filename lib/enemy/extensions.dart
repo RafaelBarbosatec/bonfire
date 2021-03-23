@@ -5,6 +5,7 @@ import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/text_damage_component.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -33,7 +34,7 @@ extension EnemyExtensions on Enemy {
       vision,
     );
 
-    if (fieldOfVision.overlaps(playerRect)) {
+    if (fieldOfVision.overlaps(playerRect.rect)) {
       if (observed != null) observed(player);
     } else {
       if (notObserved != null) notObserved();
@@ -155,7 +156,7 @@ extension EnemyExtensions on Enemy {
     );
   }
 
-  Rect get playerRect =>
+  Vector2Rect get playerRect =>
       (gameRef.player is ObjectCollision
           ? (gameRef.player as ObjectCollision)?.rectCollision
           : gameRef.player?.position) ??

@@ -15,8 +15,8 @@ import 'package:flutter/widgets.dart';
 class FlyingAttackAngleObject extends AnimatedObject
     with ObjectCollision, Lighting {
   final dynamic id;
-  final SpriteAnimation flyAnimation;
-  final SpriteAnimation destroyAnimation;
+  SpriteAnimation flyAnimation;
+  SpriteAnimation destroyAnimation;
   final double radAngle;
   final double speed;
   final double damage;
@@ -36,12 +36,12 @@ class FlyingAttackAngleObject extends AnimatedObject
 
   FlyingAttackAngleObject({
     @required Vector2 position,
-    @required this.flyAnimation,
+    @required Future<SpriteAnimation> flyAnimation,
     @required this.radAngle,
     @required this.width,
     @required this.height,
     this.id,
-    this.destroyAnimation,
+    Future<SpriteAnimation> destroyAnimation,
     this.speed = 150,
     this.damage = 1,
     this.damageInPlayer = true,
@@ -51,7 +51,11 @@ class FlyingAttackAngleObject extends AnimatedObject
     this.lightingConfig,
     CollisionConfig collision,
   }) {
-    animation = flyAnimation;
+    flyAnimation.then((value) {
+      this.flyAnimation = value;
+      animation = value;
+    });
+    destroyAnimation?.then((value) => this.destroyAnimation = value);
     this.position = Vector2Rect(
       position,
       Vector2(width, height),

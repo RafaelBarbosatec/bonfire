@@ -3,7 +3,6 @@ import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:example/map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 import 'package:example/util/enemy_sprite_sheet.dart';
-import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +10,10 @@ class Goblin extends SimpleEnemy with ObjectCollision {
   double attack = 20;
   bool _seePlayerClose = false;
 
-  Goblin(Position initPosition)
+  Goblin(Vector2 position)
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,
-          initPosition: initPosition,
+          position: position,
           width: DungeonMap.tileSize * 0.8,
           height: DungeonMap.tileSize * 0.8,
           speed: DungeonMap.tileSize * 1.6,
@@ -75,7 +74,7 @@ class Goblin extends SimpleEnemy with ObjectCollision {
   @override
   void die() {
     gameRef.add(
-      AnimatedObjectOnce(
+      AnimatedObjectOnce.futureAnimation(
         animation: CommonSpriteSheet.smokeExplosion,
         position: position,
       ),

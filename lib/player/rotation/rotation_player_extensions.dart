@@ -7,10 +7,10 @@ import 'package:flutter/widgets.dart';
 
 extension RotationPlayerExtensions on RotationPlayer {
   void simpleAttackRange({
-    @required SpriteAnimation animationTop,
+    @required Future<SpriteAnimation> animationTop,
     @required double width,
     @required double height,
-    SpriteAnimation animationDestroy,
+    Future<SpriteAnimation> animationDestroy,
     int id,
     double speed = 150,
     double damage = 1,

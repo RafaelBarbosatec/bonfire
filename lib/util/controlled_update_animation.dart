@@ -13,10 +13,9 @@ class ControlledUpdateAnimation {
   void render(Canvas canvas, Vector2Rect position) {
     if (position == null) return;
     if (animation != null && animation.getSprite()?.loaded() == true) {
-      animation.getSprite().render(
+      animation.getSprite().renderFromVector2Rect(
             canvas,
-            position: position.position,
-            size: position.size,
+            position,
             overridePaint: MapPaint.instance.paint,
           );
     }

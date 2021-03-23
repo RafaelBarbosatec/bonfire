@@ -28,9 +28,7 @@ class AnimatedFollowerObject extends FollowerObject {
   @override
   void render(Canvas canvas) {
     if (animation == null || position == null) return;
-    animation
-        .getSprite()
-        .render(canvas, position: position.position, size: position.size);
+    animation.getSprite().renderFromVector2Rect(canvas, this.position);
     super.render(canvas);
   }
 
@@ -39,7 +37,7 @@ class AnimatedFollowerObject extends FollowerObject {
     animation?.update(dt);
     super.update(dt);
     if (!loopAnimation) {
-      if (animation.isLastFrame) {
+      if (animation?.isLastFrame == true) {
         remove();
       }
     }

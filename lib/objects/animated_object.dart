@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/extensions.dart';
 import 'package:bonfire/util/priority_layer.dart';
-
 import 'package:flame/sprite.dart';
 
 /// This represents a Component for your game in bonfire.
@@ -18,7 +18,7 @@ class AnimatedObject extends GameComponent {
   void render(Canvas canvas) {
     super.render(canvas);
     if (animation == null || position == null) return;
-    animation.getSprite().render(canvas, position: position.position, size: position.size);
+    animation.getSprite().renderFromVector2Rect(canvas, this.position);
   }
 
   @override

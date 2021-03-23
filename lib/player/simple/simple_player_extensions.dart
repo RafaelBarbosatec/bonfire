@@ -8,10 +8,10 @@ import 'package:flutter/widgets.dart';
 
 extension SimplePlayerExtensions on SimplePlayer {
   void simpleAttackMelee({
-    SpriteAnimation animationRight,
-    SpriteAnimation animationBottom,
-    SpriteAnimation animationLeft,
-    SpriteAnimation animationTop,
+    Future<SpriteAnimation> animationRight,
+    Future<SpriteAnimation> animationBottom,
+    Future<SpriteAnimation> animationLeft,
+    Future<SpriteAnimation> animationTop,
     @required double damage,
     dynamic id,
     Direction direction,
@@ -35,11 +35,11 @@ extension SimplePlayerExtensions on SimplePlayer {
   }
 
   void simpleAttackRange({
-    @required SpriteAnimation animationRight,
-    @required SpriteAnimation animationLeft,
-    @required SpriteAnimation animationTop,
-    @required SpriteAnimation animationBottom,
-    SpriteAnimation animationDestroy,
+    @required Future<SpriteAnimation> animationRight,
+    @required Future<SpriteAnimation> animationLeft,
+    @required Future<SpriteAnimation> animationTop,
+    @required Future<SpriteAnimation> animationBottom,
+    Future<SpriteAnimation> animationDestroy,
     @required double width,
     @required double height,
     dynamic id,
