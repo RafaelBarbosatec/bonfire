@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flutter/gestures.dart';
 
-mixin PointerDetector {
+mixin TouchDetector {
   void onDragStart(int pointerId, Vector2 startPosition) {}
   void onDragUpdate(int pointerId, DragUpdateDetails details) {}
   void onDragEnd(int pointerId, DragEndDetails details) {}

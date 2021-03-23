@@ -108,7 +108,6 @@ class RPGGame extends CustomBaseGame with KeyboardEvents {
       moveOnlyMapArea: _cameraMoveOnlyMapArea,
       target: player,
     );
-    gameCamera.gameRef = this;
     gameController?.gameRef = this;
     if (background != null) super.add(background);
     if (map != null) super.add(map);
@@ -136,8 +135,8 @@ class RPGGame extends CustomBaseGame with KeyboardEvents {
   }
 
   @override
-  void add(Component c) {
-    addLater(c);
+  Future<void> add(Component c) {
+    return addLater(c);
   }
 
   Iterable<GameComponent> visibleComponents() => _visibleComponents;

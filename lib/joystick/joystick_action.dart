@@ -86,6 +86,7 @@ class JoystickAction {
       center: Offset(dx, dy),
       radius: radius,
     ).toVector2Rect();
+
     _rectBackgroundDirection = Rect.fromCircle(
       center: Offset(dx, dy),
       radius: _sizeBackgroundDirection / 2,
@@ -113,7 +114,9 @@ class JoystickAction {
 
   void render(Canvas c) {
     if (_rectBackgroundDirection != null && _dragging && enableDirection) {
+      print('fora:$spriteBackgroundDirection');
       if (spriteBackgroundDirection == null) {
+        print('dentro');
         double radiusBackground = _rectBackgroundDirection.rect.width / 2;
         c.drawCircle(
           Offset(
@@ -124,10 +127,9 @@ class JoystickAction {
           _paintBackground,
         );
       } else {
-        spriteBackgroundDirection.render(
+        spriteBackgroundDirection.renderFromVector2Rect(
           c,
-          position: _rectBackgroundDirection.position,
-          size: _rectBackgroundDirection.size,
+          _rectBackgroundDirection,
         );
       }
     }
@@ -260,6 +262,12 @@ class JoystickAction {
         ),
       );
       pressed();
+    }
+  }
+
+  void onTapCancel(int pointer) {
+    if (pointer == _pointer) {
+      unPressed();
     }
   }
 

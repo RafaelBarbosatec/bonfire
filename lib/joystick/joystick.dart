@@ -107,6 +107,12 @@ class Joystick extends JoystickController {
   }
 
   @override
+  void onTapCancel(int pointerId) {
+    actions?.forEach((action) => action.onTapCancel(pointerId));
+    super.onTapCancel(pointerId);
+  }
+
+  @override
   void onKeyboard(RawKeyEvent event) {
     if (!keyboardEnable) return;
     if (event is RawKeyDownEvent) {

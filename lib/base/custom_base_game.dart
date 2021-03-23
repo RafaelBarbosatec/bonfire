@@ -35,8 +35,8 @@ abstract class CustomBaseGame extends Game
               (c is DragGesture && (c).enableDrag)))
       .cast<DragGesture>();
 
-  Iterable<PointerDetector> get _pointerDetectorComponents =>
-      components.where((c) => (c is PointerDetector)).cast();
+  Iterable<TouchDetector> get _pointerDetectorComponents =>
+      components.where((c) => (c is TouchDetector)).cast();
 
   @override
   void onTapDown(int pointerId, TapDownDetails details) {
@@ -64,6 +64,9 @@ abstract class CustomBaseGame extends Game
   void onTapCancel(int pointerId) {
     for (final c in _tapGestureComponents) {
       c.handlerTapCancel(pointerId);
+    }
+    for (final c in _pointerDetectorComponents) {
+      c.onTapCancel(pointerId);
     }
     super.onTapCancel(pointerId);
   }
@@ -117,7 +120,7 @@ abstract class CustomBaseGame extends Game
   /// You can use this to setup your mixins, pre-calculate stuff on every component, or anything you desire.
   /// By default, this calls the first time resize for every component, so don't forget to call super.preAdd when overriding.
   @mustCallSuper
-  void preAdd(Component c) {
+  Future<void> preAdd(Component c) async {
     if (debugMode() && c is PositionComponent) {
       c.debugMode = true;
     }
@@ -131,6 +134,8 @@ abstract class CustomBaseGame extends Game
       c.onGameResize(size);
     }
 
+    await c.onLoad();
+
     if (c is PositionComponent) {
       c.children.forEach(preAdd);
     }
@@ -139,8 +144,8 @@ abstract class CustomBaseGame extends Game
   /// Adds a new component to the components list.
   ///
   /// Also calls [preAdd], witch in turn sets the current size on the component (because the resize hook won't be called until a new resize happens).
-  void add(Component c) {
-    preAdd(c);
+  Future<void> add(Component c) async {
+    await preAdd(c);
     components.add(c);
   }
 
@@ -148,8 +153,8 @@ abstract class CustomBaseGame extends Game
   ///
   /// Use this to add components in places where a concurrent issue with the update method might happen.
   /// Also calls [preAdd] for the component added, immediately.
-  void addLater(Component c) {
-    preAdd(c);
+  Future<void> addLater(Component c) async {
+    await preAdd(c);
     _addLater.add(c);
   }
 
@@ -223,6 +228,7 @@ abstract class CustomBaseGame extends Game
   @override
   @mustCallSuper
   void onResize(Vector2 size) {
+    gameCamera.gameRef = this;
     super.onResize(size);
     components.forEach((c) => c.onGameResize(size));
   }

@@ -53,7 +53,7 @@ abstract class JoystickListener {
 }
 
 abstract class JoystickController extends Component
-    with HasGameRef<CustomBaseGame>, PointerDetector {
+    with HasGameRef<CustomBaseGame>, TouchDetector {
   List<JoystickListener> _observers = [];
   bool keyboardEnable = false;
 
