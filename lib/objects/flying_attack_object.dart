@@ -47,6 +47,10 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
       animation = this.flyAnimation;
     });
 
+    destroyAnimation.then((value) {
+      this.destroyAnimation = value;
+    });
+
     this.position = Vector2Rect(
       position,
       Vector2(width, height),
@@ -137,52 +141,68 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
         Vector2Rect positionDestroy;
         switch (direction) {
           case Direction.left:
-            positionDestroy = Vector2Rect(
-              Vector2(position.position.x - (width / 2), position.position.y),
-              Vector2(width, height),
-            );
+            positionDestroy = Rect.fromLTWH(
+              position.left - (width / 2),
+              position.top,
+              width,
+              height,
+            ).toVector2Rect();
             break;
           case Direction.right:
-            positionDestroy = Vector2Rect(
-              Vector2(position.position.x + (width / 2), position.position.y),
-              Vector2(width, height),
-            );
+            positionDestroy = Rect.fromLTWH(
+              position.left + (width / 2),
+              position.top,
+              width,
+              height,
+            ).toVector2Rect();
             break;
           case Direction.top:
-            positionDestroy = Vector2Rect(
-              Vector2(position.position.x, position.position.y - (height / 2)),
-              Vector2(width, height),
-            );
+            positionDestroy = Rect.fromLTWH(
+              position.left,
+              position.top - (height / 2),
+              width,
+              height,
+            ).toVector2Rect();
             break;
           case Direction.bottom:
-            positionDestroy = Vector2Rect(
-              Vector2(position.position.x, position.position.y + (height / 2)),
-              Vector2(width, height),
-            );
+            positionDestroy = Rect.fromLTWH(
+              position.left,
+              position.top + (height / 2),
+              width,
+              height,
+            ).toVector2Rect();
             break;
           case Direction.topLeft:
-            positionDestroy = Vector2Rect(
-              Vector2(position.position.x - (width / 2), position.position.y),
-              Vector2(width, height),
-            );
+            positionDestroy = Rect.fromLTWH(
+              position.left - (width / 2),
+              position.top,
+              width,
+              height,
+            ).toVector2Rect();
             break;
           case Direction.topRight:
-            positionDestroy = Vector2Rect(
-              Vector2(position.position.x + (width / 2), position.position.y),
-              Vector2(width, height),
-            );
+            positionDestroy = Rect.fromLTWH(
+              position.left + (width / 2),
+              position.top,
+              width,
+              height,
+            ).toVector2Rect();
             break;
           case Direction.bottomLeft:
-            positionDestroy = Vector2Rect(
-              Vector2(position.position.x - (width / 2), position.position.y),
-              Vector2(width, height),
-            );
+            positionDestroy = Rect.fromLTWH(
+              position.left - (width / 2),
+              position.top,
+              width,
+              height,
+            ).toVector2Rect();
             break;
           case Direction.bottomRight:
-            positionDestroy = Vector2Rect(
-              Vector2(position.position.x + (width / 2), position.position.y),
-              Vector2(width, height),
-            );
+            positionDestroy = Rect.fromLTWH(
+              position.left + (width / 2),
+              position.top,
+              width,
+              height,
+            ).toVector2Rect();
             break;
         }
 
