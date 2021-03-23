@@ -1,4 +1,4 @@
-import 'package:bonfire/base/base_game_point_detector.dart';
+import 'package:bonfire/base/custom_base_game.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/decoration/decoration.dart';
@@ -24,7 +24,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
+class RPGGame extends CustomBaseGame with KeyboardEvents {
   final BuildContext context;
   final Player player;
   final GameInterface interface;

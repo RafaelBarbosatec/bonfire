@@ -1,20 +1,19 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
 class RotationPlayer extends Player {
-  final FlameAnimation.Animation animIdle;
-  final FlameAnimation.Animation animRun;
+  final SpriteAnimation animIdle;
+  final SpriteAnimation animRun;
   double speed;
   double currentRadAngle;
   bool _move = false;
-  FlameAnimation.Animation animation;
+  SpriteAnimation animation;
 
   RotationPlayer({
-    @required Position initPosition,
+    @required Vector2 position,
     @required this.animIdle,
     @required this.animRun,
     this.speed = 150,
@@ -23,7 +22,7 @@ class RotationPlayer extends Player {
     double height = 32,
     double life = 100,
   }) : super(
-          initPosition: initPosition,
+          position: position,
           width: width,
           height: height,
           life: life,
@@ -67,8 +66,12 @@ class RotationPlayer extends Player {
 
   void _renderAnimation(Canvas canvas) {
     if (animation == null || position == null) return;
-    if (animation.loaded()) {
-      animation.getSprite().renderRect(canvas, position);
+    if (animation.getSprite().loaded()) {
+      animation.getSprite().render(
+            canvas,
+            position: position.position,
+            size: position.size,
+          );
     }
   }
 }

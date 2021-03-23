@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:bonfire/base/base_game_point_detector.dart';
+import 'package:bonfire/base/custom_base_game.dart';
 import 'package:bonfire/util/mixins/pointer_detector_mixin.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
@@ -53,7 +53,7 @@ abstract class JoystickListener {
 }
 
 abstract class JoystickController extends Component
-    with HasGameRef<BaseGamePointerDetector>, PointerDetector {
+    with HasGameRef<CustomBaseGame>, PointerDetector {
   List<JoystickListener> _observers = [];
   bool keyboardEnable = false;
 

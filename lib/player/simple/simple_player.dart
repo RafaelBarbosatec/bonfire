@@ -13,10 +13,10 @@ class SimplePlayer extends Player {
   Direction lastDirection;
   Direction lastDirectionHorizontal = Direction.right;
 
-  Position _positionToMove;
+  Vector2 _positionToMove;
 
   SimplePlayer({
-    @required Position initPosition,
+    @required Vector2 position,
     @required this.animation,
     Direction initDirection = Direction.right,
     double speed = 150,
@@ -25,7 +25,7 @@ class SimplePlayer extends Player {
     double life = 100,
     Size sizeCentralMovementWindow,
   }) : super(
-          initPosition: initPosition,
+          position: position,
           width: width,
           height: height,
           life: life,

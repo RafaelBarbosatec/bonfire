@@ -2,15 +2,15 @@ import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/player/extensions.dart';
 import 'package:bonfire/player/rotation/rotation_player.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
+import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 extension RotationPlayerExtensions on RotationPlayer {
   void simpleAttackRange({
-    @required FlameAnimation.Animation animationTop,
+    @required SpriteAnimation animationTop,
     @required double width,
     @required double height,
-    FlameAnimation.Animation animationDestroy,
+    SpriteAnimation animationDestroy,
     int id,
     double speed = 150,
     double damage = 1,
@@ -41,7 +41,7 @@ extension RotationPlayerExtensions on RotationPlayer {
   }
 
   void simpleAttackMelee({
-    @required FlameAnimation.Animation animationTop,
+    @required SpriteAnimation animationTop,
     @required double damage,
     int id,
     double radAngleDirection,

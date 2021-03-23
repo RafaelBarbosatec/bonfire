@@ -1,17 +1,17 @@
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/player/extensions.dart';
 import 'package:bonfire/player/simple/simple_player.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/widgets.dart';
 
 extension SimplePlayerExtensions on SimplePlayer {
   void simpleAttackMelee({
-    FlameAnimation.Animation animationRight,
-    FlameAnimation.Animation animationBottom,
-    FlameAnimation.Animation animationLeft,
-    FlameAnimation.Animation animationTop,
+    SpriteAnimation animationRight,
+    SpriteAnimation animationBottom,
+    SpriteAnimation animationLeft,
+    SpriteAnimation animationTop,
     @required double damage,
     dynamic id,
     Direction direction,
@@ -35,11 +35,11 @@ extension SimplePlayerExtensions on SimplePlayer {
   }
 
   void simpleAttackRange({
-    @required FlameAnimation.Animation animationRight,
-    @required FlameAnimation.Animation animationLeft,
-    @required FlameAnimation.Animation animationTop,
-    @required FlameAnimation.Animation animationBottom,
-    FlameAnimation.Animation animationDestroy,
+    @required SpriteAnimation animationRight,
+    @required SpriteAnimation animationLeft,
+    @required SpriteAnimation animationTop,
+    @required SpriteAnimation animationBottom,
+    SpriteAnimation animationDestroy,
     @required double width,
     @required double height,
     dynamic id,
