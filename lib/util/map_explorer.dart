@@ -1,6 +1,6 @@
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/util/camera/camera.dart';
-import 'package:flame/position.dart';
+import 'package:flame/extensions.dart';
 
 class MapExplorer implements JoystickListener {
   final Camera camera;
@@ -33,5 +33,5 @@ class MapExplorer implements JoystickListener {
   }
 
   @override
-  void moveTo(Position position) {}
+  void moveTo(Vector2 position) {}
 }

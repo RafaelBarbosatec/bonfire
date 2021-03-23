@@ -7,12 +7,12 @@ class BackgroundColorGame extends GameComponent {
   BackgroundColorGame(this.color);
 
   @override
-  bool isHud() => true;
+  bool get isHud => true;
 
   @override
   void render(Canvas canvas) {
     canvas.drawRect(
-      new Rect.fromLTRB(0.0, 0.0, gameRef.size.width, gameRef.size.height),
+      new Rect.fromLTRB(0.0, 0.0, gameRef.size.x, gameRef.size.y),
       new Paint()..color = color,
     );
   }

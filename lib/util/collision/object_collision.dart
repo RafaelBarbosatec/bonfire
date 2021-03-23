@@ -71,7 +71,7 @@ mixin ObjectCollision on GameComponent {
   }
 
   bool isCollisionPositionTranslate(
-    Rect position,
+    Vector2Rect position,
     double translateX,
     double translateY,
   ) {

@@ -66,8 +66,8 @@ class Tile extends GameComponent {
   @override
   void render(Canvas canvas) {
     if (position == null) return;
-    animation?.render(canvas, position.rect);
-    if (sprite?.loaded() ?? false) {
+    animation?.render(canvas, position);
+    if (sprite?.loaded() == true) {
       sprite.render(
         canvas,
         position: position.position,

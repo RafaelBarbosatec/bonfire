@@ -214,7 +214,7 @@ class Enemy extends GameComponent with Attackable {
   ) {
     var collision = false;
     collision = (this as ObjectCollision).isCollisionPositionTranslate(
-      position.rect,
+      position,
       translateX,
       translateY,
     );
