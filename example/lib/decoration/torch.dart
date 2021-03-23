@@ -1,16 +1,17 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/map/dungeon_map.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/material.dart';
 
 class Torch extends GameDecoration with Lighting {
-  Torch(Position position)
-      : super.animation(
-          FlameAnimation.Animation.sequenced(
+  Torch(Vector2 position)
+      : super.futureAnimation(
+          SpriteAnimation.load(
             "itens/torch_spritesheet.png",
-            6,
-            textureWidth: 16,
-            textureHeight: 16,
+            SpriteAnimationData.sequenced(
+              amount: 6,
+              stepTime: 0.1,
+              textureSize: Vector2(16, 16),
+            ),
           ),
           width: DungeonMap.tileSize,
           height: DungeonMap.tileSize,

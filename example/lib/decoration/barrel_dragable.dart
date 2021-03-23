@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 
 class BarrelDraggable extends GameDecoration with DragGesture, ObjectCollision {
   TextConfig _textConfig;
-  BarrelDraggable(Position initPosition)
-      : super.sprite(
-          Sprite('itens/barrel.png'),
-          position: initPosition,
+  BarrelDraggable(Vector2 position)
+      : super.futureSprite(
+          Sprite.load('itens/barrel.png'),
+          position: position,
           width: DungeonMap.tileSize,
           height: DungeonMap.tileSize,
         ) {
@@ -36,7 +36,8 @@ class BarrelDraggable extends GameDecoration with DragGesture, ObjectCollision {
     _textConfig.render(
       canvas,
       'Drag',
-      Position(this.position.left + width / 5, this.position.top - width / 3),
+      Vector2(this.position.rect.left + width / 5,
+          this.position.rect.top - width / 3),
     );
   }
 }

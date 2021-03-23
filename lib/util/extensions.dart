@@ -53,6 +53,10 @@ extension OffSetExt on Offset {
   Offset copyWith({double x, double y}) {
     return Offset(x ?? this.dx, y ?? this.dy);
   }
+
+  Vector2 toVector2() {
+    return Vector2(this.dx, this.dy);
+  }
 }
 
 extension RectExt on Rect {

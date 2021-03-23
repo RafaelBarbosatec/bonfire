@@ -1,7 +1,8 @@
 import 'dart:math';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:flame/position.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -25,8 +26,8 @@ class JoystickAction {
   double _sizeBackgroundDirection;
 
   int _pointerDragging;
-  Rect _rect;
-  Rect _rectBackgroundDirection;
+  Vector2Rect _rect;
+  Vector2Rect _rectBackgroundDirection;
   bool _dragging = false;
   Sprite _sprite;
   double _tileSize;
@@ -56,7 +57,7 @@ class JoystickAction {
     _tileSize = _sizeBackgroundDirection / 2;
   }
 
-  void initialize(Size _screenSize, JoystickController joystickController) {
+  void initialize(Vector2 _screenSize, JoystickController joystickController) {
     _joystickController = joystickController;
     double radius = size / 2;
     double dx = 0, dy = 0;
@@ -67,25 +68,25 @@ class JoystickAction {
         break;
       case JoystickActionAlign.BOTTOM_LEFT:
         dx = margin.left + radius;
-        dy = _screenSize.height - (margin.bottom + radius);
+        dy = _screenSize.y - (margin.bottom + radius);
         break;
       case JoystickActionAlign.TOP_RIGHT:
-        dx = _screenSize.width - (margin.right + radius);
+        dx = _screenSize.x - (margin.right + radius);
         dy = margin.top + radius;
         break;
       case JoystickActionAlign.BOTTOM_RIGHT:
-        dx = _screenSize.width - (margin.right + radius);
-        dy = _screenSize.height - (margin.bottom + radius);
+        dx = _screenSize.x - (margin.right + radius);
+        dy = _screenSize.y - (margin.bottom + radius);
         break;
     }
     _rect = Rect.fromCircle(
       center: Offset(dx, dy),
       radius: radius,
-    );
+    ).toVector2Rect();
     _rectBackgroundDirection = Rect.fromCircle(
       center: Offset(dx, dy),
       radius: _sizeBackgroundDirection / 2,
-    );
+    ).toVector2Rect();
 
     if (spriteBackgroundDirection == null) {
       _paintBackground = Paint()
@@ -110,28 +111,37 @@ class JoystickAction {
   void render(Canvas c) {
     if (_rectBackgroundDirection != null && _dragging && enableDirection) {
       if (spriteBackgroundDirection == null) {
-        double radiusBackground = _rectBackgroundDirection.width / 2;
+        double radiusBackground = _rectBackgroundDirection.rect.width / 2;
         c.drawCircle(
           Offset(
-            _rectBackgroundDirection.left + radiusBackground,
-            _rectBackgroundDirection.top + radiusBackground,
+            _rectBackgroundDirection.rect.left + radiusBackground,
+            _rectBackgroundDirection.rect.top + radiusBackground,
           ),
           radiusBackground,
           _paintBackground,
         );
       } else {
-        spriteBackgroundDirection.renderRect(c, _rectBackgroundDirection);
+        spriteBackgroundDirection.render(
+          c,
+          position: _rectBackgroundDirection.position,
+          size: _rectBackgroundDirection.size,
+        );
       }
     }
 
     if (_sprite != null) {
-      if (_rect != null) _sprite.renderRect(c, _rect);
+      if (_rect != null)
+        _sprite.render(
+          c,
+          position: _rect.position,
+          size: _rect.size,
+        );
     } else {
-      double radiusAction = _rect.width / 2;
+      double radiusAction = _rect.rect.width / 2;
       c.drawCircle(
         Offset(
-          _rect.left + radiusAction,
-          _rect.top + radiusAction,
+          _rect.rect.left + radiusAction,
+          _rect.rect.top + radiusAction,
         ),
         radiusAction,
         isPressed ? _paintActionPressed : _paintAction,
@@ -147,9 +157,9 @@ class JoystickAction {
       );
 
       // Distance between the center of joystick background & drag position
-      Position centerPosition = Position.fromOffset(_rectBackgroundDirection.center);
-      Position dragPosition = Position.fromOffset(_dragPosition);
-      double dist = centerPosition.distance(dragPosition);
+      Vector2 centerPosition = _rectBackgroundDirection.center.toVector2();
+      Vector2 dragPosition = _dragPosition.toVector2();
+      double dist = centerPosition.distanceTo(dragPosition);
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the
@@ -187,7 +197,7 @@ class JoystickAction {
   }
 
   void actionDown(int pointer, Offset localPosition) {
-    if (!_dragging && _rect != null && _rect.contains(localPosition)) {
+    if (!_dragging && _rect != null && _rect.rect.contains(localPosition)) {
       _pointerDragging = pointer;
       if (enableDirection) {
         _dragPosition = localPosition;

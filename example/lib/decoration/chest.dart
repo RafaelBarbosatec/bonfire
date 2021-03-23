@@ -1,26 +1,26 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:example/decoration/potion_life.dart';
 import 'package:example/map/dungeon_map.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/position.dart';
 import 'package:flutter/material.dart';
 
 class Chest extends GameDecoration with TapGesture {
-  final Position initPosition;
   bool _observedPlayer = false;
 
   TextConfig _textConfig;
-  Chest(this.initPosition)
-      : super.animation(
-          FlameAnimation.Animation.sequenced(
+  Chest(Vector2 position)
+      : super.futureAnimation(
+          SpriteAnimation.load(
             "itens/chest_spritesheet.png",
-            8,
-            textureWidth: 16,
-            textureHeight: 16,
+            SpriteAnimationData.sequenced(
+              amount: 8,
+              stepTime: 0.1,
+              textureSize: Vector2(16, 16),
+            ),
           ),
           width: DungeonMap.tileSize * 0.6,
           height: DungeonMap.tileSize * 0.6,
-          position: initPosition,
+          position: position,
         ) {
     _textConfig = TextConfig(
       color: Colors.white,
@@ -52,8 +52,7 @@ class Chest extends GameDecoration with TapGesture {
       _textConfig.render(
         canvas,
         'Touch me !!',
-        Position(
-            position.left - width / 1.5, position.center.dy - (height + 5)),
+        Vector2(position.left - width / 1.5, position.center.dy - (height + 5)),
       );
     }
   }
@@ -66,10 +65,13 @@ class Chest extends GameDecoration with TapGesture {
     }
   }
 
+  @override
+  void onTapCancel() {}
+
   void _addPotions() {
     gameRef.addGameComponent(
       PotionLife(
-        Position(
+        Vector2(
           position.translate(width * 2, 0).left,
           position.top - height * 2,
         ),
@@ -79,7 +81,7 @@ class Chest extends GameDecoration with TapGesture {
 
     gameRef.addGameComponent(
       PotionLife(
-        Position(
+        Vector2(
           position.translate(width * 2, 0).left,
           position.top + height * 2,
         ),
@@ -87,42 +89,39 @@ class Chest extends GameDecoration with TapGesture {
       ),
     );
 
-    gameRef.add(
-      AnimatedObjectOnce(
-        animation: FlameAnimation.Animation.sequenced(
-          "smoke_explosin.png",
-          6,
-          textureWidth: 16,
-          textureHeight: 16,
-        ),
-        position: position.translate(width * 2, 0),
-      ),
-    );
+    _addSmokeExplosion(position.translate(width * 2, 0));
+    _addSmokeExplosion(position.translate(width * 2, height * 2));
+  }
 
+  void _addSmokeExplosion(Vector2Rect position) {
     gameRef.add(
-      AnimatedObjectOnce(
-        animation: FlameAnimation.Animation.sequenced(
+      AnimatedObjectOnce.futureAnimation(
+        animation: SpriteAnimation.load(
           "smoke_explosin.png",
-          6,
-          textureWidth: 16,
-          textureHeight: 16,
+          SpriteAnimationData.sequenced(
+            amount: 6,
+            stepTime: 0.1,
+            textureSize: Vector2(16, 16),
+          ),
         ),
-        position: position.translate(width * 2, height * 2),
+        position: position,
       ),
     );
   }
 
   void _showEmote() {
     gameRef.add(
-      AnimatedFollowerObject(
-        animation: FlameAnimation.Animation.sequenced(
-          'player/emote_exclamacao.png',
-          8,
-          textureWidth: 32,
-          textureHeight: 32,
+      AnimatedFollowerObject.futureAnimation(
+        animation: SpriteAnimation.load(
+          "player/emote_exclamacao.png",
+          SpriteAnimationData.sequenced(
+            amount: 8,
+            stepTime: 0.1,
+            textureSize: Vector2(32, 32),
+          ),
         ),
         target: this,
-        positionFromTarget: Rect.fromLTWH(18, -6, 16, 16),
+        positionFromTarget: Rect.fromLTWH(18, -6, 16, 16).toVector2Rect(),
       ),
     );
   }

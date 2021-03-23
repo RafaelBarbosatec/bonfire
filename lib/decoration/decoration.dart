@@ -45,6 +45,22 @@ class GameDecoration extends AnimatedObject {
     );
   }
 
+  GameDecoration.futureSprite(
+    Future<Sprite> sprite, {
+    @required Vector2 position,
+    @required this.height,
+    @required this.width,
+    this.frontFromPlayer = false,
+    SpriteAnimation animation,
+  }) {
+    Sprite.load(spritePath).then((value) => this.sprite = value);
+    this.position = generateRectWithBleedingPixel(
+      position,
+      width,
+      height,
+    );
+  }
+
   GameDecoration.sprite(
     this.sprite, {
     @required Vector2 position,
@@ -67,6 +83,21 @@ class GameDecoration extends AnimatedObject {
     this.frontFromPlayer = false,
   }) {
     this.animation = animation;
+    this.position = generateRectWithBleedingPixel(
+      position,
+      width,
+      height,
+    );
+  }
+
+  GameDecoration.futureAnimation(
+    Future<SpriteAnimation> animation, {
+    @required Vector2 position,
+    @required this.height,
+    @required this.width,
+    this.frontFromPlayer = false,
+  }) {
+    animation.then((value) => this.animation = value);
     this.position = generateRectWithBleedingPixel(
       position,
       width,

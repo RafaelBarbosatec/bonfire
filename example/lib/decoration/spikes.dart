@@ -1,20 +1,18 @@
-import 'dart:async';
+import 'dart:async' as async;
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:example/map/dungeon_map.dart';
-import 'package:flame/position.dart';
 
 class Spikes extends GameDecoration with Sensor {
-  final Position initPosition;
-  Timer timer;
+  async.Timer timer;
 
   bool isTick = false;
 
-  Spikes(this.initPosition)
-      : super.sprite(
-          Sprite('itens/spikes.png'),
-          position: initPosition,
+  Spikes(Vector2 position)
+      : super.futureSprite(
+          Sprite.load('itens/spikes.png'),
+          position: position,
           width: DungeonMap.tileSize / 1.5,
           height: DungeonMap.tileSize / 1.5,
         );
@@ -24,7 +22,7 @@ class Spikes extends GameDecoration with Sensor {
     if (timer == null) {
       if (collision is Attackable) {
         (collision as Attackable).receiveDamage(10, 1);
-        timer = Timer(Duration(milliseconds: 500), () {
+        timer = async.Timer(Duration(milliseconds: 500), () {
           timer = null;
         });
       }

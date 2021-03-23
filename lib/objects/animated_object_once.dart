@@ -27,6 +27,19 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     this.position = position;
   }
 
+  AnimatedObjectOnce.futureAnimation({
+    Vector2Rect position,
+    Future<SpriteAnimation> animation,
+    this.onFinish,
+    this.onStartAnimation,
+    this.rotateRadAngle,
+    this.lightingConfig,
+  }) {
+    animation.then((value) => this.animation = value..loop = false);
+
+    this.position = position;
+  }
+
   @override
   void render(Canvas canvas) {
     if (this.position == null) return;

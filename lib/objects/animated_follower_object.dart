@@ -7,7 +7,7 @@ import 'package:bonfire/util/vector2rect.dart';
 
 class AnimatedFollowerObject extends FollowerObject {
   final bool loopAnimation;
-  final SpriteAnimation animation;
+  SpriteAnimation animation;
 
   AnimatedFollowerObject({
     this.animation,
@@ -15,6 +15,15 @@ class AnimatedFollowerObject extends FollowerObject {
     Vector2Rect positionFromTarget,
     this.loopAnimation = false,
   }) : super(target, positionFromTarget);
+
+  AnimatedFollowerObject.futureAnimation({
+    Future<SpriteAnimation> animation,
+    GameComponent target,
+    Vector2Rect positionFromTarget,
+    this.loopAnimation = false,
+  }) : super(target, positionFromTarget) {
+    animation.then((value) => this.animation = value);
+  }
 
   @override
   void render(Canvas canvas) {

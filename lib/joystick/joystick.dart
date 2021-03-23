@@ -1,3 +1,4 @@
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/joystick/joystick_action.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/joystick/joystick_directional.dart';
@@ -18,7 +19,7 @@ class Joystick extends JoystickController {
     this.keyboardEnable = false,
   });
 
-  void initialize(Size size) async {
+  void initialize(Vector2 size) async {
     if (directional != null) directional.initialize(size, this);
     if (actions != null)
       actions.forEach((action) => action.initialize(size, this));
@@ -47,9 +48,9 @@ class Joystick extends JoystickController {
   }
 
   @override
-  void resize(Size size) {
-    initialize(size);
-    super.resize(size);
+  void onGameResize(Vector2 gameSize) {
+    initialize(gameSize);
+    super.onGameResize(gameSize);
   }
 
   void onPointerDown(PointerDownEvent event) {
