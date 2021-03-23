@@ -162,11 +162,7 @@ class SimpleDirectionAnimation {
     if (_fastAnimation != null) {
       _fastAnimation.render(canvas);
     } else if (current?.getSprite()?.loaded() == true) {
-      current.getSprite().render(
-            canvas,
-            position: position.position,
-            size: position.size,
-          );
+      current.getSprite().renderFromVector2Rect(canvas, position);
     }
   }
 

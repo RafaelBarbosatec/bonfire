@@ -67,11 +67,7 @@ class RotationPlayer extends Player {
   void _renderAnimation(Canvas canvas) {
     if (animation == null || position == null) return;
     if (animation.getSprite().loaded()) {
-      animation.getSprite().render(
-            canvas,
-            position: position.position,
-            size: position.size,
-          );
+      animation.getSprite().renderFromVector2Rect(canvas, position);
     }
   }
 }

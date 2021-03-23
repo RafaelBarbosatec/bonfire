@@ -68,10 +68,9 @@ class Tile extends GameComponent {
     if (position == null) return;
     animation?.render(canvas, position);
     if (sprite?.loaded() == true) {
-      sprite.render(
+      sprite.renderFromVector2Rect(
         canvas,
-        position: position.position,
-        size: position.size,
+        position,
         overridePaint: MapPaint.instance.paint,
       );
     }
