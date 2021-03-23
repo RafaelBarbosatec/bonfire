@@ -90,10 +90,9 @@ class JoystickDirectional {
   void render(Canvas canvas) {
     if (_backgroundRect != null) {
       if (_backgroundSprite != null) {
-        _backgroundSprite.render(
+        _backgroundSprite.renderFromVector2Rect(
           canvas,
-          position: _backgroundRect.position,
-          size: _backgroundRect.size,
+          _backgroundRect,
         );
       } else {
         double radiusBackground = _backgroundRect.rect.width / 2;
@@ -108,8 +107,7 @@ class JoystickDirectional {
 
     if (_knobRect != null) {
       if (_knobSprite != null) {
-        _knobSprite.renderFromVector2Rect(canvas,
-            _knobRect);
+        _knobSprite.renderFromVector2Rect(canvas, _knobRect);
       } else {
         double radiusKnob = _knobRect.rect.width / 2;
         canvas.drawCircle(

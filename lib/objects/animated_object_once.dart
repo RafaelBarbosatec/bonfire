@@ -53,7 +53,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     } else {
       super.render(canvas);
     }
-    if (animation.done()) {
+    if (animation?.done() == true) {
       if (onFinish != null) onFinish();
       remove();
     }

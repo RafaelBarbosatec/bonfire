@@ -53,33 +53,57 @@ class Joystick extends JoystickController {
     super.onGameResize(gameSize);
   }
 
-  void onPointerDown(PointerDownEvent event) {
-    if (directional != null)
-      directional.directionalDown(event.pointer, event.localPosition);
-    if (actions != null)
-      actions.forEach(
-          (action) => action.actionDown(event.pointer, event.localPosition));
+  @override
+  void onDragStart(int pointerId, Vector2 startPosition) {
+    directional?.directionalDown(pointerId, startPosition.toOffset());
+
+    actions?.where((element) => element.enableDirection)?.forEach((action) {
+      action.onDragStart(pointerId, startPosition.toOffset());
+    });
+    super.onDragStart(pointerId, startPosition);
   }
 
-  void onPointerMove(PointerMoveEvent event) {
-    if (actions != null)
-      actions.forEach(
-          (action) => action.actionMove(event.pointer, event.localPosition));
-    if (directional != null)
-      directional.directionalMove(event.pointer, event.localPosition);
+  @override
+  void onDragUpdate(int pointerId, DragUpdateDetails details) {
+    actions?.where((element) => element.enableDirection)?.forEach(
+        (action) => action.onDragUpdate(pointerId, details.localPosition));
+
+    directional?.directionalMove(pointerId, details.localPosition);
+    super.onDragUpdate(pointerId, details);
   }
 
-  void onPointerUp(PointerUpEvent event) {
-    if (actions != null)
-      actions.forEach((action) => action.actionUp(event.pointer));
+  @override
+  void onDragEnd(int pointerId, DragEndDetails details) {
+    actions
+        ?.where((element) => element.enableDirection)
+        ?.forEach((action) => action.onDragEnd(pointerId));
 
-    if (directional != null) directional.directionalUp(event.pointer);
+    if (directional != null) directional.directionalUp(pointerId);
+    super.onDragEnd(pointerId, details);
   }
 
-  void onPointerCancel(PointerCancelEvent event) {
+  @override
+  void onDragCancel(int pointerId) {
     if (actions != null)
-      actions.forEach((action) => action.actionUp(event.pointer));
-    if (directional != null) directional.directionalUp(event.pointer);
+      actions
+          ?.where((element) => element.enableDirection)
+          ?.forEach((action) => action.onDragEnd(pointerId));
+    if (directional != null) directional.directionalUp(pointerId);
+    super.onDragCancel(pointerId);
+  }
+
+  @override
+  void onTapDown(int pointerId, TapDownDetails details) {
+    actions?.forEach((action) {
+      action.onTapDown(pointerId, details.localPosition);
+    });
+    super.onTapDown(pointerId, details);
+  }
+
+  @override
+  void onTapUp(int pointerId, TapUpDetails details) {
+    actions?.forEach((action) => action.onTapUp(pointerId));
+    super.onTapUp(pointerId, details);
   }
 
   @override

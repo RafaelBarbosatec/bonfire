@@ -2,6 +2,7 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/camera/camera.dart';
 import 'package:bonfire/util/gestures/drag_gesture.dart';
 import 'package:bonfire/util/gestures/tap_gesture.dart';
+import 'package:bonfire/util/mixins/pointer_detector_mixin.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart' hide Camera;
 import 'package:flame/gestures.dart';
@@ -34,13 +35,16 @@ abstract class CustomBaseGame extends Game
               (c is DragGesture && (c).enableDrag)))
       .cast<DragGesture>();
 
-  Iterable<MultiTouchDragDetector> get _multiTouchComponents =>
-      components.where((c) => (c is MultiTouchDragDetector)).cast();
+  Iterable<PointerDetector> get _pointerDetectorComponents =>
+      components.where((c) => (c is PointerDetector)).cast();
 
   @override
   void onTapDown(int pointerId, TapDownDetails details) {
     for (final c in _tapGestureComponents) {
       c.handlerTapDown(pointerId, details.localPosition);
+    }
+    for (final c in _pointerDetectorComponents) {
+      c.onTapDown(pointerId, details);
     }
     super.onTapDown(pointerId, details);
   }
@@ -49,6 +53,9 @@ abstract class CustomBaseGame extends Game
   void onTapUp(int pointerId, TapUpDetails details) {
     for (final c in _tapGestureComponents) {
       c.handlerTapUp(pointerId, details.localPosition);
+    }
+    for (final c in _pointerDetectorComponents) {
+      c.onTapUp(pointerId, details);
     }
     super.onTapUp(pointerId, details);
   }
@@ -66,7 +73,7 @@ abstract class CustomBaseGame extends Game
     for (final c in _dragGestureComponents) {
       c.dragStart(pointerId, startPosition.toOffset());
     }
-    for (final c in _multiTouchComponents) {
+    for (final c in _pointerDetectorComponents) {
       c.onDragStart(pointerId, startPosition);
     }
     super.onDragStart(pointerId, startPosition);
@@ -77,7 +84,7 @@ abstract class CustomBaseGame extends Game
     for (final c in _dragGestureComponents) {
       c.dragCancel(pointerId);
     }
-    for (final c in _multiTouchComponents) {
+    for (final c in _pointerDetectorComponents) {
       c.onDragCancel(pointerId);
     }
     super.onDragCancel(pointerId);
@@ -88,7 +95,7 @@ abstract class CustomBaseGame extends Game
     for (final c in _dragGestureComponents) {
       c.dragEnd(pointerId);
     }
-    for (final c in _multiTouchComponents) {
+    for (final c in _pointerDetectorComponents) {
       c.onDragEnd(pointerId, details);
     }
     super.onDragEnd(pointerId, details);
@@ -99,7 +106,7 @@ abstract class CustomBaseGame extends Game
     for (final c in _dragGestureComponents) {
       c.dragMove(pointerId, details.localPosition);
     }
-    for (final c in _multiTouchComponents) {
+    for (final c in _pointerDetectorComponents) {
       c.onDragUpdate(pointerId, details);
     }
     super.onDragUpdate(pointerId, details);
