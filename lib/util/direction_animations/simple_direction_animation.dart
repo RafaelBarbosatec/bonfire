@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +26,7 @@ class SimpleDirectionAnimation {
   SpriteAnimation runBottomRight;
   Map<String, SpriteAnimation> others = {};
   SimpleAnimationEnum init;
+  final _loader = AssetsLoader();
 
   SpriteAnimation current;
   SimpleAnimationEnum _currentType;
@@ -52,28 +54,37 @@ class SimpleDirectionAnimation {
     Map<String, Future<SpriteAnimation>> others,
     this.init = SimpleAnimationEnum.idleRight,
   }) {
-    idleLeft?.then((value) => this.idleLeft = value);
-    idleRight?.then((value) => this.idleRight = value);
-    idleTop?.then((value) => this.idleTop = value);
-    idleBottom?.then((value) => this.idleBottom = value);
-    idleTopLeft?.then((value) => this.idleTopLeft = value);
-    idleTopRight?.then((value) => this.idleTopRight = value);
-    idleBottomLeft?.then((value) => this.idleBottomLeft = value);
-    idleBottomRight?.then((value) => this.idleBottomRight = value);
-    runTop?.then((value) => this.runTop = value);
-    runRight?.then((value) => this.runRight = value);
-    runBottom?.then((value) => this.runBottom = value);
-    runLeft?.then((value) => this.runLeft = value);
-    runTopLeft?.then((value) => this.runTopLeft = value);
-    runTopRight?.then((value) => this.runTopRight = value);
-    runBottomLeft?.then((value) => this.runBottomLeft = value);
-    runBottomRight?.then((value) => this.runBottomRight = value);
+    _loader.add(AssetToLoad(idleLeft, (value) => this.idleLeft = value));
+    _loader.add(AssetToLoad(idleRight, (value) => this.idleRight = value));
+    _loader.add(AssetToLoad(idleBottom, (value) => this.idleBottom = value));
+    _loader.add(AssetToLoad(idleTopLeft, (value) => this.idleTopLeft = value));
+    _loader.add(AssetToLoad(idleTopRight, (value) {
+      return this.idleTopRight = value;
+    }));
+    _loader.add(AssetToLoad(idleBottomLeft, (value) {
+      return this.idleBottomLeft = value;
+    }));
+    _loader.add(AssetToLoad(idleBottomRight, (value) {
+      return this.idleBottomRight = value;
+    }));
+    _loader.add(AssetToLoad(runTop, (value) => this.runTop = value));
+    _loader.add(AssetToLoad(runRight, (value) => this.runRight = value));
+    _loader.add(AssetToLoad(runBottom, (value) => this.runBottom = value));
+    _loader.add(AssetToLoad(runLeft, (value) => this.runLeft = value));
+    _loader.add(AssetToLoad(runTopLeft, (value) => this.runTopLeft = value));
+    _loader.add(AssetToLoad(runTopRight, (value) => this.runTopRight = value));
+    _loader.add(AssetToLoad(runBottomLeft, (value) {
+      return this.runBottomLeft = value;
+    }));
+    _loader.add(AssetToLoad(runBottomRight, (value) {
+      return this.runBottomRight = value;
+    }));
+
     others?.forEach((key, anim) {
-      anim.then((value) {
-        this.others[key] = value;
-      });
+      _loader.add(AssetToLoad(anim, (value) {
+        return this.others[key] = value;
+      }));
     });
-    play(init);
   }
 
   void play(SimpleAnimationEnum animation) {
@@ -143,7 +154,7 @@ class SimpleDirectionAnimation {
   }
 
   void playOnce(
-    SpriteAnimation animation, {
+    Future<SpriteAnimation> animation, {
     VoidCallback onFinish,
     bool runToTheEnd = false,
   }) {
@@ -174,6 +185,11 @@ class SimpleDirectionAnimation {
     } else {
       current?.update(dt);
     }
+  }
+
+  Future<void> onLoad() async {
+    await _loader.load();
+    play(init);
   }
 
   SimpleAnimationEnum get currentType => _currentType;

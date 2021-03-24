@@ -3,6 +3,7 @@ import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/vector2rect.dart';
@@ -13,7 +14,7 @@ import 'package:flutter/widgets.dart';
 class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final dynamic id;
   SpriteAnimation flyAnimation;
-  SpriteAnimation destroyAnimation;
+  Future<SpriteAnimation> destroyAnimation;
   final Direction direction;
   final double speed;
   final double damage;
@@ -23,6 +24,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final bool withDecorationCollision;
   final VoidCallback destroyedObject;
   final LightingConfig lightingConfig;
+  final _loader = AssetsLoader();
 
   final IntervalTick _timerVerifyCollision = IntervalTick(50);
 
@@ -33,7 +35,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     @required this.width,
     @required this.height,
     this.id,
-    Future<SpriteAnimation> destroyAnimation,
+    this.destroyAnimation,
     this.speed = 150,
     this.damage = 1,
     this.attackFrom = AttackFromEnum.ENEMY,
@@ -42,14 +44,9 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     this.lightingConfig,
     CollisionConfig collision,
   }) {
-    flyAnimation.then((value) {
-      this.flyAnimation = value;
-      animation = this.flyAnimation;
-    });
-
-    destroyAnimation.then((value) {
-      this.destroyAnimation = value;
-    });
+    _loader.add(AssetToLoad(flyAnimation, (value) {
+      return this.flyAnimation = value;
+    }));
 
     this.position = Vector2Rect(
       position,
@@ -237,5 +234,11 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     }
 
     return true;
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await _loader.load();
+    animation = this.flyAnimation;
   }
 }

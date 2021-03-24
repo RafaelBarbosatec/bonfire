@@ -4,19 +4,21 @@ import 'dart:ui';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_paint.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
 class Tile extends GameComponent {
-  Sprite sprite;
-  ControlledUpdateAnimation animation;
+  Sprite _sprite;
+  ControlledUpdateAnimation _animation;
   final double width;
   final double height;
   final String type;
   Vector2 _positionText;
   Paint _paintText;
+  final _loader = AssetsLoader();
 
   Tile(
     String spritePath,
@@ -27,15 +29,14 @@ class Tile extends GameComponent {
   }) {
     this.position = generateRectWithBleedingPixel(position, width, height);
     if (spritePath.isNotEmpty) {
-      Sprite.load(spritePath).then((value) => sprite = value);
+      Sprite.load(spritePath).then((value) => _sprite = value);
     }
-    ;
 
     _positionText = position;
   }
 
   Tile.fromSprite(
-    Sprite sprite,
+    Future<Sprite> sprite,
     Vector2 position, {
     this.width = 32,
     this.height = 32,
@@ -43,7 +44,7 @@ class Tile extends GameComponent {
     double offsetX = 0,
     double offsetY = 0,
   }) {
-    this.sprite = sprite;
+    _loader.add(AssetToLoad(sprite, (value) => this._sprite = value));
     this.position = generateRectWithBleedingPixel(position, width, height,
         offsetX: offsetX, offsetY: offsetY);
 
@@ -57,7 +58,7 @@ class Tile extends GameComponent {
     this.height = 32,
     this.type,
   }) {
-    this.animation = animation;
+    this._animation = animation;
     this.position = generateRectWithBleedingPixel(position, width, height);
 
     _positionText = position;
@@ -66,9 +67,9 @@ class Tile extends GameComponent {
   @override
   void render(Canvas canvas) {
     if (position == null) return;
-    animation?.render(canvas, position);
-    if (sprite?.loaded() == true) {
-      sprite.renderFromVector2Rect(
+    _animation?.render(canvas, position);
+    if (_sprite?.loaded() == true) {
+      _sprite.renderFromVector2Rect(
         canvas,
         position,
         overridePaint: MapPaint.instance.paint,
@@ -133,7 +134,13 @@ class Tile extends GameComponent {
 
   @override
   void update(double dt) {
-    animation?.update(dt);
+    _animation?.update(dt);
     super.update(dt);
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await _loader.load();
+    await _animation?.onLoad();
   }
 }

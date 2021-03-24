@@ -14,7 +14,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
   IntervalTick _timerStamina = IntervalTick(100);
-  IntervalTick _timerAttackRange = IntervalTick(100);
+  IntervalTick _timerAttackRange = IntervalTick(150);
   IntervalTick _timerSeeEnemy = IntervalTick(500);
   bool showObserveEnemy = false;
   bool showTalk = false;
@@ -206,11 +206,15 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
 
   void showEmote() {
     gameRef.add(
-      AnimatedFollowerObject.futureAnimation(
+      AnimatedFollowerObject(
         animation: CommonSpriteSheet.emote,
         target: this,
-        positionFromTarget:
-            Rect.fromLTWH(18, -6, width / 2, height / 2).toVector2Rect(),
+        positionFromTarget: Rect.fromLTWH(
+          18,
+          -6,
+          width / 2,
+          height / 2,
+        ).toVector2Rect(),
       ),
     );
   }

@@ -76,7 +76,7 @@ class GoblinRotation extends RotationEnemy {
   @override
   void die() {
     gameRef.add(
-      AnimatedObjectOnce.futureAnimation(
+      AnimatedObjectOnce(
         animation: SpriteAnimation.load(
           "smoke_explosin.png",
           SpriteAnimationData.sequenced(

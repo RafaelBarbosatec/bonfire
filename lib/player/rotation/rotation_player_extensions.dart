@@ -41,7 +41,7 @@ extension RotationPlayerExtensions on RotationPlayer {
   }
 
   void simpleAttackMelee({
-    @required SpriteAnimation animationTop,
+    @required Future<SpriteAnimation> animationTop,
     @required double damage,
     int id,
     double radAngleDirection,

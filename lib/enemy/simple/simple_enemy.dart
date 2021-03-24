@@ -207,4 +207,9 @@ class SimpleEnemy extends Enemy {
     }
     super.render(canvas);
   }
+
+  @override
+  Future<void> onLoad() {
+    return animation.onLoad();
+  }
 }

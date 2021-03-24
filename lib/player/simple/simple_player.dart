@@ -374,4 +374,9 @@ class SimplePlayer extends Player {
       _positionToMove = null;
     }
   }
+
+  @override
+  Future<void> onLoad() {
+    return animation.onLoad();
+  }
 }

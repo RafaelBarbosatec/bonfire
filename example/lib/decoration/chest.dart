@@ -95,7 +95,7 @@ class Chest extends GameDecoration with TapGesture {
 
   void _addSmokeExplosion(Vector2Rect position) {
     gameRef.add(
-      AnimatedObjectOnce.futureAnimation(
+      AnimatedObjectOnce(
         animation: SpriteAnimation.load(
           "smoke_explosin.png",
           SpriteAnimationData.sequenced(
@@ -111,7 +111,7 @@ class Chest extends GameDecoration with TapGesture {
 
   void _showEmote() {
     gameRef.add(
-      AnimatedFollowerObject.futureAnimation(
+      AnimatedFollowerObject(
         animation: SpriteAnimation.load(
           "player/emote_exclamacao.png",
           SpriteAnimationData.sequenced(

@@ -4,6 +4,7 @@ import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
@@ -16,7 +17,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     with ObjectCollision, Lighting {
   final dynamic id;
   SpriteAnimation flyAnimation;
-  SpriteAnimation destroyAnimation;
+  Future<SpriteAnimation> destroyAnimation;
   final double radAngle;
   final double speed;
   final double damage;
@@ -27,6 +28,7 @@ class FlyingAttackAngleObject extends AnimatedObject
   final bool collisionOnlyVisibleObjects;
   final VoidCallback destroyedObject;
   final LightingConfig lightingConfig;
+  final _loader = AssetsLoader();
 
   double _cosAngle;
   double _senAngle;
@@ -41,7 +43,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     @required this.width,
     @required this.height,
     this.id,
-    Future<SpriteAnimation> destroyAnimation,
+    this.destroyAnimation,
     this.speed = 150,
     this.damage = 1,
     this.damageInPlayer = true,
@@ -51,11 +53,10 @@ class FlyingAttackAngleObject extends AnimatedObject
     this.lightingConfig,
     CollisionConfig collision,
   }) {
-    flyAnimation.then((value) {
-      this.flyAnimation = value;
-      animation = value;
-    });
-    destroyAnimation?.then((value) => this.destroyAnimation = value);
+    _loader.add(AssetToLoad(flyAnimation, (value) {
+      return this.flyAnimation = value;
+    }));
+
     this.position = Vector2Rect(
       position,
       Vector2(width, height),
@@ -170,5 +171,11 @@ class FlyingAttackAngleObject extends AnimatedObject
     }
 
     return true;
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await _loader.load();
+    animation = this.flyAnimation;
   }
 }

@@ -344,7 +344,7 @@ extension PlayerExtensions on Player {
     }
 
     if (anim != null) {
-      gameRef.addLater(AnimatedObjectOnce.futureAnimation(
+      gameRef.addLater(AnimatedObjectOnce(
         animation: anim,
         position: positionAttack.toVector2Rect(),
       ));
@@ -368,7 +368,7 @@ extension PlayerExtensions on Player {
   }
 
   void simpleAttackMeleeByAngle({
-    @required SpriteAnimation animationTop,
+    @required Future<SpriteAnimation> animationTop,
     @required double damage,
     @required double radAngleDirection,
     dynamic id,

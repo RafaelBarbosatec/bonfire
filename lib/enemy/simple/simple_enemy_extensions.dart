@@ -241,7 +241,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     if (anim != null && positionAttack != null) {
       gameRef.addLater(
-        AnimatedObjectOnce.futureAnimation(
+        AnimatedObjectOnce(
           animation: anim,
           position: positionAttack.toVector2Rect(),
         ),

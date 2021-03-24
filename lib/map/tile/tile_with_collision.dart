@@ -25,7 +25,7 @@ class TileWithCollision extends Tile with ObjectCollision {
   }
 
   TileWithCollision.withSprite(
-    Sprite sprite,
+    Future<Sprite> sprite,
     Vector2 position, {
     double width = 32,
     double height = 32,

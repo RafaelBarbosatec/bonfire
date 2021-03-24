@@ -125,7 +125,7 @@ class TiledWorldMap {
             } else {
               _tiles.add(
                 TileWithCollision.withSprite(
-                  data.sprite,
+                  Future.value(data.sprite),
                   Vector2(
                     _getX(count, tileLayer.width.toInt()),
                     _getY(count, tileLayer.width.toInt()),
@@ -346,9 +346,11 @@ class TiledWorldMap {
         });
 
         _animationCache[animationKey] = ControlledUpdateAnimation(
-          SpriteAnimation.spriteList(
-            spriteList,
-            stepTime: stepTime,
+          Future.value(
+            SpriteAnimation.spriteList(
+              spriteList,
+              stepTime: stepTime,
+            ),
           ),
         );
 

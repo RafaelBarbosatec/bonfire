@@ -3,26 +3,21 @@ import 'dart:ui';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/follower_object.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/vector2rect.dart';
 
 class AnimatedFollowerObject extends FollowerObject {
   final bool loopAnimation;
+  final _loader = AssetsLoader();
   SpriteAnimation animation;
 
   AnimatedFollowerObject({
-    this.animation,
-    GameComponent target,
-    Vector2Rect positionFromTarget,
-    this.loopAnimation = false,
-  }) : super(target, positionFromTarget);
-
-  AnimatedFollowerObject.futureAnimation({
     Future<SpriteAnimation> animation,
     GameComponent target,
     Vector2Rect positionFromTarget,
     this.loopAnimation = false,
   }) : super(target, positionFromTarget) {
-    animation.then((value) => this.animation = value);
+    _loader.add(AssetToLoad(animation, (value) => this.animation = value));
   }
 
   @override
@@ -41,5 +36,10 @@ class AnimatedFollowerObject extends FollowerObject {
         remove();
       }
     }
+  }
+
+  @override
+  Future<void> onLoad() {
+    return _loader.load();
   }
 }

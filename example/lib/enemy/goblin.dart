@@ -74,7 +74,7 @@ class Goblin extends SimpleEnemy with ObjectCollision {
   @override
   void die() {
     gameRef.add(
-      AnimatedObjectOnce.futureAnimation(
+      AnimatedObjectOnce(
         animation: CommonSpriteSheet.smokeExplosion,
         position: position,
       ),

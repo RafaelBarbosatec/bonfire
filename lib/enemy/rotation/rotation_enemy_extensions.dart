@@ -108,7 +108,7 @@ extension RotationEnemyExtensions on RotationEnemy {
   }
 
   void simpleAttackMelee({
-    @required SpriteAnimation attackEffectTopAnim,
+    @required Future<SpriteAnimation> attackEffectTopAnim,
     @required double damage,
     int id,
     double heightArea = 32,

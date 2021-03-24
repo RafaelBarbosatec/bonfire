@@ -22,5 +22,10 @@ abstract class MapGame extends Component with HasGameRef<RPGGame> {
   Size getMapSize();
 
   @override
+  Future<void> onLoad() {
+    return Future.forEach(tiles, (element) => element.onLoad());
+  }
+
+  @override
   int get priority => PriorityLayer.MAP;
 }

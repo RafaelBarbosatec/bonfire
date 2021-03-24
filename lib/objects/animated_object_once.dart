@@ -5,6 +5,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 
@@ -15,19 +16,9 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
   bool _notifyStart = false;
   final LightingConfig lightingConfig;
 
-  AnimatedObjectOnce({
-    Vector2Rect position,
-    SpriteAnimation animation,
-    this.onFinish,
-    this.onStartAnimation,
-    this.rotateRadAngle,
-    this.lightingConfig,
-  }) {
-    this.animation = animation..loop = false;
-    this.position = position;
-  }
+  final _loader = AssetsLoader();
 
-  AnimatedObjectOnce.futureAnimation({
+  AnimatedObjectOnce({
     Vector2Rect position,
     Future<SpriteAnimation> animation,
     this.onFinish,
@@ -35,8 +26,9 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     this.rotateRadAngle,
     this.lightingConfig,
   }) {
-    animation.then((value) => this.animation = value..loop = false);
-
+    _loader.add(AssetToLoad(animation, (value) {
+      this.animation = value..loop = false;
+    }));
     this.position = position;
   }
 
@@ -68,5 +60,10 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
         if (onStartAnimation != null) onStartAnimation();
       }
     }
+  }
+
+  @override
+  Future<void> onLoad() {
+    return _loader.load();
   }
 }

@@ -1,21 +1,23 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
 class RotationPlayer extends Player {
-  final SpriteAnimation animIdle;
-  final SpriteAnimation animRun;
+  SpriteAnimation animIdle;
+  SpriteAnimation animRun;
   double speed;
   double currentRadAngle;
   bool _move = false;
   SpriteAnimation animation;
+  final _loader = AssetsLoader();
 
   RotationPlayer({
     @required Vector2 position,
-    @required this.animIdle,
-    @required this.animRun,
+    @required Future<SpriteAnimation> animIdle,
+    @required Future<SpriteAnimation> animRun,
     this.speed = 150,
     this.currentRadAngle = -1.55,
     double width = 32,
@@ -27,7 +29,8 @@ class RotationPlayer extends Player {
           height: height,
           life: life,
         ) {
-    this.animation = animIdle;
+    _loader.add(AssetToLoad(animIdle, (value) => this.animIdle = value));
+    _loader.add(AssetToLoad(animRun, (value) => this.animRun = value));
   }
 
   @override
@@ -69,5 +72,11 @@ class RotationPlayer extends Player {
     if (animation.getSprite().loaded()) {
       animation.getSprite().renderFromVector2Rect(canvas, position);
     }
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await _loader.load();
+    this.animation = this.animIdle;
   }
 }
