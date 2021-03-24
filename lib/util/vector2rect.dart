@@ -20,7 +20,7 @@ class Vector2Rect {
         );
 
   Vector2Rect.fromRect(this.rect)
-      : position = Vector2(rect.top, rect.left),
+      : position = Vector2(rect.left, rect.top),
         size = Vector2(rect.width, rect.height);
 
   Vector2Rect.zero() : this(Vector2.zero(), Vector2.zero());

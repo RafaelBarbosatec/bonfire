@@ -114,9 +114,7 @@ class JoystickAction {
 
   void render(Canvas c) {
     if (_rectBackgroundDirection != null && _dragging && enableDirection) {
-      print('fora:$spriteBackgroundDirection');
       if (spriteBackgroundDirection == null) {
-        print('dentro');
         double radiusBackground = _rectBackgroundDirection.rect.width / 2;
         c.drawCircle(
           Offset(

@@ -76,12 +76,7 @@ extension SpriteExt on Sprite {
     Paint overridePaint,
   }) {
     if (this.image != null) {
-      canvas.drawImageRect(
-        this.image,
-        this.src,
-        vector.rect,
-        overridePaint ?? this.paint,
-      );
+      this.render(canvas, position: vector.position, size: vector.size);
     }
   }
 }
