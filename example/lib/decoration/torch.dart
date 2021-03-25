@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class Torch extends GameDecoration with Lighting {
   Torch(Vector2 position)
-      : super.futureAnimation(
+      : super.animation(
           SpriteAnimation.load(
             "itens/torch_spritesheet.png",
             SpriteAnimationData.sequenced(

@@ -90,7 +90,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   void die() {
     remove();
     gameRef.addGameComponent(
-      GameDecoration.futureSprite(
+      GameDecoration.sprite(
         Sprite.load('player/crypt.png'),
         position: Vector2(
           position.left,

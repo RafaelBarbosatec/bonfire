@@ -109,7 +109,7 @@ class TiledWorldMap {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
               _components.add(
                 GameDecorationWithCollision.withSprite(
-                  data.sprite,
+                  Future.value(data.sprite),
                   Vector2(
                     (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
                         offsetX,
@@ -143,7 +143,7 @@ class TiledWorldMap {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
               _components.add(
                 GameDecorationWithCollision.withAnimation(
-                  data.animation.animation,
+                  Future.value(data.animation.animation),
                   Vector2(
                     (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
                         offsetX,

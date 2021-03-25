@@ -9,7 +9,7 @@ class Chest extends GameDecoration with TapGesture {
 
   TextConfig _textConfig;
   Chest(Vector2 position)
-      : super.futureAnimation(
+      : super.animation(
           SpriteAnimation.load(
             "itens/chest_spritesheet.png",
             SpriteAnimationData.sequenced(

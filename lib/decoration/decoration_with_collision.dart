@@ -30,7 +30,7 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
   }
 
   GameDecorationWithCollision.withSprite(
-    Sprite sprite,
+    Future<Sprite> sprite,
     Vector2 position, {
     double width = 32,
     double height = 32,
@@ -54,7 +54,7 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
   }
 
   GameDecorationWithCollision.withAnimation(
-    SpriteAnimation animation,
+    Future<SpriteAnimation> animation,
     Vector2 position, {
     double width = 32,
     double height = 32,

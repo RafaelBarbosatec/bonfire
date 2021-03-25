@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/animated_object.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/extensions.dart';
@@ -29,6 +30,8 @@ class GameDecoration extends AnimatedObject {
 
   int additionalPriority = 0;
 
+  final _loader = AssetsLoader();
+
   GameDecoration({
     this.sprite,
     @required Vector2 position,
@@ -45,7 +48,7 @@ class GameDecoration extends AnimatedObject {
     );
   }
 
-  GameDecoration.futureSprite(
+  GameDecoration.sprite(
     Future<Sprite> sprite, {
     @required Vector2 position,
     @required this.height,
@@ -53,21 +56,7 @@ class GameDecoration extends AnimatedObject {
     this.frontFromPlayer = false,
     SpriteAnimation animation,
   }) {
-    sprite.then((value) => this.sprite = value);
-    this.position = generateRectWithBleedingPixel(
-      position,
-      width,
-      height,
-    );
-  }
-
-  GameDecoration.sprite(
-    this.sprite, {
-    @required Vector2 position,
-    @required this.height,
-    @required this.width,
-    this.frontFromPlayer = false,
-  }) {
+    _loader.add(AssetToLoad(sprite, (value) => this.sprite = value));
     this.position = generateRectWithBleedingPixel(
       position,
       width,
@@ -76,38 +65,18 @@ class GameDecoration extends AnimatedObject {
   }
 
   GameDecoration.animation(
-    SpriteAnimation animation, {
-    @required Vector2 position,
-    @required this.height,
-    @required this.width,
-    this.frontFromPlayer = false,
-  }) {
-    this.animation = animation;
-    this.position = generateRectWithBleedingPixel(
-      position,
-      width,
-      height,
-    );
-  }
-
-  GameDecoration.futureAnimation(
     Future<SpriteAnimation> animation, {
     @required Vector2 position,
     @required this.height,
     @required this.width,
     this.frontFromPlayer = false,
   }) {
-    animation.then((value) => this.animation = value);
+    _loader.add(AssetToLoad(animation, (value) => this.animation = value));
     this.position = generateRectWithBleedingPixel(
       position,
       width,
       height,
     );
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
   }
 
   @override
@@ -144,5 +113,10 @@ class GameDecoration extends AnimatedObject {
     } else {
       return PriorityLayer.DECORATION + additionalPriority;
     }
+  }
+
+  @override
+  Future<void> onLoad() {
+    return _loader.load();
   }
 }

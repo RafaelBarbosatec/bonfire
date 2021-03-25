@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class BarrelDraggable extends GameDecoration with DragGesture, ObjectCollision {
   TextConfig _textConfig;
   BarrelDraggable(Vector2 position)
-      : super.futureSprite(
+      : super.sprite(
           Sprite.load('itens/barrel.png'),
           position: position,
           width: DungeonMap.tileSize,

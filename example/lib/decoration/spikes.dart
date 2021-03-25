@@ -10,7 +10,7 @@ class Spikes extends GameDecoration with Sensor {
   bool isTick = false;
 
   Spikes(Vector2 position)
-      : super.futureSprite(
+      : super.sprite(
           Sprite.load('itens/spikes.png'),
           position: position,
           width: DungeonMap.tileSize / 1.5,
