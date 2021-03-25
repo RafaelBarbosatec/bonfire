@@ -17,7 +17,10 @@ Bonfire is ideal for building games from the following perspectives:
 
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/feature/separate-player/media/perspectiva.jpg)
 
+## Documentation
+
 For more information and [examples](https://bonfire-engine.github.io/#/examples) see the [Documentation](https://bonfire-engine.github.io/).
+
 
 ## Credits
 
