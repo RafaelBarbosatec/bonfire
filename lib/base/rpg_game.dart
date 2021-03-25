@@ -131,12 +131,7 @@ class RPGGame extends CustomBaseGame with KeyboardEvents {
   }
 
   void addGameComponent(GameComponent component) {
-    addLater(component);
-  }
-
-  @override
-  Future<void> add(Component c) {
-    return addLater(c);
+    add(component);
   }
 
   Iterable<GameComponent> visibleComponents() => _visibleComponents;

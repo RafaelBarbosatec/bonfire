@@ -240,7 +240,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     }
 
     if (anim != null && positionAttack != null) {
-      gameRef.addLater(
+      gameRef.add(
         AnimatedObjectOnce(
           animation: anim,
           position: positionAttack.toVector2Rect(),
@@ -385,7 +385,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       this.lastDirectionHorizontal = finalDirection;
     }
 
-    gameRef.addLater(
+    gameRef.add(
       FlyingAttackObject(
         id: id,
         direction: finalDirection,

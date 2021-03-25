@@ -13,7 +13,6 @@ import 'package:ordered_set/ordered_set.dart';
 
 abstract class CustomBaseGame extends Game
     with MultiTouchDragDetector, MultiTouchTapDetector, FPSCounter {
-  bool _isPause = false;
   Camera gameCamera = Camera();
 
   /// The list of components to be updated and rendered by the base game.
@@ -146,15 +145,6 @@ abstract class CustomBaseGame extends Game
   /// Also calls [preAdd], witch in turn sets the current size on the component (because the resize hook won't be called until a new resize happens).
   Future<void> add(Component c) async {
     await preAdd(c);
-    components.add(c);
-  }
-
-  /// Registers a component to be added on the components on the next tick.
-  ///
-  /// Use this to add components in places where a concurrent issue with the update method might happen.
-  /// Also calls [preAdd] for the component added, immediately.
-  Future<void> addLater(Component c) async {
-    await preAdd(c);
     _addLater.add(c);
   }
 
@@ -201,7 +191,6 @@ abstract class CustomBaseGame extends Game
   /// You can override it further to add more custom behaviour.
   @override
   void update(double t) {
-    if (_isPause) return;
     components.addAll(_addLater);
     _addLater.clear();
 
@@ -210,16 +199,6 @@ abstract class CustomBaseGame extends Game
 
     gameCamera.update();
   }
-
-  void pause() {
-    _isPause = true;
-  }
-
-  void resume() {
-    _isPause = false;
-  }
-
-  bool get isGamePaused => _isPause;
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.
   ///

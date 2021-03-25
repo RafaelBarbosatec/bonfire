@@ -74,7 +74,7 @@ extension EnemyExtensions on Enemy {
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
     bool onlyUp = false,
   }) {
-    gameRef.addLater(
+    gameRef.add(
       TextDamageComponent(
         damage.toInt().toString(),
         Vector2(
