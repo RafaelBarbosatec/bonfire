@@ -215,6 +215,14 @@ class JoystickAction {
     }
   }
 
+  void onDragCancel(int pointer) {
+    if (pointer == _pointer) {
+      _dragging = false;
+      _dragPosition = _rectBackgroundDirection.center;
+      unPressed();
+    }
+  }
+
   void onDragEnd(int pointer) {
     if (pointer == _pointer) {
       _dragging = false;

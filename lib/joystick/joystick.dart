@@ -80,7 +80,7 @@ class Joystick extends JoystickController {
     if (actions != null)
       actions
           ?.where((element) => element.enableDirection)
-          ?.forEach((action) => action.onDragEnd(pointerId));
+          ?.forEach((action) => action.onDragCancel(pointerId));
     if (directional != null) directional.directionalUp(pointerId);
     super.onDragCancel(pointerId);
   }

@@ -1,5 +1,6 @@
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/gestures/tap_gesture.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
@@ -14,8 +15,7 @@ class InterfaceComponent extends GameComponent with TapGesture {
   final double height;
   Sprite spriteToRender;
 
-  @override
-  bool get isHud => true;
+  final _loader = AssetsLoader();
 
   InterfaceComponent({
     @required this.id,
@@ -26,13 +26,12 @@ class InterfaceComponent extends GameComponent with TapGesture {
     Future<Sprite> spriteSelected,
     this.onTapComponent,
   }) {
-    sprite?.then((value) {
+    _loader.add(AssetToLoad(sprite, (value) {
       this.sprite = value;
-      spriteToRender = this.sprite;
-    });
-    spriteSelected?.then((value) {
+    }));
+    _loader.add(AssetToLoad(spriteSelected, (value) {
       this.spriteSelected = value;
-    });
+    }));
     this.position = Vector2Rect.fromRect(
       Rect.fromLTWH(
         position.x,
@@ -66,6 +65,15 @@ class InterfaceComponent extends GameComponent with TapGesture {
   void onTap() {
     if (onTapComponent != null) onTapComponent();
     spriteToRender = sprite;
+  }
+
+  @override
+  bool get isHud => true;
+
+  @override
+  Future<void> onLoad() async {
+    await _loader.load();
+    spriteToRender = this.sprite;
   }
 
   @override

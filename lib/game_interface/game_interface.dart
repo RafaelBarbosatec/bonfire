@@ -59,6 +59,11 @@ class GameInterface extends GameComponent with TapGesture {
     _components.forEach((i) => i.handlerTapUp(pointer, position));
   }
 
+  @override
+  void handlerTapCancel(int pointer) {
+    _components.forEach((i) => i.handlerTapCancel(pointer));
+  }
+
   void _drawFPS(Canvas c) {
     if (gameRef?.showFPS == true && gameRef?.size != null) {
       double fps = gameRef.fps(100);
@@ -87,4 +92,11 @@ class GameInterface extends GameComponent with TapGesture {
 
   @override
   void onTapCancel() {}
+
+  @override
+  Future<void> onLoad() {
+    return Future.forEach<InterfaceComponent>(_components, (element) {
+      return element.onLoad();
+    });
+  }
 }
