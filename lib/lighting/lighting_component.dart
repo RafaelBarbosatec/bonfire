@@ -44,8 +44,8 @@ class LightingComponent extends GameComponent {
 
       canvas.drawCircle(
         Offset(
-          light.gameComponent.position.rect.center.dx,
-          light.gameComponent.position.rect.center.dy,
+          light.position.center.dx,
+          light.position.center.dy,
         ),
         light.lightingConfig.radius *
             (light.lightingConfig.withPulse
@@ -67,8 +67,8 @@ class LightingComponent extends GameComponent {
           );
         canvas.drawCircle(
           Offset(
-            light.gameComponent.position.rect.center.dx,
-            light.gameComponent.position.rect.center.dy,
+            light.position.center.dx,
+            light.position.center.dy,
           ),
           config.radius *
               (config.withPulse

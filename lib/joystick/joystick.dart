@@ -20,9 +20,8 @@ class Joystick extends JoystickController {
   });
 
   void initialize(Vector2 size) async {
-    if (directional != null) directional.initialize(size, this);
-    if (actions != null)
-      actions.forEach((action) => action.initialize(size, this));
+    directional?.initialize(size, this);
+    actions?.forEach((action) => action.initialize(size, this));
   }
 
   void addAction(JoystickAction action) {
@@ -45,12 +44,6 @@ class Joystick extends JoystickController {
   void update(double t) {
     if (directional != null) directional.update(t);
     if (actions != null) actions.forEach((action) => action.update(t));
-  }
-
-  @override
-  void onGameResize(Vector2 gameSize) {
-    initialize(gameSize);
-    super.onGameResize(gameSize);
   }
 
   @override
@@ -167,6 +160,21 @@ class Joystick extends JoystickController {
         intensity: 0.0,
         radAngle: 0.0,
       ));
+    }
+  }
+
+  @override
+  void onGameResize(Vector2 gameSize) {
+    initialize(gameSize);
+    super.onGameResize(gameSize);
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await directional?.onLoad();
+    if (actions != null) {
+      await Future.forEach<JoystickAction>(
+          actions, (element) => element.onLoad());
     }
   }
 }

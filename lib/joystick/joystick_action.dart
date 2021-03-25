@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,8 @@ class JoystickAction {
   JoystickController _joystickController;
   bool isPressed = false;
 
+  final _loader = AssetsLoader();
+
   JoystickAction({
     @required this.actionId,
     Future<Sprite> sprite,
@@ -52,10 +55,15 @@ class JoystickAction {
     this.opacityBackground = 0.5,
     this.opacityKnob = 0.8,
   }) {
-    sprite?.then((value) => this.sprite = value);
-    spritePressed?.then((value) => this.spritePressed = value);
-    spriteBackgroundDirection
-        ?.then((value) => this.spriteBackgroundDirection = value);
+    _loader.add(AssetToLoad(sprite, (value) {
+      this.sprite = value;
+    }));
+    _loader.add(AssetToLoad(spritePressed, (value) {
+      this.spritePressed = value;
+    }));
+    _loader.add(AssetToLoad(spriteBackgroundDirection, (value) {
+      this.spriteBackgroundDirection = value;
+    }));
     _sizeBackgroundDirection = sizeFactorBackgroundDirection * size;
     _tileSize = _sizeBackgroundDirection / 2;
   }
@@ -92,23 +100,6 @@ class JoystickAction {
       radius: _sizeBackgroundDirection / 2,
     ).toVector2Rect();
 
-    if (spriteBackgroundDirection == null) {
-      _paintBackground = Paint()
-        ..color = color.withOpacity(opacityBackground)
-        ..style = PaintingStyle.fill;
-    }
-
-    if (spritePressed == null) {
-      _paintAction = Paint()
-        ..color = color.withOpacity(opacityKnob)
-        ..style = PaintingStyle.fill;
-    }
-
-    if (spritePressed == null) {
-      _paintActionPressed = Paint()
-        ..color = color.withOpacity(opacityBackground)
-        ..style = PaintingStyle.fill;
-    }
     _dragPosition = _rect.center;
   }
 
@@ -279,5 +270,29 @@ class JoystickAction {
   void unPressed() {
     isPressed = false;
     _spriteToRender = sprite;
+  }
+
+  Future<void> onLoad() async {
+    await _loader.load();
+
+    _spriteToRender = sprite;
+
+    if (spriteBackgroundDirection == null) {
+      _paintBackground = Paint()
+        ..color = color.withOpacity(opacityBackground)
+        ..style = PaintingStyle.fill;
+    }
+
+    if (sprite == null) {
+      _paintAction = Paint()
+        ..color = color.withOpacity(opacityKnob)
+        ..style = PaintingStyle.fill;
+    }
+
+    if (spritePressed == null) {
+      _paintActionPressed = Paint()
+        ..color = color.withOpacity(opacityBackground)
+        ..style = PaintingStyle.fill;
+    }
   }
 }

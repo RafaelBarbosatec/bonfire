@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class JoystickDirectional {
 
   Vector2 _screenSize;
 
+  final _loader = AssetsLoader();
+
   JoystickDirectional({
     Future<Sprite> spriteBackgroundDirectional,
     Future<Sprite> spriteKnobDirectional,
@@ -41,24 +44,13 @@ class JoystickDirectional {
     this.size = 80,
     this.color = Colors.blueGrey,
   }) {
-    if (spriteBackgroundDirectional != null) {
-      spriteBackgroundDirectional.then((value) {
-        _backgroundSprite = value;
-      });
-    } else {
-      _paintBackground = Paint()
-        ..color = color.withOpacity(0.5)
-        ..style = PaintingStyle.fill;
-    }
-    if (spriteKnobDirectional != null) {
-      spriteKnobDirectional.then((value) {
-        _knobSprite = value;
-      });
-    } else {
-      _paintKnob = Paint()
-        ..color = color.withOpacity(0.8)
-        ..style = PaintingStyle.fill;
-    }
+    _loader.add(AssetToLoad(spriteBackgroundDirectional, (value) {
+      _backgroundSprite = value;
+    }));
+
+    _loader.add(AssetToLoad(spriteKnobDirectional, (value) {
+      _knobSprite = value;
+    }));
 
     _tileSize = size / 2;
   }
@@ -289,5 +281,20 @@ class JoystickDirectional {
       center: osKnob,
       radius: size / 4,
     ).toVector2Rect();
+  }
+
+  Future<void> onLoad() async {
+    await _loader.load();
+    if (_backgroundSprite == null) {
+      _paintBackground = Paint()
+        ..color = color.withOpacity(0.5)
+        ..style = PaintingStyle.fill;
+    }
+
+    if (_paintKnob == null) {
+      _paintKnob = Paint()
+        ..color = color.withOpacity(0.8)
+        ..style = PaintingStyle.fill;
+    }
   }
 }
