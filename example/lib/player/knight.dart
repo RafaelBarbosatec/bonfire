@@ -14,7 +14,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
   IntervalTick _timerStamina = IntervalTick(100);
-  IntervalTick _timerAttackRange = IntervalTick(150);
+  IntervalTick _timerAttackRange = IntervalTick(110);
   IntervalTick _timerSeeEnemy = IntervalTick(500);
   bool showObserveEnemy = false;
   bool showTalk = false;
