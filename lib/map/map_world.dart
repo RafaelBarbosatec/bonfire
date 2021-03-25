@@ -105,8 +105,7 @@ class MapWorld extends MapGame {
 
     this.tiles.forEach((tile) {
       if (tile.position.rect.right > width) width = tile.position.rect.right;
-      if (tile.position.rect.bottom > height)
-        height = tile.position.rect.bottom;
+      if (tile.position.rect.bottom > height) height = tile.position.bottom;
     });
 
     return Size(width, height);

@@ -53,9 +53,9 @@ class RotationEnemy extends Enemy {
   void render(Canvas canvas) {
     if (this.isVisibleInCamera()) {
       canvas.save();
-      canvas.translate(position.rect.center.dx, position.rect.center.dy);
+      canvas.translate(position.center.dx, position.center.dy);
       canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));
-      canvas.translate(-position.rect.center.dx, -position.rect.center.dy);
+      canvas.translate(-position.center.dx, -position.center.dy);
       _renderAnimation(canvas);
       canvas.restore();
     }

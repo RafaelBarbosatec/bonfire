@@ -37,9 +37,9 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     if (this.position == null) return;
     if (rotateRadAngle != null) {
       canvas.save();
-      canvas.translate(position.rect.center.dx, position.rect.center.dy);
+      canvas.translate(position.center.dx, position.center.dy);
       canvas.rotate(rotateRadAngle == 0.0 ? 0.0 : rotateRadAngle + (pi / 2));
-      canvas.translate(-position.rect.center.dx, -position.rect.center.dy);
+      canvas.translate(-position.center.dx, -position.center.dy);
       super.render(canvas);
       canvas.restore();
     } else {

@@ -66,7 +66,4 @@ class ValueGeneratorComponent extends Component {
   }
 
   bool get isFinished => _isFinished;
-
-  @override
-  bool destroy() => _isFinished;
 }

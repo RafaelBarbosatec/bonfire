@@ -2,6 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:example/decoration/potion_life.dart';
 import 'package:example/map/dungeon_map.dart';
+import 'package:example/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class Chest extends GameDecoration with TapGesture {
@@ -96,14 +97,7 @@ class Chest extends GameDecoration with TapGesture {
   void _addSmokeExplosion(Vector2Rect position) {
     gameRef.add(
       AnimatedObjectOnce(
-        animation: SpriteAnimation.load(
-          "smoke_explosin.png",
-          SpriteAnimationData.sequenced(
-            amount: 6,
-            stepTime: 0.1,
-            textureSize: Vector2(16, 16),
-          ),
-        ),
+        animation: CommonSpriteSheet.smokeExplosion,
         position: position,
       ),
     );
@@ -112,14 +106,7 @@ class Chest extends GameDecoration with TapGesture {
   void _showEmote() {
     gameRef.add(
       AnimatedFollowerObject(
-        animation: SpriteAnimation.load(
-          "player/emote_exclamacao.png",
-          SpriteAnimationData.sequenced(
-            amount: 8,
-            stepTime: 0.1,
-            textureSize: Vector2(32, 32),
-          ),
-        ),
+        animation: CommonSpriteSheet.emote,
         target: this,
         positionFromTarget: Rect.fromLTWH(18, -6, 16, 16).toVector2Rect(),
       ),

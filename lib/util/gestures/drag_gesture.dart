@@ -12,7 +12,7 @@ mixin DragGesture on GameComponent {
   void dragStart(int pointer, Offset position) {
     if (!enableDrag) return;
     if (this.isHud) {
-      if (this.position.rect.contains(position)) {
+      if (this.position.contains(position)) {
         _pointer = pointer;
         _startDragOffset = position;
         _startDragPosition = this.position.rect;
@@ -20,7 +20,7 @@ mixin DragGesture on GameComponent {
     } else {
       final absolutePosition =
           this.gameRef.gameCamera.screenPositionToWorld(position);
-      if (this.position.rect.contains(absolutePosition)) {
+      if (this.position.contains(absolutePosition)) {
         _pointer = pointer;
         _startDragOffset = absolutePosition;
         _startDragPosition = this.position.rect;

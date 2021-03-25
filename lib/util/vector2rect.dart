@@ -37,6 +37,10 @@ class Vector2Rect {
     return this.rect.overlaps(vector.rect);
   }
 
+  bool contains(Offset offset) {
+    return rect.contains(offset);
+  }
+
   Vector2Rect shift(Offset offset) {
     return Vector2Rect(
       Vector2(this.position.x + offset.dx, this.position.y + offset.dy),

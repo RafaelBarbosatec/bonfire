@@ -220,16 +220,16 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     Size mapSize = gameRef.map?.mapSize;
     if (mapSize == null) return true;
 
-    if (position.rect.left < 0) {
+    if (position.left < 0) {
       return false;
     }
-    if (position.rect.right > mapSize.width) {
+    if (position.right > mapSize.width) {
       return false;
     }
-    if (position.rect.top < 0) {
+    if (position.top < 0) {
       return false;
     }
-    if (position.rect.bottom > mapSize.height) {
+    if (position.bottom > mapSize.height) {
       return false;
     }
 

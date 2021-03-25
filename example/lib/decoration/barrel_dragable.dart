@@ -36,8 +36,7 @@ class BarrelDraggable extends GameDecoration with DragGesture, ObjectCollision {
     _textConfig.render(
       canvas,
       'Drag',
-      Vector2(this.position.rect.left + width / 5,
-          this.position.rect.top - width / 3),
+      Vector2(this.position.left + width / 5, this.position.top - width / 3),
     );
   }
 }

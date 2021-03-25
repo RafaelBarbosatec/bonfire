@@ -81,12 +81,12 @@ extension RotationEnemyExtensions on RotationEnemy {
         double _radAngle = getAngleFomPlayer();
 
         Vector2 myPosition = Vector2(
-          this.position.rect.center.dx,
-          this.position.rect.center.dy,
+          this.position.center.dx,
+          this.position.center.dy,
         );
         Vector2 playerPosition = Vector2(
-          playerRect.rect.center.dx,
-          playerRect.rect.center.dy,
+          playerRect.center.dx,
+          playerRect.center.dy,
         );
         double dist = myPosition.distanceTo(playerPosition);
 
@@ -128,9 +128,9 @@ extension RotationEnemyExtensions on RotationEnemy {
     double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.position.rect.center.dx + nextPoint.dx,
-            this.position.rect.center.dy + nextPoint.dy) -
-        this.position.rect.center;
+    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
+            this.position.center.dy + nextPoint.dy) -
+        this.position.center;
 
     Vector2Rect positionAttack = this.position.shift(diffBase);
 
@@ -187,9 +187,9 @@ extension RotationEnemyExtensions on RotationEnemy {
     double nextY = this.height * sin(_radAngle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.position.rect.center.dx + nextPoint.dx,
-            this.position.rect.center.dy + nextPoint.dy) -
-        this.position.rect.center;
+    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
+            this.position.center.dy + nextPoint.dy) -
+        this.position.center;
 
     Rect position = this.position.rect.shift(diffBase);
     gameRef.addLater(

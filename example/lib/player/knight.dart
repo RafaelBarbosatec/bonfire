@@ -122,7 +122,6 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
     if (stamina < 10) return;
 
     this.simpleAttackRangeByAngle(
-      id: {'ddd': 'kkkkk'},
       animationTop: CommonSpriteSheet.fireBallTop,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       radAngleDirection: angleRadAttack,

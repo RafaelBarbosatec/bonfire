@@ -28,8 +28,8 @@ extension EnemyExtensions on Enemy {
     double vision = radiusVision * 2;
 
     Rect fieldOfVision = Rect.fromLTWH(
-      this.position.rect.center.dx - radiusVision,
-      this.position.rect.center.dy - radiusVision,
+      this.position.center.dx - radiusVision,
+      this.position.center.dy - radiusVision,
       vision,
       vision,
     );
@@ -43,21 +43,21 @@ extension EnemyExtensions on Enemy {
 
   Direction directionThatPlayerIs() {
     Player player = this.gameRef.player;
-    var diffX = position.rect.center.dx - player.position.rect.center.dx;
+    var diffX = position.center.dx - player.position.center.dx;
     var diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;
-    var diffY = position.rect.center.dy - player.position.rect.center.dy;
+    var diffY = position.center.dy - player.position.center.dy;
     var diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
 
     if (diffPositiveX > diffPositiveY) {
-      if (player.position.rect.center.dx > position.rect.center.dx) {
+      if (player.position.center.dx > position.center.dx) {
         return Direction.right;
-      } else if (player.position.rect.center.dx < position.rect.center.dx) {
+      } else if (player.position.center.dx < position.center.dx) {
         return Direction.left;
       }
     } else {
-      if (player.position.rect.center.dy > position.rect.center.dy) {
+      if (player.position.center.dy > position.center.dy) {
         return Direction.bottom;
-      } else if (player.position.rect.center.dy < position.rect.center.dy) {
+      } else if (player.position.center.dy < position.center.dy) {
         return Direction.top;
       }
     }
@@ -78,8 +78,8 @@ extension EnemyExtensions on Enemy {
       TextDamageComponent(
         damage.toInt().toString(),
         Vector2(
-          position.rect.center.dx,
-          position.rect.top,
+          position.center.dx,
+          position.top,
         ),
         config: config ??
             TextConfig(
@@ -102,25 +102,25 @@ extension EnemyExtensions on Enemy {
     double strokeWidth = 2,
   }) {
     if (this.position == null) return;
-    double yPosition = position.rect.top - padding;
+    double yPosition = position.top - padding;
 
     if (drawInBottom) {
-      yPosition = position.rect.bottom + padding;
+      yPosition = position.bottom + padding;
     }
 
     canvas.drawLine(
-        Offset(position.rect.left, yPosition),
-        Offset(position.rect.left + position.rect.width, yPosition),
+        Offset(position.left, yPosition),
+        Offset(position.left + position.width, yPosition),
         Paint()
           ..color = Colors.black
           ..strokeWidth = strokeWidth
           ..style = PaintingStyle.fill);
 
-    double currentBarLife = (life * position.rect.width) / maxLife;
+    double currentBarLife = (life * position.width) / maxLife;
 
     canvas.drawLine(
-        Offset(position.rect.left, yPosition),
-        Offset(position.rect.left + currentBarLife, yPosition),
+        Offset(position.left, yPosition),
+        Offset(position.left + currentBarLife, yPosition),
         Paint()
           ..color = _getColorLife(currentBarLife)
           ..strokeWidth = strokeWidth
@@ -142,8 +142,8 @@ extension EnemyExtensions on Enemy {
     Player player = this.gameRef.player;
     if (player == null) return 0.0;
     return atan2(
-      playerRect.center.dy - this.position.rect.center.dy,
-      playerRect.center.dx - this.position.rect.center.dx,
+      playerRect.center.dy - this.position.center.dy,
+      playerRect.center.dx - this.position.center.dx,
     );
   }
 
@@ -151,8 +151,8 @@ extension EnemyExtensions on Enemy {
     Player player = this.gameRef.player;
     if (player == null) return 0.0;
     return atan2(
-      this.position.rect.center.dy - playerRect.center.dy,
-      this.position.rect.center.dx - playerRect.center.dx,
+      this.position.center.dy - playerRect.center.dy,
+      this.position.center.dx - playerRect.center.dx,
     );
   }
 

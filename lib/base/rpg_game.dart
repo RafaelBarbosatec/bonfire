@@ -221,8 +221,7 @@ class RPGGame extends CustomBaseGame with KeyboardEvents {
 
     if (lightingColorGame != null) {
       _visibleLights = components.where((element) {
-        return element is Lighting &&
-            (element as Lighting).isVisible(gameCamera);
+        return element is Lighting && element.isVisible(gameCamera);
       }).cast();
     }
 

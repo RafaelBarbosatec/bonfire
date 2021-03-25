@@ -110,9 +110,9 @@ class Enemy extends GameComponent with Attackable {
     double nextY = innerSpeed * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(position.rect.center.dx + nextPoint.dx,
-            position.rect.center.dy + nextPoint.dy) -
-        position.rect.center;
+    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
+            position.center.dy + nextPoint.dy) -
+        position.center;
 
     var collisionX = verifyEnemyCollision(
       position,
@@ -165,10 +165,10 @@ class Enemy extends GameComponent with Attackable {
     Offset nextPoint = Offset(nextX, nextY);
 
     Offset diffBase = Offset(
-          position.rect.center.dx + nextPoint.dx,
-          position.rect.center.dy + nextPoint.dy,
+          position.center.dx + nextPoint.dx,
+          position.center.dy + nextPoint.dy,
         ) -
-        position.rect.center;
+        position.center;
     this.position = position.shift(diffBase);
   }
 

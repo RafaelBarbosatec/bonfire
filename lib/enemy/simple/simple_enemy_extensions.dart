@@ -159,8 +159,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     switch (playerDirection) {
       case Direction.top:
         positionAttack = Rect.fromLTWH(
-          this.position.rect.left + (this.width - widthArea) / 2,
-          rectToMove.rect.top - heightArea,
+          this.position.left + (this.width - widthArea) / 2,
+          rectToMove.top - heightArea,
           widthArea,
           heightArea,
         );
@@ -169,8 +169,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.right:
         positionAttack = Rect.fromLTWH(
-          rectToMove.rect.right,
-          this.position.rect.top + (this.height - heightArea) / 2,
+          rectToMove.right,
+          this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -179,8 +179,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.bottom:
         positionAttack = Rect.fromLTWH(
-          this.position.rect.left + (this.width - widthArea) / 2,
-          rectToMove.rect.bottom,
+          this.position.left + (this.width - widthArea) / 2,
+          rectToMove.bottom,
           widthArea,
           heightArea,
         );
@@ -189,8 +189,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.left:
         positionAttack = Rect.fromLTWH(
-          rectToMove.rect.left - widthArea,
-          this.position.rect.top + (this.height - heightArea) / 2,
+          rectToMove.left - widthArea,
+          this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -199,8 +199,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.topLeft:
         positionAttack = Rect.fromLTWH(
-          rectToMove.rect.left - widthArea,
-          this.position.rect.top + (this.height - heightArea) / 2,
+          rectToMove.left - widthArea,
+          this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -209,8 +209,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.topRight:
         positionAttack = Rect.fromLTWH(
-          rectToMove.rect.right,
-          this.position.rect.top + (this.height - heightArea) / 2,
+          rectToMove.right,
+          this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -219,8 +219,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.bottomLeft:
         positionAttack = Rect.fromLTWH(
-          rectToMove.rect.left - widthArea,
-          this.position.rect.top + (this.height - heightArea) / 2,
+          rectToMove.left - widthArea,
+          this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
@@ -229,8 +229,8 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         break;
       case Direction.bottomRight:
         positionAttack = Rect.fromLTWH(
-          rectToMove.rect.right,
-          this.position.rect.top + (this.height - heightArea) / 2,
+          rectToMove.right,
+          this.position.top + (this.height - heightArea) / 2,
           widthArea,
           heightArea,
         );
