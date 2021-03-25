@@ -26,8 +26,9 @@ class GameTiledMap extends StatelessWidget {
           joystick: Joystick(
             keyboardEnable: true,
             directional: JoystickDirectional(
-              spriteBackgroundDirectional:
-                  Sprite.load('joystick_background.png'),
+              spriteBackgroundDirectional: Sprite.load(
+                'joystick_background.png',
+              ),
               spriteKnobDirectional: Sprite.load('joystick_knob.png'),
               size: 100,
               isFixed: false,
@@ -43,8 +44,9 @@ class GameTiledMap extends StatelessWidget {
               JoystickAction(
                 actionId: 1,
                 sprite: Sprite.load('joystick_atack_range.png'),
-                spriteBackgroundDirection:
-                    Sprite.load('joystick_background.png'),
+                spriteBackgroundDirection: Sprite.load(
+                  'joystick_background.png',
+                ),
                 enableDirection: true,
                 size: 50,
                 margin: EdgeInsets.only(bottom: 50, right: 160),
