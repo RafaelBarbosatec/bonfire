@@ -39,8 +39,9 @@ class GameInterface extends GameComponent with TapGesture {
     super.onGameResize(size);
   }
 
-  void add(InterfaceComponent component) {
+  Future<void> add(InterfaceComponent component) async{
     removeById(component.id);
+    await component.onLoad();
     _components.add(component);
   }
 
