@@ -6,7 +6,7 @@ import 'package:example/map/dungeon_map.dart';
 
 class GoblinRotation extends RotationEnemy {
   GoblinRotation(Vector2 position)
-      : super.futureAnimation(
+      : super(
           animIdle: SpriteAnimation.load(
             "enemy/goblin_idle.png",
             SpriteAnimationData.sequenced(

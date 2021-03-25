@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/enemy/enemy.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
@@ -15,25 +16,9 @@ class RotationEnemy extends Enemy {
   final double speed;
   double currentRadAngle;
 
-  RotationEnemy({
-    @required Vector2 position,
-    @required this.animIdle,
-    @required this.animRun,
-    double height = 32,
-    double width = 32,
-    this.currentRadAngle = -1.55,
-    this.speed = 100,
-    double life = 100,
-  }) : super(
-          position: position,
-          height: height,
-          width: width,
-          life: life,
-        ) {
-    idle();
-  }
+  final _loader = AssetsLoader();
 
-  RotationEnemy.futureAnimation({
+  RotationEnemy({
     @required Vector2 position,
     @required Future<SpriteAnimation> animIdle,
     @required Future<SpriteAnimation> animRun,
@@ -48,9 +33,12 @@ class RotationEnemy extends Enemy {
           width: width,
           life: life,
         ) {
-    animIdle.then((value) => this.animIdle = value);
-    animRun.then((value) => this.animRun = value);
-    idle();
+    _loader.add(AssetToLoad(animIdle, (value) {
+      this.animIdle = value;
+    }));
+    _loader.add(AssetToLoad(animRun, (value) {
+      this.animRun = value;
+    }));
   }
 
   @override
@@ -93,5 +81,11 @@ class RotationEnemy extends Enemy {
             this.position,
           );
     }
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await _loader.load();
+    idle();
   }
 }
