@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/custom_base_game.dart';
-import 'package:bonfire/util/mixins/pointer_detector_mixin.dart';
+import 'package:bonfire/util/mixins/touch_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';

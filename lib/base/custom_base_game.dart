@@ -2,7 +2,7 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/camera/camera.dart';
 import 'package:bonfire/util/gestures/drag_gesture.dart';
 import 'package:bonfire/util/gestures/tap_gesture.dart';
-import 'package:bonfire/util/mixins/pointer_detector_mixin.dart';
+import 'package:bonfire/util/mixins/touch_detector.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart' hide Camera;
 import 'package:flame/gestures.dart';
