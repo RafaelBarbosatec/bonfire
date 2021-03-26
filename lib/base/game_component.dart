@@ -18,7 +18,7 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
     if (this.position == null || gameRef == null) return;
 
     if (this is TapGesture) {
-      (this as TapGesture).onTapDown(pointer, position);
+      (this as TapGesture).handlerTapDown(pointer, position);
     }
     if (this is DragGesture) {
       (this as DragGesture).startDrag(pointer, position);
@@ -34,7 +34,7 @@ abstract class GameComponent extends Component with HasGameRef<RPGGame> {
   void handlerPointerUp(int pointer, Offset position) {
     if (this.position == null) return;
     if (this is TapGesture) {
-      (this as TapGesture).onTapUp(pointer, position);
+      (this as TapGesture).handlerTapUp(pointer, position);
     }
 
     if (this is DragGesture) {

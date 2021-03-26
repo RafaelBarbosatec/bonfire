@@ -5,32 +5,38 @@ import 'package:bonfire/base/game_component.dart';
 mixin TapGesture on GameComponent {
   bool enableTab = true;
   int _pointer;
-  void onTap();
-  void onTapDown(int pointer, Offset position) {
+
+  void handlerTapDown(int pointer, Offset position) {
     if (!enableTab) return;
     if (this.isHud()) {
       if (this.position.contains(position)) {
         _pointer = pointer;
+        onTapDown(pointer, position);
       }
     } else {
-      final absolutePosition = this.gameRef.gameCamera.screenPositionToWorld(position);
+      final absolutePosition =
+          this.gameRef.gameCamera.screenPositionToWorld(position);
       if (this.position.contains(absolutePosition)) {
         _pointer = pointer;
+        onTapDown(pointer, position);
       }
     }
   }
 
-  void onTapUp(int pointer, Offset position) {
+  void handlerTapUp(int pointer, Offset position) {
     if (!enableTab || pointer != _pointer) return;
     if (this.isHud()) {
       if (this.position.contains(position)) {
+        onTapUp(pointer, position);
         onTap();
       } else {
         onTapCancel();
       }
     } else {
-      final absolutePosition = this.gameRef.gameCamera.screenPositionToWorld(position);
+      final absolutePosition =
+          this.gameRef.gameCamera.screenPositionToWorld(position);
       if (this.position.contains(absolutePosition)) {
+        onTapUp(pointer, position);
         onTap();
       } else {
         onTapCancel();
@@ -39,5 +45,11 @@ mixin TapGesture on GameComponent {
     _pointer = null;
   }
 
+  void onTapDown(int pointer, Offset position) {}
+
+  void onTapUp(int pointer, Offset position) {}
+
   void onTapCancel() {}
+
+  void onTap();
 }
