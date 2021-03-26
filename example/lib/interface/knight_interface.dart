@@ -4,7 +4,7 @@ import 'package:example/player/knight.dart';
 
 class KnightInterface extends GameInterface {
   @override
-  void onGameResize(Vector2 size) {
+  Future<void> onLoad() {
     add(BarLifeComponent());
     add(InterfaceComponent(
       sprite: Sprite.load('blue_button1.png'),
@@ -19,6 +19,6 @@ class KnightInterface extends GameInterface {
         }
       },
     ));
-    super.onGameResize(size);
+    super.onLoad();
   }
 }
