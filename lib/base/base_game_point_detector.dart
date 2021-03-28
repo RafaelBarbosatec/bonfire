@@ -33,12 +33,8 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
-  Iterable<GameComponent> get _gesturesComponents => components
-      .where((c) =>
-          ((c is GameComponent && (c.isVisibleInCamera() || c.isHud())) &&
-              ((c is TapGesture && c.enableTab) ||
-                  (c is DragGesture && (c).enableDrag))))
-      .cast<GameComponent>();
+  Iterable<GameComponent> get _gesturesComponents =>
+      components.where((c) => _hasGesture(c)).cast<GameComponent>();
 
   Iterable<PointerDetector> get _pointerDetectorComponents =>
       components.where((c) => (c is PointerDetector)).cast();
@@ -49,10 +45,7 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
 
   void onPointerUp(PointerUpEvent event) {
     for (final c in _gesturesComponents) {
-      c.handlerPointerUp(
-        event.pointer,
-        event.localPosition,
-      );
+      c.handlerPointerUp(event.pointer, event.localPosition);
     }
     for (final c in _pointerDetectorComponents) {
       c.onPointerUp(event);
@@ -60,11 +53,11 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   }
 
   void onPointerMove(PointerMoveEvent event) {
-    _gesturesComponents
-        .where((element) => element is DragGesture)
-        .forEach((element) {
-      element.handlerPointerMove(event.pointer, event.localPosition);
-    });
+    for (final c in _gesturesComponents) {
+      if (c is DragGesture) {
+        c.handlerPointerMove(event.pointer, event.localPosition);
+      }
+    }
     for (final c in _pointerDetectorComponents) {
       c.onPointerMove(event);
     }
@@ -74,7 +67,6 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
     for (final c in _gesturesComponents) {
       c.handlerPointerDown(event.pointer, event.localPosition);
     }
-
     for (final c in _pointerDetectorComponents) {
       c.onPointerDown(event);
     }
@@ -104,20 +96,11 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
     }
   }
 
-  /// Adds a new component to the components list.
-  ///
-  /// Also calls [preAdd], witch in turn sets the current size on the component (because the resize hook won't be called until a new resize happens).
-  void add(Component c) {
-    preAdd(c);
-    components.add(c);
-  }
-
   /// Registers a component to be added on the components on the next tick.
   ///
   /// Use this to add components in places where a concurrent issue with the update method might happen.
   /// Also calls [preAdd] for the component added, immediately.
-  void addLater(Component c) {
-    preAdd(c);
+  void add(Component c) {
     _addLater.add(c);
   }
 
@@ -167,7 +150,10 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   @override
   void update(double t) {
     if (_isPause) return;
-    components.addAll(_addLater);
+    _addLater.forEach((c) {
+      preAdd(c);
+      components.add(c);
+    });
     _addLater.clear();
 
     components.forEach((c) => c.update(t));
@@ -244,4 +230,10 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
 
   @override
   Widget get widget => widgetBuilder.build(this);
+
+  bool _hasGesture(Component c) {
+    return ((c is GameComponent && (c.isVisibleInCamera() || c.isHud())) &&
+        ((c is TapGesture && c.enableTab) ||
+            (c is DragGesture && (c).enableDrag)));
+  }
 }

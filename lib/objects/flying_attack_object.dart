@@ -192,7 +192,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
             break;
         }
 
-        gameRef.addLater(
+        gameRef.add(
           AnimatedObjectOnce(
             animation: destroyAnimation,
             position: positionDestroy,

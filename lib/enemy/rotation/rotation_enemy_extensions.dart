@@ -128,7 +128,7 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     Rect positionAttack = this.position.shift(diffBase);
 
-    gameRef.addLater(AnimatedObjectOnce(
+    gameRef.add(AnimatedObjectOnce(
       animation: attackEffectTopAnim,
       position: positionAttack,
       rotateRadAngle: angle,
@@ -186,7 +186,7 @@ extension RotationEnemyExtensions on RotationEnemy {
         this.position.center;
 
     Rect position = this.position.shift(diffBase);
-    gameRef.addLater(
+    gameRef.add(
       FlyingAttackAngleObject(
         id: id,
         initPosition: Position(position.left, position.top),

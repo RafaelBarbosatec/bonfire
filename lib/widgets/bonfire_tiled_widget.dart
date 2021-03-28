@@ -1,5 +1,5 @@
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
@@ -59,8 +59,9 @@ class BonfireTiledWidget extends StatefulWidget {
   _BonfireTiledWidgetState createState() => _BonfireTiledWidgetState();
 }
 
-class _BonfireTiledWidgetState extends State<BonfireTiledWidget> with TickerProviderStateMixin {
-  RPGGame _game;
+class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
+    with TickerProviderStateMixin {
+  BonfireGame _game;
   bool _loading = true;
 
   @override
@@ -88,9 +89,12 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget> with TickerProv
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: widget.progressTransitionDuration ?? Duration(milliseconds: 500),
+      duration:
+          widget.progressTransitionDuration ?? Duration(milliseconds: 500),
       transitionBuilder: widget.transitionBuilder,
-      child: _loading ? widget.progress ?? _defaultProgress() : _game?.widget ?? SizedBox.shrink(),
+      child: _loading
+          ? widget.progress ?? _defaultProgress()
+          : _game?.widget ?? SizedBox.shrink(),
     );
   }
 
@@ -103,7 +107,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget> with TickerProv
 
       List<GameComponent> components = (tiled?.components ?? []);
       if (widget.components != null) components.addAll(widget.components);
-      _game = RPGGame(
+      _game = BonfireGame(
         context: context,
         joystickController: widget.joystick,
         player: widget.player,
@@ -115,8 +119,10 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget> with TickerProv
         showCollisionArea: widget.showCollisionArea,
         showFPS: widget.showFPS,
         gameController: widget.gameController,
-        constructionModeColor: widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
-        collisionAreaColor: widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
+        constructionModeColor:
+            widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+        collisionAreaColor: widget.collisionAreaColor ??
+            Colors.lightGreenAccent.withOpacity(0.5),
         lightingColorGame: widget.lightingColorGame,
         cameraZoom: widget.cameraZoom,
         cameraSizeMovementWindow: widget.cameraSizeMovementWindow,

@@ -7,17 +7,19 @@ mixin DragGesture on GameComponent {
   Rect _startDragPosition;
   int _pointer;
   bool enableDrag = true;
-
-  void startDrag(int pointer, Offset position) {
+  @override
+  void handlerPointerDown(int pointer, Offset position) {
     if (!(this is GameComponent) || !enableDrag) return;
     if (this.isHud()) {
       if (this.position.contains(position)) {
         _pointer = pointer;
         _startDragOffset = position;
         _startDragPosition = this.position;
+        startDrag(pointer, position);
       }
     } else {
-      final absolutePosition = this.gameRef.gameCamera.screenPositionToWorld(position);
+      final absolutePosition =
+          this.gameRef.gameCamera.screenPositionToWorld(position);
       if (this.position.contains(absolutePosition)) {
         _pointer = pointer;
         _startDragOffset = absolutePosition;
@@ -26,7 +28,8 @@ mixin DragGesture on GameComponent {
     }
   }
 
-  void moveDrag(int pointer, Offset position) {
+  @override
+  void handlerPointerMove(int pointer, Offset position) {
     if (!enableDrag || pointer != _pointer) return;
     if (_startDragOffset != null && this is GameComponent) {
       if (this.isHud()) {
@@ -37,7 +40,8 @@ mixin DragGesture on GameComponent {
           _startDragPosition.height,
         );
       } else {
-        final absolutePosition = this.gameRef.gameCamera.screenPositionToWorld(position);
+        final absolutePosition =
+            this.gameRef.gameCamera.screenPositionToWorld(position);
         this.position = Rect.fromLTWH(
           _startDragPosition.left + (absolutePosition.dx - _startDragOffset.dx),
           _startDragPosition.top + (absolutePosition.dy - _startDragOffset.dy),
@@ -45,14 +49,32 @@ mixin DragGesture on GameComponent {
           _startDragPosition.height,
         );
       }
+      moveDrag(pointer, position);
     }
   }
 
-  void endDrag(int pointer) {
+  @override
+  void handlerPointerUp(int pointer, Offset position) {
     if (pointer == _pointer) {
       _startDragPosition = null;
       _startDragOffset = null;
       _pointer = null;
+      endDrag(pointer);
     }
   }
+
+  @override
+  void handlerPointerCancel(int pointer) {
+    if (pointer == _pointer) {
+      _startDragPosition = null;
+      _startDragOffset = null;
+      _pointer = null;
+      cancelDrag(pointer);
+    }
+  }
+
+  void startDrag(int pointer, Offset position) {}
+  void moveDrag(int pointer, Offset position) {}
+  void endDrag(int pointer) {}
+  void cancelDrag(int pointer) {}
 }

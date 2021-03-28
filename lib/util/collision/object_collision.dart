@@ -6,12 +6,6 @@ import 'package:bonfire/util/mixins/sensor.dart';
 import 'package:flutter/material.dart';
 
 class CollisionConfig {
-  /// Used to enable or disable collision with enemy
-  final bool collisionWithEnemy;
-
-  /// Used to enable or disable collision with player
-  final bool collisionWithPlayer;
-
   bool collisionOnlyVisibleScreen;
 
   /// Representing the collision area
@@ -19,8 +13,6 @@ class CollisionConfig {
 
   CollisionConfig({
     @required this.collisions,
-    this.collisionWithEnemy = false,
-    this.collisionWithPlayer = false,
     this.collisionOnlyVisibleScreen = true,
   });
 }

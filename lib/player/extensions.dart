@@ -26,7 +26,7 @@ extension PlayerExtensions on Player {
     bool onlyUp = false,
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
   }) {
-    gameRef.addLater(
+    gameRef.add(
       TextDamageComponent(
         damage.toInt().toString(),
         Position(
@@ -109,7 +109,7 @@ extension PlayerExtensions on Player {
         this.position.center;
 
     Rect position = this.position.shift(diffBase);
-    gameRef.addLater(FlyingAttackAngleObject(
+    gameRef.add(FlyingAttackAngleObject(
       id: id,
       initPosition: Position(position.left, position.top),
       radAngle: angle,
@@ -216,7 +216,7 @@ extension PlayerExtensions on Player {
         break;
     }
 
-    gameRef.addLater(
+    gameRef.add(
       FlyingAttackObject(
         id: id,
         direction: attackDirection,
@@ -345,7 +345,7 @@ extension PlayerExtensions on Player {
     }
 
     if (anim != null) {
-      gameRef.addLater(AnimatedObjectOnce(
+      gameRef.add(AnimatedObjectOnce(
         animation: anim,
         position: positionAttack,
       ));
@@ -391,7 +391,7 @@ extension PlayerExtensions on Player {
 
     Rect positionAttack = this.position.shift(diffBase);
 
-    gameRef.addLater(AnimatedObjectOnce(
+    gameRef.add(AnimatedObjectOnce(
       animation: animationTop,
       position: positionAttack,
       rotateRadAngle: angle,

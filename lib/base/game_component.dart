@@ -1,46 +1,21 @@
 import 'dart:ui';
 
-import 'package:bonfire/base/rpg_game.dart';
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:bonfire/util/gestures/drag_gesture.dart';
-import 'package:bonfire/util/gestures/tap_gesture.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 
-abstract class GameComponent extends Component with HasGameRef<RPGGame> {
+abstract class GameComponent extends Component with HasGameRef<BonfireGame> {
   /// Position used to draw on the screen
   Rect position;
 
   /// Variable used to control whether the component has been destroyed.
   bool _isDestroyed = false;
 
-  void handlerPointerDown(int pointer, Offset position) {
-    if (this.position == null || gameRef == null) return;
-
-    if (this is TapGesture) {
-      (this as TapGesture).handlerTapDown(pointer, position);
-    }
-    if (this is DragGesture) {
-      (this as DragGesture).startDrag(pointer, position);
-    }
-  }
-
-  void handlerPointerMove(int pointer, Offset position) {
-    if (this is DragGesture) {
-      (this as DragGesture).moveDrag(pointer, position);
-    }
-  }
-
-  void handlerPointerUp(int pointer, Offset position) {
-    if (this.position == null) return;
-    if (this is TapGesture) {
-      (this as TapGesture).handlerTapUp(pointer, position);
-    }
-
-    if (this is DragGesture) {
-      (this as DragGesture).endDrag(pointer);
-    }
-  }
+  void handlerPointerDown(int pointer, Offset position) {}
+  void handlerPointerMove(int pointer, Offset position) {}
+  void handlerPointerUp(int pointer, Offset position) {}
+  void handlerPointerCancel(int pointer) {}
 
   @override
   void render(Canvas c) {}

@@ -6,7 +6,7 @@ mixin TapGesture on GameComponent {
   bool enableTab = true;
   int _pointer;
 
-  void handlerTapDown(int pointer, Offset position) {
+  void handlerPointerDown(int pointer, Offset position) {
     if (!enableTab) return;
     if (this.isHud()) {
       if (this.position.contains(position)) {
@@ -23,7 +23,7 @@ mixin TapGesture on GameComponent {
     }
   }
 
-  void handlerTapUp(int pointer, Offset position) {
+  void handlerPointerUp(int pointer, Offset position) {
     if (!enableTab || pointer != _pointer) return;
     if (this.isHud()) {
       if (this.position.contains(position)) {

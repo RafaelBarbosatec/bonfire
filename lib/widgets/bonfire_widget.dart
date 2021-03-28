@@ -1,5 +1,5 @@
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
@@ -59,7 +59,7 @@ class BonfireWidget extends StatefulWidget {
 }
 
 class _BonfireWidgetState extends State<BonfireWidget> {
-  RPGGame _game;
+  BonfireGame _game;
 
   @override
   void didUpdateWidget(BonfireWidget oldWidget) {
@@ -67,17 +67,19 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       if (_game.map != null) _game.map.updateTiles(widget.map.tiles);
 
       _game.decorations().forEach((d) => d.remove());
-      if (widget.decorations != null) widget.decorations.forEach((d) => _game.addGameComponent(d));
+      if (widget.decorations != null)
+        widget.decorations.forEach((d) => _game.addGameComponent(d));
 
       _game.enemies().forEach((e) => e.remove());
-      if (widget.enemies != null) widget.enemies.forEach((e) => _game.addGameComponent(e));
+      if (widget.enemies != null)
+        widget.enemies.forEach((e) => _game.addGameComponent(e));
     }
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void initState() {
-    _game = RPGGame(
+    _game = BonfireGame(
       context: context,
       joystickController: widget.joystick,
       player: widget.player,
@@ -91,8 +93,10 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       showCollisionArea: widget.showCollisionArea,
       showFPS: widget.showFPS,
       gameController: widget.gameController,
-      constructionModeColor: widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
-      collisionAreaColor: widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
+      constructionModeColor:
+          widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+      collisionAreaColor:
+          widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
       lightingColorGame: widget.lightingColorGame,
       cameraZoom: widget.cameraZoom,
       cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
