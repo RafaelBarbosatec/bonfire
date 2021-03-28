@@ -19,9 +19,8 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final double width;
   final double height;
   final Position initPosition;
-  final bool damageInPlayer;
-  final bool withCollision;
-  final bool collisionOnlyVisibleObjects;
+  final AttackFromEnum attackFrom;
+  final bool withDecorationCollision;
   final VoidCallback destroyedObject;
   final LightingConfig lightingConfig;
 
@@ -37,12 +36,11 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     this.destroyAnimation,
     this.speed = 150,
     this.damage = 1,
-    this.damageInPlayer = true,
-    this.withCollision = true,
-    this.collisionOnlyVisibleObjects = true,
+    this.attackFrom = AttackFromEnum.ENEMY,
+    this.withDecorationCollision = true,
     this.destroyedObject,
     this.lightingConfig,
-    Collision collision,
+    CollisionConfig collision,
   }) {
     animation = flyAnimation;
     position = Rect.fromLTWH(
@@ -52,7 +50,14 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
       height,
     );
 
-    this.collisions = [collision ?? Collision(width: width, height: height / 2)];
+    setupCollision(
+      collision ??
+          CollisionConfig(
+            collisions: [
+              collision ?? CollisionArea(width: width, height: height / 2)
+            ],
+          ),
+    );
   }
 
   @override
@@ -93,33 +98,28 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     }
   }
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    if (gameRef != null && gameRef.showCollisionArea) {
-      drawCollision(canvas, position, gameRef.collisionAreaColor);
-    }
-  }
-
   void _verifyCollision(double dt) {
     if (!_timerVerifyCollision.update(dt)) return;
 
     bool destroy = false;
 
-    if (withCollision)
+    gameRef.attackables().where((a) {
+      final fromCorrect = (attackFrom == AttackFromEnum.ENEMY
+          ? a.receivesAttackFromEnemy()
+          : a.receivesAttackFromPlayer());
+
+      final overlap = a.rectAttackable().overlaps(rectCollision);
+
+      return fromCorrect && overlap;
+    }).forEach((enemy) {
+      enemy.receiveDamage(damage, id);
+      destroy = true;
+    });
+
+    if (withDecorationCollision && !destroy) {
       destroy = isCollision(
-        onlyVisible: collisionOnlyVisibleObjects,
         shouldTriggerSensors: false,
       );
-
-    if (!destroy) {
-      gameRef.attackables().where((a) {
-        return (damageInPlayer ? a.receivesAttackFromEnemy() : a.receivesAttackFromPlayer()) &&
-            a.rectAttackable().overlaps(rectCollision);
-      }).forEach((enemy) {
-        enemy.receiveDamage(damage, id);
-        destroy = true;
-      });
     }
 
     if (destroy) {
@@ -192,7 +192,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
             break;
         }
 
-        gameRef.addLater(
+        gameRef.add(
           AnimatedObjectOnce(
             animation: destroyAnimation,
             position: positionDestroy,

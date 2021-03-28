@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:example/map/dungeon_map.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 
@@ -51,7 +52,8 @@ class GoblinRotation extends RotationEnemy {
               height: 25,
               damage: 10,
               speed: speed * 1.5,
-              collision: Collision(height: 15, width: 15));
+              collision: CollisionConfig(
+                  collisions: [CollisionArea(height: 15, width: 15)]));
         },
         radiusVision: DungeonMap.tileSize * 4,
         minDistanceCellsFromPlayer: 3);

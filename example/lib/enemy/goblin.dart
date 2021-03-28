@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:example/map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 import 'package:example/util/enemy_sprite_sheet.dart';
@@ -6,25 +7,34 @@ import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Goblin extends SimpleEnemy {
+class Goblin extends SimpleEnemy with ObjectCollision {
   double attack = 20;
   bool _seePlayerClose = false;
 
   Goblin(Position initPosition)
       : super(
-            animation: EnemySpriteSheet.simpleDirectionAnimation,
-            initPosition: initPosition,
-            width: DungeonMap.tileSize * 0.8,
-            height: DungeonMap.tileSize * 0.8,
-            speed: DungeonMap.tileSize * 1.6,
-            life: 100,
-            collision: Collision(
-                height: DungeonMap.tileSize * 0.4,
-                width: DungeonMap.tileSize * 0.4,
-                align: Offset(
-                  DungeonMap.tileSize * 0.2,
-                  DungeonMap.tileSize * 0.4,
-                )));
+          animation: EnemySpriteSheet.simpleDirectionAnimation,
+          initPosition: initPosition,
+          width: DungeonMap.tileSize * 0.8,
+          height: DungeonMap.tileSize * 0.8,
+          speed: DungeonMap.tileSize * 1.6,
+          life: 100,
+        ) {
+    setupCollision(
+      CollisionConfig(
+        collisions: [
+          CollisionArea(
+            height: DungeonMap.tileSize * 0.4,
+            width: DungeonMap.tileSize * 0.4,
+            align: Offset(
+              DungeonMap.tileSize * 0.2,
+              DungeonMap.tileSize * 0.4,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   void update(double dt) {
@@ -87,13 +97,17 @@ class Goblin extends SimpleEnemy {
       height: width * 0.9,
       damage: attack,
       speed: DungeonMap.tileSize * 3,
-      collision: Collision(
-        width: width / 2,
-        height: width / 2,
-        align: Offset(
-          width * 0.2,
-          width * 0.2,
-        ),
+      collision: CollisionConfig(
+        collisions: [
+          CollisionArea(
+            width: width / 2,
+            height: width / 2,
+            align: Offset(
+              width * 0.2,
+              width * 0.2,
+            ),
+          ),
+        ],
       ),
       lightingConfig: LightingConfig(
         radius: width,

@@ -14,7 +14,7 @@ class Torch extends GameDecoration with Lighting {
           ),
           width: DungeonMap.tileSize,
           height: DungeonMap.tileSize,
-          initPosition: position,
+          position: position,
         ) {
     lightingConfig = LightingConfig(
       radius: width * 1.5,

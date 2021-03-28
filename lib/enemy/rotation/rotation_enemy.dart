@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/enemy/enemy.dart';
-import 'package:bonfire/util/collision/collision.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
 import 'package:flutter/widgets.dart';
@@ -25,13 +24,12 @@ class RotationEnemy extends Enemy {
     this.currentRadAngle = -1.55,
     this.speed = 100,
     double life = 100,
-    Collision collision,
   }) : super(
-            initPosition: initPosition,
-            height: height,
-            width: width,
-            life: life,
-            collision: collision) {
+          initPosition: initPosition,
+          height: height,
+          width: width,
+          life: life,
+        ) {
     idle();
   }
 

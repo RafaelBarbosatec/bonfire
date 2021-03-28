@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/priority_layer.dart';
@@ -10,7 +9,7 @@ import 'package:flame/position.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Player extends GameComponent with ObjectCollision, Attackable implements JoystickListener {
+class Player extends GameComponent with Attackable implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
   /// Width of the Player.
@@ -29,7 +28,8 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
 
   bool _isDead = false;
 
-  double dtUpdate = 0;
+  double _dtUpdate = 0;
+
   bool isFocusCamera = true;
 
   Player({
@@ -38,7 +38,6 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
     this.height = 32,
     this.life = 100,
     this.speed = 100,
-    Collision collision,
   }) {
     receivesAttackFrom = ReceivesAttackFromEnum.ENEMY;
     position = Rect.fromLTWH(
@@ -48,30 +47,22 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
       height,
     );
 
-    this.collisions = [collision ?? Collision(width: width, height: height / 2)];
     maxLife = life;
   }
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    if (gameRef != null && gameRef.showCollisionArea && this.position != null) {
-      drawCollision(canvas, position, gameRef.collisionAreaColor);
-    }
-  }
-
-  @override
   void update(double dt) {
-    dtUpdate = dt;
+    _dtUpdate = dt;
     super.update(dt);
   }
 
   void moveTop(double speed, {VoidCallback onCollision}) {
-    double innerSpeed = speed * dtUpdate;
+    double innerSpeed = speed * _dtUpdate;
 
     Rect displacement = position.translate(0, (-innerSpeed));
 
-    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera)) {
+    if (_playerIsCollision(
+        displacement: displacement, onlyVisible: isFocusCamera)) {
       onCollision?.call();
       return;
     }
@@ -79,11 +70,12 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
   }
 
   void moveRight(double speed, {VoidCallback onCollision}) {
-    double innerSpeed = speed * dtUpdate;
+    double innerSpeed = speed * _dtUpdate;
 
     Rect displacement = position.translate(innerSpeed, 0);
 
-    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera)) {
+    if (_playerIsCollision(
+        displacement: displacement, onlyVisible: isFocusCamera)) {
       onCollision?.call();
       return;
     }
@@ -92,11 +84,12 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
   }
 
   void moveBottom(double speed, {VoidCallback onCollision}) {
-    double innerSpeed = speed * dtUpdate;
+    double innerSpeed = speed * _dtUpdate;
 
     Rect displacement = position.translate(0, innerSpeed);
 
-    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera)) {
+    if (_playerIsCollision(
+        displacement: displacement, onlyVisible: isFocusCamera)) {
       onCollision?.call();
       return;
     }
@@ -105,11 +98,12 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
   }
 
   void moveLeft(double speed, {VoidCallback onCollision}) {
-    double innerSpeed = speed * dtUpdate;
+    double innerSpeed = speed * _dtUpdate;
 
     Rect displacement = position.translate(-innerSpeed, 0);
 
-    if (isCollision(displacement: displacement, onlyVisible: isFocusCamera)) {
+    if (_playerIsCollision(
+        displacement: displacement, onlyVisible: isFocusCamera)) {
       onCollision?.call();
       return;
     }
@@ -118,17 +112,20 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
   }
 
   void moveFromAngle(double speed, double angle, {VoidCallback onCollision}) {
-    double nextX = (speed * dtUpdate) * cos(angle);
-    double nextY = (speed * dtUpdate) * sin(angle);
+    double nextX = (speed * _dtUpdate) * cos(angle);
+    double nextY = (speed * _dtUpdate) * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(position.center.dx + nextPoint.dx, position.center.dy + nextPoint.dy) - position.center;
+    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
+            position.center.dy + nextPoint.dy) -
+        position.center;
 
     Offset newDiffBase = diffBase;
 
     Rect newPosition = position.shift(newDiffBase);
 
-    if (isCollision(displacement: newPosition, onlyVisible: isFocusCamera)) {
+    if (_playerIsCollision(
+        displacement: newPosition, onlyVisible: isFocusCamera)) {
       onCollision?.call();
       return;
     }
@@ -169,8 +166,16 @@ class Player extends GameComponent with ObjectCollision, Attackable implements J
   int priority() => PriorityLayer.PLAYER;
 
   @override
-  Rect rectAttackable() => rectCollision;
-
-  @override
   void moveTo(Position position) {}
+
+  bool _playerIsCollision({Rect displacement, bool onlyVisible}) {
+    var collision = false;
+    if (this is ObjectCollision) {
+      (this as ObjectCollision).setCollisionOnlyVisibleScreen(onlyVisible);
+      collision =
+          (this as ObjectCollision).isCollision(displacement: displacement);
+    }
+
+    return collision;
+  }
 }

@@ -26,20 +26,20 @@ class DungeonMap {
     List.generate(35, (indexRow) {
       List.generate(70, (indexColumm) {
         if (indexRow == 3 && indexColumm > 2 && indexColumm < 30) {
-          tileList.add(Tile.fromSprite(
+          tileList.add(TileWithCollision(
             wallBottom,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
-            collision: Collision.fromSize(tileSize),
+            collisions: [CollisionArea.fromSize(tileSize)],
             width: tileSize,
             height: tileSize,
           ));
           return;
         }
         if (indexRow == 4 && indexColumm > 2 && indexColumm < 30) {
-          tileList.add(Tile.fromSprite(
+          tileList.add(TileWithCollision(
             wall,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
-            collision: Collision.fromSize(tileSize),
+            collisions: [CollisionArea.fromSize(tileSize)],
             width: tileSize,
             height: tileSize,
           ));
@@ -47,10 +47,10 @@ class DungeonMap {
         }
 
         if (indexRow == 9 && indexColumm > 2 && indexColumm < 30) {
-          tileList.add(Tile.fromSprite(
+          tileList.add(TileWithCollision(
             wallTop,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
-            collision: Collision.fromSize(tileSize),
+            collisions: [CollisionArea.fromSize(tileSize)],
             width: tileSize,
             height: tileSize,
           ));
@@ -61,39 +61,41 @@ class DungeonMap {
             indexRow < 9 &&
             indexColumm > 2 &&
             indexColumm < 30) {
-          tileList.add(Tile.fromSprite(
-            randomFloor(),
-            Position(indexColumm.toDouble(), indexRow.toDouble()),
-            width: tileSize,
-            height: tileSize,
-          ));
+          tileList.add(
+            Tile.fromSprite(
+              randomFloor(),
+              Position(indexColumm.toDouble(), indexRow.toDouble()),
+              width: tileSize,
+              height: tileSize,
+            ),
+          );
           return;
         }
 
         if (indexRow > 3 && indexRow < 9 && indexColumm == 2) {
-          tileList.add(Tile.fromSprite(
+          tileList.add(TileWithCollision(
             wallLeft,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
-            collision: Collision.fromSize(tileSize),
+            collisions: [CollisionArea.fromSize(tileSize)],
             width: tileSize,
             height: tileSize,
           ));
         }
         if (indexRow == 9 && indexColumm == 2) {
-          tileList.add(Tile.fromSprite(
+          tileList.add(TileWithCollision(
             wallBottomLeft,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
-            collision: Collision.fromSize(tileSize),
+            collisions: [CollisionArea.fromSize(tileSize)],
             width: tileSize,
             height: tileSize,
           ));
         }
 
         if (indexRow > 3 && indexRow < 9 && indexColumm == 30) {
-          tileList.add(Tile.fromSprite(
+          tileList.add(TileWithCollision(
             wallRight,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
-            collision: Collision.fromSize(tileSize),
+            collisions: [CollisionArea.fromSize(tileSize)],
             width: tileSize,
             height: tileSize,
           ));
@@ -120,36 +122,42 @@ class DungeonMap {
         getRelativeTilePosition(7, 7),
       ),
       BarrelDraggable(getRelativeTilePosition(8, 6)),
-      GameDecoration.sprite(
+      GameDecorationWithCollision(
         Sprite('itens/barrel.png'),
-        initPosition: getRelativeTilePosition(10, 6),
+        getRelativeTilePosition(10, 6),
         width: tileSize,
         height: tileSize,
-        collision: Collision(
-          width: tileSize / 1.5,
-          height: tileSize / 1.5,
-        ),
+        collisions: [
+          CollisionArea(
+            width: tileSize / 1.5,
+            height: tileSize / 1.5,
+          )
+        ],
       ),
       Chest(getRelativeTilePosition(18, 7)),
-      GameDecoration.sprite(
+      GameDecorationWithCollision(
         Sprite('itens/table.png'),
-        initPosition: getRelativeTilePosition(15, 7),
+        getRelativeTilePosition(15, 7),
         width: tileSize,
         height: tileSize,
-        collision: Collision(
-          height: tileSize * 0.8,
-          width: tileSize,
-        ),
+        collisions: [
+          CollisionArea(
+            height: tileSize * 0.8,
+            width: tileSize,
+          ),
+        ],
       ),
-      GameDecoration.sprite(
+      GameDecorationWithCollision(
         Sprite('itens/table.png'),
-        initPosition: getRelativeTilePosition(27, 6),
+        getRelativeTilePosition(27, 6),
         width: tileSize,
         height: tileSize,
-        collision: Collision(
-          height: tileSize * 0.8,
-          width: tileSize,
-        ),
+        collisions: [
+          CollisionArea(
+            height: tileSize * 0.8,
+            width: tileSize,
+          )
+        ],
       ),
       Torch(getRelativeTilePosition(4, 4)),
       Torch(getRelativeTilePosition(12, 4)),
@@ -157,25 +165,25 @@ class DungeonMap {
       Torch(getRelativeTilePosition(28, 4)),
       GameDecoration.sprite(
         Sprite('itens/flag_red.png'),
-        initPosition: getRelativeTilePosition(24, 4),
+        position: getRelativeTilePosition(24, 4),
         width: tileSize,
         height: tileSize,
       ),
       GameDecoration.sprite(
         Sprite('itens/flag_red.png'),
-        initPosition: getRelativeTilePosition(6, 4),
+        position: getRelativeTilePosition(6, 4),
         width: tileSize,
         height: tileSize,
       ),
       GameDecoration.sprite(
         Sprite('itens/prisoner.png'),
-        initPosition: getRelativeTilePosition(10, 4),
+        position: getRelativeTilePosition(10, 4),
         width: tileSize,
         height: tileSize,
       ),
       GameDecoration.sprite(
         Sprite('itens/flag_red.png'),
-        initPosition: getRelativeTilePosition(14, 4),
+        position: getRelativeTilePosition(14, 4),
         width: tileSize,
         height: tileSize,
       )

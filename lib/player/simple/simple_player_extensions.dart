@@ -1,7 +1,7 @@
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/player/extensions.dart';
 import 'package:bonfire/player/simple/simple_player.dart';
-import 'package:bonfire/util/collision/collision.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/widgets.dart';
@@ -48,7 +48,7 @@ extension SimplePlayerExtensions on SimplePlayer {
     Direction direction,
     bool withCollision = true,
     VoidCallback destroy,
-    Collision collision,
+    CollisionConfig collision,
     LightingConfig lightingConfig,
   }) {
     Direction attackDirection = direction ?? this.lastDirection;

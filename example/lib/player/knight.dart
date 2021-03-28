@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:example/map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 import 'package:example/util/player_sprite_sheet.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Knight extends SimplePlayer with Lighting {
+class Knight extends SimplePlayer with Lighting, ObjectCollision {
   final Position initPosition;
   double attack = 20;
   double stamina = 100;
@@ -21,7 +22,7 @@ class Knight extends SimplePlayer with Lighting {
   double angleRadAttack = 0.0;
   Rect rectDirectionAttack;
   Sprite spriteDirectionAttack;
-  bool showDirection = false;
+  bool execAttackRange = false;
 
   Knight(this.initPosition)
       : super(
@@ -31,16 +32,22 @@ class Knight extends SimplePlayer with Lighting {
           initPosition: initPosition,
           life: 200,
           speed: DungeonMap.tileSize * 3,
-          collision: Collision(
-            height: DungeonMap.tileSize / 2,
-            width: DungeonMap.tileSize / 1.8,
-            align: Offset(DungeonMap.tileSize / 3.5, DungeonMap.tileSize / 2),
-          ),
         ) {
     spriteDirectionAttack = Sprite('direction_attack.png');
     lightingConfig = LightingConfig(
       radius: width * 1.5,
       blurBorder: width * 1.5,
+    );
+    setupCollision(
+      CollisionConfig(
+        collisions: [
+          CollisionArea(
+            height: DungeonMap.tileSize / 2,
+            width: DungeonMap.tileSize / 1.8,
+            align: Offset(DungeonMap.tileSize / 3.5, DungeonMap.tileSize / 2),
+          ),
+        ],
+      ),
     );
   }
 
@@ -66,12 +73,11 @@ class Knight extends SimplePlayer with Lighting {
 
     if (event.id == 1) {
       if (event.event == ActionEvent.MOVE) {
-        showDirection = true;
+        execAttackRange = true;
         angleRadAttack = event.radAngle;
-        if (_timerAttackRange.update(dtUpdate)) actionAttackRange();
       }
       if (event.event == ActionEvent.UP) {
-        showDirection = false;
+        execAttackRange = false;
         actionAttackRange();
       }
     }
@@ -84,7 +90,7 @@ class Knight extends SimplePlayer with Lighting {
     remove();
     gameRef.addGameComponent(
       GameDecoration(
-        initPosition: Position(
+        position: Position(
           position.left,
           position.top,
         ),
@@ -123,10 +129,14 @@ class Knight extends SimplePlayer with Lighting {
       height: width * 0.7,
       damage: 10,
       speed: initSpeed * 2,
-      collision: Collision(
-        width: width / 2,
-        height: width / 2,
-        align: Offset(width * 0.1, 0),
+      collision: CollisionConfig(
+        collisions: [
+          CollisionArea(
+            width: width / 2,
+            height: width / 2,
+            align: Offset(width * 0.1, 0),
+          ),
+        ],
       ),
       lightingConfig: LightingConfig(
         radius: width * 0.5,
@@ -156,6 +166,8 @@ class Knight extends SimplePlayer with Lighting {
         },
       );
     }
+
+    if (execAttackRange && _timerAttackRange.update(dt)) actionAttackRange();
     super.update(dt);
   }
 
@@ -222,10 +234,10 @@ class Knight extends SimplePlayer with Lighting {
   }
 
   void _drawDirectionAttack(Canvas c) {
-    if (showDirection) {
+    if (execAttackRange) {
       double radius = position.height;
-      rectDirectionAttack =
-          Rect.fromLTWH(position.center.dx - radius, position.center.dy - radius, radius * 2, radius * 2);
+      rectDirectionAttack = Rect.fromLTWH(position.center.dx - radius,
+          position.center.dy - radius, radius * 2, radius * 2);
       renderSpriteByRadAngle(
         c,
         angleRadAttack,

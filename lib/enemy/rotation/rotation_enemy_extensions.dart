@@ -6,7 +6,6 @@ import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/objects/flying_attack_angle_object.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flame/position.dart';
@@ -21,22 +20,30 @@ extension RotationEnemyExtensions on RotationEnemy {
     double radiusVision = 32,
     double margin = 10,
   }) {
-    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
-        isDead ||
-        this.position == null) return;
+    if (isDead || this.position == null) return;
+    if (this is ObjectCollision &&
+        (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
+
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
         double _radAngle = getAngleFomPlayer();
 
+        Rect playerRect = player is ObjectCollision
+            ? (player as ObjectCollision).rectCollision
+            : player.position;
         Rect rectPlayerCollision = Rect.fromLTWH(
-          player.rectCollision.left - margin,
-          player.rectCollision.top - margin,
-          player.rectCollision.width + (margin * 2),
-          player.rectCollision.height + (margin * 2),
+          playerRect.left - margin,
+          playerRect.top - margin,
+          playerRect.width + (margin * 2),
+          playerRect.height + (margin * 2),
         );
 
-        if (this.rectCollision.overlaps(rectPlayerCollision)) {
+        Rect rectToMove = this is ObjectCollision
+            ? (this as ObjectCollision).rectCollision
+            : position;
+
+        if (rectToMove.overlaps(rectPlayerCollision)) {
           if (closePlayer != null) closePlayer(player);
           this.idle();
           this.moveFromAngleDodgeObstacles(0, _radAngle);
@@ -58,20 +65,23 @@ extension RotationEnemyExtensions on RotationEnemy {
     double radiusVision = 32,
     double minDistanceCellsFromPlayer,
   }) {
-    if ((this.collisionOnlyVisibleScreen && !isVisibleInCamera()) ||
-        isDead ||
-        this.position == null) return;
+    if (isDead || this.position == null) return;
+    if (this is ObjectCollision &&
+        (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
+
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
         if (positioned != null) positioned(player);
 
+        Rect playerRect = player is ObjectCollision
+            ? (player as ObjectCollision).rectCollision
+            : player.position;
         double distance = (minDistanceCellsFromPlayer ?? radiusVision);
         double _radAngle = getAngleFomPlayer();
 
         Position myPosition = Position.fromOffset(this.position.center);
-        Position playerPosition =
-            Position.fromOffset(player.rectCollision.center);
+        Position playerPosition = Position.fromOffset(playerRect.center);
         double dist = myPosition.distance(playerPosition);
 
         if (dist >= distance) {
@@ -118,7 +128,7 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     Rect positionAttack = this.position.shift(diffBase);
 
-    gameRef.addLater(AnimatedObjectOnce(
+    gameRef.add(AnimatedObjectOnce(
       animation: attackEffectTopAnim,
       position: positionAttack,
       rotateRadAngle: angle,
@@ -157,7 +167,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     bool withCollision = true,
     bool collisionOnlyVisibleObjects = true,
     VoidCallback destroy,
-    Collision collision,
+    CollisionConfig collision,
     VoidCallback execute,
     LightingConfig lightingConfig,
   }) {
@@ -176,7 +186,7 @@ extension RotationEnemyExtensions on RotationEnemy {
         this.position.center;
 
     Rect position = this.position.shift(diffBase);
-    gameRef.addLater(
+    gameRef.add(
       FlyingAttackAngleObject(
         id: id,
         initPosition: Position(position.left, position.top),

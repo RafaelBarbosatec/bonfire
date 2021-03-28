@@ -1,5 +1,4 @@
 import 'package:bonfire/enemy/enemy.dart';
-import 'package:bonfire/util/collision/collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
@@ -29,14 +28,13 @@ class SimpleEnemy extends Enemy {
     @required this.animation,
     double life = 100,
     this.speed = 100,
-    Collision collision,
     Direction initDirection = Direction.right,
   }) : super(
-            initPosition: initPosition,
-            height: height,
-            width: width,
-            life: life,
-            collision: collision) {
+          initPosition: initPosition,
+          height: height,
+          width: width,
+          life: life,
+        ) {
     lastDirection = initDirection;
     lastDirectionHorizontal =
         initDirection == Direction.left ? Direction.left : Direction.right;

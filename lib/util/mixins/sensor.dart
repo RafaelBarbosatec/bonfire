@@ -11,8 +11,7 @@ mixin Sensor on GameComponent {
     if (_areaSensor != null) {
       return _areaSensor;
     } else {
-      if (this is ObjectCollision &&
-          (this as ObjectCollision).collisions != null) {
+      if (this is ObjectCollision) {
         return (this as ObjectCollision).getRectCollision(this.position);
       } else {
         return this.position;

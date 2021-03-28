@@ -1,11 +1,11 @@
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class Camera with HasGameRef<RPGGame> {
+class Camera with HasGameRef<BonfireGame> {
   static const SPACING_MAP = 20.0;
   Position position = Position.empty();
   double zoom;

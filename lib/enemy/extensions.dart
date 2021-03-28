@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/text_damage_component.dart';
 import 'package:flame/position.dart';
@@ -33,7 +34,7 @@ extension EnemyExtensions on Enemy {
       vision,
     );
 
-    if (fieldOfVision.overlaps(player.rectCollision)) {
+    if (fieldOfVision.overlaps(playerRect)) {
       if (observed != null) observed(player);
     } else {
       if (notObserved != null) notObserved();
@@ -73,7 +74,7 @@ extension EnemyExtensions on Enemy {
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
     bool onlyUp = false,
   }) {
-    gameRef.addLater(
+    gameRef.add(
       TextDamageComponent(
         damage.toInt().toString(),
         Position(
@@ -141,8 +142,8 @@ extension EnemyExtensions on Enemy {
     Player player = this.gameRef.player;
     if (player == null) return 0.0;
     return atan2(
-      player.rectCollision.center.dy - this.position.center.dy,
-      player.rectCollision.center.dx - this.position.center.dx,
+      playerRect.center.dy - this.position.center.dy,
+      playerRect.center.dx - this.position.center.dx,
     );
   }
 
@@ -150,8 +151,14 @@ extension EnemyExtensions on Enemy {
     Player player = this.gameRef.player;
     if (player == null) return 0.0;
     return atan2(
-      this.position.center.dy - player.rectCollision.center.dy,
-      this.position.center.dx - player.rectCollision.center.dx,
+      this.position.center.dy - playerRect.center.dy,
+      this.position.center.dx - playerRect.center.dx,
     );
   }
+
+  Rect get playerRect =>
+      (gameRef.player is ObjectCollision
+          ? (gameRef.player as ObjectCollision)?.rectCollision
+          : gameRef.player?.position) ??
+      Rect.zero;
 }

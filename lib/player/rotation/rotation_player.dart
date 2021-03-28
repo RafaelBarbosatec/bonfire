@@ -22,13 +22,12 @@ class RotationPlayer extends Player {
     double width = 32,
     double height = 32,
     double life = 100,
-    Collision collision,
   }) : super(
-            initPosition: initPosition,
-            width: width,
-            height: height,
-            life: life,
-            collision: collision) {
+          initPosition: initPosition,
+          width: width,
+          height: height,
+          life: life,
+        ) {
     this.animation = animIdle;
   }
 
