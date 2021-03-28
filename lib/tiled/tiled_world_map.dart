@@ -2,10 +2,8 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/decoration/decoration_animated_with_collision.dart';
 import 'package:bonfire/decoration/decoration_with_collision.dart';
 import 'package:bonfire/map/tile/tile.dart';
-import 'package:bonfire/map/tile/tile_animated_with_collision.dart';
 import 'package:bonfire/map/tile/tile_with_collision.dart';
 import 'package:bonfire/tiled/map_cahe.dart';
 import 'package:bonfire/tiled/tiled_world_data.dart';
@@ -110,7 +108,7 @@ class TiledWorldMap {
           if (data.animation == null) {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
               _components.add(
-                GameDecorationWithCollision(
+                GameDecorationWithCollision.sprite(
                   data.sprite,
                   Position(
                     (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
@@ -126,7 +124,7 @@ class TiledWorldMap {
               );
             } else {
               _tiles.add(
-                TileWithCollision(
+                TileWithCollision.sprite(
                   data.sprite,
                   Position(
                     _getX(count, tileLayer.width.toInt()),
@@ -144,7 +142,7 @@ class TiledWorldMap {
           } else {
             if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
               _components.add(
-                GameDecorationAnimatedWithCollision(
+                GameDecorationWithCollision.animation(
                   data.animation.animation,
                   Position(
                     (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
@@ -160,7 +158,7 @@ class TiledWorldMap {
               );
             } else {
               _tiles.add(
-                TileAnimatedWithCollision(
+                TileWithCollision.animation(
                   data.animation,
                   Position(
                     _getX(count, tileLayer.width.toInt()),

@@ -26,7 +26,7 @@ class DungeonMap {
     List.generate(35, (indexRow) {
       List.generate(70, (indexColumm) {
         if (indexRow == 3 && indexColumm > 2 && indexColumm < 30) {
-          tileList.add(TileWithCollision(
+          tileList.add(TileWithCollision.sprite(
             wallBottom,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
             collisions: [CollisionArea.fromSize(tileSize)],
@@ -36,7 +36,7 @@ class DungeonMap {
           return;
         }
         if (indexRow == 4 && indexColumm > 2 && indexColumm < 30) {
-          tileList.add(TileWithCollision(
+          tileList.add(TileWithCollision.sprite(
             wall,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
             collisions: [CollisionArea.fromSize(tileSize)],
@@ -47,7 +47,7 @@ class DungeonMap {
         }
 
         if (indexRow == 9 && indexColumm > 2 && indexColumm < 30) {
-          tileList.add(TileWithCollision(
+          tileList.add(TileWithCollision.sprite(
             wallTop,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
             collisions: [CollisionArea.fromSize(tileSize)],
@@ -73,7 +73,7 @@ class DungeonMap {
         }
 
         if (indexRow > 3 && indexRow < 9 && indexColumm == 2) {
-          tileList.add(TileWithCollision(
+          tileList.add(TileWithCollision.sprite(
             wallLeft,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
             collisions: [CollisionArea.fromSize(tileSize)],
@@ -82,7 +82,7 @@ class DungeonMap {
           ));
         }
         if (indexRow == 9 && indexColumm == 2) {
-          tileList.add(TileWithCollision(
+          tileList.add(TileWithCollision.sprite(
             wallBottomLeft,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
             collisions: [CollisionArea.fromSize(tileSize)],
@@ -92,7 +92,7 @@ class DungeonMap {
         }
 
         if (indexRow > 3 && indexRow < 9 && indexColumm == 30) {
-          tileList.add(TileWithCollision(
+          tileList.add(TileWithCollision.sprite(
             wallRight,
             Position(indexColumm.toDouble(), indexRow.toDouble()),
             collisions: [CollisionArea.fromSize(tileSize)],
@@ -122,7 +122,7 @@ class DungeonMap {
         getRelativeTilePosition(7, 7),
       ),
       BarrelDraggable(getRelativeTilePosition(8, 6)),
-      GameDecorationWithCollision(
+      GameDecorationWithCollision.sprite(
         Sprite('itens/barrel.png'),
         getRelativeTilePosition(10, 6),
         width: tileSize,
@@ -135,7 +135,7 @@ class DungeonMap {
         ],
       ),
       Chest(getRelativeTilePosition(18, 7)),
-      GameDecorationWithCollision(
+      GameDecorationWithCollision.sprite(
         Sprite('itens/table.png'),
         getRelativeTilePosition(15, 7),
         width: tileSize,
@@ -147,7 +147,7 @@ class DungeonMap {
           ),
         ],
       ),
-      GameDecorationWithCollision(
+      GameDecorationWithCollision.sprite(
         Sprite('itens/table.png'),
         getRelativeTilePosition(27, 6),
         width: tileSize,
