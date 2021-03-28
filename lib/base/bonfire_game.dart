@@ -18,13 +18,12 @@ import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/value_generator_component.dart';
-import 'package:flame/components/component.dart';
 import 'package:flame/keyboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
+class BonfireGame extends BaseGamePointerDetector with KeyboardEvents {
   final BuildContext context;
   final Player player;
   final GameInterface interface;
@@ -55,7 +54,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
       ColorFilterComponent(GameColorFilter());
   LightingComponent lighting;
 
-  RPGGame({
+  BonfireGame({
     @required this.context,
     this.map,
     this.joystickController,
@@ -110,12 +109,7 @@ class RPGGame extends BaseGamePointerDetector with KeyboardEvents {
   }
 
   void addGameComponent(GameComponent component) {
-    addLater(component);
-  }
-
-  @override
-  void add(Component c) {
-    addLater(c);
+    add(component);
   }
 
   Iterable<GameComponent> visibleComponents() => _visibleComponents;
