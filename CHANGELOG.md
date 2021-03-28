@@ -1,4 +1,4 @@
-# NEXT
+# 0.9.0
 
 - BREAKING CHANGE: Collision system. Remove param `collision` from Enemy, Player and GameDecoration. If you need add collision in your component
 use the mixin 'Collision' and settings your properties using 'setupCollision()' method. See [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/enemy/goblin.dart).
