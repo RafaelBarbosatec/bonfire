@@ -50,6 +50,7 @@ class ValueGeneratorComponent extends Component {
     _isFinished = true;
     if (onChange != null) onChange(end);
     if (onFinish != null) onFinish();
+    remove();
   }
 
   void start() {
