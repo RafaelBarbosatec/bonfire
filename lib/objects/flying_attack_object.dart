@@ -110,6 +110,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   }
 
   void _verifyCollision(double dt) {
+    if (shouldRemove) return;
     if (!_timerVerifyCollision.update(dt)) return;
 
     bool destroy = false;
