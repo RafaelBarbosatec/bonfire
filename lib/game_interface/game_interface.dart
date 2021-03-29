@@ -17,7 +17,8 @@ class GameInterface extends GameComponent {
   bool get isHud => true;
 
   @override
-  int get priority => PriorityLayer.GAME_INTERFACE;
+  int get priority =>
+      LayerPriority.getPriorityInterface(gameRef?.highestPriority ?? 0);
 
   @override
   void render(Canvas c) {

@@ -203,9 +203,6 @@ class Enemy extends GameComponent with Attackable {
     }
   }
 
-  @override
-  int get priority => position.bottom.round();
-
   bool verifyEnemyCollision(
     Vector2Rect position,
     double translateX,

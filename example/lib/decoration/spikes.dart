@@ -2,6 +2,7 @@ import 'dart:async' as async;
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:bonfire/util/priority_layer.dart';
 import 'package:example/map/dungeon_map.dart';
 
 class Spikes extends GameDecoration with Sensor {
@@ -28,4 +29,7 @@ class Spikes extends GameDecoration with Sensor {
       }
     }
   }
+
+  @override
+  int get priority => LayerPriority.MAP;
 }

@@ -12,6 +12,8 @@ import 'package:ordered_set/ordered_set.dart';
 abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   Camera gameCamera = Camera();
 
+  int highestPriority = 1000000;
+
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components = OrderedSet(Comparing.on((c) {
     return c.priority;
@@ -20,7 +22,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
 
-  final _timerSortPriority = IntervalTick(300);
+  final _timerSortPriority = IntervalTick(250);
 
   Iterable<PointerDetectorHandler> get _gesturesComponents {
     return components
@@ -148,9 +150,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     gameCamera.update();
 
     if (_timerSortPriority.update(t)) {
-      List<Component> temp = components.toList();
-      components.clear();
-      components.addAll(temp);
+      _updateOrder();
     }
   }
 
@@ -180,5 +180,12 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     return ((c is GameComponent && c.isVisibleInCamera()) || c.isHud) &&
         (c is PointerDetectorHandler &&
             (c as PointerDetectorHandler).hasGesture());
+  }
+
+  void _updateOrder() {
+    List<Component> temp = components.toList();
+    components.clear();
+    components.addAll(temp);
+    highestPriority = components.last.priority;
   }
 }

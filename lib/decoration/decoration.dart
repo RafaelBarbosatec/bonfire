@@ -113,8 +113,6 @@ class GameDecoration extends AnimatedObject {
   //     return PriorityLayer.DECORATION + additionalPriority;
   //   }
   // }
-  @override
-  int get priority => position.bottom.round();
 
   @override
   Future<void> onLoad() {

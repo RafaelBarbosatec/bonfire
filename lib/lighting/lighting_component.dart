@@ -21,7 +21,8 @@ class LightingComponent extends GameComponent {
   }
 
   @override
-  int get priority => PriorityLayer.LIGHTING;
+  int get priority =>
+      LayerPriority.getPriorityLighting(gameRef?.highestPriority ?? 0);
 
   @override
   void render(Canvas canvas) {

@@ -66,7 +66,4 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
   Future<void> onLoad() {
     return _loader.load();
   }
-
-  @override
-  int get priority => position.bottom.round();
 }

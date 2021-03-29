@@ -179,7 +179,4 @@ class FlyingAttackAngleObject extends AnimatedObject
     await _loader.load();
     animation = this.flyAnimation;
   }
-
-  @override
-  int get priority => position.bottom.round();
 }

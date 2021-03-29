@@ -160,9 +160,6 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event) {}
 
   @override
-  int get priority => position.bottom.round();
-
-  @override
   void moveTo(Vector2 position) {}
 
   bool _playerIsCollision({Vector2Rect displacement, bool onlyVisible}) {
