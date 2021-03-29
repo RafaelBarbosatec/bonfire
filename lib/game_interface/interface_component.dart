@@ -49,14 +49,6 @@ class InterfaceComponent extends GameComponent with TapGesture {
   }
 
   @override
-  void handlerTapDown(int pointer, Offset position) {
-    if (this.position.contains(position)) {
-      spriteToRender = spriteSelected ?? spriteToRender;
-    }
-    super.handlerTapDown(pointer, position);
-  }
-
-  @override
   void onTapCancel() {
     spriteToRender = sprite;
   }
@@ -77,5 +69,10 @@ class InterfaceComponent extends GameComponent with TapGesture {
   }
 
   @override
-  void update(double t) {}
+  void onTapDown(int pointer, Offset position) {
+    spriteToRender = spriteSelected ?? spriteToRender;
+  }
+
+  @override
+  void onTapUp(int pointer, Offset position) {}
 }

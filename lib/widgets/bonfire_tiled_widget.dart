@@ -1,3 +1,4 @@
+import 'package:bonfire/base/custom_game_widget.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
@@ -8,7 +9,6 @@ import 'package:bonfire/tiled/tiled_world_data.dart';
 import 'package:bonfire/tiled/tiled_world_map.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class BonfireTiledWidget extends StatefulWidget {
@@ -95,7 +95,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       transitionBuilder: widget.transitionBuilder,
       child: _loading
           ? widget.progress ?? _defaultProgress()
-          : GameWidget(
+          : CustomGameWidget(
                 game: _game,
               ) ??
               SizedBox.shrink(),

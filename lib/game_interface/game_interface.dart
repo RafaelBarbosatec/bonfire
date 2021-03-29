@@ -7,7 +7,7 @@ import 'package:bonfire/util/priority_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class GameInterface extends GameComponent with TapGesture {
+class GameInterface extends GameComponent {
   List<InterfaceComponent> _components = [];
   final textConfigGreen = TextConfig(color: Colors.green, fontSize: 14);
   final textConfigYellow = TextConfig(color: Colors.yellow, fontSize: 14);
@@ -39,7 +39,7 @@ class GameInterface extends GameComponent with TapGesture {
     super.onGameResize(size);
   }
 
-  Future<void> add(InterfaceComponent component) async{
+  Future<void> add(InterfaceComponent component) async {
     removeById(component.id);
     await component.onLoad();
     _components.add(component);
@@ -51,18 +51,18 @@ class GameInterface extends GameComponent with TapGesture {
   }
 
   @override
-  void handlerTapDown(int pointer, Offset position) {
-    _components.forEach((i) => i.handlerTapDown(pointer, position));
+  void handlerPointerDown(PointerDownEvent event) {
+    _components.forEach((i) => i.handlerPointerDown(event));
   }
 
   @override
-  void handlerTapUp(int pointer, Offset position) {
-    _components.forEach((i) => i.handlerTapUp(pointer, position));
+  void handlerPointerUp(PointerUpEvent event) {
+    _components.forEach((i) => i.handlerPointerUp(event));
   }
 
   @override
-  void handlerTapCancel(int pointer) {
-    _components.forEach((i) => i.handlerTapCancel(pointer));
+  void handlerPointerCancel(PointerCancelEvent event) {
+    _components.forEach((i) => i.handlerPointerCancel(event));
   }
 
   void _drawFPS(Canvas c) {
@@ -89,15 +89,12 @@ class GameInterface extends GameComponent with TapGesture {
   }
 
   @override
-  void onTap() {}
-
-  @override
-  void onTapCancel() {}
-
-  @override
   Future<void> onLoad() {
     return Future.forEach<InterfaceComponent>(_components, (element) {
       return element.onLoad();
     });
   }
+
+  @override
+  bool hasGesture() => true;
 }

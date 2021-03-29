@@ -190,8 +190,8 @@ class JoystickAction {
     }
   }
 
-  void onDragStart(int pointer, Offset localPosition) {
-    if (!_dragging && _rect != null && _rect.rect.contains(localPosition)) {
+  void actionDown(int pointer, Offset localPosition) {
+    if (!_dragging && _rect != null && _rect.contains(localPosition)) {
       _pointer = pointer;
       if (enableDirection) {
         _dragPosition = localPosition;
@@ -207,7 +207,7 @@ class JoystickAction {
     }
   }
 
-  void onDragUpdate(int pointer, Offset localPosition) {
+  void actionMove(int pointer, Offset localPosition) {
     if (pointer == _pointer) {
       if (_dragging) {
         _dragPosition = localPosition;
@@ -215,15 +215,7 @@ class JoystickAction {
     }
   }
 
-  void onDragCancel(int pointer) {
-    if (pointer == _pointer) {
-      _dragging = false;
-      _dragPosition = _rectBackgroundDirection.center;
-      unPressed();
-    }
-  }
-
-  void onDragEnd(int pointer) {
+  void actionUp(int pointer) {
     if (pointer == _pointer) {
       _dragging = false;
       _dragPosition = _rectBackgroundDirection.center;
@@ -233,37 +225,6 @@ class JoystickAction {
           event: ActionEvent.UP,
         ),
       );
-      unPressed();
-    }
-  }
-
-  void onTapUp(int pointer) {
-    if (pointer == _pointer) {
-      _joystickController.joystickAction(
-        JoystickActionEvent(
-          id: actionId,
-          event: ActionEvent.UP,
-        ),
-      );
-      unPressed();
-    }
-  }
-
-  void onTapDown(int pointer, Offset localPosition) {
-    if (_rect != null && _rect.rect.contains(localPosition)) {
-      _pointer = pointer;
-      _joystickController.joystickAction(
-        JoystickActionEvent(
-          id: actionId,
-          event: ActionEvent.DOWN,
-        ),
-      );
-      pressed();
-    }
-  }
-
-  void onTapCancel(int pointer) {
-    if (pointer == _pointer) {
       unPressed();
     }
   }

@@ -1,117 +1,50 @@
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/camera/camera.dart';
-import 'package:bonfire/util/gestures/drag_gesture.dart';
-import 'package:bonfire/util/gestures/tap_gesture.dart';
-import 'package:bonfire/util/mixins/touch_detector.dart';
+import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart' hide Camera;
-import 'package:flame/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
-abstract class CustomBaseGame extends Game
-    with MultiTouchDragDetector, MultiTouchTapDetector, FPSCounter {
+abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   Camera gameCamera = Camera();
 
   /// The list of components to be updated and rendered by the base game.
-  OrderedSet<Component> components =
-      OrderedSet(Comparing.on((c) => c.priority));
+  OrderedSet<Component> components = OrderedSet(Comparing.on((c) {
+    return c.priority;
+  }));
 
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
 
-  Iterable<TapGesture> get _tapGestureComponents => components
-      .where((c) =>
-          ((c is GameComponent && (c.isVisibleInCamera() || c.isHud)) &&
-              ((c is TapGesture && c.enableTab))))
-      .cast<TapGesture>();
-
-  Iterable<DragGesture> get _dragGestureComponents => components
-      .where((c) =>
-          ((c is GameComponent && (c.isVisibleInCamera() || c.isHud)) &&
-              (c is DragGesture && (c).enableDrag)))
-      .cast<DragGesture>();
-
-  Iterable<TouchDetector> get _pointerDetectorComponents =>
-      components.where((c) => (c is TouchDetector)).cast();
-
-  @override
-  void onTapDown(int pointerId, TapDownDetails details) {
-    for (final c in _tapGestureComponents) {
-      c.handlerTapDown(pointerId, details.localPosition);
-    }
-    for (final c in _pointerDetectorComponents) {
-      c.onTapDown(pointerId, details);
-    }
-    super.onTapDown(pointerId, details);
+  Iterable<PointerDetectorHandler> get _gesturesComponents {
+    return components
+        .where((c) => _hasGesture(c))
+        .cast<PointerDetectorHandler>();
   }
 
-  @override
-  void onTapUp(int pointerId, TapUpDetails details) {
-    for (final c in _tapGestureComponents) {
-      c.handlerTapUp(pointerId, details.localPosition);
-    }
-    for (final c in _pointerDetectorComponents) {
-      c.onTapUp(pointerId, details);
-    }
-    super.onTapUp(pointerId, details);
+  void onPointerCancel(PointerCancelEvent event) {
+    _gesturesComponents.forEach((c) => c.handlerPointerCancel(event));
   }
 
-  @override
-  void onTapCancel(int pointerId) {
-    for (final c in _tapGestureComponents) {
-      c.handlerTapCancel(pointerId);
+  void onPointerUp(PointerUpEvent event) {
+    for (final c in _gesturesComponents) {
+      c.handlerPointerUp(event);
     }
-    for (final c in _pointerDetectorComponents) {
-      c.onTapCancel(pointerId);
-    }
-    super.onTapCancel(pointerId);
   }
 
-  @override
-  void onDragStart(int pointerId, Vector2 startPosition) {
-    for (final c in _dragGestureComponents) {
-      c.dragStart(pointerId, startPosition.toOffset());
+  void onPointerMove(PointerMoveEvent event) {
+    for (final c in _gesturesComponents) {
+      c.handlerPointerMove(event);
     }
-    for (final c in _pointerDetectorComponents) {
-      c.onDragStart(pointerId, startPosition);
-    }
-    super.onDragStart(pointerId, startPosition);
   }
 
-  @override
-  void onDragCancel(int pointerId) {
-    for (final c in _dragGestureComponents) {
-      c.dragCancel(pointerId);
+  void onPointerDown(PointerDownEvent event) {
+    for (final c in _gesturesComponents) {
+      c.handlerPointerDown(event);
     }
-    for (final c in _pointerDetectorComponents) {
-      c.onDragCancel(pointerId);
-    }
-    super.onDragCancel(pointerId);
-  }
-
-  @override
-  void onDragEnd(int pointerId, DragEndDetails details) {
-    for (final c in _dragGestureComponents) {
-      c.dragEnd(pointerId);
-    }
-    for (final c in _pointerDetectorComponents) {
-      c.onDragEnd(pointerId, details);
-    }
-    super.onDragEnd(pointerId, details);
-  }
-
-  @override
-  void onDragUpdate(int pointerId, DragUpdateDetails details) {
-    for (final c in _dragGestureComponents) {
-      c.dragMove(pointerId, details.localPosition);
-    }
-    for (final c in _pointerDetectorComponents) {
-      c.onDragUpdate(pointerId, details);
-    }
-    super.onDragUpdate(pointerId, details);
   }
 
   /// This method is called for every component added, both via [add] and [addLater] methods.
@@ -120,7 +53,7 @@ abstract class CustomBaseGame extends Game
   /// By default, this calls the first time resize for every component, so don't forget to call super.preAdd when overriding.
   @mustCallSuper
   Future<void> preAdd(Component c) async {
-    if (debugMode() && c is PositionComponent) {
+    if (debugMode && c is PositionComponent) {
       c.debugMode = true;
     }
 
@@ -133,7 +66,11 @@ abstract class CustomBaseGame extends Game
       c.onGameResize(size);
     }
 
-    await c.onLoad();
+    final loadFuture = c.onLoad();
+
+    if (loadFuture != null) {
+      await loadFuture;
+    }
 
     if (c is PositionComponent) {
       c.children.forEach(preAdd);
@@ -191,8 +128,10 @@ abstract class CustomBaseGame extends Game
   /// You can override it further to add more custom behaviour.
   @override
   void update(double t) {
-    components.addAll(_addLater);
-    _addLater.clear();
+    if (_addLater.isNotEmpty) {
+      components.addAll(_addLater);
+      _addLater.clear();
+    }
 
     components.forEach((c) => c.update(t));
     components.removeWhere((c) => c.shouldRemove);
@@ -212,11 +151,7 @@ abstract class CustomBaseGame extends Game
     components.forEach((c) => c.onGameResize(size));
   }
 
-  /// Returns whether this [Game] is in debug mode or not.
-  ///
-  /// Returns `false` by default. Override to use the debug mode.
-  /// You can use this value to enable debug behaviors for your game, many components show extra information on screen when on debug mode
-  bool debugMode() => false;
+  bool debugMode = false;
 
   /// Returns the current time in seconds with microseconds precision.
   ///
@@ -224,5 +159,11 @@ abstract class CustomBaseGame extends Game
   double currentTime() {
     return DateTime.now().microsecondsSinceEpoch.toDouble() /
         Duration.microsecondsPerSecond;
+  }
+
+  bool _hasGesture(Component c) {
+    return ((c is GameComponent && c.isVisibleInCamera()) || c.isHud) &&
+        (c is PointerDetectorHandler &&
+            (c as PointerDetectorHandler).hasGesture());
   }
 }

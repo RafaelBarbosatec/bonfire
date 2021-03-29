@@ -112,4 +112,10 @@ class Chest extends GameDecoration with TapGesture {
       ),
     );
   }
+
+  @override
+  void onTapDown(int pointer, Offset position) {}
+
+  @override
+  void onTapUp(int pointer, Offset position) {}
 }
