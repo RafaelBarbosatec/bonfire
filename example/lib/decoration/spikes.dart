@@ -31,5 +31,5 @@ class Spikes extends GameDecoration with Sensor {
   }
 
   @override
-  int get priority => LayerPriority.MAP;
+  int get priority => LayerPriority.MAP + 1;
 }
