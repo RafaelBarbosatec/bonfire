@@ -109,6 +109,7 @@ class FlyingAttackAngleObject extends AnimatedObject
   }
 
   void _verifyCollision(double dt) {
+    if (shouldRemove) return;
     if (!_timerVerifyCollision.update(dt)) return;
 
     bool destroy = false;
