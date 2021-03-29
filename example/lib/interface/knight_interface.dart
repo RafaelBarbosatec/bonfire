@@ -19,6 +19,6 @@ class KnightInterface extends GameInterface {
         }
       },
     ));
-    super.onLoad();
+    return super.onLoad();
   }
 }

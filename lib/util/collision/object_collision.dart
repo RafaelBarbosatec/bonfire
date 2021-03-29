@@ -23,6 +23,8 @@ class CollisionConfig {
 mixin ObjectCollision on GameComponent {
   CollisionConfig _collisionConfig;
 
+  CollisionConfig get collisionConfig => _collisionConfig;
+
   void setupCollision(CollisionConfig collisionConfig) {
     _collisionConfig = collisionConfig;
   }

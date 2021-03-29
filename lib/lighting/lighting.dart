@@ -10,7 +10,7 @@ mixin Lighting on GameComponent {
     _lightingConfig = config;
   }
 
-  LightingConfig get config => _lightingConfig;
+  LightingConfig get lightingConfig => _lightingConfig;
 
   bool isVisible(Camera camera) {
     if (_lightingConfig == null ||
@@ -19,10 +19,12 @@ mixin Lighting on GameComponent {
         camera.gameRef.size == null) return false;
 
     Rect rectLight = Rect.fromLTWH(
-      this.position.rect.center.dx - (config.radius + config.blurBorder / 2),
-      this.position.rect.center.dy - (config.radius + config.blurBorder / 2),
-      (config.radius * 2) + config.blurBorder,
-      (config.radius * 2) + config.blurBorder,
+      this.position.rect.center.dx -
+          (lightingConfig.radius + lightingConfig.blurBorder / 2),
+      this.position.rect.center.dy -
+          (lightingConfig.radius + lightingConfig.blurBorder / 2),
+      (lightingConfig.radius * 2) + lightingConfig.blurBorder,
+      (lightingConfig.radius * 2) + lightingConfig.blurBorder,
     );
 
     return camera.isRectOnCamera(rectLight) ?? false;

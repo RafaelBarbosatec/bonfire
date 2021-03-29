@@ -30,7 +30,7 @@ class LightingComponent extends GameComponent {
     canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
     canvas.drawColor(color, BlendMode.dstATop);
     _visibleLight.forEach((light) {
-      final config = light.config;
+      final config = light.lightingConfig;
       final sigma = _convertRadiusToSigma(config.blurBorder);
       config.update(_dtUpdate);
       canvas.save();
