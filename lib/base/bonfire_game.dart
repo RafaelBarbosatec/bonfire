@@ -24,7 +24,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class RPGGame extends CustomBaseGame with KeyboardEvents {
+class BonfireGame extends CustomBaseGame with KeyboardEvents {
   final BuildContext context;
   final Player player;
   final GameInterface interface;
@@ -64,7 +64,7 @@ class RPGGame extends CustomBaseGame with KeyboardEvents {
   Size _cameraSizeMovementWindow = const Size(50, 50);
   bool _cameraMoveOnlyMapArea = false;
 
-  RPGGame({
+  BonfireGame({
     @required this.context,
     this.map,
     this.joystickController,

@@ -1,6 +1,6 @@
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/custom_game_widget.dart';
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
@@ -62,7 +62,7 @@ class BonfireTiledWidget extends StatefulWidget {
 
 class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
     with TickerProviderStateMixin {
-  RPGGame _game;
+  BonfireGame _game;
   bool _loading = true;
 
   @override
@@ -111,7 +111,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
 
       List<GameComponent> components = (tiled?.components ?? []);
       if (widget.components != null) components.addAll(widget.components);
-      _game = RPGGame(
+      _game = BonfireGame(
         context: context,
         joystickController: widget.joystick,
         player: widget.player,

@@ -1,5 +1,5 @@
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/base/rpg_game.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
@@ -60,7 +60,7 @@ class BonfireWidget extends StatefulWidget {
 }
 
 class _BonfireWidgetState extends State<BonfireWidget> {
-  RPGGame _game;
+  BonfireGame _game;
 
   @override
   void didUpdateWidget(BonfireWidget oldWidget) {
@@ -80,7 +80,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
 
   @override
   void initState() {
-    _game = RPGGame(
+    _game = BonfireGame(
       context: context,
       joystickController: widget.joystick,
       player: widget.player,

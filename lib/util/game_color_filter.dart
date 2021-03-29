@@ -1,10 +1,10 @@
-import 'package:bonfire/base/rpg_game.dart';
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-class GameColorFilter with HasGameRef<RPGGame> {
+class GameColorFilter with HasGameRef<BonfireGame> {
   Color color;
   BlendMode blendMode;
   ColorTween _tween;

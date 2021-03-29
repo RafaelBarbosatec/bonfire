@@ -1,13 +1,13 @@
 import 'dart:ui';
 
-import 'package:bonfire/base/rpg_game.dart';
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 
 abstract class GameComponent extends Component
-    with HasGameRef<RPGGame>, PointerDetectorHandler {
+    with HasGameRef<BonfireGame>, PointerDetectorHandler {
   /// Position used to draw on the screen
   Vector2Rect position;
 

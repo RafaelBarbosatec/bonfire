@@ -1,4 +1,4 @@
-import 'package:bonfire/base/rpg_game.dart';
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
@@ -10,7 +10,7 @@ abstract class GameListener {
   void changeCountLiveEnemies(int count);
 }
 
-class GameController with HasGameRef<RPGGame> {
+class GameController with HasGameRef<BonfireGame> {
   GameListener _gameListener;
   int _lastCountLiveEnemies = 0;
 

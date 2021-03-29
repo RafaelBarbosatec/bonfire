@@ -1,13 +1,13 @@
 import 'dart:math';
 
-import 'package:bonfire/base/rpg_game.dart';
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 
 enum DirectionTextDamage { LEFT, RIGHT, RANDOM, NONE }
 
-class TextDamageComponent extends TextComponent with HasGameRef<RPGGame> {
+class TextDamageComponent extends TextComponent with HasGameRef<BonfireGame> {
   final String text;
   final TextConfig config;
   final DirectionTextDamage direction;
