@@ -12,6 +12,8 @@ import 'package:example/player/knight.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
+import 'decoration/column.dart';
+
 class GameTiledMap extends StatelessWidget {
   final int map;
 
@@ -69,6 +71,8 @@ class GameTiledMap extends StatelessWidget {
                 (x, y, width, height) => BarrelDraggable(Vector2(x, y)))
             ..registerObject(
                 'spike', (x, y, width, height) => Spikes(Vector2(x, y)))
+            ..registerObject('column',
+                (x, y, width, height) => ColumnDecoration(Vector2(x, y)))
             ..registerObject(
                 'chest', (x, y, width, height) => Chest(Vector2(x, y))),
           background: BackgroundColorGame(Colors.blueGrey[900]),
