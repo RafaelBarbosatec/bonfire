@@ -25,22 +25,28 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
         .cast<PointerDetectorHandler>();
   }
 
+  @override
   void onPointerCancel(PointerCancelEvent event) {
-    _gesturesComponents.forEach((c) => c.handlerPointerCancel(event));
+    for (final c in _gesturesComponents) {
+      c.handlerPointerCancel(event);
+    }
   }
 
+  @override
   void onPointerUp(PointerUpEvent event) {
     for (final c in _gesturesComponents) {
       c.handlerPointerUp(event);
     }
   }
 
+  @override
   void onPointerMove(PointerMoveEvent event) {
     for (final c in _gesturesComponents) {
       c.handlerPointerMove(event);
     }
   }
 
+  @override
   void onPointerDown(PointerDownEvent event) {
     for (final c in _gesturesComponents) {
       c.handlerPointerDown(event);
