@@ -30,7 +30,7 @@ class LightingComponent extends GameComponent {
     canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
     canvas.drawColor(color, BlendMode.dstATop);
     _visibleLight.forEach((light) {
-      final config = light.lightingConfig;
+      final config = light.config;
       final sigma = _convertRadiusToSigma(config.blurBorder);
       config.update(_dtUpdate);
       canvas.save();
@@ -47,8 +47,8 @@ class LightingComponent extends GameComponent {
           light.position.center.dx,
           light.position.center.dy,
         ),
-        light.lightingConfig.radius *
-            (light.lightingConfig.withPulse
+        config.radius *
+            (config.withPulse
                 ? (1 - config.valuePulse * config.pulseVariation)
                 : 1),
         _paintFocus
@@ -93,7 +93,7 @@ class LightingComponent extends GameComponent {
     _visibleLight = gameRef.lightVisible();
   }
 
-  void animateColorTo(
+  void animateToColor(
     Color color, {
     Duration duration = const Duration(milliseconds: 500),
     Curve curve = Curves.decelerate,

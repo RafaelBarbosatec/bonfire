@@ -35,9 +35,11 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
     Sprite.load('direction_attack.png').then((value) {
       spriteDirectionAttack = value;
     });
-    lightingConfig = LightingConfig(
-      radius: width * 1.5,
-      blurBorder: width * 1.5,
+    setupLighting(
+      LightingConfig(
+        radius: width * 1.5,
+        blurBorder: width * 1.5,
+      ),
     );
     setupCollision(
       CollisionConfig(

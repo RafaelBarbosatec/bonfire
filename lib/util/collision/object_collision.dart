@@ -7,22 +7,16 @@ import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/material.dart';
 
 class CollisionConfig {
-  /// Used to enable or disable collision with enemy
-  final bool collisionWithEnemy;
-
-  /// Used to enable or disable collision with player
-  final bool collisionWithPlayer;
-
-  bool collisionOnlyVisibleScreen;
-
   /// Representing the collision area
   final Iterable<CollisionArea> collisions;
 
+  bool collisionOnlyVisibleScreen;
+  bool enable;
+
   CollisionConfig({
     @required this.collisions,
-    this.collisionWithEnemy = false,
-    this.collisionWithPlayer = false,
     this.collisionOnlyVisibleScreen = true,
+    this.enable = true,
   });
 }
 
@@ -33,8 +27,8 @@ mixin ObjectCollision on GameComponent {
     _collisionConfig = collisionConfig;
   }
 
-  void removeCollision() {
-    _collisionConfig = null;
+  void enableCollision(bool enable) {
+    _collisionConfig.enable = enable;
   }
 
   void setCollisionOnlyVisibleScreen(bool onlyVisible) {
@@ -92,7 +86,7 @@ mixin ObjectCollision on GameComponent {
         ?.first;
   }
 
-  void drawCollision(Canvas canvas, Color color) {
+  void _drawCollision(Canvas canvas, Color color) {
     if (!containCollision()) return;
     _collisionConfig?.collisions?.forEach((element) {
       canvas.drawRect(
@@ -121,7 +115,8 @@ mixin ObjectCollision on GameComponent {
 
   bool containCollision() =>
       _collisionConfig?.collisions != null &&
-      _collisionConfig?.collisions?.isNotEmpty == true;
+      _collisionConfig?.collisions?.isNotEmpty == true &&
+      _collisionConfig.enable;
 
   Vector2Rect get rectCollision => getRectCollision(position);
 
@@ -156,7 +151,7 @@ mixin ObjectCollision on GameComponent {
   void render(Canvas canvas) {
     super.render(canvas);
     if (gameRef != null && gameRef.showCollisionArea) {
-      drawCollision(canvas, gameRef.collisionAreaColor);
+      _drawCollision(canvas, gameRef.collisionAreaColor);
     }
   }
 
