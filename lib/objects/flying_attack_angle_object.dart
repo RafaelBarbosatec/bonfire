@@ -130,8 +130,8 @@ class FlyingAttackAngleObject extends AnimatedObject
 
     if (destroy) {
       if (destroyAnimation != null) {
-        double nextX = (width / 2) * _cosAngle;
-        double nextY = (height / 2) * _senAngle;
+        double nextX = (width / 4) * _cosAngle;
+        double nextY = (height / 4) * _senAngle;
         Offset nextPoint = Offset(nextX, nextY);
 
         Offset diffBase = Offset(position.rect.center.dx + nextPoint.dx,
@@ -178,4 +178,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     await _loader.load();
     animation = this.flyAnimation;
   }
+
+  @override
+  int get priority => position.bottom.round();
 }

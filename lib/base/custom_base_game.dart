@@ -1,4 +1,5 @@
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/camera/camera.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/components.dart';
@@ -18,6 +19,8 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
 
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
+
+  final _timerSortPriority = IntervalTick(250);
 
   Iterable<PointerDetectorHandler> get _gesturesComponents {
     return components
@@ -143,6 +146,12 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     components.removeWhere((c) => c.shouldRemove);
 
     gameCamera.update();
+
+    if (_timerSortPriority.update(t)) {
+      List<Component> temp = components.toList();
+      components.clear();
+      components.addAll(temp);
+    }
   }
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.

@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
@@ -106,14 +105,16 @@ class GameDecoration extends AnimatedObject {
     );
   }
 
+  // @override
+  // int get priority {
+  //   if (frontFromPlayer) {
+  //     return PriorityLayer.OBJECTS;
+  //   } else {
+  //     return PriorityLayer.DECORATION + additionalPriority;
+  //   }
+  // }
   @override
-  int get priority {
-    if (frontFromPlayer) {
-      return PriorityLayer.OBJECTS;
-    } else {
-      return PriorityLayer.DECORATION + additionalPriority;
-    }
-  }
+  int get priority => position.bottom.round();
 
   @override
   Future<void> onLoad() {

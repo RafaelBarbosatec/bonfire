@@ -4,7 +4,6 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
-import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/cupertino.dart';
@@ -205,7 +204,7 @@ class Enemy extends GameComponent with Attackable {
   }
 
   @override
-  int get priority => PriorityLayer.ENEMY;
+  int get priority => position.bottom.round();
 
   bool verifyEnemyCollision(
     Vector2Rect position,
