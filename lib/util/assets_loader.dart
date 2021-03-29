@@ -13,7 +13,7 @@ class AssetToLoad<T> {
 }
 
 class AssetsLoader<T> {
-  List<AssetToLoad> _assets = [];
+  final List<AssetToLoad> _assets = [];
 
   void add(AssetToLoad asset) => _assets.add(asset);
 
