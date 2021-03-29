@@ -197,11 +197,13 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
 
   @override
   void receiveDamage(double damage, dynamic from) {
-    this.showDamage(damage,
-        config: TextConfig(
-          fontSize: width / 3,
-          color: Colors.red,
-        ));
+    this.showDamage(
+      damage,
+      config: TextConfig(
+        fontSize: width / 3,
+        color: Colors.red,
+      ),
+    );
     super.receiveDamage(damage, from);
   }
 
@@ -228,10 +230,15 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
           Container(
             width: 50,
             height: 50,
-            // child: AnimationWidget(
-            //   animation: animation.current,
-            //   playing: true,
-            // ),
+            child: FutureBuilder(
+              future: PlayerSpriteSheet.idleRight,
+              builder: (context, anim) {
+                return SpriteAnimationWidget(
+                  animation: anim.data,
+                  playing: true,
+                );
+              },
+            ),
           ),
         ),
       ], finish: () {
