@@ -1,12 +1,16 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:flutter/widgets.dart';
 
 mixin TapGesture on GameComponent {
   bool enableTab = true;
   int _pointer;
 
-  void handlerPointerDown(int pointer, Offset position) {
+  void handlerPointerDown(PointerDownEvent event) {
+    final pointer = event.pointer;
+    final position = event.localPosition;
+
     if (!enableTab) return;
     if (this.isHud()) {
       if (this.position.contains(position)) {
@@ -23,7 +27,10 @@ mixin TapGesture on GameComponent {
     }
   }
 
-  void handlerPointerUp(int pointer, Offset position) {
+  void handlerPointerUp(PointerUpEvent event) {
+    final pointer = event.pointer;
+    final position = event.localPosition;
+
     if (!enableTab || pointer != _pointer) return;
     if (this.isHud()) {
       if (this.position.contains(position)) {

@@ -2,10 +2,9 @@ import 'dart:math' as math;
 
 import 'package:bonfire/base/custom_widget_builder.dart';
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/camera/camera.dart';
-import 'package:bonfire/util/gestures/drag_gesture.dart';
-import 'package:bonfire/util/gestures/tap_gesture.dart';
-import 'package:bonfire/util/mixins/pointer_detector_mixin.dart';
+import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/composed_component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
@@ -33,42 +32,28 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
-  Iterable<GameComponent> get _gesturesComponents =>
-      components.where((c) => _hasGesture(c)).cast<GameComponent>();
-
-  Iterable<PointerDetector> get _pointerDetectorComponents =>
-      components.where((c) => (c is PointerDetector)).cast();
+  Iterable<PointerDetectorHandler> get _gesturesComponents =>
+      components.where((c) => _hasGesture(c)).cast<PointerDetectorHandler>();
 
   void onPointerCancel(PointerCancelEvent event) {
-    _pointerDetectorComponents.forEach((c) => c.onPointerCancel(event));
+    _gesturesComponents.forEach((c) => c.handlerPointerCancel(event));
   }
 
   void onPointerUp(PointerUpEvent event) {
     for (final c in _gesturesComponents) {
-      c.handlerPointerUp(event.pointer, event.localPosition);
-    }
-    for (final c in _pointerDetectorComponents) {
-      c.onPointerUp(event);
+      c.handlerPointerUp(event);
     }
   }
 
   void onPointerMove(PointerMoveEvent event) {
     for (final c in _gesturesComponents) {
-      if (c is DragGesture) {
-        c.handlerPointerMove(event.pointer, event.localPosition);
-      }
-    }
-    for (final c in _pointerDetectorComponents) {
-      c.onPointerMove(event);
+      c.handlerPointerMove(event);
     }
   }
 
   void onPointerDown(PointerDownEvent event) {
     for (final c in _gesturesComponents) {
-      c.handlerPointerDown(event.pointer, event.localPosition);
-    }
-    for (final c in _pointerDetectorComponents) {
-      c.onPointerDown(event);
+      c.handlerPointerDown(event);
     }
   }
 
@@ -232,8 +217,8 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   Widget get widget => widgetBuilder.build(this);
 
   bool _hasGesture(Component c) {
-    return ((c is GameComponent && (c.isVisibleInCamera() || c.isHud())) &&
-        ((c is TapGesture && c.enableTab) ||
-            (c is DragGesture && (c).enableDrag)));
+    return ((c is GameComponent && c.isVisibleInCamera()) || c.isHud()) &&
+        (c is PointerDetectorHandler &&
+            (c as PointerDetectorHandler).hasGesture());
   }
 }

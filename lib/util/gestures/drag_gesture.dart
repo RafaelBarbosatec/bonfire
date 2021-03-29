@@ -1,14 +1,18 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:flutter/widgets.dart';
 
 mixin DragGesture on GameComponent {
   Offset _startDragOffset;
   Rect _startDragPosition;
   int _pointer;
   bool enableDrag = true;
+
   @override
-  void handlerPointerDown(int pointer, Offset position) {
+  void handlerPointerDown(PointerDownEvent event) {
+    final pointer = event.pointer;
+    final position = event.localPosition;
     if (!(this is GameComponent) || !enableDrag) return;
     if (this.isHud()) {
       if (this.position.contains(position)) {
@@ -29,7 +33,10 @@ mixin DragGesture on GameComponent {
   }
 
   @override
-  void handlerPointerMove(int pointer, Offset position) {
+  void handlerPointerMove(PointerMoveEvent event) {
+    final pointer = event.pointer;
+    final position = event.localPosition;
+
     if (!enableDrag || pointer != _pointer) return;
     if (_startDragOffset != null && this is GameComponent) {
       if (this.isHud()) {
@@ -54,7 +61,8 @@ mixin DragGesture on GameComponent {
   }
 
   @override
-  void handlerPointerUp(int pointer, Offset position) {
+  void handlerPointerUp(PointerUpEvent event) {
+    final pointer = event.pointer;
     if (pointer == _pointer) {
       _startDragPosition = null;
       _startDragOffset = null;
@@ -64,7 +72,8 @@ mixin DragGesture on GameComponent {
   }
 
   @override
-  void handlerPointerCancel(int pointer) {
+  void handlerPointerCancel(PointerCancelEvent event) {
+    final pointer = event.pointer;
     if (pointer == _pointer) {
       _startDragPosition = null;
       _startDragOffset = null;

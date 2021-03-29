@@ -8,7 +8,7 @@ import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class GameInterface extends GameComponent with TapGesture {
+class GameInterface extends GameComponent {
   List<InterfaceComponent> _components = [];
   final textConfigGreen = TextConfig(color: Colors.green, fontSize: 14);
   final textConfigYellow = TextConfig(color: Colors.yellow, fontSize: 14);
@@ -51,13 +51,13 @@ class GameInterface extends GameComponent with TapGesture {
   }
 
   @override
-  void handlerPointerDown(int pointer, Offset position) {
-    _components.forEach((i) => i.handlerPointerDown(pointer, position));
+  void handlerPointerDown(PointerDownEvent event) {
+    _components.forEach((i) => i.handlerPointerDown(event));
   }
 
   @override
-  void handlerPointerUp(int pointer, Offset position) {
-    _components.forEach((i) => i.handlerPointerUp(pointer, position));
+  void handlerPointerUp(PointerUpEvent event) {
+    _components.forEach((i) => i.handlerPointerUp(event));
   }
 
   void _drawFPS(Canvas c) {
@@ -84,5 +84,5 @@ class GameInterface extends GameComponent with TapGesture {
   }
 
   @override
-  void onTap() {}
+  bool hasGesture() => true;
 }

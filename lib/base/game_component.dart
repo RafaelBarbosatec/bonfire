@@ -2,20 +2,17 @@ import 'dart:ui';
 
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
 
-abstract class GameComponent extends Component with HasGameRef<BonfireGame> {
+abstract class GameComponent extends Component
+    with HasGameRef<BonfireGame>, PointerDetectorHandler {
   /// Position used to draw on the screen
   Rect position;
 
   /// Variable used to control whether the component has been destroyed.
   bool _isDestroyed = false;
-
-  void handlerPointerDown(int pointer, Offset position) {}
-  void handlerPointerMove(int pointer, Offset position) {}
-  void handlerPointerUp(int pointer, Offset position) {}
-  void handlerPointerCancel(int pointer) {}
 
   @override
   void render(Canvas c) {}

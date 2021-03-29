@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/base_game_point_detector.dart';
-import 'package:bonfire/util/mixins/pointer_detector_mixin.dart';
+import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components/component.dart';
 import 'package:flame/components/mixins/has_game_ref.dart';
@@ -55,7 +55,7 @@ abstract class JoystickListener {
 }
 
 abstract class JoystickController extends Component
-    with HasGameRef<BaseGamePointerDetector>, PointerDetector {
+    with HasGameRef<BaseGamePointerDetector>, PointerDetectorHandler {
   List<JoystickListener> _observers = [];
   bool keyboardEnable = false;
 
@@ -88,4 +88,7 @@ abstract class JoystickController extends Component
 
   @override
   bool isHud() => true;
+
+  @override
+  bool hasGesture() => true;
 }

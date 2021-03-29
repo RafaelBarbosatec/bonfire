@@ -52,35 +52,6 @@ class Joystick extends JoystickController {
     super.resize(size);
   }
 
-  void onPointerDown(PointerDownEvent event) {
-    if (directional != null)
-      directional.directionalDown(event.pointer, event.localPosition);
-    if (actions != null)
-      actions.forEach(
-          (action) => action.actionDown(event.pointer, event.localPosition));
-  }
-
-  void onPointerMove(PointerMoveEvent event) {
-    if (actions != null)
-      actions.forEach(
-          (action) => action.actionMove(event.pointer, event.localPosition));
-    if (directional != null)
-      directional.directionalMove(event.pointer, event.localPosition);
-  }
-
-  void onPointerUp(PointerUpEvent event) {
-    if (actions != null)
-      actions.forEach((action) => action.actionUp(event.pointer));
-
-    if (directional != null) directional.directionalUp(event.pointer);
-  }
-
-  void onPointerCancel(PointerCancelEvent event) {
-    if (actions != null)
-      actions.forEach((action) => action.actionUp(event.pointer));
-    if (directional != null) directional.directionalUp(event.pointer);
-  }
-
   @override
   void onKeyboard(RawKeyEvent event) {
     if (!keyboardEnable) return;
@@ -137,5 +108,38 @@ class Joystick extends JoystickController {
         radAngle: 0.0,
       ));
     }
+  }
+
+  @override
+  void handlerPointerCancel(PointerCancelEvent event) {
+    if (actions != null)
+      actions.forEach((action) => action.actionUp(event.pointer));
+    if (directional != null) directional.directionalUp(event.pointer);
+  }
+
+  @override
+  void handlerPointerDown(PointerDownEvent event) {
+    if (directional != null)
+      directional.directionalDown(event.pointer, event.localPosition);
+    if (actions != null)
+      actions.forEach(
+          (action) => action.actionDown(event.pointer, event.localPosition));
+  }
+
+  @override
+  void handlerPointerMove(PointerMoveEvent event) {
+    if (actions != null)
+      actions.forEach(
+          (action) => action.actionMove(event.pointer, event.localPosition));
+    if (directional != null)
+      directional.directionalMove(event.pointer, event.localPosition);
+  }
+
+  @override
+  void handlerPointerUp(PointerUpEvent event) {
+    if (actions != null)
+      actions.forEach((action) => action.actionUp(event.pointer));
+
+    if (directional != null) directional.directionalUp(event.pointer);
   }
 }

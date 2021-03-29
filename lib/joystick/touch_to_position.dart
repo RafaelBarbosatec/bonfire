@@ -13,16 +13,27 @@ class TouchToPosition extends JoystickController {
   void update(double t) {}
 
   @override
-  void onPointerDown(PointerDownEvent event) {
+  void handlerPointerCancel(PointerCancelEvent event) {}
+
+  @override
+  void handlerPointerDown(PointerDownEvent event) {
     position = event.position;
-    super.onPointerDown(event);
   }
 
   @override
-  void onPointerUp(PointerUpEvent event) {
+  void handlerPointerMove(PointerMoveEvent event) {}
+
+  @override
+  void handlerPointerUp(PointerUpEvent event) {
     if (position == event.position) {
-      final absolutePosition = this.gameRef.gameCamera.screenPositionToWorld(event.position);
+      final absolutePosition =
+          this.gameRef.gameCamera.screenPositionToWorld(event.position);
       moveTo(Position.fromOffset(absolutePosition));
     }
+  }
+
+  @override
+  bool hasGesture() {
+    return true;
   }
 }
