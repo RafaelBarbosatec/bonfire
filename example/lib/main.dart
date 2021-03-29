@@ -66,9 +66,7 @@ class Menu extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => GameTiledMap(
-                        map: 2,
-                      ),
+                      builder: (context) => GameTiledMap(),
                     ),
                   );
                 },
