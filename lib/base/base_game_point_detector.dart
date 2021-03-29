@@ -32,8 +32,11 @@ abstract class BaseGamePointerDetector extends Game with PointerDetector {
   /// List of deltas used in debug mode to calculate FPS
   final List<double> _dts = [];
 
-  Iterable<PointerDetectorHandler> get _gesturesComponents =>
-      components.where((c) => _hasGesture(c)).cast<PointerDetectorHandler>();
+  Iterable<PointerDetectorHandler> get _gesturesComponents {
+    return components
+        .where((c) => _hasGesture(c))
+        .cast<PointerDetectorHandler>();
+  }
 
   void onPointerCancel(PointerCancelEvent event) {
     _gesturesComponents.forEach((c) => c.handlerPointerCancel(event));
