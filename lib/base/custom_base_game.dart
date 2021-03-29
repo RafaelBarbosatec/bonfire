@@ -20,7 +20,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
 
-  final _timerSortPriority = IntervalTick(250);
+  final _timerSortPriority = IntervalTick(300);
 
   Iterable<PointerDetectorHandler> get _gesturesComponents {
     return components
