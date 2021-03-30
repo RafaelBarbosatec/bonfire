@@ -15,9 +15,3 @@ dependencies:
   tiledjsonreader: ^0.0.8
   http: ^0.13.0
   shared_preferences: ^0.5.12+4
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
-flutter:
