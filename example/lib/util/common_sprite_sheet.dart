@@ -142,4 +142,28 @@ class CommonSpriteSheet {
           textureSize: Vector2(23, 23),
         ),
       );
+
+  static Future<SpriteAnimation> get chestAnimated => SpriteAnimation.load(
+        "itens/chest_spritesheet.png",
+        SpriteAnimationData.sequenced(
+          amount: 8,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+        ),
+      );
+
+  static Future<SpriteAnimation> get torchAnimated => SpriteAnimation.load(
+        "itens/torch_spritesheet.png",
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+        ),
+      );
+
+  static Future<Sprite> get barrelSprite => Sprite.load('itens/barrel.png');
+  static Future<Sprite> get columnSprite => Sprite.load('itens/column.png');
+  static Future<Sprite> get spikesSprite => Sprite.load('itens/spikes.png');
+  static Future<Sprite> get potionLifeSprite =>
+      Sprite.load('itens/potion_life.png');
 }

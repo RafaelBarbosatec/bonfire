@@ -2,13 +2,14 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:example/map/dungeon_map.dart';
+import 'package:example/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class BarrelDraggable extends GameDecoration with DragGesture, ObjectCollision {
   TextConfig _textConfig;
   BarrelDraggable(Vector2 position)
       : super.sprite(
-          Sprite.load('itens/barrel.png'),
+          CommonSpriteSheet.barrelSprite,
           position: position,
           width: DungeonMap.tileSize,
           height: DungeonMap.tileSize,

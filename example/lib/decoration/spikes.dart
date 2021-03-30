@@ -4,6 +4,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:example/map/dungeon_map.dart';
+import 'package:example/util/common_sprite_sheet.dart';
 
 class Spikes extends GameDecoration with Sensor {
   async.Timer timer;
@@ -12,7 +13,7 @@ class Spikes extends GameDecoration with Sensor {
 
   Spikes(Vector2 position)
       : super.sprite(
-          Sprite.load('itens/spikes.png'),
+          CommonSpriteSheet.spikesSprite,
           position: position,
           width: DungeonMap.tileSize / 1.5,
           height: DungeonMap.tileSize / 1.5,

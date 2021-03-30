@@ -11,14 +11,7 @@ class Chest extends GameDecoration with TapGesture {
   TextConfig _textConfig;
   Chest(Vector2 position)
       : super.animation(
-          SpriteAnimation.load(
-            "itens/chest_spritesheet.png",
-            SpriteAnimationData.sequenced(
-              amount: 8,
-              stepTime: 0.1,
-              textureSize: Vector2(16, 16),
-            ),
-          ),
+          CommonSpriteSheet.chestAnimated,
           width: DungeonMap.tileSize * 0.6,
           height: DungeonMap.tileSize * 0.6,
           position: position,

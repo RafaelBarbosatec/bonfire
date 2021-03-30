@@ -32,9 +32,6 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
           life: 200,
           speed: DungeonMap.tileSize * 3,
         ) {
-    Sprite.load('direction_attack.png').then((value) {
-      spriteDirectionAttack = value;
-    });
     setupLighting(
       LightingConfig(
         radius: width * 1.5,
@@ -264,5 +261,11 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
         spriteDirectionAttack,
       );
     }
+  }
+
+  @override
+  Future<void> onLoad() async {
+    spriteDirectionAttack = await Sprite.load('direction_attack.png');
+    return super.onLoad();
   }
 }
