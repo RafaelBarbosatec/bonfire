@@ -32,51 +32,45 @@ class Joystick extends JoystickController {
   }
 
   void removeAction(dynamic actionId) {
-    if (actions != null)
-      actions.removeWhere((action) => action.actionId == actionId);
+    actions?.removeWhere((action) => action.actionId == actionId);
   }
 
   void render(Canvas canvas) {
-    if (directional != null) directional.render(canvas);
-    if (actions != null) actions.forEach((action) => action.render(canvas));
+    directional?.render(canvas);
+    actions?.forEach((action) => action.render(canvas));
   }
 
   void update(double t) {
-    if (directional != null) directional.update(t);
-    if (actions != null) actions.forEach((action) => action.update(t));
+    directional?.update(t);
+    actions?.forEach((action) => action.update(t));
   }
 
   @override
   void handlerPointerCancel(PointerCancelEvent event) {
-    if (actions != null)
-      actions.forEach((action) => action.actionUp(event.pointer));
-    if (directional != null) directional.directionalUp(event.pointer);
+    actions?.forEach((action) => action.actionUp(event.pointer));
+    directional?.directionalUp(event.pointer);
   }
 
   @override
   void handlerPointerDown(PointerDownEvent event) {
-    if (directional != null)
-      directional.directionalDown(event.pointer, event.localPosition);
-    if (actions != null)
-      actions.forEach(
-          (action) => action.actionDown(event.pointer, event.localPosition));
+    directional?.directionalDown(event.pointer, event.localPosition);
+    actions?.forEach((action) {
+      action.actionDown(event.pointer, event.localPosition);
+    });
   }
 
   @override
   void handlerPointerMove(PointerMoveEvent event) {
-    if (actions != null)
-      actions.forEach(
-          (action) => action.actionMove(event.pointer, event.localPosition));
-    if (directional != null)
-      directional.directionalMove(event.pointer, event.localPosition);
+    actions?.forEach((action) {
+      action.actionMove(event.pointer, event.localPosition);
+    });
+    directional?.directionalMove(event.pointer, event.localPosition);
   }
 
   @override
   void handlerPointerUp(PointerUpEvent event) {
-    if (actions != null)
-      actions.forEach((action) => action.actionUp(event.pointer));
-
-    if (directional != null) directional.directionalUp(event.pointer);
+    actions?.forEach((action) => action.actionUp(event.pointer));
+    directional?.directionalUp(event.pointer);
   }
 
   @override
@@ -147,8 +141,9 @@ class Joystick extends JoystickController {
   Future<void> onLoad() async {
     await directional?.onLoad();
     if (actions != null) {
-      await Future.forEach<JoystickAction>(
-          actions, (element) => element.onLoad());
+      await Future.forEach<JoystickAction>(actions, (element) {
+        return element.onLoad();
+      });
     }
   }
 }
