@@ -53,7 +53,6 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
 
   @override
   void onPointerDown(PointerDownEvent event) {
-    print('onPointerDown');
     for (final c in _gesturesComponents) {
       c.handlerPointerDown(event);
     }
