@@ -77,6 +77,6 @@ abstract class GameComponent extends Component
     if (this is ObjectCollision) {
       return (this as ObjectCollision).rectCollision?.bottom?.round() ?? 0.0;
     }
-    return position?.bottom?.round() ?? 0.0;
+    return position?.bottom?.round() ?? 0;
   }
 }

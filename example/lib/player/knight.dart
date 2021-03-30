@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:example/map/dungeon_map.dart';
+import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 import 'package:example/util/player_sprite_sheet.dart';
 import 'package:flutter/cupertino.dart';
@@ -89,7 +89,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   void die() {
     remove();
     gameRef.addGameComponent(
-      GameDecoration.sprite(
+      GameDecoration.withSprite(
         Sprite.load('player/crypt.png'),
         position: Vector2(
           position.left,

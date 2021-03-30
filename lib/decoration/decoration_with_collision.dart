@@ -39,7 +39,7 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     double offsetX = 0,
     double offsetY = 0,
     bool frontFromPlayer = false,
-  }) : super.sprite(
+  }) : super.withSprite(
           sprite,
           position: position,
           height: height,
@@ -63,7 +63,7 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     double offsetX = 0,
     double offsetY = 0,
     bool frontFromPlayer = false,
-  }) : super.animation(
+  }) : super.withAnimation(
           animation,
           position: position,
           height: height,

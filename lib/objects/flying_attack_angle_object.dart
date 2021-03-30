@@ -62,6 +62,7 @@ class FlyingAttackAngleObject extends AnimatedObject
       Vector2(width, height),
     );
 
+    setupLighting(lightingConfig);
     setupCollision(
       collision ??
           CollisionConfig(

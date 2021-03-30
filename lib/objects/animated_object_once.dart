@@ -29,6 +29,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     _loader.add(AssetToLoad(animation, (value) {
       this.animation = value..loop = false;
     }));
+    setupLighting(lightingConfig);
     this.position = position;
   }
 

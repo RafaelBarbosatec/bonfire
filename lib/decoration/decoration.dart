@@ -47,7 +47,7 @@ class GameDecoration extends AnimatedObject {
     );
   }
 
-  GameDecoration.sprite(
+  GameDecoration.withSprite(
     Future<Sprite> sprite, {
     @required Vector2 position,
     @required this.height,
@@ -63,7 +63,7 @@ class GameDecoration extends AnimatedObject {
     );
   }
 
-  GameDecoration.animation(
+  GameDecoration.withAnimation(
     Future<SpriteAnimation> animation, {
     @required Vector2 position,
     @required this.height,

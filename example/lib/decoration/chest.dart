@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:example/decoration/potion_life.dart';
-import 'package:example/map/dungeon_map.dart';
+import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,7 @@ class Chest extends GameDecoration with TapGesture {
 
   TextConfig _textConfig;
   Chest(Vector2 position)
-      : super.animation(
+      : super.withAnimation(
           CommonSpriteSheet.chestAnimated,
           width: DungeonMap.tileSize * 0.6,
           height: DungeonMap.tileSize * 0.6,

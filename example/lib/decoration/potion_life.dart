@@ -2,7 +2,7 @@ import 'dart:async' as async;
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:example/map/dungeon_map.dart';
+import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 
 class PotionLife extends GameDecoration with Sensor {
@@ -10,7 +10,7 @@ class PotionLife extends GameDecoration with Sensor {
   double _lifeDistributed = 0;
 
   PotionLife(Vector2 position, this.life)
-      : super.sprite(
+      : super.withSprite(
           CommonSpriteSheet.potionLifeSprite,
           position: position,
           width: DungeonMap.tileSize * 0.5,

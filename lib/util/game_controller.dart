@@ -24,7 +24,7 @@ class GameController with HasGameRef<BonfireGame> {
 
   void notifyListeners() {
     bool notifyChangeEnemy = false;
-    int countLive = livingEnemies.length;
+    int countLive = livingEnemies?.length ?? 0;
 
     if (_lastCountLiveEnemies != countLive) {
       _lastCountLiveEnemies = countLive;
@@ -38,11 +38,11 @@ class GameController with HasGameRef<BonfireGame> {
   }
 
   Iterable<GameDecoration> get visibleDecorations =>
-      gameRef.visibleDecorations();
-  Iterable<GameDecoration> get allDecorations => gameRef.decorations();
-  Iterable<Enemy> get visibleEnemies => gameRef.visibleEnemies();
-  Iterable<Enemy> get livingEnemies => gameRef.livingEnemies();
-  Iterable<GameComponent> get visibleComponents => gameRef.visibleComponents();
-  Player get player => gameRef.player;
-  Camera get camera => gameRef.gameCamera;
+      gameRef?.visibleDecorations();
+  Iterable<GameDecoration> get allDecorations => gameRef?.decorations();
+  Iterable<Enemy> get visibleEnemies => gameRef?.visibleEnemies();
+  Iterable<Enemy> get livingEnemies => gameRef?.livingEnemies();
+  Iterable<GameComponent> get visibleComponents => gameRef?.visibleComponents();
+  Player get player => gameRef?.player;
+  Camera get camera => gameRef?.gameCamera;
 }

@@ -1,4 +1,5 @@
 import 'package:bonfire/base/bonfire_game.dart';
+import 'package:bonfire/base/custom_game_widget.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
@@ -8,7 +9,6 @@ import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {
@@ -109,7 +109,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GameWidget(
+    return CustomGameWidget(
       game: _game,
     );
   }

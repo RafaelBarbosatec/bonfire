@@ -53,6 +53,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
       Vector2(width, height),
     );
 
+    setupLighting(lightingConfig);
     setupCollision(
       collision ??
           CollisionConfig(

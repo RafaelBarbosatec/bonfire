@@ -7,7 +7,7 @@ import 'package:example/decoration/spikes.dart';
 import 'package:example/decoration/torch.dart';
 import 'package:example/enemy/goblin.dart';
 import 'package:example/interface/knight_interface.dart';
-import 'package:example/map/dungeon_map.dart';
+import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/player/knight.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -76,7 +76,7 @@ class GameTiledMap extends StatelessWidget {
             ..registerObject(
                 'chest', (x, y, width, height) => Chest(Vector2(x, y))),
           background: BackgroundColorGame(Colors.blueGrey[900]),
-          lightingColorGame: Colors.black.withOpacity(0.3),
+          lightingColorGame: Colors.black.withOpacity(0.7),
           cameraZoom:
               1.0, // you can change the game zoom here or directly on camera
         );
