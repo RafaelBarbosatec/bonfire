@@ -5,7 +5,6 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
-import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -159,9 +158,6 @@ class Player extends GameComponent with Attackable implements JoystickListener {
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {}
-
-  @override
-  int get priority => PriorityLayer.PLAYER;
 
   @override
   void moveTo(Vector2 position) {}

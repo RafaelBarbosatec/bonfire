@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/util/priority_layer.dart';
 
 class BackgroundColorGame extends GameComponent {
   final Color color;
@@ -19,4 +20,7 @@ class BackgroundColorGame extends GameComponent {
 
   @override
   void update(double t) {}
+
+  @override
+  int get priority => LayerPriority.BACKGROUND;
 }

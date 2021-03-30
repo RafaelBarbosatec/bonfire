@@ -1,4 +1,5 @@
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/camera/camera.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/components.dart';
@@ -11,6 +12,8 @@ import 'package:ordered_set/ordered_set.dart';
 abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   Camera gameCamera = Camera();
 
+  int highestPriority = 1000000;
+
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components = OrderedSet(Comparing.on((c) {
     return c.priority;
@@ -18,6 +21,8 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
 
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
+
+  final _timerSortPriority = IntervalTick(250);
 
   Iterable<PointerDetectorHandler> get _gesturesComponents {
     return components
@@ -143,6 +148,10 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     components.removeWhere((c) => c.shouldRemove);
 
     gameCamera.update();
+
+    if (_timerSortPriority.update(t)) {
+      _updateOrder();
+    }
   }
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.
@@ -171,5 +180,12 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     return ((c is GameComponent && c.isVisibleInCamera()) || c.isHud) &&
         (c is PointerDetectorHandler &&
             (c as PointerDetectorHandler).hasGesture());
+  }
+
+  void _updateOrder() {
+    Iterable<Component> temp = components.toList(growable: true);
+    components.clear();
+    temp.forEach(components.add);
+    highestPriority = components.last.priority;
   }
 }

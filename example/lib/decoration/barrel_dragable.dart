@@ -18,10 +18,10 @@ class BarrelDraggable extends GameDecoration with DragGesture, ObjectCollision {
         collisions: [
           CollisionArea(
             width: DungeonMap.tileSize * 0.6,
-            height: DungeonMap.tileSize * 0.8,
+            height: DungeonMap.tileSize * 0.4,
             align: Offset(
               DungeonMap.tileSize * 0.2,
-              0,
+              DungeonMap.tileSize * 0.4,
             ),
           )
         ],

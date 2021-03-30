@@ -28,5 +28,6 @@ class ColorFilterComponent extends Component with HasGameRef<BonfireGame> {
   }
 
   @override
-  int get priority => PriorityLayer.LIGHTING + 1;
+  int get priority =>
+      LayerPriority.getPriorityColorFilter(gameRef?.highestPriority ?? 0);
 }

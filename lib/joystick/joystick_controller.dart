@@ -82,7 +82,8 @@ abstract class JoystickController extends Component
   void update(double t) {}
 
   @override
-  int get priority => PriorityLayer.JOYSTICK;
+  int get priority =>
+      LayerPriority.getPriorityJoystick(gameRef?.highestPriority ?? 0);
 
   @override
   bool get isHud => true;

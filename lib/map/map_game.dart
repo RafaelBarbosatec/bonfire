@@ -27,5 +27,5 @@ abstract class MapGame extends Component with HasGameRef<BonfireGame> {
   }
 
   @override
-  int get priority => PriorityLayer.MAP;
+  int get priority => LayerPriority.MAP;
 }
