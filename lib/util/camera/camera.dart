@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Camera with HasGameRef<BonfireGame> {
-  static const SPACING_MAP = 20.0;
+  static const SPACING_MAP = 32.0;
   Offset position = Offset.zero;
   double zoom;
   Offset _lastTargetOffset = Offset.zero;
@@ -190,17 +190,19 @@ class Camera with HasGameRef<BonfireGame> {
 
     if (horizontalDistance.abs() > horizontal) {
       this.position = this.position.translate(
-          horizontalDistance > 0
-              ? horizontal - horizontalDistance
-              : -horizontalDistance - horizontal,
-          0);
+            horizontalDistance > 0
+                ? horizontal - horizontalDistance
+                : -horizontalDistance - horizontal,
+            0,
+          );
     }
     if (verticalDistance.abs() > vertical) {
       this.position = this.position.translate(
-          0,
-          verticalDistance > 0
-              ? vertical - verticalDistance
-              : -verticalDistance - vertical);
+            0,
+            verticalDistance > 0
+                ? vertical - verticalDistance
+                : -verticalDistance - vertical,
+          );
     }
 
     if (moveOnlyMapArea) {

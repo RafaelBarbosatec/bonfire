@@ -233,6 +233,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
             child: FutureBuilder(
               future: PlayerSpriteSheet.idleRight,
               builder: (context, anim) {
+                if (!anim.hasData) return SizedBox.shrink();
                 return SpriteAnimationWidget(
                   animation: anim.data,
                   playing: true,

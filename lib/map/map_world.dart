@@ -79,7 +79,7 @@ class MapWorld extends MapGame {
 
   void verifyMaxTopAndLeft(Vector2 size) {
     if (lastSizeScreen == size) return;
-    lastSizeScreen = size;
+    lastSizeScreen = size.clone();
 
     lastCameraX = -1;
     lastCameraY = -1;
