@@ -183,9 +183,9 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   }
 
   void _updateOrder() {
-    List<Component> temp = components.toList();
+    Iterable<Component> temp = components.toList(growable: true);
     components.clear();
-    components.addAll(temp);
+    temp.forEach(components.add);
     highestPriority = components.last.priority;
   }
 }
