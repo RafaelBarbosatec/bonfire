@@ -369,6 +369,7 @@ class TiledWorldMap {
         TiledMap tiledMap;
         if (enableServerCache) {
           tiledMap = await _mapCache.getMap(path);
+
           if (tiledMap != null) {
             return Future.value(tiledMap);
           }
@@ -389,6 +390,7 @@ class TiledWorldMap {
         _mapCache.saveMap(path, tiledMap);
         return Future.value(tiledMap);
       } catch (e) {
+        print('(TiledWorldMap) Error: $e');
         return Future.value(TiledMap());
       }
     } else {
