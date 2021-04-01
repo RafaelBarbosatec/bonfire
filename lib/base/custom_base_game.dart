@@ -12,7 +12,8 @@ import 'package:ordered_set/ordered_set.dart';
 abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   Camera gameCamera = Camera();
 
-  int highestPriority = 1000000;
+  int _highestPriority = 1000000;
+  int get highestPriority => _highestPriority;
 
   /// The list of components to be updated and rendered by the base game.
   OrderedSet<Component> components = OrderedSet(Comparing.on((c) {
@@ -186,6 +187,6 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     Iterable<Component> temp = components.toList(growable: true);
     components.clear();
     temp.forEach(components.add);
-    highestPriority = components.last.priority;
+    _highestPriority = components.last.priority;
   }
 }
