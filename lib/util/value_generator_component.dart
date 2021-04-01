@@ -42,14 +42,14 @@ class ValueGeneratorComponent extends Component {
       double value = _currentValue / duration.inMicroseconds;
       value = curve.transform(value);
       double realValue = begin + (_displacement * value);
-      if (onChange != null) onChange(realValue);
+      onChange?.call(realValue);
     }
   }
 
   void finish() {
     _isFinished = true;
-    if (onChange != null) onChange(end);
-    if (onFinish != null) onFinish();
+    onChange?.call(end);
+    onFinish?.call();
     remove();
   }
 

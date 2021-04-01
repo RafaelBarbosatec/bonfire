@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ui';
 
 class IntervalTick {
   final int interval; // in Milliseconds
@@ -10,7 +10,7 @@ class IntervalTick {
   bool update(double dt) {
     _currentTime += dt * _timeMax;
     if (_currentTime >= interval) {
-      if (tick != null) tick();
+      tick?.call();
       _currentTime = 0;
       return true;
     }
