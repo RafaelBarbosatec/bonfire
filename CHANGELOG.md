@@ -1,6 +1,6 @@
 # 1.0.0-rc0
 
-- Update Flame to 1.0.0-rc7
+- Update Flame to 1.0.0-rc8
 - BREAKING CHANGE: All params `Sprite` in components become `Future<Sprite>`.
 - BREAKING CHANGE: All params `Animation` in components become `Future<SpriteAnimation>`.
 - BREAKING CHANGE: To configure `Lighting`  use `setupLighting(LightingConfig());`
