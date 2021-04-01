@@ -12,7 +12,7 @@ dependencies:
 
   flame: 1.0.0-rc7
   ordered_set: ^2.0.1
-  tiledjsonreader: ^0.0.8
+  tiledjsonreader: ^1.0.0
   http: ^0.13.1
   shared_preferences: ^2.0.5
 
