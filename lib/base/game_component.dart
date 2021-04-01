@@ -74,9 +74,11 @@ abstract class GameComponent extends Component
   int get priority => LayerPriority.getPriorityFromMap(_getBottomPriority());
 
   int _getBottomPriority() {
+    int bottomPriority = position?.bottom?.round() ?? 0;
     if (this is ObjectCollision) {
-      return (this as ObjectCollision).rectCollision?.bottom?.round() ?? 0.0;
+      bottomPriority =
+          (this as ObjectCollision).rectCollision?.bottom?.round() ?? 0;
     }
-    return position?.bottom?.round() ?? 0;
+    return bottomPriority;
   }
 }
