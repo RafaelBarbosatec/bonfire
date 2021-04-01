@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/decoration/decoration_with_collision.dart';
 import 'package:bonfire/map/tile/tile.dart';
 import 'package:bonfire/map/tile/tile_with_collision.dart';
 import 'package:bonfire/tiled/map_cahe.dart';
@@ -21,12 +20,13 @@ import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
 typedef ObjectBuilder = GameComponent Function(
-    double x, double y, double width, double height);
+  double x,
+  double y,
+  double width,
+  double height,
+);
 
 class TiledWorldMap {
-  static const TYPE_TILE_ABOVE = 'above';
-  static const TILED_VERSION_SUPPORTED = '1.3.5';
-
   final String path;
   final Size forceTileSize;
   final bool enableServerCache;
@@ -65,11 +65,6 @@ class TiledWorldMap {
   Future<TiledWorldData> build() async {
     try {
       _tiledMap = await _readMap();
-      if (_tiledMap.tiledVersion != TILED_VERSION_SUPPORTED) {
-        throw Exception(
-          'Tiled version(${_tiledMap.tiledVersion}) not supported. please use version $TILED_VERSION_SUPPORTED}',
-        );
-      }
       _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble();
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble();
       _tileWidth = forceTileSize?.width ?? _tileWidthOrigin;
@@ -106,73 +101,37 @@ class TiledWorldMap {
         var data = await _getDataTile(tile);
         if (data != null) {
           if (data.animation == null) {
-            if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
-              _components.add(
-                GameDecorationWithCollision.withSprite(
-                  Future.value(data.sprite),
-                  Vector2(
-                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
-                        offsetX,
-                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
-                        offsetY,
-                  ),
-                  height: _tileHeight,
-                  width: _tileWidth,
-                  collisions: data.collisions,
-                  frontFromPlayer: true,
+            _tiles.add(
+              TileWithCollision.withSprite(
+                Future.value(data.sprite),
+                Vector2(
+                  _getX(count, tileLayer.width.toInt()),
+                  _getY(count, tileLayer.width.toInt()),
                 ),
-              );
-            } else {
-              _tiles.add(
-                TileWithCollision.withSprite(
-                  Future.value(data.sprite),
-                  Vector2(
-                    _getX(count, tileLayer.width.toInt()),
-                    _getY(count, tileLayer.width.toInt()),
-                  ),
-                  offsetX: offsetX,
-                  offsetY: offsetY,
-                  collisions: data.collisions,
-                  width: _tileWidth,
-                  height: _tileHeight,
-                  type: data.type,
-                ),
-              );
-            }
+                offsetX: offsetX,
+                offsetY: offsetY,
+                collisions: data.collisions,
+                width: _tileWidth,
+                height: _tileHeight,
+                type: data.type,
+              ),
+            );
           } else {
-            if (data.type.toLowerCase() == TYPE_TILE_ABOVE) {
-              _components.add(
-                GameDecorationWithCollision.withAnimation(
-                  Future.value(data.animation.animation),
-                  Vector2(
-                    (_getX(count, tileLayer.width.toInt()) * _tileWidth) +
-                        offsetX,
-                    (_getY(count, tileLayer.width.toInt()) * _tileHeight) +
-                        offsetY,
-                  ),
-                  height: _tileHeight,
-                  width: _tileWidth,
-                  collisions: data.collisions,
-                  frontFromPlayer: true,
+            _tiles.add(
+              TileWithCollision.withAnimation(
+                data.animation,
+                Vector2(
+                  _getX(count, tileLayer.width.toInt()),
+                  _getY(count, tileLayer.width.toInt()),
                 ),
-              );
-            } else {
-              _tiles.add(
-                TileWithCollision.withAnimation(
-                  data.animation,
-                  Vector2(
-                    _getX(count, tileLayer.width.toInt()),
-                    _getY(count, tileLayer.width.toInt()),
-                  ),
-                  offsetX: offsetX,
-                  offsetY: offsetY,
-                  collisions: data.collisions,
-                  width: _tileWidth,
-                  height: _tileHeight,
-                  type: data.type,
-                ),
-              );
-            }
+                offsetX: offsetX,
+                offsetY: offsetY,
+                collisions: data.collisions,
+                width: _tileWidth,
+                height: _tileHeight,
+                type: data.type,
+              ),
+            );
           }
         }
       }
