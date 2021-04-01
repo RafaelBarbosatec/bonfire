@@ -1,0 +1,38 @@
+name: unit-tests
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04]
+    steps:
+    # Set up Flutter and add it to the path.
+    - name: Clone Flutter repository with master channel
+      uses: actions/checkout@v2
+      with:
+        repository: 'flutter/flutter'
+        ref: 'master'
+        path: 'flutter'
+        fetch-depth: 0
+    - name: Add Flutter to the PATH for Unix
+      run: echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
+    - name: Run Flutter doctor
+      run: flutter doctor -v
+
+    # Clone the Gallery repository under `code`, to avoid conflicts with `flutter`.
+    - uses: actions/checkout@v2
+      with:
+        path: 'code'
+
+    # Run the tests for the repository.
+    - run: flutter pub get
+      working-directory: code
+    - run: flutter analyze
+      working-directory: code
+    - run: flutter format --set-exit-if-changed --dry-run .
+      working-directory: code
