@@ -27,6 +27,7 @@ typedef ObjectBuilder = GameComponent Function(
 );
 
 class TiledWorldMap {
+  static const ORIENTATION_SUPPORTED = 'orthogonal';
   final String path;
   final Size forceTileSize;
   final bool enableServerCache;
@@ -65,6 +66,11 @@ class TiledWorldMap {
   Future<TiledWorldData> build() async {
     try {
       _tiledMap = await _readMap();
+      if (_tiledMap.orientation != ORIENTATION_SUPPORTED) {
+        throw Exception(
+          'Orientation not supported. please use $ORIENTATION_SUPPORTED orientation',
+        );
+      }
       _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble();
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble();
       _tileWidth = forceTileSize?.width ?? _tileWidthOrigin;
