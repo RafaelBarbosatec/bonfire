@@ -147,7 +147,8 @@ class JoystickAction {
       );
 
       // Distance between the center of joystick background & drag position
-      Position centerPosition = Position.fromOffset(_rectBackgroundDirection.center);
+      Position centerPosition =
+          Position.fromOffset(_rectBackgroundDirection.center);
       Position dragPosition = Position.fromOffset(_dragPosition);
       double dist = centerPosition.distance(dragPosition);
 

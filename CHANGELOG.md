@@ -1,3 +1,6 @@
+# 0.9.0+1
+- format code
+
 # 0.9.0
 
 - BREAKING CHANGE: Collision system. Remove param `collision` from Enemy, Player and GameDecoration. If you need add collision in your component
