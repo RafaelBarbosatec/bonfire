@@ -202,10 +202,12 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
       return element.isVisibleInCamera();
     });
 
-    _visibleSensors =
-        _visibleComponents.where((element) => (element is Sensor)).cast();
-    _attackables =
-        _visibleComponents.where((element) => (element is Attackable)).cast();
+    _visibleSensors = _visibleComponents.where((element) {
+      return (element is Sensor);
+    }).cast();
+    _attackables = _visibleComponents.where((element) {
+      return (element is Attackable);
+    }).cast();
 
     _collisions = components.where((element) {
       return (element is ObjectCollision);
