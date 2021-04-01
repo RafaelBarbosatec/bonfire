@@ -97,11 +97,10 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   @override
   Future<void> onLoad() {
-    if (_colorFilter != null) {
-      _colorFilterComponent = ColorFilterComponent(_colorFilter);
-    }
-    _colorFilterComponent.gameRef = this;
-    super.add(_colorFilterComponent);
+    _colorFilterComponent = ColorFilterComponent(
+      _colorFilter ?? GameColorFilter(),
+    );
+    add(_colorFilterComponent);
     gameCamera = Camera(
       zoom: _cameraZoom ?? 1.0,
       sizeMovementWindow: _cameraSizeMovementWindow,
@@ -109,14 +108,16 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
       target: player,
     );
     gameController?.gameRef = this;
-    if (background != null) super.add(background);
-    if (map != null) super.add(map);
-    _initialDecorations?.forEach((decoration) => super.add(decoration));
-    _initialEnemies?.forEach((enemy) => super.add(enemy));
-    _initialComponents?.forEach((comp) => super.add(comp));
-    if (player != null) super.add(player);
-    lighting = LightingComponent(color: lightingColorGame);
-    super.add(lighting);
+    if (background != null) add(background);
+    if (map != null) add(map);
+    _initialDecorations?.forEach((decoration) => add(decoration));
+    _initialEnemies?.forEach((enemy) => add(enemy));
+    _initialComponents?.forEach((comp) => add(comp));
+    if (player != null) add(player);
+    if (lightingColorGame != null) {
+      lighting = LightingComponent(color: lightingColorGame);
+      super.add(lighting);
+    }
     super.add((interface ?? GameInterface()));
     super.add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(gameCamera));
@@ -135,14 +136,12 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   Iterable<GameComponent> visibleComponents() => _visibleComponents;
+
   Iterable<Enemy> visibleEnemies() => _visibleEnemies;
-
   Iterable<Enemy> livingEnemies() => _livingEnemies;
-
-  Iterable<GameDecoration> visibleDecorations() => _visibleDecorations;
-
   Iterable<Enemy> enemies() => _enemies;
 
+  Iterable<GameDecoration> visibleDecorations() => _visibleDecorations;
   Iterable<GameDecoration> decorations() => _decorations;
 
   Iterable<Lighting> lightVisible() => _visibleLights;
@@ -208,11 +207,12 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     _attackables =
         _visibleComponents.where((element) => (element is Attackable)).cast();
 
-    _collisions =
-        components.where((element) => (element is ObjectCollision)).cast();
-    _visibleCollisions = _visibleComponents
-        .where((element) => (element is ObjectCollision))
-        .cast();
+    _collisions = components.where((element) {
+      return (element is ObjectCollision);
+    }).cast();
+    _visibleCollisions = _visibleComponents.where((element) {
+      return (element is ObjectCollision);
+    }).cast();
 
     if (lightingColorGame != null) {
       _visibleLights = components.where((element) {
