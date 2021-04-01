@@ -1,4 +1,13 @@
-# NEXT
+# 1.0.0-rc0
+
+- Update Flame to 1.0.0-rc7
+- BREAKING CHANGE: All params `Sprite` in components become `Future<Sprite>`.
+- BREAKING CHANGE: All params `Animation` in components become `Future<SpriteAnimation>`.
+- BREAKING CHANGE: To configure `Lighting`  use `setupLighting(LightingConfig());`
+- BREAKING CHANGE: Removed the `Position` class. Now use `Vector2`
+- WARN (Render priority): The only components that have fixed rendering priority are: `MapGame` and` BackgroundColorGame`. All others render with priority according to the component's position on the Y axis.
+
+# 0.9.0
 
 - BREAKING CHANGE: Collision system. Remove param `collision` from Enemy, Player and GameDecoration. If you need add collision in your component
 use the mixin 'Collision' and settings your properties using 'setupCollision()' method.
