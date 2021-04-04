@@ -23,8 +23,8 @@ class Camera with HasGameRef<BonfireGame> {
 
   Rect get cameraRect => Rect.fromCenter(
         center: Offset(position.dx, position.dy),
-        width: gameRef.size.x * _zoomFactor(),
-        height: gameRef.size.y * _zoomFactor(),
+        width: (gameRef?.size.x ?? 0.0) * _zoomFactor(),
+        height: (gameRef?.size.y ?? 0.0) * _zoomFactor(),
       );
 
   Rect get cameraRectWithSpacing => Rect.fromCenter(
@@ -239,7 +239,7 @@ class Camera with HasGameRef<BonfireGame> {
   }
 
   bool isRectOnCamera(Rect c) {
-    if (gameRef?.size == null || c == null) return false;
+    if (gameRef?.size == null) return false;
 
     return cameraRectWithSpacing.overlaps(c);
   }

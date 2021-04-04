@@ -11,13 +11,13 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
 class Tile extends GameComponent {
-  Sprite _sprite;
-  ControlledUpdateAnimation _animation;
+  Sprite? _sprite;
+  ControlledUpdateAnimation? _animation;
   final double width;
   final double height;
-  final String type;
-  Vector2 _positionText;
-  Paint _paintText;
+  final String? type;
+  late Vector2 _positionText;
+  Paint? _paintText;
   final _loader = AssetsLoader();
 
   Tile(
@@ -66,15 +66,12 @@ class Tile extends GameComponent {
 
   @override
   void render(Canvas canvas) {
-    if (position == null) return;
     _animation?.render(canvas, position);
-    if (_sprite?.loaded() == true) {
-      _sprite.renderFromVector2Rect(
-        canvas,
-        position,
-        overridePaint: MapPaint.instance.paint,
-      );
-    }
+    _sprite?.renderFromVector2Rect(
+      canvas,
+      position,
+      overridePaint: MapPaint.instance.paint,
+    );
 
     if ((gameRef?.constructionMode ?? false) && isVisibleInCamera()) {
       _drawGrid(canvas);
@@ -90,15 +87,16 @@ class Tile extends GameComponent {
     }
     canvas.drawRect(
       position.rect,
-      _paintText
-        ..color = gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+      _paintText!
+        ..color =
+            gameRef?.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
     );
     if (_positionText.x % 2 == 0) {
       TextConfig(
         fontSize: width / 3.5,
       )
           .withColor(
-            gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+            gameRef?.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
           )
           .render(
             canvas,

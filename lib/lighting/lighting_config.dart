@@ -10,11 +10,11 @@ class LightingConfig {
   final double pulseSpeed;
   final double blurBorder;
   final Curve pulseCurve;
-  PulseValue _pulseAnimation;
+  PulseValue? _pulseAnimation;
 
   LightingConfig({
-    @required this.radius,
-    this.color,
+    required this.radius,
+    required this.color,
     this.withPulse = false,
     this.pulseCurve = Curves.decelerate,
     this.pulseVariation = 0.1,
@@ -25,8 +25,8 @@ class LightingConfig {
   }
 
   void update(double t) {
-    _pulseAnimation.update(t);
+    _pulseAnimation?.update(t);
   }
 
-  double get valuePulse => _pulseAnimation.value ?? 0.0;
+  double get valuePulse => _pulseAnimation?.value ?? 0.0;
 }

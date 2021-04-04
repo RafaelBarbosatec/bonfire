@@ -4,29 +4,26 @@ import 'package:bonfire/util/camera/camera.dart';
 import 'package:flutter/material.dart';
 
 mixin Lighting on GameComponent {
-  LightingConfig _lightingConfig;
+  LightingConfig? _lightingConfig;
 
   setupLighting(LightingConfig config) {
     _lightingConfig = config;
   }
 
-  LightingConfig get lightingConfig => _lightingConfig;
+  LightingConfig? get lightingConfig => _lightingConfig;
 
   bool isVisible(Camera camera) {
-    if (_lightingConfig == null ||
-        camera == null ||
-        this?.position == null ||
-        camera.gameRef.size == null) return false;
+    if (lightingConfig == null || camera.gameRef?.size == null) return false;
 
     Rect rectLight = Rect.fromLTWH(
       this.position.rect.center.dx -
-          (lightingConfig.radius + lightingConfig.blurBorder / 2),
+          (lightingConfig!.radius + lightingConfig!.blurBorder / 2),
       this.position.rect.center.dy -
-          (lightingConfig.radius + lightingConfig.blurBorder / 2),
-      (lightingConfig.radius * 2) + lightingConfig.blurBorder,
-      (lightingConfig.radius * 2) + lightingConfig.blurBorder,
+          (lightingConfig!.radius + lightingConfig!.blurBorder / 2),
+      (lightingConfig!.radius * 2) + lightingConfig!.blurBorder,
+      (lightingConfig!.radius * 2) + lightingConfig!.blurBorder,
     );
 
-    return camera.isRectOnCamera(rectLight) ?? false;
+    return camera.isRectOnCamera(rectLight);
   }
 }

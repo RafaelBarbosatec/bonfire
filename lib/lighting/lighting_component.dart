@@ -7,11 +7,11 @@ import 'package:bonfire/util/priority_layer.dart';
 import 'package:flutter/material.dart';
 
 class LightingComponent extends GameComponent {
-  Color color;
-  Paint _paintFocus;
+  Color? color;
+  late Paint _paintFocus;
   Iterable<Lighting> _visibleLight = [];
   double _dtUpdate = 0.0;
-  ColorTween _tween;
+  ColorTween? _tween;
 
   @override
   bool get isHud => true;
@@ -26,21 +26,22 @@ class LightingComponent extends GameComponent {
 
   @override
   void render(Canvas canvas) {
-    if (color == null) return;
-    Vector2 size = gameRef.size;
+    if (color == null || gameRef?.size != null) return;
+    Vector2 size = gameRef!.size;
     canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
-    canvas.drawColor(color, BlendMode.dstATop);
+    canvas.drawColor(color!, BlendMode.dstATop);
     _visibleLight.forEach((light) {
       final config = light.lightingConfig;
+      if (config == null) return;
       final sigma = _convertRadiusToSigma(config.blurBorder);
       config.update(_dtUpdate);
       canvas.save();
 
       canvas.translate(size.x / 2, size.y / 2);
-      canvas.scale(gameRef.gameCamera.zoom);
+      canvas.scale(gameRef?.gameCamera.zoom ?? 1);
       canvas.translate(
-        -gameRef.gameCamera.position.dx,
-        -gameRef.gameCamera.position.dy,
+        -(gameRef?.gameCamera.position.dx ?? 0.0),
+        -(gameRef?.gameCamera.position.dy ?? 0.0),
       );
 
       canvas.drawCircle(
@@ -59,25 +60,24 @@ class LightingComponent extends GameComponent {
           ),
       );
 
-      if (config.color != null) {
-        final Paint paint = Paint()
-          ..color = config.color
-          ..maskFilter = MaskFilter.blur(
-            BlurStyle.normal,
-            sigma,
-          );
-        canvas.drawCircle(
-          Offset(
-            light.position.center.dx,
-            light.position.center.dy,
-          ),
-          config.radius *
-              (config.withPulse
-                  ? (1 - config.valuePulse * config.pulseVariation)
-                  : 1),
-          paint,
+      final Paint paint = Paint()
+        ..color = config.color
+        ..maskFilter = MaskFilter.blur(
+          BlurStyle.normal,
+          sigma,
         );
-      }
+      canvas.drawCircle(
+        Offset(
+          light.position.center.dx,
+          light.position.center.dy,
+        ),
+        config.radius *
+            (config.withPulse
+                ? (1 - config.valuePulse * config.pulseVariation)
+                : 1),
+        paint,
+      );
+
       canvas.restore();
     });
     canvas.restore();
@@ -91,7 +91,7 @@ class LightingComponent extends GameComponent {
   void update(double dt) {
     if (color == null) return;
     _dtUpdate = dt;
-    _visibleLight = gameRef.lightVisible();
+    _visibleLight = gameRef?.lightVisible() ?? [];
   }
 
   void animateToColor(
@@ -101,10 +101,10 @@ class LightingComponent extends GameComponent {
   }) {
     _tween = ColorTween(begin: this.color ?? Colors.transparent, end: color);
 
-    gameRef.getValueGenerator(
-      duration ?? Duration(seconds: 1),
+    gameRef?.getValueGenerator(
+      duration,
       onChange: (value) {
-        this.color = _tween.transform(value);
+        this.color = _tween?.transform(value);
       },
       onFinish: () {
         this.color = color;

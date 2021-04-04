@@ -34,7 +34,7 @@ abstract class GameComponent extends Component
           : this.position;
       final tiles = map.getRendered().where((element) {
         return (element.position.overlaps(position) &&
-            (element.type.isNotEmpty));
+            (element.type?.isNotEmpty ?? false));
       });
       if (tiles.isNotEmpty) return tiles.first.type;
     }
@@ -51,9 +51,9 @@ abstract class GameComponent extends Component
           .getRendered()
           .where((element) {
             return (element.position.overlaps(position) &&
-                element.type.isNotEmpty);
+                (element.type?.isNotEmpty ?? false));
           })
-          .map<String>((e) => e.type)
+          .map<String>((e) => e.type!)
           .toList();
     }
     return null;

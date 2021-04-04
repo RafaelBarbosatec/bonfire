@@ -4,13 +4,14 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/map/tile/tile.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/cupertino.dart';
 
 class MapWorld extends MapGame {
   double lastCameraX = -1;
   double lastCameraY = -1;
   double lastZoom = -1;
-  Vector2 lastSizeScreen;
+  Vector2? lastSizeScreen;
   Iterable<Tile> _tilesToRender = [];
   Iterable<Tile> _tilesCollisionsRendered = [];
   Iterable<Tile> _tilesCollisions = [];
@@ -30,12 +31,13 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    if (lastCameraX != gameRef.gameCamera.position.dx ||
-        lastCameraY != gameRef.gameCamera.position.dy ||
-        lastZoom != gameRef.gameCamera.zoom) {
-      lastCameraX = gameRef.gameCamera.position.dx;
-      lastCameraY = gameRef.gameCamera.position.dy;
-      lastZoom = gameRef.gameCamera.zoom;
+    if (gameRef == null) return;
+    if (lastCameraX != gameRef!.gameCamera.position.dx ||
+        lastCameraY != gameRef!.gameCamera.position.dy ||
+        lastZoom != gameRef!.gameCamera.zoom) {
+      lastCameraX = gameRef!.gameCamera.position.dx;
+      lastCameraY = gameRef!.gameCamera.position.dy;
+      lastZoom = gameRef!.gameCamera.zoom;
 
       List<Tile> tilesRender = [];
       List<Tile> tilesCollision = [];
@@ -95,7 +97,7 @@ class MapWorld extends MapGame {
     lastZoom = -1;
     lastSizeScreen = null;
     this.tiles = map;
-    verifyMaxTopAndLeft(gameRef.size);
+    verifyMaxTopAndLeft(gameRef?.size ?? Vector2.zero());
   }
 
   @override

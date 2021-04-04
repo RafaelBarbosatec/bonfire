@@ -10,8 +10,8 @@ class TileWithCollision extends Tile with ObjectCollision {
     Vector2 position, {
     double width = 32,
     double height = 32,
-    String type,
-    Iterable<CollisionArea> collisions,
+    String? type,
+    Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
   }) : super(
@@ -21,7 +21,9 @@ class TileWithCollision extends Tile with ObjectCollision {
           height: height,
           type: type,
         ) {
-    setupCollision(CollisionConfig(collisions: collisions));
+    collisions?.let((c) {
+      setupCollision(CollisionConfig(collisions: c));
+    });
   }
 
   TileWithCollision.withSprite(
@@ -29,8 +31,8 @@ class TileWithCollision extends Tile with ObjectCollision {
     Vector2 position, {
     double width = 32,
     double height = 32,
-    String type,
-    Iterable<CollisionArea> collisions,
+    String? type,
+    Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
   }) : super.fromSprite(
@@ -40,7 +42,9 @@ class TileWithCollision extends Tile with ObjectCollision {
           height: height,
           type: type,
         ) {
-    setupCollision(CollisionConfig(collisions: collisions));
+    collisions?.let((c) {
+      setupCollision(CollisionConfig(collisions: c));
+    });
   }
 
   TileWithCollision.withAnimation(
@@ -48,8 +52,8 @@ class TileWithCollision extends Tile with ObjectCollision {
     Vector2 position, {
     double width = 32,
     double height = 32,
-    String type,
-    Iterable<CollisionArea> collisions,
+    String? type,
+    Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
   }) : super.fromAnimation(
@@ -59,6 +63,8 @@ class TileWithCollision extends Tile with ObjectCollision {
           height: height,
           type: type,
         ) {
-    setupCollision(CollisionConfig(collisions: collisions));
+    collisions?.let((c) {
+      setupCollision(CollisionConfig(collisions: c));
+    });
   }
 }
