@@ -49,8 +49,8 @@ class Vector2Rect {
   }
 
   Vector2Rect copyWith({
-    Vector2 position,
-    Vector2 size,
+    Vector2? position,
+    Vector2? size,
   }) {
     return Vector2Rect(
       position ?? this.position,

@@ -26,17 +26,17 @@ import 'package:flutter/services.dart';
 
 class BonfireGame extends CustomBaseGame with KeyboardEvents {
   final BuildContext context;
-  final Player player;
-  final GameInterface interface;
+  final Player? player;
+  final GameInterface? interface;
   final MapGame map;
-  final JoystickController joystickController;
-  final GameComponent background;
+  final JoystickController? joystickController;
+  final GameComponent? background;
   final bool constructionMode;
   final bool showCollisionArea;
-  final GameController gameController;
-  final Color constructionModeColor;
-  final Color lightingColorGame;
-  final Color collisionAreaColor;
+  final GameController? gameController;
+  final Color? constructionModeColor;
+  final Color? lightingColorGame;
+  final Color? collisionAreaColor;
   final bool showFPS;
 
   Iterable<Enemy> _enemies = [];
@@ -50,29 +50,29 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   Iterable<Sensor> _visibleSensors = [];
   Iterable<ObjectCollision> _visibleCollisions = [];
   Iterable<ObjectCollision> _collisions = [];
-  IntervalTick _interval;
+  IntervalTick? _interval;
   ColorFilterComponent _colorFilterComponent =
       ColorFilterComponent(GameColorFilter());
-  LightingComponent lighting;
+  LightingComponent? lighting;
 
-  List<Enemy> _initialEnemies;
-  List<GameDecoration> _initialDecorations;
-  List<GameComponent> _initialComponents;
+  List<Enemy>? _initialEnemies;
+  List<GameDecoration>? _initialDecorations;
+  List<GameComponent>? _initialComponents;
 
-  GameColorFilter _colorFilter;
-  double _cameraZoom;
+  GameColorFilter? _colorFilter;
+  double? _cameraZoom;
   Size _cameraSizeMovementWindow = const Size(50, 50);
   bool _cameraMoveOnlyMapArea = false;
 
   BonfireGame({
-    @required this.context,
-    this.map,
+    required this.context,
+    required this.map,
     this.joystickController,
     this.player,
     this.interface,
-    List<Enemy> enemies,
-    List<GameDecoration> decorations,
-    List<GameComponent> components,
+    List<Enemy>? enemies,
+    List<GameDecoration>? decorations,
+    List<GameComponent>? components,
     this.background,
     this.constructionMode = false,
     this.showCollisionArea = false,
@@ -81,11 +81,11 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     this.collisionAreaColor,
     this.lightingColorGame,
     this.showFPS = false,
-    GameColorFilter colorFilter,
-    double cameraZoom,
+    GameColorFilter? colorFilter,
+    double? cameraZoom,
     Size cameraSizeMovementWindow = const Size(50, 50),
     bool cameraMoveOnlyMapArea = false,
-  }) : assert(context != null) {
+  }) {
     _initialEnemies = enemies;
     _initialDecorations = decorations;
     _initialComponents = components;
@@ -108,15 +108,15 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
       target: player,
     );
     gameController?.gameRef = this;
-    if (background != null) add(background);
-    if (map != null) add(map);
+    if (background != null) add(background!);
+    add(map);
     _initialDecorations?.forEach((decoration) => add(decoration));
     _initialEnemies?.forEach((enemy) => add(enemy));
     _initialComponents?.forEach((comp) => add(comp));
-    if (player != null) add(player);
+    if (player != null) add(player!);
     if (lightingColorGame != null) {
-      lighting = LightingComponent(color: lightingColorGame);
-      super.add(lighting);
+      lighting = LightingComponent(color: lightingColorGame!);
+      super.add(lighting!);
     }
     super.add((interface ?? GameInterface()));
     super.add(joystickController ?? Joystick());
@@ -127,7 +127,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   @override
   void update(double t) {
-    _interval.update(t);
+    _interval?.update(t);
     super.update(t);
   }
 
@@ -157,8 +157,8 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     double begin = 0.0,
     double end = 1.0,
     Curve curve = Curves.decelerate,
-    VoidCallback onFinish,
-    ValueChanged<double> onChange,
+    VoidCallback? onFinish,
+    ValueChanged<double>? onChange,
   }) {
     final valueGenerator = ValueGeneratorComponent(
       duration,
@@ -222,7 +222,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
       }).cast();
     }
 
-    if (gameController != null) gameController.notifyListeners();
+    gameController?.notifyListeners();
   }
 
   GameColorFilter get colorFilter => _colorFilterComponent.colorFilter;

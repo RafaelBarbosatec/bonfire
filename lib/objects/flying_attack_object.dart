@@ -13,8 +13,8 @@ import 'package:flutter/widgets.dart';
 
 class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final dynamic id;
-  SpriteAnimation flyAnimation;
-  Future<SpriteAnimation> destroyAnimation;
+  SpriteAnimation? flyAnimation;
+  Future<SpriteAnimation>? destroyAnimation;
   final Direction direction;
   final double speed;
   final double damage;
@@ -22,18 +22,17 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final double height;
   final AttackFromEnum attackFrom;
   final bool withDecorationCollision;
-  final VoidCallback destroyedObject;
-  final LightingConfig lightingConfig;
+  final VoidCallback? destroyedObject;
   final _loader = AssetsLoader();
 
   final IntervalTick _timerVerifyCollision = IntervalTick(50);
 
   FlyingAttackObject({
-    @required Vector2 position,
-    @required Future<SpriteAnimation> flyAnimation,
-    @required this.direction,
-    @required this.width,
-    @required this.height,
+    required Vector2 position,
+    required Future<SpriteAnimation> flyAnimation,
+    required this.direction,
+    required this.width,
+    required this.height,
     this.id,
     this.destroyAnimation,
     this.speed = 150,
@@ -41,8 +40,8 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     this.attackFrom = AttackFromEnum.ENEMY,
     this.withDecorationCollision = true,
     this.destroyedObject,
-    this.lightingConfig,
-    CollisionConfig collision,
+    LightingConfig? lightingConfig,
+    CollisionConfig? collision,
   }) {
     _loader.add(AssetToLoad(flyAnimation, (value) {
       return this.flyAnimation = value;
@@ -53,13 +52,12 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
       Vector2(width, height),
     );
 
-    setupLighting(lightingConfig);
+    if (lightingConfig != null) setupLighting(lightingConfig);
+
     setupCollision(
       collision ??
           CollisionConfig(
-            collisions: [
-              collision ?? CollisionArea(width: width, height: height / 2)
-            ],
+            collisions: [CollisionArea(width: width, height: height / 2)],
           ),
     );
   }
@@ -116,7 +114,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
     bool destroy = false;
 
-    gameRef.attackables().where((a) {
+    gameRef?.attackables().where((a) {
       final fromCorrect = (attackFrom == AttackFromEnum.ENEMY
           ? a.receivesAttackFromEnemy()
           : a.receivesAttackFromPlayer());
@@ -205,21 +203,21 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
             break;
         }
 
-        gameRef.add(
+        gameRef?.add(
           AnimatedObjectOnce(
-            animation: destroyAnimation,
+            animation: destroyAnimation!,
             position: positionDestroy,
             lightingConfig: lightingConfig,
           ),
         );
       }
       remove();
-      if (this.destroyedObject != null) this.destroyedObject();
+      this.destroyedObject?.call();
     }
   }
 
   bool _verifyExistInWorld() {
-    Size mapSize = gameRef.map?.mapSize;
+    Size? mapSize = gameRef?.map.mapSize;
     if (mapSize == null) return true;
 
     if (position.left < 0) {

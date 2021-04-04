@@ -1,14 +1,13 @@
 class AssetToLoad<T> {
-  Function(T value) callback;
-  final Future<T> future;
+  Function(T? value)? callback;
+  final Future<T>? future;
 
   AssetToLoad(this.future, this.callback);
   Future<void> load() async {
     if (future == null) {
-      callback(null);
-      return;
+      return Future.value();
     }
-    callback(await future);
+    callback?.call(await future);
   }
 }
 
@@ -18,7 +17,7 @@ class AssetsLoader<T> {
   void add(AssetToLoad asset) => _assets.add(asset);
 
   Future<void> load() async {
-    await Future.forEach(_assets, (element) => element.load());
+    await Future.forEach<AssetToLoad>(_assets, (element) => element.load());
     _assets.forEach((element) => element.callback = null);
     _assets.clear();
   }

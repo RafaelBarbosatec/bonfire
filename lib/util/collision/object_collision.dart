@@ -14,7 +14,7 @@ class CollisionConfig {
   bool enable;
 
   CollisionConfig({
-    @required this.collisions,
+    required this.collisions,
     this.collisionOnlyVisibleScreen = true,
     this.enable = true,
   });

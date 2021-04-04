@@ -7,10 +7,10 @@ import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 class RotationEnemy extends Enemy {
-  SpriteAnimation animIdle;
-  SpriteAnimation animRun;
+  SpriteAnimation? animIdle;
+  SpriteAnimation? animRun;
 
-  SpriteAnimation animation;
+  SpriteAnimation? animation;
 
   /// Variable that represents the speed of the enemy.
   final double speed;
@@ -19,9 +19,9 @@ class RotationEnemy extends Enemy {
   final _loader = AssetsLoader();
 
   RotationEnemy({
-    @required Vector2 position,
-    @required Future<SpriteAnimation> animIdle,
-    @required Future<SpriteAnimation> animRun,
+    required Vector2 position,
+    required Future<SpriteAnimation> animIdle,
+    required Future<SpriteAnimation> animRun,
     double height = 32,
     double width = 32,
     this.currentRadAngle = -1.55,
@@ -42,8 +42,11 @@ class RotationEnemy extends Enemy {
   }
 
   @override
-  void moveFromAngleDodgeObstacles(double speed, double angle,
-      {Function notMove}) {
+  void moveFromAngleDodgeObstacles(
+    double speed,
+    double angle, {
+    Function? notMove,
+  }) {
     this.animation = animRun;
     currentRadAngle = angle;
     super.moveFromAngleDodgeObstacles(speed, angle, notMove: notMove);
@@ -74,13 +77,10 @@ class RotationEnemy extends Enemy {
   }
 
   void _renderAnimation(Canvas canvas) {
-    if (position == null) return;
-    if (animation?.getSprite()?.loaded() == true) {
-      animation.getSprite().renderFromVector2Rect(
-            canvas,
-            this.position,
-          );
-    }
+    animation?.getSprite().renderFromVector2Rect(
+          canvas,
+          this.position,
+        );
   }
 
   @override

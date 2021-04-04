@@ -11,18 +11,17 @@ import 'package:flame/sprite.dart';
 /// All components like [Enemy],[Player] and [GameDecoration] extends this.
 class AnimatedObject extends GameComponent {
   /// Animation that will be drawn on the screen.
-  SpriteAnimation animation;
+  SpriteAnimation? animation;
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (animation == null || position == null) return;
-    animation.getSprite().renderFromVector2Rect(canvas, this.position);
+    animation?.getSprite().renderFromVector2Rect(canvas, this.position);
   }
 
   @override
   void update(double dt) {
-    if (animation != null) animation.update(dt);
+    animation?.update(dt);
     super.update(dt);
   }
 }

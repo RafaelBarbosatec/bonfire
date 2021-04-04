@@ -11,8 +11,8 @@ class ValueGeneratorComponent extends Component {
   final double begin;
   final double end;
   final Curve curve;
-  final VoidCallback onFinish;
-  final ValueChanged<double> onChange;
+  final VoidCallback? onFinish;
+  final ValueChanged<double>? onChange;
 
   double _currentValue = 0;
   double _displacement = 0;

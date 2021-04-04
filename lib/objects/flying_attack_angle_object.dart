@@ -16,8 +16,8 @@ import 'package:flutter/widgets.dart';
 class FlyingAttackAngleObject extends AnimatedObject
     with ObjectCollision, Lighting {
   final dynamic id;
-  SpriteAnimation flyAnimation;
-  Future<SpriteAnimation> destroyAnimation;
+  SpriteAnimation? flyAnimation;
+  Future<SpriteAnimation>? destroyAnimation;
   final double radAngle;
   final double speed;
   final double damage;
@@ -26,22 +26,21 @@ class FlyingAttackAngleObject extends AnimatedObject
   final bool damageInPlayer;
   final bool withCollision;
   final bool collisionOnlyVisibleObjects;
-  final VoidCallback destroyedObject;
-  final LightingConfig lightingConfig;
+  final VoidCallback? destroyedObject;
   final _loader = AssetsLoader();
 
-  double _cosAngle;
-  double _senAngle;
-  double _rotate;
+  late double _cosAngle;
+  late double _senAngle;
+  late double _rotate;
 
   final IntervalTick _timerVerifyCollision = IntervalTick(40);
 
   FlyingAttackAngleObject({
-    @required Vector2 position,
-    @required Future<SpriteAnimation> flyAnimation,
-    @required this.radAngle,
-    @required this.width,
-    @required this.height,
+    required Vector2 position,
+    required Future<SpriteAnimation> flyAnimation,
+    required this.radAngle,
+    required this.width,
+    required this.height,
     this.id,
     this.destroyAnimation,
     this.speed = 150,
@@ -50,8 +49,8 @@ class FlyingAttackAngleObject extends AnimatedObject
     this.withCollision = true,
     this.collisionOnlyVisibleObjects = true,
     this.destroyedObject,
-    this.lightingConfig,
-    CollisionConfig collision,
+    LightingConfig? lightingConfig,
+    CollisionConfig? collision,
   }) {
     _loader.add(AssetToLoad(flyAnimation, (value) {
       return this.flyAnimation = value;
@@ -62,13 +61,12 @@ class FlyingAttackAngleObject extends AnimatedObject
       Vector2(width, height),
     );
 
-    setupLighting(lightingConfig);
+    if (lightingConfig != null) setupLighting(lightingConfig);
+
     setupCollision(
       collision ??
           CollisionConfig(
-            collisions: [
-              collision ?? CollisionArea(width: width, height: height / 2)
-            ],
+            collisions: [CollisionArea(width: width, height: height / 2)],
             collisionOnlyVisibleScreen: collisionOnlyVisibleObjects,
           ),
     );
@@ -115,7 +113,7 @@ class FlyingAttackAngleObject extends AnimatedObject
 
     bool destroy = false;
 
-    gameRef.attackables().where((a) {
+    gameRef?.attackables().where((a) {
       return (damageInPlayer
               ? a.receivesAttackFromEnemy()
               : a.receivesAttackFromPlayer()) &&
@@ -143,21 +141,21 @@ class FlyingAttackAngleObject extends AnimatedObject
         final positionDestroy =
             Vector2Rect.fromRect(position.rect.shift(diffBase));
 
-        gameRef.add(
+        gameRef?.add(
           AnimatedObjectOnce(
-            animation: destroyAnimation,
+            animation: destroyAnimation!,
             position: positionDestroy,
             lightingConfig: lightingConfig,
           ),
         );
       }
       remove();
-      if (this.destroyedObject != null) this.destroyedObject();
+      this.destroyedObject?.call();
     }
   }
 
   bool _verifyExistInWorld() {
-    Size mapSize = gameRef.map?.mapSize;
+    Size? mapSize = gameRef?.map.mapSize;
     if (mapSize == null) return true;
     if (position.rect.left < 0) {
       return false;

@@ -12,20 +12,20 @@ class SimpleEnemy extends Enemy {
   final double speed;
 
   /// Last position the enemy was in.
-  Direction lastDirection;
+  late Direction lastDirection;
 
   /// Last horizontal position the enemy was in.
-  Direction lastDirectionHorizontal;
+  late Direction lastDirectionHorizontal;
 
   bool _isIdle = true;
 
   bool _runFastAnimation = false;
 
   SimpleEnemy({
-    @required Vector2 position,
-    @required double height,
-    @required double width,
-    @required this.animation,
+    required Vector2 position,
+    required double height,
+    required double width,
+    required this.animation,
     double life = 100,
     this.speed = 100,
     Direction initDirection = Direction.right,
@@ -47,10 +47,10 @@ class SimpleEnemy extends Enemy {
 
     if ((lastDirection != Direction.top || _isIdle) && addAnimation) {
       _isIdle = false;
-      if (animation?.runTop != null) {
-        animation?.play(SimpleAnimationEnum.runTop);
+      if (animation.runTop != null) {
+        animation.play(SimpleAnimationEnum.runTop);
       } else {
-        animation?.play(lastDirectionHorizontal == Direction.right
+        animation.play(lastDirectionHorizontal == Direction.right
             ? SimpleAnimationEnum.runRight
             : SimpleAnimationEnum.runLeft);
       }
@@ -63,10 +63,10 @@ class SimpleEnemy extends Enemy {
     this.moveBottom(speed);
     if ((lastDirection != Direction.bottom || _isIdle) && addAnimation) {
       _isIdle = false;
-      if (animation?.runBottom != null) {
-        animation?.play(SimpleAnimationEnum.runBottom);
+      if (animation.runBottom != null) {
+        animation.play(SimpleAnimationEnum.runBottom);
       } else {
-        animation?.play(lastDirectionHorizontal == Direction.right
+        animation.play(lastDirectionHorizontal == Direction.right
             ? SimpleAnimationEnum.runRight
             : SimpleAnimationEnum.runLeft);
       }
@@ -79,7 +79,7 @@ class SimpleEnemy extends Enemy {
     this.moveLeft(speed);
     if ((lastDirection != Direction.left || _isIdle) && addAnimation) {
       _isIdle = false;
-      animation?.play(SimpleAnimationEnum.runLeft);
+      animation.play(SimpleAnimationEnum.runLeft);
       lastDirection = Direction.left;
       lastDirectionHorizontal = Direction.left;
     }
@@ -90,7 +90,7 @@ class SimpleEnemy extends Enemy {
     this.moveRight(speed);
     if ((lastDirection != Direction.right || _isIdle) && addAnimation) {
       _isIdle = false;
-      animation?.play(SimpleAnimationEnum.runRight);
+      animation.play(SimpleAnimationEnum.runRight);
       lastDirection = Direction.right;
       lastDirectionHorizontal = Direction.right;
     }
@@ -98,26 +98,26 @@ class SimpleEnemy extends Enemy {
 
   void customMoveTopRight(double speedX, double speedY) {
     if (_runFastAnimation) return;
-    animation?.play(SimpleAnimationEnum.runTopRight);
+    animation.play(SimpleAnimationEnum.runTopRight);
     lastDirection = Direction.topRight;
-    this.customMoveRight(speedX, addAnimation: animation?.runTopRight == null);
+    this.customMoveRight(speedX, addAnimation: animation.runTopRight == null);
     this.customMoveTop(speedY, addAnimation: false);
   }
 
   void customMoveTopLeft(double speedX, double speedY) {
     if (_runFastAnimation) return;
-    animation?.play(SimpleAnimationEnum.runTopLeft);
+    animation.play(SimpleAnimationEnum.runTopLeft);
     lastDirection = Direction.topLeft;
-    this.customMoveLeft(speedX, addAnimation: animation?.runTopLeft == null);
+    this.customMoveLeft(speedX, addAnimation: animation.runTopLeft == null);
     this.customMoveTop(speedY, addAnimation: false);
   }
 
   void customMoveBottomRight(double speedX, double speedY) {
     if (_runFastAnimation) return;
-    animation?.play(SimpleAnimationEnum.runBottomRight);
+    animation.play(SimpleAnimationEnum.runBottomRight);
     lastDirection = Direction.bottomRight;
     this.customMoveRight(speedX,
-        addAnimation: animation?.runBottomRight == null);
+        addAnimation: animation.runBottomRight == null);
     this.customMoveBottom(speedY, addAnimation: false);
   }
 

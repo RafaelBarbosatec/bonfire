@@ -13,14 +13,12 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 extension RotationEnemyExtensions on RotationEnemy {
-  static const ATTACK_MELEE = "attackMelee";
-  static const ATTACK_RANGE = "attackRange";
   void seeAndMoveToPlayer({
-    Function(Player) closePlayer,
+    required Function(Player) closePlayer,
     double radiusVision = 32,
     double margin = 10,
   }) {
-    if (isDead || this.position == null) return;
+    if (isDead) return;
     if (this is ObjectCollision &&
         (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
 
@@ -44,7 +42,7 @@ extension RotationEnemyExtensions on RotationEnemy {
             : position;
 
         if (rectToMove.rect.overlaps(rectPlayerCollision)) {
-          if (closePlayer != null) closePlayer(player);
+          closePlayer(player);
           this.idle();
           this.moveFromAngleDodgeObstacles(0, _radAngle);
           return;
@@ -61,18 +59,18 @@ extension RotationEnemyExtensions on RotationEnemy {
   }
 
   void seeAndMoveToAttackRange({
-    Function(Player) positioned,
+    required Function(Player) positioned,
     double radiusVision = 32,
-    double minDistanceCellsFromPlayer,
+    double? minDistanceCellsFromPlayer,
   }) {
-    if (isDead || this.position == null) return;
+    if (isDead) return;
     if (this is ObjectCollision &&
         (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
 
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
-        if (positioned != null) positioned(player);
+        positioned(player);
 
         Vector2Rect playerRect = player is ObjectCollision
             ? (player as ObjectCollision).rectCollision
@@ -84,10 +82,12 @@ extension RotationEnemyExtensions on RotationEnemy {
           this.position.center.dx,
           this.position.center.dy,
         );
+
         Vector2 playerPosition = Vector2(
           playerRect.center.dx,
           playerRect.center.dy,
         );
+
         double dist = myPosition.distanceTo(playerPosition);
 
         if (dist >= distance) {
@@ -96,10 +96,13 @@ extension RotationEnemyExtensions on RotationEnemy {
           return;
         }
 
-        this.moveFromAngleDodgeObstacles(speed, getInverseAngleFomPlayer(),
-            notMove: () {
-          this.idle();
-        });
+        this.moveFromAngleDodgeObstacles(
+          speed,
+          getInverseAngleFomPlayer(),
+          notMove: () {
+            this.idle();
+          },
+        );
       },
       notObserved: () {
         this.idle();
@@ -108,19 +111,19 @@ extension RotationEnemyExtensions on RotationEnemy {
   }
 
   void simpleAttackMelee({
-    @required Future<SpriteAnimation> attackEffectTopAnim,
-    @required double damage,
-    int id,
-    double heightArea = 32,
-    double widthArea = 32,
+    required Future<SpriteAnimation> attackEffectTopAnim,
+    required double damage,
+    required double height,
+    required double width,
+    int? id,
     bool withPush = false,
-    double radAngleDirection,
-    VoidCallback execute,
+    double? radAngleDirection,
+    VoidCallback? execute,
     int interval = 1000,
   }) {
-    if (!this.checkPassedInterval(ATTACK_MELEE, interval, dtUpdate)) return;
+    if (!this.checkPassedInterval('attackMelee', interval, dtUpdate)) return;
 
-    if (isDead || this.position == null) return;
+    if (isDead) return;
 
     double angle = radAngleDirection ?? this.currentRadAngle;
 
@@ -134,14 +137,14 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     Vector2Rect positionAttack = this.position.shift(diffBase);
 
-    gameRef.add(AnimatedObjectOnce(
+    gameRef?.add(AnimatedObjectOnce(
       animation: attackEffectTopAnim,
       position: positionAttack,
       rotateRadAngle: angle,
     ));
 
     gameRef
-        .attackables()
+        ?.attackables()
         .where((a) =>
             a.receivesAttackFromEnemy() &&
             a.rectAttackable().rect.overlaps(positionAttack.rect))
@@ -161,23 +164,23 @@ extension RotationEnemyExtensions on RotationEnemy {
   }
 
   void simpleAttackRange({
-    @required Future<SpriteAnimation> animationTop,
-    @required Future<SpriteAnimation> animationDestroy,
-    @required double width,
-    @required double height,
-    int id,
+    required Future<SpriteAnimation> animationTop,
+    required Future<SpriteAnimation> animationDestroy,
+    required double width,
+    required double height,
+    int? id,
     double speed = 150,
     double damage = 1,
-    double radAngleDirection,
+    double? radAngleDirection,
     int interval = 1000,
     bool withCollision = true,
     bool collisionOnlyVisibleObjects = true,
-    VoidCallback destroy,
-    CollisionConfig collision,
-    VoidCallback execute,
-    LightingConfig lightingConfig,
+    VoidCallback? destroy,
+    CollisionConfig? collision,
+    VoidCallback? execute,
+    LightingConfig? lightingConfig,
   }) {
-    if (!this.checkPassedInterval(ATTACK_RANGE, interval, dtUpdate)) return;
+    if (!this.checkPassedInterval('attackRange', interval, dtUpdate)) return;
 
     if (isDead) return;
 
@@ -192,7 +195,7 @@ extension RotationEnemyExtensions on RotationEnemy {
         this.position.center;
 
     Rect position = this.position.rect.shift(diffBase);
-    gameRef.add(
+    gameRef?.add(
       FlyingAttackAngleObject(
         id: id,
         position: Vector2(position.left, position.top),

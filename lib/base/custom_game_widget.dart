@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class CustomGameWidget<T extends Game> extends StatelessWidget {
   final T game;
 
-  const CustomGameWidget({Key key, this.game}) : super(key: key);
+  const CustomGameWidget({Key? key, required this.game}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -7,8 +7,8 @@ import 'package:flame/components.dart';
 
 abstract class MapGame extends Component with HasGameRef<BonfireGame> {
   Iterable<Tile> tiles;
-  Size mapSize;
-  Vector2 mapStartPosition;
+  Size? mapSize;
+  Vector2? mapStartPosition;
 
   MapGame(this.tiles);
 
@@ -23,7 +23,7 @@ abstract class MapGame extends Component with HasGameRef<BonfireGame> {
 
   @override
   Future<void> onLoad() {
-    return Future.forEach(tiles, (element) => element.onLoad());
+    return Future.forEach<Tile>(tiles, (element) => element.onLoad());
   }
 
   @override

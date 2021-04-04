@@ -8,52 +8,56 @@ import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/foundation.dart';
 
 class SimpleDirectionAnimation {
-  SpriteAnimation idleLeft;
-  SpriteAnimation idleRight;
-  SpriteAnimation idleTop;
-  SpriteAnimation idleBottom;
-  SpriteAnimation idleTopLeft;
-  SpriteAnimation idleTopRight;
-  SpriteAnimation idleBottomLeft;
-  SpriteAnimation idleBottomRight;
-  SpriteAnimation runTop;
-  SpriteAnimation runRight;
-  SpriteAnimation runBottom;
-  SpriteAnimation runLeft;
-  SpriteAnimation runTopLeft;
-  SpriteAnimation runTopRight;
-  SpriteAnimation runBottomLeft;
-  SpriteAnimation runBottomRight;
+  late SpriteAnimation idleLeft;
+  late SpriteAnimation idleRight;
+  late SpriteAnimation runLeft;
+  late SpriteAnimation runRight;
+
+  SpriteAnimation? idleTop;
+  SpriteAnimation? idleBottom;
+  SpriteAnimation? idleTopLeft;
+  SpriteAnimation? idleTopRight;
+  SpriteAnimation? idleBottomLeft;
+  SpriteAnimation? idleBottomRight;
+  SpriteAnimation? runTop;
+  SpriteAnimation? runBottom;
+  SpriteAnimation? runTopLeft;
+  SpriteAnimation? runTopRight;
+  SpriteAnimation? runBottomLeft;
+  SpriteAnimation? runBottomRight;
+
   Map<String, SpriteAnimation> others = {};
-  SimpleAnimationEnum init;
+
   final _loader = AssetsLoader();
 
-  SpriteAnimation current;
-  SimpleAnimationEnum _currentType;
-  AnimatedObjectOnce _fastAnimation;
+  SpriteAnimation? current;
+  late SimpleAnimationEnum _currentType;
+  AnimatedObjectOnce? _fastAnimation;
+  Vector2Rect? position;
+
   bool runToTheEndFastAnimation = false;
-  Vector2Rect position;
 
   SimpleDirectionAnimation({
-    @required Future<SpriteAnimation> idleLeft,
-    @required Future<SpriteAnimation> idleRight,
-    Future<SpriteAnimation> idleTop,
-    Future<SpriteAnimation> idleBottom,
-    Future<SpriteAnimation> idleTopLeft,
-    Future<SpriteAnimation> idleTopRight,
-    Future<SpriteAnimation> idleBottomLeft,
-    Future<SpriteAnimation> idleBottomRight,
-    Future<SpriteAnimation> runTop,
-    @required Future<SpriteAnimation> runRight,
-    Future<SpriteAnimation> runBottom,
-    @required Future<SpriteAnimation> runLeft,
-    Future<SpriteAnimation> runTopLeft,
-    Future<SpriteAnimation> runTopRight,
-    Future<SpriteAnimation> runBottomLeft,
-    Future<SpriteAnimation> runBottomRight,
-    Map<String, Future<SpriteAnimation>> others,
-    this.init = SimpleAnimationEnum.idleRight,
+    required Future<SpriteAnimation> idleLeft,
+    required Future<SpriteAnimation> idleRight,
+    required Future<SpriteAnimation> runRight,
+    required Future<SpriteAnimation> runLeft,
+    Future<SpriteAnimation>? idleTop,
+    Future<SpriteAnimation>? idleBottom,
+    Future<SpriteAnimation>? idleTopLeft,
+    Future<SpriteAnimation>? idleTopRight,
+    Future<SpriteAnimation>? idleBottomLeft,
+    Future<SpriteAnimation>? idleBottomRight,
+    Future<SpriteAnimation>? runTop,
+    Future<SpriteAnimation>? runBottom,
+    Future<SpriteAnimation>? runTopLeft,
+    Future<SpriteAnimation>? runTopRight,
+    Future<SpriteAnimation>? runBottomLeft,
+    Future<SpriteAnimation>? runBottomRight,
+    Map<String, Future<SpriteAnimation>>? others,
+    SimpleAnimationEnum initAnimation = SimpleAnimationEnum.idleRight,
   }) {
+    _currentType = initAnimation;
     _loader.add(AssetToLoad(idleLeft, (value) => this.idleLeft = value));
     _loader.add(AssetToLoad(idleRight, (value) => this.idleRight = value));
     _loader.add(AssetToLoad(idleBottom, (value) => this.idleBottom = value));
@@ -94,10 +98,10 @@ class SimpleDirectionAnimation {
     }
     switch (animation) {
       case SimpleAnimationEnum.idleLeft:
-        if (idleLeft != null) current = idleLeft;
+        current = idleLeft;
         break;
       case SimpleAnimationEnum.idleRight:
-        if (idleRight != null) current = idleRight;
+        current = idleRight;
         break;
       case SimpleAnimationEnum.idleTop:
         if (idleTop != null) current = idleTop;
@@ -121,13 +125,13 @@ class SimpleDirectionAnimation {
         if (runTop != null) current = runTop;
         break;
       case SimpleAnimationEnum.runRight:
-        if (runRight != null) current = runRight;
+        current = runRight;
         break;
       case SimpleAnimationEnum.runBottom:
         if (runBottom != null) current = runBottom;
         break;
       case SimpleAnimationEnum.runLeft:
-        if (runLeft != null) current = runLeft;
+        current = runLeft;
         break;
       case SimpleAnimationEnum.runTopLeft:
         if (runTopLeft != null) current = runTopLeft;
@@ -145,7 +149,7 @@ class SimpleDirectionAnimation {
   }
 
   void playOther(String key) {
-    if (others?.containsKey(key) == true) {
+    if (others.containsKey(key) == true) {
       if (!runToTheEndFastAnimation) {
         _fastAnimation = null;
       }
@@ -155,7 +159,7 @@ class SimpleDirectionAnimation {
 
   void playOnce(
     Future<SpriteAnimation> animation, {
-    VoidCallback onFinish,
+    VoidCallback? onFinish,
     bool runToTheEnd = false,
   }) {
     runToTheEndFastAnimation = runToTheEnd;
@@ -171,26 +175,23 @@ class SimpleDirectionAnimation {
   void render(Canvas canvas) {
     if (position == null) return;
     if (_fastAnimation != null) {
-      _fastAnimation.render(canvas);
-    } else if (current?.getSprite()?.loaded() == true) {
-      current.getSprite().renderFromVector2Rect(canvas, position);
+      _fastAnimation?.render(canvas);
+    } else {
+      current?.getSprite().renderFromVector2Rect(canvas, position!);
     }
   }
 
   void update(double dt, Vector2Rect position) {
     this.position = position;
-    if (_fastAnimation != null) {
-      _fastAnimation.position = position;
-      _fastAnimation.update(dt);
-    } else {
-      current?.update(dt);
-    }
+    _fastAnimation?.position = position;
+    _fastAnimation?.update(dt);
+    current?.update(dt);
   }
 
   Future<void> onLoad() async {
     await _loader.load();
-    play(init);
+    play(_currentType);
   }
 
-  SimpleAnimationEnum get currentType => _currentType;
+  SimpleAnimationEnum? get currentType => _currentType;
 }

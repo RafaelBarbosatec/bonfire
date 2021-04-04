@@ -4,7 +4,7 @@ version: 0.8.6
 homepage: https://github.com/RafaelBarbosatec/bonfire
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
   flutter:
@@ -12,7 +12,7 @@ dependencies:
 
   flame: ^1.0.0-rc8
   ordered_set: ^3.0.0
-  tiledjsonreader: ^1.0.0
+  tiledjsonreader: ^1.0.0+1
   http: ^0.13.1
   shared_preferences: ^2.0.5
 

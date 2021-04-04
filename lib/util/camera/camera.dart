@@ -10,7 +10,7 @@ class Camera with HasGameRef<BonfireGame> {
   Offset position = Offset.zero;
   double zoom;
   Offset _lastTargetOffset = Offset.zero;
-  GameComponent target;
+  GameComponent? target;
   final Size sizeMovementWindow;
   final bool moveOnlyMapArea;
 

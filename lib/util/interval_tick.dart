@@ -2,7 +2,7 @@ import 'dart:ui';
 
 class IntervalTick {
   final int interval; // in Milliseconds
-  final VoidCallback tick;
+  final VoidCallback? tick;
   double _timeMax = 1000.0;
   double _currentTime = 0;
   IntervalTick(this.interval, {this.tick});

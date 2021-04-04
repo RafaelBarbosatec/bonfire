@@ -25,7 +25,7 @@ class GameDecoration extends AnimatedObject {
   /// Use to define if this decoration should be drawing on the player.
   final bool frontFromPlayer;
 
-  Sprite sprite;
+  Sprite? sprite;
 
   int additionalPriority = 0;
 
@@ -33,11 +33,11 @@ class GameDecoration extends AnimatedObject {
 
   GameDecoration({
     this.sprite,
-    @required Vector2 position,
-    @required this.height,
-    @required this.width,
+    required Vector2 position,
+    required this.height,
+    required this.width,
     this.frontFromPlayer = false,
-    SpriteAnimation animation,
+    SpriteAnimation? animation,
   }) {
     this.animation = animation;
     this.position = generateRectWithBleedingPixel(
@@ -49,11 +49,10 @@ class GameDecoration extends AnimatedObject {
 
   GameDecoration.withSprite(
     Future<Sprite> sprite, {
-    @required Vector2 position,
-    @required this.height,
-    @required this.width,
+    required Vector2 position,
+    required this.height,
+    required this.width,
     this.frontFromPlayer = false,
-    SpriteAnimation animation,
   }) {
     _loader.add(AssetToLoad(sprite, (value) => this.sprite = value));
     this.position = generateRectWithBleedingPixel(
@@ -65,9 +64,9 @@ class GameDecoration extends AnimatedObject {
 
   GameDecoration.withAnimation(
     Future<SpriteAnimation> animation, {
-    @required Vector2 position,
-    @required this.height,
-    @required this.width,
+    required Vector2 position,
+    required this.height,
+    required this.width,
     this.frontFromPlayer = false,
   }) {
     _loader.add(AssetToLoad(animation, (value) => this.animation = value));
@@ -80,9 +79,7 @@ class GameDecoration extends AnimatedObject {
 
   @override
   void render(Canvas canvas) {
-    if (sprite?.loaded() == true) {
-      sprite.renderFromVector2Rect(canvas, this.position);
-    }
+    sprite?.renderFromVector2Rect(canvas, this.position);
     super.render(canvas);
   }
 
@@ -104,15 +101,6 @@ class GameDecoration extends AnimatedObject {
       ),
     );
   }
-
-  // @override
-  // int get priority {
-  //   if (frontFromPlayer) {
-  //     return PriorityLayer.OBJECTS;
-  //   } else {
-  //     return PriorityLayer.DECORATION + additionalPriority;
-  //   }
-  // }
 
   @override
   Future<void> onLoad() {

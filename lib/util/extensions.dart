@@ -2,13 +2,12 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/vector2rect.dart';
-import 'package:flutter/foundation.dart';
 
 extension ImageExtension on Image {
   SpriteAnimation getAnimation({
-    @required double width,
-    @required double height,
-    @required double count,
+    required double width,
+    required double height,
+    required double count,
     int startDx = 0,
     int startDy = 0,
     double stepTime = 0.1,
@@ -36,10 +35,10 @@ extension ImageExtension on Image {
   }
 
   Sprite getSprite({
-    @required double x,
-    @required double y,
-    @required double width,
-    @required double height,
+    required double x,
+    required double y,
+    required double width,
+    required double height,
   }) {
     return Sprite(
       this,
@@ -50,7 +49,7 @@ extension ImageExtension on Image {
 }
 
 extension OffSetExt on Offset {
-  Offset copyWith({double x, double y}) {
+  Offset copyWith({double? x, double? y}) {
     return Offset(x ?? this.dx, y ?? this.dy);
   }
 
@@ -66,17 +65,38 @@ extension RectExt on Rect {
 }
 
 extension SpriteExt on Sprite {
-  bool loaded() {
-    return this.image != null;
-  }
-
   void renderFromVector2Rect(
     Canvas canvas,
     Vector2Rect vector, {
-    Paint overridePaint,
+    Paint? overridePaint,
   }) {
-    if (this.image != null) {
-      this.render(canvas, position: vector.position, size: vector.size);
+    this.render(canvas, position: vector.position, size: vector.size);
+  }
+}
+
+extension GameComponentExt on GameComponent {
+  Direction? directionThatPlayerIs() {
+    Player? player = this.gameRef?.player;
+    if (player == null) return null;
+    var diffX = position.center.dx - player.position.center.dx;
+    var diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;
+    var diffY = position.center.dy - player.position.center.dy;
+    var diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
+
+    if (diffPositiveX > diffPositiveY) {
+      if (player.position.center.dx > position.center.dx) {
+        return Direction.right;
+      } else if (player.position.center.dx < position.center.dx) {
+        return Direction.left;
+      }
+    } else {
+      if (player.position.center.dy > position.center.dy) {
+        return Direction.bottom;
+      } else if (player.position.center.dy < position.center.dy) {
+        return Direction.top;
+      }
     }
+
+    return Direction.left;
   }
 }

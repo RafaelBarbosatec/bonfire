@@ -1,3 +1,4 @@
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/camera/camera.dart';
@@ -74,9 +75,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     }
 
     // first time resize
-    if (size != null) {
-      c.onGameResize(size);
-    }
+    c.onGameResize(size);
 
     final loadFuture = c.onLoad();
 
@@ -162,7 +161,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   @override
   @mustCallSuper
   void onResize(Vector2 size) {
-    gameCamera.gameRef = this;
+    if (this is BonfireGame) gameCamera.gameRef = this as BonfireGame;
     super.onResize(size);
     components.forEach((c) => c.onGameResize(size));
   }

@@ -15,11 +15,11 @@ import 'package:flutter/widgets.dart';
 
 extension SimpleEnemyExtensions on SimpleEnemy {
   void seeAndMoveToPlayer({
-    Function(Player) closePlayer,
+    required Function(Player) closePlayer,
     double radiusVision = 32,
     double margin = 10,
   }) {
-    if (isDead || this.position == null) return;
+    if (isDead) return;
     if (this is ObjectCollision &&
         (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
 
@@ -73,7 +73,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         );
 
         if (rectToMove.rect.overlaps(rectPlayerCollision)) {
-          if (closePlayer != null) closePlayer(player);
+          closePlayer(player);
           this.idle();
           return;
         }
@@ -106,26 +106,26 @@ extension SimpleEnemyExtensions on SimpleEnemy {
   }
 
   void simpleAttackMelee({
-    @required double damage,
-    double heightArea = 32,
-    double widthArea = 32,
-    int id,
+    required double damage,
+    required double height,
+    required double width,
+    int? id,
     int interval = 1000,
     bool withPush = false,
-    double sizePush,
-    Direction direction,
-    Future<SpriteAnimation> attackEffectRightAnim,
-    Future<SpriteAnimation> attackEffectBottomAnim,
-    Future<SpriteAnimation> attackEffectLeftAnim,
-    Future<SpriteAnimation> attackEffectTopAnim,
-    VoidCallback execute,
+    double? sizePush,
+    Direction? direction,
+    Future<SpriteAnimation>? attackEffectRightAnim,
+    Future<SpriteAnimation>? attackEffectBottomAnim,
+    Future<SpriteAnimation>? attackEffectLeftAnim,
+    Future<SpriteAnimation>? attackEffectTopAnim,
+    VoidCallback? execute,
   }) {
     if (!this.checkPassedInterval('attackMelee', interval, dtUpdate)) return;
 
-    if (isDead || this.position == null) return;
+    if (isDead) return;
 
     Rect positionAttack;
-    Future<SpriteAnimation> anim;
+    Future<SpriteAnimation>? anim;
 
     Direction playerDirection;
 
@@ -159,88 +159,88 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     switch (playerDirection) {
       case Direction.top:
         positionAttack = Rect.fromLTWH(
-          this.position.left + (this.width - widthArea) / 2,
-          rectToMove.top - heightArea,
-          widthArea,
-          heightArea,
+          this.position.left + (this.width - width) / 2,
+          rectToMove.top - height,
+          width,
+          height,
         );
         if (attackEffectTopAnim != null) anim = attackEffectTopAnim;
-        pushTop = (sizePush ?? heightArea) * -1;
+        pushTop = (sizePush ?? height) * -1;
         break;
       case Direction.right:
         positionAttack = Rect.fromLTWH(
           rectToMove.right,
-          this.position.top + (this.height - heightArea) / 2,
-          widthArea,
-          heightArea,
+          this.position.top + (this.height - height) / 2,
+          width,
+          height,
         );
         if (attackEffectRightAnim != null) anim = attackEffectRightAnim;
-        pushLeft = (sizePush ?? widthArea);
+        pushLeft = (sizePush ?? width);
         break;
       case Direction.bottom:
         positionAttack = Rect.fromLTWH(
-          this.position.left + (this.width - widthArea) / 2,
+          this.position.left + (this.width - width) / 2,
           rectToMove.bottom,
-          widthArea,
-          heightArea,
+          width,
+          height,
         );
         if (attackEffectBottomAnim != null) anim = attackEffectBottomAnim;
-        pushTop = (sizePush ?? heightArea);
+        pushTop = (sizePush ?? height);
         break;
       case Direction.left:
         positionAttack = Rect.fromLTWH(
-          rectToMove.left - widthArea,
-          this.position.top + (this.height - heightArea) / 2,
-          widthArea,
-          heightArea,
+          rectToMove.left - width,
+          this.position.top + (this.height - height) / 2,
+          width,
+          height,
         );
         if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
-        pushLeft = (sizePush ?? widthArea) * -1;
+        pushLeft = (sizePush ?? width) * -1;
         break;
       case Direction.topLeft:
         positionAttack = Rect.fromLTWH(
-          rectToMove.left - widthArea,
-          this.position.top + (this.height - heightArea) / 2,
-          widthArea,
-          heightArea,
+          rectToMove.left - width,
+          this.position.top + (this.height - height) / 2,
+          width,
+          height,
         );
         if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
-        pushLeft = (sizePush ?? widthArea) * -1;
+        pushLeft = (sizePush ?? width) * -1;
         break;
       case Direction.topRight:
         positionAttack = Rect.fromLTWH(
           rectToMove.right,
-          this.position.top + (this.height - heightArea) / 2,
-          widthArea,
-          heightArea,
+          this.position.top + (this.height - height) / 2,
+          width,
+          height,
         );
         if (attackEffectRightAnim != null) anim = attackEffectRightAnim;
-        pushLeft = (sizePush ?? widthArea);
+        pushLeft = (sizePush ?? width);
         break;
       case Direction.bottomLeft:
         positionAttack = Rect.fromLTWH(
-          rectToMove.left - widthArea,
-          this.position.top + (this.height - heightArea) / 2,
-          widthArea,
-          heightArea,
+          rectToMove.left - width,
+          this.position.top + (this.height - height) / 2,
+          width,
+          height,
         );
         if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
-        pushLeft = (sizePush ?? widthArea) * -1;
+        pushLeft = (sizePush ?? width) * -1;
         break;
       case Direction.bottomRight:
         positionAttack = Rect.fromLTWH(
           rectToMove.right,
-          this.position.top + (this.height - heightArea) / 2,
-          widthArea,
-          heightArea,
+          this.position.top + (this.height - height) / 2,
+          width,
+          height,
         );
         if (attackEffectRightAnim != null) anim = attackEffectRightAnim;
-        pushLeft = (sizePush ?? widthArea);
+        pushLeft = (sizePush ?? width);
         break;
     }
 
-    if (anim != null && positionAttack != null) {
-      gameRef.add(
+    if (anim != null) {
+      gameRef?.add(
         AnimatedObjectOnce(
           animation: anim,
           position: positionAttack.toVector2Rect(),
@@ -248,15 +248,17 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       );
     }
 
-    gameRef
-        .attackables()
-        .where((a) =>
-            a.receivesAttackFromEnemy() &&
-            a.rectAttackable().rect.overlaps(positionAttack))
-        .forEach((attackable) {
+    gameRef?.attackables().where((a) {
+      return a.receivesAttackFromEnemy() &&
+          a.rectAttackable().rect.overlaps(positionAttack);
+    }).forEach((attackable) {
       attackable.receiveDamage(damage, id);
-      Vector2Rect rectAfterPush =
-          attackable.position.translate(pushLeft, pushTop);
+
+      Vector2Rect rectAfterPush = attackable.position.translate(
+        pushLeft,
+        pushTop,
+      );
+
       if (withPush &&
           (attackable is ObjectCollision &&
               !(attackable as ObjectCollision)
@@ -265,27 +267,27 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       }
     });
 
-    if (execute != null) execute();
+    execute?.call();
   }
 
   void simpleAttackRange({
-    @required Future<SpriteAnimation> animationRight,
-    @required Future<SpriteAnimation> animationLeft,
-    @required Future<SpriteAnimation> animationTop,
-    @required Future<SpriteAnimation> animationBottom,
-    @required Future<SpriteAnimation> animationDestroy,
-    @required double width,
-    @required double height,
-    int id,
+    required Future<SpriteAnimation> animationRight,
+    required Future<SpriteAnimation> animationLeft,
+    required Future<SpriteAnimation> animationTop,
+    required Future<SpriteAnimation> animationBottom,
+    required Future<SpriteAnimation> animationDestroy,
+    required double width,
+    required double height,
+    int? id,
     double speed = 150,
     double damage = 1,
-    Direction direction,
+    Direction? direction,
     int interval = 1000,
     bool withCollision = true,
-    CollisionConfig collision,
-    VoidCallback destroy,
-    VoidCallback execute,
-    LightingConfig lightingConfig,
+    CollisionConfig? collision,
+    VoidCallback? destroy,
+    VoidCallback? execute,
+    LightingConfig? lightingConfig,
   }) {
     if (!this.checkPassedInterval('attackRange', interval, dtUpdate)) return;
 
@@ -294,7 +296,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     Vector2 startPosition;
     Future<SpriteAnimation> attackRangeAnimation;
 
-    Direction ballDirection;
+    late Direction ballDirection;
 
     Vector2Rect rectToMove = this is ObjectCollision
         ? (this as ObjectCollision).rectCollision
@@ -323,56 +325,56 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     switch (finalDirection) {
       case Direction.left:
-        if (animationLeft != null) attackRangeAnimation = animationLeft;
+        attackRangeAnimation = animationLeft;
         startPosition = Vector2(
           rectToMove.rect.left - width,
           (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
       case Direction.right:
-        if (animationRight != null) attackRangeAnimation = animationRight;
+        attackRangeAnimation = animationRight;
         startPosition = Vector2(
           rectToMove.rect.right,
           (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
       case Direction.top:
-        if (animationTop != null) attackRangeAnimation = animationTop;
+        attackRangeAnimation = animationTop;
         startPosition = Vector2(
           (rectToMove.rect.left + (rectToMove.rect.width - width) / 2),
           rectToMove.rect.top - height,
         );
         break;
       case Direction.bottom:
-        if (animationBottom != null) attackRangeAnimation = animationBottom;
+        attackRangeAnimation = animationBottom;
         startPosition = Vector2(
           (rectToMove.rect.left + (rectToMove.rect.width - width) / 2),
           rectToMove.rect.bottom,
         );
         break;
       case Direction.topLeft:
-        if (animationLeft != null) attackRangeAnimation = animationLeft;
+        attackRangeAnimation = animationLeft;
         startPosition = Vector2(
           rectToMove.rect.left - width,
           (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
       case Direction.topRight:
-        if (animationRight != null) attackRangeAnimation = animationRight;
+        attackRangeAnimation = animationRight;
         startPosition = Vector2(
           rectToMove.rect.right,
           (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
       case Direction.bottomLeft:
-        if (animationLeft != null) attackRangeAnimation = animationLeft;
+        attackRangeAnimation = animationLeft;
         startPosition = Vector2(
           rectToMove.rect.left - width,
           (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
       case Direction.bottomRight:
-        if (animationRight != null) attackRangeAnimation = animationRight;
+        attackRangeAnimation = animationRight;
         startPosition = Vector2(
           rectToMove.rect.right,
           (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
@@ -385,7 +387,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       this.lastDirectionHorizontal = finalDirection;
     }
 
-    gameRef.add(
+    gameRef?.add(
       FlyingAttackObject(
         id: id,
         direction: finalDirection,
@@ -406,11 +408,12 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     if (execute != null) execute();
   }
 
-  void seeAndMoveToAttackRange(
-      {Function(Player) positioned,
-      double radiusVision = 32,
-      double minDistanceFromPlayer}) {
-    if (isDead || this.position == null) return;
+  void seeAndMoveToAttackRange({
+    required Function(Player) positioned,
+    double radiusVision = 32,
+    double? minDistanceFromPlayer,
+  }) {
+    if (isDead) return;
     if (this is ObjectCollision &&
         (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
 

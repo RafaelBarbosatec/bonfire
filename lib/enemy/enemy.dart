@@ -21,7 +21,7 @@ class Enemy extends GameComponent with Attackable {
   double life;
 
   /// Max life of the Enemy.
-  double maxLife;
+  late double maxLife;
 
   bool _isDead = false;
 
@@ -31,9 +31,9 @@ class Enemy extends GameComponent with Attackable {
   double dtUpdate = 0;
 
   Enemy({
-    @required Vector2 position,
-    @required this.height,
-    @required this.width,
+    required Vector2 position,
+    required this.height,
+    required this.width,
     this.life = 10,
   }) {
     receivesAttackFrom = ReceivesAttackFromEnum.PLAYER;
@@ -102,8 +102,11 @@ class Enemy extends GameComponent with Attackable {
     position = position.translate(speed, 0);
   }
 
-  void moveFromAngleDodgeObstacles(double speed, double angle,
-      {Function notMove}) {
+  void moveFromAngleDodgeObstacles(
+    double speed,
+    double angle, {
+    Function? notMove,
+  }) {
     double innerSpeed = (speed * dtUpdate);
     double nextX = innerSpeed * cos(angle);
     double nextY = innerSpeed * sin(angle);
@@ -151,8 +154,8 @@ class Enemy extends GameComponent with Attackable {
       if (!collisionX) newDiffBase = Offset(innerSpeed, 0);
     }
 
-    if (newDiffBase == Offset.zero && notMove != null) {
-      notMove();
+    if (newDiffBase == Offset.zero) {
+      notMove?.call();
     }
     this.position = position.shift(newDiffBase);
   }
@@ -193,13 +196,11 @@ class Enemy extends GameComponent with Attackable {
   }
 
   bool checkPassedInterval(String name, int intervalInMilli, double dt) {
-    if (this.timers[name] == null ||
-        (this.timers[name] != null &&
-            this.timers[name].interval != intervalInMilli)) {
+    if (this.timers[name]?.interval != intervalInMilli) {
       this.timers[name] = IntervalTick(intervalInMilli);
       return true;
     } else {
-      return this.timers[name].update(dt);
+      return this.timers[name]?.update(dt) ?? false;
     }
   }
 

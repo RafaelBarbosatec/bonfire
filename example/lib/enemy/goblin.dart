@@ -118,8 +118,8 @@ class Goblin extends SimpleEnemy with ObjectCollision {
   void execAttack() {
     if (gameRef.player != null && gameRef.player.isDead) return;
     this.simpleAttackMelee(
-      heightArea: width,
-      widthArea: width,
+      height: width,
+      width: width,
       damage: attack / 2,
       interval: 400,
       attackEffectBottomAnim: CommonSpriteSheet.blackAttackEffectBottom,

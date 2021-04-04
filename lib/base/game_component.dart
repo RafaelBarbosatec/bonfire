@@ -10,15 +10,10 @@ import 'package:flame/components.dart';
 abstract class GameComponent extends Component
     with HasGameRef<BonfireGame>, PointerDetectorHandler {
   /// Position used to draw on the screen
-  Vector2Rect position;
+  Vector2Rect position = Vector2Rect.zero();
 
   @override
   void render(Canvas c) {}
-
-  @override
-  void update(double t) {
-    position ??= Vector2Rect(Vector2.zero(), Vector2.zero());
-  }
 
   /// This method destroy of the component
   void remove() {
@@ -26,15 +21,12 @@ abstract class GameComponent extends Component
   }
 
   bool isVisibleInCamera() {
-    if (gameRef == null ||
-        gameRef?.size == null ||
-        position == null ||
-        shouldRemove) return false;
+    if (gameRef == null || gameRef?.size == null || shouldRemove) return false;
 
-    return gameRef.gameCamera.isComponentOnCamera(this);
+    return gameRef?.gameCamera.isComponentOnCamera(this) ?? false;
   }
 
-  String tileTypeBelow() {
+  String? tileTypeBelow() {
     final map = gameRef?.map;
     if (map != null && map.tiles.isNotEmpty) {
       Vector2Rect position = (this is ObjectCollision)
@@ -42,14 +34,14 @@ abstract class GameComponent extends Component
           : this.position;
       final tiles = map.getRendered().where((element) {
         return (element.position.overlaps(position) &&
-            (element?.type?.isNotEmpty ?? false));
+            (element.type.isNotEmpty));
       });
       if (tiles.isNotEmpty) return tiles.first.type;
     }
     return null;
   }
 
-  List<String> tileTypesBelow() {
+  List<String>? tileTypesBelow() {
     final map = gameRef?.map;
     if (map != null && map.tiles.isNotEmpty) {
       Vector2Rect position = (this is ObjectCollision)
@@ -57,8 +49,10 @@ abstract class GameComponent extends Component
           : this.position;
       return map
           .getRendered()
-          .where((element) => (element.position.overlaps(position) &&
-              (element?.type?.isNotEmpty ?? false)))
+          .where((element) {
+            return (element.position.overlaps(position) &&
+                element.type.isNotEmpty);
+          })
           .map<String>((e) => e.type)
           .toList();
     }
@@ -66,18 +60,18 @@ abstract class GameComponent extends Component
   }
 
   void translate(double translateX, double translateY) {
-    position =
-        Vector2Rect.fromRect(position.rect.translate(translateX, translateY));
+    position = Vector2Rect.fromRect(
+      position.rect.translate(translateX, translateY),
+    );
   }
 
   @override
   int get priority => LayerPriority.getPriorityFromMap(_getBottomPriority());
 
   int _getBottomPriority() {
-    int bottomPriority = position?.bottom?.round() ?? 0;
+    int bottomPriority = position.bottom.round();
     if (this is ObjectCollision) {
-      bottomPriority =
-          (this as ObjectCollision).rectCollision?.bottom?.round() ?? 0;
+      bottomPriority = (this as ObjectCollision).rectCollision.bottom.round();
     }
     return bottomPriority;
   }

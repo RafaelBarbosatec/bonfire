@@ -5,12 +5,11 @@ import 'package:flame/components.dart';
 class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
   GameDecorationWithCollision(
     Vector2 position, {
-    Sprite sprite,
-    SpriteAnimation animation,
+    Sprite? sprite,
+    SpriteAnimation? animation,
     double width = 32,
     double height = 32,
-    String type,
-    Iterable<CollisionArea> collisions,
+    Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
     bool frontFromPlayer = false,
@@ -22,11 +21,11 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
           animation: animation,
           sprite: sprite,
         ) {
-    setupCollision(
-      CollisionConfig(
-        collisions: collisions,
-      ),
-    );
+    if (collisions != null) {
+      setupCollision(
+        CollisionConfig(collisions: collisions),
+      );
+    }
   }
 
   GameDecorationWithCollision.withSprite(
@@ -34,8 +33,7 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     Vector2 position, {
     double width = 32,
     double height = 32,
-    String type,
-    Iterable<CollisionArea> collisions,
+    Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
     bool frontFromPlayer = false,
@@ -46,11 +44,11 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
           width: width,
           frontFromPlayer: frontFromPlayer,
         ) {
-    setupCollision(
-      CollisionConfig(
-        collisions: collisions,
-      ),
-    );
+    if (collisions != null) {
+      setupCollision(
+        CollisionConfig(collisions: collisions),
+      );
+    }
   }
 
   GameDecorationWithCollision.withAnimation(
@@ -58,8 +56,7 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     Vector2 position, {
     double width = 32,
     double height = 32,
-    String type,
-    Iterable<CollisionArea> collisions,
+    Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
     bool frontFromPlayer = false,
@@ -70,10 +67,10 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
           width: width,
           frontFromPlayer: frontFromPlayer,
         ) {
-    setupCollision(
-      CollisionConfig(
-        collisions: collisions,
-      ),
-    );
+    if (collisions != null) {
+      setupCollision(
+        CollisionConfig(collisions: collisions),
+      );
+    }
   }
 }

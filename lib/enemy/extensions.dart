@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/text_damage_component.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
@@ -12,13 +11,13 @@ import 'package:flutter/widgets.dart';
 
 extension EnemyExtensions on Enemy {
   void seePlayer({
-    Function(Player) observed,
-    Function() notObserved,
+    required Function(Player) observed,
+    VoidCallback? notObserved,
     double radiusVision = 32,
     int interval = 500,
   }) {
-    Player player = gameRef.player;
-    if (player == null || this.position == null) return;
+    Player? player = gameRef?.player;
+    if (player == null) return;
 
     if (player.isDead) {
       if (notObserved != null) notObserved();
@@ -35,46 +34,22 @@ extension EnemyExtensions on Enemy {
     );
 
     if (fieldOfVision.overlaps(playerRect.rect)) {
-      if (observed != null) observed(player);
+      observed(player);
     } else {
-      if (notObserved != null) notObserved();
+      notObserved?.call();
     }
-  }
-
-  Direction directionThatPlayerIs() {
-    Player player = this.gameRef.player;
-    var diffX = position.center.dx - player.position.center.dx;
-    var diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;
-    var diffY = position.center.dy - player.position.center.dy;
-    var diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
-
-    if (diffPositiveX > diffPositiveY) {
-      if (player.position.center.dx > position.center.dx) {
-        return Direction.right;
-      } else if (player.position.center.dx < position.center.dx) {
-        return Direction.left;
-      }
-    } else {
-      if (player.position.center.dy > position.center.dy) {
-        return Direction.bottom;
-      } else if (player.position.center.dy < position.center.dy) {
-        return Direction.top;
-      }
-    }
-
-    return Direction.left;
   }
 
   void showDamage(
     double damage, {
-    TextConfig config,
+    TextConfig? config,
     double initVelocityTop = -5,
     double gravity = 0.5,
     double maxDownSize = 20,
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
     bool onlyUp = false,
   }) {
-    gameRef.add(
+    gameRef?.add(
       TextDamageComponent(
         damage.toInt().toString(),
         Vector2(
@@ -101,7 +76,6 @@ extension EnemyExtensions on Enemy {
     double padding = 5,
     double strokeWidth = 2,
   }) {
-    if (this.position == null) return;
     double yPosition = position.top - padding;
 
     if (drawInBottom) {
@@ -139,7 +113,7 @@ extension EnemyExtensions on Enemy {
   }
 
   double getAngleFomPlayer() {
-    Player player = this.gameRef.player;
+    Player? player = this.gameRef?.player;
     if (player == null) return 0.0;
     return atan2(
       playerRect.center.dy - this.position.center.dy,
@@ -148,7 +122,7 @@ extension EnemyExtensions on Enemy {
   }
 
   double getInverseAngleFomPlayer() {
-    Player player = this.gameRef.player;
+    Player? player = this.gameRef?.player;
     if (player == null) return 0.0;
     return atan2(
       this.position.center.dy - playerRect.center.dy,
@@ -156,9 +130,10 @@ extension EnemyExtensions on Enemy {
     );
   }
 
-  Vector2Rect get playerRect =>
-      (gameRef.player is ObjectCollision
-          ? (gameRef.player as ObjectCollision)?.rectCollision
-          : gameRef.player?.position) ??
-      Rect.zero;
+  Vector2Rect get playerRect {
+    return (gameRef?.player is ObjectCollision
+            ? (gameRef?.player as ObjectCollision).rectCollision
+            : gameRef?.player?.position) ??
+        Vector2Rect.zero();
+  }
 }
