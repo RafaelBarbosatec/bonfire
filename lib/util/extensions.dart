@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -74,8 +75,12 @@ extension SpriteExt on Sprite {
   }
 }
 
+extension NullableExt<T> on T? {
+  FutureOr<void> let(FutureOr<void> Function(T o) call) => call(this!);
+}
+
 extension GameComponentExt on GameComponent {
-  Direction? directionThatPlayerIs() {
+  Direction? directionThePlayerIsIn() {
     Player? player = this.gameRef?.player;
     if (player == null) return null;
     var diffX = position.center.dx - player.position.center.dx;

@@ -12,9 +12,9 @@ enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
 class JoystickAction {
   final dynamic actionId;
-  Sprite sprite;
-  Sprite spritePressed;
-  Sprite spriteBackgroundDirection;
+  Sprite? sprite;
+  Sprite? spritePressed;
+  Sprite? spriteBackgroundDirection;
   final double sizeFactorBackgroundDirection;
   final double size;
   final EdgeInsets margin;
@@ -24,28 +24,28 @@ class JoystickAction {
   final double opacityBackground;
   final double opacityKnob;
 
-  double _sizeBackgroundDirection;
+  late double _sizeBackgroundDirection;
+  late double _tileSize;
 
-  int _pointer;
-  Vector2Rect _rect;
-  Vector2Rect _rectBackgroundDirection;
+  int? _pointer;
+  Vector2Rect? _rect;
+  Vector2Rect? _rectBackgroundDirection;
   bool _dragging = false;
-  Sprite _spriteToRender;
-  double _tileSize;
-  Offset _dragPosition;
-  Paint _paintBackground;
-  Paint _paintAction;
-  Paint _paintActionPressed;
-  JoystickController _joystickController;
+  Sprite? _spriteToRender;
+  Offset? _dragPosition;
+  Paint? _paintBackground;
+  Paint? _paintAction;
+  Paint? _paintActionPressed;
+  JoystickController? _joystickController;
   bool isPressed = false;
 
   final _loader = AssetsLoader();
 
   JoystickAction({
-    @required this.actionId,
-    Future<Sprite> sprite,
-    Future<Sprite> spritePressed,
-    Future<Sprite> spriteBackgroundDirection,
+    required this.actionId,
+    Future<Sprite>? sprite,
+    Future<Sprite>? spritePressed,
+    Future<Sprite>? spriteBackgroundDirection,
     this.enableDirection = false,
     this.size = 50,
     this.sizeFactorBackgroundDirection = 1.5,
@@ -100,59 +100,65 @@ class JoystickAction {
       radius: _sizeBackgroundDirection / 2,
     ).toVector2Rect();
 
-    _dragPosition = _rect.center;
+    _dragPosition = _rect!.center;
   }
 
   void render(Canvas c) {
     if (_rectBackgroundDirection != null && _dragging && enableDirection) {
       if (spriteBackgroundDirection == null) {
-        double radiusBackground = _rectBackgroundDirection.rect.width / 2;
-        c.drawCircle(
-          Offset(
-            _rectBackgroundDirection.rect.left + radiusBackground,
-            _rectBackgroundDirection.rect.top + radiusBackground,
-          ),
-          radiusBackground,
-          _paintBackground,
-        );
+        _paintBackground?.let((paintBackground) {
+          double radiusBackground = _rectBackgroundDirection!.rect.width / 2;
+          c.drawCircle(
+            Offset(
+              _rectBackgroundDirection!.rect.left + radiusBackground,
+              _rectBackgroundDirection!.rect.top + radiusBackground,
+            ),
+            radiusBackground,
+            paintBackground,
+          );
+        });
       } else {
-        spriteBackgroundDirection.renderFromVector2Rect(
+        spriteBackgroundDirection?.renderFromVector2Rect(
           c,
-          _rectBackgroundDirection,
+          _rectBackgroundDirection!,
         );
       }
     }
 
-    if (_spriteToRender != null) {
-      if (_rect != null)
-        _spriteToRender.render(
+    _rect?.let((rect) {
+      if (_spriteToRender != null) {
+        _spriteToRender?.render(
           c,
-          position: _rect.position,
-          size: _rect.size,
+          position: rect.position,
+          size: rect.size,
         );
-    } else {
-      double radiusAction = _rect.rect.width / 2;
-      c.drawCircle(
-        Offset(
-          _rect.rect.left + radiusAction,
-          _rect.rect.top + radiusAction,
-        ),
-        radiusAction,
-        isPressed ? _paintActionPressed : _paintAction,
-      );
-    }
+      } else {
+        double radiusAction = rect.width / 2;
+        c.drawCircle(
+          Offset(
+            rect.left + radiusAction,
+            rect.top + radiusAction,
+          ),
+          radiusAction,
+          (isPressed ? _paintActionPressed : _paintAction) ?? Paint(),
+        );
+      }
+    });
   }
 
   void update(double dt) {
+    if (_dragPosition == null ||
+        _rectBackgroundDirection == null ||
+        _rect == null) return;
     if (_dragging) {
       double _radAngle = atan2(
-        _dragPosition.dy - _rectBackgroundDirection.center.dy,
-        _dragPosition.dx - _rectBackgroundDirection.center.dx,
+        _dragPosition!.dy - _rectBackgroundDirection!.center.dy,
+        _dragPosition!.dx - _rectBackgroundDirection!.center.dx,
       );
 
       // Distance between the center of joystick background & drag position
-      Vector2 centerPosition = _rectBackgroundDirection.center.toVector2();
-      Vector2 dragPosition = _dragPosition.toVector2();
+      Vector2 centerPosition = _rectBackgroundDirection!.center.toVector2();
+      Vector2 dragPosition = _dragPosition!.toVector2();
       double dist = centerPosition.distanceTo(dragPosition);
 
       // The maximum distance for the knob position the edge of
@@ -166,15 +172,15 @@ class JoystickAction {
       Offset nextPoint = Offset(nextX, nextY);
 
       Offset diff = Offset(
-            _rectBackgroundDirection.center.dx + nextPoint.dx,
-            _rectBackgroundDirection.center.dy + nextPoint.dy,
+            _rectBackgroundDirection!.center.dx + nextPoint.dx,
+            _rectBackgroundDirection!.center.dy + nextPoint.dy,
           ) -
-          _rect.center;
-      _rect = _rect.shift(diff);
+          _rect!.center;
+      _rect = _rect!.shift(diff);
 
       double _intensity = dist / _tileSize;
 
-      _joystickController.joystickAction(
+      _joystickController?.joystickAction(
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.MOVE,
@@ -183,21 +189,19 @@ class JoystickAction {
         ),
       );
     } else {
-      if (_rect != null) {
-        Offset diff = _dragPosition - _rect.center;
-        _rect = _rect.shift(diff);
-      }
+      Offset diff = _dragPosition! - _rect!.center;
+      _rect = _rect!.shift(diff);
     }
   }
 
   void actionDown(int pointer, Offset localPosition) {
-    if (!_dragging && _rect != null && _rect.contains(localPosition)) {
+    if (!_dragging && _rect != null && _rect!.contains(localPosition)) {
       _pointer = pointer;
       if (enableDirection) {
         _dragPosition = localPosition;
         _dragging = true;
       }
-      _joystickController.joystickAction(
+      _joystickController?.joystickAction(
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.DOWN,
@@ -218,8 +222,12 @@ class JoystickAction {
   void actionUp(int pointer) {
     if (pointer == _pointer) {
       _dragging = false;
-      _dragPosition = _rectBackgroundDirection.center;
-      _joystickController.joystickAction(
+
+      _rectBackgroundDirection?.let((rectBackgroundDirection) {
+        _dragPosition = rectBackgroundDirection.center;
+      });
+
+      _joystickController?.joystickAction(
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.UP,

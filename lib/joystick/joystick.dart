@@ -7,11 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class Joystick extends JoystickController {
-  final List<JoystickAction> actions;
-  final JoystickDirectional directional;
+  final List<JoystickAction>? actions;
+  final JoystickDirectional? directional;
   final bool keyboardEnable;
   bool _isDirectionalDownKeyboard = false;
-  LogicalKeyboardKey _currentDirectionalKey;
+  LogicalKeyboardKey? _currentDirectionalKey;
 
   Joystick({
     this.actions,
@@ -26,8 +26,8 @@ class Joystick extends JoystickController {
 
   void addAction(JoystickAction action) {
     if (actions != null && gameRef?.size != null) {
-      action.initialize(gameRef.size, this);
-      actions.add(action);
+      action.initialize(gameRef!.size, this);
+      actions?.add(action);
     }
   }
 
@@ -115,9 +115,12 @@ class Joystick extends JoystickController {
       }
 
       if (!_isDirectionalDownKeyboard) {
-        joystickAction(JoystickActionEvent(
-          id: event.logicalKey.keyId,
-        ));
+        joystickAction(
+          JoystickActionEvent(
+            id: event.logicalKey.keyId,
+            event: ActionEvent.DOWN,
+          ),
+        );
       }
     } else if (event is RawKeyUpEvent &&
         _isDirectionalDownKeyboard &&
@@ -141,7 +144,7 @@ class Joystick extends JoystickController {
   Future<void> onLoad() async {
     await directional?.onLoad();
     if (actions != null) {
-      await Future.forEach<JoystickAction>(actions, (element) {
+      await Future.forEach<JoystickAction>(actions!, (element) {
         return element.onLoad();
       });
     }

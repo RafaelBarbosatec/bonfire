@@ -7,15 +7,15 @@ import 'package:flutter/material.dart';
 
 class TextInterfaceComponent extends InterfaceComponent {
   String text;
-  TextConfig textConfig;
+  late TextConfig textConfig;
   TextInterfaceComponent({
-    @required int id,
-    @required Vector2 position,
+    required int id,
+    required Vector2 position,
     this.text = '',
     double width = 0,
     double height = 0,
-    VoidCallback onTapComponent,
-    TextConfig textConfig,
+    VoidCallback? onTapComponent,
+    TextConfig? textConfig,
   }) : super(
           id: id,
           position: position,

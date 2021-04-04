@@ -24,7 +24,7 @@ class JoystickDirectionalEvent {
   final double radAngle;
 
   JoystickDirectionalEvent({
-    this.directional,
+    required this.directional,
     this.intensity = 0.0,
     this.radAngle = 0.0,
   });
@@ -33,7 +33,7 @@ class JoystickDirectionalEvent {
 enum ActionEvent { DOWN, UP, MOVE }
 
 class JoystickActionEvent {
-  final dynamic id;
+  final dynamic? id;
   final double intensity;
   final double radAngle;
   final ActionEvent event;
@@ -42,7 +42,7 @@ class JoystickActionEvent {
     this.id,
     this.intensity = 0.0,
     this.radAngle = 0.0,
-    this.event,
+    required this.event,
   });
 }
 
@@ -82,8 +82,9 @@ abstract class JoystickController extends Component
   void update(double t) {}
 
   @override
-  int get priority =>
-      LayerPriority.getPriorityJoystick(gameRef?.highestPriority ?? 0);
+  int get priority {
+    return LayerPriority.getPriorityJoystick(gameRef?.highestPriority ?? 0);
+  }
 
   @override
   bool get isHud => true;

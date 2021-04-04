@@ -68,11 +68,11 @@ class GameInterface extends GameComponent {
 
   void _drawFPS(Canvas c) {
     if (gameRef?.showFPS == true && gameRef?.size != null) {
-      double fps = gameRef.fps(100);
-      getTextConfigFps(fps).render(
+      double? fps = gameRef?.fps(100);
+      getTextConfigFps(fps ?? 0.0).render(
         c,
-        'FPS: ${fps.toStringAsFixed(2)}',
-        Vector2(gameRef.size.x - 100, 20),
+        'FPS: ${fps?.toStringAsFixed(2)}',
+        Vector2((gameRef?.size.x ?? 0.0) - 100, 20),
       );
     }
   }
