@@ -7,7 +7,7 @@ import 'package:bonfire/util/vector2rect.dart';
 
 class ControlledUpdateAnimation {
   bool _alreadyUpdate = false;
-  SpriteAnimation animation;
+  SpriteAnimation? animation;
   final _loader = AssetsLoader();
 
   ControlledUpdateAnimation(Future<SpriteAnimation> animation) {
@@ -15,9 +15,8 @@ class ControlledUpdateAnimation {
   }
 
   void render(Canvas canvas, Vector2Rect position) {
-    if (position == null) return;
-    if (animation != null && animation.getSprite()?.loaded() == true) {
-      animation.getSprite().renderFromVector2Rect(
+    if (animation != null) {
+      animation?.getSprite().renderFromVector2Rect(
             canvas,
             position,
             overridePaint: MapPaint.instance.paint,

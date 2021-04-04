@@ -12,30 +12,30 @@ import 'package:bonfire/util/game_controller.dart';
 import 'package:flutter/material.dart';
 
 class BonfireTiledWidget extends StatefulWidget {
-  final JoystickController joystick;
-  final Player player;
-  final GameInterface interface;
-  final GameComponent background;
-  final List<GameComponent> components;
+  final JoystickController? joystick;
+  final Player? player;
+  final GameInterface? interface;
+  final GameComponent? background;
+  final List<GameComponent>? components;
   final bool constructionMode;
   final bool showCollisionArea;
   final bool showFPS;
-  final GameController gameController;
-  final Color constructionModeColor;
-  final Color collisionAreaColor;
-  final Color lightingColorGame;
+  final GameController? gameController;
+  final Color? constructionModeColor;
+  final Color? collisionAreaColor;
+  final Color? lightingColorGame;
   final TiledWorldMap map;
-  final Widget progress;
+  final Widget? progress;
   final double cameraZoom;
   final Size cameraSizeMovementWindow;
   final bool cameraMoveOnlyMapArea;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
-  final Duration progressTransitionDuration;
-  final GameColorFilter colorFilter;
+  final Duration? progressTransitionDuration;
+  final GameColorFilter? colorFilter;
 
   const BonfireTiledWidget({
-    Key key,
-    this.map,
+    Key? key,
+    required this.map,
     this.joystick,
     this.player,
     this.interface,
@@ -48,7 +48,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.collisionAreaColor,
     this.lightingColorGame,
     this.progress,
-    this.cameraZoom,
+    this.cameraZoom = 1.0,
     this.cameraMoveOnlyMapArea = false,
     this.cameraSizeMovementWindow = const Size(50, 50),
     this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
@@ -62,20 +62,17 @@ class BonfireTiledWidget extends StatefulWidget {
 
 class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
     with TickerProviderStateMixin {
-  BonfireGame _game;
+  BonfireGame? _game;
   bool _loading = true;
 
   @override
   void didUpdateWidget(BonfireTiledWidget oldWidget) {
     if (widget.constructionMode) {
-      if (widget.map == null) return;
       widget.map.build().then((value) {
-        _game.map.updateTiles(value.map.tiles);
-
-        _game.decorations().forEach((d) => d.remove());
-        _game.enemies().forEach((e) => e.remove());
-
-        value.components.forEach((d) => _game.addGameComponent(d));
+        _game?.map.updateTiles(value.map.tiles);
+        _game?.decorations().forEach((d) => d.remove());
+        _game?.enemies().forEach((e) => e.remove());
+        value.components?.forEach((d) => _game?.addGameComponent(d));
       });
     }
     super.didUpdateWidget(oldWidget);
@@ -93,30 +90,22 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       duration:
           widget.progressTransitionDuration ?? Duration(milliseconds: 500),
       transitionBuilder: widget.transitionBuilder,
-      child: _loading
-          ? widget.progress ?? _defaultProgress()
-          : CustomGameWidget(
-                game: _game,
-              ) ??
-              SizedBox.shrink(),
+      child: _loading ? _defaultProgress() : _buildGame(),
     );
   }
 
   void _loadGame() async {
     try {
-      TiledWorldData tiled;
-      if (widget.map != null) {
-        tiled = await widget.map.build();
-      }
+      TiledWorldData tiled = await widget.map.build();
 
-      List<GameComponent> components = (tiled?.components ?? []);
-      if (widget.components != null) components.addAll(widget.components);
+      List<GameComponent> components = (tiled.components ?? []);
+      if (widget.components != null) components.addAll(widget.components!);
       _game = BonfireGame(
         context: context,
         joystickController: widget.joystick,
         player: widget.player,
         interface: widget.interface,
-        map: tiled?.map,
+        map: tiled.map,
         components: components,
         background: widget.background,
         constructionMode: widget.constructionMode,
@@ -143,11 +132,19 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   }
 
   Widget _defaultProgress() {
-    return Container(
-      color: Colors.black,
-      child: Center(
-        child: CircularProgressIndicator(),
-      ),
+    return widget.progress ??
+        Container(
+          color: Colors.black,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+  }
+
+  Widget _buildGame() {
+    if (_game == null) return SizedBox.shrink();
+    return CustomGameWidget(
+      game: _game!,
     );
   }
 }

@@ -12,29 +12,29 @@ import 'package:bonfire/util/game_controller.dart';
 import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {
-  final JoystickController joystick;
-  final Player player;
-  final GameInterface interface;
+  final JoystickController? joystick;
+  final Player? player;
+  final GameInterface? interface;
   final MapGame map;
-  final List<Enemy> enemies;
-  final List<GameDecoration> decorations;
-  final List<GameComponent> components;
-  final GameComponent background;
+  final List<Enemy>? enemies;
+  final List<GameDecoration>? decorations;
+  final List<GameComponent>? components;
+  final GameComponent? background;
   final bool constructionMode;
   final bool showCollisionArea;
   final bool showFPS;
-  final GameController gameController;
-  final Color constructionModeColor;
-  final Color collisionAreaColor;
-  final Color lightingColorGame;
+  final GameController? gameController;
+  final Color? constructionModeColor;
+  final Color? collisionAreaColor;
+  final Color? lightingColorGame;
   final double cameraZoom;
   final Size cameraSizeMovementWindow;
   final bool cameraMoveOnlyMapArea;
-  final GameColorFilter colorFilter;
+  final GameColorFilter? colorFilter;
 
   const BonfireWidget({
-    Key key,
-    this.map,
+    Key? key,
+    required this.map,
     this.joystick,
     this.player,
     this.interface,
@@ -48,7 +48,7 @@ class BonfireWidget extends StatefulWidget {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
-    this.cameraZoom,
+    this.cameraZoom = 1.0,
     this.colorFilter,
     this.cameraMoveOnlyMapArea = false,
     this.cameraSizeMovementWindow = const Size(50, 50),
@@ -60,20 +60,18 @@ class BonfireWidget extends StatefulWidget {
 }
 
 class _BonfireWidgetState extends State<BonfireWidget> {
-  BonfireGame _game;
+  BonfireGame? _game;
 
   @override
   void didUpdateWidget(BonfireWidget oldWidget) {
     if (widget.constructionMode) {
-      if (_game.map != null) _game.map.updateTiles(widget.map.tiles);
+      _game?.map.updateTiles(widget.map.tiles);
 
-      _game.decorations().forEach((d) => d.remove());
-      if (widget.decorations != null)
-        widget.decorations.forEach((d) => _game.addGameComponent(d));
+      _game?.decorations().forEach((d) => d.remove());
+      widget.decorations?.forEach((d) => _game?.addGameComponent(d));
 
-      _game.enemies().forEach((e) => e.remove());
-      if (widget.enemies != null)
-        widget.enemies.forEach((e) => _game.addGameComponent(e));
+      _game?.enemies().forEach((e) => e.remove());
+      widget.enemies?.forEach((e) => _game?.addGameComponent(e));
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -109,8 +107,9 @@ class _BonfireWidgetState extends State<BonfireWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (_game == null) return SizedBox.shrink();
     return CustomGameWidget(
-      game: _game,
+      game: _game!,
     );
   }
 }
