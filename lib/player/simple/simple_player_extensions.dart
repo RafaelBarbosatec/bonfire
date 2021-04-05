@@ -8,13 +8,13 @@ import 'package:flutter/widgets.dart';
 
 extension SimplePlayerExtensions on SimplePlayer {
   void simpleAttackMelee({
-    Future<SpriteAnimation> animationRight,
-    Future<SpriteAnimation> animationBottom,
-    Future<SpriteAnimation> animationLeft,
-    Future<SpriteAnimation> animationTop,
-    @required double damage,
+    Future<SpriteAnimation>? animationRight,
+    Future<SpriteAnimation>? animationBottom,
+    Future<SpriteAnimation>? animationLeft,
+    Future<SpriteAnimation>? animationTop,
+    required double damage,
     dynamic id,
-    Direction direction,
+    Direction? direction,
     double heightArea = 32,
     double widthArea = 32,
     bool withPush = true,
@@ -28,28 +28,28 @@ extension SimplePlayerExtensions on SimplePlayer {
       animationTop: animationTop,
       damage: damage,
       id: id,
-      heightArea: heightArea,
-      widthArea: widthArea,
+      height: heightArea,
+      width: widthArea,
       withPush: withPush,
     );
   }
 
   void simpleAttackRange({
-    @required Future<SpriteAnimation> animationRight,
-    @required Future<SpriteAnimation> animationLeft,
-    @required Future<SpriteAnimation> animationTop,
-    @required Future<SpriteAnimation> animationBottom,
-    Future<SpriteAnimation> animationDestroy,
-    @required double width,
-    @required double height,
-    dynamic id,
+    required Future<SpriteAnimation> animationRight,
+    required Future<SpriteAnimation> animationLeft,
+    required Future<SpriteAnimation> animationTop,
+    required Future<SpriteAnimation> animationBottom,
+    Future<SpriteAnimation>? animationDestroy,
+    required double width,
+    required double height,
+    dynamic? id,
     double speed = 150,
     double damage = 1,
-    Direction direction,
+    Direction? direction,
     bool withCollision = true,
-    VoidCallback destroy,
-    CollisionConfig collision,
-    LightingConfig lightingConfig,
+    VoidCallback? destroy,
+    CollisionConfig? collision,
+    LightingConfig? lightingConfig,
   }) {
     Direction attackDirection = direction ?? this.lastDirection;
     this.simpleAttackRangeByDirection(

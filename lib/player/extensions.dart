@@ -17,14 +17,14 @@ import 'package:flutter/widgets.dart';
 extension PlayerExtensions on Player {
   void showDamage(
     double damage, {
-    TextConfig config,
+    TextConfig? config,
     double initVelocityTop = -5,
     double gravity = 0.5,
     double maxDownSize = 20,
     bool onlyUp = false,
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
   }) {
-    gameRef.add(
+    gameRef?.add(
       TextDamageComponent(
         damage.toInt().toString(),
         Vector2(
@@ -46,13 +46,13 @@ extension PlayerExtensions on Player {
   }
 
   void seeEnemy({
-    Function(List<Enemy>) observed,
-    Function() notObserved,
+    required Function(List<Enemy>) observed,
+    VoidCallback? notObserved,
     double radiusVision = 32,
   }) {
-    if (isDead || this.position == null) return;
+    if (isDead) return;
 
-    var enemiesInLife = this.gameRef.visibleEnemies();
+    var enemiesInLife = this.gameRef!.visibleEnemies();
     if (enemiesInLife.isEmpty) {
       if (notObserved != null) notObserved();
       return;
@@ -69,32 +69,30 @@ extension PlayerExtensions on Player {
     );
 
     List<Enemy> enemiesObserved = enemiesInLife
-        .where((enemy) =>
-            enemy.position != null &&
-            fieldOfVision.overlaps(enemy.position.rect))
+        .where((enemy) => fieldOfVision.overlaps(enemy.position.rect))
         .toList();
 
     if (enemiesObserved.isNotEmpty) {
-      if (observed != null) observed(enemiesObserved);
+      observed(enemiesObserved);
     } else {
-      if (notObserved != null) notObserved();
+      notObserved?.call();
     }
   }
 
   void simpleAttackRangeByAngle({
-    @required Future<SpriteAnimation> animationTop,
-    @required double width,
-    @required double height,
-    @required double radAngleDirection,
-    Future<SpriteAnimation> animationDestroy,
-    dynamic id,
+    required Future<SpriteAnimation> animationTop,
+    required double width,
+    required double height,
+    required double radAngleDirection,
+    Future<SpriteAnimation>? animationDestroy,
+    dynamic? id,
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
     bool collisionOnlyVisibleObjects = true,
-    VoidCallback destroy,
-    CollisionConfig collision,
-    LightingConfig lightingConfig,
+    VoidCallback? destroy,
+    CollisionConfig? collision,
+    LightingConfig? lightingConfig,
   }) {
     if (isDead) return;
 
@@ -108,7 +106,7 @@ extension PlayerExtensions on Player {
         this.position.center;
 
     Vector2Rect position = this.position.shift(diffBase);
-    gameRef.add(FlyingAttackAngleObject(
+    gameRef?.add(FlyingAttackAngleObject(
       id: id,
       position: position.position,
       radAngle: angle,
@@ -128,22 +126,22 @@ extension PlayerExtensions on Player {
   }
 
   void simpleAttackRangeByDirection({
-    @required Future<SpriteAnimation> animationRight,
-    @required Future<SpriteAnimation> animationLeft,
-    @required Future<SpriteAnimation> animationTop,
-    @required Future<SpriteAnimation> animationBottom,
-    Future<SpriteAnimation> animationDestroy,
-    @required double width,
-    @required double height,
-    @required Direction direction,
+    required Future<SpriteAnimation> animationRight,
+    required Future<SpriteAnimation> animationLeft,
+    required Future<SpriteAnimation> animationTop,
+    required Future<SpriteAnimation> animationBottom,
+    Future<SpriteAnimation>? animationDestroy,
+    required double width,
+    required double height,
+    required Direction direction,
     dynamic id,
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
     bool collisionOnlyVisibleObjects = true,
-    VoidCallback destroy,
-    CollisionConfig collision,
-    LightingConfig lightingConfig,
+    VoidCallback? destroy,
+    CollisionConfig? collision,
+    LightingConfig? lightingConfig,
   }) {
     if (isDead) return;
 
@@ -158,56 +156,56 @@ extension PlayerExtensions on Player {
 
     switch (attackDirection) {
       case Direction.left:
-        if (animationLeft != null) attackRangeAnimation = animationLeft;
+        attackRangeAnimation = animationLeft;
         startPosition = Vector2(
           rectBase.rect.left - width,
           (rectBase.rect.top + (rectBase.rect.height - height) / 2),
         );
         break;
       case Direction.right:
-        if (animationRight != null) attackRangeAnimation = animationRight;
+        attackRangeAnimation = animationRight;
         startPosition = Vector2(
           rectBase.rect.right,
           (rectBase.rect.top + (rectBase.rect.height - height) / 2),
         );
         break;
       case Direction.top:
-        if (animationTop != null) attackRangeAnimation = animationTop;
+        attackRangeAnimation = animationTop;
         startPosition = Vector2(
           (rectBase.rect.left + (rectBase.rect.width - width) / 2),
           rectBase.rect.top - height,
         );
         break;
       case Direction.bottom:
-        if (animationBottom != null) attackRangeAnimation = animationBottom;
+        attackRangeAnimation = animationBottom;
         startPosition = Vector2(
           (rectBase.rect.left + (rectBase.rect.width - width) / 2),
           rectBase.rect.bottom,
         );
         break;
       case Direction.topLeft:
-        if (animationLeft != null) attackRangeAnimation = animationLeft;
+        attackRangeAnimation = animationLeft;
         startPosition = Vector2(
           rectBase.rect.left - width,
           (rectBase.rect.top + (rectBase.rect.height - height) / 2),
         );
         break;
       case Direction.topRight:
-        if (animationRight != null) attackRangeAnimation = animationRight;
+        attackRangeAnimation = animationRight;
         startPosition = Vector2(
           rectBase.rect.right,
           (rectBase.rect.top + (rectBase.rect.height - height) / 2),
         );
         break;
       case Direction.bottomLeft:
-        if (animationLeft != null) attackRangeAnimation = animationLeft;
+        attackRangeAnimation = animationLeft;
         startPosition = Vector2(
           rectBase.rect.left - width,
           (rectBase.rect.top + (rectBase.rect.height - height) / 2),
         );
         break;
       case Direction.bottomRight:
-        if (animationRight != null) attackRangeAnimation = animationRight;
+        attackRangeAnimation = animationRight;
         startPosition = Vector2(
           rectBase.rect.right,
           (rectBase.rect.top + (rectBase.rect.height - height) / 2),
@@ -215,7 +213,7 @@ extension PlayerExtensions on Player {
         break;
     }
 
-    gameRef.add(
+    gameRef?.add(
       FlyingAttackObject(
         id: id,
         direction: attackDirection,
@@ -236,22 +234,22 @@ extension PlayerExtensions on Player {
   }
 
   void simpleAttackMeleeByDirection({
-    Future<SpriteAnimation> animationRight,
-    Future<SpriteAnimation> animationBottom,
-    Future<SpriteAnimation> animationLeft,
-    Future<SpriteAnimation> animationTop,
-    @required double damage,
-    @required Direction direction,
-    dynamic id,
-    double heightArea = 32,
-    double widthArea = 32,
+    Future<SpriteAnimation>? animationRight,
+    Future<SpriteAnimation>? animationBottom,
+    Future<SpriteAnimation>? animationLeft,
+    Future<SpriteAnimation>? animationTop,
+    dynamic? id,
+    required double damage,
+    required Direction direction,
+    required double height,
+    required double width,
     bool withPush = true,
-    double sizePush,
+    double? sizePush,
   }) {
     if (isDead) return;
 
     Rect positionAttack;
-    Future<SpriteAnimation> anim;
+    Future<SpriteAnimation>? anim;
     double pushLeft = 0;
     double pushTop = 0;
     Direction attackDirection = direction;
@@ -263,94 +261,94 @@ extension PlayerExtensions on Player {
     switch (attackDirection) {
       case Direction.top:
         positionAttack = Rect.fromLTWH(
-          this.position.rect.left + (this.width - widthArea) / 2,
-          rectBase.rect.top - heightArea,
-          widthArea,
-          heightArea,
+          this.position.rect.left + (this.width - width) / 2,
+          rectBase.rect.top - height,
+          width,
+          height,
         );
         if (animationTop != null) anim = animationTop;
-        pushTop = (sizePush ?? heightArea) * -1;
+        pushTop = (sizePush ?? height) * -1;
         break;
       case Direction.right:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.right,
-          this.position.rect.top + (this.height - heightArea) / 2,
-          widthArea,
-          heightArea,
+          this.position.rect.top + (this.height - height) / 2,
+          width,
+          height,
         );
         if (animationRight != null) anim = animationRight;
-        pushLeft = (sizePush ?? widthArea);
+        pushLeft = (sizePush ?? width);
         break;
       case Direction.bottom:
         positionAttack = Rect.fromLTWH(
-          this.position.rect.left + (this.width - widthArea) / 2,
+          this.position.rect.left + (this.width - width) / 2,
           rectBase.rect.bottom,
-          widthArea,
-          heightArea,
+          width,
+          height,
         );
         if (animationBottom != null) anim = animationBottom;
-        pushTop = (sizePush ?? heightArea);
+        pushTop = (sizePush ?? height);
         break;
       case Direction.left:
         positionAttack = Rect.fromLTWH(
-          rectBase.rect.left - widthArea,
-          this.position.rect.top + (this.height - heightArea) / 2,
-          widthArea,
-          heightArea,
+          rectBase.rect.left - width,
+          this.position.rect.top + (this.height - height) / 2,
+          width,
+          height,
         );
         if (animationLeft != null) anim = animationLeft;
-        pushLeft = (sizePush ?? widthArea) * -1;
+        pushLeft = (sizePush ?? width) * -1;
         break;
       case Direction.topLeft:
         positionAttack = Rect.fromLTWH(
-          rectBase.rect.left - widthArea,
-          this.position.rect.top + (this.height - heightArea) / 2,
-          widthArea,
-          heightArea,
+          rectBase.rect.left - width,
+          this.position.rect.top + (this.height - height) / 2,
+          width,
+          height,
         );
         if (animationLeft != null) anim = animationLeft;
-        pushLeft = (sizePush ?? widthArea) * -1;
+        pushLeft = (sizePush ?? width) * -1;
         break;
       case Direction.topRight:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.right,
-          this.position.rect.top + (this.height - heightArea) / 2,
-          widthArea,
-          heightArea,
+          this.position.rect.top + (this.height - height) / 2,
+          width,
+          height,
         );
         if (animationRight != null) anim = animationRight;
-        pushLeft = (sizePush ?? widthArea);
+        pushLeft = (sizePush ?? width);
         break;
       case Direction.bottomLeft:
         positionAttack = Rect.fromLTWH(
-          rectBase.rect.left - widthArea,
-          this.position.rect.top + (this.height - heightArea) / 2,
-          widthArea,
-          heightArea,
+          rectBase.rect.left - width,
+          this.position.rect.top + (this.height - height) / 2,
+          width,
+          height,
         );
         if (animationLeft != null) anim = animationLeft;
-        pushLeft = (sizePush ?? widthArea) * -1;
+        pushLeft = (sizePush ?? width) * -1;
         break;
       case Direction.bottomRight:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.right,
-          this.position.rect.top + (this.height - heightArea) / 2,
-          widthArea,
-          heightArea,
+          this.position.rect.top + (this.height - height) / 2,
+          width,
+          height,
         );
         if (animationRight != null) anim = animationRight;
-        pushLeft = (sizePush ?? widthArea);
+        pushLeft = (sizePush ?? width);
         break;
     }
 
     if (anim != null) {
-      gameRef.add(AnimatedObjectOnce(
+      gameRef?.add(AnimatedObjectOnce(
         animation: anim,
         position: positionAttack.toVector2Rect(),
       ));
     }
 
-    gameRef.attackables().where((a) {
+    gameRef?.attackables().where((a) {
       return a.receivesAttackFromPlayer() &&
           a.rectAttackable().rect.overlaps(positionAttack);
     }).forEach(
@@ -368,36 +366,38 @@ extension PlayerExtensions on Player {
   }
 
   void simpleAttackMeleeByAngle({
-    @required Future<SpriteAnimation> animationTop,
-    @required double damage,
-    @required double radAngleDirection,
-    dynamic id,
-    double heightArea = 32,
-    double widthArea = 32,
+    required Future<SpriteAnimation> animationTop,
+    required double damage,
+    required double radAngleDirection,
+    dynamic? id,
+    required double height,
+    required double width,
     bool withPush = true,
   }) {
     if (isDead) return;
 
     double angle = radAngleDirection;
 
-    double nextX = this.height * cos(angle);
-    double nextY = this.height * sin(angle);
+    double nextX = height * cos(angle);
+    double nextY = width * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
-            this.position.center.dy + nextPoint.dy) -
+    Offset diffBase = Offset(
+          this.position.center.dx + nextPoint.dx,
+          this.position.center.dy + nextPoint.dy,
+        ) -
         this.position.center;
 
     Vector2Rect positionAttack = this.position.shift(diffBase);
 
-    gameRef.add(AnimatedObjectOnce(
+    gameRef?.add(AnimatedObjectOnce(
       animation: animationTop,
       position: positionAttack,
       rotateRadAngle: angle,
     ));
 
     gameRef
-        .attackables()
+        ?.attackables()
         .where((a) =>
             a.receivesAttackFromPlayer() &&
             a.rectAttackable().overlaps(positionAttack))

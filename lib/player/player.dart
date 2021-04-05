@@ -21,7 +21,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   double speed;
 
   double life;
-  double maxLife;
+  late double maxLife;
 
   bool _isDead = false;
 
@@ -30,9 +30,9 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   bool isFocusCamera = true;
 
   Player({
-    @required Vector2 position,
-    this.width = 32,
-    this.height = 32,
+    required Vector2 position,
+    required this.width,
+    required this.height,
     this.life = 100,
     this.speed = 100,
   }) {
@@ -53,7 +53,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     super.update(dt);
   }
 
-  void moveTop(double speed, {VoidCallback onCollision}) {
+  void moveTop(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
     Vector2Rect displacement = position.translate(0, (-innerSpeed));
@@ -66,7 +66,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     position = displacement;
   }
 
-  void moveRight(double speed, {VoidCallback onCollision}) {
+  void moveRight(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
     Vector2Rect displacement = position.translate(innerSpeed, 0);
@@ -80,7 +80,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     position = displacement;
   }
 
-  void moveBottom(double speed, {VoidCallback onCollision}) {
+  void moveBottom(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
     Vector2Rect displacement = position.translate(0, innerSpeed);
@@ -94,7 +94,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     position = displacement;
   }
 
-  void moveLeft(double speed, {VoidCallback onCollision}) {
+  void moveLeft(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
     Vector2Rect displacement = position.translate(-innerSpeed, 0);
@@ -108,7 +108,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     position = displacement;
   }
 
-  void moveFromAngle(double speed, double angle, {VoidCallback onCollision}) {
+  void moveFromAngle(double speed, double angle, {VoidCallback? onCollision}) {
     double nextX = (speed * _dtUpdate) * cos(angle);
     double nextY = (speed * _dtUpdate) * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
@@ -162,12 +162,16 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   @override
   void moveTo(Vector2 position) {}
 
-  bool _playerIsCollision({Vector2Rect displacement, bool onlyVisible}) {
+  bool _playerIsCollision({
+    required Vector2Rect displacement,
+    bool onlyVisible = true,
+  }) {
     var collision = false;
     if (this is ObjectCollision) {
       (this as ObjectCollision).setCollisionOnlyVisibleScreen(onlyVisible);
-      collision =
-          (this as ObjectCollision).isCollision(displacement: displacement);
+      collision = (this as ObjectCollision).isCollision(
+        displacement: displacement,
+      );
     }
 
     return collision;
