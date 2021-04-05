@@ -13,7 +13,7 @@ mixin DragGesture on GameComponent {
 
   @override
   void handlerPointerDown(PointerDownEvent event) {
-    if (gameRef == null) return;
+    if (!hasGameRef) return;
     final pointer = event.pointer;
     final position = event.localPosition;
     if (!(this is GameComponent) || !enableDrag) return;
@@ -26,7 +26,7 @@ mixin DragGesture on GameComponent {
       }
     } else {
       final absolutePosition =
-          this.gameRef!.gameCamera.screenPositionToWorld(position);
+          this.gameRef.gameCamera.screenPositionToWorld(position);
       if (this.position.contains(absolutePosition)) {
         _pointer = pointer;
         _startDragOffset = absolutePosition;
@@ -37,9 +37,8 @@ mixin DragGesture on GameComponent {
 
   @override
   void handlerPointerMove(PointerMoveEvent event) {
-    if (gameRef == null ||
-        _startDragPosition == null ||
-        _startDragOffset == null) return;
+    if (!hasGameRef || _startDragPosition == null || _startDragOffset == null)
+      return;
 
     final pointer = event.pointer;
     final position = event.localPosition;
@@ -56,7 +55,7 @@ mixin DragGesture on GameComponent {
         ).toVector2Rect();
       } else {
         final absolutePosition =
-            this.gameRef!.gameCamera.screenPositionToWorld(position);
+            this.gameRef.gameCamera.screenPositionToWorld(position);
         this.position = Rect.fromLTWH(
           _startDragPosition!.left +
               (absolutePosition.dx - _startDragOffset!.dx),

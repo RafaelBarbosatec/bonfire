@@ -25,8 +25,8 @@ class Joystick extends JoystickController {
   }
 
   void addAction(JoystickAction action) {
-    if (actions != null && gameRef?.size != null) {
-      action.initialize(gameRef!.size, this);
+    if (actions != null) {
+      action.initialize(gameRef.size, this);
       actions?.add(action);
     }
   }

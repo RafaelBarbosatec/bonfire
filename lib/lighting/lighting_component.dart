@@ -22,12 +22,12 @@ class LightingComponent extends GameComponent {
 
   @override
   int get priority =>
-      LayerPriority.getPriorityLighting(gameRef?.highestPriority ?? 0);
+      LayerPriority.getPriorityLighting(gameRef.highestPriority);
 
   @override
   void render(Canvas canvas) {
-    if (color == null || gameRef?.size == null) return;
-    Vector2 size = gameRef!.size;
+    if (color == null) return;
+    Vector2 size = gameRef.size;
     canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
     canvas.drawColor(color!, BlendMode.dstATop);
     _visibleLight.forEach((light) {
@@ -38,10 +38,10 @@ class LightingComponent extends GameComponent {
       canvas.save();
 
       canvas.translate(size.x / 2, size.y / 2);
-      canvas.scale(gameRef?.gameCamera.zoom ?? 1);
+      canvas.scale(gameRef.gameCamera.zoom);
       canvas.translate(
-        -(gameRef?.gameCamera.position.dx ?? 0.0),
-        -(gameRef?.gameCamera.position.dy ?? 0.0),
+        -(gameRef.gameCamera.position.dx),
+        -(gameRef.gameCamera.position.dy),
       );
 
       canvas.drawCircle(
@@ -91,7 +91,7 @@ class LightingComponent extends GameComponent {
   void update(double dt) {
     if (color == null) return;
     _dtUpdate = dt;
-    _visibleLight = gameRef?.lightVisible() ?? [];
+    _visibleLight = gameRef.lightVisible();
   }
 
   void animateToColor(
@@ -101,7 +101,7 @@ class LightingComponent extends GameComponent {
   }) {
     _tween = ColorTween(begin: this.color ?? Colors.transparent, end: color);
 
-    gameRef?.getValueGenerator(
+    gameRef.getValueGenerator(
       duration,
       onChange: (value) {
         this.color = _tween?.transform(value);

@@ -22,7 +22,7 @@ class GameColorFilter with HasGameRef<BonfireGame> {
     this.blendMode = blendMode;
     _tween = ColorTween(begin: this.color ?? Colors.transparent, end: color);
 
-    gameRef?.getValueGenerator(
+    gameRef.getValueGenerator(
       duration,
       onChange: (value) {
         this.color = _tween?.transform(value);

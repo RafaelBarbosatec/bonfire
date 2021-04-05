@@ -12,9 +12,8 @@ class BackgroundColorGame extends GameComponent {
 
   @override
   void render(Canvas canvas) {
-    if (gameRef == null) return;
     canvas.drawRect(
-      new Rect.fromLTRB(0.0, 0.0, gameRef!.size.x, gameRef!.size.y),
+      new Rect.fromLTRB(0.0, 0.0, gameRef.size.x, gameRef.size.y),
       new Paint()..color = color,
     );
   }

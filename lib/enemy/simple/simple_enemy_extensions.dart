@@ -240,7 +240,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     }
 
     if (anim != null) {
-      gameRef?.add(
+      gameRef.add(
         AnimatedObjectOnce(
           animation: anim,
           position: positionAttack.toVector2Rect(),
@@ -248,7 +248,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       );
     }
 
-    gameRef?.attackables().where((a) {
+    gameRef.attackables().where((a) {
       return a.receivesAttackFromEnemy() &&
           a.rectAttackable().rect.overlaps(positionAttack);
     }).forEach((attackable) {
@@ -387,7 +387,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       this.lastDirectionHorizontal = finalDirection;
     }
 
-    gameRef?.add(
+    gameRef.add(
       FlyingAttackObject(
         id: id,
         direction: finalDirection,

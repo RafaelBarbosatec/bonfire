@@ -24,7 +24,7 @@ extension PlayerExtensions on Player {
     bool onlyUp = false,
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
   }) {
-    gameRef?.add(
+    gameRef.add(
       TextDamageComponent(
         damage.toInt().toString(),
         Vector2(
@@ -52,7 +52,7 @@ extension PlayerExtensions on Player {
   }) {
     if (isDead) return;
 
-    var enemiesInLife = this.gameRef!.visibleEnemies();
+    var enemiesInLife = this.gameRef.visibleEnemies();
     if (enemiesInLife.isEmpty) {
       if (notObserved != null) notObserved();
       return;
@@ -106,7 +106,7 @@ extension PlayerExtensions on Player {
         this.position.center;
 
     Vector2Rect position = this.position.shift(diffBase);
-    gameRef?.add(FlyingAttackAngleObject(
+    gameRef.add(FlyingAttackAngleObject(
       id: id,
       position: position.position,
       radAngle: angle,
@@ -213,7 +213,7 @@ extension PlayerExtensions on Player {
         break;
     }
 
-    gameRef?.add(
+    gameRef.add(
       FlyingAttackObject(
         id: id,
         direction: attackDirection,
@@ -342,13 +342,13 @@ extension PlayerExtensions on Player {
     }
 
     if (anim != null) {
-      gameRef?.add(AnimatedObjectOnce(
+      gameRef.add(AnimatedObjectOnce(
         animation: anim,
         position: positionAttack.toVector2Rect(),
       ));
     }
 
-    gameRef?.attackables().where((a) {
+    gameRef.attackables().where((a) {
       return a.receivesAttackFromPlayer() &&
           a.rectAttackable().rect.overlaps(positionAttack);
     }).forEach(
@@ -390,14 +390,14 @@ extension PlayerExtensions on Player {
 
     Vector2Rect positionAttack = this.position.shift(diffBase);
 
-    gameRef?.add(AnimatedObjectOnce(
+    gameRef.add(AnimatedObjectOnce(
       animation: animationTop,
       position: positionAttack,
       rotateRadAngle: angle,
     ));
 
     gameRef
-        ?.attackables()
+        .attackables()
         .where((a) =>
             a.receivesAttackFromPlayer() &&
             a.rectAttackable().overlaps(positionAttack))

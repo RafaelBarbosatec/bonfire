@@ -83,7 +83,7 @@ abstract class JoystickController extends Component
 
   @override
   int get priority {
-    return LayerPriority.getPriorityJoystick(gameRef?.highestPriority ?? 0);
+    return LayerPriority.getPriorityJoystick(gameRef.highestPriority);
   }
 
   @override

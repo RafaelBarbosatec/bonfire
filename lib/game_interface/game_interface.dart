@@ -18,7 +18,7 @@ class GameInterface extends GameComponent {
 
   @override
   int get priority =>
-      LayerPriority.getPriorityInterface(gameRef?.highestPriority ?? 0);
+      LayerPriority.getPriorityInterface(gameRef.highestPriority);
 
   @override
   void render(Canvas c) {
@@ -67,12 +67,12 @@ class GameInterface extends GameComponent {
   }
 
   void _drawFPS(Canvas c) {
-    if (gameRef?.showFPS == true && gameRef?.size != null) {
-      double? fps = gameRef?.fps(100);
-      getTextConfigFps(fps ?? 0.0).render(
+    if (gameRef.showFPS == true) {
+      double? fps = gameRef.fps(100);
+      getTextConfigFps(fps).render(
         c,
-        'FPS: ${fps?.toStringAsFixed(2)}',
-        Vector2((gameRef?.size.x ?? 0.0) - 100, 20),
+        'FPS: ${fps.toStringAsFixed(2)}',
+        Vector2((gameRef.size.x) - 100, 20),
       );
     }
   }

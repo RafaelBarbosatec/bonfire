@@ -15,7 +15,7 @@ mixin Lighting on GameComponent {
   LightingConfig? get lightingConfig => _lightingConfig;
 
   bool isVisible(Camera camera) {
-    if (lightingConfig == null || camera.gameRef?.size == null) return false;
+    if (lightingConfig == null) return false;
 
     Rect rectLight = Rect.fromLTWH(
       this.position.rect.center.dx -

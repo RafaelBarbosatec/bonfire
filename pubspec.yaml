@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flame: ^1.0.0-rc8
+  flame: ^1.0.0-rc9
   ordered_set: ^3.0.0
   tiledjsonreader: ^1.0.0+1
   http: ^0.13.1

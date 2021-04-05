@@ -18,15 +18,15 @@ abstract class GameComponent extends Component
 
   /// Method that checks if this component is visible on the screen
   bool isVisibleInCamera() {
-    if (gameRef?.size == null || shouldRemove) return false;
+    if (shouldRemove) return false;
 
-    return gameRef?.gameCamera.isComponentOnCamera(this) ?? false;
+    return gameRef.gameCamera.isComponentOnCamera(this);
   }
 
   /// Method that checks what type map tile is currently
   String? tileTypeBelow() {
-    final map = gameRef?.map;
-    if (map != null && map.tiles.isNotEmpty) {
+    final map = gameRef.map;
+    if (map.tiles.isNotEmpty) {
       Vector2Rect position = (this is ObjectCollision)
           ? (this as ObjectCollision).getRectCollision(this.position)
           : this.position;
@@ -41,8 +41,8 @@ abstract class GameComponent extends Component
 
   /// Method that checks what types map tile is currently
   List<String>? tileTypesBelow() {
-    final map = gameRef?.map;
-    if (map != null && map.tiles.isNotEmpty) {
+    final map = gameRef.map;
+    if (map.tiles.isNotEmpty) {
       Vector2Rect position = (this is ObjectCollision)
           ? (this as ObjectCollision).getRectCollision(this.position)
           : this.position;

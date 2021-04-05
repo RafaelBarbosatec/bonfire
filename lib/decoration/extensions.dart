@@ -9,7 +9,7 @@ extension GameDecorationExtensions on GameDecoration {
     VoidCallback? notObserved,
     int visionCells = 3,
   }) {
-    Player? player = gameRef?.player;
+    Player? player = gameRef.player;
     if (!isVisibleInCamera() || player == null) return;
 
     if (player.isDead) {

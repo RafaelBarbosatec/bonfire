@@ -113,7 +113,7 @@ class FlyingAttackAngleObject extends AnimatedObject
 
     bool destroy = false;
 
-    gameRef?.attackables().where((a) {
+    gameRef.attackables().where((a) {
       return (damageInPlayer
               ? a.receivesAttackFromEnemy()
               : a.receivesAttackFromPlayer()) &&
@@ -141,7 +141,7 @@ class FlyingAttackAngleObject extends AnimatedObject
         final positionDestroy =
             Vector2Rect.fromRect(position.rect.shift(diffBase));
 
-        gameRef?.add(
+        gameRef.add(
           AnimatedObjectOnce(
             animation: destroyAnimation!,
             position: positionDestroy,
@@ -155,7 +155,7 @@ class FlyingAttackAngleObject extends AnimatedObject
   }
 
   bool _verifyExistInWorld() {
-    Size? mapSize = gameRef?.map.mapSize;
+    Size? mapSize = gameRef.map.mapSize;
     if (mapSize == null) return true;
     if (position.rect.left < 0) {
       return false;

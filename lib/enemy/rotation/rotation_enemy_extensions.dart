@@ -137,14 +137,14 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     Vector2Rect positionAttack = this.position.shift(diffBase);
 
-    gameRef?.add(AnimatedObjectOnce(
+    gameRef.add(AnimatedObjectOnce(
       animation: attackEffectTopAnim,
       position: positionAttack,
       rotateRadAngle: angle,
     ));
 
     gameRef
-        ?.attackables()
+        .attackables()
         .where((a) =>
             a.receivesAttackFromEnemy() &&
             a.rectAttackable().rect.overlaps(positionAttack.rect))
@@ -195,7 +195,7 @@ extension RotationEnemyExtensions on RotationEnemy {
         this.position.center;
 
     Rect position = this.position.rect.shift(diffBase);
-    gameRef?.add(
+    gameRef.add(
       FlyingAttackAngleObject(
         id: id,
         position: Vector2(position.left, position.top),

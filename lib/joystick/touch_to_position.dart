@@ -28,12 +28,10 @@ class TouchToPosition extends JoystickController {
     if (_pointer == event.pointer) {
       final absolutePosition = this
           .gameRef
-          ?.gameCamera
+          .gameCamera
           .screenPositionToWorld(event.position)
           .toVector2();
-      absolutePosition?.let((o) {
-        moveTo(o);
-      });
+      moveTo(absolutePosition);
     }
   }
 

@@ -16,7 +16,7 @@ extension EnemyExtensions on Enemy {
     double radiusVision = 32,
     int interval = 500,
   }) {
-    Player? player = gameRef?.player;
+    Player? player = gameRef.player;
     if (player == null) return;
 
     if (player.isDead) {
@@ -49,7 +49,7 @@ extension EnemyExtensions on Enemy {
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
     bool onlyUp = false,
   }) {
-    gameRef?.add(
+    gameRef.add(
       TextDamageComponent(
         damage.toInt().toString(),
         Vector2(
@@ -113,7 +113,7 @@ extension EnemyExtensions on Enemy {
   }
 
   double getAngleFomPlayer() {
-    Player? player = this.gameRef?.player;
+    Player? player = this.gameRef.player;
     if (player == null) return 0.0;
     return atan2(
       playerRect.center.dy - this.position.center.dy,
@@ -122,7 +122,7 @@ extension EnemyExtensions on Enemy {
   }
 
   double getInverseAngleFomPlayer() {
-    Player? player = this.gameRef?.player;
+    Player? player = this.gameRef.player;
     if (player == null) return 0.0;
     return atan2(
       this.position.center.dy - playerRect.center.dy,
@@ -131,9 +131,9 @@ extension EnemyExtensions on Enemy {
   }
 
   Vector2Rect get playerRect {
-    return (gameRef?.player is ObjectCollision
-            ? (gameRef?.player as ObjectCollision).rectCollision
-            : gameRef?.player?.position) ??
+    return (gameRef.player is ObjectCollision
+            ? (gameRef.player as ObjectCollision).rectCollision
+            : gameRef.player?.position) ??
         Vector2Rect.zero();
   }
 }

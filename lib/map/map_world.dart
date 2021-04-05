@@ -31,18 +31,17 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    if (gameRef == null) return;
-    if (lastCameraX != gameRef!.gameCamera.position.dx ||
-        lastCameraY != gameRef!.gameCamera.position.dy ||
-        lastZoom != gameRef!.gameCamera.zoom) {
-      lastCameraX = gameRef!.gameCamera.position.dx;
-      lastCameraY = gameRef!.gameCamera.position.dy;
-      lastZoom = gameRef!.gameCamera.zoom;
+    if (lastCameraX != gameRef.gameCamera.position.dx ||
+        lastCameraY != gameRef.gameCamera.position.dy ||
+        lastZoom != gameRef.gameCamera.zoom) {
+      lastCameraX = gameRef.gameCamera.position.dx;
+      lastCameraY = gameRef.gameCamera.position.dy;
+      lastZoom = gameRef.gameCamera.zoom;
 
       List<Tile> tilesRender = [];
       List<Tile> tilesCollision = [];
       for (final tile in tiles) {
-        tile.gameRef ??= gameRef;
+        tile.gameRef = gameRef;
         if (tile.isVisibleInCamera()) {
           tilesRender.add(tile);
           if ((tile is ObjectCollision) &&
@@ -97,7 +96,7 @@ class MapWorld extends MapGame {
     lastZoom = -1;
     lastSizeScreen = null;
     this.tiles = map;
-    verifyMaxTopAndLeft(gameRef?.size ?? Vector2.zero());
+    verifyMaxTopAndLeft(gameRef.size);
   }
 
   @override

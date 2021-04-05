@@ -38,7 +38,7 @@ mixin ObjectCollision on GameComponent {
   }
 
   void triggerSensors(Iterable<Vector2Rect> rectCollisions) {
-    gameRef?.let((ref) {
+    gameRef.let((ref) {
       final Iterable<Sensor> sensors = ref
           .visibleSensors()
           .where((decoration) => decoration is Sensor)
@@ -123,8 +123,8 @@ mixin ObjectCollision on GameComponent {
   bool _containsCollisionWithMap(Iterable<Vector2Rect> rectCollisions) {
     final tiledCollisions =
         ((_collisionConfig?.collisionOnlyVisibleScreen ?? false)
-            ? gameRef?.map.getCollisionsRendered() ?? []
-            : gameRef?.map.getCollisions() ?? []);
+            ? gameRef.map.getCollisionsRendered()
+            : gameRef.map.getCollisions());
     final collisionMap = tiledCollisions.where(
       (i) =>
           (i is ObjectCollision) &&
@@ -135,19 +135,19 @@ mixin ObjectCollision on GameComponent {
 
   bool _containsCollision(Iterable<Vector2Rect> rectCollisions) {
     final collisions = ((_collisionConfig?.collisionOnlyVisibleScreen ?? true)
-            ? gameRef?.visibleCollisions()
-            : gameRef?.collisions())
-        ?.where(
+            ? gameRef.visibleCollisions()
+            : gameRef.collisions())
+        .where(
       (i) => i.detectCollision(rectCollisions) && i != this,
     );
-    return collisions?.isNotEmpty ?? false;
+    return collisions.isNotEmpty;
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (gameRef != null && gameRef?.showCollisionArea == true) {
-      _drawCollision(canvas, gameRef?.collisionAreaColor);
+    if (gameRef.showCollisionArea == true) {
+      _drawCollision(canvas, gameRef.collisionAreaColor);
     }
   }
 

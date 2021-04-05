@@ -23,8 +23,8 @@ class Camera with HasGameRef<BonfireGame> {
 
   Rect get cameraRect => Rect.fromCenter(
         center: Offset(position.dx, position.dy),
-        width: (gameRef?.size.x ?? 0.0) * _zoomFactor(),
-        height: (gameRef?.size.y ?? 0.0) * _zoomFactor(),
+        width: (gameRef.size.x) * _zoomFactor(),
+        height: (gameRef.size.y) * _zoomFactor(),
       );
 
   Rect get cameraRectWithSpacing => Rect.fromCenter(
@@ -83,7 +83,6 @@ class Camera with HasGameRef<BonfireGame> {
     Duration? duration,
     Curve curve = Curves.decelerate,
   }) {
-    if (gameRef?.size == null) return;
     if (zoom <= 0.0) return;
     target = null;
 
@@ -96,7 +95,7 @@ class Camera with HasGameRef<BonfireGame> {
     double initialZoom = this.zoom;
 
     gameRef
-        ?.getValueGenerator(
+        .getValueGenerator(
           duration ?? Duration(seconds: 1),
           onChange: (value) {
             this.position = this.position.copyWith(
@@ -120,7 +119,6 @@ class Camera with HasGameRef<BonfireGame> {
     Duration? duration,
     Curve curve = Curves.decelerate,
   }) {
-    if (gameRef?.size == null) return;
     if (zoom <= 0.0) return;
     this.target = null;
 
@@ -132,7 +130,7 @@ class Camera with HasGameRef<BonfireGame> {
     double diffZoom = this.zoom - zoom;
     double initialZoom = this.zoom;
 
-    gameRef?.getValueGenerator(
+    gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
         this.position = position.copyWith(x: originX - (diffX * value));
@@ -148,13 +146,12 @@ class Camera with HasGameRef<BonfireGame> {
   }
 
   void moveToPosition(Offset position) {
-    if (gameRef?.size == null) return;
     target = null;
     this.position = position;
   }
 
   void moveToPlayer() {
-    this.target = gameRef?.player;
+    this.target = gameRef.player;
   }
 
   void moveToTarget(GameComponent target) {
@@ -167,9 +164,9 @@ class Camera with HasGameRef<BonfireGame> {
     double zoom = 1,
     Curve curve = Curves.decelerate,
   }) {
-    if (gameRef?.player == null) return;
+    if (gameRef.player == null) return;
     moveToTargetAnimated(
-      gameRef!.player!,
+      gameRef.player!,
       zoom: zoom,
       finish: finish,
       duration: duration,
@@ -178,12 +175,12 @@ class Camera with HasGameRef<BonfireGame> {
   }
 
   void _followTarget({double horizontal = 50, double vertical = 50}) {
-    if (target == null || gameRef?.size == null) return;
+    if (target == null) return;
     if (_lastTargetOffset == target!.position.rect.center) return;
     _lastTargetOffset = target!.position.rect.center;
     final screenCenter = Offset(
-      gameRef!.size.x / 2,
-      gameRef!.size.y / 2,
+      gameRef.size.x / 2,
+      gameRef.size.y / 2,
     );
     final positionTarget = worldPositionToScreen(target!.position.rect.center);
 
@@ -218,13 +215,12 @@ class Camera with HasGameRef<BonfireGame> {
     VoidCallback? finish,
     Curve curve = Curves.decelerate,
   }) {
-    if (gameRef?.size == null) return;
     if (zoom <= 0.0) return;
 
     double diffZoom = this.zoom - (zoom);
     double initialZoom = this.zoom;
 
-    gameRef?.getValueGenerator(
+    gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
         this.zoom = initialZoom - (diffZoom * value);
@@ -235,14 +231,10 @@ class Camera with HasGameRef<BonfireGame> {
   }
 
   bool isComponentOnCamera(GameComponent c) {
-    if (gameRef?.size == null) return false;
-
     return cameraRectWithSpacing.overlaps(c.position.rect);
   }
 
   bool isRectOnCamera(Rect c) {
-    if (gameRef?.size == null) return false;
-
     return cameraRectWithSpacing.overlaps(c);
   }
 
@@ -254,9 +246,8 @@ class Camera with HasGameRef<BonfireGame> {
   }
 
   Offset screenPositionToWorld(Offset position) {
-    if (gameRef == null) return Offset.zero;
-    double diffX = position.dx - gameRef!.size.x / 2;
-    double diffY = position.dy - gameRef!.size.y / 2;
+    double diffX = position.dx - gameRef.size.x / 2;
+    double diffY = position.dy - gameRef.size.y / 2;
     return Offset(
       this.cameraRect.center.dx + (diffX / zoom),
       this.cameraRect.center.dy + (diffY / zoom),
@@ -271,15 +262,14 @@ class Camera with HasGameRef<BonfireGame> {
   }
 
   void _keepInMapArea() {
-    if (gameRef?.map == null) return;
-    final startPosition = gameRef!.map.mapStartPosition;
-    final sizeMap = gameRef!.map.mapSize;
+    final startPosition = gameRef.map.mapStartPosition;
+    final sizeMap = gameRef.map.mapSize;
     if (startPosition == null || sizeMap == null) return;
 
-    final limitX = (startPosition.x + gameRef!.size.x / 2);
-    final limitY = (startPosition.y + gameRef!.size.y / 2);
-    final limitMaxX = (sizeMap.width - gameRef!.size.x / 2);
-    final limitMaxY = (sizeMap.height - gameRef!.size.y / 2);
+    final limitX = (startPosition.x + gameRef.size.x / 2);
+    final limitY = (startPosition.y + gameRef.size.y / 2);
+    final limitMaxX = (sizeMap.width - gameRef.size.x / 2);
+    final limitMaxY = (sizeMap.height - gameRef.size.y / 2);
 
     if (this.position.dx > limitMaxX) {
       this.position = Offset(limitMaxX, position.dy);

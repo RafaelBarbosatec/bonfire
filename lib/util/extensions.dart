@@ -81,7 +81,7 @@ extension NullableExt<T> on T? {
 
 extension GameComponentExt on GameComponent {
   Direction? directionThePlayerIsIn() {
-    Player? player = this.gameRef?.player;
+    Player? player = this.gameRef.player;
     if (player == null) return null;
     var diffX = position.center.dx - player.position.center.dx;
     var diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;

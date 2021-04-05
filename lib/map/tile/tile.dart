@@ -73,7 +73,7 @@ class Tile extends GameComponent {
       overridePaint: MapPaint.instance.paint,
     );
 
-    if ((gameRef?.constructionMode ?? false) && isVisibleInCamera()) {
+    if (gameRef.constructionMode && isVisibleInCamera()) {
       _drawGrid(canvas);
     }
     super.render(canvas);
@@ -88,15 +88,14 @@ class Tile extends GameComponent {
     canvas.drawRect(
       position.rect,
       _paintText!
-        ..color =
-            gameRef?.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+        ..color = gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
     );
     if (_positionText.x % 2 == 0) {
       TextConfig(
         fontSize: width / 3.5,
       )
           .withColor(
-            gameRef?.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+            gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
           )
           .render(
             canvas,
