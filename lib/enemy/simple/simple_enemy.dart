@@ -38,7 +38,6 @@ class SimpleEnemy extends Enemy {
     lastDirection = initDirection;
     lastDirectionHorizontal =
         initDirection == Direction.left ? Direction.left : Direction.right;
-    idle();
   }
 
   void customMoveTop(double moveSpeed, {bool addAnimation = true}) {
@@ -123,9 +122,9 @@ class SimpleEnemy extends Enemy {
 
   void customMoveBottomLeft(double speedX, double speedY) {
     if (_runFastAnimation) return;
-    animation?.play(SimpleAnimationEnum.runBottomLeft);
+    animation.play(SimpleAnimationEnum.runBottomLeft);
     lastDirection = Direction.bottomLeft;
-    this.customMoveLeft(speedX, addAnimation: animation?.runBottomLeft == null);
+    this.customMoveLeft(speedX, addAnimation: animation.runBottomLeft == null);
     this.customMoveBottom(speedY, addAnimation: false);
   }
 
@@ -134,59 +133,59 @@ class SimpleEnemy extends Enemy {
     _isIdle = true;
     switch (lastDirection) {
       case Direction.left:
-        animation?.play(SimpleAnimationEnum.idleLeft);
+        animation.play(SimpleAnimationEnum.idleLeft);
         break;
       case Direction.right:
-        animation?.play(SimpleAnimationEnum.idleRight);
+        animation.play(SimpleAnimationEnum.idleRight);
         break;
       case Direction.top:
-        if (animation?.idleTop != null) {
-          animation?.play(SimpleAnimationEnum.idleTop);
+        if (animation.idleTop != null) {
+          animation.play(SimpleAnimationEnum.idleTop);
         } else {
           if (lastDirectionHorizontal == Direction.left) {
-            animation?.play(SimpleAnimationEnum.idleLeft);
+            animation.play(SimpleAnimationEnum.idleLeft);
           } else {
-            animation?.play(SimpleAnimationEnum.idleRight);
+            animation.play(SimpleAnimationEnum.idleRight);
           }
         }
         break;
       case Direction.bottom:
-        if (animation?.idleBottom != null) {
-          animation?.play(SimpleAnimationEnum.idleBottom);
+        if (animation.idleBottom != null) {
+          animation.play(SimpleAnimationEnum.idleBottom);
         } else {
           if (lastDirectionHorizontal == Direction.left) {
-            animation?.play(SimpleAnimationEnum.idleLeft);
+            animation.play(SimpleAnimationEnum.idleLeft);
           } else {
-            animation?.play(SimpleAnimationEnum.idleRight);
+            animation.play(SimpleAnimationEnum.idleRight);
           }
         }
         break;
       case Direction.topLeft:
-        if (animation?.idleTopLeft != null) {
-          animation?.play(SimpleAnimationEnum.idleTopLeft);
+        if (animation.idleTopLeft != null) {
+          animation.play(SimpleAnimationEnum.idleTopLeft);
         } else {
-          animation?.play(SimpleAnimationEnum.idleLeft);
+          animation.play(SimpleAnimationEnum.idleLeft);
         }
         break;
       case Direction.topRight:
-        if (animation?.idleTopRight != null) {
-          animation?.play(SimpleAnimationEnum.idleTopRight);
+        if (animation.idleTopRight != null) {
+          animation.play(SimpleAnimationEnum.idleTopRight);
         } else {
-          animation?.play(SimpleAnimationEnum.idleRight);
+          animation.play(SimpleAnimationEnum.idleRight);
         }
         break;
       case Direction.bottomLeft:
-        if (animation?.idleBottomLeft != null) {
-          animation?.play(SimpleAnimationEnum.idleBottomLeft);
+        if (animation.idleBottomLeft != null) {
+          animation.play(SimpleAnimationEnum.idleBottomLeft);
         } else {
-          animation?.play(SimpleAnimationEnum.idleLeft);
+          animation.play(SimpleAnimationEnum.idleLeft);
         }
         break;
       case Direction.bottomRight:
-        if (animation?.idleBottomRight != null) {
-          animation?.play(SimpleAnimationEnum.idleBottomRight);
+        if (animation.idleBottomRight != null) {
+          animation.play(SimpleAnimationEnum.idleBottomRight);
         } else {
-          animation?.play(SimpleAnimationEnum.idleRight);
+          animation.play(SimpleAnimationEnum.idleRight);
         }
         break;
     }
@@ -195,7 +194,7 @@ class SimpleEnemy extends Enemy {
   @override
   void update(double dt) {
     if (isVisibleInCamera()) {
-      animation?.update(dt, position);
+      animation.update(dt, position);
     }
     super.update(dt);
   }
@@ -203,13 +202,14 @@ class SimpleEnemy extends Enemy {
   @override
   void render(Canvas canvas) {
     if (isVisibleInCamera()) {
-      animation?.render(canvas);
+      animation.render(canvas);
     }
     super.render(canvas);
   }
 
   @override
-  Future<void> onLoad() {
-    return animation.onLoad();
+  Future<void> onLoad() async {
+    await animation.onLoad();
+    idle();
   }
 }

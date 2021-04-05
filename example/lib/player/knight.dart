@@ -34,9 +34,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
         ) {
     setupLighting(
       LightingConfig(
-        radius: width * 1.5,
-        blurBorder: width * 1.5,
-      ),
+          radius: width * 1.5,
+          blurBorder: width * 1.5,
+          color: Colors.transparent),
     );
     setupCollision(
       CollisionConfig(
@@ -138,9 +138,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
         ],
       ),
       lightingConfig: LightingConfig(
-        radius: width * 0.5,
-        blurBorder: width,
-      ),
+          radius: width * 0.5, blurBorder: width, color: Colors.transparent),
     );
   }
 

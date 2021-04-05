@@ -37,7 +37,6 @@ class SimplePlayer extends Player {
           ? JoystickMoveDirectional.MOVE_LEFT
           : JoystickMoveDirectional.MOVE_RIGHT;
     }
-    idle();
   }
 
   @override
@@ -375,7 +374,8 @@ class SimplePlayer extends Player {
   }
 
   @override
-  Future<void> onLoad() {
-    return animation.onLoad();
+  Future<void> onLoad() async {
+    await animation.onLoad();
+    idle();
   }
 }

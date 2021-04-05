@@ -75,16 +75,15 @@ class GameManualMap extends StatelessWidget implements GameListener {
     double x = DungeonMap.tileSize * (4 + Random().nextInt(25));
     double y = DungeonMap.tileSize * (5 + Random().nextInt(3));
 
-    Vector2 position = Vector2(
-      x,
-      y,
-    );
+    final goblin = Goblin(Vector2(x, y));
+
     _controller.addGameComponent(AnimatedObjectOnce(
       animation: CommonSpriteSheet.smokeExplosion,
+      position: goblin.position,
     ));
 
     _controller.addGameComponent(
-      Goblin(position),
+      goblin,
     );
   }
 }
