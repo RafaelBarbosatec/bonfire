@@ -24,19 +24,45 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends CustomBaseGame with KeyboardEvents {
+  /// Context used to access all Flutter power in your game.
   final BuildContext context;
+
+  /// Represents the character controlled by the user in the game. Instances of this class has actions and movements ready to be used and configured.
   final Player? player;
+
+  /// The way you cand raw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
   final GameInterface? interface;
+
+  /// Represents a map (or world) where the game occurs.
   final MapGame map;
+
+  /// The player-controlling component.
   final JoystickController? joystickController;
+
+  /// Background of the game. This can be a color or custom component
   final GameComponent? background;
+
+  /// Used to show grid in the map and facilitate the construction and testing of the map
   final bool constructionMode;
-  final bool showCollisionArea;
-  final GameController? gameController;
+
+  /// Color grid when `constructionMode` is true
   final Color? constructionModeColor;
-  final Color? lightingColorGame;
+
+  /// Used to draw area collision in objects.
+  final bool showCollisionArea;
+
+  /// Color of the colision area when `showCollisionArea` is true
   final Color? collisionAreaColor;
+
+  /// Used to extensively control game elements
+  final GameController? gameController;
+
+  /// Used to configure lighting in the game
+  final Color? lightingColorGame;
+
+  /// Used to show in the interface the FPS.
   final bool showFPS;
 
   Iterable<Enemy> _enemies = [];
@@ -51,8 +77,9 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   Iterable<ObjectCollision> _visibleCollisions = [];
   Iterable<ObjectCollision> _collisions = [];
   IntervalTick? _interval;
-  ColorFilterComponent _colorFilterComponent =
-      ColorFilterComponent(GameColorFilter());
+  ColorFilterComponent _colorFilterComponent = ColorFilterComponent(
+    GameColorFilter(),
+  );
   LightingComponent? lighting;
 
   List<Enemy>? _initialEnemies;
