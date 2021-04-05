@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 class GameColorFilter with HasGameRef<BonfireGame> {
-  Color color;
-  BlendMode blendMode;
-  ColorTween _tween;
+  Color? color;
+  BlendMode? blendMode;
+  ColorTween? _tween;
 
   GameColorFilter({this.color, this.blendMode});
 
@@ -22,10 +22,10 @@ class GameColorFilter with HasGameRef<BonfireGame> {
     this.blendMode = blendMode;
     _tween = ColorTween(begin: this.color ?? Colors.transparent, end: color);
 
-    gameRef.getValueGenerator(
-      duration ?? Duration(seconds: 1),
+    gameRef?.getValueGenerator(
+      duration,
       onChange: (value) {
-        this.color = _tween.transform(value);
+        this.color = _tween?.transform(value);
       },
       onFinish: () {
         this.color = color;

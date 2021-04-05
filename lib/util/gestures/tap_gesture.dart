@@ -5,8 +5,10 @@ import 'package:flutter/widgets.dart';
 
 mixin TapGesture on GameComponent {
   bool enableTab = true;
-  int _pointer;
+  int _pointer = -1;
   void handlerPointerDown(PointerDownEvent event) {
+    if (gameRef == null) return;
+
     final pointer = event.pointer;
     final position = event.localPosition;
 
@@ -18,7 +20,7 @@ mixin TapGesture on GameComponent {
       }
     } else {
       final absolutePosition =
-          this.gameRef.gameCamera.screenPositionToWorld(position);
+          this.gameRef!.gameCamera.screenPositionToWorld(position);
       if (this.position.contains(absolutePosition)) {
         _pointer = pointer;
         onTapDown(pointer, position);
@@ -27,6 +29,8 @@ mixin TapGesture on GameComponent {
   }
 
   void handlerPointerUp(PointerUpEvent event) {
+    if (gameRef == null) return;
+
     final pointer = event.pointer;
     final position = event.localPosition;
 
@@ -40,7 +44,7 @@ mixin TapGesture on GameComponent {
       }
     } else {
       final absolutePosition =
-          this.gameRef.gameCamera.screenPositionToWorld(position);
+          this.gameRef!.gameCamera.screenPositionToWorld(position);
       if (this.position.contains(absolutePosition)) {
         onTapUp(pointer, position);
         onTap();
@@ -48,7 +52,7 @@ mixin TapGesture on GameComponent {
         onTapCancel();
       }
     }
-    _pointer = null;
+    _pointer = -1;
   }
 
   void onTapDown(int pointer, Offset position);

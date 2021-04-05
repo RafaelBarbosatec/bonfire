@@ -6,13 +6,14 @@ import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/widgets.dart';
 
 mixin DragGesture on GameComponent {
-  Offset _startDragOffset;
-  Vector2Rect _startDragPosition;
-  int _pointer;
+  Offset? _startDragOffset;
+  Vector2Rect? _startDragPosition;
+  int _pointer = -1;
   bool enableDrag = true;
 
   @override
   void handlerPointerDown(PointerDownEvent event) {
+    if (gameRef == null) return;
     final pointer = event.pointer;
     final position = event.localPosition;
     if (!(this is GameComponent) || !enableDrag) return;
@@ -25,7 +26,7 @@ mixin DragGesture on GameComponent {
       }
     } else {
       final absolutePosition =
-          this.gameRef.gameCamera.screenPositionToWorld(position);
+          this.gameRef!.gameCamera.screenPositionToWorld(position);
       if (this.position.contains(absolutePosition)) {
         _pointer = pointer;
         _startDragOffset = absolutePosition;
@@ -36,26 +37,33 @@ mixin DragGesture on GameComponent {
 
   @override
   void handlerPointerMove(PointerMoveEvent event) {
+    if (gameRef == null ||
+        _startDragPosition == null ||
+        _startDragOffset == null) return;
+
     final pointer = event.pointer;
     final position = event.localPosition;
 
     if (!enableDrag || pointer != _pointer) return;
-    if (_startDragOffset != null && this is GameComponent) {
+
+    if (this is GameComponent) {
       if (this.isHud) {
         this.position = Rect.fromLTWH(
-          _startDragPosition.left + (position.dx - _startDragOffset.dx),
-          _startDragPosition.top + (position.dy - _startDragOffset.dy),
-          _startDragPosition.width,
-          _startDragPosition.height,
+          _startDragPosition!.left + (position.dx - _startDragOffset!.dx),
+          _startDragPosition!.top + (position.dy - _startDragOffset!.dy),
+          _startDragPosition!.width,
+          _startDragPosition!.height,
         ).toVector2Rect();
       } else {
         final absolutePosition =
-            this.gameRef.gameCamera.screenPositionToWorld(position);
+            this.gameRef!.gameCamera.screenPositionToWorld(position);
         this.position = Rect.fromLTWH(
-          _startDragPosition.left + (absolutePosition.dx - _startDragOffset.dx),
-          _startDragPosition.top + (absolutePosition.dy - _startDragOffset.dy),
-          _startDragPosition.width,
-          _startDragPosition.height,
+          _startDragPosition!.left +
+              (absolutePosition.dx - _startDragOffset!.dx),
+          _startDragPosition!.top +
+              (absolutePosition.dy - _startDragOffset!.dy),
+          _startDragPosition!.width,
+          _startDragPosition!.height,
         ).toVector2Rect();
       }
       moveDrag(pointer, position);
@@ -68,7 +76,7 @@ mixin DragGesture on GameComponent {
     if (pointer == _pointer) {
       _startDragPosition = null;
       _startDragOffset = null;
-      _pointer = null;
+      _pointer = -1;
       endDrag(pointer);
     }
   }
@@ -79,7 +87,7 @@ mixin DragGesture on GameComponent {
     if (pointer == _pointer) {
       _startDragPosition = null;
       _startDragOffset = null;
-      _pointer = null;
+      _pointer = -1;
       cancelDrag(pointer);
     }
   }

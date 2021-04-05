@@ -158,12 +158,14 @@ class SimpleDirectionAnimation {
   }
 
   void playOnce(
-    Future<SpriteAnimation> animation, {
+    Future<SpriteAnimation> animation,
+    Vector2Rect position, {
     VoidCallback? onFinish,
     bool runToTheEnd = false,
   }) {
     runToTheEndFastAnimation = runToTheEnd;
     _fastAnimation = AnimatedObjectOnce(
+      position: position,
       animation: animation,
       onFinish: () {
         onFinish?.call();

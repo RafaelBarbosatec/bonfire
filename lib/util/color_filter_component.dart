@@ -11,11 +11,11 @@ class ColorFilterComponent extends Component with HasGameRef<BonfireGame> {
   ColorFilterComponent(this.colorFilter);
   @override
   void render(Canvas canvas) {
-    if (colorFilter?.enable == true) {
+    if (colorFilter.enable == true) {
       canvas.save();
       canvas.drawColor(
-        colorFilter?.color,
-        colorFilter?.blendMode,
+        colorFilter.color!,
+        colorFilter.blendMode!,
       );
       canvas.restore();
     }

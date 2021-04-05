@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 mixin Lighting on GameComponent {
   LightingConfig? _lightingConfig;
 
-  setupLighting(LightingConfig config) {
-    _lightingConfig = config;
+  setupLighting(LightingConfig? config) {
+    if (config != null) {
+      _lightingConfig = config;
+    }
   }
 
   LightingConfig? get lightingConfig => _lightingConfig;

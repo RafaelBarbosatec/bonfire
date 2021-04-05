@@ -5,11 +5,10 @@ import 'package:bonfire/util/extensions.dart';
 import 'package:flame/sprite.dart';
 
 class SpriteObject extends GameComponent {
-  Sprite sprite;
+  Sprite? sprite;
 
   @override
   void render(Canvas canvas) {
-    if (sprite != null && position != null)
-      sprite.renderFromVector2Rect(canvas, this.position);
+    sprite?.renderFromVector2Rect(canvas, this.position);
   }
 }

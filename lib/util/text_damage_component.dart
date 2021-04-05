@@ -9,11 +9,10 @@ enum DirectionTextDamage { LEFT, RIGHT, RANDOM, NONE }
 
 class TextDamageComponent extends TextComponent with HasGameRef<BonfireGame> {
   final String text;
-  final TextConfig config;
   final DirectionTextDamage direction;
   final double maxDownSize;
-  double _initialY;
-  double _velocity;
+  late double _initialY;
+  late double _velocity;
   final double gravity;
   double _moveAxisX = 0;
   final bool onlyUp;
@@ -22,7 +21,7 @@ class TextDamageComponent extends TextComponent with HasGameRef<BonfireGame> {
     this.text,
     Vector2 position, {
     this.onlyUp = false,
-    this.config,
+    TextConfig? config,
     double initVelocityTop = -4,
     this.maxDownSize = 20,
     this.gravity = 0.5,

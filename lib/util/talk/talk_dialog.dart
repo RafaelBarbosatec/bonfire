@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 class TalkDialog extends StatefulWidget {
   const TalkDialog(
-      {Key key,
-      this.says,
+      {Key? key,
+      required this.says,
       this.finish,
       this.onChangeTalk,
       this.textStyle,
@@ -18,12 +18,12 @@ class TalkDialog extends StatefulWidget {
   static show(
     BuildContext context,
     List<Say> sayList, {
-    VoidCallback finish,
-    ValueChanged<int> onChangeTalk,
-    TextStyle textStyle,
-    BoxDecoration boxTextDecoration,
+    VoidCallback? finish,
+    ValueChanged<int>? onChangeTalk,
+    TextStyle? textStyle,
+    BoxDecoration? boxTextDecoration,
     double boxTextHeight = 100,
-    EdgeInsetsGeometry padding,
+    EdgeInsetsGeometry? padding,
   }) {
     showDialog(
       context: context,
@@ -42,20 +42,20 @@ class TalkDialog extends StatefulWidget {
   }
 
   final List<Say> says;
-  final VoidCallback finish;
-  final ValueChanged<int> onChangeTalk;
-  final TextStyle textStyle;
-  final BoxDecoration boxTextDecoration;
-  final double boxTextHeight;
-  final EdgeInsetsGeometry padding;
+  final VoidCallback? finish;
+  final ValueChanged<int>? onChangeTalk;
+  final TextStyle? textStyle;
+  final BoxDecoration? boxTextDecoration;
+  final double? boxTextHeight;
+  final EdgeInsetsGeometry? padding;
 
   @override
   _TalkDialogState createState() => _TalkDialogState();
 }
 
 class _TalkDialogState extends State<TalkDialog> {
-  Timer timer;
-  Say currentSay;
+  Timer? timer;
+  late Say currentSay;
   int currentIndexTalk = 0;
   int countLetter = 1;
   bool finishCurrentTalk = false;
@@ -73,7 +73,7 @@ class _TalkDialogState extends State<TalkDialog> {
   @override
   void dispose() {
     _textShowController.close();
-    timer.cancel();
+    timer?.cancel();
     super.dispose();
   }
 
@@ -109,14 +109,14 @@ class _TalkDialogState extends State<TalkDialog> {
                   color: Colors.transparent,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: StreamBuilder(
+                    child: StreamBuilder<String>(
                       stream: _textShowController.stream,
                       builder: (context, snapshot) {
                         return SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           physics: BouncingScrollPhysics(),
                           child: Text(
-                            snapshot.hasData ? snapshot.data : '',
+                            snapshot.hasData ? (snapshot.data ?? '') : '',
                             style: widget.textStyle ??
                                 TextStyle(
                                   color: Colors.white,
@@ -138,7 +138,7 @@ class _TalkDialogState extends State<TalkDialog> {
   }
 
   void _finishTalk() {
-    timer.cancel();
+    timer?.cancel();
     _textShowController.add(currentSay.text);
     countLetter = 1;
     finishCurrentTalk = true;
@@ -152,9 +152,10 @@ class _TalkDialogState extends State<TalkDialog> {
         currentSay = widget.says[currentIndexTalk];
       });
       startShowText();
-      if (widget.onChangeTalk != null) widget.onChangeTalk(currentIndexTalk);
+      if (widget.onChangeTalk != null)
+        widget.onChangeTalk?.call(currentIndexTalk);
     } else {
-      if (widget.finish != null) widget.finish();
+      if (widget.finish != null) widget.finish?.call();
       Navigator.pop(context);
     }
   }

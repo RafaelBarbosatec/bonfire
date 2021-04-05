@@ -10,21 +10,20 @@ import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 
 class AnimatedObjectOnce extends AnimatedObject with Lighting {
-  final VoidCallback onFinish;
-  final VoidCallback onStartAnimation;
-  final double rotateRadAngle;
+  final VoidCallback? onFinish;
+  final VoidCallback? onStartAnimation;
+  final double? rotateRadAngle;
   bool _notifyStart = false;
-  final LightingConfig lightingConfig;
 
   final _loader = AssetsLoader();
 
   AnimatedObjectOnce({
-    Vector2Rect position,
-    Future<SpriteAnimation> animation,
+    required Vector2Rect position,
+    Future<SpriteAnimation>? animation,
     this.onFinish,
     this.onStartAnimation,
     this.rotateRadAngle,
-    this.lightingConfig,
+    LightingConfig? lightingConfig,
   }) {
     _loader.add(AssetToLoad(animation, (value) {
       this.animation = value..loop = false;
@@ -35,11 +34,10 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
 
   @override
   void render(Canvas canvas) {
-    if (this.position == null) return;
     if (rotateRadAngle != null) {
       canvas.save();
       canvas.translate(position.center.dx, position.center.dy);
-      canvas.rotate(rotateRadAngle == 0.0 ? 0.0 : rotateRadAngle + (pi / 2));
+      canvas.rotate(rotateRadAngle == 0.0 ? 0.0 : rotateRadAngle! + (pi / 2));
       canvas.translate(-position.center.dx, -position.center.dy);
       super.render(canvas);
       canvas.restore();
@@ -47,7 +45,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
       super.render(canvas);
     }
     if (animation?.done() == true) {
-      if (onFinish != null) onFinish();
+      onFinish?.call();
       remove();
     }
   }
@@ -56,9 +54,9 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
   void update(double dt) {
     super.update(dt);
     if (animation != null && !shouldRemove) {
-      if (animation.currentIndex == 1 && !_notifyStart) {
+      if (animation?.currentIndex == 1 && !_notifyStart) {
         _notifyStart = true;
-        if (onStartAnimation != null) onStartAnimation();
+        onStartAnimation?.call();
       }
     }
   }

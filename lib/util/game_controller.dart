@@ -11,11 +11,11 @@ abstract class GameListener {
 }
 
 class GameController with HasGameRef<BonfireGame> {
-  GameListener _gameListener;
+  GameListener? _gameListener;
   int _lastCountLiveEnemies = 0;
 
   void addGameComponent(GameComponent component) {
-    gameRef.addGameComponent(component);
+    gameRef?.addGameComponent(component);
   }
 
   void setListener(GameListener listener) {
@@ -31,18 +31,19 @@ class GameController with HasGameRef<BonfireGame> {
       notifyChangeEnemy = true;
     }
     if (_gameListener != null) {
-      _gameListener.updateGame();
+      _gameListener?.updateGame();
       if (notifyChangeEnemy)
-        _gameListener.changeCountLiveEnemies(_lastCountLiveEnemies);
+        _gameListener?.changeCountLiveEnemies(_lastCountLiveEnemies);
     }
   }
 
-  Iterable<GameDecoration> get visibleDecorations =>
+  Iterable<GameDecoration>? get visibleDecorations =>
       gameRef?.visibleDecorations();
-  Iterable<GameDecoration> get allDecorations => gameRef?.decorations();
-  Iterable<Enemy> get visibleEnemies => gameRef?.visibleEnemies();
-  Iterable<Enemy> get livingEnemies => gameRef?.livingEnemies();
-  Iterable<GameComponent> get visibleComponents => gameRef?.visibleComponents();
-  Player get player => gameRef?.player;
-  Camera get camera => gameRef?.gameCamera;
+  Iterable<GameDecoration>? get allDecorations => gameRef?.decorations();
+  Iterable<Enemy>? get visibleEnemies => gameRef?.visibleEnemies();
+  Iterable<Enemy>? get livingEnemies => gameRef?.livingEnemies();
+  Iterable<GameComponent>? get visibleComponents =>
+      gameRef?.visibleComponents();
+  Player? get player => gameRef?.player;
+  Camera? get camera => gameRef?.gameCamera;
 }

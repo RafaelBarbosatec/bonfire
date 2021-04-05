@@ -5,7 +5,7 @@ import 'package:bonfire/util/vector2rect.dart';
 
 abstract class FollowerObject extends GameComponent {
   final GameComponent target;
-  final Vector2Rect positionFromTarget;
+  final Vector2Rect? positionFromTarget;
 
   FollowerObject(
     this.target,

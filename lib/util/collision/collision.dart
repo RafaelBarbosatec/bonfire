@@ -12,10 +12,9 @@ class CollisionArea {
     this.align = const Offset(0, 0),
   });
 
-  CollisionArea.fromSize(double size, {this.align = const Offset(0, 0)}) {
-    width = size;
-    height = size;
-  }
+  CollisionArea.fromSize(double size, {this.align = const Offset(0, 0)})
+      : height = size,
+        width = size;
 
   Vector2Rect getVectorCollision(Vector2Rect displacement) {
     double left = displacement.rect.left + align.dx;

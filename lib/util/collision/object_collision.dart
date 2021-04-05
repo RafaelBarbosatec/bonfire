@@ -21,36 +21,38 @@ class CollisionConfig {
 }
 
 mixin ObjectCollision on GameComponent {
-  CollisionConfig _collisionConfig;
+  CollisionConfig? _collisionConfig;
 
-  CollisionConfig get collisionConfig => _collisionConfig;
+  CollisionConfig? get collisionConfig => _collisionConfig;
 
   void setupCollision(CollisionConfig collisionConfig) {
     _collisionConfig = collisionConfig;
   }
 
   void enableCollision(bool enable) {
-    _collisionConfig.enable = enable;
+    _collisionConfig?.enable = enable;
   }
 
   void setCollisionOnlyVisibleScreen(bool onlyVisible) {
-    _collisionConfig.collisionOnlyVisibleScreen = onlyVisible;
+    _collisionConfig?.collisionOnlyVisibleScreen = onlyVisible;
   }
 
   void triggerSensors(Iterable<Vector2Rect> rectCollisions) {
-    final Iterable<Sensor> sensors = gameRef
-        .visibleSensors()
-        .where((decoration) => decoration is Sensor)
-        .cast();
+    gameRef?.let((ref) {
+      final Iterable<Sensor> sensors = ref
+          .visibleSensors()
+          .where((decoration) => decoration is Sensor)
+          .cast();
 
-    sensors.forEach((sensor) {
-      if (sensor.areaSensor.overlaps(rectCollisions.first))
-        sensor.onContact(this);
+      sensors.forEach((sensor) {
+        if (sensor.areaSensor.overlaps(rectCollisions.first))
+          sensor.onContact(this);
+      });
     });
   }
 
   bool isCollision({
-    Vector2Rect displacement,
+    Vector2Rect? displacement,
     bool shouldTriggerSensors = true,
   }) {
     if (!containCollision()) return false;
@@ -77,20 +79,20 @@ mixin ObjectCollision on GameComponent {
 
   Iterable<Vector2Rect> getRectCollisions(Vector2Rect displacement) {
     if (!containCollision()) return [];
-    return _collisionConfig?.collisions
-        ?.map<Vector2Rect>((e) => e.getVectorCollision(displacement));
+    return _collisionConfig!.collisions
+        .map<Vector2Rect>((e) => e.getVectorCollision(displacement));
   }
 
   Vector2Rect getRectCollision(Vector2Rect displacement) {
     if (!containCollision()) return Vector2Rect.zero();
-    return _collisionConfig?.collisions
-        ?.map<Vector2Rect>((e) => e.getVectorCollision(displacement))
-        ?.first;
+    return _collisionConfig!.collisions
+        .map<Vector2Rect>((e) => e.getVectorCollision(displacement))
+        .first;
   }
 
-  void _drawCollision(Canvas canvas, Color color) {
+  void _drawCollision(Canvas canvas, Color? color) {
     if (!containCollision()) return;
-    _collisionConfig?.collisions?.forEach((element) {
+    _collisionConfig!.collisions.forEach((element) {
       canvas.drawRect(
         element.getVectorCollision(position).rect,
         Paint()..color = color ?? Colors.lightGreenAccent.withOpacity(0.5),
@@ -100,60 +102,52 @@ mixin ObjectCollision on GameComponent {
 
   bool detectCollision(Iterable<Vector2Rect> displacements) {
     if (!containCollision()) return false;
-    final collision = displacements.firstWhere(
-      (displacement) {
-        final c = _collisionConfig?.collisions?.firstWhere(
-          (element) =>
-              element.getVectorCollision(this.position).overlaps(displacement),
-          orElse: () => null,
-        );
-        return c != null;
-      },
-      orElse: () => null,
-    );
+    final collision = displacements.where((displacement) {
+      final c = _collisionConfig!.collisions.where(
+        (element) =>
+            element.getVectorCollision(this.position).overlaps(displacement),
+      );
+      return c.isNotEmpty;
+    });
 
-    return collision != null;
+    return collision.isNotEmpty;
   }
 
   bool containCollision() =>
       _collisionConfig?.collisions != null &&
-      _collisionConfig?.collisions?.isNotEmpty == true &&
-      _collisionConfig.enable;
+      _collisionConfig?.collisions.isNotEmpty == true &&
+      _collisionConfig?.enable == true;
 
   Vector2Rect get rectCollision => getRectCollision(position);
 
   bool _containsCollisionWithMap(Iterable<Vector2Rect> rectCollisions) {
     final tiledCollisions =
         ((_collisionConfig?.collisionOnlyVisibleScreen ?? false)
-            ? gameRef?.map?.getCollisionsRendered() ?? []
-            : gameRef?.map?.getCollisions() ?? []);
-    final collisionMap = tiledCollisions.firstWhere(
+            ? gameRef?.map.getCollisionsRendered() ?? []
+            : gameRef?.map.getCollisions() ?? []);
+    final collisionMap = tiledCollisions.where(
       (i) =>
           (i is ObjectCollision) &&
           (i as ObjectCollision).detectCollision(rectCollisions),
-      orElse: () => null,
     );
-    return collisionMap != null;
+    return collisionMap.isNotEmpty;
   }
 
   bool _containsCollision(Iterable<Vector2Rect> rectCollisions) {
     final collisions = ((_collisionConfig?.collisionOnlyVisibleScreen ?? true)
             ? gameRef?.visibleCollisions()
             : gameRef?.collisions())
-        ?.firstWhere(
-      (i) {
-        return i.detectCollision(rectCollisions) && i != this;
-      },
-      orElse: () => null,
+        ?.where(
+      (i) => i.detectCollision(rectCollisions) && i != this,
     );
-    return collisions != null;
+    return collisions?.isNotEmpty ?? false;
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (gameRef != null && gameRef.showCollisionArea) {
-      _drawCollision(canvas, gameRef.collisionAreaColor);
+    if (gameRef != null && gameRef?.showCollisionArea == true) {
+      _drawCollision(canvas, gameRef?.collisionAreaColor);
     }
   }
 

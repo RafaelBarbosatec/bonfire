@@ -4,11 +4,11 @@ import 'package:bonfire/util/vector2rect.dart';
 
 mixin Sensor on GameComponent {
   void onContact(ObjectCollision collision);
-  Vector2Rect _areaSensor;
+  Vector2Rect? _areaSensor;
 
   Vector2Rect get areaSensor {
     if (_areaSensor != null) {
-      return _areaSensor;
+      return _areaSensor!;
     } else {
       if (this is ObjectCollision) {
         return (this as ObjectCollision).getRectCollision(this.position);
