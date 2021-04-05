@@ -5,22 +5,25 @@ import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 
+/// Base of the all components in the Bonfire
 abstract class GameComponent extends Component
     with HasGameRef<BonfireGame>, PointerDetectorHandler {
   /// Position used to draw on the screen
   Vector2Rect position = Vector2Rect.zero();
 
-  /// This method destroy of the component
+  /// This method remove of the component
   void remove() {
     shouldRemove = true;
   }
 
+  /// Method that checks if this component is visible on the screen
   bool isVisibleInCamera() {
-    if (gameRef == null || gameRef?.size == null || shouldRemove) return false;
+    if (gameRef?.size == null || shouldRemove) return false;
 
     return gameRef?.gameCamera.isComponentOnCamera(this) ?? false;
   }
 
+  /// Method that checks what type map tile is currently
   String? tileTypeBelow() {
     final map = gameRef?.map;
     if (map != null && map.tiles.isNotEmpty) {
@@ -36,6 +39,7 @@ abstract class GameComponent extends Component
     return null;
   }
 
+  /// Method that checks what types map tile is currently
   List<String>? tileTypesBelow() {
     final map = gameRef?.map;
     if (map != null && map.tiles.isNotEmpty) {
@@ -55,9 +59,7 @@ abstract class GameComponent extends Component
   }
 
   void translate(double translateX, double translateY) {
-    position = Vector2Rect.fromRect(
-      position.rect.translate(translateX, translateY),
-    );
+    position = position.translate(translateX, translateY);
   }
 
   @override
@@ -65,7 +67,8 @@ abstract class GameComponent extends Component
 
   int _getBottomPriority() {
     int bottomPriority = position.bottom.round();
-    if (this is ObjectCollision) {
+    if (this is ObjectCollision &&
+        (this as ObjectCollision).containCollision()) {
       bottomPriority = (this as ObjectCollision).rectCollision.bottom.round();
     }
     return bottomPriority;
