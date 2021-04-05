@@ -32,7 +32,7 @@ class TiledWorldMap {
   static const ORIENTATION_SUPPORTED = 'orthogonal';
   final String path;
   final Size? forceTileSize;
-  final ValueChanged<String>? onError;
+  final ValueChanged<Object>? onError;
   late TiledJsonReader _reader;
   List<Tile> _tiles = [];
   List<GameComponent> _components = [];
@@ -76,7 +76,7 @@ class TiledWorldMap {
       _tileHeight = forceTileSize?.height ?? _tileHeightOrigin;
       await _load(_tiledMap!);
     } catch (e) {
-      onError?.call(e.toString());
+      onError?.call(e);
       print('(TiledWorldMap) Error: $e');
     }
 
