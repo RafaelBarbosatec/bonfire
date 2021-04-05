@@ -10,10 +10,16 @@ import 'package:flutter/widgets.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
 
+/// CustomBaseGame created to use `Listener` to capture touch screen gestures.
+/// Apply zoom in canvas.
+/// Reorder components per time frame.
 abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   Camera gameCamera = Camera();
 
+  /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
   int _highestPriority = 1000000;
+
+  /// Get of the _highestPriority
   int get highestPriority => _highestPriority;
 
   /// The list of components to be updated and rendered by the base game.
@@ -24,8 +30,10 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
 
+  /// interval used to reorder of the components
   final _timerSortPriority = IntervalTick(250);
 
+  /// to get the components that contain gestures
   Iterable<PointerDetectorHandler> get _gesturesComponents {
     return components
         .where((c) => _hasGesture(c))
@@ -176,12 +184,14 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
         Duration.microsecondsPerSecond;
   }
 
+  /// Verify if the compont contain gestures.
   bool _hasGesture(Component c) {
     return ((c is GameComponent && c.isVisibleInCamera()) || c.isHud) &&
         (c is PointerDetectorHandler &&
             (c as PointerDetectorHandler).hasGesture());
   }
 
+  /// reorder components by priority
   void _updateOrder() {
     Iterable<Component> temp = components.toList(growable: true);
     components.clear();

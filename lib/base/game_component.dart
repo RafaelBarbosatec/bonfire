@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
@@ -11,9 +9,6 @@ abstract class GameComponent extends Component
     with HasGameRef<BonfireGame>, PointerDetectorHandler {
   /// Position used to draw on the screen
   Vector2Rect position = Vector2Rect.zero();
-
-  @override
-  void render(Canvas c) {}
 
   /// This method destroy of the component
   void remove() {

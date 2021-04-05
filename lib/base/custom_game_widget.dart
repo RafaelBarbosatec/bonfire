@@ -2,7 +2,10 @@ import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
+/// Widget used to run the Game
+/// This widget also is responsible in capture gesture with `Listener`
 class CustomGameWidget<T extends Game> extends StatelessWidget {
+  /// instance of the game
   final T game;
 
   const CustomGameWidget({Key? key, required this.game}) : super(key: key);
