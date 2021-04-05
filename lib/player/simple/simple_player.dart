@@ -3,17 +3,10 @@ import 'package:bonfire/util/direction_animations/simple_direction_animation.dar
 import 'package:flutter/widgets.dart';
 
 class SimplePlayer extends Player {
-  static const REDUCTION_SPEED_DIAGONAL = 0.7;
   SimpleDirectionAnimation animation;
-
-  /// Variable that represents the current directional status of the joystick.
-  late JoystickMoveDirectional statusMoveDirectional;
-  JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
 
   late Direction lastDirection;
   Direction lastDirectionHorizontal = Direction.right;
-
-  Vector2? _positionToMove;
 
   SimplePlayer({
     required Vector2 position,
@@ -33,15 +26,7 @@ class SimplePlayer extends Player {
     lastDirection = initDirection;
     if (initDirection == Direction.left || initDirection == Direction.right) {
       lastDirectionHorizontal = initDirection;
-      statusMoveDirectional = initDirection == Direction.left
-          ? JoystickMoveDirectional.MOVE_LEFT
-          : JoystickMoveDirectional.MOVE_RIGHT;
     }
-  }
-
-  @override
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    _currentDirectional = event.directional;
   }
 
   @override
@@ -52,207 +37,107 @@ class SimplePlayer extends Player {
 
   @override
   void update(double dt) {
-    if (!this.isDead) {
-      if (_positionToMove != null) {
-        moveToPosition();
-      } else {
-        switch (_currentDirectional) {
-          case JoystickMoveDirectional.MOVE_UP:
-            customMoveTop();
-            break;
-          case JoystickMoveDirectional.MOVE_UP_LEFT:
-            customMoveUpLeft();
-            break;
-          case JoystickMoveDirectional.MOVE_UP_RIGHT:
-            customMoveUpRight();
-            break;
-          case JoystickMoveDirectional.MOVE_RIGHT:
-            customMoveRight();
-            break;
-          case JoystickMoveDirectional.MOVE_DOWN:
-            customMoveBottom();
-            break;
-          case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-            customMoveDownRight();
-            break;
-          case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-            customMoveDownLeft();
-            break;
-          case JoystickMoveDirectional.MOVE_LEFT:
-            customMoveLeft();
-            break;
-          case JoystickMoveDirectional.IDLE:
-            idle();
-            break;
-        }
-      }
-    }
     animation.update(dt, position);
     super.update(dt);
   }
 
-  void customMoveTop({
-    bool addAnimation = true,
-    bool isDiagonal = false,
-    VoidCallback? onCollision,
-  }) {
-    if (addAnimation) {
-      _addTopAnimation();
-      statusMoveDirectional = JoystickMoveDirectional.MOVE_UP;
-      lastDirection = Direction.top;
-    }
-
-    double speed =
-        (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
-
-    this.moveTop(speed, onCollision: onCollision);
-  }
-
-  void _addTopAnimation() {
-    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_UP) {
-      if (animation.runTop != null) {
-        animation.play(SimpleAnimationEnum.runTop);
+  @override
+  void moveTop(double speed, {VoidCallback? onCollision}) {
+    if (animation.runTop != null) {
+      animation.play(SimpleAnimationEnum.runTop);
+    } else {
+      if (lastDirectionHorizontal == Direction.left) {
+        animation.play(SimpleAnimationEnum.runLeft);
       } else {
-        if (lastDirectionHorizontal == Direction.left) {
-          animation.play(SimpleAnimationEnum.runLeft);
-        } else {
-          animation.play(SimpleAnimationEnum.runRight);
-        }
+        animation.play(SimpleAnimationEnum.runRight);
       }
     }
+    lastDirection = Direction.top;
+    super.moveTop(speed, onCollision: onCollision);
   }
 
-  void customMoveRight(
-      {bool addAnimation = true,
-      bool isDiagonal = false,
-      VoidCallback? onCollision}) {
-    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_RIGHT &&
-        addAnimation) {
-      animation.play(SimpleAnimationEnum.runRight);
-      statusMoveDirectional = JoystickMoveDirectional.MOVE_RIGHT;
-      lastDirection = Direction.right;
-      lastDirectionHorizontal = Direction.right;
-    }
-    double speed =
-        (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
-
-    this.moveRight(speed, onCollision: onCollision);
+  @override
+  void moveRight(double speed, {VoidCallback? onCollision}) {
+    animation.play(SimpleAnimationEnum.runRight);
+    lastDirection = Direction.right;
+    lastDirectionHorizontal = Direction.right;
+    super.moveRight(speed, onCollision: onCollision);
   }
 
-  void customMoveBottom(
-      {bool addAnimation = true,
-      bool isDiagonal = false,
-      VoidCallback? onCollision}) {
-    if (addAnimation) {
-      _addBottomAnimation();
-      statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN;
-      lastDirection = Direction.bottom;
-    }
-
-    double speed =
-        (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
-
-    this.moveBottom(speed, onCollision: onCollision);
-  }
-
-  void _addBottomAnimation() {
-    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN) {
-      if (animation.runBottom != null) {
-        animation.play(SimpleAnimationEnum.runBottom);
+  @override
+  void moveBottom(double speed, {VoidCallback? onCollision}) {
+    if (animation.runBottom != null) {
+      animation.play(SimpleAnimationEnum.runBottom);
+    } else {
+      if (lastDirectionHorizontal == Direction.left) {
+        animation.play(SimpleAnimationEnum.runLeft);
       } else {
-        if (lastDirectionHorizontal == Direction.left) {
-          animation.play(SimpleAnimationEnum.runLeft);
-        } else {
-          animation.play(SimpleAnimationEnum.runRight);
-        }
+        animation.play(SimpleAnimationEnum.runRight);
       }
     }
+    lastDirection = Direction.bottom;
+    super.moveBottom(speed, onCollision: onCollision);
   }
 
-  void customMoveLeft(
-      {bool addAnimation = true,
-      bool isDiagonal = false,
-      VoidCallback? onCollision}) {
-    if (statusMoveDirectional != JoystickMoveDirectional.MOVE_LEFT &&
-        addAnimation) {
-      animation.play(SimpleAnimationEnum.runLeft);
-      statusMoveDirectional = JoystickMoveDirectional.MOVE_LEFT;
-      lastDirection = Direction.left;
-      lastDirectionHorizontal = Direction.left;
-    }
-
-    double speed =
-        (isDiagonal ? this.speed * REDUCTION_SPEED_DIAGONAL : this.speed);
-
-    this.moveLeft(speed, onCollision: onCollision);
+  @override
+  void moveLeft(double speed, {VoidCallback? onCollision}) {
+    animation.play(SimpleAnimationEnum.runLeft);
+    lastDirection = Direction.left;
+    lastDirectionHorizontal = Direction.left;
+    super.moveLeft(speed, onCollision: onCollision);
   }
 
-  void customMoveUpLeft() {
-    if (animation.runTopLeft != null &&
-        statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_LEFT) {
+  @override
+  void moveUpLeft() {
+    if (animation.runTopLeft != null) {
       animation.play(SimpleAnimationEnum.runTopLeft);
-      lastDirection = Direction.topLeft;
-      statusMoveDirectional = JoystickMoveDirectional.MOVE_UP_LEFT;
+    } else {
+      animation.play(SimpleAnimationEnum.runLeft);
     }
-    customMoveLeft(
-      addAnimation: animation.runTopLeft == null,
-      isDiagonal: true,
-    );
-    customMoveTop(
-      addAnimation: false,
-      isDiagonal: true,
-    );
+    lastDirection = Direction.topLeft;
+    lastDirectionHorizontal = Direction.left;
+    super.moveUpLeft();
   }
 
-  void customMoveUpRight() {
-    if (animation.runTopRight != null &&
-        statusMoveDirectional != JoystickMoveDirectional.MOVE_UP_RIGHT) {
+  @override
+  void moveUpRight() {
+    if (animation.runTopRight != null) {
       animation.play(SimpleAnimationEnum.runTopRight);
-      lastDirection = Direction.topRight;
-      statusMoveDirectional = JoystickMoveDirectional.MOVE_UP_RIGHT;
+    } else {
+      animation.play(SimpleAnimationEnum.runRight);
     }
-    customMoveRight(
-      addAnimation: animation.runTopRight == null,
-      isDiagonal: true,
-    );
-    customMoveTop(
-      addAnimation: false,
-      isDiagonal: true,
-    );
+    lastDirection = Direction.topRight;
+    lastDirectionHorizontal = Direction.right;
+    super.moveUpRight();
   }
 
-  void customMoveDownRight() {
-    if (animation.runBottomRight != null &&
-        statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
+  @override
+  void moveBottomRight() {
+    if (animation.runBottomRight != null) {
       animation.play(SimpleAnimationEnum.runBottomRight);
-      lastDirection = Direction.bottomRight;
-      statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN_RIGHT;
+    } else {
+      animation.play(SimpleAnimationEnum.runRight);
     }
-    customMoveRight(
-      addAnimation: animation.runBottomRight == null,
-      isDiagonal: true,
-    );
-    customMoveBottom(
-      addAnimation: false,
-      isDiagonal: true,
-    );
+    lastDirection = Direction.bottomRight;
+    lastDirectionHorizontal = Direction.right;
+    super.moveBottomRight();
   }
 
-  void customMoveDownLeft() {
-    if (animation.runBottomLeft != null &&
-        statusMoveDirectional != JoystickMoveDirectional.MOVE_DOWN_LEFT) {
+  @override
+  void moveBottomLeft() {
+    if (animation.runBottomLeft != null) {
       animation.play(SimpleAnimationEnum.runBottomLeft);
-      lastDirection = Direction.bottomLeft;
-      statusMoveDirectional = JoystickMoveDirectional.MOVE_DOWN_LEFT;
+    } else {
+      animation.play(SimpleAnimationEnum.runLeft);
     }
-    customMoveLeft(
-        addAnimation: animation.runBottomLeft == null, isDiagonal: true);
-    customMoveBottom(addAnimation: false, isDiagonal: true);
+    lastDirection = Direction.bottomLeft;
+    lastDirectionHorizontal = Direction.left;
+    super.moveBottomLeft();
   }
 
-  void idle({bool forceAddAnimation = false}) {
-    if (statusMoveDirectional != JoystickMoveDirectional.IDLE ||
-        forceAddAnimation) {
+  @override
+  void idle() {
+    if (!isIdle) {
       switch (lastDirection) {
         case Direction.left:
           animation.play(SimpleAnimationEnum.idleLeft);
@@ -312,65 +197,7 @@ class SimplePlayer extends Player {
           break;
       }
     }
-    statusMoveDirectional = JoystickMoveDirectional.IDLE;
-  }
-
-  @override
-  void moveTo(Vector2 position) {
-    _positionToMove = position;
-    super.moveTo(position);
-  }
-
-  void moveToPosition() {
-    if (_positionToMove == null) return;
-    bool move = false;
-
-    if (_positionToMove!.x > position.center.dx &&
-        _positionToMove!.x - position.center.dx > 1) {
-      move = true;
-      customMoveRight(
-        onCollision: () {
-          _positionToMove = null;
-        },
-      );
-    }
-
-    if (_positionToMove!.x < position.center.dx &&
-        position.center.dx - _positionToMove!.x > 1) {
-      move = true;
-      customMoveLeft(
-        onCollision: () {
-          _positionToMove = null;
-          return;
-        },
-      );
-    }
-    if (_positionToMove == null) return;
-    if (_positionToMove!.y > position.center.dy &&
-        _positionToMove!.y - position.center.dy > 1) {
-      move = true;
-      customMoveBottom(
-        onCollision: () {
-          _positionToMove = null;
-          return;
-        },
-      );
-    }
-    if (_positionToMove == null) return;
-    if (_positionToMove!.y < position.center.dy &&
-        position.center.dy - _positionToMove!.y > 1) {
-      move = true;
-      customMoveTop(
-        onCollision: () {
-          _positionToMove = null;
-          return;
-        },
-      );
-    }
-    if (!move) {
-      idle(forceAddAnimation: true);
-      _positionToMove = null;
-    }
+    super.idle();
   }
 
   @override
