@@ -17,7 +17,7 @@ abstract class MapGame extends Component with HasGameRef<BonfireGame> {
   Iterable<Tile> getCollisionsRendered();
   Iterable<Tile> getCollisions();
 
-  void updateTiles(Iterable<Tile> map);
+  Future<void> updateTiles(Iterable<Tile> map);
 
   Size getMapSize();
 

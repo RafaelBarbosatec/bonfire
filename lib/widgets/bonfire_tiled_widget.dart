@@ -92,8 +92,8 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   @override
   void didUpdateWidget(BonfireTiledWidget oldWidget) {
     if (widget.constructionMode) {
-      widget.map.build().then((value) {
-        _game?.map.updateTiles(value.map.tiles);
+      widget.map.build().then((value) async {
+        await _game?.map.updateTiles(value.map.tiles);
         _game?.decorations().forEach((d) => d.remove());
         _game?.enemies().forEach((e) => e.remove());
         value.components?.forEach((d) => _game?.addGameComponent(d));

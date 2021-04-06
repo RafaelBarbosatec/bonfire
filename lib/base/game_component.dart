@@ -4,6 +4,7 @@ import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 
 /// Base of the all components in the Bonfire
 abstract class GameComponent extends Component
@@ -21,6 +22,11 @@ abstract class GameComponent extends Component
     if (shouldRemove) return false;
 
     return gameRef.gameCamera.isComponentOnCamera(this);
+  }
+
+  /// Method return screen position
+  Offset screenPosition() {
+    return gameRef.gameCamera.worldPositionToScreen(position.offset);
   }
 
   /// Method that checks what type map tile is currently

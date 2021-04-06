@@ -58,6 +58,7 @@ class Vector2Rect {
     );
   }
 
+  Offset get offset => Offset(left, top);
   Offset get center => rect.center;
   double get left => rect.left;
   double get right => rect.right;

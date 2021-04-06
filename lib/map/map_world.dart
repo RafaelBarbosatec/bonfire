@@ -90,12 +90,13 @@ class MapWorld extends MapGame {
   }
 
   @override
-  void updateTiles(Iterable<Tile> map) {
+  Future<void> updateTiles(Iterable<Tile> map) async {
     lastCameraX = -1;
     lastCameraY = -1;
     lastZoom = -1;
     lastSizeScreen = null;
     this.tiles = map;
+    await onLoad();
     verifyMaxTopAndLeft(gameRef.size);
   }
 

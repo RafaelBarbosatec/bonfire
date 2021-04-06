@@ -120,6 +120,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     _cameraZoom = cameraZoom;
     _cameraSizeMovementWindow = cameraSizeMovementWindow;
     _cameraMoveOnlyMapArea = cameraMoveOnlyMapArea;
+    debugMode = constructionMode;
   }
 
   @override

@@ -85,13 +85,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
   @override
   void didUpdateWidget(BonfireWidget oldWidget) {
     if (widget.constructionMode) {
-      _game?.map.updateTiles(widget.map.tiles);
-
-      _game?.decorations().forEach((d) => d.remove());
-      widget.decorations?.forEach((d) => _game?.addGameComponent(d));
-
-      _game?.enemies().forEach((e) => e.remove());
-      widget.enemies?.forEach((e) => _game?.addGameComponent(e));
+      _refreshGame();
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -131,5 +125,15 @@ class _BonfireWidgetState extends State<BonfireWidget> {
     return CustomGameWidget(
       game: _game!,
     );
+  }
+
+  void _refreshGame() async {
+    await _game?.map.updateTiles(widget.map.tiles);
+
+    _game?.decorations().forEach((d) => d.remove());
+    widget.decorations?.forEach((d) => _game?.addGameComponent(d));
+
+    _game?.enemies().forEach((e) => e.remove());
+    widget.enemies?.forEach((e) => _game?.addGameComponent(e));
   }
 }
