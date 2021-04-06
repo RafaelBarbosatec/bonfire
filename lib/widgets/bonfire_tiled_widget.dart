@@ -12,19 +12,43 @@ import 'package:bonfire/util/game_controller.dart';
 import 'package:flutter/material.dart';
 
 class BonfireTiledWidget extends StatefulWidget {
+  /// The player-controlling component.
   final JoystickController? joystick;
+
+  /// Represents the character controlled by the user in the game. Instances of this class has actions and movements ready to be used and configured.
   final Player? player;
+
+  /// The way you cand raw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
   final GameInterface? interface;
+
+  /// Background of the game. This can be a color or custom component
   final GameComponent? background;
-  final List<GameComponent>? components;
+
+  /// Used to show grid in the map and facilitate the construction and testing of the map
   final bool constructionMode;
+
+  /// Used to draw area collision in objects.
   final bool showCollisionArea;
+
+  /// Used to show in the interface the FPS.
   final bool showFPS;
+
+  /// Used to extensively control game elements
   final GameController? gameController;
+
+  /// Color grid when `constructionMode` is true
   final Color? constructionModeColor;
+
+  /// Color of the colision area when `showCollisionArea` is true
   final Color? collisionAreaColor;
+
+  /// Used to configure lighting in the game
   final Color? lightingColorGame;
+
+  /// Represents a map (or world) where the game occurs.
   final TiledWorldMap map;
+
+  final List<GameComponent>? components;
   final Widget? progress;
   final double cameraZoom;
   final Size cameraSizeMovementWindow;
