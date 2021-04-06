@@ -36,7 +36,7 @@ class BonfireWidget extends StatefulWidget {
   /// Color grid when `constructionMode` is true
   final Color? constructionModeColor;
 
-  /// Color of the colision area when `showCollisionArea` is true
+  /// Color of the collision area when `showCollisionArea` is true
   final Color? collisionAreaColor;
 
   /// Used to configure lighting in the game

@@ -53,7 +53,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   /// Used to draw area collision in objects.
   final bool showCollisionArea;
 
-  /// Color of the colision area when `showCollisionArea` is true
+  /// Color of the collision area when `showCollisionArea` is true
   final Color? collisionAreaColor;
 
   /// Used to extensively control game elements
