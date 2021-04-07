@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class Chest extends GameDecoration with TapGesture {
   bool _observedPlayer = false;
 
-  TextConfig _textConfig;
+  late TextConfig _textConfig;
   Chest(Vector2 position)
       : super.withAnimation(
           CommonSpriteSheet.chestAnimated,

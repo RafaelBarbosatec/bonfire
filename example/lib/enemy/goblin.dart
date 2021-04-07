@@ -84,7 +84,7 @@ class Goblin extends SimpleEnemy with ObjectCollision {
   }
 
   void execAttackRange() {
-    if (gameRef.player != null && gameRef.player.isDead) return;
+    if (gameRef.player != null && gameRef.player?.isDead == true) return;
     this.simpleAttackRange(
       animationRight: CommonSpriteSheet.fireBallRight,
       animationLeft: CommonSpriteSheet.fireBallLeft,
@@ -117,7 +117,7 @@ class Goblin extends SimpleEnemy with ObjectCollision {
   }
 
   void execAttack() {
-    if (gameRef.player != null && gameRef.player.isDead) return;
+    if (gameRef.player != null && gameRef.player?.isDead == true) return;
     this.simpleAttackMelee(
       height: width,
       width: width,

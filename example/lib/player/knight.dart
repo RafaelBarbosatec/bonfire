@@ -19,8 +19,8 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
-  Rect rectDirectionAttack;
-  Sprite spriteDirectionAttack;
+  Rect? rectDirectionAttack;
+  Sprite? spriteDirectionAttack;
   bool execAttackRange = false;
 
   Knight(Vector2 position)
@@ -61,7 +61,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   void joystickAction(JoystickActionEvent event) {
     if (isDead) return;
 
-    if (gameRef.joystickController.keyboardEnable) {
+    if (gameRef.joystickController?.keyboardEnable == true) {
       if (event.id == LogicalKeyboardKey.space.keyId) {
         actionAttack();
       }
@@ -147,7 +147,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
 
   @override
   void update(double dt) {
-    if (this.isDead || gameRef?.size == null) return;
+    if (this.isDead) return;
     _verifyStamina(dt);
 
     if (_timerSeeEnemy.update(dt) && !showObserveEnemy) {
@@ -228,12 +228,12 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
           Container(
             width: 50,
             height: 50,
-            child: FutureBuilder(
+            child: FutureBuilder<SpriteAnimation>(
               future: PlayerSpriteSheet.idleRight,
               builder: (context, anim) {
                 if (!anim.hasData) return SizedBox.shrink();
                 return SpriteAnimationWidget(
-                  animation: anim.data,
+                  animation: anim.data!,
                   playing: true,
                 );
               },
@@ -255,12 +255,15 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
         radius * 2,
         radius * 2,
       );
-      renderSpriteByRadAngle(
-        c,
-        angleRadAttack,
-        rectDirectionAttack.toVector2Rect(),
-        spriteDirectionAttack,
-      );
+
+      if (rectDirectionAttack != null && spriteDirectionAttack != null) {
+        renderSpriteByRadAngle(
+          c,
+          angleRadAttack,
+          rectDirectionAttack!.toVector2Rect(),
+          spriteDirectionAttack!,
+        );
+      }
     }
   }
 

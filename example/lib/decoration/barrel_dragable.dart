@@ -6,7 +6,7 @@ import 'package:example/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class BarrelDraggable extends GameDecoration with DragGesture, ObjectCollision {
-  TextConfig _textConfig;
+  late TextConfig _textConfig;
   BarrelDraggable(Vector2 position)
       : super.withSprite(
           CommonSpriteSheet.barrelSprite,

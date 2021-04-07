@@ -17,7 +17,7 @@ import 'decoration/column.dart';
 class GameTiledMap extends StatelessWidget {
   final int map;
 
-  const GameTiledMap({Key key, this.map = 1}) : super(key: key);
+  const GameTiledMap({Key? key, this.map = 1}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -75,7 +75,7 @@ class GameTiledMap extends StatelessWidget {
                 (x, y, width, height) => ColumnDecoration(Vector2(x, y)))
             ..registerObject(
                 'chest', (x, y, width, height) => Chest(Vector2(x, y))),
-          background: BackgroundColorGame(Colors.blueGrey[900]),
+          background: BackgroundColorGame(Colors.blueGrey[900]!),
           lightingColorGame: Colors.black.withOpacity(0.7),
         );
       },

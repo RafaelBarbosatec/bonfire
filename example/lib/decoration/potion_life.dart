@@ -25,7 +25,7 @@ class PotionLife extends GameDecoration with Sensor {
           timer.cancel();
         } else {
           _lifeDistributed += 2;
-          gameRef.player.addLife(5);
+          gameRef.player?.addLife(5);
         }
       });
       remove();
