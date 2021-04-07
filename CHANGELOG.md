@@ -1,6 +1,6 @@
 # 1.0.0-rc0
 
-- Update Flame to 1.0.0-rc8
+- Update Flame to [1.0.0-rc9](https://pub.dev/packages/flame/versions/1.0.0-rc9/changelog)
 - Add support to use overlays of the Flame.
 - BREAKING CHANGE: All params `Sprite` in components become `Future<Sprite>`.
 - BREAKING CHANGE: All params `Animation` in components become `Future<SpriteAnimation>`.
