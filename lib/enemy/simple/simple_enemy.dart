@@ -44,20 +44,6 @@ class SimpleEnemy extends Enemy {
     super.moveUp(speed);
   }
 
-  // void customMoveTop(double moveSpeed, {bool addAnimation = true}) {
-  //   if (_runFastAnimation) return;
-  //
-  //   if (animation.runTop != null) {
-  //     animation.play(SimpleAnimationEnum.runTop);
-  //   } else {
-  //     animation.play(lastDirectionHorizontal == Direction.right
-  //         ? SimpleAnimationEnum.runRight
-  //         : SimpleAnimationEnum.runLeft);
-  //   }
-  //   lastDirection = Direction.top;
-  //   this.moveUp(moveSpeed);
-  // }
-
   @override
   void moveDown(double speed) {
     if (_runFastAnimation) return;
@@ -71,21 +57,6 @@ class SimpleEnemy extends Enemy {
     lastDirection = Direction.down;
     super.moveDown(speed);
   }
-  // void customMoveBottom(double speed, {bool addAnimation = true}) {
-  //   if (_runFastAnimation) return;
-  //   this.moveDown(speed);
-  //   if ((lastDirection != Direction.bottom || _isIdle) && addAnimation) {
-  //     _isIdle = false;
-  //     if (animation.runBottom != null) {
-  //       animation.play(SimpleAnimationEnum.runBottom);
-  //     } else {
-  //       animation.play(lastDirectionHorizontal == Direction.right
-  //           ? SimpleAnimationEnum.runRight
-  //           : SimpleAnimationEnum.runLeft);
-  //     }
-  //     lastDirection = Direction.bottom;
-  //   }
-  // }
 
   @override
   void moveLeft(double speed) {
@@ -96,17 +67,6 @@ class SimpleEnemy extends Enemy {
     super.moveLeft(speed);
   }
 
-  // void customMoveLeft(double speed, {bool addAnimation = true}) {
-  //   if (_runFastAnimation) return;
-  //   this.moveLeft(speed);
-  //   if ((lastDirection != Direction.left || _isIdle) && addAnimation) {
-  //     _isIdle = false;
-  //     animation.play(SimpleAnimationEnum.runLeft);
-  //     lastDirection = Direction.left;
-  //     lastDirectionHorizontal = Direction.left;
-  //   }
-  // }
-
   @override
   void moveRight(double speed) {
     if (_runFastAnimation) return;
@@ -115,16 +75,6 @@ class SimpleEnemy extends Enemy {
     lastDirectionHorizontal = Direction.right;
     super.moveRight(speed);
   }
-  // void customMoveRight(double speed, {bool addAnimation = true}) {
-  //   if (_runFastAnimation) return;
-  //   this.moveRight(speed);
-  //   if ((lastDirection != Direction.right || _isIdle) && addAnimation) {
-  //     _isIdle = false;
-  //     animation.play(SimpleAnimationEnum.runRight);
-  //     lastDirection = Direction.right;
-  //     lastDirectionHorizontal = Direction.right;
-  //   }
-  // }
 
   @override
   void moveUpRight(double speedX, double speedY) {
@@ -138,13 +88,6 @@ class SimpleEnemy extends Enemy {
     lastDirectionHorizontal = Direction.right;
     super.moveUpRight(speedX, speedY);
   }
-  // void customMoveTopRight(double speedX, double speedY) {
-  //   if (_runFastAnimation) return;
-  //   animation.play(SimpleAnimationEnum.runTopRight);
-  //   lastDirection = Direction.topRight;
-  //   this.customMoveRight(speedX, addAnimation: animation.runTopRight == null);
-  //   this.customMoveTop(speedY, addAnimation: false);
-  // }
 
   @override
   void moveUpLeft(double speedX, double speedY) {
@@ -159,14 +102,6 @@ class SimpleEnemy extends Enemy {
     super.moveUpLeft(speedX, speedY);
   }
 
-  // void customMoveTopLeft(double speedX, double speedY) {
-  //   if (_runFastAnimation) return;
-  //   animation.play(SimpleAnimationEnum.runTopLeft);
-  //   lastDirection = Direction.topLeft;
-  //   this.customMoveLeft(speedX, addAnimation: animation.runTopLeft == null);
-  //   this.customMoveTop(speedY, addAnimation: false);
-  // }
-
   @override
   void moveDownRight(double speedX, double speedY) {
     if (_runFastAnimation) return;
@@ -179,14 +114,6 @@ class SimpleEnemy extends Enemy {
     lastDirectionHorizontal = Direction.right;
     super.moveDownRight(speedX, speedY);
   }
-  // void customMoveBottomRight(double speedX, double speedY) {
-  //   if (_runFastAnimation) return;
-  //   animation.play(SimpleAnimationEnum.runBottomRight);
-  //   lastDirection = Direction.bottomRight;
-  //   this.customMoveRight(speedX,
-  //       addAnimation: animation.runBottomRight == null);
-  //   this.customMoveBottom(speedY, addAnimation: false);
-  // }
 
   @override
   void moveDownLeft(double speedX, double speedY) {
@@ -200,14 +127,6 @@ class SimpleEnemy extends Enemy {
     lastDirectionHorizontal = Direction.left;
     super.moveDownLeft(speedX, speedY);
   }
-
-  // void customMoveBottomLeft(double speedX, double speedY) {
-  //   if (_runFastAnimation) return;
-  //   animation.play(SimpleAnimationEnum.runBottomLeft);
-  //   lastDirection = Direction.bottomLeft;
-  //   this.customMoveLeft(speedX, addAnimation: animation.runBottomLeft == null);
-  //   this.customMoveBottom(speedY, addAnimation: false);
-  // }
 
   @override
   void idle() {
