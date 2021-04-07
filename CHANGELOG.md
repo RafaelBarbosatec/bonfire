@@ -6,6 +6,8 @@
 - BREAKING CHANGE: To configure `Lighting`  use `setupLighting(LightingConfig());`
 - BREAKING CHANGE: Removed the `Position` class. Now use `Vector2`
 - WARN (Render priority): The only components that have fixed rendering priority are: `MapGame` and` BackgroundColorGame`. All others render with priority according to the component's position on the Y axis.
+- Update support tiled to 1.5.0;
+- Others improvements
 
 # 0.9.0
 
