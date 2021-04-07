@@ -56,8 +56,9 @@ class Enemy extends GameComponent with Attackable {
     dtUpdate = dt;
   }
 
-  void moveTop(double speed) {
-    var collision = verifyEnemyCollision(
+  /// Move Enemy to up
+  void moveUp(double speed) {
+    var collision = verifyEnemyTranslateCollision(
       position,
       0,
       (speed * -1),
@@ -68,8 +69,9 @@ class Enemy extends GameComponent with Attackable {
     position = position.translate(0, (speed * -1));
   }
 
-  void moveBottom(double speed) {
-    var collision = verifyEnemyCollision(
+  /// Move Enemy to down
+  void moveDown(double speed) {
+    var collision = verifyEnemyTranslateCollision(
       position,
       0,
       speed,
@@ -79,8 +81,9 @@ class Enemy extends GameComponent with Attackable {
     position = position.translate(0, speed);
   }
 
+  /// Move Enemy to left
   void moveLeft(double speed) {
-    var collision = verifyEnemyCollision(
+    var collision = verifyEnemyTranslateCollision(
       position,
       (speed * -1),
       0,
@@ -90,8 +93,9 @@ class Enemy extends GameComponent with Attackable {
     position = position.translate((speed * -1), 0);
   }
 
+  /// Move Enemy to right
   void moveRight(double speed) {
-    var collision = verifyEnemyCollision(
+    var collision = verifyEnemyTranslateCollision(
       position,
       speed,
       0,
@@ -102,6 +106,7 @@ class Enemy extends GameComponent with Attackable {
     position = position.translate(speed, 0);
   }
 
+  /// Move Enemy to diretion by radAngle with dodge obstacles
   void moveFromAngleDodgeObstacles(
     double speed,
     double angle, {
@@ -116,12 +121,12 @@ class Enemy extends GameComponent with Attackable {
             position.center.dy + nextPoint.dy) -
         position.center;
 
-    var collisionX = verifyEnemyCollision(
+    var collisionX = verifyEnemyTranslateCollision(
       position,
       diffBase.dx,
       0,
     );
-    var collisionY = verifyEnemyCollision(
+    var collisionY = verifyEnemyTranslateCollision(
       position,
       0,
       diffBase.dy,
@@ -137,7 +142,7 @@ class Enemy extends GameComponent with Attackable {
     }
 
     if (collisionX && !collisionY && newDiffBase.dy != 0) {
-      var collisionY = verifyEnemyCollision(
+      var collisionY = verifyEnemyTranslateCollision(
         position,
         0,
         innerSpeed,
@@ -146,7 +151,7 @@ class Enemy extends GameComponent with Attackable {
     }
 
     if (collisionY && !collisionX && newDiffBase.dx != 0) {
-      var collisionX = verifyEnemyCollision(
+      var collisionX = verifyEnemyTranslateCollision(
         position,
         innerSpeed,
         0,
@@ -160,6 +165,7 @@ class Enemy extends GameComponent with Attackable {
     this.position = position.shift(newDiffBase);
   }
 
+  /// Move Enemy to diretion by radAngle
   void moveFromAngle(double speed, double angle) {
     double innerSpeed = (speed * dtUpdate);
     double nextX = innerSpeed * cos(angle);
@@ -191,10 +197,13 @@ class Enemy extends GameComponent with Attackable {
     }
   }
 
+  /// marks the enemy as dead
   void die() {
     _isDead = true;
   }
 
+  /// Checks whether you entered a certain configured interval
+  /// Used in flows involved in the [update]
   bool checkPassedInterval(String name, int intervalInMilli, double dt) {
     if (this.timers[name]?.interval != intervalInMilli) {
       this.timers[name] = IntervalTick(intervalInMilli);
@@ -204,7 +213,8 @@ class Enemy extends GameComponent with Attackable {
     }
   }
 
-  bool verifyEnemyCollision(
+  /// Check if performing a certain translate on the enemy collision occurs
+  bool verifyEnemyTranslateCollision(
     Vector2Rect position,
     double translateX,
     double translateY,

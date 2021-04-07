@@ -27,8 +27,7 @@ class GameDecoration extends AnimatedObject {
 
   Sprite? sprite;
 
-  int additionalPriority = 0;
-
+  /// Used to load assets in [onLoad]
   final _loader = AssetsLoader();
 
   GameDecoration({

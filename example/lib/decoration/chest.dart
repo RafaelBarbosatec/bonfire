@@ -34,7 +34,7 @@ class Chest extends GameDecoration with TapGesture {
       notObserved: () {
         _observedPlayer = false;
       },
-      visionCells: 1,
+      radiusVision: 1,
     );
     super.update(dt);
   }

@@ -42,7 +42,7 @@ class SimpleEnemy extends Enemy {
 
   void customMoveTop(double moveSpeed, {bool addAnimation = true}) {
     if (_runFastAnimation) return;
-    this.moveTop(moveSpeed);
+    this.moveUp(moveSpeed);
 
     if ((lastDirection != Direction.top || _isIdle) && addAnimation) {
       _isIdle = false;
@@ -59,7 +59,7 @@ class SimpleEnemy extends Enemy {
 
   void customMoveBottom(double speed, {bool addAnimation = true}) {
     if (_runFastAnimation) return;
-    this.moveBottom(speed);
+    this.moveDown(speed);
     if ((lastDirection != Direction.bottom || _isIdle) && addAnimation) {
       _isIdle = false;
       if (animation.runBottom != null) {

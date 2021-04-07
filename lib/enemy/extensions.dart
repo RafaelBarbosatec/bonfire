@@ -9,12 +9,14 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+/// Functions util to use in your [Enemy]
 extension EnemyExtensions on Enemy {
+  /// This method we notify when detect the player when enter in [radiusVision] configuration
+  /// Method that bo used in [update] method.
   void seePlayer({
     required Function(Player) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
-    int interval = 500,
   }) {
     Player? player = gameRef.player;
     if (player == null) return;
@@ -40,6 +42,7 @@ extension EnemyExtensions on Enemy {
     }
   }
 
+  /// Add in the game a text with animation representing damage received
   void showDamage(
     double damage, {
     TextConfig? config,
@@ -70,6 +73,7 @@ extension EnemyExtensions on Enemy {
     );
   }
 
+  /// Draw simple life bar
   void drawDefaultLifeBar(
     Canvas canvas, {
     bool drawInBottom = false,
@@ -112,6 +116,8 @@ extension EnemyExtensions on Enemy {
     }
   }
 
+  /// Get angle between enemy and player
+  /// player as a base
   double getAngleFomPlayer() {
     Player? player = this.gameRef.player;
     if (player == null) return 0.0;
@@ -121,6 +127,8 @@ extension EnemyExtensions on Enemy {
     );
   }
 
+  /// Get angle between enemy and player
+  /// enemy position as a base
   double getInverseAngleFomPlayer() {
     Player? player = this.gameRef.player;
     if (player == null) return 0.0;
@@ -130,6 +138,7 @@ extension EnemyExtensions on Enemy {
     );
   }
 
+  /// Gets player position used how base in calculations
   Vector2Rect get playerRect {
     return (gameRef.player is ObjectCollision
             ? (gameRef.player as ObjectCollision).rectCollision

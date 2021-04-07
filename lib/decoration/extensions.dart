@@ -3,11 +3,14 @@ import 'dart:ui';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/player/player.dart';
 
+/// Functions util to use in your [GameDecoration]
 extension GameDecorationExtensions on GameDecoration {
+  /// This method we notify when detect the player when enter in [radiusVision] configuration
+  /// Method that bo used in [update] method.
   void seePlayer({
     required Function(Player) observed,
     VoidCallback? notObserved,
-    int visionCells = 3,
+    int radiusVision = 3,
   }) {
     Player? player = gameRef.player;
     if (!isVisibleInCamera() || player == null) return;
@@ -17,8 +20,8 @@ extension GameDecorationExtensions on GameDecoration {
       return;
     }
 
-    double visionWidth = position.width * visionCells * 2;
-    double visionHeight = position.height * visionCells * 2;
+    double visionWidth = position.width * radiusVision * 2;
+    double visionHeight = position.height * radiusVision * 2;
 
     Rect fieldOfVision = Rect.fromLTWH(
       position.left - (visionWidth / 2),
