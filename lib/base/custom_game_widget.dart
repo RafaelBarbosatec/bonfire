@@ -8,7 +8,16 @@ class CustomGameWidget<T extends Game> extends StatelessWidget {
   /// instance of the game
   final T game;
 
-  const CustomGameWidget({Key? key, required this.game}) : super(key: key);
+  final Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap;
+
+  final List<String>? initialActiveOverlays;
+
+  const CustomGameWidget({
+    Key? key,
+    required this.game,
+    this.overlayBuilderMap,
+    this.initialActiveOverlays,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +38,8 @@ class CustomGameWidget<T extends Game> extends StatelessWidget {
             : null,
         child: GameWidget(
           game: game,
+          overlayBuilderMap: overlayBuilderMap,
+          initialActiveOverlays: initialActiveOverlays,
         ),
       ),
     );

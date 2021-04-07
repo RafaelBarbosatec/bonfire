@@ -9,6 +9,7 @@ import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {
@@ -42,6 +43,8 @@ class BonfireWidget extends StatefulWidget {
   /// Used to configure lighting in the game
   final Color? lightingColorGame;
 
+  final Map<String, OverlayWidgetBuilder<BonfireGame>>? overlayBuilderMap;
+  final List<String>? initialActiveOverlays;
   final List<Enemy>? enemies;
   final List<GameDecoration>? decorations;
   final List<GameComponent>? components;
@@ -73,6 +76,8 @@ class BonfireWidget extends StatefulWidget {
     this.cameraMoveOnlyMapArea = false,
     this.cameraSizeMovementWindow = const Size(50, 50),
     this.components,
+    this.overlayBuilderMap,
+    this.initialActiveOverlays,
   }) : super(key: key);
 
   @override
@@ -124,6 +129,8 @@ class _BonfireWidgetState extends State<BonfireWidget> {
     if (_game == null) return SizedBox.shrink();
     return CustomGameWidget(
       game: _game!,
+      overlayBuilderMap: widget.overlayBuilderMap,
+      initialActiveOverlays: widget.initialActiveOverlays,
     );
   }
 

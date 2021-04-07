@@ -9,6 +9,7 @@ import 'package:bonfire/tiled/tiled_world_data.dart';
 import 'package:bonfire/tiled/tiled_world_map.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class BonfireTiledWidget extends StatefulWidget {
@@ -48,6 +49,8 @@ class BonfireTiledWidget extends StatefulWidget {
   /// Represents a map (or world) where the game occurs.
   final TiledWorldMap map;
 
+  final Map<String, OverlayWidgetBuilder<BonfireGame>>? overlayBuilderMap;
+  final List<String>? initialActiveOverlays;
   final List<GameComponent>? components;
   final Widget? progress;
   final double cameraZoom;
@@ -79,6 +82,8 @@ class BonfireTiledWidget extends StatefulWidget {
     this.progressTransitionDuration,
     this.colorFilter,
     this.components,
+    this.overlayBuilderMap,
+    this.initialActiveOverlays,
   }) : super(key: key);
   @override
   _BonfireTiledWidgetState createState() => _BonfireTiledWidgetState();
@@ -169,6 +174,8 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
     if (_game == null) return SizedBox.shrink();
     return CustomGameWidget(
       game: _game!,
+      overlayBuilderMap: widget.overlayBuilderMap,
+      initialActiveOverlays: widget.initialActiveOverlays,
     );
   }
 }

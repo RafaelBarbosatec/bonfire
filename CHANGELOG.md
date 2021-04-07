@@ -1,13 +1,14 @@
 # 1.0.0-rc0
 
 - Update Flame to 1.0.0-rc8
+- Add support to use overlays of the Flame.
 - BREAKING CHANGE: All params `Sprite` in components become `Future<Sprite>`.
 - BREAKING CHANGE: All params `Animation` in components become `Future<SpriteAnimation>`.
-- BREAKING CHANGE: To configure `Lighting`  use `setupLighting(LightingConfig());`
-- BREAKING CHANGE: Removed the `Position` class. Now use `Vector2`
+- BREAKING CHANGE: To configure `Lighting`  use `setupLighting(LightingConfig())`.
+- BREAKING CHANGE: Removed the `Position` class. Now use `Vector2`.
 - WARN (Render priority): The only components that have fixed rendering priority are: `MapGame` and` BackgroundColorGame`. All others render with priority according to the component's position on the Y axis.
-- Update support tiled to 1.5.0;
-- Others improvements
+- Update support tiled to 1.5.0.
+- Others improvements.
 
 # 0.9.0
 
