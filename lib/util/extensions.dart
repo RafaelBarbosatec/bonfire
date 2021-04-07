@@ -96,9 +96,9 @@ extension GameComponentExt on GameComponent {
       }
     } else {
       if (player.position.center.dy > position.center.dy) {
-        return Direction.bottom;
+        return Direction.down;
       } else if (player.position.center.dy < position.center.dy) {
-        return Direction.top;
+        return Direction.up;
       }
     }
 

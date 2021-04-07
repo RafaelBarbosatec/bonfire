@@ -169,42 +169,42 @@ extension PlayerExtensions on Player {
           (rectBase.rect.top + (rectBase.rect.height - height) / 2),
         );
         break;
-      case Direction.top:
+      case Direction.up:
         attackRangeAnimation = animationTop;
         startPosition = Vector2(
           (rectBase.rect.left + (rectBase.rect.width - width) / 2),
           rectBase.rect.top - height,
         );
         break;
-      case Direction.bottom:
+      case Direction.down:
         attackRangeAnimation = animationBottom;
         startPosition = Vector2(
           (rectBase.rect.left + (rectBase.rect.width - width) / 2),
           rectBase.rect.bottom,
         );
         break;
-      case Direction.topLeft:
+      case Direction.upLeft:
         attackRangeAnimation = animationLeft;
         startPosition = Vector2(
           rectBase.rect.left - width,
           (rectBase.rect.top + (rectBase.rect.height - height) / 2),
         );
         break;
-      case Direction.topRight:
+      case Direction.upRight:
         attackRangeAnimation = animationRight;
         startPosition = Vector2(
           rectBase.rect.right,
           (rectBase.rect.top + (rectBase.rect.height - height) / 2),
         );
         break;
-      case Direction.bottomLeft:
+      case Direction.downLeft:
         attackRangeAnimation = animationLeft;
         startPosition = Vector2(
           rectBase.rect.left - width,
           (rectBase.rect.top + (rectBase.rect.height - height) / 2),
         );
         break;
-      case Direction.bottomRight:
+      case Direction.downRight:
         attackRangeAnimation = animationRight;
         startPosition = Vector2(
           rectBase.rect.right,
@@ -259,7 +259,7 @@ extension PlayerExtensions on Player {
         : position;
 
     switch (attackDirection) {
-      case Direction.top:
+      case Direction.up:
         positionAttack = Rect.fromLTWH(
           this.position.rect.left + (this.width - width) / 2,
           rectBase.rect.top - height,
@@ -279,7 +279,7 @@ extension PlayerExtensions on Player {
         if (animationRight != null) anim = animationRight;
         pushLeft = (sizePush ?? width);
         break;
-      case Direction.bottom:
+      case Direction.down:
         positionAttack = Rect.fromLTWH(
           this.position.rect.left + (this.width - width) / 2,
           rectBase.rect.bottom,
@@ -299,7 +299,7 @@ extension PlayerExtensions on Player {
         if (animationLeft != null) anim = animationLeft;
         pushLeft = (sizePush ?? width) * -1;
         break;
-      case Direction.topLeft:
+      case Direction.upLeft:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.left - width,
           this.position.rect.top + (this.height - height) / 2,
@@ -309,7 +309,7 @@ extension PlayerExtensions on Player {
         if (animationLeft != null) anim = animationLeft;
         pushLeft = (sizePush ?? width) * -1;
         break;
-      case Direction.topRight:
+      case Direction.upRight:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.right,
           this.position.rect.top + (this.height - height) / 2,
@@ -319,7 +319,7 @@ extension PlayerExtensions on Player {
         if (animationRight != null) anim = animationRight;
         pushLeft = (sizePush ?? width);
         break;
-      case Direction.bottomLeft:
+      case Direction.downLeft:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.left - width,
           this.position.rect.top + (this.height - height) / 2,
@@ -329,7 +329,7 @@ extension PlayerExtensions on Player {
         if (animationLeft != null) anim = animationLeft;
         pushLeft = (sizePush ?? width) * -1;
         break;
-      case Direction.bottomRight:
+      case Direction.downRight:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.right,
           this.position.rect.top + (this.height - height) / 2,

@@ -79,23 +79,23 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         }
 
         if (translateX > 0 && translateY > 0) {
-          this.customMoveBottomRight(translateX, translateY);
+          this.moveDownRight(translateX, translateY);
         } else if (translateX < 0 && translateY < 0) {
-          this.customMoveTopLeft(translateX * -1, translateY * -1);
+          this.moveUpLeft(translateX * -1, translateY * -1);
         } else if (translateX > 0 && translateY < 0) {
-          this.customMoveTopRight(translateX, translateY * -1);
+          this.moveUpRight(translateX, translateY * -1);
         } else if (translateX < 0 && translateY > 0) {
-          this.customMoveBottomLeft(translateX * -1, translateY);
+          this.moveDownLeft(translateX * -1, translateY);
         } else {
           if (translateX > 0) {
-            this.customMoveRight(translateX);
+            this.moveRight(translateX);
           } else if (translateX < 0) {
-            customMoveLeft((translateX * -1));
+            moveLeft((translateX * -1));
           }
           if (translateY > 0) {
-            customMoveBottom(translateY);
+            moveDown(translateY);
           } else if (translateY < 0) {
-            customMoveTop((translateY * -1));
+            moveUp((translateY * -1));
           }
         }
       },
@@ -148,7 +148,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       if (positiveDiffX > positiveDiffY) {
         playerDirection = diffX > 0 ? Direction.left : Direction.right;
       } else {
-        playerDirection = diffY > 0 ? Direction.top : Direction.bottom;
+        playerDirection = diffY > 0 ? Direction.up : Direction.down;
       }
     } else {
       playerDirection = direction;
@@ -157,7 +157,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     double pushLeft = 0;
     double pushTop = 0;
     switch (playerDirection) {
-      case Direction.top:
+      case Direction.up:
         positionAttack = Rect.fromLTWH(
           this.position.left + (this.width - width) / 2,
           rectToMove.top - height,
@@ -177,7 +177,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         if (attackEffectRightAnim != null) anim = attackEffectRightAnim;
         pushLeft = (sizePush ?? width);
         break;
-      case Direction.bottom:
+      case Direction.down:
         positionAttack = Rect.fromLTWH(
           this.position.left + (this.width - width) / 2,
           rectToMove.bottom,
@@ -197,7 +197,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
         pushLeft = (sizePush ?? width) * -1;
         break;
-      case Direction.topLeft:
+      case Direction.upLeft:
         positionAttack = Rect.fromLTWH(
           rectToMove.left - width,
           this.position.top + (this.height - height) / 2,
@@ -207,7 +207,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
         pushLeft = (sizePush ?? width) * -1;
         break;
-      case Direction.topRight:
+      case Direction.upRight:
         positionAttack = Rect.fromLTWH(
           rectToMove.right,
           this.position.top + (this.height - height) / 2,
@@ -217,7 +217,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         if (attackEffectRightAnim != null) anim = attackEffectRightAnim;
         pushLeft = (sizePush ?? width);
         break;
-      case Direction.bottomLeft:
+      case Direction.downLeft:
         positionAttack = Rect.fromLTWH(
           rectToMove.left - width,
           this.position.top + (this.height - height) / 2,
@@ -227,7 +227,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         if (attackEffectLeftAnim != null) anim = attackEffectLeftAnim;
         pushLeft = (sizePush ?? width) * -1;
         break;
-      case Direction.bottomRight:
+      case Direction.downRight:
         positionAttack = Rect.fromLTWH(
           rectToMove.right,
           this.position.top + (this.height - height) / 2,
@@ -315,9 +315,9 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       }
     } else {
       if (playerRect.center.dy > rectToMove.rect.center.dy) {
-        ballDirection = Direction.bottom;
+        ballDirection = Direction.down;
       } else if (playerRect.center.dy < rectToMove.rect.center.dy) {
-        ballDirection = Direction.top;
+        ballDirection = Direction.up;
       }
     }
 
@@ -338,42 +338,42 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
-      case Direction.top:
+      case Direction.up:
         attackRangeAnimation = animationTop;
         startPosition = Vector2(
           (rectToMove.rect.left + (rectToMove.rect.width - width) / 2),
           rectToMove.rect.top - height,
         );
         break;
-      case Direction.bottom:
+      case Direction.down:
         attackRangeAnimation = animationBottom;
         startPosition = Vector2(
           (rectToMove.rect.left + (rectToMove.rect.width - width) / 2),
           rectToMove.rect.bottom,
         );
         break;
-      case Direction.topLeft:
+      case Direction.upLeft:
         attackRangeAnimation = animationLeft;
         startPosition = Vector2(
           rectToMove.rect.left - width,
           (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
-      case Direction.topRight:
+      case Direction.upRight:
         attackRangeAnimation = animationRight;
         startPosition = Vector2(
           rectToMove.rect.right,
           (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
-      case Direction.bottomLeft:
+      case Direction.downLeft:
         attackRangeAnimation = animationLeft;
         startPosition = Vector2(
           rectToMove.rect.left - width,
           (rectToMove.rect.top + (rectToMove.rect.height - height) / 2),
         );
         break;
-      case Direction.bottomRight:
+      case Direction.downRight:
         attackRangeAnimation = animationRight;
         startPosition = Vector2(
           rectToMove.rect.right,
@@ -497,23 +497,23 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         }
 
         if (translateX > 0 && translateY > 0) {
-          this.customMoveBottomRight(translateX, translateY);
+          this.moveDownRight(translateX, translateY);
         } else if (translateX < 0 && translateY < 0) {
-          this.customMoveTopLeft(translateX * -1, translateY * -1);
+          this.moveUpLeft(translateX * -1, translateY * -1);
         } else if (translateX > 0 && translateY < 0) {
-          this.customMoveTopRight(translateX, translateY * -1);
+          this.moveUpRight(translateX, translateY * -1);
         } else if (translateX < 0 && translateY > 0) {
-          this.customMoveBottomLeft(translateX * -1, translateY);
+          this.moveDownLeft(translateX * -1, translateY);
         } else {
           if (translateX > 0) {
-            this.customMoveRight(translateX);
+            this.moveRight(translateX);
           } else {
-            customMoveLeft((translateX * -1));
+            moveLeft((translateX * -1));
           }
           if (translateY > 0) {
-            customMoveBottom(translateY);
+            moveDown(translateY);
           } else {
-            customMoveTop((translateY * -1));
+            moveUp((translateY * -1));
           }
         }
       },

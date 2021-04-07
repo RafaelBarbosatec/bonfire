@@ -1,10 +1,1 @@
-enum Direction {
-  left,
-  right,
-  top,
-  bottom,
-  topLeft,
-  topRight,
-  bottomLeft,
-  bottomRight
-}
+enum Direction { left, right, up, down, upLeft, upRight, downLeft, downRight }

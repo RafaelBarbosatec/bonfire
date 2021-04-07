@@ -25,6 +25,8 @@ class Enemy extends GameComponent with Attackable {
 
   bool _isDead = false;
 
+  bool isIdle = true;
+
   /// Map available to store times that can be used to control the frequency of any action.
   Map<String, IntervalTick> timers = Map();
 
@@ -58,6 +60,7 @@ class Enemy extends GameComponent with Attackable {
 
   /// Move Enemy to up
   void moveUp(double speed) {
+    isIdle = false;
     var collision = verifyEnemyTranslateCollision(
       position,
       0,
@@ -71,6 +74,7 @@ class Enemy extends GameComponent with Attackable {
 
   /// Move Enemy to down
   void moveDown(double speed) {
+    isIdle = false;
     var collision = verifyEnemyTranslateCollision(
       position,
       0,
@@ -83,6 +87,7 @@ class Enemy extends GameComponent with Attackable {
 
   /// Move Enemy to left
   void moveLeft(double speed) {
+    isIdle = false;
     var collision = verifyEnemyTranslateCollision(
       position,
       (speed * -1),
@@ -95,6 +100,7 @@ class Enemy extends GameComponent with Attackable {
 
   /// Move Enemy to right
   void moveRight(double speed) {
+    isIdle = false;
     var collision = verifyEnemyTranslateCollision(
       position,
       speed,
@@ -106,12 +112,33 @@ class Enemy extends GameComponent with Attackable {
     position = position.translate(speed, 0);
   }
 
+  void moveUpRight(double speedX, double speedY) {
+    moveRight(speedX);
+    moveUp(speedY);
+  }
+
+  void moveUpLeft(double speedX, double speedY) {
+    moveLeft(speedX);
+    moveUp(speedY);
+  }
+
+  void moveDownLeft(double speedX, double speedY) {
+    moveLeft(speedX);
+    moveDown(speedY);
+  }
+
+  void moveDownRight(double speedX, double speedY) {
+    moveRight(speedX);
+    moveDown(speedY);
+  }
+
   /// Move Enemy to diretion by radAngle with dodge obstacles
   void moveFromAngleDodgeObstacles(
     double speed,
     double angle, {
     Function? notMove,
   }) {
+    isIdle = false;
     double innerSpeed = (speed * dtUpdate);
     double nextX = innerSpeed * cos(angle);
     double nextY = innerSpeed * sin(angle);
@@ -167,6 +194,7 @@ class Enemy extends GameComponent with Attackable {
 
   /// Move Enemy to diretion by radAngle
   void moveFromAngle(double speed, double angle) {
+    isIdle = false;
     double innerSpeed = (speed * dtUpdate);
     double nextX = innerSpeed * cos(angle);
     double nextY = innerSpeed * sin(angle);
@@ -195,6 +223,10 @@ class Enemy extends GameComponent with Attackable {
     if (this.life > maxLife) {
       this.life = maxLife;
     }
+  }
+
+  void idle() {
+    isIdle = true;
   }
 
   /// marks the enemy as dead
