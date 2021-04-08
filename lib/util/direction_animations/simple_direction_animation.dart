@@ -103,10 +103,10 @@ class SimpleDirectionAnimation {
       case SimpleAnimationEnum.idleRight:
         current = idleRight;
         break;
-      case SimpleAnimationEnum.idleTop:
+      case SimpleAnimationEnum.idleUp:
         if (idleUp != null) current = idleUp;
         break;
-      case SimpleAnimationEnum.idleBottom:
+      case SimpleAnimationEnum.idleDown:
         if (idleDown != null) current = idleDown;
         break;
       case SimpleAnimationEnum.idleTopLeft:
@@ -115,34 +115,34 @@ class SimpleDirectionAnimation {
       case SimpleAnimationEnum.idleTopRight:
         if (idleUpRight != null) current = idleUpRight;
         break;
-      case SimpleAnimationEnum.idleBottomLeft:
+      case SimpleAnimationEnum.idleDownLeft:
         if (idleDownLeft != null) current = idleDownLeft;
         break;
-      case SimpleAnimationEnum.idleBottomRight:
+      case SimpleAnimationEnum.idleDownRight:
         if (idleDownRight != null) current = idleDownRight;
         break;
-      case SimpleAnimationEnum.runTop:
+      case SimpleAnimationEnum.runUp:
         if (runUp != null) current = runUp;
         break;
       case SimpleAnimationEnum.runRight:
         current = runRight;
         break;
-      case SimpleAnimationEnum.runBottom:
+      case SimpleAnimationEnum.runDown:
         if (runDown != null) current = runDown;
         break;
       case SimpleAnimationEnum.runLeft:
         current = runLeft;
         break;
-      case SimpleAnimationEnum.runTopLeft:
+      case SimpleAnimationEnum.runUpLeft:
         if (runUpLeft != null) current = runUpLeft;
         break;
-      case SimpleAnimationEnum.runTopRight:
+      case SimpleAnimationEnum.runUpRight:
         if (runUpRight != null) current = runUpRight;
         break;
-      case SimpleAnimationEnum.runBottomLeft:
+      case SimpleAnimationEnum.runDownLeft:
         if (runDownLeft != null) current = runDownLeft;
         break;
-      case SimpleAnimationEnum.runBottomRight:
+      case SimpleAnimationEnum.runDownRight:
         if (runDownRight != null) current = runDownRight;
         break;
     }

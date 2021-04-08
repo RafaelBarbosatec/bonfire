@@ -88,8 +88,8 @@ class Goblin extends SimpleEnemy with ObjectCollision {
     this.simpleAttackRange(
       animationRight: CommonSpriteSheet.fireBallRight,
       animationLeft: CommonSpriteSheet.fireBallLeft,
-      animationTop: CommonSpriteSheet.fireBallTop,
-      animationBottom: CommonSpriteSheet.fireBallBottom,
+      animationUp: CommonSpriteSheet.fireBallTop,
+      animationDown: CommonSpriteSheet.fireBallBottom,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       id: 35,
       width: width * 0.9,

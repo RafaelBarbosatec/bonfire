@@ -112,21 +112,25 @@ class Enemy extends GameComponent with Attackable {
     position = position.translate(speed, 0);
   }
 
+  /// Move Enemy to up and right
   void moveUpRight(double speedX, double speedY) {
     moveRight(speedX);
     moveUp(speedY);
   }
 
+  /// Move Enemy to up and left
   void moveUpLeft(double speedX, double speedY) {
     moveLeft(speedX);
     moveUp(speedY);
   }
 
+  /// Move Enemy to down and left
   void moveDownLeft(double speedX, double speedY) {
     moveLeft(speedX);
     moveDown(speedY);
   }
 
+  /// Move Enemy to down and right
   void moveDownRight(double speedX, double speedY) {
     moveRight(speedX);
     moveDown(speedY);

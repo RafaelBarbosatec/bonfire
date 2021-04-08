@@ -15,7 +15,7 @@ class MapExplorer implements JoystickListener {
     double speed = 8 * event.intensity;
     camera.moveCamera(speed, event.directional);
     if (event.directional == JoystickMoveDirectional.MOVE_UP_LEFT) {
-      camera.moveLeft(speed * 0.8);
+      camera.moveUp(speed * 0.8);
       camera.moveTop(speed * 0.8);
     }
     if (event.directional == JoystickMoveDirectional.MOVE_UP_RIGHT) {
@@ -23,12 +23,12 @@ class MapExplorer implements JoystickListener {
       camera.moveTop(speed * 0.8);
     }
     if (event.directional == JoystickMoveDirectional.MOVE_DOWN_LEFT) {
-      camera.moveLeft(speed * 0.8);
-      camera.moveBottom(speed * 0.8);
+      camera.moveUp(speed * 0.8);
+      camera.moveDown(speed * 0.8);
     }
     if (event.directional == JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
       camera.moveRight(speed * 0.8);
-      camera.moveBottom(speed * 0.8);
+      camera.moveDown(speed * 0.8);
     }
   }
 

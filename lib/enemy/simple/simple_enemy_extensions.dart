@@ -14,6 +14,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 extension SimpleEnemyExtensions on SimpleEnemy {
+  /// Checks whether the player is within range. If so, move to it.
   void seeAndMoveToPlayer({
     required Function(Player) closePlayer,
     double radiusVision = 32,
@@ -105,6 +106,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     );
   }
 
+  ///Execute simple attach melee using animation
   void simpleAttackMelee({
     required double damage,
     required double height,
@@ -270,11 +272,12 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     execute?.call();
   }
 
+  /// Execute attack range using a component with animation
   void simpleAttackRange({
     required Future<SpriteAnimation> animationRight,
     required Future<SpriteAnimation> animationLeft,
-    required Future<SpriteAnimation> animationTop,
-    required Future<SpriteAnimation> animationBottom,
+    required Future<SpriteAnimation> animationUp,
+    required Future<SpriteAnimation> animationDown,
     required Future<SpriteAnimation> animationDestroy,
     required double width,
     required double height,
@@ -339,14 +342,14 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         );
         break;
       case Direction.up:
-        attackRangeAnimation = animationTop;
+        attackRangeAnimation = animationUp;
         startPosition = Vector2(
           (rectToMove.rect.left + (rectToMove.rect.width - width) / 2),
           rectToMove.rect.top - height,
         );
         break;
       case Direction.down:
-        attackRangeAnimation = animationBottom;
+        attackRangeAnimation = animationDown;
         startPosition = Vector2(
           (rectToMove.rect.left + (rectToMove.rect.width - width) / 2),
           rectToMove.rect.bottom,
@@ -408,6 +411,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     if (execute != null) execute();
   }
 
+  /// Checks whether the player is within range. If so, move to it.
   void seeAndMoveToAttackRange({
     required Function(Player) positioned,
     double radiusVision = 32,

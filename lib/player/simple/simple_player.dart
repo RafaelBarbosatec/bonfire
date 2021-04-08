@@ -42,9 +42,9 @@ class SimplePlayer extends Player {
   }
 
   @override
-  void moveTop(double speed, {VoidCallback? onCollision}) {
+  void moveUp(double speed, {VoidCallback? onCollision}) {
     if (animation.runUp != null) {
-      animation.play(SimpleAnimationEnum.runTop);
+      animation.play(SimpleAnimationEnum.runUp);
     } else {
       if (lastDirectionHorizontal == Direction.left) {
         animation.play(SimpleAnimationEnum.runLeft);
@@ -53,7 +53,7 @@ class SimplePlayer extends Player {
       }
     }
     lastDirection = Direction.up;
-    super.moveTop(speed, onCollision: onCollision);
+    super.moveUp(speed, onCollision: onCollision);
   }
 
   @override
@@ -65,9 +65,9 @@ class SimplePlayer extends Player {
   }
 
   @override
-  void moveBottom(double speed, {VoidCallback? onCollision}) {
+  void moveDown(double speed, {VoidCallback? onCollision}) {
     if (animation.runDown != null) {
-      animation.play(SimpleAnimationEnum.runBottom);
+      animation.play(SimpleAnimationEnum.runDown);
     } else {
       if (lastDirectionHorizontal == Direction.left) {
         animation.play(SimpleAnimationEnum.runLeft);
@@ -76,7 +76,7 @@ class SimplePlayer extends Player {
       }
     }
     lastDirection = Direction.down;
-    super.moveBottom(speed, onCollision: onCollision);
+    super.moveDown(speed, onCollision: onCollision);
   }
 
   @override
@@ -90,7 +90,7 @@ class SimplePlayer extends Player {
   @override
   void moveUpLeft() {
     if (animation.runUpLeft != null) {
-      animation.play(SimpleAnimationEnum.runTopLeft);
+      animation.play(SimpleAnimationEnum.runUpLeft);
     } else {
       animation.play(SimpleAnimationEnum.runLeft);
     }
@@ -102,7 +102,7 @@ class SimplePlayer extends Player {
   @override
   void moveUpRight() {
     if (animation.runUpRight != null) {
-      animation.play(SimpleAnimationEnum.runTopRight);
+      animation.play(SimpleAnimationEnum.runUpRight);
     } else {
       animation.play(SimpleAnimationEnum.runRight);
     }
@@ -112,27 +112,27 @@ class SimplePlayer extends Player {
   }
 
   @override
-  void moveBottomRight() {
+  void moveDownRight() {
     if (animation.runDownRight != null) {
-      animation.play(SimpleAnimationEnum.runBottomRight);
+      animation.play(SimpleAnimationEnum.runDownRight);
     } else {
       animation.play(SimpleAnimationEnum.runRight);
     }
     lastDirection = Direction.downRight;
     lastDirectionHorizontal = Direction.right;
-    super.moveBottomRight();
+    super.moveDownRight();
   }
 
   @override
-  void moveBottomLeft() {
+  void moveDownLeft() {
     if (animation.runDownLeft != null) {
-      animation.play(SimpleAnimationEnum.runBottomLeft);
+      animation.play(SimpleAnimationEnum.runDownLeft);
     } else {
       animation.play(SimpleAnimationEnum.runLeft);
     }
     lastDirection = Direction.downLeft;
     lastDirectionHorizontal = Direction.left;
-    super.moveBottomLeft();
+    super.moveDownLeft();
   }
 
   @override
@@ -147,7 +147,7 @@ class SimplePlayer extends Player {
           break;
         case Direction.up:
           if (animation.idleUp != null) {
-            animation.play(SimpleAnimationEnum.idleTop);
+            animation.play(SimpleAnimationEnum.idleUp);
           } else {
             if (lastDirectionHorizontal == Direction.left) {
               animation.play(SimpleAnimationEnum.idleLeft);
@@ -158,7 +158,7 @@ class SimplePlayer extends Player {
           break;
         case Direction.down:
           if (animation.idleDown != null) {
-            animation.play(SimpleAnimationEnum.idleBottom);
+            animation.play(SimpleAnimationEnum.idleDown);
           } else {
             if (lastDirectionHorizontal == Direction.left) {
               animation.play(SimpleAnimationEnum.idleLeft);
@@ -183,14 +183,14 @@ class SimplePlayer extends Player {
           break;
         case Direction.downLeft:
           if (animation.idleDownLeft != null) {
-            animation.play(SimpleAnimationEnum.idleBottomLeft);
+            animation.play(SimpleAnimationEnum.idleDownLeft);
           } else {
             animation.play(SimpleAnimationEnum.idleLeft);
           }
           break;
         case Direction.downRight:
           if (animation.idleDownRight != null) {
-            animation.play(SimpleAnimationEnum.idleBottomRight);
+            animation.play(SimpleAnimationEnum.idleDownRight);
           } else {
             animation.play(SimpleAnimationEnum.idleRight);
           }

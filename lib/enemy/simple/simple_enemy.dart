@@ -48,7 +48,7 @@ class SimpleEnemy extends Enemy {
   void moveDown(double speed) {
     if (_runFastAnimation) return;
     if (animation.runDown != null) {
-      animation.play(SimpleAnimationEnum.runBottom);
+      animation.play(SimpleAnimationEnum.runDown);
     } else {
       animation.play(lastDirectionHorizontal == Direction.right
           ? SimpleAnimationEnum.runRight
@@ -80,7 +80,7 @@ class SimpleEnemy extends Enemy {
   void moveUpRight(double speedX, double speedY) {
     if (_runFastAnimation) return;
     if (animation.runUpRight != null) {
-      animation.play(SimpleAnimationEnum.runTopRight);
+      animation.play(SimpleAnimationEnum.runUpRight);
     } else {
       animation.play(SimpleAnimationEnum.runRight);
     }
@@ -93,7 +93,7 @@ class SimpleEnemy extends Enemy {
   void moveUpLeft(double speedX, double speedY) {
     if (_runFastAnimation) return;
     if (animation.runUpLeft != null) {
-      animation.play(SimpleAnimationEnum.runTopLeft);
+      animation.play(SimpleAnimationEnum.runUpLeft);
     } else {
       animation.play(SimpleAnimationEnum.runLeft);
     }
@@ -106,7 +106,7 @@ class SimpleEnemy extends Enemy {
   void moveDownRight(double speedX, double speedY) {
     if (_runFastAnimation) return;
     if (animation.runDownRight != null) {
-      animation.play(SimpleAnimationEnum.runBottomRight);
+      animation.play(SimpleAnimationEnum.runDownRight);
     } else {
       animation.play(SimpleAnimationEnum.runRight);
     }
@@ -119,7 +119,7 @@ class SimpleEnemy extends Enemy {
   void moveDownLeft(double speedX, double speedY) {
     if (_runFastAnimation) return;
     if (animation.runDownLeft != null) {
-      animation.play(SimpleAnimationEnum.runBottomLeft);
+      animation.play(SimpleAnimationEnum.runDownLeft);
     } else {
       animation.play(SimpleAnimationEnum.runLeft);
     }
@@ -141,7 +141,7 @@ class SimpleEnemy extends Enemy {
         break;
       case Direction.up:
         if (animation.idleUp != null) {
-          animation.play(SimpleAnimationEnum.idleTop);
+          animation.play(SimpleAnimationEnum.idleUp);
         } else {
           if (lastDirectionHorizontal == Direction.left) {
             animation.play(SimpleAnimationEnum.idleLeft);
@@ -152,7 +152,7 @@ class SimpleEnemy extends Enemy {
         break;
       case Direction.down:
         if (animation.idleDown != null) {
-          animation.play(SimpleAnimationEnum.idleBottom);
+          animation.play(SimpleAnimationEnum.idleDown);
         } else {
           if (lastDirectionHorizontal == Direction.left) {
             animation.play(SimpleAnimationEnum.idleLeft);
@@ -177,14 +177,14 @@ class SimpleEnemy extends Enemy {
         break;
       case Direction.downLeft:
         if (animation.idleDownLeft != null) {
-          animation.play(SimpleAnimationEnum.idleBottomLeft);
+          animation.play(SimpleAnimationEnum.idleDownLeft);
         } else {
           animation.play(SimpleAnimationEnum.idleLeft);
         }
         break;
       case Direction.downRight:
         if (animation.idleDownRight != null) {
-          animation.play(SimpleAnimationEnum.idleBottomRight);
+          animation.play(SimpleAnimationEnum.idleDownRight);
         } else {
           animation.play(SimpleAnimationEnum.idleRight);
         }

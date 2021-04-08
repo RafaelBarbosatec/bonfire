@@ -41,11 +41,11 @@ class Camera with HasGameRef<BonfireGame> {
     position = position.translate(displacement, 0);
   }
 
-  void moveBottom(double displacement) {
+  void moveDown(double displacement) {
     position = position.translate(0, displacement);
   }
 
-  void moveLeft(double displacement) {
+  void moveUp(double displacement) {
     position = position.translate(displacement * -1, 0);
   }
 
@@ -58,10 +58,10 @@ class Camera with HasGameRef<BonfireGame> {
         moveRight(displacement);
         break;
       case JoystickMoveDirectional.MOVE_DOWN:
-        moveBottom(displacement);
+        moveDown(displacement);
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
-        moveLeft(displacement);
+        moveUp(displacement);
         break;
       case JoystickMoveDirectional.MOVE_UP_LEFT:
         break;

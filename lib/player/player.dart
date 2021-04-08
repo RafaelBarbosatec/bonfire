@@ -62,7 +62,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
       switch (_currentDirectional) {
         case JoystickMoveDirectional.MOVE_UP:
           isIdle = false;
-          moveTop(speed);
+          moveUp(speed);
           break;
         case JoystickMoveDirectional.MOVE_UP_LEFT:
           isIdle = false;
@@ -78,15 +78,15 @@ class Player extends GameComponent with Attackable implements JoystickListener {
           break;
         case JoystickMoveDirectional.MOVE_DOWN:
           isIdle = false;
-          moveBottom(speed);
+          moveDown(speed);
           break;
         case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
           isIdle = false;
-          moveBottomRight();
+          moveDownRight();
           break;
         case JoystickMoveDirectional.MOVE_DOWN_LEFT:
           isIdle = false;
-          moveBottomLeft();
+          moveDownLeft();
           break;
         case JoystickMoveDirectional.MOVE_LEFT:
           isIdle = false;
@@ -100,7 +100,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     super.update(dt);
   }
 
-  void moveTop(double speed, {VoidCallback? onCollision}) {
+  void moveUp(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
     Vector2Rect displacement = position.translate(0, (-innerSpeed));
@@ -131,7 +131,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     position = displacement;
   }
 
-  void moveBottom(double speed, {VoidCallback? onCollision}) {
+  void moveDown(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
     Vector2Rect displacement = position.translate(0, innerSpeed);
@@ -166,25 +166,25 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   void moveUpLeft() {
     final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
     moveLeft(diagonalSpeed);
-    moveTop(diagonalSpeed);
+    moveUp(diagonalSpeed);
   }
 
   void moveUpRight() {
     final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
     moveRight(diagonalSpeed);
-    moveTop(diagonalSpeed);
+    moveUp(diagonalSpeed);
   }
 
-  void moveBottomRight() {
+  void moveDownRight() {
     final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
     moveRight(diagonalSpeed);
-    moveBottom(diagonalSpeed);
+    moveDown(diagonalSpeed);
   }
 
-  void moveBottomLeft() {
+  void moveDownLeft() {
     final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
     moveLeft(diagonalSpeed);
-    moveBottom(diagonalSpeed);
+    moveDown(diagonalSpeed);
   }
 
   void idle() {
@@ -283,7 +283,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     if (_positionToMove!.y > position.center.dy &&
         _positionToMove!.y - position.center.dy > 1) {
       move = true;
-      moveBottom(
+      moveDown(
         speed,
         onCollision: () {
           _positionToMove = null;
@@ -295,7 +295,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     if (_positionToMove!.y < position.center.dy &&
         position.center.dy - _positionToMove!.y > 1) {
       move = true;
-      moveTop(
+      moveUp(
         speed,
         onCollision: () {
           _positionToMove = null;
