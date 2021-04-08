@@ -5,6 +5,7 @@ import 'package:bonfire/game_interface/interface_component.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/// Component used to add Text in your [GameInterface]
 class TextInterfaceComponent extends InterfaceComponent {
   String text;
   late TextConfig textConfig;
@@ -28,11 +29,11 @@ class TextInterfaceComponent extends InterfaceComponent {
 
   @override
   void render(Canvas canvas) {
-    super.render(canvas);
     textConfig.render(
       canvas,
       text,
       Vector2(this.position.left, this.position.top),
     );
+    super.render(canvas);
   }
 }

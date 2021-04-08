@@ -6,6 +6,7 @@ import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flutter/material.dart';
 
+/// Layer component responsible for adding lighting to the game.
 class LightingComponent extends GameComponent {
   Color? color;
   late Paint _paintFocus;

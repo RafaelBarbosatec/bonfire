@@ -3,9 +3,11 @@ import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/util/camera/camera.dart';
 import 'package:flutter/material.dart';
 
+/// Mixin used to configure lighting in your component
 mixin Lighting on GameComponent {
   LightingConfig? _lightingConfig;
 
+  /// Used to set configuration
   setupLighting(LightingConfig? config) {
     if (config != null) {
       _lightingConfig = config;

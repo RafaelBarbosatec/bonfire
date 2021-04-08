@@ -2,14 +2,29 @@ import 'package:bonfire/util/pulse_value.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
+/// Class used to configure lighting
 class LightingConfig {
+  /// Radius of the lighting
   final double radius;
+
+  /// Color of the lighting
   final Color color;
+
+  /// Enable pulse effect in lighting
   final bool withPulse;
+
+  /// Configure variation in pulse effect
   final double pulseVariation;
+
+  /// Configure speed in pulse effect
   final double pulseSpeed;
-  final double blurBorder;
+
+  /// Configure curve in pulse effect
   final Curve pulseCurve;
+
+  /// Configure blur in lighting
+  final double blurBorder;
+
   PulseValue? _pulseAnimation;
 
   LightingConfig({
