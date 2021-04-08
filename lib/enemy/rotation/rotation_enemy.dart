@@ -6,6 +6,7 @@ import 'package:bonfire/util/assets_loader.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
+/// Enemy used for top-down perspective
 class RotationEnemy extends Enemy {
   SpriteAnimation? animIdle;
   SpriteAnimation? animRun;

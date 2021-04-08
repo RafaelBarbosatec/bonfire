@@ -6,14 +6,24 @@ import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
+/// Component used to add in your [GameInterface]
 class InterfaceComponent extends GameComponent with TapGesture {
+  /// identifier
   final int id;
+
+  /// sprite that will be render
   Sprite? sprite;
+
+  /// sprite that will be render when pressed
   Sprite? spriteSelected;
-  final VoidCallback? onTapComponent;
+
+  /// Callback used to receive onTab gesture in your component. this return if is selected
+  final ValueChanged<bool>? onTapComponent;
   final double width;
   final double height;
-  Sprite? spriteToRender;
+  final bool selectable;
+  bool selected = false;
+  Sprite? _spriteToRender;
 
   final _loader = AssetsLoader();
 
@@ -24,6 +34,7 @@ class InterfaceComponent extends GameComponent with TapGesture {
     required this.height,
     Future<Sprite>? sprite,
     Future<Sprite>? spriteSelected,
+    this.selectable = false,
     this.onTapComponent,
   }) {
     _loader.add(AssetToLoad(sprite, (value) {
@@ -43,18 +54,27 @@ class InterfaceComponent extends GameComponent with TapGesture {
   }
 
   void render(Canvas canvas) {
-    spriteToRender?.renderFromVector2Rect(canvas, this.position);
+    _spriteToRender?.renderFromVector2Rect(canvas, this.position);
   }
 
   @override
   void onTapCancel() {
-    spriteToRender = sprite;
+    if (selectable && selected) return;
+    _spriteToRender = sprite;
   }
 
   @override
   void onTap() {
-    onTapComponent?.call();
-    spriteToRender = sprite;
+    if (selectable) {
+      selected = !selected;
+      if (!selected) {
+        _spriteToRender = sprite;
+      }
+    } else {
+      _spriteToRender = sprite;
+    }
+
+    onTapComponent?.call(selected);
   }
 
   @override
@@ -63,12 +83,12 @@ class InterfaceComponent extends GameComponent with TapGesture {
   @override
   Future<void> onLoad() async {
     await _loader.load();
-    spriteToRender = this.sprite;
+    _spriteToRender = this.sprite;
   }
 
   @override
   void onTapDown(int pointer, Offset position) {
-    spriteToRender = spriteSelected ?? spriteToRender;
+    _spriteToRender = spriteSelected ?? _spriteToRender;
   }
 
   @override

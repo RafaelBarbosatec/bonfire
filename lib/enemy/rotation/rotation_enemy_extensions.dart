@@ -13,6 +13,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 extension RotationEnemyExtensions on RotationEnemy {
+  /// Checks whether the player is within range. If so, move to it.
   void seeAndMoveToPlayer({
     required Function(Player) closePlayer,
     double radiusVision = 32,
@@ -58,6 +59,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     );
   }
 
+  /// Checks whether the player is within range. If so, move to it.
   void seeAndMoveToAttackRange({
     required Function(Player) positioned,
     double radiusVision = 32,
@@ -110,6 +112,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     );
   }
 
+  ///Execute simple attach melee using animation
   void simpleAttackMelee({
     required Future<SpriteAnimation> attackEffectTopAnim,
     required double damage,
@@ -163,6 +166,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     if (execute != null) execute();
   }
 
+  /// Execute attack range using a component with animation
   void simpleAttackRange({
     required Future<SpriteAnimation> animationTop,
     required Future<SpriteAnimation> animationDestroy,

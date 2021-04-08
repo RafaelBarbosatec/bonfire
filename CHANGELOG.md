@@ -10,6 +10,7 @@
 - Update support tiled to 1.5.0.
 - Rename enum values in `Direction`.
 - Rename values in `SimpleDirectionAnimation`.
+- Improvements in `InterfaceComponent`. Now can be selectable.
 - Others improvements.
 
 # 0.9.0

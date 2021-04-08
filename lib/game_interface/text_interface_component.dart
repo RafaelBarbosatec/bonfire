@@ -14,7 +14,7 @@ class TextInterfaceComponent extends InterfaceComponent {
     this.text = '',
     double width = 0,
     double height = 0,
-    VoidCallback? onTapComponent,
+    ValueChanged<bool>? onTapComponent,
     TextConfig? textConfig,
   }) : super(
           id: id,

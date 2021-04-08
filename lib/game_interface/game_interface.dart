@@ -7,10 +7,17 @@ import 'package:bonfire/util/priority_layer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+/// The way you cand raw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
 class GameInterface extends GameComponent {
   List<InterfaceComponent> _components = [];
+
+  /// textConfig used to show FPS
   final textConfigGreen = TextConfig(color: Colors.green, fontSize: 14);
+
+  /// textConfig used to show FPS
   final textConfigYellow = TextConfig(color: Colors.yellow, fontSize: 14);
+
+  /// textConfig used to show FPS
   final textConfigRed = TextConfig(color: Colors.red, fontSize: 14);
 
   @override
@@ -40,12 +47,14 @@ class GameInterface extends GameComponent {
     super.onGameResize(size);
   }
 
+  /// Used to add components in your interface like a Button.
   Future<void> add(InterfaceComponent component) async {
     removeById(component.id);
     await component.onLoad();
     _components.add(component);
   }
 
+  /// Used to remove component of the interface by id
   void removeById(int id) {
     if (_components.isEmpty) return;
     _components.removeWhere((i) => i.id == id);

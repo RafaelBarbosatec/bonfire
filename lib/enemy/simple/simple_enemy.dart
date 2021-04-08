@@ -5,7 +5,9 @@ import 'package:bonfire/util/direction_animations/simple_direction_animation.dar
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
+/// Enemy with animation in all direction
 class SimpleEnemy extends Enemy {
+  /// animations of the enemy
   SimpleDirectionAnimation animation;
 
   /// Variable that represents the speed of the enemy.
