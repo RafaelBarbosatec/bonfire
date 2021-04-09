@@ -2,6 +2,7 @@
 [![Flutter](https://img.shields.io/badge/Made%20with-Flutter-blue.svg)](https://flutter.dev/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![pub package](https://img.shields.io/pub/v/bonfire.svg)](https://pub.dev/packages/bonfire)
+[![pub package](https://img.shields.io/pub/v/bonfire.svg?style=popout&include_prereleases)](https://pub.dev/packages/bonfire/versions/1.0.0-rc0)
 
 
 [![bonfire](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/bonfire.gif)](https://bonfire-engine.github.io/)
