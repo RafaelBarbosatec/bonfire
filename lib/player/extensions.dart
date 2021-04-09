@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 extension PlayerExtensions on Player {
+  /// Add in the game a text with animation representing damage received
   void showDamage(
     double damage, {
     TextConfig? config,
@@ -45,6 +46,8 @@ extension PlayerExtensions on Player {
     );
   }
 
+  /// This method we notify when detect the enemy when enter in [radiusVision] configuration
+  /// Method that bo used in [update] method.
   void seeEnemy({
     required Function(List<Enemy>) observed,
     VoidCallback? notObserved,
@@ -79,6 +82,7 @@ extension PlayerExtensions on Player {
     }
   }
 
+  /// Execute the ranged attack using a component with animation
   void simpleAttackRangeByAngle({
     required Future<SpriteAnimation> animationTop,
     required double width,
@@ -125,6 +129,7 @@ extension PlayerExtensions on Player {
     ));
   }
 
+  /// Execute the ranged attack using a component with animation
   void simpleAttackRangeByDirection({
     required Future<SpriteAnimation> animationRight,
     required Future<SpriteAnimation> animationLeft,
@@ -233,6 +238,7 @@ extension PlayerExtensions on Player {
     );
   }
 
+  ///Execute simple attack melee using animation
   void simpleAttackMeleeByDirection({
     Future<SpriteAnimation>? animationRight,
     Future<SpriteAnimation>? animationBottom,
@@ -365,6 +371,7 @@ extension PlayerExtensions on Player {
     );
   }
 
+  ///Execute simple attack melee using animation
   void simpleAttackMeleeByAngle({
     required Future<SpriteAnimation> animationTop,
     required double damage,

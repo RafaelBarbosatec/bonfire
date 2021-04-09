@@ -196,7 +196,7 @@ class Enemy extends GameComponent with Attackable {
     this.position = position.shift(newDiffBase);
   }
 
-  /// Move Enemy to diretion by radAngle
+  /// Move Enemy to direction by radAngle
   void moveFromAngle(double speed, double angle) {
     isIdle = false;
     double innerSpeed = (speed * dtUpdate);
@@ -222,6 +222,7 @@ class Enemy extends GameComponent with Attackable {
     }
   }
 
+  /// increase life in the enemy
   void addLife(double life) {
     this.life += life;
     if (this.life > maxLife) {

@@ -106,7 +106,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     );
   }
 
-  ///Execute simple attach melee using animation
+  ///Execute simple attack melee using animation
   void simpleAttackMelee({
     required double damage,
     required double height,
@@ -272,7 +272,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     execute?.call();
   }
 
-  /// Execute attack range using a component with animation
+  /// Execute the ranged attack using a component with animation
   void simpleAttackRange({
     required Future<SpriteAnimation> animationRight,
     required Future<SpriteAnimation> animationLeft,

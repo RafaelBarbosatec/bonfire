@@ -18,20 +18,19 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   /// Height of the Player.
   final double height;
 
+  /// Movement speed speed of the Player.
   double speed;
 
+  /// life of the Player
   double life;
+
   late double maxLife;
 
   bool _isDead = false;
   bool isIdle = true;
-
   double _dtUpdate = 0;
-
   bool isFocusCamera = true;
-
   Vector2? _positionToMove;
-
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
 
   Player({
@@ -100,6 +99,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     super.update(dt);
   }
 
+  /// Move player to up
   void moveUp(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
@@ -115,6 +115,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     position = displacement;
   }
 
+  /// Move player to right
   void moveRight(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
@@ -131,6 +132,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     position = displacement;
   }
 
+  /// Move player to down
   void moveDown(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
@@ -147,6 +149,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     position = displacement;
   }
 
+  /// Move player to left
   void moveLeft(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * _dtUpdate;
 
@@ -163,24 +166,28 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     position = displacement;
   }
 
+  /// Move player to up and left
   void moveUpLeft() {
     final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
     moveLeft(diagonalSpeed);
     moveUp(diagonalSpeed);
   }
 
+  /// Move player to up and right
   void moveUpRight() {
     final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
     moveRight(diagonalSpeed);
     moveUp(diagonalSpeed);
   }
 
+  /// Move player to down and right
   void moveDownRight() {
     final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
     moveRight(diagonalSpeed);
     moveDown(diagonalSpeed);
   }
 
+  /// Move player to down and left
   void moveDownLeft() {
     final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
     moveLeft(diagonalSpeed);
@@ -191,6 +198,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     isIdle = true;
   }
 
+  /// Move Playr to direction by radAngle
   void moveFromAngle(double speed, double angle, {VoidCallback? onCollision}) {
     double nextX = (speed * _dtUpdate) * cos(angle);
     double nextY = (speed * _dtUpdate) * sin(angle);
@@ -227,12 +235,14 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     }
   }
 
+  /// marks the player as dead
   void die() {
     _isDead = true;
   }
 
   bool get isDead => _isDead;
 
+  /// increase life in the player
   void addLife(double life) {
     this.life += life;
     if (this.life > maxLife) {
@@ -253,6 +263,8 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     _positionToMove = position;
   }
 
+  /// Move player to position tapped
+  /// Used when uses [TouchToPosition]
   void moveToPosition() {
     if (_positionToMove == null) return;
     bool move = false;

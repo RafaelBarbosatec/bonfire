@@ -112,7 +112,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     );
   }
 
-  ///Execute simple attach melee using animation
+  ///Execute simple attack melee using animation
   void simpleAttackMelee({
     required Future<SpriteAnimation> attackEffectTopAnim,
     required double damage,
@@ -166,7 +166,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     if (execute != null) execute();
   }
 
-  /// Execute attack range using a component with animation
+  /// Execute the ranged attack using a component with animation
   void simpleAttackRange({
     required Future<SpriteAnimation> animationTop,
     required Future<SpriteAnimation> animationDestroy,
