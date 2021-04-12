@@ -1,12 +1,16 @@
+import 'package:bonfire/bonfire.dart';
 import 'package:example/game_tiled_map.dart';
 import 'package:example/manual_map/game_manual_map.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Flame.util.setLandscape(); //TODO Comment when running for web
-  // await Flame.util.fullScreen(); //TODO Comment when running for web
+  if (!kIsWeb) {
+    await Flame.device.setLandscape();
+    await Flame.device.fullScreen();
+  }
   runApp(
     MaterialApp(
       home: Menu(),
