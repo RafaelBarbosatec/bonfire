@@ -1,6 +1,7 @@
 # NEXT
 
 - Fix bug in `cameraMoveOnlyMapArea`
+- Add `CameraConfig` in `BonfireTiledWidget` and `BonfireWidget`
 
 # 1.0.0-rc0
 

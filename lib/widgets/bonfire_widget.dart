@@ -7,6 +7,7 @@ import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/camera/camera_config.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:flame/game.dart';
@@ -50,9 +51,7 @@ class BonfireWidget extends StatefulWidget {
   final List<GameComponent>? components;
   final GameComponent? background;
   final GameController? gameController;
-  final double cameraZoom;
-  final Size cameraSizeMovementWindow;
-  final bool cameraMoveOnlyMapArea;
+  final CameraConfig? cameraConfig;
   final GameColorFilter? colorFilter;
 
   const BonfireWidget({
@@ -71,13 +70,11 @@ class BonfireWidget extends StatefulWidget {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
-    this.cameraZoom = 1.0,
     this.colorFilter,
-    this.cameraMoveOnlyMapArea = false,
-    this.cameraSizeMovementWindow = const Size(50, 50),
     this.components,
     this.overlayBuilderMap,
     this.initialActiveOverlays,
+    this.cameraConfig,
   }) : super(key: key);
 
   @override
@@ -116,9 +113,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       collisionAreaColor:
           widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
       lightingColorGame: widget.lightingColorGame,
-      cameraZoom: widget.cameraZoom,
-      cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
-      cameraMoveOnlyMapArea: widget.cameraMoveOnlyMapArea,
+      cameraConfig: widget.cameraConfig,
       colorFilter: widget.colorFilter,
     );
     super.initState();

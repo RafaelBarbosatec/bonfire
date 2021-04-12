@@ -2,6 +2,7 @@ import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/camera/camera.dart';
+import 'package:bonfire/util/camera/camera_config.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart' hide Camera;
@@ -14,7 +15,7 @@ import 'package:ordered_set/ordered_set.dart';
 /// Apply zoom in canvas.
 /// Reorder components per time frame.
 abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
-  Camera gameCamera = Camera();
+  Camera gameCamera = Camera(CameraConfig());
 
   /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
   int _highestPriority = 1000000;
@@ -113,7 +114,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     canvas.save();
 
     canvas.translate(size.x / 2, size.y / 2);
-    canvas.scale(gameCamera.zoom);
+    canvas.scale(gameCamera.config.zoom);
     canvas.translate(-gameCamera.position.dx, -gameCamera.position.dy);
 
     components.forEach((comp) => renderComponent(canvas, comp));
@@ -133,7 +134,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
 
     if (comp.isHud) {
       canvas.translate(gameCamera.position.dx, gameCamera.position.dy);
-      canvas.scale(1 / gameCamera.zoom);
+      canvas.scale(1 / gameCamera.config.zoom);
       canvas.translate(-size.x / 2, -size.y / 2);
     }
 

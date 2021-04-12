@@ -33,10 +33,10 @@ class MapWorld extends MapGame {
   void update(double t) {
     if (lastCameraX != gameRef.gameCamera.position.dx ||
         lastCameraY != gameRef.gameCamera.position.dy ||
-        lastZoom != gameRef.gameCamera.zoom) {
+        lastZoom != gameRef.gameCamera.config.zoom) {
       lastCameraX = gameRef.gameCamera.position.dx;
       lastCameraY = gameRef.gameCamera.position.dy;
-      lastZoom = gameRef.gameCamera.zoom;
+      lastZoom = gameRef.gameCamera.config.zoom;
 
       List<Tile> tilesRender = [];
       List<Tile> tilesCollision = [];

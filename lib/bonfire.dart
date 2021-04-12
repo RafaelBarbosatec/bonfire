@@ -38,6 +38,7 @@ export 'package:bonfire/player/simple/simple_player.dart';
 export 'package:bonfire/player/simple/simple_player_extensions.dart';
 export 'package:bonfire/tiled/tiled_world_map.dart';
 export 'package:bonfire/util/background_color_game.dart';
+export 'package:bonfire/util/camera/camera_config.dart';
 export 'package:bonfire/util/collision/collision.dart';
 export 'package:bonfire/util/direction.dart';
 export 'package:bonfire/util/direction_animations/simple_animation_enum.dart';

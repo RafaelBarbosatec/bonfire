@@ -1,6 +1,7 @@
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/camera/camera_config.dart';
 import 'package:flame/components.dart' hide JoystickMoveDirectional;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -8,18 +9,10 @@ import 'package:flutter/widgets.dart';
 class Camera with HasGameRef<BonfireGame> {
   static const SPACING_MAP = 32.0;
   Offset position = Offset.zero;
-  double zoom;
   Offset _lastTargetOffset = Offset.zero;
-  GameComponent? target;
-  final Size sizeMovementWindow;
-  final bool moveOnlyMapArea;
+  final CameraConfig config;
 
-  Camera({
-    this.zoom = 1.0,
-    this.target,
-    this.moveOnlyMapArea = false,
-    this.sizeMovementWindow = const Size(50, 50),
-  });
+  Camera(this.config);
 
   Rect get cameraRect => Rect.fromCenter(
         center: Offset(position.dx, position.dy),
@@ -84,15 +77,15 @@ class Camera with HasGameRef<BonfireGame> {
     Curve curve = Curves.decelerate,
   }) {
     if (zoom <= 0.0) return;
-    target = null;
+    config.target = null;
 
     double diffX = this.position.dx - position.dx;
     double diffY = this.position.dy - position.dy;
     double originX = this.position.dx;
     double originY = this.position.dy;
 
-    double diffZoom = this.zoom - zoom;
-    double initialZoom = this.zoom;
+    double diffZoom = config.zoom - zoom;
+    double initialZoom = config.zoom;
 
     gameRef
         .getValueGenerator(
@@ -104,8 +97,9 @@ class Camera with HasGameRef<BonfireGame> {
             this.position = this.position.copyWith(
                   y: originY - (diffY * value),
                 );
-            this.zoom = initialZoom - (diffZoom * value);
-            if (moveOnlyMapArea) {
+            config.zoom = initialZoom - (diffZoom * value);
+
+            if (config.moveOnlyMapArea) {
               _keepInMapArea();
             }
           },
@@ -123,28 +117,29 @@ class Camera with HasGameRef<BonfireGame> {
     Curve curve = Curves.decelerate,
   }) {
     if (zoom <= 0.0) return;
-    this.target = null;
+    config.target = null;
 
     double diffX = this.position.dx - target.position.rect.center.dx;
     double diffY = this.position.dy - target.position.rect.center.dy;
     double originX = this.position.dx;
     double originY = this.position.dy;
 
-    double diffZoom = this.zoom - zoom;
-    double initialZoom = this.zoom;
+    double diffZoom = config.zoom - zoom;
+    double initialZoom = config.zoom;
 
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
         this.position = position.copyWith(x: originX - (diffX * value));
         this.position = position.copyWith(y: originY - (diffY * value));
-        this.zoom = initialZoom - (diffZoom * value);
-        if (moveOnlyMapArea) {
+        config.zoom = initialZoom - (diffZoom * value);
+
+        if (config.moveOnlyMapArea) {
           _keepInMapArea();
         }
       },
       onFinish: () {
-        this.target = target;
+        config.target = target;
         finish?.call();
       },
       curve: curve,
@@ -152,16 +147,16 @@ class Camera with HasGameRef<BonfireGame> {
   }
 
   void moveToPosition(Offset position) {
-    target = null;
+    config.target = null;
     this.position = position;
   }
 
   void moveToPlayer() {
-    this.target = gameRef.player;
+    config.target = gameRef.player;
   }
 
   void moveToTarget(GameComponent target) {
-    this.target = target;
+    config.target = target;
   }
 
   void moveToPlayerAnimated({
@@ -181,14 +176,15 @@ class Camera with HasGameRef<BonfireGame> {
   }
 
   void _followTarget({double horizontal = 50, double vertical = 50}) {
-    if (target == null) return;
-    if (_lastTargetOffset == target!.position.rect.center) return;
-    _lastTargetOffset = target!.position.rect.center;
+    if (config.target == null) return;
+    if (_lastTargetOffset == config.target!.position.rect.center) return;
+    _lastTargetOffset = config.target!.position.rect.center;
     final screenCenter = Offset(
       gameRef.size.x / 2,
       gameRef.size.y / 2,
     );
-    final positionTarget = worldPositionToScreen(target!.position.rect.center);
+    final positionTarget =
+        worldPositionToScreen(config.target!.position.rect.center);
 
     final horizontalDistance = screenCenter.dx - positionTarget.dx;
     final verticalDistance = screenCenter.dy - positionTarget.dy;
@@ -210,7 +206,7 @@ class Camera with HasGameRef<BonfireGame> {
           );
     }
 
-    if (moveOnlyMapArea) {
+    if (config.moveOnlyMapArea) {
       _keepInMapArea();
     }
   }
@@ -223,13 +219,13 @@ class Camera with HasGameRef<BonfireGame> {
   }) {
     if (zoom <= 0.0) return;
 
-    double diffZoom = this.zoom - (zoom);
-    double initialZoom = this.zoom;
+    double diffZoom = config.zoom - (zoom);
+    double initialZoom = config.zoom;
 
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
-        this.zoom = initialZoom - (diffZoom * value);
+        config.zoom = initialZoom - (diffZoom * value);
       },
       onFinish: finish,
       curve: curve,
@@ -255,15 +251,15 @@ class Camera with HasGameRef<BonfireGame> {
     double diffX = position.dx - gameRef.size.x / 2;
     double diffY = position.dy - gameRef.size.y / 2;
     return Offset(
-      this.cameraRect.center.dx + (diffX / zoom),
-      this.cameraRect.center.dy + (diffY / zoom),
+      this.cameraRect.center.dx + (diffX / config.zoom),
+      this.cameraRect.center.dy + (diffY / config.zoom),
     );
   }
 
   void update() {
     _followTarget(
-      vertical: sizeMovementWindow.height,
-      horizontal: sizeMovementWindow.width,
+      vertical: config.sizeMovementWindow.height,
+      horizontal: config.sizeMovementWindow.width,
     );
   }
 
@@ -293,7 +289,7 @@ class Camera with HasGameRef<BonfireGame> {
   }
 
   double _zoomFactor() {
-    if (zoom > 1) return 1;
-    return 1 / zoom;
+    if (config.zoom > 1) return 1;
+    return 1 / config.zoom;
   }
 }

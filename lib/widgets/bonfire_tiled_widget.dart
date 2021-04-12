@@ -7,6 +7,7 @@ import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/tiled/tiled_world_data.dart';
 import 'package:bonfire/tiled/tiled_world_map.dart';
+import 'package:bonfire/util/camera/camera_config.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:flame/game.dart';
@@ -53,9 +54,7 @@ class BonfireTiledWidget extends StatefulWidget {
   final List<String>? initialActiveOverlays;
   final List<GameComponent>? components;
   final Widget? progress;
-  final double cameraZoom;
-  final Size cameraSizeMovementWindow;
-  final bool cameraMoveOnlyMapArea;
+  final CameraConfig? cameraConfig;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
   final Duration? progressTransitionDuration;
   final GameColorFilter? colorFilter;
@@ -75,9 +74,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.collisionAreaColor,
     this.lightingColorGame,
     this.progress,
-    this.cameraZoom = 1.0,
-    this.cameraMoveOnlyMapArea = false,
-    this.cameraSizeMovementWindow = const Size(50, 50),
+    this.cameraConfig,
     this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
     this.progressTransitionDuration,
     this.colorFilter,
@@ -146,9 +143,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
         collisionAreaColor: widget.collisionAreaColor ??
             Colors.lightGreenAccent.withOpacity(0.5),
         lightingColorGame: widget.lightingColorGame,
-        cameraZoom: widget.cameraZoom,
-        cameraSizeMovementWindow: widget.cameraSizeMovementWindow,
-        cameraMoveOnlyMapArea: widget.cameraMoveOnlyMapArea,
+        cameraConfig: widget.cameraConfig,
         colorFilter: widget.colorFilter,
       );
       await Future.delayed(Duration.zero);

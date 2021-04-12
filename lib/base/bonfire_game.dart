@@ -10,6 +10,7 @@ import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/camera/camera.dart';
+import 'package:bonfire/util/camera/camera_config.dart';
 import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/color_filter_component.dart';
 import 'package:bonfire/util/game_color_filter.dart';
@@ -65,7 +66,8 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   /// Used to show in the interface the FPS.
   final bool showFPS;
 
-  final bool cameraMoveOnlyMapArea;
+  /// Camera configuration
+  final CameraConfig? cameraConfig;
 
   Iterable<Enemy> _enemies = [];
   Iterable<Enemy> _visibleEnemies = [];
@@ -89,8 +91,6 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   List<GameComponent>? _initialComponents;
 
   GameColorFilter? _colorFilter;
-  double? _cameraZoom;
-  Size _cameraSizeMovementWindow = const Size(50, 50);
 
   BonfireGame({
     required this.context,
@@ -110,17 +110,22 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     this.lightingColorGame,
     this.showFPS = false,
     GameColorFilter? colorFilter,
-    double? cameraZoom,
-    Size cameraSizeMovementWindow = const Size(50, 50),
-    this.cameraMoveOnlyMapArea = false,
+    this.cameraConfig,
   }) {
     _initialEnemies = enemies;
     _initialDecorations = decorations;
     _initialComponents = components;
     _colorFilter = colorFilter;
-    _cameraZoom = cameraZoom;
-    _cameraSizeMovementWindow = cameraSizeMovementWindow;
     debugMode = constructionMode;
+
+    gameController?.gameRef = this;
+    cameraConfig?.let((config) {
+      gameCamera = Camera(config);
+    });
+
+    if (gameCamera.config.target == null) {
+      gameCamera.config.target = player;
+    }
   }
 
   @override
@@ -129,19 +134,14 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
       _colorFilter ?? GameColorFilter(),
     );
     add(_colorFilterComponent);
-    gameCamera = Camera(
-      zoom: _cameraZoom ?? 1.0,
-      sizeMovementWindow: _cameraSizeMovementWindow,
-      moveOnlyMapArea: cameraMoveOnlyMapArea,
-      target: player,
-    );
-    gameController?.gameRef = this;
-    if (background != null) add(background!);
+
+    background?.let((bg) => add(bg));
+
     add(map);
     _initialDecorations?.forEach((decoration) => add(decoration));
     _initialEnemies?.forEach((enemy) => add(enemy));
     _initialComponents?.forEach((comp) => add(comp));
-    if (player != null) add(player!);
+    player?.let((p) => add(p));
     if (lightingColorGame != null) {
       lighting = LightingComponent(color: lightingColorGame!);
       super.add(lighting!);

@@ -39,7 +39,7 @@ class LightingComponent extends GameComponent {
       canvas.save();
 
       canvas.translate(size.x / 2, size.y / 2);
-      canvas.scale(gameRef.gameCamera.zoom);
+      canvas.scale(gameRef.gameCamera.config.zoom);
       canvas.translate(
         -(gameRef.gameCamera.position.dx),
         -(gameRef.gameCamera.position.dy),
