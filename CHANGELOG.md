@@ -1,3 +1,7 @@
+# NEXT
+
+- Fix bug in `cameraMoveOnlyMapArea`
+
 # 1.0.0-rc0
 
 - Update Flame to [1.0.0-rc9](https://pub.dev/packages/flame/versions/1.0.0-rc9/changelog)

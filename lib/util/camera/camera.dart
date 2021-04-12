@@ -105,6 +105,9 @@ class Camera with HasGameRef<BonfireGame> {
                   y: originY - (diffY * value),
                 );
             this.zoom = initialZoom - (diffZoom * value);
+            if (moveOnlyMapArea) {
+              _keepInMapArea();
+            }
           },
           onFinish: () => finish?.call(),
           curve: curve,
@@ -136,6 +139,9 @@ class Camera with HasGameRef<BonfireGame> {
         this.position = position.copyWith(x: originX - (diffX * value));
         this.position = position.copyWith(y: originY - (diffY * value));
         this.zoom = initialZoom - (diffZoom * value);
+        if (moveOnlyMapArea) {
+          _keepInMapArea();
+        }
       },
       onFinish: () {
         this.target = target;
@@ -279,10 +285,10 @@ class Camera with HasGameRef<BonfireGame> {
     }
 
     if (this.position.dx < limitX) {
-      this.position = Offset(limitMaxX, position.dy);
+      this.position = Offset(limitX, position.dy);
     }
     if (this.position.dy < limitY) {
-      this.position = Offset(position.dx, limitMaxY);
+      this.position = Offset(position.dx, limitY);
     }
   }
 

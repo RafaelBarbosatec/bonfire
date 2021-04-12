@@ -77,6 +77,7 @@ class GameTiledMap extends StatelessWidget {
                 'chest', (x, y, width, height) => Chest(Vector2(x, y))),
           background: BackgroundColorGame(Colors.blueGrey[900]!),
           lightingColorGame: Colors.black.withOpacity(0.7),
+          cameraMoveOnlyMapArea: true,
         );
       },
     );

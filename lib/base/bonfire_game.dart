@@ -65,6 +65,8 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   /// Used to show in the interface the FPS.
   final bool showFPS;
 
+  final bool cameraMoveOnlyMapArea;
+
   Iterable<Enemy> _enemies = [];
   Iterable<Enemy> _visibleEnemies = [];
   Iterable<Enemy> _livingEnemies = [];
@@ -89,7 +91,6 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   GameColorFilter? _colorFilter;
   double? _cameraZoom;
   Size _cameraSizeMovementWindow = const Size(50, 50);
-  bool _cameraMoveOnlyMapArea = false;
 
   BonfireGame({
     required this.context,
@@ -111,7 +112,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     GameColorFilter? colorFilter,
     double? cameraZoom,
     Size cameraSizeMovementWindow = const Size(50, 50),
-    bool cameraMoveOnlyMapArea = false,
+    this.cameraMoveOnlyMapArea = false,
   }) {
     _initialEnemies = enemies;
     _initialDecorations = decorations;
@@ -119,7 +120,6 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     _colorFilter = colorFilter;
     _cameraZoom = cameraZoom;
     _cameraSizeMovementWindow = cameraSizeMovementWindow;
-    _cameraMoveOnlyMapArea = cameraMoveOnlyMapArea;
     debugMode = constructionMode;
   }
 
@@ -132,7 +132,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     gameCamera = Camera(
       zoom: _cameraZoom ?? 1.0,
       sizeMovementWindow: _cameraSizeMovementWindow,
-      moveOnlyMapArea: _cameraMoveOnlyMapArea,
+      moveOnlyMapArea: cameraMoveOnlyMapArea,
       target: player,
     );
     gameController?.gameRef = this;
