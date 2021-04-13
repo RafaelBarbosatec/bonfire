@@ -401,7 +401,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         width: width,
         damage: damage,
         speed: speed,
-        destroyedObject: destroy,
+        onDestroyedObject: destroy,
         withDecorationCollision: withCollision,
         collision: collision,
         lightingConfig: lightingConfig,

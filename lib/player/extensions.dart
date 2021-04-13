@@ -230,7 +230,7 @@ extension PlayerExtensions on Player {
         damage: damage,
         speed: speed,
         attackFrom: AttackFromEnum.PLAYER,
-        destroyedObject: destroy,
+        onDestroyedObject: destroy,
         withDecorationCollision: withCollision,
         collision: collision,
         lightingConfig: lightingConfig,

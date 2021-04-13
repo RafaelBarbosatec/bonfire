@@ -22,7 +22,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final double height;
   final AttackFromEnum attackFrom;
   final bool withDecorationCollision;
-  final VoidCallback? destroyedObject;
+  final VoidCallback? onDestroyedObject;
   final _loader = AssetsLoader();
 
   final IntervalTick _timerVerifyCollision = IntervalTick(50);
@@ -39,7 +39,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     this.damage = 1,
     this.attackFrom = AttackFromEnum.ENEMY,
     this.withDecorationCollision = true,
-    this.destroyedObject,
+    this.onDestroyedObject,
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) {
@@ -212,7 +212,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
         );
       }
       remove();
-      this.destroyedObject?.call();
+      this.onDestroyedObject?.call();
     }
   }
 
