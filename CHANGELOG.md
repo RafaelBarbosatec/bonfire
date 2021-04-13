@@ -1,3 +1,6 @@
+# NEXT
+- Improvement in layer priority.
+
 # 1.0.0-rc1
 
 - Fix bug in `cameraMoveOnlyMapArea`
