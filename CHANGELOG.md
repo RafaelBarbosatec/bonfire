@@ -1,5 +1,7 @@
 # NEXT
 - Improvement in layer priority.
+- Fix bug `animation.playOnce` in Player and Enemy
+- Fix bug `addAction` in `Joystick`
 
 # 1.0.0-rc1
 

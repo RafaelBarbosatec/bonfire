@@ -1,5 +1,6 @@
 library bonfire;
 
+export 'package:bonfire/base/bonfire_game.dart';
 export 'package:bonfire/base/game_component.dart';
 export 'package:bonfire/decoration/decoration.dart';
 export 'package:bonfire/decoration/decoration_with_collision.dart';
@@ -40,6 +41,7 @@ export 'package:bonfire/tiled/tiled_world_map.dart';
 export 'package:bonfire/util/background_color_game.dart';
 export 'package:bonfire/util/camera/camera_config.dart';
 export 'package:bonfire/util/collision/collision.dart';
+export 'package:bonfire/util/collision/object_collision.dart';
 export 'package:bonfire/util/direction.dart';
 export 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 export 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
@@ -56,6 +58,7 @@ export 'package:bonfire/util/talk/say.dart';
 export 'package:bonfire/util/talk/talk_dialog.dart';
 export 'package:bonfire/util/text_damage_component.dart';
 export 'package:bonfire/util/value_generator_component.dart';
+export 'package:bonfire/util/vector2rect.dart';
 export 'package:bonfire/widgets/bonfire_tiled_widget.dart';
 export 'package:bonfire/widgets/bonfire_widget.dart';
 export 'package:flame/components.dart'

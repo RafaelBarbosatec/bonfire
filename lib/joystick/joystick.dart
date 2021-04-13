@@ -24,9 +24,10 @@ class Joystick extends JoystickController {
     actions?.forEach((action) => action.initialize(size, this));
   }
 
-  void addAction(JoystickAction action) {
+  Future addAction(JoystickAction action) async {
     if (actions != null) {
       action.initialize(gameRef.size, this);
+      await action.onLoad();
       actions?.add(action);
     }
   }

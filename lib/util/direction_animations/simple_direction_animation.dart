@@ -157,14 +157,14 @@ class SimpleDirectionAnimation {
     }
   }
 
-  void playOnce(
+  Future playOnce(
     Future<SpriteAnimation> animation,
     Vector2Rect position, {
     VoidCallback? onFinish,
     bool runToTheEnd = false,
-  }) {
+  }) async {
     runToTheEndFastAnimation = runToTheEnd;
-    _fastAnimation = AnimatedObjectOnce(
+    final anim = AnimatedObjectOnce(
       position: position,
       animation: animation,
       onFinish: () {
@@ -172,6 +172,8 @@ class SimpleDirectionAnimation {
         _fastAnimation = null;
       },
     );
+    await anim.onLoad();
+    _fastAnimation = anim;
   }
 
   void render(Canvas canvas) {

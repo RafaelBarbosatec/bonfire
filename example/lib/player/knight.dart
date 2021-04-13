@@ -104,18 +104,19 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   }
 
   void actionAttack() {
-    if (stamina < 15) return;
-
-    decrementStamina(15);
-    this.simpleAttackMelee(
-      damage: attack,
-      animationBottom: CommonSpriteSheet.whiteAttackEffectBottom,
-      animationLeft: CommonSpriteSheet.whiteAttackEffectLeft,
-      animationRight: CommonSpriteSheet.whiteAttackEffectRight,
-      animationTop: CommonSpriteSheet.whiteAttackEffectTop,
-      heightArea: DungeonMap.tileSize,
-      widthArea: DungeonMap.tileSize,
-    );
+    animation.playOnce(CommonSpriteSheet.smokeExplosion, position);
+    // if (stamina < 15) return;
+    //
+    // decrementStamina(15);
+    // this.simpleAttackMelee(
+    //   damage: attack,
+    //   animationBottom: CommonSpriteSheet.whiteAttackEffectBottom,
+    //   animationLeft: CommonSpriteSheet.whiteAttackEffectLeft,
+    //   animationRight: CommonSpriteSheet.whiteAttackEffectRight,
+    //   animationTop: CommonSpriteSheet.whiteAttackEffectTop,
+    //   heightArea: DungeonMap.tileSize,
+    //   widthArea: DungeonMap.tileSize,
+    // );
   }
 
   void actionAttackRange() {
