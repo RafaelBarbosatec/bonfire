@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:bonfire/util/vector2rect.dart';
 
 /// Functions util to use in your [GameDecoration]
 extension GameDecorationExtensions on GameDecoration {
@@ -13,27 +15,34 @@ extension GameDecorationExtensions on GameDecoration {
     int radiusVision = 3,
   }) {
     Player? player = gameRef.player;
-    if (!isVisibleInCamera() || player == null) return;
+    if (player == null) return;
 
     if (player.isDead) {
-      notObserved?.call();
+      if (notObserved != null) notObserved();
       return;
     }
 
-    double visionWidth = position.width * radiusVision * 2;
-    double visionHeight = position.height * radiusVision * 2;
+    double vision = radiusVision * 2;
 
     Rect fieldOfVision = Rect.fromLTWH(
-      position.left - (visionWidth / 2),
-      position.top - (visionHeight / 2),
-      visionWidth,
-      visionHeight,
+      this.position.center.dx - radiusVision,
+      this.position.center.dy - radiusVision,
+      vision,
+      vision,
     );
 
-    if (fieldOfVision.overlaps(player.position.rect)) {
+    if (fieldOfVision.overlaps(playerRect.rect)) {
       observed(player);
     } else {
       notObserved?.call();
     }
+  }
+
+  /// Gets player position used how base in calculations
+  Vector2Rect get playerRect {
+    return (gameRef.player is ObjectCollision
+            ? (gameRef.player as ObjectCollision).rectCollision
+            : gameRef.player?.position) ??
+        Vector2Rect.zero();
   }
 }
