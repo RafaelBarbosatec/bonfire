@@ -22,9 +22,6 @@ class GameDecoration extends AnimatedObject {
   /// Width of the Decoration.
   final double width;
 
-  /// Use to define if this decoration should be drawing on the player.
-  final bool frontFromPlayer;
-
   Sprite? sprite;
 
   /// Used to load assets in [onLoad]
@@ -35,7 +32,6 @@ class GameDecoration extends AnimatedObject {
     required Vector2 position,
     required this.height,
     required this.width,
-    this.frontFromPlayer = false,
     SpriteAnimation? animation,
   }) {
     this.animation = animation;
@@ -51,7 +47,6 @@ class GameDecoration extends AnimatedObject {
     required Vector2 position,
     required this.height,
     required this.width,
-    this.frontFromPlayer = false,
   }) {
     _loader.add(AssetToLoad(sprite, (value) => this.sprite = value));
     this.position = generateRectWithBleedingPixel(
@@ -66,7 +61,6 @@ class GameDecoration extends AnimatedObject {
     required Vector2 position,
     required this.height,
     required this.width,
-    this.frontFromPlayer = false,
   }) {
     _loader.add(AssetToLoad(animation, (value) => this.animation = value));
     this.position = generateRectWithBleedingPixel(

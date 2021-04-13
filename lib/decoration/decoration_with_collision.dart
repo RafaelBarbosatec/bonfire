@@ -13,12 +13,10 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
-    bool frontFromPlayer = false,
   }) : super(
           position: position,
           height: height,
           width: width,
-          frontFromPlayer: frontFromPlayer,
           animation: animation,
           sprite: sprite,
         ) {
@@ -43,7 +41,6 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
           position: position,
           height: height,
           width: width,
-          frontFromPlayer: frontFromPlayer,
         ) {
     if (collisions != null) {
       setupCollision(
@@ -66,7 +63,6 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
           position: position,
           height: height,
           width: width,
-          frontFromPlayer: frontFromPlayer,
         ) {
     if (collisions != null) {
       setupCollision(

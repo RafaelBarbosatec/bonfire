@@ -6,19 +6,19 @@ class LayerPriority {
     return MAP + priority;
   }
 
-  static int getPriorityLighting(int priority) {
-    return priority + 10;
-  }
-
-  static int getPriorityColorFilter(int highestPriority) {
-    return highestPriority + 5;
-  }
-
-  static int getPriorityInterface(int highestPriority) {
+  static int getPriorityLighting(int highestPriority) {
     return highestPriority + 10;
   }
 
+  static int getPriorityColorFilter(int highestPriority) {
+    return highestPriority + 20;
+  }
+
+  static int getPriorityInterface(int highestPriority) {
+    return highestPriority + 30;
+  }
+
   static int getPriorityJoystick(int highestPriority) {
-    return highestPriority + 15;
+    return highestPriority + 40;
   }
 }
