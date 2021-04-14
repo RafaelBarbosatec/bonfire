@@ -267,7 +267,7 @@ extension PlayerExtensions on Player {
     switch (attackDirection) {
       case Direction.up:
         positionAttack = Rect.fromLTWH(
-          this.position.rect.left + (this.width - width) / 2,
+          rectBase.rect.center.dx - width / 2,
           rectBase.rect.top - height,
           width,
           height,
@@ -278,7 +278,7 @@ extension PlayerExtensions on Player {
       case Direction.right:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.right,
-          this.position.rect.top + (this.height - height) / 2,
+          rectBase.rect.center.dy - height / 2,
           width,
           height,
         );
@@ -287,7 +287,7 @@ extension PlayerExtensions on Player {
         break;
       case Direction.down:
         positionAttack = Rect.fromLTWH(
-          this.position.rect.left + (this.width - width) / 2,
+          rectBase.rect.center.dx - width / 2,
           rectBase.rect.bottom,
           width,
           height,
@@ -298,7 +298,7 @@ extension PlayerExtensions on Player {
       case Direction.left:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.left - width,
-          this.position.rect.top + (this.height - height) / 2,
+          rectBase.rect.center.dy - height / 2,
           width,
           height,
         );
@@ -308,7 +308,7 @@ extension PlayerExtensions on Player {
       case Direction.upLeft:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.left - width,
-          this.position.rect.top + (this.height - height) / 2,
+          rectBase.rect.center.dy - height / 2,
           width,
           height,
         );
@@ -318,7 +318,7 @@ extension PlayerExtensions on Player {
       case Direction.upRight:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.right,
-          this.position.rect.top + (this.height - height) / 2,
+          rectBase.rect.center.dy - height / 2,
           width,
           height,
         );
@@ -328,7 +328,7 @@ extension PlayerExtensions on Player {
       case Direction.downLeft:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.left - width,
-          this.position.rect.top + (this.height - height) / 2,
+          rectBase.rect.center.dy - height / 2,
           width,
           height,
         );
@@ -338,7 +338,7 @@ extension PlayerExtensions on Player {
       case Direction.downRight:
         positionAttack = Rect.fromLTWH(
           rectBase.rect.right,
-          this.position.rect.top + (this.height - height) / 2,
+          rectBase.rect.center.dy - height / 2,
           width,
           height,
         );

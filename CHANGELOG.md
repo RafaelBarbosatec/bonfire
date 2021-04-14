@@ -1,3 +1,8 @@
+# NEXT
+
+- Improvement in `simpleAttackMelee`
+
+
 # 1.0.0-rc2
 
 - Improvement in layer priority.
