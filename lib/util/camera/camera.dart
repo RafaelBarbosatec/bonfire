@@ -268,10 +268,15 @@ class Camera with HasGameRef<BonfireGame> {
     final sizeMap = gameRef.map.mapSize;
     if (startPosition == null || sizeMap == null) return;
 
-    final limitX = (startPosition.x + gameRef.size.x / 2);
-    final limitY = (startPosition.y + gameRef.size.y / 2);
-    final limitMaxX = (sizeMap.width - gameRef.size.x / 2);
-    final limitMaxY = (sizeMap.height - gameRef.size.y / 2);
+    double zoomFactor = 1 / config.zoom;
+
+    double gameWidth = (gameRef.size.x * zoomFactor) / 2;
+    double gameHeight = (gameRef.size.y * zoomFactor) / 2;
+
+    final limitX = (startPosition.x + gameWidth);
+    final limitY = (startPosition.y + gameHeight);
+    final limitMaxX = (sizeMap.width - gameWidth);
+    final limitMaxY = (sizeMap.height - gameHeight);
 
     if (this.position.dx > limitMaxX) {
       this.position = Offset(limitMaxX, position.dy);

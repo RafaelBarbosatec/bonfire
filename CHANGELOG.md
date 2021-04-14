@@ -1,5 +1,6 @@
 # NEXT
 - Improvement in layer priority.
+- Improvement in `Camera` when `moveOnlyMapArea` enable.
 - Fix bug `animation.playOnce` in Player and Enemy
 - Fix bug `addAction` in `Joystick`
 - Fix bug `seePlayer` in `GameDecoration`
