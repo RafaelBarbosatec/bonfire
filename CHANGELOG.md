@@ -1,6 +1,7 @@
 # NEXT
 
 - Improvement in `simpleAttackMelee`
+- Improvement in `InterfaceComponent` when `selectable` enable
 
 
 # 1.0.0-rc2

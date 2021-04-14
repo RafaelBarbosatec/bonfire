@@ -22,8 +22,8 @@ class InterfaceComponent extends GameComponent with TapGesture {
   final double width;
   final double height;
   final bool selectable;
+  bool _lastSelected = false;
   bool selected = false;
-  Sprite? _spriteToRender;
 
   final _loader = AssetsLoader();
 
@@ -54,26 +54,24 @@ class InterfaceComponent extends GameComponent with TapGesture {
   }
 
   void render(Canvas canvas) {
-    _spriteToRender?.renderFromVector2Rect(canvas, this.position);
+    (selected ? spriteSelected : sprite)
+        ?.renderFromVector2Rect(canvas, this.position);
   }
 
   @override
   void onTapCancel() {
-    if (selectable && selected) return;
-    _spriteToRender = sprite;
+    if (selectable) return;
+    selected = !selected;
   }
 
   @override
   void onTap() {
-    if (selectable) {
-      selected = !selected;
-      if (!selected) {
-        _spriteToRender = sprite;
-      }
+    if (selectable && !_lastSelected) {
+      selected = true;
     } else {
-      _spriteToRender = sprite;
+      selected = !selected;
     }
-
+    _lastSelected = selected;
     onTapComponent?.call(selected);
   }
 
@@ -83,12 +81,11 @@ class InterfaceComponent extends GameComponent with TapGesture {
   @override
   Future<void> onLoad() async {
     await _loader.load();
-    _spriteToRender = this.sprite;
   }
 
   @override
   void onTapDown(int pointer, Offset position) {
-    _spriteToRender = spriteSelected ?? _spriteToRender;
+    selected = true;
   }
 
   @override
