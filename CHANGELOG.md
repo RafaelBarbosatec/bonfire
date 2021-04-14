@@ -1,4 +1,5 @@
-# NEXT
+# 1.0.0-rc2
+
 - Improvement in layer priority.
 - Improvement in `Camera` when `moveOnlyMapArea` enable.
 - Fix bug `animation.playOnce` in Player and Enemy
