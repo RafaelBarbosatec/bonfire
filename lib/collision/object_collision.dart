@@ -13,24 +13,21 @@ class CollisionConfig {
   bool collisionOnlyVisibleScreen;
   bool enable;
 
-  late Rect _rect;
+  Rect _rect = Rect.zero;
+
+  Vector2Rect? _lastPosition;
 
   CollisionConfig({
     required this.collisions,
     this.collisionOnlyVisibleScreen = true,
     this.enable = true,
-  }) {
-    _rect = collisions.first.rect;
-    collisions.forEach((element) {
-      _rect.expandToInclude(element.rect);
-    });
-  }
+  });
 
   Rect get rect => _rect;
 
   bool verifyCollision(CollisionConfig? other) {
     if (other == null) return false;
-    if (_rect.overlaps(other.rect)) {
+    if (rect.overlaps(other.rect)) {
       return collisions.where((element1) {
         return other.collisions.where((element2) {
           return element1.verifyCollision(element2);
@@ -38,6 +35,18 @@ class CollisionConfig {
       }).isNotEmpty;
     } else {
       return false;
+    }
+  }
+
+  void updatePosition(Vector2Rect position) {
+    if (collisions.isNotEmpty && position != _lastPosition) {
+      collisions.first.updatePosition(position);
+      _rect = collisions.first.rect;
+      collisions.forEach((element) {
+        element.updatePosition(position);
+        _rect.expandToInclude(element.rect);
+      });
+      _lastPosition = position;
     }
   }
 }
@@ -65,9 +74,9 @@ mixin ObjectCollision on GameComponent {
   }) {
     if (!containCollision()) return false;
 
-    displacement?.let((i) => updatePosition(i));
-
-    // if (shouldTriggerSensors) triggerSensors(rectCollisions);
+    if (displacement != null) {
+      updatePosition(displacement);
+    }
 
     if (_containsCollisionWithMap()) return true;
 
@@ -123,7 +132,9 @@ mixin ObjectCollision on GameComponent {
             : gameRef.collisions());
 
     final collisions = compCollisions.where(
-      (i) => _collisionConfig?.verifyCollision(i.collisionConfig) ?? false,
+      (i) =>
+          i != this &&
+          (_collisionConfig?.verifyCollision(i.collisionConfig) ?? false),
     );
     return collisions.isNotEmpty;
   }
@@ -151,8 +162,6 @@ mixin ObjectCollision on GameComponent {
   }
 
   void updatePosition(Vector2Rect position) {
-    _collisionConfig?.collisions.forEach((element) {
-      element.updatePosition(position);
-    });
+    _collisionConfig?.updatePosition(position);
   }
 }

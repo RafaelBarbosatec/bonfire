@@ -17,10 +17,11 @@ class MapWorld extends MapGame {
   Iterable<ObjectCollision> _tilesCollisions = [];
 
   MapWorld(Iterable<Tile> tiles) : super(tiles) {
-    _tilesCollisions = tiles.where((element) =>
+    _tilesCollisions = tiles
+        .where((element) =>
             (element is ObjectCollision) &&
             (element as ObjectCollision).containCollision())
-        as Iterable<ObjectCollision>;
+        .cast<ObjectCollision>();
   }
 
   @override
