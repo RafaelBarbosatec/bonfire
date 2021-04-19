@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/collision/collision.dart';
-import 'package:bonfire/util/mixins/sensor.dart';
+import 'package:bonfire/collision/collision_area.dart';
+import 'package:bonfire/util/extensions.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/material.dart';
 
@@ -13,11 +13,33 @@ class CollisionConfig {
   bool collisionOnlyVisibleScreen;
   bool enable;
 
+  late Rect _rect;
+
   CollisionConfig({
     required this.collisions,
     this.collisionOnlyVisibleScreen = true,
     this.enable = true,
-  });
+  }) {
+    _rect = collisions.first.rect;
+    collisions.forEach((element) {
+      _rect.expandToInclude(element.rect);
+    });
+  }
+
+  Rect get rect => _rect;
+
+  bool verifyCollision(CollisionConfig? other) {
+    if (other == null) return false;
+    if (_rect.overlaps(other.rect)) {
+      return collisions.where((element1) {
+        return other.collisions.where((element2) {
+          return element1.verifyCollision(element2);
+        }).isNotEmpty;
+      }).isNotEmpty;
+    } else {
+      return false;
+    }
+  }
 }
 
 mixin ObjectCollision on GameComponent {
@@ -37,19 +59,7 @@ mixin ObjectCollision on GameComponent {
     _collisionConfig?.collisionOnlyVisibleScreen = onlyVisible;
   }
 
-  void triggerSensors(Iterable<Vector2Rect> rectCollisions) {
-    gameRef.let((ref) {
-      final Iterable<Sensor> sensors = ref
-          .visibleSensors()
-          .where((decoration) => decoration is Sensor)
-          .cast();
-
-      sensors.forEach((sensor) {
-        if (sensor.areaSensor.overlaps(rectCollisions.first))
-          sensor.onContact(this);
-      });
-    });
-  }
+  get enable => _collisionConfig != null && (_collisionConfig?.enable ?? false);
 
   bool isCollision({
     Vector2Rect? displacement,
@@ -57,13 +67,13 @@ mixin ObjectCollision on GameComponent {
   }) {
     if (!containCollision()) return false;
 
-    final rectCollisions = getRectCollisions(displacement ?? position);
+    displacement?.let((i) => updatePosition(i));
 
-    if (shouldTriggerSensors) triggerSensors(rectCollisions);
+    // if (shouldTriggerSensors) triggerSensors(rectCollisions);
 
-    if (_containsCollisionWithMap(rectCollisions)) return true;
+    if (_containsCollisionWithMap()) return true;
 
-    if (_containsCollision(rectCollisions)) return true;
+    if (_containsCollision()) return true;
 
     return false;
   }
@@ -77,40 +87,16 @@ mixin ObjectCollision on GameComponent {
     return isCollision(displacement: moveToCurrent);
   }
 
-  Iterable<Vector2Rect> getRectCollisions(Vector2Rect displacement) {
-    if (!containCollision()) return [];
-    return _collisionConfig!.collisions
-        .map<Vector2Rect>((e) => e.getVectorCollision(displacement));
-  }
-
   Vector2Rect getRectCollision(Vector2Rect displacement) {
     if (!containCollision()) return Vector2Rect.zero();
-    return _collisionConfig!.collisions
-        .map<Vector2Rect>((e) => e.getVectorCollision(displacement))
-        .first;
+    return _collisionConfig!.rect.toVector2Rect();
   }
 
-  void _drawCollision(Canvas canvas, Color? color) {
+  void _drawCollision(Canvas canvas, Color color) {
     if (!containCollision()) return;
     _collisionConfig!.collisions.forEach((element) {
-      canvas.drawRect(
-        element.getVectorCollision(position).rect,
-        Paint()..color = color ?? Colors.lightGreenAccent.withOpacity(0.5),
-      );
+      element.render(canvas, color);
     });
-  }
-
-  bool detectCollision(Iterable<Vector2Rect> displacements) {
-    if (!containCollision()) return false;
-    final collision = displacements.where((displacement) {
-      final c = _collisionConfig!.collisions.where(
-        (element) =>
-            element.getVectorCollision(this.position).overlaps(displacement),
-      );
-      return c.isNotEmpty;
-    });
-
-    return collision.isNotEmpty;
   }
 
   bool containCollision() =>
@@ -120,25 +106,26 @@ mixin ObjectCollision on GameComponent {
 
   Vector2Rect get rectCollision => getRectCollision(position);
 
-  bool _containsCollisionWithMap(Iterable<Vector2Rect> rectCollisions) {
-    final tiledCollisions =
+  bool _containsCollisionWithMap() {
+    final Iterable<ObjectCollision> tiledCollisions =
         ((_collisionConfig?.collisionOnlyVisibleScreen ?? false)
             ? gameRef.map.getCollisionsRendered()
             : gameRef.map.getCollisions());
+
     final collisionMap = tiledCollisions.where(
-      (i) =>
-          (i is ObjectCollision) &&
-          (i as ObjectCollision).detectCollision(rectCollisions),
+      (i) => _collisionConfig?.verifyCollision(i.collisionConfig) ?? false,
     );
     return collisionMap.isNotEmpty;
   }
 
-  bool _containsCollision(Iterable<Vector2Rect> rectCollisions) {
-    final collisions = ((_collisionConfig?.collisionOnlyVisibleScreen ?? true)
+  bool _containsCollision() {
+    final compCollisions =
+        ((_collisionConfig?.collisionOnlyVisibleScreen ?? true)
             ? gameRef.visibleCollisions()
-            : gameRef.collisions())
-        .where(
-      (i) => i.detectCollision(rectCollisions) && i != this,
+            : gameRef.collisions());
+
+    final collisions = compCollisions.where(
+      (i) => _collisionConfig?.verifyCollision(i.collisionConfig) ?? false,
     );
     return collisions.isNotEmpty;
   }
@@ -147,12 +134,27 @@ mixin ObjectCollision on GameComponent {
   void render(Canvas canvas) {
     super.render(canvas);
     if (gameRef.showCollisionArea == true) {
-      _drawCollision(canvas, gameRef.collisionAreaColor);
+      _drawCollision(
+        canvas,
+        gameRef.collisionAreaColor ?? Colors.lightGreen.withOpacity(0.5),
+      );
     }
+  }
+
+  @override
+  void update(double dt) {
+    updatePosition(this.position);
+    super.update(dt);
   }
 
   bool notVisibleAndCollisionOnlyScreen() {
     return (_collisionConfig?.collisionOnlyVisibleScreen ?? true) &&
         !isVisibleInCamera();
+  }
+
+  void updatePosition(Vector2Rect position) {
+    _collisionConfig?.collisions.forEach((element) {
+      element.updatePosition(position);
+    });
   }
 }

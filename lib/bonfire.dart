@@ -3,7 +3,7 @@ library bonfire;
 export 'package:bonfire/base/bonfire_game.dart';
 export 'package:bonfire/base/game_component.dart';
 export 'package:bonfire/camera/camera_config.dart';
-export 'package:bonfire/collision/collision.dart';
+export 'package:bonfire/collision/collision_area.dart';
 export 'package:bonfire/collision/object_collision.dart';
 export 'package:bonfire/decoration/decoration.dart';
 export 'package:bonfire/decoration/decoration_with_collision.dart';

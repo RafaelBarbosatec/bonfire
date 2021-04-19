@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/vector2rect.dart';
+import 'package:flame/geometry.dart';
 
 extension ImageExtension on Image {
   SpriteAnimation getAnimation({
@@ -76,7 +77,7 @@ extension SpriteExt on Sprite {
 }
 
 extension NullableExt<T> on T? {
-  FutureOr<void> let(FutureOr<void> Function(T o) call) => call(this!);
+  FutureOr<void> let(FutureOr<void> Function(T i) call) => call(this!);
 }
 
 extension GameComponentExt on GameComponent {
@@ -104,4 +105,13 @@ extension GameComponentExt on GameComponent {
 
     return Direction.left;
   }
+}
+
+extension ShapeExt on Shape {
+  Rect get rect => Rect.fromLTWH(
+        this.position.x,
+        this.position.y,
+        (this.size?.x ?? 0.0),
+        (this.size?.y ?? 0.0),
+      );
 }

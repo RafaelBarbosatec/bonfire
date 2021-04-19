@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:bonfire/collision/collision.dart';
+import 'package:bonfire/collision/collision_area.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_config.dart';

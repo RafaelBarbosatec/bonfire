@@ -44,8 +44,12 @@ class CollisionArea {
     shape.render(c, _paintCollision..color = color);
   }
 
-  bool verifyCollision(Shape other) {
-    return shape.intersections(other).isNotEmpty;
+  bool verifyCollision(CollisionArea other) {
+    if (rect.overlaps(other.rect)) {
+      return shape.intersections(other.shape).isNotEmpty;
+    } else {
+      return false;
+    }
   }
 
   Rect get rect => Rect.fromLTWH(
