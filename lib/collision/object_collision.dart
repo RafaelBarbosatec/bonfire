@@ -59,8 +59,6 @@ mixin ObjectCollision on GameComponent {
     _collisionConfig?.collisionOnlyVisibleScreen = onlyVisible;
   }
 
-  get enable => _collisionConfig != null && (_collisionConfig?.enable ?? false);
-
   bool isCollision({
     Vector2Rect? displacement,
     bool shouldTriggerSensors = true,
