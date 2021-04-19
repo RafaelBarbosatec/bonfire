@@ -1,3 +1,7 @@
+# NEXT
+
+- fix to use `Tap Gesture` in `Drag Gesture` using together.
+
 # 1.0.0-rc3
 
 - Improvement in `simpleAttackMelee`

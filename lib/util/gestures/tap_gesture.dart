@@ -26,6 +26,7 @@ mixin TapGesture on GameComponent {
         onTapDown(pointer, position);
       }
     }
+    super.handlerPointerDown(event);
   }
 
   void handlerPointerUp(PointerUpEvent event) {
@@ -53,6 +54,15 @@ mixin TapGesture on GameComponent {
       }
     }
     _pointer = -1;
+
+    super.handlerPointerUp(event);
+  }
+
+  @override
+  void handlerPointerMove(PointerMoveEvent event) {
+    _pointer = -1;
+    onTapCancel();
+    super.handlerPointerMove(event);
   }
 
   void onTapDown(int pointer, Offset position);

@@ -33,6 +33,7 @@ mixin DragGesture on GameComponent {
         _startDragPosition = this.position;
       }
     }
+    super.handlerPointerDown(event);
   }
 
   @override
@@ -67,6 +68,7 @@ mixin DragGesture on GameComponent {
       }
       moveDrag(pointer, position);
     }
+    super.handlerPointerMove(event);
   }
 
   @override
@@ -78,6 +80,8 @@ mixin DragGesture on GameComponent {
       _pointer = -1;
       endDrag(pointer);
     }
+
+    super.handlerPointerUp(event);
   }
 
   @override
@@ -89,6 +93,7 @@ mixin DragGesture on GameComponent {
       _pointer = -1;
       cancelDrag(pointer);
     }
+    super.handlerPointerCancel(event);
   }
 
   void startDrag(int pointer, Offset position) {}
