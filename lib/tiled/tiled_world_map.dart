@@ -279,11 +279,28 @@ class TiledWorldMap {
           double x = ((object.x ?? 0.0) * _tileWidth) / _tileWidthOrigin;
           double y = ((object.y ?? 0.0) * _tileHeight) / _tileHeightOrigin;
 
-          collisions.add(CollisionArea(
-            width: width,
-            height: height,
-            align: Offset(x, y),
-          ));
+          CollisionArea ca = CollisionArea.rectangle(
+            size: Vector2(width, height),
+            align: Vector2(x, y),
+          );
+
+          if (object.ellipse == true) {
+            ca = CollisionArea.circle(
+              radius: (width > height ? width : height) / 2,
+              align: Vector2(x, y),
+            );
+          }
+
+          if (object.polygon?.isNotEmpty == true) {
+            ca = CollisionArea.polygon(
+              points: object.polygon!.map((e) {
+                return Vector2((e.x ?? 0.0), (e.y ?? 0.0));
+              }).toList(),
+              align: Vector2(x, y),
+            );
+          }
+
+          collisions.add(ca);
         });
       }
       return DataObjectCollision(collisions: collisions, type: type);
