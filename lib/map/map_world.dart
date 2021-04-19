@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/map/tile/tile.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/cupertino.dart';
 

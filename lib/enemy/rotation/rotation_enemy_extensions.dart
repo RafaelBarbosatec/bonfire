@@ -1,12 +1,12 @@
 import 'dart:math';
 
+import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/enemy/extensions.dart';
 import 'package:bonfire/enemy/rotation/rotation_enemy.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/objects/flying_attack_angle_object.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/rendering.dart';

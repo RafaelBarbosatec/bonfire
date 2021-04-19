@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/collision/collision.dart';
+import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/map/tile/tile.dart';
-import 'package:bonfire/util/collision/collision.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 
 class TileWithCollision extends Tile with ObjectCollision {

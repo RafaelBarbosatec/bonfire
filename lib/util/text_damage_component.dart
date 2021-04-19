@@ -72,5 +72,5 @@ class TextDamageComponent extends TextComponent with HasGameRef<BonfireGame> {
   }
 
   @override
-  int get priority => LayerPriority.getPriorityFromMap(position.y.round());
+  int get priority => LayerPriority.getComponentPriority(position.y.round());
 }

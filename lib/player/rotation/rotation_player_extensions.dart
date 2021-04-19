@@ -1,7 +1,7 @@
+import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/player/extensions.dart';
 import 'package:bonfire/player/rotation/rotation_player.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 

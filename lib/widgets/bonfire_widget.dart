@@ -1,13 +1,13 @@
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/custom_game_widget.dart';
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/camera/camera_config.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/camera/camera_config.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:flame/game.dart';

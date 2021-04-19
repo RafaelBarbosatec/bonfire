@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/cupertino.dart';

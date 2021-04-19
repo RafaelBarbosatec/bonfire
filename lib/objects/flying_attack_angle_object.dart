@@ -1,12 +1,12 @@
 import 'dart:math';
 
+import 'package:bonfire/collision/collision.dart';
+import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/collision/collision.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/extensions.dart';

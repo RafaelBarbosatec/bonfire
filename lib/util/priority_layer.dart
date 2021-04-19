@@ -1,24 +1,25 @@
 class LayerPriority {
   static const int BACKGROUND = 10;
   static const int MAP = 20;
+  static const int COMPONENTS = 30;
 
-  static int getPriorityFromMap(int priority) {
-    return MAP + priority;
+  static int getComponentPriority(int bottom) {
+    return COMPONENTS + bottom;
   }
 
-  static int getPriorityLighting(int highestPriority) {
+  static int getLightingPriority(int highestPriority) {
     return highestPriority + 10;
   }
 
-  static int getPriorityColorFilter(int highestPriority) {
+  static int getColorFilterPriority(int highestPriority) {
     return highestPriority + 20;
   }
 
-  static int getPriorityInterface(int highestPriority) {
+  static int getInterfacePriority(int highestPriority) {
     return highestPriority + 30;
   }
 
-  static int getPriorityJoystick(int highestPriority) {
+  static int getJoystickPriority(int highestPriority) {
     return highestPriority + 40;
   }
 }

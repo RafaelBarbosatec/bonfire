@@ -1,8 +1,8 @@
 import 'dart:ui';
 
+import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/vector2rect.dart';
 
 /// Functions util to use in your [GameDecoration]

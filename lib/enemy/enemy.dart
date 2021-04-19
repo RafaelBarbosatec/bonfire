@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/vector2rect.dart';

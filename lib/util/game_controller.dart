@@ -1,8 +1,8 @@
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/camera/camera.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
-import 'package:bonfire/util/camera/camera.dart';
 import 'package:flame/components.dart';
 
 abstract class GameListener {

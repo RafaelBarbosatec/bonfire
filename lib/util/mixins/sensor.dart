@@ -1,5 +1,5 @@
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/vector2rect.dart';
 
 mixin Sensor on GameComponent {

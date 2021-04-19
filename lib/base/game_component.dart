@@ -1,5 +1,5 @@
 import 'package:bonfire/base/bonfire_game.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/vector2rect.dart';
@@ -69,7 +69,7 @@ abstract class GameComponent extends Component
   }
 
   @override
-  int get priority => LayerPriority.getPriorityFromMap(_getBottomPriority());
+  int get priority => LayerPriority.getComponentPriority(_getBottomPriority());
 
   int _getBottomPriority() {
     int bottomPriority = position.bottom.round();

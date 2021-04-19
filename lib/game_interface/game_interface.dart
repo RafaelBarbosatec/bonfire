@@ -25,7 +25,7 @@ class GameInterface extends GameComponent {
 
   @override
   int get priority =>
-      LayerPriority.getPriorityInterface(gameRef.highestPriority);
+      LayerPriority.getInterfacePriority(gameRef.highestPriority);
 
   @override
   void render(Canvas c) {

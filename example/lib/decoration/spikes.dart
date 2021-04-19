@@ -1,7 +1,6 @@
 import 'dart:async' as async;
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';

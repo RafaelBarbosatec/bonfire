@@ -1,12 +1,10 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/decoration/decoration.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
-class BarrelDraggable extends GameDecoration
-    with DragGesture, ObjectCollision, TapGesture {
+class BarrelDraggable extends GameDecoration with DragGesture, ObjectCollision {
   late TextConfig _textConfig;
   BarrelDraggable(Vector2 position)
       : super.withSprite(
@@ -40,25 +38,5 @@ class BarrelDraggable extends GameDecoration
       'Drag',
       Vector2(this.position.left + width / 5, this.position.top - width / 3),
     );
-  }
-
-  @override
-  void onTap() {
-    print('onTap');
-  }
-
-  @override
-  void onTapCancel() {
-    // TODO: implement onTapCancel
-  }
-
-  @override
-  void onTapDown(int pointer, Offset position) {
-    // TODO: implement onTapDown
-  }
-
-  @override
-  void onTapUp(int pointer, Offset position) {
-    // TODO: implement onTapUp
   }
 }
