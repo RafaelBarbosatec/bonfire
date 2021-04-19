@@ -41,11 +41,16 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
     setupCollision(
       CollisionConfig(
         collisions: [
-          CollisionArea(
-            height: DungeonMap.tileSize / 2,
-            width: DungeonMap.tileSize / 1.8,
-            align: Offset(DungeonMap.tileSize / 3.5, DungeonMap.tileSize / 2),
-          ),
+          CollisionArea.rectangle(
+            size: Vector2(
+              DungeonMap.tileSize / 2,
+              DungeonMap.tileSize / 1.8,
+            ),
+            align: Vector2(
+              DungeonMap.tileSize / 3.5,
+              DungeonMap.tileSize / 2,
+            ),
+          )
         ],
       ),
     );
@@ -130,10 +135,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
       speed: initSpeed * 2,
       collision: CollisionConfig(
         collisions: [
-          CollisionArea(
-            width: width / 2,
-            height: width / 2,
-            align: Offset(width * 0.1, 0),
+          CollisionArea.rectangle(
+            size: Vector2(width / 2, width / 2),
+            align: Vector2(width * 0.1, 0),
           ),
         ],
       ),

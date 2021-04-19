@@ -59,7 +59,12 @@ class GoblinRotation extends RotationEnemy {
           damage: 10,
           speed: speed * 1.5,
           collision: CollisionConfig(
-            collisions: [CollisionArea(height: 15, width: 15)],
+            collisions: [
+              CollisionArea.rectangle(
+                size: Vector2(width / 2, width / 2),
+                align: Vector2(width * 0.1, 0),
+              ),
+            ],
           ),
         );
       },
