@@ -66,7 +66,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     setupCollision(
       collision ??
           CollisionConfig(
-            collisions: [CollisionArea(width: width, height: height / 2)],
+            collisions: [CollisionArea.rectangle(size: Vector2(width, height))],
             collisionOnlyVisibleScreen: collisionOnlyVisibleObjects,
           ),
     );
