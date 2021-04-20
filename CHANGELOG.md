@@ -1,6 +1,7 @@
 # NEXT
 
 - fix to use `Tap Gesture` in `Drag Gesture` using together.
+- Improvements in mixin `Sensor`.
 
 # 1.0.0-rc3
 

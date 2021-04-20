@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/collision/collision_area.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ Paint _paintSensor = Paint()..color = Colors.red.withOpacity(0.5);
 mixin Sensor on GameComponent {
   void onContact(GameComponent collision);
 
-  int intervalCheckContact = 250;
+  int _intervalCheckContact = 0;
   IntervalTick? _tick;
   Vector2Rect? _sensorArea;
 
@@ -28,12 +29,15 @@ mixin Sensor on GameComponent {
     }
   }
 
-  set sensorArea(Vector2Rect s) => _sensorArea = s;
+  void setupSensorArea(Vector2Rect s, {int intervalCheck = 250}) {
+    _sensorArea = s;
+    _intervalCheckContact = intervalCheck;
+  }
 
   @override
   void update(double dt) {
-    if (_tick == null) {
-      _tick = IntervalTick(intervalCheckContact, tick: _verifyContact);
+    if (_tick == null || _tick?.interval != _intervalCheckContact) {
+      _tick = IntervalTick(_intervalCheckContact, tick: _verifyContact);
     } else {
       _tick?.update(dt);
     }
@@ -50,8 +54,14 @@ mixin Sensor on GameComponent {
 
   void _verifyContact() {
     for (final i in gameRef.visibleComponents()) {
-      Vector2Rect rect = i is ObjectCollision ? i.rectCollision : i.position;
-      if (rect.overlaps(sensorArea)) {
+      if (i is ObjectCollision) {
+        CollisionConfig config = CollisionConfig(
+          collisions: [CollisionArea.fromVector2Rect(rect: sensorArea)],
+        )..updatePosition(sensorArea);
+        if (i.collisionConfig?.verifyCollision(config) ?? false) {
+          onContact(i);
+        }
+      } else if (i.position.overlaps(sensorArea)) {
         onContact(i);
       }
     }

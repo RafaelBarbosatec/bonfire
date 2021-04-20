@@ -32,6 +32,12 @@ class CollisionArea {
   })  : shape = Polygon(points),
         align = align ?? Vector2.zero();
 
+  CollisionArea.fromVector2Rect({
+    required Vector2Rect rect,
+    Vector2? align,
+  })  : shape = Rectangle(size: rect.size),
+        align = align ?? Vector2.zero();
+
   void updatePosition(Vector2Rect position) {
     double x = position.position.x;
     double y = position.position.y;
