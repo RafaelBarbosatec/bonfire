@@ -314,9 +314,24 @@ class TiledWorldMap {
               return vector;
             }).toList();
 
+            if ((minorX ?? 0) < 0) {
+              points = points.map((e) {
+                return Vector2(e.x - minorX!, e.y);
+              }).toList();
+            }
+
+            if ((minorY ?? 0) < 0) {
+              points = points.map((e) {
+                return Vector2(e.x, e.y - minorY!);
+              }).toList();
+            }
+
+            double xAlign = x - points.first.x;
+            double yAlign = y - points.first.y;
+
             ca = CollisionArea.polygon(
               points: points,
-              align: Vector2((minorX ?? 0.0) + x, (minorY ?? 0.0) + y),
+              align: Vector2(xAlign, yAlign),
             );
           }
 
