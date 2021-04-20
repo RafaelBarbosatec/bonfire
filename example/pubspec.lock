@@ -95,9 +95,11 @@ packages:
   flame:
     dependency: transitive
     description:
-      name: flame
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/flame"
+      ref: "spydon.fix-collision-detection-angles"
+      resolved-ref: "0b0fe0b305a5dcfa240b97e625cee7bfb7e1c41a"
+      url: "https://github.com/flame-engine/flame.git"
+    source: git
     version: "1.0.0-rc9"
   flutter:
     dependency: "direct main"

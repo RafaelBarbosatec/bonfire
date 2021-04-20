@@ -17,7 +17,7 @@ class PotionLife extends GameDecoration with Sensor {
         );
 
   @override
-  void onContact(ObjectCollision collision) {
+  void onContact(GameComponent collision) {
     if (collision is Player) {
       async.Timer.periodic(Duration(milliseconds: 100), (timer) {
         if (_lifeDistributed >= life) {

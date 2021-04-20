@@ -94,7 +94,7 @@ mixin ObjectCollision on GameComponent {
     return isCollision(displacement: moveToCurrent);
   }
 
-  Vector2Rect getRectCollision(Vector2Rect displacement) {
+  Vector2Rect getRectCollision() {
     if (!containCollision()) return Vector2Rect.zero();
     return _collisionConfig!.rect.toVector2Rect();
   }
@@ -111,7 +111,7 @@ mixin ObjectCollision on GameComponent {
       _collisionConfig?.collisions.isNotEmpty == true &&
       _collisionConfig?.enable == true;
 
-  Vector2Rect get rectCollision => getRectCollision(position);
+  Vector2Rect get rectCollision => getRectCollision();
 
   bool _containsCollisionWithMap() {
     final Iterable<ObjectCollision> tiledCollisions =
