@@ -292,11 +292,31 @@ class TiledWorldMap {
           }
 
           if (object.polygon?.isNotEmpty == true) {
+            double? minorX;
+            double? minorY;
+            List<Vector2> points = object.polygon!.map((e) {
+              Vector2 vector = Vector2(
+                ((e.x ?? 0.0) * _tileWidth) / _tileWidthOrigin,
+                ((e.y ?? 0.0) * _tileHeight) / _tileHeightOrigin,
+              );
+
+              if (minorX == null) {
+                minorX = vector.x;
+              } else if (vector.x < (minorX ?? 0.0)) {
+                minorX = vector.x;
+              }
+
+              if (minorY == null) {
+                minorY = vector.y;
+              } else if (vector.y < (minorY ?? 0.0)) {
+                minorY = vector.y;
+              }
+              return vector;
+            }).toList();
+
             ca = CollisionArea.polygon(
-              points: object.polygon!.map((e) {
-                return Vector2((e.x ?? 0.0), (e.y ?? 0.0));
-              }).toList(),
-              align: Vector2(x, y),
+              points: points,
+              align: Vector2((minorX ?? 0.0) + x, (minorY ?? 0.0) + y),
             );
           }
 
