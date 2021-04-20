@@ -28,11 +28,14 @@ class CollisionConfig {
   bool verifyCollision(CollisionConfig? other) {
     if (other == null) return false;
     if (rect.overlaps(other.rect)) {
-      return collisions.where((element1) {
-        return other.collisions.where((element2) {
-          return element1.verifyCollision(element2);
-        }).isNotEmpty;
-      }).isNotEmpty;
+      for (final element1 in collisions) {
+        for (final element2 in other.collisions) {
+          if (element1.verifyCollision(element2)) {
+            return true;
+          }
+        }
+      }
+      return false;
     } else {
       return false;
     }
@@ -42,10 +45,10 @@ class CollisionConfig {
     if (collisions.isNotEmpty && position != _lastPosition) {
       collisions.first.updatePosition(position);
       _rect = collisions.first.rect;
-      collisions.forEach((element) {
+      for (final element in collisions) {
         element.updatePosition(position);
         _rect.expandToInclude(element.rect);
-      });
+      }
       _lastPosition = position;
     }
   }
@@ -78,32 +81,16 @@ mixin ObjectCollision on GameComponent {
       updatePosition(displacement);
     }
 
-    if (_containsCollisionWithMap()) return true;
+    if (_verifyMapCollision()) return true;
 
-    if (_containsCollision()) return true;
+    if (_verifyComponentCollision()) return true;
 
     return false;
-  }
-
-  bool isCollisionPositionTranslate(
-    Vector2Rect position,
-    double translateX,
-    double translateY,
-  ) {
-    var moveToCurrent = position.translate(translateX, translateY);
-    return isCollision(displacement: moveToCurrent);
   }
 
   Vector2Rect getRectCollision() {
     if (!containCollision()) return Vector2Rect.zero();
     return _collisionConfig!.rect.toVector2Rect();
-  }
-
-  void _drawCollision(Canvas canvas, Color color) {
-    if (!containCollision()) return;
-    _collisionConfig!.collisions.forEach((element) {
-      element.render(canvas, color);
-    });
   }
 
   bool containCollision() =>
@@ -113,30 +100,33 @@ mixin ObjectCollision on GameComponent {
 
   Vector2Rect get rectCollision => getRectCollision();
 
-  bool _containsCollisionWithMap() {
+  bool _verifyMapCollision() {
     final Iterable<ObjectCollision> tiledCollisions =
         ((_collisionConfig?.collisionOnlyVisibleScreen ?? false)
             ? gameRef.map.getCollisionsRendered()
             : gameRef.map.getCollisions());
 
-    final collisionMap = tiledCollisions.where(
-      (i) => _collisionConfig?.verifyCollision(i.collisionConfig) ?? false,
-    );
-    return collisionMap.isNotEmpty;
+    for (final i in tiledCollisions) {
+      if (_collisionConfig?.verifyCollision(i.collisionConfig) ?? false) {
+        return true;
+      }
+    }
+    return false;
   }
 
-  bool _containsCollision() {
+  bool _verifyComponentCollision() {
     final compCollisions =
         ((_collisionConfig?.collisionOnlyVisibleScreen ?? true)
             ? gameRef.visibleCollisions()
             : gameRef.collisions());
 
-    final collisions = compCollisions.where(
-      (i) =>
-          i != this &&
-          (_collisionConfig?.verifyCollision(i.collisionConfig) ?? false),
-    );
-    return collisions.isNotEmpty;
+    for (final i in compCollisions) {
+      if (i != this &&
+          (_collisionConfig?.verifyCollision(i.collisionConfig) ?? false)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
@@ -147,6 +137,14 @@ mixin ObjectCollision on GameComponent {
         canvas,
         gameRef.collisionAreaColor ?? Colors.lightGreen.withOpacity(0.5),
       );
+    }
+  }
+
+  void _drawCollision(Canvas canvas, Color color) {
+    if (!containCollision()) return;
+
+    for (final element in _collisionConfig!.collisions) {
+      element.render(canvas, color);
     }
   }
 

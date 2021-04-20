@@ -62,7 +62,6 @@ class Enemy extends GameComponent with Attackable {
   void moveUp(double speed) {
     isIdle = false;
     var collision = verifyEnemyTranslateCollision(
-      position,
       0,
       (speed * -1),
     );
@@ -76,7 +75,6 @@ class Enemy extends GameComponent with Attackable {
   void moveDown(double speed) {
     isIdle = false;
     var collision = verifyEnemyTranslateCollision(
-      position,
       0,
       speed,
     );
@@ -89,7 +87,6 @@ class Enemy extends GameComponent with Attackable {
   void moveLeft(double speed) {
     isIdle = false;
     var collision = verifyEnemyTranslateCollision(
-      position,
       (speed * -1),
       0,
     );
@@ -102,7 +99,6 @@ class Enemy extends GameComponent with Attackable {
   void moveRight(double speed) {
     isIdle = false;
     var collision = verifyEnemyTranslateCollision(
-      position,
       speed,
       0,
     );
@@ -153,12 +149,10 @@ class Enemy extends GameComponent with Attackable {
         position.center;
 
     var collisionX = verifyEnemyTranslateCollision(
-      position,
       diffBase.dx,
       0,
     );
     var collisionY = verifyEnemyTranslateCollision(
-      position,
       0,
       diffBase.dy,
     );
@@ -174,7 +168,6 @@ class Enemy extends GameComponent with Attackable {
 
     if (collisionX && !collisionY && newDiffBase.dy != 0) {
       var collisionY = verifyEnemyTranslateCollision(
-        position,
         0,
         innerSpeed,
       );
@@ -183,7 +176,6 @@ class Enemy extends GameComponent with Attackable {
 
     if (collisionY && !collisionX && newDiffBase.dx != 0) {
       var collisionX = verifyEnemyTranslateCollision(
-        position,
         innerSpeed,
         0,
       );
@@ -252,16 +244,11 @@ class Enemy extends GameComponent with Attackable {
 
   /// Check if performing a certain translate on the enemy collision occurs
   bool verifyEnemyTranslateCollision(
-    Vector2Rect position,
     double translateX,
     double translateY,
   ) {
-    var collision = false;
-    collision = (this as ObjectCollision).isCollisionPositionTranslate(
-      position,
-      translateX,
-      translateY,
+    return (this as ObjectCollision).isCollision(
+      displacement: this.position.translate(translateX, translateY),
     );
-    return collision;
   }
 }
