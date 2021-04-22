@@ -1,6 +1,9 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/gemonetry/circle.dart';
+import 'package:bonfire/gemonetry/polygon.dart';
+import 'package:bonfire/gemonetry/retangle.dart';
+import 'package:bonfire/gemonetry/shape.dart';
 import 'package:bonfire/util/vector2rect.dart';
-import 'package:flame/geometry.dart';
 import 'package:flutter/widgets.dart';
 
 Paint _paintCollision = Paint();
@@ -15,27 +18,27 @@ class CollisionArea {
   }) : align = align ?? Vector2.zero();
 
   CollisionArea.rectangle({
-    required Vector2 size,
+    required Size size,
     Vector2? align,
-  })  : shape = Rectangle(size: size),
+  })  : shape = RectangleShape(size),
         align = align ?? Vector2.zero();
 
   CollisionArea.circle({
     required double radius,
     Vector2? align,
-  })  : shape = Circle(radius: radius),
+  })  : shape = CircleShape(radius),
         align = align ?? Vector2.zero();
 
   CollisionArea.polygon({
     required List<Vector2> points,
     Vector2? align,
-  })  : shape = Polygon(points),
+  })  : shape = PolygonShape(points),
         align = align ?? Vector2.zero();
 
   CollisionArea.fromVector2Rect({
     required Vector2Rect rect,
     Vector2? align,
-  })  : shape = Rectangle(size: rect.size),
+  })  : shape = RectangleShape(Size(rect.size.x, rect.size.y)),
         align = align ?? Vector2.zero();
 
   void updatePosition(Vector2Rect position) {
@@ -51,17 +54,22 @@ class CollisionArea {
   }
 
   bool verifyCollision(CollisionArea other) {
-    if (rect.overlaps(other.rect)) {
-      return shape.intersections(other.shape).isNotEmpty;
-    } else {
-      return false;
-    }
+    return shape.isCollision(other.shape);
   }
 
-  Rect get rect => Rect.fromLTWH(
-        shape.position.x,
-        shape.position.y,
-        (shape.size?.x ?? 0.0),
-        (shape.size?.y ?? 0.0),
-      );
+  Rect get rect {
+    if (shape is CircleShape) {
+      return (shape as CircleShape).rect.rect;
+    }
+
+    if (shape is RectangleShape) {
+      return (shape as RectangleShape).rect;
+    }
+
+    if (shape is PolygonShape) {
+      return (shape as PolygonShape).rect.rect;
+    }
+
+    return Rect.zero;
+  }
 }

@@ -15,7 +15,7 @@ class ShapeCollision {
       } else if (b is CircleShape) {
         return rectToCircle(a, b);
       } else if (b is PolygonShape) {
-        return rectToComplex(a, b);
+        return rectToPolygon(a, b);
       } else {
         return false;
       }
@@ -25,17 +25,17 @@ class ShapeCollision {
       } else if (b is CircleShape) {
         return circleToCircle(a, b);
       } else if (b is PolygonShape) {
-        return circleToComplex(a, b);
+        return circleToPolygon(a, b);
       } else {
         return false;
       }
     } else {
       if (b is RectangleShape && a is PolygonShape) {
-        return rectToComplex(b, a);
+        return rectToPolygon(b, a);
       } else if (b is CircleShape && a is PolygonShape) {
-        return circleToComplex(b, a);
+        return circleToPolygon(b, a);
       } else if (b is PolygonShape && a is PolygonShape) {
-        return complexToComplex(a, b);
+        return polygonToPolygon(a, b);
       } else {
         return false;
       }
@@ -64,7 +64,7 @@ class ShapeCollision {
     return false;
   }
 
-  static bool rectToComplex(RectangleShape a, PolygonShape b) {
+  static bool rectToPolygon(RectangleShape a, PolygonShape b) {
     if (!rectToRect(a, b.rect)) return false;
     if (!isLinesShadowOver(
         a.leftTop, a.rightBottom, b.rect.leftTop, b.rect.rightBottom))
@@ -109,22 +109,24 @@ class ShapeCollision {
     return sqrt(w * w + h * h) <= distance;
   }
 
-  static bool circleToComplex(CircleShape a, PolygonShape b) {
+  static bool circleToPolygon(CircleShape a, PolygonShape b) {
     if (!rectToRect(a.rect, b.rect)) return false;
 
-    final points = b.points.toList();
-    points.add(points.first);
-    for (var i = 0; i < points.length - 1; i++) {
-      final distance = getNearestDistance(points[i], points[i + 1], a.center);
-      if (distance <= a.radius) {
-        return true;
+    if (b.points.isNotEmpty) {
+      final points = b.points.toList();
+      points.add(points.first);
+      for (var i = 0; i < points.length - 1; i++) {
+        final distance = getNearestDistance(points[i], points[i + 1], a.center);
+        if (distance <= a.radius) {
+          return true;
+        }
       }
     }
 
     return false;
   }
 
-  static bool complexToComplex(PolygonShape a, PolygonShape b) {
+  static bool polygonToPolygon(PolygonShape a, PolygonShape b) {
     if (!rectToRect(a.rect, b.rect)) return false;
 
     final pointsA = a.points.toList()..add(a.points.first);

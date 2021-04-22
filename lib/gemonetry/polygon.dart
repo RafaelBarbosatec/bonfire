@@ -19,10 +19,9 @@ class PolygonShape extends Shape {
     Vector2 position,
   ) {
     final list = <Vector2>[];
-    for (var i = 0; i < list.length; i++) {
-      list[i] = relativePoints[i] + position;
+    for (var i = 0; i < relativePoints.length; i++) {
+      list.add(relativePoints[i] + position);
     }
-
     return list;
   }
 
@@ -56,13 +55,15 @@ class PolygonShape extends Shape {
 
   @override
   void render(Canvas canvas, Paint paint) {
-    paint.style = PaintingStyle.fill;
-    final path = Path()..moveTo(points.first.x, points.first.y);
-    for (var i = 1; i < points.length; i++) {
-      path.lineTo(points[i].x, points[i].y);
-    }
-    path.lineTo(points.first.x, points.first.y);
+    if (points.isNotEmpty) {
+      paint.style = PaintingStyle.fill;
+      final path = Path()..moveTo(points.first.x, points.first.y);
+      for (var i = 1; i < points.length; i++) {
+        path.lineTo(points[i].x, points[i].y);
+      }
+      path.lineTo(points.first.x, points.first.y);
 
-    canvas.drawPath(path, paint);
+      canvas.drawPath(path, paint);
+    }
   }
 }

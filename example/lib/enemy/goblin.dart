@@ -22,7 +22,7 @@ class Goblin extends SimpleEnemy with ObjectCollision {
       CollisionConfig(
         collisions: [
           CollisionArea.rectangle(
-            size: Vector2(
+            size: Size(
               DungeonMap.tileSize * 0.4,
               DungeonMap.tileSize * 0.4,
             ),
@@ -100,7 +100,7 @@ class Goblin extends SimpleEnemy with ObjectCollision {
       collision: CollisionConfig(
         collisions: [
           CollisionArea.rectangle(
-            size: Vector2(width / 2, width / 2),
+            size: Size(width / 2, width / 2),
             align: Vector2(width * 0.1, 0),
           ),
         ],

@@ -9,9 +9,12 @@ class CircleShape extends Shape {
   final double radius;
   final RectangleShape rect;
   Vector2 center;
+  Offset offsetToDraw;
 
   CircleShape(this.radius, {Vector2? position})
       : this.center = (position ?? Vector2.zero()).translate(radius, radius),
+        this.offsetToDraw = Offset((position ?? Vector2.zero()).x + radius,
+            (position ?? Vector2.zero()).y + radius),
         this.rect = RectangleShape(
           Size(2 * radius, 2 * radius),
           position: position,
@@ -24,12 +27,13 @@ class CircleShape extends Shape {
 
     rect.position = value;
     center = value.translate(radius, radius);
+    offsetToDraw = Offset(position.x + radius, position.y + radius);
   }
 
   @override
   void render(Canvas canvas, Paint paint) {
     canvas.drawCircle(
-      position.toOffset(),
+      Offset(position.x + radius, position.y + radius),
       radius,
       paint,
     );

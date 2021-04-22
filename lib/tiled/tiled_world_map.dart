@@ -280,7 +280,7 @@ class TiledWorldMap {
           double y = ((object.y ?? 0.0) * _tileHeight) / _tileHeightOrigin;
 
           CollisionArea ca = CollisionArea.rectangle(
-            size: Vector2(width, height),
+            size: Size(width, height),
             align: Vector2(x, y),
           );
 
