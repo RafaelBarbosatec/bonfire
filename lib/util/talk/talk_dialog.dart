@@ -54,6 +54,7 @@ class TalkDialog extends StatefulWidget {
 }
 
 class _TalkDialogState extends State<TalkDialog> {
+  final FocusNode _focusNode = FocusNode();
   Timer? timer;
   late Say currentSay;
   int currentIndexTalk = 0;
@@ -73,65 +74,65 @@ class _TalkDialogState extends State<TalkDialog> {
   @override
   void dispose() {
     _textShowController.close();
+    _focusNode.dispose();
     timer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (finishCurrentTalk) {
-          _nextTalk();
-        } else {
-          _finishTalk();
-        }
-      },
-      child: Container(
-        color: Colors.transparent,
-        width: double.maxFinite,
-        height: double.maxFinite,
-        padding: widget.padding ?? EdgeInsets.all(20.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            ..._buildPerson(PersonDirection.LEFT),
-            Expanded(
-              child: Container(
-                height: widget.boxTextHeight,
-                decoration: widget.boxTextDecoration ??
-                    BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
-                      borderRadius: BorderRadius.circular(10.0),
-                      border: Border.all(color: Colors.white.withOpacity(0.5)),
-                    ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: StreamBuilder<String>(
-                      stream: _textShowController.stream,
-                      builder: (context, snapshot) {
-                        return SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          physics: BouncingScrollPhysics(),
-                          child: Text(
-                            snapshot.hasData ? (snapshot.data ?? '') : '',
-                            style: widget.textStyle ??
-                                TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                ),
-                          ),
-                        );
-                      },
+    return RawKeyboardListener(
+      focusNode: _focusNode,
+      onKey: (raw) => _nextOrFinish(),
+      child: GestureDetector(
+        onTap: _nextOrFinish,
+        child: Container(
+          color: Colors.transparent,
+          width: double.maxFinite,
+          height: double.maxFinite,
+          padding: widget.padding ?? EdgeInsets.all(20.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              ..._buildPerson(PersonDirection.LEFT),
+              Expanded(
+                child: Container(
+                  height: widget.boxTextHeight,
+                  decoration: widget.boxTextDecoration ??
+                      BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(10.0),
+                        border:
+                            Border.all(color: Colors.white.withOpacity(0.5)),
+                      ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: StreamBuilder<String>(
+                        stream: _textShowController.stream,
+                        builder: (context, snapshot) {
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            physics: BouncingScrollPhysics(),
+                            child: Text(
+                              snapshot.hasData ? (snapshot.data ?? '') : '',
+                              style: widget.textStyle ??
+                                  TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            ..._buildPerson(PersonDirection.RIGHT),
-          ],
+              ..._buildPerson(PersonDirection.RIGHT),
+            ],
+          ),
         ),
       ),
     );
@@ -191,6 +192,14 @@ class _TalkDialogState extends State<TalkDialog> {
       ];
     } else {
       return [];
+    }
+  }
+
+  void _nextOrFinish() {
+    if (finishCurrentTalk) {
+      _nextTalk();
+    } else {
+      _finishTalk();
     }
   }
 }
