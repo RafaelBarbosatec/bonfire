@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:bonfire/gemonetry/rectangle.dart';
-import 'package:bonfire/gemonetry/shape.dart';
+import 'package:bonfire/geometry/rectangle.dart';
+import 'package:bonfire/geometry/shape.dart';
 import 'package:flame/extensions.dart';
 
 class PolygonShape extends Shape {

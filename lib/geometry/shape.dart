@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:bonfire/gemonetry/shape_collision.dart';
+import 'package:bonfire/geometry/shape_collision.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 

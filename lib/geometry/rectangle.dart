@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:bonfire/gemonetry/shape.dart';
+import 'package:bonfire/geometry/shape.dart';
 import 'package:bonfire/util/extensions.dart';
 import 'package:flame/extensions.dart';
 
