@@ -1,4 +1,8 @@
+import 'dart:ui';
+
+import 'package:bonfire/gemonetry/shape_collision.dart';
 import 'package:flame/extensions.dart';
+import 'package:flutter/material.dart';
 
 abstract class Shape {
   Vector2 _position;
@@ -12,4 +16,10 @@ abstract class Shape {
 
   // ignore: unnecessary_getters_setters
   Vector2 get position => _position;
+
+  void render(Canvas canvas, Paint paint);
+
+  bool isCollision(Shape b) {
+    return ShapeCollision.isCollision(this, b);
+  }
 }

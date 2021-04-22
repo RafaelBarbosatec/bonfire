@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bonfire/gemonetry/retangle.dart';
 import 'package:bonfire/gemonetry/shape.dart';
 import 'package:bonfire/util/extensions.dart';
@@ -22,5 +24,14 @@ class CircleShape extends Shape {
 
     rect.position = value;
     center = value.translate(radius, radius);
+  }
+
+  @override
+  void render(Canvas canvas, Paint paint) {
+    canvas.drawCircle(
+      position.toOffset(),
+      radius,
+      paint,
+    );
   }
 }

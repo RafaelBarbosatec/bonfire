@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bonfire/gemonetry/retangle.dart';
 import 'package:bonfire/gemonetry/shape.dart';
 import 'package:flame/extensions.dart';
@@ -50,5 +52,17 @@ class PolygonShape extends Shape {
     for (var i = 0; i < points.length; i++) {
       points[i] = relativePoints[i] + value;
     }
+  }
+
+  @override
+  void render(Canvas canvas, Paint paint) {
+    paint.style = PaintingStyle.fill;
+    final path = Path()..moveTo(points.first.x, points.first.y);
+    for (var i = 1; i < points.length; i++) {
+      path.lineTo(points[i].x, points[i].y);
+    }
+    path.lineTo(points.first.x, points.first.y);
+
+    canvas.drawPath(path, paint);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bonfire/gemonetry/shape.dart';
 import 'package:bonfire/util/extensions.dart';
 import 'package:flame/extensions.dart';
@@ -47,4 +49,9 @@ class RectangleShape extends Shape {
   double get top => _rect.top;
   double get right => _rect.right;
   double get bottom => _rect.bottom;
+
+  @override
+  void render(Canvas canvas, Paint paint) {
+    canvas.drawRect(rect, paint);
+  }
 }
