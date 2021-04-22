@@ -240,29 +240,38 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   }
 
   void _showTalk(Enemy first) {
-    gameRef.gameCamera.moveToTargetAnimated(first, zoom: 2, finish: () {
-      TalkDialog.show(gameRef.context, [
-        Say(
-          "Look at this! It seems that I'm not alone here ...",
-          Container(
-            width: 50,
-            height: 50,
-            child: FutureBuilder<SpriteAnimation>(
-              future: PlayerSpriteSheet.idleRight,
-              builder: (context, anim) {
-                if (!anim.hasData) return SizedBox.shrink();
-                return SpriteAnimationWidget(
-                  animation: anim.data!,
-                  playing: true,
-                );
-              },
+    gameRef.gameCamera.moveToTargetAnimated(
+      first,
+      zoom: 2,
+      finish: () {
+        TalkDialog.show(
+          gameRef.context,
+          [
+            Say(
+              "Look at this! It seems that I'm not alone here ...",
+              Container(
+                width: 50,
+                height: 50,
+                child: FutureBuilder<SpriteAnimation>(
+                  future: PlayerSpriteSheet.idleRight,
+                  builder: (context, anim) {
+                    if (!anim.hasData) return SizedBox.shrink();
+                    return SpriteAnimationWidget(
+                      animation: anim.data!,
+                      playing: true,
+                    );
+                  },
+                ),
+              ),
             ),
-          ),
-        ),
-      ], finish: () {
-        gameRef.gameCamera.moveToPlayerAnimated();
-      });
-    });
+          ],
+          finish: () {
+            gameRef.gameCamera.moveToPlayerAnimated();
+          },
+          logicalKeyboardKeyToNext: LogicalKeyboardKey.space,
+        );
+      },
+    );
   }
 
   void _drawDirectionAttack(Canvas c) {

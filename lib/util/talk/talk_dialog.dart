@@ -2,29 +2,33 @@ import 'dart:async';
 
 import 'package:bonfire/util/talk/say.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TalkDialog extends StatefulWidget {
-  const TalkDialog(
-      {Key? key,
-      required this.says,
-      this.finish,
-      this.onChangeTalk,
-      this.textStyle,
-      this.boxTextDecoration,
-      this.boxTextHeight = 100,
-      this.padding})
-      : super(key: key);
+  const TalkDialog({
+    Key? key,
+    required this.says,
+    this.finish,
+    this.onChangeTalk,
+    this.textStyle,
+    this.textBoxDecoration,
+    this.textBoxMinHeight = 100,
+    this.padding,
+    this.keyboardKeyToNext,
+    this.headerWidget,
+    this.bottomWidget,
+  }) : super(key: key);
 
-  static show(
-    BuildContext context,
-    List<Say> sayList, {
-    VoidCallback? finish,
-    ValueChanged<int>? onChangeTalk,
-    TextStyle? textStyle,
-    BoxDecoration? boxTextDecoration,
-    double boxTextHeight = 100,
-    EdgeInsetsGeometry? padding,
-  }) {
+  static show(BuildContext context, List<Say> sayList,
+      {VoidCallback? finish,
+      ValueChanged<int>? onChangeTalk,
+      TextStyle? textStyle,
+      BoxDecoration? boxTextDecoration,
+      double boxTextHeight = 100,
+      EdgeInsetsGeometry? padding,
+      LogicalKeyboardKey? logicalKeyboardKeyToNext,
+      Widget? headerWidget,
+      Widget? bottomWidget}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -33,9 +37,12 @@ class TalkDialog extends StatefulWidget {
           finish: finish,
           onChangeTalk: onChangeTalk,
           textStyle: textStyle,
-          boxTextDecoration: boxTextDecoration,
-          boxTextHeight: boxTextHeight,
+          textBoxDecoration: boxTextDecoration,
+          textBoxMinHeight: boxTextHeight,
           padding: padding,
+          keyboardKeyToNext: logicalKeyboardKeyToNext,
+          headerWidget: headerWidget,
+          bottomWidget: bottomWidget,
         );
       },
     );
@@ -45,9 +52,12 @@ class TalkDialog extends StatefulWidget {
   final VoidCallback? finish;
   final ValueChanged<int>? onChangeTalk;
   final TextStyle? textStyle;
-  final BoxDecoration? boxTextDecoration;
-  final double? boxTextHeight;
+  final BoxDecoration? textBoxDecoration;
+  final double? textBoxMinHeight;
   final EdgeInsetsGeometry? padding;
+  final LogicalKeyboardKey? keyboardKeyToNext;
+  final Widget? headerWidget;
+  final Widget? bottomWidget;
 
   @override
   _TalkDialogState createState() => _TalkDialogState();
@@ -68,6 +78,9 @@ class _TalkDialogState extends State<TalkDialog> {
   void initState() {
     currentSay = widget.says[currentIndexTalk];
     startShowText();
+    Future.delayed(Duration.zero, () {
+      _focusNode.requestFocus();
+    });
     super.initState();
   }
 
@@ -83,7 +96,14 @@ class _TalkDialogState extends State<TalkDialog> {
   Widget build(BuildContext context) {
     return RawKeyboardListener(
       focusNode: _focusNode,
-      onKey: (raw) => _nextOrFinish(),
+      onKey: (raw) {
+        if (widget.keyboardKeyToNext == null) {
+          _nextOrFinish();
+        } else if (raw.logicalKey == widget.keyboardKeyToNext &&
+            raw is RawKeyDownEvent) {
+          _nextOrFinish();
+        }
+      },
       child: GestureDetector(
         onTap: _nextOrFinish,
         child: Container(
@@ -97,34 +117,47 @@ class _TalkDialogState extends State<TalkDialog> {
               ..._buildPerson(PersonDirection.LEFT),
               Expanded(
                 child: Container(
-                  height: widget.boxTextHeight,
-                  decoration: widget.boxTextDecoration ??
+                  constraints: widget.textBoxMinHeight != null
+                      ? BoxConstraints(
+                          minHeight: widget.textBoxMinHeight!,
+                        )
+                      : null,
+                  decoration: widget.textBoxDecoration ??
                       BoxDecoration(
                         color: Colors.black.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(10.0),
-                        border:
-                            Border.all(color: Colors.white.withOpacity(0.5)),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.5),
+                        ),
                       ),
                   child: Material(
                     color: Colors.transparent,
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: StreamBuilder<String>(
-                        stream: _textShowController.stream,
-                        builder: (context, snapshot) {
-                          return SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            physics: BouncingScrollPhysics(),
-                            child: Text(
-                              snapshot.hasData ? (snapshot.data ?? '') : '',
-                              style: widget.textStyle ??
-                                  TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                  ),
-                            ),
-                          );
-                        },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (widget.headerWidget != null) widget.headerWidget!,
+                          StreamBuilder<String>(
+                            stream: _textShowController.stream,
+                            builder: (context, snapshot) {
+                              return SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                physics: BouncingScrollPhysics(),
+                                child: Text(
+                                  snapshot.hasData ? (snapshot.data ?? '') : '',
+                                  style: widget.textStyle ??
+                                      TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                      ),
+                                ),
+                              );
+                            },
+                          ),
+                          if (widget.bottomWidget != null) widget.bottomWidget!,
+                        ],
                       ),
                     ),
                   ),
@@ -181,8 +214,8 @@ class _TalkDialogState extends State<TalkDialog> {
             width: 10,
           ),
         Container(
-          height: widget.boxTextHeight,
-          width: widget.boxTextHeight,
+          height: widget.textBoxMinHeight,
+          width: widget.textBoxMinHeight,
           child: currentSay.person,
         ),
         if (direction == PersonDirection.LEFT)
