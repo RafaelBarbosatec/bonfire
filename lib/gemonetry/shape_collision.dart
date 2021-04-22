@@ -1,12 +1,14 @@
 import 'dart:math';
 
-import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/gemonetry/polygon.dart';
+import 'package:flame/extensions.dart';
 
 import 'circle.dart';
-import 'retangle.dart';
+import 'polygon.dart';
+import 'rectangle.dart';
 import 'shape.dart';
 
+/// Class responsible to verify collision of the Shapes.
+/// Code based from: https://github.com/hahafather007/collision_check
 class ShapeCollision {
   static bool isCollision(Shape a, Shape b) {
     if (a is RectangleShape) {
@@ -157,7 +159,7 @@ class ShapeCollision {
     return false;
   }
 
-  /// 获取[o]点距离[o1]和[o2]线段的距离
+  /// Get [o] point distance [o1] and [o2] line segment distance
   /// https://blog.csdn.net/yjukh/article/details/5213577
   static double getNearestDistance(Vector2 o1, Vector2 o2, Vector2 o) {
     if (o1 == o || o2 == o) return 0;
@@ -176,13 +178,13 @@ class ShapeCollision {
     return 2 * area / c;
   }
 
-  /// 获取保留4位小数的[double]值，避免精度问题带来的误差
+  /// Obtain the [double] value with 4 decimal places to avoid errors caused by precision problems
   static double _getFixDouble(double value) {
     return double.parse(value.toStringAsFixed(4));
   }
 
-  /// 快速排斥实验
-  /// 判断[a]~[b]线段与[c]~[d]线段在x轴和y轴上的投影是否有公共区域
+  /// Rapid rejection experiment
+  /// Determine whether the projections of the line segment [a]~[b] and the line segment [c]~[d] on the x-axis and y-axis have a common area
   static bool isLinesShadowOver(Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
     if (min(a.x, b.x) > max(c.x, d.x) ||
         min(c.x, d.x) > max(a.x, b.x) ||
@@ -194,8 +196,8 @@ class ShapeCollision {
     return true;
   }
 
-  /// 跨立实验
-  /// 判断[a]~[b]线段与[c]~[d]线段是否🍌
+  /// Straddle experiment
+  /// Determine whether the line segment [a]~[b] and the line segment [c]~[d]
   /// https://www.rogoso.info/%E5%88%A4%E6%96%AD%E7%BA%BF%E6%AE%B5%E7%9B%B8%E4%BA%A4/
   static bool isLinesOver(Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
     final ac = VectorVector(a, c);
@@ -211,7 +213,6 @@ class ShapeCollision {
         vectorProduct(ca, cb) * vectorProduct(da, db) <= 0;
   }
 
-  /// 计算x1*y2-x2*y1;
   static double vectorProduct(VectorVector a, VectorVector b) {
     return a.x * b.y - b.x * a.y;
   }
@@ -227,6 +228,6 @@ class VectorVector {
       : x = end.x - start.x,
         y = end.y - start.y;
 
-  /// 向量取反
+  /// Vector negation
   VectorVector get negative => VectorVector(end, start);
 }

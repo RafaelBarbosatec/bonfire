@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/gemonetry/circle.dart';
 import 'package:bonfire/gemonetry/polygon.dart';
-import 'package:bonfire/gemonetry/retangle.dart';
+import 'package:bonfire/gemonetry/rectangle.dart';
 import 'package:bonfire/gemonetry/shape.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/widgets.dart';
