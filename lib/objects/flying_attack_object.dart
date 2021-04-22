@@ -72,36 +72,28 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
     switch (direction) {
       case Direction.left:
-        position =
-            Vector2Rect.fromRect(position.rect.translate((speed * dt) * -1, 0));
+        position = position.translate((speed * dt) * -1, 0);
         break;
       case Direction.right:
-        position =
-            Vector2Rect.fromRect(position.rect.translate((speed * dt), 0));
+        position = position.translate((speed * dt), 0);
         break;
       case Direction.up:
-        position =
-            Vector2Rect.fromRect(position.rect.translate(0, (speed * dt) * -1));
+        position = position.translate(0, (speed * dt) * -1);
         break;
       case Direction.down:
-        position =
-            Vector2Rect.fromRect(position.rect.translate(0, (speed * dt)));
+        position = position.translate(0, (speed * dt));
         break;
       case Direction.upLeft:
-        position =
-            Vector2Rect.fromRect(position.rect.translate((speed * dt) * -1, 0));
+        position = position.translate((speed * dt) * -1, 0);
         break;
       case Direction.upRight:
-        position =
-            Vector2Rect.fromRect(position.rect.translate((speed * dt), 0));
+        position = position.translate((speed * dt), 0);
         break;
       case Direction.downLeft:
-        position =
-            Vector2Rect.fromRect(position.rect.translate((speed * dt) * -1, 0));
+        position = position.translate((speed * dt) * -1, 0);
         break;
       case Direction.downRight:
-        position =
-            Vector2Rect.fromRect(position.rect.translate((speed * dt), 0));
+        position = position.translate((speed * dt), 0);
         break;
     }
 
@@ -127,7 +119,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
       return fromCorrect && overlap;
     }).forEach((enemy) {
-      enemy.receiveDamage(damage, id);
+      // enemy.receiveDamage(damage, id);
       destroy = true;
     });
 
@@ -143,64 +135,64 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
         switch (direction) {
           case Direction.left:
             positionDestroy = Rect.fromLTWH(
-              position.left - (width / 2),
-              position.top,
+              rectCollision.left - (width / 2),
+              rectCollision.top - ((height - rectCollision.height) / 2),
               width,
               height,
             ).toVector2Rect();
             break;
           case Direction.right:
             positionDestroy = Rect.fromLTWH(
-              position.left + (width / 2),
-              position.top,
+              rectCollision.right - (width / 2),
+              rectCollision.top - ((height - rectCollision.height) / 2),
               width,
               height,
             ).toVector2Rect();
             break;
           case Direction.up:
             positionDestroy = Rect.fromLTWH(
-              position.left,
-              position.top - (height / 2),
+              rectCollision.left - ((width - rectCollision.width) / 2),
+              rectCollision.top - (height / 2),
               width,
               height,
             ).toVector2Rect();
             break;
           case Direction.down:
             positionDestroy = Rect.fromLTWH(
-              position.left,
-              position.top + (height / 2),
+              rectCollision.left - ((width - rectCollision.width) / 2),
+              rectCollision.bottom + (height / 2),
               width,
               height,
             ).toVector2Rect();
             break;
           case Direction.upLeft:
             positionDestroy = Rect.fromLTWH(
-              position.left - (width / 2),
-              position.top,
+              rectCollision.left - (width / 2),
+              rectCollision.top,
               width,
               height,
             ).toVector2Rect();
             break;
           case Direction.upRight:
             positionDestroy = Rect.fromLTWH(
-              position.left + (width / 2),
-              position.top,
+              rectCollision.right - (width / 2),
+              rectCollision.top,
               width,
               height,
             ).toVector2Rect();
             break;
           case Direction.downLeft:
             positionDestroy = Rect.fromLTWH(
-              position.left - (width / 2),
-              position.top,
+              rectCollision.left - (width / 2),
+              rectCollision.top,
               width,
               height,
             ).toVector2Rect();
             break;
           case Direction.downRight:
             positionDestroy = Rect.fromLTWH(
-              position.left + (width / 2),
-              position.top,
+              rectCollision.right - (width / 2),
+              rectCollision.top,
               width,
               height,
             ).toVector2Rect();
