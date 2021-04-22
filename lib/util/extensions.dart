@@ -115,3 +115,9 @@ extension ShapeExt on Shape {
         (this.size?.y ?? 0.0),
       );
 }
+
+extension Vector2Ext on Vector2 {
+  Vector2 translate(double x, double y) {
+    return Vector2(this.x + x, this.y + y);
+  }
+}
