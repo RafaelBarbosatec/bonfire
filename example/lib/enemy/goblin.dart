@@ -101,7 +101,7 @@ class Goblin extends SimpleEnemy with ObjectCollision {
         collisions: [
           CollisionArea.rectangle(
             size: Size(width / 2, width / 2),
-            align: Vector2(width * 0.1, 0),
+            align: Vector2(width * 0.25, width * 0.25),
           ),
         ],
       ),

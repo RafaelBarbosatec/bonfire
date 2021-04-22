@@ -58,7 +58,9 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
       collision ??
           CollisionConfig(
             collisions: [
-              CollisionArea.rectangle(size: Size(width, height)),
+              CollisionArea.rectangle(
+                size: Size(width, height),
+              ),
             ],
           ),
     );
