@@ -44,7 +44,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
           CollisionArea.rectangle(
             size: Size(
               DungeonMap.tileSize / 2,
-              DungeonMap.tileSize / 1.8,
+              DungeonMap.tileSize / 2.2,
             ),
             align: Vector2(
               DungeonMap.tileSize / 3.5,

@@ -47,7 +47,7 @@ class CollisionConfig {
       _rect = collisions.first.rect;
       for (final element in collisions) {
         element.updatePosition(position);
-        _rect.expandToInclude(element.rect);
+        _rect = _rect.expandToInclude(element.rect);
       }
       _lastPosition = position;
     }
