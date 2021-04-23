@@ -2,6 +2,7 @@
 
 - Rename params in `simpleAttackMelee`
 - new improvements to use `TapGesture` and `DragGesture` together.
+- improvements in `Joystick`(KEYBOARD) to adds diagonal movement with directional.
 
 # 1.0.0-rc4
 

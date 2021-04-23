@@ -81,10 +81,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   void joystickAction(JoystickActionEvent event) {
     if (isDead) return;
 
-    if (gameRef.joystickController?.keyboardEnable == true) {
-      if (event.id == LogicalKeyboardKey.space.keyId) {
-        actionAttack();
-      }
+    if (event.id == LogicalKeyboardKey.space.keyId &&
+        event.event == ActionEvent.DOWN) {
+      actionAttack();
     }
 
     if (event.id == 0 && event.event == ActionEvent.DOWN) {

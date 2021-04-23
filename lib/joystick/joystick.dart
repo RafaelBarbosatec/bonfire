@@ -10,8 +10,7 @@ class Joystick extends JoystickController {
   final List<JoystickAction>? actions;
   final JoystickDirectional? directional;
   final bool keyboardEnable;
-  bool _isDirectionalDownKeyboard = false;
-  LogicalKeyboardKey? _currentDirectionalKey;
+  List<LogicalKeyboardKey> _currentKeyboardKeys = [];
 
   Joystick({
     this.actions,
@@ -77,61 +76,44 @@ class Joystick extends JoystickController {
   @override
   void onKeyboard(RawKeyEvent event) {
     if (!keyboardEnable) return;
-    if (event is RawKeyDownEvent) {
-      if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-        _isDirectionalDownKeyboard = true;
-        _currentDirectionalKey = event.logicalKey;
-        joystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.MOVE_DOWN,
-          intensity: 1.0,
-          radAngle: 0.0,
-        ));
-      }
-      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-        _isDirectionalDownKeyboard = true;
-        _currentDirectionalKey = event.logicalKey;
-        joystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.MOVE_UP,
-          intensity: 1.0,
-          radAngle: 0.0,
-        ));
-      }
-      if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-        _isDirectionalDownKeyboard = true;
-        _currentDirectionalKey = event.logicalKey;
-        joystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.MOVE_LEFT,
-          intensity: 1.0,
-          radAngle: 0.0,
-        ));
-      }
-      if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-        _isDirectionalDownKeyboard = true;
-        _currentDirectionalKey = event.logicalKey;
-        joystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.MOVE_RIGHT,
-          intensity: 1.0,
-          radAngle: 0.0,
-        ));
+
+    if (_isDirectional(event)) {
+      if (event is RawKeyDownEvent && _currentKeyboardKeys.length < 2) {
+        if (!_currentKeyboardKeys.contains(event.logicalKey)) {
+          _currentKeyboardKeys.add(event.logicalKey);
+        }
       }
 
-      if (!_isDirectionalDownKeyboard) {
-        joystickAction(
-          JoystickActionEvent(
-            id: event.logicalKey.keyId,
-            event: ActionEvent.DOWN,
-          ),
-        );
+      if (event is RawKeyUpEvent && _currentKeyboardKeys.length > 0) {
+        _currentKeyboardKeys.remove(event.logicalKey);
       }
-    } else if (event is RawKeyUpEvent &&
-        _isDirectionalDownKeyboard &&
-        _currentDirectionalKey == event.logicalKey) {
-      _isDirectionalDownKeyboard = false;
-      joystickChangeDirectional(JoystickDirectionalEvent(
-        directional: JoystickMoveDirectional.IDLE,
-        intensity: 0.0,
-        radAngle: 0.0,
-      ));
+
+      if (_currentKeyboardKeys.isEmpty) {
+        joystickChangeDirectional(JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.IDLE,
+          intensity: 0.0,
+          radAngle: 0.0,
+        ));
+      } else {
+        if (_currentKeyboardKeys.length == 1) {
+          _sendOneDirection(_currentKeyboardKeys.first);
+        } else {
+          _sendTwoDirection(
+              _currentKeyboardKeys.first, _currentKeyboardKeys[1]);
+        }
+      }
+    } else {
+      if (event is RawKeyDownEvent) {
+        joystickAction(JoystickActionEvent(
+          id: event.logicalKey.keyId,
+          event: ActionEvent.DOWN,
+        ));
+      } else if (event is RawKeyUpEvent) {
+        joystickAction(JoystickActionEvent(
+          id: event.logicalKey.keyId,
+          event: ActionEvent.UP,
+        ));
+      }
     }
   }
 
@@ -148,6 +130,93 @@ class Joystick extends JoystickController {
       await Future.forEach<JoystickAction>(actions!, (element) {
         return element.onLoad();
       });
+    }
+  }
+
+  bool _isDirectional(RawKeyEvent event) {
+    return event.logicalKey == LogicalKeyboardKey.arrowRight ||
+        event.logicalKey == LogicalKeyboardKey.arrowUp ||
+        event.logicalKey == LogicalKeyboardKey.arrowLeft ||
+        event.logicalKey == LogicalKeyboardKey.arrowDown;
+  }
+
+  void _sendOneDirection(LogicalKeyboardKey key) {
+    if (key == LogicalKeyboardKey.arrowRight) {
+      joystickChangeDirectional(JoystickDirectionalEvent(
+        directional: JoystickMoveDirectional.MOVE_RIGHT,
+        intensity: 1.0,
+        radAngle: 0.0,
+      ));
+    }
+
+    if (key == LogicalKeyboardKey.arrowUp) {
+      joystickChangeDirectional(JoystickDirectionalEvent(
+        directional: JoystickMoveDirectional.MOVE_UP,
+        intensity: 1.0,
+        radAngle: 0.0,
+      ));
+    }
+
+    if (key == LogicalKeyboardKey.arrowLeft) {
+      joystickChangeDirectional(JoystickDirectionalEvent(
+        directional: JoystickMoveDirectional.MOVE_LEFT,
+        intensity: 1.0,
+        radAngle: 0.0,
+      ));
+    }
+
+    if (key == LogicalKeyboardKey.arrowDown) {
+      joystickChangeDirectional(JoystickDirectionalEvent(
+        directional: JoystickMoveDirectional.MOVE_DOWN,
+        intensity: 1.0,
+        radAngle: 0.0,
+      ));
+    }
+  }
+
+  void _sendTwoDirection(LogicalKeyboardKey key1, LogicalKeyboardKey key2) {
+    if (key1 == LogicalKeyboardKey.arrowRight &&
+            key2 == LogicalKeyboardKey.arrowDown ||
+        key2 == LogicalKeyboardKey.arrowRight &&
+            key1 == LogicalKeyboardKey.arrowDown) {
+      joystickChangeDirectional(JoystickDirectionalEvent(
+        directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
+        intensity: 1.0,
+        radAngle: 0.0,
+      ));
+    }
+
+    if (key1 == LogicalKeyboardKey.arrowLeft &&
+            key2 == LogicalKeyboardKey.arrowDown ||
+        key2 == LogicalKeyboardKey.arrowLeft &&
+            key1 == LogicalKeyboardKey.arrowDown) {
+      joystickChangeDirectional(JoystickDirectionalEvent(
+        directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
+        intensity: 1.0,
+        radAngle: 0.0,
+      ));
+    }
+
+    if (key1 == LogicalKeyboardKey.arrowLeft &&
+            key2 == LogicalKeyboardKey.arrowUp ||
+        key2 == LogicalKeyboardKey.arrowLeft &&
+            key1 == LogicalKeyboardKey.arrowUp) {
+      joystickChangeDirectional(JoystickDirectionalEvent(
+        directional: JoystickMoveDirectional.MOVE_UP_LEFT,
+        intensity: 1.0,
+        radAngle: 0.0,
+      ));
+    }
+
+    if (key1 == LogicalKeyboardKey.arrowRight &&
+            key2 == LogicalKeyboardKey.arrowUp ||
+        key2 == LogicalKeyboardKey.arrowRight &&
+            key1 == LogicalKeyboardKey.arrowUp) {
+      joystickChangeDirectional(JoystickDirectionalEvent(
+        directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
+        intensity: 1.0,
+        radAngle: 0.0,
+      ));
     }
   }
 }
