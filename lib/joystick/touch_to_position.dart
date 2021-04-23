@@ -13,15 +13,10 @@ class TouchToPosition extends JoystickController {
   void update(double t) {}
 
   @override
-  void handlerPointerCancel(PointerCancelEvent event) {}
-
-  @override
   void handlerPointerDown(PointerDownEvent event) {
     _pointer = event.pointer;
+    super.handlerPointerDown(event);
   }
-
-  @override
-  void handlerPointerMove(PointerMoveEvent event) {}
 
   @override
   void handlerPointerUp(PointerUpEvent event) {
@@ -33,10 +28,6 @@ class TouchToPosition extends JoystickController {
           .toVector2();
       moveTo(absolutePosition);
     }
-  }
-
-  @override
-  bool hasGesture() {
-    return true;
+    super.handlerPointerUp(event);
   }
 }

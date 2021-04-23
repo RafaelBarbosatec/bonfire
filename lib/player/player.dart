@@ -260,7 +260,11 @@ class Player extends GameComponent with Attackable implements JoystickListener {
 
   @override
   void moveTo(Vector2 position) {
-    _positionToMove = position;
+    double innerSpeed = speed * _dtUpdate;
+    _positionToMove = Vector2(
+      position.x - (position.x % innerSpeed),
+      position.y - (position.y % innerSpeed),
+    );
   }
 
   /// Move player to position tapped
@@ -275,48 +279,54 @@ class Player extends GameComponent with Attackable implements JoystickListener {
       moveRight(
         speed,
         onCollision: () {
+          move = false;
           _positionToMove = null;
         },
       );
     }
 
-    if (_positionToMove!.x < position.center.dx &&
+    if (_positionToMove != null &&
+        _positionToMove!.x < position.center.dx &&
         position.center.dx - _positionToMove!.x > 1) {
       move = true;
       moveLeft(
         speed,
         onCollision: () {
+          move = false;
           _positionToMove = null;
-          return;
         },
       );
     }
-    if (_positionToMove == null) return;
-    if (_positionToMove!.y > position.center.dy &&
+
+    if (_positionToMove != null &&
+        _positionToMove!.y > position.center.dy &&
         _positionToMove!.y - position.center.dy > 1) {
       move = true;
       moveDown(
         speed,
         onCollision: () {
+          move = false;
           _positionToMove = null;
-          return;
         },
       );
     }
-    if (_positionToMove == null) return;
-    if (_positionToMove!.y < position.center.dy &&
+
+    if (_positionToMove != null &&
+        _positionToMove!.y < position.center.dy &&
         position.center.dy - _positionToMove!.y > 1) {
       move = true;
       moveUp(
         speed,
         onCollision: () {
+          move = false;
           _positionToMove = null;
-          return;
         },
       );
     }
+
     if (!move) {
       idle();
+      isIdle = false;
       _positionToMove = null;
     }
   }
