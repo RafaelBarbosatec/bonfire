@@ -3,7 +3,7 @@ library bonfire;
 export 'package:bonfire/base/bonfire_game.dart';
 export 'package:bonfire/base/game_component.dart';
 export 'package:bonfire/camera/camera_config.dart';
-export 'package:bonfire/collision/collision.dart';
+export 'package:bonfire/collision/collision_area.dart';
 export 'package:bonfire/collision/object_collision.dart';
 export 'package:bonfire/decoration/decoration.dart';
 export 'package:bonfire/decoration/decoration_with_collision.dart';
@@ -16,6 +16,9 @@ export 'package:bonfire/enemy/simple/simple_enemy_extensions.dart';
 export 'package:bonfire/game_interface/game_interface.dart';
 export 'package:bonfire/game_interface/interface_component.dart';
 export 'package:bonfire/game_interface/text_interface_component.dart';
+export 'package:bonfire/geometry/circle.dart';
+export 'package:bonfire/geometry/polygon.dart';
+export 'package:bonfire/geometry/rectangle.dart';
 export 'package:bonfire/joystick/joystick.dart';
 export 'package:bonfire/joystick/joystick_action.dart';
 export 'package:bonfire/joystick/joystick_controller.dart';
@@ -75,6 +78,5 @@ export 'package:flame/components.dart'
         JoystickActionAlign,
         ActionEvent;
 export 'package:flame/flame.dart';
-export 'package:flame/geometry.dart';
 export 'package:flame/sprite.dart';
 export 'package:flame/widgets.dart' hide NineTileBox;

@@ -76,7 +76,7 @@ extension SpriteExt on Sprite {
 }
 
 extension NullableExt<T> on T? {
-  FutureOr<void> let(FutureOr<void> Function(T o) call) => call(this!);
+  FutureOr<void> let(FutureOr<void> Function(T i) call) => call(this!);
 }
 
 extension GameComponentExt on GameComponent {
@@ -103,5 +103,11 @@ extension GameComponentExt on GameComponent {
     }
 
     return Direction.left;
+  }
+}
+
+extension Vector2Ext on Vector2 {
+  Vector2 translate(double x, double y) {
+    return Vector2(this.x + x, this.y + y);
   }
 }

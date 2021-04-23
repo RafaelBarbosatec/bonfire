@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:bonfire/collision/collision.dart';
+import 'package:bonfire/collision/collision_area.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
@@ -66,7 +66,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     setupCollision(
       collision ??
           CollisionConfig(
-            collisions: [CollisionArea(width: width, height: height / 2)],
+            collisions: [CollisionArea.rectangle(size: Size(width, height))],
             collisionOnlyVisibleScreen: collisionOnlyVisibleObjects,
           ),
     );
@@ -134,12 +134,13 @@ class FlyingAttackAngleObject extends AnimatedObject
         double nextY = (height / 4) * _senAngle;
         Offset nextPoint = Offset(nextX, nextY);
 
-        Offset diffBase = Offset(position.rect.center.dx + nextPoint.dx,
-                position.rect.center.dy + nextPoint.dy) -
-            position.rect.center;
+        Offset diffBase = Offset(rectCollision.rect.center.dx + nextPoint.dx,
+                rectCollision.rect.center.dy + nextPoint.dy) -
+            rectCollision.rect.center;
 
-        final positionDestroy =
-            Vector2Rect.fromRect(position.rect.shift(diffBase));
+        final positionDestroy = Vector2Rect.fromRect(
+          position.rect.shift(diffBase),
+        );
 
         gameRef.add(
           AnimatedObjectOnce(

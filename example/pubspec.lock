@@ -35,7 +35,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.0-rc3"
+    version: "1.0.0-rc4"
   boolean_selector:
     dependency: transitive
     description:

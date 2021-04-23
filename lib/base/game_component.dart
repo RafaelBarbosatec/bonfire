@@ -34,7 +34,7 @@ abstract class GameComponent extends Component
     final map = gameRef.map;
     if (map.tiles.isNotEmpty) {
       Vector2Rect position = (this is ObjectCollision)
-          ? (this as ObjectCollision).getRectCollision(this.position)
+          ? (this as ObjectCollision).getRectCollision()
           : this.position;
       final tiles = map.getRendered().where((element) {
         return (element.position.overlaps(position) &&
@@ -50,7 +50,7 @@ abstract class GameComponent extends Component
     final map = gameRef.map;
     if (map.tiles.isNotEmpty) {
       Vector2Rect position = (this is ObjectCollision)
-          ? (this as ObjectCollision).getRectCollision(this.position)
+          ? (this as ObjectCollision).getRectCollision()
           : this.position;
       return map
           .getRendered()

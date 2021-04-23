@@ -238,10 +238,11 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     }).cast();
 
     _collisions = components.where((element) {
-      return (element is ObjectCollision);
+      return (element is ObjectCollision) && (element).containCollision();
     }).cast();
+
     _visibleCollisions = _visibleComponents.where((element) {
-      return (element is ObjectCollision);
+      return (element is ObjectCollision) && (element).containCollision();
     }).cast();
 
     if (lightingColorGame != null) {

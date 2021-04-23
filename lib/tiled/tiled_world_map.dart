@@ -279,11 +279,63 @@ class TiledWorldMap {
           double x = ((object.x ?? 0.0) * _tileWidth) / _tileWidthOrigin;
           double y = ((object.y ?? 0.0) * _tileHeight) / _tileHeightOrigin;
 
-          collisions.add(CollisionArea(
-            width: width,
-            height: height,
-            align: Offset(x, y),
-          ));
+          CollisionArea ca = CollisionArea.rectangle(
+            size: Size(width, height),
+            align: Vector2(x, y),
+          );
+
+          if (object.ellipse == true) {
+            ca = CollisionArea.circle(
+              radius: (width > height ? width : height) / 2,
+              align: Vector2(x, y),
+            );
+          }
+
+          if (object.polygon?.isNotEmpty == true) {
+            double? minorX;
+            double? minorY;
+            List<Vector2> points = object.polygon!.map((e) {
+              Vector2 vector = Vector2(
+                ((e.x ?? 0.0) * _tileWidth) / _tileWidthOrigin,
+                ((e.y ?? 0.0) * _tileHeight) / _tileHeightOrigin,
+              );
+
+              if (minorX == null) {
+                minorX = vector.x;
+              } else if (vector.x < (minorX ?? 0.0)) {
+                minorX = vector.x;
+              }
+
+              if (minorY == null) {
+                minorY = vector.y;
+              } else if (vector.y < (minorY ?? 0.0)) {
+                minorY = vector.y;
+              }
+              return vector;
+            }).toList();
+
+            if ((minorX ?? 0) < 0) {
+              points = points.map((e) {
+                return Vector2(e.x - minorX!, e.y);
+              }).toList();
+            }
+
+            if ((minorY ?? 0) < 0) {
+              points = points.map((e) {
+                return Vector2(e.x, e.y - minorY!);
+              }).toList();
+            }
+
+            double xAlign = x - points.first.x;
+            double yAlign = y - points.first.y;
+
+            ca = CollisionArea.polygon(
+              points: points,
+              align: Vector2(xAlign, yAlign),
+            );
+          }
+
+          collisions.add(ca);
         });
       }
       return DataObjectCollision(collisions: collisions, type: type);

@@ -41,11 +41,31 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
     setupCollision(
       CollisionConfig(
         collisions: [
-          CollisionArea(
-            height: DungeonMap.tileSize / 2,
-            width: DungeonMap.tileSize / 1.8,
-            align: Offset(DungeonMap.tileSize / 3.5, DungeonMap.tileSize / 2),
-          ),
+          CollisionArea.rectangle(
+            size: Size(
+              DungeonMap.tileSize / 2,
+              DungeonMap.tileSize / 2.2,
+            ),
+            align: Vector2(
+              DungeonMap.tileSize / 3.5,
+              DungeonMap.tileSize / 2,
+            ),
+          )
+          // CollisionArea.circle(radius: DungeonMap.tileSize / 2),
+          // CollisionArea.polygon(
+          //   points: [
+          //     Vector2(25, 0),
+          //     Vector2(31, 18),
+          //     Vector2(50, 18),
+          //     Vector2(34, 31),
+          //     Vector2(40, 50),
+          //     Vector2(25, 38),
+          //     Vector2(10, 50),
+          //     Vector2(14, 31),
+          //     Vector2(0, 18),
+          //     Vector2(18, 18),
+          //   ],
+          // ),
         ],
       ),
     );
@@ -130,10 +150,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
       speed: initSpeed * 2,
       collision: CollisionConfig(
         collisions: [
-          CollisionArea(
-            width: width / 2,
-            height: width / 2,
-            align: Offset(width * 0.1, 0),
+          CollisionArea.rectangle(
+            size: Size(width / 2, width / 2),
+            align: Vector2(width * 0.1, 0),
           ),
         ],
       ),
@@ -221,29 +240,38 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   }
 
   void _showTalk(Enemy first) {
-    gameRef.gameCamera.moveToTargetAnimated(first, zoom: 2, finish: () {
-      TalkDialog.show(gameRef.context, [
-        Say(
-          "Look at this! It seems that I'm not alone here ...",
-          Container(
-            width: 50,
-            height: 50,
-            child: FutureBuilder<SpriteAnimation>(
-              future: PlayerSpriteSheet.idleRight,
-              builder: (context, anim) {
-                if (!anim.hasData) return SizedBox.shrink();
-                return SpriteAnimationWidget(
-                  animation: anim.data!,
-                  playing: true,
-                );
-              },
+    gameRef.gameCamera.moveToTargetAnimated(
+      first,
+      zoom: 2,
+      finish: () {
+        TalkDialog.show(
+          gameRef.context,
+          [
+            Say(
+              "Look at this! It seems that I'm not alone here ...",
+              Container(
+                width: 50,
+                height: 50,
+                child: FutureBuilder<SpriteAnimation>(
+                  future: PlayerSpriteSheet.idleRight,
+                  builder: (context, anim) {
+                    if (!anim.hasData) return SizedBox.shrink();
+                    return SpriteAnimationWidget(
+                      animation: anim.data!,
+                      playing: true,
+                    );
+                  },
+                ),
+              ),
             ),
-          ),
-        ),
-      ], finish: () {
-        gameRef.gameCamera.moveToPlayerAnimated();
-      });
-    });
+          ],
+          finish: () {
+            gameRef.gameCamera.moveToPlayerAnimated();
+          },
+          logicalKeyboardKeyToNext: LogicalKeyboardKey.space,
+        );
+      },
+    );
   }
 
   void _drawDirectionAttack(Canvas c) {

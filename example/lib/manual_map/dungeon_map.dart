@@ -6,6 +6,7 @@ import 'package:example/decoration/chest.dart';
 import 'package:example/decoration/spikes.dart';
 import 'package:example/decoration/torch.dart';
 import 'package:example/enemy/goblin.dart';
+import 'package:flutter/material.dart';
 
 class DungeonMap {
   static double tileSize = 45;
@@ -29,7 +30,9 @@ class DungeonMap {
           tileList.add(TileWithCollision.withSprite(
             wallBottom,
             Vector2(indexColumm.toDouble(), indexRow.toDouble()),
-            collisions: [CollisionArea.fromSize(tileSize)],
+            collisions: [
+              CollisionArea.rectangle(size: Size(tileSize, tileSize))
+            ],
             width: tileSize,
             height: tileSize,
           ));
@@ -39,7 +42,9 @@ class DungeonMap {
           tileList.add(TileWithCollision.withSprite(
             wall,
             Vector2(indexColumm.toDouble(), indexRow.toDouble()),
-            collisions: [CollisionArea.fromSize(tileSize)],
+            collisions: [
+              CollisionArea.rectangle(size: Size(tileSize, tileSize))
+            ],
             width: tileSize,
             height: tileSize,
           ));
@@ -50,7 +55,9 @@ class DungeonMap {
           tileList.add(TileWithCollision.withSprite(
             wallTop,
             Vector2(indexColumm.toDouble(), indexRow.toDouble()),
-            collisions: [CollisionArea.fromSize(tileSize)],
+            collisions: [
+              CollisionArea.rectangle(size: Size(tileSize, tileSize))
+            ],
             width: tileSize,
             height: tileSize,
           ));
@@ -76,7 +83,9 @@ class DungeonMap {
           tileList.add(TileWithCollision.withSprite(
             wallLeft,
             Vector2(indexColumm.toDouble(), indexRow.toDouble()),
-            collisions: [CollisionArea.fromSize(tileSize)],
+            collisions: [
+              CollisionArea.rectangle(size: Size(tileSize, tileSize))
+            ],
             width: tileSize,
             height: tileSize,
           ));
@@ -85,7 +94,9 @@ class DungeonMap {
           tileList.add(TileWithCollision.withSprite(
             wallBottomLeft,
             Vector2(indexColumm.toDouble(), indexRow.toDouble()),
-            collisions: [CollisionArea.fromSize(tileSize)],
+            collisions: [
+              CollisionArea.rectangle(size: Size(tileSize, tileSize))
+            ],
             width: tileSize,
             height: tileSize,
           ));
@@ -95,7 +106,9 @@ class DungeonMap {
           tileList.add(TileWithCollision.withSprite(
             wallRight,
             Vector2(indexColumm.toDouble(), indexRow.toDouble()),
-            collisions: [CollisionArea.fromSize(tileSize)],
+            collisions: [
+              CollisionArea.rectangle(size: Size(tileSize, tileSize))
+            ],
             width: tileSize,
             height: tileSize,
           ));
@@ -130,10 +143,7 @@ class DungeonMap {
         width: tileSize,
         height: tileSize,
         collisions: [
-          CollisionArea(
-            width: tileSize / 1.5,
-            height: tileSize / 1.5,
-          )
+          CollisionArea.rectangle(size: Size(tileSize / 1.5, tileSize / 1.5))
         ],
       ),
       Chest(getRelativeTilePosition(18, 7)),
@@ -143,10 +153,7 @@ class DungeonMap {
         width: tileSize,
         height: tileSize,
         collisions: [
-          CollisionArea(
-            height: tileSize * 0.8,
-            width: tileSize,
-          ),
+          CollisionArea.rectangle(size: Size(tileSize, tileSize * 0.8)),
         ],
       ),
       GameDecorationWithCollision.withSprite(
@@ -155,10 +162,7 @@ class DungeonMap {
         width: tileSize,
         height: tileSize,
         collisions: [
-          CollisionArea(
-            height: tileSize * 0.8,
-            width: tileSize,
-          )
+          CollisionArea.rectangle(size: Size(tileSize, tileSize * 0.8)),
         ],
       ),
       Torch(getRelativeTilePosition(4, 4)),
@@ -204,22 +208,16 @@ class DungeonMap {
     switch (p) {
       case 0:
         return floor_1;
-        break;
       case 1:
         return floor_2;
-        break;
       case 2:
         return floor_3;
-        break;
       case 3:
         return floor_4;
-        break;
       case 4:
         return floor_3;
-        break;
       case 5:
         return floor_4;
-        break;
       default:
         return floor_1;
     }

@@ -13,13 +13,15 @@ class MapWorld extends MapGame {
   double lastZoom = -1;
   Vector2? lastSizeScreen;
   Iterable<Tile> _tilesToRender = [];
-  Iterable<Tile> _tilesCollisionsRendered = [];
-  Iterable<Tile> _tilesCollisions = [];
+  Iterable<ObjectCollision> _tilesCollisionsRendered = [];
+  Iterable<ObjectCollision> _tilesCollisions = [];
 
   MapWorld(Iterable<Tile> tiles) : super(tiles) {
-    _tilesCollisions = tiles.where((element) =>
-        (element is ObjectCollision) &&
-        (element as ObjectCollision).containCollision());
+    _tilesCollisions = tiles
+        .where((element) =>
+            (element is ObjectCollision) &&
+            (element as ObjectCollision).containCollision())
+        .cast<ObjectCollision>();
   }
 
   @override
@@ -39,14 +41,14 @@ class MapWorld extends MapGame {
       lastZoom = gameRef.gameCamera.config.zoom;
 
       List<Tile> tilesRender = [];
-      List<Tile> tilesCollision = [];
+      List<ObjectCollision> tilesCollision = [];
       for (final tile in tiles) {
         tile.gameRef = gameRef;
         if (tile.isVisibleInCamera()) {
           tilesRender.add(tile);
           if ((tile is ObjectCollision) &&
               (tile as ObjectCollision).containCollision())
-            tilesCollision.add(tile);
+            tilesCollision.add(tile as ObjectCollision);
         }
       }
       _tilesToRender = tilesRender;
@@ -63,12 +65,12 @@ class MapWorld extends MapGame {
   }
 
   @override
-  Iterable<Tile> getCollisionsRendered() {
+  Iterable<ObjectCollision> getCollisionsRendered() {
     return _tilesCollisionsRendered;
   }
 
   @override
-  Iterable<Tile> getCollisions() {
+  Iterable<ObjectCollision> getCollisions() {
     return _tilesCollisions;
   }
 
