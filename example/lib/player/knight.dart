@@ -132,8 +132,8 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
       animationLeft: CommonSpriteSheet.whiteAttackEffectLeft,
       animationRight: CommonSpriteSheet.whiteAttackEffectRight,
       animationTop: CommonSpriteSheet.whiteAttackEffectTop,
-      heightArea: DungeonMap.tileSize,
-      widthArea: DungeonMap.tileSize,
+      height: DungeonMap.tileSize,
+      width: DungeonMap.tileSize,
     );
   }
 

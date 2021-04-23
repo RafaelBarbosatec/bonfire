@@ -15,8 +15,8 @@ extension SimplePlayerExtensions on SimplePlayer {
     required double damage,
     dynamic id,
     Direction? direction,
-    double heightArea = 32,
-    double widthArea = 32,
+    double height = 32,
+    double width = 32,
     bool withPush = true,
   }) {
     Direction attackDirection = direction ?? this.lastDirection;
@@ -28,8 +28,8 @@ extension SimplePlayerExtensions on SimplePlayer {
       animationTop: animationTop,
       damage: damage,
       id: id,
-      height: heightArea,
-      width: widthArea,
+      height: height,
+      width: width,
       withPush: withPush,
     );
   }

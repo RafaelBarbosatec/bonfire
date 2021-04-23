@@ -12,7 +12,6 @@ class KnightInterface extends GameInterface {
       height: 40,
       width: 40,
       id: 5,
-      selectable: true,
       position: Vector2(150, 20),
       onTapComponent: (selected) {
         if (gameRef.player != null) {
