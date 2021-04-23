@@ -1,7 +1,7 @@
-# NEXT
+# 1.0.0-rc4
 
 - BREAKING CHANGE: add Shapes(circle,rectangle,polygon) to use collisions.
-- fix to use `Tap Gesture` in `Drag Gesture` using together.
+- fix to use `TapGesture` in `DragGesture` using together.
 - Improvements in mixin `Sensor`.
 - Improvements in `TalkDialog`.
 
