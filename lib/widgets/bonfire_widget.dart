@@ -82,7 +82,7 @@ class BonfireWidget extends StatefulWidget {
 }
 
 class _BonfireWidgetState extends State<BonfireWidget> {
-  BonfireGame? _game;
+  late BonfireGame _game;
 
   @override
   void didUpdateWidget(BonfireWidget oldWidget) {
@@ -121,21 +121,20 @@ class _BonfireWidgetState extends State<BonfireWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (_game == null) return SizedBox.shrink();
     return CustomGameWidget(
-      game: _game!,
+      game: _game,
       overlayBuilderMap: widget.overlayBuilderMap,
       initialActiveOverlays: widget.initialActiveOverlays,
     );
   }
 
   void _refreshGame() async {
-    await _game?.map.updateTiles(widget.map.tiles);
+    await _game.map.updateTiles(widget.map.tiles);
 
-    _game?.decorations().forEach((d) => d.remove());
-    widget.decorations?.forEach((d) => _game?.addGameComponent(d));
+    _game.decorations().forEach((d) => d.remove());
+    widget.decorations?.forEach((d) => _game.addGameComponent(d));
 
-    _game?.enemies().forEach((e) => e.remove());
-    widget.enemies?.forEach((e) => _game?.addGameComponent(e));
+    _game.enemies().forEach((e) => e.remove());
+    widget.enemies?.forEach((e) => _game.addGameComponent(e));
   }
 }

@@ -1,4 +1,4 @@
-# NEXT
+# 1.0.0-rc5
 
 - Rename params in `simpleAttackMelee`
 - new improvements to use `TapGesture` and `DragGesture` together.
