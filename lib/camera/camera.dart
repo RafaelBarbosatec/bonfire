@@ -178,14 +178,14 @@ class Camera with HasGameRef<BonfireGame> {
 
   void _followTarget({double horizontal = 50, double vertical = 50}) {
     if (config.target == null) return;
-    if (_lastTargetOffset == config.target!.position.rect.center) return;
-    _lastTargetOffset = config.target!.position.rect.center;
+    final centerTarget = _getCenterTarget();
+    if (_lastTargetOffset == centerTarget) return;
+    _lastTargetOffset = centerTarget;
     final screenCenter = Offset(
       gameRef.size.x / 2,
       gameRef.size.y / 2,
     );
-    final positionTarget =
-        worldPositionToScreen(config.target!.position.rect.center);
+    final positionTarget = worldPositionToScreen(_lastTargetOffset);
 
     final horizontalDistance = screenCenter.dx - positionTarget.dx;
     final verticalDistance = screenCenter.dy - positionTarget.dy;
@@ -297,5 +297,12 @@ class Camera with HasGameRef<BonfireGame> {
   double _zoomFactor() {
     if (config.zoom > 1) return 1;
     return 1 / config.zoom;
+  }
+
+  Offset _getCenterTarget() {
+    if (config.target is ObjectCollision) {
+      return (config.target as ObjectCollision).rectCollision.center;
+    }
+    return config.target?.position.rect.center ?? Offset.zero;
   }
 }

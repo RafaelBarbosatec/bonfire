@@ -1,3 +1,7 @@
+# NEXT
+
+- improvements in `Camera`.
+
 # 1.0.0-rc5
 
 - Rename params in `simpleAttackMelee`
