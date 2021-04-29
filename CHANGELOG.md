@@ -1,3 +1,7 @@
+# NEXT
+
+- Improvements in `SimpleDirectionAnimation`
+
 # 1.0.0-rc7
 
 - fix bug animation to up in `SimpleEnemy`

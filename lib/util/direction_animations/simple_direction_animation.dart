@@ -61,6 +61,7 @@ class SimpleDirectionAnimation {
     _loader.add(AssetToLoad(idleLeft, (value) => this.idleLeft = value));
     _loader.add(AssetToLoad(idleRight, (value) => this.idleRight = value));
     _loader.add(AssetToLoad(idleDown, (value) => this.idleDown = value));
+    _loader.add(AssetToLoad(idleUp, (value) => this.idleUp = value));
     _loader.add(AssetToLoad(idleUpLeft, (value) => this.idleUpLeft = value));
     _loader.add(AssetToLoad(idleUpRight, (value) {
       return this.idleUpRight = value;
