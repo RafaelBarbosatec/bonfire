@@ -43,6 +43,14 @@ class SimpleEnemy extends Enemy {
   @override
   void moveUp(double speed) {
     if (_runFastAnimation) return;
+    if (animation.runUp != null) {
+      animation.play(SimpleAnimationEnum.runUp);
+    } else {
+      animation.play(lastDirectionHorizontal == Direction.right
+          ? SimpleAnimationEnum.runRight
+          : SimpleAnimationEnum.runLeft);
+    }
+    lastDirection = Direction.up;
     super.moveUp(speed);
   }
 
