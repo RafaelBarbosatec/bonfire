@@ -1,5 +1,6 @@
-# NEXT
+# 1.0.0-rc6
 
+- remove comments in `FlyingAttackAngleObject` (bug)
 - improvements in `Camera`.
 
 # 1.0.0-rc5
