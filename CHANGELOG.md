@@ -1,3 +1,7 @@
+# 1.0.0-rc7
+
+- fix bug animation to up in `SimpleEnemy`
+
 # 1.0.0-rc6
 
 - remove comments in `FlyingAttackAngleObject` (bug)
