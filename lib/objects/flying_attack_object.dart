@@ -119,7 +119,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
       return fromCorrect && overlap;
     }).forEach((enemy) {
-      // enemy.receiveDamage(damage, id);
+      enemy.receiveDamage(damage, id);
       destroy = true;
     });
 
