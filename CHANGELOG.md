@@ -1,6 +1,7 @@
-# NEXT
+# 1.0.0-rc8
 
 - Improvements in `SimpleDirectionAnimation`
+- Improvements in `Collision`
 
 # 1.0.0-rc7
 
