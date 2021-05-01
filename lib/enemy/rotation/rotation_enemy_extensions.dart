@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/enemy/extensions.dart';
 import 'package:bonfire/enemy/rotation/rotation_enemy.dart';

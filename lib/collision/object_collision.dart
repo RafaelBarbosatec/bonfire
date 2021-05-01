@@ -1,58 +1,11 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/collision/collision_area.dart';
+import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/util/extensions.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/material.dart';
 
-class CollisionConfig {
-  /// Representing the collision area
-  final Iterable<CollisionArea> collisions;
-
-  bool collisionOnlyVisibleScreen;
-  bool enable;
-
-  Rect _rect = Rect.zero;
-
-  Vector2Rect? _lastPosition;
-
-  CollisionConfig({
-    required this.collisions,
-    this.collisionOnlyVisibleScreen = true,
-    this.enable = true,
-  });
-
-  Rect get rect => _rect;
-
-  bool verifyCollision(CollisionConfig? other) {
-    if (other == null) return false;
-    if (rect.overlaps(other.rect)) {
-      for (final element1 in collisions) {
-        for (final element2 in other.collisions) {
-          if (element1.verifyCollision(element2)) {
-            return true;
-          }
-        }
-      }
-      return false;
-    } else {
-      return false;
-    }
-  }
-
-  void updatePosition(Vector2Rect position) {
-    if (collisions.isNotEmpty && position != _lastPosition) {
-      collisions.first.updatePosition(position);
-      _rect = collisions.first.rect;
-      for (final element in collisions) {
-        element.updatePosition(position);
-        _rect = _rect.expandToInclude(element.rect);
-      }
-      _lastPosition = position;
-    }
-  }
-}
 
 mixin ObjectCollision on GameComponent {
   CollisionConfig? _collisionConfig;
@@ -81,8 +34,6 @@ mixin ObjectCollision on GameComponent {
       updatePosition(displacement);
     }
 
-    if (_verifyMapCollision()) return true;
-
     if (_verifyComponentCollision()) return true;
 
     return false;
@@ -99,20 +50,6 @@ mixin ObjectCollision on GameComponent {
       _collisionConfig?.enable == true;
 
   Vector2Rect get rectCollision => getRectCollision();
-
-  bool _verifyMapCollision() {
-    final Iterable<ObjectCollision> tiledCollisions =
-        ((_collisionConfig?.collisionOnlyVisibleScreen ?? false)
-            ? gameRef.map.getCollisionsRendered()
-            : gameRef.map.getCollisions());
-
-    for (final i in tiledCollisions) {
-      if (_collisionConfig?.verifyCollision(i.collisionConfig) ?? false) {
-        return true;
-      }
-    }
-    return false;
-  }
 
   bool _verifyComponentCollision() {
     final compCollisions =

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/enemy/extensions.dart';
 import 'package:bonfire/enemy/simple/simple_enemy.dart';

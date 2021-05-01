@@ -233,17 +233,20 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     _visibleSensors = _visibleComponents.where((element) {
       return (element is Sensor);
     }).cast();
+
     _attackables = _visibleComponents.where((element) {
       return (element is Attackable);
     }).cast();
 
-    _collisions = components.where((element) {
+    Iterable<ObjectCollision> cAux = components.where((element) {
       return (element is ObjectCollision) && (element).containCollision();
     }).cast();
+    _collisions = cAux.toList()..addAll(map.getCollisions());
 
-    _visibleCollisions = _visibleComponents.where((element) {
+    Iterable<ObjectCollision> cvAux = _visibleComponents.where((element) {
       return (element is ObjectCollision) && (element).containCollision();
     }).cast();
+    _visibleCollisions = cvAux.toList()..addAll(map.getCollisionsRendered());
 
     if (lightingColorGame != null) {
       _visibleLights = components.where((element) {
