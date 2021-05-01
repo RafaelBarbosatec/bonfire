@@ -35,7 +35,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.0.0-rc5"
+    version: "1.0.0-rc8"
   boolean_selector:
     dependency: transitive
     description:
@@ -124,7 +124,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.1"
+    version: "0.13.2"
   http_multi_server:
     dependency: transitive
     description:

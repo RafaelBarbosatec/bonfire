@@ -2,6 +2,7 @@
 
 - Improvements in `SimpleDirectionAnimation`
 - Improvements in `Collision`
+- Update `http`
 
 # 1.0.0-rc7
 
