@@ -50,26 +50,30 @@ class JoystickMoveToPosition extends JoystickController {
           ? (player as ObjectCollision).rectCollision.center
           : player.position.center;
 
-      Offset playerPosition = _getCenterPositionByTileAndInvert(positionPlayer);
+      Offset playerPosition = _getCenterPositionByTile(positionPlayer);
 
-      Offset targetPosition =
-          _getCenterPositionByTileAndInvert(absolutePosition);
+      Offset targetPosition = _getCenterPositionByTile(absolutePosition);
 
-      int columns = (playerPosition.dy > targetPosition.dy
+      int rows = (playerPosition.dy > targetPosition.dy
               ? playerPosition.dy
               : targetPosition.dy)
           .toInt();
-      int rows = (playerPosition.dx > targetPosition.dx
+      int columns = (playerPosition.dx > targetPosition.dx
               ? playerPosition.dx
               : targetPosition.dx)
           .toInt();
 
       List<Offset> barriers = gameRef.visibleCollisions().map((e) {
-        return _getCenterPositionByTileAndInvert(e.position.center);
+        return _getCenterPositionByTile(e.position.center);
       }).toList();
 
       List<Offset> result = [];
       List<Offset> path = [];
+
+      if (barriers.contains(targetPosition)) {
+        return;
+      }
+
       try {
         result = AStar(
           rows: rows + 1,
@@ -82,7 +86,7 @@ class JoystickMoveToPosition extends JoystickController {
         path.addAll(result.reversed);
         path.add(targetPosition);
         path = path.map((e) {
-          return Offset(e.dy * tileSize, e.dx * tileSize)
+          return Offset(e.dx * tileSize, e.dy * tileSize)
               .translate(tileSize / 2, tileSize / 2);
         }).toList();
       } catch (e) {
@@ -94,10 +98,10 @@ class JoystickMoveToPosition extends JoystickController {
     }
   }
 
-  Offset _getCenterPositionByTileAndInvert(Offset center) {
+  Offset _getCenterPositionByTile(Offset center) {
     return Offset(
-      (center.dy / tileSize).floor().toDouble(),
       (center.dx / tileSize).floor().toDouble(),
+      (center.dy / tileSize).floor().toDouble(),
     );
   }
 }
