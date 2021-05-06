@@ -75,16 +75,15 @@ class JoystickMoveToPosition extends JoystickController {
           path.add(playerPosition);
           path.addAll(result.reversed);
           path.add(targetPosition);
+          path = path.map((e) {
+            return Offset(e.dy * tileSize, e.dx * tileSize)
+                .translate(tileSize / 2, tileSize / 2);
+          }).toList();
         } catch (e) {
           print('ERROR(AStar):$e');
         }
 
-        gameRef.map.setLinePath(
-          path.map((e) {
-            return Offset(e.dy * tileSize, e.dx * tileSize)
-                .translate(tileSize / 2, tileSize / 2);
-          }).toList(),
-        );
+        gameRef.map.setLinePath(path);
         // moveTo(absolutePosition.toVector2(), path);
       }
     }
