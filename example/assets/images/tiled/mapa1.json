@@ -1,11 +1,4 @@
 { "compressionlevel":-1,
- "editorsettings":
-    {
-     "export":
-        {
-         "target":"."
-        }
-    },
  "height":40,
  "infinite":false,
  "layers":[
@@ -479,15 +472,15 @@
                  "y":89.2741622460862
                 }, 
                 {
-                 "height":16,
+                 "height":48,
                  "id":57,
                  "name":"column",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":121,
-                 "y":113.75
+                 "x":127.954545454545,
+                 "y":120.068181818182
                 }, 
                 {
                  "height":16,
@@ -510,7 +503,7 @@
  "nextobjectid":59,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.3.5",
+ "tiledversion":"1.5.0",
  "tileheight":16,
  "tilesets":[
         {
@@ -519,6 +512,6 @@
         }],
  "tilewidth":16,
  "type":"map",
- "version":1.2,
+ "version":1.5,
  "width":60
 }
