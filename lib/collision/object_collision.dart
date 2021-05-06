@@ -6,7 +6,6 @@ import 'package:bonfire/util/extensions.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/material.dart';
 
-
 mixin ObjectCollision on GameComponent {
   CollisionConfig? _collisionConfig;
 

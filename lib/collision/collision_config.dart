@@ -14,7 +14,7 @@ class CollisionConfig {
   Rect _rect = Rect.zero;
 
   Vector2Rect? _lastPosition;
-  
+
   CollisionConfig({
     required this.collisions,
     this.collisionOnlyVisibleScreen = true,

@@ -13,7 +13,7 @@ dependencies:
   flame: ^1.0.0-rc9
   ordered_set: ^3.0.0
   tiledjsonreader: ^1.0.0+1
-  http: ^0.13.2
+  http: ^0.13.3
 
 dev_dependencies:
   flutter_test:
