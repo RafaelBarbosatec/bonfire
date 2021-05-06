@@ -30,13 +30,14 @@ class JoystickMoveToPosition extends JoystickController {
       final camera = this.gameRef.camera;
       final absolutePosition = camera.screenPositionToWorld(event.position);
 
-      final tiledTouched = this.gameRef.map.getRendered().where((element) {
-        return element.position.contains(absolutePosition) &&
-            !(element is ObjectCollision &&
-                (element as ObjectCollision).containCollision());
+      final tiledCollisionTouched =
+          this.gameRef.map.getCollisionsRendered().where((element) {
+        return (element is ObjectCollision &&
+            element.containCollision() &&
+            element.position.contains(absolutePosition));
       });
 
-      if (tiledTouched.isNotEmpty && gameRef.player != null) {
+      if (tiledCollisionTouched.isEmpty && gameRef.player != null) {
         final player = gameRef.player!;
 
         final positionPlayer = player is ObjectCollision
@@ -84,7 +85,7 @@ class JoystickMoveToPosition extends JoystickController {
         }
 
         gameRef.map.setLinePath(path);
-        // moveTo(absolutePosition.toVector2(), path);
+        moveTo(absolutePosition.toVector2(), path);
       }
     }
     super.handlerPointerUp(event);

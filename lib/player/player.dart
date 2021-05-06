@@ -260,11 +260,11 @@ class Player extends GameComponent with Attackable implements JoystickListener {
 
   @override
   void moveTo(Vector2 position, List<Offset> path) {
-    double innerSpeed = speed * _dtUpdate;
-    _positionToMove = Vector2(
-      position.x - (position.x % innerSpeed),
-      position.y - (position.y % innerSpeed),
-    );
+    // double innerSpeed = speed * _dtUpdate;
+    // _positionToMove = Vector2(
+    //   position.x - (position.x % innerSpeed),
+    //   position.y - (position.y % innerSpeed),
+    // );
   }
 
   /// Move player to position tapped
