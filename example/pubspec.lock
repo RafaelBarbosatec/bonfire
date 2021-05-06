@@ -8,6 +8,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
+  a_star_algorithm:
+    dependency: transitive
+    description:
+      name: a_star_algorithm
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   analyzer:
     dependency: transitive
     description:

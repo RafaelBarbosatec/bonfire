@@ -33,5 +33,5 @@ class MapExplorer implements JoystickListener {
   }
 
   @override
-  void moveTo(Vector2 position) {}
+  void moveTo(Vector2 position, List<Offset> path) {}
 }

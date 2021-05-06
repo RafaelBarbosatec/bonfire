@@ -25,36 +25,37 @@ class GameTiledMap extends StatelessWidget {
         DungeonMap.tileSize = max(constraints.maxHeight, constraints.maxWidth) /
             (kIsWeb ? 25 : 22);
         return BonfireTiledWidget(
-          joystick: Joystick(
-            keyboardEnable: true,
-            directional: JoystickDirectional(
-              spriteBackgroundDirectional: Sprite.load(
-                'joystick_background.png',
-              ),
-              spriteKnobDirectional: Sprite.load('joystick_knob.png'),
-              size: 100,
-              isFixed: false,
-            ),
-            actions: [
-              JoystickAction(
-                actionId: 0,
-                sprite: Sprite.load('joystick_atack.png'),
-                align: JoystickActionAlign.BOTTOM_RIGHT,
-                size: 80,
-                margin: EdgeInsets.only(bottom: 50, right: 50),
-              ),
-              JoystickAction(
-                actionId: 1,
-                sprite: Sprite.load('joystick_atack_range.png'),
-                spriteBackgroundDirection: Sprite.load(
-                  'joystick_background.png',
-                ),
-                enableDirection: true,
-                size: 50,
-                margin: EdgeInsets.only(bottom: 50, right: 160),
-              )
-            ],
-          ),
+          joystick: JoystickMoveToPosition(DungeonMap.tileSize),
+          // joystick: Joystick(
+          //   keyboardEnable: true,
+          //   directional: JoystickDirectional(
+          //     spriteBackgroundDirectional: Sprite.load(
+          //       'joystick_background.png',
+          //     ),
+          //     spriteKnobDirectional: Sprite.load('joystick_knob.png'),
+          //     size: 100,
+          //     isFixed: false,
+          //   ),
+          //   actions: [
+          //     JoystickAction(
+          //       actionId: 0,
+          //       sprite: Sprite.load('joystick_atack.png'),
+          //       align: JoystickActionAlign.BOTTOM_RIGHT,
+          //       size: 80,
+          //       margin: EdgeInsets.only(bottom: 50, right: 50),
+          //     ),
+          //     JoystickAction(
+          //       actionId: 1,
+          //       sprite: Sprite.load('joystick_atack_range.png'),
+          //       spriteBackgroundDirection: Sprite.load(
+          //         'joystick_background.png',
+          //       ),
+          //       enableDirection: true,
+          //       size: 50,
+          //       margin: EdgeInsets.only(bottom: 50, right: 160),
+          //     )
+          //   ],
+          // ),
           player: Knight(
             Vector2((8 * DungeonMap.tileSize), (5 * DungeonMap.tileSize)),
           ),
@@ -77,6 +78,7 @@ class GameTiledMap extends StatelessWidget {
                 'chest', (x, y, width, height) => Chest(Vector2(x, y))),
           background: BackgroundColorGame(Colors.blueGrey[900]!),
           lightingColorGame: Colors.black.withOpacity(0.7),
+          showCollisionArea: true,
         );
       },
     );

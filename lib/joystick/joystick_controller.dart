@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:bonfire/base/custom_base_game.dart';
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
@@ -49,11 +49,11 @@ class JoystickActionEvent {
 abstract class JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);
   void joystickAction(JoystickActionEvent event);
-  void moveTo(Vector2 position);
+  void moveTo(Vector2 position, List<Offset> path);
 }
 
 abstract class JoystickController extends Component
-    with HasGameRef<CustomBaseGame>, PointerDetectorHandler {
+    with HasGameRef<BonfireGame>, PointerDetectorHandler {
   List<JoystickListener> _observers = [];
   bool keyboardEnable = false;
 
@@ -67,8 +67,8 @@ abstract class JoystickController extends Component
     _observers.forEach((o) => o.joystickAction(event));
   }
 
-  void moveTo(Vector2 event) {
-    _observers.forEach((o) => o.moveTo(event));
+  void moveTo(Vector2 event, List<Offset> path) {
+    _observers.forEach((o) => o.moveTo(event, path));
   }
 
   void addObserver(JoystickListener listener) {

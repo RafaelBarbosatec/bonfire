@@ -6,6 +6,7 @@ import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/map/tile/tile.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class MapWorld extends MapGame {
   double lastCameraX = -1;
@@ -15,6 +16,12 @@ class MapWorld extends MapGame {
   Iterable<Tile> _tilesToRender = [];
   Iterable<ObjectCollision> _tilesCollisionsRendered = [];
   Iterable<ObjectCollision> _tilesCollisions = [];
+
+  List<Offset> _path = [];
+  Paint _paintPath = Paint()
+    ..color = Colors.lightBlueAccent.withOpacity(0.8)
+    ..strokeWidth = 4
+    ..strokeCap = StrokeCap.round;
 
   MapWorld(Iterable<Tile> tiles) : super(tiles) {
     _tilesCollisions = tiles
@@ -28,6 +35,10 @@ class MapWorld extends MapGame {
   void render(Canvas canvas) {
     for (final tile in _tilesToRender) {
       tile.render(canvas);
+    }
+    if (_path.isNotEmpty) {
+      final pointMode = PointMode.polygon;
+      canvas.drawPoints(pointMode, _path, _paintPath);
     }
   }
 
@@ -129,5 +140,11 @@ class MapWorld extends MapGame {
     } catch (e) {
       return Vector2.zero();
     }
+  }
+
+  @override
+  void setLinePath(List<Offset> path) {
+    _path = path;
+    super.setLinePath(path);
   }
 }
