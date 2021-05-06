@@ -15,7 +15,7 @@ import 'package:ordered_set/ordered_set.dart';
 /// Apply zoom in canvas.
 /// Reorder components per time frame.
 abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
-  Camera gameCamera = Camera(CameraConfig());
+  Camera camera = Camera(CameraConfig());
 
   /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
   int _highestPriority = 1000000;
@@ -114,8 +114,8 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     canvas.save();
 
     canvas.translate(size.x / 2, size.y / 2);
-    canvas.scale(gameCamera.config.zoom);
-    canvas.translate(-gameCamera.position.dx, -gameCamera.position.dy);
+    canvas.scale(camera.config.zoom);
+    canvas.translate(-camera.position.dx, -camera.position.dy);
 
     components.forEach((comp) => renderComponent(canvas, comp));
     canvas.restore();
@@ -133,8 +133,8 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     canvas.save();
 
     if (comp.isHud) {
-      canvas.translate(gameCamera.position.dx, gameCamera.position.dy);
-      canvas.scale(1 / gameCamera.config.zoom);
+      canvas.translate(camera.position.dx, camera.position.dy);
+      canvas.scale(1 / camera.config.zoom);
       canvas.translate(-size.x / 2, -size.y / 2);
     }
 
@@ -156,7 +156,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     components.forEach((c) => c.update(t));
     components.removeWhere((c) => c.shouldRemove);
 
-    gameCamera.update();
+    camera.update();
 
     if (_timerSortPriority.update(t)) {
       _updateOrder();
@@ -170,7 +170,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   @override
   @mustCallSuper
   void onResize(Vector2 size) {
-    if (this is BonfireGame) gameCamera.gameRef = this as BonfireGame;
+    if (this is BonfireGame) camera.gameRef = this as BonfireGame;
     super.onResize(size);
     components.forEach((c) => c.onGameResize(size));
   }

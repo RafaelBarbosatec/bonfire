@@ -18,7 +18,7 @@ mixin TapGesture on GameComponent {
         }
       } else {
         final absolutePosition =
-            this.gameRef.gameCamera.screenPositionToWorld(position);
+            this.gameRef.camera.screenPositionToWorld(position);
         if (this.position.contains(absolutePosition)) {
           _pointer = pointer;
           onTapDown(pointer, position);
@@ -42,7 +42,7 @@ mixin TapGesture on GameComponent {
         }
       } else {
         final absolutePosition =
-            this.gameRef.gameCamera.screenPositionToWorld(position);
+            this.gameRef.camera.screenPositionToWorld(position);
         if (this.position.contains(absolutePosition)) {
           onTapUp(pointer, position);
           onTap();

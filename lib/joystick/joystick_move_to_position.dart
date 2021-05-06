@@ -27,7 +27,7 @@ class JoystickMoveToPosition extends JoystickController {
   @override
   void handlerPointerUp(PointerUpEvent event) {
     if (_pointer == event.pointer) {
-      final camera = this.gameRef.gameCamera;
+      final camera = this.gameRef.camera;
       final absolutePosition = camera.screenPositionToWorld(event.position);
 
       final tiledTouched = this.gameRef.map.getRendered().where((element) {

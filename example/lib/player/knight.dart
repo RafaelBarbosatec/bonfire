@@ -51,21 +51,6 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
               DungeonMap.tileSize / 2,
             ),
           )
-          // CollisionArea.circle(radius: DungeonMap.tileSize / 2),
-          // CollisionArea.polygon(
-          //   points: [
-          //     Vector2(25, 0),
-          //     Vector2(31, 18),
-          //     Vector2(50, 18),
-          //     Vector2(34, 31),
-          //     Vector2(40, 50),
-          //     Vector2(25, 38),
-          //     Vector2(10, 50),
-          //     Vector2(14, 31),
-          //     Vector2(0, 18),
-          //     Vector2(18, 18),
-          //   ],
-          // ),
         ],
       ),
     );
@@ -239,7 +224,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   }
 
   void _showTalk(Enemy first) {
-    gameRef.gameCamera.moveToTargetAnimated(
+    gameRef.camera.moveToTargetAnimated(
       first,
       zoom: 2,
       finish: () {
@@ -265,7 +250,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
             ),
           ],
           finish: () {
-            gameRef.gameCamera.moveToPlayerAnimated();
+            gameRef.camera.moveToPlayerAnimated();
           },
           logicalKeyboardKeyToNext: LogicalKeyboardKey.space,
         );

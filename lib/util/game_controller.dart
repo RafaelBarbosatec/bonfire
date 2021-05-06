@@ -63,6 +63,6 @@ class GameController with HasGameRef<BonfireGame> {
   }
 
   Camera? get camera {
-    return gameRef.gameCamera;
+    return gameRef.camera;
   }
 }

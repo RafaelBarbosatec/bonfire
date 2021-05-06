@@ -66,9 +66,6 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   /// Used to show in the interface the FPS.
   final bool showFPS;
 
-  /// Camera configuration
-  final CameraConfig? cameraConfig;
-
   Iterable<Enemy> _enemies = [];
   Iterable<Enemy> _visibleEnemies = [];
   Iterable<Enemy> _livingEnemies = [];
@@ -110,7 +107,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     this.lightingColorGame,
     this.showFPS = false,
     GameColorFilter? colorFilter,
-    this.cameraConfig,
+    CameraConfig? cameraConfig,
   }) {
     _initialEnemies = enemies;
     _initialDecorations = decorations;
@@ -119,12 +116,10 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     debugMode = constructionMode;
 
     gameController?.gameRef = this;
-    cameraConfig?.let((config) {
-      gameCamera = Camera(config);
-    });
+    camera = Camera(cameraConfig ?? CameraConfig());
 
-    if (gameCamera.config.target == null) {
-      gameCamera.config.target = player;
+    if (camera.config.target == null) {
+      camera.config.target = player;
     }
   }
 
@@ -148,7 +143,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     }
     super.add((interface ?? GameInterface()));
     super.add(joystickController ?? Joystick());
-    joystickController?.addObserver(player ?? MapExplorer(gameCamera));
+    joystickController?.addObserver(player ?? MapExplorer(camera));
     _interval = IntervalTick(200, tick: _updateTempList);
     return super.onLoad();
   }
@@ -250,7 +245,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
     if (lightingColorGame != null) {
       _visibleLights = components.where((element) {
-        return element is Lighting && element.isVisible(gameCamera);
+        return element is Lighting && element.isVisible(camera);
       }).cast();
     }
 

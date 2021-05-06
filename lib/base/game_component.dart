@@ -21,12 +21,12 @@ abstract class GameComponent extends Component
   bool isVisibleInCamera() {
     if (shouldRemove) return false;
 
-    return gameRef.gameCamera.isComponentOnCamera(this);
+    return gameRef.camera.isComponentOnCamera(this);
   }
 
   /// Method return screen position
   Offset screenPosition() {
-    return gameRef.gameCamera.worldPositionToScreen(position.offset);
+    return gameRef.camera.worldPositionToScreen(position.offset);
   }
 
   /// Method that checks what type map tile is currently

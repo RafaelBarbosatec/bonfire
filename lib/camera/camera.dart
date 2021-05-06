@@ -43,33 +43,6 @@ class Camera with HasGameRef<BonfireGame> {
     position = position.translate(displacement * -1, 0);
   }
 
-  void moveCamera(double displacement, JoystickMoveDirectional directional) {
-    switch (directional) {
-      case JoystickMoveDirectional.MOVE_UP:
-        moveTop(displacement);
-        break;
-      case JoystickMoveDirectional.MOVE_RIGHT:
-        moveRight(displacement);
-        break;
-      case JoystickMoveDirectional.MOVE_DOWN:
-        moveDown(displacement);
-        break;
-      case JoystickMoveDirectional.MOVE_LEFT:
-        moveUp(displacement);
-        break;
-      case JoystickMoveDirectional.MOVE_UP_LEFT:
-        break;
-      case JoystickMoveDirectional.MOVE_UP_RIGHT:
-        break;
-      case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-        break;
-      case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-        break;
-      case JoystickMoveDirectional.IDLE:
-        break;
-    }
-  }
-
   void moveToPositionAnimated(
     Offset position, {
     double zoom = 1,

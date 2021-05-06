@@ -1,3 +1,7 @@
+# NEXT
+
+- Rename `gameCamera` to `camera`
+
 # 1.0.0-rc8
 
 - Improvements in `SimpleDirectionAnimation`
