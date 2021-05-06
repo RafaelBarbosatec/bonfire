@@ -17,7 +17,7 @@ class MapWorld extends MapGame {
   Iterable<ObjectCollision> _tilesCollisionsRendered = [];
   Iterable<ObjectCollision> _tilesCollisions = [];
 
-  List<Offset> _path = [];
+  List<Offset> _linePath = [];
   Paint _paintPath = Paint()
     ..color = Colors.lightBlueAccent.withOpacity(0.8)
     ..strokeWidth = 4
@@ -36,9 +36,9 @@ class MapWorld extends MapGame {
     for (final tile in _tilesToRender) {
       tile.render(canvas);
     }
-    if (_path.isNotEmpty) {
+    if (_linePath.isNotEmpty) {
       final pointMode = PointMode.polygon;
-      canvas.drawPoints(pointMode, _path, _paintPath);
+      canvas.drawPoints(pointMode, _linePath, _paintPath);
     }
   }
 
@@ -144,7 +144,7 @@ class MapWorld extends MapGame {
 
   @override
   void setLinePath(List<Offset> path) {
-    _path = path;
+    _linePath = path;
     super.setLinePath(path);
   }
 }
