@@ -49,7 +49,7 @@ class JoystickActionEvent {
 abstract class JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);
   void joystickAction(JoystickActionEvent event);
-  void moveTo(Vector2 position, List<Offset> path);
+  void moveTo(Vector2 position);
 }
 
 abstract class JoystickController extends Component
@@ -67,8 +67,8 @@ abstract class JoystickController extends Component
     _observers.forEach((o) => o.joystickAction(event));
   }
 
-  void moveTo(Vector2 event, List<Offset> path) {
-    _observers.forEach((o) => o.moveTo(event, path));
+  void moveTo(Vector2 event) {
+    _observers.forEach((o) => o.moveTo(event));
   }
 
   void addObserver(JoystickListener listener) {

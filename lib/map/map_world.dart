@@ -36,10 +36,7 @@ class MapWorld extends MapGame {
     for (final tile in _tilesToRender) {
       tile.render(canvas);
     }
-    if (_linePath.isNotEmpty) {
-      final pointMode = PointMode.polygon;
-      canvas.drawPoints(pointMode, _linePath, _paintPath);
-    }
+    _drawPathLine(canvas);
   }
 
   @override
@@ -143,8 +140,21 @@ class MapWorld extends MapGame {
   }
 
   @override
-  void setLinePath(List<Offset> path) {
+  void setLinePath(List<Offset> path, Color color, double strokeWidth) {
+    _paintPath.color = color;
+    _paintPath.strokeWidth = strokeWidth;
     _linePath = path;
-    super.setLinePath(path);
+    super.setLinePath(path, color, strokeWidth);
+  }
+
+  void _drawPathLine(Canvas canvas) {
+    if (_linePath.isNotEmpty) {
+      _paintPath.style = PaintingStyle.stroke;
+      final path = Path()..moveTo(_linePath.first.dx, _linePath.first.dy);
+      for (var i = 1; i < _linePath.length; i++) {
+        path.lineTo(_linePath[i].dx, _linePath[i].dy);
+      }
+      canvas.drawPath(path, _paintPath);
+    }
   }
 }

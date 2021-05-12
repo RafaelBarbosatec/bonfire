@@ -25,7 +25,7 @@ class GameTiledMap extends StatelessWidget {
         DungeonMap.tileSize = max(constraints.maxHeight, constraints.maxWidth) /
             (kIsWeb ? 25 : 22);
         return BonfireTiledWidget(
-          joystick: JoystickMoveToPosition(DungeonMap.tileSize),
+          joystick: JoystickMoveToPosition(),
           // joystick: Joystick(
           //   keyboardEnable: true,
           //   directional: JoystickDirectional(
@@ -78,7 +78,6 @@ class GameTiledMap extends StatelessWidget {
                 'chest', (x, y, width, height) => Chest(Vector2(x, y))),
           background: BackgroundColorGame(Colors.blueGrey[900]!),
           lightingColorGame: Colors.black.withOpacity(0.7),
-          showCollisionArea: true,
         );
       },
     );

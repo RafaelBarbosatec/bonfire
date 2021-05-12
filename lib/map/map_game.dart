@@ -27,7 +27,7 @@ abstract class MapGame extends Component with HasGameRef<BonfireGame> {
     return Future.forEach<Tile>(tiles, (element) => element.onLoad());
   }
 
-  void setLinePath(List<Offset> linePath) {}
+  void setLinePath(List<Offset> linePath, Color color, double strokeWidth) {}
 
   @override
   int get priority => LayerPriority.MAP;

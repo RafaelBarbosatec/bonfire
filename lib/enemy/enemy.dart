@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
+import 'package:bonfire/util/component_movimantation.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/vector2rect.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// It is used to represent your enemies.
-class Enemy extends GameComponent with Attackable {
+class Enemy extends GameComponent with Attackable implements ComponentMovement {
   /// Height of the Enemy.
   final double height;
 
@@ -59,77 +60,91 @@ class Enemy extends GameComponent with Attackable {
   }
 
   /// Move Enemy to up
-  void moveUp(double speed) {
+  void moveUp(double speed, {VoidCallback? onCollision}) {
     isIdle = false;
     var collision = verifyEnemyTranslateCollision(
       0,
       (speed * -1),
     );
 
-    if (collision) return;
+    if (collision) {
+      onCollision?.call();
+      return;
+    }
+    ;
 
     position = position.translate(0, (speed * -1));
   }
 
   /// Move Enemy to down
-  void moveDown(double speed) {
+  void moveDown(double speed, {VoidCallback? onCollision}) {
     isIdle = false;
     var collision = verifyEnemyTranslateCollision(
       0,
       speed,
     );
-    if (collision) return;
+    if (collision) {
+      onCollision?.call();
+      return;
+    }
 
     position = position.translate(0, speed);
   }
 
   /// Move Enemy to left
-  void moveLeft(double speed) {
+  void moveLeft(double speed, {VoidCallback? onCollision}) {
     isIdle = false;
     var collision = verifyEnemyTranslateCollision(
       (speed * -1),
       0,
     );
-    if (collision) return;
+    if (collision) {
+      onCollision?.call();
+      return;
+    }
 
     position = position.translate((speed * -1), 0);
   }
 
   /// Move Enemy to right
-  void moveRight(double speed) {
+  void moveRight(double speed, {VoidCallback? onCollision}) {
     isIdle = false;
     var collision = verifyEnemyTranslateCollision(
       speed,
       0,
     );
 
-    if (collision) return;
+    if (collision) {
+      onCollision?.call();
+      return;
+    }
 
     position = position.translate(speed, 0);
   }
 
   /// Move Enemy to up and right
-  void moveUpRight(double speedX, double speedY) {
-    moveRight(speedX);
-    moveUp(speedY);
+  void moveUpRight(double speedX, double speedY, {VoidCallback? onCollision}) {
+    moveRight(speedX, onCollision: onCollision);
+    moveUp(speedY, onCollision: onCollision);
   }
 
   /// Move Enemy to up and left
-  void moveUpLeft(double speedX, double speedY) {
-    moveLeft(speedX);
-    moveUp(speedY);
+  void moveUpLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
+    moveLeft(speedX, onCollision: onCollision);
+    moveUp(speedY, onCollision: onCollision);
   }
 
   /// Move Enemy to down and left
-  void moveDownLeft(double speedX, double speedY) {
-    moveLeft(speedX);
-    moveDown(speedY);
+  void moveDownLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
+    moveLeft(speedX, onCollision: onCollision);
+    moveDown(speedY, onCollision: onCollision);
   }
 
   /// Move Enemy to down and right
-  void moveDownRight(double speedX, double speedY) {
-    moveRight(speedX);
-    moveDown(speedY);
+  void moveDownRight(double speedX, double speedY,
+      {VoidCallback? onCollision}) {
+    moveRight(speedX, onCollision: onCollision);
+    moveDown(speedY, onCollision: onCollision);
   }
 
   /// Move Enemy to diretion by radAngle with dodge obstacles

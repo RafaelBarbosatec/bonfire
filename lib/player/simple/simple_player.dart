@@ -53,6 +53,7 @@ class SimplePlayer extends Player {
       }
     }
     lastDirection = Direction.up;
+
     super.moveUp(speed, onCollision: onCollision);
   }
 
@@ -88,7 +89,7 @@ class SimplePlayer extends Player {
   }
 
   @override
-  void moveUpLeft() {
+  void moveUpLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
     if (animation.runUpLeft != null) {
       animation.play(SimpleAnimationEnum.runUpLeft);
     } else {
@@ -96,11 +97,11 @@ class SimplePlayer extends Player {
     }
     lastDirection = Direction.upLeft;
     lastDirectionHorizontal = Direction.left;
-    super.moveUpLeft();
+    super.moveUpLeft(speedX, speedY, onCollision: onCollision);
   }
 
   @override
-  void moveUpRight() {
+  void moveUpRight(double speedX, double speedY, {VoidCallback? onCollision}) {
     if (animation.runUpRight != null) {
       animation.play(SimpleAnimationEnum.runUpRight);
     } else {
@@ -108,11 +109,12 @@ class SimplePlayer extends Player {
     }
     lastDirection = Direction.upRight;
     lastDirectionHorizontal = Direction.right;
-    super.moveUpRight();
+    super.moveUpRight(speedX, speedY, onCollision: onCollision);
   }
 
   @override
-  void moveDownRight() {
+  void moveDownRight(double speedX, double speedY,
+      {VoidCallback? onCollision}) {
     if (animation.runDownRight != null) {
       animation.play(SimpleAnimationEnum.runDownRight);
     } else {
@@ -120,11 +122,11 @@ class SimplePlayer extends Player {
     }
     lastDirection = Direction.downRight;
     lastDirectionHorizontal = Direction.right;
-    super.moveDownRight();
+    super.moveDownRight(speedX, speedY, onCollision: onCollision);
   }
 
   @override
-  void moveDownLeft() {
+  void moveDownLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
     if (animation.runDownLeft != null) {
       animation.play(SimpleAnimationEnum.runDownLeft);
     } else {
@@ -132,7 +134,7 @@ class SimplePlayer extends Player {
     }
     lastDirection = Direction.downLeft;
     lastDirectionHorizontal = Direction.left;
-    super.moveDownLeft();
+    super.moveDownLeft(speedX, speedY, onCollision: onCollision);
   }
 
   @override

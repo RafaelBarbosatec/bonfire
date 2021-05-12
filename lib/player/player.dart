@@ -4,12 +4,16 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
+import 'package:bonfire/util/component_movimantation.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
+import 'package:bonfire/util/mixins/move_to_position_mixin.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Player extends GameComponent with Attackable implements JoystickListener {
+class Player extends GameComponent
+    with Attackable, MoveToPositionMixin
+    implements JoystickListener, ComponentMovement {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
   /// Width of the Player.
@@ -30,7 +34,6 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   bool isIdle = true;
   double _dtUpdate = 0;
   bool isFocusCamera = true;
-  Vector2? _positionToMove;
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
 
   Player({
@@ -54,47 +57,37 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   @override
   void update(double dt) {
     _dtUpdate = dt;
+    final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
     if (isDead) return;
-    if (_positionToMove != null) {
-      moveToPosition();
-    } else {
-      switch (_currentDirectional) {
-        case JoystickMoveDirectional.MOVE_UP:
-          isIdle = false;
-          moveUp(speed);
-          break;
-        case JoystickMoveDirectional.MOVE_UP_LEFT:
-          isIdle = false;
-          moveUpLeft();
-          break;
-        case JoystickMoveDirectional.MOVE_UP_RIGHT:
-          isIdle = false;
-          moveUpRight();
-          break;
-        case JoystickMoveDirectional.MOVE_RIGHT:
-          isIdle = false;
-          moveRight(speed);
-          break;
-        case JoystickMoveDirectional.MOVE_DOWN:
-          isIdle = false;
-          moveDown(speed);
-          break;
-        case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-          isIdle = false;
-          moveDownRight();
-          break;
-        case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-          isIdle = false;
-          moveDownLeft();
-          break;
-        case JoystickMoveDirectional.MOVE_LEFT:
-          isIdle = false;
-          moveLeft(speed);
-          break;
-        case JoystickMoveDirectional.IDLE:
-          idle();
-          break;
-      }
+
+    switch (_currentDirectional) {
+      case JoystickMoveDirectional.MOVE_UP:
+        moveUp(speed);
+        break;
+      case JoystickMoveDirectional.MOVE_UP_LEFT:
+        moveUpLeft(diagonalSpeed, diagonalSpeed);
+        break;
+      case JoystickMoveDirectional.MOVE_UP_RIGHT:
+        moveUpRight(diagonalSpeed, diagonalSpeed);
+        break;
+      case JoystickMoveDirectional.MOVE_RIGHT:
+        moveRight(speed);
+        break;
+      case JoystickMoveDirectional.MOVE_DOWN:
+        moveDown(speed);
+        break;
+      case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
+        moveDownRight(diagonalSpeed, diagonalSpeed);
+        break;
+      case JoystickMoveDirectional.MOVE_DOWN_LEFT:
+        moveDownLeft(diagonalSpeed, diagonalSpeed);
+        break;
+      case JoystickMoveDirectional.MOVE_LEFT:
+        moveLeft(speed);
+        break;
+      case JoystickMoveDirectional.IDLE:
+        idle();
+        break;
     }
     super.update(dt);
   }
@@ -112,6 +105,7 @@ class Player extends GameComponent with Attackable implements JoystickListener {
       onCollision?.call();
       return;
     }
+    isIdle = false;
     position = displacement;
   }
 
@@ -128,6 +122,8 @@ class Player extends GameComponent with Attackable implements JoystickListener {
       onCollision?.call();
       return;
     }
+
+    isIdle = false;
 
     position = displacement;
   }
@@ -146,6 +142,8 @@ class Player extends GameComponent with Attackable implements JoystickListener {
       return;
     }
 
+    isIdle = false;
+
     position = displacement;
   }
 
@@ -163,35 +161,34 @@ class Player extends GameComponent with Attackable implements JoystickListener {
       return;
     }
 
+    isIdle = false;
+
     position = displacement;
   }
 
   /// Move player to up and left
-  void moveUpLeft() {
-    final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
-    moveLeft(diagonalSpeed);
-    moveUp(diagonalSpeed);
+  void moveUpLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
+    moveLeft(speedX, onCollision: onCollision);
+    moveUp(speedY, onCollision: onCollision);
   }
 
   /// Move player to up and right
-  void moveUpRight() {
-    final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
-    moveRight(diagonalSpeed);
-    moveUp(diagonalSpeed);
+  void moveUpRight(double speedX, double speedY, {VoidCallback? onCollision}) {
+    moveRight(speedX, onCollision: onCollision);
+    moveUp(speedY, onCollision: onCollision);
   }
 
   /// Move player to down and right
-  void moveDownRight() {
-    final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
-    moveRight(diagonalSpeed);
-    moveDown(diagonalSpeed);
+  void moveDownRight(double speedX, double speedY,
+      {VoidCallback? onCollision}) {
+    moveRight(speedX, onCollision: onCollision);
+    moveDown(speedY, onCollision: onCollision);
   }
 
   /// Move player to down and left
-  void moveDownLeft() {
-    final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
-    moveLeft(diagonalSpeed);
-    moveDown(diagonalSpeed);
+  void moveDownLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
+    moveLeft(speedX, onCollision: onCollision);
+    moveDown(speedY, onCollision: onCollision);
   }
 
   void idle() {
@@ -259,76 +256,8 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   }
 
   @override
-  void moveTo(Vector2 position, List<Offset> path) {
-    // double innerSpeed = speed * _dtUpdate;
-    // _positionToMove = Vector2(
-    //   position.x - (position.x % innerSpeed),
-    //   position.y - (position.y % innerSpeed),
-    // );
-  }
-
-  /// Move player to position tapped
-  /// Used when uses [JoystickMoveToPosition]
-  void moveToPosition() {
-    if (_positionToMove == null) return;
-    bool move = false;
-
-    if (_positionToMove!.x > position.center.dx &&
-        _positionToMove!.x - position.center.dx > 1) {
-      move = true;
-      moveRight(
-        speed,
-        onCollision: () {
-          move = false;
-          _positionToMove = null;
-        },
-      );
-    }
-
-    if (_positionToMove != null &&
-        _positionToMove!.x < position.center.dx &&
-        position.center.dx - _positionToMove!.x > 1) {
-      move = true;
-      moveLeft(
-        speed,
-        onCollision: () {
-          move = false;
-          _positionToMove = null;
-        },
-      );
-    }
-
-    if (_positionToMove != null &&
-        _positionToMove!.y > position.center.dy &&
-        _positionToMove!.y - position.center.dy > 1) {
-      move = true;
-      moveDown(
-        speed,
-        onCollision: () {
-          move = false;
-          _positionToMove = null;
-        },
-      );
-    }
-
-    if (_positionToMove != null &&
-        _positionToMove!.y < position.center.dy &&
-        position.center.dy - _positionToMove!.y > 1) {
-      move = true;
-      moveUp(
-        speed,
-        onCollision: () {
-          move = false;
-          _positionToMove = null;
-        },
-      );
-    }
-
-    if (!move) {
-      idle();
-      isIdle = false;
-      _positionToMove = null;
-    }
+  void moveTo(Vector2 position) {
+    this.moveAlongThePath(position, speed);
   }
 
   bool _playerIsCollision({

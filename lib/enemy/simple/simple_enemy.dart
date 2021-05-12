@@ -41,7 +41,7 @@ class SimpleEnemy extends Enemy {
   }
 
   @override
-  void moveUp(double speed) {
+  void moveUp(double speed, {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
     if (animation.runUp != null) {
       animation.play(SimpleAnimationEnum.runUp);
@@ -55,7 +55,7 @@ class SimpleEnemy extends Enemy {
   }
 
   @override
-  void moveDown(double speed) {
+  void moveDown(double speed, {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
     if (animation.runDown != null) {
       animation.play(SimpleAnimationEnum.runDown);
@@ -69,7 +69,7 @@ class SimpleEnemy extends Enemy {
   }
 
   @override
-  void moveLeft(double speed) {
+  void moveLeft(double speed, {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
     animation.play(SimpleAnimationEnum.runLeft);
     lastDirection = Direction.left;
@@ -78,7 +78,7 @@ class SimpleEnemy extends Enemy {
   }
 
   @override
-  void moveRight(double speed) {
+  void moveRight(double speed, {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
     animation.play(SimpleAnimationEnum.runRight);
     lastDirection = Direction.right;
@@ -87,7 +87,7 @@ class SimpleEnemy extends Enemy {
   }
 
   @override
-  void moveUpRight(double speedX, double speedY) {
+  void moveUpRight(double speedX, double speedY, {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
     if (animation.runUpRight != null) {
       animation.play(SimpleAnimationEnum.runUpRight);
@@ -100,7 +100,7 @@ class SimpleEnemy extends Enemy {
   }
 
   @override
-  void moveUpLeft(double speedX, double speedY) {
+  void moveUpLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
     if (animation.runUpLeft != null) {
       animation.play(SimpleAnimationEnum.runUpLeft);
@@ -113,7 +113,8 @@ class SimpleEnemy extends Enemy {
   }
 
   @override
-  void moveDownRight(double speedX, double speedY) {
+  void moveDownRight(double speedX, double speedY,
+      {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
     if (animation.runDownRight != null) {
       animation.play(SimpleAnimationEnum.runDownRight);
@@ -126,7 +127,7 @@ class SimpleEnemy extends Enemy {
   }
 
   @override
-  void moveDownLeft(double speedX, double speedY) {
+  void moveDownLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
     if (animation.runDownLeft != null) {
       animation.play(SimpleAnimationEnum.runDownLeft);
