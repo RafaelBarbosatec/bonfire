@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 mixin MoveToPositionMixin on GameComponent {
   List<Offset> _currentPath = [];
   int _currentIndex = 0;
-  double speed = 0;
-  ComponentMovement? component;
+  double _speed = 0;
+  ComponentMovement? _component;
 
   Color pathLineColor = Colors.lightBlueAccent.withOpacity(0.5);
   double pathLineStrokeWidth = 4;
@@ -20,10 +20,10 @@ mixin MoveToPositionMixin on GameComponent {
     double speed,
   ) {
     if (this is ComponentMovement) {
-      component = this as ComponentMovement;
+      _component = this as ComponentMovement;
       _calculatePath(position.toOffset());
       _currentIndex = 0;
-      this.speed = speed;
+      this._speed = speed;
     } else {
       print(
           'It was not possible to move components to the point. Implement "ComponentMovement" in its class');
@@ -41,11 +41,11 @@ mixin MoveToPositionMixin on GameComponent {
   void stopMoveAlongThePath() {
     _currentPath.clear();
     _currentIndex = 0;
-    component?.idle();
+    _component?.idle();
   }
 
   void _move(double dt) {
-    double innerSpeed = speed * dt;
+    double innerSpeed = _speed * dt;
 
     Vector2Rect componentPosition = position;
     if (this is ObjectCollision) {
@@ -53,8 +53,8 @@ mixin MoveToPositionMixin on GameComponent {
     }
     double diffX = _currentPath[_currentIndex].dx - componentPosition.center.dx;
     double diffY = _currentPath[_currentIndex].dy - componentPosition.center.dy;
-    double displacementX = diffX.abs() > innerSpeed ? speed : diffX.abs() / dt;
-    double displacementY = diffY.abs() > innerSpeed ? speed : diffY.abs() / dt;
+    double displacementX = diffX.abs() > innerSpeed ? _speed : diffX.abs() / dt;
+    double displacementY = diffY.abs() > innerSpeed ? _speed : diffY.abs() / dt;
 
     if (diffX.abs() < 0.5 && diffY.abs() < 0.5) {
       if (_currentIndex < _currentPath.length - 1) {
@@ -64,17 +64,17 @@ mixin MoveToPositionMixin on GameComponent {
       }
     } else {
       if (diffX > 0 && diffX.abs() > 0.5) {
-        component?.moveRight(displacementX);
+        _component?.moveRight(displacementX);
       }
       if (diffX < 0 && diffX.abs() > 0.5) {
-        component?.moveLeft(displacementX);
+        _component?.moveLeft(displacementX);
       }
 
       if (diffY > 0 && diffY.abs() > 0.5) {
-        component?.moveDown(displacementY);
+        _component?.moveDown(displacementY);
       }
       if (diffY < 0 && diffY.abs() > 0.5) {
-        component?.moveUp(displacementY);
+        _component?.moveUp(displacementY);
       }
     }
   }
