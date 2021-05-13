@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-abstract class ComponentMovement {
+abstract class Movement {
   void moveUp(double speed, {VoidCallback? onCollision});
   void moveDown(double speed, {VoidCallback? onCollision});
   void moveLeft(double speed, {VoidCallback? onCollision});

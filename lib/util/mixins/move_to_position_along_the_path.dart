@@ -3,24 +3,30 @@ import 'dart:ui';
 import 'package:a_star_algorithm/a_star_algorithm.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/component_movimantation.dart';
+import 'package:bonfire/util/movement.dart';
 import 'package:flutter/material.dart';
 
-mixin MoveToPositionMixin on GameComponent {
+mixin MoveToPositionAlongThePath on GameComponent {
   List<Offset> _currentPath = [];
   int _currentIndex = 0;
   double _speed = 0;
-  ComponentMovement? _component;
+  Movement? _component;
 
-  Color pathLineColor = Colors.lightBlueAccent.withOpacity(0.5);
-  double pathLineStrokeWidth = 4;
+  Color _pathLineColor = Colors.lightBlueAccent.withOpacity(0.5);
+  double _pathLineStrokeWidth = 4;
+
+  void setupMoveToPositionAlongThePath(Color pathLineColor,
+      {double pathLineStrokeWidth = 4}) {
+    _pathLineColor = pathLineColor;
+    _pathLineStrokeWidth = pathLineStrokeWidth;
+  }
 
   void moveAlongThePath(
     Vector2 position,
     double speed,
   ) {
-    if (this is ComponentMovement) {
-      _component = this as ComponentMovement;
+    if (this is Movement) {
+      _component = this as Movement;
       _calculatePath(position.toOffset());
       _currentIndex = 0;
       this._speed = speed;
@@ -132,29 +138,32 @@ mixin MoveToPositionMixin on GameComponent {
         path.addAll(result.reversed);
         path.add(targetPosition);
         path = path.map((e) {
-          return Offset(e.dx * tileSize, e.dy * tileSize)
-              .translate(tileSize / 2, tileSize / 2);
+          return Offset(e.dx * _tileSize, e.dy * _tileSize)
+              .translate(_tileSize / 2, _tileSize / 2);
         }).toList();
 
         _currentPath = path;
+        _currentIndex = 0;
       } catch (e) {
         print('ERROR(AStar):$e');
       }
-      gameRef.map.setLinePath(path, pathLineColor, pathLineStrokeWidth);
+      gameRef.map.setLinePath(path, _pathLineColor, _pathLineStrokeWidth);
     }
   }
 
-  double get tileSize {
+  double get _tileSize {
     if (gameRef.map.tiles.isNotEmpty) {
       return gameRef.map.tiles.first.width;
     }
     return 0.0;
   }
 
+  bool get isMovingAlongThePath => _currentPath.isNotEmpty;
+
   Offset _getCenterPositionByTile(Offset center) {
     return Offset(
-      (center.dx / tileSize).floor().toDouble(),
-      (center.dy / tileSize).floor().toDouble(),
+      (center.dx / _tileSize).floor().toDouble(),
+      (center.dy / _tileSize).floor().toDouble(),
     );
   }
 }
