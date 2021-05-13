@@ -144,7 +144,7 @@ mixin MoveToPositionAlongThePath on GameComponent {
               .translate(_tileSize / 2, _tileSize / 2);
         }).toList();
 
-        _currentPath = path;
+        _currentPath = _resumePath(path);
         _currentIndex = 0;
       } catch (e) {
         print('ERROR(AStar):$e');
@@ -167,5 +167,59 @@ mixin MoveToPositionAlongThePath on GameComponent {
       (center.dx / _tileSize).floor().toDouble(),
       (center.dy / _tileSize).floor().toDouble(),
     );
+  }
+
+  /// Resume path
+  /// Example:
+  /// [(1,2),(1,3),(1,4),(1,5)] = [(1,2),(1,5)]
+  List<Offset> _resumePath(List<Offset> path) {
+    List<Offset> newPath = [];
+    List<Offset> newPathStep1 = [];
+
+    List<List<Offset>> listOffset = [];
+    int indexList = -1;
+    double currentY = 0;
+    path.forEach((element) {
+      if (element.dy == currentY) {
+        listOffset[indexList].add(element);
+      } else {
+        currentY = element.dy;
+        listOffset.add([element]);
+        indexList++;
+      }
+    });
+
+    listOffset.forEach((element) {
+      if (element.length > 1) {
+        newPathStep1.add(element.first);
+        newPathStep1.add(element.last);
+      } else {
+        newPathStep1.add(element.first);
+      }
+    });
+
+    indexList = -1;
+    double currentX = 0;
+    listOffset.clear();
+    newPathStep1.forEach((element) {
+      if (element.dx == currentX) {
+        listOffset[indexList].add(element);
+      } else {
+        currentX = element.dx;
+        listOffset.add([element]);
+        indexList++;
+      }
+    });
+
+    listOffset.forEach((element) {
+      if (element.length > 1) {
+        newPath.add(element.first);
+        newPath.add(element.last);
+      } else {
+        newPath.add(element.first);
+      }
+    });
+
+    return newPath;
   }
 }
