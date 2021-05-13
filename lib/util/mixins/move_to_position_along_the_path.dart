@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:a_star_algorithm/a_star_algorithm.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/movement.dart';
+import 'package:bonfire/util/mixins/movement.dart';
 import 'package:flutter/material.dart';
 
 mixin MoveToPositionAlongThePath on GameComponent {

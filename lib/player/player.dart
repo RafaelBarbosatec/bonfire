@@ -4,16 +4,16 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/util/component_movimantation.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
-import 'package:bonfire/util/mixins/move_to_position_mixin.dart';
+import 'package:bonfire/util/mixins/move_to_position_along_the_path.dart';
+import 'package:bonfire/util/mixins/movement.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Player extends GameComponent
-    with Attackable, MoveToPositionMixin
-    implements JoystickListener, ComponentMovement {
+    with Movement, Attackable, MoveToPositionAlongThePath
+    implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
   /// Width of the Player.
@@ -22,7 +22,7 @@ class Player extends GameComponent
   /// Height of the Player.
   final double height;
 
-  /// Movement speed speed of the Player.
+  /// Movement speed speed of the Player (pixel per second).
   double speed;
 
   /// life of the Player
@@ -31,7 +31,6 @@ class Player extends GameComponent
   late double maxLife;
 
   bool _isDead = false;
-  bool isIdle = true;
   double _dtUpdate = 0;
   bool isFocusCamera = true;
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
@@ -90,109 +89,6 @@ class Player extends GameComponent
         break;
     }
     super.update(dt);
-  }
-
-  /// Move player to up
-  void moveUp(double speed, {VoidCallback? onCollision}) {
-    double innerSpeed = speed * _dtUpdate;
-
-    Vector2Rect displacement = position.translate(0, (-innerSpeed));
-
-    if (_playerIsCollision(
-      displacement: displacement,
-      onlyVisible: isFocusCamera,
-    )) {
-      onCollision?.call();
-      return;
-    }
-    isIdle = false;
-    position = displacement;
-  }
-
-  /// Move player to right
-  void moveRight(double speed, {VoidCallback? onCollision}) {
-    double innerSpeed = speed * _dtUpdate;
-
-    Vector2Rect displacement = position.translate(innerSpeed, 0);
-
-    if (_playerIsCollision(
-      displacement: displacement,
-      onlyVisible: isFocusCamera,
-    )) {
-      onCollision?.call();
-      return;
-    }
-
-    isIdle = false;
-
-    position = displacement;
-  }
-
-  /// Move player to down
-  void moveDown(double speed, {VoidCallback? onCollision}) {
-    double innerSpeed = speed * _dtUpdate;
-
-    Vector2Rect displacement = position.translate(0, innerSpeed);
-
-    if (_playerIsCollision(
-      displacement: displacement,
-      onlyVisible: isFocusCamera,
-    )) {
-      onCollision?.call();
-      return;
-    }
-
-    isIdle = false;
-
-    position = displacement;
-  }
-
-  /// Move player to left
-  void moveLeft(double speed, {VoidCallback? onCollision}) {
-    double innerSpeed = speed * _dtUpdate;
-
-    Vector2Rect displacement = position.translate(-innerSpeed, 0);
-
-    if (_playerIsCollision(
-      displacement: displacement,
-      onlyVisible: isFocusCamera,
-    )) {
-      onCollision?.call();
-      return;
-    }
-
-    isIdle = false;
-
-    position = displacement;
-  }
-
-  /// Move player to up and left
-  void moveUpLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
-    moveLeft(speedX, onCollision: onCollision);
-    moveUp(speedY, onCollision: onCollision);
-  }
-
-  /// Move player to up and right
-  void moveUpRight(double speedX, double speedY, {VoidCallback? onCollision}) {
-    moveRight(speedX, onCollision: onCollision);
-    moveUp(speedY, onCollision: onCollision);
-  }
-
-  /// Move player to down and right
-  void moveDownRight(double speedX, double speedY,
-      {VoidCallback? onCollision}) {
-    moveRight(speedX, onCollision: onCollision);
-    moveDown(speedY, onCollision: onCollision);
-  }
-
-  /// Move player to down and left
-  void moveDownLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
-    moveLeft(speedX, onCollision: onCollision);
-    moveDown(speedY, onCollision: onCollision);
-  }
-
-  void idle() {
-    isIdle = true;
   }
 
   /// Move Playr to direction by radAngle
@@ -264,14 +160,13 @@ class Player extends GameComponent
     required Vector2Rect displacement,
     bool onlyVisible = true,
   }) {
-    var collision = false;
     if (this is ObjectCollision) {
       (this as ObjectCollision).setCollisionOnlyVisibleScreen(onlyVisible);
-      collision = (this as ObjectCollision).isCollision(
+      return (this as ObjectCollision).isCollision(
         displacement: displacement,
       );
+    } else {
+      return false;
     }
-
-    return collision;
   }
 }

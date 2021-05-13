@@ -2,16 +2,16 @@ import 'dart:math';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
-import 'package:bonfire/util/component_movimantation.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
+import 'package:bonfire/util/mixins/movement.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// It is used to represent your enemies.
-class Enemy extends GameComponent with Attackable implements ComponentMovement {
+class Enemy extends GameComponent with Attackable implements Movement {
   /// Height of the Enemy.
   final double height;
 
@@ -71,7 +71,6 @@ class Enemy extends GameComponent with Attackable implements ComponentMovement {
       onCollision?.call();
       return;
     }
-    ;
 
     position = position.translate(0, (speed * -1));
   }
@@ -262,8 +261,12 @@ class Enemy extends GameComponent with Attackable implements ComponentMovement {
     double translateX,
     double translateY,
   ) {
-    return (this as ObjectCollision).isCollision(
-      displacement: this.position.translate(translateX, translateY),
-    );
+    if (this is ObjectCollision) {
+      return (this as ObjectCollision).isCollision(
+        displacement: this.position.translate(translateX, translateY),
+      );
+    } else {
+      return false;
+    }
   }
 }
