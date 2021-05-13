@@ -15,8 +15,10 @@ mixin MoveToPositionAlongThePath on GameComponent {
   Color _pathLineColor = Colors.lightBlueAccent.withOpacity(0.5);
   double _pathLineStrokeWidth = 4;
 
-  void setupMoveToPositionAlongThePath(Color pathLineColor,
-      {double pathLineStrokeWidth = 4}) {
+  void setupMoveToPositionAlongThePath(
+    Color pathLineColor, {
+    double pathLineStrokeWidth = 4,
+  }) {
     _pathLineColor = pathLineColor;
     _pathLineStrokeWidth = pathLineStrokeWidth;
   }
