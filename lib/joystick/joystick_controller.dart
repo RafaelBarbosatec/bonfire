@@ -33,7 +33,7 @@ class JoystickDirectionalEvent {
 enum ActionEvent { DOWN, UP, MOVE }
 
 class JoystickActionEvent {
-  final dynamic? id;
+  final dynamic id;
   final double intensity;
   final double radAngle;
   final ActionEvent event;

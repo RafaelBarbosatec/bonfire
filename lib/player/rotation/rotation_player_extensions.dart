@@ -11,7 +11,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     required double width,
     required double height,
     Future<SpriteAnimation>? animationDestroy,
-    dynamic? id,
+    dynamic id,
     double speed = 150,
     double damage = 1,
     double? radAngleDirection,
@@ -47,7 +47,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     required double damage,
     required double height,
     required double width,
-    dynamic? id,
+    dynamic id,
     double? radAngleDirection,
     bool withPush = true,
   }) {

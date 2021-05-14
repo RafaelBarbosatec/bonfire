@@ -42,7 +42,7 @@ extension SimplePlayerExtensions on SimplePlayer {
     Future<SpriteAnimation>? animationDestroy,
     required double width,
     required double height,
-    dynamic? id,
+    dynamic id,
     double speed = 150,
     double damage = 1,
     Direction? direction,
