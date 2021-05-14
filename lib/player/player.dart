@@ -22,7 +22,7 @@ class Player extends GameComponent
   /// Height of the Player.
   final double height;
 
-  /// Movement speed speed of the Player (pixel per second).
+  /// Movement speed of the Player (pixel per second).
   double speed;
 
   /// life of the Player
@@ -56,8 +56,9 @@ class Player extends GameComponent
   @override
   void update(double dt) {
     _dtUpdate = dt;
-    final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
     if (isDead) return;
+
+    final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
 
     switch (_currentDirectional) {
       case JoystickMoveDirectional.MOVE_UP:
@@ -91,7 +92,7 @@ class Player extends GameComponent
     super.update(dt);
   }
 
-  /// Move Playr to direction by radAngle
+  /// Move Player to direction by radAngle
   void moveFromAngle(double speed, double angle, {VoidCallback? onCollision}) {
     double nextX = (speed * _dtUpdate) * cos(angle);
     double nextY = (speed * _dtUpdate) * sin(angle);
@@ -153,7 +154,7 @@ class Player extends GameComponent
 
   @override
   void moveTo(Vector2 position) {
-    this.moveAlongThePath(position, speed);
+    this.moveToPositionAlongThePath(position, speed);
   }
 
   bool _playerIsCollision({

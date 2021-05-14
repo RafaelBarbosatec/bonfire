@@ -23,7 +23,7 @@ mixin MoveToPositionAlongThePath on GameComponent {
     _pathLineStrokeWidth = pathLineStrokeWidth;
   }
 
-  void moveAlongThePath(
+  void moveToPositionAlongThePath(
     Vector2 position,
     double speed,
   ) {

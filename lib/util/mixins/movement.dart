@@ -6,11 +6,11 @@ import 'package:bonfire/util/vector2rect.dart';
 
 mixin Movement on GameComponent {
   bool isIdle = true;
-  double _dtUpdate = 0;
+  double dtUpdate = 0;
 
   /// Move player to Up
   void moveUp(double speed, {VoidCallback? onCollision}) {
-    double innerSpeed = speed * _dtUpdate;
+    double innerSpeed = speed * dtUpdate;
     Vector2Rect displacement = position.translate(0, (innerSpeed * -1));
 
     if (_isCollision(displacement)) {
@@ -24,7 +24,7 @@ mixin Movement on GameComponent {
 
   /// Move player to Down
   void moveDown(double speed, {VoidCallback? onCollision}) {
-    double innerSpeed = speed * _dtUpdate;
+    double innerSpeed = speed * dtUpdate;
     Vector2Rect displacement = position.translate(0, innerSpeed);
 
     if (_isCollision(displacement)) {
@@ -38,7 +38,7 @@ mixin Movement on GameComponent {
 
   /// Move player to Left
   void moveLeft(double speed, {VoidCallback? onCollision}) {
-    double innerSpeed = speed * _dtUpdate;
+    double innerSpeed = speed * dtUpdate;
     Vector2Rect displacement = position.translate((innerSpeed * -1), 0);
 
     if (_isCollision(displacement)) {
@@ -52,7 +52,7 @@ mixin Movement on GameComponent {
 
   /// Move player to Right
   void moveRight(double speed, {VoidCallback? onCollision}) {
-    double innerSpeed = speed * _dtUpdate;
+    double innerSpeed = speed * dtUpdate;
     Vector2Rect displacement = position.translate(innerSpeed, 0);
 
     if (_isCollision(displacement)) {
@@ -95,7 +95,7 @@ mixin Movement on GameComponent {
 
   @override
   void update(double dt) {
-    _dtUpdate = dt;
+    dtUpdate = dt;
     super.update(dt);
   }
 

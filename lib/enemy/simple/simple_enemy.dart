@@ -51,7 +51,7 @@ class SimpleEnemy extends Enemy {
           : SimpleAnimationEnum.runLeft);
     }
     lastDirection = Direction.up;
-    super.moveUp(speed);
+    super.moveUp(speed, onCollision: onCollision);
   }
 
   @override
@@ -65,7 +65,7 @@ class SimpleEnemy extends Enemy {
           : SimpleAnimationEnum.runLeft);
     }
     lastDirection = Direction.down;
-    super.moveDown(speed);
+    super.moveDown(speed, onCollision: onCollision);
   }
 
   @override
@@ -74,7 +74,7 @@ class SimpleEnemy extends Enemy {
     animation.play(SimpleAnimationEnum.runLeft);
     lastDirection = Direction.left;
     lastDirectionHorizontal = Direction.left;
-    super.moveLeft(speed);
+    super.moveLeft(speed, onCollision: onCollision);
   }
 
   @override
@@ -83,7 +83,7 @@ class SimpleEnemy extends Enemy {
     animation.play(SimpleAnimationEnum.runRight);
     lastDirection = Direction.right;
     lastDirectionHorizontal = Direction.right;
-    super.moveRight(speed);
+    super.moveRight(speed, onCollision: onCollision);
   }
 
   @override
@@ -96,7 +96,7 @@ class SimpleEnemy extends Enemy {
     }
     lastDirection = Direction.upRight;
     lastDirectionHorizontal = Direction.right;
-    super.moveUpRight(speedX, speedY);
+    super.moveUpRight(speedX, speedY, onCollision: onCollision);
   }
 
   @override
@@ -109,7 +109,7 @@ class SimpleEnemy extends Enemy {
     }
     lastDirection = Direction.upLeft;
     lastDirectionHorizontal = Direction.left;
-    super.moveUpLeft(speedX, speedY);
+    super.moveUpLeft(speedX, speedY, onCollision: onCollision);
   }
 
   @override
@@ -123,7 +123,7 @@ class SimpleEnemy extends Enemy {
     }
     lastDirection = Direction.downRight;
     lastDirectionHorizontal = Direction.right;
-    super.moveDownRight(speedX, speedY);
+    super.moveDownRight(speedX, speedY, onCollision: onCollision);
   }
 
   @override
@@ -136,7 +136,7 @@ class SimpleEnemy extends Enemy {
     }
     lastDirection = Direction.downLeft;
     lastDirectionHorizontal = Direction.left;
-    super.moveDownLeft(speedX, speedY);
+    super.moveDownLeft(speedX, speedY, onCollision: onCollision);
   }
 
   @override

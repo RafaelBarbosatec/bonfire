@@ -80,24 +80,27 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           return;
         }
 
+        translateX = translateX / this.dtUpdate;
+        translateY = translateY / this.dtUpdate;
+
         if (translateX > 0 && translateY > 0) {
           this.moveDownRight(translateX, translateY);
         } else if (translateX < 0 && translateY < 0) {
-          this.moveUpLeft(translateX * -1, translateY * -1);
+          this.moveUpLeft(translateX.abs(), translateY.abs());
         } else if (translateX > 0 && translateY < 0) {
-          this.moveUpRight(translateX, translateY * -1);
+          this.moveUpRight(translateX, translateY.abs());
         } else if (translateX < 0 && translateY > 0) {
-          this.moveDownLeft(translateX * -1, translateY);
+          this.moveDownLeft(translateX.abs(), translateY);
         } else {
           if (translateX > 0) {
             this.moveRight(translateX);
           } else if (translateX < 0) {
-            moveLeft((translateX * -1));
+            moveLeft(translateX.abs());
           }
           if (translateY > 0) {
             moveDown(translateY);
           } else if (translateY < 0) {
-            moveUp((translateY * -1));
+            moveUp(translateY.abs());
           }
         }
       },
@@ -501,24 +504,27 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           return;
         }
 
+        translateX = translateX / this.dtUpdate;
+        translateY = translateY / this.dtUpdate;
+
         if (translateX > 0 && translateY > 0) {
           this.moveDownRight(translateX, translateY);
         } else if (translateX < 0 && translateY < 0) {
-          this.moveUpLeft(translateX * -1, translateY * -1);
+          this.moveUpLeft(translateX.abs(), translateY.abs());
         } else if (translateX > 0 && translateY < 0) {
-          this.moveUpRight(translateX, translateY * -1);
+          this.moveUpRight(translateX, translateY.abs());
         } else if (translateX < 0 && translateY > 0) {
-          this.moveDownLeft(translateX * -1, translateY);
+          this.moveDownLeft(translateX.abs(), translateY);
         } else {
           if (translateX > 0) {
             this.moveRight(translateX);
           } else {
-            moveLeft((translateX * -1));
+            moveLeft(translateX.abs());
           }
           if (translateY > 0) {
             moveDown(translateY);
           } else {
-            moveUp((translateY * -1));
+            moveUp(translateY.abs());
           }
         }
       },
