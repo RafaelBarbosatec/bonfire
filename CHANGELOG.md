@@ -1,3 +1,7 @@
+# 1.0.1
+
+- Fix `SimpleDirectionAnimation`
+
 # 1.0.0
 
 - Rename `gameCamera` to `camera`
