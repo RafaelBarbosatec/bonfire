@@ -105,4 +105,6 @@ mixin DragGesture on GameComponent {
   void moveDrag(int pointer, Offset position) {}
   void endDrag(int pointer) {}
   void cancelDrag(int pointer) {}
+
+  bool get receiveInteraction => _pointer != -1;
 }

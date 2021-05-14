@@ -50,6 +50,7 @@ mixin MoveToPositionAlongThePath on GameComponent {
     _currentPath.clear();
     _currentIndex = 0;
     _component?.idle();
+    gameRef.map.setLinePath(_currentPath, _pathLineColor, _pathLineStrokeWidth);
   }
 
   void _move(double dt) {

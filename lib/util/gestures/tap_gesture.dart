@@ -69,4 +69,6 @@ mixin TapGesture on GameComponent {
   void onTapUp(int pointer, Offset position);
   void onTapCancel();
   void onTap();
+
+  bool get receiveInteraction => _pointer != -1;
 }

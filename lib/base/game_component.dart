@@ -79,4 +79,7 @@ abstract class GameComponent extends Component
     }
     return bottomPriority;
   }
+
+  @override
+  bool hasGesture() => true;
 }

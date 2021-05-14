@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 class JoystickMoveToPosition extends JoystickController {
   int? _pointer;
+  bool _interfaceReceiveInteraction = false;
 
   @override
   void render(Canvas c) {}
@@ -18,15 +19,20 @@ class JoystickMoveToPosition extends JoystickController {
   void handlerPointerDown(PointerDownEvent event) {
     _pointer = event.pointer;
     super.handlerPointerDown(event);
+    _interfaceReceiveInteraction =
+        gameRef.interface?.receiveInteraction ?? false;
   }
 
   @override
   void handlerPointerUp(PointerUpEvent event) {
     if (_pointer == event.pointer) {
-      final absolutePosition =
-          this.gameRef.camera.screenPositionToWorld(event.position);
-      moveTo(absolutePosition.toVector2());
+      if (!_interfaceReceiveInteraction) {
+        final absolutePosition =
+            this.gameRef.camera.screenPositionToWorld(event.position);
+        moveTo(absolutePosition.toVector2());
+      }
     }
+    _interfaceReceiveInteraction = false;
     super.handlerPointerUp(event);
   }
 }

@@ -13,7 +13,6 @@ abstract class PointerDetectorHandler {
   void handlerPointerDown(PointerDownEvent event) {}
   void handlerPointerMove(PointerMoveEvent event) {}
   void handlerPointerUp(PointerUpEvent event) {}
-
   void handlerPointerCancel(PointerCancelEvent event) {}
 
   bool hasGesture() {
