@@ -1,24 +1,34 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/map/tile/tile.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class MapWorld extends MapGame {
   double lastCameraX = -1;
   double lastCameraY = -1;
   double lastZoom = -1;
-  Size lastSizeScreen;
+  Vector2? lastSizeScreen;
   Iterable<Tile> _tilesToRender = [];
-  Iterable<Tile> _tilesCollisionsRendered = [];
-  Iterable<Tile> _tilesCollisions = [];
+  Iterable<ObjectCollision> _tilesCollisionsRendered = [];
+  Iterable<ObjectCollision> _tilesCollisions = [];
+
+  List<Offset> _linePath = [];
+  Paint _paintPath = Paint()
+    ..color = Colors.lightBlueAccent.withOpacity(0.8)
+    ..strokeWidth = 4
+    ..strokeCap = StrokeCap.round;
 
   MapWorld(Iterable<Tile> tiles) : super(tiles) {
-    _tilesCollisions = tiles.where((element) =>
-        (element is ObjectCollision) &&
-        (element as ObjectCollision).containCollision());
+    _tilesCollisions = tiles
+        .where((element) =>
+            (element is ObjectCollision) &&
+            (element as ObjectCollision).containCollision())
+        .cast<ObjectCollision>();
   }
 
   @override
@@ -26,26 +36,27 @@ class MapWorld extends MapGame {
     for (final tile in _tilesToRender) {
       tile.render(canvas);
     }
+    _drawPathLine(canvas);
   }
 
   @override
   void update(double t) {
-    if (lastCameraX != gameRef.gameCamera.position.x ||
-        lastCameraY != gameRef.gameCamera.position.y ||
-        lastZoom != gameRef.gameCamera.zoom) {
-      lastCameraX = gameRef.gameCamera.position.x;
-      lastCameraY = gameRef.gameCamera.position.y;
-      lastZoom = gameRef.gameCamera.zoom;
+    if (lastCameraX != gameRef.camera.position.dx ||
+        lastCameraY != gameRef.camera.position.dy ||
+        lastZoom != gameRef.camera.config.zoom) {
+      lastCameraX = gameRef.camera.position.dx;
+      lastCameraY = gameRef.camera.position.dy;
+      lastZoom = gameRef.camera.config.zoom;
 
       List<Tile> tilesRender = [];
-      List<Tile> tilesCollision = [];
+      List<ObjectCollision> tilesCollision = [];
       for (final tile in tiles) {
-        tile.gameRef ??= gameRef;
+        tile.gameRef = gameRef;
         if (tile.isVisibleInCamera()) {
           tilesRender.add(tile);
           if ((tile is ObjectCollision) &&
               (tile as ObjectCollision).containCollision())
-            tilesCollision.add(tile);
+            tilesCollision.add(tile as ObjectCollision);
         }
       }
       _tilesToRender = tilesRender;
@@ -62,24 +73,24 @@ class MapWorld extends MapGame {
   }
 
   @override
-  Iterable<Tile> getCollisionsRendered() {
+  Iterable<ObjectCollision> getCollisionsRendered() {
     return _tilesCollisionsRendered;
   }
 
   @override
-  Iterable<Tile> getCollisions() {
+  Iterable<ObjectCollision> getCollisions() {
     return _tilesCollisions;
   }
 
   @override
-  void resize(Size size) {
+  void onGameResize(Vector2 size) {
     verifyMaxTopAndLeft(size);
-    super.resize(size);
+    super.onGameResize(size);
   }
 
-  void verifyMaxTopAndLeft(Size size) {
+  void verifyMaxTopAndLeft(Vector2 size) {
     if (lastSizeScreen == size) return;
-    lastSizeScreen = size;
+    lastSizeScreen = size.clone();
 
     lastCameraX = -1;
     lastCameraY = -1;
@@ -89,12 +100,13 @@ class MapWorld extends MapGame {
   }
 
   @override
-  void updateTiles(Iterable<Tile> map) {
+  Future<void> updateTiles(Iterable<Tile> map) async {
     lastCameraX = -1;
     lastCameraY = -1;
     lastZoom = -1;
     lastSizeScreen = null;
     this.tiles = map;
+    await onLoad();
     verifyMaxTopAndLeft(gameRef.size);
   }
 
@@ -104,26 +116,45 @@ class MapWorld extends MapGame {
     double width = 0;
 
     this.tiles.forEach((tile) {
-      if (tile.position.right > width) width = tile.position.right;
-      if (tile.position.bottom > height) height = tile.position.bottom;
+      if (tile.position.rect.right > width) width = tile.position.rect.right;
+      if (tile.position.rect.bottom > height) height = tile.position.bottom;
     });
 
     return Size(width, height);
   }
 
-  Position getStartPosition() {
+  Vector2 getStartPosition() {
     try {
-      double x = this.tiles.first.position.left;
-      double y = this.tiles.first.position.top;
+      double x = this.tiles.first.position.rect.left;
+      double y = this.tiles.first.position.rect.top;
 
       this.tiles.forEach((tile) {
-        if (tile.position.left < x) x = tile.position.left;
-        if (tile.position.top < y) y = tile.position.top;
+        if (tile.position.rect.left < x) x = tile.position.rect.left;
+        if (tile.position.rect.top < y) y = tile.position.rect.top;
       });
 
-      return Position(x, y);
+      return Vector2(x, y);
     } catch (e) {
-      return Position.empty();
+      return Vector2.zero();
+    }
+  }
+
+  @override
+  void setLinePath(List<Offset> path, Color color, double strokeWidth) {
+    _paintPath.color = color;
+    _paintPath.strokeWidth = strokeWidth;
+    _linePath = path;
+    super.setLinePath(path, color, strokeWidth);
+  }
+
+  void _drawPathLine(Canvas canvas) {
+    if (_linePath.isNotEmpty) {
+      _paintPath.style = PaintingStyle.stroke;
+      final path = Path()..moveTo(_linePath.first.dx, _linePath.first.dy);
+      for (var i = 1; i < _linePath.length; i++) {
+        path.lineTo(_linePath[i].dx, _linePath[i].dy);
+      }
+      canvas.drawPath(path, _paintPath);
     }
   }
 }

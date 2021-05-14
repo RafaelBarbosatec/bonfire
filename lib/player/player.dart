@@ -1,15 +1,15 @@
-import 'dart:math';
-
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
-import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/position.dart';
+import 'package:bonfire/util/mixins/move_to_position_along_the_path.dart';
+import 'package:bonfire/util/mixins/movement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Player extends GameComponent with Attackable implements JoystickListener {
+class Player extends GameComponent
+    with Movement, Attackable, MoveToPositionAlongThePath
+    implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
   /// Width of the Player.
@@ -18,119 +18,72 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   /// Height of the Player.
   final double height;
 
-  /// World position that this Player must position yourself.
-  final Position initPosition;
-
+  /// Movement speed of the Player (pixel per second).
   double speed;
 
+  /// life of the Player
   double life;
-  double maxLife;
+
+  late double maxLife;
 
   bool _isDead = false;
-
-  double _dtUpdate = 0;
-
   bool isFocusCamera = true;
+  JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
 
   Player({
-    @required this.initPosition,
-    this.width = 32,
-    this.height = 32,
+    required Vector2 position,
+    required this.width,
+    required this.height,
     this.life = 100,
     this.speed = 100,
   }) {
     receivesAttackFrom = ReceivesAttackFromEnum.ENEMY;
-    position = Rect.fromLTWH(
-      initPosition.x,
-      initPosition.y,
+    this.position = Rect.fromLTWH(
+      position.x,
+      position.y,
       width,
       height,
-    );
+    ).toVector2Rect();
 
     maxLife = life;
   }
 
   @override
   void update(double dt) {
-    _dtUpdate = dt;
+    if (isDead) return;
+
+    final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
+
+    switch (_currentDirectional) {
+      case JoystickMoveDirectional.MOVE_UP:
+        moveUp(speed);
+        break;
+      case JoystickMoveDirectional.MOVE_UP_LEFT:
+        moveUpLeft(diagonalSpeed, diagonalSpeed);
+        break;
+      case JoystickMoveDirectional.MOVE_UP_RIGHT:
+        moveUpRight(diagonalSpeed, diagonalSpeed);
+        break;
+      case JoystickMoveDirectional.MOVE_RIGHT:
+        moveRight(speed);
+        break;
+      case JoystickMoveDirectional.MOVE_DOWN:
+        moveDown(speed);
+        break;
+      case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
+        moveDownRight(diagonalSpeed, diagonalSpeed);
+        break;
+      case JoystickMoveDirectional.MOVE_DOWN_LEFT:
+        moveDownLeft(diagonalSpeed, diagonalSpeed);
+        break;
+      case JoystickMoveDirectional.MOVE_LEFT:
+        moveLeft(speed);
+        break;
+      case JoystickMoveDirectional.IDLE:
+        idle();
+        break;
+    }
     super.update(dt);
-  }
-
-  void moveTop(double speed, {VoidCallback onCollision}) {
-    double innerSpeed = speed * _dtUpdate;
-
-    Rect displacement = position.translate(0, (-innerSpeed));
-
-    if (_playerIsCollision(
-        displacement: displacement, onlyVisible: isFocusCamera)) {
-      onCollision?.call();
-      return;
-    }
-    position = displacement;
-  }
-
-  void moveRight(double speed, {VoidCallback onCollision}) {
-    double innerSpeed = speed * _dtUpdate;
-
-    Rect displacement = position.translate(innerSpeed, 0);
-
-    if (_playerIsCollision(
-        displacement: displacement, onlyVisible: isFocusCamera)) {
-      onCollision?.call();
-      return;
-    }
-
-    position = displacement;
-  }
-
-  void moveBottom(double speed, {VoidCallback onCollision}) {
-    double innerSpeed = speed * _dtUpdate;
-
-    Rect displacement = position.translate(0, innerSpeed);
-
-    if (_playerIsCollision(
-        displacement: displacement, onlyVisible: isFocusCamera)) {
-      onCollision?.call();
-      return;
-    }
-
-    position = displacement;
-  }
-
-  void moveLeft(double speed, {VoidCallback onCollision}) {
-    double innerSpeed = speed * _dtUpdate;
-
-    Rect displacement = position.translate(-innerSpeed, 0);
-
-    if (_playerIsCollision(
-        displacement: displacement, onlyVisible: isFocusCamera)) {
-      onCollision?.call();
-      return;
-    }
-
-    position = displacement;
-  }
-
-  void moveFromAngle(double speed, double angle, {VoidCallback onCollision}) {
-    double nextX = (speed * _dtUpdate) * cos(angle);
-    double nextY = (speed * _dtUpdate) * sin(angle);
-    Offset nextPoint = Offset(nextX, nextY);
-
-    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
-            position.center.dy + nextPoint.dy) -
-        position.center;
-
-    Offset newDiffBase = diffBase;
-
-    Rect newPosition = position.shift(newDiffBase);
-
-    if (_playerIsCollision(
-        displacement: newPosition, onlyVisible: isFocusCamera)) {
-      onCollision?.call();
-      return;
-    }
-
-    position = newPosition;
   }
 
   @override
@@ -143,12 +96,14 @@ class Player extends GameComponent with Attackable implements JoystickListener {
     }
   }
 
+  /// marks the player as dead
   void die() {
     _isDead = true;
   }
 
   bool get isDead => _isDead;
 
+  /// increase life in the player
   void addLife(double life) {
     this.life += life;
     if (this.life > maxLife) {
@@ -160,22 +115,12 @@ class Player extends GameComponent with Attackable implements JoystickListener {
   void joystickAction(JoystickActionEvent event) {}
 
   @override
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {}
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    _currentDirectional = event.directional;
+  }
 
   @override
-  int priority() => PriorityLayer.PLAYER;
-
-  @override
-  void moveTo(Position position) {}
-
-  bool _playerIsCollision({Rect displacement, bool onlyVisible}) {
-    var collision = false;
-    if (this is ObjectCollision) {
-      (this as ObjectCollision).setCollisionOnlyVisibleScreen(onlyVisible);
-      collision =
-          (this as ObjectCollision).isCollision(displacement: displacement);
-    }
-
-    return collision;
+  void moveTo(Vector2 position) {
+    this.moveToPositionAlongThePath(position, speed);
   }
 }

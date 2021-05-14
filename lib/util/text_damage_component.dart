@@ -1,38 +1,36 @@
 import 'dart:math';
 
 import 'package:bonfire/base/bonfire_game.dart';
-import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/text_config.dart';
+import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 
 enum DirectionTextDamage { LEFT, RIGHT, RANDOM, NONE }
 
 class TextDamageComponent extends TextComponent with HasGameRef<BonfireGame> {
   final String text;
-  final TextConfig config;
-  final Position initPosition;
   final DirectionTextDamage direction;
   final double maxDownSize;
-  bool destroyed = false;
-  Position position;
-  double _initialY;
-  double _velocity;
+  late double _initialY;
+  late double _velocity;
   final double gravity;
   double _moveAxisX = 0;
   final bool onlyUp;
 
   TextDamageComponent(
     this.text,
-    this.initPosition, {
+    Vector2 position, {
     this.onlyUp = false,
-    this.config,
+    TextConfig? config,
     double initVelocityTop = -4,
     this.maxDownSize = 20,
     this.gravity = 0.5,
     this.direction = DirectionTextDamage.RANDOM,
-  }) : super(text, config: (config ?? TextConfig(fontSize: 10))) {
-    position = initPosition;
+  }) : super(
+          text,
+          config: (config ?? TextConfig(fontSize: 10)),
+          position: position,
+        ) {
     _initialY = position.y;
     _velocity = initVelocityTop;
     switch (direction) {
@@ -48,19 +46,17 @@ class TextDamageComponent extends TextComponent with HasGameRef<BonfireGame> {
       case DirectionTextDamage.NONE:
         break;
     }
-    setByPosition(position);
   }
 
   @override
-  bool destroy() => destroyed;
+  void render(Canvas c) {
+    if (shouldRemove) return;
+    super.render(c);
+  }
 
   @override
   void update(double t) {
-    setByPosition(Position(
-      position.x,
-      position.y,
-    ));
-
+    if (shouldRemove) return;
     position.y += _velocity;
     position.x += _moveAxisX;
     _velocity += gravity;
@@ -75,10 +71,6 @@ class TextDamageComponent extends TextComponent with HasGameRef<BonfireGame> {
     super.update(t);
   }
 
-  void remove() {
-    destroyed = true;
-  }
-
   @override
-  int priority() => PriorityLayer.OBJECTS;
+  int get priority => LayerPriority.getComponentPriority(position.y.round());
 }

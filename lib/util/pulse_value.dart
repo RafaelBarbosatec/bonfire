@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 class PulseValue {
   final double speed;
   final Curve curve;
-  double value;
+  double value = 0;
   bool _animIsReverse = false;
   double _controlAnim = 0;
   PulseValue({this.speed = 1, this.curve = Curves.decelerate});

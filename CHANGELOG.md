@@ -1,11 +1,77 @@
-# 0.9.0+1
-- format code
+# 1.0.0
+
+- Rename `gameCamera` to `camera`
+- Add [JoystickMoveToPosition](https://bonfire-engine.github.io/#/joystick?id=joystickmovetoposition)
+- Add mixin `MoveToPositionAlongThePath` and `Movement`
+
+# 1.0.0-rc8
+
+- Improvements in `SimpleDirectionAnimation`
+- Improvements in `Collision`
+- Update `http`
+
+# 1.0.0-rc7
+
+- fix bug animation to up in `SimpleEnemy`
+
+# 1.0.0-rc6
+
+- remove comments in `FlyingAttackAngleObject` (bug)
+- improvements in `Camera`.
+
+# 1.0.0-rc5
+
+- Rename params in `simpleAttackMelee`
+- new improvements to use `TapGesture` and `DragGesture` together.
+- improvements in `Joystick`(KEYBOARD) to adds diagonal movement with directional.
+- improvements in `moveToPosition` of the Player.
+
+# 1.0.0-rc4
+
+- BREAKING CHANGE: add Shapes(circle,rectangle,polygon) to use collisions.
+- fix to use `TapGesture` and `DragGesture` together.
+- Improvements in mixin `Sensor`.
+- Improvements in `TalkDialog`.
+
+# 1.0.0-rc3
+
+- Improvement in `simpleAttackMelee`
+- Improvement in `InterfaceComponent` when `selectable` enable
+
+
+# 1.0.0-rc2
+
+- Improvement in layer priority.
+- Improvement in `Camera` when `moveOnlyMapArea` enable.
+- Fix bug `animation.playOnce` in Player and Enemy
+- Fix bug `addAction` in `Joystick`
+- Fix bug `seePlayer` in `GameDecoration`
+
+# 1.0.0-rc1
+
+- Fix bug in `cameraMoveOnlyMapArea`
+- Add `CameraConfig` in `BonfireTiledWidget` and `BonfireWidget`
+
+# 1.0.0-rc0
+
+- Update Flame to [1.0.0-rc9](https://pub.dev/packages/flame/versions/1.0.0-rc9/changelog)
+- Add null-safety
+- Add support to use overlays of the Flame.
+- BREAKING CHANGE: All params `Sprite` in components become `Future<Sprite>`.
+- BREAKING CHANGE: All params `Animation` in components become `Future<SpriteAnimation>`.
+- BREAKING CHANGE: To configure `Lighting`  use `setupLighting(LightingConfig())`.
+- BREAKING CHANGE: Removed the `Position` class. Now use `Vector2`.
+- WARN (Render priority): The only components that have fixed rendering priority are: `MapGame` and` BackgroundColorGame`. All others render with priority according to the component's position on the Y axis.
+- Update support tiled to 1.5.0.
+- Rename enum values in `Direction`.
+- Rename values in `SimpleDirectionAnimation`.
+- Improvements in `InterfaceComponent`. Now can be selectable.
+- Others improvements.
 
 # 0.9.0
 
 - BREAKING CHANGE: Collision system. Remove param `collision` from Enemy, Player and GameDecoration. If you need add collision in your component
-use the mixin 'Collision' and settings your properties using 'setupCollision()' method. See [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/enemy/goblin.dart).
--  Improvements in `DragGesture` and `TapGesture`
+use the mixin 'Collision' and settings your properties using 'setupCollision()' method.
 
 # 0.8.6
 

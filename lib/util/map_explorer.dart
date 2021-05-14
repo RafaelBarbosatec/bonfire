@@ -1,6 +1,6 @@
+import 'package:bonfire/camera/camera.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/util/camera/camera.dart';
-import 'package:flame/position.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 class MapExplorer implements JoystickListener {
   final Camera camera;
@@ -13,25 +13,41 @@ class MapExplorer implements JoystickListener {
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     double speed = 8 * event.intensity;
-    camera.moveCamera(speed, event.directional);
-    if (event.directional == JoystickMoveDirectional.MOVE_UP_LEFT) {
-      camera.moveLeft(speed * 0.8);
-      camera.moveTop(speed * 0.8);
-    }
-    if (event.directional == JoystickMoveDirectional.MOVE_UP_RIGHT) {
-      camera.moveRight(speed * 0.8);
-      camera.moveTop(speed * 0.8);
-    }
-    if (event.directional == JoystickMoveDirectional.MOVE_DOWN_LEFT) {
-      camera.moveLeft(speed * 0.8);
-      camera.moveBottom(speed * 0.8);
-    }
-    if (event.directional == JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
-      camera.moveRight(speed * 0.8);
-      camera.moveBottom(speed * 0.8);
+
+    switch (event.directional) {
+      case JoystickMoveDirectional.MOVE_UP:
+        camera.moveTop(speed);
+        break;
+      case JoystickMoveDirectional.MOVE_RIGHT:
+        camera.moveRight(speed);
+        break;
+      case JoystickMoveDirectional.MOVE_DOWN:
+        camera.moveDown(speed);
+        break;
+      case JoystickMoveDirectional.MOVE_LEFT:
+        camera.moveUp(speed);
+        break;
+      case JoystickMoveDirectional.MOVE_UP_LEFT:
+        camera.moveUp(speed * 0.8);
+        camera.moveTop(speed * 0.8);
+        break;
+      case JoystickMoveDirectional.MOVE_UP_RIGHT:
+        camera.moveRight(speed * 0.8);
+        camera.moveTop(speed * 0.8);
+        break;
+      case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
+        camera.moveRight(speed * 0.8);
+        camera.moveDown(speed * 0.8);
+        break;
+      case JoystickMoveDirectional.MOVE_DOWN_LEFT:
+        camera.moveUp(speed * 0.8);
+        camera.moveDown(speed * 0.8);
+        break;
+      case JoystickMoveDirectional.IDLE:
+        break;
     }
   }
 
   @override
-  void moveTo(Position position) {}
+  void moveTo(Vector2 position) {}
 }

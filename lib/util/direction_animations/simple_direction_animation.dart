@@ -2,118 +2,156 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
-import 'package:flame/animation.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/foundation.dart';
 
 class SimpleDirectionAnimation {
-  final Animation idleLeft;
-  final Animation idleRight;
-  final Animation idleTop;
-  final Animation idleBottom;
-  final Animation idleTopLeft;
-  final Animation idleTopRight;
-  final Animation idleBottomLeft;
-  final Animation idleBottomRight;
-  final Animation runTop;
-  final Animation runRight;
-  final Animation runBottom;
-  final Animation runLeft;
-  final Animation runTopLeft;
-  final Animation runTopRight;
-  final Animation runBottomLeft;
-  final Animation runBottomRight;
-  final Map<String, Animation> others;
-  final SimpleAnimationEnum init;
+  late SpriteAnimation idleLeft;
+  late SpriteAnimation idleRight;
+  late SpriteAnimation runLeft;
+  late SpriteAnimation runRight;
 
-  Animation current;
-  SimpleAnimationEnum _currentType;
-  AnimatedObjectOnce _fastAnimation;
+  SpriteAnimation? idleUp;
+  SpriteAnimation? idleDown;
+  SpriteAnimation? idleUpLeft;
+  SpriteAnimation? idleUpRight;
+  SpriteAnimation? idleDownLeft;
+  SpriteAnimation? idleDownRight;
+  SpriteAnimation? runUp;
+  SpriteAnimation? runDown;
+  SpriteAnimation? runUpLeft;
+  SpriteAnimation? runUpRight;
+  SpriteAnimation? runDownLeft;
+  SpriteAnimation? runDownRight;
+
+  Map<String, SpriteAnimation> others = {};
+
+  final _loader = AssetsLoader();
+
+  SpriteAnimation? current;
+  late SimpleAnimationEnum _currentType;
+  AnimatedObjectOnce? _fastAnimation;
+  Vector2Rect? position;
+
   bool runToTheEndFastAnimation = false;
-  Rect position;
 
   SimpleDirectionAnimation({
-    @required this.idleLeft,
-    @required this.idleRight,
-    this.idleTop,
-    this.idleBottom,
-    this.idleTopLeft,
-    this.idleTopRight,
-    this.idleBottomLeft,
-    this.idleBottomRight,
-    this.runTop,
-    @required this.runRight,
-    this.runBottom,
-    @required this.runLeft,
-    this.runTopLeft,
-    this.runTopRight,
-    this.runBottomLeft,
-    this.runBottomRight,
-    this.others,
-    this.init = SimpleAnimationEnum.idleRight,
+    required Future<SpriteAnimation> idleLeft,
+    required Future<SpriteAnimation> idleRight,
+    required Future<SpriteAnimation> runRight,
+    required Future<SpriteAnimation> runLeft,
+    Future<SpriteAnimation>? idleUp,
+    Future<SpriteAnimation>? idleDown,
+    Future<SpriteAnimation>? idleUpLeft,
+    Future<SpriteAnimation>? idleUpRight,
+    Future<SpriteAnimation>? idleDownLeft,
+    Future<SpriteAnimation>? idleDownRight,
+    Future<SpriteAnimation>? runUp,
+    Future<SpriteAnimation>? runDown,
+    Future<SpriteAnimation>? runUpLeft,
+    Future<SpriteAnimation>? runUpRight,
+    Future<SpriteAnimation>? runDownLeft,
+    Future<SpriteAnimation>? runDownRight,
+    Map<String, Future<SpriteAnimation>>? others,
+    SimpleAnimationEnum initAnimation = SimpleAnimationEnum.idleRight,
   }) {
-    play(init);
+    _currentType = initAnimation;
+    _loader.add(AssetToLoad(idleLeft, (value) => this.idleLeft = value));
+    _loader.add(AssetToLoad(idleRight, (value) => this.idleRight = value));
+    _loader.add(AssetToLoad(idleDown, (value) => this.idleDown = value));
+    _loader.add(AssetToLoad(idleUp, (value) => this.idleUp = value));
+    _loader.add(AssetToLoad(idleUpLeft, (value) => this.idleUpLeft = value));
+    _loader.add(AssetToLoad(idleUpRight, (value) {
+      return this.idleUpRight = value;
+    }));
+    _loader.add(AssetToLoad(idleDownLeft, (value) {
+      return this.idleDownLeft = value;
+    }));
+    _loader.add(AssetToLoad(idleDownRight, (value) {
+      return this.idleDownRight = value;
+    }));
+    _loader.add(AssetToLoad(runUp, (value) => this.runUp = value));
+    _loader.add(AssetToLoad(runRight, (value) => this.runRight = value));
+    _loader.add(AssetToLoad(runDown, (value) => this.runDown = value));
+    _loader.add(AssetToLoad(runLeft, (value) => this.runLeft = value));
+    _loader.add(AssetToLoad(runUpLeft, (value) => this.runUpLeft = value));
+    _loader.add(AssetToLoad(runUpRight, (value) => this.runUpRight = value));
+    _loader.add(AssetToLoad(runDownLeft, (value) {
+      return this.runDownLeft = value;
+    }));
+    _loader.add(AssetToLoad(runDownRight, (value) {
+      return this.runDownRight = value;
+    }));
+
+    others?.forEach((key, anim) {
+      _loader.add(AssetToLoad(anim, (value) {
+        return this.others[key] = value;
+      }));
+    });
   }
 
-  void play(SimpleAnimationEnum animation) {
+  void play(SimpleAnimationEnum animation, {bool force = false}) {
+    if (_currentType == animation && !force) return;
     _currentType = animation;
     if (!runToTheEndFastAnimation) {
       _fastAnimation = null;
     }
     switch (animation) {
       case SimpleAnimationEnum.idleLeft:
-        if (idleLeft != null) current = idleLeft;
+        current = idleLeft;
         break;
       case SimpleAnimationEnum.idleRight:
-        if (idleRight != null) current = idleRight;
+        current = idleRight;
         break;
-      case SimpleAnimationEnum.idleTop:
-        if (idleTop != null) current = idleTop;
+      case SimpleAnimationEnum.idleUp:
+        if (idleUp != null) current = idleUp;
         break;
-      case SimpleAnimationEnum.idleBottom:
-        if (idleBottom != null) current = idleBottom;
+      case SimpleAnimationEnum.idleDown:
+        if (idleDown != null) current = idleDown;
         break;
       case SimpleAnimationEnum.idleTopLeft:
-        if (idleTopLeft != null) current = idleTopLeft;
+        if (idleUpLeft != null) current = idleUpLeft;
         break;
       case SimpleAnimationEnum.idleTopRight:
-        if (idleTopRight != null) current = idleTopRight;
+        if (idleUpRight != null) current = idleUpRight;
         break;
-      case SimpleAnimationEnum.idleBottomLeft:
-        if (idleBottomLeft != null) current = idleBottomLeft;
+      case SimpleAnimationEnum.idleDownLeft:
+        if (idleDownLeft != null) current = idleDownLeft;
         break;
-      case SimpleAnimationEnum.idleBottomRight:
-        if (idleBottomRight != null) current = idleBottomRight;
+      case SimpleAnimationEnum.idleDownRight:
+        if (idleDownRight != null) current = idleDownRight;
         break;
-      case SimpleAnimationEnum.runTop:
-        if (runTop != null) current = runTop;
+      case SimpleAnimationEnum.runUp:
+        if (runUp != null) current = runUp;
         break;
       case SimpleAnimationEnum.runRight:
-        if (runRight != null) current = runRight;
+        current = runRight;
         break;
-      case SimpleAnimationEnum.runBottom:
-        if (runBottom != null) current = runBottom;
+      case SimpleAnimationEnum.runDown:
+        if (runDown != null) current = runDown;
         break;
       case SimpleAnimationEnum.runLeft:
-        if (runLeft != null) current = runLeft;
+        current = runLeft;
         break;
-      case SimpleAnimationEnum.runTopLeft:
-        if (runTopLeft != null) current = runTopLeft;
+      case SimpleAnimationEnum.runUpLeft:
+        if (runUpLeft != null) current = runUpLeft;
         break;
-      case SimpleAnimationEnum.runTopRight:
-        if (runTopRight != null) current = runTopRight;
+      case SimpleAnimationEnum.runUpRight:
+        if (runUpRight != null) current = runUpRight;
         break;
-      case SimpleAnimationEnum.runBottomLeft:
-        if (runBottomLeft != null) current = runBottomLeft;
+      case SimpleAnimationEnum.runDownLeft:
+        if (runDownLeft != null) current = runDownLeft;
         break;
-      case SimpleAnimationEnum.runBottomRight:
-        if (runBottomRight != null) current = runBottomRight;
+      case SimpleAnimationEnum.runDownRight:
+        if (runDownRight != null) current = runDownRight;
         break;
     }
   }
 
   void playOther(String key) {
-    if (others?.containsKey(key) == true) {
+    if (others.containsKey(key) == true) {
       if (!runToTheEndFastAnimation) {
         _fastAnimation = null;
       }
@@ -121,41 +159,45 @@ class SimpleDirectionAnimation {
     }
   }
 
-  void playOnce(
-    Animation animation, {
-    VoidCallback onFinish,
+  Future playOnce(
+    Future<SpriteAnimation> animation,
+    Vector2Rect position, {
+    VoidCallback? onFinish,
     bool runToTheEnd = false,
-  }) {
+  }) async {
     runToTheEndFastAnimation = runToTheEnd;
-    _fastAnimation = AnimatedObjectOnce(
+    final anim = AnimatedObjectOnce(
+      position: position,
       animation: animation,
       onFinish: () {
         onFinish?.call();
         _fastAnimation = null;
       },
     );
+    await anim.onLoad();
+    _fastAnimation = anim;
   }
 
   void render(Canvas canvas) {
     if (position == null) return;
     if (_fastAnimation != null) {
-      _fastAnimation.render(canvas);
+      _fastAnimation?.render(canvas);
     } else {
-      if (current?.loaded() == true) {
-        current.getSprite().renderRect(canvas, position);
-      }
+      current?.getSprite().renderFromVector2Rect(canvas, position!);
     }
   }
 
-  void update(double dt, Rect position) {
+  void update(double dt, Vector2Rect position) {
     this.position = position;
-    if (_fastAnimation != null) {
-      _fastAnimation.position = position;
-      _fastAnimation.update(dt);
-    } else {
-      current?.update(dt);
-    }
+    _fastAnimation?.position = position;
+    _fastAnimation?.update(dt);
+    current?.update(dt);
   }
 
-  SimpleAnimationEnum get currentType => _currentType;
+  Future<void> onLoad() async {
+    await _loader.load();
+    play(_currentType, force: true);
+  }
+
+  SimpleAnimationEnum? get currentType => _currentType;
 }

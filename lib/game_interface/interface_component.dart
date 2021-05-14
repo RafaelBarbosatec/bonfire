@@ -1,61 +1,93 @@
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/gestures/tap_gesture.dart';
-import 'package:flame/position.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
+/// Component used to add in your [GameInterface]
 class InterfaceComponent extends GameComponent with TapGesture {
+  /// identifier
   final int id;
-  final Sprite sprite;
-  final Sprite spriteSelected;
-  final VoidCallback onTapComponent;
+
+  /// sprite that will be render
+  Sprite? sprite;
+
+  /// sprite that will be render when pressed
+  Sprite? spriteSelected;
+
+  /// Callback used to receive onTab gesture in your component. this return if is selected
+  final ValueChanged<bool>? onTapComponent;
   final double width;
   final double height;
-  Sprite spriteToRender;
+  final bool selectable;
+  bool _lastSelected = false;
+  bool selected = false;
 
-  @override
-  bool isHud() => true;
+  final _loader = AssetsLoader();
 
   InterfaceComponent({
-    @required this.id,
-    @required Position position,
-    @required this.width,
-    @required this.height,
-    this.sprite,
-    this.spriteSelected,
+    required this.id,
+    required Vector2 position,
+    required this.width,
+    required this.height,
+    Future<Sprite>? sprite,
+    Future<Sprite>? spriteSelected,
+    this.selectable = false,
     this.onTapComponent,
   }) {
-    this.position = Rect.fromLTWH(position.x, position.y, width, height);
-    spriteToRender = sprite;
+    _loader.add(AssetToLoad(sprite, (value) {
+      this.sprite = value;
+    }));
+    _loader.add(AssetToLoad(spriteSelected, (value) {
+      this.spriteSelected = value;
+    }));
+    this.position = Vector2Rect.fromRect(
+      Rect.fromLTWH(
+        position.x,
+        position.y,
+        width,
+        height,
+      ),
+    );
   }
 
   void render(Canvas canvas) {
-    if (spriteToRender != null &&
-        this.position != null &&
-        spriteToRender.loaded())
-      spriteToRender.renderRect(canvas, this.position);
-  }
-
-  @override
-  void onTapDown(int pointer, Offset position) {
-    if (this.position.contains(position)) {
-      spriteToRender = spriteSelected ?? spriteToRender;
-    }
-    super.onTapDown(pointer, position);
+    (selected ? spriteSelected : sprite)
+        ?.renderFromVector2Rect(canvas, this.position);
   }
 
   @override
   void onTapCancel() {
-    spriteToRender = sprite;
-    super.onTapCancel();
+    if (selectable) return;
+    selected = !selected;
   }
 
   @override
   void onTap() {
-    if (onTapComponent != null) onTapComponent();
-    spriteToRender = sprite;
+    if (selectable && !_lastSelected) {
+      selected = true;
+    } else {
+      selected = !selected;
+    }
+    _lastSelected = selected;
+    onTapComponent?.call(selected);
   }
 
   @override
-  void update(double t) {}
+  bool get isHud => true;
+
+  @override
+  Future<void> onLoad() async {
+    await _loader.load();
+  }
+
+  @override
+  void onTapDown(int pointer, Offset position) {
+    selected = true;
+  }
+
+  @override
+  void onTapUp(int pointer, Offset position) {}
 }
