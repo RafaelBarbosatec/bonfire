@@ -1,6 +1,8 @@
-# NEXT
+# 1.0.0
 
 - Rename `gameCamera` to `camera`
+- Add [JoystickMoveToPosition](https://bonfire-engine.github.io/#/joystick?id=joystickmovetoposition)
+- Add mixin `MoveToPositionAlongThePath` and `Movement`
 
 # 1.0.0-rc8
 
