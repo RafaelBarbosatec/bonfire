@@ -92,8 +92,7 @@ class SimpleDirectionAnimation {
     });
   }
 
-  void play(SimpleAnimationEnum animation, {bool force = false}) {
-    if (_currentType == animation && !force) return;
+  void play(SimpleAnimationEnum animation) {
     _currentType = animation;
     if (!runToTheEndFastAnimation) {
       _fastAnimation = null;
@@ -196,7 +195,7 @@ class SimpleDirectionAnimation {
 
   Future<void> onLoad() async {
     await _loader.load();
-    play(_currentType, force: true);
+    play(_currentType);
   }
 
   SimpleAnimationEnum? get currentType => _currentType;
