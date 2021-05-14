@@ -1,41 +1,53 @@
 import 'dart:math';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/enemy/enemy.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/position.dart';
+import 'package:bonfire/util/assets_loader.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
+/// Enemy used for top-down perspective
 class RotationEnemy extends Enemy {
-  final FlameAnimation.Animation animIdle;
-  final FlameAnimation.Animation animRun;
+  SpriteAnimation? animIdle;
+  SpriteAnimation? animRun;
 
-  FlameAnimation.Animation animation;
+  SpriteAnimation? animation;
 
   /// Variable that represents the speed of the enemy.
   final double speed;
   double currentRadAngle;
 
+  final _loader = AssetsLoader();
+
   RotationEnemy({
-    @required Position initPosition,
-    @required this.animIdle,
-    @required this.animRun,
+    required Vector2 position,
+    required Future<SpriteAnimation> animIdle,
+    required Future<SpriteAnimation> animRun,
     double height = 32,
     double width = 32,
     this.currentRadAngle = -1.55,
     this.speed = 100,
     double life = 100,
   }) : super(
-          initPosition: initPosition,
+          position: position,
           height: height,
           width: width,
           life: life,
         ) {
-    idle();
+    _loader.add(AssetToLoad(animIdle, (value) {
+      this.animIdle = value;
+    }));
+    _loader.add(AssetToLoad(animRun, (value) {
+      this.animRun = value;
+    }));
   }
 
   @override
-  void moveFromAngleDodgeObstacles(double speed, double angle,
-      {Function notMove}) {
+  void moveFromAngleDodgeObstacles(
+    double speed,
+    double angle, {
+    Function? notMove,
+  }) {
     this.animation = animRun;
     currentRadAngle = angle;
     super.moveFromAngleDodgeObstacles(speed, angle, notMove: notMove);
@@ -66,9 +78,15 @@ class RotationEnemy extends Enemy {
   }
 
   void _renderAnimation(Canvas canvas) {
-    if (animation == null || position == null) return;
-    if (animation.loaded()) {
-      animation.getSprite().renderRect(canvas, position);
-    }
+    animation?.getSprite().renderFromVector2Rect(
+          canvas,
+          this.position,
+        );
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await _loader.load();
+    idle();
   }
 }

@@ -1,11 +1,9 @@
 import 'dart:ui';
 
-import 'package:bonfire/base/base_game_point_detector.dart';
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/components/component.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
-import 'package:flame/position.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 
 enum JoystickMoveDirectional {
@@ -26,7 +24,7 @@ class JoystickDirectionalEvent {
   final double radAngle;
 
   JoystickDirectionalEvent({
-    this.directional,
+    required this.directional,
     this.intensity = 0.0,
     this.radAngle = 0.0,
   });
@@ -44,18 +42,18 @@ class JoystickActionEvent {
     this.id,
     this.intensity = 0.0,
     this.radAngle = 0.0,
-    this.event,
+    required this.event,
   });
 }
 
 abstract class JoystickListener {
   void joystickChangeDirectional(JoystickDirectionalEvent event);
   void joystickAction(JoystickActionEvent event);
-  void moveTo(Position position);
+  void moveTo(Vector2 position);
 }
 
 abstract class JoystickController extends Component
-    with HasGameRef<BaseGamePointerDetector>, PointerDetectorHandler {
+    with HasGameRef<BonfireGame>, PointerDetectorHandler {
   List<JoystickListener> _observers = [];
   bool keyboardEnable = false;
 
@@ -69,7 +67,7 @@ abstract class JoystickController extends Component
     _observers.forEach((o) => o.joystickAction(event));
   }
 
-  void moveTo(Position event) {
+  void moveTo(Vector2 event) {
     _observers.forEach((o) => o.moveTo(event));
   }
 
@@ -84,10 +82,12 @@ abstract class JoystickController extends Component
   void update(double t) {}
 
   @override
-  int priority() => PriorityLayer.JOYSTICK;
+  int get priority {
+    return LayerPriority.getJoystickPriority(gameRef.highestPriority);
+  }
 
   @override
-  bool isHud() => true;
+  bool get isHud => true;
 
   @override
   bool hasGesture() => true;

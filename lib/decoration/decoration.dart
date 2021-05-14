@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/animated_object.dart';
-import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/position.dart';
+import 'package:bonfire/util/assets_loader.dart';
+import 'package:bonfire/util/vector2rect.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
@@ -22,20 +22,17 @@ class GameDecoration extends AnimatedObject {
   /// Width of the Decoration.
   final double width;
 
-  /// Use to define if this decoration should be drawing on the player.
-  final bool frontFromPlayer;
+  Sprite? sprite;
 
-  Sprite sprite;
-
-  int additionalPriority = 0;
+  /// Used to load assets in [onLoad]
+  final _loader = AssetsLoader();
 
   GameDecoration({
     this.sprite,
-    @required Position position,
-    @required this.height,
-    @required this.width,
-    this.frontFromPlayer = false,
-    FlameAnimation.Animation animation,
+    required Vector2 position,
+    required this.height,
+    required this.width,
+    SpriteAnimation? animation,
   }) {
     this.animation = animation;
     this.position = generateRectWithBleedingPixel(
@@ -45,13 +42,13 @@ class GameDecoration extends AnimatedObject {
     );
   }
 
-  GameDecoration.sprite(
-    this.sprite, {
-    @required Position position,
-    @required this.height,
-    @required this.width,
-    this.frontFromPlayer = false,
+  GameDecoration.withSprite(
+    Future<Sprite> sprite, {
+    required Vector2 position,
+    required this.height,
+    required this.width,
   }) {
+    _loader.add(AssetToLoad(sprite, (value) => this.sprite = value));
     this.position = generateRectWithBleedingPixel(
       position,
       width,
@@ -59,34 +56,28 @@ class GameDecoration extends AnimatedObject {
     );
   }
 
-  GameDecoration.animation(
-    FlameAnimation.Animation animation, {
-    @required Position position,
-    @required this.height,
-    @required this.width,
-    this.frontFromPlayer = false,
+  GameDecoration.withAnimation(
+    Future<SpriteAnimation> animation, {
+    required Vector2 position,
+    required this.height,
+    required this.width,
   }) {
-    this.animation = animation;
+    _loader.add(AssetToLoad(animation, (value) => this.animation = value));
     this.position = generateRectWithBleedingPixel(
       position,
       width,
       height,
     );
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
   }
 
   @override
   void render(Canvas canvas) {
-    if (sprite != null && sprite.loaded()) sprite.renderRect(canvas, position);
+    sprite?.renderFromVector2Rect(canvas, this.position);
     super.render(canvas);
   }
 
-  Rect generateRectWithBleedingPixel(
-    Position position,
+  Vector2Rect generateRectWithBleedingPixel(
+    Vector2 position,
     double width,
     double height,
   ) {
@@ -94,20 +85,18 @@ class GameDecoration extends AnimatedObject {
     if (bleendingPixel > 2) {
       bleendingPixel = 2;
     }
-    return Rect.fromLTWH(
-      position.x - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0),
-      position.y - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0),
-      width + (position.x % 2 == 0 ? bleendingPixel : 0),
-      height + (position.y % 2 == 0 ? bleendingPixel : 0),
+    return Vector2Rect.fromRect(
+      Rect.fromLTWH(
+        position.x - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0),
+        position.y - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0),
+        width + (position.x % 2 == 0 ? bleendingPixel : 0),
+        height + (position.y % 2 == 0 ? bleendingPixel : 0),
+      ),
     );
   }
 
   @override
-  int priority() {
-    if (frontFromPlayer) {
-      return PriorityLayer.OBJECTS;
-    } else {
-      return PriorityLayer.DECORATION + additionalPriority;
-    }
+  Future<void> onLoad() {
+    return _loader.load();
   }
 }

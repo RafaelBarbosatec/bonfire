@@ -1,33 +1,35 @@
-import 'dart:async';
+import 'dart:async' as async;
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:example/map/dungeon_map.dart';
-import 'package:flame/position.dart';
+import 'package:bonfire/util/priority_layer.dart';
+import 'package:example/manual_map/dungeon_map.dart';
+import 'package:example/util/common_sprite_sheet.dart';
 
 class Spikes extends GameDecoration with Sensor {
-  final Position initPosition;
-  Timer timer;
+  async.Timer? timer;
 
   bool isTick = false;
 
-  Spikes(this.initPosition)
-      : super.sprite(
-          Sprite('itens/spikes.png'),
-          position: initPosition,
+  Spikes(Vector2 position)
+      : super.withSprite(
+          CommonSpriteSheet.spikesSprite,
+          position: position,
           width: DungeonMap.tileSize / 1.5,
           height: DungeonMap.tileSize / 1.5,
         );
 
   @override
-  void onContact(ObjectCollision collision) {
+  void onContact(GameComponent collision) {
     if (timer == null) {
       if (collision is Attackable) {
-        (collision as Attackable).receiveDamage(10, 1);
-        timer = Timer(Duration(milliseconds: 500), () {
+        collision.receiveDamage(10, 1);
+        timer = async.Timer(Duration(milliseconds: 500), () {
           timer = null;
         });
       }
     }
   }
+
+  @override
+  int get priority => LayerPriority.MAP + 1;
 }

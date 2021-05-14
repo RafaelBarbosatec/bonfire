@@ -4,21 +4,28 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/game_interface/interface_component.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+/// The way you cand raw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
 class GameInterface extends GameComponent {
   List<InterfaceComponent> _components = [];
+
+  /// textConfig used to show FPS
   final textConfigGreen = TextConfig(color: Colors.green, fontSize: 14);
+
+  /// textConfig used to show FPS
   final textConfigYellow = TextConfig(color: Colors.yellow, fontSize: 14);
+
+  /// textConfig used to show FPS
   final textConfigRed = TextConfig(color: Colors.red, fontSize: 14);
 
   @override
-  bool isHud() => true;
+  bool get isHud => true;
 
   @override
-  int priority() => PriorityLayer.GAME_INTERFACE;
+  int get priority =>
+      LayerPriority.getInterfacePriority(gameRef.highestPriority);
 
   @override
   void render(Canvas c) {
@@ -35,16 +42,19 @@ class GameInterface extends GameComponent {
   }
 
   @override
-  void resize(Size size) {
-    _components.forEach((i) => i.resize(size));
-    super.resize(size);
+  void onGameResize(Vector2 size) {
+    _components.forEach((i) => i.onGameResize(size));
+    super.onGameResize(size);
   }
 
-  void add(InterfaceComponent component) {
+  /// Used to add components in your interface like a Button.
+  Future<void> add(InterfaceComponent component) async {
     removeById(component.id);
+    await component.onLoad();
     _components.add(component);
   }
 
+  /// Used to remove component of the interface by id
   void removeById(int id) {
     if (_components.isEmpty) return;
     _components.removeWhere((i) => i.id == id);
@@ -60,13 +70,18 @@ class GameInterface extends GameComponent {
     _components.forEach((i) => i.handlerPointerUp(event));
   }
 
+  @override
+  void handlerPointerCancel(PointerCancelEvent event) {
+    _components.forEach((i) => i.handlerPointerCancel(event));
+  }
+
   void _drawFPS(Canvas c) {
-    if (gameRef?.showFPS == true && gameRef?.size != null) {
-      double fps = gameRef.fps(100);
+    if (gameRef.showFPS == true) {
+      double? fps = gameRef.fps(100);
       getTextConfigFps(fps).render(
         c,
         'FPS: ${fps.toStringAsFixed(2)}',
-        Position(gameRef.size.width - 100, 20),
+        Vector2((gameRef.size.x) - 100, 20),
       );
     }
   }
@@ -84,5 +99,15 @@ class GameInterface extends GameComponent {
   }
 
   @override
+  Future<void> onLoad() {
+    return Future.forEach<InterfaceComponent>(_components, (element) {
+      return element.onLoad();
+    });
+  }
+
+  @override
   bool hasGesture() => true;
+
+  bool get receiveInteraction =>
+      _components.where((element) => element.receiveInteraction).isNotEmpty;
 }

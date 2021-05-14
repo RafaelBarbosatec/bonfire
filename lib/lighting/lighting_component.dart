@@ -1,53 +1,57 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flutter/material.dart';
 
+/// Layer component responsible for adding lighting to the game.
 class LightingComponent extends GameComponent {
-  Color color;
-  Paint _paintFocus;
+  Color? color;
+  late Paint _paintFocus;
   Iterable<Lighting> _visibleLight = [];
   double _dtUpdate = 0.0;
-  ColorTween _tween;
+  ColorTween? _tween;
 
   @override
-  bool isHud() => true;
+  bool get isHud => true;
 
   LightingComponent({this.color}) {
     _paintFocus = Paint()..blendMode = BlendMode.clear;
   }
 
   @override
-  int priority() => PriorityLayer.LIGHTING;
+  int get priority =>
+      LayerPriority.getLightingPriority(gameRef.highestPriority);
 
   @override
   void render(Canvas canvas) {
     if (color == null) return;
-    Size size = gameRef.size;
-    canvas.saveLayer(Offset.zero & size, Paint());
-    canvas.drawColor(color, BlendMode.dstATop);
+    Vector2 size = gameRef.size;
+    canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
+    canvas.drawColor(color!, BlendMode.dstATop);
     _visibleLight.forEach((light) {
       final config = light.lightingConfig;
+      if (config == null) return;
       final sigma = _convertRadiusToSigma(config.blurBorder);
       config.update(_dtUpdate);
       canvas.save();
 
-      canvas.translate(size.width / 2, size.height / 2);
-      canvas.scale(gameRef.gameCamera.zoom);
+      canvas.translate(size.x / 2, size.y / 2);
+      canvas.scale(gameRef.camera.config.zoom);
       canvas.translate(
-        -gameRef.gameCamera.position.x,
-        -gameRef.gameCamera.position.y,
+        -(gameRef.camera.position.dx),
+        -(gameRef.camera.position.dy),
       );
 
       canvas.drawCircle(
         Offset(
-          light.gameComponent.position.center.dx,
-          light.gameComponent.position.center.dy,
+          light.position.center.dx,
+          light.position.center.dy,
         ),
-        light.lightingConfig.radius *
-            (light.lightingConfig.withPulse
+        config.radius *
+            (config.withPulse
                 ? (1 - config.valuePulse * config.pulseVariation)
                 : 1),
         _paintFocus
@@ -57,25 +61,24 @@ class LightingComponent extends GameComponent {
           ),
       );
 
-      if (config.color != null) {
-        final Paint paint = Paint()
-          ..color = config.color
-          ..maskFilter = MaskFilter.blur(
-            BlurStyle.normal,
-            sigma,
-          );
-        canvas.drawCircle(
-          Offset(
-            light.gameComponent.position.center.dx,
-            light.gameComponent.position.center.dy,
-          ),
-          config.radius *
-              (config.withPulse
-                  ? (1 - config.valuePulse * config.pulseVariation)
-                  : 1),
-          paint,
+      final Paint paint = Paint()
+        ..color = config.color
+        ..maskFilter = MaskFilter.blur(
+          BlurStyle.normal,
+          sigma,
         );
-      }
+      canvas.drawCircle(
+        Offset(
+          light.position.center.dx,
+          light.position.center.dy,
+        ),
+        config.radius *
+            (config.withPulse
+                ? (1 - config.valuePulse * config.pulseVariation)
+                : 1),
+        paint,
+      );
+
       canvas.restore();
     });
     canvas.restore();
@@ -92,7 +95,7 @@ class LightingComponent extends GameComponent {
     _visibleLight = gameRef.lightVisible();
   }
 
-  void animateColorTo(
+  void animateToColor(
     Color color, {
     Duration duration = const Duration(milliseconds: 500),
     Curve curve = Curves.decelerate,
@@ -100,9 +103,9 @@ class LightingComponent extends GameComponent {
     _tween = ColorTween(begin: this.color ?? Colors.transparent, end: color);
 
     gameRef.getValueGenerator(
-      duration ?? Duration(seconds: 1),
+      duration,
       onChange: (value) {
-        this.color = _tween.transform(value);
+        this.color = _tween?.transform(value);
       },
       onFinish: () {
         this.color = color;

@@ -1,13 +1,13 @@
 import 'package:bonfire/base/bonfire_game.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 class GameColorFilter with HasGameRef<BonfireGame> {
-  Color color;
-  BlendMode blendMode;
-  ColorTween _tween;
+  Color? color;
+  BlendMode? blendMode;
+  ColorTween? _tween;
 
   GameColorFilter({this.color, this.blendMode});
 
@@ -23,9 +23,9 @@ class GameColorFilter with HasGameRef<BonfireGame> {
     _tween = ColorTween(begin: this.color ?? Colors.transparent, end: color);
 
     gameRef.getValueGenerator(
-      duration ?? Duration(seconds: 1),
+      duration,
       onChange: (value) {
-        this.color = _tween.transform(value);
+        this.color = _tween?.transform(value);
       },
       onFinish: () {
         this.color = color;

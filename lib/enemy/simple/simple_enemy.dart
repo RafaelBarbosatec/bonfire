@@ -2,35 +2,35 @@ import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
-import 'package:flame/position.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
+/// Enemy with animation in all direction
 class SimpleEnemy extends Enemy {
+  /// animations of the enemy
   SimpleDirectionAnimation animation;
 
   /// Variable that represents the speed of the enemy.
   final double speed;
 
-  /// Last position the enemy was in.
-  Direction lastDirection;
+  /// Last position the enemy was.
+  late Direction lastDirection;
 
-  /// Last horizontal position the enemy was in.
-  Direction lastDirectionHorizontal;
-
-  bool _isIdle = true;
+  /// Last horizontal position the enemy was.
+  late Direction lastDirectionHorizontal;
 
   bool _runFastAnimation = false;
 
   SimpleEnemy({
-    @required Position initPosition,
-    @required double height,
-    @required double width,
-    @required this.animation,
+    required Vector2 position,
+    required double height,
+    required double width,
+    required this.animation,
     double life = 100,
     this.speed = 100,
     Direction initDirection = Direction.right,
   }) : super(
-          initPosition: initPosition,
+          position: position,
           height: height,
           width: width,
           life: life,
@@ -38,164 +38,176 @@ class SimpleEnemy extends Enemy {
     lastDirection = initDirection;
     lastDirectionHorizontal =
         initDirection == Direction.left ? Direction.left : Direction.right;
-    idle();
   }
 
-  void customMoveTop(double moveSpeed, {bool addAnimation = true}) {
+  @override
+  void moveUp(double speed, {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
-    this.moveTop(moveSpeed);
-
-    if ((lastDirection != Direction.top || _isIdle) && addAnimation) {
-      _isIdle = false;
-      if (animation?.runTop != null) {
-        animation?.play(SimpleAnimationEnum.runTop);
-      } else {
-        animation?.play(lastDirectionHorizontal == Direction.right
-            ? SimpleAnimationEnum.runRight
-            : SimpleAnimationEnum.runLeft);
-      }
-      lastDirection = Direction.top;
+    if (animation.runUp != null) {
+      animation.play(SimpleAnimationEnum.runUp);
+    } else {
+      animation.play(lastDirectionHorizontal == Direction.right
+          ? SimpleAnimationEnum.runRight
+          : SimpleAnimationEnum.runLeft);
     }
+    lastDirection = Direction.up;
+    super.moveUp(speed, onCollision: onCollision);
   }
 
-  void customMoveBottom(double speed, {bool addAnimation = true}) {
+  @override
+  void moveDown(double speed, {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
-    this.moveBottom(speed);
-    if ((lastDirection != Direction.bottom || _isIdle) && addAnimation) {
-      _isIdle = false;
-      if (animation?.runBottom != null) {
-        animation?.play(SimpleAnimationEnum.runBottom);
-      } else {
-        animation?.play(lastDirectionHorizontal == Direction.right
-            ? SimpleAnimationEnum.runRight
-            : SimpleAnimationEnum.runLeft);
-      }
-      lastDirection = Direction.bottom;
+    if (animation.runDown != null) {
+      animation.play(SimpleAnimationEnum.runDown);
+    } else {
+      animation.play(lastDirectionHorizontal == Direction.right
+          ? SimpleAnimationEnum.runRight
+          : SimpleAnimationEnum.runLeft);
     }
+    lastDirection = Direction.down;
+    super.moveDown(speed, onCollision: onCollision);
   }
 
-  void customMoveLeft(double speed, {bool addAnimation = true}) {
+  @override
+  void moveLeft(double speed, {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
-    this.moveLeft(speed);
-    if ((lastDirection != Direction.left || _isIdle) && addAnimation) {
-      _isIdle = false;
-      animation?.play(SimpleAnimationEnum.runLeft);
-      lastDirection = Direction.left;
-      lastDirectionHorizontal = Direction.left;
+    animation.play(SimpleAnimationEnum.runLeft);
+    lastDirection = Direction.left;
+    lastDirectionHorizontal = Direction.left;
+    super.moveLeft(speed, onCollision: onCollision);
+  }
+
+  @override
+  void moveRight(double speed, {VoidCallback? onCollision}) {
+    if (_runFastAnimation) return;
+    animation.play(SimpleAnimationEnum.runRight);
+    lastDirection = Direction.right;
+    lastDirectionHorizontal = Direction.right;
+    super.moveRight(speed, onCollision: onCollision);
+  }
+
+  @override
+  void moveUpRight(double speedX, double speedY, {VoidCallback? onCollision}) {
+    if (_runFastAnimation) return;
+    if (animation.runUpRight != null) {
+      animation.play(SimpleAnimationEnum.runUpRight);
+    } else {
+      animation.play(SimpleAnimationEnum.runRight);
     }
+    lastDirection = Direction.upRight;
+    lastDirectionHorizontal = Direction.right;
+    super.moveUpRight(speedX, speedY, onCollision: onCollision);
   }
 
-  void customMoveRight(double speed, {bool addAnimation = true}) {
+  @override
+  void moveUpLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
-    this.moveRight(speed);
-    if ((lastDirection != Direction.right || _isIdle) && addAnimation) {
-      _isIdle = false;
-      animation?.play(SimpleAnimationEnum.runRight);
-      lastDirection = Direction.right;
-      lastDirectionHorizontal = Direction.right;
+    if (animation.runUpLeft != null) {
+      animation.play(SimpleAnimationEnum.runUpLeft);
+    } else {
+      animation.play(SimpleAnimationEnum.runLeft);
     }
+    lastDirection = Direction.upLeft;
+    lastDirectionHorizontal = Direction.left;
+    super.moveUpLeft(speedX, speedY, onCollision: onCollision);
   }
 
-  void customMoveTopRight(double speedX, double speedY) {
+  @override
+  void moveDownRight(double speedX, double speedY,
+      {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
-    animation?.play(SimpleAnimationEnum.runTopRight);
-    lastDirection = Direction.topRight;
-    this.customMoveRight(speedX, addAnimation: animation?.runTopRight == null);
-    this.customMoveTop(speedY, addAnimation: false);
+    if (animation.runDownRight != null) {
+      animation.play(SimpleAnimationEnum.runDownRight);
+    } else {
+      animation.play(SimpleAnimationEnum.runRight);
+    }
+    lastDirection = Direction.downRight;
+    lastDirectionHorizontal = Direction.right;
+    super.moveDownRight(speedX, speedY, onCollision: onCollision);
   }
 
-  void customMoveTopLeft(double speedX, double speedY) {
+  @override
+  void moveDownLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
     if (_runFastAnimation) return;
-    animation?.play(SimpleAnimationEnum.runTopLeft);
-    lastDirection = Direction.topLeft;
-    this.customMoveLeft(speedX, addAnimation: animation?.runTopLeft == null);
-    this.customMoveTop(speedY, addAnimation: false);
+    if (animation.runDownLeft != null) {
+      animation.play(SimpleAnimationEnum.runDownLeft);
+    } else {
+      animation.play(SimpleAnimationEnum.runLeft);
+    }
+    lastDirection = Direction.downLeft;
+    lastDirectionHorizontal = Direction.left;
+    super.moveDownLeft(speedX, speedY, onCollision: onCollision);
   }
 
-  void customMoveBottomRight(double speedX, double speedY) {
-    if (_runFastAnimation) return;
-    animation?.play(SimpleAnimationEnum.runBottomRight);
-    lastDirection = Direction.bottomRight;
-    this.customMoveRight(speedX,
-        addAnimation: animation?.runBottomRight == null);
-    this.customMoveBottom(speedY, addAnimation: false);
-  }
-
-  void customMoveBottomLeft(double speedX, double speedY) {
-    if (_runFastAnimation) return;
-    animation?.play(SimpleAnimationEnum.runBottomLeft);
-    lastDirection = Direction.bottomLeft;
-    this.customMoveLeft(speedX, addAnimation: animation?.runBottomLeft == null);
-    this.customMoveBottom(speedY, addAnimation: false);
-  }
-
+  @override
   void idle() {
+    if (isIdle) return;
     if (_runFastAnimation) return;
-    _isIdle = true;
     switch (lastDirection) {
       case Direction.left:
-        animation?.play(SimpleAnimationEnum.idleLeft);
+        animation.play(SimpleAnimationEnum.idleLeft);
         break;
       case Direction.right:
-        animation?.play(SimpleAnimationEnum.idleRight);
+        animation.play(SimpleAnimationEnum.idleRight);
         break;
-      case Direction.top:
-        if (animation?.idleTop != null) {
-          animation?.play(SimpleAnimationEnum.idleTop);
+      case Direction.up:
+        if (animation.idleUp != null) {
+          animation.play(SimpleAnimationEnum.idleUp);
         } else {
           if (lastDirectionHorizontal == Direction.left) {
-            animation?.play(SimpleAnimationEnum.idleLeft);
+            animation.play(SimpleAnimationEnum.idleLeft);
           } else {
-            animation?.play(SimpleAnimationEnum.idleRight);
+            animation.play(SimpleAnimationEnum.idleRight);
           }
         }
         break;
-      case Direction.bottom:
-        if (animation?.idleBottom != null) {
-          animation?.play(SimpleAnimationEnum.idleBottom);
+      case Direction.down:
+        if (animation.idleDown != null) {
+          animation.play(SimpleAnimationEnum.idleDown);
         } else {
           if (lastDirectionHorizontal == Direction.left) {
-            animation?.play(SimpleAnimationEnum.idleLeft);
+            animation.play(SimpleAnimationEnum.idleLeft);
           } else {
-            animation?.play(SimpleAnimationEnum.idleRight);
+            animation.play(SimpleAnimationEnum.idleRight);
           }
         }
         break;
-      case Direction.topLeft:
-        if (animation?.idleTopLeft != null) {
-          animation?.play(SimpleAnimationEnum.idleTopLeft);
+      case Direction.upLeft:
+        if (animation.idleUpLeft != null) {
+          animation.play(SimpleAnimationEnum.idleTopLeft);
         } else {
-          animation?.play(SimpleAnimationEnum.idleLeft);
+          animation.play(SimpleAnimationEnum.idleLeft);
         }
         break;
-      case Direction.topRight:
-        if (animation?.idleTopRight != null) {
-          animation?.play(SimpleAnimationEnum.idleTopRight);
+      case Direction.upRight:
+        if (animation.idleUpRight != null) {
+          animation.play(SimpleAnimationEnum.idleTopRight);
         } else {
-          animation?.play(SimpleAnimationEnum.idleRight);
+          animation.play(SimpleAnimationEnum.idleRight);
         }
         break;
-      case Direction.bottomLeft:
-        if (animation?.idleBottomLeft != null) {
-          animation?.play(SimpleAnimationEnum.idleBottomLeft);
+      case Direction.downLeft:
+        if (animation.idleDownLeft != null) {
+          animation.play(SimpleAnimationEnum.idleDownLeft);
         } else {
-          animation?.play(SimpleAnimationEnum.idleLeft);
+          animation.play(SimpleAnimationEnum.idleLeft);
         }
         break;
-      case Direction.bottomRight:
-        if (animation?.idleBottomRight != null) {
-          animation?.play(SimpleAnimationEnum.idleBottomRight);
+      case Direction.downRight:
+        if (animation.idleDownRight != null) {
+          animation.play(SimpleAnimationEnum.idleDownRight);
         } else {
-          animation?.play(SimpleAnimationEnum.idleRight);
+          animation.play(SimpleAnimationEnum.idleRight);
         }
         break;
     }
+    super.idle();
   }
 
   @override
   void update(double dt) {
     if (isVisibleInCamera()) {
-      animation?.update(dt, position);
+      animation.update(dt, position);
     }
     super.update(dt);
   }
@@ -203,8 +215,14 @@ class SimpleEnemy extends Enemy {
   @override
   void render(Canvas canvas) {
     if (isVisibleInCamera()) {
-      animation?.render(canvas);
+      animation.render(canvas);
     }
     super.render(canvas);
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await animation.onLoad();
+    idle();
   }
 }

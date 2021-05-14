@@ -1,60 +1,67 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/collision/collision_config.dart';
+import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/direction.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
-import 'package:flame/position.dart';
+import 'package:bonfire/util/vector2rect.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
 class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final dynamic id;
-  final FlameAnimation.Animation flyAnimation;
-  final FlameAnimation.Animation destroyAnimation;
+  SpriteAnimation? flyAnimation;
+  Future<SpriteAnimation>? destroyAnimation;
   final Direction direction;
   final double speed;
   final double damage;
   final double width;
   final double height;
-  final Position initPosition;
   final AttackFromEnum attackFrom;
   final bool withDecorationCollision;
-  final VoidCallback destroyedObject;
-  final LightingConfig lightingConfig;
+  final VoidCallback? onDestroyedObject;
+  final _loader = AssetsLoader();
 
   final IntervalTick _timerVerifyCollision = IntervalTick(50);
 
   FlyingAttackObject({
-    @required this.initPosition,
-    @required this.flyAnimation,
-    @required this.direction,
-    @required this.width,
-    @required this.height,
+    required Vector2 position,
+    required Future<SpriteAnimation> flyAnimation,
+    required this.direction,
+    required this.width,
+    required this.height,
     this.id,
     this.destroyAnimation,
     this.speed = 150,
     this.damage = 1,
     this.attackFrom = AttackFromEnum.ENEMY,
     this.withDecorationCollision = true,
-    this.destroyedObject,
-    this.lightingConfig,
-    CollisionConfig collision,
+    this.onDestroyedObject,
+    LightingConfig? lightingConfig,
+    CollisionConfig? collision,
   }) {
-    animation = flyAnimation;
-    position = Rect.fromLTWH(
-      initPosition.x,
-      initPosition.y,
-      width,
-      height,
+    _loader.add(AssetToLoad(flyAnimation, (value) {
+      return this.flyAnimation = value;
+    }));
+
+    this.position = Vector2Rect(
+      position,
+      Vector2(width, height),
     );
+
+    if (lightingConfig != null) setupLighting(lightingConfig);
 
     setupCollision(
       collision ??
           CollisionConfig(
             collisions: [
-              collision ?? CollisionArea(width: width, height: height / 2)
+              CollisionArea.rectangle(
+                size: Size(width, height),
+              ),
             ],
           ),
     );
@@ -71,22 +78,22 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
       case Direction.right:
         position = position.translate((speed * dt), 0);
         break;
-      case Direction.top:
+      case Direction.up:
         position = position.translate(0, (speed * dt) * -1);
         break;
-      case Direction.bottom:
+      case Direction.down:
         position = position.translate(0, (speed * dt));
         break;
-      case Direction.topLeft:
+      case Direction.upLeft:
         position = position.translate((speed * dt) * -1, 0);
         break;
-      case Direction.topRight:
+      case Direction.upRight:
         position = position.translate((speed * dt), 0);
         break;
-      case Direction.bottomLeft:
+      case Direction.downLeft:
         position = position.translate((speed * dt) * -1, 0);
         break;
-      case Direction.bottomRight:
+      case Direction.downRight:
         position = position.translate((speed * dt), 0);
         break;
     }
@@ -99,6 +106,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   }
 
   void _verifyCollision(double dt) {
+    if (shouldRemove) return;
     if (!_timerVerifyCollision.update(dt)) return;
 
     bool destroy = false;
@@ -124,89 +132,89 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
     if (destroy) {
       if (destroyAnimation != null) {
-        Rect positionDestroy;
+        Vector2Rect positionDestroy;
         switch (direction) {
           case Direction.left:
             positionDestroy = Rect.fromLTWH(
-              position.left - (width / 2),
-              position.top,
+              rectCollision.left - (width / 2),
+              rectCollision.top - ((height - rectCollision.height) / 2),
               width,
               height,
-            );
+            ).toVector2Rect();
             break;
           case Direction.right:
             positionDestroy = Rect.fromLTWH(
-              position.left + (width / 2),
-              position.top,
+              rectCollision.right - (width / 2),
+              rectCollision.top - ((height - rectCollision.height) / 2),
               width,
               height,
-            );
+            ).toVector2Rect();
             break;
-          case Direction.top:
+          case Direction.up:
             positionDestroy = Rect.fromLTWH(
-              position.left,
-              position.top - (height / 2),
+              rectCollision.left - ((width - rectCollision.width) / 2),
+              rectCollision.top - (height / 2),
               width,
               height,
-            );
+            ).toVector2Rect();
             break;
-          case Direction.bottom:
+          case Direction.down:
             positionDestroy = Rect.fromLTWH(
-              position.left,
-              position.top + (height / 2),
+              rectCollision.left - ((width - rectCollision.width) / 2),
+              rectCollision.bottom + (height / 2),
               width,
               height,
-            );
+            ).toVector2Rect();
             break;
-          case Direction.topLeft:
+          case Direction.upLeft:
             positionDestroy = Rect.fromLTWH(
-              position.left - (width / 2),
-              position.top,
+              rectCollision.left - (width / 2),
+              rectCollision.top,
               width,
               height,
-            );
+            ).toVector2Rect();
             break;
-          case Direction.topRight:
+          case Direction.upRight:
             positionDestroy = Rect.fromLTWH(
-              position.left + (width / 2),
-              position.top,
+              rectCollision.right - (width / 2),
+              rectCollision.top,
               width,
               height,
-            );
+            ).toVector2Rect();
             break;
-          case Direction.bottomLeft:
+          case Direction.downLeft:
             positionDestroy = Rect.fromLTWH(
-              position.left - (width / 2),
-              position.top,
+              rectCollision.left - (width / 2),
+              rectCollision.top,
               width,
               height,
-            );
+            ).toVector2Rect();
             break;
-          case Direction.bottomRight:
+          case Direction.downRight:
             positionDestroy = Rect.fromLTWH(
-              position.left + (width / 2),
-              position.top,
+              rectCollision.right - (width / 2),
+              rectCollision.top,
               width,
               height,
-            );
+            ).toVector2Rect();
             break;
         }
 
         gameRef.add(
           AnimatedObjectOnce(
-            animation: destroyAnimation,
+            animation: destroyAnimation!,
             position: positionDestroy,
             lightingConfig: lightingConfig,
           ),
         );
       }
       remove();
-      if (this.destroyedObject != null) this.destroyedObject();
+      this.onDestroyedObject?.call();
     }
   }
 
   bool _verifyExistInWorld() {
-    Size mapSize = gameRef.map?.mapSize;
+    Size? mapSize = gameRef.map.mapSize;
     if (mapSize == null) return true;
 
     if (position.left < 0) {
@@ -223,5 +231,11 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     }
 
     return true;
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await _loader.load();
+    animation = this.flyAnimation;
   }
 }

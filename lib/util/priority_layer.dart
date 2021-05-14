@@ -1,10 +1,25 @@
-class PriorityLayer {
+class LayerPriority {
+  static const int BACKGROUND = 10;
   static const int MAP = 20;
-  static const int DECORATION = 30;
-  static const int ENEMY = 40;
-  static const int PLAYER = 50;
-  static const int OBJECTS = 60;
-  static const int LIGHTING = 80;
-  static const int GAME_INTERFACE = 90;
-  static const int JOYSTICK = 100;
+  static const int COMPONENTS = 30;
+
+  static int getComponentPriority(int bottom) {
+    return COMPONENTS + bottom;
+  }
+
+  static int getLightingPriority(int highestPriority) {
+    return highestPriority + 10;
+  }
+
+  static int getColorFilterPriority(int highestPriority) {
+    return highestPriority + 20;
+  }
+
+  static int getInterfacePriority(int highestPriority) {
+    return highestPriority + 30;
+  }
+
+  static int getJoystickPriority(int highestPriority) {
+    return highestPriority + 40;
+  }
 }

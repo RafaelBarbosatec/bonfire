@@ -1,22 +1,22 @@
+import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/player/extensions.dart';
 import 'package:bonfire/player/simple/simple_player.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
 import 'package:flutter/widgets.dart';
 
 extension SimplePlayerExtensions on SimplePlayer {
   void simpleAttackMelee({
-    FlameAnimation.Animation animationRight,
-    FlameAnimation.Animation animationBottom,
-    FlameAnimation.Animation animationLeft,
-    FlameAnimation.Animation animationTop,
-    @required double damage,
+    Future<SpriteAnimation>? animationRight,
+    Future<SpriteAnimation>? animationBottom,
+    Future<SpriteAnimation>? animationLeft,
+    Future<SpriteAnimation>? animationTop,
+    required double damage,
     dynamic id,
-    Direction direction,
-    double heightArea = 32,
-    double widthArea = 32,
+    Direction? direction,
+    double height = 32,
+    double width = 32,
     bool withPush = true,
   }) {
     Direction attackDirection = direction ?? this.lastDirection;
@@ -28,28 +28,28 @@ extension SimplePlayerExtensions on SimplePlayer {
       animationTop: animationTop,
       damage: damage,
       id: id,
-      heightArea: heightArea,
-      widthArea: widthArea,
+      height: height,
+      width: width,
       withPush: withPush,
     );
   }
 
   void simpleAttackRange({
-    @required FlameAnimation.Animation animationRight,
-    @required FlameAnimation.Animation animationLeft,
-    @required FlameAnimation.Animation animationTop,
-    @required FlameAnimation.Animation animationBottom,
-    FlameAnimation.Animation animationDestroy,
-    @required double width,
-    @required double height,
+    required Future<SpriteAnimation> animationRight,
+    required Future<SpriteAnimation> animationLeft,
+    required Future<SpriteAnimation> animationTop,
+    required Future<SpriteAnimation> animationBottom,
+    Future<SpriteAnimation>? animationDestroy,
+    required double width,
+    required double height,
     dynamic id,
     double speed = 150,
     double damage = 1,
-    Direction direction,
+    Direction? direction,
     bool withCollision = true,
-    VoidCallback destroy,
-    CollisionConfig collision,
-    LightingConfig lightingConfig,
+    VoidCallback? destroy,
+    CollisionConfig? collision,
+    LightingConfig? lightingConfig,
   }) {
     Direction attackDirection = direction ?? this.lastDirection;
     this.simpleAttackRangeByDirection(

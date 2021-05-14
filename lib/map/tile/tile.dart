@@ -2,74 +2,78 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_paint.dart';
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
-import 'package:flame/position.dart';
+import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/text_config.dart';
 import 'package:flutter/material.dart';
 
 class Tile extends GameComponent {
-  Sprite sprite;
-  ControlledUpdateAnimation animation;
+  Sprite? _sprite;
+  ControlledUpdateAnimation? _animation;
   final double width;
   final double height;
-  final String type;
-  Position _positionText;
-  Paint _paintText;
+  final String? type;
+  late Vector2 _positionText;
+  Paint? _paintText;
+  final _loader = AssetsLoader();
 
   Tile(
     String spritePath,
-    Position position, {
+    Vector2 position, {
     this.width = 32,
     this.height = 32,
     this.type,
   }) {
     this.position = generateRectWithBleedingPixel(position, width, height);
-    if (spritePath.isNotEmpty) sprite = Sprite(spritePath);
+    if (spritePath.isNotEmpty) {
+      Sprite.load(spritePath).then((value) => _sprite = value);
+    }
 
-    _positionText = Position(position.x, position.y);
+    _positionText = position;
   }
 
   Tile.fromSprite(
-    Sprite sprite,
-    Position position, {
+    Future<Sprite> sprite,
+    Vector2 position, {
     this.width = 32,
     this.height = 32,
     this.type,
     double offsetX = 0,
     double offsetY = 0,
   }) {
-    this.sprite = sprite;
+    _loader.add(AssetToLoad(sprite, (value) => this._sprite = value));
     this.position = generateRectWithBleedingPixel(position, width, height,
         offsetX: offsetX, offsetY: offsetY);
 
-    _positionText = Position(position.x, position.y);
+    _positionText = position;
   }
 
   Tile.fromAnimation(
     ControlledUpdateAnimation animation,
-    Position position, {
+    Vector2 position, {
     this.width = 32,
     this.height = 32,
     this.type,
   }) {
-    this.animation = animation;
+    this._animation = animation;
     this.position = generateRectWithBleedingPixel(position, width, height);
 
-    _positionText = Position(position.x, position.y);
+    _positionText = position;
   }
 
   @override
   void render(Canvas canvas) {
-    if (position == null) return;
-    animation?.render(canvas, position);
-    if (sprite?.loaded() ?? false) {
-      sprite.renderRect(canvas, position,
-          overridePaint: MapPaint.instance.paint);
-    }
+    _animation?.render(canvas, position);
+    _sprite?.renderFromVector2Rect(
+      canvas,
+      position,
+      overridePaint: MapPaint.instance.paint,
+    );
 
-    if ((gameRef?.constructionMode ?? false) && isVisibleInCamera()) {
+    if (gameRef.constructionMode && isVisibleInCamera()) {
       _drawGrid(canvas);
     }
     super.render(canvas);
@@ -82,8 +86,8 @@ class Tile extends GameComponent {
         ..strokeWidth = 1;
     }
     canvas.drawRect(
-      position,
-      _paintText
+      position.rect,
+      _paintText!
         ..color = gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
     );
     if (_positionText.x % 2 == 0) {
@@ -96,13 +100,13 @@ class Tile extends GameComponent {
           .render(
             canvas,
             '${_positionText.x.toInt()}:${_positionText.y.toInt()}',
-            Position(position.left + 2, position.top + 2),
+            Vector2(position.rect.left + 2, position.rect.top + 2),
           );
     }
   }
 
-  Rect generateRectWithBleedingPixel(
-    Position position,
+  Vector2Rect generateRectWithBleedingPixel(
+    Vector2 position,
     double width,
     double height, {
     double offsetX = 0,
@@ -122,12 +126,18 @@ class Tile extends GameComponent {
           offsetY,
       width + (position.x % 2 == 0 ? bleendingPixel : 0),
       height + (position.y % 2 == 0 ? bleendingPixel : 0),
-    );
+    ).toVector2Rect();
   }
 
   @override
   void update(double dt) {
-    animation?.update(dt);
+    _animation?.update(dt);
     super.update(dt);
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await _loader.load();
+    await _animation?.onLoad();
   }
 }

@@ -1,9 +1,9 @@
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/camera/camera.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
-import 'package:bonfire/util/camera/camera.dart';
-import 'package:flame/components/mixins/has_game_ref.dart';
+import 'package:flame/components.dart';
 
 abstract class GameListener {
   void updateGame();
@@ -11,7 +11,7 @@ abstract class GameListener {
 }
 
 class GameController with HasGameRef<BonfireGame> {
-  GameListener _gameListener;
+  GameListener? _gameListener;
   int _lastCountLiveEnemies = 0;
 
   void addGameComponent(GameComponent component) {
@@ -23,26 +23,46 @@ class GameController with HasGameRef<BonfireGame> {
   }
 
   void notifyListeners() {
+    if (!hasGameRef) return;
     bool notifyChangeEnemy = false;
-    int countLive = livingEnemies.length;
+    int countLive = livingEnemies?.length ?? 0;
 
     if (_lastCountLiveEnemies != countLive) {
       _lastCountLiveEnemies = countLive;
       notifyChangeEnemy = true;
     }
     if (_gameListener != null) {
-      _gameListener.updateGame();
+      _gameListener?.updateGame();
       if (notifyChangeEnemy)
-        _gameListener.changeCountLiveEnemies(_lastCountLiveEnemies);
+        _gameListener?.changeCountLiveEnemies(_lastCountLiveEnemies);
     }
   }
 
-  Iterable<GameDecoration> get visibleDecorations =>
-      gameRef.visibleDecorations();
-  Iterable<GameDecoration> get allDecorations => gameRef.decorations();
-  Iterable<Enemy> get visibleEnemies => gameRef.visibleEnemies();
-  Iterable<Enemy> get livingEnemies => gameRef.livingEnemies();
-  Iterable<GameComponent> get visibleComponents => gameRef.visibleComponents();
-  Player get player => gameRef.player;
-  Camera get camera => gameRef.gameCamera;
+  Iterable<GameDecoration>? get visibleDecorations {
+    return gameRef.visibleDecorations();
+  }
+
+  Iterable<GameDecoration>? get allDecorations {
+    return gameRef.decorations();
+  }
+
+  Iterable<Enemy>? get visibleEnemies {
+    return gameRef.visibleEnemies();
+  }
+
+  Iterable<Enemy>? get livingEnemies {
+    return gameRef.livingEnemies();
+  }
+
+  Iterable<GameComponent>? get visibleComponents {
+    return gameRef.visibleComponents();
+  }
+
+  Player? get player {
+    return gameRef.player;
+  }
+
+  Camera? get camera {
+    return gameRef.camera;
+  }
 }

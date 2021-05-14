@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/components/component.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 class ValueGeneratorComponent extends Component {
@@ -11,8 +11,8 @@ class ValueGeneratorComponent extends Component {
   final double begin;
   final double end;
   final Curve curve;
-  final VoidCallback onFinish;
-  final ValueChanged<double> onChange;
+  final VoidCallback? onFinish;
+  final ValueChanged<double>? onChange;
 
   double _currentValue = 0;
   double _displacement = 0;
@@ -42,14 +42,15 @@ class ValueGeneratorComponent extends Component {
       double value = _currentValue / duration.inMicroseconds;
       value = curve.transform(value);
       double realValue = begin + (_displacement * value);
-      if (onChange != null) onChange(realValue);
+      onChange?.call(realValue);
     }
   }
 
   void finish() {
     _isFinished = true;
-    if (onChange != null) onChange(end);
-    if (onFinish != null) onFinish();
+    onChange?.call(end);
+    onFinish?.call();
+    remove();
   }
 
   void start() {
@@ -66,7 +67,4 @@ class ValueGeneratorComponent extends Component {
   }
 
   bool get isFinished => _isFinished;
-
-  @override
-  bool destroy() => _isFinished;
 }

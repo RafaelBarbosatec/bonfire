@@ -1,8 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/collision/object_collision.dart';
-import 'package:example/map/dungeon_map.dart';
+import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 import 'package:example/util/player_sprite_sheet.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,42 +9,48 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Knight extends SimplePlayer with Lighting, ObjectCollision {
-  final Position initPosition;
   double attack = 20;
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
   IntervalTick _timerStamina = IntervalTick(100);
-  IntervalTick _timerAttackRange = IntervalTick(100);
+  IntervalTick _timerAttackRange = IntervalTick(110);
   IntervalTick _timerSeeEnemy = IntervalTick(500);
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
-  Rect rectDirectionAttack;
-  Sprite spriteDirectionAttack;
+  Rect? rectDirectionAttack;
+  Sprite? spriteDirectionAttack;
   bool execAttackRange = false;
 
-  Knight(this.initPosition)
+  Knight(Vector2 position)
       : super(
           animation: PlayerSpriteSheet.simpleDirectionAnimation,
           width: DungeonMap.tileSize,
           height: DungeonMap.tileSize,
-          initPosition: initPosition,
+          position: position,
           life: 200,
           speed: DungeonMap.tileSize * 3,
         ) {
-    spriteDirectionAttack = Sprite('direction_attack.png');
-    lightingConfig = LightingConfig(
-      radius: width * 1.5,
-      blurBorder: width * 1.5,
+    setupLighting(
+      LightingConfig(
+        radius: width * 1.5,
+        blurBorder: width * 1.5,
+        color: Colors.transparent,
+      ),
     );
     setupCollision(
       CollisionConfig(
         collisions: [
-          CollisionArea(
-            height: DungeonMap.tileSize / 2,
-            width: DungeonMap.tileSize / 1.8,
-            align: Offset(DungeonMap.tileSize / 3.5, DungeonMap.tileSize / 2),
-          ),
+          CollisionArea.rectangle(
+            size: Size(
+              DungeonMap.tileSize / 2,
+              DungeonMap.tileSize / 2.2,
+            ),
+            align: Vector2(
+              DungeonMap.tileSize / 3.5,
+              DungeonMap.tileSize / 2,
+            ),
+          )
         ],
       ),
     );
@@ -61,10 +66,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   void joystickAction(JoystickActionEvent event) {
     if (isDead) return;
 
-    if (gameRef.joystickController.keyboardEnable) {
-      if (event.id == LogicalKeyboardKey.space.keyId) {
-        actionAttack();
-      }
+    if (event.id == LogicalKeyboardKey.space.keyId &&
+        event.event == ActionEvent.DOWN) {
+      actionAttack();
     }
 
     if (event.id == 0 && event.event == ActionEvent.DOWN) {
@@ -89,14 +93,14 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   void die() {
     remove();
     gameRef.addGameComponent(
-      GameDecoration(
-        position: Position(
+      GameDecoration.withSprite(
+        Sprite.load('player/crypt.png'),
+        position: Vector2(
           position.left,
           position.top,
         ),
         height: DungeonMap.tileSize,
         width: DungeonMap.tileSize,
-        sprite: Sprite('player/crypt.png'),
       ),
     );
     super.die();
@@ -112,8 +116,8 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
       animationLeft: CommonSpriteSheet.whiteAttackEffectLeft,
       animationRight: CommonSpriteSheet.whiteAttackEffectRight,
       animationTop: CommonSpriteSheet.whiteAttackEffectTop,
-      heightArea: DungeonMap.tileSize,
-      widthArea: DungeonMap.tileSize,
+      height: DungeonMap.tileSize,
+      width: DungeonMap.tileSize,
     );
   }
 
@@ -121,7 +125,6 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
     if (stamina < 10) return;
 
     this.simpleAttackRangeByAngle(
-      id: {'ddd': 'kkkkk'},
       animationTop: CommonSpriteSheet.fireBallTop,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       radAngleDirection: angleRadAttack,
@@ -131,23 +134,23 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
       speed: initSpeed * 2,
       collision: CollisionConfig(
         collisions: [
-          CollisionArea(
-            width: width / 2,
-            height: width / 2,
-            align: Offset(width * 0.1, 0),
+          CollisionArea.rectangle(
+            size: Size(width / 2, width / 2),
+            align: Vector2(width * 0.1, 0),
           ),
         ],
       ),
       lightingConfig: LightingConfig(
-        radius: width * 0.5,
+        radius: width / 2,
         blurBorder: width,
+        color: Colors.orange.withOpacity(0.3),
       ),
     );
   }
 
   @override
   void update(double dt) {
-    if (this.isDead || gameRef?.size == null) return;
+    if (this.isDead) return;
     _verifyStamina(dt);
 
     if (_timerSeeEnemy.update(dt) && !showObserveEnemy) {
@@ -195,11 +198,13 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
 
   @override
   void receiveDamage(double damage, dynamic from) {
-    this.showDamage(damage,
-        config: TextConfig(
-          fontSize: width / 3,
-          color: Colors.red,
-        ));
+    this.showDamage(
+      damage,
+      config: TextConfig(
+        fontSize: width / 3,
+        color: Colors.red,
+      ),
+    );
     super.receiveDamage(damage, from);
   }
 
@@ -208,42 +213,75 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
       AnimatedFollowerObject(
         animation: CommonSpriteSheet.emote,
         target: this,
-        positionFromTarget: Rect.fromLTWH(18, -6, width / 2, height / 2),
+        positionFromTarget: Rect.fromLTWH(
+          18,
+          -6,
+          width / 2,
+          height / 2,
+        ).toVector2Rect(),
       ),
     );
   }
 
   void _showTalk(Enemy first) {
-    gameRef.gameCamera.moveToTargetAnimated(first, zoom: 2, finish: () {
-      TalkDialog.show(gameRef.context, [
-        Say(
-          "Look at this! It seems that I'm not alone here ...",
-          Container(
-            width: 50,
-            height: 50,
-            child: AnimationWidget(
-              animation: animation.current,
-              playing: true,
+    gameRef.camera.moveToTargetAnimated(
+      first,
+      zoom: 2,
+      finish: () {
+        TalkDialog.show(
+          gameRef.context,
+          [
+            Say(
+              "Look at this! It seems that I'm not alone here ...",
+              Container(
+                width: 50,
+                height: 50,
+                child: FutureBuilder<SpriteAnimation>(
+                  future: PlayerSpriteSheet.idleRight,
+                  builder: (context, anim) {
+                    if (!anim.hasData) return SizedBox.shrink();
+                    return SpriteAnimationWidget(
+                      animation: anim.data!,
+                      playing: true,
+                    );
+                  },
+                ),
+              ),
             ),
-          ),
-        ),
-      ], finish: () {
-        gameRef.gameCamera.moveToPlayerAnimated();
-      });
-    });
+          ],
+          finish: () {
+            gameRef.camera.moveToPlayerAnimated();
+          },
+          logicalKeyboardKeyToNext: LogicalKeyboardKey.space,
+        );
+      },
+    );
   }
 
   void _drawDirectionAttack(Canvas c) {
     if (execAttackRange) {
       double radius = position.height;
-      rectDirectionAttack = Rect.fromLTWH(position.center.dx - radius,
-          position.center.dy - radius, radius * 2, radius * 2);
-      renderSpriteByRadAngle(
-        c,
-        angleRadAttack,
-        rectDirectionAttack,
-        spriteDirectionAttack,
+      rectDirectionAttack = Rect.fromLTWH(
+        position.center.dx - radius,
+        position.center.dy - radius,
+        radius * 2,
+        radius * 2,
       );
+
+      if (rectDirectionAttack != null && spriteDirectionAttack != null) {
+        renderSpriteByRadAngle(
+          c,
+          angleRadAttack,
+          rectDirectionAttack!.toVector2Rect(),
+          spriteDirectionAttack!,
+        );
+      }
     }
+  }
+
+  @override
+  Future<void> onLoad() async {
+    spriteDirectionAttack = await Sprite.load('direction_attack.png');
+    return super.onLoad();
   }
 }

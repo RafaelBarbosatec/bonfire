@@ -1,34 +1,36 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flame/animation.dart' as FlameAnimation;
+import 'package:bonfire/util/assets_loader.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
 class RotationPlayer extends Player {
-  final FlameAnimation.Animation animIdle;
-  final FlameAnimation.Animation animRun;
-  double speed;
-  double currentRadAngle;
+  SpriteAnimation? animIdle;
+  SpriteAnimation? animRun;
+  double? currentRadAngle;
   bool _move = false;
-  FlameAnimation.Animation animation;
+  SpriteAnimation? animation;
+  final _loader = AssetsLoader();
 
   RotationPlayer({
-    @required Position initPosition,
-    @required this.animIdle,
-    @required this.animRun,
-    this.speed = 150,
+    required Vector2 position,
+    required Future<SpriteAnimation> animIdle,
+    required Future<SpriteAnimation> animRun,
+    double speed = 150,
     this.currentRadAngle = -1.55,
     double width = 32,
     double height = 32,
     double life = 100,
   }) : super(
-          initPosition: initPosition,
+          position: position,
           width: width,
           height: height,
           life: life,
+          speed: speed,
         ) {
-    this.animation = animIdle;
+    _loader.add(AssetToLoad(animIdle, (value) => this.animIdle = value));
+    _loader.add(AssetToLoad(animRun, (value) => this.animRun = value));
   }
 
   @override
@@ -48,8 +50,8 @@ class RotationPlayer extends Player {
 
   @override
   void update(double dt) {
-    if (_move && !isDead) {
-      moveFromAngle(speed, currentRadAngle);
+    if (_move && !isDead && currentRadAngle != null) {
+      moveFromAngle(speed, currentRadAngle!);
     }
     animation?.update(dt);
     super.update(dt);
@@ -57,18 +59,23 @@ class RotationPlayer extends Player {
 
   @override
   void render(Canvas canvas) {
+    if (currentRadAngle == null) return;
     canvas.save();
     canvas.translate(position.center.dx, position.center.dy);
-    canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));
+    canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle! + (pi / 2));
     canvas.translate(-position.center.dx, -position.center.dy);
     _renderAnimation(canvas);
     canvas.restore();
   }
 
   void _renderAnimation(Canvas canvas) {
-    if (animation == null || position == null) return;
-    if (animation.loaded()) {
-      animation.getSprite().renderRect(canvas, position);
-    }
+    if (animation == null) return;
+    animation?.getSprite().renderFromVector2Rect(canvas, position);
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await _loader.load();
+    this.animation = this.animIdle;
   }
 }

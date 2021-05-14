@@ -1,10 +1,26 @@
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/game.dart';
-import 'package:flame/game/embedded_game_widget.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
-class CustomWidgetBuilder {
-  Widget build(Game game) {
+/// Widget used to run the Game
+/// This widget also is responsible in capture gesture with `Listener`
+class CustomGameWidget<T extends Game> extends StatelessWidget {
+  /// instance of the game
+  final T game;
+
+  final Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap;
+
+  final List<String>? initialActiveOverlays;
+
+  const CustomGameWidget({
+    Key? key,
+    required this.game,
+    this.overlayBuilderMap,
+    this.initialActiveOverlays,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return ClipRRect(
       child: Listener(
         onPointerDown: game is PointerDetector
@@ -20,12 +36,10 @@ class CustomWidgetBuilder {
             ? (PointerCancelEvent d) =>
                 (game as PointerDetector).onPointerCancel(d)
             : null,
-        child: Container(
-          color: game.backgroundColor(),
-          child: Directionality(
-            textDirection: TextDirection.ltr,
-            child: EmbeddedGameWidget(game),
-          ),
+        child: GameWidget(
+          game: game,
+          overlayBuilderMap: overlayBuilderMap,
+          initialActiveOverlays: initialActiveOverlays,
         ),
       ),
     );
