@@ -1,13 +1,9 @@
-import 'dart:math';
-
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/mixins/move_to_position_along_the_path.dart';
 import 'package:bonfire/util/mixins/movement.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +27,6 @@ class Player extends GameComponent
   late double maxLife;
 
   bool _isDead = false;
-  double _dtUpdate = 0;
   bool isFocusCamera = true;
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
 
@@ -55,7 +50,6 @@ class Player extends GameComponent
 
   @override
   void update(double dt) {
-    _dtUpdate = dt;
     if (isDead) return;
 
     final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
@@ -90,33 +84,6 @@ class Player extends GameComponent
         break;
     }
     super.update(dt);
-  }
-
-  /// Move Player to direction by radAngle
-  void moveFromAngle(double speed, double angle, {VoidCallback? onCollision}) {
-    double nextX = (speed * _dtUpdate) * cos(angle);
-    double nextY = (speed * _dtUpdate) * sin(angle);
-    Offset nextPoint = Offset(nextX, nextY);
-
-    Offset diffBase = Offset(
-          position.rect.center.dx + nextPoint.dx,
-          position.rect.center.dy + nextPoint.dy,
-        ) -
-        position.rect.center;
-
-    Offset newDiffBase = diffBase;
-
-    Vector2Rect newPosition = position.shift(newDiffBase);
-
-    if (_playerIsCollision(
-      displacement: newPosition,
-      onlyVisible: isFocusCamera,
-    )) {
-      onCollision?.call();
-      return;
-    }
-
-    position = newPosition;
   }
 
   @override
@@ -155,19 +122,5 @@ class Player extends GameComponent
   @override
   void moveTo(Vector2 position) {
     this.moveToPositionAlongThePath(position, speed);
-  }
-
-  bool _playerIsCollision({
-    required Vector2Rect displacement,
-    bool onlyVisible = true,
-  }) {
-    if (this is ObjectCollision) {
-      (this as ObjectCollision).setCollisionOnlyVisibleScreen(onlyVisible);
-      return (this as ObjectCollision).isCollision(
-        displacement: displacement,
-      );
-    } else {
-      return false;
-    }
   }
 }

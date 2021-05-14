@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
@@ -87,6 +88,31 @@ mixin Movement on GameComponent {
       {VoidCallback? onCollision}) {
     moveRight(speedX, onCollision: onCollision);
     moveDown(speedY, onCollision: onCollision);
+  }
+
+  /// Move Player to direction by radAngle
+  void moveFromAngle(double speed, double angle, {VoidCallback? onCollision}) {
+    double nextX = (speed * dtUpdate) * cos(angle);
+    double nextY = (speed * dtUpdate) * sin(angle);
+    Offset nextPoint = Offset(nextX, nextY);
+
+    Offset diffBase = Offset(
+          position.rect.center.dx + nextPoint.dx,
+          position.rect.center.dy + nextPoint.dy,
+        ) -
+        position.rect.center;
+
+    Offset newDiffBase = diffBase;
+
+    Vector2Rect newPosition = position.shift(newDiffBase);
+
+    if (_isCollision(newPosition)) {
+      onCollision?.call();
+      return;
+    }
+
+    isIdle = false;
+    position = newPosition;
   }
 
   void idle() {

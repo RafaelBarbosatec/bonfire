@@ -49,94 +49,7 @@ class Enemy extends GameComponent with Movement, Attackable {
 
   bool get isDead => _isDead;
 
-  // /// Move Enemy to up
-  // void moveUp(double speed, {VoidCallback? onCollision}) {
-  //   isIdle = false;
-  //   var collision = verifyEnemyTranslateCollision(
-  //     0,
-  //     (speed * -1),
-  //   );
-  //
-  //   if (collision) {
-  //     onCollision?.call();
-  //     return;
-  //   }
-  //
-  //   position = position.translate(0, (speed * -1));
-  // }
-  //
-  // /// Move Enemy to down
-  // void moveDown(double speed, {VoidCallback? onCollision}) {
-  //   isIdle = false;
-  //   var collision = verifyEnemyTranslateCollision(
-  //     0,
-  //     speed,
-  //   );
-  //   if (collision) {
-  //     onCollision?.call();
-  //     return;
-  //   }
-  //
-  //   position = position.translate(0, speed);
-  // }
-  //
-  // /// Move Enemy to left
-  // void moveLeft(double speed, {VoidCallback? onCollision}) {
-  //   isIdle = false;
-  //   var collision = verifyEnemyTranslateCollision(
-  //     (speed * -1),
-  //     0,
-  //   );
-  //   if (collision) {
-  //     onCollision?.call();
-  //     return;
-  //   }
-  //
-  //   position = position.translate((speed * -1), 0);
-  // }
-  //
-  // /// Move Enemy to right
-  // void moveRight(double speed, {VoidCallback? onCollision}) {
-  //   isIdle = false;
-  //   var collision = verifyEnemyTranslateCollision(
-  //     speed,
-  //     0,
-  //   );
-  //
-  //   if (collision) {
-  //     onCollision?.call();
-  //     return;
-  //   }
-  //
-  //   position = position.translate(speed, 0);
-  // }
-  //
-  // /// Move Enemy to up and right
-  // void moveUpRight(double speedX, double speedY, {VoidCallback? onCollision}) {
-  //   moveRight(speedX, onCollision: onCollision);
-  //   moveUp(speedY, onCollision: onCollision);
-  // }
-  //
-  // /// Move Enemy to up and left
-  // void moveUpLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
-  //   moveLeft(speedX, onCollision: onCollision);
-  //   moveUp(speedY, onCollision: onCollision);
-  // }
-  //
-  // /// Move Enemy to down and left
-  // void moveDownLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
-  //   moveLeft(speedX, onCollision: onCollision);
-  //   moveDown(speedY, onCollision: onCollision);
-  // }
-  //
-  // /// Move Enemy to down and right
-  // void moveDownRight(double speedX, double speedY,
-  //     {VoidCallback? onCollision}) {
-  //   moveRight(speedX, onCollision: onCollision);
-  //   moveDown(speedY, onCollision: onCollision);
-  // }
-
-  /// Move Enemy to diretion by radAngle with dodge obstacles
+  /// Move Enemy to direction by radAngle with dodge obstacles
   void moveFromAngleDodgeObstacles(
     double speed,
     double angle, {
@@ -190,22 +103,6 @@ class Enemy extends GameComponent with Movement, Attackable {
       notMove?.call();
     }
     this.position = position.shift(newDiffBase);
-  }
-
-  /// Move Enemy to direction by radAngle
-  void moveFromAngle(double speed, double angle) {
-    isIdle = false;
-    double innerSpeed = (speed * dtUpdate);
-    double nextX = innerSpeed * cos(angle);
-    double nextY = innerSpeed * sin(angle);
-    Offset nextPoint = Offset(nextX, nextY);
-
-    Offset diffBase = Offset(
-          position.center.dx + nextPoint.dx,
-          position.center.dy + nextPoint.dy,
-        ) -
-        position.center;
-    this.position = position.shift(diffBase);
   }
 
   @override
