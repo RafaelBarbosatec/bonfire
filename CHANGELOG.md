@@ -1,3 +1,6 @@
+# 1.0.2
+- Downgrade flame version to 1.0.0-rc9
+
 # 1.0.1
 
 - Fix `SimpleDirectionAnimation`
