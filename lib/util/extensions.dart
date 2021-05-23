@@ -111,3 +111,9 @@ extension Vector2Ext on Vector2 {
     return Vector2(this.x + x, this.y + y);
   }
 }
+
+extension SpriteAnimationExt on SpriteAnimation {
+  Future<SpriteAnimation> asFuture() {
+    return Future.value(this);
+  }
+}
