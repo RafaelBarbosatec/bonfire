@@ -112,8 +112,8 @@ extension Vector2Ext on Vector2 {
   }
 }
 
-extension SpriteAnimationExt on SpriteAnimation {
-  Future<SpriteAnimation> asFuture() {
+extension ObjectExt<T> on T {
+  Future<T> asFuture() {
     return Future.value(this);
   }
 }

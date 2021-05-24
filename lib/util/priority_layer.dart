@@ -7,6 +7,10 @@ class LayerPriority {
     return COMPONENTS + bottom;
   }
 
+  static int getAbovePriority(int highestPriority) {
+    return highestPriority + 5;
+  }
+
   static int getLightingPriority(int highestPriority) {
     return highestPriority + 10;
   }

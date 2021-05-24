@@ -27,6 +27,8 @@ class GameDecoration extends AnimatedObject {
   /// Used to load assets in [onLoad]
   final _loader = AssetsLoader();
 
+  bool aboveComponents = false;
+
   GameDecoration({
     this.sprite,
     required Vector2 position,
@@ -98,5 +100,13 @@ class GameDecoration extends AnimatedObject {
   @override
   Future<void> onLoad() {
     return _loader.load();
+  }
+
+  @override
+  int get priority {
+    if (aboveComponents) {
+      return LayerPriority.getAbovePriority(gameRef.highestPriority);
+    }
+    return super.priority;
   }
 }

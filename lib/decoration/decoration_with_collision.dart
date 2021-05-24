@@ -5,6 +5,8 @@ import 'package:flame/components.dart';
 
 /// GameDecoration with collision used in construct of the map with Tiled
 class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
+  bool aboveComponents = false;
+
   GameDecorationWithCollision(
     Vector2 position, {
     Sprite? sprite,
@@ -14,6 +16,7 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
+    this.aboveComponents = false,
   }) : super(
           position: position,
           height: height,
@@ -36,7 +39,7 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
-    bool frontFromPlayer = false,
+    this.aboveComponents = false,
   }) : super.withSprite(
           sprite,
           position: position,
@@ -58,7 +61,7 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
-    bool frontFromPlayer = false,
+    this.aboveComponents = false,
   }) : super.withAnimation(
           animation,
           position: position,
