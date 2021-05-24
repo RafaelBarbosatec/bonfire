@@ -12,6 +12,9 @@ abstract class GameComponent extends Component
   /// Position used to draw on the screen
   Vector2Rect position = Vector2Rect.zero();
 
+  /// When true this component render above all components in game.
+  bool aboveComponents = false;
+
   /// This method remove of the component
   void remove() {
     shouldRemove = true;
@@ -69,7 +72,12 @@ abstract class GameComponent extends Component
   }
 
   @override
-  int get priority => LayerPriority.getComponentPriority(_getBottomPriority());
+  int get priority {
+    if (aboveComponents) {
+      return LayerPriority.getAbovePriority(gameRef.highestPriority);
+    }
+    return LayerPriority.getComponentPriority(_getBottomPriority());
+  }
 
   int _getBottomPriority() {
     int bottomPriority = position.bottom.round();
