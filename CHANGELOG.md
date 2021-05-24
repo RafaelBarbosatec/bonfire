@@ -1,5 +1,6 @@
 # NEXT
 - Add type `above` in tiled to render above components
+- update `tiledjsonreader`
 
 # 1.0.2
 - Downgrade flame version to 1.0.0-rc9
