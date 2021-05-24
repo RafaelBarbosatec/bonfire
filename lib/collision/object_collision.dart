@@ -90,11 +90,6 @@ mixin ObjectCollision on GameComponent {
     super.update(dt);
   }
 
-  bool notVisibleAndCollisionOnlyScreen() {
-    return (_collisionConfig?.collisionOnlyVisibleScreen ?? true) &&
-        !isVisibleInCamera();
-  }
-
   void updatePosition(Vector2Rect position) {
     _collisionConfig?.updatePosition(position);
   }

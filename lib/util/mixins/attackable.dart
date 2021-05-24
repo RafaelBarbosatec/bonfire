@@ -11,7 +11,7 @@ mixin Attackable on GameComponent {
 
   void receiveDamage(double damage, dynamic from);
 
-  Vector2Rect rectAttackable() => this is ObjectCollision
+  Vector2Rect rectAttackable() => this.isObjectCollision()
       ? (this as ObjectCollision).rectCollision
       : position;
 

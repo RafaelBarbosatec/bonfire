@@ -148,7 +148,7 @@ class Enemy extends GameComponent with Movement, Attackable {
     double translateX,
     double translateY,
   ) {
-    if (this is ObjectCollision) {
+    if (this.isObjectCollision()) {
       return (this as ObjectCollision).isCollision(
         displacement: this.position.translate(translateX, translateY),
       );

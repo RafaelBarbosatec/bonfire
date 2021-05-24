@@ -154,7 +154,7 @@ extension PlayerExtensions on Player {
 
     Direction attackDirection = direction;
 
-    Vector2Rect rectBase = (this is ObjectCollision)
+    Vector2Rect rectBase = (this.isObjectCollision())
         ? (this as ObjectCollision).rectCollision
         : position;
 
@@ -259,7 +259,7 @@ extension PlayerExtensions on Player {
     double pushTop = 0;
     Direction attackDirection = direction;
 
-    Vector2Rect rectBase = (this is ObjectCollision)
+    Vector2Rect rectBase = (this.isObjectCollision())
         ? (this as ObjectCollision).rectCollision
         : position;
 
