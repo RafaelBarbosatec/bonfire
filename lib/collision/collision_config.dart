@@ -8,7 +8,7 @@ class CollisionConfig {
   /// Representing the collision area
   final Iterable<CollisionArea> collisions;
 
-  bool collisionOnlyVisibleScreen;
+  bool collisionOnlyVisibleScreen = true;
   bool enable;
 
   Rect _rect = Rect.zero;
@@ -17,7 +17,6 @@ class CollisionConfig {
 
   CollisionConfig({
     required this.collisions,
-    this.collisionOnlyVisibleScreen = true,
     this.enable = true,
   });
 

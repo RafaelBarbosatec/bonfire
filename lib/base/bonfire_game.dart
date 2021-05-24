@@ -70,6 +70,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   Iterable<Enemy> _visibleEnemies = [];
   Iterable<Enemy> _livingEnemies = [];
   Iterable<Attackable> _attackables = [];
+  Iterable<Attackable> _visibleAttackables = [];
   Iterable<GameDecoration> _decorations = [];
   Iterable<GameDecoration> _visibleDecorations = [];
   Iterable<Lighting> _visibleLights = [];
@@ -170,6 +171,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   Iterable<Lighting> lightVisible() => _visibleLights;
 
   Iterable<Attackable> attackables() => _attackables;
+  Iterable<Attackable> visibleAttackables() => _visibleAttackables;
   Iterable<Sensor> visibleSensors() => _visibleSensors;
 
   Iterable<ObjectCollision> collisions() => _collisions;
@@ -229,7 +231,11 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
       return (element is Sensor);
     }).cast();
 
-    _attackables = _visibleComponents.where((element) {
+    _visibleAttackables = _visibleComponents.where((element) {
+      return (element is Attackable);
+    }).cast();
+
+    _attackables = components.where((element) {
       return (element is Attackable);
     }).cast();
 

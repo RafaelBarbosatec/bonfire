@@ -26,7 +26,6 @@ class FlyingAttackAngleObject extends AnimatedObject
   final double height;
   final bool damageInPlayer;
   final bool withCollision;
-  final bool collisionOnlyVisibleObjects;
   final VoidCallback? destroyedObject;
   final _loader = AssetsLoader();
 
@@ -48,7 +47,6 @@ class FlyingAttackAngleObject extends AnimatedObject
     this.damage = 1,
     this.damageInPlayer = true,
     this.withCollision = true,
-    this.collisionOnlyVisibleObjects = true,
     this.destroyedObject,
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
@@ -68,7 +66,6 @@ class FlyingAttackAngleObject extends AnimatedObject
       collision ??
           CollisionConfig(
             collisions: [CollisionArea.rectangle(size: Size(width, height))],
-            collisionOnlyVisibleScreen: collisionOnlyVisibleObjects,
           ),
     );
 
@@ -114,7 +111,7 @@ class FlyingAttackAngleObject extends AnimatedObject
 
     bool destroy = false;
 
-    gameRef.attackables().where((a) {
+    gameRef.visibleAttackables().where((a) {
       return (damageInPlayer
               ? a.receivesAttackFromEnemy()
               : a.receivesAttackFromPlayer()) &&

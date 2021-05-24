@@ -148,7 +148,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     ));
 
     gameRef
-        .attackables()
+        .visibleAttackables()
         .where((a) =>
             a.receivesAttackFromEnemy() &&
             a.rectAttackable().rect.overlaps(positionAttack.rect))
@@ -179,7 +179,6 @@ extension RotationEnemyExtensions on RotationEnemy {
     double? radAngleDirection,
     int interval = 1000,
     bool withCollision = true,
-    bool collisionOnlyVisibleObjects = true,
     VoidCallback? destroy,
     CollisionConfig? collision,
     VoidCallback? execute,
@@ -216,7 +215,6 @@ extension RotationEnemyExtensions on RotationEnemy {
         flyAnimation: animationTop,
         destroyAnimation: animationDestroy,
         lightingConfig: lightingConfig,
-        collisionOnlyVisibleObjects: collisionOnlyVisibleObjects,
       ),
     );
 

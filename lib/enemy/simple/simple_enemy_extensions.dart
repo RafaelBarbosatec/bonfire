@@ -254,7 +254,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       );
     }
 
-    gameRef.attackables().where((a) {
+    gameRef.visibleAttackables().where((a) {
       return a.receivesAttackFromEnemy() &&
           a.rectAttackable().rect.overlaps(positionAttack);
     }).forEach((attackable) {

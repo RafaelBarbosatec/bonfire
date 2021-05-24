@@ -273,7 +273,8 @@ class Camera with HasGameRef<BonfireGame> {
   }
 
   Offset _getCenterTarget() {
-    if (config.target is ObjectCollision) {
+    if (config.target is ObjectCollision &&
+        (config.target as ObjectCollision).containCollision()) {
       return (config.target as ObjectCollision).rectCollision.center;
     }
     return config.target?.position.rect.center ?? Offset.zero;
