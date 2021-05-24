@@ -53,7 +53,9 @@ class TiledWorldMap {
     this.path, {
     this.forceTileSize,
     this.onError,
+    Map<String, ObjectBuilder>? objectsBuilder,
   }) {
+    _objectsBuilder = objectsBuilder ?? Map();
     _basePath = path.replaceAll(path.split('/').last, '');
     fromServer = path.contains('http://') || path.contains('https://');
     _reader = TiledJsonReader(_basePathFlame + path);

@@ -2,6 +2,7 @@
 - Add type `above` in tiled to render above components
 - update `tiledjsonreader`
 - improvements in `Camera`
+- add param `objectsBuilder` in `TiledWorldMap`
 - others improvements
 
 # 1.0.2
