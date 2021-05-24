@@ -19,10 +19,10 @@ extension RotationEnemyExtensions on RotationEnemy {
     required Function(Player) closePlayer,
     double radiusVision = 32,
     double margin = 10,
+    bool runOnlyVisibleInScreen = true,
   }) {
     if (isDead) return;
-    if (this is ObjectCollision &&
-        (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
+    if (runOnlyVisibleInScreen && !this.isVisibleInCamera()) return;
 
     seePlayer(
       radiusVision: radiusVision,
@@ -39,7 +39,7 @@ extension RotationEnemyExtensions on RotationEnemy {
           playerRect.rect.height + (margin * 2),
         );
 
-        Vector2Rect rectToMove = this is ObjectCollision
+        Vector2Rect rectToMove = this.isObjectCollision()
             ? (this as ObjectCollision).rectCollision
             : position;
 
@@ -65,10 +65,10 @@ extension RotationEnemyExtensions on RotationEnemy {
     required Function(Player) positioned,
     double radiusVision = 32,
     double? minDistanceCellsFromPlayer,
+    bool runOnlyVisibleInScreen = true,
   }) {
     if (isDead) return;
-    if (this is ObjectCollision &&
-        (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
+    if (runOnlyVisibleInScreen && !this.isVisibleInCamera()) return;
 
     seePlayer(
       radiusVision: radiusVision,
@@ -148,7 +148,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     ));
 
     gameRef
-        .attackables()
+        .visibleAttackables()
         .where((a) =>
             a.receivesAttackFromEnemy() &&
             a.rectAttackable().rect.overlaps(positionAttack.rect))
@@ -179,7 +179,6 @@ extension RotationEnemyExtensions on RotationEnemy {
     double? radAngleDirection,
     int interval = 1000,
     bool withCollision = true,
-    bool collisionOnlyVisibleObjects = true,
     VoidCallback? destroy,
     CollisionConfig? collision,
     VoidCallback? execute,
@@ -216,7 +215,6 @@ extension RotationEnemyExtensions on RotationEnemy {
         flyAnimation: animationTop,
         destroyAnimation: animationDestroy,
         lightingConfig: lightingConfig,
-        collisionOnlyVisibleObjects: collisionOnlyVisibleObjects,
       ),
     );
 

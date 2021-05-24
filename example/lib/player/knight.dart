@@ -135,7 +135,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
       collision: CollisionConfig(
         collisions: [
           CollisionArea.rectangle(
-            size: Size(width / 2, width / 2),
+            size: Size(width / 3, width / 3),
             align: Vector2(width * 0.1, 0),
           ),
         ],

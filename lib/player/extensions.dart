@@ -94,7 +94,6 @@ extension PlayerExtensions on Player {
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
-    bool collisionOnlyVisibleObjects = true,
     VoidCallback? destroy,
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
@@ -126,7 +125,6 @@ extension PlayerExtensions on Player {
       flyAnimation: animationTop,
       destroyAnimation: animationDestroy,
       lightingConfig: lightingConfig,
-      collisionOnlyVisibleObjects: collisionOnlyVisibleObjects,
     ));
   }
 
@@ -156,7 +154,7 @@ extension PlayerExtensions on Player {
 
     Direction attackDirection = direction;
 
-    Vector2Rect rectBase = (this is ObjectCollision)
+    Vector2Rect rectBase = (this.isObjectCollision())
         ? (this as ObjectCollision).rectCollision
         : position;
 
@@ -261,7 +259,7 @@ extension PlayerExtensions on Player {
     double pushTop = 0;
     Direction attackDirection = direction;
 
-    Vector2Rect rectBase = (this is ObjectCollision)
+    Vector2Rect rectBase = (this.isObjectCollision())
         ? (this as ObjectCollision).rectCollision
         : position;
 
@@ -355,7 +353,7 @@ extension PlayerExtensions on Player {
       ));
     }
 
-    gameRef.attackables().where((a) {
+    gameRef.visibleAttackables().where((a) {
       return a.receivesAttackFromPlayer() &&
           a.rectAttackable().rect.overlaps(positionAttack);
     }).forEach(
@@ -405,7 +403,7 @@ extension PlayerExtensions on Player {
     ));
 
     gameRef
-        .attackables()
+        .visibleAttackables()
         .where((a) =>
             a.receivesAttackFromPlayer() &&
             a.rectAttackable().overlaps(positionAttack))

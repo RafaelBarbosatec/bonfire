@@ -126,7 +126,7 @@ mixin Movement on GameComponent {
   }
 
   bool _isCollision(Vector2Rect displacement) {
-    if (this is ObjectCollision) {
+    if (this.isObjectCollision()) {
       (this as ObjectCollision)
           .setCollisionOnlyVisibleScreen(this.isVisibleInCamera());
       return (this as ObjectCollision).isCollision(

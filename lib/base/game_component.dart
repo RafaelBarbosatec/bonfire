@@ -12,6 +12,9 @@ abstract class GameComponent extends Component
   /// Position used to draw on the screen
   Vector2Rect position = Vector2Rect.zero();
 
+  /// When true this component render above all components in game.
+  bool aboveComponents = false;
+
   /// This method remove of the component
   void remove() {
     shouldRemove = true;
@@ -24,6 +27,12 @@ abstract class GameComponent extends Component
     return gameRef.camera.isComponentOnCamera(this);
   }
 
+  /// Method that checks if this component contain collisions
+  bool isObjectCollision() {
+    return (this is ObjectCollision &&
+        (this as ObjectCollision).containCollision());
+  }
+
   /// Method return screen position
   Offset screenPosition() {
     return gameRef.camera.worldPositionToScreen(position.offset);
@@ -31,17 +40,11 @@ abstract class GameComponent extends Component
 
   /// Method that checks what type map tile is currently
   String? tileTypeBelow() {
-    final map = gameRef.map;
-    if (map.tiles.isNotEmpty) {
-      Vector2Rect position = (this is ObjectCollision)
-          ? (this as ObjectCollision).getRectCollision()
-          : this.position;
-      final tiles = map.getRendered().where((element) {
-        return (element.position.overlaps(position) &&
-            (element.type?.isNotEmpty ?? false));
-      });
-      if (tiles.isNotEmpty) return tiles.first.type;
+    final list = tileTypesBelow();
+    if (list?.isNotEmpty == true) {
+      return tileTypesBelow()?.first;
     }
+
     return null;
   }
 
@@ -49,7 +52,7 @@ abstract class GameComponent extends Component
   List<String>? tileTypesBelow() {
     final map = gameRef.map;
     if (map.tiles.isNotEmpty) {
-      Vector2Rect position = (this is ObjectCollision)
+      Vector2Rect position = this.isObjectCollision()
           ? (this as ObjectCollision).getRectCollision()
           : this.position;
       return map
@@ -69,12 +72,16 @@ abstract class GameComponent extends Component
   }
 
   @override
-  int get priority => LayerPriority.getComponentPriority(_getBottomPriority());
+  int get priority {
+    if (aboveComponents) {
+      return LayerPriority.getAbovePriority(gameRef.highestPriority);
+    }
+    return LayerPriority.getComponentPriority(_getBottomPriority());
+  }
 
   int _getBottomPriority() {
     int bottomPriority = position.bottom.round();
-    if (this is ObjectCollision &&
-        (this as ObjectCollision).containCollision()) {
+    if (this.isObjectCollision()) {
       bottomPriority = (this as ObjectCollision).rectCollision.bottom.round();
     }
     return bottomPriority;

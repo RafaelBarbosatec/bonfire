@@ -20,10 +20,10 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     required Function(Player) closePlayer,
     double radiusVision = 32,
     double margin = 10,
+    bool runOnlyVisibleInScreen = true,
   }) {
     if (isDead) return;
-    if (this is ObjectCollision &&
-        (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
+    if (runOnlyVisibleInScreen && !this.isVisibleInCamera()) return;
 
     seePlayer(
       radiusVision: radiusVision,
@@ -35,7 +35,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         double translateY = 0;
         double speed = this.speed * this.dtUpdate;
 
-        Vector2Rect rectToMove = this is ObjectCollision
+        Vector2Rect rectToMove = this.isObjectCollision()
             ? (this as ObjectCollision).rectCollision
             : position;
 
@@ -135,7 +135,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     Direction playerDirection;
 
-    Vector2Rect rectToMove = this is ObjectCollision
+    Vector2Rect rectToMove = this.isObjectCollision()
         ? (this as ObjectCollision).rectCollision
         : position;
 
@@ -254,7 +254,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
       );
     }
 
-    gameRef.attackables().where((a) {
+    gameRef.visibleAttackables().where((a) {
       return a.receivesAttackFromEnemy() &&
           a.rectAttackable().rect.overlaps(positionAttack);
     }).forEach((attackable) {
@@ -305,7 +305,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
     late Direction ballDirection;
 
-    Vector2Rect rectToMove = this is ObjectCollision
+    Vector2Rect rectToMove = this.isObjectCollision()
         ? (this as ObjectCollision).rectCollision
         : position;
 
@@ -420,10 +420,10 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     required Function(Player) positioned,
     double radiusVision = 32,
     double? minDistanceFromPlayer,
+    bool runOnlyVisibleInScreen = true,
   }) {
     if (isDead) return;
-    if (this is ObjectCollision &&
-        (this as ObjectCollision).notVisibleAndCollisionOnlyScreen()) return;
+    if (runOnlyVisibleInScreen && !this.isVisibleInCamera()) return;
 
     double distance = (minDistanceFromPlayer ?? radiusVision);
 
@@ -438,7 +438,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
         double speed = this.speed * this.dtUpdate;
 
-        Vector2Rect rectToMove = this is ObjectCollision
+        Vector2Rect rectToMove = this.isObjectCollision()
             ? (this as ObjectCollision).rectCollision
             : position;
 

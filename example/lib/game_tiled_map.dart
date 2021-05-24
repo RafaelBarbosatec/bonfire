@@ -62,19 +62,16 @@ class GameTiledMap extends StatelessWidget {
           map: TiledWorldMap(
             'tiled/mapa$map.json',
             forceTileSize: Size(DungeonMap.tileSize, DungeonMap.tileSize),
-          )
-            ..registerObject(
-                'goblin', (x, y, width, height) => Goblin(Vector2(x, y)))
-            ..registerObject(
-                'torch', (x, y, width, height) => Torch(Vector2(x, y)))
-            ..registerObject('barrel',
-                (x, y, width, height) => BarrelDraggable(Vector2(x, y)))
-            ..registerObject(
-                'spike', (x, y, width, height) => Spikes(Vector2(x, y)))
-            ..registerObject('column',
-                (x, y, width, height) => ColumnDecoration(Vector2(x, y)))
-            ..registerObject(
-                'chest', (x, y, width, height) => Chest(Vector2(x, y))),
+            objectsBuilder: {
+              'goblin': (x, y, width, height) => Goblin(Vector2(x, y)),
+              'torch': (x, y, width, height) => Torch(Vector2(x, y)),
+              'barrel': (x, y, width, height) => BarrelDraggable(Vector2(x, y)),
+              'spike': (x, y, width, height) => Spikes(Vector2(x, y)),
+              'column': (x, y, width, height) =>
+                  ColumnDecoration(Vector2(x, y)),
+              'chest': (x, y, width, height) => Chest(Vector2(x, y)),
+            },
+          ),
           background: BackgroundColorGame(Colors.blueGrey[900]!),
           lightingColorGame: Colors.black.withOpacity(0.7),
         );

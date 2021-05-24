@@ -30,6 +30,7 @@ typedef ObjectBuilder = GameComponent Function(
 
 class TiledWorldMap {
   static const ORIENTATION_SUPPORTED = 'orthogonal';
+  static const ABOVE_TYPE = 'above';
   final String path;
   final Size? forceTileSize;
   final ValueChanged<Object>? onError;
@@ -52,7 +53,9 @@ class TiledWorldMap {
     this.path, {
     this.forceTileSize,
     this.onError,
+    Map<String, ObjectBuilder>? objectsBuilder,
   }) {
+    _objectsBuilder = objectsBuilder ?? Map();
     _basePath = path.replaceAll(path.split('/').last, '');
     fromServer = path.contains('http://') || path.contains('https://');
     _reader = TiledJsonReader(_basePathFlame + path);
@@ -108,43 +111,97 @@ class TiledWorldMap {
       if (tile != 0) {
         var data = await _getDataTile(tile);
         if (data != null) {
-          if (data.animation == null) {
-            _tiles.add(
-              TileWithCollision.withSprite(
-                Future.value(data.sprite),
-                Vector2(
-                  _getX(count, tileLayer.width?.toInt() ?? 0),
-                  _getY(count, tileLayer.width?.toInt() ?? 0),
-                ),
-                offsetX: offsetX,
-                offsetY: offsetY,
-                collisions: data.collisions,
-                width: _tileWidth,
-                height: _tileHeight,
-                type: data.type,
-              ),
-            );
+          if (data.type?.contains(ABOVE_TYPE) ?? false) {
+            _addGameDecorationAbove(data, count, tileLayer);
           } else {
-            _tiles.add(
-              TileWithCollision.withAnimation(
-                data.animation!,
-                Vector2(
-                  _getX(count, tileLayer.width?.toInt() ?? 0),
-                  _getY(count, tileLayer.width?.toInt() ?? 0),
-                ),
-                offsetX: offsetX,
-                offsetY: offsetY,
-                collisions: data.collisions,
-                width: _tileWidth,
-                height: _tileHeight,
-                type: data.type,
-              ),
-            );
+            _addTile(data, count, tileLayer, offsetX, offsetY);
           }
         }
       }
       count++;
     });
+  }
+
+  void _addTile(
+    ItemTileSet data,
+    int count,
+    TileLayer tileLayer,
+    double offsetX,
+    double offsetY,
+  ) {
+    if (data.animation == null) {
+      _tiles.add(
+        TileWithCollision.withSprite(
+          Future.value(data.sprite),
+          Vector2(
+            _getX(count, tileLayer.width?.toInt() ?? 0),
+            _getY(count, tileLayer.width?.toInt() ?? 0),
+          ),
+          offsetX: offsetX,
+          offsetY: offsetY,
+          collisions: data.collisions,
+          width: _tileWidth,
+          height: _tileHeight,
+          type: data.type,
+        ),
+      );
+    } else {
+      _tiles.add(
+        TileWithCollision.withAnimation(
+          data.animation!,
+          Vector2(
+            _getX(count, tileLayer.width?.toInt() ?? 0),
+            _getY(count, tileLayer.width?.toInt() ?? 0),
+          ),
+          offsetX: offsetX,
+          offsetY: offsetY,
+          collisions: data.collisions,
+          width: _tileWidth,
+          height: _tileHeight,
+          type: data.type,
+        ),
+      );
+    }
+  }
+
+  void _addGameDecorationAbove(
+    ItemTileSet data,
+    int count,
+    TileLayer tileLayer,
+  ) {
+    if (data.animation != null) {
+      if (data.animation?.animation != null) {
+        _components.add(
+          GameDecorationWithCollision.withAnimation(
+            data.animation!.animation!.asFuture(),
+            Vector2(
+              _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
+              _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
+            ),
+            height: _tileHeight,
+            width: _tileWidth,
+            collisions: data.collisions,
+            aboveComponents: true,
+          ),
+        );
+      }
+    } else {
+      if (data.sprite != null) {
+        _components.add(
+          GameDecorationWithCollision.withSprite(
+            data.sprite!.asFuture(),
+            Vector2(
+              _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
+              _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
+            ),
+            height: _tileHeight,
+            width: _tileWidth,
+            collisions: data.collisions,
+            aboveComponents: true,
+          ),
+        );
+      }
+    }
   }
 
   double _getX(int index, int width) {

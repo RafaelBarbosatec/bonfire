@@ -22,7 +22,7 @@ mixin Sensor on GameComponent {
     if (_sensorArea != null) {
       return _sensorArea!.translate(position.left, position.top);
     } else {
-      if (this is ObjectCollision) {
+      if (this.isObjectCollision()) {
         return (this as ObjectCollision).getRectCollision();
       } else {
         return this.position;

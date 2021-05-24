@@ -57,7 +57,7 @@ mixin MoveToPositionAlongThePath on GameComponent {
     double innerSpeed = _speed * dt;
 
     Vector2Rect componentPosition = position;
-    if (this is ObjectCollision) {
+    if (this.isObjectCollision()) {
       componentPosition = (this as ObjectCollision).rectCollision;
     }
     double diffX = _currentPath[_currentIndex].dx - componentPosition.center.dx;

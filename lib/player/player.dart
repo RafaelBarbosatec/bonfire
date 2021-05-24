@@ -96,6 +96,12 @@ class Player extends GameComponent
     }
   }
 
+  @override
+  void idle() {
+    _currentDirectional = JoystickMoveDirectional.IDLE;
+    super.idle();
+  }
+
   /// marks the player as dead
   void die() {
     _isDead = true;
