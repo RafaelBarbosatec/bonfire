@@ -1,4 +1,4 @@
-# NEXT
+# 1.0.3
 - Add type `above` in tiled to render above components
 - update `tiledjsonreader`
 - improvements in `Camera`
