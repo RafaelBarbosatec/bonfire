@@ -121,10 +121,11 @@ class FlyingAttackAngleObject extends AnimatedObject
       destroy = true;
     });
 
-    if (withCollision && !destroy)
+    if (withCollision && !destroy) {
       destroy = isCollision(
         shouldTriggerSensors: false,
       );
+    }
 
     if (destroy) {
       if (destroyAnimation != null) {
@@ -148,6 +149,7 @@ class FlyingAttackAngleObject extends AnimatedObject
           ),
         );
       }
+      setupCollision(CollisionConfig(collisions: []));
       remove();
       this.destroyedObject?.call();
     }

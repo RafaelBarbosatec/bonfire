@@ -208,6 +208,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
           ),
         );
       }
+      setupCollision(CollisionConfig(collisions: []));
       remove();
       this.onDestroyedObject?.call();
     }
