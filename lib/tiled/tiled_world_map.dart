@@ -109,7 +109,7 @@ class TiledWorldMap {
       if (tile != 0) {
         var data = await _getDataTile(tile);
         if (data != null) {
-          if (data.type == ABOVE_TYPE) {
+          if (data.type?.contains(ABOVE_TYPE) ?? false) {
             _addGameDecorationAbove(data, count, tileLayer);
           } else {
             _addTile(data, count, tileLayer, offsetX, offsetY);
