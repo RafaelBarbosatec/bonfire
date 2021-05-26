@@ -97,6 +97,17 @@
                  "height":16,
                  "id":14,
                  "name":"barrel",
+                 "properties":[
+                        {
+                         "name":"nome",
+                         "type":"string",
+                         "value":"rafael"
+                        }, 
+                        {
+                         "name":"tipo",
+                         "type":"string",
+                         "value":"doMal"
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,

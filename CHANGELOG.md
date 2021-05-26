@@ -1,3 +1,20 @@
+# NEXT
+- [BREAKING CHANGE] improvements in `objectsBuilder` and `registerObject` to register objects in `TiledWorldMap`.
+    ```dart
+      TiledWorldMap(
+        'tiled/map.json',
+        forceTileSize: Size(32, 32),
+        objectsBuilder: {
+          'goblin': (ObjectProperties properties) => Goblin(properties.position),
+          'torch': (ObjectProperties properties) => Torch(properties.position),
+          'barrel': (ObjectProperties properties) => BarrelDraggable(properties.position),
+          'spike': (ObjectProperties properties) => Spikes(properties.position),
+          'column': (ObjectProperties properties) => ColumnDecoration(properties.position),
+          'chest': (ObjectProperties properties) => Chest(properties.position),
+        },
+      )
+    ```
+
 # 1.0.3
 - Add type `above` in tiled to render above components
 - update `tiledjsonreader`

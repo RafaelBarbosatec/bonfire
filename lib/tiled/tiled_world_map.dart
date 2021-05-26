@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiledjsonreader/map/layer/map_layer.dart';
 import 'package:tiledjsonreader/map/layer/object_group.dart';
+import 'package:tiledjsonreader/map/layer/objects.dart';
 import 'package:tiledjsonreader/map/layer/tile_layer.dart';
 import 'package:tiledjsonreader/map/tile_set_detail.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
@@ -21,12 +22,23 @@ import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
-typedef ObjectBuilder = GameComponent Function(
-  double x,
-  double y,
-  double width,
-  double height,
-);
+class ObjectProperties {
+  final Vector2 position;
+  final Size size;
+  final double? rotation;
+  final String? type;
+  final Map<String, dynamic> others;
+
+  ObjectProperties(
+    this.position,
+    this.size,
+    this.type,
+    this.rotation,
+    this.others,
+  );
+}
+
+typedef ObjectBuilder = GameComponent Function(ObjectProperties properties);
 
 class TiledWorldMap {
   static const ORIENTATION_SUPPORTED = 'orthogonal';
@@ -281,8 +293,16 @@ class TiledWorldMap {
               ((element.width ?? 0.0) * _tileWidth) / _tileWidthOrigin;
           double height =
               ((element.height ?? 0.0) * _tileHeight) / _tileHeightOrigin;
-          final object =
-              _objectsBuilder[element.name]?.call(x, y, width, height);
+
+          final object = _objectsBuilder[element.name]?.call(
+            ObjectProperties(
+              Vector2(x, y),
+              Size(width, height),
+              element.type,
+              element.rotation,
+              _extractOtherProperties(element.properties),
+            ),
+          );
 
           if (object != null) {
             _components.add(object);
@@ -498,6 +518,17 @@ class TiledWorldMap {
     } catch (e) {
       return null;
     }
+  }
+
+  Map<String, dynamic> _extractOtherProperties(List<Property>? properties) {
+    Map<String, dynamic> map = Map();
+
+    properties?.forEach((element) {
+      if (element.value != null && element.name != null) {
+        map[element.name!] = element.value;
+      }
+    });
+    return map;
   }
 }
 
