@@ -14,6 +14,7 @@
         },
       )
     ```
+- add method `tilePropertiesBelow()` and `tilePropertiesListBelow()` in GameComponent to access proprieties of the tile set in Tiled.
 
 # 1.0.3
 - Add type `above` in tiled to render above components

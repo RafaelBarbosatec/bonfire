@@ -155,6 +155,7 @@ class TiledWorldMap {
           width: _tileWidth,
           height: _tileHeight,
           type: data.type,
+          properties: data.properties,
         ),
       );
     } else {
@@ -171,6 +172,7 @@ class TiledWorldMap {
           width: _tileWidth,
           height: _tileHeight,
           type: data.type,
+          properties: data.properties,
         ),
       );
     }
@@ -271,6 +273,7 @@ class TiledWorldMap {
           sprite: sprite,
           type: object.type,
           collisions: object.collisions,
+          properties: object.properties,
         ),
       );
     } else {
@@ -343,6 +346,8 @@ class TiledWorldMap {
           tileSetItemList.first.objectGroup?.objects ?? [];
 
       String type = tileSetItemList.first.type ?? '';
+      Map<String, dynamic> properties =
+          _extractOtherProperties(tileSetItemList.first.properties);
 
       List<CollisionArea> collisions = [];
 
@@ -415,7 +420,11 @@ class TiledWorldMap {
           collisions.add(ca);
         });
       }
-      return DataObjectCollision(collisions: collisions, type: type);
+      return DataObjectCollision(
+        collisions: collisions,
+        type: type,
+        properties: properties,
+      );
     }
     return DataObjectCollision();
   }
@@ -537,18 +546,21 @@ class ItemTileSet {
   final Sprite? sprite;
   final List<CollisionArea>? collisions;
   final String? type;
+  final Map<String, dynamic>? properties;
 
   ItemTileSet({
     this.sprite,
     this.collisions,
     this.animation,
     this.type,
+    this.properties,
   });
 }
 
 class DataObjectCollision {
   final List<CollisionArea>? collisions;
   final String type;
+  final Map<String, dynamic>? properties;
 
-  DataObjectCollision({this.collisions, this.type = ''});
+  DataObjectCollision({this.collisions, this.type = '', this.properties});
 }

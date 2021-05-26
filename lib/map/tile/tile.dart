@@ -19,6 +19,7 @@ class Tile extends GameComponent {
   late Vector2 _positionText;
   Paint? _paintText;
   final _loader = AssetsLoader();
+  final Map<String, dynamic>? properties;
 
   Tile(
     String spritePath,
@@ -26,6 +27,7 @@ class Tile extends GameComponent {
     this.width = 32,
     this.height = 32,
     this.type,
+    this.properties,
   }) {
     this.position = generateRectWithBleedingPixel(position, width, height);
     if (spritePath.isNotEmpty) {
@@ -41,6 +43,7 @@ class Tile extends GameComponent {
     this.width = 32,
     this.height = 32,
     this.type,
+    this.properties,
     double offsetX = 0,
     double offsetY = 0,
   }) {
@@ -57,6 +60,7 @@ class Tile extends GameComponent {
     this.width = 32,
     this.height = 32,
     this.type,
+    this.properties,
   }) {
     this._animation = animation;
     this.position = generateRectWithBleedingPixel(position, width, height);
