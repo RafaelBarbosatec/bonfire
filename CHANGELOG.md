@@ -16,7 +16,7 @@
       )
     ```
 - adds method `tilePropertiesBelow()` and `tilePropertiesListBelow()` in GameComponent to access proprieties of the tile set in Tiled.
-- adds method `void onCollision(GameComponent component)` in `ObjectCollision`. Now you can override this method to listen what Component enter in collision.
+- adds method `void onCollision(GameComponent component, bool active)` in `ObjectCollision`. Now you can override this method to listen what Component enter in collision.
 
 # 1.0.3
 

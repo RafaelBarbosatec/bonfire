@@ -18,6 +18,8 @@ mixin Sensor on GameComponent {
   IntervalTick? _tick;
   Vector2Rect? _sensorArea;
 
+  CollisionConfig? _collisionConfig;
+
   Vector2Rect get sensorArea {
     if (_sensorArea != null) {
       return _sensorArea!.translate(position.left, position.top);
@@ -33,6 +35,9 @@ mixin Sensor on GameComponent {
   void setupSensorArea(Vector2Rect s, {int intervalCheck = 250}) {
     _sensorArea = s;
     _intervalCheckContact = intervalCheck;
+    _collisionConfig = CollisionConfig(
+      collisions: [CollisionArea.fromVector2Rect(rect: sensorArea)],
+    );
   }
 
   @override
@@ -54,12 +59,13 @@ mixin Sensor on GameComponent {
   }
 
   void _verifyContact() {
+    _collisionConfig?.updatePosition(sensorArea);
     for (final i in gameRef.visibleComponents()) {
-      if (i is ObjectCollision) {
-        CollisionConfig config = CollisionConfig(
-          collisions: [CollisionArea.fromVector2Rect(rect: sensorArea)],
-        )..updatePosition(sensorArea);
-        if (i.collisionConfig?.verifyCollision(config) ?? false) {
+      if (i.isObjectCollision()) {
+        if ((i as ObjectCollision)
+                .collisionConfig
+                ?.verifyCollision(_collisionConfig) ??
+            false) {
           onContact(i);
         }
       } else if (i.position.overlaps(sensorArea)) {
