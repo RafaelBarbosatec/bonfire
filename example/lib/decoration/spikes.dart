@@ -26,10 +26,10 @@ class Spikes extends GameDecoration with Sensor {
   }
 
   @override
-  void onContact(GameComponent collision) {
+  void onContact(GameComponent component) {
     if (timer == null) {
-      if (collision is Attackable) {
-        collision.receiveDamage(10, 1);
+      if (component is Attackable) {
+        component.receiveDamage(10, 1);
         timer = async.Timer(Duration(milliseconds: 500), () {
           timer = null;
         });

@@ -12,7 +12,7 @@ import '../interval_tick.dart';
 Paint _paintSensor = Paint()..color = Colors.red.withOpacity(0.5);
 
 mixin Sensor on GameComponent {
-  void onContact(GameComponent collision);
+  void onContact(GameComponent component);
 
   int _intervalCheckContact = 0;
   IntervalTick? _tick;
