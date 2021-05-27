@@ -27,6 +27,8 @@ import 'package:flutter/services.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends CustomBaseGame with KeyboardEvents {
+  static const INTERVAL_UPDATE_CACHE = 200;
+
   /// Context used to access all Flutter power in your game.
   final BuildContext context;
 
@@ -66,16 +68,8 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   /// Used to show in the interface the FPS.
   final bool showFPS;
 
-  Iterable<Enemy> _enemies = [];
-  Iterable<Enemy> _visibleEnemies = [];
-  Iterable<Enemy> _livingEnemies = [];
-  Iterable<Attackable> _attackables = [];
-  Iterable<Attackable> _visibleAttackables = [];
-  Iterable<GameDecoration> _decorations = [];
-  Iterable<GameDecoration> _visibleDecorations = [];
   Iterable<Lighting> _visibleLights = [];
   Iterable<GameComponent> _visibleComponents = [];
-  Iterable<Sensor> _visibleSensors = [];
   Iterable<ObjectCollision> _visibleCollisions = [];
   Iterable<ObjectCollision> _collisions = [];
   IntervalTick? _interval;
@@ -145,7 +139,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     super.add((interface ?? GameInterface()));
     super.add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(camera));
-    _interval = IntervalTick(200, tick: _updateTempList);
+    _interval = IntervalTick(INTERVAL_UPDATE_CACHE, tick: _updateTempList);
     return super.onLoad();
   }
 
@@ -161,18 +155,45 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   Iterable<GameComponent> visibleComponents() => _visibleComponents;
 
-  Iterable<Enemy> visibleEnemies() => _visibleEnemies;
-  Iterable<Enemy> livingEnemies() => _livingEnemies;
-  Iterable<Enemy> enemies() => _enemies;
+  Iterable<Enemy> visibleEnemies() {
+    return _visibleComponents.where((element) => (element is Enemy)).cast();
+  }
 
-  Iterable<GameDecoration> visibleDecorations() => _visibleDecorations;
-  Iterable<GameDecoration> decorations() => _decorations;
+  Iterable<Enemy> livingEnemies() {
+    return enemies().where((element) => !element.isDead).cast();
+  }
+
+  Iterable<Enemy> enemies() {
+    return components.where((element) => (element is Enemy)).cast();
+  }
+
+  Iterable<GameDecoration> visibleDecorations() {
+    return _visibleComponents
+        .where((element) => (element is GameDecoration))
+        .cast();
+  }
+
+  Iterable<GameDecoration> decorations() {
+    return components.where((element) => (element is GameDecoration)).cast();
+  }
 
   Iterable<Lighting> lightVisible() => _visibleLights;
 
-  Iterable<Attackable> attackables() => _attackables;
-  Iterable<Attackable> visibleAttackables() => _visibleAttackables;
-  Iterable<Sensor> visibleSensors() => _visibleSensors;
+  Iterable<Attackable> attackables() {
+    return components.where((element) => (element is Attackable)).cast();
+  }
+
+  Iterable<Attackable> visibleAttackables() {
+    return _visibleComponents
+        .where((element) => (element is Attackable))
+        .cast();
+  }
+
+  Iterable<Sensor> visibleSensors() {
+    return _visibleComponents.where((element) {
+      return (element is Sensor);
+    }).cast();
+  }
 
   Iterable<ObjectCollision> collisions() => _collisions;
   Iterable<ObjectCollision> visibleCollisions() => _visibleCollisions;
@@ -211,32 +232,6 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   void _updateTempList() {
     _visibleComponents = components.where((element) {
       return (element is GameComponent) && (element).isVisibleInCamera();
-    }).cast();
-
-    _decorations = components.where((element) {
-      return (element is GameDecoration);
-    }).cast();
-
-    _visibleDecorations = _decorations.where((element) {
-      return element.isVisibleInCamera();
-    });
-
-    _enemies = components.where((element) => (element is Enemy)).cast();
-    _livingEnemies = _enemies.where((element) => !element.isDead).cast();
-    _visibleEnemies = _livingEnemies.where((element) {
-      return element.isVisibleInCamera();
-    });
-
-    _visibleSensors = _visibleComponents.where((element) {
-      return (element is Sensor);
-    }).cast();
-
-    _visibleAttackables = _visibleComponents.where((element) {
-      return (element is Attackable);
-    }).cast();
-
-    _attackables = components.where((element) {
-      return (element is Attackable);
     }).cast();
 
     Iterable<ObjectCollision> cAux = components.where((element) {
