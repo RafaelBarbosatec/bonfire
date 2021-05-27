@@ -1,4 +1,5 @@
 # NEXT
+
 - [BREAKING CHANGE] improvements in `objectsBuilder` and `registerObject` to register objects in `TiledWorldMap`.
     ```dart
       TiledWorldMap(
@@ -17,6 +18,7 @@
 - add method `tilePropertiesBelow()` and `tilePropertiesListBelow()` in GameComponent to access proprieties of the tile set in Tiled.
 
 # 1.0.3
+
 - Add type `above` in tiled to render above components
 - update `tiledjsonreader`
 - improvements in `Camera`
@@ -24,6 +26,7 @@
 - others improvements
 
 # 1.0.2
+
 - Downgrade flame version to 1.0.0-rc9
 
 # 1.0.1
