@@ -11,6 +11,8 @@ mixin ObjectCollision on GameComponent {
 
   CollisionConfig? get collisionConfig => _collisionConfig;
 
+  void onCollision(GameComponent component) {}
+
   void setupCollision(CollisionConfig collisionConfig) {
     _collisionConfig = collisionConfig;
   }
@@ -59,6 +61,7 @@ mixin ObjectCollision on GameComponent {
     for (final i in compCollisions) {
       if (i != this &&
           (_collisionConfig?.verifyCollision(i.collisionConfig) ?? false)) {
+        onCollision(i);
         return true;
       }
     }
