@@ -37,7 +37,9 @@ mixin Sensor on GameComponent {
     _sensorArea = s;
     _intervalCheckContact = intervalCheck;
     _collisionConfig = CollisionConfig(
-      collisions: [CollisionArea.fromVector2Rect(rect: sensorArea)],
+      collisions: [
+        CollisionArea.fromVector2Rect(rect: s),
+      ],
     );
   }
 
