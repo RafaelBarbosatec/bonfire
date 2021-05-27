@@ -1,4 +1,4 @@
-# NEXT
+# 1.1.0
 
 - Update `Flame` to `1.0.0-releasecandidate.11` version.
 - [BREAKING CHANGE] improvements in `objectsBuilder` and `registerObject` to register objects in `TiledWorldMap`.
