@@ -1,5 +1,6 @@
 # NEXT
 
+- Update `Flame` to `1.0.0-releasecandidate.11` version.
 - [BREAKING CHANGE] improvements in `objectsBuilder` and `registerObject` to register objects in `TiledWorldMap`.
     ```dart
       TiledWorldMap(
@@ -15,9 +16,11 @@
         },
       )
     ```
+- [BREAKING CHANGE] change `TextConfig` to `TextPaintConfig`
 - adds method `tilePropertiesBelow()` and `tilePropertiesListBelow()` in GameComponent to access proprieties of the tile set in Tiled.
 - adds method `void onCollision(GameComponent component, bool active)` in `ObjectCollision`. Now you can override this method to listen what Component enter in collision.
-- improvements in `BonfireGame`
+- improvements in `BonfireGame`.
+
 
 # 1.0.3
 

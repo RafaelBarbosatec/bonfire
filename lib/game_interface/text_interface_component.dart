@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 /// Component used to add Text in your [GameInterface]
 class TextInterfaceComponent extends InterfaceComponent {
   String text;
-  late TextConfig textConfig;
+  late TextPaint textConfig;
   TextInterfaceComponent({
     required int id,
     required Vector2 position,
@@ -16,7 +16,7 @@ class TextInterfaceComponent extends InterfaceComponent {
     double width = 0,
     double height = 0,
     ValueChanged<bool>? onTapComponent,
-    TextConfig? textConfig,
+    TextPaintConfig? textConfig,
   }) : super(
           id: id,
           position: position,
@@ -24,7 +24,7 @@ class TextInterfaceComponent extends InterfaceComponent {
           height: height,
           onTapComponent: onTapComponent,
         ) {
-    this.textConfig = textConfig ?? TextConfig();
+    this.textConfig = TextPaint(config: textConfig ?? TextPaintConfig());
   }
 
   @override

@@ -200,7 +200,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   void receiveDamage(double damage, dynamic from) {
     this.showDamage(
       damage,
-      config: TextConfig(
+      config: TextPaintConfig(
         fontSize: width / 3,
         color: Colors.red,
       ),

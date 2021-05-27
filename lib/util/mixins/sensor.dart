@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/collision_area.dart';
 import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/collision/object_collision.dart';
@@ -42,6 +43,15 @@ mixin Sensor on GameComponent {
 
   @override
   void update(double dt) {
+    if (_collisionConfig == null) {
+      _collisionConfig = CollisionConfig(
+        collisions: [
+          CollisionArea.fromVector2Rect(
+            rect: Vector2Rect(Vector2.zero(), position.size),
+          ),
+        ],
+      );
+    }
     if (_tick == null || _tick?.interval != _intervalCheckContact) {
       _tick = IntervalTick(_intervalCheckContact, tick: _verifyContact);
     } else {

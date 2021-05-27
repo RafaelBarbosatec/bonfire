@@ -16,14 +16,7 @@ class Spikes extends GameDecoration with Sensor {
           position: position,
           width: DungeonMap.tileSize / 1.5,
           height: DungeonMap.tileSize / 1.5,
-        ) {
-    setupSensorArea(
-      Vector2Rect(
-        Vector2.zero(),
-        Vector2(width, height),
-      ),
-    );
-  }
+        ) {}
 
   @override
   void onContact(GameComponent component) {

@@ -14,7 +14,7 @@ class PotionLife extends GameDecoration with Sensor {
           position: position,
           width: DungeonMap.tileSize * 0.5,
           height: DungeonMap.tileSize * 0.5,
-        );
+        ) {}
 
   @override
   void onContact(GameComponent collision) {

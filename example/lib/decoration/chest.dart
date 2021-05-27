@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class Chest extends GameDecoration with TapGesture {
   bool _observedPlayer = false;
 
-  late TextConfig _textConfig;
+  late TextPaint _textConfig;
   Chest(Vector2 position)
       : super.withAnimation(
           CommonSpriteSheet.chestAnimated,
@@ -16,9 +16,11 @@ class Chest extends GameDecoration with TapGesture {
           height: DungeonMap.tileSize * 0.6,
           position: position,
         ) {
-    _textConfig = TextConfig(
-      color: Colors.white,
-      fontSize: width / 2,
+    _textConfig = TextPaint(
+      config: TextPaintConfig(
+        color: Colors.white,
+        fontSize: width / 2,
+      ),
     );
   }
 

@@ -21,14 +21,16 @@ class TextDamageComponent extends TextComponent with HasGameRef<BonfireGame> {
     this.text,
     Vector2 position, {
     this.onlyUp = false,
-    TextConfig? config,
+    TextPaintConfig? config,
     double initVelocityTop = -4,
     this.maxDownSize = 20,
     this.gravity = 0.5,
     this.direction = DirectionTextDamage.RANDOM,
   }) : super(
           text,
-          config: (config ?? TextConfig(fontSize: 10)),
+          textRenderer: TextPaint(
+            config: config ?? TextPaintConfig(),
+          ),
           position: position,
         ) {
     _initialY = position.y;

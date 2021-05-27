@@ -20,6 +20,7 @@ class Tile extends GameComponent {
   Paint? _paintText;
   final _loader = AssetsLoader();
   final Map<String, dynamic>? properties;
+  TextPaint? _textPaintConfig;
 
   Tile(
     String spritePath,
@@ -95,17 +96,18 @@ class Tile extends GameComponent {
         ..color = gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
     );
     if (_positionText.x % 2 == 0) {
-      TextConfig(
-        fontSize: width / 3.5,
-      )
-          .withColor(
-            gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
-          )
-          .render(
-            canvas,
-            '${_positionText.x.toInt()}:${_positionText.y.toInt()}',
-            Vector2(position.rect.left + 2, position.rect.top + 2),
-          );
+      if (_textPaintConfig == null) {
+        _textPaintConfig = TextPaint(
+          config: TextPaintConfig(
+              color: gameRef.constructionModeColor ??
+                  Colors.cyan.withOpacity(0.5)),
+        );
+      }
+      _textPaintConfig?.render(
+        canvas,
+        '${_positionText.x.toInt()}:${_positionText.y.toInt()}',
+        Vector2(position.rect.left + 2, position.rect.top + 2),
+      );
     }
   }
 
