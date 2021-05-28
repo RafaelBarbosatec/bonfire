@@ -19,6 +19,8 @@ class Tile extends GameComponent {
   late Vector2 _positionText;
   Paint? _paintText;
   final _loader = AssetsLoader();
+  final Map<String, dynamic>? properties;
+  TextPaint? _textPaintConfig;
 
   Tile(
     String spritePath,
@@ -26,6 +28,7 @@ class Tile extends GameComponent {
     this.width = 32,
     this.height = 32,
     this.type,
+    this.properties,
   }) {
     this.position = generateRectWithBleedingPixel(position, width, height);
     if (spritePath.isNotEmpty) {
@@ -41,6 +44,7 @@ class Tile extends GameComponent {
     this.width = 32,
     this.height = 32,
     this.type,
+    this.properties,
     double offsetX = 0,
     double offsetY = 0,
   }) {
@@ -57,6 +61,7 @@ class Tile extends GameComponent {
     this.width = 32,
     this.height = 32,
     this.type,
+    this.properties,
   }) {
     this._animation = animation;
     this.position = generateRectWithBleedingPixel(position, width, height);
@@ -91,17 +96,18 @@ class Tile extends GameComponent {
         ..color = gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
     );
     if (_positionText.x % 2 == 0) {
-      TextConfig(
-        fontSize: width / 3.5,
-      )
-          .withColor(
-            gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
-          )
-          .render(
-            canvas,
-            '${_positionText.x.toInt()}:${_positionText.y.toInt()}',
-            Vector2(position.rect.left + 2, position.rect.top + 2),
-          );
+      if (_textPaintConfig == null) {
+        _textPaintConfig = TextPaint(
+          config: TextPaintConfig(
+              color: gameRef.constructionModeColor ??
+                  Colors.cyan.withOpacity(0.5)),
+        );
+      }
+      _textPaintConfig?.render(
+        canvas,
+        '${_positionText.x.toInt()}:${_positionText.y.toInt()}',
+        Vector2(position.rect.left + 2, position.rect.top + 2),
+      );
     }
   }
 

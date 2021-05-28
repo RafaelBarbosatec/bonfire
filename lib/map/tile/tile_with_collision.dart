@@ -15,12 +15,14 @@ class TileWithCollision extends Tile with ObjectCollision {
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
+    Map<String, dynamic>? properties,
   }) : super(
           spritePath,
           position,
           width: width,
           height: height,
           type: type,
+          properties: properties,
         ) {
     collisions?.let((c) {
       setupCollision(CollisionConfig(collisions: c));
@@ -36,12 +38,14 @@ class TileWithCollision extends Tile with ObjectCollision {
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
+    Map<String, dynamic>? properties,
   }) : super.fromSprite(
           sprite,
           position,
           width: width,
           height: height,
           type: type,
+          properties: properties,
         ) {
     collisions?.let((c) {
       setupCollision(CollisionConfig(collisions: c));
@@ -57,12 +61,14 @@ class TileWithCollision extends Tile with ObjectCollision {
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
+    Map<String, dynamic>? properties,
   }) : super.fromAnimation(
           animation,
           position,
           width: width,
           height: height,
           type: type,
+          properties: properties,
         ) {
     collisions?.let((c) {
       setupCollision(CollisionConfig(collisions: c));

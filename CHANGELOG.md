@@ -1,11 +1,38 @@
+# 1.1.0
+
+- Update `Flame` to `1.0.0-releasecandidate.11` version.
+- [BREAKING CHANGE] improvements in `objectsBuilder` and `registerObject` to register objects in `TiledWorldMap`.
+    ```dart
+      TiledWorldMap(
+        'tiled/map.json',
+        forceTileSize: Size(32, 32),
+        objectsBuilder: {
+          'goblin': (ObjectProperties properties) => Goblin(properties.position),
+          'torch': (ObjectProperties properties) => Torch(properties.position),
+          'barrel': (ObjectProperties properties) => BarrelDraggable(properties.position),
+          'spike': (ObjectProperties properties) => Spikes(properties.position),
+          'column': (ObjectProperties properties) => ColumnDecoration(properties.position),
+          'chest': (ObjectProperties properties) => Chest(properties.position),
+        },
+      )
+    ```
+- [BREAKING CHANGE] change `TextConfig` to `TextPaintConfig`
+- adds method `tilePropertiesBelow()` and `tilePropertiesListBelow()` in GameComponent to access proprieties of the tile set in Tiled.
+- adds method `void onCollision(GameComponent component, bool active)` in `ObjectCollision`. Now you can override this method to listen what Component enter in collision.
+- improvements in `BonfireGame`
+- improvements in `TalkDialog`.
+
+
 # 1.0.3
-- Add type `above` in tiled to render above components
+
+- Adds type `above` in tiled to render above components
 - update `tiledjsonreader`
 - improvements in `Camera`
-- add param `objectsBuilder` in `TiledWorldMap`
+- Adds param `objectsBuilder` in `TiledWorldMap`
 - others improvements
 
 # 1.0.2
+
 - Downgrade flame version to 1.0.0-rc9
 
 # 1.0.1

@@ -412,6 +412,12 @@
         }, 
         {
          "id":130,
+         "properties":[
+                {
+                 "name":"type",
+                 "type":"string",
+                 "value":"crash"
+                }],
          "type":"ground_crash"
         }, 
         {

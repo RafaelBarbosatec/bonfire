@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiledjsonreader/map/layer/map_layer.dart';
 import 'package:tiledjsonreader/map/layer/object_group.dart';
+import 'package:tiledjsonreader/map/layer/objects.dart';
 import 'package:tiledjsonreader/map/layer/tile_layer.dart';
 import 'package:tiledjsonreader/map/tile_set_detail.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
@@ -21,12 +22,23 @@ import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
-typedef ObjectBuilder = GameComponent Function(
-  double x,
-  double y,
-  double width,
-  double height,
-);
+class ObjectProperties {
+  final Vector2 position;
+  final Size size;
+  final double? rotation;
+  final String? type;
+  final Map<String, dynamic> others;
+
+  ObjectProperties(
+    this.position,
+    this.size,
+    this.type,
+    this.rotation,
+    this.others,
+  );
+}
+
+typedef ObjectBuilder = GameComponent Function(ObjectProperties properties);
 
 class TiledWorldMap {
   static const ORIENTATION_SUPPORTED = 'orthogonal';
@@ -143,6 +155,7 @@ class TiledWorldMap {
           width: _tileWidth,
           height: _tileHeight,
           type: data.type,
+          properties: data.properties,
         ),
       );
     } else {
@@ -159,6 +172,7 @@ class TiledWorldMap {
           width: _tileWidth,
           height: _tileHeight,
           type: data.type,
+          properties: data.properties,
         ),
       );
     }
@@ -259,6 +273,7 @@ class TiledWorldMap {
           sprite: sprite,
           type: object.type,
           collisions: object.collisions,
+          properties: object.properties,
         ),
       );
     } else {
@@ -281,8 +296,16 @@ class TiledWorldMap {
               ((element.width ?? 0.0) * _tileWidth) / _tileWidthOrigin;
           double height =
               ((element.height ?? 0.0) * _tileHeight) / _tileHeightOrigin;
-          final object =
-              _objectsBuilder[element.name]?.call(x, y, width, height);
+
+          final object = _objectsBuilder[element.name]?.call(
+            ObjectProperties(
+              Vector2(x, y),
+              Size(width, height),
+              element.type,
+              element.rotation,
+              _extractOtherProperties(element.properties),
+            ),
+          );
 
           if (object != null) {
             _components.add(object);
@@ -323,6 +346,8 @@ class TiledWorldMap {
           tileSetItemList.first.objectGroup?.objects ?? [];
 
       String type = tileSetItemList.first.type ?? '';
+      Map<String, dynamic> properties =
+          _extractOtherProperties(tileSetItemList.first.properties);
 
       List<CollisionArea> collisions = [];
 
@@ -395,7 +420,11 @@ class TiledWorldMap {
           collisions.add(ca);
         });
       }
-      return DataObjectCollision(collisions: collisions, type: type);
+      return DataObjectCollision(
+        collisions: collisions,
+        type: type,
+        properties: properties,
+      );
     }
     return DataObjectCollision();
   }
@@ -499,6 +528,17 @@ class TiledWorldMap {
       return null;
     }
   }
+
+  Map<String, dynamic> _extractOtherProperties(List<Property>? properties) {
+    Map<String, dynamic> map = Map();
+
+    properties?.forEach((element) {
+      if (element.value != null && element.name != null) {
+        map[element.name!] = element.value;
+      }
+    });
+    return map;
+  }
 }
 
 class ItemTileSet {
@@ -506,18 +546,21 @@ class ItemTileSet {
   final Sprite? sprite;
   final List<CollisionArea>? collisions;
   final String? type;
+  final Map<String, dynamic>? properties;
 
   ItemTileSet({
     this.sprite,
     this.collisions,
     this.animation,
     this.type,
+    this.properties,
   });
 }
 
 class DataObjectCollision {
   final List<CollisionArea>? collisions;
   final String type;
+  final Map<String, dynamic>? properties;
 
-  DataObjectCollision({this.collisions, this.type = ''});
+  DataObjectCollision({this.collisions, this.type = '', this.properties});
 }

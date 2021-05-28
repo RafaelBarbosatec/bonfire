@@ -19,7 +19,7 @@ extension PlayerExtensions on Player {
   /// Add in the game a text with animation representing damage received
   void showDamage(
     double damage, {
-    TextConfig? config,
+    TextPaintConfig? config,
     double initVelocityTop = -5,
     double gravity = 0.5,
     double maxDownSize = 20,
@@ -34,7 +34,7 @@ extension PlayerExtensions on Player {
           position.rect.top,
         ),
         config: config ??
-            TextConfig(
+            TextPaintConfig(
               fontSize: 14,
               color: Colors.red,
             ),

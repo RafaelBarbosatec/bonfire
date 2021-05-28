@@ -37,14 +37,14 @@ class GameTiledMap extends StatelessWidget {
             ),
             actions: [
               JoystickAction(
-                actionId: 0,
+                actionId: PlayerAttackType.AttackMelee,
                 sprite: Sprite.load('joystick_atack.png'),
                 align: JoystickActionAlign.BOTTOM_RIGHT,
                 size: 80,
                 margin: EdgeInsets.only(bottom: 50, right: 50),
               ),
               JoystickAction(
-                actionId: 1,
+                actionId: PlayerAttackType.AttackRange,
                 sprite: Sprite.load('joystick_atack_range.png'),
                 spriteBackgroundDirection: Sprite.load(
                   'joystick_background.png',
@@ -63,13 +63,12 @@ class GameTiledMap extends StatelessWidget {
             'tiled/mapa$map.json',
             forceTileSize: Size(DungeonMap.tileSize, DungeonMap.tileSize),
             objectsBuilder: {
-              'goblin': (x, y, width, height) => Goblin(Vector2(x, y)),
-              'torch': (x, y, width, height) => Torch(Vector2(x, y)),
-              'barrel': (x, y, width, height) => BarrelDraggable(Vector2(x, y)),
-              'spike': (x, y, width, height) => Spikes(Vector2(x, y)),
-              'column': (x, y, width, height) =>
-                  ColumnDecoration(Vector2(x, y)),
-              'chest': (x, y, width, height) => Chest(Vector2(x, y)),
+              'goblin': (properties) => Goblin(properties.position),
+              'torch': (properties) => Torch(properties.position),
+              'barrel': (properties) => BarrelDraggable(properties.position),
+              'spike': (properties) => Spikes(properties.position),
+              'column': (properties) => ColumnDecoration(properties.position),
+              'chest': (properties) => Chest(properties.position),
             },
           ),
           background: BackgroundColorGame(Colors.blueGrey[900]!),

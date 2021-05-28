@@ -40,16 +40,16 @@ abstract class GameComponent extends Component
 
   /// Method that checks what type map tile is currently
   String? tileTypeBelow() {
-    final list = tileTypesBelow();
+    final list = tileTypeListBelow();
     if (list?.isNotEmpty == true) {
-      return tileTypesBelow()?.first;
+      return list?.first;
     }
 
     return null;
   }
 
   /// Method that checks what types map tile is currently
-  List<String>? tileTypesBelow() {
+  List<String>? tileTypeListBelow() {
     final map = gameRef.map;
     if (map.tiles.isNotEmpty) {
       Vector2Rect position = this.isObjectCollision()
@@ -67,6 +67,36 @@ abstract class GameComponent extends Component
     return null;
   }
 
+  /// Method that checks what properties map tile is currently
+  Map<String, dynamic>? tilePropertiesBelow() {
+    final list = tilePropertiesListBelow();
+    if (list?.isNotEmpty == true) {
+      return list?.first;
+    }
+
+    return null;
+  }
+
+  /// Method that checks what properties list map tile is currently
+  List<Map<String, dynamic>>? tilePropertiesListBelow() {
+    final map = gameRef.map;
+    if (map.tiles.isNotEmpty) {
+      Vector2Rect position = this.isObjectCollision()
+          ? (this as ObjectCollision).getRectCollision()
+          : this.position;
+      return map
+          .getRendered()
+          .where((element) {
+            return (element.position.overlaps(position) &&
+                (element.properties != null));
+          })
+          .map<Map<String, dynamic>>((e) => e.properties!)
+          .toList();
+    }
+    return null;
+  }
+
+  /// Method used to translate component
   void translate(double translateX, double translateY) {
     position = position.translate(translateX, translateY);
   }

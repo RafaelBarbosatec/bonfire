@@ -8,6 +8,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+enum PlayerAttackType { AttackMelee, AttackRange }
+
 class Knight extends SimplePlayer with Lighting, ObjectCollision {
   double attack = 20;
   double stamina = 100;
@@ -71,11 +73,12 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
       actionAttack();
     }
 
-    if (event.id == 0 && event.event == ActionEvent.DOWN) {
+    if (event.id == PlayerAttackType.AttackMelee &&
+        event.event == ActionEvent.DOWN) {
       actionAttack();
     }
 
-    if (event.id == 1) {
+    if (event.id == PlayerAttackType.AttackRange) {
       if (event.event == ActionEvent.MOVE) {
         execAttackRange = true;
         angleRadAttack = event.radAngle;
@@ -200,7 +203,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   void receiveDamage(double damage, dynamic from) {
     this.showDamage(
       damage,
-      config: TextConfig(
+      config: TextPaintConfig(
         fontSize: width / 3,
         color: Colors.red,
       ),
@@ -233,9 +236,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
           [
             Say(
               "Look at this! It seems that I'm not alone here ...",
-              Container(
-                width: 50,
-                height: 50,
+              person: Container(
+                width: 100,
+                height: 100,
                 child: FutureBuilder<SpriteAnimation>(
                   future: PlayerSpriteSheet.idleRight,
                   builder: (context, anim) {

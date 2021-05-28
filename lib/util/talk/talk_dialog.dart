@@ -10,25 +10,20 @@ class TalkDialog extends StatefulWidget {
     required this.says,
     this.finish,
     this.onChangeTalk,
-    this.textStyle,
-    this.textBoxDecoration,
     this.textBoxMinHeight = 100,
-    this.padding,
     this.keyboardKeyToNext,
-    this.headerWidget,
-    this.bottomWidget,
+    this.padding,
   }) : super(key: key);
 
-  static show(BuildContext context, List<Say> sayList,
-      {VoidCallback? finish,
-      ValueChanged<int>? onChangeTalk,
-      TextStyle? textStyle,
-      BoxDecoration? boxTextDecoration,
-      double boxTextHeight = 100,
-      EdgeInsetsGeometry? padding,
-      LogicalKeyboardKey? logicalKeyboardKeyToNext,
-      Widget? headerWidget,
-      Widget? bottomWidget}) {
+  static show(
+    BuildContext context,
+    List<Say> sayList, {
+    VoidCallback? finish,
+    ValueChanged<int>? onChangeTalk,
+    double boxTextHeight = 100,
+    LogicalKeyboardKey? logicalKeyboardKeyToNext,
+    EdgeInsetsGeometry? padding,
+  }) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -36,13 +31,9 @@ class TalkDialog extends StatefulWidget {
           says: sayList,
           finish: finish,
           onChangeTalk: onChangeTalk,
-          textStyle: textStyle,
-          textBoxDecoration: boxTextDecoration,
           textBoxMinHeight: boxTextHeight,
-          padding: padding,
           keyboardKeyToNext: logicalKeyboardKeyToNext,
-          headerWidget: headerWidget,
-          bottomWidget: bottomWidget,
+          padding: padding,
         );
       },
     );
@@ -51,13 +42,9 @@ class TalkDialog extends StatefulWidget {
   final List<Say> says;
   final VoidCallback? finish;
   final ValueChanged<int>? onChangeTalk;
-  final TextStyle? textStyle;
-  final BoxDecoration? textBoxDecoration;
   final double? textBoxMinHeight;
-  final EdgeInsetsGeometry? padding;
   final LogicalKeyboardKey? keyboardKeyToNext;
-  final Widget? headerWidget;
-  final Widget? bottomWidget;
+  final EdgeInsetsGeometry? padding;
 
   @override
   _TalkDialogState createState() => _TalkDialogState();
@@ -94,77 +81,86 @@ class _TalkDialogState extends State<TalkDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
-      focusNode: _focusNode,
-      onKey: (raw) {
-        if (widget.keyboardKeyToNext == null) {
-          _nextOrFinish();
-        } else if (raw.logicalKey == widget.keyboardKeyToNext &&
-            raw is RawKeyDownEvent) {
-          _nextOrFinish();
-        }
-      },
-      child: GestureDetector(
-        onTap: _nextOrFinish,
-        child: Container(
-          color: Colors.transparent,
-          width: double.maxFinite,
-          height: double.maxFinite,
-          padding: widget.padding ?? EdgeInsets.all(20.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              ..._buildPerson(PersonDirection.LEFT),
-              Expanded(
-                child: Container(
-                  constraints: widget.textBoxMinHeight != null
-                      ? BoxConstraints(
-                          minHeight: widget.textBoxMinHeight!,
-                        )
-                      : null,
-                  decoration: widget.textBoxDecoration ??
-                      BoxDecoration(
-                        color: Colors.black.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.5),
-                        ),
-                      ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+    return Material(
+      type: MaterialType.transparency,
+      child: RawKeyboardListener(
+        focusNode: _focusNode,
+        onKey: (raw) {
+          if (widget.keyboardKeyToNext == null && raw is RawKeyDownEvent) {
+            _nextOrFinish();
+          } else if (raw.logicalKey == widget.keyboardKeyToNext &&
+              raw is RawKeyDownEvent) {
+            _nextOrFinish();
+          }
+        },
+        child: GestureDetector(
+          onTap: _nextOrFinish,
+          child: Padding(
+            padding: widget.padding ?? EdgeInsets.all(10),
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                Align(
+                  alignment: _getAlign(currentSay.personSayDirection),
+                  child: currentSay.background ?? SizedBox.shrink(),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    ..._buildPerson(PersonSayDirection.LEFT),
+                    Flexible(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (widget.headerWidget != null) widget.headerWidget!,
-                          StreamBuilder<String>(
-                            stream: _textShowController.stream,
-                            builder: (context, snapshot) {
-                              return SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                physics: BouncingScrollPhysics(),
-                                child: Text(
-                                  snapshot.hasData ? (snapshot.data ?? '') : '',
-                                  style: widget.textStyle ??
-                                      TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                      ),
+                          currentSay.header ?? SizedBox.shrink(),
+                          Container(
+                            width: double.maxFinite,
+                            padding: currentSay.padding ?? EdgeInsets.all(10),
+                            margin: currentSay.margin,
+                            constraints: widget.textBoxMinHeight != null
+                                ? BoxConstraints(
+                                    minHeight: widget.textBoxMinHeight!,
+                                  )
+                                : null,
+                            decoration: currentSay.boxDecoration ??
+                                BoxDecoration(
+                                  color: Colors.black.withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.5),
+                                  ),
                                 ),
-                              );
-                            },
+                            child: StreamBuilder<String>(
+                              stream: _textShowController.stream,
+                              builder: (context, snapshot) {
+                                return SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  physics: BouncingScrollPhysics(),
+                                  child: Text(
+                                    snapshot.hasData
+                                        ? (snapshot.data ?? '')
+                                        : '',
+                                    style: currentSay.textStyle ??
+                                        TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                        ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                          if (widget.bottomWidget != null) widget.bottomWidget!,
+                          currentSay.bottom ?? SizedBox.shrink(),
                         ],
                       ),
                     ),
-                  ),
+                    ..._buildPerson(PersonSayDirection.RIGHT),
+                  ],
                 ),
-              ),
-              ..._buildPerson(PersonDirection.RIGHT),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -206,21 +202,17 @@ class _TalkDialogState extends State<TalkDialog> {
     });
   }
 
-  List<Widget> _buildPerson(PersonDirection direction) {
-    if (currentSay.personDirection == direction) {
+  List<Widget> _buildPerson(PersonSayDirection direction) {
+    if (currentSay.personSayDirection == direction) {
       return [
-        if (direction == PersonDirection.RIGHT)
+        if (direction == PersonSayDirection.RIGHT && currentSay.person != null)
           SizedBox(
-            width: 10,
+            width: (widget.padding ?? EdgeInsets.all(10)).horizontal / 2,
           ),
-        Container(
-          height: widget.textBoxMinHeight,
-          width: widget.textBoxMinHeight,
-          child: currentSay.person,
-        ),
-        if (direction == PersonDirection.LEFT)
+        currentSay.person ?? SizedBox.shrink(),
+        if (direction == PersonSayDirection.LEFT && currentSay.person != null)
           SizedBox(
-            width: 10,
+            width: (widget.padding ?? EdgeInsets.all(10)).horizontal / 2,
           ),
       ];
     } else {
@@ -234,5 +226,11 @@ class _TalkDialogState extends State<TalkDialog> {
     } else {
       _finishTalk();
     }
+  }
+
+  Alignment _getAlign(PersonSayDirection personDirection) {
+    return personDirection == PersonSayDirection.LEFT
+        ? Alignment.bottomLeft
+        : Alignment.bottomRight;
   }
 }

@@ -12,13 +12,19 @@ class GameInterface extends GameComponent {
   List<InterfaceComponent> _components = [];
 
   /// textConfig used to show FPS
-  final textConfigGreen = TextConfig(color: Colors.green, fontSize: 14);
+  final textConfigGreen = TextPaint(
+    config: TextPaintConfig(color: Colors.green, fontSize: 14),
+  );
 
   /// textConfig used to show FPS
-  final textConfigYellow = TextConfig(color: Colors.yellow, fontSize: 14);
+  final textConfigYellow = TextPaint(
+    config: TextPaintConfig(color: Colors.yellow, fontSize: 14),
+  );
 
   /// textConfig used to show FPS
-  final textConfigRed = TextConfig(color: Colors.red, fontSize: 14);
+  final textConfigRed = TextPaint(
+    config: TextPaintConfig(color: Colors.red, fontSize: 14),
+  );
 
   @override
   bool get isHud => true;
@@ -86,7 +92,7 @@ class GameInterface extends GameComponent {
     }
   }
 
-  TextConfig getTextConfigFps(double fps) {
+  TextPaint getTextConfigFps(double fps) {
     if (fps >= 58) {
       return textConfigGreen;
     }
