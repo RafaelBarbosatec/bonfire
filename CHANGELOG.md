@@ -1,7 +1,7 @@
 # 1.1.1
 
-- Fix bug TalkDialog.
-- Fix bug Animations in player.
+- Fix bug `TalkDialog`.
+- Fix bug Animations in `SimplePlayer` and `SimpleEnemy`.
 
 # 1.1.0
 

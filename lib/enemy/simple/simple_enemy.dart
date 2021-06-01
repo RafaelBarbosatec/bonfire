@@ -89,7 +89,8 @@ class SimpleEnemy extends Enemy {
     }
     lastDirection = Direction.upRight;
     lastDirectionHorizontal = Direction.right;
-    super.moveUpRight(speedX, speedY, onCollision: onCollision);
+    super.moveUp(speedY, onCollision: onCollision);
+    super.moveRight(speedX, onCollision: onCollision);
   }
 
   @override
@@ -101,7 +102,8 @@ class SimpleEnemy extends Enemy {
     }
     lastDirection = Direction.upLeft;
     lastDirectionHorizontal = Direction.left;
-    super.moveUpLeft(speedX, speedY, onCollision: onCollision);
+    super.moveUp(speedY, onCollision: onCollision);
+    super.moveLeft(speedX, onCollision: onCollision);
   }
 
   @override
@@ -114,7 +116,8 @@ class SimpleEnemy extends Enemy {
     }
     lastDirection = Direction.downRight;
     lastDirectionHorizontal = Direction.right;
-    super.moveDownRight(speedX, speedY, onCollision: onCollision);
+    super.moveDown(speedY, onCollision: onCollision);
+    super.moveRight(speedX, onCollision: onCollision);
   }
 
   @override
@@ -126,7 +129,8 @@ class SimpleEnemy extends Enemy {
     }
     lastDirection = Direction.downLeft;
     lastDirectionHorizontal = Direction.left;
-    super.moveDownLeft(speedX, speedY, onCollision: onCollision);
+    super.moveDown(speedY, onCollision: onCollision);
+    super.moveLeft(speedX, onCollision: onCollision);
   }
 
   @override
