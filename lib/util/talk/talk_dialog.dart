@@ -95,7 +95,8 @@ class _TalkDialogState extends State<TalkDialog> {
         },
         child: GestureDetector(
           onTap: _nextOrFinish,
-          child: Padding(
+          child: Container(
+            color: Colors.transparent,
             padding: widget.padding ?? EdgeInsets.all(10),
             child: Stack(
               alignment: Alignment.bottomCenter,
@@ -185,7 +186,7 @@ class _TalkDialogState extends State<TalkDialog> {
       if (widget.onChangeTalk != null)
         widget.onChangeTalk?.call(currentIndexTalk);
     } else {
-      if (widget.finish != null) widget.finish?.call();
+      widget.finish?.call();
       Navigator.pop(context);
     }
   }
