@@ -1,3 +1,8 @@
+# 1.1.1
+
+- Fix bug `TalkDialog`.
+- Fix bug Animations in `SimplePlayer` and `SimpleEnemy`.
+
 # 1.1.0
 
 - Update `Flame` to `1.0.0-releasecandidate.11` version.
