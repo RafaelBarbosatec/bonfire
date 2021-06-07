@@ -1,3 +1,4 @@
+import 'package:bonfire/background/game_background.dart';
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/custom_game_widget.dart';
 import 'package:bonfire/base/game_component.dart';
@@ -49,7 +50,7 @@ class BonfireWidget extends StatefulWidget {
   final List<Enemy>? enemies;
   final List<GameDecoration>? decorations;
   final List<GameComponent>? components;
-  final GameComponent? background;
+  final GameBackground? background;
   final GameController? gameController;
   final CameraConfig? cameraConfig;
   final GameColorFilter? colorFilter;

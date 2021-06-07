@@ -45,7 +45,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   final JoystickController? joystickController;
 
   /// Background of the game. This can be a color or custom component
-  final GameComponent? background;
+  final GameBackground? background;
 
   /// Used to show grid in the map and facilitate the construction and testing of the map
   final bool constructionMode;

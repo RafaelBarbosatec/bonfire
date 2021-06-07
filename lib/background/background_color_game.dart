@@ -8,9 +8,9 @@ class BackgroundColorGame extends GameBackground {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(
-      new Rect.fromLTRB(0.0, 0.0, gameRef.size.x, gameRef.size.y),
-      new Paint()..color = color,
+    canvas.drawColor(
+      color,
+      BlendMode.src,
     );
   }
 }
