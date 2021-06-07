@@ -1,3 +1,6 @@
+# 1.1.2
+- Update `tiledjsonreader`
+
 # 1.1.1
 
 - Fix bug `TalkDialog`.
