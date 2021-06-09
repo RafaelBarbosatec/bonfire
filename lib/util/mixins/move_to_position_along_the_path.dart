@@ -109,18 +109,25 @@ mixin MoveToPositionAlongThePath on GameComponent {
 
       Offset targetPosition = _getCenterPositionByTile(finalPosition);
 
-      int rows = (playerPosition.dy > targetPosition.dy
-              ? playerPosition.dy
-              : targetPosition.dy)
-          .toInt();
-      int columns = (playerPosition.dx > targetPosition.dx
-              ? playerPosition.dx
-              : targetPosition.dx)
-          .toInt();
+      int columnsAdditional = ((gameRef.size.x / 2) / _tileSize).floor();
+      int rowsAdditional = ((gameRef.size.y / 2) / _tileSize).floor();
 
-      List<Offset> barriers = gameRef.visibleCollisions().map((e) {
-        return _getCenterPositionByTile(e.position.center);
-      }).toList();
+      int rows = (playerPosition.dy > targetPosition.dy
+                  ? playerPosition.dy
+                  : targetPosition.dy)
+              .toInt() +
+          rowsAdditional;
+
+      int columns = (playerPosition.dx > targetPosition.dx
+                  ? playerPosition.dx
+                  : targetPosition.dx)
+              .toInt() +
+          columnsAdditional;
+
+      List<Offset> barriers = [];
+      gameRef.visibleCollisions().forEach((e) {
+        barriers.addAll(_getOffsetsPositionByTile(e.position));
+      });
 
       List<Offset> result = [];
       List<Offset> path = [];
@@ -137,16 +144,19 @@ mixin MoveToPositionAlongThePath on GameComponent {
           end: targetPosition,
           barriers: barriers,
         ).findThePath();
-        path.add(playerPosition);
-        path.addAll(result.reversed);
-        path.add(targetPosition);
-        path = path.map((e) {
-          return Offset(e.dx * _tileSize, e.dy * _tileSize)
-              .translate(_tileSize / 2, _tileSize / 2);
-        }).toList();
 
-        _currentPath = _resumePath(path);
-        _currentIndex = 0;
+        if (result.isNotEmpty || _isNeighbor(playerPosition, targetPosition)) {
+          path.add(playerPosition);
+          path.addAll(result.reversed);
+          path.add(targetPosition);
+          path = path.map((e) {
+            return Offset(e.dx * _tileSize, e.dy * _tileSize)
+                .translate(_tileSize / 2, _tileSize / 2);
+          }).toList();
+
+          _currentPath = _resumePath(path);
+          _currentIndex = 0;
+        }
       } catch (e) {
         print('ERROR(AStar):$e');
       }
@@ -168,6 +178,15 @@ mixin MoveToPositionAlongThePath on GameComponent {
       (center.dx / _tileSize).floor().toDouble(),
       (center.dy / _tileSize).floor().toDouble(),
     );
+  }
+
+  List<Offset> _getOffsetsPositionByTile(Vector2Rect rect) {
+    final center = Offset(
+      (rect.center.dx / _tileSize).floor().toDouble(),
+      (rect.center.dy / _tileSize).floor().toDouble(),
+    );
+
+    return [center];
   }
 
   /// Resume path
@@ -222,5 +241,17 @@ mixin MoveToPositionAlongThePath on GameComponent {
     });
 
     return newPath;
+  }
+
+  bool _isNeighbor(Offset playerPosition, Offset targetPosition) {
+    if ((playerPosition.dx - targetPosition.dx).abs() == 1 &&
+        playerPosition.dy == targetPosition.dy) {
+      return true;
+    }
+    if ((playerPosition.dy - targetPosition.dy).abs() == 1 &&
+        playerPosition.dx == targetPosition.dx) {
+      return true;
+    }
+    return false;
   }
 }
