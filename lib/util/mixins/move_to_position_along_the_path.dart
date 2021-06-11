@@ -190,6 +190,7 @@ mixin MoveToPositionAlongThePath on GameComponent {
     }
   }
 
+  /// Get size of the grid used on algorithm to calculate path
   double get _tileSize {
     if (_tileSizeIsSizeCollision) {
       if (this.isObjectCollision()) {

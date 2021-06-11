@@ -72,7 +72,6 @@ class GameTiledMap extends StatelessWidget {
               'chest': (properties) => Chest(properties.position),
             },
           ),
-          showCollisionArea: true,
           background: BackgroundColorGame(Colors.blueGrey[900]!),
           lightingColorGame: Colors.black.withOpacity(0.7),
         );
