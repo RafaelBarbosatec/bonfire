@@ -787,6 +787,7 @@
          "objectgroup":
             {
              "draworder":"index",
+             "id":2,
              "name":"",
              "objects":[
                     {
@@ -826,8 +827,8 @@
                      "type":"",
                      "visible":true,
                      "width":7,
-                     "x":0,
-                     "y":1.9375
+                     "x":0.527285063487448,
+                     "y":1.96851676844044
                     }],
              "opacity":1,
              "type":"objectgroup",
@@ -841,19 +842,20 @@
          "objectgroup":
             {
              "draworder":"index",
+             "id":2,
              "name":"",
              "objects":[
                     {
                      "ellipse":true,
-                     "height":16,
+                     "height":15.5657652418339,
                      "id":1,
                      "name":"",
                      "rotation":0,
                      "type":"",
                      "visible":true,
-                     "width":16,
-                     "x":0,
-                     "y":0
+                     "width":15.5657652418339,
+                     "x":0.217117379083067,
+                     "y":0.248134147523507
                     }],
              "opacity":1,
              "type":"objectgroup",
@@ -867,17 +869,18 @@
          "objectgroup":
             {
              "draworder":"index",
+             "id":2,
              "name":"",
              "objects":[
                     {
-                     "height":12.9870591721822,
+                     "height":12.6458747193374,
                      "id":1,
                      "name":"",
                      "rotation":0,
                      "type":"",
                      "visible":true,
-                     "width":16,
-                     "x":0,
+                     "width":15.1005137152273,
+                     "x":0.434234758166134,
                      "y":3.01294082781784
                     }],
              "opacity":1,

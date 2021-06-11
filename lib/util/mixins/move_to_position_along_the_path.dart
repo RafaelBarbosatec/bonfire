@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:a_star_algorithm/a_star_algorithm.dart';
@@ -11,16 +12,29 @@ mixin MoveToPositionAlongThePath on GameComponent {
   int _currentIndex = 0;
   double _speed = 0;
   Movement? _component;
+  bool _showBarriers = false;
+  bool _tileSizeIsSizeCollision = false;
+
+  List<Rect> gritCollision = [];
 
   Color _pathLineColor = Colors.lightBlueAccent.withOpacity(0.5);
   double _pathLineStrokeWidth = 4;
 
-  void setupMoveToPositionAlongThePath(
-    Color pathLineColor, {
+  Paint _paintShowBarriers = Paint()..color = Colors.blue.withOpacity(0.5);
+
+  void setupMoveToPositionAlongThePath({
+    Color? pathLineColor,
+    Color? barriersCalculatedColor,
     double pathLineStrokeWidth = 4,
+    bool showBarriersCalculated = false,
+    bool tileSizeIsSizeCollision = false,
   }) {
-    _pathLineColor = pathLineColor;
+    _paintShowBarriers.color =
+        barriersCalculatedColor ?? Colors.blue.withOpacity(0.5);
+    this._showBarriers = showBarriersCalculated;
+    _pathLineColor = pathLineColor ?? Colors.lightBlueAccent.withOpacity(0.5);
     _pathLineStrokeWidth = pathLineStrokeWidth;
+    _tileSizeIsSizeCollision = tileSizeIsSizeCollision;
   }
 
   void moveToPositionAlongThePath(
@@ -44,6 +58,15 @@ mixin MoveToPositionAlongThePath on GameComponent {
       _move(dt);
     }
     super.update(dt);
+  }
+
+  void render(Canvas c) {
+    if (_showBarriers) {
+      gritCollision.forEach((element) {
+        c.drawRect(element, _paintShowBarriers);
+      });
+    }
+    super.render(c);
   }
 
   void stopMoveAlongThePath() {
@@ -89,6 +112,7 @@ mixin MoveToPositionAlongThePath on GameComponent {
   }
 
   void _calculatePath(Offset finalPosition) {
+    gritCollision.clear();
     final tiledCollisionTouched =
         this.gameRef.map.getCollisionsRendered().where(
       (element) {
@@ -126,7 +150,9 @@ mixin MoveToPositionAlongThePath on GameComponent {
 
       List<Offset> barriers = [];
       gameRef.visibleCollisions().forEach((e) {
-        barriers.addAll(_getOffsetsPositionByTile(e.position));
+        if (e != this) {
+          barriers.addAll(_getOffsetsPositionByTile(e.rectCollision));
+        }
       });
 
       List<Offset> result = [];
@@ -165,6 +191,13 @@ mixin MoveToPositionAlongThePath on GameComponent {
   }
 
   double get _tileSize {
+    if (_tileSizeIsSizeCollision) {
+      if (this.isObjectCollision()) {
+        return max((this as ObjectCollision).rectCollision.width,
+            (this as ObjectCollision).rectCollision.height);
+      }
+      return max(position.height, position.width);
+    }
     if (gameRef.map.tiles.isNotEmpty) {
       return gameRef.map.tiles.first.width;
     }
@@ -180,13 +213,42 @@ mixin MoveToPositionAlongThePath on GameComponent {
     );
   }
 
+  /// creating an imaginary grid would calculate how many tile this object is occupying.
   List<Offset> _getOffsetsPositionByTile(Vector2Rect rect) {
-    final center = Offset(
-      (rect.center.dx / _tileSize).floor().toDouble(),
-      (rect.center.dy / _tileSize).floor().toDouble(),
+    final leftTop = Offset(
+      (rect.left / _tileSize).floor().toDouble() * _tileSize,
+      (rect.top / _tileSize).floor().toDouble() * _tileSize,
     );
 
-    return [center];
+    List<Rect> grid = [];
+    int countColumns = (rect.width / _tileSize).ceil() + 1;
+    int countRows = (rect.height / _tileSize).ceil() + 1;
+
+    List.generate(countRows, (r) {
+      List.generate(countColumns, (c) {
+        grid.add(Rect.fromLTWH(
+          leftTop.dx + (c * _tileSize),
+          leftTop.dy + (r * _tileSize),
+          _tileSize,
+          _tileSize,
+        ));
+      });
+    });
+
+    List<Rect> listRect = grid.where((element) {
+      return rect.rect.overlaps(element);
+    }).toList();
+
+    gritCollision.addAll(listRect);
+
+    final result = listRect.map((e) {
+      return Offset(
+        e.left / _tileSize,
+        e.top / _tileSize,
+      );
+    }).toList();
+
+    return result;
   }
 
   /// Resume path
