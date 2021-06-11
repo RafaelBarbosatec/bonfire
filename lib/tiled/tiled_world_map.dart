@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tile/tile.dart';
 import 'package:bonfire/map/tile/tile_with_collision.dart';
-import 'package:bonfire/tiled/tiled_world_data.dart';
+import 'package:bonfire/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:bonfire/util/extensions.dart';
 import 'package:flame/sprite.dart';
@@ -22,23 +22,12 @@ import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
-class ObjectProperties {
-  final Vector2 position;
-  final Size size;
-  final double? rotation;
-  final String? type;
-  final Map<String, dynamic> others;
+import 'model/tiled_data_object_oollision.dart';
+import 'model/tiled_item_tile_set.dart';
+import 'model/tiled_object_properties.dart';
 
-  ObjectProperties(
-    this.position,
-    this.size,
-    this.type,
-    this.rotation,
-    this.others,
-  );
-}
-
-typedef ObjectBuilder = GameComponent Function(ObjectProperties properties);
+typedef ObjectBuilder = GameComponent Function(
+    TiledObjectProperties properties);
 
 class TiledWorldMap {
   static const ORIENTATION_SUPPORTED = 'orthogonal';
@@ -135,7 +124,7 @@ class TiledWorldMap {
   }
 
   void _addTile(
-    ItemTileSet data,
+    TiledItemTileSet data,
     int count,
     TileLayer tileLayer,
     double offsetX,
@@ -179,7 +168,7 @@ class TiledWorldMap {
   }
 
   void _addGameDecorationAbove(
-    ItemTileSet data,
+    TiledItemTileSet data,
     int count,
     TileLayer tileLayer,
   ) {
@@ -226,7 +215,7 @@ class TiledWorldMap {
     return (index / width).floor().toDouble();
   }
 
-  Future<ItemTileSet?> _getDataTile(int index) async {
+  Future<TiledItemTileSet?> _getDataTile(int index) async {
     TileSet? tileSetContain;
     int firsTgId = 0;
 
@@ -262,13 +251,13 @@ class TiledWorldMap {
         widthCount,
       );
 
-      DataObjectCollision object = _getCollision(
+      TiledDataObjectCollision object = _getCollision(
         tileSetContain!,
         (index - firsTgId),
       );
 
       return Future.value(
-        ItemTileSet(
+        TiledItemTileSet(
           animation: animation,
           sprite: sprite,
           type: object.type,
@@ -298,7 +287,7 @@ class TiledWorldMap {
               ((element.height ?? 0.0) * _tileHeight) / _tileHeightOrigin;
 
           final object = _objectsBuilder[element.name]?.call(
-            ObjectProperties(
+            TiledObjectProperties(
               Vector2(x, y),
               Size(width, height),
               element.type,
@@ -335,7 +324,7 @@ class TiledWorldMap {
     return Future.value(_spriteCache['$image/$row/$column']);
   }
 
-  DataObjectCollision _getCollision(TileSet tileSetContain, int index) {
+  TiledDataObjectCollision _getCollision(TileSet tileSetContain, int index) {
     Iterable<TileSetItem> tileSetItemList = tileSetContain.tiles?.where(
           (element) => element.id == index,
         ) ??
@@ -420,13 +409,13 @@ class TiledWorldMap {
           collisions.add(ca);
         });
       }
-      return DataObjectCollision(
+      return TiledDataObjectCollision(
         collisions: collisions,
         type: type,
         properties: properties,
       );
     }
-    return DataObjectCollision();
+    return TiledDataObjectCollision();
   }
 
   Future<ControlledUpdateAnimation?> _getAnimation(
@@ -539,28 +528,4 @@ class TiledWorldMap {
     });
     return map;
   }
-}
-
-class ItemTileSet {
-  final ControlledUpdateAnimation? animation;
-  final Sprite? sprite;
-  final List<CollisionArea>? collisions;
-  final String? type;
-  final Map<String, dynamic>? properties;
-
-  ItemTileSet({
-    this.sprite,
-    this.collisions,
-    this.animation,
-    this.type,
-    this.properties,
-  });
-}
-
-class DataObjectCollision {
-  final List<CollisionArea>? collisions;
-  final String type;
-  final Map<String, dynamic>? properties;
-
-  DataObjectCollision({this.collisions, this.type = '', this.properties});
 }

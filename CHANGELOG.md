@@ -1,3 +1,8 @@
+# 1.1.2
+- Update `tiledjsonreader`
+- Improvements in `MoveToPositionAlongThePath`
+- Fix bug of the issue [#115](https://github.com/RafaelBarbosatec/bonfire/issues/115)
+
 # 1.1.1
 
 - Fix bug `TalkDialog`.

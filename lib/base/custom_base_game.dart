@@ -149,8 +149,10 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   @override
   void update(double t) {
     if (_addLater.isNotEmpty) {
-      components.addAll(_addLater);
+      final addNow = _addLater.toList(growable: false);
+      components.addAll(addNow);
       _addLater.clear();
+      addNow.forEach((component) => component.onMount());
     }
 
     components.forEach((c) => c.update(t));

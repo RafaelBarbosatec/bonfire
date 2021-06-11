@@ -16,8 +16,9 @@ class ColumnDecoration extends GameDecoration with ObjectCollision {
       CollisionConfig(
         collisions: [
           CollisionArea.rectangle(
-            size: Size(DungeonMap.tileSize, DungeonMap.tileSize / 2),
-            align: Vector2(0, DungeonMap.tileSize * 1.8),
+            size: Size(DungeonMap.tileSize * 0.8, DungeonMap.tileSize / 2),
+            align:
+                Vector2(DungeonMap.tileSize * 0.1, DungeonMap.tileSize * 1.8),
           ),
         ],
       ),

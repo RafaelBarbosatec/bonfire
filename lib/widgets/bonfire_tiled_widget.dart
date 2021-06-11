@@ -6,7 +6,7 @@ import 'package:bonfire/camera/camera_config.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/tiled/tiled_world_data.dart';
+import 'package:bonfire/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/tiled/tiled_world_map.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
@@ -24,7 +24,7 @@ class BonfireTiledWidget extends StatefulWidget {
   final GameInterface? interface;
 
   /// Background of the game. This can be a color or custom component
-  final GameComponent? background;
+  final GameBackground? background;
 
   /// Used to show grid in the map and facilitate the construction and testing of the map
   final bool constructionMode;

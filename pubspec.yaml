@@ -1,18 +1,18 @@
 name: bonfire
 description: (RPG maker) Create RPG-style or similar games more simply with Flame.
-version: 1.1.1
+version: 1.1.2
 homepage: https://github.com/RafaelBarbosatec/bonfire
 
 environment:
-  sdk: ">=2.12.0-0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
   flame: ^1.0.0-releasecandidate.11
-  ordered_set: ^3.0.0
-  tiledjsonreader: ^1.0.1
+  ordered_set: ^3.1.0
+  tiledjsonreader: ^1.0.2
   http: ^0.13.3
   a_star_algorithm: ^0.0.4
 
