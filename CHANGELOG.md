@@ -1,3 +1,6 @@
+# NEXT
+- Improvements in `MoveToPositionAlongThePath`
+
 # 1.1.2
 - Update `tiledjsonreader`
 - Improvements in `MoveToPositionAlongThePath`

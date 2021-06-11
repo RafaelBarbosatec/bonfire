@@ -15,7 +15,7 @@ mixin MoveToPositionAlongThePath on GameComponent {
   bool _showBarriers = false;
   bool _tileSizeIsSizeCollision = false;
 
-  List<Rect> gritCollision = [];
+  List<Offset> barriers = [];
 
   Color _pathLineColor = Colors.lightBlueAccent.withOpacity(0.5);
   double _pathLineStrokeWidth = 4;
@@ -43,8 +43,8 @@ mixin MoveToPositionAlongThePath on GameComponent {
   ) {
     if (this is Movement) {
       _component = this as Movement;
-      _calculatePath(position.toOffset());
       _currentIndex = 0;
+      _calculatePath(position.toOffset());
       this._speed = speed;
     } else {
       print(
@@ -62,8 +62,16 @@ mixin MoveToPositionAlongThePath on GameComponent {
 
   void render(Canvas c) {
     if (_showBarriers) {
-      gritCollision.forEach((element) {
-        c.drawRect(element, _paintShowBarriers);
+      barriers.forEach((element) {
+        c.drawRect(
+          Rect.fromLTWH(
+            element.dx * _tileSize,
+            element.dy * _tileSize,
+            _tileSize,
+            _tileSize,
+          ),
+          _paintShowBarriers,
+        );
       });
     }
     super.render(c);
@@ -112,82 +120,72 @@ mixin MoveToPositionAlongThePath on GameComponent {
   }
 
   void _calculatePath(Offset finalPosition) {
-    gritCollision.clear();
-    final tiledCollisionTouched =
-        this.gameRef.map.getCollisionsRendered().where(
-      (element) {
-        return (element is ObjectCollision &&
-            element.containCollision() &&
-            element.position.contains(finalPosition));
-      },
-    );
+    final player = this;
 
-    if (tiledCollisionTouched.isEmpty && gameRef.player != null) {
-      final player = this;
+    final positionPlayer = player is ObjectCollision
+        ? (player as ObjectCollision).rectCollision.center
+        : player.position.center;
 
-      final positionPlayer = player is ObjectCollision
-          ? (player as ObjectCollision).rectCollision.center
-          : player.position.center;
+    Offset playerPosition = _getCenterPositionByTile(positionPlayer);
 
-      Offset playerPosition = _getCenterPositionByTile(positionPlayer);
+    Offset targetPosition = _getCenterPositionByTile(finalPosition);
 
-      Offset targetPosition = _getCenterPositionByTile(finalPosition);
+    int columnsAdditional = ((gameRef.size.x / 2) / _tileSize).floor();
+    int rowsAdditional = ((gameRef.size.y / 2) / _tileSize).floor();
 
-      int columnsAdditional = ((gameRef.size.x / 2) / _tileSize).floor();
-      int rowsAdditional = ((gameRef.size.y / 2) / _tileSize).floor();
+    int rows = (playerPosition.dy > targetPosition.dy
+                ? playerPosition.dy
+                : targetPosition.dy)
+            .toInt() +
+        rowsAdditional;
 
-      int rows = (playerPosition.dy > targetPosition.dy
-                  ? playerPosition.dy
-                  : targetPosition.dy)
-              .toInt() +
-          rowsAdditional;
+    int columns = (playerPosition.dx > targetPosition.dx
+                ? playerPosition.dx
+                : targetPosition.dx)
+            .toInt() +
+        columnsAdditional;
 
-      int columns = (playerPosition.dx > targetPosition.dx
-                  ? playerPosition.dx
-                  : targetPosition.dx)
-              .toInt() +
-          columnsAdditional;
+    barriers.clear();
 
-      List<Offset> barriers = [];
-      gameRef.visibleCollisions().forEach((e) {
-        if (e != this) {
-          barriers.addAll(_getOffsetsPositionByTile(e.rectCollision));
-        }
-      });
-
-      List<Offset> result = [];
-      List<Offset> path = [];
-
-      if (barriers.contains(targetPosition)) {
-        return;
+    gameRef.visibleCollisions().forEach((e) {
+      if (e != this) {
+        _addCollisionOffsetsPositionByTile(e.rectCollision);
       }
+    });
 
-      try {
-        result = AStar(
-          rows: rows + 1,
-          columns: columns + 1,
-          start: playerPosition,
-          end: targetPosition,
-          barriers: barriers,
-        ).findThePath();
+    List<Offset> result = [];
+    List<Offset> path = [];
 
-        if (result.isNotEmpty || _isNeighbor(playerPosition, targetPosition)) {
-          path.add(playerPosition);
-          path.addAll(result.reversed);
-          path.add(targetPosition);
-          path = path.map((e) {
-            return Offset(e.dx * _tileSize, e.dy * _tileSize)
-                .translate(_tileSize / 2, _tileSize / 2);
-          }).toList();
-
-          _currentPath = _resumePath(path);
-          _currentIndex = 0;
-        }
-      } catch (e) {
-        print('ERROR(AStar):$e');
-      }
-      gameRef.map.setLinePath(path, _pathLineColor, _pathLineStrokeWidth);
+    if (barriers.contains(targetPosition)) {
+      stopMoveAlongThePath();
+      return;
     }
+
+    try {
+      result = AStar(
+        rows: rows + 1,
+        columns: columns + 1,
+        start: playerPosition,
+        end: targetPosition,
+        barriers: barriers,
+      ).findThePath();
+
+      if (result.isNotEmpty || _isNeighbor(playerPosition, targetPosition)) {
+        path.add(playerPosition);
+        path.addAll(result.reversed);
+        path.add(targetPosition);
+        path = path.map((e) {
+          return Offset(e.dx * _tileSize, e.dy * _tileSize)
+              .translate(_tileSize / 2, _tileSize / 2);
+        }).toList();
+
+        _currentPath = _resumePath(path);
+        _currentIndex = 0;
+      }
+    } catch (e) {
+      print('ERROR(AStar):$e');
+    }
+    gameRef.map.setLinePath(path, _pathLineColor, _pathLineStrokeWidth);
   }
 
   /// Get size of the grid used on algorithm to calculate path
@@ -215,7 +213,7 @@ mixin MoveToPositionAlongThePath on GameComponent {
   }
 
   /// creating an imaginary grid would calculate how many tile this object is occupying.
-  List<Offset> _getOffsetsPositionByTile(Vector2Rect rect) {
+  void _addCollisionOffsetsPositionByTile(Vector2Rect rect) {
     final leftTop = Offset(
       (rect.left / _tileSize).floor().toDouble() * _tileSize,
       (rect.top / _tileSize).floor().toDouble() * _tileSize,
@@ -240,8 +238,6 @@ mixin MoveToPositionAlongThePath on GameComponent {
       return rect.rect.overlaps(element);
     }).toList();
 
-    gritCollision.addAll(listRect);
-
     final result = listRect.map((e) {
       return Offset(
         e.left / _tileSize,
@@ -249,7 +245,11 @@ mixin MoveToPositionAlongThePath on GameComponent {
       );
     }).toList();
 
-    return result;
+    result.forEach((element) {
+      if (!barriers.contains(element)) {
+        barriers.add(element);
+      }
+    });
   }
 
   /// Resume path
