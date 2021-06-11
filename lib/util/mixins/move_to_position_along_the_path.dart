@@ -133,16 +133,16 @@ mixin MoveToPositionAlongThePath on GameComponent {
     int columnsAdditional = ((gameRef.size.x / 2) / _tileSize).floor();
     int rowsAdditional = ((gameRef.size.y / 2) / _tileSize).floor();
 
-    int rows = (playerPosition.dy > targetPosition.dy
-                ? playerPosition.dy
-                : targetPosition.dy)
-            .toInt() +
+    int rows = max(
+          playerPosition.dy,
+          targetPosition.dy,
+        ).toInt() +
         rowsAdditional;
 
-    int columns = (playerPosition.dx > targetPosition.dx
-                ? playerPosition.dx
-                : targetPosition.dx)
-            .toInt() +
+    int columns = max(
+          playerPosition.dx,
+          targetPosition.dx,
+        ).toInt() +
         columnsAdditional;
 
     barriers.clear();
@@ -215,8 +215,8 @@ mixin MoveToPositionAlongThePath on GameComponent {
   /// creating an imaginary grid would calculate how many tile this object is occupying.
   void _addCollisionOffsetsPositionByTile(Vector2Rect rect) {
     final leftTop = Offset(
-      (rect.left / _tileSize).floor().toDouble() * _tileSize,
-      (rect.top / _tileSize).floor().toDouble() * _tileSize,
+      ((rect.left / _tileSize) * _tileSize),
+      ((rect.top / _tileSize) * _tileSize),
     );
 
     List<Rect> grid = [];
@@ -240,8 +240,8 @@ mixin MoveToPositionAlongThePath on GameComponent {
 
     final result = listRect.map((e) {
       return Offset(
-        e.left / _tileSize,
-        e.top / _tileSize,
+        (e.center.dx / _tileSize).floorToDouble(),
+        (e.center.dy / _tileSize).floorToDouble(),
       );
     }).toList();
 
