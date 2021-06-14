@@ -215,8 +215,8 @@ mixin MoveToPositionAlongThePath on GameComponent {
   /// creating an imaginary grid would calculate how many tile this object is occupying.
   void _addCollisionOffsetsPositionByTile(Vector2Rect rect) {
     final leftTop = Offset(
-      ((rect.left / _tileSize) * _tileSize),
-      ((rect.top / _tileSize) * _tileSize),
+      (rect.left ~/ _tileSize * _tileSize),
+      ((rect.top ~/ _tileSize) * _tileSize),
     );
 
     List<Rect> grid = [];

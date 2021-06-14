@@ -1,4 +1,4 @@
-# 1.1.3
+# 1.1.4
 - new improvements in `MoveToPositionAlongThePath`
 
 # 1.1.2
