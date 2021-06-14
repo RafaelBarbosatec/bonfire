@@ -56,6 +56,8 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
         ],
       ),
     );
+
+    setupMoveToPositionAlongThePath(showBarriersCalculated: true);
   }
 
   @override
