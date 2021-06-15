@@ -1,5 +1,6 @@
 # 1.1.5
 - blocks paths off screen in `MoveToPositionAlongThePath`
+- create function `merge` to `Image`.
 
 # 1.1.4
 - new improvements in `MoveToPositionAlongThePath`
