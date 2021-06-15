@@ -50,7 +50,7 @@ extension ImageExtension on Image {
   }
 
   /// Do merge image. Overlaying the images
-  Future<Image> merge(Image other) {
+  Future<Image> overlap(Image other) {
     PictureRecorder recorder = PictureRecorder();
     final paint = Paint();
     Canvas canvas = Canvas(recorder);
