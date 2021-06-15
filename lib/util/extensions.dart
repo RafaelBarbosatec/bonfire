@@ -60,6 +60,22 @@ extension ImageExtension on Image {
     canvas.drawImage(other, Offset.zero, paint);
     return recorder.endRecording().toImage(totalWidth, totalHeight);
   }
+
+  /// Do merge image list. Overlaying the images
+  Future<Image> overlapList(List<Image> others) {
+    PictureRecorder recorder = PictureRecorder();
+    final paint = Paint();
+    Canvas canvas = Canvas(recorder);
+    int totalWidth = this.width;
+    int totalHeight = this.height;
+    canvas.drawImage(this, Offset.zero, paint);
+    others.forEach((i) {
+      totalWidth = max(totalWidth, i.width);
+      totalHeight = max(totalHeight, i.height);
+      canvas.drawImage(i, Offset.zero, paint);
+    });
+    return recorder.endRecording().toImage(totalWidth, totalHeight);
+  }
 }
 
 extension OffSetExt on Offset {
