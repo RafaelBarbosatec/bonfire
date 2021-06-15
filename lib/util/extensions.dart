@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -46,6 +47,18 @@ extension ImageExtension on Image {
       srcPosition: Vector2(x, y),
       srcSize: Vector2(width, height),
     );
+  }
+
+  /// Do merge image. Overlaying the images
+  Future<Image> overlap(Image other) {
+    PictureRecorder recorder = PictureRecorder();
+    final paint = Paint();
+    Canvas canvas = Canvas(recorder);
+    final totalWidth = max(this.width, other.width);
+    final totalHeight = max(this.height, other.height);
+    canvas.drawImage(this, Offset.zero, paint);
+    canvas.drawImage(other, Offset.zero, paint);
+    return recorder.endRecording().toImage(totalWidth, totalHeight);
   }
 }
 

@@ -105,15 +105,11 @@ mixin MoveToPositionAlongThePath on GameComponent {
     } else {
       if (diffX > 0 && diffX.abs() > 0.5) {
         _component?.moveRight(displacementX);
-      }
-      if (diffX < 0 && diffX.abs() > 0.5) {
+      } else if (diffX < 0 && diffX.abs() > 0.5) {
         _component?.moveLeft(displacementX);
-      }
-
-      if (diffY > 0 && diffY.abs() > 0.5) {
+      } else if (diffY > 0 && diffY.abs() > 0.5) {
         _component?.moveDown(displacementY);
-      }
-      if (diffY < 0 && diffY.abs() > 0.5) {
+      } else if (diffY < 0 && diffY.abs() > 0.5) {
         _component?.moveUp(displacementY);
       }
     }
@@ -181,6 +177,15 @@ mixin MoveToPositionAlongThePath on GameComponent {
 
         _currentPath = _resumePath(path);
         _currentIndex = 0;
+
+        final pointsOutOfTheCamera = _currentPath.where((element) {
+          return !gameRef.camera.cameraRect.contains(element);
+        });
+
+        if (pointsOutOfTheCamera.isNotEmpty) {
+          stopMoveAlongThePath();
+          return;
+        }
       }
     } catch (e) {
       print('ERROR(AStar):$e');
@@ -215,8 +220,8 @@ mixin MoveToPositionAlongThePath on GameComponent {
   /// creating an imaginary grid would calculate how many tile this object is occupying.
   void _addCollisionOffsetsPositionByTile(Vector2Rect rect) {
     final leftTop = Offset(
-      (rect.left ~/ _tileSize * _tileSize),
-      ((rect.top ~/ _tileSize) * _tileSize),
+      ((rect.left / _tileSize).floor() * _tileSize),
+      ((rect.top / _tileSize).floor() * _tileSize),
     );
 
     List<Rect> grid = [];
