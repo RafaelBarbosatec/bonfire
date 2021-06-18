@@ -49,8 +49,13 @@ class Tile extends GameComponent {
     double offsetY = 0,
   }) {
     _loader.add(AssetToLoad(sprite, (value) => this._sprite = value));
-    this.position = generateRectWithBleedingPixel(position, width, height,
-        offsetX: offsetX, offsetY: offsetY);
+    this.position = generateRectWithBleedingPixel(
+      position,
+      width,
+      height,
+      offsetX: offsetX,
+      offsetY: offsetY,
+    );
 
     _positionText = position;
   }
@@ -119,19 +124,21 @@ class Tile extends GameComponent {
     double offsetY = 0,
   }) {
     double sizeMax = max(width, height);
-    double bleendingPixel = sizeMax * 0.04;
-    if (bleendingPixel > 3) {
-      bleendingPixel = 3;
+    double blendingPixel = sizeMax * 0.05;
+
+    if (blendingPixel > 2) {
+      blendingPixel = 2;
     }
+
     return Rect.fromLTWH(
       (position.x * width) -
-          (position.x % 2 == 0 ? (bleendingPixel / 2) : 0) +
+          (position.x % 2 == 0 ? (blendingPixel / 2) : 0) +
           offsetX,
       (position.y * height) -
-          (position.y % 2 == 0 ? (bleendingPixel / 2) : 0) +
+          (position.y % 2 != 0 ? (blendingPixel / 2) : 0) +
           offsetY,
-      width + (position.x % 2 == 0 ? bleendingPixel : 0),
-      height + (position.y % 2 == 0 ? bleendingPixel : 0),
+      width + (position.x % 2 == 0 ? blendingPixel : 0),
+      height + (position.y % 2 != 0 ? blendingPixel : 0),
     ).toVector2Rect();
   }
 

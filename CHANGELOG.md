@@ -1,3 +1,10 @@
+# 1.1.6
+- update `tiledjsonreader`
+- update `flame`
+- Improvements in `SimpleDirectionAnimation`
+- Improvements in `generateRectWithBleedingPixel`
+
+
 # 1.1.5
 - blocks paths off screen in `MoveToPositionAlongThePath`
 - create function `overlap` to `Image`.
