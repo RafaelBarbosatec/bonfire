@@ -49,8 +49,13 @@ class Tile extends GameComponent {
     double offsetY = 0,
   }) {
     _loader.add(AssetToLoad(sprite, (value) => this._sprite = value));
-    this.position = generateRectWithBleedingPixel(position, width, height,
-        offsetX: offsetX, offsetY: offsetY);
+    this.position = generateRectWithBleedingPixel(
+      position,
+      width,
+      height,
+      offsetX: offsetX,
+      offsetY: offsetY,
+    );
 
     _positionText = position;
   }
@@ -119,7 +124,7 @@ class Tile extends GameComponent {
     double offsetY = 0,
   }) {
     double sizeMax = max(width, height);
-    double bleendingPixel = sizeMax * 0.04;
+    double bleendingPixel = sizeMax * 0.05;
     if (bleendingPixel > 3) {
       bleendingPixel = 3;
     }
