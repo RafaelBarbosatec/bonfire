@@ -1,3 +1,7 @@
+# NEXT
+- Improvements in `SimpleDirectionAnimation`
+
+
 # 1.1.5
 - blocks paths off screen in `MoveToPositionAlongThePath`
 - create function `overlap` to `Image`.
