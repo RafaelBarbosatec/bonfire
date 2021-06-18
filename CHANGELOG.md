@@ -2,6 +2,7 @@
 - update `tiledjsonreader`
 - update `flame`
 - Improvements in `SimpleDirectionAnimation`
+- Improvements in `generateRectWithBleedingPixel`
 
 
 # 1.1.5
