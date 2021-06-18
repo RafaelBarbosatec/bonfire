@@ -1,5 +1,6 @@
 # NEXT
 - update `tiledjsonreader`
+- update `flame`
 - Improvements in `SimpleDirectionAnimation`
 
 
