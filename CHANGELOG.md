@@ -1,4 +1,5 @@
 # NEXT
+- update `tiledjsonreader`
 - Improvements in `SimpleDirectionAnimation`
 
 

@@ -12,7 +12,7 @@ dependencies:
 
   flame: ^1.0.0-releasecandidate.11
   ordered_set: ^3.1.0
-  tiledjsonreader: ^1.0.2
+  tiledjsonreader: ^1.0.3
   http: ^0.13.3
   a_star_algorithm: ^0.0.4
 
