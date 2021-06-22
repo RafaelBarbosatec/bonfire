@@ -1,3 +1,7 @@
+
+# NEXT
+- Improvements in `TextInterfaceComponent`
+
 # 1.1.6
 - update `tiledjsonreader`
 - update `flame`

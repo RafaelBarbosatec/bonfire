@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 /// Component used to add Text in your [GameInterface]
 class TextInterfaceComponent extends InterfaceComponent {
   String text;
+  double? _measuredWidth;
+  double? _measuredHeight;
   late TextPaint textConfig;
   TextInterfaceComponent({
     required int id,
@@ -29,6 +31,14 @@ class TextInterfaceComponent extends InterfaceComponent {
 
   @override
   void render(Canvas canvas) {
+    if (_measuredWidth == null) {
+      _measuredWidth = textConfig.measureTextWidth(text);
+      _measuredHeight = textConfig.measureTextHeight(text);
+      position = position.copyWith(
+        size: Vector2(_measuredWidth!, _measuredHeight!),
+      );
+    }
+
     textConfig.render(
       canvas,
       text,

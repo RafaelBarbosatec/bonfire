@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/interface/bar_life_component.dart';
 import 'package:example/player/knight.dart';
+import 'package:flutter/material.dart';
 
 class KnightInterface extends GameInterface {
   @override
@@ -13,6 +14,19 @@ class KnightInterface extends GameInterface {
       width: 40,
       id: 5,
       position: Vector2(150, 20),
+      onTapComponent: (selected) {
+        if (gameRef.player != null) {
+          (gameRef.player as Knight).showEmote();
+        }
+      },
+    ));
+    add(TextInterfaceComponent(
+      text: 'Text example',
+      textConfig: TextPaintConfig(
+        color: Colors.white,
+      ),
+      id: 5,
+      position: Vector2(200, 20),
       onTapComponent: (selected) {
         if (gameRef.player != null) {
           (gameRef.player as Knight).showEmote();
