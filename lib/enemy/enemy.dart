@@ -12,12 +12,6 @@ import 'package:flutter/material.dart';
 
 /// It is used to represent your enemies.
 class Enemy extends GameComponent with Movement, Attackable {
-  /// Height of the Enemy.
-  double get height => this.position.height;
-
-  /// Width of the Enemy.
-  double get width => this.position.width;
-
   /// Life of the Enemy.
   double life;
 

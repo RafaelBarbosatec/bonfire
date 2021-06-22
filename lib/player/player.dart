@@ -12,12 +12,6 @@ class Player extends GameComponent
     implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
-  /// Width of the Player.
-  double get width => position.width;
-
-  /// Height of the Player.
-  double get height => position.height;
-
   /// Movement speed of the Player (pixel per second).
   double speed;
 

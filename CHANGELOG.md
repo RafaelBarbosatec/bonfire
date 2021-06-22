@@ -1,6 +1,7 @@
 
 # NEXT
 - Improvements in `TextInterfaceComponent`
+- Improvements in `GameComponent`
 
 # 1.1.6
 - update `tiledjsonreader`

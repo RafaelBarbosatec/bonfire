@@ -12,6 +12,30 @@ abstract class GameComponent extends Component
   /// Position used to draw on the screen
   Vector2Rect position = Vector2Rect.zero();
 
+  /// Height of the Component.
+  double get height => this.position.height;
+
+  /// set Height of the Component.
+  set height(double newHeight) {
+    this.position = this.position.copyWith(size: Vector2(width, newHeight));
+  }
+
+  /// Width of the Component.
+  double get width => this.position.width;
+
+  /// set Height of the Component.
+  set width(double newWidth) {
+    this.position = this.position.copyWith(size: Vector2(newWidth, height));
+  }
+
+  /// get vectorPosition of the Component.
+  Vector2 get vectorPosition => this.position.position;
+
+  /// set vectorPosition of the Component.
+  set vectorPosition(Vector2 newPosition) {
+    this.position = this.position.copyWith(position: newPosition);
+  }
+
   /// When true this component render above all components in game.
   bool aboveComponents = false;
 
