@@ -101,12 +101,14 @@ extension PlayerExtensions on Player {
     if (isDead) return;
 
     double angle = radAngleDirection;
-    double nextX = this.height * cos(angle);
+    double nextX = this.width * cos(angle);
     double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
-            this.position.center.dy + nextPoint.dy) -
+    Offset diffBase = Offset(
+          this.position.center.dx + nextPoint.dx,
+          this.position.center.dy + nextPoint.dy,
+        ) -
         this.position.center;
 
     Vector2Rect position = this.position.shift(diffBase);
