@@ -93,8 +93,8 @@ class Camera with HasGameRef<BonfireGame> {
     if (zoom <= 0.0) return;
     config.target = null;
 
-    double diffX = this.position.dx - target.position.rect.center.dx;
-    double diffY = this.position.dy - target.position.rect.center.dy;
+    double diffX = this.position.dx - target.position.center.dx;
+    double diffY = this.position.dy - target.position.center.dy;
     double originX = this.position.dx;
     double originY = this.position.dy;
 
