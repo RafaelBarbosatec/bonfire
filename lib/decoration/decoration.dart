@@ -16,12 +16,6 @@ export 'package:bonfire/decoration/extensions.dart';
 ///
 /// You can use ImageSprite or Animation[FlameAnimation.Animation]
 class GameDecoration extends AnimatedObject {
-  /// Height of the Decoration.
-  final double height;
-
-  /// Width of the Decoration.
-  final double width;
-
   Sprite? sprite;
 
   /// Used to load assets in [onLoad]
@@ -30,8 +24,8 @@ class GameDecoration extends AnimatedObject {
   GameDecoration({
     this.sprite,
     required Vector2 position,
-    required this.height,
-    required this.width,
+    required double height,
+    required double width,
     SpriteAnimation? animation,
   }) {
     this.animation = animation;
@@ -45,8 +39,8 @@ class GameDecoration extends AnimatedObject {
   GameDecoration.withSprite(
     Future<Sprite> sprite, {
     required Vector2 position,
-    required this.height,
-    required this.width,
+    required double height,
+    required double width,
   }) {
     _loader.add(AssetToLoad(sprite, (value) => this.sprite = value));
     this.position = generateRectWithBleedingPixel(
@@ -59,8 +53,8 @@ class GameDecoration extends AnimatedObject {
   GameDecoration.withAnimation(
     Future<SpriteAnimation> animation, {
     required Vector2 position,
-    required this.height,
-    required this.width,
+    required double height,
+    required double width,
   }) {
     _loader.add(AssetToLoad(animation, (value) => this.animation = value));
     this.position = generateRectWithBleedingPixel(
