@@ -30,7 +30,7 @@ class SimpleDirectionAnimation {
 
   final _loader = AssetsLoader();
 
-  SpriteAnimation? current;
+  SpriteAnimation? _current;
   late SimpleAnimationEnum _currentType;
   AnimatedObjectOnce? _fastAnimation;
   Vector2Rect? position;
@@ -99,52 +99,54 @@ class SimpleDirectionAnimation {
     }
     switch (animation) {
       case SimpleAnimationEnum.idleLeft:
-        current = idleLeft;
+        _current = idleLeft;
         break;
       case SimpleAnimationEnum.idleRight:
-        current = idleRight;
+        _current = idleRight;
         break;
       case SimpleAnimationEnum.idleUp:
-        if (idleUp != null) current = idleUp;
+        if (idleUp != null) _current = idleUp;
         break;
       case SimpleAnimationEnum.idleDown:
-        if (idleDown != null) current = idleDown;
+        if (idleDown != null) _current = idleDown;
         break;
       case SimpleAnimationEnum.idleTopLeft:
-        if (idleUpLeft != null) current = idleUpLeft;
+        if (idleUpLeft != null) _current = idleUpLeft;
         break;
       case SimpleAnimationEnum.idleTopRight:
-        if (idleUpRight != null) current = idleUpRight;
+        if (idleUpRight != null) _current = idleUpRight;
         break;
       case SimpleAnimationEnum.idleDownLeft:
-        if (idleDownLeft != null) current = idleDownLeft;
+        if (idleDownLeft != null) _current = idleDownLeft;
         break;
       case SimpleAnimationEnum.idleDownRight:
-        if (idleDownRight != null) current = idleDownRight;
+        if (idleDownRight != null) _current = idleDownRight;
         break;
       case SimpleAnimationEnum.runUp:
-        if (runUp != null) current = runUp;
+        if (runUp != null) _current = runUp;
         break;
       case SimpleAnimationEnum.runRight:
-        current = runRight;
+        _current = runRight;
         break;
       case SimpleAnimationEnum.runDown:
-        if (runDown != null) current = runDown;
+        if (runDown != null) _current = runDown;
         break;
       case SimpleAnimationEnum.runLeft:
-        current = runLeft;
+        _current = runLeft;
         break;
       case SimpleAnimationEnum.runUpLeft:
-        if (runUpLeft != null) current = runUpLeft;
+        if (runUpLeft != null) _current = runUpLeft;
         break;
       case SimpleAnimationEnum.runUpRight:
-        if (runUpRight != null) current = runUpRight;
+        if (runUpRight != null) _current = runUpRight;
         break;
       case SimpleAnimationEnum.runDownLeft:
-        if (runDownLeft != null) current = runDownLeft;
+        if (runDownLeft != null) _current = runDownLeft;
         break;
       case SimpleAnimationEnum.runDownRight:
-        if (runDownRight != null) current = runDownRight;
+        if (runDownRight != null) _current = runDownRight;
+        break;
+      case SimpleAnimationEnum.custom:
         break;
     }
   }
@@ -154,7 +156,8 @@ class SimpleDirectionAnimation {
       if (!runToTheEndFastAnimation) {
         _fastAnimation = null;
       }
-      current = others[key];
+      _current = others[key];
+      _currentType = SimpleAnimationEnum.custom;
     }
   }
 
@@ -183,7 +186,7 @@ class SimpleDirectionAnimation {
     if (_fastAnimation != null) {
       _fastAnimation?.render(canvas);
     } else {
-      current?.getSprite().renderFromVector2Rect(canvas, position!);
+      _current?.getSprite().renderFromVector2Rect(canvas, position!);
     }
   }
 
@@ -191,12 +194,19 @@ class SimpleDirectionAnimation {
     this.position = position;
     _fastAnimation?.position = position;
     _fastAnimation?.update(dt);
-    current?.update(dt);
+    _current?.update(dt);
   }
 
   Future<void> onLoad() async {
     await _loader.load();
     play(_currentType);
+  }
+
+  Future<void> addOtherAnimation(
+    String key,
+    Future<SpriteAnimation> animation,
+  ) async {
+    others[key] = await animation;
   }
 
   SimpleAnimationEnum? get currentType => _currentType;

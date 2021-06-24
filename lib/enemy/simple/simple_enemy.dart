@@ -135,7 +135,6 @@ class SimpleEnemy extends Enemy {
 
   @override
   void idle() {
-    if (isIdle) return;
     switch (lastDirection) {
       case Direction.left:
         animation.play(SimpleAnimationEnum.idleLeft);

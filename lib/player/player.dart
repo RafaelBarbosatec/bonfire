@@ -74,7 +74,9 @@ class Player extends GameComponent
         moveLeft(speed);
         break;
       case JoystickMoveDirectional.IDLE:
-        idle();
+        if (!isIdle) {
+          idle();
+        }
         break;
     }
     super.update(dt);

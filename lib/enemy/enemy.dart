@@ -117,10 +117,6 @@ class Enemy extends GameComponent with Movement, Attackable {
     }
   }
 
-  void idle() {
-    isIdle = true;
-  }
-
   /// marks the enemy as dead
   void die() {
     _isDead = true;

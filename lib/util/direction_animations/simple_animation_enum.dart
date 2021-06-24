@@ -15,4 +15,5 @@ enum SimpleAnimationEnum {
   runUpRight,
   runDownLeft,
   runDownRight,
+  custom,
 }

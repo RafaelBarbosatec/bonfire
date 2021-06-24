@@ -76,7 +76,9 @@ extension SimpleEnemyExtensions on SimpleEnemy {
 
         if (rectToMove.rect.overlaps(rectPlayerCollision)) {
           closePlayer(player);
-          this.idle();
+          if (!this.isIdle) {
+            this.idle();
+          }
           return;
         }
 
@@ -105,7 +107,9 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         }
       },
       notObserved: () {
-        this.idle();
+        if (!this.isIdle) {
+          this.idle();
+        }
       },
     );
   }
@@ -499,7 +503,9 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         }
 
         if (translateX == 0 && translateY == 0) {
-          idle();
+          if (!this.isIdle) {
+            this.idle();
+          }
           positioned(player);
           return;
         }
@@ -529,7 +535,9 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         }
       },
       notObserved: () {
-        this.idle();
+        if (!this.isIdle) {
+          this.idle();
+        }
       },
     );
   }

@@ -2,6 +2,7 @@
 # NEXT
 - Improvements in `TextInterfaceComponent`
 - Improvements in `GameComponent`
+- Improvements in `SimpleDirectionAnimation`
 
 # 1.1.6
 - update `tiledjsonreader`
