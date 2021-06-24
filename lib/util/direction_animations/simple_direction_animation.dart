@@ -7,6 +7,7 @@ import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/foundation.dart';
 
+/// Class responsible to manager animation on `SimplePlayer` and `SimpleEnemy`
 class SimpleDirectionAnimation {
   late SpriteAnimation idleLeft;
   late SpriteAnimation idleRight;
@@ -92,6 +93,7 @@ class SimpleDirectionAnimation {
     });
   }
 
+  /// Method used to play specific default animation
   void play(SimpleAnimationEnum animation) {
     _currentType = animation;
     if (!runToTheEndFastAnimation) {
@@ -151,6 +153,7 @@ class SimpleDirectionAnimation {
     }
   }
 
+  /// Method used to play specific animation registred in `others`
   void playOther(String key) {
     if (others.containsKey(key) == true) {
       if (!runToTheEndFastAnimation) {
@@ -161,6 +164,7 @@ class SimpleDirectionAnimation {
     }
   }
 
+  /// Method used to play animation once time
   Future playOnce(
     Future<SpriteAnimation> animation, {
     VoidCallback? onFinish,
@@ -179,6 +183,14 @@ class SimpleDirectionAnimation {
       await anim.onLoad();
       _fastAnimation = anim;
     }
+  }
+
+  /// Method used to register new animation in others
+  Future<void> addOtherAnimation(
+    String key,
+    Future<SpriteAnimation> animation,
+  ) async {
+    others[key] = await animation;
   }
 
   void render(Canvas canvas) {
@@ -200,13 +212,6 @@ class SimpleDirectionAnimation {
   Future<void> onLoad() async {
     await _loader.load();
     play(_currentType);
-  }
-
-  Future<void> addOtherAnimation(
-    String key,
-    Future<SpriteAnimation> animation,
-  ) async {
-    others[key] = await animation;
   }
 
   SimpleAnimationEnum? get currentType => _currentType;
