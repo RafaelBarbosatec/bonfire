@@ -12,12 +12,6 @@ import 'package:flutter/material.dart';
 
 /// It is used to represent your enemies.
 class Enemy extends GameComponent with Movement, Attackable {
-  /// Height of the Enemy.
-  final double height;
-
-  /// Width of the Enemy.
-  final double width;
-
   /// Life of the Enemy.
   double life;
 
@@ -31,8 +25,8 @@ class Enemy extends GameComponent with Movement, Attackable {
 
   Enemy({
     required Vector2 position,
-    required this.height,
-    required this.width,
+    required double height,
+    required double width,
     this.life = 10,
   }) {
     receivesAttackFrom = ReceivesAttackFromEnum.PLAYER;
@@ -121,10 +115,6 @@ class Enemy extends GameComponent with Movement, Attackable {
     if (this.life > maxLife) {
       this.life = maxLife;
     }
-  }
-
-  void idle() {
-    isIdle = true;
   }
 
   /// marks the enemy as dead

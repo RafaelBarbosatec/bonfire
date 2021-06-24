@@ -12,12 +12,6 @@ class Player extends GameComponent
     implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
-  /// Width of the Player.
-  final double width;
-
-  /// Height of the Player.
-  final double height;
-
   /// Movement speed of the Player (pixel per second).
   double speed;
 
@@ -32,8 +26,8 @@ class Player extends GameComponent
 
   Player({
     required Vector2 position,
-    required this.width,
-    required this.height,
+    required double width,
+    required double height,
     this.life = 100,
     this.speed = 100,
   }) {
@@ -80,7 +74,9 @@ class Player extends GameComponent
         moveLeft(speed);
         break;
       case JoystickMoveDirectional.IDLE:
-        idle();
+        if (!isIdle) {
+          idle();
+        }
         break;
     }
     super.update(dt);
