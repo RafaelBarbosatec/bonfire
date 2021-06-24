@@ -1,5 +1,5 @@
 
-# NEXT
+# 1.1.7
 - Improvements in `TextInterfaceComponent`
 - Improvements in `GameComponent`
 - Improvements in `SimpleDirectionAnimation`
