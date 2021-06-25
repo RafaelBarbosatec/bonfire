@@ -3,8 +3,10 @@ import 'package:flutter/gestures.dart';
 
 mixin MouseHoverGesture on GameComponent {
   bool enableHover = true;
+
   @override
   void handlerPointerHover(PointerHoverEvent event) {
+    if (!enableHover) return;
     int pointer = event.pointer;
     Offset position = event.localPosition;
     onHoverScreen(pointer, position);
@@ -22,6 +24,7 @@ mixin MouseHoverGesture on GameComponent {
         onHoverOut(pointer, position);
       }
     }
+    super.handlerPointerHover(event);
   }
 
   void onHoverScreen(int pointer, Offset position);

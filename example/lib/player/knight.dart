@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -69,6 +70,8 @@ class Knight extends SimplePlayer
     setupMoveToPositionAlongThePath(
       showBarriersCalculated: true,
     );
+
+    _enableHover();
   }
 
   @override
@@ -324,5 +327,9 @@ class Knight extends SimplePlayer
     double left = p.dx - (p.dx % DungeonMap.tileSize);
     double top = p.dy - (p.dy % DungeonMap.tileSize);
     _rectHover = Rect.fromLTWH(left, top, _rectHover.width, _rectHover.height);
+  }
+
+  void _enableHover() {
+    enableHover = (Platform.isAndroid || Platform.isIOS) ? false : true;
   }
 }
