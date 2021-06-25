@@ -23,11 +23,10 @@ mixin DragGesture on GameComponent {
           _pointer = pointer;
           _startDragOffset = position;
           _startDragPosition = this.position;
-          startDrag(pointer, position);
+          onStartDrag(pointer, position);
         }
       } else {
-        final absolutePosition =
-            this.gameRef.camera.screenPositionToWorld(position);
+        final absolutePosition = this.gameRef.screenPositionToWorld(position);
         if (this.position.contains(absolutePosition)) {
           _pointer = pointer;
           _startDragOffset = absolutePosition;
@@ -57,8 +56,7 @@ mixin DragGesture on GameComponent {
           _startDragPosition!.height,
         ).toVector2Rect();
       } else {
-        final absolutePosition =
-            this.gameRef.camera.screenPositionToWorld(position);
+        final absolutePosition = this.gameRef.screenPositionToWorld(position);
         this.position = Rect.fromLTWH(
           _startDragPosition!.left +
               (absolutePosition.dx - _startDragOffset!.dx),
@@ -69,7 +67,7 @@ mixin DragGesture on GameComponent {
         ).toVector2Rect();
       }
       inMoving = true;
-      moveDrag(pointer, position);
+      onMoveDrag(pointer, position);
     }
     super.handlerPointerMove(event);
   }
@@ -82,7 +80,7 @@ mixin DragGesture on GameComponent {
       _startDragOffset = null;
       _pointer = -1;
       inMoving = false;
-      endDrag(pointer);
+      onEndDrag(pointer);
     }
 
     super.handlerPointerUp(event);
@@ -96,15 +94,15 @@ mixin DragGesture on GameComponent {
       _startDragOffset = null;
       _pointer = -1;
       inMoving = false;
-      cancelDrag(pointer);
+      onCancelDrag(pointer);
     }
     super.handlerPointerCancel(event);
   }
 
-  void startDrag(int pointer, Offset position) {}
-  void moveDrag(int pointer, Offset position) {}
-  void endDrag(int pointer) {}
-  void cancelDrag(int pointer) {}
+  void onStartDrag(int pointer, Offset position) {}
+  void onMoveDrag(int pointer, Offset position) {}
+  void onEndDrag(int pointer) {}
+  void onCancelDrag(int pointer) {}
 
   bool get receiveInteraction => _pointer != -1;
 }

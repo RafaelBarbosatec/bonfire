@@ -24,17 +24,22 @@ class CustomGameWidget<T extends Game> extends StatelessWidget {
     return ClipRRect(
       child: Listener(
         onPointerDown: game is PointerDetector
-            ? (PointerDownEvent d) => (game as PointerDetector).onPointerDown(d)
+            ? (game as PointerDetector).onPointerDown
             : null,
         onPointerMove: game is PointerDetector
-            ? (PointerMoveEvent d) => (game as PointerDetector).onPointerMove(d)
+            ? (game as PointerDetector).onPointerMove
             : null,
         onPointerUp: game is PointerDetector
-            ? (PointerUpEvent d) => (game as PointerDetector).onPointerUp(d)
+            ? (game as PointerDetector).onPointerUp
             : null,
         onPointerCancel: game is PointerDetector
-            ? (PointerCancelEvent d) =>
-                (game as PointerDetector).onPointerCancel(d)
+            ? (game as PointerDetector).onPointerCancel
+            : null,
+        onPointerHover: game is PointerDetector
+            ? (game as PointerDetector).onPointerHover
+            : null,
+        onPointerSignal: game is PointerDetector
+            ? (game as PointerDetector).onPointerSignal
             : null,
         child: GameWidget(
           game: game,

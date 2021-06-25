@@ -254,4 +254,17 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   GameColorFilter get colorFilter => _colorFilterComponent.colorFilter;
+
+  Offset worldPositionToScreen(Offset position) {
+    return camera.worldPositionToScreen(position);
+  }
+
+  Offset screenPositionToWorld(Offset position) {
+    return camera.screenPositionToWorld(position);
+  }
+
+  bool isVisibleInCamera(GameComponent c) {
+    if (c.shouldRemove) return false;
+    return camera.isComponentOnCamera(c);
+  }
 }

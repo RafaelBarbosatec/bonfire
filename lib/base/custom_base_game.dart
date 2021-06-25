@@ -6,6 +6,7 @@ import 'package:bonfire/camera/camera_config.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart' hide Camera;
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ordered_set/comparing.dart';
@@ -66,6 +67,20 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   void onPointerDown(PointerDownEvent event) {
     for (final c in _gesturesComponents) {
       c.handlerPointerDown(event);
+    }
+  }
+
+  @override
+  void onPointerHover(PointerHoverEvent event) {
+    for (final c in _gesturesComponents) {
+      c.handlerPointerHover(event);
+    }
+  }
+
+  @override
+  void onPointerSignal(PointerSignalEvent event) {
+    for (final c in _gesturesComponents) {
+      c.handlerPointerSignal(event);
     }
   }
 

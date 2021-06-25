@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -5,24 +6,32 @@ import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 import 'package:example/util/player_sprite_sheet.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 enum PlayerAttackType { AttackMelee, AttackRange }
 
-class Knight extends SimplePlayer with Lighting, ObjectCollision {
+class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   double attack = 20;
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
   IntervalTick _timerStamina = IntervalTick(100);
   IntervalTick _timerAttackRange = IntervalTick(110);
-  IntervalTick _timerSeeEnemy = IntervalTick(500);
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
   Rect? rectDirectionAttack;
   Sprite? spriteDirectionAttack;
   bool execAttackRange = false;
+  bool canShowEmoteFromHover = true;
+
+  Rect _rectHover =
+      Rect.fromLTWH(0, 0, DungeonMap.tileSize, DungeonMap.tileSize);
+  Paint paintHover = new Paint()
+    ..color = Colors.white
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 2;
 
   Knight(Vector2 position)
       : super(
@@ -60,6 +69,8 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
     setupMoveToPositionAlongThePath(
       showBarriersCalculated: true,
     );
+
+    _enableMouseGesture();
   }
 
   @override
@@ -160,22 +171,22 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
     if (this.isDead) return;
     _verifyStamina(dt);
 
-    if (_timerSeeEnemy.update(dt) && !showObserveEnemy) {
-      this.seeEnemy(
-        radiusVision: width * 5,
-        notObserved: () {
-          showObserveEnemy = false;
-        },
-        observed: (enemies) {
+    this.seeEnemy(
+      radiusVision: width * 4,
+      notObserved: () {
+        showObserveEnemy = false;
+      },
+      observed: (enemies) {
+        if (!showObserveEnemy) {
           showObserveEnemy = true;
           showEmote();
-          if (!showTalk) {
-            showTalk = true;
-            _showTalk(enemies.first);
-          }
-        },
-      );
-    }
+        }
+        if (!showTalk) {
+          showTalk = true;
+          _showTalk(enemies.first);
+        }
+      },
+    );
 
     if (execAttackRange && _timerAttackRange.update(dt)) actionAttackRange();
     super.update(dt);
@@ -184,6 +195,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   @override
   void render(Canvas c) {
     _drawDirectionAttack(c);
+    if (_rectHover.left != 0 || _rectHover.top != 0) {
+      c.drawRect(_rectHover, paintHover);
+    }
     super.render(c);
   }
 
@@ -291,5 +305,59 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   Future<void> onLoad() async {
     spriteDirectionAttack = await Sprite.load('direction_attack.png');
     return super.onLoad();
+  }
+
+  @override
+  void onHoverEnter(int pointer, Offset position) {
+    if (canShowEmoteFromHover) {
+      canShowEmoteFromHover = false;
+      showEmote();
+    }
+  }
+
+  @override
+  void onHoverExit(int pointer, Offset position) {
+    canShowEmoteFromHover = true;
+  }
+
+  @override
+  void onHoverScreen(int pointer, Offset position) {
+    Offset p = gameRef.screenPositionToWorld(position);
+    double left = p.dx - (p.dx % DungeonMap.tileSize);
+    double top = p.dy - (p.dy % DungeonMap.tileSize);
+    _rectHover = Rect.fromLTWH(left, top, _rectHover.width, _rectHover.height);
+  }
+
+  @override
+  void onScroll(int pointer, Offset position, Offset scrollDelta) {
+    print(scrollDelta);
+    // do anything when use scroll of the mouse in your component
+  }
+
+  @override
+  void onMouseCancel() {
+    print('onMouseCancel');
+  }
+
+  @override
+  void onMouseTapLeft() {
+    print('onMouseTapLeft');
+  }
+
+  @override
+  void onMouseTapRight() {
+    print('onMouseTapRight');
+  }
+
+  @override
+  void onMouseTapMiddle() {
+    print('onMouseTapMiddle');
+  }
+
+  void _enableMouseGesture() {
+    if (!kIsWeb) {
+      enableMouseGesture =
+          (Platform.isAndroid || Platform.isIOS) ? false : true;
+    }
   }
 }
