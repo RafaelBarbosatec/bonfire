@@ -1,7 +1,7 @@
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/gestures/tap_gesture.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/gestures/tap_gesture.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';

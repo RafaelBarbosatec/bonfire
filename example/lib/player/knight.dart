@@ -70,7 +70,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       showBarriersCalculated: true,
     );
 
-    _enableHover();
+    _enableMouseGesture();
   }
 
   @override
@@ -330,10 +330,31 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   @override
   void onScroll(int pointer, Offset position, Offset scrollDelta) {
+    print(scrollDelta);
     // do anything when use scroll of the mouse in your component
   }
 
-  void _enableHover() {
+  @override
+  void onMouseCancel() {
+    print('onMouseCancel');
+  }
+
+  @override
+  void onMouseTapLeft() {
+    print('onMouseTapLeft');
+  }
+
+  @override
+  void onMouseTapRight() {
+    print('onMouseTapRight');
+  }
+
+  @override
+  void onMouseTapMiddle() {
+    print('onMouseTapMiddle');
+  }
+
+  void _enableMouseGesture() {
     if (!kIsWeb) {
       enableMouseGesture =
           (Platform.isAndroid || Platform.isIOS) ? false : true;

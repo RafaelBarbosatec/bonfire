@@ -1,6 +1,6 @@
-import 'package:bonfire/util/gestures/drag_gesture.dart';
-import 'package:bonfire/util/gestures/mouse_gesture.dart';
-import 'package:bonfire/util/gestures/tap_gesture.dart';
+import 'package:bonfire/gestures/drag_gesture.dart';
+import 'package:bonfire/gestures/mouse_gesture.dart';
+import 'package:bonfire/gestures/tap_gesture.dart';
 import 'package:flutter/gestures.dart';
 
 mixin PointerDetector {
