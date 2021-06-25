@@ -77,6 +77,13 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     }
   }
 
+  @override
+  void onPointerSignal(PointerSignalEvent event) {
+    for (final c in _gesturesComponents) {
+      c.handlerPointerSignal(event);
+    }
+  }
+
   /// This method is called for every component added, both via [add] and [addLater] methods.
   ///
   /// You can use this to setup your mixins, pre-calculate stuff on every component, or anything you desire.

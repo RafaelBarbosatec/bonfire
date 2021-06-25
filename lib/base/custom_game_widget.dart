@@ -38,6 +38,9 @@ class CustomGameWidget<T extends Game> extends StatelessWidget {
         onPointerHover: game is PointerDetector
             ? (game as PointerDetector).onPointerHover
             : null,
+        onPointerSignal: game is PointerDetector
+            ? (game as PointerDetector).onPointerSignal
+            : null,
         child: GameWidget(
           game: game,
           overlayBuilderMap: overlayBuilderMap,

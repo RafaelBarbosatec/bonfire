@@ -6,13 +6,13 @@ import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 import 'package:example/util/player_sprite_sheet.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 enum PlayerAttackType { AttackMelee, AttackRange }
 
-class Knight extends SimplePlayer
-    with Lighting, ObjectCollision, MouseHoverGesture {
+class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   double attack = 20;
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
@@ -308,7 +308,7 @@ class Knight extends SimplePlayer
   }
 
   @override
-  void onHoverIn(int pointer, Offset position) {
+  void onHoverEnter(int pointer, Offset position) {
     if (canShowEmoteFromHover) {
       canShowEmoteFromHover = false;
       showEmote();
@@ -316,7 +316,7 @@ class Knight extends SimplePlayer
   }
 
   @override
-  void onHoverOut(int pointer, Offset position) {
+  void onHoverExit(int pointer, Offset position) {
     canShowEmoteFromHover = true;
   }
 
@@ -328,7 +328,15 @@ class Knight extends SimplePlayer
     _rectHover = Rect.fromLTWH(left, top, _rectHover.width, _rectHover.height);
   }
 
+  @override
+  void onScroll(int pointer, Offset position, Offset scrollDelta) {
+    // do anything when use scroll of the mouse in your component
+  }
+
   void _enableHover() {
-    enableHover = (Platform.isAndroid || Platform.isIOS) ? false : true;
+    if (!kIsWeb) {
+      enableMouseGesture =
+          (Platform.isAndroid || Platform.isIOS) ? false : true;
+    }
   }
 }
