@@ -1,5 +1,5 @@
 # NEXT
-- add `MouseHoverGesture` mixin to listen hover of the mouse.
+- add `MouseGesture` mixin to listen mouse gestures.
 - add method `worldPositionToScreen` in `BonfireGame`.
 - add method `screenPositionToWorld` in `BonfireGame`.
 - add method `componentVisibleInCamera` in `BonfireGame`.
