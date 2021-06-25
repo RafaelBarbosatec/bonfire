@@ -26,8 +26,7 @@ mixin DragGesture on GameComponent {
           startDrag(pointer, position);
         }
       } else {
-        final absolutePosition =
-            this.gameRef.camera.screenPositionToWorld(position);
+        final absolutePosition = this.gameRef.screenPositionToWorld(position);
         if (this.position.contains(absolutePosition)) {
           _pointer = pointer;
           _startDragOffset = absolutePosition;
@@ -57,8 +56,7 @@ mixin DragGesture on GameComponent {
           _startDragPosition!.height,
         ).toVector2Rect();
       } else {
-        final absolutePosition =
-            this.gameRef.camera.screenPositionToWorld(position);
+        final absolutePosition = this.gameRef.screenPositionToWorld(position);
         this.position = Rect.fromLTWH(
           _startDragPosition!.left +
               (absolutePosition.dx - _startDragOffset!.dx),

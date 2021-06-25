@@ -48,7 +48,7 @@ abstract class GameComponent extends Component
   bool isVisibleInCamera() {
     if (shouldRemove) return false;
 
-    return gameRef.camera.isComponentOnCamera(this);
+    return gameRef.componentVisibleInCamera(this);
   }
 
   /// Method that checks if this component contain collisions
@@ -59,7 +59,7 @@ abstract class GameComponent extends Component
 
   /// Method return screen position
   Offset screenPosition() {
-    return gameRef.camera.worldPositionToScreen(position.offset);
+    return gameRef.worldPositionToScreen(position.offset);
   }
 
   /// Method that checks what type map tile is currently

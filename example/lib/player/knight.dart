@@ -10,7 +10,8 @@ import 'package:flutter/services.dart';
 
 enum PlayerAttackType { AttackMelee, AttackRange }
 
-class Knight extends SimplePlayer with Lighting, ObjectCollision {
+class Knight extends SimplePlayer
+    with Lighting, ObjectCollision, MouseHoverGesture {
   double attack = 20;
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
@@ -23,6 +24,14 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   Rect? rectDirectionAttack;
   Sprite? spriteDirectionAttack;
   bool execAttackRange = false;
+  bool canShowEmoteFromHover = true;
+
+  Rect _rectHover =
+      Rect.fromLTWH(0, 0, DungeonMap.tileSize, DungeonMap.tileSize);
+  Paint paintHover = new Paint()
+    ..color = Colors.white
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 2;
 
   Knight(Vector2 position)
       : super(
@@ -184,6 +193,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   @override
   void render(Canvas c) {
     _drawDirectionAttack(c);
+    if (_rectHover.left != 0 || _rectHover.top != 0) {
+      c.drawRect(_rectHover, paintHover);
+    }
     super.render(c);
   }
 
@@ -291,5 +303,26 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision {
   Future<void> onLoad() async {
     spriteDirectionAttack = await Sprite.load('direction_attack.png');
     return super.onLoad();
+  }
+
+  @override
+  void onHoverIn(int pointer, Offset position) {
+    if (canShowEmoteFromHover) {
+      canShowEmoteFromHover = false;
+      showEmote();
+    }
+  }
+
+  @override
+  void onHoverOut(int pointer, Offset position) {
+    canShowEmoteFromHover = true;
+  }
+
+  @override
+  void onHoverScreen(int pointer, Offset position) {
+    Offset p = gameRef.screenPositionToWorld(position);
+    double left = p.dx - (p.dx % DungeonMap.tileSize);
+    double top = p.dy - (p.dy % DungeonMap.tileSize);
+    _rectHover = Rect.fromLTWH(left, top, _rectHover.width, _rectHover.height);
   }
 }
