@@ -18,7 +18,6 @@ class Knight extends SimplePlayer
   double initSpeed = DungeonMap.tileSize * 3;
   IntervalTick _timerStamina = IntervalTick(100);
   IntervalTick _timerAttackRange = IntervalTick(110);
-  IntervalTick _timerSeeEnemy = IntervalTick(500);
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
@@ -172,22 +171,22 @@ class Knight extends SimplePlayer
     if (this.isDead) return;
     _verifyStamina(dt);
 
-    if (_timerSeeEnemy.update(dt) && !showObserveEnemy) {
-      this.seeEnemy(
-        radiusVision: width * 5,
-        notObserved: () {
-          showObserveEnemy = false;
-        },
-        observed: (enemies) {
+    this.seeEnemy(
+      radiusVision: width * 4,
+      notObserved: () {
+        showObserveEnemy = false;
+      },
+      observed: (enemies) {
+        if (!showObserveEnemy) {
           showObserveEnemy = true;
           showEmote();
-          if (!showTalk) {
-            showTalk = true;
-            _showTalk(enemies.first);
-          }
-        },
-      );
-    }
+        }
+        if (!showTalk) {
+          showTalk = true;
+          _showTalk(enemies.first);
+        }
+      },
+    );
 
     if (execAttackRange && _timerAttackRange.update(dt)) actionAttackRange();
     super.update(dt);
