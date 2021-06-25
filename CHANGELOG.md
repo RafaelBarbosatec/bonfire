@@ -1,5 +1,5 @@
-# NEXT
-- add `MouseGesture` mixin to listen mouse gestures.
+# 1.2.0
+- add `MouseGesture` mixin to listen mouse gestures see [documentation](https://bonfire-engine.github.io/#/gestures?id=mousegesture)
 - add method `worldPositionToScreen` in `BonfireGame`.
 - add method `screenPositionToWorld` in `BonfireGame`.
 - add method `isVisibleInCamera` in `BonfireGame`.
