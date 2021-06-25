@@ -2,7 +2,7 @@
 - add `MouseGesture` mixin to listen mouse gestures.
 - add method `worldPositionToScreen` in `BonfireGame`.
 - add method `screenPositionToWorld` in `BonfireGame`.
-- add method `componentVisibleInCamera` in `BonfireGame`.
+- add method `isVisibleInCamera` in `BonfireGame`.
 
 # 1.1.7
 - Improvements in `TextInterfaceComponent`

@@ -263,7 +263,8 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     return camera.screenPositionToWorld(position);
   }
 
-  bool componentVisibleInCamera(GameComponent c) {
+  bool isVisibleInCamera(GameComponent c) {
+    if (c.shouldRemove) return false;
     return camera.isComponentOnCamera(c);
   }
 }
