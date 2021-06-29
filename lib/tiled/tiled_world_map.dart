@@ -217,6 +217,7 @@ class TiledWorldMap {
 
   Future<TiledItemTileSet?> _getDataTile(int index) async {
     TileSet? tileSetContain;
+    String _pathTileset = '';
     int firsTgId = 0;
 
     _tiledMap?.tileSets?.forEach(
@@ -226,6 +227,10 @@ class TiledWorldMap {
             index >= tileSet.firsTgId!) {
           firsTgId = tileSet.firsTgId!;
           tileSetContain = tileSet.tileSet!;
+          if (tileSet.source != null) {
+            _pathTileset =
+                tileSet.source!.replaceAll(tileSet.source!.split('/').last, '');
+          }
         }
       },
     );
@@ -238,7 +243,7 @@ class TiledWorldMap {
       int column = _getX((index - firsTgId), widthCount).toInt();
 
       Sprite sprite = await _getSprite(
-        '$_basePath${tileSetContain?.image}',
+        '$_basePath$_pathTileset${tileSetContain?.image}',
         row,
         column,
         tileSetContain?.tileWidth ?? 0,
@@ -247,6 +252,7 @@ class TiledWorldMap {
 
       final animation = await _getAnimation(
         tileSetContain!,
+        _pathTileset,
         (index - firsTgId),
         widthCount,
       );
@@ -420,6 +426,7 @@ class TiledWorldMap {
 
   Future<ControlledUpdateAnimation?> _getAnimation(
     TileSet tileSetContain,
+    String pathTileset,
     int index,
     int widthCount,
   ) async {
@@ -442,7 +449,7 @@ class TiledWorldMap {
           int column = _getX((frame.tileid ?? 0), widthCount).toInt();
 
           Sprite sprite = await _getSprite(
-            '$_basePath${tileSetContain.image}',
+            '$_basePath$pathTileset${tileSetContain.image}',
             row,
             column,
             tileSetContain.tileWidth ?? 0.0,
