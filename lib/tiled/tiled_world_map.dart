@@ -238,7 +238,7 @@ class TiledWorldMap {
       int column = _getX((index - firsTgId), widthCount).toInt();
 
       Sprite sprite = await _getSprite(
-        '$_basePath${tileSetContain?.image?.split('/').last}',
+        '$_basePath${tileSetContain?.image}',
         row,
         column,
         tileSetContain?.tileWidth ?? 0,
@@ -442,7 +442,7 @@ class TiledWorldMap {
           int column = _getX((frame.tileid ?? 0), widthCount).toInt();
 
           Sprite sprite = await _getSprite(
-            '$_basePath${tileSetContain.image?.split('/').last}',
+            '$_basePath${tileSetContain.image}',
             row,
             column,
             tileSetContain.tileWidth ?? 0.0,
@@ -481,7 +481,7 @@ class TiledWorldMap {
             throw Exception('Invalid TileSet source: only supports json files');
           }
           final tileSetResponse = await http.get(
-            Uri.parse('$_basePath${tileSet.source?.split('/').last}'),
+            Uri.parse('$_basePath${tileSet.source}'),
           );
           Map<String, dynamic> _result = jsonDecode(tileSetResponse.body);
           tileSet.tileSet = TileSet.fromJson(_result);
