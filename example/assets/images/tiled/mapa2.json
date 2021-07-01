@@ -416,7 +416,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"0x72_DungeonTilesetII_v1.json"
+         "source":"tileset\/0x72_DungeonTilesetII_v1.json"
         }],
  "tilewidth":16,
  "type":"map",
