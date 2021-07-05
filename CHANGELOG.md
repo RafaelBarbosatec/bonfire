@@ -1,3 +1,9 @@
+
+# 1.2.1
+- improvements in `TiledWorldMap`
+- add property `backgroundColor` in `TalkDialog`.
+- performance improvements in `TiledWorldMap`
+
 # 1.2.0
 - add `MouseGesture` mixin to listen mouse gestures see [documentation](https://bonfire-engine.github.io/#/gestures?id=mousegesture)
 - add method `worldPositionToScreen` in `BonfireGame`.

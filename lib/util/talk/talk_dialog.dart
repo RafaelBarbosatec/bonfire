@@ -20,11 +20,13 @@ class TalkDialog extends StatefulWidget {
     List<Say> sayList, {
     VoidCallback? finish,
     ValueChanged<int>? onChangeTalk,
+    Color? backgroundColor,
     double boxTextHeight = 100,
     LogicalKeyboardKey? logicalKeyboardKeyToNext,
     EdgeInsetsGeometry? padding,
   }) {
     showDialog(
+      barrierColor: backgroundColor,
       context: context,
       builder: (BuildContext context) {
         return TalkDialog(

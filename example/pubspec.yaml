@@ -45,4 +45,5 @@ flutter:
     - assets/images/enemy/
     - assets/images/tile/
     - assets/images/tiled/
+    - assets/images/tiled/tileset/
     - assets/images/itens/
