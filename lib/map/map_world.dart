@@ -39,7 +39,7 @@ class MapWorld extends MapGame {
     int cameraY = (gameRef.camera.position.dy / tileSize).floor();
     if (lastCameraX != cameraX ||
         lastCameraY != cameraY ||
-        lastZoom != gameRef.camera.config.zoom) {
+        lastZoom > gameRef.camera.config.zoom) {
       lastCameraX = cameraX;
       lastCameraY = cameraY;
       lastZoom = gameRef.camera.config.zoom;
