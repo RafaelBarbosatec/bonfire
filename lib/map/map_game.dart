@@ -10,6 +10,7 @@ abstract class MapGame extends Component with HasGameRef<BonfireGame> {
   Iterable<Tile> tiles;
   Size? mapSize;
   Vector2? mapStartPosition;
+  double tileSize = 0;
 
   MapGame(this.tiles);
 

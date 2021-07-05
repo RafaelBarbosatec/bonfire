@@ -9,8 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MapWorld extends MapGame {
-  double lastCameraX = -1;
-  double lastCameraY = -1;
+  int lastCameraX = -1;
+  int lastCameraY = -1;
   double lastZoom = -1;
   Vector2? lastSizeScreen;
   Iterable<Tile> _tilesToRender = [];
@@ -23,13 +23,7 @@ class MapWorld extends MapGame {
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round;
 
-  MapWorld(Iterable<Tile> tiles) : super(tiles) {
-    _tilesCollisions = tiles
-        .where((element) =>
-            (element is ObjectCollision) &&
-            (element as ObjectCollision).containCollision())
-        .cast<ObjectCollision>();
-  }
+  MapWorld(Iterable<Tile> tiles) : super(tiles);
 
   @override
   void render(Canvas canvas) {
@@ -41,26 +35,21 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    if (lastCameraX != gameRef.camera.position.dx ||
-        lastCameraY != gameRef.camera.position.dy ||
-        lastZoom != gameRef.camera.config.zoom) {
-      lastCameraX = gameRef.camera.position.dx;
-      lastCameraY = gameRef.camera.position.dy;
+    int cameraX = (gameRef.camera.position.dx / tileSize).floor();
+    int cameraY = (gameRef.camera.position.dy / tileSize).floor();
+    if (lastCameraX != cameraX ||
+        lastCameraY != cameraY ||
+        lastZoom > gameRef.camera.config.zoom) {
+      lastCameraX = cameraX;
+      lastCameraY = cameraY;
       lastZoom = gameRef.camera.config.zoom;
 
-      List<Tile> tilesRender = [];
-      List<ObjectCollision> tilesCollision = [];
-      for (final tile in tiles) {
-        tile.gameRef = gameRef;
-        if (tile.isVisibleInCamera()) {
-          tilesRender.add(tile);
-          if ((tile is ObjectCollision) &&
+      _tilesToRender = tiles.where((tile) => tile.isVisibleInCamera());
+      _tilesCollisionsRendered = _tilesToRender
+          .where((tile) =>
+              (tile is ObjectCollision) &&
               (tile as ObjectCollision).containCollision())
-            tilesCollision.add(tile as ObjectCollision);
-        }
-      }
-      _tilesToRender = tilesRender;
-      _tilesCollisionsRendered = tilesCollision;
+          .cast<ObjectCollision>();
     }
     for (final tile in _tilesToRender) {
       tile.update(t);
@@ -97,6 +86,18 @@ class MapWorld extends MapGame {
     lastZoom = -1;
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
+    tileSize = tiles.first.width;
+
+    List<ObjectCollision> tilesCollision = [];
+    tiles.forEach((tile) {
+      tile.gameRef = gameRef;
+      if ((tile is ObjectCollision) &&
+          (tile as ObjectCollision).containCollision())
+        tilesCollision.add(tile as ObjectCollision);
+    });
+
+    _tilesCollisions = tilesCollision;
+    gameRef.camera.updateSpacingVisibleMap(tileSize);
   }
 
   @override
