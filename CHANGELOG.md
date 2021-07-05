@@ -1,5 +1,7 @@
+
 # NEXT
 - improvements in `TiledWorldMap`
+- add property `backgroundColor` in `TalkDialog`.
 - performance improvements in `TiledWorldMap`
 
 # 1.2.0
