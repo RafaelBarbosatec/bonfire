@@ -10,7 +10,6 @@ class TalkDialog extends StatefulWidget {
     required this.says,
     this.finish,
     this.onChangeTalk,
-    this.backgroundColor,
     this.textBoxMinHeight = 100,
     this.keyboardKeyToNext,
     this.padding,
@@ -34,7 +33,6 @@ class TalkDialog extends StatefulWidget {
           says: sayList,
           finish: finish,
           onChangeTalk: onChangeTalk,
-          backgroundColor: backgroundColor,
           textBoxMinHeight: boxTextHeight,
           keyboardKeyToNext: logicalKeyboardKeyToNext,
           padding: padding,
@@ -46,7 +44,6 @@ class TalkDialog extends StatefulWidget {
   final List<Say> says;
   final VoidCallback? finish;
   final ValueChanged<int>? onChangeTalk;
-  final Color? backgroundColor;
   final double? textBoxMinHeight;
   final LogicalKeyboardKey? keyboardKeyToNext;
   final EdgeInsetsGeometry? padding;
