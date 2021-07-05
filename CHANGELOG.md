@@ -1,5 +1,6 @@
 # NEXT
 - improvements in `TiledWorldMap`
+- performance improvements in `TiledWorldMap`
 
 # 1.2.0
 - add `MouseGesture` mixin to listen mouse gestures see [documentation](https://bonfire-engine.github.io/#/gestures?id=mousegesture)

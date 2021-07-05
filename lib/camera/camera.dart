@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'camera_config.dart';
 
 class Camera with HasGameRef<BonfireGame> {
-  static const SPACING_MAP = 32.0;
+  double _spacingMap = -32.0;
   Offset position = Offset.zero;
   Offset _lastTargetOffset = Offset.zero;
   final CameraConfig config;
@@ -23,8 +23,8 @@ class Camera with HasGameRef<BonfireGame> {
 
   Rect get cameraRectWithSpacing => Rect.fromCenter(
         center: Offset(cameraRect.center.dx, cameraRect.center.dy),
-        width: cameraRect.width + SPACING_MAP,
-        height: cameraRect.height + SPACING_MAP,
+        width: cameraRect.width + _spacingMap,
+        height: cameraRect.height + _spacingMap,
       );
 
   void moveTop(double displacement) {
@@ -235,6 +235,10 @@ class Camera with HasGameRef<BonfireGame> {
       vertical: config.sizeMovementWindow.height,
       horizontal: config.sizeMovementWindow.width,
     );
+  }
+
+  void updateSpacingVisibleMap(double space) {
+    _spacingMap = space;
   }
 
   void _keepInMapArea() {
