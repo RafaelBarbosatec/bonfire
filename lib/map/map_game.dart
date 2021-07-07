@@ -32,4 +32,10 @@ abstract class MapGame extends Component with HasGameRef<BonfireGame> {
 
   @override
   int get priority => LayerPriority.MAP;
+
+  void renderDebugMode(Canvas canvas) {
+    for (final t in getRendered()) {
+      t.renderDebugMode(canvas);
+    }
+  }
 }

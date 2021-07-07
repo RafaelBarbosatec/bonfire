@@ -155,6 +155,14 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
 
     comp.render(canvas);
     canvas.restore();
+
+    if (comp is GameComponent && debugMode) {
+      comp.renderDebugMode(canvas);
+    }
+
+    if (comp is MapGame && debugMode) {
+      comp.renderDebugMode(canvas);
+    }
   }
 
   /// This implementation of update updates every component in the list.
@@ -192,7 +200,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     components.forEach((c) => c.onGameResize(size));
   }
 
-  bool debugMode = false;
+  bool debugMode = true;
 
   /// Returns the current time in seconds with microseconds precision.
   ///

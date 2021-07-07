@@ -1,3 +1,5 @@
+# NEXT
+- improvements in `constructionMode`
 
 # 1.2.1
 - improvements in `TiledWorldMap`
