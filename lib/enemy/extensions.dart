@@ -80,6 +80,7 @@ extension EnemyExtensions on Enemy {
   /// Draw simple life bar
   void drawDefaultLifeBar(
     Canvas canvas, {
+    Offset align = Offset.zero,
     bool drawInBottom = false,
     double margin = 4,
     double height = 4,
@@ -92,9 +93,13 @@ extension EnemyExtensions on Enemy {
   }) {
     double yPosition = (position.top - height) - margin;
 
+    double xPosition = position.left + align.dx;
+
     if (drawInBottom) {
       yPosition = position.bottom + margin;
     }
+
+    yPosition = yPosition - align.dy;
 
     final w = width ?? position.width;
 
@@ -102,7 +107,7 @@ extension EnemyExtensions on Enemy {
 
     if (borderWidth > 0) {
       final RRect borderRect = borderRadius.toRRect(Rect.fromLTWH(
-        position.left,
+        xPosition,
         yPosition,
         w,
         height,
@@ -118,7 +123,7 @@ extension EnemyExtensions on Enemy {
     }
 
     final RRect bgRect = borderRadius.toRRect(Rect.fromLTWH(
-      position.left,
+      xPosition,
       yPosition,
       w,
       height,
@@ -132,7 +137,7 @@ extension EnemyExtensions on Enemy {
     );
 
     final RRect lifeRect = borderRadius.toRRect(Rect.fromLTWH(
-      position.left,
+      xPosition,
       yPosition,
       currentBarLife,
       height,
