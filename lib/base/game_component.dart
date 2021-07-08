@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
@@ -38,6 +40,20 @@ abstract class GameComponent extends Component
 
   /// When true this component render above all components in game.
   bool aboveComponents = false;
+
+  Color debugColor = const Color(0xFFFF00FF);
+
+  Paint get debugPaint => Paint()
+    ..color = debugColor
+    ..strokeWidth = 1
+    ..style = PaintingStyle.stroke;
+
+  TextPaint get debugTextPaint => TextPaint(
+        config: TextPaintConfig(
+          color: debugColor,
+          fontSize: 12,
+        ),
+      );
 
   /// This method remove of the component
   void remove() {
@@ -139,6 +155,17 @@ abstract class GameComponent extends Component
     return bottomPriority;
   }
 
-  @override
-  bool hasGesture() => true;
+  void renderDebugMode(Canvas canvas) {
+    if (isVisibleInCamera()) {
+      canvas.drawRect(position.rect, debugPaint);
+      final rect = position.rect;
+      final dx = rect.right;
+      final dy = rect.bottom;
+      debugTextPaint.render(
+        canvas,
+        'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
+        Vector2(dx - 50, dy),
+      );
+    }
+  }
 }

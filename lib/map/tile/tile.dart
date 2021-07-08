@@ -82,11 +82,14 @@ class Tile extends GameComponent {
       position,
       overridePaint: MapPaint.instance.paint,
     );
+    super.render(canvas);
+  }
 
-    if (gameRef.constructionMode && isVisibleInCamera()) {
+  @override
+  void renderDebugMode(Canvas canvas) {
+    if (isVisibleInCamera()) {
       _drawGrid(canvas);
     }
-    super.render(canvas);
   }
 
   void _drawGrid(Canvas canvas) {
@@ -104,8 +107,10 @@ class Tile extends GameComponent {
       if (_textPaintConfig == null) {
         _textPaintConfig = TextPaint(
           config: TextPaintConfig(
-              color: gameRef.constructionModeColor ??
-                  Colors.cyan.withOpacity(0.5)),
+            fontSize: width / 3,
+            color:
+                gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+          ),
         );
       }
       _textPaintConfig?.render(

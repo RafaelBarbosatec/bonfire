@@ -132,7 +132,16 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     canvas.scale(camera.config.zoom);
     canvas.translate(-camera.position.dx, -camera.position.dy);
 
-    components.forEach((comp) => renderComponent(canvas, comp));
+    for (final comp in components) {
+      renderComponent(canvas, comp);
+    }
+
+    if (debugMode) {
+      for (final comp in components) {
+        renderDebugMode(comp, canvas);
+      }
+    }
+
     canvas.restore();
   }
 
@@ -157,6 +166,16 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     canvas.restore();
   }
 
+  void renderDebugMode(Component comp, Canvas canvas) {
+    if (comp is GameComponent && debugMode) {
+      comp.renderDebugMode(canvas);
+    }
+
+    if (comp is MapGame && debugMode) {
+      comp.renderDebugMode(canvas);
+    }
+  }
+
   /// This implementation of update updates every component in the list.
   ///
   /// It also actually adds the components that were added by the [addLater] method, and remove those that are marked for destruction via the [Component.destroy] method.
@@ -167,10 +186,15 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
       final addNow = _addLater.toList(growable: false);
       components.addAll(addNow);
       _addLater.clear();
-      addNow.forEach((component) => component.onMount());
+      for (final comp in addNow) {
+        comp.onMount();
+      }
     }
 
-    components.forEach((c) => c.update(t));
+    for (final comp in components) {
+      comp.update(t);
+    }
+
     components.removeWhere((c) => c.shouldRemove);
 
     camera.update();
@@ -189,7 +213,9 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   void onResize(Vector2 size) {
     if (this is BonfireGame) camera.gameRef = this as BonfireGame;
     super.onResize(size);
-    components.forEach((c) => c.onGameResize(size));
+    for (final comp in components) {
+      comp.onGameResize(size);
+    }
   }
 
   bool debugMode = false;
