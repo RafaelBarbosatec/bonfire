@@ -1,5 +1,7 @@
 # NEXT
 - improvements in `constructionMode`
+- improvements in `drawDefaultLifeBar`
+- performance improvements
 
 # 1.2.1
 - improvements in `TiledWorldMap`
