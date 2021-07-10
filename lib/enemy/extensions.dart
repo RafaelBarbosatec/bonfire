@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/extensions/game_component_extensions.dart';
 import 'package:bonfire/util/text_damage_component.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
@@ -29,21 +30,11 @@ extension EnemyExtensions on Enemy {
       if (notObserved != null) notObserved();
       return;
     }
-
-    double vision = radiusVision * 2;
-
-    Rect fieldOfVision = Rect.fromLTWH(
-      this.position.center.dx - radiusVision,
-      this.position.center.dy - radiusVision,
-      vision,
-      vision,
+    this.seeComponent(
+      player,
+      observed: (c) => observed(c as Player),
+      radiusVision: radiusVision,
     );
-
-    if (fieldOfVision.overlaps(playerRect.rect)) {
-      observed(player);
-    } else {
-      notObserved?.call();
-    }
   }
 
   /// Add in the game a text with animation representing damage received

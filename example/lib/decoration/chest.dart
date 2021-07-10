@@ -26,7 +26,8 @@ class Chest extends GameDecoration with TapGesture {
 
   @override
   void update(double dt) {
-    this.seePlayer(
+    this.seeComponent(
+      gameRef.player!,
       observed: (player) {
         if (!_observedPlayer) {
           _observedPlayer = true;
@@ -36,7 +37,7 @@ class Chest extends GameDecoration with TapGesture {
       notObserved: () {
         _observedPlayer = false;
       },
-      radiusVision: DungeonMap.tileSize.toInt(),
+      radiusVision: DungeonMap.tileSize,
     );
     super.update(dt);
   }
