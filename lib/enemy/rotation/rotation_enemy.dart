@@ -13,8 +13,6 @@ class RotationEnemy extends Enemy {
 
   SpriteAnimation? animation;
 
-  /// Variable that represents the speed of the enemy.
-  final double speed;
   double currentRadAngle;
 
   final _loader = AssetsLoader();
@@ -26,13 +24,14 @@ class RotationEnemy extends Enemy {
     double height = 32,
     double width = 32,
     this.currentRadAngle = -1.55,
-    this.speed = 100,
+    double speed = 100,
     double life = 100,
   }) : super(
           position: position,
           height: height,
           width: width,
           life: life,
+          speed: speed,
         ) {
     _loader.add(AssetToLoad(animIdle, (value) {
       this.animIdle = value;

@@ -1,3 +1,6 @@
+# next
+- new extensions to `GameComponent`
+
 # 1.2.2
 - improvements in `constructionMode`
 - improvements in `drawDefaultLifeBar`

@@ -5,6 +5,8 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/vector2rect.dart';
 
+export 'game_component_extensions.dart';
+
 extension ImageExtension on Image {
   SpriteAnimation getAnimation({
     required double width,

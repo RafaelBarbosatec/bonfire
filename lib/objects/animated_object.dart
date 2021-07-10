@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/extensions.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/sprite.dart';
 
 /// This represents a Component for your game in bonfire.

@@ -8,6 +8,7 @@ import 'package:bonfire/util/vector2rect.dart';
 mixin Movement on GameComponent {
   bool isIdle = true;
   double dtUpdate = 0;
+  double speed = 100;
 
   /// Move player to Up
   void moveUp(double speed, {VoidCallback? onCollision}) {

@@ -12,9 +12,6 @@ class Player extends GameComponent
     implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
-  /// Movement speed of the Player (pixel per second).
-  double speed;
-
   /// life of the Player
   double life;
 
@@ -29,8 +26,9 @@ class Player extends GameComponent
     required double width,
     required double height,
     this.life = 100,
-    this.speed = 100,
+    double speed = 100,
   }) {
+    this.speed = speed;
     receivesAttackFrom = ReceivesAttackFromEnum.ENEMY;
     this.position = Rect.fromLTWH(
       position.x,

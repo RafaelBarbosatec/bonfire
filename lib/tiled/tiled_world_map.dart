@@ -6,7 +6,7 @@ import 'package:bonfire/map/tile/tile.dart';
 import 'package:bonfire/map/tile/tile_with_collision.dart';
 import 'package:bonfire/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
-import 'package:bonfire/util/extensions.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;

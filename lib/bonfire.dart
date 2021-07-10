@@ -51,7 +51,7 @@ export 'package:bonfire/tiled/tiled_world_map.dart';
 export 'package:bonfire/util/direction.dart';
 export 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 export 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
-export 'package:bonfire/util/extensions.dart';
+export 'package:bonfire/util/extensions/extensions.dart';
 export 'package:bonfire/util/functions.dart';
 export 'package:bonfire/util/game_color_filter.dart';
 export 'package:bonfire/util/game_controller.dart';

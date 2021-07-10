@@ -28,7 +28,9 @@ class Enemy extends GameComponent with Movement, Attackable {
     required double height,
     required double width,
     this.life = 10,
+    double speed = 100,
   }) {
+    this.speed = speed;
     receivesAttackFrom = ReceivesAttackFromEnum.PLAYER;
     maxLife = life;
     this.position = Vector2Rect.fromRect(

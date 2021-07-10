@@ -10,9 +10,6 @@ class SimpleEnemy extends Enemy {
   /// animations of the enemy
   SimpleDirectionAnimation animation;
 
-  /// Variable that represents the speed of the enemy.
-  final double speed;
-
   /// Last position the enemy was.
   late Direction lastDirection;
 
@@ -25,13 +22,14 @@ class SimpleEnemy extends Enemy {
     required double width,
     required this.animation,
     double life = 100,
-    this.speed = 100,
+    double speed = 100,
     Direction initDirection = Direction.right,
   }) : super(
           position: position,
           height: height,
           width: width,
           life: life,
+          speed: speed,
         ) {
     lastDirection = initDirection;
     lastDirectionHorizontal =

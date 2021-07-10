@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:bonfire/util/extensions.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/cupertino.dart';
