@@ -17,7 +17,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
   IntervalTick _timerStamina = IntervalTick(100);
-  IntervalTick _timerAttackRange = IntervalTick(110);
+  IntervalTick _timerAttackRange = IntervalTick(150);
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
@@ -100,7 +100,6 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       }
       if (event.event == ActionEvent.UP) {
         execAttackRange = false;
-        actionAttackRange();
       }
     }
 

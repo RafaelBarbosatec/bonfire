@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/collision/object_collision.dart';
-import 'package:bonfire/enemy/extensions.dart';
-import 'package:bonfire/enemy/rotation/rotation_enemy.dart';
+import 'package:bonfire/enemy/rotation_enemy.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
-import 'package:bonfire/objects/flying_attack_angle_object.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/extensions/enemy/enemy_extensions.dart';
+import 'package:bonfire/util/extensions/game_component_extensions.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/rendering.dart';
@@ -173,10 +173,10 @@ extension RotationEnemyExtensions on RotationEnemy {
     required Future<SpriteAnimation> animationDestroy,
     required double width,
     required double height,
+    double? radAngleDirection,
     int? id,
     double speed = 150,
     double damage = 1,
-    double? radAngleDirection,
     int interval = 1000,
     bool withCollision = true,
     VoidCallback? destroy,
@@ -188,34 +188,19 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     if (isDead) return;
 
-    double _radAngle = radAngleDirection ?? getAngleFomPlayer();
-
-    double nextX = this.height * cos(_radAngle);
-    double nextY = this.height * sin(_radAngle);
-    Offset nextPoint = Offset(nextX, nextY);
-
-    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
-            this.position.center.dy + nextPoint.dy) -
-        this.position.center;
-
-    Rect position = this.position.rect.shift(diffBase);
-    gameRef.add(
-      FlyingAttackAngleObject(
-        id: id,
-        position: Vector2(position.left, position.top),
-        radAngle: _radAngle,
-        width: width,
-        height: height,
-        damage: damage,
-        speed: speed,
-        damageInPlayer: true,
-        collision: collision,
-        withCollision: withCollision,
-        destroyedObject: destroy,
-        flyAnimation: animationTop,
-        destroyAnimation: animationDestroy,
-        lightingConfig: lightingConfig,
-      ),
+    this.simpleAttackRangeByAngle(
+      animationTop: animationTop,
+      animationDestroy: animationDestroy,
+      width: width,
+      height: height,
+      radAngleDirection: radAngleDirection ?? this.currentRadAngle,
+      id: id,
+      speed: speed,
+      damage: damage,
+      withCollision: withCollision,
+      destroy: destroy,
+      collision: collision,
+      lightingConfig: lightingConfig,
     );
 
     if (execute != null) execute();

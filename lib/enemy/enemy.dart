@@ -12,12 +12,6 @@ import 'package:flutter/material.dart';
 
 /// It is used to represent your enemies.
 class Enemy extends GameComponent with Movement, Attackable {
-  /// Life of the Enemy.
-  double life;
-
-  /// Max life of the Enemy.
-  late double maxLife;
-
   bool _isDead = false;
 
   /// Map available to store times that can be used to control the frequency of any action.
@@ -27,12 +21,12 @@ class Enemy extends GameComponent with Movement, Attackable {
     required Vector2 position,
     required double height,
     required double width,
-    this.life = 10,
+    double life = 10,
     double speed = 100,
   }) {
     this.speed = speed;
     receivesAttackFrom = ReceivesAttackFromEnum.PLAYER;
-    maxLife = life;
+    initialLife(life);
     this.position = Vector2Rect.fromRect(
       Rect.fromLTWH(
         position.x,
@@ -103,11 +97,9 @@ class Enemy extends GameComponent with Movement, Attackable {
 
   @override
   void receiveDamage(double damage, dynamic from) {
-    if (life > 0) {
-      life -= damage;
-      if (life <= 0) {
-        die();
-      }
+    super.receiveDamage(damage, from);
+    if (life <= 0) {
+      die();
     }
   }
 

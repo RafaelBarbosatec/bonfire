@@ -12,11 +12,6 @@ class Player extends GameComponent
     implements JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
-  /// life of the Player
-  double life;
-
-  late double maxLife;
-
   bool _isDead = false;
   bool isFocusCamera = true;
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
@@ -25,19 +20,18 @@ class Player extends GameComponent
     required Vector2 position,
     required double width,
     required double height,
-    this.life = 100,
+    double life = 100,
     double speed = 100,
   }) {
     this.speed = speed;
     receivesAttackFrom = ReceivesAttackFromEnum.ENEMY;
+    initialLife(life);
     this.position = Rect.fromLTWH(
       position.x,
       position.y,
       width,
       height,
     ).toVector2Rect();
-
-    maxLife = life;
   }
 
   @override
@@ -82,11 +76,9 @@ class Player extends GameComponent
 
   @override
   void receiveDamage(double damage, dynamic from) {
-    if (life > 0) {
-      life -= damage;
-      if (life <= 0) {
-        die();
-      }
+    super.receiveDamage(damage, from);
+    if (life <= 0) {
+      die();
     }
   }
 

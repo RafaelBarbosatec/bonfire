@@ -5,7 +5,13 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/vector2rect.dart';
 
+export 'attackable_extensions.dart';
+export 'enemy/enemy_extensions.dart';
 export 'game_component_extensions.dart';
+export 'movement_extensions.dart';
+export 'player/player_extensions.dart';
+export 'player/rotation_player_extensions.dart';
+export 'player/simple_player_extensions.dart';
 
 extension ImageExtension on Image {
   SpriteAnimation getAnimation({

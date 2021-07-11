@@ -9,6 +9,7 @@ import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/interval_tick.dart';
+import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
@@ -24,7 +25,7 @@ class FlyingAttackAngleObject extends AnimatedObject
   final double damage;
   final double width;
   final double height;
-  final bool damageInPlayer;
+  final AttackFromEnum attackFrom;
   final bool withCollision;
   final VoidCallback? destroyedObject;
   final _loader = AssetsLoader();
@@ -45,7 +46,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     this.destroyAnimation,
     this.speed = 150,
     this.damage = 1,
-    this.damageInPlayer = true,
+    this.attackFrom = AttackFromEnum.ENEMY,
     this.withCollision = true,
     this.destroyedObject,
     LightingConfig? lightingConfig,
@@ -112,7 +113,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     bool destroy = false;
 
     gameRef.visibleAttackables().where((a) {
-      return (damageInPlayer
+      return (attackFrom == AttackFromEnum.ENEMY
               ? a.receivesAttackFromEnemy()
               : a.receivesAttackFromPlayer()) &&
           a.rectAttackable().rect.overlaps(position.rect);

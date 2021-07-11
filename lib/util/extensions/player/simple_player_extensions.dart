@@ -1,8 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
-import 'package:bonfire/player/extensions.dart';
-import 'package:bonfire/player/simple/simple_player.dart';
+import 'package:bonfire/player/simple_player.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:flutter/widgets.dart';
 
@@ -37,8 +36,8 @@ extension SimplePlayerExtensions on SimplePlayer {
   void simpleAttackRange({
     required Future<SpriteAnimation> animationRight,
     required Future<SpriteAnimation> animationLeft,
-    required Future<SpriteAnimation> animationTop,
-    required Future<SpriteAnimation> animationBottom,
+    required Future<SpriteAnimation> animationUp,
+    required Future<SpriteAnimation> animationDown,
     Future<SpriteAnimation>? animationDestroy,
     required double width,
     required double height,
@@ -56,8 +55,8 @@ extension SimplePlayerExtensions on SimplePlayer {
       direction: attackDirection,
       animationRight: animationRight,
       animationLeft: animationLeft,
-      animationTop: animationTop,
-      animationBottom: animationBottom,
+      animationUp: animationUp,
+      animationDown: animationDown,
       animationDestroy: animationDestroy,
       width: width,
       height: height,

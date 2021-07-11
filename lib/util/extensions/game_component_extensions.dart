@@ -1,7 +1,9 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:flutter/material.dart';
 
 extension GameComponentExtensions on GameComponent {
   /// This method we notify when detect the component when enter in [radiusVision] configuration
@@ -70,126 +72,376 @@ extension GameComponentExtensions on GameComponent {
     }
   }
 
-  /// This method move this component to target
-  /// Need use Movement mixin.
-  /// Method that bo used in [update] method.
-  void followComponent(
-    GameComponent target,
-    double dt, {
-    required Function(GameComponent) closeComponent,
-    double margin = 10,
+  /// Add in the game a text with animation representing damage received
+  void showDamage(
+    double damage, {
+    TextPaintConfig? config,
+    double initVelocityTop = -5,
+    double gravity = 0.5,
+    double maxDownSize = 20,
+    DirectionTextDamage direction = DirectionTextDamage.RANDOM,
+    bool onlyUp = false,
   }) {
-    final comp = _getRectAndCollision(target);
-    double centerXPlayer = comp.center.dx;
-    double centerYPlayer = comp.center.dy;
-    if (!(this is Movement)) {
-      print('$this need use Movement mixin.');
-      return;
-    }
+    gameRef.add(
+      TextDamageComponent(
+        damage.toInt().toString(),
+        Vector2(
+          position.center.dx,
+          position.top,
+        ),
+        config: config ??
+            TextPaintConfig(
+              fontSize: 14,
+              color: Colors.white,
+            ),
+        initVelocityTop: initVelocityTop,
+        gravity: gravity,
+        direction: direction,
+        onlyUp: onlyUp,
+        maxDownSize: maxDownSize,
+      ),
+    );
+  }
 
-    Movement thisMov = this as Movement;
+  /// Execute the ranged attack using a component with animation
+  void simpleAttackRangeByAngle({
+    required Future<SpriteAnimation> animationTop,
+    required double width,
+    required double height,
+    required double radAngleDirection,
+    Future<SpriteAnimation>? animationDestroy,
+    dynamic id,
+    double speed = 150,
+    double damage = 1,
+    bool withCollision = true,
+    VoidCallback? destroy,
+    CollisionConfig? collision,
+    LightingConfig? lightingConfig,
+  }) {
+    double angle = radAngleDirection;
+    double nextX = this.width * cos(angle);
+    double nextY = this.height * sin(angle);
+    Offset nextPoint = Offset(nextX, nextY);
 
-    double translateX = 0;
-    double translateY = 0;
-    double speed = thisMov.speed * dt;
+    Offset diffBase = Offset(
+          this.position.center.dx + nextPoint.dx,
+          this.position.center.dy + nextPoint.dy,
+        ) -
+        this.position.center;
 
-    Vector2Rect rectToMove = this.isObjectCollision()
+    Vector2Rect position = this.position.shift(diffBase);
+    gameRef.add(FlyingAttackAngleObject(
+      id: id,
+      position: position.position,
+      radAngle: angle,
+      width: width,
+      height: height,
+      damage: damage,
+      speed: speed,
+      attackFrom: this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
+      collision: collision,
+      withCollision: withCollision,
+      destroyedObject: destroy,
+      flyAnimation: animationTop,
+      destroyAnimation: animationDestroy,
+      lightingConfig: lightingConfig,
+    ));
+  }
+
+  /// Execute the ranged attack using a component with animation
+  void simpleAttackRangeByDirection({
+    required Future<SpriteAnimation> animationRight,
+    required Future<SpriteAnimation> animationLeft,
+    required Future<SpriteAnimation> animationUp,
+    required Future<SpriteAnimation> animationDown,
+    Future<SpriteAnimation>? animationDestroy,
+    required double width,
+    required double height,
+    required Direction direction,
+    dynamic id,
+    double speed = 150,
+    double damage = 1,
+    bool withCollision = true,
+    bool collisionOnlyVisibleObjects = true,
+    VoidCallback? destroy,
+    CollisionConfig? collision,
+    LightingConfig? lightingConfig,
+  }) {
+    Vector2 startPosition;
+    Future<SpriteAnimation> attackRangeAnimation;
+
+    Direction attackDirection = direction;
+
+    Vector2Rect rectBase = (this.isObjectCollision())
         ? (this as ObjectCollision).rectCollision
         : position;
 
-    translateX =
-        rectToMove.rect.center.dx > centerXPlayer ? (-1 * speed) : speed;
+    switch (attackDirection) {
+      case Direction.left:
+        attackRangeAnimation = animationLeft;
+        startPosition = Vector2(
+          rectBase.rect.left - width,
+          (rectBase.rect.top + (rectBase.rect.height - height) / 2),
+        );
+        break;
+      case Direction.right:
+        attackRangeAnimation = animationRight;
+        startPosition = Vector2(
+          rectBase.rect.right,
+          (rectBase.rect.top + (rectBase.rect.height - height) / 2),
+        );
+        break;
+      case Direction.up:
+        attackRangeAnimation = animationUp;
+        startPosition = Vector2(
+          (rectBase.rect.left + (rectBase.rect.width - width) / 2),
+          rectBase.rect.top - height,
+        );
+        break;
+      case Direction.down:
+        attackRangeAnimation = animationDown;
+        startPosition = Vector2(
+          (rectBase.rect.left + (rectBase.rect.width - width) / 2),
+          rectBase.rect.bottom,
+        );
+        break;
+      case Direction.upLeft:
+        attackRangeAnimation = animationLeft;
+        startPosition = Vector2(
+          rectBase.rect.left - width,
+          (rectBase.rect.top + (rectBase.rect.height - height) / 2),
+        );
+        break;
+      case Direction.upRight:
+        attackRangeAnimation = animationRight;
+        startPosition = Vector2(
+          rectBase.rect.right,
+          (rectBase.rect.top + (rectBase.rect.height - height) / 2),
+        );
+        break;
+      case Direction.downLeft:
+        attackRangeAnimation = animationLeft;
+        startPosition = Vector2(
+          rectBase.rect.left - width,
+          (rectBase.rect.top + (rectBase.rect.height - height) / 2),
+        );
+        break;
+      case Direction.downRight:
+        attackRangeAnimation = animationRight;
+        startPosition = Vector2(
+          rectBase.rect.right,
+          (rectBase.rect.top + (rectBase.rect.height - height) / 2),
+        );
+        break;
+    }
 
-    translateX = _adjustTranslate(
-      translateX,
-      rectToMove.rect.center.dx,
-      centerXPlayer,
-      speed,
+    gameRef.add(
+      FlyingAttackObject(
+        id: id,
+        direction: attackDirection,
+        flyAnimation: attackRangeAnimation,
+        destroyAnimation: animationDestroy,
+        position: startPosition,
+        height: height,
+        width: width,
+        damage: damage,
+        speed: speed,
+        attackFrom:
+            this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
+        onDestroyedObject: destroy,
+        withDecorationCollision: withCollision,
+        collision: collision,
+        lightingConfig: lightingConfig,
+      ),
     );
-    translateY =
-        rectToMove.rect.center.dy > centerYPlayer ? (-1 * speed) : speed;
-    translateY = _adjustTranslate(
-      translateY,
-      rectToMove.rect.center.dy,
-      centerYPlayer,
-      speed,
+  }
+
+  ///Execute simple attack melee using animation
+  void simpleAttackMeleeByDirection({
+    Future<SpriteAnimation>? animationRight,
+    Future<SpriteAnimation>? animationBottom,
+    Future<SpriteAnimation>? animationLeft,
+    Future<SpriteAnimation>? animationTop,
+    dynamic id,
+    required double damage,
+    required Direction direction,
+    required double height,
+    required double width,
+    bool withPush = true,
+    double? sizePush,
+  }) {
+    Rect positionAttack;
+    Future<SpriteAnimation>? anim;
+    double pushLeft = 0;
+    double pushTop = 0;
+    Direction attackDirection = direction;
+
+    Vector2Rect rectBase = (this.isObjectCollision())
+        ? (this as ObjectCollision).rectCollision
+        : position;
+
+    switch (attackDirection) {
+      case Direction.up:
+        positionAttack = Rect.fromLTWH(
+          rectBase.rect.center.dx - width / 2,
+          rectBase.rect.top - height,
+          width,
+          height,
+        );
+        if (animationTop != null) anim = animationTop;
+        pushTop = (sizePush ?? height) * -1;
+        break;
+      case Direction.right:
+        positionAttack = Rect.fromLTWH(
+          rectBase.rect.right,
+          rectBase.rect.center.dy - height / 2,
+          width,
+          height,
+        );
+        if (animationRight != null) anim = animationRight;
+        pushLeft = (sizePush ?? width);
+        break;
+      case Direction.down:
+        positionAttack = Rect.fromLTWH(
+          rectBase.rect.center.dx - width / 2,
+          rectBase.rect.bottom,
+          width,
+          height,
+        );
+        if (animationBottom != null) anim = animationBottom;
+        pushTop = (sizePush ?? height);
+        break;
+      case Direction.left:
+        positionAttack = Rect.fromLTWH(
+          rectBase.rect.left - width,
+          rectBase.rect.center.dy - height / 2,
+          width,
+          height,
+        );
+        if (animationLeft != null) anim = animationLeft;
+        pushLeft = (sizePush ?? width) * -1;
+        break;
+      case Direction.upLeft:
+        positionAttack = Rect.fromLTWH(
+          rectBase.rect.left - width,
+          rectBase.rect.center.dy - height / 2,
+          width,
+          height,
+        );
+        if (animationLeft != null) anim = animationLeft;
+        pushLeft = (sizePush ?? width) * -1;
+        break;
+      case Direction.upRight:
+        positionAttack = Rect.fromLTWH(
+          rectBase.rect.right,
+          rectBase.rect.center.dy - height / 2,
+          width,
+          height,
+        );
+        if (animationRight != null) anim = animationRight;
+        pushLeft = (sizePush ?? width);
+        break;
+      case Direction.downLeft:
+        positionAttack = Rect.fromLTWH(
+          rectBase.rect.left - width,
+          rectBase.rect.center.dy - height / 2,
+          width,
+          height,
+        );
+        if (animationLeft != null) anim = animationLeft;
+        pushLeft = (sizePush ?? width) * -1;
+        break;
+      case Direction.downRight:
+        positionAttack = Rect.fromLTWH(
+          rectBase.rect.right,
+          rectBase.rect.center.dy - height / 2,
+          width,
+          height,
+        );
+        if (animationRight != null) anim = animationRight;
+        pushLeft = (sizePush ?? width);
+        break;
+    }
+
+    if (anim != null) {
+      gameRef.add(AnimatedObjectOnce(
+        animation: anim,
+        position: positionAttack.toVector2Rect(),
+      ));
+    }
+
+    gameRef.visibleAttackables().where((a) {
+      return (this is Player
+              ? a.receivesAttackFromPlayer()
+              : a.receivesAttackFromEnemy()) &&
+          a.rectAttackable().rect.overlaps(positionAttack);
+    }).forEach(
+      (enemy) {
+        enemy.receiveDamage(damage, id);
+        Vector2Rect rectAfterPush = enemy.position.translate(pushLeft, pushTop);
+        if (withPush &&
+            (enemy is ObjectCollision &&
+                !(enemy as ObjectCollision)
+                    .isCollision(displacement: rectAfterPush))) {
+          enemy.translate(pushLeft, pushTop);
+        }
+      },
     );
+  }
 
-    if ((translateX < 0 && translateX > -0.1) ||
-        (translateX > 0 && translateX < 0.1)) {
-      translateX = 0;
-    }
+  ///Execute simple attack melee using animation
+  void simpleAttackMeleeByAngle({
+    required Future<SpriteAnimation> animationTop,
+    required double damage,
+    required double radAngleDirection,
+    dynamic id,
+    required double height,
+    required double width,
+    bool withPush = true,
+  }) {
+    double angle = radAngleDirection;
 
-    if ((translateY < 0 && translateY > -0.1) ||
-        (translateY > 0 && translateY < 0.1)) {
-      translateY = 0;
-    }
+    double nextX = height * cos(angle);
+    double nextY = width * sin(angle);
+    Offset nextPoint = Offset(nextX, nextY);
 
-    Rect rectPlayerCollision = Rect.fromLTWH(
-      comp.left - margin,
-      comp.top - margin,
-      comp.width + (margin * 2),
-      comp.height + (margin * 2),
-    );
+    Offset diffBase = Offset(
+          this.position.center.dx + nextPoint.dx,
+          this.position.center.dy + nextPoint.dy,
+        ) -
+        this.position.center;
 
-    if (rectToMove.rect.overlaps(rectPlayerCollision)) {
-      closeComponent(target);
-      if (!thisMov.isIdle) {
-        thisMov.idle();
+    Vector2Rect positionAttack = this.position.shift(diffBase);
+
+    gameRef.add(AnimatedObjectOnce(
+      animation: animationTop,
+      position: positionAttack,
+      rotateRadAngle: angle,
+    ));
+
+    gameRef
+        .visibleAttackables()
+        .where((a) =>
+            (this is Player
+                ? a.receivesAttackFromPlayer()
+                : a.receivesAttackFromEnemy()) &&
+            a.rectAttackable().overlaps(positionAttack))
+        .forEach((enemy) {
+      enemy.receiveDamage(damage, id);
+      Vector2Rect rectAfterPush =
+          enemy.position.translate(diffBase.dx, diffBase.dy);
+      if (withPush &&
+          (enemy is ObjectCollision &&
+              !(enemy as ObjectCollision)
+                  .isCollision(displacement: rectAfterPush))) {
+        enemy.translate(diffBase.dx, diffBase.dy);
       }
-      return;
-    }
-
-    translateX = translateX / dt;
-    translateY = translateY / dt;
-
-    if (translateX > 0 && translateY > 0) {
-      thisMov.moveDownRight(translateX, translateY);
-    } else if (translateX < 0 && translateY < 0) {
-      thisMov.moveUpLeft(translateX.abs(), translateY.abs());
-    } else if (translateX > 0 && translateY < 0) {
-      thisMov.moveUpRight(translateX, translateY.abs());
-    } else if (translateX < 0 && translateY > 0) {
-      thisMov.moveDownLeft(translateX.abs(), translateY);
-    } else {
-      if (translateX > 0) {
-        thisMov.moveRight(translateX);
-      } else if (translateX < 0) {
-        thisMov.moveLeft(translateX.abs());
-      }
-      if (translateY > 0) {
-        thisMov.moveDown(translateY);
-      } else if (translateY < 0) {
-        thisMov.moveUp(translateY.abs());
-      }
-    }
+    });
   }
 
   /// Gets player position used how base in calculations
   Vector2Rect _getRectAndCollision(GameComponent? comp) {
     return (comp is ObjectCollision ? (comp).rectCollision : comp?.position) ??
         Vector2Rect.zero();
-  }
-
-  double _adjustTranslate(
-    double translate,
-    double centerEnemy,
-    double centerPlayer,
-    double speed,
-  ) {
-    double innerTranslate = translate;
-    if (innerTranslate > 0) {
-      double diffX = centerPlayer - centerEnemy;
-      if (diffX < speed) {
-        innerTranslate = diffX;
-      }
-    } else if (innerTranslate < 0) {
-      double diffX = centerPlayer - centerEnemy;
-      if (diffX > (speed * -1)) {
-        innerTranslate = diffX;
-      }
-    }
-
-    return innerTranslate;
   }
 }
