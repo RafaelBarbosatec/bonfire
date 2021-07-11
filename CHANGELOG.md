@@ -1,5 +1,5 @@
 # next
-- new extensions to `GameComponent`
+- new extensions to `GameComponent`. (`seeComponent`, `eeComponentType`, etc)
 
 # 1.2.2
 - improvements in `constructionMode`
