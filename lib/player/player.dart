@@ -72,6 +72,6 @@ class Player extends GameComponent
 
   @override
   void moveTo(Vector2 position) {
-    this.moveToPositionAlongThePath(position, speed);
+    this.moveToPositionAlongThePath(position);
   }
 }

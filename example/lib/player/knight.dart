@@ -68,10 +68,6 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       ),
     );
 
-    setupMoveToPositionAlongThePath(
-      showBarriersCalculated: true,
-    );
-
     _enableMouseGesture();
   }
 
