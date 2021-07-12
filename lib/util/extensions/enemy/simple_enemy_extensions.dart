@@ -2,14 +2,12 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/collision_config.dart';
-import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/enemy/simple_enemy.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/extensions/enemy/enemy_extensions.dart';
 import 'package:bonfire/util/extensions/movement_extensions.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
@@ -135,112 +133,19 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     bool runOnlyVisibleInScreen = true,
   }) {
     if (isDead) return;
-    if (runOnlyVisibleInScreen && !this.isVisibleInCamera()) return;
-
-    double distance = (minDistanceFromPlayer ?? radiusVision);
 
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
-        double centerXPlayer = playerRect.center.dx;
-        double centerYPlayer = playerRect.center.dy;
-
-        double translateX = 0;
-        double translateY = 0;
-
-        double speed = this.speed * this.dtUpdate;
-
-        Vector2Rect rectToMove = this.isObjectCollision()
-            ? (this as ObjectCollision).rectCollision
-            : position;
-
-        translateX =
-            rectToMove.rect.center.dx > centerXPlayer ? (-1 * speed) : speed;
-        translateX = _adjustTranslate(
-          translateX,
-          rectToMove.rect.center.dx,
-          centerXPlayer,
-          speed,
+        this.positionsItselfAndKeepDistance(
+          player,
+          minDistanceFromPlayer: minDistanceFromPlayer,
+          radiusVision: radiusVision,
+          runOnlyVisibleInScreen: runOnlyVisibleInScreen,
+          positioned: (player) {
+            positioned(player as Player);
+          },
         );
-
-        translateY =
-            rectToMove.rect.center.dy > centerYPlayer ? (-1 * speed) : speed;
-        translateY = _adjustTranslate(
-          translateY,
-          rectToMove.rect.center.dy,
-          centerYPlayer,
-          speed,
-        );
-
-        if ((translateX < 0 && translateX > -0.1) ||
-            (translateX > 0 && translateX < 0.1)) {
-          translateX = 0;
-        }
-
-        if ((translateY < 0 && translateY > -0.1) ||
-            (translateY > 0 && translateY < 0.1)) {
-          translateY = 0;
-        }
-
-        double translateXPositive =
-            rectToMove.rect.center.dx - playerRect.center.dx;
-        translateXPositive = translateXPositive >= 0
-            ? translateXPositive
-            : translateXPositive * -1;
-
-        double translateYPositive =
-            rectToMove.rect.center.dy - playerRect.center.dy;
-        translateYPositive = translateYPositive >= 0
-            ? translateYPositive
-            : translateYPositive * -1;
-
-        if (translateXPositive >= distance &&
-            translateXPositive > translateYPositive) {
-          translateX = 0;
-        } else if (translateXPositive > translateYPositive) {
-          translateX = translateX * -1;
-          positioned(player);
-        }
-
-        if (translateYPositive >= distance &&
-            translateXPositive < translateYPositive) {
-          translateY = 0;
-        } else if (translateXPositive < translateYPositive) {
-          translateY = translateY * -1;
-          positioned(player);
-        }
-
-        if (translateX == 0 && translateY == 0) {
-          if (!this.isIdle) {
-            this.idle();
-          }
-          positioned(player);
-          return;
-        }
-
-        translateX = translateX / this.dtUpdate;
-        translateY = translateY / this.dtUpdate;
-
-        if (translateX > 0 && translateY > 0) {
-          this.moveDownRight(translateX, translateY);
-        } else if (translateX < 0 && translateY < 0) {
-          this.moveUpLeft(translateX.abs(), translateY.abs());
-        } else if (translateX > 0 && translateY < 0) {
-          this.moveUpRight(translateX, translateY.abs());
-        } else if (translateX < 0 && translateY > 0) {
-          this.moveDownLeft(translateX.abs(), translateY);
-        } else {
-          if (translateX > 0) {
-            this.moveRight(translateX);
-          } else {
-            moveLeft(translateX.abs());
-          }
-          if (translateY > 0) {
-            moveDown(translateY);
-          } else {
-            moveUp(translateY.abs());
-          }
-        }
       },
       notObserved: () {
         if (!this.isIdle) {
@@ -248,27 +153,5 @@ extension SimpleEnemyExtensions on SimpleEnemy {
         }
       },
     );
-  }
-
-  double _adjustTranslate(
-    double translate,
-    double centerEnemy,
-    double centerPlayer,
-    double speed,
-  ) {
-    double innerTranslate = translate;
-    if (innerTranslate > 0) {
-      double diffX = centerPlayer - centerEnemy;
-      if (diffX < speed) {
-        innerTranslate = diffX;
-      }
-    } else if (innerTranslate < 0) {
-      double diffX = centerPlayer - centerEnemy;
-      if (diffX > (speed * -1)) {
-        innerTranslate = diffX;
-      }
-    }
-
-    return innerTranslate;
   }
 }

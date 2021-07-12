@@ -101,6 +101,116 @@ extension MovementExtensions on Movement {
     }
   }
 
+  /// Checks whether the component is within range. If so, position yourself and keep your distance.
+  /// Method that bo used in [update] method.
+  void positionsItselfAndKeepDistance(
+    GameComponent target, {
+    required Function(GameComponent) positioned,
+    double radiusVision = 32,
+    double? minDistanceFromPlayer,
+    bool runOnlyVisibleInScreen = true,
+  }) {
+    if (runOnlyVisibleInScreen && !this.isVisibleInCamera()) return;
+    double distance = (minDistanceFromPlayer ?? radiusVision);
+
+    Vector2Rect rectTarget = getRectAndCollision(target);
+    double centerXPlayer = rectTarget.center.dx;
+    double centerYPlayer = rectTarget.center.dy;
+
+    double translateX = 0;
+    double translateY = 0;
+
+    double speed = this.speed * this.dtUpdate;
+
+    Vector2Rect rectToMove = getRectAndCollision(this);
+
+    translateX =
+        rectToMove.rect.center.dx > centerXPlayer ? (-1 * speed) : speed;
+    translateX = _adjustTranslate(
+      translateX,
+      rectToMove.rect.center.dx,
+      centerXPlayer,
+      speed,
+    );
+
+    translateY =
+        rectToMove.rect.center.dy > centerYPlayer ? (-1 * speed) : speed;
+    translateY = _adjustTranslate(
+      translateY,
+      rectToMove.rect.center.dy,
+      centerYPlayer,
+      speed,
+    );
+
+    if ((translateX < 0 && translateX > -0.1) ||
+        (translateX > 0 && translateX < 0.1)) {
+      translateX = 0;
+    }
+
+    if ((translateY < 0 && translateY > -0.1) ||
+        (translateY > 0 && translateY < 0.1)) {
+      translateY = 0;
+    }
+
+    double translateXPositive =
+        rectToMove.rect.center.dx - rectTarget.center.dx;
+    translateXPositive =
+        translateXPositive >= 0 ? translateXPositive : translateXPositive * -1;
+
+    double translateYPositive =
+        rectToMove.rect.center.dy - rectTarget.center.dy;
+    translateYPositive =
+        translateYPositive >= 0 ? translateYPositive : translateYPositive * -1;
+
+    if (translateXPositive >= distance &&
+        translateXPositive > translateYPositive) {
+      translateX = 0;
+    } else if (translateXPositive > translateYPositive) {
+      translateX = translateX * -1;
+      positioned(target);
+    }
+
+    if (translateYPositive >= distance &&
+        translateXPositive < translateYPositive) {
+      translateY = 0;
+    } else if (translateXPositive < translateYPositive) {
+      translateY = translateY * -1;
+      positioned(target);
+    }
+
+    if (translateX == 0 && translateY == 0) {
+      if (!this.isIdle) {
+        this.idle();
+      }
+      positioned(target);
+      return;
+    }
+
+    translateX = translateX / this.dtUpdate;
+    translateY = translateY / this.dtUpdate;
+
+    if (translateX > 0 && translateY > 0) {
+      this.moveDownRight(translateX, translateY);
+    } else if (translateX < 0 && translateY < 0) {
+      this.moveUpLeft(translateX.abs(), translateY.abs());
+    } else if (translateX > 0 && translateY < 0) {
+      this.moveUpRight(translateX, translateY.abs());
+    } else if (translateX < 0 && translateY > 0) {
+      this.moveDownLeft(translateX.abs(), translateY);
+    } else {
+      if (translateX > 0) {
+        this.moveRight(translateX);
+      } else {
+        moveLeft(translateX.abs());
+      }
+      if (translateY > 0) {
+        moveDown(translateY);
+      } else {
+        moveUp(translateY.abs());
+      }
+    }
+  }
+
   double _adjustTranslate(
     double translate,
     double centerEnemy,

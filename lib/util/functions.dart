@@ -23,6 +23,8 @@ void renderSpriteByRadAngle(
 
 /// Gets player position used how base in calculations
 Vector2Rect getRectAndCollision(GameComponent? comp) {
-  return (comp is ObjectCollision ? (comp).rectCollision : comp?.position) ??
+  return ((comp?.isObjectCollision() ?? false)
+          ? (comp as ObjectCollision).rectCollision
+          : comp?.position) ??
       Vector2Rect.zero();
 }

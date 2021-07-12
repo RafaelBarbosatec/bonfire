@@ -46,8 +46,13 @@ class JoystickActionEvent {
   });
 }
 
-abstract class JoystickListener {
-  void joystickChangeDirectional(JoystickDirectionalEvent event);
+mixin JoystickListener {
+  JoystickMoveDirectional currentDirectional = JoystickMoveDirectional.IDLE;
+
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    currentDirectional = event.directional;
+  }
+
   void joystickAction(JoystickActionEvent event);
   void moveTo(Vector2 position);
 }
@@ -73,6 +78,14 @@ abstract class JoystickController extends Component
 
   void addObserver(JoystickListener listener) {
     _observers.add(listener);
+  }
+
+  void removeObserver(JoystickListener listener) {
+    _observers.remove(listener);
+  }
+
+  void cleanObservers() {
+    _observers.clear();
   }
 
   @override
