@@ -15,6 +15,8 @@ mixin Attackable on GameComponent {
   /// Max life of the Enemy.
   double _maxLife = 100;
 
+  bool _isDead = false;
+
   double get life => _life;
   set life(double life) => _life = life;
   double get maxLife => _maxLife;
@@ -24,11 +26,28 @@ mixin Attackable on GameComponent {
     _maxLife = life;
   }
 
+  /// increase life in the player
+  void addLife(double life) {
+    this.life += life;
+    if (this.life > maxLife) {
+      this.life = maxLife;
+    }
+  }
+
   void receiveDamage(double damage, dynamic from) {
     if (life > 0) {
       life -= damage;
     }
+    if (life <= 0) {
+      die();
+    }
   }
+
+  void die() {
+    _isDead = true;
+  }
+
+  bool get isDead => _isDead;
 
   Vector2Rect rectAttackable() => this.isObjectCollision()
       ? (this as ObjectCollision).rectCollision

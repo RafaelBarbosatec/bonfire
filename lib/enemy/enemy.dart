@@ -12,8 +12,6 @@ import 'package:flutter/material.dart';
 
 /// It is used to represent your enemies.
 class Enemy extends GameComponent with Movement, Attackable {
-  bool _isDead = false;
-
   /// Map available to store times that can be used to control the frequency of any action.
   Map<String, IntervalTick> timers = Map();
 
@@ -36,8 +34,6 @@ class Enemy extends GameComponent with Movement, Attackable {
       ),
     );
   }
-
-  bool get isDead => _isDead;
 
   /// Move Enemy to direction by radAngle with dodge obstacles
   void moveFromAngleDodgeObstacles(
@@ -93,27 +89,6 @@ class Enemy extends GameComponent with Movement, Attackable {
       notMove?.call();
     }
     this.position = position.shift(newDiffBase);
-  }
-
-  @override
-  void receiveDamage(double damage, dynamic from) {
-    super.receiveDamage(damage, from);
-    if (life <= 0) {
-      die();
-    }
-  }
-
-  /// increase life in the enemy
-  void addLife(double life) {
-    this.life += life;
-    if (this.life > maxLife) {
-      this.life = maxLife;
-    }
-  }
-
-  /// marks the enemy as dead
-  void die() {
-    _isDead = true;
   }
 
   /// Checks whether you entered a certain configured interval

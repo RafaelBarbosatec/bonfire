@@ -15,11 +15,6 @@ class Player extends GameComponent
         MoveToPositionAlongThePath,
         JoystickListener,
         MovementByJoystick {
-  static const REDUCTION_SPEED_DIAGONAL = 0.7;
-
-  bool _isDead = false;
-  bool isFocusCamera = true;
-
   Player({
     required Vector2 position,
     required double width,
@@ -36,35 +31,6 @@ class Player extends GameComponent
       width,
       height,
     ).toVector2Rect();
-  }
-
-  @override
-  void update(double dt) {
-    if (isDead) return;
-    super.update(dt);
-  }
-
-  @override
-  void receiveDamage(double damage, dynamic from) {
-    super.receiveDamage(damage, from);
-    if (life <= 0) {
-      die();
-    }
-  }
-
-  /// marks the player as dead
-  void die() {
-    _isDead = true;
-  }
-
-  bool get isDead => _isDead;
-
-  /// increase life in the player
-  void addLife(double life) {
-    this.life += life;
-    if (this.life > maxLife) {
-      this.life = maxLife;
-    }
   }
 
   @override
