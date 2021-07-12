@@ -129,6 +129,76 @@ mixin Movement on GameComponent {
     position = newPosition;
   }
 
+  /// Move to direction by radAngle with dodge obstacles
+  void moveFromAngleDodgeObstacles(
+    double speed,
+    double angle, {
+    VoidCallback? onCollision,
+  }) {
+    isIdle = false;
+    double innerSpeed = (speed * dtUpdate);
+    double nextX = innerSpeed * cos(angle);
+    double nextY = innerSpeed * sin(angle);
+    Offset nextPoint = Offset(nextX, nextY);
+
+    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
+            position.center.dy + nextPoint.dy) -
+        position.center;
+
+    var collisionX = _verifyTranslateCollision(
+      diffBase.dx,
+      0,
+    );
+    var collisionY = _verifyTranslateCollision(
+      0,
+      diffBase.dy,
+    );
+
+    Offset newDiffBase = diffBase;
+
+    if (collisionX) {
+      newDiffBase = Offset(0, newDiffBase.dy);
+    }
+    if (collisionY) {
+      newDiffBase = Offset(newDiffBase.dx, 0);
+    }
+
+    if (collisionX && !collisionY && newDiffBase.dy != 0) {
+      var collisionY = _verifyTranslateCollision(
+        0,
+        innerSpeed,
+      );
+      if (!collisionY) newDiffBase = Offset(0, innerSpeed);
+    }
+
+    if (collisionY && !collisionX && newDiffBase.dx != 0) {
+      var collisionX = _verifyTranslateCollision(
+        innerSpeed,
+        0,
+      );
+      if (!collisionX) newDiffBase = Offset(innerSpeed, 0);
+    }
+
+    if (newDiffBase == Offset.zero) {
+      onCollision?.call();
+    }
+    this.position = position.shift(newDiffBase);
+  }
+
+  /// Check if performing a certain translate on the enemy collision occurs
+  bool _verifyTranslateCollision(
+    double translateX,
+    double translateY,
+  ) {
+    if (this.isObjectCollision()) {
+      return (this as ObjectCollision).isCollision(
+        displacement: this.position.translate(translateX, translateY),
+      );
+    } else {
+      return false;
+    }
+  }
+
   void idle() {
     isIdle = true;
   }

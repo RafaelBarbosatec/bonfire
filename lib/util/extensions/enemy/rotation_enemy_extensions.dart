@@ -50,9 +50,7 @@ extension RotationEnemyExtensions on RotationEnemy {
           return;
         }
 
-        this.moveFromAngleDodgeObstacles(speed, _radAngle, notMove: () {
-          this.idle();
-        });
+        this.moveFromAngleDodgeObstacles(speed, _radAngle, onCollision: idle);
       },
       notObserved: () {
         this.idle();
@@ -102,9 +100,7 @@ extension RotationEnemyExtensions on RotationEnemy {
         this.moveFromAngleDodgeObstacles(
           speed,
           getInverseAngleFomPlayer(),
-          notMove: () {
-            this.idle();
-          },
+          onCollision: idle,
         );
       },
       notObserved: () {

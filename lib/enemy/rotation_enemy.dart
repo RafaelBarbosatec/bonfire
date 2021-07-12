@@ -45,11 +45,11 @@ class RotationEnemy extends Enemy {
   void moveFromAngleDodgeObstacles(
     double speed,
     double angle, {
-    Function? notMove,
+    VoidCallback? onCollision,
   }) {
     this.animation = animRun;
     currentRadAngle = angle;
-    super.moveFromAngleDodgeObstacles(speed, angle, notMove: notMove);
+    super.moveFromAngleDodgeObstacles(speed, angle, onCollision: onCollision);
   }
 
   @override
@@ -62,6 +62,7 @@ class RotationEnemy extends Enemy {
       _renderAnimation(canvas);
       canvas.restore();
     }
+    super.render(canvas);
   }
 
   @override
@@ -74,6 +75,7 @@ class RotationEnemy extends Enemy {
 
   void idle() {
     this.animation = animIdle;
+    super.idle();
   }
 
   void _renderAnimation(Canvas canvas) {
@@ -87,5 +89,6 @@ class RotationEnemy extends Enemy {
   Future<void> onLoad() async {
     await _loader.load();
     idle();
+    return super.onLoad();
   }
 }
