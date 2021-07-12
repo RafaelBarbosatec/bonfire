@@ -190,16 +190,16 @@ extension MovementExtensions on Movement {
     translateY = translateY / this.dtUpdate;
 
     if (translateX > 0 && translateY > 0) {
-      this.moveDownRight(translateX, translateY);
+      moveDownRight(translateX, translateY);
     } else if (translateX < 0 && translateY < 0) {
-      this.moveUpLeft(translateX.abs(), translateY.abs());
+      moveUpLeft(translateX.abs(), translateY.abs());
     } else if (translateX > 0 && translateY < 0) {
-      this.moveUpRight(translateX, translateY.abs());
+      moveUpRight(translateX, translateY.abs());
     } else if (translateX < 0 && translateY > 0) {
-      this.moveDownLeft(translateX.abs(), translateY);
+      moveDownLeft(translateX.abs(), translateY);
     } else {
       if (translateX > 0) {
-        this.moveRight(translateX);
+        moveRight(translateX);
       } else {
         moveLeft(translateX.abs());
       }

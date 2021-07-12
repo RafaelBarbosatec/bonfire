@@ -29,6 +29,7 @@ extension EnemyExtensions on Enemy {
     this.seeComponent(
       player,
       observed: (c) => observed(c as Player),
+      notObserved: notObserved,
       radiusVision: radiusVision,
     );
   }

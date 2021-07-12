@@ -3,12 +3,15 @@ import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
+import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/vector2rect.dart';
 
 mixin Movement on GameComponent {
   bool isIdle = true;
   double dtUpdate = 0;
   double speed = 100;
+  Direction lastDirection = Direction.right;
+  Direction lastDirectionHorizontal = Direction.right;
 
   /// Move player to Up
   void moveUp(double speed, {VoidCallback? onCollision}) {
@@ -22,6 +25,7 @@ mixin Movement on GameComponent {
 
     isIdle = false;
     position = displacement;
+    lastDirection = Direction.up;
   }
 
   /// Move player to Down
@@ -36,6 +40,7 @@ mixin Movement on GameComponent {
 
     isIdle = false;
     position = displacement;
+    lastDirection = Direction.down;
   }
 
   /// Move player to Left
@@ -50,6 +55,8 @@ mixin Movement on GameComponent {
 
     isIdle = false;
     position = displacement;
+    lastDirection = Direction.left;
+    lastDirectionHorizontal = Direction.left;
   }
 
   /// Move player to Right
@@ -64,24 +71,29 @@ mixin Movement on GameComponent {
 
     isIdle = false;
     position = displacement;
+    lastDirection = Direction.right;
+    lastDirectionHorizontal = Direction.right;
   }
 
   /// Move player to Up and Right
   void moveUpRight(double speedX, double speedY, {VoidCallback? onCollision}) {
     moveRight(speedX, onCollision: onCollision);
     moveUp(speedY, onCollision: onCollision);
+    lastDirection = Direction.upRight;
   }
 
   /// Move player to Up and Left
   void moveUpLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
     moveLeft(speedX, onCollision: onCollision);
     moveUp(speedY, onCollision: onCollision);
+    lastDirection = Direction.upLeft;
   }
 
   /// Move player to Down and Left
   void moveDownLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
     moveLeft(speedX, onCollision: onCollision);
     moveDown(speedY, onCollision: onCollision);
+    lastDirection = Direction.downLeft;
   }
 
   /// Move player to Down and Right
@@ -89,6 +101,7 @@ mixin Movement on GameComponent {
       {VoidCallback? onCollision}) {
     moveRight(speedX, onCollision: onCollision);
     moveDown(speedY, onCollision: onCollision);
+    lastDirection = Direction.downRight;
   }
 
   /// Move Player to direction by radAngle
