@@ -162,7 +162,6 @@ extension GameComponentExtensions on GameComponent {
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
-    bool collisionOnlyVisibleObjects = true,
     VoidCallback? destroy,
     CollisionConfig? collision,
     LightingConfig? lightingConfig,

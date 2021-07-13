@@ -57,7 +57,6 @@ export 'package:bonfire/util/mixins/move_to_position_along_the_path.dart';
 export 'package:bonfire/util/mixins/movement.dart';
 export 'package:bonfire/util/mixins/movement_by_joystick.dart';
 export 'package:bonfire/util/mixins/sensor.dart';
-export 'package:bonfire/util/mixins/touch_detector.dart';
 export 'package:bonfire/util/priority_layer.dart';
 export 'package:bonfire/util/talk/say.dart';
 export 'package:bonfire/util/talk/talk_dialog.dart';

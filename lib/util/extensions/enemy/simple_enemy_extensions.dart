@@ -29,6 +29,7 @@ extension SimpleEnemyExtensions on SimpleEnemy {
           player,
           dtUpdate,
           closeComponent: (comp) => closePlayer(comp as Player),
+          margin: margin,
         );
       },
       notObserved: () {

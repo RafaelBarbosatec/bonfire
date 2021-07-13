@@ -3,7 +3,6 @@ import 'package:bonfire/util/mixins/movement.dart';
 
 mixin MovementByJoystick on Movement {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
-
   @override
   void update(double dt) {
     if (this is JoystickListener) {

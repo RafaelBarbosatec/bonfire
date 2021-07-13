@@ -1,5 +1,8 @@
 # next
-- new extensions to `GameComponent`. (`seeComponent`, `eeComponentType`, etc)
+- new extensions to `GameComponent`.
+- new extensions to `MovementExtensions`.
+- new extensions to `AttackableExtensions`.
+- Makes Bonfire more modular. Every kind of behavior has become a mixin.
 
 # 1.2.2
 - improvements in `constructionMode`

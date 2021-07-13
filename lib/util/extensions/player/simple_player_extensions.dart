@@ -17,6 +17,7 @@ extension SimplePlayerExtensions on SimplePlayer {
     double height = 32,
     double width = 32,
     bool withPush = true,
+    double? sizePush,
   }) {
     Direction attackDirection = direction ?? this.lastDirection;
     this.simpleAttackMeleeByDirection(
@@ -30,6 +31,7 @@ extension SimplePlayerExtensions on SimplePlayer {
       height: height,
       width: width,
       withPush: withPush,
+      sizePush: sizePush,
     );
   }
 
