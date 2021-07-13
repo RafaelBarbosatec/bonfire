@@ -49,6 +49,7 @@ mixin MovementByJoystick on Movement {
     super.update(dt);
   }
 
+  /// get currentDirectional from `JoystickListener`
   JoystickMoveDirectional? get innerCurrentDirectional {
     if (this is JoystickListener) {
       return (this as JoystickListener).currentDirectional;

@@ -14,12 +14,12 @@ mixin Attackable on GameComponent {
 
   /// Max life of the Enemy.
   double _maxLife = 100;
+  double get maxLife => _maxLife;
 
   bool _isDead = false;
 
   double get life => _life;
   set life(double life) => _life = life;
-  double get maxLife => _maxLife;
 
   void initialLife(double life) {
     _life = life;
