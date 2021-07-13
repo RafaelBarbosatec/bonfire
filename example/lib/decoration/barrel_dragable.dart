@@ -4,8 +4,7 @@ import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
-class BarrelDraggable extends GameDecoration
-    with DragGesture, ObjectCollision, Movement {
+class BarrelDraggable extends GameDecoration with DragGesture, ObjectCollision {
   late TextPaint _textConfig;
 
   BarrelDraggable(Vector2 position)
