@@ -6,6 +6,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/mixins/movement.dart';
 import 'package:flutter/material.dart';
 
+/// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
 mixin MoveToPositionAlongThePath on Movement {
   List<Offset> _currentPath = [];
   int _currentIndex = 0;

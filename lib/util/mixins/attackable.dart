@@ -5,6 +5,7 @@ import 'package:bonfire/util/vector2rect.dart';
 enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER }
 enum AttackFromEnum { ENEMY, PLAYER }
 
+/// Mixin responsible for adding damage-taking behavior to the component.
 mixin Attackable on GameComponent {
   /// Used to define which type of component can be damaged
   ReceivesAttackFromEnum receivesAttackFrom = ReceivesAttackFromEnum.ALL;

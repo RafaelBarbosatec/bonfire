@@ -1,6 +1,7 @@
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/util/mixins/movement.dart';
 
+/// Mixin responsible for adding movements through joystick events
 mixin MovementByJoystick on Movement {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
   @override

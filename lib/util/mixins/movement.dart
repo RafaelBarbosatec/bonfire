@@ -6,6 +6,7 @@ import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/vector2rect.dart';
 
+/// Mixin responsible for adding movements
 mixin Movement on GameComponent {
   bool isIdle = true;
   double dtUpdate = 0;

@@ -6,6 +6,7 @@ import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
 import 'package:bonfire/util/mixins/movement.dart';
 
+/// Mixin responsible for adding animations to movements
 mixin DirectionAnimation on Movement {
   SimpleDirectionAnimation? animation;
 
