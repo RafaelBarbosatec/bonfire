@@ -1,4 +1,4 @@
-# next
+# 1.3.0
 - new extensions to `GameComponent`.
 - new extensions to `MovementExtensions`.
 - new extensions to `AttackableExtensions`.
