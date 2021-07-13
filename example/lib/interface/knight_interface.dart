@@ -20,13 +20,26 @@ class KnightInterface extends GameInterface {
         }
       },
     ));
+    add(InterfaceComponent(
+      sprite: Sprite.load('blue_button1.png'),
+      spriteSelected: Sprite.load('blue_button2.png'),
+      height: 40,
+      width: 40,
+      id: 5,
+      position: Vector2(200, 20),
+      onTapComponent: (selected) {
+        if (gameRef.player != null) {
+          (gameRef.player as Knight).changeControllerToVisibleEnemy();
+        }
+      },
+    ));
     add(TextInterfaceComponent(
       text: 'Text example',
       textConfig: TextPaintConfig(
         color: Colors.white,
       ),
       id: 5,
-      position: Vector2(200, 20),
+      position: Vector2(250, 20),
       onTapComponent: (selected) {
         if (gameRef.player != null) {
           (gameRef.player as Knight).showEmote();

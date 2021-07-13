@@ -210,8 +210,7 @@ class SimpleDirectionAnimation {
   }
 
   Future<void> onLoad() async {
-    await _loader.load();
-    play(_currentType);
+    return _loader.load();
   }
 
   SimpleAnimationEnum? get currentType => _currentType;

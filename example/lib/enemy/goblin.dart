@@ -5,9 +5,11 @@ import 'package:example/util/enemy_sprite_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Goblin extends SimpleEnemy with ObjectCollision {
+class Goblin extends SimpleEnemy
+    with ObjectCollision, JoystickListener, MovementByJoystick {
   double attack = 20;
   bool _seePlayerClose = false;
+  bool enableBehaviors = true;
 
   Goblin(Vector2 position)
       : super(
@@ -40,6 +42,7 @@ class Goblin extends SimpleEnemy with ObjectCollision {
   void update(double dt) {
     super.update(dt);
     if (this.isDead) return;
+    if (!enableBehaviors) return;
 
     _seePlayerClose = false;
     this.seePlayer(
@@ -141,5 +144,15 @@ class Goblin extends SimpleEnemy with ObjectCollision {
       ),
     );
     super.receiveDamage(damage, from);
+  }
+
+  @override
+  void joystickAction(JoystickActionEvent event) {
+    // TODO: implement joystickAction
+  }
+
+  @override
+  void moveTo(Vector2 position) {
+    // TODO: implement moveTo
   }
 }

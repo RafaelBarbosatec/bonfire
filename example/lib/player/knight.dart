@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:example/enemy/goblin.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 import 'package:example/util/player_sprite_sheet.dart';
@@ -17,7 +18,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   double stamina = 100;
   double initSpeed = DungeonMap.tileSize * 3;
   IntervalTick _timerStamina = IntervalTick(100);
-  IntervalTick _timerAttackRange = IntervalTick(110);
+  IntervalTick _timerAttackRange = IntervalTick(150);
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
@@ -25,6 +26,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   Sprite? spriteDirectionAttack;
   bool execAttackRange = false;
   bool canShowEmoteFromHover = true;
+  Goblin? enemyControlled;
 
   Rect _rectHover =
       Rect.fromLTWH(0, 0, DungeonMap.tileSize, DungeonMap.tileSize);
@@ -66,10 +68,6 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       ),
     );
 
-    setupMoveToPositionAlongThePath(
-      showBarriersCalculated: true,
-    );
-
     _enableMouseGesture();
   }
 
@@ -100,7 +98,6 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       }
       if (event.event == ActionEvent.UP) {
         execAttackRange = false;
-        actionAttackRange();
       }
     }
 
@@ -242,6 +239,28 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
         ).toVector2Rect(),
       ),
     );
+  }
+
+  void changeControllerToVisibleEnemy() {
+    if (enemyControlled == null) {
+      final v = gameRef
+          .visibleEnemies()
+          .where((element) => element is Goblin)
+          .cast<Goblin>();
+      if (v.isNotEmpty) {
+        enemyControlled = v.first;
+        enemyControlled?.enableBehaviors = false;
+        gameRef.joystickController?.removeObserver(this);
+        gameRef.joystickController?.addObserver(enemyControlled!);
+        gameRef.camera.moveToTargetAnimated(enemyControlled!);
+      }
+    } else {
+      gameRef.joystickController?.removeObserver(enemyControlled!);
+      gameRef.joystickController?.addObserver(this);
+      gameRef.camera.moveToPlayerAnimated();
+      enemyControlled?.enableBehaviors = true;
+      enemyControlled = null;
+    }
   }
 
   void _showTalk(Enemy first) {

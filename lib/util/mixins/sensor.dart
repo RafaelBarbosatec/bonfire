@@ -12,6 +12,7 @@ import '../interval_tick.dart';
 
 Paint _paintSensor = Paint()..color = Colors.red.withOpacity(0.5);
 
+/// Mixin responsible for adding trigger to detect other objects above
 mixin Sensor on GameComponent {
   void onContact(GameComponent component);
 

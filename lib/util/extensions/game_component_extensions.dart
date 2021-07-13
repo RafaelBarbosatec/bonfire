@@ -1,63 +1,52 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/collision/collision_config.dart';
-import 'package:bonfire/collision/object_collision.dart';
-import 'package:bonfire/enemy/enemy.dart';
-import 'package:bonfire/lighting/lighting_config.dart';
-import 'package:bonfire/objects/animated_object_once.dart';
-import 'package:bonfire/objects/flying_attack_angle_object.dart';
-import 'package:bonfire/objects/flying_attack_object.dart';
-import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/text_damage_component.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-extension PlayerExtensions on Player {
-  /// Add in the game a text with animation representing damage received
-  void showDamage(
-    double damage, {
-    TextPaintConfig? config,
-    double initVelocityTop = -5,
-    double gravity = 0.5,
-    double maxDownSize = 20,
-    bool onlyUp = false,
-    DirectionTextDamage direction = DirectionTextDamage.RANDOM,
-  }) {
-    gameRef.add(
-      TextDamageComponent(
-        damage.toInt().toString(),
-        Vector2(
-          position.rect.center.dx,
-          position.rect.top,
-        ),
-        config: config ??
-            TextPaintConfig(
-              fontSize: 14,
-              color: Colors.red,
-            ),
-        initVelocityTop: initVelocityTop,
-        gravity: gravity,
-        direction: direction,
-        onlyUp: onlyUp,
-        maxDownSize: maxDownSize,
-      ),
-    );
-  }
-
-  /// This method we notify when detect the enemy when enter in [radiusVision] configuration
+extension GameComponentExtensions on GameComponent {
+  /// This method we notify when detect the component when enter in [radiusVision] configuration
   /// Method that bo used in [update] method.
-  void seeEnemy({
-    required Function(List<Enemy>) observed,
+  void seeComponent(
+    GameComponent component, {
+    required Function(GameComponent) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
   }) {
-    if (isDead) return;
+    if (component.shouldRemove) {
+      if (notObserved != null) notObserved();
+      return;
+    }
 
-    var enemiesInLife = this.gameRef.visibleEnemies();
-    if (enemiesInLife.isEmpty) {
+    double vision = radiusVision * 2;
+
+    Rect fieldOfVision = Rect.fromLTWH(
+      this.position.center.dx - radiusVision,
+      this.position.center.dy - radiusVision,
+      vision,
+      vision,
+    );
+
+    if (fieldOfVision.overlaps(_getRectAndCollision(component).rect)) {
+      observed(component);
+    } else {
+      notObserved?.call();
+    }
+  }
+
+  /// This method we notify when detect components by type when enter in [radiusVision] configuration
+  /// Method that bo used in [update] method.
+  void seeComponentType<T extends GameComponent>({
+    required Function(List<T>) observed,
+    VoidCallback? notObserved,
+    double radiusVision = 32,
+  }) {
+    var compVisible = this.gameRef.visibleComponents().where((element) {
+      return element is T && element != this;
+    }).cast<T>();
+
+    if (compVisible.isEmpty) {
       if (notObserved != null) notObserved();
       return;
     }
@@ -72,15 +61,46 @@ extension PlayerExtensions on Player {
       visionHeight,
     );
 
-    List<Enemy> enemiesObserved = enemiesInLife
-        .where((enemy) => fieldOfVision.overlaps(enemy.position.rect))
+    List<T> compObserved = compVisible
+        .where((comp) => fieldOfVision.overlaps(comp.position.rect))
         .toList();
 
-    if (enemiesObserved.isNotEmpty) {
-      observed(enemiesObserved);
+    if (compObserved.isNotEmpty) {
+      observed(compObserved);
     } else {
       notObserved?.call();
     }
+  }
+
+  /// Add in the game a text with animation representing damage received
+  void showDamage(
+    double damage, {
+    TextPaintConfig? config,
+    double initVelocityTop = -5,
+    double gravity = 0.5,
+    double maxDownSize = 20,
+    DirectionTextDamage direction = DirectionTextDamage.RANDOM,
+    bool onlyUp = false,
+  }) {
+    gameRef.add(
+      TextDamageComponent(
+        damage.toInt().toString(),
+        Vector2(
+          position.center.dx,
+          position.top,
+        ),
+        config: config ??
+            TextPaintConfig(
+              fontSize: 14,
+              color: Colors.white,
+            ),
+        initVelocityTop: initVelocityTop,
+        gravity: gravity,
+        direction: direction,
+        onlyUp: onlyUp,
+        maxDownSize: maxDownSize,
+      ),
+    );
   }
 
   /// Execute the ranged attack using a component with animation
@@ -98,8 +118,6 @@ extension PlayerExtensions on Player {
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
   }) {
-    if (isDead) return;
-
     double angle = radAngleDirection;
     double nextX = this.width * cos(angle);
     double nextY = this.height * sin(angle);
@@ -120,7 +138,7 @@ extension PlayerExtensions on Player {
       height: height,
       damage: damage,
       speed: speed,
-      damageInPlayer: false,
+      attackFrom: this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
       collision: collision,
       withCollision: withCollision,
       destroyedObject: destroy,
@@ -134,8 +152,8 @@ extension PlayerExtensions on Player {
   void simpleAttackRangeByDirection({
     required Future<SpriteAnimation> animationRight,
     required Future<SpriteAnimation> animationLeft,
-    required Future<SpriteAnimation> animationTop,
-    required Future<SpriteAnimation> animationBottom,
+    required Future<SpriteAnimation> animationUp,
+    required Future<SpriteAnimation> animationDown,
     Future<SpriteAnimation>? animationDestroy,
     required double width,
     required double height,
@@ -144,13 +162,10 @@ extension PlayerExtensions on Player {
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
-    bool collisionOnlyVisibleObjects = true,
     VoidCallback? destroy,
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
   }) {
-    if (isDead) return;
-
     Vector2 startPosition;
     Future<SpriteAnimation> attackRangeAnimation;
 
@@ -176,14 +191,14 @@ extension PlayerExtensions on Player {
         );
         break;
       case Direction.up:
-        attackRangeAnimation = animationTop;
+        attackRangeAnimation = animationUp;
         startPosition = Vector2(
           (rectBase.rect.left + (rectBase.rect.width - width) / 2),
           rectBase.rect.top - height,
         );
         break;
       case Direction.down:
-        attackRangeAnimation = animationBottom;
+        attackRangeAnimation = animationDown;
         startPosition = Vector2(
           (rectBase.rect.left + (rectBase.rect.width - width) / 2),
           rectBase.rect.bottom,
@@ -230,7 +245,8 @@ extension PlayerExtensions on Player {
         width: width,
         damage: damage,
         speed: speed,
-        attackFrom: AttackFromEnum.PLAYER,
+        attackFrom:
+            this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
         onDestroyedObject: destroy,
         withDecorationCollision: withCollision,
         collision: collision,
@@ -253,8 +269,6 @@ extension PlayerExtensions on Player {
     bool withPush = true,
     double? sizePush,
   }) {
-    if (isDead) return;
-
     Rect positionAttack;
     Future<SpriteAnimation>? anim;
     double pushLeft = 0;
@@ -356,7 +370,9 @@ extension PlayerExtensions on Player {
     }
 
     gameRef.visibleAttackables().where((a) {
-      return a.receivesAttackFromPlayer() &&
+      return (this is Player
+              ? a.receivesAttackFromPlayer()
+              : a.receivesAttackFromEnemy()) &&
           a.rectAttackable().rect.overlaps(positionAttack);
     }).forEach(
       (enemy) {
@@ -382,8 +398,6 @@ extension PlayerExtensions on Player {
     required double width,
     bool withPush = true,
   }) {
-    if (isDead) return;
-
     double angle = radAngleDirection;
 
     double nextX = height * cos(angle);
@@ -407,7 +421,9 @@ extension PlayerExtensions on Player {
     gameRef
         .visibleAttackables()
         .where((a) =>
-            a.receivesAttackFromPlayer() &&
+            (this is Player
+                ? a.receivesAttackFromPlayer()
+                : a.receivesAttackFromEnemy()) &&
             a.rectAttackable().overlaps(positionAttack))
         .forEach((enemy) {
       enemy.receiveDamage(damage, id);
@@ -420,5 +436,11 @@ extension PlayerExtensions on Player {
         enemy.translate(diffBase.dx, diffBase.dy);
       }
     });
+  }
+
+  /// Gets player position used how base in calculations
+  Vector2Rect _getRectAndCollision(GameComponent? comp) {
+    return (comp is ObjectCollision ? (comp).rectCollision : comp?.position) ??
+        Vector2Rect.zero();
   }
 }

@@ -13,8 +13,6 @@ class RotationEnemy extends Enemy {
 
   SpriteAnimation? animation;
 
-  /// Variable that represents the speed of the enemy.
-  final double speed;
   double currentRadAngle;
 
   final _loader = AssetsLoader();
@@ -26,13 +24,14 @@ class RotationEnemy extends Enemy {
     double height = 32,
     double width = 32,
     this.currentRadAngle = -1.55,
-    this.speed = 100,
+    double speed = 100,
     double life = 100,
   }) : super(
           position: position,
           height: height,
           width: width,
           life: life,
+          speed: speed,
         ) {
     _loader.add(AssetToLoad(animIdle, (value) {
       this.animIdle = value;
@@ -46,11 +45,11 @@ class RotationEnemy extends Enemy {
   void moveFromAngleDodgeObstacles(
     double speed,
     double angle, {
-    Function? notMove,
+    VoidCallback? onCollision,
   }) {
     this.animation = animRun;
     currentRadAngle = angle;
-    super.moveFromAngleDodgeObstacles(speed, angle, notMove: notMove);
+    super.moveFromAngleDodgeObstacles(speed, angle, onCollision: onCollision);
   }
 
   @override
@@ -63,6 +62,7 @@ class RotationEnemy extends Enemy {
       _renderAnimation(canvas);
       canvas.restore();
     }
+    super.render(canvas);
   }
 
   @override
@@ -75,6 +75,7 @@ class RotationEnemy extends Enemy {
 
   void idle() {
     this.animation = animIdle;
+    super.idle();
   }
 
   void _renderAnimation(Canvas canvas) {
@@ -88,5 +89,6 @@ class RotationEnemy extends Enemy {
   Future<void> onLoad() async {
     await _loader.load();
     idle();
+    return super.onLoad();
   }
 }

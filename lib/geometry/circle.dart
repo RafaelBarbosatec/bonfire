@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:bonfire/util/extensions.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/extensions.dart';
 
 import 'rectangle.dart';

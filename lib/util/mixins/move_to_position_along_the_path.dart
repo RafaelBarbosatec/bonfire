@@ -2,20 +2,18 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:a_star_algorithm/a_star_algorithm.dart';
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/mixins/movement.dart';
 import 'package:flutter/material.dart';
 
-mixin MoveToPositionAlongThePath on GameComponent {
+/// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
+mixin MoveToPositionAlongThePath on Movement {
   List<Offset> _currentPath = [];
   int _currentIndex = 0;
-  double _speed = 0;
-  Movement? _component;
   bool _showBarriers = false;
   bool _tileSizeIsSizeCollision = false;
 
-  List<Offset> barriers = [];
+  List<Offset> _barriers = [];
 
   Color _pathLineColor = Colors.lightBlueAccent.withOpacity(0.5);
   double _pathLineStrokeWidth = 4;
@@ -39,17 +37,9 @@ mixin MoveToPositionAlongThePath on GameComponent {
 
   void moveToPositionAlongThePath(
     Vector2 position,
-    double speed,
   ) {
-    if (this is Movement) {
-      _component = this as Movement;
-      _currentIndex = 0;
-      _calculatePath(position.toOffset());
-      this._speed = speed;
-    } else {
-      print(
-          'It was not possible to move components to the point. Implement "ComponentMovement" in its class');
-    }
+    _currentIndex = 0;
+    _calculatePath(position.toOffset());
   }
 
   @override
@@ -62,7 +52,7 @@ mixin MoveToPositionAlongThePath on GameComponent {
 
   void render(Canvas c) {
     if (_showBarriers) {
-      barriers.forEach((element) {
+      _barriers.forEach((element) {
         c.drawRect(
           Rect.fromLTWH(
             element.dx * _tileSize,
@@ -80,12 +70,12 @@ mixin MoveToPositionAlongThePath on GameComponent {
   void stopMoveAlongThePath() {
     _currentPath.clear();
     _currentIndex = 0;
-    _component?.idle();
+    this.idle();
     gameRef.map.setLinePath(_currentPath, _pathLineColor, _pathLineStrokeWidth);
   }
 
   void _move(double dt) {
-    double innerSpeed = _speed * dt;
+    double innerSpeed = speed * dt;
 
     Vector2Rect componentPosition = position;
     if (this.isObjectCollision()) {
@@ -93,8 +83,8 @@ mixin MoveToPositionAlongThePath on GameComponent {
     }
     double diffX = _currentPath[_currentIndex].dx - componentPosition.center.dx;
     double diffY = _currentPath[_currentIndex].dy - componentPosition.center.dy;
-    double displacementX = diffX.abs() > innerSpeed ? _speed : diffX.abs() / dt;
-    double displacementY = diffY.abs() > innerSpeed ? _speed : diffY.abs() / dt;
+    double displacementX = diffX.abs() > innerSpeed ? speed : diffX.abs() / dt;
+    double displacementY = diffY.abs() > innerSpeed ? speed : diffY.abs() / dt;
 
     if (diffX.abs() < 0.5 && diffY.abs() < 0.5) {
       if (_currentIndex < _currentPath.length - 1) {
@@ -104,13 +94,13 @@ mixin MoveToPositionAlongThePath on GameComponent {
       }
     } else {
       if (diffX > 0 && diffX.abs() > 0.5) {
-        _component?.moveRight(displacementX);
+        this.moveRight(displacementX);
       } else if (diffX < 0 && diffX.abs() > 0.5) {
-        _component?.moveLeft(displacementX);
+        this.moveLeft(displacementX);
       } else if (diffY > 0 && diffY.abs() > 0.5) {
-        _component?.moveDown(displacementY);
+        this.moveDown(displacementY);
       } else if (diffY < 0 && diffY.abs() > 0.5) {
-        _component?.moveUp(displacementY);
+        this.moveUp(displacementY);
       }
     }
   }
@@ -141,7 +131,7 @@ mixin MoveToPositionAlongThePath on GameComponent {
         ).toInt() +
         columnsAdditional;
 
-    barriers.clear();
+    _barriers.clear();
 
     gameRef.visibleCollisions().forEach((e) {
       if (e != this) {
@@ -152,7 +142,7 @@ mixin MoveToPositionAlongThePath on GameComponent {
     List<Offset> result = [];
     List<Offset> path = [];
 
-    if (barriers.contains(targetPosition)) {
+    if (_barriers.contains(targetPosition)) {
       stopMoveAlongThePath();
       return;
     }
@@ -163,7 +153,7 @@ mixin MoveToPositionAlongThePath on GameComponent {
         columns: columns + 1,
         start: playerPosition,
         end: targetPosition,
-        barriers: barriers,
+        barriers: _barriers,
       ).findThePath();
 
       if (result.isNotEmpty || _isNeighbor(playerPosition, targetPosition)) {
@@ -251,8 +241,8 @@ mixin MoveToPositionAlongThePath on GameComponent {
     }).toList();
 
     result.forEach((element) {
-      if (!barriers.contains(element)) {
-        barriers.add(element);
+      if (!_barriers.contains(element)) {
+        _barriers.add(element);
       }
     });
   }
