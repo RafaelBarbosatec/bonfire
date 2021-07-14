@@ -81,7 +81,7 @@ class Goblin extends SimpleEnemy
       );
     }
 
-    if (!_seePlayerAway) {
+    if (!_seePlayerAway && !_seePlayerClose) {
       runRandomMovement(
         dt,
         speed: speed / 2,
