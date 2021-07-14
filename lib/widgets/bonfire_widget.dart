@@ -45,6 +45,7 @@ class BonfireWidget extends StatefulWidget {
   /// Used to configure lighting in the game
   final Color? lightingColorGame;
 
+  final ValueChanged<BonfireGame>? onReady;
   final Map<String, OverlayWidgetBuilder<BonfireGame>>? overlayBuilderMap;
   final List<String>? initialActiveOverlays;
   final List<Enemy>? enemies;
@@ -76,6 +77,7 @@ class BonfireWidget extends StatefulWidget {
     this.overlayBuilderMap,
     this.initialActiveOverlays,
     this.cameraConfig,
+    this.onReady,
   }) : super(key: key);
 
   @override
@@ -116,6 +118,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       lightingColorGame: widget.lightingColorGame,
       cameraConfig: widget.cameraConfig,
       colorFilter: widget.colorFilter,
+      onReady: widget.onReady,
     );
     super.initState();
   }

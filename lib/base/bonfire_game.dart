@@ -84,6 +84,9 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   GameColorFilter? _colorFilter;
 
+  bool isReady = false;
+  ValueChanged<BonfireGame>? onReady;
+
   BonfireGame({
     required this.context,
     required this.map,
@@ -101,6 +104,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     this.collisionAreaColor,
     this.lightingColorGame,
     this.showFPS = false,
+    this.onReady,
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
   }) {
@@ -146,6 +150,10 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   @override
   void update(double t) {
+    if (!isReady) {
+      isReady = true;
+      onReady?.call(this);
+    }
     _interval?.update(t);
     super.update(t);
   }
@@ -227,10 +235,10 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   @override
   void onResize(Vector2 size) {
     super.onResize(size);
-    _updateTempList();
+    _updateTempList(fromResize: true);
   }
 
-  void _updateTempList() {
+  void _updateTempList({bool fromResize = false}) {
     _visibleComponents = components.where((element) {
       return (element is GameComponent) && (element).isVisibleInCamera();
     }).cast();
