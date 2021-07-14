@@ -87,10 +87,18 @@ extension AttackableExtensions on Attackable {
   }
 
   Color _getColorLife(
-      double currentBarLife, double maxWidth, List<Color> colors) {
+    double currentBarLife,
+    double maxWidth,
+    List<Color> colors,
+  ) {
     final parts = maxWidth / colors.length;
-    int index = (currentBarLife / parts).floor() - 1;
-    if (index < 0) return colors[0];
+    int index = (currentBarLife / parts).ceil() - 1;
+    if (index < 0) {
+      return colors[0];
+    }
+    if (index > colors.length - 1) {
+      return colors.last;
+    }
     return colors[index];
   }
 }

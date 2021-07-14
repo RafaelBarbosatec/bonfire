@@ -1,3 +1,6 @@
+# next
+- little improvement in `drawDefaultLifeBar`.
+
 # 1.3.0
 - new extensions to `GameComponent`.
 - new extensions to `Movement`.
