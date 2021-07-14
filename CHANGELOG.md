@@ -1,5 +1,6 @@
 # next
 - little improvement in `drawDefaultLifeBar`.
+- create mixin `AutomaticRandomMovement`
 
 # 1.3.0
 - new extensions to `GameComponent`.

@@ -52,6 +52,7 @@ export 'package:bonfire/util/game_color_filter.dart';
 export 'package:bonfire/util/game_controller.dart';
 export 'package:bonfire/util/interval_tick.dart';
 export 'package:bonfire/util/mixins/attackable.dart';
+export 'package:bonfire/util/mixins/automatic_random_movement.dart';
 export 'package:bonfire/util/mixins/move_to_position_along_the_path.dart';
 export 'package:bonfire/util/mixins/movement.dart';
 export 'package:bonfire/util/mixins/movement_by_joystick.dart';
