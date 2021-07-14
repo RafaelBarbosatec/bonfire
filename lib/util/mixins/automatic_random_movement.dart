@@ -85,7 +85,7 @@ mixin AutomaticRandomMovement on Movement {
   }
 
   void _cleanTargetMovementRandom() {
-    idle();
     _targetRandomMovement = Vector2.zero();
+    idle();
   }
 }
