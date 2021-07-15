@@ -3,6 +3,7 @@
 - create mixin `AutomaticRandomMovement`
 - add `onReady` in `BonfireTiledWidget` and `BonfireWidget`
 - add `getComponentDirectionFromMe` in `GameComponentExtensions`
+- add `checkInterval` in `GameComponent`
 
 # 1.3.0
 - new extensions to `GameComponent`.
