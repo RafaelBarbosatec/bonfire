@@ -6,7 +6,7 @@ import 'movement.dart';
 
 mixin AutomaticRandomMovement on Movement {
   Vector2 _targetRandomMovement = Vector2.zero();
-  IntervalTick? _tickKeepStopped;
+  static const _KEY_INTERVAL_KEEP_STOPPED = 'INTERVAL_RANDOM_MOVEMENT';
 
   /// Method that bo used in [update] method.
   void runRandomMovement(
@@ -21,10 +21,7 @@ mixin AutomaticRandomMovement on Movement {
   }) {
     if (runOnlyVisibleInCamera && !isVisibleInCamera()) return;
     if (_targetRandomMovement == Vector2.zero()) {
-      if (_tickKeepStopped == null) {
-        _tickKeepStopped = IntervalTick(timeKeepStopped);
-      }
-      if (_tickKeepStopped!.update(dt)) {
+      if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
         int randomX = Random().nextInt(maxDistance.toInt());
         randomX = randomX < minDistance ? minDistance : randomX;
         int randomY = Random().nextInt(maxDistance.toInt());
@@ -35,7 +32,6 @@ mixin AutomaticRandomMovement on Movement {
           randomX.toDouble() * randomNegativeX,
           randomY.toDouble() * randomNegativeY,
         );
-        _tickKeepStopped = null;
       }
     } else {
       bool canMoveX =

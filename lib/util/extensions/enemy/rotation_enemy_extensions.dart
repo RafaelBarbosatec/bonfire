@@ -121,7 +121,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     VoidCallback? execute,
     int interval = 1000,
   }) {
-    if (!this.checkPassedInterval('attackMelee', interval, dtUpdate)) return;
+    if (!this.checkInterval('attackMelee', interval, dtUpdate)) return;
 
     if (isDead) return;
 
@@ -180,7 +180,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     VoidCallback? execute,
     LightingConfig? lightingConfig,
   }) {
-    if (!this.checkPassedInterval('attackRange', interval, dtUpdate)) return;
+    if (!this.checkInterval('attackRange', interval, dtUpdate)) return;
 
     if (isDead) return;
 
