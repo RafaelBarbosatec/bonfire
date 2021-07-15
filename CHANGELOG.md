@@ -1,3 +1,6 @@
+# next
+- improvements in extensions organization.
+
 # 1.3.1
 - little improvement in `drawDefaultLifeBar`.
 - create mixin `AutomaticRandomMovement`
