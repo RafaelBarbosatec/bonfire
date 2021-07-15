@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/collision/object_collision.dart';
+import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/vector2rect.dart';
@@ -42,6 +43,9 @@ abstract class GameComponent extends Component
   bool aboveComponents = false;
 
   Color debugColor = const Color(0xFFFF00FF);
+
+  /// Map available to store times that can be used to control the frequency of any action.
+  Map<String, IntervalTick> _timers = Map();
 
   Paint get debugPaint => Paint()
     ..color = debugColor
@@ -166,6 +170,18 @@ abstract class GameComponent extends Component
         'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
         Vector2(dx - 50, dy),
       );
+    }
+  }
+
+  /// Returns true if for each time the defined millisecond interval passes.
+  /// Like a `Timer.periodic`
+  /// Used in flows involved in the [update]
+  bool checkInterval(String key, int intervalInMilli, double dt) {
+    if (this._timers[key]?.interval != intervalInMilli) {
+      this._timers[key] = IntervalTick(intervalInMilli);
+      return true;
+    } else {
+      return this._timers[key]?.update(dt) ?? false;
     }
   }
 }

@@ -50,6 +50,7 @@ class BonfireTiledWidget extends StatefulWidget {
   /// Represents a map (or world) where the game occurs.
   final TiledWorldMap map;
 
+  final ValueChanged<BonfireGame>? onReady;
   final Map<String, OverlayWidgetBuilder<BonfireGame>>? overlayBuilderMap;
   final List<String>? initialActiveOverlays;
   final List<GameComponent>? components;
@@ -81,6 +82,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.components,
     this.overlayBuilderMap,
     this.initialActiveOverlays,
+    this.onReady,
   }) : super(key: key);
   @override
   _BonfireTiledWidgetState createState() => _BonfireTiledWidgetState();
@@ -112,11 +114,16 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration:
-          widget.progressTransitionDuration ?? Duration(milliseconds: 500),
-      transitionBuilder: widget.transitionBuilder,
-      child: _loading ? _defaultProgress() : _buildGame(),
+    return Stack(
+      children: [
+        _buildGame(),
+        AnimatedSwitcher(
+          duration:
+              widget.progressTransitionDuration ?? Duration(milliseconds: 500),
+          transitionBuilder: widget.transitionBuilder,
+          child: _loading ? _defaultProgress() : Center(),
+        ),
+      ],
     );
   }
 
@@ -145,11 +152,12 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
         lightingColorGame: widget.lightingColorGame,
         cameraConfig: widget.cameraConfig,
         colorFilter: widget.colorFilter,
+        onReady: (game) {
+          _showProgress(false);
+          widget.onReady?.call(game);
+        },
       );
-      await Future.delayed(Duration.zero);
-      setState(() {
-        _loading = false;
-      });
+      _showProgress(true);
     } catch (e) {
       print('(BonfireTiledWidget) Error: $e');
     }
@@ -172,5 +180,12 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       overlayBuilderMap: widget.overlayBuilderMap,
       initialActiveOverlays: widget.initialActiveOverlays,
     );
+  }
+
+  void _showProgress(bool show) async {
+    await Future.delayed(Duration.zero);
+    setState(() {
+      _loading = show;
+    });
   }
 }

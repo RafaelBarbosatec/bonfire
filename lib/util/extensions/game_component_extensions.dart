@@ -28,7 +28,7 @@ extension GameComponentExtensions on GameComponent {
       vision,
     );
 
-    if (fieldOfVision.overlaps(_getRectAndCollision(component).rect)) {
+    if (fieldOfVision.overlaps(getRectAndCollision(component).rect)) {
       observed(component);
     } else {
       notObserved?.call();
@@ -438,9 +438,21 @@ extension GameComponentExtensions on GameComponent {
     });
   }
 
-  /// Gets player position used how base in calculations
-  Vector2Rect _getRectAndCollision(GameComponent? comp) {
-    return (comp is ObjectCollision ? (comp).rectCollision : comp?.position) ??
-        Vector2Rect.zero();
+  Direction getComponentDirectionFromMe(GameComponent? comp) {
+    Vector2Rect rectToMove = getRectAndCollision(this);
+    double centerXPlayer = comp?.position.center.dx ?? 0;
+    double centerYPlayer = comp?.position.center.dy ?? 0;
+
+    double centerYEnemy = rectToMove.center.dy;
+    double centerXEnemy = rectToMove.center.dx;
+
+    double diffX = centerXEnemy - centerXPlayer;
+    double diffY = centerYEnemy - centerYPlayer;
+
+    if (diffX.abs() > diffY.abs()) {
+      return diffX > 0 ? Direction.left : Direction.right;
+    } else {
+      return diffY > 0 ? Direction.up : Direction.down;
+    }
   }
 }

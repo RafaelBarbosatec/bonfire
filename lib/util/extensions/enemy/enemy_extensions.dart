@@ -3,9 +3,7 @@ import 'dart:math';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/extensions/game_component_extensions.dart';
-import 'package:bonfire/util/functions.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -43,26 +41,6 @@ extension EnemyExtensions on Enemy {
       playerRect.center.dy - this.position.center.dy,
       playerRect.center.dx - this.position.center.dx,
     );
-  }
-
-  Direction getPlayerDirection() {
-    Vector2Rect rectToMove = getRectAndCollision(this);
-    double centerXPlayer = playerRect.center.dx;
-    double centerYPlayer = playerRect.center.dy;
-
-    double centerYEnemy = rectToMove.center.dy;
-    double centerXEnemy = rectToMove.center.dx;
-
-    double diffX = centerXEnemy - centerXPlayer;
-    double diffY = centerYEnemy - centerYPlayer;
-
-    double positiveDiffX = diffX > 0 ? diffX : diffX * -1;
-    double positiveDiffY = diffY > 0 ? diffY : diffY * -1;
-    if (positiveDiffX > positiveDiffY) {
-      return diffX > 0 ? Direction.left : Direction.right;
-    } else {
-      return diffY > 0 ? Direction.up : Direction.down;
-    }
   }
 
   /// Get angle between enemy and player

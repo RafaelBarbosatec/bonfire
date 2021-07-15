@@ -6,9 +6,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Goblin extends SimpleEnemy
-    with ObjectCollision, JoystickListener, MovementByJoystick {
+    with
+        ObjectCollision,
+        JoystickListener,
+        MovementByJoystick,
+        AutomaticRandomMovement {
   double attack = 20;
   bool _seePlayerClose = false;
+  bool _seePlayerAway = false;
   bool enableBehaviors = true;
 
   Goblin(Vector2 position)
@@ -45,6 +50,8 @@ class Goblin extends SimpleEnemy
     if (!enableBehaviors) return;
 
     _seePlayerClose = false;
+    _seePlayerAway = false;
+
     this.seePlayer(
       observed: (player) {
         _seePlayerClose = true;
@@ -52,19 +59,33 @@ class Goblin extends SimpleEnemy
           closePlayer: (player) {
             execAttack();
           },
-          radiusVision: DungeonMap.tileSize * 2,
+          radiusVision: DungeonMap.tileSize * 1.5,
         );
       },
-      radiusVision: DungeonMap.tileSize * 2,
+      radiusVision: DungeonMap.tileSize * 1.5,
     );
 
     if (!_seePlayerClose) {
-      this.seeAndMoveToAttackRange(
-        minDistanceFromPlayer: DungeonMap.tileSize * 4,
-        positioned: (p) {
-          execAttackRange();
+      seePlayer(
+        radiusVision: DungeonMap.tileSize * 3,
+        observed: (p) {
+          _seePlayerAway = true;
+          this.seeAndMoveToAttackRange(
+            minDistanceFromPlayer: DungeonMap.tileSize * 2,
+            positioned: (p) {
+              execAttackRange();
+            },
+            radiusVision: DungeonMap.tileSize * 3,
+          );
         },
-        radiusVision: DungeonMap.tileSize * 5,
+      );
+    }
+
+    if (!_seePlayerAway && !_seePlayerClose) {
+      runRandomMovement(
+        dt,
+        speed: speed / 2,
+        maxDistance: (DungeonMap.tileSize * 3).toInt(),
       );
     }
   }
@@ -127,6 +148,7 @@ class Goblin extends SimpleEnemy
       width: width,
       damage: attack / 2,
       interval: 400,
+      sizePush: DungeonMap.tileSize / 2,
       attackEffectBottomAnim: CommonSpriteSheet.blackAttackEffectBottom,
       attackEffectLeftAnim: CommonSpriteSheet.blackAttackEffectLeft,
       attackEffectRightAnim: CommonSpriteSheet.blackAttackEffectRight,
@@ -152,7 +174,5 @@ class Goblin extends SimpleEnemy
   }
 
   @override
-  void moveTo(Vector2 position) {
-    // TODO: implement moveTo
-  }
+  void moveTo(Vector2 position) {}
 }

@@ -56,11 +56,11 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     Future<SpriteAnimation>? attackEffectTopAnim,
     VoidCallback? execute,
   }) {
-    if (!this.checkPassedInterval('attackMelee', interval, dtUpdate)) return;
+    if (!this.checkInterval('attackMelee', interval, dtUpdate)) return;
 
     if (isDead) return;
 
-    Direction direct = direction ?? getPlayerDirection();
+    Direction direct = direction ?? getComponentDirectionFromMe(gameRef.player);
 
     this.simpleAttackMeleeByDirection(
       damage: damage,
@@ -99,11 +99,11 @@ extension SimpleEnemyExtensions on SimpleEnemy {
     VoidCallback? execute,
     LightingConfig? lightingConfig,
   }) {
-    if (!this.checkPassedInterval('attackRange', interval, dtUpdate)) return;
+    if (!this.checkInterval('attackRange', interval, dtUpdate)) return;
 
     if (isDead) return;
 
-    Direction direct = direction ?? getPlayerDirection();
+    Direction direct = direction ?? getComponentDirectionFromMe(gameRef.player);
 
     this.simpleAttackRangeByDirection(
       animationRight: animationRight,
