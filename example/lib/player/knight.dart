@@ -267,6 +267,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       first,
       zoom: 2,
       finish: () {
+        gameRef.pauseEngine();
         TalkDialog.show(
           gameRef.context,
           [
@@ -291,6 +292,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
           finish: () {
             print('finish');
             gameRef.camera.moveToPlayerAnimated();
+            gameRef.resumeEngine();
           },
           logicalKeyboardKeyToNext: LogicalKeyboardKey.space,
         );
