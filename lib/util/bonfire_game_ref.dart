@@ -1,7 +1,7 @@
+import 'package:bonfire/base/custom_base_game.dart';
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 
-mixin BonfireHasGameRef<T extends Game> {
+mixin BonfireHasGameRef<T extends CustomBaseGame> {
   T? _gameRef;
 
   T get gameRef {
