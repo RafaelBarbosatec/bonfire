@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
@@ -92,12 +90,6 @@ abstract class JoystickController extends Component
   bool containObserver(JoystickListener listener) {
     return _observers.contains(listener);
   }
-
-  @override
-  void render(Canvas c) {}
-
-  @override
-  void update(double t) {}
 
   @override
   int get priority {
