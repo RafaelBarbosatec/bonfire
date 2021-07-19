@@ -1,13 +1,13 @@
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:flame/components.dart' hide JoystickMoveDirectional;
+import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'camera_config.dart';
 
-class Camera with HasGameRef<BonfireGame> {
+class Camera with BonfireHasGameRef<BonfireGame> {
   double _spacingMap = -32.0;
   Offset position = Offset.zero;
   Offset _lastTargetOffset = Offset.zero;

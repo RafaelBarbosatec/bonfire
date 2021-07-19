@@ -5,9 +5,12 @@ import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 
+import 'bonfire_game_ref.dart';
+
 enum DirectionTextDamage { LEFT, RIGHT, RANDOM, NONE }
 
-class TextDamageComponent extends TextComponent with HasGameRef<BonfireGame> {
+class TextDamageComponent extends TextComponent
+    with BonfireHasGameRef<BonfireGame> {
   final String text;
   final DirectionTextDamage direction;
   final double maxDownSize;

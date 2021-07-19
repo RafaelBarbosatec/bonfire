@@ -74,7 +74,8 @@ export 'package:flame/components.dart'
         JoystickListener,
         JoystickMoveDirectional,
         JoystickActionAlign,
-        ActionEvent;
+        ActionEvent,
+        HasGameRef;
 export 'package:flame/flame.dart';
 export 'package:flame/sprite.dart';
 export 'package:flame/widgets.dart' hide NineTileBox;

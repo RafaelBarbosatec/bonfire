@@ -5,7 +5,10 @@ import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
 
-class ColorFilterComponent extends Component with HasGameRef<BonfireGame> {
+import 'bonfire_game_ref.dart';
+
+class ColorFilterComponent extends Component
+    with BonfireHasGameRef<BonfireGame> {
   final GameColorFilter colorFilter;
 
   ColorFilterComponent(this.colorFilter);

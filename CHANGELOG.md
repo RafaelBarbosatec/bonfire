@@ -1,5 +1,7 @@
 # next
-- improvements in extensions organization.
+- Improvements in extensions organization.
+- Update Flame to `1.0.0-releasecandidate.13` version.
+- Replace `HasGameRef` for the own `BonfireHasGameRef`.
 
 # 1.3.1
 - little improvement in `drawDefaultLifeBar`.
