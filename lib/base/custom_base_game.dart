@@ -3,6 +3,7 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera.dart';
 import 'package:bonfire/camera/camera_config.dart';
+import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart' hide Camera;
@@ -94,8 +95,8 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
       c.debugMode = true;
     }
 
-    if (c is HasGameRef) {
-      (c as HasGameRef).gameRef = this;
+    if (c is BonfireHasGameRef) {
+      (c as BonfireHasGameRef).gameRef = this;
     }
 
     // first time resize

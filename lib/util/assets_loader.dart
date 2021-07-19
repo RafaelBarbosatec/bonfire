@@ -8,6 +8,7 @@ class AssetToLoad<T> {
       return Future.value();
     }
     callback?.call(await future);
+    callback = null;
   }
 }
 
@@ -18,7 +19,6 @@ class AssetsLoader<T> {
 
   Future<void> load() async {
     await Future.forEach<AssetToLoad>(_assets, (element) => element.load());
-    _assets.forEach((element) => element.callback = null);
     _assets.clear();
   }
 }

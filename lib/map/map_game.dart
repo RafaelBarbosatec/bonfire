@@ -3,10 +3,11 @@ import 'dart:ui';
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/map/tile/tile.dart';
+import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
 
-abstract class MapGame extends Component with HasGameRef<BonfireGame> {
+abstract class MapGame extends Component with BonfireHasGameRef<BonfireGame> {
   Iterable<Tile> tiles;
   Size? mapSize;
   Vector2? mapStartPosition;

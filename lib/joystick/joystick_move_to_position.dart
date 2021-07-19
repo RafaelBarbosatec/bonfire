@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:flutter/gestures.dart';
@@ -8,12 +6,6 @@ import 'package:flutter/material.dart';
 class JoystickMoveToPosition extends JoystickController {
   int? _pointer;
   bool _interfaceReceiveInteraction = false;
-
-  @override
-  void render(Canvas c) {}
-
-  @override
-  void update(double t) {}
 
   @override
   void handlerPointerDown(PointerDownEvent event) {

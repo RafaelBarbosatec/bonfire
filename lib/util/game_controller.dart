@@ -3,14 +3,15 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
-import 'package:flame/components.dart';
+
+import 'bonfire_game_ref.dart';
 
 abstract class GameListener {
   void updateGame();
   void changeCountLiveEnemies(int count);
 }
 
-class GameController with HasGameRef<BonfireGame> {
+class GameController with BonfireHasGameRef<BonfireGame> {
   GameListener? _gameListener;
   int _lastCountLiveEnemies = 0;
 

@@ -44,8 +44,6 @@ export 'package:bonfire/tiled/tiled_world_map.dart';
 export 'package:bonfire/util/direction.dart';
 export 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 export 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
-export 'package:bonfire/util/extensions/enemy/rotation_enemy_extensions.dart';
-export 'package:bonfire/util/extensions/enemy/simple_enemy_extensions.dart';
 export 'package:bonfire/util/extensions/extensions.dart';
 export 'package:bonfire/util/functions.dart';
 export 'package:bonfire/util/game_color_filter.dart';
@@ -76,7 +74,8 @@ export 'package:flame/components.dart'
         JoystickListener,
         JoystickMoveDirectional,
         JoystickActionAlign,
-        ActionEvent;
+        ActionEvent,
+        HasGameRef;
 export 'package:flame/flame.dart';
 export 'package:flame/sprite.dart';
 export 'package:flame/widgets.dart' hide NineTileBox;
