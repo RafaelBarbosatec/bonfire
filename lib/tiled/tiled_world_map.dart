@@ -23,7 +23,7 @@ import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
-import 'model/tiled_data_object_oollision.dart';
+import 'model/tiled_data_object_collision.dart';
 import 'model/tiled_item_tile_set.dart';
 import 'model/tiled_object_properties.dart';
 
