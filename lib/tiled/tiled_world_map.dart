@@ -23,7 +23,7 @@ import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
-import 'model/tiled_data_object_oollision.dart';
+import 'model/tiled_data_object_collision.dart';
 import 'model/tiled_item_tile_set.dart';
 import 'model/tiled_object_properties.dart';
 
@@ -98,16 +98,20 @@ class TiledWorldMap {
   }
 
   Future<void> _loadLayer(MapLayer layer) async {
+    if (layer.visible != true) return;
+
     if (layer is TileLayer) {
       await _addTileLayer(layer);
     }
+
+    if (layer is ObjectGroup) {
+      _addObjects(layer);
+    }
+
     if (layer is GroupLayer) {
       await Future.forEach<MapLayer>(layer.layers ?? [], (subLayer) async {
         await _loadLayer(subLayer);
       });
-    }
-    if (layer is ObjectGroup) {
-      _addObjects(layer);
     }
   }
 
@@ -230,48 +234,53 @@ class TiledWorldMap {
     String _pathTileset = '';
     int firsTgId = 0;
 
-    _tiledMap?.tileSets?.forEach(
-      (tileSet) {
-        if (tileSet.tileSet != null &&
+    try {
+      final findTileset = _tiledMap?.tileSets?.lastWhere((tileSet) {
+        return tileSet.tileSet != null &&
             tileSet.firsTgId != null &&
-            index >= tileSet.firsTgId!) {
-          firsTgId = tileSet.firsTgId!;
-          tileSetContain = tileSet.tileSet!;
-          if (tileSet.source != null) {
-            _pathTileset =
-                tileSet.source!.replaceAll(tileSet.source!.split('/').last, '');
-          }
-        }
-      },
-    );
+            index >= tileSet.firsTgId!;
+      });
+
+      firsTgId = findTileset?.firsTgId ?? 0;
+      tileSetContain = findTileset?.tileSet;
+      if (findTileset?.source != null) {
+        _pathTileset = findTileset!.source!.replaceAll(
+          findTileset.source!.split('/').last,
+          '',
+        );
+      }
+    } catch (e) {}
 
     if (tileSetContain != null) {
       final int widthCount =
-          (tileSetContain?.imageWidth ?? 0) ~/ (tileSetContain?.tileWidth ?? 0);
+          (tileSetContain.imageWidth ?? 0) ~/ (tileSetContain.tileWidth ?? 0);
 
       int row = _getY((index - firsTgId), widthCount).toInt();
       int column = _getX((index - firsTgId), widthCount).toInt();
 
       Sprite sprite = await _getSprite(
-        '$_basePath$_pathTileset${tileSetContain?.image}',
+        '$_basePath$_pathTileset${tileSetContain.image}',
         row,
         column,
-        tileSetContain?.tileWidth ?? 0,
-        tileSetContain?.tileHeight ?? 0,
+        tileSetContain.tileWidth ?? 0,
+        tileSetContain.tileHeight ?? 0,
       );
 
       final animation = await _getAnimation(
-        tileSetContain!,
+        tileSetContain,
         _pathTileset,
         (index - firsTgId),
         widthCount,
       );
 
       TiledDataObjectCollision object = _getCollision(
-        tileSetContain!,
+        tileSetContain,
         (index - firsTgId),
       );
 
+      if (index > 1025) {
+        print(tileSetContain.toJson());
+      }
       return Future.value(
         TiledItemTileSet(
           animation: animation,
