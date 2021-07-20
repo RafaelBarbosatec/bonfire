@@ -98,14 +98,18 @@ class TiledWorldMap {
   }
 
   Future<void> _loadLayer(MapLayer layer) async {
+    if (layer.visible != true) return;
+
     if (layer is TileLayer) {
       await _addTileLayer(layer);
     }
+
     if (layer is GroupLayer) {
       await Future.forEach<MapLayer>(layer.layers ?? [], (subLayer) async {
         await _loadLayer(subLayer);
       });
     }
+
     if (layer is ObjectGroup) {
       _addObjects(layer);
     }
