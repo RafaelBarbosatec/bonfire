@@ -104,14 +104,14 @@ class TiledWorldMap {
       await _addTileLayer(layer);
     }
 
+    if (layer is ObjectGroup) {
+      _addObjects(layer);
+    }
+
     if (layer is GroupLayer) {
       await Future.forEach<MapLayer>(layer.layers ?? [], (subLayer) async {
         await _loadLayer(subLayer);
       });
-    }
-
-    if (layer is ObjectGroup) {
-      _addObjects(layer);
     }
   }
 
