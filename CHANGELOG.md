@@ -1,9 +1,9 @@
-# next
-- improvements in `TiledWorldMap`
+# 1.3.4
+- Improvements in `TiledWorldMap`
 
 # 1.3.3
-- update `tiledjsonreader`
-- adds support to folders(group) in Tiled
+- Update `tiledjsonreader`
+- Adds support to folders(group) in Tiled
 
 # 1.3.2
 - Improvements in extensions organization.
