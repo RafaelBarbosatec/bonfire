@@ -1,4 +1,4 @@
-# next
+# 1.3.3
 - update `tiledjsonreader`
 - adds support to folders(group) in Tiled
 
