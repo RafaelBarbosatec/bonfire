@@ -278,9 +278,6 @@ class TiledWorldMap {
         (index - firsTgId),
       );
 
-      if (index > 1025) {
-        print(tileSetContain.toJson());
-      }
       return Future.value(
         TiledItemTileSet(
           animation: animation,
