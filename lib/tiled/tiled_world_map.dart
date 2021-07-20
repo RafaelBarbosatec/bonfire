@@ -10,6 +10,7 @@ import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiledjsonreader/map/layer/group_layer.dart';
 import 'package:tiledjsonreader/map/layer/map_layer.dart';
 import 'package:tiledjsonreader/map/layer/object_group.dart';
 import 'package:tiledjsonreader/map/layer/objects.dart';
@@ -92,13 +93,22 @@ class TiledWorldMap {
 
   Future<void> _load(TiledMap tiledMap) async {
     await Future.forEach<MapLayer>(tiledMap.layers ?? [], (layer) async {
-      if (layer is TileLayer) {
-        await _addTileLayer(layer);
-      }
-      if (layer is ObjectGroup) {
-        _addObjects(layer);
-      }
+      await _loadLayer(layer);
     });
+  }
+
+  Future<void> _loadLayer(MapLayer layer) async {
+    if (layer is TileLayer) {
+      await _addTileLayer(layer);
+    }
+    if (layer is GroupLayer) {
+      await Future.forEach<MapLayer>(layer.layers ?? [], (subLayer) async {
+        await _loadLayer(subLayer);
+      });
+    }
+    if (layer is ObjectGroup) {
+      _addObjects(layer);
+    }
   }
 
   Future<void> _addTileLayer(TileLayer tileLayer) async {
