@@ -235,7 +235,7 @@ class TiledWorldMap {
     int firsTgId = 0;
 
     try {
-      final findTileset = _tiledMap?.tileSets?.firstWhere((tileSet) {
+      final findTileset = _tiledMap?.tileSets?.lastWhere((tileSet) {
         return tileSet.tileSet != null &&
             tileSet.firsTgId != null &&
             index >= tileSet.firsTgId!;
@@ -278,6 +278,9 @@ class TiledWorldMap {
         (index - firsTgId),
       );
 
+      if (index > 1025) {
+        print(tileSetContain.toJson());
+      }
       return Future.value(
         TiledItemTileSet(
           animation: animation,
