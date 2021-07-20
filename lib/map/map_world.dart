@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -86,7 +87,9 @@ class MapWorld extends MapGame {
     lastZoom = -1;
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
-    tileSize = tiles.first.width;
+    if (tiles.isNotEmpty) {
+      tileSize = max(tiles.first.width, tiles.first.height);
+    }
 
     List<ObjectCollision> tilesCollision = [];
     tiles.forEach((tile) {
