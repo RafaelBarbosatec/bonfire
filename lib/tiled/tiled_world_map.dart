@@ -234,45 +234,47 @@ class TiledWorldMap {
     String _pathTileset = '';
     int firsTgId = 0;
 
-    _tiledMap?.tileSets?.forEach(
-      (tileSet) {
-        if (tileSet.tileSet != null &&
+    try {
+      final findTileset = _tiledMap?.tileSets?.firstWhere((tileSet) {
+        return tileSet.tileSet != null &&
             tileSet.firsTgId != null &&
-            index >= tileSet.firsTgId!) {
-          firsTgId = tileSet.firsTgId!;
-          tileSetContain = tileSet.tileSet!;
-          if (tileSet.source != null) {
-            _pathTileset =
-                tileSet.source!.replaceAll(tileSet.source!.split('/').last, '');
-          }
-        }
-      },
-    );
+            index >= tileSet.firsTgId!;
+      });
+
+      firsTgId = findTileset?.firsTgId ?? 0;
+      tileSetContain = findTileset?.tileSet;
+      if (findTileset?.source != null) {
+        _pathTileset = findTileset!.source!.replaceAll(
+          findTileset.source!.split('/').last,
+          '',
+        );
+      }
+    } catch (e) {}
 
     if (tileSetContain != null) {
       final int widthCount =
-          (tileSetContain?.imageWidth ?? 0) ~/ (tileSetContain?.tileWidth ?? 0);
+          (tileSetContain.imageWidth ?? 0) ~/ (tileSetContain.tileWidth ?? 0);
 
       int row = _getY((index - firsTgId), widthCount).toInt();
       int column = _getX((index - firsTgId), widthCount).toInt();
 
       Sprite sprite = await _getSprite(
-        '$_basePath$_pathTileset${tileSetContain?.image}',
+        '$_basePath$_pathTileset${tileSetContain.image}',
         row,
         column,
-        tileSetContain?.tileWidth ?? 0,
-        tileSetContain?.tileHeight ?? 0,
+        tileSetContain.tileWidth ?? 0,
+        tileSetContain.tileHeight ?? 0,
       );
 
       final animation = await _getAnimation(
-        tileSetContain!,
+        tileSetContain,
         _pathTileset,
         (index - firsTgId),
         widthCount,
       );
 
       TiledDataObjectCollision object = _getCollision(
-        tileSetContain!,
+        tileSetContain,
         (index - firsTgId),
       );
 
