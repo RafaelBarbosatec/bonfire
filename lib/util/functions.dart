@@ -11,13 +11,14 @@ void renderSpriteByRadAngle(
   Canvas canvas,
   double radAngle,
   Vector2Rect position,
-  Sprite sprite,
-) {
+  Sprite sprite, {
+  double opacity = 1.0,
+}) {
   canvas.save();
   canvas.translate(position.center.dx, position.center.dy);
   canvas.rotate(radAngle == 0.0 ? 0.0 : radAngle + (pi / 2));
   canvas.translate(-position.center.dx, -position.center.dy);
-  sprite.renderFromVector2Rect(canvas, position);
+  sprite.renderFromVector2Rect(canvas, position, opacity: opacity);
   canvas.restore();
 }
 

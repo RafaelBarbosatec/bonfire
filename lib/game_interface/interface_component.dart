@@ -54,8 +54,11 @@ class InterfaceComponent extends GameComponent with TapGesture {
   }
 
   void render(Canvas canvas) {
-    (selected ? spriteSelected : sprite)
-        ?.renderFromVector2Rect(canvas, this.position);
+    (selected ? spriteSelected : sprite)?.renderFromVector2Rect(
+      canvas,
+      this.position,
+      opacity: opacity,
+    );
   }
 
   @override

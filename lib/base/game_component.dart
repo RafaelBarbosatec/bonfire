@@ -48,6 +48,10 @@ abstract class GameComponent extends Component
   /// Map available to store times that can be used to control the frequency of any action.
   Map<String, IntervalTick> _timers = Map();
 
+  /// Use to set opacity in render
+  /// Range [0.0..1.0]
+  double opacity = 1.0;
+
   Paint get debugPaint => Paint()
     ..color = debugColor
     ..strokeWidth = 1

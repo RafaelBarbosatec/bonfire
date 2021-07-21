@@ -21,6 +21,7 @@ mixin DirectionAnimation on Movement {
   @override
   void update(double dt) {
     if (isVisibleInCamera()) {
+      animation?.opacity = opacity;
       animation?.update(dt, position);
     }
     super.update(dt);

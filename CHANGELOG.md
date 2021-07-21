@@ -1,3 +1,7 @@
+# 1.3.5
+- remove Unnecessary `print` in `TiledWorldMap`
+- Add param `opacity` in `GameComponent` to control opacity.
+
 # 1.3.4
 - Improvements in `TiledWorldMap`
 

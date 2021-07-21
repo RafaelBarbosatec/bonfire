@@ -82,6 +82,7 @@ class RotationEnemy extends Enemy {
     animation?.getSprite().renderFromVector2Rect(
           canvas,
           this.position,
+          opacity: opacity,
         );
   }
 
