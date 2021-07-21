@@ -38,6 +38,8 @@ class SimpleDirectionAnimation {
 
   bool runToTheEndFastAnimation = false;
 
+  double opacity = 1.0;
+
   SimpleDirectionAnimation({
     required Future<SpriteAnimation> idleLeft,
     required Future<SpriteAnimation> idleRight,
@@ -198,12 +200,17 @@ class SimpleDirectionAnimation {
     if (_fastAnimation != null) {
       _fastAnimation?.render(canvas);
     } else {
-      _current?.getSprite().renderFromVector2Rect(canvas, position!);
+      _current?.getSprite().renderFromVector2Rect(
+            canvas,
+            position!,
+            opacity: opacity,
+          );
     }
   }
 
   void update(double dt, Vector2Rect position) {
     this.position = position;
+    _fastAnimation?.opacity = opacity;
     _fastAnimation?.position = position;
     _fastAnimation?.update(dt);
     _current?.update(dt);

@@ -70,7 +70,11 @@ class RotationPlayer extends Player {
 
   void _renderAnimation(Canvas canvas) {
     if (animation == null) return;
-    animation?.getSprite().renderFromVector2Rect(canvas, position);
+    animation?.getSprite().renderFromVector2Rect(
+          canvas,
+          position,
+          opacity: opacity,
+        );
   }
 
   @override

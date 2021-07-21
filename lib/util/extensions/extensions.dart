@@ -108,8 +108,23 @@ extension SpriteExt on Sprite {
     Canvas canvas,
     Vector2Rect vector, {
     Paint? overridePaint,
+    double opacity = 1,
   }) {
-    this.render(canvas, position: vector.position, size: vector.size);
+    if (opacity != paint.color.opacity) {
+      paint = Paint()..color = Color(0xFFFFFFFF).withOpacity(opacity);
+    }
+
+    if (overridePaint != null) {
+      if (opacity != overridePaint.color.opacity) {
+        overridePaint.color = overridePaint.color.withOpacity(opacity);
+      }
+    }
+    this.render(
+      canvas,
+      position: vector.position,
+      size: vector.size,
+      overridePaint: overridePaint,
+    );
   }
 }
 
