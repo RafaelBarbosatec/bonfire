@@ -15,6 +15,8 @@ class CollisionConfig {
 
   Vector2Rect? _lastPosition;
 
+  Vector2Rect? _lastPositionTmp;
+
   CollisionConfig({
     required this.collisions,
     this.enable = true,
@@ -28,12 +30,23 @@ class CollisionConfig {
       for (final element1 in collisions) {
         for (final element2 in other.collisions) {
           if (element1.verifyCollision(element2)) {
-            return true;
+            final newDist =
+                _lastPosition!.position.distanceTo(element2.shape.position);
+            final oldDist =
+                _lastPositionTmp!.position.distanceTo(element2.shape.position);
+            if (newDist > oldDist) {
+              _lastPositionTmp = _lastPosition;
+              return false;
+            } else {
+              return true;
+            }
           }
         }
       }
+      _lastPositionTmp = _lastPosition;
       return false;
     } else {
+      _lastPositionTmp = _lastPosition;
       return false;
     }
   }
