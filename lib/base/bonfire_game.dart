@@ -141,7 +141,9 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     super.add((interface ?? GameInterface()));
     super.add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(camera));
-    _interval = IntervalTick(INTERVAL_UPDATE_CACHE, tick: _updateTempList);
+    _interval = IntervalTick(INTERVAL_UPDATE_CACHE, tick: () {
+      Future.microtask(_updateTempList);
+    });
     return super.onLoad();
   }
 
