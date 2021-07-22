@@ -232,10 +232,10 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   @override
   void onResize(Vector2 size) {
     super.onResize(size);
-    _updateTempList(fromResize: true);
+    _updateTempList();
   }
 
-  void _updateTempList({bool fromResize = false}) {
+  void _updateTempList() {
     _visibleComponents = components.where((element) {
       return (element is GameComponent) && (element).isVisibleInCamera();
     }).cast();
