@@ -25,9 +25,9 @@ class ColorFilterComponent extends Component
   }
 
   @override
-  void onGameResize(Vector2 gameSize) {
+  set gameRef(BonfireGame gameRef) {
     colorFilter.gameRef = gameRef;
-    super.onGameResize(gameSize);
+    super.gameRef = gameRef;
   }
 
   @override
