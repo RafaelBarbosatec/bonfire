@@ -1,3 +1,6 @@
+#NEXT
+- Improvements in `LightingComponent`
+
 # 1.3.5
 - remove Unnecessary `print` in `TiledWorldMap`
 - Add param `opacity` in `GameComponent` to control opacity.

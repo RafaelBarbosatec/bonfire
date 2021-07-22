@@ -4,12 +4,13 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// Layer component responsible for adding lighting to the game.
 class LightingComponent extends GameComponent {
   Color? color;
   late Paint _paintFocus;
+  Paint _paintLighting = Paint();
   Iterable<Lighting> _visibleLight = [];
   double _dtUpdate = 0.0;
   ColorTween? _tween;
@@ -27,7 +28,7 @@ class LightingComponent extends GameComponent {
 
   @override
   void render(Canvas canvas) {
-    if (color == null) return;
+    if (!containsColor()) return;
     Vector2 size = gameRef.size;
     canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
     canvas.drawColor(color!, BlendMode.dstATop);
@@ -61,22 +62,19 @@ class LightingComponent extends GameComponent {
           ),
       );
 
-      final Paint paint = Paint()
+      _paintLighting
         ..color = config.color
         ..maskFilter = MaskFilter.blur(
           BlurStyle.normal,
           sigma,
         );
       canvas.drawCircle(
-        Offset(
-          light.position.center.dx,
-          light.position.center.dy,
-        ),
+        light.position.center,
         config.radius *
             (config.withPulse
                 ? (1 - config.valuePulse * config.pulseVariation)
                 : 1),
-        paint,
+        _paintLighting,
       );
 
       canvas.restore();
@@ -90,7 +88,7 @@ class LightingComponent extends GameComponent {
 
   @override
   void update(double dt) {
-    if (color == null) return;
+    if (!containsColor()) return;
     _dtUpdate = dt;
     _visibleLight = gameRef.lightVisible();
   }
@@ -100,7 +98,7 @@ class LightingComponent extends GameComponent {
     Duration duration = const Duration(milliseconds: 500),
     Curve curve = Curves.decelerate,
   }) {
-    _tween = ColorTween(begin: this.color ?? Colors.transparent, end: color);
+    _tween = ColorTween(begin: this.color ?? Color(0x00000000), end: color);
 
     gameRef.getValueGenerator(
       duration,
@@ -112,5 +110,9 @@ class LightingComponent extends GameComponent {
       },
       curve: curve,
     ).start();
+  }
+
+  bool containsColor() {
+    return color != null && color != Color(0x00000000);
   }
 }
