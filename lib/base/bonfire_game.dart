@@ -26,7 +26,7 @@ import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends CustomBaseGame with KeyboardEvents {
-  static const INTERVAL_UPDATE_CACHE = 150;
+  static const INTERVAL_UPDATE_CACHE = 100;
 
   /// Context used to access all Flutter power in your game.
   final BuildContext context;
@@ -240,15 +240,16 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
       return (element is GameComponent) && (element).isVisibleInCamera();
     }).cast();
 
-    Iterable<ObjectCollision> cAux = components.where((element) {
+    _collisions = components.where((element) {
       return (element is ObjectCollision) && (element).containCollision();
     }).cast();
-    _collisions = cAux.toList()..addAll(map.getCollisions());
+    _collisions = _collisions.toList()..addAll(map.getCollisions());
 
-    Iterable<ObjectCollision> cvAux = _visibleComponents.where((element) {
+    _visibleCollisions = _visibleComponents.where((element) {
       return (element is ObjectCollision) && (element).containCollision();
     }).cast();
-    _visibleCollisions = cvAux.toList()..addAll(map.getCollisionsRendered());
+    _visibleCollisions = _visibleCollisions.toList()
+      ..addAll(map.getCollisionsRendered());
 
     _visibleLights = components.where((element) {
       return element is Lighting && element.isVisible(camera);
