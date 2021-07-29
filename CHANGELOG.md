@@ -1,6 +1,8 @@
 #NEXT
 - Improvements in `LightingComponent`
+- Improvements in `TalkDialog`
 - update `a_star_algorithm`
+
 
 # 1.3.5
 - remove Unnecessary `print` in `TiledWorldMap`
