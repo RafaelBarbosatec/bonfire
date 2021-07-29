@@ -14,7 +14,7 @@ packages:
       name: a_star_algorithm
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4"
+    version: "0.0.5"
   analyzer:
     dependency: transitive
     description:
