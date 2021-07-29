@@ -89,7 +89,11 @@ class _TalkDialogState extends State<TalkDialog> {
         focusNode: _focusNode,
         onKey: (raw) {
           if (widget.keyboardKeyToNext == null && raw is RawKeyDownEvent) {
-            _nextOrFinish();
+            // Prevent volume buttons from triggering the next dialog
+            if (raw.logicalKey != LogicalKeyboardKey.audioVolumeUp &&
+                raw.logicalKey != LogicalKeyboardKey.audioVolumeDown) {
+              _nextOrFinish();
+            }
           } else if (raw.logicalKey == widget.keyboardKeyToNext &&
               raw is RawKeyDownEvent) {
             _nextOrFinish();
@@ -194,6 +198,9 @@ class _TalkDialogState extends State<TalkDialog> {
   }
 
   void startShowText() {
+    // Clean the stream to prevent textStyle from changing before the text
+    _textShowController.add('');
+
     timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
       _textShowController.add(currentSay.text.substring(0, countLetter));
       countLetter++;

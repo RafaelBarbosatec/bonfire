@@ -20,10 +20,6 @@ extension MovementExtensions on Movement {
     final comp = getRectAndCollision(target);
     double centerXPlayer = comp.center.dx;
     double centerYPlayer = comp.center.dy;
-    if (!(this is Movement)) {
-      print('$this need use Movement mixin.');
-      return;
-    }
 
     double translateX = 0;
     double translateY = 0;

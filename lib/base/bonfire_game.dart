@@ -21,13 +21,12 @@ import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/value_generator_component.dart';
 import 'package:flame/components.dart' hide JoystickController;
 import 'package:flame/keyboard.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends CustomBaseGame with KeyboardEvents {
-  static const INTERVAL_UPDATE_CACHE = 200;
+  static const INTERVAL_UPDATE_CACHE = 100;
 
   /// Context used to access all Flutter power in your game.
   final BuildContext context;
@@ -137,14 +136,14 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     _initialEnemies?.forEach((enemy) => add(enemy));
     _initialComponents?.forEach((comp) => add(comp));
     player?.let((p) => add(p));
-    if (lightingColorGame != null) {
-      lighting = LightingComponent(color: lightingColorGame!);
-      super.add(lighting!);
-    }
+    lighting = LightingComponent(color: lightingColorGame ?? Color(0x00000000));
+    super.add(lighting!);
     super.add((interface ?? GameInterface()));
     super.add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(camera));
-    _interval = IntervalTick(INTERVAL_UPDATE_CACHE, tick: _updateTempList);
+    _interval = IntervalTick(INTERVAL_UPDATE_CACHE, tick: () {
+      Future.microtask(_updateTempList);
+    });
     return super.onLoad();
   }
 
@@ -235,29 +234,28 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   @override
   void onResize(Vector2 size) {
     super.onResize(size);
-    _updateTempList(fromResize: true);
+    _updateTempList();
   }
 
-  void _updateTempList({bool fromResize = false}) {
+  void _updateTempList() {
     _visibleComponents = components.where((element) {
       return (element is GameComponent) && (element).isVisibleInCamera();
     }).cast();
 
-    Iterable<ObjectCollision> cAux = components.where((element) {
+    _collisions = components.where((element) {
       return (element is ObjectCollision) && (element).containCollision();
     }).cast();
-    _collisions = cAux.toList()..addAll(map.getCollisions());
+    _collisions = _collisions.toList()..addAll(map.getCollisions());
 
-    Iterable<ObjectCollision> cvAux = _visibleComponents.where((element) {
+    _visibleCollisions = _visibleComponents.where((element) {
       return (element is ObjectCollision) && (element).containCollision();
     }).cast();
-    _visibleCollisions = cvAux.toList()..addAll(map.getCollisionsRendered());
+    _visibleCollisions = _visibleCollisions.toList()
+      ..addAll(map.getCollisionsRendered());
 
-    if (lightingColorGame != null) {
-      _visibleLights = components.where((element) {
-        return element is Lighting && element.isVisible(camera);
-      }).cast();
-    }
+    _visibleLights = components.where((element) {
+      return element is Lighting && element.isVisible(camera);
+    }).cast();
 
     gameController?.notifyListeners();
   }
