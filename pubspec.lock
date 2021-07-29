@@ -7,7 +7,7 @@ packages:
       name: a_star_algorithm
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4"
+    version: "0.0.5"
   async:
     dependency: transitive
     description:
@@ -176,7 +176,7 @@ packages:
       name: tiledjsonreader
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.4"
   typed_data:
     dependency: transitive
     description:
