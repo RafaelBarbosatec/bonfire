@@ -14,7 +14,7 @@
  "name":"0x72_DungeonTilesetII_v1.3",
  "spacing":0,
  "tilecount":1024,
- "tiledversion":"1.3.5",
+ "tiledversion":"1.5.0",
  "tileheight":16,
  "tiles":[
         {
@@ -22,7 +22,6 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
@@ -48,7 +47,6 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
@@ -200,7 +198,6 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
@@ -339,7 +336,6 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
@@ -446,7 +442,6 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
@@ -677,7 +672,6 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
@@ -895,5 +889,5 @@
         }],
  "tilewidth":16,
  "type":"tileset",
- "version":1.2
+ "version":1.5
 }

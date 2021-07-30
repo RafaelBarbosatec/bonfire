@@ -67,9 +67,17 @@ class Tile extends GameComponent {
     this.height = 32,
     this.type,
     this.properties,
+    double offsetX = 0,
+    double offsetY = 0,
   }) {
     this._animation = animation;
-    this.position = generateRectWithBleedingPixel(position, width, height);
+    this.position = generateRectWithBleedingPixel(
+      position,
+      width,
+      height,
+      offsetX: offsetX,
+      offsetY: offsetY,
+    );
 
     _positionText = position;
   }

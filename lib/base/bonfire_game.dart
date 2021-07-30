@@ -201,7 +201,10 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     }).cast();
   }
 
-  Iterable<ObjectCollision> collisions() => _collisions;
+  Iterable<ObjectCollision> collisions() {
+    return map.getCollisions().toList()..addAll(_collisions);
+  }
+
   Iterable<ObjectCollision> visibleCollisions() => _visibleCollisions;
 
   ValueGeneratorComponent getValueGenerator(
@@ -243,7 +246,6 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     _collisions = components.where((element) {
       return (element is ObjectCollision) && (element).containCollision();
     }).cast();
-    _collisions = _collisions.toList()..addAll(map.getCollisions());
 
     _visibleCollisions = _visibleComponents.where((element) {
       return (element is ObjectCollision) && (element).containCollision();
