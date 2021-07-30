@@ -18,7 +18,7 @@ class Tile extends GameComponent {
   final String? type;
   late Vector2 _positionText;
   Paint? _paintText;
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
   final Map<String, dynamic>? properties;
   TextPaint? _textPaintConfig;
 
@@ -32,7 +32,9 @@ class Tile extends GameComponent {
   }) {
     this.position = generateRectWithBleedingPixel(position, width, height);
     if (spritePath.isNotEmpty) {
-      Sprite.load(spritePath).then((value) => _sprite = value);
+      _loader?.add(
+        AssetToLoad(Sprite.load(spritePath), (value) => this._sprite = value),
+      );
     }
 
     _positionText = position;
@@ -48,7 +50,7 @@ class Tile extends GameComponent {
     double offsetX = 0,
     double offsetY = 0,
   }) {
-    _loader.add(AssetToLoad(sprite, (value) => this._sprite = value));
+    _loader?.add(AssetToLoad(sprite, (value) => this._sprite = value));
     this.position = generateRectWithBleedingPixel(
       position,
       width,
@@ -163,7 +165,8 @@ class Tile extends GameComponent {
 
   @override
   Future<void> onLoad() async {
-    await _loader.load();
+    await _loader?.load();
     await _animation?.onLoad();
+    _loader = null;
   }
 }
