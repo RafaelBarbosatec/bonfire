@@ -26,7 +26,7 @@ import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends CustomBaseGame with KeyboardEvents {
-  static const INTERVAL_UPDATE_CACHE = 100;
+  static const INTERVAL_UPDATE_CACHE = 150;
 
   /// Context used to access all Flutter power in your game.
   final BuildContext context;
@@ -141,9 +141,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     super.add((interface ?? GameInterface()));
     super.add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(camera));
-    _interval = IntervalTick(INTERVAL_UPDATE_CACHE, tick: () {
-      Future.microtask(_updateTempList);
-    });
+    _interval = IntervalTick(INTERVAL_UPDATE_CACHE, tick: _updateTempList);
     return super.onLoad();
   }
 

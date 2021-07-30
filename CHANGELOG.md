@@ -1,3 +1,6 @@
+# 1.3.7
+- remove microTask to update chache in `BonfireGame`
+
 # 1.3.6
 - Improvements in `LightingComponent`
 - Improvements in `TalkDialog`. [#136](https://github.com/RafaelBarbosatec/bonfire/pull/136)
