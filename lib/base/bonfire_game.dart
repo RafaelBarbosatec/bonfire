@@ -26,7 +26,7 @@ import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends CustomBaseGame with KeyboardEvents {
-  static const INTERVAL_UPDATE_CACHE = 100;
+  static const INTERVAL_UPDATE_CACHE = 150;
 
   /// Context used to access all Flutter power in your game.
   final BuildContext context;

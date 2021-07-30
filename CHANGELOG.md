@@ -1,5 +1,5 @@
-# next
-- remove microTask in cache
+# 1.3.7
+- remove microTask to update chache in `BonfireGame`
 
 # 1.3.6
 - Improvements in `LightingComponent`
