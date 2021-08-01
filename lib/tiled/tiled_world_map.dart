@@ -145,39 +145,75 @@ class TiledWorldMap {
     double offsetY,
   ) {
     if (data.animation == null) {
-      _tiles.add(
-        TileWithCollision.withSprite(
-          Future.value(data.sprite),
-          Vector2(
-            _getX(count, tileLayer.width?.toInt() ?? 0),
-            _getY(count, tileLayer.width?.toInt() ?? 0),
+      if (data.collisions?.isNotEmpty == true) {
+        _tiles.add(
+          TileWithCollision.withSprite(
+            Future.value(data.sprite),
+            Vector2(
+              _getX(count, tileLayer.width?.toInt() ?? 0),
+              _getY(count, tileLayer.width?.toInt() ?? 0),
+            ),
+            offsetX: offsetX,
+            offsetY: offsetY,
+            collisions: data.collisions,
+            width: _tileWidth,
+            height: _tileHeight,
+            type: data.type,
+            properties: data.properties,
           ),
-          offsetX: offsetX,
-          offsetY: offsetY,
-          collisions: data.collisions,
-          width: _tileWidth,
-          height: _tileHeight,
-          type: data.type,
-          properties: data.properties,
-        ),
-      );
+        );
+      } else {
+        _tiles.add(
+          Tile.fromSprite(
+            Future.value(data.sprite),
+            Vector2(
+              _getX(count, tileLayer.width?.toInt() ?? 0),
+              _getY(count, tileLayer.width?.toInt() ?? 0),
+            ),
+            offsetX: offsetX,
+            offsetY: offsetY,
+            width: _tileWidth,
+            height: _tileHeight,
+            type: data.type,
+            properties: data.properties,
+          ),
+        );
+      }
     } else {
-      _tiles.add(
-        TileWithCollision.withAnimation(
-          data.animation!,
-          Vector2(
-            _getX(count, tileLayer.width?.toInt() ?? 0),
-            _getY(count, tileLayer.width?.toInt() ?? 0),
+      if (data.collisions?.isNotEmpty == true) {
+        _tiles.add(
+          TileWithCollision.withAnimation(
+            data.animation!,
+            Vector2(
+              _getX(count, tileLayer.width?.toInt() ?? 0),
+              _getY(count, tileLayer.width?.toInt() ?? 0),
+            ),
+            offsetX: offsetX,
+            offsetY: offsetY,
+            collisions: data.collisions,
+            width: _tileWidth,
+            height: _tileHeight,
+            type: data.type,
+            properties: data.properties,
           ),
-          offsetX: offsetX,
-          offsetY: offsetY,
-          collisions: data.collisions,
-          width: _tileWidth,
-          height: _tileHeight,
-          type: data.type,
-          properties: data.properties,
-        ),
-      );
+        );
+      } else {
+        _tiles.add(
+          Tile.fromAnimation(
+            data.animation!,
+            Vector2(
+              _getX(count, tileLayer.width?.toInt() ?? 0),
+              _getY(count, tileLayer.width?.toInt() ?? 0),
+            ),
+            offsetX: offsetX,
+            offsetY: offsetY,
+            width: _tileWidth,
+            height: _tileHeight,
+            type: data.type,
+            properties: data.properties,
+          ),
+        );
+      }
     }
   }
 
