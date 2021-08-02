@@ -94,7 +94,7 @@ class MapWorld extends MapGame {
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
     if (tiles.isNotEmpty) {
-      tileSize = max(tiles.first.width, tiles.first.height) * 4;
+      tileSize = max(tiles.first.width, tiles.first.height) * 2;
     }
     _getTileCollisions();
     gameRef.camera.updateSpacingVisibleMap(tileSize * 2);
@@ -255,6 +255,7 @@ class MapWorld extends MapGame {
       await o.onLoad();
       aux.add(o as ObjectCollision);
     });
+    print(aux.length);
     _tilesCollisions = aux;
   }
 }
