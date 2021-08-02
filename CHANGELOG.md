@@ -1,3 +1,6 @@
+# Next
+- Improvements in `Camera`
+
 # 1.3.7
 - remove microTask to update chache in `BonfireGame`
 
