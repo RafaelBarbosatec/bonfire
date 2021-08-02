@@ -1,8 +1,9 @@
 import 'package:bonfire/collision/collision_area.dart';
+import 'package:bonfire/map/assets_manager.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 class TileModelSprite {
-  final String id;
   final String path;
   final int row;
   final int column;
@@ -10,25 +11,55 @@ class TileModelSprite {
   final double height;
 
   TileModelSprite({
-    required this.id,
     required this.path,
-    required this.row,
-    required this.column,
-    required this.width,
-    required this.height,
+    this.row = 0,
+    this.column = 0,
+    this.width = 0,
+    this.height = 0,
   });
+
+  Future<Sprite> getSprite() {
+    if (row == 0 && column == 0 && width == 0 && height == 0) {
+      return Sprite.load(path);
+    }
+    return AssetsManager.getSprite(
+      path,
+      row,
+      column,
+      width,
+      height,
+    );
+  }
 }
 
 class TileModelAnimation {
-  final String id;
   final double stepTime;
   final List<TileModelSprite> frames;
 
   TileModelAnimation({
-    required this.id,
     required this.stepTime,
     required this.frames,
   });
+
+  Future<SpriteAnimation> getSpriteAnimation() async {
+    List<Sprite> spriteList = [];
+
+    await Future.forEach<TileModelSprite>(frames, (frame) async {
+      Sprite sprite = await AssetsManager.getSprite(
+        frame.path,
+        frame.row,
+        frame.column,
+        frame.width,
+        frame.height,
+      );
+      spriteList.add(sprite);
+    });
+
+    return SpriteAnimation.spriteList(
+      spriteList,
+      stepTime: stepTime,
+    );
+  }
 }
 
 class TileModel {
@@ -58,5 +89,10 @@ class TileModel {
     this.collisions,
   });
 
-  Offset get center => Offset(x + (width / 2.0), y + (height / 2.0));
+  double get left => (x * width);
+  double get right => (x * width) + width;
+  double get top => (y * height);
+  double get bottom => (y * height) + height;
+  Offset get center =>
+      Offset((x * width) + (width / 2.0), (y * height) + (height / 2.0));
 }

@@ -128,7 +128,7 @@ class DungeonMap {
       });
     });
 
-    return MapWorld(tileList);
+    return MapWorld([]);
   }
 
   static List<GameDecoration> decorations() {

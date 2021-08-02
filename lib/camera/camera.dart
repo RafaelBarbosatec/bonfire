@@ -9,7 +9,7 @@ import 'camera_config.dart';
 
 class Camera with BonfireHasGameRef<BonfireGame> {
   bool _isMoving = false;
-  double _spacingMap = -32.0;
+  double _spacingMap = 32.0;
   Offset position = Offset.zero;
   Offset _lastTargetOffset = Offset.zero;
   final CameraConfig config;
@@ -222,6 +222,10 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     return cameraRectWithSpacing.overlaps(c.position.rect);
   }
 
+  bool contains(Offset c) {
+    return cameraRectWithSpacing.contains(c);
+  }
+
   bool isRectOnCamera(Rect c) {
     return cameraRectWithSpacing.overlaps(c);
   }
@@ -250,6 +254,7 @@ class Camera with BonfireHasGameRef<BonfireGame> {
   }
 
   void updateSpacingVisibleMap(double space) {
+    print(space);
     _spacingMap = space;
   }
 
