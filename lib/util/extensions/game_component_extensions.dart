@@ -377,7 +377,8 @@ extension GameComponentExtensions on GameComponent {
     }).forEach(
       (enemy) {
         enemy.receiveDamage(damage, id);
-        Vector2Rect rectAfterPush = enemy.position.translate(pushLeft, pushTop);
+        final rectAfterPush =
+            enemy.position.position.translate(pushLeft, pushTop);
         if (withPush &&
             (enemy is ObjectCollision &&
                 !(enemy as ObjectCollision)
@@ -427,8 +428,8 @@ extension GameComponentExtensions on GameComponent {
             a.rectAttackable().overlaps(positionAttack))
         .forEach((enemy) {
       enemy.receiveDamage(damage, id);
-      Vector2Rect rectAfterPush =
-          enemy.position.translate(diffBase.dx, diffBase.dy);
+      final rectAfterPush =
+          enemy.position.position.translate(diffBase.dx, diffBase.dy);
       if (withPush &&
           (enemy is ObjectCollision &&
               !(enemy as ObjectCollision)

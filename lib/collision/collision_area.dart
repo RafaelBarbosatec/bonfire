@@ -49,6 +49,32 @@ class CollisionArea {
     return shape.isCollision(other.shape);
   }
 
+  bool verifyCollisionSimulate(Vector2 position, CollisionArea other) {
+    late Shape shapeAux;
+    if (shape is CircleShape) {
+      shapeAux = CircleShape(
+        (shape as CircleShape).radius,
+      );
+    }
+    if (shape is RectangleShape) {
+      shapeAux = RectangleShape(
+        (shape as RectangleShape).rect.size,
+      );
+    }
+    if (shape is PolygonShape) {
+      shapeAux = PolygonShape(
+        (shape as PolygonShape).relativePoints,
+      );
+    }
+
+    double x = position.x;
+    double y = position.y;
+    x += (align?.x ?? 0.0);
+    y += (align?.y ?? 0.0);
+    shapeAux.position = Vector2(x, y);
+    return shapeAux.isCollision(other.shape);
+  }
+
   Rect get rect {
     if (shape is CircleShape) {
       return (shape as CircleShape).rect.rect;
