@@ -254,7 +254,6 @@ class Camera with BonfireHasGameRef<BonfireGame> {
   }
 
   void updateSpacingVisibleMap(double space) {
-    print(space);
     _spacingMap = space;
   }
 

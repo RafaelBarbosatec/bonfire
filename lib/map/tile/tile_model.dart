@@ -28,6 +28,7 @@ class TileModelSprite {
       column,
       width,
       height,
+      fromServer: path.contains('http'),
     );
   }
 }
@@ -51,6 +52,7 @@ class TileModelAnimation {
         frame.column,
         frame.width,
         frame.height,
+        fromServer: frame.path.contains('http'),
       );
       spriteList.add(sprite);
     });

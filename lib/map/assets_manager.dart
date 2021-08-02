@@ -14,12 +14,13 @@ class AssetsManager {
     int row,
     int column,
     double tileWidth,
-    double tileHeight,
-  ) async {
+    double tileHeight, {
+    bool fromServer = false,
+  }) async {
     if (spriteCache.containsKey('$image/$row/$column')) {
       return Future.value(spriteCache['$image/$row/$column']);
     }
-    final spriteSheetImg = await loadImage(image);
+    final spriteSheetImg = await loadImage(image, fromServer: fromServer);
     spriteCache['$image/$row/$column'] = spriteSheetImg.getSprite(
       x: (column * tileWidth).toDouble(),
       y: (row * tileHeight).toDouble(),
@@ -29,8 +30,10 @@ class AssetsManager {
     return Future.value(spriteCache['$image/$row/$column']);
   }
 
-  static Future<Image> loadImage(String image,
-      {bool fromServer = false}) async {
+  static Future<Image> loadImage(
+    String image, {
+    bool fromServer = false,
+  }) async {
     if (fromServer) {
       final imageCache = getImageFromCache(image);
       if (imageCache != null) {
