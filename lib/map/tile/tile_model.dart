@@ -2,6 +2,7 @@ import 'package:bonfire/collision/collision_area.dart';
 import 'package:flutter/widgets.dart';
 
 class TileModelSprite {
+  final String id;
   final String path;
   final int row;
   final int column;
@@ -9,6 +10,7 @@ class TileModelSprite {
   final double height;
 
   TileModelSprite({
+    required this.id,
     required this.path,
     required this.row,
     required this.column,
@@ -18,10 +20,15 @@ class TileModelSprite {
 }
 
 class TileModelAnimation {
+  final String id;
   final double stepTime;
   final List<TileModelSprite> frames;
 
-  TileModelAnimation({required this.stepTime, required this.frames});
+  TileModelAnimation({
+    required this.id,
+    required this.stepTime,
+    required this.frames,
+  });
 }
 
 class TileModel {
