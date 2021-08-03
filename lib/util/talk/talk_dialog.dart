@@ -57,16 +57,15 @@ class _TalkDialogState extends State<TalkDialog> {
   Timer? timer;
   late Say currentSay;
   int currentIndexTalk = 0;
-  int countLetter = 1;
-  bool finishCurrentTalk = false;
+  bool finishedCurrentSay = false;
 
-  StreamController<String> _textShowController =
-      StreamController<String>.broadcast();
+  StreamController<List<TextSpan>> _textShowController =
+      StreamController<List<TextSpan>>.broadcast();
 
   @override
   void initState() {
     currentSay = widget.says[currentIndexTalk];
-    startShowText();
+    _startShowText();
     Future.delayed(Duration.zero, () {
       _focusNode.requestFocus();
     });
@@ -139,21 +138,20 @@ class _TalkDialogState extends State<TalkDialog> {
                                     color: Colors.white.withOpacity(0.5),
                                   ),
                                 ),
-                            child: StreamBuilder<String>(
+                            child: StreamBuilder<List<TextSpan>>(
                               stream: _textShowController.stream,
                               builder: (context, snapshot) {
                                 return SingleChildScrollView(
                                   scrollDirection: Axis.vertical,
                                   physics: BouncingScrollPhysics(),
-                                  child: Text(
-                                    snapshot.hasData
-                                        ? (snapshot.data ?? '')
-                                        : '',
-                                    style: currentSay.textStyle ??
-                                        TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                        ),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: snapshot.data,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                      ),
+                                    ),
                                   ),
                                 );
                               },
@@ -174,21 +172,19 @@ class _TalkDialogState extends State<TalkDialog> {
     );
   }
 
-  void _finishTalk() {
-    timer?.cancel();
-    _textShowController.add(currentSay.text);
-    countLetter = 1;
-    finishCurrentTalk = true;
+  void _finishCurrentSay() {
+    _textShowController.add([...currentSay.text]);
+    finishedCurrentSay = true;
   }
 
-  void _nextTalk() {
+  void _nextSay() {
     currentIndexTalk++;
     if (currentIndexTalk < widget.says.length) {
       setState(() {
-        finishCurrentTalk = false;
+        finishedCurrentSay = false;
         currentSay = widget.says[currentIndexTalk];
       });
-      startShowText();
+      _startShowText();
       if (widget.onChangeTalk != null)
         widget.onChangeTalk?.call(currentIndexTalk);
     } else {
@@ -197,18 +193,36 @@ class _TalkDialogState extends State<TalkDialog> {
     }
   }
 
-  void startShowText() {
-    // Clean the stream to prevent textStyle from changing before the text
-    _textShowController.add('');
+  void _nextOrFinish() {
+    if (finishedCurrentSay) {
+      _nextSay();
+    } else {
+      _finishCurrentSay();
+    }
+  }
 
-    timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
-      _textShowController.add(currentSay.text.substring(0, countLetter));
-      countLetter++;
-      if (countLetter == currentSay.text.length + 1) {
-        timer.cancel();
-        countLetter = 1;
-        finishCurrentTalk = true;
+  void _startShowText() async {
+    // Clean the stream to prevent textStyle from changing before the text
+    _textShowController.add([TextSpan()]);
+
+    await Future.forEach(currentSay.text, (span) async {
+      TextSpan _currentSpan = span as TextSpan;
+      for (int i = 0; i < (_currentSpan.text?.length ?? 0); i++) {
+        if (finishedCurrentSay) {
+          _textShowController.add([...currentSay.text]);
+          break;
+        }
+        await Future.delayed(Duration(milliseconds: currentSay.speed ?? 50));
+        _textShowController.add([
+          ...currentSay.text.sublist(0, currentSay.text.indexOf(span)),
+          TextSpan(
+            text: _currentSpan.text!.substring(0, i + 1),
+            style: _currentSpan.style,
+          )
+        ]);
       }
+    }).then((_) {
+      finishedCurrentSay = true;
     });
   }
 
@@ -227,14 +241,6 @@ class _TalkDialogState extends State<TalkDialog> {
       ];
     } else {
       return [];
-    }
-  }
-
-  void _nextOrFinish() {
-    if (finishCurrentTalk) {
-      _nextTalk();
-    } else {
-      _finishTalk();
     }
   }
 

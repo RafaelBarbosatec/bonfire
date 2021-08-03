@@ -1,3 +1,8 @@
+# Next
+- [BREAKING CHANGE] Refactor `TalkDialog` core to allow RichText animations:
+  Now every `Say` requires a `text` param which takes a `List<TextSpan>` instead of a String.
+- Add param `speed` to `TalkDialog`.
+
 # 1.4.4
 - add param `tileSizeToUpdate` to configure interval of the update map.
 
