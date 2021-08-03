@@ -183,8 +183,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       },
     );
 
-    if (execAttackRange && checkInterval('ATTACK_RANGE', 150, dt))
+    if (execAttackRange && checkInterval('ATTACK_RANGE', 150, dt)) {
       actionAttackRange();
+    }
     super.update(dt);
   }
 

@@ -27,16 +27,14 @@ mixin ObjectCollision on GameComponent {
   }
 
   bool isCollision({
-    Vector2Rect? displacement,
+    Vector2? displacement,
     bool shouldTriggerSensors = true,
   }) {
     if (!containCollision()) return false;
 
-    if (displacement != null) {
-      updatePosition(displacement);
+    if (_verifyComponentCollision(position: displacement)) {
+      return true;
     }
-
-    if (_verifyComponentCollision()) return true;
 
     return false;
   }
@@ -53,7 +51,7 @@ mixin ObjectCollision on GameComponent {
 
   Vector2Rect get rectCollision => getRectCollision();
 
-  bool _verifyComponentCollision() {
+  bool _verifyComponentCollision({Vector2? position}) {
     final compCollisions =
         ((_collisionConfig?.collisionOnlyVisibleScreen ?? true)
             ? gameRef.visibleCollisions()
@@ -61,7 +59,9 @@ mixin ObjectCollision on GameComponent {
 
     for (final i in compCollisions) {
       if (i != this &&
-          (_collisionConfig?.verifyCollision(i.collisionConfig) ?? false)) {
+          (_collisionConfig?.verifyCollision(i.collisionConfig,
+                  position: position) ??
+              false)) {
         onCollision(i, true);
         i.onCollision(this, false);
         return true;

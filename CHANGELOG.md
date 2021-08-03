@@ -1,5 +1,7 @@
-# Next
+# 1.4.0
 - Improvements in `Camera`
+- Improvements in `MapWorld` to support large maps.
+- [BREAKING CHANGE] change `List<Tile>` to `List<TileModel>` to create manual maps see [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/manual_map/dungeon_map.dart).
 
 # 1.3.7
 - remove microTask to update chache in `BonfireGame`
