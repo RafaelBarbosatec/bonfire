@@ -1,5 +1,5 @@
 import 'package:bonfire/collision/collision_area.dart';
-import 'package:bonfire/map/assets_manager.dart';
+import 'package:bonfire/map/map_assets_manager.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
@@ -22,7 +22,7 @@ class TileModelSprite {
     if (row == 0 && column == 0 && width == 0 && height == 0) {
       return Sprite.load(path);
     }
-    return AssetsManager.getSprite(
+    return MapAssetsManager.getSprite(
       path,
       row,
       column,
@@ -46,7 +46,7 @@ class TileModelAnimation {
     List<Sprite> spriteList = [];
 
     await Future.forEach<TileModelSprite>(frames, (frame) async {
-      Sprite sprite = await AssetsManager.getSprite(
+      Sprite sprite = await MapAssetsManager.getSprite(
         frame.path,
         frame.row,
         frame.column,

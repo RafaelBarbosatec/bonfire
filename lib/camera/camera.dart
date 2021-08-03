@@ -26,8 +26,8 @@ class Camera with BonfireHasGameRef<BonfireGame> {
 
   Rect get cameraRectWithSpacing => Rect.fromCenter(
         center: Offset(cameraRect.center.dx, cameraRect.center.dy),
-        width: cameraRect.width + _spacingMap,
-        height: cameraRect.height + _spacingMap,
+        width: cameraRect.width + (_spacingMap * 2),
+        height: cameraRect.height + (_spacingMap * 2),
       );
 
   void moveTop(double displacement) {

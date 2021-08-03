@@ -6,7 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:http/http.dart' as http;
 
-class AssetsManager {
+class MapAssetsManager {
   static final Map<String, Sprite> spriteCache = Map();
 
   static Future<Sprite> getSprite(

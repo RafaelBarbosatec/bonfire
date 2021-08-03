@@ -40,8 +40,8 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    int cameraX = (gameRef.camera.position.dx / tileSize).floor();
-    int cameraY = (gameRef.camera.position.dy / tileSize).floor();
+    final cameraX = (gameRef.camera.position.dx / tileSize).floor();
+    final cameraY = (gameRef.camera.position.dy / tileSize).floor();
     if (lastCameraX != cameraX ||
         lastCameraY != cameraY ||
         lastZoom > gameRef.camera.config.zoom) {
@@ -94,10 +94,11 @@ class MapWorld extends MapGame {
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
     if (tiles.isNotEmpty) {
-      tileSize = max(tiles.first.width, tiles.first.height);
+      tileSize = max(size.x, size.y) / 10;
+      tileSize = tileSize.ceilToDouble();
     }
     _getTileCollisions();
-    gameRef.camera.updateSpacingVisibleMap((tileSize * 4).ceilToDouble());
+    gameRef.camera.updateSpacingVisibleMap(tileSize);
   }
 
   @override
