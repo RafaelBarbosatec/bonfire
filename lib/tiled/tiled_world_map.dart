@@ -33,6 +33,7 @@ class TiledWorldMap {
   final Size? forceTileSize;
   final ValueChanged<Object>? onError;
   late TiledJsonReader _reader;
+  final double tileSizeToUpdate;
   List<TileModel> _tiles = [];
   List<GameComponent> _components = [];
   String? _basePath;
@@ -49,6 +50,7 @@ class TiledWorldMap {
     this.path, {
     this.forceTileSize,
     this.onError,
+    this.tileSizeToUpdate = 0,
     Map<String, ObjectBuilder>? objectsBuilder,
   }) {
     _objectsBuilder = objectsBuilder ?? Map();
@@ -79,10 +81,12 @@ class TiledWorldMap {
       print('(TiledWorldMap) Error: $e');
     }
 
-    return Future.value(TiledWorldData(
-      map: MapWorld(_tiles),
-      components: _components,
-    ));
+    return Future.value(
+      TiledWorldData(
+        map: MapWorld(_tiles, tileSizeToUpdate: tileSizeToUpdate),
+        components: _components,
+      ),
+    );
   }
 
   Future<void> _load(TiledMap tiledMap) async {
