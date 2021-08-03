@@ -28,7 +28,11 @@ class MapWorld extends MapGame {
 
   List<Tile> addLaterTiles = [];
 
-  MapWorld(Iterable<TileModel> tiles) : super(tiles);
+  MapWorld(Iterable<TileModel> tiles, {double tileSizeToUpdate = 0})
+      : super(
+          tiles,
+          tileSizeToUpdate: tileSizeToUpdate,
+        );
 
   @override
   void render(Canvas canvas) {
@@ -40,8 +44,8 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    final cameraX = (gameRef.camera.position.dx / tileSize).floor();
-    final cameraY = (gameRef.camera.position.dy / tileSize).floor();
+    final cameraX = (gameRef.camera.position.dx / tileSizeToUpdate).floor();
+    final cameraY = (gameRef.camera.position.dy / tileSizeToUpdate).floor();
     if (lastCameraX != cameraX ||
         lastCameraY != cameraY ||
         lastZoom > gameRef.camera.config.zoom) {
@@ -93,12 +97,12 @@ class MapWorld extends MapGame {
     lastZoom = -1;
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
-    if (tiles.isNotEmpty) {
-      tileSize = max(tiles.first.width, tiles.first.height) * 4;
-      tileSize = tileSize.ceilToDouble();
+    if (tiles.isNotEmpty && tileSizeToUpdate == 0) {
+      tileSizeToUpdate = max(tiles.first.width, tiles.first.height) * 4;
+      tileSizeToUpdate = tileSizeToUpdate.ceilToDouble();
     }
     _getTileCollisions();
-    gameRef.camera.updateSpacingVisibleMap(tileSize);
+    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 2);
   }
 
   @override
