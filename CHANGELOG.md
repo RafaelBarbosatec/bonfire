@@ -1,3 +1,6 @@
+# 1.4.1
+- fix `tileSize` in `MapWorld`.
+
 # 1.4.0
 - Improvements in `Camera`
 - Improvements in `MapWorld` to support large maps.
