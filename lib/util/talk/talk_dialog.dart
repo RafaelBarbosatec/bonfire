@@ -54,7 +54,6 @@ class TalkDialog extends StatefulWidget {
 
 class _TalkDialogState extends State<TalkDialog> {
   final FocusNode _focusNode = FocusNode();
-  Timer? timer;
   late Say currentSay;
   int currentIndexTalk = 0;
   bool finishedCurrentSay = false;
@@ -76,7 +75,6 @@ class _TalkDialogState extends State<TalkDialog> {
   void dispose() {
     _textShowController.close();
     _focusNode.dispose();
-    timer?.cancel();
     super.dispose();
   }
 
