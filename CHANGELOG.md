@@ -1,4 +1,4 @@
-# 1.4.1
+# 1.4.2
 - fix `tileSize` in `MapWorld`.
 
 # 1.4.0

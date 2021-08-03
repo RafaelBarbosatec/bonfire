@@ -1,6 +1,6 @@
 name: bonfire
 description: (RPG maker) Create RPG-style or similar games more simply with Flame.
-version: 1.4.1
+version: 1.4.2
 homepage: https://github.com/RafaelBarbosatec/bonfire
 
 environment:
