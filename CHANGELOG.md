@@ -1,4 +1,4 @@
-# 1.4.3
+# 1.4.4
 - add param `tileSizeToUpdate` to configure interval of the update map.
 
 # 1.4.2

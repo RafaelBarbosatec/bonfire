@@ -18,7 +18,9 @@ class AssetsLoader<T> {
   void add(AssetToLoad asset) => _assets.add(asset);
 
   Future<void> load() async {
-    await Future.forEach<AssetToLoad>(_assets, (element) => element.load());
+    for (final element in _assets) {
+      await element.load();
+    }
     _assets.clear();
   }
 }

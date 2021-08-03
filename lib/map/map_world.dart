@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
@@ -19,6 +20,8 @@ class MapWorld extends MapGame {
   Iterable<Tile> _tilesToRender = [];
   List<ObjectCollision> _tilesCollisionsRendered = [];
   Iterable<ObjectCollision> _tilesCollisions = [];
+  List<Tile> _auxTiles = [];
+  List<ObjectCollision> _auxCollisionTiles = [];
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -26,7 +29,7 @@ class MapWorld extends MapGame {
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round;
 
-  List<Tile> addLaterTiles = [];
+  List<Tile> _addLaterTiles = [];
 
   MapWorld(Iterable<TileModel> tiles, {double tileSizeToUpdate = 0})
       : super(
@@ -57,13 +60,14 @@ class MapWorld extends MapGame {
 
       _updateTilesToRender();
     }
-    for (final tile in _tilesToRender) {
-      tile.update(t);
+
+    if (_addLaterTiles.isNotEmpty) {
+      _tilesToRender = _addLaterTiles.toList(growable: false);
+      _addLaterTiles.clear();
     }
 
-    if (addLaterTiles.isNotEmpty) {
-      _tilesToRender = addLaterTiles.toList();
-      addLaterTiles.clear();
+    for (final tile in _tilesToRender) {
+      tile.update(t);
     }
   }
 
@@ -98,11 +102,11 @@ class MapWorld extends MapGame {
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
     if (tiles.isNotEmpty && tileSizeToUpdate == 0) {
-      tileSizeToUpdate = max(tiles.first.width, tiles.first.height) * 4;
+      tileSizeToUpdate = max(size.x, size.y) / 3;
       tileSizeToUpdate = tileSizeToUpdate.ceilToDouble();
     }
     _getTileCollisions();
-    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 2);
+    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.5);
   }
 
   @override
@@ -164,23 +168,13 @@ class MapWorld extends MapGame {
   }
 
   void _updateTilesToRender() async {
-    if (addLaterTiles.isEmpty) {
+    if (_addLaterTiles.isEmpty) {
       final visibleTiles = tiles.where(
         (tile) => gameRef.camera.contains(tile.center),
       );
-
-      List<Tile> auxTiles = [];
-      List<ObjectCollision> auxCollisionTiles = [];
-      await Future.forEach<TileModel>(visibleTiles, (element) async {
-        final tile = _buildTile(element);
-        if (tile is ObjectCollision) {
-          auxCollisionTiles.add(tile as ObjectCollision);
-        }
-        await tile.onLoad();
-        auxTiles.add(tile);
-      });
-      addLaterTiles = auxTiles;
-      _tilesCollisionsRendered = auxCollisionTiles;
+      await _buildAsyncTiles(visibleTiles);
+      _addLaterTiles = _auxTiles;
+      _tilesCollisionsRendered = _auxCollisionTiles.toList(growable: false);
     }
   }
 
@@ -261,5 +255,18 @@ class MapWorld extends MapGame {
       aux.add(o as ObjectCollision);
     });
     _tilesCollisions = aux;
+  }
+
+  Future<void> _buildAsyncTiles(Iterable<TileModel> visibleTiles) async {
+    _auxCollisionTiles.clear();
+    _auxTiles.clear();
+    for (final element in visibleTiles) {
+      final tile = _buildTile(element);
+      if (tile is ObjectCollision) {
+        _auxCollisionTiles.add(tile as ObjectCollision);
+      }
+      await tile.onLoad();
+      _auxTiles.add(tile);
+    }
   }
 }
