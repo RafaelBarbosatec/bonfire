@@ -10,26 +10,26 @@ import 'package:flutter/material.dart';
 
 class DungeonMap {
   static double tileSize = 45;
-  static final Future<Sprite> wallBottom = Sprite.load('tile/wall_bottom.png');
-  static final Future<Sprite> wall = Sprite.load('tile/wall.png');
-  static final Future<Sprite> wallTop = Sprite.load('tile/wall_top.png');
-  static final Future<Sprite> wallLeft = Sprite.load('tile/wall_left.png');
-  static final Future<Sprite> wallBottomLeft =
-      Sprite.load('tile/wall_bottom_left.png');
-  static final Future<Sprite> wallRight = Sprite.load('tile/wall_right.png');
-  static final Future<Sprite> floor_1 = Sprite.load('tile/floor_1.png');
-  static final Future<Sprite> floor_2 = Sprite.load('tile/floor_2.png');
-  static final Future<Sprite> floor_3 = Sprite.load('tile/floor_3.png');
-  static final Future<Sprite> floor_4 = Sprite.load('tile/floor_4.png');
+  static final String wallBottom = 'tile/wall_bottom.png';
+  static final String wall = 'tile/wall.png';
+  static final String wallTop = 'tile/wall_top.png';
+  static final String wallLeft = 'tile/wall_left.png';
+  static final String wallBottomLeft = 'tile/wall_bottom_left.png';
+  static final String wallRight = 'tile/wall_right.png';
+  static final String floor_1 = 'tile/floor_1.png';
+  static final String floor_2 = 'tile/floor_2.png';
+  static final String floor_3 = 'tile/floor_3.png';
+  static final String floor_4 = 'tile/floor_4.png';
 
   static MapWorld map() {
-    List<Tile> tileList = [];
+    List<TileModel> tileList = [];
     List.generate(35, (indexRow) {
       List.generate(70, (indexColumm) {
         if (indexRow == 3 && indexColumm > 2 && indexColumm < 30) {
-          tileList.add(TileWithCollision.withSprite(
-            wallBottom,
-            Vector2(indexColumm.toDouble(), indexRow.toDouble()),
+          tileList.add(TileModel(
+            sprite: TileModelSprite(path: wallBottom),
+            x: indexColumm.toDouble(),
+            y: indexRow.toDouble(),
             collisions: [
               CollisionArea.rectangle(size: Size(tileSize, tileSize))
             ],
@@ -39,9 +39,10 @@ class DungeonMap {
           return;
         }
         if (indexRow == 4 && indexColumm > 2 && indexColumm < 30) {
-          tileList.add(TileWithCollision.withSprite(
-            wall,
-            Vector2(indexColumm.toDouble(), indexRow.toDouble()),
+          tileList.add(TileModel(
+            sprite: TileModelSprite(path: wall),
+            x: indexColumm.toDouble(),
+            y: indexRow.toDouble(),
             collisions: [
               CollisionArea.rectangle(size: Size(tileSize, tileSize))
             ],
@@ -52,9 +53,10 @@ class DungeonMap {
         }
 
         if (indexRow == 9 && indexColumm > 2 && indexColumm < 30) {
-          tileList.add(TileWithCollision.withSprite(
-            wallTop,
-            Vector2(indexColumm.toDouble(), indexRow.toDouble()),
+          tileList.add(TileModel(
+            sprite: TileModelSprite(path: wallTop),
+            x: indexColumm.toDouble(),
+            y: indexRow.toDouble(),
             collisions: [
               CollisionArea.rectangle(size: Size(tileSize, tileSize))
             ],
@@ -69,9 +71,10 @@ class DungeonMap {
             indexColumm > 2 &&
             indexColumm < 30) {
           tileList.add(
-            Tile.fromSprite(
-              randomFloor(),
-              Vector2(indexColumm.toDouble(), indexRow.toDouble()),
+            TileModel(
+              sprite: TileModelSprite(path: randomFloor()),
+              x: indexColumm.toDouble(),
+              y: indexRow.toDouble(),
               width: tileSize,
               height: tileSize,
             ),
@@ -80,9 +83,10 @@ class DungeonMap {
         }
 
         if (indexRow > 3 && indexRow < 9 && indexColumm == 2) {
-          tileList.add(TileWithCollision.withSprite(
-            wallLeft,
-            Vector2(indexColumm.toDouble(), indexRow.toDouble()),
+          tileList.add(TileModel(
+            sprite: TileModelSprite(path: wallLeft),
+            x: indexColumm.toDouble(),
+            y: indexRow.toDouble(),
             collisions: [
               CollisionArea.rectangle(size: Size(tileSize, tileSize))
             ],
@@ -91,9 +95,10 @@ class DungeonMap {
           ));
         }
         if (indexRow == 9 && indexColumm == 2) {
-          tileList.add(TileWithCollision.withSprite(
-            wallBottomLeft,
-            Vector2(indexColumm.toDouble(), indexRow.toDouble()),
+          tileList.add(TileModel(
+            sprite: TileModelSprite(path: wallBottomLeft),
+            x: indexColumm.toDouble(),
+            y: indexRow.toDouble(),
             collisions: [
               CollisionArea.rectangle(size: Size(tileSize, tileSize))
             ],
@@ -103,9 +108,10 @@ class DungeonMap {
         }
 
         if (indexRow > 3 && indexRow < 9 && indexColumm == 30) {
-          tileList.add(TileWithCollision.withSprite(
-            wallRight,
-            Vector2(indexColumm.toDouble(), indexRow.toDouble()),
+          tileList.add(TileModel(
+            sprite: TileModelSprite(path: wallRight),
+            x: indexColumm.toDouble(),
+            y: indexRow.toDouble(),
             collisions: [
               CollisionArea.rectangle(size: Size(tileSize, tileSize))
             ],
@@ -113,23 +119,10 @@ class DungeonMap {
             height: tileSize,
           ));
         }
-
-        if (indexRow == 13 && indexColumm == 31) {
-          tileList.add(
-            Tile(
-              '',
-              Vector2(indexColumm.toDouble(), indexRow.toDouble()),
-              width: tileSize,
-              height: tileSize,
-            ),
-          );
-          return;
-        }
       });
     });
 
-    ///Todo atualizar esse exemplo
-    return MapWorld([]);
+    return MapWorld(tileList);
   }
 
   static List<GameDecoration> decorations() {
@@ -204,7 +197,7 @@ class DungeonMap {
     ];
   }
 
-  static Future<Sprite> randomFloor() {
+  static String randomFloor() {
     int p = Random().nextInt(6);
     switch (p) {
       case 0:

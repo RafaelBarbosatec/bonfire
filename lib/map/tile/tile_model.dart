@@ -80,8 +80,8 @@ class TileModel {
   TileModel({
     required this.x,
     required this.y,
-    required this.offsetX,
-    required this.offsetY,
+    this.offsetX = 0.0,
+    this.offsetY = 0.0,
     required this.width,
     required this.height,
     this.type,
