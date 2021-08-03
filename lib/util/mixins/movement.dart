@@ -5,6 +5,7 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/vector2rect.dart';
+import 'package:flame/components.dart';
 
 /// Mixin responsible for adding movements
 mixin Movement on GameComponent {
@@ -19,7 +20,7 @@ mixin Movement on GameComponent {
     double innerSpeed = speed * dtUpdate;
     Vector2Rect displacement = position.translate(0, (innerSpeed * -1));
 
-    if (_isCollision(displacement)) {
+    if (_isCollision(displacement.position)) {
       onCollision?.call();
       return;
     }
@@ -34,7 +35,7 @@ mixin Movement on GameComponent {
     double innerSpeed = speed * dtUpdate;
     Vector2Rect displacement = position.translate(0, innerSpeed);
 
-    if (_isCollision(displacement)) {
+    if (_isCollision(displacement.position)) {
       onCollision?.call();
       return;
     }
@@ -49,7 +50,7 @@ mixin Movement on GameComponent {
     double innerSpeed = speed * dtUpdate;
     Vector2Rect displacement = position.translate((innerSpeed * -1), 0);
 
-    if (_isCollision(displacement)) {
+    if (_isCollision(displacement.position)) {
       onCollision?.call();
       return;
     }
@@ -65,7 +66,7 @@ mixin Movement on GameComponent {
     double innerSpeed = speed * dtUpdate;
     Vector2Rect displacement = position.translate(innerSpeed, 0);
 
-    if (_isCollision(displacement)) {
+    if (_isCollision(displacement.position)) {
       onCollision?.call();
       return;
     }
@@ -121,7 +122,7 @@ mixin Movement on GameComponent {
 
     Vector2Rect newPosition = position.shift(newDiffBase);
 
-    if (_isCollision(newPosition)) {
+    if (_isCollision(newPosition.position)) {
       onCollision?.call();
       return;
     }
@@ -193,7 +194,7 @@ mixin Movement on GameComponent {
   ) {
     if (this.isObjectCollision()) {
       return (this as ObjectCollision).isCollision(
-        displacement: this.position.translate(translateX, translateY),
+        displacement: this.position.translate(translateX, translateY).position,
       );
     } else {
       return false;
@@ -210,7 +211,7 @@ mixin Movement on GameComponent {
     super.update(dt);
   }
 
-  bool _isCollision(Vector2Rect displacement) {
+  bool _isCollision(Vector2 displacement) {
     if (this.isObjectCollision()) {
       (this as ObjectCollision)
           .setCollisionOnlyVisibleScreen(this.isVisibleInCamera());

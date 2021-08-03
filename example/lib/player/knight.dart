@@ -183,8 +183,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       },
     );
 
-    if (execAttackRange && checkInterval('ATTACK_RANGE', 150, dt))
+    if (execAttackRange && checkInterval('ATTACK_RANGE', 150, dt)) {
       actionAttackRange();
+    }
     super.update(dt);
   }
 
@@ -241,24 +242,26 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   }
 
   void changeControllerToVisibleEnemy() {
-    if (enemyControlled == null) {
-      final v = gameRef
-          .visibleEnemies()
-          .where((element) => element is Goblin)
-          .cast<Goblin>();
-      if (v.isNotEmpty) {
-        enemyControlled = v.first;
-        enemyControlled?.enableBehaviors = false;
-        gameRef.joystickController?.removeObserver(this);
-        gameRef.joystickController?.addObserver(enemyControlled!);
-        gameRef.camera.moveToTargetAnimated(enemyControlled!);
+    if (!gameRef.camera.isMoving) {
+      if (enemyControlled == null) {
+        final v = gameRef
+            .visibleEnemies()
+            .where((element) => element is Goblin)
+            .cast<Goblin>();
+        if (v.isNotEmpty) {
+          enemyControlled = v.first;
+          enemyControlled?.enableBehaviors = false;
+          gameRef.joystickController?.removeObserver(this);
+          gameRef.joystickController?.addObserver(enemyControlled!);
+          gameRef.camera.moveToTargetAnimated(enemyControlled!);
+        }
+      } else {
+        gameRef.joystickController?.removeObserver(enemyControlled!);
+        gameRef.joystickController?.addObserver(this);
+        gameRef.camera.moveToPlayerAnimated();
+        enemyControlled?.enableBehaviors = true;
+        enemyControlled = null;
       }
-    } else {
-      gameRef.joystickController?.removeObserver(enemyControlled!);
-      gameRef.joystickController?.addObserver(this);
-      gameRef.camera.moveToPlayerAnimated();
-      enemyControlled?.enableBehaviors = true;
-      enemyControlled = null;
     }
   }
 

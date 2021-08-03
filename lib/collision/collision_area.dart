@@ -34,11 +34,10 @@ class CollisionArea {
         align = align ?? Vector2.zero();
 
   void updatePosition(Vector2Rect position) {
-    double x = position.position.x;
-    double y = position.position.y;
-    x += (align?.x ?? 0.0);
-    y += (align?.y ?? 0.0);
-    shape.position = Vector2(x, y);
+    shape.position = Vector2(
+      position.position.x + (align?.x ?? 0.0),
+      position.position.y + (align?.y ?? 0.0),
+    );
   }
 
   void render(Canvas c, Color color) {
@@ -47,6 +46,29 @@ class CollisionArea {
 
   bool verifyCollision(CollisionArea other) {
     return shape.isCollision(other.shape);
+  }
+
+  bool verifyCollisionSimulate(Vector2 position, CollisionArea other) {
+    Shape? shapeAux;
+    if (shape is CircleShape) {
+      shapeAux = CircleShape(
+        (shape as CircleShape).radius,
+      );
+    } else if (shape is RectangleShape) {
+      shapeAux = RectangleShape(
+        (shape as RectangleShape).rect.size,
+      );
+    } else if (shape is PolygonShape) {
+      shapeAux = PolygonShape(
+        (shape as PolygonShape).relativePoints,
+      );
+    }
+
+    shapeAux?.position = Vector2(
+      position.x + (align?.x ?? 0.0),
+      position.y + (align?.y ?? 0.0),
+    );
+    return shapeAux?.isCollision(other.shape) ?? false;
   }
 
   Rect get rect {

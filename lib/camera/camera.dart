@@ -8,12 +8,15 @@ import 'package:flutter/widgets.dart';
 import 'camera_config.dart';
 
 class Camera with BonfireHasGameRef<BonfireGame> {
-  double _spacingMap = -32.0;
+  bool _isMoving = false;
+  double _spacingMap = 32.0;
   Offset position = Offset.zero;
   Offset _lastTargetOffset = Offset.zero;
   final CameraConfig config;
 
   Camera(this.config);
+
+  bool get isMoving => _isMoving;
 
   Rect get cameraRect => Rect.fromCenter(
         center: Offset(position.dx, position.dy),
@@ -23,8 +26,8 @@ class Camera with BonfireHasGameRef<BonfireGame> {
 
   Rect get cameraRectWithSpacing => Rect.fromCenter(
         center: Offset(cameraRect.center.dx, cameraRect.center.dy),
-        width: cameraRect.width + _spacingMap,
-        height: cameraRect.height + _spacingMap,
+        width: cameraRect.width + (_spacingMap * 2),
+        height: cameraRect.height + (_spacingMap * 2),
       );
 
   void moveTop(double displacement) {
@@ -50,8 +53,9 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     Duration? duration,
     Curve curve = Curves.decelerate,
   }) {
-    if (zoom <= 0.0) return;
+    if (zoom <= 0.0 || _isMoving) return;
     config.target = null;
+    _isMoving = true;
 
     double diffX = this.position.dx - position.dx;
     double diffY = this.position.dy - position.dy;
@@ -61,26 +65,27 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     double diffZoom = config.zoom - zoom;
     double initialZoom = config.zoom;
 
-    gameRef
-        .getValueGenerator(
-          duration ?? Duration(seconds: 1),
-          onChange: (value) {
-            this.position = this.position.copyWith(
-                  x: originX - (diffX * value),
-                );
-            this.position = this.position.copyWith(
-                  y: originY - (diffY * value),
-                );
-            config.zoom = initialZoom - (diffZoom * value);
+    gameRef.getValueGenerator(
+      duration ?? Duration(seconds: 1),
+      onChange: (value) {
+        this.position = this.position.copyWith(
+              x: originX - (diffX * value),
+            );
+        this.position = this.position.copyWith(
+              y: originY - (diffY * value),
+            );
+        config.zoom = initialZoom - (diffZoom * value);
 
-            if (config.moveOnlyMapArea) {
-              _keepInMapArea();
-            }
-          },
-          onFinish: () => finish?.call(),
-          curve: curve,
-        )
-        .start();
+        if (config.moveOnlyMapArea) {
+          _keepInMapArea();
+        }
+      },
+      onFinish: () {
+        _isMoving = false;
+        finish?.call();
+      },
+      curve: curve,
+    ).start();
   }
 
   void moveToTargetAnimated(
@@ -90,8 +95,9 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     Duration? duration,
     Curve curve = Curves.decelerate,
   }) {
-    if (zoom <= 0.0) return;
+    if (zoom <= 0.0 || _isMoving) return;
     config.target = null;
+    _isMoving = true;
 
     double diffX = this.position.dx - target.position.center.dx;
     double diffY = this.position.dy - target.position.center.dy;
@@ -114,6 +120,7 @@ class Camera with BonfireHasGameRef<BonfireGame> {
       },
       onFinish: () {
         config.target = target;
+        _isMoving = false;
         finish?.call();
       },
       curve: curve,
@@ -191,7 +198,9 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     VoidCallback? finish,
     Curve curve = Curves.decelerate,
   }) {
-    if (zoom <= 0.0) return;
+    if (zoom <= 0.0 || _isMoving) return;
+
+    _isMoving = true;
 
     double diffZoom = config.zoom - (zoom);
     double initialZoom = config.zoom;
@@ -201,13 +210,20 @@ class Camera with BonfireHasGameRef<BonfireGame> {
       onChange: (value) {
         config.zoom = initialZoom - (diffZoom * value);
       },
-      onFinish: finish,
+      onFinish: () {
+        _isMoving = false;
+        finish?.call();
+      },
       curve: curve,
     ).start();
   }
 
   bool isComponentOnCamera(GameComponent c) {
     return cameraRectWithSpacing.overlaps(c.position.rect);
+  }
+
+  bool contains(Offset c) {
+    return cameraRectWithSpacing.contains(c);
   }
 
   bool isRectOnCamera(Rect c) {
