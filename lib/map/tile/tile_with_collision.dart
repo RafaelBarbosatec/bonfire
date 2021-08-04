@@ -29,8 +29,8 @@ class TileWithCollision extends Tile with ObjectCollision {
     });
   }
 
-  TileWithCollision.withSprite(
-    Future<Sprite> sprite,
+  TileWithCollision.fromSprite(
+    Sprite sprite,
     Vector2 position, {
     double width = 32,
     double height = 32,
@@ -40,6 +40,29 @@ class TileWithCollision extends Tile with ObjectCollision {
     double offsetY = 0,
     Map<String, dynamic>? properties,
   }) : super.fromSprite(
+          sprite,
+          position,
+          width: width,
+          height: height,
+          type: type,
+          properties: properties,
+        ) {
+    collisions?.let((c) {
+      setupCollision(CollisionConfig(collisions: c));
+    });
+  }
+
+  TileWithCollision.fromFutureSprite(
+    Future<Sprite> sprite,
+    Vector2 position, {
+    double width = 32,
+    double height = 32,
+    String? type,
+    Iterable<CollisionArea>? collisions,
+    double offsetX = 0,
+    double offsetY = 0,
+    Map<String, dynamic>? properties,
+  }) : super.fromFutureSprite(
           sprite,
           position,
           width: width,

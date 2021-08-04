@@ -1,5 +1,6 @@
 import 'package:bonfire/collision/collision_area.dart';
 import 'package:bonfire/map/map_assets_manager.dart';
+import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
@@ -18,7 +19,8 @@ class TileModelSprite {
     this.height = 0,
   });
 
-  Future<Sprite> getSprite() {
+  bool get inCache => MapAssetsManager.inSpriteCache('$path/$row/$column');
+  Future<Sprite> getFutureSprite() {
     if (row == 0 && column == 0 && width == 0 && height == 0) {
       return Sprite.load(path);
     }
@@ -31,6 +33,10 @@ class TileModelSprite {
       fromServer: path.contains('http'),
     );
   }
+
+  Sprite getSprite() {
+    return MapAssetsManager.getSpriteCache('$path/$row/$column');
+  }
 }
 
 class TileModelAnimation {
@@ -42,25 +48,27 @@ class TileModelAnimation {
     required this.frames,
   });
 
-  Future<SpriteAnimation> getSpriteAnimation() async {
-    List<Sprite> spriteList = [];
+  bool get inCache => MapAssetsManager.inSpriteAnimationCache(key());
 
-    await Future.forEach<TileModelSprite>(frames, (frame) async {
-      Sprite sprite = await MapAssetsManager.getSprite(
-        frame.path,
-        frame.row,
-        frame.column,
-        frame.width,
-        frame.height,
-        fromServer: frame.path.contains('http'),
-      );
-      spriteList.add(sprite);
+  Future<ControlledUpdateAnimation> getFutureControlledAnimation() async {
+    return MapAssetsManager.getSpriteAnimation(frames, stepTime);
+  }
+
+  Future<SpriteAnimation> getFutureSpriteAnimation() async {
+    final a = await MapAssetsManager.getSpriteAnimation(frames, stepTime);
+    return a.animation!;
+  }
+
+  ControlledUpdateAnimation getSpriteAnimation() {
+    return MapAssetsManager.getSpriteAnimationCache(key());
+  }
+
+  String key() {
+    String key = '';
+    frames.forEach((element) {
+      key += '${element.path}${element.row}${element.column}';
     });
-
-    return SpriteAnimation.spriteList(
-      spriteList,
-      stepTime: stepTime,
-    );
+    return key;
   }
 }
 
@@ -91,6 +99,7 @@ class TileModel {
     this.collisions,
   });
 
+  String get id => '$x/$y';
   double get left => (x * width);
   double get right => (x * width) + width;
   double get top => (y * height);

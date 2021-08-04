@@ -8,10 +8,15 @@ import 'package:bonfire/util/vector2rect.dart';
 class ControlledUpdateAnimation {
   bool _alreadyUpdate = false;
   SpriteAnimation? animation;
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader;
 
   ControlledUpdateAnimation(Future<SpriteAnimation> animation) {
-    _loader.add(AssetToLoad(animation, (value) => this.animation = value));
+    _loader = AssetsLoader();
+    _loader?.add(AssetToLoad(animation, (value) => this.animation = value));
+  }
+
+  ControlledUpdateAnimation.fromInstance(SpriteAnimation animation) {
+    this.animation = animation;
   }
 
   void render(Canvas canvas, Vector2Rect position) {
@@ -32,7 +37,7 @@ class ControlledUpdateAnimation {
     }
   }
 
-  Future<void> onLoad() {
-    return _loader.load();
+  Future<void> onLoad() async {
+    await _loader?.load();
   }
 }
