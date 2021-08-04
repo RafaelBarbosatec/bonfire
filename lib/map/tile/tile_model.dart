@@ -104,6 +104,8 @@ class TileModel {
   double get right => (x * width) + width;
   double get top => (y * height);
   double get bottom => (y * height) + height;
-  Offset get center =>
-      Offset((x * width) + (width / 2.0), (y * height) + (height / 2.0));
+  Offset get center => Offset(
+        (x * width) + (width / 2.0),
+        (y * height) + (height / 2.0),
+      );
 }
