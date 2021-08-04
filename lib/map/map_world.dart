@@ -104,8 +104,8 @@ class MapWorld extends MapGame {
       tileSizeToUpdate = max(size.x, size.y) / 4;
       tileSizeToUpdate = tileSizeToUpdate.ceilToDouble();
     }
-    _getTileCollisions();
     gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.5);
+    _getTileCollisions();
   }
 
   @override
@@ -294,14 +294,15 @@ class MapWorld extends MapGame {
 
   void _getTileCollisions() async {
     List<ObjectCollision> aux = [];
-    final list =
-        tiles.where((element) => element.collisions?.isNotEmpty == true);
+    final list = tiles.where((element) {
+      return element.collisions?.isNotEmpty == true;
+    });
 
-    await Future.forEach<TileModel>(list, (element) async {
+    for (final element in list) {
       final o = _buildTile(element);
       await o.onLoad();
       aux.add(o as ObjectCollision);
-    });
+    }
     _tilesCollisions = aux;
   }
 
