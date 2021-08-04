@@ -57,7 +57,9 @@ class MapWorld extends MapGame {
       if (lastZoom > gameRef.camera.config.zoom) {
         lastZoom = gameRef.camera.config.zoom;
       }
-      _updateTilesToRender();
+      if (_addLaterTiles.isEmpty) {
+        scheduleMicrotask(_updateTilesToRender);
+      }
     }
 
     if (_addLaterTiles.isNotEmpty) {
