@@ -203,9 +203,8 @@ class _TalkDialogState extends State<TalkDialog> {
     // Clean the stream to prevent textStyle from changing before the text
     _textShowController.add([TextSpan()]);
 
-    await Future.forEach(currentSay.text, (span) async {
-      TextSpan _currentSpan = span as TextSpan;
-      for (int i = 0; i < (_currentSpan.text?.length ?? 0); i++) {
+    await Future.forEach<TextSpan>(currentSay.text, (span) async {
+      for (int i = 0; i < (span.text?.length ?? 0); i++) {
         if (finishedCurrentSay) {
           _textShowController.add([...currentSay.text]);
           break;
@@ -214,8 +213,8 @@ class _TalkDialogState extends State<TalkDialog> {
         _textShowController.add([
           ...currentSay.text.sublist(0, currentSay.text.indexOf(span)),
           TextSpan(
-            text: _currentSpan.text!.substring(0, i + 1),
-            style: _currentSpan.style,
+            text: span.text!.substring(0, i + 1),
+            style: span.style,
           )
         ]);
       }

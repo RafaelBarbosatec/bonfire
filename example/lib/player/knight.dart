@@ -276,14 +276,14 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
             Say(
               text: [
                 TextSpan(
-                  text: "Look at this! It seems that",
+                  text: 'Look at this! It seems that',
                 ),
                 TextSpan(
                   text: ' I\'m not alone ',
                   style: TextStyle(color: Colors.red),
                 ),
                 TextSpan(
-                  text: "here...",
+                  text: 'here...',
                 ),
               ],
               person: Container(
