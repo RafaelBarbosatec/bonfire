@@ -168,7 +168,7 @@ class TiledWorldMap {
       if (data.animation != null) {
         _components.add(
           GameDecorationWithCollision.withAnimation(
-            data.animation!.getSpriteAnimation(),
+            data.animation!.getFutureSpriteAnimation(),
             Vector2(
               _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
               _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
@@ -184,7 +184,7 @@ class TiledWorldMap {
       if (data.sprite != null) {
         _components.add(
           GameDecorationWithCollision.withSprite(
-            data.sprite!.getSprite(),
+            data.sprite!.getFutureSprite(),
             Vector2(
               _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
               _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,

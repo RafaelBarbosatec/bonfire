@@ -21,6 +21,7 @@ class Tile extends GameComponent {
   AssetsLoader? _loader;
   final Map<String, dynamic>? properties;
   TextPaint? _textPaintConfig;
+  String id = '';
 
   Tile(
     String spritePath,
@@ -30,6 +31,7 @@ class Tile extends GameComponent {
     this.type,
     this.properties,
   }) {
+    id = '${position.x}/${position.y}';
     this.position = generateRectWithBleedingPixel(position, width, height);
     if (spritePath.isNotEmpty) {
       _loader = AssetsLoader();
@@ -42,6 +44,29 @@ class Tile extends GameComponent {
   }
 
   Tile.fromSprite(
+    Sprite sprite,
+    Vector2 position, {
+    this.width = 32,
+    this.height = 32,
+    this.type,
+    this.properties,
+    double offsetX = 0,
+    double offsetY = 0,
+  }) {
+    id = '${position.x}/${position.y}';
+    this._sprite = sprite;
+    this.position = generateRectWithBleedingPixel(
+      position,
+      width,
+      height,
+      offsetX: offsetX,
+      offsetY: offsetY,
+    );
+
+    _positionText = position;
+  }
+
+  Tile.fromFutureSprite(
     Future<Sprite> sprite,
     Vector2 position, {
     this.width = 32,
@@ -51,6 +76,7 @@ class Tile extends GameComponent {
     double offsetX = 0,
     double offsetY = 0,
   }) {
+    id = '${position.x}/${position.y}';
     _loader = AssetsLoader();
     _loader?.add(AssetToLoad(sprite, (value) => this._sprite = value));
     this.position = generateRectWithBleedingPixel(
@@ -74,6 +100,7 @@ class Tile extends GameComponent {
     double offsetX = 0,
     double offsetY = 0,
   }) {
+    id = '${position.x}/${position.y}';
     this._animation = animation;
     this.position = generateRectWithBleedingPixel(
       position,

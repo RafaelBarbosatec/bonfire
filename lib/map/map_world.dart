@@ -57,7 +57,6 @@ class MapWorld extends MapGame {
       if (lastZoom > gameRef.camera.config.zoom) {
         lastZoom = gameRef.camera.config.zoom;
       }
-
       _updateTilesToRender();
     }
 
@@ -102,7 +101,7 @@ class MapWorld extends MapGame {
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
     if (tiles.isNotEmpty && tileSizeToUpdate == 0) {
-      tileSizeToUpdate = max(size.x, size.y) / 3;
+      tileSizeToUpdate = max(size.x, size.y) / 4;
       tileSizeToUpdate = tileSizeToUpdate.ceilToDouble();
     }
     _getTileCollisions();
@@ -167,7 +166,7 @@ class MapWorld extends MapGame {
     }
   }
 
-  void _updateTilesToRender() async {
+  Future<void> _updateTilesToRender() async {
     if (_addLaterTiles.isEmpty) {
       final visibleTiles = tiles.where(
         (tile) => gameRef.camera.contains(tile.center),
@@ -181,39 +180,80 @@ class MapWorld extends MapGame {
   Tile _buildTile(TileModel e) {
     if (e.animation == null) {
       if (e.collisions?.isNotEmpty == true) {
-        return TileWithCollision.withSprite(
-          e.sprite!.getSprite(),
-          Vector2(
-            e.x,
-            e.y,
-          ),
-          offsetX: e.offsetX,
-          offsetY: e.offsetY,
-          collisions: e.collisions,
-          width: e.width,
-          height: e.height,
-          type: e.type,
-          properties: e.properties,
-        )..gameRef = gameRef;
+        if (e.sprite!.inCache) {
+          return TileWithCollision.fromSprite(
+            e.sprite!.getSprite(),
+            Vector2(
+              e.x,
+              e.y,
+            ),
+            offsetX: e.offsetX,
+            offsetY: e.offsetY,
+            collisions: e.collisions,
+            width: e.width,
+            height: e.height,
+            type: e.type,
+            properties: e.properties,
+          )..gameRef = gameRef;
+        } else {
+          return TileWithCollision.fromFutureSprite(
+            e.sprite!.getFutureSprite(),
+            Vector2(
+              e.x,
+              e.y,
+            ),
+            offsetX: e.offsetX,
+            offsetY: e.offsetY,
+            collisions: e.collisions,
+            width: e.width,
+            height: e.height,
+            type: e.type,
+            properties: e.properties,
+          )..gameRef = gameRef;
+        }
       } else {
-        return Tile.fromSprite(
-          e.sprite!.getSprite(),
-          Vector2(
-            e.x,
-            e.y,
-          ),
-          offsetX: e.offsetX,
-          offsetY: e.offsetY,
-          width: e.width,
-          height: e.height,
-          type: e.type,
-          properties: e.properties,
-        )..gameRef = gameRef;
+        if (e.sprite!.inCache) {
+          return Tile.fromSprite(
+            e.sprite!.getSprite(),
+            Vector2(
+              e.x,
+              e.y,
+            ),
+            offsetX: e.offsetX,
+            offsetY: e.offsetY,
+            width: e.width,
+            height: e.height,
+            type: e.type,
+            properties: e.properties,
+          )..gameRef = gameRef;
+        } else {
+          return Tile.fromFutureSprite(
+            e.sprite!.getFutureSprite(),
+            Vector2(
+              e.x,
+              e.y,
+            ),
+            offsetX: e.offsetX,
+            offsetY: e.offsetY,
+            width: e.width,
+            height: e.height,
+            type: e.type,
+            properties: e.properties,
+          )..gameRef = gameRef;
+        }
       }
     } else {
       if (e.collisions?.isNotEmpty == true) {
+        ControlledUpdateAnimation animation;
+        if (e.animation!.inCache) {
+          animation = ControlledUpdateAnimation.fromInstance(
+              e.animation!.getSpriteAnimation());
+        } else {
+          animation = ControlledUpdateAnimation(
+              e.animation!.getFutureSpriteAnimation());
+        }
         return TileWithCollision.withAnimation(
-          ControlledUpdateAnimation(e.animation!.getSpriteAnimation()),
+          animation,
           Vector2(
             e.x,
             e.y,
@@ -227,8 +267,18 @@ class MapWorld extends MapGame {
           properties: e.properties,
         )..gameRef = gameRef;
       } else {
+        ControlledUpdateAnimation animation;
+        if (e.animation!.inCache) {
+          animation = ControlledUpdateAnimation.fromInstance(
+            e.animation!.getSpriteAnimation(),
+          );
+        } else {
+          animation = ControlledUpdateAnimation(
+            e.animation!.getFutureSpriteAnimation(),
+          );
+        }
         return Tile.fromAnimation(
-          ControlledUpdateAnimation(e.animation!.getSpriteAnimation()),
+          animation,
           Vector2(
             e.x,
             e.y,
@@ -268,5 +318,10 @@ class MapWorld extends MapGame {
       await tile.onLoad();
       _auxTiles.add(tile);
     }
+  }
+
+  @override
+  Future<void>? onLoad() async {
+    return _updateTilesToRender();
   }
 }
