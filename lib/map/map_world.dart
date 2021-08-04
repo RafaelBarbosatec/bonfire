@@ -101,7 +101,7 @@ class MapWorld extends MapGame {
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
     if (tiles.isNotEmpty && tileSizeToUpdate == 0) {
-      tileSizeToUpdate = max(size.x, size.y) / 4;
+      tileSizeToUpdate = max(size.x, size.y) / 3;
       tileSizeToUpdate = tileSizeToUpdate.ceilToDouble();
     }
     gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.5);
@@ -321,6 +321,9 @@ class MapWorld extends MapGame {
 
   @override
   Future<void>? onLoad() async {
+    lastCameraX = (gameRef.camera.position.dx / tileSizeToUpdate).floor();
+    lastCameraY = (gameRef.camera.position.dy / tileSizeToUpdate).floor();
+    lastZoom = gameRef.camera.config.zoom;
     return _updateTilesToRender();
   }
 }
