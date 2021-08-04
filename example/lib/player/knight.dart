@@ -16,7 +16,7 @@ enum PlayerAttackType { AttackMelee, AttackRange }
 class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   double attack = 20;
   double stamina = 100;
-  double initSpeed = 500;
+  double initSpeed = DungeonMap.tileSize * 3;
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;

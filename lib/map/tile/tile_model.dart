@@ -1,5 +1,6 @@
 import 'package:bonfire/collision/collision_area.dart';
 import 'package:bonfire/map/map_assets_manager.dart';
+import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
@@ -49,11 +50,16 @@ class TileModelAnimation {
 
   bool get inCache => MapAssetsManager.inSpriteAnimationCache(key());
 
-  Future<SpriteAnimation> getFutureSpriteAnimation() async {
+  Future<ControlledUpdateAnimation> getFutureControlledAnimation() async {
     return MapAssetsManager.getSpriteAnimation(frames, stepTime);
   }
 
-  SpriteAnimation getSpriteAnimation() {
+  Future<SpriteAnimation> getFutureSpriteAnimation() async {
+    final a = await MapAssetsManager.getSpriteAnimation(frames, stepTime);
+    return a.animation!;
+  }
+
+  ControlledUpdateAnimation getSpriteAnimation() {
     return MapAssetsManager.getSpriteAnimationCache(key());
   }
 

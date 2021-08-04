@@ -99,8 +99,6 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     config.target = null;
     _isMoving = true;
 
-    double diffX = this.position.dx - target.position.center.dx;
-    double diffY = this.position.dy - target.position.center.dy;
     double originX = this.position.dx;
     double originY = this.position.dy;
 
@@ -110,6 +108,9 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
+        double diffX = originX - target.position.center.dx;
+        double diffY = originY - target.position.center.dy;
+
         this.position = position.copyWith(x: originX - (diffX * value));
         this.position = position.copyWith(y: originY - (diffY * value));
         config.zoom = initialZoom - (diffZoom * value);

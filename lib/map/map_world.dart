@@ -246,11 +246,11 @@ class MapWorld extends MapGame {
       if (e.collisions?.isNotEmpty == true) {
         ControlledUpdateAnimation animation;
         if (e.animation!.inCache) {
-          animation = ControlledUpdateAnimation.fromInstance(
-              e.animation!.getSpriteAnimation());
+          animation = e.animation!.getSpriteAnimation();
         } else {
           animation = ControlledUpdateAnimation(
-              e.animation!.getFutureSpriteAnimation());
+            e.animation!.getFutureSpriteAnimation(),
+          );
         }
         return TileWithCollision.withAnimation(
           animation,
@@ -269,9 +269,7 @@ class MapWorld extends MapGame {
       } else {
         ControlledUpdateAnimation animation;
         if (e.animation!.inCache) {
-          animation = ControlledUpdateAnimation.fromInstance(
-            e.animation!.getSpriteAnimation(),
-          );
+          animation = e.animation!.getSpriteAnimation();
         } else {
           animation = ControlledUpdateAnimation(
             e.animation!.getFutureSpriteAnimation(),

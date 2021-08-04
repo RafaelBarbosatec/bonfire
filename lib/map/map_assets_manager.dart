@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:bonfire/map/tile/tile_model.dart';
+import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
@@ -9,7 +10,8 @@ import 'package:http/http.dart' as http;
 
 class MapAssetsManager {
   static final Map<String, Sprite> spriteCache = Map();
-  static final Map<String, SpriteAnimation> spriteAnimationCache = Map();
+  static final Map<String, ControlledUpdateAnimation> spriteAnimationCache =
+      Map();
 
   static bool inSpriteCache(String key) => spriteCache.containsKey(key);
   static Sprite getSpriteCache(String key) => spriteCache[key]!;
@@ -37,11 +39,11 @@ class MapAssetsManager {
     return spriteAnimationCache.containsKey(key);
   }
 
-  static SpriteAnimation getSpriteAnimationCache(String key) {
+  static ControlledUpdateAnimation getSpriteAnimationCache(String key) {
     return spriteAnimationCache[key]!;
   }
 
-  static Future<SpriteAnimation> getSpriteAnimation(
+  static Future<ControlledUpdateAnimation> getSpriteAnimation(
     List<TileModelSprite> frames,
     double stepTime,
   ) async {
@@ -61,9 +63,11 @@ class MapAssetsManager {
       spriteList.add(sprite);
     });
 
-    return spriteAnimationCache[key] = SpriteAnimation.spriteList(
-      spriteList,
-      stepTime: stepTime,
+    return spriteAnimationCache[key] = ControlledUpdateAnimation.fromInstance(
+      SpriteAnimation.spriteList(
+        spriteList,
+        stepTime: stepTime,
+      ),
     );
   }
 
