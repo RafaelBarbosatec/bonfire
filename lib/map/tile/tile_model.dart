@@ -1,5 +1,8 @@
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/collision/collision_area.dart';
 import 'package:bonfire/map/map_assets_manager.dart';
+import 'package:bonfire/map/tile/tile.dart';
+import 'package:bonfire/map/tile/tile_with_collision.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
@@ -108,4 +111,119 @@ class TileModel {
         (x * width) + (width / 2.0),
         (y * height) + (height / 2.0),
       );
+
+  Tile getTile(BonfireGame gameRef) {
+    if (animation == null) {
+      if (collisions?.isNotEmpty == true) {
+        if (sprite!.inCache) {
+          return TileWithCollision.fromSprite(
+            sprite!.getSprite(),
+            Vector2(
+              x,
+              y,
+            ),
+            offsetX: offsetX,
+            offsetY: offsetY,
+            collisions: collisions,
+            width: width,
+            height: height,
+            type: type,
+            properties: properties,
+          )..gameRef = gameRef;
+        } else {
+          return TileWithCollision.fromFutureSprite(
+            sprite!.getFutureSprite(),
+            Vector2(
+              x,
+              y,
+            ),
+            offsetX: offsetX,
+            offsetY: offsetY,
+            collisions: collisions,
+            width: width,
+            height: height,
+            type: type,
+            properties: properties,
+          )..gameRef = gameRef;
+        }
+      } else {
+        if (sprite!.inCache) {
+          return Tile.fromSprite(
+            sprite!.getSprite(),
+            Vector2(
+              x,
+              y,
+            ),
+            offsetX: offsetX,
+            offsetY: offsetY,
+            width: width,
+            height: height,
+            type: type,
+            properties: properties,
+          )..gameRef = gameRef;
+        } else {
+          return Tile.fromFutureSprite(
+            sprite!.getFutureSprite(),
+            Vector2(
+              x,
+              y,
+            ),
+            offsetX: offsetX,
+            offsetY: offsetY,
+            width: width,
+            height: height,
+            type: type,
+            properties: properties,
+          )..gameRef = gameRef;
+        }
+      }
+    } else {
+      if (collisions?.isNotEmpty == true) {
+        ControlledUpdateAnimation animationControlled;
+        if (animation!.inCache) {
+          animationControlled = animation!.getSpriteAnimation();
+        } else {
+          animationControlled = ControlledUpdateAnimation(
+            animation!.getFutureSpriteAnimation(),
+          );
+        }
+        return TileWithCollision.withAnimation(
+          animationControlled,
+          Vector2(
+            x,
+            y,
+          ),
+          offsetX: offsetX,
+          offsetY: offsetY,
+          collisions: collisions,
+          width: width,
+          height: height,
+          type: type,
+          properties: properties,
+        )..gameRef = gameRef;
+      } else {
+        ControlledUpdateAnimation animationControlled;
+        if (animation!.inCache) {
+          animationControlled = animation!.getSpriteAnimation();
+        } else {
+          animationControlled = ControlledUpdateAnimation(
+            animation!.getFutureSpriteAnimation(),
+          );
+        }
+        return Tile.fromAnimation(
+          animationControlled,
+          Vector2(
+            x,
+            y,
+          ),
+          offsetX: offsetX,
+          offsetY: offsetY,
+          width: width,
+          height: height,
+          type: type,
+          properties: properties,
+        )..gameRef = gameRef;
+      }
+    }
+  }
 }

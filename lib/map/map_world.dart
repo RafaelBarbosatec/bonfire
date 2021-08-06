@@ -7,7 +7,6 @@ import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/map/tile/tile.dart';
 import 'package:bonfire/map/tile/tile_model.dart';
-import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -179,121 +178,6 @@ class MapWorld extends MapGame {
     }
   }
 
-  Tile _buildTile(TileModel e) {
-    if (e.animation == null) {
-      if (e.collisions?.isNotEmpty == true) {
-        if (e.sprite!.inCache) {
-          return TileWithCollision.fromSprite(
-            e.sprite!.getSprite(),
-            Vector2(
-              e.x,
-              e.y,
-            ),
-            offsetX: e.offsetX,
-            offsetY: e.offsetY,
-            collisions: e.collisions,
-            width: e.width,
-            height: e.height,
-            type: e.type,
-            properties: e.properties,
-          )..gameRef = gameRef;
-        } else {
-          return TileWithCollision.fromFutureSprite(
-            e.sprite!.getFutureSprite(),
-            Vector2(
-              e.x,
-              e.y,
-            ),
-            offsetX: e.offsetX,
-            offsetY: e.offsetY,
-            collisions: e.collisions,
-            width: e.width,
-            height: e.height,
-            type: e.type,
-            properties: e.properties,
-          )..gameRef = gameRef;
-        }
-      } else {
-        if (e.sprite!.inCache) {
-          return Tile.fromSprite(
-            e.sprite!.getSprite(),
-            Vector2(
-              e.x,
-              e.y,
-            ),
-            offsetX: e.offsetX,
-            offsetY: e.offsetY,
-            width: e.width,
-            height: e.height,
-            type: e.type,
-            properties: e.properties,
-          )..gameRef = gameRef;
-        } else {
-          return Tile.fromFutureSprite(
-            e.sprite!.getFutureSprite(),
-            Vector2(
-              e.x,
-              e.y,
-            ),
-            offsetX: e.offsetX,
-            offsetY: e.offsetY,
-            width: e.width,
-            height: e.height,
-            type: e.type,
-            properties: e.properties,
-          )..gameRef = gameRef;
-        }
-      }
-    } else {
-      if (e.collisions?.isNotEmpty == true) {
-        ControlledUpdateAnimation animation;
-        if (e.animation!.inCache) {
-          animation = e.animation!.getSpriteAnimation();
-        } else {
-          animation = ControlledUpdateAnimation(
-            e.animation!.getFutureSpriteAnimation(),
-          );
-        }
-        return TileWithCollision.withAnimation(
-          animation,
-          Vector2(
-            e.x,
-            e.y,
-          ),
-          offsetX: e.offsetX,
-          offsetY: e.offsetY,
-          collisions: e.collisions,
-          width: e.width,
-          height: e.height,
-          type: e.type,
-          properties: e.properties,
-        )..gameRef = gameRef;
-      } else {
-        ControlledUpdateAnimation animation;
-        if (e.animation!.inCache) {
-          animation = e.animation!.getSpriteAnimation();
-        } else {
-          animation = ControlledUpdateAnimation(
-            e.animation!.getFutureSpriteAnimation(),
-          );
-        }
-        return Tile.fromAnimation(
-          animation,
-          Vector2(
-            e.x,
-            e.y,
-          ),
-          offsetX: e.offsetX,
-          offsetY: e.offsetY,
-          width: e.width,
-          height: e.height,
-          type: e.type,
-          properties: e.properties,
-        )..gameRef = gameRef;
-      }
-    }
-  }
-
   void _getTileCollisions() async {
     List<ObjectCollision> aux = [];
     final list = tiles.where((element) {
@@ -301,7 +185,8 @@ class MapWorld extends MapGame {
     });
 
     for (final element in list) {
-      final o = _buildTile(element);
+      final o = element.getTile(gameRef);
+      ;
       await o.onLoad();
       aux.add(o as ObjectCollision);
     }
@@ -312,7 +197,7 @@ class MapWorld extends MapGame {
     _auxCollisionTiles.clear();
     _auxTiles.clear();
     for (final element in visibleTiles) {
-      final tile = _buildTile(element);
+      final tile = element.getTile(gameRef);
       if (tile is ObjectCollision) {
         _auxCollisionTiles.add(tile as ObjectCollision);
       }
