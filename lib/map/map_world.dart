@@ -188,7 +188,6 @@ class MapWorld extends MapGame {
 
     for (final element in list) {
       final o = element.getTile(gameRef);
-      ;
       await o.onLoad();
       aux.add(o as ObjectCollision);
     }
@@ -206,9 +205,6 @@ class MapWorld extends MapGame {
 
   @override
   Future<void>? onLoad() async {
-    lastCameraX = (gameRef.camera.position.dx / tileSizeToUpdate).floor();
-    lastCameraY = (gameRef.camera.position.dy / tileSizeToUpdate).floor();
-    lastZoom = gameRef.camera.config.zoom;
     return _updateTilesToRender();
   }
 
