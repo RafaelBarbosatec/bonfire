@@ -86,4 +86,64 @@ class CollisionArea {
 
     return Rect.zero;
   }
+
+  factory CollisionArea.fromMap(Map<String, dynamic> map) {
+    Vector2 align = Vector2(
+      map['align']['x'],
+      map['align']['y'],
+    );
+    if (map['shape']['type'] == 'RectangleShape') {
+      return CollisionArea.rectangle(
+          size: Size(
+            map['shape']['size']['width'],
+            map['shape']['size']['height'],
+          ),
+          align: align);
+    }
+
+    if (map['shape']['type'] == 'CircleShape') {
+      return CollisionArea.circle(radius: map['shape']['radius'], align: align);
+    }
+
+    if (map['shape']['type'] == 'PolygonShape') {
+      return CollisionArea.polygon(
+          points: (map['shape']['points'] as List).map((e) {
+            return Vector2(e['x'], e['y']);
+          }).toList(),
+          align: align);
+    }
+
+    return CollisionArea.rectangle(
+      size: Size.zero,
+      align: align,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    Map shape = Map();
+    if (this.shape is RectangleShape) {
+      RectangleShape s = this.shape as RectangleShape;
+      shape['type'] = 'RectangleShape';
+      shape['size'] = {'width': s.width, 'height': s.height};
+    }
+
+    if (this.shape is CircleShape) {
+      CircleShape s = this.shape as CircleShape;
+      shape['type'] = 'CircleShape';
+      shape['radius'] = s.radius;
+    }
+
+    if (this.shape is PolygonShape) {
+      PolygonShape s = this.shape as PolygonShape;
+      shape['type'] = 'PolygonShape';
+      shape['points'] = s.relativePoints.map((e) {
+        return {'x': e.x, 'y': e.y};
+      }).toList();
+    }
+
+    return {
+      'shape': this.shape,
+      'align': {'x': this.align?.x ?? 0.0, 'y': this.align?.y ?? 0.0},
+    };
+  }
 }

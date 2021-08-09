@@ -16,11 +16,10 @@ class MapWorld extends MapGame {
   int lastCameraY = -1;
   double lastZoom = -1;
   Vector2? lastSizeScreen;
-  Iterable<Tile> _tilesToRender = [];
-  List<ObjectCollision> _tilesCollisionsRendered = [];
+  List<Tile> _tilesToRender = [];
   Iterable<ObjectCollision> _tilesCollisions = [];
   List<Tile> _auxTiles = [];
-  List<ObjectCollision> _auxCollisionTiles = [];
+  Rect tilesRenderRect = Rect.zero;
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -62,12 +61,15 @@ class MapWorld extends MapGame {
     }
 
     if (_addLaterTiles.isNotEmpty) {
-      _tilesToRender = _addLaterTiles.toList(growable: false);
+      final newTiles = _addLaterTiles.toList(growable: false);
+      _tilesToRender.addAll(newTiles);
+      _tilesToRender.retainWhere((element) => element.isVisibleInCamera());
+      _calculateRectAndUpdate(t);
       _addLaterTiles.clear();
-    }
-
-    for (final tile in _tilesToRender) {
-      tile.update(t);
+    } else {
+      for (final tile in _tilesToRender) {
+        tile.update(t);
+      }
     }
   }
 
@@ -78,7 +80,7 @@ class MapWorld extends MapGame {
 
   @override
   Iterable<ObjectCollision> getCollisionsRendered() {
-    return _tilesCollisionsRendered;
+    return _tilesToRender.where((element) => element is ObjectCollision).cast();
   }
 
   @override
@@ -169,12 +171,12 @@ class MapWorld extends MapGame {
 
   Future<void> _updateTilesToRender() async {
     if (_addLaterTiles.isEmpty) {
-      final visibleTiles = tiles.where(
-        (tile) => gameRef.camera.contains(tile.center),
-      );
+      final visibleTiles = tiles.where((tile) {
+        return gameRef.camera.contains(tile.center) &&
+            !tilesRenderRect.contains(tile.center);
+      });
       await _buildAsyncTiles(visibleTiles);
       _addLaterTiles = _auxTiles;
-      _tilesCollisionsRendered = _auxCollisionTiles.toList(growable: false);
     }
   }
 
@@ -186,7 +188,6 @@ class MapWorld extends MapGame {
 
     for (final element in list) {
       final o = element.getTile(gameRef);
-      ;
       await o.onLoad();
       aux.add(o as ObjectCollision);
     }
@@ -194,13 +195,9 @@ class MapWorld extends MapGame {
   }
 
   Future<void> _buildAsyncTiles(Iterable<TileModel> visibleTiles) async {
-    _auxCollisionTiles.clear();
     _auxTiles.clear();
     for (final element in visibleTiles) {
       final tile = element.getTile(gameRef);
-      if (tile is ObjectCollision) {
-        _auxCollisionTiles.add(tile as ObjectCollision);
-      }
       await tile.onLoad();
       _auxTiles.add(tile);
     }
@@ -208,9 +205,32 @@ class MapWorld extends MapGame {
 
   @override
   Future<void>? onLoad() async {
-    lastCameraX = (gameRef.camera.position.dx / tileSizeToUpdate).floor();
-    lastCameraY = (gameRef.camera.position.dy / tileSizeToUpdate).floor();
-    lastZoom = gameRef.camera.config.zoom;
     return _updateTilesToRender();
+  }
+
+  void _calculateRectAndUpdate(double dt) {
+    double left = _tilesToRender.first.position.left;
+    double top = _tilesToRender.first.position.top;
+    double right = _tilesToRender.first.position.right;
+    double bottom = _tilesToRender.first.position.bottom;
+    for (final tile in _tilesToRender) {
+      tile.update(dt);
+      if (tile.position.left < left) {
+        left = tile.position.left;
+      }
+      if (tile.position.top < top) {
+        top = tile.position.top;
+      }
+
+      if (tile.position.right > right) {
+        right = tile.position.right;
+      }
+
+      if (tile.position.bottom > bottom) {
+        bottom = tile.position.bottom;
+      }
+    }
+
+    tilesRenderRect = Rect.fromLTRB(left, top, right, bottom);
   }
 }
