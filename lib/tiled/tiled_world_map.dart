@@ -45,6 +45,7 @@ class TiledWorldMap {
   double _tileHeightOrigin = 0;
   bool fromServer = false;
   Map<String, ObjectBuilder> _objectsBuilder = Map();
+  Map<String, TileModelSprite> _tileModelSpriteCache = Map();
 
   TiledWorldMap(
     this.path, {
@@ -153,7 +154,7 @@ class TiledWorldMap {
         width: _tileHeight,
         animation: data.animation,
         sprite: data.sprite,
-        properties: data.properties,
+        properties: data.properties?.isEmpty == true ? null : data.properties,
         type: data.type,
       ),
     );
@@ -237,13 +238,20 @@ class TiledWorldMap {
       int column = _getX((index - firsTgId), widthCount).toInt();
 
       final pathSprite = '$_basePath$_pathTileset${tileSetContain.image}';
-      final sprite = TileModelSprite(
-        path: pathSprite,
-        width: tileSetContain.tileWidth ?? 0,
-        height: tileSetContain.tileHeight ?? 0,
-        row: row,
-        column: column,
-      );
+
+      TileModelSprite sprite;
+      if (_tileModelSpriteCache.containsKey('$pathSprite$row$column')) {
+        sprite = _tileModelSpriteCache['$pathSprite$row$column']!;
+      } else {
+        sprite =
+            _tileModelSpriteCache['$pathSprite$row$column'] = TileModelSprite(
+          path: pathSprite,
+          width: tileSetContain.tileWidth ?? 0,
+          height: tileSetContain.tileHeight ?? 0,
+          row: row,
+          column: column,
+        );
+      }
 
       final animation = _getAnimation(
         tileSetContain,
