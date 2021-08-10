@@ -85,7 +85,7 @@ class MapWorld extends MapGame {
       }
       final visibleTiles = (processAllList
               ? tiles
-              : tiles.toList().sublist(startRange, endRange))
+              : tiles.toList().getRange(startRange, endRange))
           .where((tile) => gameRef.camera.contains(tile.center));
       if (visibleTiles.isNotEmpty) {
         await _buildAsyncTiles(visibleTiles);
