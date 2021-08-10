@@ -1,3 +1,6 @@
+# next
+- new Improvements in process Tile in `TiledMap`.
+
 # 1.4.8
 - Improvements in process Tile in `TiledMap`.
 
