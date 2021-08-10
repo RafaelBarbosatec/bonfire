@@ -83,12 +83,15 @@ class MapWorld extends MapGame {
       if (currentIndexProcess == countFramesToProcess) {
         endRange = countTiles;
       }
-      final visibleTiles =
+
+      Iterable<TileModel> visibleTiles =
           (processAllList ? tiles : tiles.getRange(startRange, endRange))
               .where((tile) => gameRef.camera.contains(tile.center));
+
       if (visibleTiles.isNotEmpty) {
         await _buildAsyncTiles(visibleTiles);
       }
+
       currentIndexProcess++;
       if (currentIndexProcess > countFramesToProcess || processAllList) {
         _tilesToRender = _auxTiles.toList(growable: false);
