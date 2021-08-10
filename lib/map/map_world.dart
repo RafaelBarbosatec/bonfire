@@ -61,12 +61,12 @@ class MapWorld extends MapGame {
       }
     }
 
-    if (currentIndexProcess != -1) {
-      scheduleMicrotask(_updateTilesToRender);
-    }
-
     for (final tile in getTilesToUpdate()) {
       tile.update(t);
+    }
+
+    if (currentIndexProcess != -1) {
+      scheduleMicrotask(_updateTilesToRender);
     }
   }
 
