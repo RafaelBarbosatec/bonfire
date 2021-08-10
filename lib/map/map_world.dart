@@ -30,7 +30,7 @@ class MapWorld extends MapGame {
   int countTiles = 0;
   int countFramesToProcess = 0;
 
-  MapWorld(Iterable<TileModel> tiles, {double tileSizeToUpdate = 0})
+  MapWorld(List<TileModel> tiles, {double tileSizeToUpdate = 0})
       : super(
           tiles,
           tileSizeToUpdate: tileSizeToUpdate,
@@ -83,10 +83,9 @@ class MapWorld extends MapGame {
       if (currentIndexProcess == countFramesToProcess) {
         endRange = countTiles;
       }
-      final visibleTiles = (processAllList
-              ? tiles
-              : tiles.toList().getRange(startRange, endRange))
-          .where((tile) => gameRef.camera.contains(tile.center));
+      final visibleTiles =
+          (processAllList ? tiles : tiles.getRange(startRange, endRange))
+              .where((tile) => gameRef.camera.contains(tile.center));
       if (visibleTiles.isNotEmpty) {
         await _buildAsyncTiles(visibleTiles);
       }
@@ -145,7 +144,7 @@ class MapWorld extends MapGame {
   }
 
   @override
-  Future<void> updateTiles(Iterable<TileModel> map) async {
+  Future<void> updateTiles(List<TileModel> map) async {
     lastSizeScreen = null;
     this.tiles = map;
     verifyMaxTopAndLeft(gameRef.size, isUpdate: true);
