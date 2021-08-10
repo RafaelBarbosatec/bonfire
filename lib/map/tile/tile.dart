@@ -198,4 +198,6 @@ class Tile extends GameComponent {
     await _animation?.onLoad();
     _loader = null;
   }
+
+  bool get containAnimation => _animation != null;
 }

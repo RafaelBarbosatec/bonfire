@@ -1,3 +1,6 @@
+# 1.4.7
+- Improvements in process Tile in `TiledMap`.
+
 # 1.4.6
 - Improvements in `TiledMap`.
 
