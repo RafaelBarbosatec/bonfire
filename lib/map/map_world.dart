@@ -18,6 +18,7 @@ class MapWorld extends MapGame {
   Vector2? lastSizeScreen;
   Iterable<Tile> _tilesToRender = [];
   Iterable<ObjectCollision> _tilesCollisions = [];
+  Iterable<ObjectCollision> _tilesVisibleCollisions = [];
   List<Tile> _auxTiles = [];
 
   List<Offset> _linePath = [];
@@ -95,6 +96,9 @@ class MapWorld extends MapGame {
       currentIndexProcess++;
       if (currentIndexProcess > countFramesToProcess || processAllList) {
         _tilesToRender = _auxTiles.toList(growable: false);
+        _tilesVisibleCollisions = _tilesToRender
+            .where((element) => element is ObjectCollision)
+            .cast();
         _auxTiles.clear();
         currentIndexProcess = -1;
       }
@@ -108,7 +112,7 @@ class MapWorld extends MapGame {
 
   @override
   Iterable<ObjectCollision> getCollisionsRendered() {
-    return _tilesToRender.where((element) => element is ObjectCollision).cast();
+    return _tilesVisibleCollisions;
   }
 
   @override
