@@ -29,7 +29,6 @@ class MapWorld extends MapGame {
   int currentIndexProcess = -1;
   int countTiles = 0;
   int countFramesToProcess = 0;
-  Rect currentCamera = Rect.zero;
 
   MapWorld(Iterable<TileModel> tiles, {double tileSizeToUpdate = 0})
       : super(
@@ -58,7 +57,6 @@ class MapWorld extends MapGame {
         lastZoom = gameRef.camera.config.zoom;
       }
       if (currentIndexProcess == -1) {
-        currentCamera = gameRef.camera.cameraRectWithSpacing;
         currentIndexProcess = 0;
       }
     }
@@ -87,8 +85,8 @@ class MapWorld extends MapGame {
       }
       final visibleTiles = (processAllList
               ? tiles
-              : tiles.toList(growable: false).sublist(startRange, endRange))
-          .where((tile) => currentCamera.contains(tile.center));
+              : tiles.toList().sublist(startRange, endRange))
+          .where((tile) => gameRef.camera.contains(tile.center));
       if (visibleTiles.isNotEmpty) {
         await _buildAsyncTiles(visibleTiles);
       }
@@ -225,7 +223,6 @@ class MapWorld extends MapGame {
 
   @override
   Future<void>? onLoad() async {
-    currentCamera = gameRef.camera.cameraRectWithSpacing;
     return _updateTilesToRender(processAllList: true);
   }
 }
