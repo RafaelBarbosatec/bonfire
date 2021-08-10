@@ -17,6 +17,7 @@ class MapWorld extends MapGame {
   double lastZoom = -1;
   Vector2? lastSizeScreen;
   Iterable<Tile> _tilesToRender = [];
+  Iterable<Tile> _tilesToUpdate = [];
   Iterable<ObjectCollision> _tilesCollisions = [];
   Iterable<ObjectCollision> _tilesVisibleCollisions = [];
   List<Tile> _auxTiles = [];
@@ -62,19 +63,13 @@ class MapWorld extends MapGame {
       }
     }
 
-    for (final tile in getTilesToUpdate()) {
+    for (final tile in _tilesToUpdate) {
       tile.update(t);
     }
 
     if (currentIndexProcess != -1) {
       scheduleMicrotask(_updateTilesToRender);
     }
-  }
-
-  Iterable<Tile> getTilesToUpdate() {
-    return _tilesToRender.where((element) {
-      return element is ObjectCollision || element.containAnimation;
-    });
   }
 
   Future<void> _updateTilesToRender({bool processAllList = false}) async {
@@ -96,7 +91,10 @@ class MapWorld extends MapGame {
       currentIndexProcess++;
       if (currentIndexProcess > countFramesToProcess || processAllList) {
         _tilesToRender = _auxTiles.toList(growable: false);
-        _tilesVisibleCollisions = _tilesToRender
+        _tilesToUpdate = _tilesToRender.where((element) {
+          return element is ObjectCollision || element.containAnimation;
+        });
+        _tilesVisibleCollisions = _tilesToUpdate
             .where((element) => element is ObjectCollision)
             .cast();
         _auxTiles.clear();
