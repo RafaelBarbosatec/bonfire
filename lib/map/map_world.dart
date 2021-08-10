@@ -67,12 +67,12 @@ class MapWorld extends MapGame {
       scheduleMicrotask(_updateTilesToRender);
     }
 
-    for (final tile in tilesToUpdate()) {
+    for (final tile in getTilesToUpdate()) {
       tile.update(t);
     }
   }
 
-  Iterable<Tile> tilesToUpdate() {
+  Iterable<Tile> getTilesToUpdate() {
     return _tilesToRender.where((element) {
       return element is ObjectCollision || element.containAnimation;
     });
@@ -207,7 +207,7 @@ class MapWorld extends MapGame {
       return element.collisions?.isNotEmpty == true;
     });
 
-    for (final element in list) {
+    for (var element in list) {
       final o = element.getTile(gameRef);
       await o.onLoad();
       aux.add(o as ObjectCollision);
@@ -216,7 +216,7 @@ class MapWorld extends MapGame {
   }
 
   Future<void> _buildAsyncTiles(Iterable<TileModel> visibleTiles) async {
-    for (final element in visibleTiles) {
+    for (var element in visibleTiles) {
       final tile = element.getTile(gameRef);
       await tile.onLoad();
       _auxTiles.add(tile);
