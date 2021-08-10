@@ -3,10 +3,18 @@ import 'package:flutter/material.dart';
 enum PersonSayDirection { LEFT, RIGHT }
 
 class Say {
-  final String text;
+  /// List of TextSpans to be shown in a TalkDialog.
+  /// Example:
+  /// ```dart
+  /// [
+  ///   TextSpan(text: 'New'),
+  ///   TextSpan(text: ' item ', style: TextStyle(color: Colors.red)),
+  ///   TextSpan(text: 'unlocked!'),
+  /// ]
+  /// ```
+  final List<TextSpan> text;
   final Widget? person;
   final PersonSayDirection personSayDirection;
-  final TextStyle? textStyle;
   final BoxDecoration? boxDecoration;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
@@ -14,10 +22,14 @@ class Say {
   final Widget? header;
   final Widget? bottom;
 
-  Say(
-    this.text, {
+  /// How long each character takes to be shown, in milliseconds.
+  /// Defaults to 50.
+  final int? speed;
+
+  /// Create a text animation to be shown inside `TalkDialog.show`
+  Say({
+    required this.text,
     this.personSayDirection = PersonSayDirection.LEFT,
-    this.textStyle,
     this.boxDecoration,
     this.padding,
     this.margin,
@@ -25,5 +37,6 @@ class Say {
     this.background,
     this.header,
     this.bottom,
+    this.speed,
   });
 }

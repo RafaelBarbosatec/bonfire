@@ -1,5 +1,25 @@
-# Next
+# 1.4.8
+- Improvements in process Tile in `TiledMap`.
+
+# 1.4.6
+- Improvements in `TiledMap`.
+
+# 1.4.5
+- [BREAKING CHANGE] Refactor `TalkDialog` core to allow RichText animations:
+  Now every `Say` requires a `text` param which takes a `List<TextSpan>` instead of a String.
+- Add param `speed` to `TalkDialog`.
+- Improvements in cache system to load map.
+
+# 1.4.4
+- add param `tileSizeToUpdate` to configure interval of the update map.
+
+# 1.4.2
+- fix `tileSize` in `MapWorld`.
+
+# 1.4.0
 - Improvements in `Camera`
+- Improvements in `MapWorld` to support large maps.
+- [BREAKING CHANGE] change `List<Tile>` to `List<TileModel>` to create manual maps see [example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/manual_map/dungeon_map.dart).
 
 # 1.3.7
 - remove microTask to update chache in `BonfireGame`

@@ -2,12 +2,8 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/map/tile/tile.dart';
-import 'package:bonfire/map/tile/tile_with_collision.dart';
+import 'package:bonfire/map/tile/tile_model.dart';
 import 'package:bonfire/tiled/model/tiled_world_data.dart';
-import 'package:bonfire/util/controlled_update_animation.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:flame/sprite.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiledjsonreader/map/layer/group_layer.dart';
@@ -37,7 +33,8 @@ class TiledWorldMap {
   final Size? forceTileSize;
   final ValueChanged<Object>? onError;
   late TiledJsonReader _reader;
-  List<Tile> _tiles = [];
+  final double tileSizeToUpdate;
+  List<TileModel> _tiles = [];
   List<GameComponent> _components = [];
   String? _basePath;
   String _basePathFlame = 'assets/images/';
@@ -47,19 +44,19 @@ class TiledWorldMap {
   double _tileWidthOrigin = 0;
   double _tileHeightOrigin = 0;
   bool fromServer = false;
-  Map<String, Sprite> _spriteCache = Map();
-  Map<String, ControlledUpdateAnimation> _animationCache = Map();
   Map<String, ObjectBuilder> _objectsBuilder = Map();
+  Map<String, TileModelSprite> _tileModelSpriteCache = Map();
 
   TiledWorldMap(
     this.path, {
     this.forceTileSize,
     this.onError,
+    this.tileSizeToUpdate = 0,
     Map<String, ObjectBuilder>? objectsBuilder,
   }) {
     _objectsBuilder = objectsBuilder ?? Map();
     _basePath = path.replaceAll(path.split('/').last, '');
-    fromServer = path.contains('http://') || path.contains('https://');
+    fromServer = path.contains('http');
     _reader = TiledJsonReader(_basePathFlame + path);
   }
 
@@ -85,10 +82,12 @@ class TiledWorldMap {
       print('(TiledWorldMap) Error: $e');
     }
 
-    return Future.value(TiledWorldData(
-      map: MapWorld(_tiles),
-      components: _components,
-    ));
+    return Future.value(
+      TiledWorldData(
+        map: MapWorld(_tiles, tileSizeToUpdate: tileSizeToUpdate),
+        components: _components,
+      ),
+    );
   }
 
   Future<void> _load(TiledMap tiledMap) async {
@@ -124,7 +123,7 @@ class TiledWorldMap {
         ((tileLayer.offsetY ?? 0.0) * _tileHeight) / _tileHeightOrigin;
     await Future.forEach<int>(tileLayer.data ?? [], (tile) async {
       if (tile != 0) {
-        var data = await _getDataTile(tile);
+        var data = _getDataTile(tile);
         if (data != null) {
           if (data.type?.contains(ABOVE_TYPE) ?? false) {
             _addGameDecorationAbove(data, count, tileLayer);
@@ -144,77 +143,21 @@ class TiledWorldMap {
     double offsetX,
     double offsetY,
   ) {
-    if (data.animation == null) {
-      if (data.collisions?.isNotEmpty == true) {
-        _tiles.add(
-          TileWithCollision.withSprite(
-            Future.value(data.sprite),
-            Vector2(
-              _getX(count, tileLayer.width?.toInt() ?? 0),
-              _getY(count, tileLayer.width?.toInt() ?? 0),
-            ),
-            offsetX: offsetX,
-            offsetY: offsetY,
-            collisions: data.collisions,
-            width: _tileWidth,
-            height: _tileHeight,
-            type: data.type,
-            properties: data.properties,
-          ),
-        );
-      } else {
-        _tiles.add(
-          Tile.fromSprite(
-            Future.value(data.sprite),
-            Vector2(
-              _getX(count, tileLayer.width?.toInt() ?? 0),
-              _getY(count, tileLayer.width?.toInt() ?? 0),
-            ),
-            offsetX: offsetX,
-            offsetY: offsetY,
-            width: _tileWidth,
-            height: _tileHeight,
-            type: data.type,
-            properties: data.properties,
-          ),
-        );
-      }
-    } else {
-      if (data.collisions?.isNotEmpty == true) {
-        _tiles.add(
-          TileWithCollision.withAnimation(
-            data.animation!,
-            Vector2(
-              _getX(count, tileLayer.width?.toInt() ?? 0),
-              _getY(count, tileLayer.width?.toInt() ?? 0),
-            ),
-            offsetX: offsetX,
-            offsetY: offsetY,
-            collisions: data.collisions,
-            width: _tileWidth,
-            height: _tileHeight,
-            type: data.type,
-            properties: data.properties,
-          ),
-        );
-      } else {
-        _tiles.add(
-          Tile.fromAnimation(
-            data.animation!,
-            Vector2(
-              _getX(count, tileLayer.width?.toInt() ?? 0),
-              _getY(count, tileLayer.width?.toInt() ?? 0),
-            ),
-            offsetX: offsetX,
-            offsetY: offsetY,
-            width: _tileWidth,
-            height: _tileHeight,
-            type: data.type,
-            properties: data.properties,
-          ),
-        );
-      }
-    }
+    _tiles.add(
+      TileModel(
+        x: _getX(count, tileLayer.width?.toInt() ?? 0),
+        y: _getY(count, tileLayer.width?.toInt() ?? 0),
+        offsetX: offsetX,
+        offsetY: offsetY,
+        collisions: data.collisions,
+        height: _tileWidth,
+        width: _tileHeight,
+        animation: data.animation,
+        sprite: data.sprite,
+        properties: data.properties?.isEmpty == true ? null : data.properties,
+        type: data.type,
+      ),
+    );
   }
 
   void _addGameDecorationAbove(
@@ -223,10 +166,10 @@ class TiledWorldMap {
     TileLayer tileLayer,
   ) {
     if (data.animation != null) {
-      if (data.animation?.animation != null) {
+      if (data.animation != null) {
         _components.add(
           GameDecorationWithCollision.withAnimation(
-            data.animation!.animation!.asFuture(),
+            data.animation!.getFutureSpriteAnimation(),
             Vector2(
               _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
               _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
@@ -242,7 +185,7 @@ class TiledWorldMap {
       if (data.sprite != null) {
         _components.add(
           GameDecorationWithCollision.withSprite(
-            data.sprite!.asFuture(),
+            data.sprite!.getFutureSprite(),
             Vector2(
               _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
               _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
@@ -265,7 +208,7 @@ class TiledWorldMap {
     return (index / width).floor().toDouble();
   }
 
-  Future<TiledItemTileSet?> _getDataTile(int index) async {
+  TiledItemTileSet? _getDataTile(int index) {
     TileSet? tileSetContain;
     String _pathTileset = '';
     int firsTgId = 0;
@@ -294,34 +237,40 @@ class TiledWorldMap {
       int row = _getY((index - firsTgId), widthCount).toInt();
       int column = _getX((index - firsTgId), widthCount).toInt();
 
-      Sprite sprite = await _getSprite(
-        '$_basePath$_pathTileset${tileSetContain.image}',
-        row,
-        column,
-        tileSetContain.tileWidth ?? 0,
-        tileSetContain.tileHeight ?? 0,
-      );
+      final pathSprite = '$_basePath$_pathTileset${tileSetContain.image}';
 
-      final animation = await _getAnimation(
+      TileModelSprite sprite;
+      if (_tileModelSpriteCache.containsKey('$pathSprite$row$column')) {
+        sprite = _tileModelSpriteCache['$pathSprite$row$column']!;
+      } else {
+        sprite =
+            _tileModelSpriteCache['$pathSprite$row$column'] = TileModelSprite(
+          path: pathSprite,
+          width: tileSetContain.tileWidth ?? 0,
+          height: tileSetContain.tileHeight ?? 0,
+          row: row,
+          column: column,
+        );
+      }
+
+      final animation = _getAnimation(
         tileSetContain,
         _pathTileset,
         (index - firsTgId),
         widthCount,
       );
 
-      TiledDataObjectCollision object = _getCollision(
+      final object = _getCollision(
         tileSetContain,
         (index - firsTgId),
       );
 
-      return Future.value(
-        TiledItemTileSet(
-          animation: animation,
-          sprite: sprite,
-          type: object.type,
-          collisions: object.collisions,
-          properties: object.properties,
-        ),
+      return TiledItemTileSet(
+        type: object.type,
+        collisions: object.collisions,
+        properties: object.properties,
+        sprite: sprite,
+        animation: animation,
       );
     } else {
       return null;
@@ -360,26 +309,6 @@ class TiledWorldMap {
         }
       },
     );
-  }
-
-  Future<Sprite> _getSprite(
-    String image,
-    int row,
-    int column,
-    double tileWidth,
-    double tileHeight,
-  ) async {
-    if (_spriteCache.containsKey('$image/$row/$column')) {
-      return Future.value(_spriteCache['$image/$row/$column']);
-    }
-    final spriteSheetImg = await _loadImage(image);
-    _spriteCache['$image/$row/$column'] = spriteSheetImg.getSprite(
-      x: (column * tileWidth).toDouble(),
-      y: (row * tileHeight).toDouble(),
-      width: tileWidth,
-      height: tileHeight,
-    );
-    return Future.value(_spriteCache['$image/$row/$column']);
   }
 
   TiledDataObjectCollision _getCollision(TileSet tileSetContain, int index) {
@@ -476,12 +405,12 @@ class TiledWorldMap {
     return TiledDataObjectCollision();
   }
 
-  Future<ControlledUpdateAnimation?> _getAnimation(
+  TileModelAnimation? _getAnimation(
     TileSet tileSetContain,
     String pathTileset,
     int index,
     int widthCount,
-  ) async {
+  ) {
     try {
       TileSetItem tileSetItemList = tileSetContain.tiles!.firstWhere(
         (element) => element.id == index,
@@ -489,37 +418,28 @@ class TiledWorldMap {
 
       List<FrameAnimation> animationFrames = tileSetItemList.animation ?? [];
 
+      List<TileModelSprite> frames = [];
       if ((animationFrames.isNotEmpty)) {
-        String animationKey = '${tileSetContain.name}/$index';
-        if (_animationCache.containsKey(animationKey)) {
-          return Future.value(_animationCache[animationKey]);
-        }
-        List<Sprite> spriteList = [];
         double stepTime = (animationFrames[0].duration ?? 100) / 1000;
-        await Future.forEach<FrameAnimation>(animationFrames, (frame) async {
+        animationFrames.forEach((frame) async {
           int row = _getY((frame.tileid ?? 0), widthCount).toInt();
           int column = _getX((frame.tileid ?? 0), widthCount).toInt();
 
-          Sprite sprite = await _getSprite(
-            '$_basePath$pathTileset${tileSetContain.image}',
-            row,
-            column,
-            tileSetContain.tileWidth ?? 0.0,
-            tileSetContain.tileHeight ?? 0.0,
+          final spritePath = '$_basePath$pathTileset${tileSetContain.image}';
+          TileModelSprite sprite = TileModelSprite(
+            path: spritePath,
+            width: tileSetContain.tileWidth ?? 0,
+            height: tileSetContain.tileHeight ?? 0,
+            row: row,
+            column: column,
           );
-          spriteList.add(sprite);
+          frames.add(sprite);
         });
 
-        _animationCache[animationKey] = ControlledUpdateAnimation(
-          Future.value(
-            SpriteAnimation.spriteList(
-              spriteList,
-              stepTime: stepTime,
-            ),
-          ),
+        return TileModelAnimation(
+          stepTime: stepTime,
+          frames: frames,
         );
-
-        return _animationCache[animationKey];
       } else {
         return null;
       }
@@ -552,28 +472,6 @@ class TiledWorldMap {
       }
     } else {
       return _reader.read();
-    }
-  }
-
-  Future<Image> _loadImage(String image) async {
-    if (fromServer) {
-      final imageCache = getImageFromCache(image);
-      if (imageCache != null) {
-        return imageCache;
-      }
-      final response = await http.get(Uri.parse(image));
-      String img64 = base64Encode(response.bodyBytes);
-      return Flame.images.fromBase64(image, img64);
-    } else {
-      return Flame.images.load(image);
-    }
-  }
-
-  Image? getImageFromCache(String image) {
-    try {
-      return Flame.images.fromCache(image);
-    } catch (e) {
-      return null;
     }
   }
 

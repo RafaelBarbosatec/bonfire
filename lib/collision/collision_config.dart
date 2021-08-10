@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/vector2rect.dart';
 
 import 'collision_area.dart';
@@ -22,20 +23,18 @@ class CollisionConfig {
 
   Rect get rect => _rect;
 
-  bool verifyCollision(CollisionConfig? other) {
+  bool verifyCollision(CollisionConfig? other, {Vector2? position}) {
     if (other == null) return false;
-    if (rect.overlaps(other.rect)) {
-      for (final element1 in collisions) {
-        for (final element2 in other.collisions) {
-          if (element1.verifyCollision(element2)) {
-            return true;
-          }
+    for (final element1 in collisions) {
+      for (final element2 in other.collisions) {
+        if (position != null
+            ? element1.verifyCollisionSimulate(position, element2)
+            : element1.verifyCollision(element2)) {
+          return true;
         }
       }
-      return false;
-    } else {
-      return false;
     }
+    return false;
   }
 
   void updatePosition(Vector2Rect position) {

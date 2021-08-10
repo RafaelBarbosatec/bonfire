@@ -183,8 +183,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       },
     );
 
-    if (execAttackRange && checkInterval('ATTACK_RANGE', 150, dt))
+    if (execAttackRange && checkInterval('ATTACK_RANGE', 150, dt)) {
       actionAttackRange();
+    }
     super.update(dt);
   }
 
@@ -273,7 +274,18 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
           gameRef.context,
           [
             Say(
-              "Look at this! It seems that I'm not alone here ...",
+              text: [
+                TextSpan(
+                  text: 'Look at this! It seems that',
+                ),
+                TextSpan(
+                  text: ' I\'m not alone ',
+                  style: TextStyle(color: Colors.red),
+                ),
+                TextSpan(
+                  text: 'here...',
+                ),
+              ],
               person: Container(
                 width: 100,
                 height: 100,
@@ -291,7 +303,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
             ),
           ],
           finish: () {
-            print('finish');
+            print('finish talk');
             gameRef.camera.moveToPlayerAnimated();
           },
           logicalKeyboardKeyToNext: LogicalKeyboardKey.space,

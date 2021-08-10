@@ -9,7 +9,7 @@ import 'camera_config.dart';
 
 class Camera with BonfireHasGameRef<BonfireGame> {
   bool _isMoving = false;
-  double _spacingMap = -32.0;
+  double _spacingMap = 32.0;
   Offset position = Offset.zero;
   Offset _lastTargetOffset = Offset.zero;
   final CameraConfig config;
@@ -26,8 +26,8 @@ class Camera with BonfireHasGameRef<BonfireGame> {
 
   Rect get cameraRectWithSpacing => Rect.fromCenter(
         center: Offset(cameraRect.center.dx, cameraRect.center.dy),
-        width: cameraRect.width + _spacingMap,
-        height: cameraRect.height + _spacingMap,
+        width: cameraRect.width + (_spacingMap * 2),
+        height: cameraRect.height + (_spacingMap * 2),
       );
 
   void moveTop(double displacement) {
@@ -99,8 +99,6 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     config.target = null;
     _isMoving = true;
 
-    double diffX = this.position.dx - target.position.center.dx;
-    double diffY = this.position.dy - target.position.center.dy;
     double originX = this.position.dx;
     double originY = this.position.dy;
 
@@ -110,6 +108,9 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
+        double diffX = originX - target.position.center.dx;
+        double diffY = originY - target.position.center.dy;
+
         this.position = position.copyWith(x: originX - (diffX * value));
         this.position = position.copyWith(y: originY - (diffY * value));
         config.zoom = initialZoom - (diffZoom * value);
@@ -220,6 +221,10 @@ class Camera with BonfireHasGameRef<BonfireGame> {
 
   bool isComponentOnCamera(GameComponent c) {
     return cameraRectWithSpacing.overlaps(c.position.rect);
+  }
+
+  bool contains(Offset c) {
+    return cameraRectWithSpacing.contains(c);
   }
 
   bool isRectOnCamera(Rect c) {

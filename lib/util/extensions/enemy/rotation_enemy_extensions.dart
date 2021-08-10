@@ -150,12 +150,12 @@ extension RotationEnemyExtensions on RotationEnemy {
             a.rectAttackable().rect.overlaps(positionAttack.rect))
         .forEach((attackable) {
       attackable.receiveDamage(damage, id);
-      Vector2Rect rectAfterPush =
+      final rectAfterPush =
           attackable.position.translate(diffBase.dx, diffBase.dy);
       if (withPush &&
           (attackable is ObjectCollision &&
               !(attackable as ObjectCollision)
-                  .isCollision(displacement: rectAfterPush))) {
+                  .isCollision(displacement: rectAfterPush.position))) {
         attackable.position = rectAfterPush;
       }
     });
