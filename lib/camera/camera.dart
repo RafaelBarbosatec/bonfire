@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
@@ -29,6 +31,22 @@ class Camera with BonfireHasGameRef<BonfireGame> {
         width: cameraRect.width + (_spacingMap * 2),
         height: cameraRect.height + (_spacingMap * 2),
       );
+
+  /// Remaining time in seconds for the camera shake.
+  double _shakeTimer = 0.0;
+
+  /// The intensity of the current shake action.
+  double _shakeIntensity = 0.0;
+
+  /// If the camera should go back to player after shaking.
+  /// Camera goes to `_lastPositionBeforeShake` as default.
+  bool _focusPlayerOnFinishShake = false;
+
+  /// Save the last position before shaking starts
+  Offset _lastPositionBeforeShake = Offset.zero;
+
+  double defaultShakeIntensity = 8.0; // in pixels
+  double defaultShakeDuration = 1; // in seconds
 
   void moveTop(double displacement) {
     position = position.translate(0, displacement * -1);
@@ -247,7 +265,61 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     );
   }
 
+  /// Applies a shaking effect to the camera for [duration] seconds and with
+  /// [intensity] expressed in pixels. If [focusPlayerOnFinishShake] is true,
+  /// camera will focus on player after shaking instead of its last position
+  void shake({
+    double? duration,
+    double? intensity,
+    bool focusPlayerOnFinishShake = false,
+  }) {
+    _shakeTimer += duration ?? defaultShakeDuration;
+    _shakeIntensity = intensity ?? defaultShakeIntensity;
+    _focusPlayerOnFinishShake = focusPlayerOnFinishShake;
+  }
+
+  /// Whether the camera is currently shaking or not.
+  bool get shaking => _shakeTimer > 0.0;
+
+  /// Buffer to re-use for the shake delta.
+  final _shakeBuffer = Vector2.zero();
+
+  /// The random number generator to use for shaking
+  final _shakeRng = math.Random();
+
+  /// Generates one value between [-1, 1] * [_shakeIntensity] used once for each
+  /// of the axis in the shake delta.
+  double _shakeValue() => (_shakeRng.nextDouble() - 0.5) * 2 * _shakeIntensity;
+
+  /// Generates a random [Offset] of displacement applied to the camera.
+  /// This will be a random [Offset] every tick causing a shakiness effect.
+  Offset _shakeDelta() {
+    if (shaking) {
+      _shakeBuffer.setValues(_shakeValue(), _shakeValue());
+    } else if (!_shakeBuffer.isZero()) {
+      _shakeBuffer.setZero();
+    }
+    return _shakeBuffer.toOffset();
+  }
+
   void update() {
+    // Generate shake Offset
+    final shake = _shakeDelta();
+    // Update last position if not shaking
+    if (!shaking) _lastPositionBeforeShake = this.position;
+    // Update camera position applying shake effect
+    this.position = this.position + shake;
+    if (shaking) {
+      _shakeTimer -= 0.1;
+      // Go back to player or last position before shake
+      if (_shakeTimer < 0.0) {
+        this.position = _focusPlayerOnFinishShake
+            ? gameRef.player!.vectorPosition.toOffset()
+            : _lastPositionBeforeShake;
+        _shakeTimer = 0.0;
+      }
+    }
+
     _followTarget(
       vertical: config.sizeMovementWindow.height,
       horizontal: config.sizeMovementWindow.width,
