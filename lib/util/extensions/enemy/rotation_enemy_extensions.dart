@@ -175,9 +175,9 @@ extension RotationEnemyExtensions on RotationEnemy {
     double damage = 1,
     int interval = 1000,
     bool withCollision = true,
-    VoidCallback? destroy,
+    VoidCallback? onDestroy,
     CollisionConfig? collision,
-    VoidCallback? execute,
+    VoidCallback? onExecute,
     LightingConfig? lightingConfig,
   }) {
     if (!this.checkInterval('attackRange', interval, dtUpdate)) return;
@@ -194,11 +194,11 @@ extension RotationEnemyExtensions on RotationEnemy {
       speed: speed,
       damage: damage,
       withCollision: withCollision,
-      destroy: destroy,
+      onDestroy: onDestroy,
       collision: collision,
       lightingConfig: lightingConfig,
     );
 
-    if (execute != null) execute();
+    onExecute?.call();
   }
 }

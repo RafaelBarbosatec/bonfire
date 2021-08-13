@@ -27,7 +27,7 @@ class FlyingAttackAngleObject extends AnimatedObject
   final double height;
   final AttackFromEnum attackFrom;
   final bool withCollision;
-  final VoidCallback? destroyedObject;
+  final VoidCallback? onDestroy;
   final _loader = AssetsLoader();
 
   late double _cosAngle;
@@ -48,7 +48,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     this.damage = 1,
     this.attackFrom = AttackFromEnum.ENEMY,
     this.withCollision = true,
-    this.destroyedObject,
+    this.onDestroy,
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) {
@@ -152,7 +152,7 @@ class FlyingAttackAngleObject extends AnimatedObject
       }
       setupCollision(CollisionConfig(collisions: []));
       remove();
-      this.destroyedObject?.call();
+      this.onDestroy?.call();
     }
   }
 

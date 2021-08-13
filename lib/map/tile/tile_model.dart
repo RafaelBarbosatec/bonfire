@@ -128,6 +128,8 @@ class TileModel {
   final TileModelAnimation? animation;
   final List<CollisionArea>? collisions;
 
+  Offset center = Offset.zero;
+
   TileModel({
     required this.x,
     required this.y,
@@ -140,17 +142,18 @@ class TileModel {
     this.sprite,
     this.animation,
     this.collisions,
-  });
+  }) {
+    center = Offset(
+      (x * width) + (width / 2.0),
+      (y * height) + (height / 2.0),
+    );
+  }
 
   String get id => '$x/$y';
   double get left => (x * width);
   double get right => (x * width) + width;
   double get top => (y * height);
   double get bottom => (y * height) + height;
-  Offset get center => Offset(
-        (x * width) + (width / 2.0),
-        (y * height) + (height / 2.0),
-      );
 
   Tile getTile(BonfireGame gameRef) {
     if (animation == null) {

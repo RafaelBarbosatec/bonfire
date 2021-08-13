@@ -16,7 +16,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     double damage = 1,
     double? radAngleDirection,
     bool withCollision = true,
-    VoidCallback? destroy,
+    VoidCallback? onDestroy,
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
   }) {
@@ -35,7 +35,7 @@ extension RotationPlayerExtensions on RotationPlayer {
         speed: speed,
         damage: damage,
         withCollision: withCollision,
-        destroy: destroy,
+        onDestroy: onDestroy,
         collision: collision,
         lightingConfig: lightingConfig,
       );

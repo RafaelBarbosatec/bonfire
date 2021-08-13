@@ -1,3 +1,7 @@
+# 1.4.9
+- new Improvements in process Tile in `TiledMap`.
+- Add `shake` method in `Camera`.
+
 # 1.4.8
 - Improvements in process Tile in `TiledMap`.
 

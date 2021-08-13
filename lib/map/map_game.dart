@@ -9,7 +9,7 @@ import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
 
 abstract class MapGame extends Component with BonfireHasGameRef<BonfireGame> {
-  Iterable<TileModel> tiles;
+  List<TileModel> tiles;
   Size? mapSize;
   Vector2? mapStartPosition;
   double tileSizeToUpdate;
@@ -21,7 +21,7 @@ abstract class MapGame extends Component with BonfireHasGameRef<BonfireGame> {
   Iterable<ObjectCollision> getCollisionsRendered();
   Iterable<ObjectCollision> getCollisions();
 
-  Future<void> updateTiles(Iterable<TileModel> map);
+  Future<void> updateTiles(List<TileModel> map);
 
   Size getMapSize();
 

@@ -142,7 +142,7 @@ class CollisionArea {
     }
 
     return {
-      'shape': this.shape,
+      'shape': shape,
       'align': {'x': this.align?.x ?? 0.0, 'y': this.align?.y ?? 0.0},
     };
   }

@@ -114,7 +114,7 @@ extension GameComponentExtensions on GameComponent {
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
-    VoidCallback? destroy,
+    VoidCallback? onDestroy,
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
   }) {
@@ -141,7 +141,7 @@ extension GameComponentExtensions on GameComponent {
       attackFrom: this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
       collision: collision,
       withCollision: withCollision,
-      destroyedObject: destroy,
+      onDestroy: onDestroy,
       flyAnimation: animationTop,
       destroyAnimation: animationDestroy,
       lightingConfig: lightingConfig,

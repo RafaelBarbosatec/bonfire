@@ -17,7 +17,9 @@ class MapWorld extends MapGame {
   double lastZoom = -1;
   Vector2? lastSizeScreen;
   Iterable<Tile> _tilesToRender = [];
+  Iterable<Tile> _tilesToUpdate = [];
   Iterable<ObjectCollision> _tilesCollisions = [];
+  Iterable<ObjectCollision> _tilesVisibleCollisions = [];
   List<Tile> _auxTiles = [];
 
   List<Offset> _linePath = [];
@@ -30,7 +32,7 @@ class MapWorld extends MapGame {
   int countTiles = 0;
   int countFramesToProcess = 0;
 
-  MapWorld(Iterable<TileModel> tiles, {double tileSizeToUpdate = 0})
+  MapWorld(List<TileModel> tiles, {double tileSizeToUpdate = 0})
       : super(
           tiles,
           tileSizeToUpdate: tileSizeToUpdate,
@@ -61,41 +63,41 @@ class MapWorld extends MapGame {
       }
     }
 
+    for (final tile in _tilesToUpdate) {
+      tile.update(t);
+    }
+
     if (currentIndexProcess != -1) {
       scheduleMicrotask(_updateTilesToRender);
     }
-
-    for (final tile in getTilesToUpdate()) {
-      tile.update(t);
-    }
-  }
-
-  Iterable<Tile> getTilesToUpdate() {
-    return _tilesToRender.where((element) {
-      return element is ObjectCollision || element.containAnimation;
-    });
   }
 
   Future<void> _updateTilesToRender({bool processAllList = false}) async {
-    if (currentIndexProcess != -1 || processAllList) {
-      int startRange = SIZE_LOT_TILES_TO_PROCESS * currentIndexProcess;
-      int endRange = SIZE_LOT_TILES_TO_PROCESS * (currentIndexProcess + 1);
-      if (currentIndexProcess == countFramesToProcess) {
-        endRange = countTiles;
-      }
-      final visibleTiles = (processAllList
-              ? tiles
-              : tiles.toList().sublist(startRange, endRange))
-          .where((tile) => gameRef.camera.contains(tile.center));
-      if (visibleTiles.isNotEmpty) {
-        await _buildAsyncTiles(visibleTiles);
-      }
-      currentIndexProcess++;
-      if (currentIndexProcess > countFramesToProcess || processAllList) {
-        _tilesToRender = _auxTiles.toList(growable: false);
-        _auxTiles.clear();
-        currentIndexProcess = -1;
-      }
+    int startRange = SIZE_LOT_TILES_TO_PROCESS * currentIndexProcess;
+    int endRange = SIZE_LOT_TILES_TO_PROCESS * (currentIndexProcess + 1);
+    if (currentIndexProcess == countFramesToProcess) {
+      endRange = countTiles;
+    }
+
+    Iterable<TileModel> visibleTiles =
+        (processAllList ? tiles : tiles.getRange(startRange, endRange))
+            .where((tile) => gameRef.camera.contains(tile.center));
+
+    if (visibleTiles.isNotEmpty) {
+      _auxTiles.addAll(await _buildAsyncTiles(visibleTiles));
+    }
+
+    currentIndexProcess++;
+    if (currentIndexProcess > countFramesToProcess || processAllList) {
+      _tilesToRender = _auxTiles.toList(growable: false);
+      _tilesToUpdate = _tilesToRender.where((element) {
+        return element is ObjectCollision || element.containAnimation;
+      });
+      _tilesVisibleCollisions = _tilesToUpdate.where((element) {
+        return element is ObjectCollision;
+      }).cast();
+      _auxTiles.clear();
+      currentIndexProcess = -1;
     }
   }
 
@@ -106,7 +108,7 @@ class MapWorld extends MapGame {
 
   @override
   Iterable<ObjectCollision> getCollisionsRendered() {
-    return _tilesToRender.where((element) => element is ObjectCollision).cast();
+    return _tilesVisibleCollisions;
   }
 
   @override
@@ -145,7 +147,7 @@ class MapWorld extends MapGame {
   }
 
   @override
-  Future<void> updateTiles(Iterable<TileModel> map) async {
+  Future<void> updateTiles(List<TileModel> map) async {
     lastSizeScreen = null;
     this.tiles = map;
     verifyMaxTopAndLeft(gameRef.size, isUpdate: true);
@@ -213,12 +215,14 @@ class MapWorld extends MapGame {
     _tilesCollisions = aux;
   }
 
-  Future<void> _buildAsyncTiles(Iterable<TileModel> visibleTiles) async {
+  Future<List<Tile>> _buildAsyncTiles(Iterable<TileModel> visibleTiles) async {
+    List<Tile> aux = [];
     for (var element in visibleTiles) {
       final tile = element.getTile(gameRef);
       await tile.onLoad();
-      _auxTiles.add(tile);
+      aux.add(tile);
     }
+    return aux;
   }
 
   @override
