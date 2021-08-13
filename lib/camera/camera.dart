@@ -38,10 +38,6 @@ class Camera with BonfireHasGameRef<BonfireGame> {
   /// The intensity of the current shake action.
   double _shakeIntensity = 0.0;
 
-  /// If the camera should go back to player after shaking.
-  /// Camera goes to `_lastPositionBeforeShake` as default.
-  bool _focusPlayerOnFinishShake = false;
-
   /// Save the last position before shaking starts
   Offset _lastPositionBeforeShake = Offset.zero;
 
@@ -271,11 +267,9 @@ class Camera with BonfireHasGameRef<BonfireGame> {
   void shake({
     double? duration,
     double? intensity,
-    bool focusPlayerOnFinishShake = false,
   }) {
     _shakeTimer += duration ?? defaultShakeDuration;
     _shakeIntensity = intensity ?? defaultShakeIntensity;
-    _focusPlayerOnFinishShake = focusPlayerOnFinishShake;
   }
 
   /// Whether the camera is currently shaking or not.
@@ -302,28 +296,35 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     return _shakeBuffer.toOffset();
   }
 
-  void update() {
-    // Generate shake Offset
-    final shake = _shakeDelta();
-    // Update last position if not shaking
-    if (!shaking) _lastPositionBeforeShake = this.position;
-    // Update camera position applying shake effect
-    this.position = this.position + shake;
-    if (shaking) {
-      _shakeTimer -= 0.1;
-      // Go back to player or last position before shake
-      if (_shakeTimer < 0.0) {
-        this.position = _focusPlayerOnFinishShake
-            ? gameRef.player!.vectorPosition.toOffset()
-            : _lastPositionBeforeShake;
-        _shakeTimer = 0.0;
-      }
-    }
+  void update(double dt) {
+    _doShake();
 
     _followTarget(
       vertical: config.sizeMovementWindow.height,
       horizontal: config.sizeMovementWindow.width,
     );
+  }
+
+  void _doShake() {
+    // Update last position if not shaking
+    if (!shaking) {
+      _lastPositionBeforeShake = this.position;
+      return;
+    }
+    // Generate shake Offset
+    final shake = _shakeDelta();
+
+    // Update camera position applying shake effect
+    this.position = this.position + shake;
+    if (shaking) {
+      _shakeTimer -= 0.1;
+      // Go back to target or last position before shake
+      if (_shakeTimer < 0.0) {
+        this.position = config.target?.vectorPosition.toOffset() ??
+            _lastPositionBeforeShake;
+        _shakeTimer = 0.0;
+      }
+    }
   }
 
   void updateSpacingVisibleMap(double space) {

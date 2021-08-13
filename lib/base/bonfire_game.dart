@@ -118,7 +118,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
     if (camera.config.target == null) {
       camera.config.target = player;
-      camera.update();
+      camera.update(0);
     }
   }
 

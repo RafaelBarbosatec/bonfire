@@ -198,7 +198,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
 
     components.removeWhere((c) => c.shouldRemove);
 
-    camera.update();
+    camera.update(t);
 
     if (_timerSortPriority.update(t)) {
       _updateOrder();
