@@ -138,6 +138,10 @@ class MapWorld extends MapGame {
 
     _getTileCollisions();
 
+    _createTilesLot();
+  }
+
+  void _createTilesLot() {
     final countTiles = tiles.length;
     final countFramesToProcess =
         (countTiles / SIZE_LOT_TILES_TO_PROCESS).ceil();
