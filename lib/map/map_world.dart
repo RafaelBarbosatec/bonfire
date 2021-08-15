@@ -22,6 +22,7 @@ class MapWorld extends MapGame {
   Iterable<ObjectCollision> _tilesVisibleCollisions = [];
   List<Iterable<TileModel>> _tilesLot = [];
   List<Tile> _auxTiles = [];
+  bool processingTiles = false;
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -66,7 +67,8 @@ class MapWorld extends MapGame {
       tile.update(t);
     }
 
-    if (currentIndexProcess != -1) {
+    if (currentIndexProcess != -1 && !processingTiles) {
+      processingTiles = true;
       scheduleMicrotask(_updateTilesToRender);
     }
   }
@@ -92,6 +94,7 @@ class MapWorld extends MapGame {
       _auxTiles.clear();
       currentIndexProcess = -1;
     }
+    processingTiles = false;
   }
 
   @override
