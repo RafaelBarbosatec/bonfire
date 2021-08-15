@@ -20,7 +20,9 @@ class MapWorld extends MapGame {
   Iterable<Tile> _tilesToUpdate = [];
   Iterable<ObjectCollision> _tilesCollisions = [];
   Iterable<ObjectCollision> _tilesVisibleCollisions = [];
+  List<Iterable<TileModel>> _tilesLot = [];
   List<Tile> _auxTiles = [];
+  bool processingTiles = false;
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -29,8 +31,6 @@ class MapWorld extends MapGame {
     ..strokeCap = StrokeCap.round;
 
   int currentIndexProcess = -1;
-  int countTiles = 0;
-  int countFramesToProcess = 0;
 
   MapWorld(List<TileModel> tiles, {double tileSizeToUpdate = 0})
       : super(
@@ -67,20 +67,15 @@ class MapWorld extends MapGame {
       tile.update(t);
     }
 
-    if (currentIndexProcess != -1) {
+    if (currentIndexProcess != -1 && !processingTiles) {
+      processingTiles = true;
       scheduleMicrotask(_updateTilesToRender);
     }
   }
 
   Future<void> _updateTilesToRender({bool processAllList = false}) async {
-    int startRange = SIZE_LOT_TILES_TO_PROCESS * currentIndexProcess;
-    int endRange = SIZE_LOT_TILES_TO_PROCESS * (currentIndexProcess + 1);
-    if (currentIndexProcess == countFramesToProcess) {
-      endRange = countTiles;
-    }
-
     Iterable<TileModel> visibleTiles =
-        (processAllList ? tiles : tiles.getRange(startRange, endRange))
+        (processAllList ? tiles : _tilesLot[currentIndexProcess])
             .where((tile) => gameRef.camera.contains(tile.center));
 
     if (visibleTiles.isNotEmpty) {
@@ -88,7 +83,7 @@ class MapWorld extends MapGame {
     }
 
     currentIndexProcess++;
-    if (currentIndexProcess > countFramesToProcess || processAllList) {
+    if (currentIndexProcess >= _tilesLot.length || processAllList) {
       _tilesToRender = _auxTiles.toList(growable: false);
       _tilesToUpdate = _tilesToRender.where((element) {
         return element is ObjectCollision || element.containAnimation;
@@ -99,6 +94,7 @@ class MapWorld extends MapGame {
       _auxTiles.clear();
       currentIndexProcess = -1;
     }
+    processingTiles = false;
   }
 
   @override
@@ -142,8 +138,22 @@ class MapWorld extends MapGame {
 
     _getTileCollisions();
 
-    countTiles = tiles.length;
-    countFramesToProcess = (countTiles / SIZE_LOT_TILES_TO_PROCESS).floor();
+    _createTilesLot();
+  }
+
+  void _createTilesLot() {
+    final countTiles = tiles.length;
+    final countFramesToProcess =
+        (countTiles / SIZE_LOT_TILES_TO_PROCESS).ceil();
+    _tilesLot.clear();
+    List.generate(countFramesToProcess, (index) {
+      int startRange = SIZE_LOT_TILES_TO_PROCESS * index;
+      int endRange = SIZE_LOT_TILES_TO_PROCESS * (index + 1);
+      if (index == countFramesToProcess - 1) {
+        endRange = countTiles;
+      }
+      _tilesLot.add(tiles.getRange(startRange, endRange));
+    });
   }
 
   @override
