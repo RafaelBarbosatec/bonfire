@@ -21,7 +21,6 @@ class MapWorld extends MapGame {
   Iterable<ObjectCollision> _tilesCollisions = [];
   Iterable<ObjectCollision> _tilesVisibleCollisions = [];
   List<Iterable<TileModel>> _tilesLot = [];
-  List<Iterable<Map>> _tilesMapLot = [];
   List<Tile> _auxTiles = [];
   bool processingTiles = false;
 
