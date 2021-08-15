@@ -21,6 +21,7 @@ class MapWorld extends MapGame {
   Iterable<ObjectCollision> _tilesCollisions = [];
   Iterable<ObjectCollision> _tilesVisibleCollisions = [];
   List<Iterable<TileModel>> _tilesLot = [];
+  List<Iterable<Map>> _tilesMapLot = [];
   List<Tile> _auxTiles = [];
   bool processingTiles = false;
 
@@ -78,9 +79,7 @@ class MapWorld extends MapGame {
         (processAllList ? tiles : _tilesLot[currentIndexProcess])
             .where((tile) => gameRef.camera.contains(tile.center));
 
-    if (visibleTiles.isNotEmpty) {
-      _auxTiles.addAll(await _buildAsyncTiles(visibleTiles));
-    }
+    _auxTiles.addAll(await _buildAsyncTiles(visibleTiles));
 
     currentIndexProcess++;
     if (currentIndexProcess >= _tilesLot.length || processAllList) {
