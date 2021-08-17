@@ -81,10 +81,13 @@ class MapWorld extends MapGame {
       _auxTiles.clear();
       _tilesToUpdate = _tilesToRender.where((element) {
         return element is ObjectCollision || element.containAnimation;
-      });
-      _tilesVisibleCollisions = _tilesToUpdate.where((element) {
-        return element is ObjectCollision;
-      }).cast();
+      }).toList(growable: false);
+      _tilesVisibleCollisions = _tilesToUpdate
+          .where((element) {
+            return element is ObjectCollision;
+          })
+          .toList(growable: false)
+          .cast();
 
       currentIndexProcess = -1;
     }
@@ -138,15 +141,16 @@ class MapWorld extends MapGame {
     final countTiles = tiles.length;
     final countFramesToProcess =
         (countTiles / SIZE_LOT_TILES_TO_PROCESS).ceil();
-    _tilesLot.clear();
+    List<Iterable<TileModel>> aux = [];
     List.generate(countFramesToProcess, (index) {
       int startRange = SIZE_LOT_TILES_TO_PROCESS * index;
       int endRange = SIZE_LOT_TILES_TO_PROCESS * (index + 1);
       if (index == countFramesToProcess - 1) {
         endRange = countTiles;
       }
-      _tilesLot.add(tiles.getRange(startRange, endRange));
+      aux.add(tiles.getRange(startRange, endRange).toList(growable: false));
     });
+    _tilesLot = aux.toList(growable: false);
   }
 
   @override

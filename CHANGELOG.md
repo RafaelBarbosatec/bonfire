@@ -1,3 +1,6 @@
+# 1.4.11
+- improvements in `MapWorld`
+
 # 1.4.10
 - improvements performance
 
