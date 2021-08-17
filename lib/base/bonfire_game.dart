@@ -34,7 +34,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   /// Represents the character controlled by the user in the game. Instances of this class has actions and movements ready to be used and configured.
   final Player? player;
 
-  /// The way you cand raw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
+  /// The way you can draw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
   final GameInterface? interface;
 
   /// Represents a map (or world) where the game occurs.
@@ -252,7 +252,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     }).cast();
 
     _visibleCollisions = _visibleCollisions.toList()
-      ..addAll(map.getCollisionsRendered());
+      ..addAll(map.getCollisionsRendered().toList(growable: false));
 
     _visibleLights = components.where((element) {
       return element is Lighting && element.isVisible(camera);
