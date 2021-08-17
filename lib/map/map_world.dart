@@ -12,8 +12,7 @@ import 'package:flutter/material.dart';
 
 class MapWorld extends MapGame {
   static const int SIZE_LOT_TILES_TO_PROCESS = 1000;
-  int lastCameraX = -1;
-  int lastCameraY = -1;
+  Vector2 lastCamera = Vector2.zero();
   double lastZoom = -1;
   Vector2? lastSizeScreen;
   Iterable<Tile> _tilesToRender = [];
@@ -48,13 +47,9 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    final cameraX = (gameRef.camera.position.dx / tileSizeToUpdate).floor();
-    final cameraY = (gameRef.camera.position.dy / tileSizeToUpdate).floor();
-    if (lastCameraX != cameraX ||
-        lastCameraY != cameraY ||
-        lastZoom > gameRef.camera.config.zoom) {
-      lastCameraX = cameraX;
-      lastCameraY = cameraY;
+    final camera = _getCameraTileUpdate();
+    if (lastCamera != camera || lastZoom > gameRef.camera.config.zoom) {
+      lastCamera = camera;
       if (lastZoom > gameRef.camera.config.zoom) {
         lastZoom = gameRef.camera.config.zoom;
       }
@@ -83,13 +78,14 @@ class MapWorld extends MapGame {
     currentIndexProcess++;
     if (currentIndexProcess >= _tilesLot.length || processAllList) {
       _tilesToRender = _auxTiles.toList(growable: false);
+      _auxTiles.clear();
       _tilesToUpdate = _tilesToRender.where((element) {
         return element is ObjectCollision || element.containAnimation;
       });
       _tilesVisibleCollisions = _tilesToUpdate.where((element) {
         return element is ObjectCollision;
       }).cast();
-      _auxTiles.clear();
+
       currentIndexProcess = -1;
     }
     processingTiles = false;
@@ -121,8 +117,7 @@ class MapWorld extends MapGame {
     lastSizeScreen = size.clone();
 
     if (isUpdate) {
-      lastCameraX = -1;
-      lastCameraY = -1;
+      lastCamera = Vector2.zero();
       lastZoom = -1;
     }
 
@@ -236,5 +231,12 @@ class MapWorld extends MapGame {
   @override
   Future<void>? onLoad() async {
     return _updateTilesToRender(processAllList: true);
+  }
+
+  Vector2 _getCameraTileUpdate() {
+    return Vector2(
+      (gameRef.camera.position.dx / tileSizeToUpdate).floorToDouble(),
+      (gameRef.camera.position.dy / tileSizeToUpdate).floorToDouble(),
+    );
   }
 }
