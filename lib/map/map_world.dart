@@ -15,11 +15,11 @@ class MapWorld extends MapGame {
   Vector2 lastCamera = Vector2.zero();
   double lastZoom = -1;
   Vector2? lastSizeScreen;
-  Iterable<Tile> _tilesToRender = [];
-  Iterable<Tile> _tilesToUpdate = [];
-  Iterable<ObjectCollision> _tilesCollisions = [];
-  Iterable<ObjectCollision> _tilesVisibleCollisions = [];
-  List<Iterable<TileModel>> _tilesLot = [];
+  Iterable<Tile> _tilesToRender = List.empty();
+  Iterable<Tile> _tilesToUpdate = List.empty();
+  Iterable<ObjectCollision> _tilesCollisions = List.empty();
+  Iterable<ObjectCollision> _tilesVisibleCollisions = List.empty();
+  List<Iterable<TileModel>> _tilesLot = List.empty();
   List<Tile> _auxTiles = [];
   bool processingTiles = false;
 

@@ -67,10 +67,10 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   /// Used to show in the interface the FPS.
   final bool showFPS;
 
-  Iterable<Lighting> _visibleLights = [];
-  Iterable<GameComponent> _visibleComponents = [];
-  Iterable<ObjectCollision> _visibleCollisions = [];
-  Iterable<ObjectCollision> _collisions = [];
+  Iterable<Lighting> _visibleLights = List.empty();
+  Iterable<GameComponent> _visibleComponents = List.empty();
+  Iterable<ObjectCollision> _visibleCollisions = List.empty();
+  Iterable<ObjectCollision> _collisions = List.empty();
   IntervalTick? _interval;
   ColorFilterComponent _colorFilterComponent = ColorFilterComponent(
     GameColorFilter(),
@@ -239,24 +239,37 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   void _updateTempList() {
-    _visibleComponents = components.where((element) {
-      return (element is GameComponent) && (element).isVisibleInCamera();
-    }).cast();
+    _visibleComponents = components
+        .where((element) {
+          return (element is GameComponent) && (element).isVisibleInCamera();
+        })
+        .toList(growable: false)
+        .cast();
 
-    _collisions = components.where((element) {
-      return (element is ObjectCollision) && (element).containCollision();
-    }).cast();
+    _collisions = components
+        .where((element) {
+          return (element is ObjectCollision) && (element).containCollision();
+        })
+        .toList(growable: false)
+        .cast();
 
-    _visibleCollisions = _visibleComponents.where((element) {
-      return (element is ObjectCollision) && (element).containCollision();
-    }).cast();
+    _visibleCollisions = _visibleComponents
+        .where((element) {
+          return (element is ObjectCollision) && (element).containCollision();
+        })
+        .toList(growable: false)
+        .cast();
 
-    _visibleCollisions = _visibleCollisions.toList()
-      ..addAll(map.getCollisionsRendered().toList(growable: false));
+    _visibleCollisions = (_visibleCollisions.toList()
+          ..addAll(map.getCollisionsRendered()))
+        .toList(growable: false);
 
-    _visibleLights = components.where((element) {
-      return element is Lighting && element.isVisible(camera);
-    }).cast();
+    _visibleLights = components
+        .where((element) {
+          return element is Lighting && element.isVisible(camera);
+        })
+        .toList(growable: false)
+        .cast();
 
     gameController?.notifyListeners();
   }
