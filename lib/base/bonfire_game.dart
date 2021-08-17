@@ -239,37 +239,29 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   void _updateTempList() {
-    _visibleComponents = components
-        .where((element) {
-          return (element is GameComponent) && (element).isVisibleInCamera();
-        })
-        .toList(growable: false)
-        .cast();
+    _visibleComponents = components.where((element) {
+      return (element is GameComponent) && (element).isVisibleInCamera();
+    }).cast()
+      ..toList(growable: false);
 
-    _collisions = components
-        .where((element) {
-          return (element is ObjectCollision) && (element).containCollision();
-        })
-        .toList(growable: false)
-        .cast();
+    _collisions = components.where((element) {
+      return (element is ObjectCollision) && (element).containCollision();
+    }).cast()
+      ..toList(growable: false);
 
-    _visibleCollisions = _visibleComponents
-        .where((element) {
-          return (element is ObjectCollision) && (element).containCollision();
-        })
-        .toList(growable: false)
-        .cast();
+    _visibleCollisions = _visibleComponents.where((element) {
+      return (element is ObjectCollision) && (element).containCollision();
+    }).cast()
+      ..toList(growable: false);
 
     _visibleCollisions = (_visibleCollisions.toList()
           ..addAll(map.getCollisionsRendered()))
         .toList(growable: false);
 
-    _visibleLights = components
-        .where((element) {
-          return element is Lighting && element.isVisible(camera);
-        })
-        .toList(growable: false)
-        .cast();
+    _visibleLights = components.where((element) {
+      return element is Lighting && element.isVisible(camera);
+    }).cast()
+      ..toList(growable: false);
 
     gameController?.notifyListeners();
   }

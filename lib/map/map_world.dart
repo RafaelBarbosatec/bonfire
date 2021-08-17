@@ -78,16 +78,18 @@ class MapWorld extends MapGame {
     currentIndexProcess++;
     if (currentIndexProcess >= _tilesLot.length || processAllList) {
       _tilesToRender = _auxTiles.toList(growable: false);
-      _auxTiles.clear();
-      _tilesToUpdate = _tilesToRender.where((element) {
-        return element is ObjectCollision || element.containAnimation;
-      }).toList(growable: false);
+
+      _tilesToUpdate = _tilesToRender
+          .where((element) =>
+              element is ObjectCollision || element.containAnimation)
+          .toList(growable: false);
+
       _tilesVisibleCollisions = _tilesToUpdate
-          .where((element) {
-            return element is ObjectCollision;
-          })
+          .where((element) => element is ObjectCollision)
           .toList(growable: false)
           .cast();
+
+      _auxTiles.clear();
 
       currentIndexProcess = -1;
     }
