@@ -84,7 +84,10 @@ class TiledWorldMap {
 
     return Future.value(
       TiledWorldData(
-        map: MapWorld(_tiles, tileSizeToUpdate: tileSizeToUpdate),
+        map: MapWorld(
+          _tiles,
+          tileSizeToUpdate: tileSizeToUpdate,
+        ),
         components: _components,
       ),
     );
@@ -121,7 +124,7 @@ class TiledWorldMap {
         ((tileLayer.offsetX ?? 0.0) * _tileWidth) / _tileWidthOrigin;
     double offsetY =
         ((tileLayer.offsetY ?? 0.0) * _tileHeight) / _tileHeightOrigin;
-    await Future.forEach<int>(tileLayer.data ?? [], (tile) async {
+    (tileLayer.data ?? []).forEach((tile) async {
       if (tile != 0) {
         var data = _getDataTile(tile);
         if (data != null) {
@@ -168,12 +171,12 @@ class TiledWorldMap {
     if (data.animation != null) {
       if (data.animation != null) {
         _components.add(
-          GameDecorationWithCollision.withAnimation(
-            data.animation!.getFutureSpriteAnimation(),
+          GameDecorationWithCollision(
             Vector2(
               _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
               _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
             ),
+            animation: data.animation!.getSpriteAnimation().animation,
             height: _tileHeight,
             width: _tileWidth,
             collisions: data.collisions,
@@ -184,12 +187,12 @@ class TiledWorldMap {
     } else {
       if (data.sprite != null) {
         _components.add(
-          GameDecorationWithCollision.withSprite(
-            data.sprite!.getFutureSprite(),
+          GameDecorationWithCollision(
             Vector2(
               _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
               _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
             ),
+            sprite: data.sprite!.getSprite(),
             height: _tileHeight,
             width: _tileWidth,
             collisions: data.collisions,
@@ -421,11 +424,13 @@ class TiledWorldMap {
       List<TileModelSprite> frames = [];
       if ((animationFrames.isNotEmpty)) {
         double stepTime = (animationFrames[0].duration ?? 100) / 1000;
-        animationFrames.forEach((frame) async {
+
+        animationFrames.forEach((frame) {
           int row = _getY((frame.tileid ?? 0), widthCount).toInt();
           int column = _getX((frame.tileid ?? 0), widthCount).toInt();
 
           final spritePath = '$_basePath$pathTileset${tileSetContain.image}';
+
           TileModelSprite sprite = TileModelSprite(
             path: spritePath,
             width: tileSetContain.tileWidth ?? 0,

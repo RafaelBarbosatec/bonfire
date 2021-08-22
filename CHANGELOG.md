@@ -1,5 +1,6 @@
 # NEXT
 - fix crash when remove Tile
+- optimizes map loading
 
 # 1.4.11
 - improvements in `MapWorld`

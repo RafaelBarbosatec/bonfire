@@ -22,23 +22,14 @@ class TileModelSprite {
     this.height = 0,
   });
 
-  bool get inCache => MapAssetsManager.inSpriteCache('$path/$row/$column');
-  Future<Sprite> getFutureSprite() {
-    if (row == 0 && column == 0 && width == 0 && height == 0) {
-      return Sprite.load(path);
-    }
+  Sprite getSprite() {
     return MapAssetsManager.getSprite(
       path,
       row,
       column,
       width,
       height,
-      fromServer: path.contains('http'),
     );
-  }
-
-  Sprite getSprite() {
-    return MapAssetsManager.getSpriteCache('$path/$row/$column');
   }
 
   factory TileModelSprite.fromMap(Map<String, dynamic> map) {
@@ -72,27 +63,8 @@ class TileModelAnimation {
     required this.frames,
   });
 
-  bool get inCache => MapAssetsManager.inSpriteAnimationCache(key());
-
-  Future<ControlledUpdateAnimation> getFutureControlledAnimation() async {
-    return MapAssetsManager.getSpriteAnimation(frames, stepTime);
-  }
-
-  Future<SpriteAnimation> getFutureSpriteAnimation() async {
-    final a = await MapAssetsManager.getSpriteAnimation(frames, stepTime);
-    return a.animation!;
-  }
-
   ControlledUpdateAnimation getSpriteAnimation() {
-    return MapAssetsManager.getSpriteAnimationCache(key());
-  }
-
-  String key() {
-    String key = '';
-    frames.forEach((element) {
-      key += '${element.path}${element.row}${element.column}';
-    });
-    return key;
+    return MapAssetsManager.getSpriteAnimation(frames, stepTime);
   }
 
   factory TileModelAnimation.fromMap(Map<String, dynamic> map) {
@@ -158,86 +130,43 @@ class TileModel {
   Tile getTile(BonfireGame gameRef) {
     if (animation == null) {
       if (collisions?.isNotEmpty == true) {
-        if (sprite!.inCache) {
-          return TileWithCollision.fromSprite(
-            sprite!.getSprite(),
-            Vector2(
-              x,
-              y,
-            ),
-            offsetX: offsetX,
-            offsetY: offsetY,
-            collisions: collisions,
-            width: width,
-            height: height,
-            type: type,
-            properties: properties,
-          )
-            ..gameRef = gameRef
-            ..id = id;
-        } else {
-          return TileWithCollision.fromFutureSprite(
-            sprite!.getFutureSprite(),
-            Vector2(
-              x,
-              y,
-            ),
-            offsetX: offsetX,
-            offsetY: offsetY,
-            collisions: collisions,
-            width: width,
-            height: height,
-            type: type,
-            properties: properties,
-          )
-            ..gameRef = gameRef
-            ..id = id;
-        }
+        return TileWithCollision.fromSprite(
+          sprite!.getSprite(),
+          Vector2(
+            x,
+            y,
+          ),
+          offsetX: offsetX,
+          offsetY: offsetY,
+          collisions: collisions,
+          width: width,
+          height: height,
+          type: type,
+          properties: properties,
+        )
+          ..gameRef = gameRef
+          ..id = id;
       } else {
-        if (sprite!.inCache) {
-          return Tile.fromSprite(
-            sprite!.getSprite(),
-            Vector2(
-              x,
-              y,
-            ),
-            offsetX: offsetX,
-            offsetY: offsetY,
-            width: width,
-            height: height,
-            type: type,
-            properties: properties,
-          )
-            ..gameRef = gameRef
-            ..id = id;
-        } else {
-          return Tile.fromFutureSprite(
-            sprite!.getFutureSprite(),
-            Vector2(
-              x,
-              y,
-            ),
-            offsetX: offsetX,
-            offsetY: offsetY,
-            width: width,
-            height: height,
-            type: type,
-            properties: properties,
-          )
-            ..gameRef = gameRef
-            ..id = id;
-        }
+        return Tile.fromSprite(
+          sprite!.getSprite(),
+          Vector2(
+            x,
+            y,
+          ),
+          offsetX: offsetX,
+          offsetY: offsetY,
+          width: width,
+          height: height,
+          type: type,
+          properties: properties,
+        )
+          ..gameRef = gameRef
+          ..id = id;
       }
     } else {
       if (collisions?.isNotEmpty == true) {
-        ControlledUpdateAnimation animationControlled;
-        if (animation!.inCache) {
-          animationControlled = animation!.getSpriteAnimation();
-        } else {
-          animationControlled = ControlledUpdateAnimation(
-            animation!.getFutureSpriteAnimation(),
-          );
-        }
+        ControlledUpdateAnimation animationControlled =
+            animation!.getSpriteAnimation();
         return TileWithCollision.withAnimation(
           animationControlled,
           Vector2(
@@ -255,14 +184,8 @@ class TileModel {
           ..gameRef = gameRef
           ..id = id;
       } else {
-        ControlledUpdateAnimation animationControlled;
-        if (animation!.inCache) {
-          animationControlled = animation!.getSpriteAnimation();
-        } else {
-          animationControlled = ControlledUpdateAnimation(
-            animation!.getFutureSpriteAnimation(),
-          );
-        }
+        ControlledUpdateAnimation animationControlled =
+            animation!.getSpriteAnimation();
         return Tile.fromAnimation(
           animationControlled,
           Vector2(

@@ -10,6 +10,8 @@ import 'package:bonfire/map/tile/tile_model.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+import 'map_assets_manager.dart';
+
 class MapWorld extends MapGame {
   static const int SIZE_LOT_TILES_TO_PROCESS = 1000;
   Vector2 lastCamera = Vector2.zero();
@@ -19,6 +21,7 @@ class MapWorld extends MapGame {
   List<ObjectCollision> _tilesVisibleCollisions = List.empty();
   List<Iterable<TileModel>> _tilesLot = List.empty();
   List<Tile> _auxTiles = [];
+  List<Tile> _tilesToRemove = [];
   bool processingTiles = false;
 
   List<Offset> _linePath = [];
@@ -29,8 +32,10 @@ class MapWorld extends MapGame {
 
   int currentIndexProcess = -1;
 
-  MapWorld(List<TileModel> tiles, {double tileSizeToUpdate = 0})
-      : super(
+  MapWorld(
+    List<TileModel> tiles, {
+    double tileSizeToUpdate = 0,
+  }) : super(
           tiles,
           tileSizeToUpdate: tileSizeToUpdate,
         );
@@ -58,8 +63,12 @@ class MapWorld extends MapGame {
 
     for (var tile in children) {
       tile.update(t);
-      _verifyRemove(tile);
+      if (tile.shouldRemove) {
+        _tilesToRemove.add(tile);
+      }
     }
+
+    _verifyRemoveTiles();
 
     if (currentIndexProcess != -1 && !processingTiles) {
       processingTiles = true;
@@ -72,7 +81,8 @@ class MapWorld extends MapGame {
         (processAllList ? tiles : _tilesLot[currentIndexProcess])
             .where((tile) => gameRef.camera.contains(tile.center));
 
-    _auxTiles.addAll(await _buildAsyncTiles(visibleTiles));
+    final newTiles = _buildTiles(visibleTiles);
+    _auxTiles.addAll(newTiles);
 
     currentIndexProcess++;
     if (currentIndexProcess >= _tilesLot.length || processAllList) {
@@ -103,11 +113,13 @@ class MapWorld extends MapGame {
 
   @override
   void onGameResize(Vector2 size) {
-    verifyMaxTopAndLeft(size);
+    if (loaded) {
+      _verifyMaxTopAndLeft(size);
+    }
     super.onGameResize(size);
   }
 
-  void verifyMaxTopAndLeft(Vector2 size, {bool isUpdate = false}) {
+  void _verifyMaxTopAndLeft(Vector2 size, {bool isUpdate = false}) {
     if (lastSizeScreen == size) return;
     lastSizeScreen = size.clone();
 
@@ -149,7 +161,7 @@ class MapWorld extends MapGame {
   Future<void> updateTiles(List<TileModel> map) async {
     lastSizeScreen = null;
     this.tiles = map;
-    verifyMaxTopAndLeft(gameRef.size, isUpdate: true);
+    _verifyMaxTopAndLeft(gameRef.size, isUpdate: true);
   }
 
   @override
@@ -200,7 +212,7 @@ class MapWorld extends MapGame {
     }
   }
 
-  void _getTileCollisions() async {
+  void _getTileCollisions() {
     List<ObjectCollision> aux = [];
     final list = tiles.where((element) {
       return element.collisions?.isNotEmpty == true;
@@ -208,17 +220,15 @@ class MapWorld extends MapGame {
 
     for (var element in list) {
       final o = element.getTile(gameRef);
-      await o.onLoad();
       aux.add(o as ObjectCollision);
     }
     _tilesCollisions = aux;
   }
 
-  Future<List<Tile>> _buildAsyncTiles(Iterable<TileModel> visibleTiles) async {
+  List<Tile> _buildTiles(Iterable<TileModel> visibleTiles) {
     List<Tile> aux = [];
     for (var element in visibleTiles) {
       final tile = element.getTile(gameRef);
-      await tile.onLoad();
       aux.add(tile);
     }
     return aux;
@@ -226,7 +236,19 @@ class MapWorld extends MapGame {
 
   @override
   Future<void>? onLoad() async {
-    return _updateTilesToRender(processAllList: true);
+    await Future.forEach<TileModel>(tiles, (element) async {
+      if (element.sprite != null) {
+        await MapAssetsManager.loadImage(element.sprite!.path);
+      }
+      if (element.animation != null) {
+        for (var frame in element.animation!.frames) {
+          await MapAssetsManager.loadImage(frame.path);
+        }
+      }
+    });
+    _verifyMaxTopAndLeft(gameRef.size);
+    await _updateTilesToRender(processAllList: true);
+    return super.onLoad();
   }
 
   Vector2 _getCameraTileUpdate() {
@@ -236,18 +258,20 @@ class MapWorld extends MapGame {
     );
   }
 
-  void _verifyRemove(Tile tile) {
-    if (tile.shouldRemove) {
-      children.remove(tile);
-      tiles.removeWhere((element) => element.id == tile.id);
-      if (tile is ObjectCollision) {
-        _tilesCollisions.removeWhere((element) {
-          return (element as Tile).id == tile.id;
-        });
-        _tilesVisibleCollisions.removeWhere((element) {
-          return (element as Tile).id == tile.id;
-        });
-      }
+  void _verifyRemoveTiles() {
+    if (_tilesToRemove.isNotEmpty) {
+      _tilesToRemove.forEach((tile) {
+        children.remove(tile);
+        tiles.removeWhere((element) => element.id == tile.id);
+        if (tile is ObjectCollision) {
+          _tilesCollisions.removeWhere((element) {
+            return (element as Tile).id == tile.id;
+          });
+          _tilesVisibleCollisions.removeWhere((element) {
+            return (element as Tile).id == tile.id;
+          });
+        }
+      });
       _createTilesLot();
     }
   }
@@ -266,15 +290,6 @@ class MapWorld extends MapGame {
     _createTilesLot();
   }
 
-  void _findVisibleCollisions() {
-    _tilesVisibleCollisions = children
-        .where((element) {
-          return element is ObjectCollision;
-        })
-        .toList()
-        .cast();
-  }
-
   @override
   void removeTile(String id) {
     try {
@@ -282,5 +297,14 @@ class MapWorld extends MapGame {
     } catch (e) {
       print('Not found visible tile with $id id');
     }
+  }
+
+  void _findVisibleCollisions() {
+    _tilesVisibleCollisions = children
+        .where((element) {
+          return element is ObjectCollision;
+        })
+        .toList()
+        .cast();
   }
 }
