@@ -1,3 +1,6 @@
+# 1.4.12
+- enables remove tiles of map.
+
 # 1.4.11
 - improvements in `MapWorld`
 

@@ -127,6 +127,7 @@ class TileModel {
   final TileModelSprite? sprite;
   final TileModelAnimation? animation;
   final List<CollisionArea>? collisions;
+  String id = '';
 
   Offset center = Offset.zero;
 
@@ -147,9 +148,8 @@ class TileModel {
       (x * width) + (width / 2.0),
       (y * height) + (height / 2.0),
     );
+    id = '$x/$y:${DateTime.now().microsecondsSinceEpoch}';
   }
-
-  String get id => '$x/$y';
   double get left => (x * width);
   double get right => (x * width) + width;
   double get top => (y * height);
@@ -172,7 +172,9 @@ class TileModel {
             height: height,
             type: type,
             properties: properties,
-          )..gameRef = gameRef;
+          )
+            ..gameRef = gameRef
+            ..id = id;
         } else {
           return TileWithCollision.fromFutureSprite(
             sprite!.getFutureSprite(),
@@ -187,7 +189,9 @@ class TileModel {
             height: height,
             type: type,
             properties: properties,
-          )..gameRef = gameRef;
+          )
+            ..gameRef = gameRef
+            ..id = id;
         }
       } else {
         if (sprite!.inCache) {
@@ -203,7 +207,9 @@ class TileModel {
             height: height,
             type: type,
             properties: properties,
-          )..gameRef = gameRef;
+          )
+            ..gameRef = gameRef
+            ..id = id;
         } else {
           return Tile.fromFutureSprite(
             sprite!.getFutureSprite(),
@@ -217,7 +223,9 @@ class TileModel {
             height: height,
             type: type,
             properties: properties,
-          )..gameRef = gameRef;
+          )
+            ..gameRef = gameRef
+            ..id = id;
         }
       }
     } else {
@@ -243,7 +251,9 @@ class TileModel {
           height: height,
           type: type,
           properties: properties,
-        )..gameRef = gameRef;
+        )
+          ..gameRef = gameRef
+          ..id = id;
       } else {
         ControlledUpdateAnimation animationControlled;
         if (animation!.inCache) {
@@ -265,7 +275,9 @@ class TileModel {
           height: height,
           type: type,
           properties: properties,
-        )..gameRef = gameRef;
+        )
+          ..gameRef = gameRef
+          ..id = id;
       }
     }
   }
