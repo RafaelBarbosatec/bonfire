@@ -1,3 +1,6 @@
+# NEXT
+- fix crash when remove Tile
+
 # 1.4.11
 - improvements in `MapWorld`
 - enables remove tiles of map.
