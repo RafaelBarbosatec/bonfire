@@ -236,16 +236,7 @@ class MapWorld extends MapGame {
 
   @override
   Future<void>? onLoad() async {
-    await Future.forEach<TileModel>(tiles, (element) async {
-      if (element.sprite != null) {
-        await MapAssetsManager.loadImage(element.sprite!.path);
-      }
-      if (element.animation != null) {
-        for (var frame in element.animation!.frames) {
-          await MapAssetsManager.loadImage(frame.path);
-        }
-      }
-    });
+    await Future.forEach<TileModel>(tiles, _loadTile);
     _verifyMaxTopAndLeft(gameRef.size);
     await _updateTilesToRender(processAllList: true);
     return super.onLoad();
@@ -278,8 +269,8 @@ class MapWorld extends MapGame {
 
   @override
   Future addTile(TileModel tileModel) async {
+    await _loadTile(tileModel);
     final tile = tileModel.getTile(gameRef);
-    await tile.onLoad();
     tiles.add(tileModel);
     children.add(tile);
 
@@ -306,5 +297,16 @@ class MapWorld extends MapGame {
         })
         .toList()
         .cast();
+  }
+
+  Future<void> _loadTile(TileModel element) async {
+    if (element.sprite != null) {
+      await MapAssetsManager.loadImage((element.sprite?.path ?? ''));
+    }
+    if (element.animation != null) {
+      for (var frame in (element.animation?.frames ?? [])) {
+        await MapAssetsManager.loadImage(frame.path);
+      }
+    }
   }
 }
