@@ -12,15 +12,12 @@ import 'package:flutter/material.dart';
 
 class MapWorld extends MapGame {
   static const int SIZE_LOT_TILES_TO_PROCESS = 1000;
-  int lastCameraX = -1;
-  int lastCameraY = -1;
+  Vector2 lastCamera = Vector2.zero();
   double lastZoom = -1;
   Vector2? lastSizeScreen;
-  Iterable<Tile> _tilesToRender = [];
-  Iterable<Tile> _tilesToUpdate = [];
-  Iterable<ObjectCollision> _tilesCollisions = [];
-  Iterable<ObjectCollision> _tilesVisibleCollisions = [];
-  List<Iterable<TileModel>> _tilesLot = [];
+  List<ObjectCollision> _tilesCollisions = List.empty();
+  List<ObjectCollision> _tilesVisibleCollisions = List.empty();
+  List<Iterable<TileModel>> _tilesLot = List.empty();
   List<Tile> _auxTiles = [];
   bool processingTiles = false;
 
@@ -40,7 +37,7 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    for (final tile in _tilesToRender) {
+    for (var tile in children) {
       tile.render(canvas);
     }
     _drawPathLine(canvas);
@@ -48,13 +45,9 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    final cameraX = (gameRef.camera.position.dx / tileSizeToUpdate).floor();
-    final cameraY = (gameRef.camera.position.dy / tileSizeToUpdate).floor();
-    if (lastCameraX != cameraX ||
-        lastCameraY != cameraY ||
-        lastZoom > gameRef.camera.config.zoom) {
-      lastCameraX = cameraX;
-      lastCameraY = cameraY;
+    final camera = _getCameraTileUpdate();
+    if (lastCamera != camera || lastZoom > gameRef.camera.config.zoom) {
+      lastCamera = camera;
       if (lastZoom > gameRef.camera.config.zoom) {
         lastZoom = gameRef.camera.config.zoom;
       }
@@ -63,8 +56,9 @@ class MapWorld extends MapGame {
       }
     }
 
-    for (final tile in _tilesToUpdate) {
+    for (var tile in children) {
       tile.update(t);
+      _verifyRemove(tile);
     }
 
     if (currentIndexProcess != -1 && !processingTiles) {
@@ -78,19 +72,14 @@ class MapWorld extends MapGame {
         (processAllList ? tiles : _tilesLot[currentIndexProcess])
             .where((tile) => gameRef.camera.contains(tile.center));
 
-    if (visibleTiles.isNotEmpty) {
-      _auxTiles.addAll(await _buildAsyncTiles(visibleTiles));
-    }
+    _auxTiles.addAll(await _buildAsyncTiles(visibleTiles));
 
     currentIndexProcess++;
     if (currentIndexProcess >= _tilesLot.length || processAllList) {
-      _tilesToRender = _auxTiles.toList(growable: false);
-      _tilesToUpdate = _tilesToRender.where((element) {
-        return element is ObjectCollision || element.containAnimation;
-      });
-      _tilesVisibleCollisions = _tilesToUpdate.where((element) {
-        return element is ObjectCollision;
-      }).cast();
+      children = _auxTiles.toList();
+
+      _findVisibleCollisions();
+
       _auxTiles.clear();
       currentIndexProcess = -1;
     }
@@ -99,7 +88,7 @@ class MapWorld extends MapGame {
 
   @override
   Iterable<Tile> getRendered() {
-    return _tilesToRender;
+    return children;
   }
 
   @override
@@ -123,8 +112,7 @@ class MapWorld extends MapGame {
     lastSizeScreen = size.clone();
 
     if (isUpdate) {
-      lastCameraX = -1;
-      lastCameraY = -1;
+      lastCamera = Vector2.zero();
       lastZoom = -1;
     }
 
@@ -145,15 +133,16 @@ class MapWorld extends MapGame {
     final countTiles = tiles.length;
     final countFramesToProcess =
         (countTiles / SIZE_LOT_TILES_TO_PROCESS).ceil();
-    _tilesLot.clear();
+    List<Iterable<TileModel>> aux = [];
     List.generate(countFramesToProcess, (index) {
       int startRange = SIZE_LOT_TILES_TO_PROCESS * index;
       int endRange = SIZE_LOT_TILES_TO_PROCESS * (index + 1);
       if (index == countFramesToProcess - 1) {
         endRange = countTiles;
       }
-      _tilesLot.add(tiles.getRange(startRange, endRange));
+      aux.add(tiles.getRange(startRange, endRange).toList(growable: false));
     });
+    _tilesLot = aux.toList(growable: false);
   }
 
   @override
@@ -238,5 +227,58 @@ class MapWorld extends MapGame {
   @override
   Future<void>? onLoad() async {
     return _updateTilesToRender(processAllList: true);
+  }
+
+  Vector2 _getCameraTileUpdate() {
+    return Vector2(
+      (gameRef.camera.position.dx / tileSizeToUpdate).floorToDouble(),
+      (gameRef.camera.position.dy / tileSizeToUpdate).floorToDouble(),
+    );
+  }
+
+  void _verifyRemove(Tile tile) {
+    if (tile.shouldRemove) {
+      children.remove(tile);
+      tiles.removeWhere((element) => element.id == tile.id);
+      if (tile is ObjectCollision) {
+        _tilesCollisions.removeWhere((element) {
+          return (element as Tile).id == tile.id;
+        });
+        _tilesVisibleCollisions.removeWhere((element) {
+          return (element as Tile).id == tile.id;
+        });
+      }
+      _createTilesLot();
+    }
+  }
+
+  @override
+  Future addTile(TileModel tileModel) async {
+    final tile = tileModel.getTile(gameRef);
+    await tile.onLoad();
+    tiles.add(tileModel);
+    children.add(tile);
+
+    if (tile is ObjectCollision) {
+      _tilesCollisions.add(tile as ObjectCollision);
+      _findVisibleCollisions();
+    }
+    _createTilesLot();
+  }
+
+  void _findVisibleCollisions() {
+    _tilesVisibleCollisions = children
+        .where((element) => element is ObjectCollision)
+        .toList(growable: false)
+        .cast();
+  }
+
+  @override
+  void removeTile(String id) {
+    try {
+      children.firstWhere((element) => element.id == id).remove();
+    } catch (e) {
+      print('Not found visible tile with $id id');
+    }
   }
 }

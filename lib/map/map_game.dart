@@ -13,6 +13,7 @@ abstract class MapGame extends Component with BonfireHasGameRef<BonfireGame> {
   Size? mapSize;
   Vector2? mapStartPosition;
   double tileSizeToUpdate;
+  List<Tile> children = [];
 
   MapGame(this.tiles, {this.tileSizeToUpdate = 0});
 
@@ -24,6 +25,9 @@ abstract class MapGame extends Component with BonfireHasGameRef<BonfireGame> {
   Future<void> updateTiles(List<TileModel> map);
 
   Size getMapSize();
+
+  void removeTile(String id);
+  Future addTile(TileModel tileModel);
 
   void setLinePath(List<Offset> linePath, Color color, double strokeWidth) {}
 

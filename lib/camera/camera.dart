@@ -27,7 +27,7 @@ class Camera with BonfireHasGameRef<BonfireGame> {
       );
 
   Rect get cameraRectWithSpacing => Rect.fromCenter(
-        center: Offset(cameraRect.center.dx, cameraRect.center.dy),
+        center: Offset(position.dx, position.dy),
         width: cameraRect.width + (_spacingMap * 2),
         height: cameraRect.height + (_spacingMap * 2),
       );

@@ -85,16 +85,16 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
         position = position.translate(0, (speed * dt));
         break;
       case Direction.upLeft:
-        position = position.translate((speed * dt) * -1, 0);
+        position = position.translate((speed * dt) * -1, (speed * dt) * -1);
         break;
       case Direction.upRight:
-        position = position.translate((speed * dt), 0);
+        position = position.translate((speed * dt), (speed * dt) * -1);
         break;
       case Direction.downLeft:
-        position = position.translate((speed * dt) * -1, 0);
+        position = position.translate((speed * dt) * -1, (speed * dt));
         break;
       case Direction.downRight:
-        position = position.translate((speed * dt), 0);
+        position = position.translate((speed * dt), (speed * dt));
         break;
     }
 

@@ -31,7 +31,6 @@ class Tile extends GameComponent {
     this.type,
     this.properties,
   }) {
-    id = '${position.x}/${position.y}';
     this.position = generateRectWithBleedingPixel(position, width, height);
     if (spritePath.isNotEmpty) {
       _loader = AssetsLoader();
