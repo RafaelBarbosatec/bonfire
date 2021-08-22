@@ -14,9 +14,9 @@ import 'package:flutter/services.dart';
 enum PlayerAttackType { AttackMelee, AttackRange }
 
 class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
+  static final double maxSpeed = DungeonMap.tileSize * 3;
   double attack = 20;
   double stamina = 100;
-  double initSpeed = DungeonMap.tileSize * 3;
   bool showObserveEnemy = false;
   bool showTalk = false;
   double angleRadAttack = 0.0;
@@ -40,8 +40,13 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
           height: DungeonMap.tileSize,
           position: position,
           life: 200,
-          speed: DungeonMap.tileSize * 3,
+          speed: maxSpeed,
         ) {
+    // for the default 8 way movement
+    dPadAngles = true;
+    // for full 360 degree movement
+    // dPadAngles = false;
+
     setupLighting(
       LightingConfig(
         radius: width * 1.5,
@@ -71,7 +76,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    this.speed = initSpeed * event.intensity;
+    this.speed = maxSpeed * event.intensity;
     super.joystickChangeDirectional(event);
   }
 
@@ -144,7 +149,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       width: width * 0.7,
       height: width * 0.7,
       damage: 10,
-      speed: initSpeed * 2,
+      speed: maxSpeed * 2,
       collision: CollisionConfig(
         collisions: [
           CollisionArea.rectangle(

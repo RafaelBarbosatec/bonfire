@@ -1,3 +1,8 @@
+# 1.4.12
+- fix crash when remove Tile
+- optimizes map loading
+- improve player joystick movement [#157](https://github.com/RafaelBarbosatec/bonfire/pull/157)
+
 # 1.4.11
 - improvements in `MapWorld`
 - enables remove tiles of map.
