@@ -42,6 +42,11 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
           life: 200,
           speed: DungeonMap.tileSize * 3,
         ) {
+    // for the default 8 way movement
+    dPadAngles = true;
+    // for full 360 degree movement
+    // dPadAngles = false;
+
     setupLighting(
       LightingConfig(
         radius: width * 1.5,
