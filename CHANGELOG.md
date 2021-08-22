@@ -1,8 +1,7 @@
-# 1.4.12
-- enables remove tiles of map.
-
 # 1.4.11
 - improvements in `MapWorld`
+- enables remove tiles of map.
+- fix position translation on diagonal movement of FlyingAttackObject [#155](https://github.com/RafaelBarbosatec/bonfire/pull/155)
 
 # 1.4.10
 - improvements performance
