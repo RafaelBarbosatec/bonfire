@@ -34,6 +34,24 @@ class Player extends GameComponent
   }
 
   @override
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    var newAngle = event.radAngle;
+    if (dPadAngles || newAngle == 0.0) {
+      newAngle = event.directionalRadAngle;
+    }
+    if (event.directional != JoystickMoveDirectional.IDLE &&
+        !isDead &&
+        newAngle != 0.0) {
+      movementRadAngle = newAngle;
+    }
+    super.joystickChangeDirectional(JoystickDirectionalEvent(
+      directional: event.directional,
+      intensity: event.intensity,
+      radAngle: newAngle,
+    ));
+  }
+
+  @override
   void joystickAction(JoystickActionEvent event) {}
 
   @override

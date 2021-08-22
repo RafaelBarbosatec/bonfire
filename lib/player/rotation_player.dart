@@ -9,7 +9,6 @@ class RotationPlayer extends Player {
   SpriteAnimation? animIdle;
   SpriteAnimation? animRun;
   double? currentRadAngle;
-  bool _move = false;
   SpriteAnimation? animation;
   final _loader = AssetsLoader();
 
@@ -35,24 +34,17 @@ class RotationPlayer extends Player {
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    if (event.directional != JoystickMoveDirectional.IDLE &&
-        !isDead &&
-        event.radAngle != 0.0) {
-      currentRadAngle = event.radAngle;
-      _move = true;
+    super.joystickChangeDirectional(event);
+    if (event.directional != JoystickMoveDirectional.IDLE && !isDead) {
+      currentRadAngle = movementRadAngle;
       this.animation = animRun;
     } else {
-      _move = false;
       this.animation = animIdle;
     }
-    super.joystickChangeDirectional(event);
   }
 
   @override
   void update(double dt) {
-    if (_move && !isDead && currentRadAngle != null) {
-      moveFromAngle(speed, currentRadAngle!);
-    }
     animation?.update(dt);
     super.update(dt);
   }

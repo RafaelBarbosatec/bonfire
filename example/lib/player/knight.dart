@@ -42,6 +42,11 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
           life: 200,
           speed: maxSpeed,
         ) {
+    // for the default 8 way movement
+    dPadAngles = true;
+    // for full 360 degree movement
+    // dPadAngles = false;
+
     setupLighting(
       LightingConfig(
         radius: width * 1.5,
