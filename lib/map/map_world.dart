@@ -268,8 +268,10 @@ class MapWorld extends MapGame {
 
   void _findVisibleCollisions() {
     _tilesVisibleCollisions = children
-        .where((element) => element is ObjectCollision)
-        .toList(growable: false)
+        .where((element) {
+          return element is ObjectCollision;
+        })
+        .toList()
         .cast();
   }
 
