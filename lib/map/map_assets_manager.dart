@@ -35,6 +35,53 @@ class MapAssetsManager {
     );
   }
 
+  static Future<Sprite> getFutureSprite(
+    String image,
+    int row,
+    int column,
+    double tileWidth,
+    double tileHeight,
+  ) async {
+    if (spriteCache.containsKey('$image/$row/$column')) {
+      return Future.value(spriteCache['$image/$row/$column']);
+    }
+
+    Image spriteSheetImg = await loadImage(
+      image,
+      fromServer: image.contains('http'),
+    );
+
+    return spriteCache['$image/$row/$column'] = spriteSheetImg.getSprite(
+      x: (column * tileWidth).toDouble(),
+      y: (row * tileHeight).toDouble(),
+      width: tileWidth == 0.0 ? spriteSheetImg.width.toDouble() : tileWidth,
+      height: tileHeight == 0.0 ? spriteSheetImg.height.toDouble() : tileHeight,
+    );
+  }
+
+  static Future<SpriteAnimation> getFutureSpriteAnimation(
+    List<TileModelSprite> frames,
+    double stepTime,
+  ) async {
+    List<Sprite> spriteList = [];
+
+    for (var frame in frames) {
+      Sprite sprite = await MapAssetsManager.getFutureSprite(
+        frame.path,
+        frame.row,
+        frame.column,
+        frame.width,
+        frame.height,
+      );
+      spriteList.add(sprite);
+    }
+
+    return Future.value(SpriteAnimation.spriteList(
+      spriteList,
+      stepTime: stepTime,
+    ));
+  }
+
   static ControlledUpdateAnimation getSpriteAnimation(
     List<TileModelSprite> frames,
     double stepTime,

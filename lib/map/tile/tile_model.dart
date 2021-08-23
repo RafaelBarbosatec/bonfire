@@ -32,6 +32,16 @@ class TileModelSprite {
     );
   }
 
+  Future<Sprite> getFutureSprite() {
+    return MapAssetsManager.getFutureSprite(
+      path,
+      row,
+      column,
+      width,
+      height,
+    );
+  }
+
   factory TileModelSprite.fromMap(Map<String, dynamic> map) {
     return new TileModelSprite(
       path: map['path'],
@@ -63,8 +73,12 @@ class TileModelAnimation {
     required this.frames,
   });
 
-  ControlledUpdateAnimation getSpriteAnimation() {
+  ControlledUpdateAnimation getSpriteControlledAnimation() {
     return MapAssetsManager.getSpriteAnimation(frames, stepTime);
+  }
+
+  Future<SpriteAnimation> getFutureSpriteAnimation() {
+    return MapAssetsManager.getFutureSpriteAnimation(frames, stepTime);
   }
 
   factory TileModelAnimation.fromMap(Map<String, dynamic> map) {
@@ -166,7 +180,7 @@ class TileModel {
     } else {
       if (collisions?.isNotEmpty == true) {
         ControlledUpdateAnimation animationControlled =
-            animation!.getSpriteAnimation();
+            animation!.getSpriteControlledAnimation();
         return TileWithCollision.withAnimation(
           animationControlled,
           Vector2(
@@ -185,7 +199,7 @@ class TileModel {
           ..id = id;
       } else {
         ControlledUpdateAnimation animationControlled =
-            animation!.getSpriteAnimation();
+            animation!.getSpriteControlledAnimation();
         return Tile.fromAnimation(
           animationControlled,
           Vector2(

@@ -171,12 +171,12 @@ class TiledWorldMap {
     if (data.animation != null) {
       if (data.animation != null) {
         _components.add(
-          GameDecorationWithCollision(
+          GameDecorationWithCollision.withAnimation(
+            data.animation!.getFutureSpriteAnimation(),
             Vector2(
               _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
               _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
             ),
-            animation: data.animation!.getSpriteAnimation().animation,
             height: _tileHeight,
             width: _tileWidth,
             collisions: data.collisions,
@@ -187,12 +187,12 @@ class TiledWorldMap {
     } else {
       if (data.sprite != null) {
         _components.add(
-          GameDecorationWithCollision(
+          GameDecorationWithCollision.withSprite(
+            data.sprite!.getFutureSprite(),
             Vector2(
               _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
               _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
             ),
-            sprite: data.sprite!.getSprite(),
             height: _tileHeight,
             width: _tileWidth,
             collisions: data.collisions,
