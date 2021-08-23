@@ -1,3 +1,6 @@
+# 1.4.14
+- fix bug in `TapGesture`
+
 # 1.4.13
 - fix error Tile of `above` type.
 
