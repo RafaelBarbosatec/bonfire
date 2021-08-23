@@ -1,3 +1,6 @@
+# 1.4.13
+- fix error Tile of `above` type.
+
 # 1.4.12
 - fix crash when remove Tile
 - optimizes map loading
