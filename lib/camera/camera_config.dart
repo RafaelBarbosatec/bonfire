@@ -16,10 +16,15 @@ class CameraConfig {
   /// Component that the camera will focus on / follow
   GameComponent? target;
 
+  bool smoothCameraEnable;
+  double smoothCameraSpeed;
+
   CameraConfig({
     this.sizeMovementWindow = const Size(50, 50),
     this.moveOnlyMapArea = false,
     this.zoom = 1.0,
     this.target,
+    this.smoothCameraEnable = false,
+    this.smoothCameraSpeed = 1.0,
   });
 }

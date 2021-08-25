@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/game_component.dart';
@@ -171,36 +172,49 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     );
   }
 
-  void _followTarget({double horizontal = 50, double vertical = 50}) {
+  void _followTarget(double dt,
+      {double sizeHorizontal = 50, double sizeVertical = 50}) {
+    if (!hasGameRef) return;
     if (config.target == null) return;
     final centerTarget = _getCenterTarget();
-    if (_lastTargetOffset == centerTarget) return;
+
+    if (_lastTargetOffset == centerTarget && !config.smoothCameraEnable) return;
+
+    final enableSmooth = config.smoothCameraEnable;
+    double horizontal = enableSmooth ? 0 : sizeHorizontal;
+    double vertical = enableSmooth ? 0 : sizeVertical;
     _lastTargetOffset = centerTarget;
     final screenCenter = Offset(
       gameRef.size.x / 2,
       gameRef.size.y / 2,
     );
+
     final positionTarget = worldPositionToScreen(_lastTargetOffset);
 
     final horizontalDistance = screenCenter.dx - positionTarget.dx;
     final verticalDistance = screenCenter.dy - positionTarget.dy;
 
+    double newX = this.position.dx;
+    double newY = this.position.dy;
+
     if (horizontalDistance.abs() > horizontal) {
-      this.position = this.position.translate(
-            horizontalDistance > 0
-                ? horizontal - horizontalDistance
-                : -horizontalDistance - horizontal,
-            0,
-          );
+      newX = this.position.dx +
+          (horizontalDistance > 0
+              ? horizontal - horizontalDistance
+              : -horizontalDistance - horizontal);
     }
+
     if (verticalDistance.abs() > vertical) {
-      this.position = this.position.translate(
-            0,
-            verticalDistance > 0
-                ? vertical - verticalDistance
-                : -verticalDistance - vertical,
-          );
+      newY = this.position.dy +
+          (verticalDistance > 0
+              ? vertical - verticalDistance
+              : -verticalDistance - vertical);
     }
+
+    this.position = this.position.copyWith(
+          x: enableSmooth ? lerpDouble(this.position.dx, newX, dt * 1) : newX,
+          y: enableSmooth ? lerpDouble(this.position.dy, newY, dt * 1) : newY,
+        );
 
     if (config.moveOnlyMapArea) {
       _keepInMapArea();
@@ -300,8 +314,9 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     _doShake();
 
     _followTarget(
-      vertical: config.sizeMovementWindow.height,
-      horizontal: config.sizeMovementWindow.width,
+      dt,
+      sizeVertical: config.sizeMovementWindow.height,
+      sizeHorizontal: config.sizeMovementWindow.width,
     );
   }
 

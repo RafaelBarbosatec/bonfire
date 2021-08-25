@@ -1,3 +1,14 @@
+# 1.5.0
+- adds "Smooth" effect in camera. To enable:
+```dart
+    BonfireTiledWidget(
+        ...
+        cameraConfig: CameraConfig(
+            smoothCameraEnable: true,
+        ),
+    );
+```
+
 # 1.4.14
 - fix bug in `TapGesture`
 
