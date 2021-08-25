@@ -172,8 +172,11 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     );
   }
 
-  void _followTarget(double dt,
-      {double sizeHorizontal = 50, double sizeVertical = 50}) {
+  void _followTarget(
+    double dt, {
+    double sizeHorizontal = 50,
+    double sizeVertical = 50,
+  }) {
     if (!hasGameRef) return;
     if (config.target == null) return;
     final centerTarget = _getCenterTarget();
@@ -181,6 +184,7 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     if (_lastTargetOffset == centerTarget && !config.smoothCameraEnable) return;
 
     final enableSmooth = config.smoothCameraEnable;
+    final speedSmooth = config.smoothCameraSpeed;
     double horizontal = enableSmooth ? 0 : sizeHorizontal;
     double vertical = enableSmooth ? 0 : sizeVertical;
     _lastTargetOffset = centerTarget;
@@ -212,8 +216,12 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     }
 
     this.position = this.position.copyWith(
-          x: enableSmooth ? lerpDouble(this.position.dx, newX, dt * 1) : newX,
-          y: enableSmooth ? lerpDouble(this.position.dy, newY, dt * 1) : newY,
+          x: enableSmooth
+              ? lerpDouble(this.position.dx, newX, dt * speedSmooth)
+              : newX,
+          y: enableSmooth
+              ? lerpDouble(this.position.dy, newY, dt * speedSmooth)
+              : newY,
         );
 
     if (config.moveOnlyMapArea) {
