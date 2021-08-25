@@ -185,9 +185,12 @@ class Camera with BonfireHasGameRef<BonfireGame> {
 
     final enableSmooth = config.smoothCameraEnable;
     final speedSmooth = config.smoothCameraSpeed;
+
     double horizontal = enableSmooth ? 0 : sizeHorizontal;
     double vertical = enableSmooth ? 0 : sizeVertical;
+
     _lastTargetOffset = centerTarget;
+
     final screenCenter = Offset(
       gameRef.size.x / 2,
       gameRef.size.y / 2,
