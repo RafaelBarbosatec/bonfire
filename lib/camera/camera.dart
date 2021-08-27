@@ -14,7 +14,6 @@ class Camera with BonfireHasGameRef<BonfireGame> {
   bool _isMoving = false;
   double _spacingMap = 32.0;
   Offset position = Offset.zero;
-  Offset _lastTargetOffset = Offset.zero;
   final CameraConfig config;
 
   Camera(this.config);
@@ -180,22 +179,18 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     if (config.target == null) return;
     final centerTarget = _getCenterTarget();
 
-    if (_lastTargetOffset == centerTarget && !config.smoothCameraEnable) return;
-
     final enableSmooth = config.smoothCameraEnable;
     final speedSmooth = config.smoothCameraSpeed;
 
     double horizontal = enableSmooth ? 0 : sizeHorizontal;
     double vertical = enableSmooth ? 0 : sizeVertical;
 
-    _lastTargetOffset = centerTarget;
-
     final screenCenter = Offset(
       gameRef.size.x / 2,
       gameRef.size.y / 2,
     );
 
-    final positionTarget = worldPositionToScreen(_lastTargetOffset);
+    final positionTarget = worldPositionToScreen(centerTarget);
 
     final horizontalDistance = screenCenter.dx - positionTarget.dx;
     final verticalDistance = screenCenter.dy - positionTarget.dy;

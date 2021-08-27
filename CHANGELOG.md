@@ -1,3 +1,6 @@
+# next
+- improvements in `Camera`
+
 # 1.5.1
 - improvements in `CameraConfig -> moveOnlyMapArea`
 - improvements in `Lighting`
