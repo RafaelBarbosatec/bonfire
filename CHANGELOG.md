@@ -1,3 +1,6 @@
+# next
+- improvements in order of the update of `Camera`
+
 # 1.5.2
 - improvements in `Camera`
 - improvements in `AnimatedObjectOnce`
