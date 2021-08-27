@@ -177,9 +177,25 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     double sizeVertical = 50,
   }) {
     if (config.target == null) return;
-    final centerTarget = _getCenterTarget();
 
-    final enableSmooth = config.smoothCameraEnable;
+    _moveCameraToTarget(
+      dt,
+      enableSmooth: config.smoothCameraEnable,
+      sizeHorizontal: sizeHorizontal,
+      sizeVertical: sizeVertical,
+    );
+
+    if (config.moveOnlyMapArea) {
+      _keepInMapArea();
+    }
+  }
+
+  void _moveCameraToTarget(
+    double dt, {
+    double sizeHorizontal = 50,
+    double sizeVertical = 50,
+    bool enableSmooth = false,
+  }) {
     final speedSmooth = config.smoothCameraSpeed;
 
     double horizontal = enableSmooth ? 0 : sizeHorizontal;
@@ -190,6 +206,7 @@ class Camera with BonfireHasGameRef<BonfireGame> {
       gameRef.size.y / 2,
     );
 
+    final centerTarget = _getCenterTarget();
     final positionTarget = worldPositionToScreen(centerTarget);
 
     final horizontalDistance = screenCenter.dx - positionTarget.dx;
@@ -220,10 +237,6 @@ class Camera with BonfireHasGameRef<BonfireGame> {
               ? lerpDouble(this.position.dy, newY, dt * speedSmooth)
               : newY,
         );
-
-    if (config.moveOnlyMapArea) {
-      _keepInMapArea();
-    }
   }
 
   void animateZoom({
