@@ -18,7 +18,7 @@ mixin Lighting on GameComponent {
   @override
   bool isVisibleInCamera() {
     if (!hasGameRef) return false;
-    if (lightingConfig == null) return false;
+    if (lightingConfig == null) return super.isVisibleInCamera();
 
     Rect rectLight = Rect.fromLTWH(
       this.position.rect.center.dx -
