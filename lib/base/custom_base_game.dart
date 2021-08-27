@@ -182,6 +182,8 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   /// You can override it further to add more custom behaviour.
   @override
   void update(double t) {
+    camera.update(t);
+
     if (_addLater.isNotEmpty) {
       final addNow = _addLater.toList(growable: false);
       components.addAll(addNow);
@@ -196,8 +198,6 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     }
 
     components.removeWhere((c) => c.shouldRemove);
-
-    camera.update(t);
 
     if (_timerSortPriority.update(t)) {
       _updateOrder();
