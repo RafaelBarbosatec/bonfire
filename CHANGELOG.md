@@ -1,3 +1,6 @@
+# 1.5.1
+- improvements in `CameraConfig -> moveOnlyMapArea`
+
 # 1.5.0
 - adds "Smooth" effect in camera. To enable:
 ```dart

@@ -1,4 +1,3 @@
-import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera.dart';
@@ -212,7 +211,6 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   @override
   @mustCallSuper
   void onResize(Vector2 size) {
-    if (this is BonfireGame) camera.gameRef = this as BonfireGame;
     super.onResize(size);
     for (final comp in components) {
       comp.onGameResize(size);
