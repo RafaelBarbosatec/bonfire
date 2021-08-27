@@ -1,5 +1,6 @@
-# next
+# 1.5.2
 - improvements in `Camera`
+- improvements in `AnimatedObjectOnce`
 
 # 1.5.1
 - improvements in `CameraConfig -> moveOnlyMapArea`
