@@ -115,10 +115,9 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
     gameController?.gameRef = this;
     camera = Camera(cameraConfig ?? CameraConfig());
-
+    camera.gameRef = this;
     if (camera.config.target == null) {
       camera.config.target = player;
-      camera.update(0);
     }
   }
 
@@ -147,12 +146,12 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   @override
   void update(double t) {
+    _interval?.update(t);
+    super.update(t);
     if (!isReady) {
       isReady = true;
       onReady?.call(this);
     }
-    _interval?.update(t);
-    super.update(t);
   }
 
   void addGameComponent(GameComponent component) {
@@ -258,8 +257,8 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
           ..addAll(map.getCollisionsRendered()))
         .toList(growable: false);
 
-    _visibleLights = components.where((element) {
-      return element is Lighting && element.isVisible(camera);
+    _visibleLights = _visibleComponents.where((element) {
+      return element is Lighting;
     }).cast()
       ..toList(growable: false);
 

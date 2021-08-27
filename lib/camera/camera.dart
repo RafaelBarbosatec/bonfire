@@ -177,7 +177,6 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     double sizeHorizontal = 50,
     double sizeVertical = 50,
   }) {
-    if (!hasGameRef) return;
     if (config.target == null) return;
     final centerTarget = _getCenterTarget();
 
@@ -358,6 +357,7 @@ class Camera with BonfireHasGameRef<BonfireGame> {
   }
 
   void _keepInMapArea() {
+    if (!hasGameRef) return;
     final startPosition = gameRef.map.mapStartPosition;
     final sizeMap = gameRef.map.mapSize;
     if (startPosition == null || sizeMap == null) return;
