@@ -11,8 +11,6 @@
 /// on 30/08/21
 import 'dart:math';
 
-import 'package:bonfire/map/tile/tile_model.dart';
-
 // defaults should almost never be used, tune the quad tree to fit your problem
 const int default_max_depth = 1000;
 const int default_max_items = 100;
@@ -58,11 +56,11 @@ class QuadTree<T> extends Rectangle<num> {
         _center = Point<num>(left + width / 2.0, top + height / 2.0),
         super(left, top, width, height);
 
-  bool insert(T item, Point<num> atPoint) {
+  bool insert(T item, Point<num> atPoint, {dynamic id}) {
     if (!containsPoint(atPoint)) return false;
     if (_children.isEmpty) {
       if (_items.length + 1 <= maxItems || _depth + 1 > maxDepth) {
-        _items.add(_ItemAtPoint<T>(item, atPoint));
+        _items.add(_ItemAtPoint<T>(id, item, atPoint));
         return true;
       }
       _splitItemsBetweenChildren();
@@ -70,9 +68,9 @@ class QuadTree<T> extends Rectangle<num> {
     return _insertItemIntoChildren(item, atPoint);
   }
 
-  void removeTile(String id) {
+  void removeTile(dynamic id) {
     if (_children.isEmpty) {
-      _items.removeWhere((item) => (item.item as TileModel).id == id);
+      _items.removeWhere((item) => item.id == id);
     }
     return _children.forEach((element) {
       element.removeTile(id);
@@ -166,8 +164,13 @@ class QuadTree<T> extends Rectangle<num> {
 }
 
 class _ItemAtPoint<T> {
+  final dynamic id;
   final T item;
   final Point<num> point;
 
-  _ItemAtPoint(this.item, this.point);
+  _ItemAtPoint(
+    this.id,
+    this.item,
+    this.point,
+  );
 }

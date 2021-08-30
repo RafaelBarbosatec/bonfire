@@ -130,7 +130,7 @@ class MapWorld extends MapGame {
     );
 
     for (var tile in tiles) {
-      quadTree?.insert(tile, Point(tile.x, tile.y));
+      quadTree?.insert(tile, Point(tile.x, tile.y), id: tile.id);
     }
   }
 
@@ -250,7 +250,11 @@ class MapWorld extends MapGame {
     final tile = tileModel.getTile(gameRef);
     tiles.add(tileModel);
     children.add(tile);
-    quadTree?.insert(tileModel, Point(tileModel.x, tileModel.y));
+    quadTree?.insert(
+      tileModel,
+      Point(tileModel.x, tileModel.y),
+      id: tileModel.id,
+    );
 
     if (tile is ObjectCollision) {
       _tilesCollisions.add(tile as ObjectCollision);
