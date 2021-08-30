@@ -7,22 +7,19 @@ import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/map/tile/tile.dart';
 import 'package:bonfire/map/tile/tile_model.dart';
+import 'package:bonfire/util/quadtree.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
 import 'map_assets_manager.dart';
 
 class MapWorld extends MapGame {
-  static const int SIZE_LOT_TILES_TO_PROCESS = 1000;
   Vector2 lastCamera = Vector2.zero();
   double lastZoom = -1;
   Vector2? lastSizeScreen;
   List<ObjectCollision> _tilesCollisions = List.empty();
   List<ObjectCollision> _tilesVisibleCollisions = List.empty();
-  List<Iterable<TileModel>> _tilesLot = List.empty();
-  List<Tile> _auxTiles = [];
   List<Tile> _tilesToRemove = [];
-  bool processingTiles = false;
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -31,6 +28,8 @@ class MapWorld extends MapGame {
     ..strokeCap = StrokeCap.round;
 
   int currentIndexProcess = -1;
+
+  QuadTree<TileModel>? quadTree;
 
   MapWorld(
     List<TileModel> tiles, {
@@ -56,9 +55,7 @@ class MapWorld extends MapGame {
       if (lastZoom > gameRef.camera.config.zoom) {
         lastZoom = gameRef.camera.config.zoom;
       }
-      if (currentIndexProcess == -1) {
-        currentIndexProcess = 0;
-      }
+      scheduleMicrotask(_updateTilesToRender);
     }
 
     for (var tile in children) {
@@ -69,31 +66,18 @@ class MapWorld extends MapGame {
     }
 
     _verifyRemoveTiles();
-
-    if (currentIndexProcess != -1 && !processingTiles) {
-      processingTiles = true;
-      scheduleMicrotask(_updateTilesToRender);
-    }
   }
 
   Future<void> _updateTilesToRender({bool processAllList = false}) async {
-    Iterable<TileModel> visibleTiles =
-        (processAllList ? tiles : _tilesLot[currentIndexProcess])
-            .where((tile) => gameRef.camera.contains(tile.center));
-
-    final newTiles = _buildTiles(visibleTiles);
-    _auxTiles.addAll(newTiles);
-
-    currentIndexProcess++;
-    if (currentIndexProcess >= _tilesLot.length || processAllList) {
-      children = _auxTiles.toList();
-
-      _findVisibleCollisions();
-
-      _auxTiles.clear();
-      currentIndexProcess = -1;
-    }
-    processingTiles = false;
+    final tileSize = tiles.first.width;
+    final visibleTiles = quadTree?.query(
+          gameRef.camera.cameraRectWithSpacing.getRectangleByTileSize(
+            tileSize,
+          ),
+        ) ??
+        [];
+    children = _buildTiles(visibleTiles);
+    _findVisibleCollisions();
   }
 
   @override
@@ -138,23 +122,16 @@ class MapWorld extends MapGame {
 
     _getTileCollisions();
 
-    _createTilesLot();
-  }
+    quadTree = QuadTree(
+      0,
+      0,
+      ((mapSize?.width ?? 0).ceil() / tiles.first.width).ceil(),
+      ((mapSize?.height ?? 0).ceil() / tiles.first.width).ceil(),
+    );
 
-  void _createTilesLot() {
-    final countTiles = tiles.length;
-    final countFramesToProcess =
-        (countTiles / SIZE_LOT_TILES_TO_PROCESS).ceil();
-    List<Iterable<TileModel>> aux = [];
-    List.generate(countFramesToProcess, (index) {
-      int startRange = SIZE_LOT_TILES_TO_PROCESS * index;
-      int endRange = SIZE_LOT_TILES_TO_PROCESS * (index + 1);
-      if (index == countFramesToProcess - 1) {
-        endRange = countTiles;
-      }
-      aux.add(tiles.getRange(startRange, endRange).toList(growable: false));
-    });
-    _tilesLot = aux.toList(growable: false);
+    for (var tile in tiles) {
+      quadTree?.insert(tile, Point(tile.x, tile.y));
+    }
   }
 
   @override
@@ -254,6 +231,7 @@ class MapWorld extends MapGame {
       _tilesToRemove.forEach((tile) {
         children.remove(tile);
         tiles.removeWhere((element) => element.id == tile.id);
+        quadTree?.removeTile(tile.id);
         if (tile is ObjectCollision) {
           _tilesCollisions.removeWhere((element) {
             return (element as Tile).id == tile.id;
@@ -263,7 +241,6 @@ class MapWorld extends MapGame {
           });
         }
       });
-      _createTilesLot();
     }
   }
 
@@ -273,12 +250,12 @@ class MapWorld extends MapGame {
     final tile = tileModel.getTile(gameRef);
     tiles.add(tileModel);
     children.add(tile);
+    quadTree?.insert(tileModel, Point(tileModel.x, tileModel.y));
 
     if (tile is ObjectCollision) {
       _tilesCollisions.add(tile as ObjectCollision);
       _findVisibleCollisions();
     }
-    _createTilesLot();
   }
 
   @override

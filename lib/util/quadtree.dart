@@ -1,0 +1,173 @@
+///
+/// Created by
+///
+/// ─▄▀─▄▀
+/// ──▀──▀
+/// █▀▀▀▀▀█▄
+/// █░░░░░█─█
+/// ▀▄▄▄▄▄▀▀
+///
+/// Rafaelbarbosatec
+/// on 30/08/21
+import 'dart:math';
+
+import 'package:bonfire/map/tile/tile_model.dart';
+
+// defaults should almost never be used, tune the quad tree to fit your problem
+int default_max_depth = 1000;
+int default_max_items = 100;
+
+// names reflect a coordinate system where values increase as one goes left or down
+const _upperLeftIndex = 0;
+const _upperRightIndex = 1;
+const _lowerLeftIndex = 2;
+const _lowerRightIndex = 3;
+
+class QuadTree<T> extends Rectangle<num> {
+  final int maxDepth;
+  final int maxItems;
+
+  final int _depth;
+  final Point<num> _center;
+  final List<_ItemAtPoint<T>> _items = <_ItemAtPoint<T>>[];
+  final List<QuadTree<T>> _children = <QuadTree<T>>[];
+
+  factory QuadTree(
+    num left,
+    num top,
+    num width,
+    num height, {
+    int? maxDepth,
+    int? maxItems,
+  }) =>
+      QuadTree._(
+        left,
+        top,
+        width,
+        height,
+        0,
+        maxDepth: maxDepth,
+        maxItems: maxItems,
+      );
+
+  QuadTree._(num left, num top, num width, num height, int depth,
+      {int? maxDepth, int? maxItems})
+      : maxDepth = maxDepth ?? default_max_depth,
+        maxItems = maxItems ?? default_max_items,
+        _depth = depth,
+        _center = Point<num>(left + width / 2.0, top + height / 2.0),
+        super(left, top, width, height);
+
+  bool insert(T item, Point<num> atPoint) {
+    if (!containsPoint(atPoint)) return false;
+    if (_children.isEmpty) {
+      if (_items.length + 1 <= maxItems || _depth + 1 > maxDepth) {
+        _items.add(_ItemAtPoint<T>(item, atPoint));
+        return true;
+      }
+      _splitItemsBetweenChildren();
+    }
+    return _insertItemIntoChildren(item, atPoint);
+  }
+
+  void removeTile(String id) {
+    if (_children.isEmpty) {
+      _items.removeWhere((item) => (item.item as TileModel).id == id);
+    }
+    return _children.forEach((element) {
+      element.removeTile(id);
+    });
+  }
+
+  List<T> query(Rectangle range) {
+    if (_children.isEmpty) {
+      return _items
+          .where((item) => range.containsPoint(item.point))
+          .map((item) => item.item)
+          .toList();
+    }
+    return _children
+        .where((child) => child.intersects(range))
+        .expand((child) => child.query(range))
+        .toList();
+  }
+
+  String toString() {
+    return '[$_depth](${_items.map((item) => item.item).toList()}:$_children)';
+  }
+
+  bool _insertItemIntoChildren(T item, Point<num> atPoint) {
+    if (atPoint.x > _center.x) {
+      if (atPoint.y > _center.y) {
+        return _children[_lowerRightIndex].insert(item, atPoint);
+      }
+      return _children[_upperRightIndex].insert(item, atPoint);
+    } else {
+      if (atPoint.y > _center.y) {
+        return _children[_lowerLeftIndex].insert(item, atPoint);
+      } else {
+        return _children[_upperLeftIndex].insert(item, atPoint);
+      }
+    }
+  }
+
+  void _splitItemsBetweenChildren() {
+    _children.addAll([
+      _newUpperLeft, // _upperLeftIndex = 0
+      _newUpperRight, // _upperRightIndex = 1
+      _newLowerLeft, // _lowerLeftIndex = 2
+      _newLowerRight // _lowerRightIndex = 3
+    ]);
+    for (final item in _items) {
+      _insertItemIntoChildren(item.item, item.point);
+    }
+    _items.clear();
+  }
+
+  QuadTree<T> get _newUpperLeft => QuadTree<T>._(
+        left,
+        top,
+        width / 2.0,
+        height / 2.0,
+        _depth + 1,
+        maxItems: maxItems,
+        maxDepth: maxDepth,
+      );
+
+  QuadTree<T> get _newUpperRight => QuadTree<T>._(
+        _center.x,
+        top,
+        width / 2.0,
+        height / 2.0,
+        _depth + 1,
+        maxItems: maxItems,
+        maxDepth: maxDepth,
+      );
+
+  QuadTree<T> get _newLowerLeft => QuadTree<T>._(
+        left,
+        _center.y,
+        width / 2.0,
+        height / 2.0,
+        _depth + 1,
+        maxItems: maxItems,
+        maxDepth: maxDepth,
+      );
+
+  QuadTree<T> get _newLowerRight => QuadTree<T>._(
+        _center.x,
+        _center.y,
+        width / 2.0,
+        height / 2.0,
+        _depth + 1,
+        maxItems: maxItems,
+        maxDepth: maxDepth,
+      );
+}
+
+class _ItemAtPoint<T> {
+  final T item;
+  final Point<num> point;
+
+  _ItemAtPoint(this.item, this.point);
+}
