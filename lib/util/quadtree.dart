@@ -14,8 +14,8 @@ import 'dart:math';
 import 'package:bonfire/map/tile/tile_model.dart';
 
 // defaults should almost never be used, tune the quad tree to fit your problem
-int default_max_depth = 1000;
-int default_max_items = 100;
+const int default_max_depth = 1000;
+const int default_max_items = 100;
 
 // names reflect a coordinate system where values increase as one goes left or down
 const _upperLeftIndex = 0;
