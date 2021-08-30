@@ -68,7 +68,7 @@ class MapWorld extends MapGame {
     _verifyRemoveTiles();
   }
 
-  void _updateTilesToRender({bool processAllList = false}) {
+  void _updateTilesToRender() {
     final tileSize = tiles.first.width;
     final visibleTiles = quadTree?.query(
           gameRef.camera.cameraRectWithSpacing.getRectangleByTileSize(
@@ -215,7 +215,7 @@ class MapWorld extends MapGame {
   Future<void>? onLoad() async {
     await Future.forEach<TileModel>(tiles, _loadTile);
     _verifyMaxTopAndLeft(gameRef.size);
-    _updateTilesToRender(processAllList: true);
+    _updateTilesToRender();
     return super.onLoad();
   }
 
