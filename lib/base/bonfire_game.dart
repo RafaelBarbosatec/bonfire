@@ -27,6 +27,7 @@ import 'package:flutter/widgets.dart';
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends CustomBaseGame with KeyboardEvents {
   static const INTERVAL_UPDATE_CACHE = 200;
+  static const INTERVAL_UPDATE_ORDER = 253;
 
   /// Context used to access all Flutter power in your game.
   final BuildContext context;
@@ -69,9 +70,10 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   Iterable<Lighting> _visibleLights = List.empty();
   Iterable<GameComponent> _visibleComponents = List.empty();
-  Iterable<ObjectCollision> _visibleCollisions = List.empty();
+  List<ObjectCollision> _visibleCollisions = List.empty();
   Iterable<ObjectCollision> _collisions = List.empty();
   IntervalTick? _interval;
+  IntervalTick? _intervalUpdateOder;
   ColorFilterComponent _colorFilterComponent = ColorFilterComponent(
     GameColorFilter(),
   );
@@ -83,7 +85,6 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   GameColorFilter? _colorFilter;
 
-  bool isReady = false;
   ValueChanged<BonfireGame>? onReady;
 
   BonfireGame({
@@ -119,10 +120,19 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     if (camera.config.target == null && player != null) {
       camera.moveToTarget(player!);
     }
+
+    _interval = IntervalTick(
+      INTERVAL_UPDATE_CACHE,
+      tick: _updateTempList,
+    );
+    _intervalUpdateOder = IntervalTick(
+      INTERVAL_UPDATE_ORDER,
+      tick: updateOrderPriority,
+    );
   }
 
   @override
-  Future<void> onLoad() {
+  Future<void> onLoad() async {
     _colorFilterComponent = ColorFilterComponent(
       _colorFilter ?? GameColorFilter(),
     );
@@ -136,22 +146,19 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     _initialComponents?.forEach((comp) => add(comp));
     player?.let((p) => add(p));
     lighting = LightingComponent(color: lightingColorGame ?? Color(0x00000000));
-    super.add(lighting!);
-    super.add((interface ?? GameInterface()));
-    super.add(joystickController ?? Joystick());
+    add(lighting!);
+    add(interface ?? GameInterface());
+    add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(camera));
-    _interval = IntervalTick(INTERVAL_UPDATE_CACHE, tick: _updateTempList);
-    return super.onLoad();
+    await super.onLoad();
+    onReady?.call(this);
   }
 
   @override
   void update(double t) {
-    _interval?.update(t);
     super.update(t);
-    if (!isReady) {
-      isReady = true;
-      onReady?.call(this);
-    }
+    _interval?.update(t);
+    _intervalUpdateOder?.update(t);
   }
 
   void addGameComponent(GameComponent component) {
@@ -204,7 +211,9 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     return map.getCollisions().toList()..addAll(_collisions);
   }
 
-  Iterable<ObjectCollision> visibleCollisions() => _visibleCollisions;
+  Iterable<ObjectCollision> visibleCollisions() {
+    return _visibleCollisions.toList()..addAll(map.getCollisionsRendered());
+  }
 
   ValueGeneratorComponent getValueGenerator(
     Duration duration, {
@@ -245,22 +254,18 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
     _collisions = components.where((element) {
       return (element is ObjectCollision) && (element).containCollision();
-    }).cast()
-      ..toList(growable: false);
+    }).cast();
 
-    _visibleCollisions = _visibleComponents.where((element) {
-      return (element is ObjectCollision) && (element).containCollision();
-    }).cast()
-      ..toList(growable: false);
-
-    _visibleCollisions = (_visibleCollisions.toList()
-          ..addAll(map.getCollisionsRendered()))
-        .toList(growable: false);
+    _visibleCollisions = _visibleComponents
+        .where((element) {
+          return (element is ObjectCollision) && element.containCollision();
+        })
+        .toList()
+        .cast();
 
     _visibleLights = _visibleComponents.where((element) {
       return element is Lighting;
-    }).cast()
-      ..toList(growable: false);
+    }).cast();
 
     gameController?.notifyListeners();
   }
