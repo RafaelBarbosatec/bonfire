@@ -1,5 +1,6 @@
 # next
 - improvements in order of the update of `Camera`
+- add `QuadTree` data struct to search of the visible Tiles.
 
 # 1.5.2
 - improvements in `Camera`
