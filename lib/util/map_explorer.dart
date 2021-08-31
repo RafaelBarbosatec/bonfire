@@ -13,7 +13,7 @@ class MapExplorer with JoystickListener {
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    double speed = 8 * event.intensity;
+    double speed = 10 * event.intensity;
 
     switch (event.directional) {
       case JoystickMoveDirectional.MOVE_UP:

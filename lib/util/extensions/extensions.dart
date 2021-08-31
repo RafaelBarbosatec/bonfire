@@ -102,6 +102,20 @@ extension RectExt on Rect {
   Vector2Rect toVector2Rect() {
     return Vector2Rect.fromRect(this);
   }
+
+  Rectangle getRectangleByTileSize(double tileSize) {
+    final left = this.left / tileSize;
+    final top = this.top / tileSize;
+    final width = this.width / tileSize;
+    final height = this.height / tileSize;
+
+    return Rectangle(
+      left,
+      top,
+      width,
+      height,
+    );
+  }
 }
 
 extension SpriteExt on Sprite {

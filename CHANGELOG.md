@@ -1,3 +1,8 @@
+# 1.5.3
+- improvements in order of the update of `Camera`
+- add `QuadTree` data struct to search of the visible Tiles.
+- update `ordered_set`
+
 # 1.5.2
 - improvements in `Camera`
 - improvements in `AnimatedObjectOnce`

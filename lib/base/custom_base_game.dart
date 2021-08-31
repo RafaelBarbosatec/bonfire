@@ -32,9 +32,6 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   /// Components added by the [addLater] method
   final List<Component> _addLater = [];
 
-  /// interval used to reorder of the components
-  final _timerSortPriority = IntervalTick(250);
-
   /// to get the components that contain gestures
   Iterable<PointerDetectorHandler> get _gesturesComponents {
     return components
@@ -182,6 +179,8 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   /// You can override it further to add more custom behaviour.
   @override
   void update(double t) {
+    camera.update(t);
+
     if (_addLater.isNotEmpty) {
       final addNow = _addLater.toList(growable: false);
       components.addAll(addNow);
@@ -196,12 +195,6 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     }
 
     components.removeWhere((c) => c.shouldRemove);
-
-    camera.update(t);
-
-    if (_timerSortPriority.update(t)) {
-      _updateOrder();
-    }
   }
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.
@@ -235,7 +228,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   }
 
   /// reorder components by priority
-  void _updateOrder() {
+  void updateOrderPriority() {
     components.rebalanceAll();
     _highestPriority = components.last.priority;
   }
