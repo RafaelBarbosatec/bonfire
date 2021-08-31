@@ -27,6 +27,7 @@ import 'package:flutter/widgets.dart';
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends CustomBaseGame with KeyboardEvents {
   static const INTERVAL_UPDATE_CACHE = 200;
+  static const INTERVAL_UPDATE_ORDER = 253;
 
   /// Context used to access all Flutter power in your game.
   final BuildContext context;
@@ -72,6 +73,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   List<ObjectCollision> _visibleCollisions = List.empty();
   Iterable<ObjectCollision> _collisions = List.empty();
   IntervalTick? _interval;
+  IntervalTick? _intervalUpdateOder;
   ColorFilterComponent _colorFilterComponent = ColorFilterComponent(
     GameColorFilter(),
   );
@@ -118,6 +120,15 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     if (camera.config.target == null && player != null) {
       camera.moveToTarget(player!);
     }
+
+    _interval = IntervalTick(
+      INTERVAL_UPDATE_CACHE,
+      tick: _updateTempList,
+    );
+    _intervalUpdateOder = IntervalTick(
+      INTERVAL_UPDATE_ORDER,
+      tick: updateOrderPriority,
+    );
   }
 
   @override
@@ -139,7 +150,6 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     add(interface ?? GameInterface());
     add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(camera));
-    _interval = IntervalTick(INTERVAL_UPDATE_CACHE, tick: _updateTempList);
     await super.onLoad();
     onReady?.call(this);
   }
@@ -148,6 +158,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   void update(double t) {
     super.update(t);
     _interval?.update(t);
+    _intervalUpdateOder?.update(t);
   }
 
   void addGameComponent(GameComponent component) {
@@ -200,7 +211,9 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     return map.getCollisions().toList()..addAll(_collisions);
   }
 
-  Iterable<ObjectCollision> visibleCollisions() => _visibleCollisions;
+  Iterable<ObjectCollision> visibleCollisions() {
+    return _visibleCollisions.toList()..addAll(map.getCollisionsRendered());
+  }
 
   ValueGeneratorComponent getValueGenerator(
     Duration duration, {
@@ -249,8 +262,6 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
         })
         .toList()
         .cast();
-
-    _visibleCollisions.addAll(map.getCollisionsRendered());
 
     _visibleLights = _visibleComponents.where((element) {
       return element is Lighting;
