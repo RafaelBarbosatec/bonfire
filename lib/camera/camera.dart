@@ -266,7 +266,7 @@ class Camera with BonfireHasGameRef<BonfireGame> {
   }
 
   bool isComponentOnCamera(GameComponent c) {
-    return cameraRectWithSpacing.overlaps(c.position.rect);
+    return isRectOnCamera(c.position.rect);
   }
 
   bool contains(Offset c) {
