@@ -15,7 +15,7 @@ import 'map_assets_manager.dart';
 
 class MapWorld extends MapGame {
   Vector2 lastCamera = Vector2.zero();
-  double lastZoom = -1;
+  double lastMinorZoom = 1.0;
   Vector2? lastSizeScreen;
   List<ObjectCollision> _tilesCollisions = List.empty();
   List<ObjectCollision> _tilesVisibleCollisions = List.empty();
@@ -26,8 +26,6 @@ class MapWorld extends MapGame {
     ..color = Colors.lightBlueAccent.withOpacity(0.8)
     ..strokeWidth = 4
     ..strokeCap = StrokeCap.round;
-
-  int currentIndexProcess = -1;
 
   QuadTree<TileModel>? quadTree;
 
@@ -49,12 +47,7 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    final camera = _getCameraTileUpdate();
-    if (lastCamera != camera || lastZoom > gameRef.camera.config.zoom) {
-      lastCamera = camera;
-      if (lastZoom > gameRef.camera.config.zoom) {
-        lastZoom = gameRef.camera.config.zoom;
-      }
+    if (_checkNeedUpdateTiles()) {
       scheduleMicrotask(_updateTilesToRender);
     }
 
@@ -107,28 +100,32 @@ class MapWorld extends MapGame {
 
     if (isUpdate) {
       lastCamera = Vector2.zero();
-      lastZoom = -1;
+      lastMinorZoom = 1.0;
     }
 
-    final tileSize = tiles.first.width;
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
-    if (tiles.isNotEmpty && tileSizeToUpdate == 0) {
+
+    if (tileSizeToUpdate == 0) {
       tileSizeToUpdate = (max(size.x, size.y) / 3).ceilToDouble();
     }
     gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate);
 
     _getTileCollisions();
 
-    quadTree = QuadTree(
-      0,
-      0,
-      ((mapSize?.width ?? 0).ceil() / tileSize).ceil(),
-      ((mapSize?.height ?? 0).ceil() / tileSize).ceil(),
-    );
+    if (tiles.isNotEmpty) {
+      final tileSize = tiles.first.width;
 
-    for (var tile in tiles) {
-      quadTree?.insert(tile, Point(tile.x, tile.y), id: tile.id);
+      quadTree = QuadTree(
+        0,
+        0,
+        ((mapSize?.width ?? 0).ceil() / tileSize).ceil(),
+        ((mapSize?.height ?? 0).ceil() / tileSize).ceil(),
+      );
+
+      for (var tile in tiles) {
+        quadTree?.insert(tile, Point(tile.x, tile.y), id: tile.id);
+      }
     }
   }
 
@@ -201,12 +198,9 @@ class MapWorld extends MapGame {
   }
 
   List<Tile> _buildTiles(Iterable<TileModel> visibleTiles) {
-    List<Tile> aux = [];
-    for (var element in visibleTiles) {
-      final tile = element.getTile(gameRef);
-      aux.add(tile);
-    }
-    return aux;
+    return visibleTiles.map((e) {
+      return e.getTile(gameRef);
+    }).toList();
   }
 
   @override
@@ -215,13 +209,6 @@ class MapWorld extends MapGame {
     _verifyMaxTopAndLeft(gameRef.size);
     _updateTilesToRender();
     return super.onLoad();
-  }
-
-  Vector2 _getCameraTileUpdate() {
-    return Vector2(
-      (gameRef.camera.position.dx / tileSizeToUpdate).floorToDouble(),
-      (gameRef.camera.position.dy / tileSizeToUpdate).floorToDouble(),
-    );
   }
 
   void _verifyRemoveTiles() {
@@ -287,5 +274,25 @@ class MapWorld extends MapGame {
         await MapAssetsManager.loadImage(frame.path);
       }
     }
+    return Future.value();
+  }
+
+  Vector2 _getCameraTileUpdate() {
+    return Vector2(
+      (gameRef.camera.position.dx / tileSizeToUpdate).floorToDouble(),
+      (gameRef.camera.position.dy / tileSizeToUpdate).floorToDouble(),
+    );
+  }
+
+  bool _checkNeedUpdateTiles() {
+    final camera = _getCameraTileUpdate();
+    if (lastCamera != camera || lastMinorZoom > gameRef.camera.config.zoom) {
+      lastCamera = camera;
+      if (lastMinorZoom > gameRef.camera.config.zoom) {
+        lastMinorZoom = gameRef.camera.config.zoom;
+      }
+      return true;
+    }
+    return false;
   }
 }

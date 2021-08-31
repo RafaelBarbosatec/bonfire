@@ -69,7 +69,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   Iterable<Lighting> _visibleLights = List.empty();
   Iterable<GameComponent> _visibleComponents = List.empty();
-  Iterable<ObjectCollision> _visibleCollisions = List.empty();
+  List<ObjectCollision> _visibleCollisions = List.empty();
   Iterable<ObjectCollision> _collisions = List.empty();
   IntervalTick? _interval;
   ColorFilterComponent _colorFilterComponent = ColorFilterComponent(
@@ -146,8 +146,8 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   @override
   void update(double t) {
-    _interval?.update(t);
     super.update(t);
+    _interval?.update(t);
   }
 
   void addGameComponent(GameComponent component) {
@@ -241,22 +241,20 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
     _collisions = components.where((element) {
       return (element is ObjectCollision) && (element).containCollision();
-    }).cast()
-      ..toList(growable: false);
+    }).cast();
 
-    _visibleCollisions = _visibleComponents.where((element) {
-      return (element is ObjectCollision) && (element).containCollision();
-    }).cast()
-      ..toList(growable: false);
+    _visibleCollisions = _visibleComponents
+        .where((element) {
+          return (element is ObjectCollision) && element.containCollision();
+        })
+        .toList()
+        .cast();
 
-    _visibleCollisions = (_visibleCollisions.toList()
-          ..addAll(map.getCollisionsRendered()))
-        .toList(growable: false);
+    _visibleCollisions.addAll(map.getCollisionsRendered());
 
     _visibleLights = _visibleComponents.where((element) {
       return element is Lighting;
-    }).cast()
-      ..toList(growable: false);
+    }).cast();
 
     gameController?.notifyListeners();
   }
