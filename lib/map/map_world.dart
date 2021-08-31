@@ -226,7 +226,7 @@ class MapWorld extends MapGame {
 
   void _verifyRemoveTiles() {
     if (_tilesToRemove.isNotEmpty) {
-      _tilesToRemove.forEach((tile) {
+      for (var tile in _tilesToRemove) {
         children.remove(tile);
         tiles.removeWhere((element) => element.id == tile.id);
         quadTree?.removeTile(tile.id);
@@ -238,7 +238,7 @@ class MapWorld extends MapGame {
             return (element as Tile).id == tile.id;
           });
         }
-      });
+      }
     }
   }
 

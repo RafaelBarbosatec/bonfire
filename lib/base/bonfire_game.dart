@@ -83,7 +83,6 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   GameColorFilter? _colorFilter;
 
-  bool isReady = false;
   ValueChanged<BonfireGame>? onReady;
 
   BonfireGame({
@@ -122,7 +121,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   @override
-  Future<void> onLoad() {
+  Future<void> onLoad() async {
     _colorFilterComponent = ColorFilterComponent(
       _colorFilter ?? GameColorFilter(),
     );
@@ -136,22 +135,19 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     _initialComponents?.forEach((comp) => add(comp));
     player?.let((p) => add(p));
     lighting = LightingComponent(color: lightingColorGame ?? Color(0x00000000));
-    super.add(lighting!);
-    super.add((interface ?? GameInterface()));
-    super.add(joystickController ?? Joystick());
+    add(lighting!);
+    add(interface ?? GameInterface());
+    add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(camera));
     _interval = IntervalTick(INTERVAL_UPDATE_CACHE, tick: _updateTempList);
-    return super.onLoad();
+    await super.onLoad();
+    onReady?.call(this);
   }
 
   @override
   void update(double t) {
     _interval?.update(t);
     super.update(t);
-    if (!isReady) {
-      isReady = true;
-      onReady?.call(this);
-    }
   }
 
   void addGameComponent(GameComponent component) {
