@@ -1,4 +1,4 @@
-# next
+# 1.5.4
 - increases map rendering space
 
 # 1.5.3
