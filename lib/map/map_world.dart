@@ -70,13 +70,11 @@ class MapWorld extends MapGame {
 
   void _updateTilesToRender() {
     final tileSize = tiles.first.width;
+    final rectCamera = gameRef.camera.cameraRectWithSpacing;
     final visibleTiles = quadTree?.query(
-          gameRef.camera.cameraRectWithSpacing.getRectangleByTileSize(
-            tileSize,
-          ),
-        ) ??
-        [];
-    children = _buildTiles(visibleTiles);
+      rectCamera.getRectangleByTileSize(tileSize),
+    );
+    children = _buildTiles(visibleTiles ?? []);
     _findVisibleCollisions();
   }
 
@@ -112,21 +110,21 @@ class MapWorld extends MapGame {
       lastZoom = -1;
     }
 
+    final tileSize = tiles.first.width;
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
     if (tiles.isNotEmpty && tileSizeToUpdate == 0) {
-      tileSizeToUpdate = max(size.x, size.y) / 3;
-      tileSizeToUpdate = tileSizeToUpdate.ceilToDouble();
+      tileSizeToUpdate = (max(size.x, size.y) / 3).ceilToDouble();
     }
-    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.5);
+    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate);
 
     _getTileCollisions();
 
     quadTree = QuadTree(
       0,
       0,
-      ((mapSize?.width ?? 0).ceil() / tiles.first.width).ceil(),
-      ((mapSize?.height ?? 0).ceil() / tiles.first.width).ceil(),
+      ((mapSize?.width ?? 0).ceil() / tileSize).ceil(),
+      ((mapSize?.height ?? 0).ceil() / tileSize).ceil(),
     );
 
     for (var tile in tiles) {
