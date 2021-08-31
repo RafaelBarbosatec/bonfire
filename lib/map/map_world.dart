@@ -103,19 +103,19 @@ class MapWorld extends MapGame {
       lastMinorZoom = 1.0;
     }
 
+    final tileSize = tiles.first.width;
+
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
 
     if (tileSizeToUpdate == 0) {
       tileSizeToUpdate = (max(size.x, size.y) / 3).ceilToDouble();
     }
-    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate);
+    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate + (tileSize * 2));
 
     _getTileCollisions();
 
     if (tiles.isNotEmpty) {
-      final tileSize = tiles.first.width;
-
       quadTree = QuadTree(
         0,
         0,

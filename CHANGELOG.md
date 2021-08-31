@@ -1,3 +1,6 @@
+# 1.5.4
+- increases map rendering space
+
 # 1.5.3
 - improvements in order of the update of `Camera`
 - add `QuadTree` data struct to search of the visible Tiles.
