@@ -89,14 +89,20 @@ class MapWorld extends MapGame {
     }
   }
 
-  void _updateTilesToRender() {
+  void _updateTilesToRender({bool buildAllTiles = false}) {
     final tileSize = tiles.first.width;
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
     _visibleTileModel = quadTree?.query(
           rectCamera.getRectangleByTileSize(tileSize),
         ) ??
         [];
-    _indexBuildTile = 0;
+    if (buildAllTiles) {
+      children = _buildTiles(_visibleTileModel);
+      _findVisibleCollisions();
+      _visibleTileModel.clear();
+    } else {
+      _indexBuildTile = 0;
+    }
   }
 
   @override
@@ -235,7 +241,7 @@ class MapWorld extends MapGame {
   Future<void>? onLoad() async {
     await Future.forEach<TileModel>(tiles, _loadTile);
     _verifyMaxTopAndLeft(gameRef.size);
-    _updateTilesToRender();
+    _updateTilesToRender(buildAllTiles: true);
     return super.onLoad();
   }
 
