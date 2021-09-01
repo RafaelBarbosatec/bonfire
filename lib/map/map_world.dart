@@ -14,12 +14,17 @@ import 'package:flutter/material.dart';
 import 'map_assets_manager.dart';
 
 class MapWorld extends MapGame {
+  static const int _LOT_BUILD_TILE = 100;
   Vector2 lastCamera = Vector2.zero();
   double lastMinorZoom = 1.0;
   Vector2? lastSizeScreen;
   List<ObjectCollision> _tilesCollisions = List.empty();
   List<ObjectCollision> _tilesVisibleCollisions = List.empty();
   List<Tile> _tilesToRemove = [];
+  List<Tile> _tilesToUpdate = [];
+  List<TileModel> _visibleTileModel = [];
+  int _indexBuildTile = -1;
+  bool buildingTiles = false;
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -47,8 +52,13 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    if (_checkNeedUpdateTiles()) {
-      scheduleMicrotask(_updateTilesToRender);
+    if (_indexBuildTile == -1 && _checkNeedUpdateTiles()) {
+      scheduleMicrotask(_searchTilesToRender);
+    }
+
+    if (_indexBuildTile != -1 && !buildingTiles) {
+      buildingTiles = true;
+      scheduleMicrotask(_buildTilesLot);
     }
 
     for (var tile in children) {
@@ -61,14 +71,43 @@ class MapWorld extends MapGame {
     _verifyRemoveTiles();
   }
 
-  void _updateTilesToRender() {
+  void _buildTilesLot() {
+    int sizeList = _visibleTileModel.length;
+    int countLot = (sizeList / _LOT_BUILD_TILE).ceil();
+    int start = _LOT_BUILD_TILE * _indexBuildTile;
+    int end = start + _LOT_BUILD_TILE;
+    if (end > sizeList) {
+      end = sizeList;
+    }
+    var visibleTiles = _visibleTileModel.sublist(start, end);
+    _tilesToUpdate.addAll(_buildTiles(visibleTiles));
+    _indexBuildTile++;
+
+    if (_indexBuildTile >= countLot) {
+      children = _tilesToUpdate.toList();
+      _findVisibleCollisions();
+      _tilesToUpdate.clear();
+      _visibleTileModel.clear();
+      _indexBuildTile = -1;
+    }
+
+    buildingTiles = false;
+  }
+
+  void _searchTilesToRender({bool buildAllTiles = false}) {
     final tileSize = tiles.first.width;
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
-    final visibleTiles = quadTree?.query(
-      rectCamera.getRectangleByTileSize(tileSize),
-    );
-    children = _buildTiles(visibleTiles ?? []);
-    _findVisibleCollisions();
+    _visibleTileModel = quadTree?.query(
+          rectCamera.getRectangleByTileSize(tileSize),
+        ) ??
+        [];
+    if (buildAllTiles) {
+      children = _buildTiles(_visibleTileModel);
+      _findVisibleCollisions();
+      _visibleTileModel.clear();
+    } else {
+      _indexBuildTile = 0;
+    }
   }
 
   @override
@@ -207,7 +246,7 @@ class MapWorld extends MapGame {
   Future<void>? onLoad() async {
     await Future.forEach<TileModel>(tiles, _loadTile);
     _verifyMaxTopAndLeft(gameRef.size);
-    _updateTilesToRender();
+    _searchTilesToRender(buildAllTiles: true);
     return super.onLoad();
   }
 

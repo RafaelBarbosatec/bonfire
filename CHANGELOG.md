@@ -1,3 +1,6 @@
+# 1.5.5
+- improvements performance in big maps
+
 # 1.5.4
 - increases map rendering space
 
