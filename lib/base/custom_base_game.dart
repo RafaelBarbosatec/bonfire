@@ -179,8 +179,6 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   /// You can override it further to add more custom behaviour.
   @override
   void update(double t) {
-    camera.update(t);
-
     if (_addLater.isNotEmpty) {
       final addNow = _addLater.toList(growable: false);
       components.addAll(addNow);
@@ -195,6 +193,8 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
     }
 
     components.removeWhere((c) => c.shouldRemove);
+
+    camera.update(t);
   }
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.
