@@ -24,6 +24,7 @@ class MapWorld extends MapGame {
   List<Tile> _tilesToUpdate = [];
   List<TileModel> _visibleTileModel = [];
   int _indexBuildTile = -1;
+  bool buildingTiles = false;
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -52,10 +53,13 @@ class MapWorld extends MapGame {
   @override
   void update(double t) {
     if (_indexBuildTile == -1 && _checkNeedUpdateTiles()) {
-      scheduleMicrotask(_updateTilesToRender);
+      scheduleMicrotask(_searchTilesToRender);
     }
 
-    _buildTilesLot();
+    if (_indexBuildTile != -1 && !buildingTiles) {
+      buildingTiles = true;
+      scheduleMicrotask(_buildTilesLot);
+    }
 
     for (var tile in children) {
       tile.update(t);
@@ -68,7 +72,6 @@ class MapWorld extends MapGame {
   }
 
   void _buildTilesLot() {
-    if (_indexBuildTile == -1) return;
     int sizeList = _visibleTileModel.length;
     int countLot = (sizeList / _LOT_BUILD_TILE).ceil();
     int start = _LOT_BUILD_TILE * _indexBuildTile;
@@ -87,9 +90,11 @@ class MapWorld extends MapGame {
       _visibleTileModel.clear();
       _indexBuildTile = -1;
     }
+
+    buildingTiles = false;
   }
 
-  void _updateTilesToRender({bool buildAllTiles = false}) {
+  void _searchTilesToRender({bool buildAllTiles = false}) {
     final tileSize = tiles.first.width;
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
     _visibleTileModel = quadTree?.query(
@@ -241,7 +246,7 @@ class MapWorld extends MapGame {
   Future<void>? onLoad() async {
     await Future.forEach<TileModel>(tiles, _loadTile);
     _verifyMaxTopAndLeft(gameRef.size);
-    _updateTilesToRender(buildAllTiles: true);
+    _searchTilesToRender(buildAllTiles: true);
     return super.onLoad();
   }
 
