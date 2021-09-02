@@ -98,7 +98,7 @@ abstract class GameComponent extends Component
   /// Method that checks what types map tile is currently
   List<String>? tileTypeListBelow() {
     final map = gameRef.map;
-    if (map.tiles.isNotEmpty) {
+    if (map.getRendered().isNotEmpty) {
       Vector2Rect position = this.isObjectCollision()
           ? (this as ObjectCollision).getRectCollision()
           : this.position;

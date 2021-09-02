@@ -68,6 +68,8 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   /// Used to show in the interface the FPS.
   final bool showFPS;
 
+  bool _firstUpdate = true;
+
   Iterable<Lighting> _visibleLights = List.empty();
   Iterable<GameComponent> _visibleComponents = List.empty();
   List<ObjectCollision> _visibleCollisions = List.empty();
@@ -150,8 +152,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     add(interface ?? GameInterface());
     add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(camera));
-    await super.onLoad();
-    onReady?.call(this);
+    return super.onLoad();
   }
 
   @override
@@ -159,6 +160,11 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     super.update(t);
     _interval?.update(t);
     _intervalUpdateOder?.update(t);
+
+    if (_firstUpdate) {
+      _firstUpdate = false;
+      onReady?.call(this);
+    }
   }
 
   void addGameComponent(GameComponent component) {
