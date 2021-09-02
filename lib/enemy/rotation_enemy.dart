@@ -54,7 +54,7 @@ class RotationEnemy extends Enemy {
 
   @override
   void render(Canvas canvas) {
-    if (this.isVisibleInCamera()) {
+    if (this.isVisible) {
       canvas.save();
       canvas.translate(position.center.dx, position.center.dy);
       canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));
@@ -67,7 +67,7 @@ class RotationEnemy extends Enemy {
 
   @override
   void update(double dt) {
-    if (isVisibleInCamera()) {
+    if (this.isVisible) {
       animation?.update(dt);
     }
     super.update(dt);

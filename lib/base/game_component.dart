@@ -52,6 +52,8 @@ abstract class GameComponent extends Component
   /// Range [0.0..1.0]
   double opacity = 1.0;
 
+  bool isVisible = false;
+
   Paint get debugPaint => Paint()
     ..color = debugColor
     ..strokeWidth = 1
@@ -70,7 +72,7 @@ abstract class GameComponent extends Component
   }
 
   /// Method that checks if this component is visible on the screen
-  bool isVisibleInCamera() {
+  bool _isVisibleInCamera() {
     return gameRef.isVisibleInCamera(this);
   }
 
@@ -165,7 +167,7 @@ abstract class GameComponent extends Component
   }
 
   void renderDebugMode(Canvas canvas) {
-    if (isVisibleInCamera()) {
+    if (isVisible) {
       canvas.drawRect(position.rect, debugPaint);
       final rect = position.rect;
       final dx = rect.right;
@@ -188,5 +190,11 @@ abstract class GameComponent extends Component
     } else {
       return this._timers[key]?.update(dt) ?? false;
     }
+  }
+
+  @override
+  void update(double dt) {
+    isVisible = this._isVisibleInCamera();
+    super.update(dt);
   }
 }

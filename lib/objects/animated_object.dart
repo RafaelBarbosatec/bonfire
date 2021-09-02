@@ -15,17 +15,21 @@ class AnimatedObject extends GameComponent {
 
   @override
   void render(Canvas canvas) {
-    animation?.getSprite().renderFromVector2Rect(
-          canvas,
-          this.position,
-          opacity: opacity,
-        );
+    if (isVisible) {
+      animation?.getSprite().renderFromVector2Rect(
+            canvas,
+            this.position,
+            opacity: opacity,
+          );
+    }
     super.render(canvas);
   }
 
   @override
   void update(double dt) {
-    animation?.update(dt);
+    if (isVisible) {
+      animation?.update(dt);
+    }
     super.update(dt);
   }
 }

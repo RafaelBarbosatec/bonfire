@@ -125,7 +125,7 @@ class Tile extends GameComponent {
 
   @override
   void renderDebugMode(Canvas canvas) {
-    if (isVisibleInCamera()) {
+    if (isVisible) {
       _drawGrid(canvas);
     }
   }

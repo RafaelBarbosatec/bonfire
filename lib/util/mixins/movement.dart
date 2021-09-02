@@ -214,8 +214,7 @@ mixin Movement on GameComponent {
 
   bool _isCollision(Vector2 displacement) {
     if (this.isObjectCollision()) {
-      (this as ObjectCollision)
-          .setCollisionOnlyVisibleScreen(this.isVisibleInCamera());
+      (this as ObjectCollision).setCollisionOnlyVisibleScreen(this.isVisible);
       return (this as ObjectCollision).isCollision(
         displacement: displacement,
       );
