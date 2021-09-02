@@ -64,13 +64,11 @@ class GameDecoration extends AnimatedObject {
 
   @override
   void render(Canvas canvas) {
-    if (isVisible) {
-      sprite?.renderFromVector2Rect(
-        canvas,
-        this.position,
-        opacity: opacity,
-      );
-    }
+    sprite?.renderFromVector2Rect(
+      canvas,
+      this.position,
+      opacity: opacity,
+    );
     super.render(canvas);
   }
 

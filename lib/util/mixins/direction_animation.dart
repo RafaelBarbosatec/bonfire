@@ -12,9 +12,7 @@ mixin DirectionAnimation on Movement {
 
   @override
   void render(Canvas canvas) {
-    if (isVisible) {
-      animation?.render(canvas);
-    }
+    animation?.render(canvas);
     super.render(canvas);
   }
 
