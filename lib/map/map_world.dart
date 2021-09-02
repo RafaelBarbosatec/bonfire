@@ -257,7 +257,7 @@ class MapWorld extends MapGame {
       for (var tile in _tilesToRemove) {
         children.remove(tile);
         tiles.removeWhere((element) => element.id == tile.id);
-        quadTree?.removeTile(tile.id);
+        quadTree?.removeById(tile.id);
         if (tile is ObjectCollision) {
           _tilesCollisions.removeWhere((element) {
             return (element as Tile).id == tile.id;
