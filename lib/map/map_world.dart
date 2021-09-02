@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'map_assets_manager.dart';
 
 class MapWorld extends MapGame {
-  static const int _LOT_BUILD_TILE = 100;
+  int countBuildTileLot = 100;
   Vector2 lastCamera = Vector2.zero();
   double lastMinorZoom = 1.0;
   Vector2? lastSizeScreen;
@@ -25,6 +25,7 @@ class MapWorld extends MapGame {
   List<TileModel> _visibleTileModel = [];
   int _indexBuildTile = -1;
   bool buildingTiles = false;
+  int _sizeVisibleTileModel = 0;
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -72,12 +73,11 @@ class MapWorld extends MapGame {
   }
 
   void _buildTilesLot() {
-    int sizeList = _visibleTileModel.length;
-    int countLot = (sizeList / _LOT_BUILD_TILE).ceil();
-    int start = _LOT_BUILD_TILE * _indexBuildTile;
-    int end = start + _LOT_BUILD_TILE;
-    if (end > sizeList) {
-      end = sizeList;
+    int countLot = (_sizeVisibleTileModel / countBuildTileLot).ceil();
+    int start = countBuildTileLot * _indexBuildTile;
+    int end = start + countBuildTileLot;
+    if (end > _sizeVisibleTileModel) {
+      end = _sizeVisibleTileModel;
     }
     var visibleTiles = _visibleTileModel.sublist(start, end);
     _tilesToUpdate.addAll(_buildTiles(visibleTiles));
@@ -101,11 +101,13 @@ class MapWorld extends MapGame {
           rectCamera.getRectangleByTileSize(tileSize),
         ) ??
         [];
+    _sizeVisibleTileModel = _visibleTileModel.length;
     if (buildAllTiles) {
       children = _buildTiles(_visibleTileModel);
       _findVisibleCollisions();
       _visibleTileModel.clear();
     } else {
+      countBuildTileLot = (_sizeVisibleTileModel / 2).ceil();
       _indexBuildTile = 0;
     }
   }
