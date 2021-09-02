@@ -171,22 +171,24 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     if (this.isDead) return;
     _verifyStamina(dt);
 
-    this.seeEnemy(
-      radiusVision: width * 4,
-      notObserved: () {
-        showObserveEnemy = false;
-      },
-      observed: (enemies) {
-        if (!showObserveEnemy) {
-          showObserveEnemy = true;
-          showEmote();
-        }
-        if (!showTalk) {
-          showTalk = true;
-          _showTalk(enemies.first);
-        }
-      },
-    );
+    if (checkInterval('seeEnemy', 200, dt)) {
+      this.seeEnemy(
+        radiusVision: width * 4,
+        notObserved: () {
+          showObserveEnemy = false;
+        },
+        observed: (enemies) {
+          if (!showObserveEnemy) {
+            showObserveEnemy = true;
+            showEmote();
+          }
+          if (!showTalk) {
+            showTalk = true;
+            _showTalk(enemies.first);
+          }
+        },
+      );
+    }
 
     if (execAttackRange && checkInterval('ATTACK_RANGE', 150, dt)) {
       actionAttackRange();

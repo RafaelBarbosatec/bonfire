@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 
@@ -194,7 +195,7 @@ mixin Movement on GameComponent {
   ) {
     if (this.isObjectCollision()) {
       return (this as ObjectCollision).isCollision(
-        displacement: this.position.translate(translateX, translateY).position,
+        displacement: this.position.position.translate(translateX, translateY),
       );
     } else {
       return false;

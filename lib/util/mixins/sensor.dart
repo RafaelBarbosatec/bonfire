@@ -16,7 +16,7 @@ Paint _paintSensor = Paint()..color = Colors.red.withOpacity(0.5);
 mixin Sensor on GameComponent {
   void onContact(GameComponent component);
 
-  int _intervalCheckContact = 0;
+  int _intervalCheckContact = 250;
   IntervalTick? _tick;
   Vector2Rect? _sensorArea;
 
