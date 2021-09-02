@@ -1,4 +1,4 @@
-# 1.5.5
+# 1.5.6
 - improvements performance in big maps
 
 # 1.5.4
