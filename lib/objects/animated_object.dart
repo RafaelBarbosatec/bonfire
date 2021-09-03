@@ -25,9 +25,7 @@ class AnimatedObject extends GameComponent {
 
   @override
   void update(double dt) {
-    if (isVisible) {
-      animation?.update(dt);
-    }
+    animation?.update(dt);
     super.update(dt);
   }
 }
