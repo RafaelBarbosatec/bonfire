@@ -45,7 +45,7 @@ extension EnemyExtensions on Enemy {
     bool runOnlyVisibleInScreen = true,
   }) {
     if (isDead) return;
-    if (runOnlyVisibleInScreen && !this.isVisibleInCamera()) return;
+    if (runOnlyVisibleInScreen && !this.isVisible) return;
 
     seePlayer(
       radiusVision: radiusVision,

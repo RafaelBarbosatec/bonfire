@@ -106,7 +106,7 @@ extension MovementExtensions on Movement {
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
   }) {
-    if (runOnlyVisibleInScreen && !this.isVisibleInCamera()) return;
+    if (runOnlyVisibleInScreen && !this.isVisible) return;
     double distance = (minDistanceFromPlayer ?? radiusVision);
 
     Vector2Rect rectTarget = getRectAndCollision(target);

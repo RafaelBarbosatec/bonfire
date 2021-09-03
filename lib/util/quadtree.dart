@@ -68,12 +68,21 @@ class QuadTree<T> extends Rectangle<num> {
     return _insertItemIntoChildren(item, atPoint);
   }
 
-  void removeTile(dynamic id) {
+  void removeById(dynamic id) {
     if (_children.isEmpty) {
       _items.removeWhere((item) => item.id == id);
     }
     return _children.forEach((element) {
-      element.removeTile(id);
+      element.removeById(id);
+    });
+  }
+
+  void remove(T item) {
+    if (_children.isEmpty) {
+      _items.removeWhere((i) => i == item);
+    }
+    return _children.forEach((element) {
+      element.removeById(item);
     });
   }
 

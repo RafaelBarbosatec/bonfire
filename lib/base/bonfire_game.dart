@@ -254,7 +254,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   void _updateTempList() {
     _visibleComponents = components.where((element) {
-      return (element is GameComponent) && (element).isVisibleInCamera();
+      return (element is GameComponent) && (element).isVisible;
     }).cast()
       ..toList(growable: false);
 

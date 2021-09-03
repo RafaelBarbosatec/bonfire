@@ -12,15 +12,13 @@ mixin DirectionAnimation on Movement {
 
   @override
   void render(Canvas canvas) {
-    if (isVisibleInCamera()) {
-      animation?.render(canvas);
-    }
+    animation?.render(canvas);
     super.render(canvas);
   }
 
   @override
   void update(double dt) {
-    if (isVisibleInCamera()) {
+    if (isVisible) {
       animation?.opacity = opacity;
       animation?.update(dt, position);
     }

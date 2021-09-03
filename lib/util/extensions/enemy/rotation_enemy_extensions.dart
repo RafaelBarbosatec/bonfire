@@ -22,7 +22,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     bool runOnlyVisibleInScreen = true,
   }) {
     if (isDead) return;
-    if (runOnlyVisibleInScreen && !this.isVisibleInCamera()) return;
+    if (runOnlyVisibleInScreen && !this.isVisible) return;
 
     seePlayer(
       radiusVision: radiusVision,
@@ -66,7 +66,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     bool runOnlyVisibleInScreen = true,
   }) {
     if (isDead) return;
-    if (runOnlyVisibleInScreen && !this.isVisibleInCamera()) return;
+    if (runOnlyVisibleInScreen && !this.isVisible) return;
 
     seePlayer(
       radiusVision: radiusVision,

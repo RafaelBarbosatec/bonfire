@@ -148,7 +148,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   /// This makes sure the canvas is not messed up by one component and all components render independently.
   void renderComponent(Canvas canvas, Component comp) {
     if (comp is GameComponent) {
-      if (!comp.isHud && !comp.isVisibleInCamera()) return;
+      if (!comp.isHud && !comp.isVisible) return;
     }
 
     canvas.save();
@@ -222,7 +222,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
 
   /// Verify if the compont contain gestures.
   bool _hasGesture(Component c) {
-    return ((c is GameComponent && c.isVisibleInCamera()) || c.isHud) &&
+    return ((c is GameComponent && c.isVisible) || c.isHud) &&
         (c is PointerDetectorHandler &&
             (c as PointerDetectorHandler).hasGesture());
   }
