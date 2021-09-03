@@ -1,4 +1,4 @@
-# 1.5.7
+# 1.5.8
 - remove method `isVisibleInCamera()` in `GameComponent`. Now use the `isVisible` param to check if this component is visible in camera.
 
 # 1.5.6

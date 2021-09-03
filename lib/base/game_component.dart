@@ -74,6 +74,7 @@ abstract class GameComponent extends Component
 
   /// Method that checks if this component is visible on the screen
   bool _isVisibleInCamera() {
+    if (!hasGameRef) return false;
     return gameRef.isVisibleInCamera(this);
   }
 
