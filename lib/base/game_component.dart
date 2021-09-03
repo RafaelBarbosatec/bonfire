@@ -52,6 +52,7 @@ abstract class GameComponent extends Component
   /// Range [0.0..1.0]
   double opacity = 1.0;
 
+  /// Param checks if this component is visible on the screen
   bool isVisible = false;
 
   Paint get debugPaint => Paint()
