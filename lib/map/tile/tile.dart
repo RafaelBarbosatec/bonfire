@@ -188,7 +188,6 @@ class Tile extends GameComponent {
   @override
   void update(double dt) {
     _animation?.update(dt);
-    super.update(dt);
   }
 
   @override
