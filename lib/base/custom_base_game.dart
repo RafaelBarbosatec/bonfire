@@ -188,8 +188,12 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
       }
     }
 
+    _highestPriority = 0;
     for (final comp in components) {
       comp.update(t);
+      if (comp.priority > _highestPriority) {
+        _highestPriority = comp.priority;
+      }
     }
 
     components.removeWhere((c) => c.shouldRemove);
@@ -230,6 +234,5 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   /// reorder components by priority
   void updateOrderPriority() {
     components.rebalanceAll();
-    _highestPriority = components.last.priority;
   }
 }
