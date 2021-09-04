@@ -42,7 +42,7 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    for (var tile in children) {
+    for (Tile tile in children) {
       tile.render(canvas);
     }
     _drawPathLine(canvas);
@@ -61,7 +61,7 @@ class MapWorld extends MapGame {
       _visibleTileModel.clear();
     }
 
-    for (var tile in children) {
+    for (Tile tile in children) {
       tile.update(t);
       if (tile.shouldRemove) {
         _tilesToRemove.add(tile);
@@ -271,12 +271,7 @@ class MapWorld extends MapGame {
   }
 
   void _findVisibleCollisions() {
-    _tilesVisibleCollisions = children
-        .where((element) {
-          return element is ObjectCollision;
-        })
-        .toList()
-        .cast();
+    _tilesVisibleCollisions = children.whereType<ObjectCollision>().toList();
   }
 
   Future<void> _loadTile(TileModel element) async {
