@@ -21,11 +21,8 @@ class MapWorld extends MapGame {
   List<ObjectCollision> _tilesCollisions = List.empty();
   List<ObjectCollision> _tilesVisibleCollisions = List.empty();
   List<Tile> _tilesToRemove = [];
-  List<Tile> _tilesToUpdate = [];
   List<TileModel> _visibleTileModel = [];
-  int _indexBuildTile = -1;
-  bool buildingTiles = false;
-  int _sizeVisibleTileModel = 0;
+  bool buildTilesInNextFrame = false;
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -53,13 +50,15 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    if (_indexBuildTile == -1 && _checkNeedUpdateTiles()) {
+    if (!buildTilesInNextFrame && _checkNeedUpdateTiles()) {
       scheduleMicrotask(_searchTilesToRender);
     }
 
-    if (_indexBuildTile != -1 && !buildingTiles) {
-      buildingTiles = true;
-      scheduleMicrotask(_buildTilesLot);
+    if (buildTilesInNextFrame) {
+      buildTilesInNextFrame = false;
+      children = _buildTiles(_visibleTileModel);
+      _findVisibleCollisions();
+      _visibleTileModel.clear();
     }
 
     for (var tile in children) {
@@ -72,28 +71,6 @@ class MapWorld extends MapGame {
     _verifyRemoveTiles();
   }
 
-  void _buildTilesLot() {
-    int countLot = (_sizeVisibleTileModel / countBuildTileLot).ceil();
-    int start = countBuildTileLot * _indexBuildTile;
-    int end = start + countBuildTileLot;
-    if (end > _sizeVisibleTileModel) {
-      end = _sizeVisibleTileModel;
-    }
-    var visibleTiles = _visibleTileModel.sublist(start, end);
-    _tilesToUpdate.addAll(_buildTiles(visibleTiles));
-    _indexBuildTile++;
-
-    if (_indexBuildTile >= countLot) {
-      children = _tilesToUpdate.toList();
-      _findVisibleCollisions();
-      _tilesToUpdate.clear();
-      _visibleTileModel.clear();
-      _indexBuildTile = -1;
-    }
-
-    buildingTiles = false;
-  }
-
   void _searchTilesToRender({bool buildAllTiles = false}) {
     final tileSize = tiles.first.width;
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
@@ -101,15 +78,7 @@ class MapWorld extends MapGame {
           rectCamera.getRectangleByTileSize(tileSize),
         ) ??
         [];
-    _sizeVisibleTileModel = _visibleTileModel.length;
-    if (buildAllTiles) {
-      children = _buildTiles(_visibleTileModel);
-      _findVisibleCollisions();
-      _visibleTileModel.clear();
-    } else {
-      countBuildTileLot = (_sizeVisibleTileModel / 2).ceil();
-      _indexBuildTile = 0;
-    }
+    buildTilesInNextFrame = true;
   }
 
   @override
@@ -150,18 +119,22 @@ class MapWorld extends MapGame {
     mapStartPosition = getStartPosition();
 
     if (tileSizeToUpdate == 0) {
-      tileSizeToUpdate = (max(size.x, size.y) / 3).ceilToDouble();
+      tileSizeToUpdate = (tileSize * 5).ceilToDouble();
     }
-    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate + (tileSize * 2));
+    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.2);
 
     _getTileCollisions();
 
     if (tiles.isNotEmpty) {
+      int minSize = min(size.x, size.y).ceil();
+      int maxItems = ((minSize / 2) / tileSize).ceil();
+      maxItems *= maxItems;
       quadTree = QuadTree(
         0,
         0,
         ((mapSize?.width ?? 0).ceil() / tileSize).ceil(),
         ((mapSize?.height ?? 0).ceil() / tileSize).ceil(),
+        maxItems: maxItems,
       );
 
       for (var tile in tiles) {

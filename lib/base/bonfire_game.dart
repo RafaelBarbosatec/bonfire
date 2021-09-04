@@ -73,9 +73,10 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   Iterable<Lighting> _visibleLights = List.empty();
   Iterable<GameComponent> _visibleComponents = List.empty();
   List<ObjectCollision> _visibleCollisions = List.empty();
-  Iterable<ObjectCollision> _collisions = List.empty();
+  List<ObjectCollision> _collisions = List.empty();
   IntervalTick? _interval;
   IntervalTick? _intervalUpdateOder;
+  IntervalTick? _intervalAllCollisions;
   ColorFilterComponent _colorFilterComponent = ColorFilterComponent(
     GameColorFilter(),
   );
@@ -131,6 +132,10 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
       INTERVAL_UPDATE_ORDER,
       tick: updateOrderPriority,
     );
+    _intervalAllCollisions = IntervalTick(
+      1000,
+      tick: _updateAllCollisions,
+    );
   }
 
   @override
@@ -160,6 +165,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     super.update(t);
     _interval?.update(t);
     _intervalUpdateOder?.update(t);
+    _intervalAllCollisions?.update(t);
 
     if (_firstUpdate) {
       _firstUpdate = false;
@@ -214,11 +220,11 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   Iterable<ObjectCollision> collisions() {
-    return map.getCollisions().toList()..addAll(_collisions);
+    return _collisions;
   }
 
   Iterable<ObjectCollision> visibleCollisions() {
-    return _visibleCollisions.toList()..addAll(map.getCollisionsRendered());
+    return _visibleCollisions;
   }
 
   ValueGeneratorComponent getValueGenerator(
@@ -258,10 +264,6 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     }).cast()
       ..toList(growable: false);
 
-    _collisions = components.where((element) {
-      return (element is ObjectCollision) && (element).containCollision();
-    }).cast();
-
     _visibleCollisions = _visibleComponents
         .where((element) {
           return (element is ObjectCollision) && element.containCollision();
@@ -269,11 +271,22 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
         .toList()
         .cast();
 
-    _visibleLights = _visibleComponents.where((element) {
-      return element is Lighting;
-    }).cast();
+    _visibleCollisions.addAll(map.getCollisionsRendered());
+
+    _visibleLights = _visibleComponents.whereType<Lighting>();
 
     gameController?.notifyListeners();
+  }
+
+  void _updateAllCollisions() {
+    _collisions = components
+        .where((element) {
+          return (element is ObjectCollision) && (element).containCollision();
+        })
+        .toList()
+        .cast();
+
+    _collisions.addAll(map.getCollisions());
   }
 
   GameColorFilter get colorFilter => _colorFilterComponent.colorFilter;

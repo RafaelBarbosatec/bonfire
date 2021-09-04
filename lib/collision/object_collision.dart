@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/collision_config.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/material.dart';
 
@@ -41,7 +40,7 @@ mixin ObjectCollision on GameComponent {
 
   Vector2Rect getRectCollision() {
     if (!containCollision()) return Vector2Rect.zero();
-    return _collisionConfig!.rect.toVector2Rect();
+    return _collisionConfig!.vector2rect;
   }
 
   bool containCollision() =>
