@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'map_assets_manager.dart';
 
 class MapWorld extends MapGame {
+  static const COUNT_LOT = 2;
   int countBuildTileLot = 100;
   Vector2 lastCamera = Vector2.zero();
   double lastMinorZoom = 1.0;
@@ -21,8 +22,10 @@ class MapWorld extends MapGame {
   List<ObjectCollision> _tilesCollisions = List.empty();
   List<ObjectCollision> _tilesVisibleCollisions = List.empty();
   List<Tile> _tilesToRemove = [];
-  List<TileModel> _visibleTileModel = [];
-  bool buildTilesInNextFrame = false;
+  List<Tile> _tilesToAdd = [];
+  List<List<TileModel>> _lotsToBuild = [];
+  int currentIndexLot = 0;
+  bool buildingTiles = false;
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -50,15 +53,13 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    if (!buildTilesInNextFrame && _checkNeedUpdateTiles()) {
+    if (_lotsToBuild.isEmpty && _checkNeedUpdateTiles()) {
       scheduleMicrotask(_searchTilesToRender);
     }
 
-    if (buildTilesInNextFrame) {
-      buildTilesInNextFrame = false;
-      children = _buildTiles(_visibleTileModel);
-      _findVisibleCollisions();
-      _visibleTileModel.clear();
+    if (_lotsToBuild.isNotEmpty && !buildingTiles) {
+      buildingTiles = true;
+      scheduleMicrotask(_buildLot);
     }
 
     for (Tile tile in children) {
@@ -71,14 +72,31 @@ class MapWorld extends MapGame {
     _verifyRemoveTiles();
   }
 
+  void _buildLot() {
+    _tilesToAdd.addAll(_buildTiles(_lotsToBuild[currentIndexLot]));
+    currentIndexLot++;
+    if (currentIndexLot >= COUNT_LOT) {
+      children = _tilesToAdd.toList();
+      _findVisibleCollisions();
+      _tilesToAdd.clear();
+      _lotsToBuild.clear();
+    }
+    buildingTiles = false;
+  }
+
   void _searchTilesToRender({bool buildAllTiles = false}) {
     final tileSize = tiles.first.width;
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
-    _visibleTileModel = quadTree?.query(
+    final visibleTileModel = quadTree?.query(
           rectCamera.getRectangleByTileSize(tileSize),
         ) ??
         [];
-    buildTilesInNextFrame = true;
+    final count = visibleTileModel.length;
+    final half = (count / COUNT_LOT).ceil();
+
+    _lotsToBuild.add(visibleTileModel.sublist(0, half));
+    _lotsToBuild.add(visibleTileModel.sublist(half, count));
+    currentIndexLot = 0;
   }
 
   @override
