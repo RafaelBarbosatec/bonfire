@@ -188,15 +188,13 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
       }
     }
 
-    int _priority = 0;
+    _highestPriority = 0;
     for (var comp in components) {
       comp.update(t);
-      if (comp.priority > _priority) {
-        _priority = comp.priority;
+      if (comp.priority > _highestPriority) {
+        _highestPriority = comp.priority;
       }
     }
-
-    _highestPriority = _priority;
 
     components.removeWhere((c) => c.shouldRemove);
 
