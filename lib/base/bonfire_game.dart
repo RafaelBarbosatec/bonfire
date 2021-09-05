@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bonfire/base/custom_base_game.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
@@ -28,6 +30,7 @@ import 'package:flutter/widgets.dart';
 class BonfireGame extends CustomBaseGame with KeyboardEvents {
   static const INTERVAL_UPDATE_CACHE = 200;
   static const INTERVAL_UPDATE_ORDER = 253;
+  static const INTERVAL_UPDATE_COLLISIONS = 1003;
 
   /// Context used to access all Flutter power in your game.
   final BuildContext context;
@@ -133,8 +136,8 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
       tick: updateOrderPriority,
     );
     _intervalAllCollisions = IntervalTick(
-      1000,
-      tick: _updateAllCollisions,
+      INTERVAL_UPDATE_COLLISIONS,
+      tick: () => scheduleMicrotask(_updateAllCollisions),
     );
   }
 

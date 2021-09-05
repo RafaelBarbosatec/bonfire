@@ -144,7 +144,7 @@ class TileModel {
   Tile getTile(BonfireGame gameRef) {
     if (animation == null) {
       if (collisions?.isNotEmpty == true) {
-        return TileWithCollision.fromSprite(
+        final tile = TileWithCollision.fromSprite(
           sprite!.getSprite(),
           Vector2(
             x,
@@ -157,11 +157,13 @@ class TileModel {
           height: height,
           type: type,
           properties: properties,
-        )
-          ..gameRef = gameRef
-          ..id = id;
+        );
+        tile.gameRef = gameRef;
+        tile.id = id;
+
+        return tile;
       } else {
-        return Tile.fromSprite(
+        final tile = Tile.fromSprite(
           sprite!.getSprite(),
           Vector2(
             x,
@@ -173,15 +175,18 @@ class TileModel {
           height: height,
           type: type,
           properties: properties,
-        )
-          ..gameRef = gameRef
-          ..id = id;
+        );
+
+        tile.gameRef = gameRef;
+        tile.id = id;
+
+        return tile;
       }
     } else {
       if (collisions?.isNotEmpty == true) {
         ControlledUpdateAnimation animationControlled =
             animation!.getSpriteControlledAnimation();
-        return TileWithCollision.withAnimation(
+        final tile = TileWithCollision.withAnimation(
           animationControlled,
           Vector2(
             x,
@@ -194,13 +199,16 @@ class TileModel {
           height: height,
           type: type,
           properties: properties,
-        )
-          ..gameRef = gameRef
-          ..id = id;
+        );
+
+        tile.gameRef = gameRef;
+        tile.id = id;
+
+        return tile;
       } else {
         ControlledUpdateAnimation animationControlled =
             animation!.getSpriteControlledAnimation();
-        return Tile.fromAnimation(
+        final tile = Tile.fromAnimation(
           animationControlled,
           Vector2(
             x,
@@ -212,9 +220,11 @@ class TileModel {
           height: height,
           type: type,
           properties: properties,
-        )
-          ..gameRef = gameRef
-          ..id = id;
+        );
+        tile.gameRef = gameRef;
+        tile.id = id;
+
+        return tile;
       }
     }
   }
