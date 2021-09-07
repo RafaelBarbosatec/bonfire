@@ -26,8 +26,12 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   bool canShowEmoteFromHover = true;
   Goblin? enemyControlled;
 
-  Rect _rectHover =
-      Rect.fromLTWH(0, 0, DungeonMap.tileSize, DungeonMap.tileSize);
+  Rect _rectHover = Rect.fromLTWH(
+    0,
+    0,
+    DungeonMap.tileSize,
+    DungeonMap.tileSize,
+  );
   Paint paintHover = new Paint()
     ..color = Colors.white
     ..style = PaintingStyle.stroke

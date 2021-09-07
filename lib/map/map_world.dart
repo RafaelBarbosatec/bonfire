@@ -21,11 +21,9 @@ class MapWorld extends MapGame {
   Vector2? lastSizeScreen;
   List<ObjectCollision> _tilesCollisions = List.empty();
   List<ObjectCollision> _tilesVisibleCollisions = List.empty();
-  List<Tile> _tilesToRemove = [];
-  List<Tile> _tilesToAdd = [];
-  List<List<TileModel>> _lotsToBuild = [];
-  int currentIndexLot = 0;
-  bool buildingTiles = false;
+  List<TileModel> tilesToAdd = [];
+  IntervalTick? _tickerRemove;
+  Set<String> _visibleSet = Set();
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -41,7 +39,9 @@ class MapWorld extends MapGame {
   }) : super(
           tiles,
           tileSizeToUpdate: tileSizeToUpdate,
-        );
+        ) {
+    _tickerRemove = IntervalTick(1000, tick: _removeTilesNotVisible);
+  }
 
   @override
   void render(Canvas canvas) {
@@ -53,35 +53,27 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    if (_lotsToBuild.isEmpty && _checkNeedUpdateTiles()) {
+    if (tilesToAdd.isEmpty && _checkNeedUpdateTiles()) {
       scheduleMicrotask(_searchTilesToRender);
     }
 
-    if (_lotsToBuild.isNotEmpty && !buildingTiles) {
-      buildingTiles = true;
-      scheduleMicrotask(_buildLot);
+    if (tilesToAdd.isNotEmpty) {
+      children.addAll(_buildTiles(tilesToAdd));
+      tilesToAdd.clear();
     }
 
     for (Tile tile in children) {
       tile.update(t);
-      if (tile.shouldRemove) {
-        _tilesToRemove.add(tile);
-      }
+      _verifyRemoveTileOfWord(tile);
     }
 
-    _verifyRemoveTiles();
+    _tickerRemove?.update(t);
   }
 
-  void _buildLot() {
-    _tilesToAdd.addAll(_buildTiles(_lotsToBuild[currentIndexLot]));
-    currentIndexLot++;
-    if (currentIndexLot >= COUNT_LOT) {
-      children = _tilesToAdd.toList();
-      _findVisibleCollisions();
-      _tilesToAdd.clear();
-      _lotsToBuild.clear();
-    }
-    buildingTiles = false;
+  void _removeTilesNotVisible() {
+    children.removeWhere((element) {
+      return !_visibleSet.contains(element.id);
+    });
   }
 
   void _searchTilesToRender({bool buildAllTiles = false}) {
@@ -91,12 +83,16 @@ class MapWorld extends MapGame {
           rectCamera.getRectangleByTileSize(tileSize),
         ) ??
         [];
-    final count = visibleTileModel.length;
-    final half = (count / COUNT_LOT).ceil();
 
-    _lotsToBuild.add(visibleTileModel.sublist(0, half));
-    _lotsToBuild.add(visibleTileModel.sublist(half, count));
-    currentIndexLot = 0;
+    if (buildAllTiles) {
+      children = _buildTiles(visibleTileModel);
+    } else {
+      tilesToAdd = visibleTileModel.where((element) {
+        return !_visibleSet.contains(element.id);
+      }).toList();
+    }
+    _findVisibleCollisions();
+    _visibleSet = visibleTileModel.map((e) => e.id).toSet();
   }
 
   @override
@@ -243,20 +239,18 @@ class MapWorld extends MapGame {
     return super.onLoad();
   }
 
-  void _verifyRemoveTiles() {
-    if (_tilesToRemove.isNotEmpty) {
-      for (var tile in _tilesToRemove) {
-        children.remove(tile);
-        tiles.removeWhere((element) => element.id == tile.id);
-        quadTree?.removeById(tile.id);
-        if (tile is ObjectCollision) {
-          _tilesCollisions.removeWhere((element) {
-            return (element as Tile).id == tile.id;
-          });
-          _tilesVisibleCollisions.removeWhere((element) {
-            return (element as Tile).id == tile.id;
-          });
-        }
+  void _verifyRemoveTileOfWord(Tile tile) {
+    if (tile.shouldRemove) {
+      children.remove(tile);
+      tiles.removeWhere((element) => element.id == tile.id);
+      quadTree?.removeById(tile.id);
+      if (tile is ObjectCollision) {
+        _tilesCollisions.removeWhere((element) {
+          return (element as Tile).id == tile.id;
+        });
+        _tilesVisibleCollisions.removeWhere((element) {
+          return (element as Tile).id == tile.id;
+        });
       }
     }
   }
