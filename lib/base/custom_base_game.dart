@@ -183,13 +183,13 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
       final addNow = _addLater.toList(growable: false);
       components.addAll(addNow);
       _addLater.clear();
-      for (final comp in addNow) {
+      for (var comp in addNow) {
         comp.onMount();
       }
     }
 
     _highestPriority = 0;
-    for (final comp in components) {
+    for (var comp in components) {
       comp.update(t);
       if (comp.priority > _highestPriority) {
         _highestPriority = comp.priority;
@@ -209,7 +209,7 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   @mustCallSuper
   void onResize(Vector2 size) {
     super.onResize(size);
-    for (final comp in components) {
+    for (var comp in components) {
       comp.onGameResize(size);
     }
   }
