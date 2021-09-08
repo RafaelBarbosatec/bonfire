@@ -199,4 +199,16 @@ abstract class GameComponent extends Component
     isVisible = this._isVisibleInCamera();
     super.update(dt);
   }
+
+  /// Return screen position of this component.
+  Vector2 getScreenPosition() {
+    if (hasGameRef) {
+      final offset = gameRef.camera.worldPositionToScreen(
+        vectorPosition.toOffset(),
+      );
+      return Vector2(offset.dx, offset.dy);
+    } else {
+      return Vector2.zero();
+    }
+  }
 }

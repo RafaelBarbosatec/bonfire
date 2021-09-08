@@ -1,3 +1,6 @@
+# next
+- adds `getScreenPosition` method in `GameComponent`.
+
 # 1.5.11
 - Improvements performance.
 
