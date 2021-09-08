@@ -24,8 +24,7 @@ class MapWorld extends MapGame {
   List<TileModel> _tilesToAdd = [];
   List<Tile> _tilesToRemove = [];
   Set<String> _visibleSet = Set();
-  bool _creatingTiles = false;
-  bool _needRemoveTilesNotVisible = false;
+  bool _buildingTiles = false;
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -53,16 +52,9 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    if (_tilesToAdd.isEmpty && _checkNeedUpdateTiles()) {
+    if (!_buildingTiles && _checkNeedUpdateTiles()) {
+      _buildingTiles = true;
       scheduleMicrotask(_searchTilesToRender);
-    }
-
-    if (_tilesToAdd.isNotEmpty && !_creatingTiles) {
-      scheduleMicrotask(_createTiles);
-    }
-
-    if (_needRemoveTilesNotVisible) {
-      scheduleMicrotask(_removeTilesNotVisible);
     }
 
     for (Tile tile in children) {
@@ -75,20 +67,6 @@ class MapWorld extends MapGame {
     _verifyRemoveTileOfWord();
   }
 
-  void _createTiles() {
-    children.addAll(_buildTiles(_tilesToAdd));
-    _tilesToAdd.clear();
-    _creatingTiles = false;
-    _needRemoveTilesNotVisible = true;
-  }
-
-  void _removeTilesNotVisible() {
-    children.removeWhere((element) {
-      return !_visibleSet.contains(element.id);
-    });
-    _needRemoveTilesNotVisible = false;
-  }
-
   void _searchTilesToRender({bool buildAllTiles = false}) {
     final tileSize = tiles.first.width;
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
@@ -97,15 +75,21 @@ class MapWorld extends MapGame {
         ) ??
         [];
 
+    _tilesToAdd = visibleTileModel.where((element) {
+      return !_visibleSet.contains(element.id);
+    }).toList();
+
+    _visibleSet = visibleTileModel.map((e) => e.id).toSet();
+
+    _findVisibleCollisions();
+
     if (buildAllTiles) {
       children = _buildTiles(visibleTileModel);
     } else {
-      _tilesToAdd = visibleTileModel.where((element) {
-        return !_visibleSet.contains(element.id);
-      }).toList();
+      children.removeWhere((element) => !_visibleSet.contains(element.id));
+      children.addAll(_buildTiles(_tilesToAdd));
     }
-    _findVisibleCollisions();
-    _visibleSet = visibleTileModel.map((e) => e.id).toSet();
+    _buildingTiles = false;
   }
 
   @override
@@ -146,7 +130,7 @@ class MapWorld extends MapGame {
     mapStartPosition = getStartPosition();
 
     if (tileSizeToUpdate == 0) {
-      tileSizeToUpdate = (tileSize * 5).ceilToDouble();
+      tileSizeToUpdate = (tileSize * 4).ceilToDouble();
     }
     gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.2);
 
