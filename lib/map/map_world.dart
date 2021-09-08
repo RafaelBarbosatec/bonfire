@@ -67,7 +67,7 @@ class MapWorld extends MapGame {
     _verifyRemoveTileOfWord();
   }
 
-  void _searchTilesToRender({bool buildAllTiles = false}) {
+  void _searchTilesToRender() {
     final tileSize = tiles.first.width;
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
     final visibleTileModel = quadTree?.query(
@@ -81,14 +81,11 @@ class MapWorld extends MapGame {
 
     _visibleSet = visibleTileModel.map((e) => e.id).toSet();
 
+    children.removeWhere((element) => !_visibleSet.contains(element.id));
+    children.addAll(_buildTiles(_tilesToAdd));
+
     _findVisibleCollisions();
 
-    if (buildAllTiles) {
-      children = _buildTiles(visibleTileModel);
-    } else {
-      children.removeWhere((element) => !_visibleSet.contains(element.id));
-      children.addAll(_buildTiles(_tilesToAdd));
-    }
     _buildingTiles = false;
   }
 
@@ -232,7 +229,7 @@ class MapWorld extends MapGame {
   Future<void>? onLoad() async {
     await Future.forEach<TileModel>(tiles, _loadTile);
     _verifyMaxTopAndLeft(gameRef.size);
-    _searchTilesToRender(buildAllTiles: true);
+    _searchTilesToRender();
     return super.onLoad();
   }
 
