@@ -25,6 +25,7 @@ class MapWorld extends MapGame {
   List<Tile> _tilesToRemove = [];
   Set<String> _visibleSet = Set();
   bool _buildingTiles = false;
+  double tileSize = 0.0;
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -68,7 +69,6 @@ class MapWorld extends MapGame {
   }
 
   void _searchTilesToRender() {
-    final tileSize = tiles.first.width;
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
     final visibleTileModel = quadTree?.query(
           rectCamera.getRectangleByTileSize(tileSize),
@@ -121,7 +121,7 @@ class MapWorld extends MapGame {
       lastMinorZoom = 1.0;
     }
 
-    final tileSize = tiles.first.width;
+    tileSize = tiles.first.width;
 
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
