@@ -14,18 +14,18 @@ import 'package:flutter/material.dart';
 import 'map_assets_manager.dart';
 
 class MapWorld extends MapGame {
+  static const COUNT_LOT = 2;
   int countBuildTileLot = 100;
   Vector2 lastCamera = Vector2.zero();
   double lastMinorZoom = 1.0;
   Vector2? lastSizeScreen;
   List<ObjectCollision> _tilesCollisions = List.empty();
   List<ObjectCollision> _tilesVisibleCollisions = List.empty();
+  List<TileModel> _tilesToAdd = [];
   List<Tile> _tilesToRemove = [];
-  List<Tile> _tilesToUpdate = [];
-  List<TileModel> _visibleTileModel = [];
-  int _indexBuildTile = -1;
-  bool buildingTiles = false;
-  int _sizeVisibleTileModel = 0;
+  Set<String> _visibleSet = Set();
+  bool _buildingTiles = false;
+  double tileSize = 0.0;
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -45,7 +45,7 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    for (var tile in children) {
+    for (Tile tile in children) {
       tile.render(canvas);
     }
     _drawPathLine(canvas);
@@ -53,63 +53,40 @@ class MapWorld extends MapGame {
 
   @override
   void update(double t) {
-    if (_indexBuildTile == -1 && _checkNeedUpdateTiles()) {
+    if (!_buildingTiles && _checkNeedUpdateTiles()) {
+      _buildingTiles = true;
       scheduleMicrotask(_searchTilesToRender);
     }
 
-    if (_indexBuildTile != -1 && !buildingTiles) {
-      buildingTiles = true;
-      scheduleMicrotask(_buildTilesLot);
-    }
-
-    for (var tile in children) {
+    for (Tile tile in children) {
       tile.update(t);
       if (tile.shouldRemove) {
         _tilesToRemove.add(tile);
       }
     }
 
-    _verifyRemoveTiles();
+    _verifyRemoveTileOfWord();
   }
 
-  void _buildTilesLot() {
-    int countLot = (_sizeVisibleTileModel / countBuildTileLot).ceil();
-    int start = countBuildTileLot * _indexBuildTile;
-    int end = start + countBuildTileLot;
-    if (end > _sizeVisibleTileModel) {
-      end = _sizeVisibleTileModel;
-    }
-    var visibleTiles = _visibleTileModel.sublist(start, end);
-    _tilesToUpdate.addAll(_buildTiles(visibleTiles));
-    _indexBuildTile++;
-
-    if (_indexBuildTile >= countLot) {
-      children = _tilesToUpdate.toList();
-      _findVisibleCollisions();
-      _tilesToUpdate.clear();
-      _visibleTileModel.clear();
-      _indexBuildTile = -1;
-    }
-
-    buildingTiles = false;
-  }
-
-  void _searchTilesToRender({bool buildAllTiles = false}) {
-    final tileSize = tiles.first.width;
+  void _searchTilesToRender() {
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
-    _visibleTileModel = quadTree?.query(
+    final visibleTileModel = quadTree?.query(
           rectCamera.getRectangleByTileSize(tileSize),
         ) ??
         [];
-    _sizeVisibleTileModel = _visibleTileModel.length;
-    if (buildAllTiles) {
-      children = _buildTiles(_visibleTileModel);
-      _findVisibleCollisions();
-      _visibleTileModel.clear();
-    } else {
-      countBuildTileLot = (_sizeVisibleTileModel / 2).ceil();
-      _indexBuildTile = 0;
-    }
+
+    _tilesToAdd = visibleTileModel.where((element) {
+      return !_visibleSet.contains(element.id);
+    }).toList();
+
+    _visibleSet = visibleTileModel.map((e) => e.id).toSet();
+
+    children.removeWhere((element) => !_visibleSet.contains(element.id));
+    children.addAll(_buildTiles(_tilesToAdd));
+
+    _findVisibleCollisions();
+
+    _buildingTiles = false;
   }
 
   @override
@@ -144,24 +121,28 @@ class MapWorld extends MapGame {
       lastMinorZoom = 1.0;
     }
 
-    final tileSize = tiles.first.width;
+    tileSize = tiles.first.width;
 
     mapSize = getMapSize();
     mapStartPosition = getStartPosition();
 
     if (tileSizeToUpdate == 0) {
-      tileSizeToUpdate = (max(size.x, size.y) / 3).ceilToDouble();
+      tileSizeToUpdate = (tileSize * 4).ceilToDouble();
     }
-    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate + (tileSize * 2));
+    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.2);
 
     _getTileCollisions();
 
     if (tiles.isNotEmpty) {
+      int minSize = min(size.x, size.y).ceil();
+      int maxItems = ((minSize / 2) / tileSize).ceil();
+      maxItems *= maxItems;
       quadTree = QuadTree(
         0,
         0,
         ((mapSize?.width ?? 0).ceil() / tileSize).ceil(),
         ((mapSize?.height ?? 0).ceil() / tileSize).ceil(),
+        maxItems: maxItems,
       );
 
       for (var tile in tiles) {
@@ -248,23 +229,25 @@ class MapWorld extends MapGame {
   Future<void>? onLoad() async {
     await Future.forEach<TileModel>(tiles, _loadTile);
     _verifyMaxTopAndLeft(gameRef.size);
-    _searchTilesToRender(buildAllTiles: true);
+    _searchTilesToRender();
     return super.onLoad();
   }
 
-  void _verifyRemoveTiles() {
+  void _verifyRemoveTileOfWord() {
     if (_tilesToRemove.isNotEmpty) {
-      for (var tile in _tilesToRemove) {
-        children.remove(tile);
-        tiles.removeWhere((element) => element.id == tile.id);
-        quadTree?.removeById(tile.id);
-        if (tile is ObjectCollision) {
-          _tilesCollisions.removeWhere((element) {
-            return (element as Tile).id == tile.id;
-          });
-          _tilesVisibleCollisions.removeWhere((element) {
-            return (element as Tile).id == tile.id;
-          });
+      for (Tile tile in _tilesToRemove) {
+        if (tile.shouldRemove) {
+          children.remove(tile);
+          tiles.removeWhere((element) => element.id == tile.id);
+          quadTree?.removeById(tile.id);
+          if (tile is ObjectCollision) {
+            _tilesCollisions.removeWhere((element) {
+              return (element as Tile).id == tile.id;
+            });
+            _tilesVisibleCollisions.removeWhere((element) {
+              return (element as Tile).id == tile.id;
+            });
+          }
         }
       }
     }
@@ -298,12 +281,7 @@ class MapWorld extends MapGame {
   }
 
   void _findVisibleCollisions() {
-    _tilesVisibleCollisions = children
-        .where((element) {
-          return element is ObjectCollision;
-        })
-        .toList()
-        .cast();
+    _tilesVisibleCollisions = children.whereType<ObjectCollision>().toList();
   }
 
   Future<void> _loadTile(TileModel element) async {

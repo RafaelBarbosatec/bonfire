@@ -125,15 +125,13 @@ extension SpriteExt on Sprite {
     Paint? overridePaint,
     double opacity = 1,
   }) {
-    if (opacity != paint.color.opacity) {
-      paint = Paint()..color = Color(0xFFFFFFFF).withOpacity(opacity);
+    if (paint.color.opacity != opacity) {
+      paint.color = paint.color.withOpacity(opacity);
+    }
+    if (overridePaint != null && overridePaint.color.opacity != opacity) {
+      overridePaint.color = overridePaint.color.withOpacity(opacity);
     }
 
-    if (overridePaint != null) {
-      if (opacity != overridePaint.color.opacity) {
-        overridePaint.color = overridePaint.color.withOpacity(opacity);
-      }
-    }
     this.render(
       canvas,
       position: vector.position,

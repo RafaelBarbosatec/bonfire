@@ -12,16 +12,16 @@ class CollisionConfig {
   bool collisionOnlyVisibleScreen = true;
   bool enable;
 
-  Rect _rect = Rect.zero;
-
   Vector2Rect? _lastPosition;
+
+  Vector2Rect vector2rect = Vector2Rect.zero();
 
   CollisionConfig({
     required this.collisions,
     this.enable = true,
   });
 
-  Rect get rect => _rect;
+  Rect get rect => vector2rect.rect;
 
   bool verifyCollision(CollisionConfig? other, {Vector2? position}) {
     if (other == null) return false;
@@ -40,12 +40,17 @@ class CollisionConfig {
   void updatePosition(Vector2Rect position) {
     if (collisions.isNotEmpty && position != _lastPosition) {
       collisions.first.updatePosition(position);
-      _rect = collisions.first.rect;
+      Rect? _rect;
       for (final element in collisions) {
         element.updatePosition(position);
-        _rect = _rect.expandToInclude(element.rect);
+        if (_rect == null) {
+          _rect = element.rect;
+        } else {
+          _rect = _rect.expandToInclude(element.rect);
+        }
       }
       _lastPosition = position;
+      vector2rect = Vector2Rect.fromRect(_rect!);
     }
   }
 }

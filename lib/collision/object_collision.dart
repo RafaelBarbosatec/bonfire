@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/collision_config.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +10,8 @@ mixin ObjectCollision on GameComponent {
   CollisionConfig? _collisionConfig;
 
   CollisionConfig? get collisionConfig => _collisionConfig;
+
+  bool _containCollision = false;
 
   void onCollision(GameComponent component, bool active) {}
 
@@ -41,13 +42,10 @@ mixin ObjectCollision on GameComponent {
 
   Vector2Rect getRectCollision() {
     if (!containCollision()) return Vector2Rect.zero();
-    return _collisionConfig!.rect.toVector2Rect();
+    return _collisionConfig!.vector2rect;
   }
 
-  bool containCollision() =>
-      _collisionConfig?.collisions != null &&
-      _collisionConfig?.collisions.isNotEmpty == true &&
-      _collisionConfig?.enable == true;
+  bool containCollision() => _containCollision;
 
   Vector2Rect get rectCollision => getRectCollision();
 
@@ -92,6 +90,9 @@ mixin ObjectCollision on GameComponent {
   @override
   void update(double dt) {
     updatePosition(this.position);
+    _containCollision = _collisionConfig?.collisions != null &&
+        _collisionConfig?.collisions.isNotEmpty == true &&
+        _collisionConfig?.enable == true;
     super.update(dt);
   }
 
