@@ -1,3 +1,4 @@
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/gestures/drag_gesture.dart';
 import 'package:bonfire/gestures/mouse_gesture.dart';
 import 'package:bonfire/gestures/tap_gesture.dart';
@@ -28,3 +29,9 @@ abstract class PointerDetectorHandler {
     return false;
   }
 }
+
+typedef TapInGame = void Function(
+  BonfireGame game,
+  Offset screenPosition,
+  Offset worldPosition,
+);

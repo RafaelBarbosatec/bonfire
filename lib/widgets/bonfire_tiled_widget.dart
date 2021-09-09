@@ -10,6 +10,7 @@ import 'package:bonfire/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/tiled/tiled_world_map.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
+import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -50,6 +51,8 @@ class BonfireTiledWidget extends StatefulWidget {
   /// Represents a map (or world) where the game occurs.
   final TiledWorldMap map;
 
+  final TapInGame? onTapDown;
+
   final ValueChanged<BonfireGame>? onReady;
   final Map<String, OverlayWidgetBuilder<BonfireGame>>? overlayBuilderMap;
   final List<String>? initialActiveOverlays;
@@ -82,6 +85,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.components,
     this.overlayBuilderMap,
     this.initialActiveOverlays,
+    this.onTapDown,
     this.onReady,
   }) : super(key: key);
   @override
@@ -152,6 +156,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
         lightingColorGame: widget.lightingColorGame,
         cameraConfig: widget.cameraConfig,
         colorFilter: widget.colorFilter,
+        onTapDown: widget.onTapDown,
         onReady: (game) {
           _showProgress(false);
           widget.onReady?.call(game);
