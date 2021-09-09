@@ -1,4 +1,4 @@
-# 1.5.12
+# 1.6.0
 - adds `getScreenPosition` method in `GameComponent`.
 - adds `enableDiagonal` param in `simpleAttackRange`.
 - adds `visibleComponentsByType` and `componentsByType` in `BonfireGame`.
