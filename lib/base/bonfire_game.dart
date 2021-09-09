@@ -230,6 +230,14 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     return _visibleCollisions;
   }
 
+  Iterable<T> visibleComponentsByType<T>() {
+    return _visibleComponents.whereType<T>();
+  }
+
+  Iterable<T> componentsByType<T>() {
+    return components.whereType<T>();
+  }
+
   ValueGeneratorComponent getValueGenerator(
     Duration duration, {
     double begin = 0.0,
