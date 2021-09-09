@@ -1,3 +1,9 @@
+# 1.6.0
+- adds `getScreenPosition` method in `GameComponent`.
+- adds `enableDiagonal` param in `simpleAttackRange`.
+- adds `visibleComponentsByType` and `componentsByType` in `BonfireGame`.
+- adds `onTapDown` and `onTapUp` in `BonfireTiledWidget` and `BonfireWidget`.
+
 # 1.5.11
 - Improvements performance.
 

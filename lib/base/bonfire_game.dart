@@ -20,6 +20,7 @@ import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
+import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/value_generator_component.dart';
 import 'package:flame/components.dart' hide JoystickController;
 import 'package:flame/keyboard.dart';
@@ -71,6 +72,9 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   /// Used to show in the interface the FPS.
   final bool showFPS;
 
+  final TapInGame? onTapDown;
+  final TapInGame? onTapUp;
+
   bool _firstUpdate = true;
 
   Iterable<Lighting> _visibleLights = List.empty();
@@ -111,6 +115,8 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     this.lightingColorGame,
     this.showFPS = false,
     this.onReady,
+    this.onTapDown,
+    this.onTapUp,
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
   }) {
@@ -230,6 +236,14 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     return _visibleCollisions;
   }
 
+  Iterable<T> visibleComponentsByType<T>() {
+    return _visibleComponents.whereType<T>();
+  }
+
+  Iterable<T> componentsByType<T>() {
+    return components.whereType<T>();
+  }
+
   ValueGeneratorComponent getValueGenerator(
     Duration duration, {
     double begin = 0.0,
@@ -305,5 +319,25 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   bool isVisibleInCamera(GameComponent c) {
     if (c.shouldRemove) return false;
     return camera.isComponentOnCamera(c);
+  }
+
+  @override
+  void onPointerDown(PointerDownEvent event) {
+    onTapDown?.call(
+      this,
+      event.localPosition,
+      camera.screenPositionToWorld(event.localPosition),
+    );
+    super.onPointerDown(event);
+  }
+
+  @override
+  void onPointerUp(PointerUpEvent event) {
+    onTapUp?.call(
+      this,
+      event.localPosition,
+      camera.screenPositionToWorld(event.localPosition),
+    );
+    super.onPointerUp(event);
   }
 }

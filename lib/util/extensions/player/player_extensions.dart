@@ -65,6 +65,7 @@ extension PlayerExtensions on Player {
     double damage = 1,
     Direction? direction,
     bool withCollision = true,
+    bool enableDiagonal = true,
     VoidCallback? destroy,
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
@@ -85,6 +86,7 @@ extension PlayerExtensions on Player {
       withCollision: withCollision,
       destroy: destroy,
       collision: collision,
+      enableDiagonal: enableDiagonal,
       lightingConfig: lightingConfig,
     );
   }

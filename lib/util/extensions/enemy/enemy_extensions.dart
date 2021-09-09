@@ -119,6 +119,7 @@ extension EnemyExtensions on Enemy {
     Direction? direction,
     int interval = 1000,
     bool withCollision = true,
+    bool enableDiagonal = true,
     CollisionConfig? collision,
     VoidCallback? destroy,
     VoidCallback? execute,
@@ -146,6 +147,7 @@ extension EnemyExtensions on Enemy {
       collision: collision,
       destroy: destroy,
       lightingConfig: lightingConfig,
+      enableDiagonal: enableDiagonal,
     );
 
     if (execute != null) execute();

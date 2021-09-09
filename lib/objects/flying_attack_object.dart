@@ -25,6 +25,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final bool withDecorationCollision;
   final VoidCallback? onDestroyedObject;
   final _loader = AssetsLoader();
+  final bool enableDiagonal;
 
   final IntervalTick _timerVerifyCollision = IntervalTick(50);
 
@@ -41,6 +42,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     this.attackFrom = AttackFromEnum.ENEMY,
     this.withDecorationCollision = true,
     this.onDestroyedObject,
+    this.enableDiagonal = true,
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) {
@@ -85,16 +87,34 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
         position = position.translate(0, (speed * dt));
         break;
       case Direction.upLeft:
-        position = position.translate((speed * dt) * -1, (speed * dt) * -1);
+        if (enableDiagonal) {
+          position = position.translate((speed * dt) * -1, (speed * dt) * -1);
+        } else {
+          position = position.translate((speed * dt) * -1, 0);
+        }
         break;
       case Direction.upRight:
-        position = position.translate((speed * dt), (speed * dt) * -1);
+        if (enableDiagonal) {
+          position = position.translate((speed * dt), (speed * dt) * -1);
+        } else {
+          position = position.translate((speed * dt), 0);
+        }
+
         break;
       case Direction.downLeft:
-        position = position.translate((speed * dt) * -1, (speed * dt));
+        if (enableDiagonal) {
+          position = position.translate((speed * dt) * -1, (speed * dt));
+        } else {
+          position = position.translate((speed * dt) * -1, 0);
+        }
+
         break;
       case Direction.downRight:
-        position = position.translate((speed * dt), (speed * dt));
+        if (enableDiagonal) {
+          position = position.translate((speed * dt), (speed * dt));
+        } else {
+          position = position.translate((speed * dt), 0);
+        }
         break;
     }
 

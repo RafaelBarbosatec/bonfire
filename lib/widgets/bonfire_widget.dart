@@ -11,6 +11,7 @@ import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
+import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -45,6 +46,9 @@ class BonfireWidget extends StatefulWidget {
   /// Used to configure lighting in the game
   final Color? lightingColorGame;
 
+  final TapInGame? onTapDown;
+  final TapInGame? onTapUp;
+
   final ValueChanged<BonfireGame>? onReady;
   final Map<String, OverlayWidgetBuilder<BonfireGame>>? overlayBuilderMap;
   final List<String>? initialActiveOverlays;
@@ -77,6 +81,8 @@ class BonfireWidget extends StatefulWidget {
     this.overlayBuilderMap,
     this.initialActiveOverlays,
     this.cameraConfig,
+    this.onTapDown,
+    this.onTapUp,
     this.onReady,
   }) : super(key: key);
 
@@ -119,6 +125,8 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       cameraConfig: widget.cameraConfig,
       colorFilter: widget.colorFilter,
       onReady: widget.onReady,
+      onTapDown: widget.onTapDown,
+      onTapUp: widget.onTapUp,
     );
     super.initState();
   }
