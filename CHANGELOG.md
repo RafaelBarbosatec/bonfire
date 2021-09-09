@@ -1,5 +1,6 @@
-# next
+# NEXT
 - adds `getScreenPosition` method in `GameComponent`.
+- add `enableDiagonal` param in `simpleAttackRange`.
 
 # 1.5.11
 - Improvements performance.
