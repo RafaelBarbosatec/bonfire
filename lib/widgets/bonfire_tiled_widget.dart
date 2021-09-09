@@ -52,6 +52,7 @@ class BonfireTiledWidget extends StatefulWidget {
   final TiledWorldMap map;
 
   final TapInGame? onTapDown;
+  final TapInGame? onTapUp;
 
   final ValueChanged<BonfireGame>? onReady;
   final Map<String, OverlayWidgetBuilder<BonfireGame>>? overlayBuilderMap;
@@ -86,6 +87,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.overlayBuilderMap,
     this.initialActiveOverlays,
     this.onTapDown,
+    this.onTapUp,
     this.onReady,
   }) : super(key: key);
   @override
@@ -157,6 +159,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
         cameraConfig: widget.cameraConfig,
         colorFilter: widget.colorFilter,
         onTapDown: widget.onTapDown,
+        onTapUp: widget.onTapUp,
         onReady: (game) {
           _showProgress(false);
           widget.onReady?.call(game);

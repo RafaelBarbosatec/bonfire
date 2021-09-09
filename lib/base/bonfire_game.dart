@@ -73,6 +73,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   final bool showFPS;
 
   final TapInGame? onTapDown;
+  final TapInGame? onTapUp;
 
   bool _firstUpdate = true;
 
@@ -115,6 +116,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     this.showFPS = false,
     this.onReady,
     this.onTapDown,
+    this.onTapUp,
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
   }) {
@@ -327,5 +329,15 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
       camera.screenPositionToWorld(event.localPosition),
     );
     super.onPointerDown(event);
+  }
+
+  @override
+  void onPointerUp(PointerUpEvent event) {
+    onTapUp?.call(
+      this,
+      event.localPosition,
+      camera.screenPositionToWorld(event.localPosition),
+    );
+    super.onPointerUp(event);
   }
 }
