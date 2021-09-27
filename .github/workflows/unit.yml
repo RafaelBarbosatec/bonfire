@@ -12,7 +12,7 @@ jobs:
         os: [ubuntu-18.04]
     steps:
     # Set up Flutter and add it to the path.
-    - name: Clone Flutter repository with master channel
+    - name: Clone Flutter repository with stable channel
       uses: actions/checkout@v2
       with:
         repository: 'flutter/flutter'
