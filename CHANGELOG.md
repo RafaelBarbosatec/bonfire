@@ -1,3 +1,6 @@
+# 1.6.1
+- fixed the flame version to `1.0.0-releasecandidate.13` while we fixed the flame update crash change.
+
 # 1.6.0
 - adds `getScreenPosition` method in `GameComponent`.
 - adds `enableDiagonal` param in `simpleAttackRange`.

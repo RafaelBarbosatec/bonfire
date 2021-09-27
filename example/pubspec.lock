@@ -42,7 +42,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.5.10"
+    version: "1.6.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -180,7 +180,7 @@ packages:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0"
+    version: "1.7.0"
   mime:
     dependency: transitive
     description:
