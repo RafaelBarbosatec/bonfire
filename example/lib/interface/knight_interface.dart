@@ -43,6 +43,7 @@ class KnightInterface extends GameInterface {
             context,
             gameRef.player!,
             Container(
+              height: 50,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
@@ -57,7 +58,7 @@ class KnightInterface extends GameInterface {
             ),
             align: Offset(
               0,
-              -40,
+              -55,
             ),
           );
         }
