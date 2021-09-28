@@ -1,3 +1,6 @@
+# next
+- adds `FollowerWidget`. With this you can add a widget what follows a component in the game.
+
 # 1.6.1
 - fixed the flame version to `1.0.0-releasecandidate.13` while we fixed the flame update crash change.
 
