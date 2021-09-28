@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 
 /// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
 mixin MoveToPositionAlongThePath on Movement {
+  static const REDUCTION_SPEED_DIAGONAL = 0.7;
+
   List<Offset> _currentPath = [];
   int _currentIndex = 0;
   bool _showBarriers = false;
@@ -94,10 +96,8 @@ mixin MoveToPositionAlongThePath on Movement {
       }
     } else {
       if (diffX.abs() > 0.5 && diffY.abs() > 0.5) {
-        final displacementXDiagonal =
-            displacementX * MovementByJoystick.REDUCTION_SPEED_DIAGONAL;
-        final displacementYDiagonal =
-            displacementY * MovementByJoystick.REDUCTION_SPEED_DIAGONAL;
+        final displacementXDiagonal = displacementX * REDUCTION_SPEED_DIAGONAL;
+        final displacementYDiagonal = displacementY * REDUCTION_SPEED_DIAGONAL;
         if (diffX > 0 && diffY > 0) {
           this.moveDownRight(displacementXDiagonal, displacementYDiagonal);
         } else if (diffX < 0 && diffY > 0) {
