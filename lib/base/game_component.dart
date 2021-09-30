@@ -9,6 +9,7 @@ import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flutter/cupertino.dart';
 
 /// Base of the all components in the Bonfire
 abstract class GameComponent extends Component
@@ -54,6 +55,9 @@ abstract class GameComponent extends Component
 
   /// Param checks if this component is visible on the screen
   bool isVisible = false;
+
+  /// Get BuildContext
+  BuildContext get context => gameRef.context;
 
   Paint get debugPaint => Paint()
     ..color = debugColor
