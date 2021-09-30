@@ -4,7 +4,8 @@ import 'package:example/player/knight.dart';
 import 'package:flutter/material.dart';
 
 class KnightInterface extends GameInterface {
-  OverlayEntry? overlay;
+  static const followerWidgetTestId = 'BUTTON';
+
   @override
   Future<void> onLoad() {
     add(BarLifeComponent());
@@ -29,20 +30,32 @@ class KnightInterface extends GameInterface {
       width: 40,
       id: 5,
       position: Vector2(200, 20),
+      selectable: true,
       onTapComponent: (selected) {
-        // if (gameRef.player != null) {
-        //   (gameRef.player as Knight).changeControllerToVisibleEnemy();
-        // }
-        if (overlay != null) {
-          overlay?.remove();
-          overlay = null;
+        if (gameRef.player != null) {
+          (gameRef.player as Knight).changeControllerToVisibleEnemy();
+        }
+      },
+    ));
+    add(InterfaceComponent(
+      sprite: Sprite.load('blue_button1.png'),
+      spriteSelected: Sprite.load('blue_button2.png'),
+      height: 40,
+      width: 40,
+      id: 5,
+      position: Vector2(250, 20),
+      selectable: true,
+      onTapComponent: (selected) {
+        if (!selected && FollowerWidget.isVisible(followerWidgetTestId)) {
+          FollowerWidget.remove(followerWidgetTestId);
           return;
         }
-        if (gameRef.player != null) {
-          overlay = FollowerWidget.show(
-            context,
-            gameRef.player!,
-            Container(
+        gameRef.player?.let((player) {
+          FollowerWidget.show(
+            identify: followerWidgetTestId,
+            context: context,
+            target: player,
+            child: Container(
               height: 50,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -56,12 +69,9 @@ class KnightInterface extends GameInterface {
                 child: Text('clica aqui'),
               ),
             ),
-            align: Offset(
-              0,
-              -55,
-            ),
+            align: Offset(0, -55),
           );
-        }
+        });
       },
     ));
     add(TextInterfaceComponent(
@@ -70,7 +80,7 @@ class KnightInterface extends GameInterface {
         color: Colors.white,
       ),
       id: 5,
-      position: Vector2(250, 20),
+      position: Vector2(300, 20),
       onTapComponent: (selected) {
         if (gameRef.player != null) {
           (gameRef.player as Knight).showEmote();

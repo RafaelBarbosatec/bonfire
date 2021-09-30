@@ -14,6 +14,10 @@ import 'package:flutter/material.dart';
 ///
 /// Rafaelbarbosatec
 /// on 28/09/21
+
+final Map<String, OverlayEntry> _mapOverlayEntry = {};
+
+/// With this widget you can add a widget what follows a component in the game.
 class FollowerWidget extends StatefulWidget {
   final GameComponent target;
   final Widget child;
@@ -24,10 +28,13 @@ class FollowerWidget extends StatefulWidget {
     required this.child,
     this.align = Offset.zero,
   }) : super(key: key);
-  static OverlayEntry show(
-    BuildContext context,
-    GameComponent target,
-    Widget child, {
+
+  /// Use this method to show a widget what follow the component
+  static void show({
+    required String identify,
+    required BuildContext context,
+    required GameComponent target,
+    required Widget child,
     Offset align = Offset.zero,
   }) {
     final overlay = OverlayEntry(
@@ -40,9 +47,31 @@ class FollowerWidget extends StatefulWidget {
       },
     );
 
-    Overlay.of(context)?.insert(overlay);
+    Overlay.of(context)?.let((over) {
+      over.insert(overlay);
+      _mapOverlayEntry[identify] = overlay;
+    });
+  }
 
-    return overlay;
+  /// Use this method to remove a widget what follow the component
+  static remove(String identify) {
+    if (_mapOverlayEntry.containsKey(identify)) {
+      _mapOverlayEntry[identify]?.remove();
+      _mapOverlayEntry.remove(identify);
+    }
+  }
+
+  /// Use this method to remove all widgets what follow the component.
+  static removeAll() {
+    _mapOverlayEntry.forEach((key, value) {
+      value.remove();
+    });
+    _mapOverlayEntry.clear();
+  }
+
+  /// Use this method to check if is visible widget with your `identify`.
+  static bool isVisible(String identify) {
+    return _mapOverlayEntry.containsKey(identify);
   }
 
   @override
