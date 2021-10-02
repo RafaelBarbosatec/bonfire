@@ -1,4 +1,4 @@
-# [next]
+# 1.8.0
 - Bugfix/quadtree id for removal [#178](https://github.com/RafaelBarbosatec/bonfire/pull/178)
 - Adds `keyboardDirectionalType` param in `Joystick` to enable WASD.
 
