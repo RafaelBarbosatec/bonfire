@@ -251,6 +251,7 @@ class MapWorld extends MapGame {
         }
       }
     }
+    _tilesToRemove.clear();
   }
 
   @override
