@@ -65,7 +65,7 @@ class QuadTree<T> extends Rectangle<num> {
       }
       _splitItemsBetweenChildren();
     }
-    return _insertItemIntoChildren(item, atPoint);
+    return _insertItemIntoChildren(item, atPoint, id: id);
   }
 
   void removeById(dynamic id) {
@@ -79,10 +79,10 @@ class QuadTree<T> extends Rectangle<num> {
 
   void remove(T item) {
     if (_children.isEmpty) {
-      _items.removeWhere((i) => i == item);
+      _items.removeWhere((i) => i.item == item);
     }
     return _children.forEach((element) {
-      element.removeById(item);
+      element.remove(item);
     });
   }
 
@@ -103,17 +103,17 @@ class QuadTree<T> extends Rectangle<num> {
     return '[$_depth](${_items.map((item) => item.item).toList()}:$_children)';
   }
 
-  bool _insertItemIntoChildren(T item, Point<num> atPoint) {
+  bool _insertItemIntoChildren(T item, Point<num> atPoint, {dynamic id}) {
     if (atPoint.x > _center.x) {
       if (atPoint.y > _center.y) {
-        return _children[_lowerRightIndex].insert(item, atPoint);
+        return _children[_lowerRightIndex].insert(item, atPoint, id: id);
       }
-      return _children[_upperRightIndex].insert(item, atPoint);
+      return _children[_upperRightIndex].insert(item, atPoint, id: id);
     } else {
       if (atPoint.y > _center.y) {
-        return _children[_lowerLeftIndex].insert(item, atPoint);
+        return _children[_lowerLeftIndex].insert(item, atPoint, id: id);
       } else {
-        return _children[_upperLeftIndex].insert(item, atPoint);
+        return _children[_upperLeftIndex].insert(item, atPoint, id: id);
       }
     }
   }
@@ -126,7 +126,7 @@ class QuadTree<T> extends Rectangle<num> {
       _newLowerRight // _lowerRightIndex = 3
     ]);
     for (final item in _items) {
-      _insertItemIntoChildren(item.item, item.point);
+      _insertItemIntoChildren(item.item, item.point, id: item.id);
     }
     _items.clear();
   }
