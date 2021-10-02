@@ -1,3 +1,6 @@
+# [next]
+- Bugfix/quadtree id for removal [#178](https://github.com/RafaelBarbosatec/bonfire/pull/178)
+
 # 1.7.0
 - adds `FollowerWidget`. With this you can add a widget what follows a component in the game.
 - update `a_star_algorithm`. now enables diagonal movements.
