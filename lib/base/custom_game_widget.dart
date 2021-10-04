@@ -41,10 +41,14 @@ class CustomGameWidget<T extends Game> extends StatelessWidget {
         onPointerSignal: game is PointerDetector
             ? (game as PointerDetector).onPointerSignal
             : null,
-        child: GameWidget(
-          game: game,
-          overlayBuilderMap: overlayBuilderMap,
-          initialActiveOverlays: initialActiveOverlays,
+        child: Focus(
+          autofocus: true,
+          onKey: (FocusNode node, RawKeyEvent event) => KeyEventResult.handled,
+          child: GameWidget(
+            game: game,
+            overlayBuilderMap: overlayBuilderMap,
+            initialActiveOverlays: initialActiveOverlays,
+          ),
         ),
       ),
     );
