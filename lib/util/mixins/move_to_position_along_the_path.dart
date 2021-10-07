@@ -16,6 +16,7 @@ mixin MoveToPositionAlongThePath on Movement {
   bool _tileSizeIsSizeCollision = false;
 
   List<Offset> _barriers = [];
+  List ignoreCollisions = [];
 
   Color _pathLineColor = Colors.lightBlueAccent.withOpacity(0.5);
   double _pathLineStrokeWidth = 4;
@@ -38,8 +39,15 @@ mixin MoveToPositionAlongThePath on Movement {
   }
 
   void moveToPositionAlongThePath(
-    Vector2 position,
-  ) {
+    Vector2 position, {
+    List? ignoreCollisions,
+  }) {
+    this.ignoreCollisions.clear();
+    this.ignoreCollisions.add(this);
+    if (ignoreCollisions != null) {
+      this.ignoreCollisions.addAll(ignoreCollisions);
+    }
+
     _currentIndex = 0;
     _calculatePath(position.toOffset());
   }
@@ -152,7 +160,7 @@ mixin MoveToPositionAlongThePath on Movement {
     _barriers.clear();
 
     gameRef.visibleCollisions().forEach((e) {
-      if (e != this) {
+      if (!ignoreCollisions.contains(e)) {
         _addCollisionOffsetsPositionByTile(e.rectCollision);
       }
     });

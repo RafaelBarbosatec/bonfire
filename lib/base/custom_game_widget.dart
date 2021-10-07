@@ -1,3 +1,4 @@
+import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,12 @@ class CustomGameWidget<T extends Game> extends StatelessWidget {
             : null,
         child: Focus(
           autofocus: true,
-          onKey: (FocusNode node, RawKeyEvent event) => KeyEventResult.handled,
+          onKey: (FocusNode node, RawKeyEvent event) {
+            BonfireGame bGame = game as BonfireGame;
+            return (bGame.joystickController?.keyboardEnable ?? false)
+                ? KeyEventResult.handled
+                : KeyEventResult.ignored;
+          },
           child: GameWidget(
             game: game,
             overlayBuilderMap: overlayBuilderMap,
