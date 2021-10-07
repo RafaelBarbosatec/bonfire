@@ -151,7 +151,7 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     config.target = gameRef.player;
   }
 
-  void moveToTarget(GameComponent target) {
+  void moveToTarget(GameComponent? target) {
     config.target = target;
   }
 

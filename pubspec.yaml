@@ -1,6 +1,6 @@
 name: bonfire
 description: (RPG maker) Create RPG-style or similar games more simply with Flame.
-version: 1.8.0
+version: 1.8.1
 homepage: https://github.com/RafaelBarbosatec/bonfire
 
 environment:
@@ -13,7 +13,7 @@ dependencies:
   flame: 1.0.0-releasecandidate.13
   ordered_set: 3.2.0
   tiledjsonreader: 1.0.4
-  http: 0.13.3
+  http: 0.13.4
   a_star_algorithm: 0.1.1
 
 dev_dependencies:
