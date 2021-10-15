@@ -74,8 +74,6 @@ class BonfireGame extends BaseGame with KeyboardEvents {
   final TapInGame? onTapDown;
   final TapInGame? onTapUp;
 
-  bool _firstUpdate = true;
-
   Iterable<Lighting> _visibleLights = List.empty();
   Iterable<GameComponent> _visibleComponents = List.empty();
   List<ObjectCollision> _visibleCollisions = List.empty();
@@ -147,23 +145,37 @@ class BonfireGame extends BaseGame with KeyboardEvents {
   }
 
   @override
-  Future<void> onLoad() async {
+  Future<void>? onLoad() async {
     _colorFilterComponent = ColorFilterComponent(
       _colorFilter ?? GameColorFilter(),
     );
-    add(_colorFilterComponent);
+    await add(_colorFilterComponent);
 
-    background?.let((bg) => add(bg));
+    if (background != null) {
+      await add(background!);
+    }
 
-    add(map);
-    _initialDecorations?.forEach((decoration) => add(decoration));
-    _initialEnemies?.forEach((enemy) => add(enemy));
-    _initialComponents?.forEach((comp) => add(comp));
-    player?.let((p) => add(p));
+    await add(map);
+
+    if (_initialDecorations != null) {
+      await Future.forEach<GameComponent>(
+          _initialDecorations!, (element) => add(element));
+    }
+    if (_initialEnemies != null) {
+      await Future.forEach<GameComponent>(
+          _initialEnemies!, (element) => add(element));
+    }
+    if (_initialComponents != null) {
+      await Future.forEach<GameComponent>(
+          _initialComponents!, (element) => add(element));
+    }
+    if (player != null) {
+      await add(player!);
+    }
     lighting = LightingComponent(color: lightingColorGame ?? Color(0x00000000));
-    add(lighting!);
-    add(interface ?? GameInterface());
-    add(joystickController ?? Joystick());
+    await add(lighting!);
+    await add(interface ?? GameInterface());
+    await add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(camera));
     return super.onLoad();
   }
@@ -174,11 +186,12 @@ class BonfireGame extends BaseGame with KeyboardEvents {
     _interval?.update(t);
     _intervalUpdateOder?.update(t);
     _intervalAllCollisions?.update(t);
+  }
 
-    if (_firstUpdate) {
-      _firstUpdate = false;
-      onReady?.call(this);
-    }
+  @override
+  void onMount() {
+    onReady?.call(this);
+    super.onMount();
   }
 
   void addGameComponent(GameComponent component) {
@@ -196,7 +209,7 @@ class BonfireGame extends BaseGame with KeyboardEvents {
   }
 
   Iterable<Enemy> enemies() {
-    return components.where((element) => (element is Enemy)).cast();
+    return children.where((element) => (element is Enemy)).cast();
   }
 
   Iterable<GameDecoration> visibleDecorations() {
@@ -206,13 +219,13 @@ class BonfireGame extends BaseGame with KeyboardEvents {
   }
 
   Iterable<GameDecoration> decorations() {
-    return components.where((element) => (element is GameDecoration)).cast();
+    return children.where((element) => (element is GameDecoration)).cast();
   }
 
   Iterable<Lighting> lightVisible() => _visibleLights;
 
   Iterable<Attackable> attackables() {
-    return components.where((element) => (element is Attackable)).cast();
+    return children.where((element) => (element is Attackable)).cast();
   }
 
   Iterable<Attackable> visibleAttackables() {
@@ -240,7 +253,7 @@ class BonfireGame extends BaseGame with KeyboardEvents {
   }
 
   Iterable<T> componentsByType<T>() {
-    return components.whereType<T>();
+    return children.whereType<T>();
   }
 
   ValueGeneratorComponent getValueGenerator(
@@ -288,7 +301,7 @@ class BonfireGame extends BaseGame with KeyboardEvents {
   }
 
   void _updateTempList() {
-    _visibleComponents = components.where((element) {
+    _visibleComponents = children.where((element) {
       return (element is GameComponent) && (element).isVisible;
     }).cast()
       ..toList(growable: false);
@@ -308,7 +321,7 @@ class BonfireGame extends BaseGame with KeyboardEvents {
   }
 
   void _updateAllCollisions() {
-    _collisions = components
+    _collisions = children
         .where((element) {
           return (element is ObjectCollision) && (element).containCollision();
         })

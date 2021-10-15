@@ -44,29 +44,24 @@ class MapWorld extends MapGame {
         );
 
   @override
-  void render(Canvas canvas) {
+  void renderTree(Canvas canvas) {
     for (final tile in children) {
       tile.render(canvas);
+      if (tile.shouldRemove) {
+        _tilesToRemove.add(tile as Tile);
+      }
     }
     _drawPathLine(canvas);
   }
 
   @override
-  void update(double t) {
+  void update(double dt) {
     if (!_buildingTiles && _checkNeedUpdateTiles()) {
       _buildingTiles = true;
       scheduleMicrotask(_searchTilesToRender);
     }
-
-    for (final tile in children) {
-      tile.update(t);
-      if (tile.shouldRemove) {
-        _tilesToRemove.add(tile as Tile);
-      }
-    }
-
     _verifyRemoveTileOfWord();
-    super.update(t);
+    super.update(dt);
   }
 
   void _searchTilesToRender() {
@@ -82,8 +77,9 @@ class MapWorld extends MapGame {
 
     _visibleSet = visibleTileModel.map((e) => e.id).toSet();
 
-    children
-        .removeWhere((element) => !_visibleSet.contains((element as Tile).id));
+    children.removeWhere((element) {
+      return !_visibleSet.contains((element as Tile).id);
+    });
     children.addAll(_buildTiles(_tilesToAdd));
 
     _findVisibleCollisions();
@@ -108,7 +104,7 @@ class MapWorld extends MapGame {
 
   @override
   void onGameResize(Vector2 size) {
-    if (loaded) {
+    if (isLoaded) {
       _verifyMaxTopAndLeft(size);
     }
     super.onGameResize(size);

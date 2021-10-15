@@ -191,10 +191,11 @@ class Tile extends GameComponent {
   }
 
   @override
-  Future<void> onLoad() async {
+  Future<void>? onLoad() async {
     await _loader?.load();
     await _animation?.onLoad();
     _loader = null;
+    return super.onLoad();
   }
 
   bool get containAnimation => _animation != null;

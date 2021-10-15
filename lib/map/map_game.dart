@@ -1,19 +1,17 @@
 import 'dart:ui';
 
-import 'package:bonfire/base/bonfire_game.dart';
+import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/map/tile/tile.dart';
 import 'package:bonfire/map/tile/tile_model.dart';
-import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 
-abstract class MapGame extends Component with BonfireHasGameRef<BonfireGame> {
+abstract class MapGame extends GameComponent {
   List<TileModel> tiles;
   Size? mapSize;
   Vector2? mapStartPosition;
   double tileSizeToUpdate;
-  bool loaded = false;
 
   MapGame(this.tiles, {this.tileSizeToUpdate = 0});
 
@@ -41,8 +39,5 @@ abstract class MapGame extends Component with BonfireHasGameRef<BonfireGame> {
   }
 
   @override
-  Future<void>? onLoad() {
-    loaded = true;
-    return super.onLoad();
-  }
+  bool get isVisible => true;
 }
