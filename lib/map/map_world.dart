@@ -45,7 +45,7 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    for (Tile tile in children) {
+    for (Tile tile in tilesRendered) {
       tile.render(canvas);
     }
     _drawPathLine(canvas);
@@ -58,7 +58,7 @@ class MapWorld extends MapGame {
       scheduleMicrotask(_searchTilesToRender);
     }
 
-    for (Tile tile in children) {
+    for (Tile tile in tilesRendered) {
       tile.update(t);
       if (tile.shouldRemove) {
         _tilesToRemove.add(tile);
@@ -81,8 +81,8 @@ class MapWorld extends MapGame {
 
     _visibleSet = visibleTileModel.map((e) => e.id).toSet();
 
-    children.removeWhere((element) => !_visibleSet.contains(element.id));
-    children.addAll(_buildTiles(_tilesToAdd));
+    tilesRendered.removeWhere((element) => !_visibleSet.contains(element.id));
+    tilesRendered.addAll(_buildTiles(_tilesToAdd));
 
     _findVisibleCollisions();
 
@@ -91,7 +91,7 @@ class MapWorld extends MapGame {
 
   @override
   Iterable<Tile> getRendered() {
-    return children;
+    return tilesRendered;
   }
 
   @override
@@ -237,7 +237,7 @@ class MapWorld extends MapGame {
     if (_tilesToRemove.isNotEmpty) {
       for (Tile tile in _tilesToRemove) {
         if (tile.shouldRemove) {
-          children.remove(tile);
+          tilesRendered.remove(tile);
           tiles.removeWhere((element) => element.id == tile.id);
           quadTree?.removeById(tile.id);
           if (tile is ObjectCollision) {
@@ -259,7 +259,7 @@ class MapWorld extends MapGame {
     await _loadTile(tileModel);
     final tile = tileModel.getTile(gameRef);
     tiles.add(tileModel);
-    children.add(tile);
+    tilesRendered.add(tile);
     quadTree?.insert(
       tileModel,
       Point(tileModel.x, tileModel.y),
@@ -275,14 +275,17 @@ class MapWorld extends MapGame {
   @override
   void removeTile(String id) {
     try {
-      children.firstWhere((element) => element.id == id).remove();
+      tilesRendered
+          .firstWhere((element) => element.id == id)
+          .removeFromParent();
     } catch (e) {
       print('Not found visible tile with $id id');
     }
   }
 
   void _findVisibleCollisions() {
-    _tilesVisibleCollisions = children.whereType<ObjectCollision>().toList();
+    _tilesVisibleCollisions =
+        tilesRendered.whereType<ObjectCollision>().toList();
   }
 
   Future<void> _loadTile(TileModel element) async {

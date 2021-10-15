@@ -45,7 +45,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     }
     if (animation?.done() == true) {
       onFinish?.call();
-      remove();
+      removeFromParent();
     }
   }
 

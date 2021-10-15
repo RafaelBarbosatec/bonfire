@@ -16,8 +16,8 @@ mixin BonfireHasGameRef<T extends CustomBaseGame> {
 
   set gameRef(T gameRef) {
     _gameRef = gameRef;
-    if (this is BaseComponent) {
-      (this as BaseComponent)
+    if (this is Component) {
+      (this as Component)
           .children
           .whereType<BonfireHasGameRef<T>>()
           .forEach((e) => e.gameRef = gameRef);

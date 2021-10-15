@@ -13,7 +13,7 @@ abstract class MapGame extends Component with BonfireHasGameRef<BonfireGame> {
   Size? mapSize;
   Vector2? mapStartPosition;
   double tileSizeToUpdate;
-  List<Tile> children = [];
+  List<Tile> tilesRendered = [];
   bool loaded = false;
 
   MapGame(this.tiles, {this.tileSizeToUpdate = 0});

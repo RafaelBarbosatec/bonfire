@@ -23,7 +23,7 @@ import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/value_generator_component.dart';
 import 'package:flame/components.dart' hide JoystickController;
-import 'package:flame/keyboard.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -265,13 +265,25 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   @override
-  void onKeyEvent(RawKeyEvent event) {
-    joystickController?.onKeyboard(event);
+  KeyEventResult onKeyEvent(
+    RawKeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    if (joystickController?.keyboardConfig.acceptedKeys != null) {
+      final keyAccepted = joystickController?.keyboardConfig.acceptedKeys;
+      if (keyAccepted!.contains(event.logicalKey)) {
+        joystickController?.onKeyboard(event);
+        return KeyEventResult.handled;
+      } else {
+        return KeyEventResult.ignored;
+      }
+    }
+    return KeyEventResult.handled;
   }
 
   @override
-  void onResize(Vector2 size) {
-    super.onResize(size);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
     _updateTempList();
   }
 

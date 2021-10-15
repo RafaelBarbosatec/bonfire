@@ -54,10 +54,14 @@ class GameInterface extends GameComponent {
   }
 
   /// Used to add components in your interface like a Button.
-  Future<void> add(InterfaceComponent component) async {
-    removeById(component.id);
-    await component.onLoad();
-    _components.add(component);
+  Future<void> add(Component component) async {
+    if (component is InterfaceComponent) {
+      removeById(component.id);
+      await component.onLoad();
+      _components.add(component);
+    } else {
+      super.add(component);
+    }
   }
 
   /// Used to remove component of the interface by id

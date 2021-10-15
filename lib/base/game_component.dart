@@ -71,11 +71,6 @@ abstract class GameComponent extends Component
         ),
       );
 
-  /// This method remove of the component
-  void remove() {
-    shouldRemove = true;
-  }
-
   /// Method that checks if this component is visible on the screen
   bool _isVisibleInCamera() {
     if (!hasGameRef) return false;

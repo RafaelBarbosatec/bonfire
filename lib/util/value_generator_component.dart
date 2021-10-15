@@ -50,7 +50,7 @@ class ValueGeneratorComponent extends Component {
     _isFinished = true;
     onChange?.call(end);
     onFinish?.call();
-    remove();
+    removeFromParent();
   }
 
   void start() {

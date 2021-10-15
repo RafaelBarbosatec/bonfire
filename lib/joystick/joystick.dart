@@ -8,19 +8,33 @@ import 'package:flutter/widgets.dart';
 
 enum KeyboardDirectionalType { arrows, wasd }
 
+class KeyboardConfig {
+  final bool enable;
+  final KeyboardDirectionalType keyboardDirectionalType;
+  final List<LogicalKeyboardKey>? acceptedKeys;
+
+  KeyboardConfig({
+    this.enable = true,
+    this.keyboardDirectionalType = KeyboardDirectionalType.arrows,
+    this.acceptedKeys,
+  });
+}
+
 class Joystick extends JoystickController {
   final List<JoystickAction>? actions;
   final JoystickDirectional? directional;
-  final bool keyboardEnable;
-  final KeyboardDirectionalType keyboardDirectionalType;
+
   List<LogicalKeyboardKey> _currentKeyboardKeys = [];
 
   Joystick({
     this.actions,
     this.directional,
-    this.keyboardEnable = false,
-    this.keyboardDirectionalType = KeyboardDirectionalType.arrows,
-  });
+    KeyboardConfig? keyboardConfig,
+  }) {
+    if (keyboardConfig != null) {
+      this.keyboardConfig = keyboardConfig;
+    }
+  }
 
   void initialize(Vector2 size) async {
     directional?.initialize(size, this);
@@ -79,7 +93,7 @@ class Joystick extends JoystickController {
 
   @override
   void onKeyboard(RawKeyEvent event) {
-    if (!keyboardEnable) return;
+    if (!keyboardConfig.enable) return;
 
     if (_isDirectional(event)) {
       if (event is RawKeyDownEvent && _currentKeyboardKeys.length < 2) {
@@ -140,7 +154,8 @@ class Joystick extends JoystickController {
   }
 
   bool _isDirectional(RawKeyEvent event) {
-    if (keyboardDirectionalType == KeyboardDirectionalType.arrows) {
+    if (keyboardConfig.keyboardDirectionalType ==
+        KeyboardDirectionalType.arrows) {
       return event.logicalKey == LogicalKeyboardKey.arrowRight ||
           event.logicalKey == LogicalKeyboardKey.arrowUp ||
           event.logicalKey == LogicalKeyboardKey.arrowLeft ||
@@ -154,7 +169,7 @@ class Joystick extends JoystickController {
   }
 
   void _sendOneDirection(LogicalKeyboardKey key) {
-    switch (keyboardDirectionalType) {
+    switch (keyboardConfig.keyboardDirectionalType) {
       case KeyboardDirectionalType.arrows:
         _oneDirectionArrows(key);
         break;
@@ -233,7 +248,7 @@ class Joystick extends JoystickController {
   }
 
   void _sendTwoDirection(LogicalKeyboardKey key1, LogicalKeyboardKey key2) {
-    switch (keyboardDirectionalType) {
+    switch (keyboardConfig.keyboardDirectionalType) {
       case KeyboardDirectionalType.arrows:
         _twoDirectionsArrows(key1, key2);
         break;

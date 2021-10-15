@@ -119,7 +119,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     }
 
     if (!_verifyExistInWorld()) {
-      remove();
+      removeFromParent();
     } else {
       _verifyCollision(dt);
     }
@@ -229,7 +229,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
         );
       }
       setupCollision(CollisionConfig(collisions: []));
-      remove();
+      removeFromParent();
       this.onDestroyedObject?.call();
     }
   }

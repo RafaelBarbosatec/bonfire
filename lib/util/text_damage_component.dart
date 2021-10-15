@@ -67,10 +67,10 @@ class TextDamageComponent extends TextComponent
     _velocity += gravity;
 
     if (onlyUp && _velocity >= 0) {
-      remove();
+      removeFromParent();
     }
     if (position.y > _initialY + maxDownSize) {
-      remove();
+      removeFromParent();
     }
 
     super.update(t);

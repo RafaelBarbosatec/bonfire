@@ -15,7 +15,7 @@ import 'package:ordered_set/ordered_set.dart';
 /// CustomBaseGame created to use `Listener` to capture touch screen gestures.
 /// Apply zoom in canvas.
 /// Reorder components per time frame.
-abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
+abstract class CustomBaseGame with Loadable, Game, FPSCounter, PointerDetector {
   Camera camera = Camera(CameraConfig());
 
   /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
@@ -206,9 +206,8 @@ abstract class CustomBaseGame extends Game with FPSCounter, PointerDetector {
   /// It also updates the [size] field of the class to be used by later added components and other methods.
   /// You can override it further to add more custom behaviour, but you should seriously consider calling the super implementation as well.
   @override
-  @mustCallSuper
-  void onResize(Vector2 size) {
-    super.onResize(size);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
     for (var comp in components) {
       comp.onGameResize(size);
     }

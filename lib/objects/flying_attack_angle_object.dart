@@ -90,7 +90,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     position = Vector2Rect.fromRect(position.rect.shift(diffBase));
 
     if (!_verifyExistInWorld()) {
-      remove();
+      removeFromParent();
     } else {
       _verifyCollision(dt);
     }
@@ -151,7 +151,7 @@ class FlyingAttackAngleObject extends AnimatedObject
         );
       }
       setupCollision(CollisionConfig(collisions: []));
-      remove();
+      removeFromParent();
       this.onDestroy?.call();
     }
   }
