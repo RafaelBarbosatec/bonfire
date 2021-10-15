@@ -131,7 +131,6 @@ abstract class CustomBaseGame extends Component
   @override
   void render(Canvas canvas) {
     if (!hasLayout) return;
-    print('render');
     canvas.save();
 
     canvas.translate(size.x / 2, size.y / 2);
