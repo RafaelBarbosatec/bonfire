@@ -45,6 +45,7 @@ class MapWorld extends MapGame {
 
   @override
   void renderTree(Canvas canvas) {
+    super.renderTree(canvas);
     for (final tile in children) {
       tile.render(canvas);
       if (tile.shouldRemove) {
