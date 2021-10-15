@@ -1,5 +1,7 @@
-# [next]
+# 1.8.1
 - Adds `Focus` in `CustomGameWidget` to remove "system ding" in MACOS.
+- Updates `moveToTarget` method in `Camera` to receive null;
+- Add optional list of objects to `moveToPositionAlongThePath` for ignoring visible collisions
 
 # 1.8.0
 - Bugfix/quadtree id for removal [#178](https://github.com/RafaelBarbosatec/bonfire/pull/178)
