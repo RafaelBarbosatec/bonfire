@@ -7,7 +7,7 @@ class KnightInterface extends GameInterface {
   static const followerWidgetTestId = 'BUTTON';
 
   @override
-  Future<void> onLoad() {
+  void onMount() {
     add(BarLifeComponent());
     add(InterfaceComponent(
       sprite: Sprite.load('blue_button1.png'),
@@ -87,6 +87,6 @@ class KnightInterface extends GameInterface {
         }
       },
     ));
-    return super.onLoad();
+    super.onMount();
   }
 }

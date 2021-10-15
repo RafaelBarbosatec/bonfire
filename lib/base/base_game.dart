@@ -6,8 +6,10 @@ import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart' hide Camera;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ordered_set/comparing.dart';
 import 'package:ordered_set/ordered_set.dart';
@@ -15,7 +17,7 @@ import 'package:ordered_set/ordered_set.dart';
 /// CustomBaseGame created to use `Listener` to capture touch screen gestures.
 /// Apply zoom in canvas.
 /// Reorder components per time frame.
-abstract class CustomBaseGame extends Component
+abstract class BaseGame extends Component
     with Loadable, Game, FPSCounter, PointerDetector {
   Camera camera = Camera(CameraConfig());
 
@@ -166,8 +168,7 @@ abstract class CustomBaseGame extends Component
       canvas.scale(1 / camera.config.zoom);
       canvas.translate(-size.x / 2, -size.y / 2);
     }
-
-    comp.render(canvas);
+    comp.renderTree(canvas);
     canvas.restore();
   }
 
@@ -207,6 +208,7 @@ abstract class CustomBaseGame extends Component
     components.removeWhere((c) => c.shouldRemove);
 
     camera.update(t);
+    super.update(t);
   }
 
   /// This implementation of resize passes the resize call along to every component in the list, enabling each one to make their decisions as how to handle the resize.
@@ -241,5 +243,21 @@ abstract class CustomBaseGame extends Component
   /// reorder components by priority
   void updateOrderPriority() {
     components.rebalanceAll();
+  }
+
+  @override
+  void detach() {
+    if (kReleaseMode) {
+      super.detach();
+    }
+  }
+
+  @override
+  void attach(owner, gameRenderBox) {
+    if (!kReleaseMode && !isAttached) {
+      super.attach(owner, gameRenderBox);
+    } else if (kReleaseMode) {
+      super.attach(owner, gameRenderBox);
+    }
   }
 }

@@ -53,12 +53,14 @@ class InterfaceComponent extends GameComponent with TapGesture {
     );
   }
 
+  @override
   void render(Canvas canvas) {
     (selected ? spriteSelected : sprite)?.renderFromVector2Rect(
       canvas,
       this.position,
       opacity: opacity,
     );
+    super.render(canvas);
   }
 
   @override
@@ -82,8 +84,9 @@ class InterfaceComponent extends GameComponent with TapGesture {
   bool get isHud => true;
 
   @override
-  Future<void> onLoad() async {
+  Future<void>? onLoad() async {
     await _loader.load();
+    return super.onLoad();
   }
 
   @override

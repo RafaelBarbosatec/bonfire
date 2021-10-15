@@ -17,7 +17,24 @@ class KeyboardConfig {
     this.enable = true,
     this.keyboardDirectionalType = KeyboardDirectionalType.arrows,
     this.acceptedKeys,
-  });
+  }) {
+    if (acceptedKeys != null) {
+      switch (keyboardDirectionalType) {
+        case KeyboardDirectionalType.arrows:
+          acceptedKeys?.add(LogicalKeyboardKey.arrowLeft);
+          acceptedKeys?.add(LogicalKeyboardKey.arrowRight);
+          acceptedKeys?.add(LogicalKeyboardKey.arrowDown);
+          acceptedKeys?.add(LogicalKeyboardKey.arrowUp);
+          break;
+        case KeyboardDirectionalType.wasd:
+          acceptedKeys?.add(LogicalKeyboardKey.keyW);
+          acceptedKeys?.add(LogicalKeyboardKey.keyS);
+          acceptedKeys?.add(LogicalKeyboardKey.keyA);
+          acceptedKeys?.add(LogicalKeyboardKey.keyD);
+          break;
+      }
+    }
+  }
 }
 
 class Joystick extends JoystickController {

@@ -9,6 +9,7 @@ import 'package:example/player/knight.dart';
 import 'package:example/util/common_sprite_sheet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class GameManualMap extends StatelessWidget implements GameListener {
   final GameController _controller = GameController();
@@ -20,7 +21,11 @@ class GameManualMap extends StatelessWidget implements GameListener {
           max(constraints.maxHeight, constraints.maxWidth) / (kIsWeb ? 25 : 22);
       return BonfireWidget(
         joystick: Joystick(
-          keyboardConfig: KeyboardConfig(),
+          keyboardConfig: KeyboardConfig(
+            acceptedKeys: [
+              LogicalKeyboardKey.space,
+            ],
+          ),
           directional: JoystickDirectional(
             spriteBackgroundDirectional: Sprite.load('joystick_background.png'),
             spriteKnobDirectional: Sprite.load('joystick_knob.png'),

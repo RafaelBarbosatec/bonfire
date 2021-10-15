@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bonfire/base/custom_base_game.dart';
+import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera.dart';
@@ -27,7 +27,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
-class BonfireGame extends CustomBaseGame with KeyboardEvents {
+class BonfireGame extends BaseGame with KeyboardEvents {
   static const INTERVAL_UPDATE_CACHE = 200;
   static const INTERVAL_UPDATE_ORDER = 253;
   static const INTERVAL_UPDATE_COLLISIONS = 1003;

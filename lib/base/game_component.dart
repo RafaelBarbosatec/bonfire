@@ -210,4 +210,49 @@ abstract class GameComponent extends Component
       return Vector2.zero();
     }
   }
+
+  @override
+  void handlerPointerDown(PointerDownEvent event) {
+    children.forEach((i) {
+      if (i is GameComponent) {
+        i.handlerPointerDown(event);
+      }
+    });
+  }
+
+  @override
+  void handlerPointerUp(PointerUpEvent event) {
+    children.forEach((i) {
+      if (i is GameComponent) {
+        i.handlerPointerUp(event);
+      }
+    });
+  }
+
+  @override
+  void handlerPointerCancel(PointerCancelEvent event) {
+    children.forEach((i) {
+      if (i is GameComponent) {
+        i.handlerPointerCancel(event);
+      }
+    });
+  }
+
+  @override
+  Future<void> add(Component component) {
+    if (component is BonfireHasGameRef) {
+      (component as BonfireHasGameRef).gameRef = gameRef;
+    }
+    return super.add(component);
+  }
+
+  @override
+  void prepare(Component parent) {
+    super.prepare(parent);
+    debugMode |= parent.debugMode;
+    isPrepared = true;
+    if (hasGameRef) {
+      onGameResize(gameRef.size);
+    }
+  }
 }
