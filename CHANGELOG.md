@@ -1,7 +1,7 @@
 # [next]
-- update flame to `1.0.0-releasecandidate.15`
-- [BREAKING CHANGE] now use `removeFromParent` instead of `remove` to remove the component of the game.
-- [BREAKING CHANGE] remove param `keyboardEnable` and `keyboardDirectionalType` in `Joystick`. Move this attributes to `keyboardConfig`
+- Update flame to `1.0.0-releasecandidate.15`
+- [BREAKING CHANGE] Component `remove()` method was replaced by `removeFromParent()`. Use it to remove a component from the game.
+- [BREAKING CHANGE] Removed params `keyboardEnable` and `keyboardDirectionalType` in `Joystick`. Set these attributes through `keyboardConfig`.
 
 # 1.8.1
 - Adds `Focus` in `CustomGameWidget` to remove "system ding" in MACOS.

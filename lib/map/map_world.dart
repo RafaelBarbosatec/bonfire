@@ -56,12 +56,12 @@ class MapWorld extends MapGame {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (!_buildingTiles && _checkNeedUpdateTiles()) {
       _buildingTiles = true;
       scheduleMicrotask(_searchTilesToRender);
     }
     _verifyRemoveTileOfWord();
-    super.update(dt);
   }
 
   void _searchTilesToRender() {
@@ -225,10 +225,10 @@ class MapWorld extends MapGame {
 
   @override
   Future<void>? onLoad() async {
+    await super.onLoad();
     await Future.forEach<TileModel>(tiles, _loadTile);
     _verifyMaxTopAndLeft(gameRef.size);
     _searchTilesToRender();
-    return super.onLoad();
   }
 
   void _verifyRemoveTileOfWord() {

@@ -88,6 +88,7 @@ class LightingComponent extends GameComponent {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (!containsColor()) return;
     _dtUpdate = dt;
     _visibleLight = gameRef.lightVisible();

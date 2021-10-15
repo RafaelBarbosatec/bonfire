@@ -34,6 +34,7 @@ class ValueGeneratorComponent extends Component {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (!_isRunning) return;
     _currentValue += dt * _maxInMicroSeconds;
     if (_currentValue >= duration.inMicroseconds) {

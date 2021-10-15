@@ -64,9 +64,9 @@ class KnightInterface extends GameInterface {
               padding: EdgeInsets.all(10),
               child: ElevatedButton(
                 onPressed: () {
-                  print('aqui');
+                  print('Tapped');
                 },
-                child: Text('clica aqui'),
+                child: Text('Tap here'),
               ),
             ),
             align: Offset(0, -55),

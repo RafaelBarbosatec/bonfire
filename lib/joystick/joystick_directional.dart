@@ -117,7 +117,7 @@ class JoystickDirectional {
     });
   }
 
-  void update(double t) {
+  void update(double dt) {
     if (_dragPosition == null || _backgroundRect == null || _knobRect == null)
       return;
 

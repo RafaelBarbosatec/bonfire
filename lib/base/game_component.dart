@@ -195,8 +195,8 @@ abstract class GameComponent extends Component
 
   @override
   void update(double dt) {
-    isVisible = this._isVisibleInCamera();
     super.update(dt);
+    isVisible = this._isVisibleInCamera();
   }
 
   /// Return screen position of this component.

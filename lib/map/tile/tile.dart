@@ -187,15 +187,16 @@ class Tile extends GameComponent {
 
   @override
   void update(double dt) {
+    super.update(dt);
     _animation?.update(dt);
   }
 
   @override
   Future<void>? onLoad() async {
+    await super.onLoad();
     await _loader?.load();
     await _animation?.onLoad();
     _loader = null;
-    return super.onLoad();
   }
 
   bool get containAnimation => _animation != null;

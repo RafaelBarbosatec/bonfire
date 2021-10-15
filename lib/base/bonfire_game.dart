@@ -146,6 +146,7 @@ class BonfireGame extends BaseGame with KeyboardEvents {
 
   @override
   Future<void>? onLoad() async {
+    await super.onLoad();
     _colorFilterComponent = ColorFilterComponent(
       _colorFilter ?? GameColorFilter(),
     );
@@ -177,7 +178,6 @@ class BonfireGame extends BaseGame with KeyboardEvents {
     await add(interface ?? GameInterface());
     await add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(camera));
-    return super.onLoad();
   }
 
   @override

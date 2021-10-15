@@ -172,8 +172,8 @@ mixin DirectionAnimation on Movement {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     await animation?.onLoad();
     idle();
-    return super.onLoad();
   }
 }

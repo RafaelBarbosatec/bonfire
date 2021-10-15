@@ -75,9 +75,11 @@ class Joystick extends JoystickController {
     actions?.forEach((action) => action.render(canvas));
   }
 
-  void update(double t) {
-    directional?.update(t);
-    actions?.forEach((action) => action.update(t));
+  @override
+  void update(double dt) {
+    directional?.update(dt);
+    actions?.forEach((action) => action.update(dt));
+    super.update(dt);
   }
 
   @override
@@ -162,6 +164,7 @@ class Joystick extends JoystickController {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     await directional?.onLoad();
     if (actions != null) {
       await Future.forEach<JoystickAction>(actions!, (element) {

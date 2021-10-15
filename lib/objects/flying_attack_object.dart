@@ -256,6 +256,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     await _loader.load();
     animation = this.flyAnimation;
   }

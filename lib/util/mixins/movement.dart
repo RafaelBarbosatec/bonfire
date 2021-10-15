@@ -208,8 +208,8 @@ mixin Movement on GameComponent {
 
   @override
   void update(double dt) {
-    dtUpdate = dt;
     super.update(dt);
+    dtUpdate = dt;
   }
 
   bool _isCollision(Vector2 displacement) {

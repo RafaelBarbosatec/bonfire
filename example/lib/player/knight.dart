@@ -346,8 +346,8 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     spriteDirectionAttack = await Sprite.load('direction_attack.png');
-    return super.onLoad();
   }
 
   @override

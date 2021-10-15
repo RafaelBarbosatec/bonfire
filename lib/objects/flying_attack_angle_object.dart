@@ -177,6 +177,7 @@ class FlyingAttackAngleObject extends AnimatedObject
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     await _loader.load();
     animation = this.flyAnimation;
   }

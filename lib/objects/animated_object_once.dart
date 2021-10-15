@@ -62,6 +62,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
 
   @override
   Future<void> onLoad() {
+    super.onLoad();
     return _loader.load();
   }
 }

@@ -43,6 +43,7 @@ class AnimatedFollowerObject extends FollowerObject {
 
   @override
   Future<void> onLoad() {
+    super.onLoad();
     return _loader.load();
   }
 }

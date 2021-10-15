@@ -84,9 +84,9 @@ class InterfaceComponent extends GameComponent with TapGesture {
   bool get isHud => true;
 
   @override
-  Future<void>? onLoad() async {
-    await _loader.load();
-    return super.onLoad();
+  Future<void>? onLoad() {
+    super.onLoad();
+    return _loader.load();
   }
 
   @override
