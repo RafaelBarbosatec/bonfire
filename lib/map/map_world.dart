@@ -44,8 +44,8 @@ class MapWorld extends MapGame {
         );
 
   @override
+  // ignore: must_call_super
   void renderTree(Canvas canvas) {
-    super.renderTree(canvas);
     for (final tile in children) {
       tile.render(canvas);
       if (tile.shouldRemove) {
