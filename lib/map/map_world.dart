@@ -45,7 +45,7 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    for (Tile tile in tilesRendered) {
+    for (final tile in children) {
       tile.render(canvas);
     }
     _drawPathLine(canvas);
@@ -58,14 +58,15 @@ class MapWorld extends MapGame {
       scheduleMicrotask(_searchTilesToRender);
     }
 
-    for (Tile tile in tilesRendered) {
+    for (final tile in children) {
       tile.update(t);
       if (tile.shouldRemove) {
-        _tilesToRemove.add(tile);
+        _tilesToRemove.add(tile as Tile);
       }
     }
 
     _verifyRemoveTileOfWord();
+    super.update(t);
   }
 
   void _searchTilesToRender() {
@@ -81,8 +82,9 @@ class MapWorld extends MapGame {
 
     _visibleSet = visibleTileModel.map((e) => e.id).toSet();
 
-    tilesRendered.removeWhere((element) => !_visibleSet.contains(element.id));
-    tilesRendered.addAll(_buildTiles(_tilesToAdd));
+    children
+        .removeWhere((element) => !_visibleSet.contains((element as Tile).id));
+    children.addAll(_buildTiles(_tilesToAdd));
 
     _findVisibleCollisions();
 
@@ -91,7 +93,7 @@ class MapWorld extends MapGame {
 
   @override
   Iterable<Tile> getRendered() {
-    return tilesRendered;
+    return children.cast();
   }
 
   @override
@@ -237,7 +239,7 @@ class MapWorld extends MapGame {
     if (_tilesToRemove.isNotEmpty) {
       for (Tile tile in _tilesToRemove) {
         if (tile.shouldRemove) {
-          tilesRendered.remove(tile);
+          children.remove(tile);
           tiles.removeWhere((element) => element.id == tile.id);
           quadTree?.removeById(tile.id);
           if (tile is ObjectCollision) {
@@ -259,7 +261,7 @@ class MapWorld extends MapGame {
     await _loadTile(tileModel);
     final tile = tileModel.getTile(gameRef);
     tiles.add(tileModel);
-    tilesRendered.add(tile);
+    children.add(tile);
     quadTree?.insert(
       tileModel,
       Point(tileModel.x, tileModel.y),
@@ -275,8 +277,8 @@ class MapWorld extends MapGame {
   @override
   void removeTile(String id) {
     try {
-      tilesRendered
-          .firstWhere((element) => element.id == id)
+      children
+          .firstWhere((element) => (element as Tile).id == id)
           .removeFromParent();
     } catch (e) {
       print('Not found visible tile with $id id');
@@ -284,8 +286,7 @@ class MapWorld extends MapGame {
   }
 
   void _findVisibleCollisions() {
-    _tilesVisibleCollisions =
-        tilesRendered.whereType<ObjectCollision>().toList();
+    _tilesVisibleCollisions = children.whereType<ObjectCollision>().toList();
   }
 
   Future<void> _loadTile(TileModel element) async {
