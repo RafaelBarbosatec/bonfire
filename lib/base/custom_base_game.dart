@@ -15,7 +15,8 @@ import 'package:ordered_set/ordered_set.dart';
 /// CustomBaseGame created to use `Listener` to capture touch screen gestures.
 /// Apply zoom in canvas.
 /// Reorder components per time frame.
-abstract class CustomBaseGame with Loadable, Game, FPSCounter, PointerDetector {
+abstract class CustomBaseGame extends Component
+    with Loadable, Game, FPSCounter, PointerDetector {
   Camera camera = Camera(CameraConfig());
 
   /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
@@ -41,6 +42,7 @@ abstract class CustomBaseGame with Loadable, Game, FPSCounter, PointerDetector {
 
   @override
   void onPointerCancel(PointerCancelEvent event) {
+    if (!hasLayout) return;
     for (final c in _gesturesComponents) {
       c.handlerPointerCancel(event);
     }
@@ -48,6 +50,7 @@ abstract class CustomBaseGame with Loadable, Game, FPSCounter, PointerDetector {
 
   @override
   void onPointerUp(PointerUpEvent event) {
+    if (!hasLayout) return;
     for (final c in _gesturesComponents) {
       c.handlerPointerUp(event);
     }
@@ -55,6 +58,7 @@ abstract class CustomBaseGame with Loadable, Game, FPSCounter, PointerDetector {
 
   @override
   void onPointerMove(PointerMoveEvent event) {
+    if (!hasLayout) return;
     for (final c in _gesturesComponents) {
       c.handlerPointerMove(event);
     }
@@ -62,6 +66,7 @@ abstract class CustomBaseGame with Loadable, Game, FPSCounter, PointerDetector {
 
   @override
   void onPointerDown(PointerDownEvent event) {
+    if (!hasLayout) return;
     for (final c in _gesturesComponents) {
       c.handlerPointerDown(event);
     }
@@ -69,6 +74,7 @@ abstract class CustomBaseGame with Loadable, Game, FPSCounter, PointerDetector {
 
   @override
   void onPointerHover(PointerHoverEvent event) {
+    if (!hasLayout) return;
     for (final c in _gesturesComponents) {
       c.handlerPointerHover(event);
     }
@@ -76,6 +82,7 @@ abstract class CustomBaseGame with Loadable, Game, FPSCounter, PointerDetector {
 
   @override
   void onPointerSignal(PointerSignalEvent event) {
+    if (!hasLayout) return;
     for (final c in _gesturesComponents) {
       c.handlerPointerSignal(event);
     }
@@ -123,6 +130,8 @@ abstract class CustomBaseGame with Loadable, Game, FPSCounter, PointerDetector {
   /// Beware of however you are rendering components if not using this; you must be careful to save and restore the canvas to avoid components messing up with each other.
   @override
   void render(Canvas canvas) {
+    if (!hasLayout) return;
+    print('render');
     canvas.save();
 
     canvas.translate(size.x / 2, size.y / 2);
@@ -135,7 +144,7 @@ abstract class CustomBaseGame with Loadable, Game, FPSCounter, PointerDetector {
 
     if (debugMode) {
       for (final comp in components) {
-        renderDebugMode(comp, canvas);
+        renderItemDebugMode(comp, canvas);
       }
     }
 
@@ -163,7 +172,7 @@ abstract class CustomBaseGame with Loadable, Game, FPSCounter, PointerDetector {
     canvas.restore();
   }
 
-  void renderDebugMode(Component comp, Canvas canvas) {
+  void renderItemDebugMode(Component comp, Canvas canvas) {
     if (comp is GameComponent && debugMode) {
       comp.renderDebugMode(canvas);
     }

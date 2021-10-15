@@ -113,7 +113,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   @override
   void die() {
-    remove();
+    removeFromParent();
     gameRef.addGameComponent(
       GameDecoration.withSprite(
         Sprite.load('player/crypt.png'),

@@ -20,7 +20,7 @@ class GameManualMap extends StatelessWidget implements GameListener {
           max(constraints.maxHeight, constraints.maxWidth) / (kIsWeb ? 25 : 22);
       return BonfireWidget(
         joystick: Joystick(
-          keyboardEnable: true,
+          keyboardConfig: KeyboardConfig(),
           directional: JoystickDirectional(
             spriteBackgroundDirectional: Sprite.load('joystick_background.png'),
             spriteKnobDirectional: Sprite.load('joystick_knob.png'),

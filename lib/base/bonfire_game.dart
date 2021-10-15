@@ -278,6 +278,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
         return KeyEventResult.ignored;
       }
     }
+    joystickController?.onKeyboard(event);
     return KeyEventResult.handled;
   }
 
@@ -329,6 +330,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   bool isVisibleInCamera(GameComponent c) {
+    if (!hasLayout) return false;
     if (c.shouldRemove) return false;
     return camera.isComponentOnCamera(c);
   }

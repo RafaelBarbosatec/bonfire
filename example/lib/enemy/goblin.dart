@@ -108,7 +108,7 @@ class Goblin extends SimpleEnemy
         position: position,
       ),
     );
-    remove();
+    removeFromParent();
     super.die();
   }
 

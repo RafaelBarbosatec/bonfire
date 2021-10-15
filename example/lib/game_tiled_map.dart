@@ -26,7 +26,7 @@ class GameTiledMap extends StatelessWidget {
             (kIsWeb ? 25 : 22);
         return BonfireTiledWidget(
           joystick: Joystick(
-            keyboardEnable: true,
+            keyboardConfig: KeyboardConfig(),
             directional: JoystickDirectional(
               spriteBackgroundDirectional: Sprite.load(
                 'joystick_background.png',
