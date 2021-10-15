@@ -53,6 +53,8 @@ class MapWorld extends MapGame {
       }
     }
     _drawPathLine(canvas);
+
+    /// not used super.renderTree(canvas); to avoid render twice.
   }
 
   @override

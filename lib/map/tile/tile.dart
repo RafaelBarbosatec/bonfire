@@ -189,6 +189,8 @@ class Tile extends GameComponent {
   // ignore: must_call_super
   void update(double dt) {
     _animation?.update(dt);
+
+    /// not used super.update(dt); to avoid consulting unnecessary computational resources
   }
 
   @override
