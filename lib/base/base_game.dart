@@ -159,7 +159,7 @@ abstract class BaseGame extends Component
     super.update(dt);
   }
 
-  /// Verify if the compont contain gestures.
+  /// Verify if the Component contain gestures.
   bool _hasGesture(Component c) {
     return ((c is GameComponent && c.isVisible) || c.isHud) &&
         (c is PointerDetectorHandler &&
