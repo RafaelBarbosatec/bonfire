@@ -103,7 +103,7 @@ packages:
     source: hosted
     version: "1.7.0"
   ordered_set:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: ordered_set
       url: "https://pub.dartlang.org"

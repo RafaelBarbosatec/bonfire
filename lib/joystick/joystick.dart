@@ -9,8 +9,13 @@ import 'package:flutter/widgets.dart';
 enum KeyboardDirectionalType { arrows, wasd }
 
 class KeyboardConfig {
+  /// Use to enable ou disable keyboard events
   final bool enable;
+
+  /// Type of the directional (arrows or wasd)
   final KeyboardDirectionalType keyboardDirectionalType;
+
+  /// You can pass specific Keys accepted. If null accept all keys
   final List<LogicalKeyboardKey>? acceptedKeys;
 
   KeyboardConfig({

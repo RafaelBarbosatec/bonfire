@@ -11,7 +11,6 @@ dependencies:
     sdk: flutter
 
   flame: 1.0.0-releasecandidate.15
-  ordered_set: 4.0.0
   tiledjsonreader: 1.0.4
   http: 0.13.4
   a_star_algorithm: 0.1.1
