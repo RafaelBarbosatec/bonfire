@@ -45,7 +45,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     }
     if (animation?.done() == true) {
       onFinish?.call();
-      remove();
+      removeFromParent();
     }
   }
 
@@ -62,6 +62,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
 
   @override
   Future<void> onLoad() {
+    super.onLoad();
     return _loader.load();
   }
 }

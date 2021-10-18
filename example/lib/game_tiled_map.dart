@@ -11,6 +11,7 @@ import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/player/knight.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'decoration/column.dart';
 
@@ -26,7 +27,11 @@ class GameTiledMap extends StatelessWidget {
             (kIsWeb ? 25 : 22);
         return BonfireTiledWidget(
           joystick: Joystick(
-            keyboardEnable: true,
+            keyboardConfig: KeyboardConfig(
+              acceptedKeys: [
+                LogicalKeyboardKey.space,
+              ],
+            ),
             directional: JoystickDirectional(
               spriteBackgroundDirectional: Sprite.load(
                 'joystick_background.png',

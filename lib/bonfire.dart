@@ -65,19 +65,7 @@ export 'package:bonfire/util/value_generator_component.dart';
 export 'package:bonfire/util/vector2rect.dart';
 export 'package:bonfire/widgets/bonfire_tiled_widget.dart';
 export 'package:bonfire/widgets/bonfire_widget.dart';
-export 'package:flame/components.dart'
-    hide
-        JoystickController,
-        JoystickAction,
-        JoystickActionEvent,
-        JoystickDirectional,
-        JoystickDirectionalEvent,
-        JoystickComponent,
-        JoystickListener,
-        JoystickMoveDirectional,
-        JoystickActionAlign,
-        ActionEvent,
-        HasGameRef;
+export 'package:flame/components.dart' hide JoystickComponent, HasGameRef;
 export 'package:flame/flame.dart';
 export 'package:flame/sprite.dart';
 export 'package:flame/widgets.dart' hide NineTileBox;

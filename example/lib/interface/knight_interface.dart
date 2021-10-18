@@ -7,7 +7,7 @@ class KnightInterface extends GameInterface {
   static const followerWidgetTestId = 'BUTTON';
 
   @override
-  Future<void> onLoad() {
+  void onMount() {
     add(BarLifeComponent());
     add(InterfaceComponent(
       sprite: Sprite.load('blue_button1.png'),
@@ -64,9 +64,9 @@ class KnightInterface extends GameInterface {
               padding: EdgeInsets.all(10),
               child: ElevatedButton(
                 onPressed: () {
-                  print('aqui');
+                  print('Tapped');
                 },
-                child: Text('clica aqui'),
+                child: Text('Tap here'),
               ),
             ),
             align: Offset(0, -55),
@@ -87,6 +87,6 @@ class KnightInterface extends GameInterface {
         }
       },
     ));
-    return super.onLoad();
+    super.onMount();
   }
 }

@@ -95,7 +95,7 @@ class GoblinRotation extends RotationEnemy {
         position: position,
       ),
     );
-    remove();
+    removeFromParent();
     super.die();
   }
 }

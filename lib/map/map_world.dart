@@ -44,27 +44,26 @@ class MapWorld extends MapGame {
         );
 
   @override
-  void render(Canvas canvas) {
-    for (Tile tile in children) {
+  // ignore: must_call_super
+  void renderTree(Canvas canvas) {
+    for (final tile in children) {
       tile.render(canvas);
+      if (tile.shouldRemove) {
+        _tilesToRemove.add(tile as Tile);
+      }
     }
     _drawPathLine(canvas);
+
+    /// not used super.renderTree(canvas); to avoid render twice.
   }
 
   @override
-  void update(double t) {
+  void update(double dt) {
+    super.update(dt);
     if (!_buildingTiles && _checkNeedUpdateTiles()) {
       _buildingTiles = true;
       scheduleMicrotask(_searchTilesToRender);
     }
-
-    for (Tile tile in children) {
-      tile.update(t);
-      if (tile.shouldRemove) {
-        _tilesToRemove.add(tile);
-      }
-    }
-
     _verifyRemoveTileOfWord();
   }
 
@@ -81,7 +80,9 @@ class MapWorld extends MapGame {
 
     _visibleSet = visibleTileModel.map((e) => e.id).toSet();
 
-    children.removeWhere((element) => !_visibleSet.contains(element.id));
+    children.removeWhere((element) {
+      return !_visibleSet.contains((element as Tile).id);
+    });
     children.addAll(_buildTiles(_tilesToAdd));
 
     _findVisibleCollisions();
@@ -91,7 +92,7 @@ class MapWorld extends MapGame {
 
   @override
   Iterable<Tile> getRendered() {
-    return children;
+    return children.cast();
   }
 
   @override
@@ -106,7 +107,7 @@ class MapWorld extends MapGame {
 
   @override
   void onGameResize(Vector2 size) {
-    if (loaded) {
+    if (isLoaded) {
       _verifyMaxTopAndLeft(size);
     }
     super.onGameResize(size);
@@ -227,10 +228,10 @@ class MapWorld extends MapGame {
 
   @override
   Future<void>? onLoad() async {
+    await super.onLoad();
     await Future.forEach<TileModel>(tiles, _loadTile);
     _verifyMaxTopAndLeft(gameRef.size);
     _searchTilesToRender();
-    return super.onLoad();
   }
 
   void _verifyRemoveTileOfWord() {
@@ -275,7 +276,9 @@ class MapWorld extends MapGame {
   @override
   void removeTile(String id) {
     try {
-      children.firstWhere((element) => element.id == id).remove();
+      children
+          .firstWhere((element) => (element as Tile).id == id)
+          .removeFromParent();
     } catch (e) {
       print('Not found visible tile with $id id');
     }

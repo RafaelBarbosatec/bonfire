@@ -1,5 +1,5 @@
-import 'package:bonfire/base/bonfire_game.dart';
-import 'package:bonfire/util/bonfire_game_ref.dart';
+import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/joystick/joystick.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
@@ -56,10 +56,11 @@ mixin JoystickListener {
   void moveTo(Vector2 position);
 }
 
-abstract class JoystickController extends Component
-    with BonfireHasGameRef<BonfireGame>, PointerDetectorHandler {
+abstract class JoystickController extends GameComponent
+    with PointerDetectorHandler {
   List<JoystickListener> _observers = [];
-  bool keyboardEnable = false;
+
+  KeyboardConfig keyboardConfig = KeyboardConfig(enable: false);
 
   void onKeyboard(RawKeyEvent event) {}
 

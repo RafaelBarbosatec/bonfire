@@ -36,13 +36,14 @@ class AnimatedFollowerObject extends FollowerObject {
     super.update(dt);
     if (!loopAnimation) {
       if (animation?.isLastFrame == true) {
-        remove();
+        removeFromParent();
       }
     }
   }
 
   @override
   Future<void> onLoad() {
+    super.onLoad();
     return _loader.load();
   }
 }

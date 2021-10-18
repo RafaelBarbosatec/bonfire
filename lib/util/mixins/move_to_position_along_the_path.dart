@@ -54,10 +54,10 @@ mixin MoveToPositionAlongThePath on Movement {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (_currentPath.isNotEmpty) {
       _move(dt);
     }
-    super.update(dt);
   }
 
   void render(Canvas c) {

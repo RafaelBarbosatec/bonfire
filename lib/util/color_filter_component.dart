@@ -1,14 +1,11 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/bonfire_game.dart';
+import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/components.dart';
 
-import 'bonfire_game_ref.dart';
-
-class ColorFilterComponent extends Component
-    with BonfireHasGameRef<BonfireGame> {
+class ColorFilterComponent extends GameComponent {
   final GameColorFilter colorFilter;
 
   ColorFilterComponent(this.colorFilter);

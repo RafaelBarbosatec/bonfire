@@ -60,7 +60,7 @@ class Chest extends GameDecoration with TapGesture {
   void onTap() {
     if (_observedPlayer) {
       _addPotions();
-      remove();
+      removeFromParent();
     }
   }
 

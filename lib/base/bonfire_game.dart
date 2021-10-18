@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bonfire/base/custom_base_game.dart';
+import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera.dart';
@@ -22,13 +22,12 @@ import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/value_generator_component.dart';
-import 'package:flame/components.dart' hide JoystickController;
-import 'package:flame/keyboard.dart';
+import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
-class BonfireGame extends CustomBaseGame with KeyboardEvents {
+class BonfireGame extends BaseGame with KeyboardEvents {
   static const INTERVAL_UPDATE_CACHE = 200;
   static const INTERVAL_UPDATE_ORDER = 253;
   static const INTERVAL_UPDATE_COLLISIONS = 1003;
@@ -74,8 +73,6 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
 
   final TapInGame? onTapDown;
   final TapInGame? onTapUp;
-
-  bool _firstUpdate = true;
 
   Iterable<Lighting> _visibleLights = List.empty();
   Iterable<GameComponent> _visibleComponents = List.empty();
@@ -148,25 +145,39 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   @override
-  Future<void> onLoad() async {
+  Future<void>? onLoad() async {
+    await super.onLoad();
     _colorFilterComponent = ColorFilterComponent(
       _colorFilter ?? GameColorFilter(),
     );
-    add(_colorFilterComponent);
+    await add(_colorFilterComponent);
 
-    background?.let((bg) => add(bg));
+    if (background != null) {
+      await add(background!);
+    }
 
-    add(map);
-    _initialDecorations?.forEach((decoration) => add(decoration));
-    _initialEnemies?.forEach((enemy) => add(enemy));
-    _initialComponents?.forEach((comp) => add(comp));
-    player?.let((p) => add(p));
+    await add(map);
+
+    if (_initialDecorations != null) {
+      await Future.forEach<GameComponent>(
+          _initialDecorations!, (element) => add(element));
+    }
+    if (_initialEnemies != null) {
+      await Future.forEach<GameComponent>(
+          _initialEnemies!, (element) => add(element));
+    }
+    if (_initialComponents != null) {
+      await Future.forEach<GameComponent>(
+          _initialComponents!, (element) => add(element));
+    }
+    if (player != null) {
+      await add(player!);
+    }
     lighting = LightingComponent(color: lightingColorGame ?? Color(0x00000000));
-    add(lighting!);
-    add(interface ?? GameInterface());
-    add(joystickController ?? Joystick());
+    await add(lighting!);
+    await add(interface ?? GameInterface());
+    await add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(camera));
-    return super.onLoad();
   }
 
   @override
@@ -175,11 +186,12 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
     _interval?.update(t);
     _intervalUpdateOder?.update(t);
     _intervalAllCollisions?.update(t);
+  }
 
-    if (_firstUpdate) {
-      _firstUpdate = false;
-      onReady?.call(this);
-    }
+  @override
+  void onMount() {
+    onReady?.call(this);
+    super.onMount();
   }
 
   void addGameComponent(GameComponent component) {
@@ -197,7 +209,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   Iterable<Enemy> enemies() {
-    return components.where((element) => (element is Enemy)).cast();
+    return children.where((element) => (element is Enemy)).cast();
   }
 
   Iterable<GameDecoration> visibleDecorations() {
@@ -207,13 +219,13 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   Iterable<GameDecoration> decorations() {
-    return components.where((element) => (element is GameDecoration)).cast();
+    return children.where((element) => (element is GameDecoration)).cast();
   }
 
   Iterable<Lighting> lightVisible() => _visibleLights;
 
   Iterable<Attackable> attackables() {
-    return components.where((element) => (element is Attackable)).cast();
+    return children.where((element) => (element is Attackable)).cast();
   }
 
   Iterable<Attackable> visibleAttackables() {
@@ -241,7 +253,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   Iterable<T> componentsByType<T>() {
-    return components.whereType<T>();
+    return children.whereType<T>();
   }
 
   ValueGeneratorComponent getValueGenerator(
@@ -265,18 +277,31 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   @override
-  void onKeyEvent(RawKeyEvent event) {
+  KeyEventResult onKeyEvent(
+    RawKeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    if (joystickController?.keyboardConfig.acceptedKeys != null) {
+      final keyAccepted = joystickController?.keyboardConfig.acceptedKeys;
+      if (keyAccepted!.contains(event.logicalKey)) {
+        joystickController?.onKeyboard(event);
+        return KeyEventResult.handled;
+      } else {
+        return KeyEventResult.ignored;
+      }
+    }
     joystickController?.onKeyboard(event);
+    return KeyEventResult.handled;
   }
 
   @override
-  void onResize(Vector2 size) {
-    super.onResize(size);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
     _updateTempList();
   }
 
   void _updateTempList() {
-    _visibleComponents = components.where((element) {
+    _visibleComponents = children.where((element) {
       return (element is GameComponent) && (element).isVisible;
     }).cast()
       ..toList(growable: false);
@@ -296,7 +321,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   void _updateAllCollisions() {
-    _collisions = components
+    _collisions = children
         .where((element) {
           return (element is ObjectCollision) && (element).containCollision();
         })
@@ -317,6 +342,7 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
   }
 
   bool isVisibleInCamera(GameComponent c) {
+    if (!hasLayout) return false;
     if (c.shouldRemove) return false;
     return camera.isComponentOnCamera(c);
   }
@@ -339,5 +365,21 @@ class BonfireGame extends CustomBaseGame with KeyboardEvents {
       camera.screenPositionToWorld(event.localPosition),
     );
     super.onPointerUp(event);
+  }
+
+  /// Use this method to change default observer of the Joystick events.
+  void changeJoystickTarget(
+    GameComponent target, {
+    bool cleanObservers = true,
+  }) {
+    if (target is JoystickListener) {
+      if (cleanObservers) {
+        joystickController?.cleanObservers();
+      }
+      joystickController?.addObserver(target as JoystickListener);
+      camera.moveToTargetAnimated(target);
+    } else {
+      print('$target is not a JoystickListener');
+    }
   }
 }

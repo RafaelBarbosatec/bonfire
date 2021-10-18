@@ -65,10 +65,10 @@ class RotationEnemy extends Enemy {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (this.isVisible) {
       animation?.update(dt);
     }
-    super.update(dt);
   }
 
   void idle() {
@@ -86,8 +86,8 @@ class RotationEnemy extends Enemy {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     await _loader.load();
     idle();
-    return super.onLoad();
   }
 }
