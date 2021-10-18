@@ -1,4 +1,4 @@
-# [next]
+# 1.9.0
 - Update flame to `1.0.0-releasecandidate.15`
 - [BREAKING CHANGE] Component `remove()` method was replaced by `removeFromParent()`. Use it to remove a component from the game.
 - [BREAKING CHANGE] Removed params `keyboardEnable` and `keyboardDirectionalType` in `Joystick`. Set these attributes through `keyboardConfig`.
