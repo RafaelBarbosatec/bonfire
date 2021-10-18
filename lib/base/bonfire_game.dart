@@ -366,4 +366,20 @@ class BonfireGame extends BaseGame with KeyboardEvents {
     );
     super.onPointerUp(event);
   }
+
+  /// Use this method to change default observer of the Joystick events.
+  void changeJoystickTarget(
+    GameComponent target, {
+    bool cleanObservers = true,
+  }) {
+    if (target is JoystickListener) {
+      if (cleanObservers) {
+        joystickController?.cleanObservers();
+      }
+      joystickController?.addObserver(target as JoystickListener);
+      camera.moveToTargetAnimated(target);
+    } else {
+      print('$target is not a JoystickListener');
+    }
+  }
 }

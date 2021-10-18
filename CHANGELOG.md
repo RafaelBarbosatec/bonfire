@@ -1,7 +1,8 @@
 # 1.9.0
 - Update flame to `1.0.0-releasecandidate.15`
+- Adds  methods `changeJoystickTarget` in BonfireGame to make it easy to switch the default joystick events watcher.
 - [BREAKING CHANGE] Component `remove()` method was replaced by `removeFromParent()`. Use it to remove a component from the game.
-- [BREAKING CHANGE] Removed params `keyboardEnable` and `keyboardDirectionalType` in `Joystick`. Set these attributes through `keyboardConfig`.
+- [BREAKING CHANGE] Improvements in Keyboard events. Removed params `keyboardEnable` and `keyboardDirectionalType` in `Joystick`. Set these attributes through `keyboardConfig`.
 
 # 1.8.1
 - Adds `Focus` in `CustomGameWidget` to remove "system ding" in MACOS.

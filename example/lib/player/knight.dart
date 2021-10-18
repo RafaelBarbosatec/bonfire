@@ -262,14 +262,10 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
         if (v.isNotEmpty) {
           enemyControlled = v.first;
           enemyControlled?.enableBehaviors = false;
-          gameRef.joystickController?.removeObserver(this);
-          gameRef.joystickController?.addObserver(enemyControlled!);
-          gameRef.camera.moveToTargetAnimated(enemyControlled!);
+          gameRef.changeJoystickTarget(enemyControlled!);
         }
       } else {
-        gameRef.joystickController?.removeObserver(enemyControlled!);
-        gameRef.joystickController?.addObserver(this);
-        gameRef.camera.moveToPlayerAnimated();
+        gameRef.changeJoystickTarget(this);
         enemyControlled?.enableBehaviors = true;
         enemyControlled = null;
       }
