@@ -179,6 +179,7 @@ abstract class GameComponent extends Component
         Vector2(dx - 50, dy),
       );
     }
+    super.renderDebugMode(canvas);
   }
 
   /// Returns true if for each time the defined millisecond interval passes.

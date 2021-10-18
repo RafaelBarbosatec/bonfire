@@ -114,21 +114,14 @@ abstract class BaseGame extends Component
       canvas.scale(1 / camera.config.zoom);
       canvas.translate(-size.x / 2, -size.y / 2);
     }
-    if (debugMode) {
-      renderItemDebugMode(comp, canvas);
-    }
+
     comp.renderTree(canvas);
+
+    if (debugMode) {
+      comp.renderDebugMode(canvas);
+    }
+
     canvas.restore();
-  }
-
-  void renderItemDebugMode(Component comp, Canvas canvas) {
-    if (comp is GameComponent && debugMode) {
-      comp.renderDebugMode(canvas);
-    }
-
-    if (comp is MapGame && debugMode) {
-      comp.renderDebugMode(canvas);
-    }
   }
 
   @override

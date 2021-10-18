@@ -33,6 +33,7 @@ abstract class MapGame extends GameComponent {
   int get priority => LayerPriority.MAP;
 
   void renderDebugMode(Canvas canvas) {
+    super.renderDebugMode(canvas);
     for (final t in getRendered()) {
       t.renderDebugMode(canvas);
     }
