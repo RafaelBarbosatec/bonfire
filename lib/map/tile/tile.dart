@@ -125,9 +125,7 @@ class Tile extends GameComponent {
 
   @override
   void renderDebugMode(Canvas canvas) {
-    if (isVisible) {
-      _drawGrid(canvas);
-    }
+    _drawGrid(canvas);
   }
 
   void _drawGrid(Canvas canvas) {
@@ -186,12 +184,16 @@ class Tile extends GameComponent {
   }
 
   @override
+  // ignore: must_call_super
   void update(double dt) {
     _animation?.update(dt);
+
+    /// not used super.update(dt); to avoid consulting unnecessary computational resources
   }
 
   @override
-  Future<void> onLoad() async {
+  Future<void>? onLoad() async {
+    await super.onLoad();
     await _loader?.load();
     await _animation?.onLoad();
     _loader = null;

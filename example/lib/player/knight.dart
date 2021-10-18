@@ -113,7 +113,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   @override
   void die() {
-    remove();
+    removeFromParent();
     gameRef.addGameComponent(
       GameDecoration.withSprite(
         Sprite.load('player/crypt.png'),
@@ -262,14 +262,10 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
         if (v.isNotEmpty) {
           enemyControlled = v.first;
           enemyControlled?.enableBehaviors = false;
-          gameRef.joystickController?.removeObserver(this);
-          gameRef.joystickController?.addObserver(enemyControlled!);
-          gameRef.camera.moveToTargetAnimated(enemyControlled!);
+          gameRef.changeJoystickTarget(enemyControlled!);
         }
       } else {
-        gameRef.joystickController?.removeObserver(enemyControlled!);
-        gameRef.joystickController?.addObserver(this);
-        gameRef.camera.moveToPlayerAnimated();
+        gameRef.changeJoystickTarget(this);
         enemyControlled?.enableBehaviors = true;
         enemyControlled = null;
       }
@@ -346,8 +342,8 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     spriteDirectionAttack = await Sprite.load('direction_attack.png');
-    return super.onLoad();
   }
 
   @override

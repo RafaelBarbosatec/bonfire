@@ -18,6 +18,7 @@ mixin Lighting on GameComponent {
   @override
   bool get isVisible {
     if (!hasGameRef) return false;
+    if (!gameRef.hasLayout) return false;
     if (lightingConfig == null) return super.isVisible;
 
     Rect rectLight = Rect.fromLTWH(

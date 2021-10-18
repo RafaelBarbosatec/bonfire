@@ -92,7 +92,8 @@ class GameDecoration extends AnimatedObject {
   }
 
   @override
-  Future<void> onLoad() {
+  Future<void> onLoad() async {
+    await super.onLoad();
     return _loader.load();
   }
 }

@@ -1,7 +1,7 @@
-import 'package:bonfire/base/custom_base_game.dart';
+import 'package:bonfire/base/base_game.dart';
 import 'package:flame/components.dart';
 
-mixin BonfireHasGameRef<T extends CustomBaseGame> {
+mixin BonfireHasGameRef<T extends BaseGame> {
   T? _gameRef;
 
   T get gameRef {
@@ -16,8 +16,8 @@ mixin BonfireHasGameRef<T extends CustomBaseGame> {
 
   set gameRef(T gameRef) {
     _gameRef = gameRef;
-    if (this is BaseComponent) {
-      (this as BaseComponent)
+    if (this is Component) {
+      (this as Component)
           .children
           .whereType<BonfireHasGameRef<T>>()
           .forEach((e) => e.gameRef = gameRef);

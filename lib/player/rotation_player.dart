@@ -45,8 +45,8 @@ class RotationPlayer extends Player {
 
   @override
   void update(double dt) {
-    animation?.update(dt);
     super.update(dt);
+    animation?.update(dt);
   }
 
   @override
@@ -71,6 +71,7 @@ class RotationPlayer extends Player {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     await _loader.load();
     this.animation = this.animIdle;
   }

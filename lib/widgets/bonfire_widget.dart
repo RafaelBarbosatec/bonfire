@@ -143,10 +143,10 @@ class _BonfireWidgetState extends State<BonfireWidget> {
   void _refreshGame() async {
     await _game.map.updateTiles(widget.map.tiles);
 
-    _game.decorations().forEach((d) => d.remove());
+    _game.decorations().forEach((d) => d.removeFromParent());
     widget.decorations?.forEach((d) => _game.addGameComponent(d));
 
-    _game.enemies().forEach((e) => e.remove());
+    _game.enemies().forEach((e) => e.removeFromParent());
     widget.enemies?.forEach((e) => _game.addGameComponent(e));
   }
 }

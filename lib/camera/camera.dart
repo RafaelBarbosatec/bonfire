@@ -329,6 +329,7 @@ class Camera with BonfireHasGameRef<BonfireGame> {
   }
 
   void update(double dt) {
+    if (!gameRef.hasLayout) return;
     _doShake();
 
     _followTarget(

@@ -39,8 +39,8 @@ class LightingConfig {
     _pulseAnimation = PulseValue(speed: pulseSpeed, curve: pulseCurve);
   }
 
-  void update(double t) {
-    _pulseAnimation?.update(t);
+  void update(double dt) {
+    _pulseAnimation?.update(dt);
   }
 
   double get valuePulse => _pulseAnimation?.value ?? 0.0;

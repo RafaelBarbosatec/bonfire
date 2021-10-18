@@ -24,24 +24,24 @@ class BarLifeComponent extends InterfaceComponent {
         );
 
   @override
-  void update(double t) {
-    if (this.gameRef.player != null) {
+  void update(double dt) {
+    if (hasGameRef && this.gameRef.player != null) {
       life = this.gameRef.player?.life ?? 0.0;
       maxLife = this.gameRef.player?.maxLife ?? 0.0;
       if (this.gameRef.player is Knight) {
         stamina = (this.gameRef.player as Knight).stamina;
       }
     }
-    super.update(t);
+    super.update(dt);
   }
 
   @override
   void render(Canvas c) {
+    super.render(c);
     try {
       _drawLife(c);
       _drawStamina(c);
     } catch (e) {}
-    super.render(c);
   }
 
   void _drawLife(Canvas canvas) {

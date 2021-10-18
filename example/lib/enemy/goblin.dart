@@ -108,7 +108,7 @@ class Goblin extends SimpleEnemy
         position: position,
       ),
     );
-    remove();
+    removeFromParent();
     super.die();
   }
 
@@ -169,9 +169,7 @@ class Goblin extends SimpleEnemy
   }
 
   @override
-  void joystickAction(JoystickActionEvent event) {
-    // TODO: implement joystickAction
-  }
+  void joystickAction(JoystickActionEvent event) {}
 
   @override
   void moveTo(Vector2 position) {}

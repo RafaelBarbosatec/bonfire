@@ -60,20 +60,19 @@ class TextDamageComponent extends TextComponent
   }
 
   @override
-  void update(double t) {
+  void update(double dt) {
+    super.update(dt);
     if (shouldRemove) return;
     position.y += _velocity;
     position.x += _moveAxisX;
     _velocity += gravity;
 
     if (onlyUp && _velocity >= 0) {
-      remove();
+      removeFromParent();
     }
     if (position.y > _initialY + maxDownSize) {
-      remove();
+      removeFromParent();
     }
-
-    super.update(t);
   }
 
   @override

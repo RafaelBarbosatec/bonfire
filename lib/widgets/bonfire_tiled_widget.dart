@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/custom_game_widget.dart';
 import 'package:bonfire/base/game_component.dart';
@@ -97,15 +99,15 @@ class BonfireTiledWidget extends StatefulWidget {
 class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
     with TickerProviderStateMixin {
   BonfireGame? _game;
-  bool _loading = true;
+  late StreamController<bool> _loadingStream;
 
   @override
   void didUpdateWidget(BonfireTiledWidget oldWidget) {
     if (widget.constructionMode) {
       widget.map.build().then((value) async {
         await _game?.map.updateTiles(value.map.tiles);
-        _game?.decorations().forEach((d) => d.remove());
-        _game?.enemies().forEach((e) => e.remove());
+        _game?.decorations().forEach((d) => d.removeFromParent());
+        _game?.enemies().forEach((e) => e.removeFromParent());
         value.components?.forEach((d) => _game?.addGameComponent(d));
       });
     }
@@ -114,8 +116,15 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
 
   @override
   void initState() {
+    _loadingStream = StreamController<bool>();
     _loadGame();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _loadingStream.close();
+    super.dispose();
   }
 
   @override
@@ -123,11 +132,20 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
     return Stack(
       children: [
         _buildGame(),
-        AnimatedSwitcher(
-          duration:
-              widget.progressTransitionDuration ?? Duration(milliseconds: 500),
-          transitionBuilder: widget.transitionBuilder,
-          child: _loading ? _defaultProgress() : Center(),
+        StreamBuilder<bool>(
+          stream: _loadingStream.stream,
+          builder: (context, snapshot) {
+            bool _loading = true;
+            if (snapshot.hasData) {
+              _loading = snapshot.data!;
+            }
+            return AnimatedSwitcher(
+              duration: widget.progressTransitionDuration ??
+                  Duration(milliseconds: 500),
+              transitionBuilder: widget.transitionBuilder,
+              child: _loading ? _defaultProgress() : Center(),
+            );
+          },
         ),
       ],
     );
@@ -165,7 +183,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
           widget.onReady?.call(game);
         },
       );
-      _showProgress(true);
+      setState(() {});
     } catch (e) {
       print('(BonfireTiledWidget) Error: $e');
     }
@@ -192,8 +210,6 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
 
   void _showProgress(bool show) async {
     await Future.delayed(Duration.zero);
-    setState(() {
-      _loading = show;
-    });
+    _loadingStream.add(show);
   }
 }

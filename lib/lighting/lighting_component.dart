@@ -87,6 +87,7 @@ class LightingComponent extends GameComponent {
   }
 
   @override
+  // ignore: must_call_super
   void update(double dt) {
     if (!containsColor()) return;
     _dtUpdate = dt;

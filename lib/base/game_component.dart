@@ -71,11 +71,6 @@ abstract class GameComponent extends Component
         ),
       );
 
-  /// This method remove of the component
-  void remove() {
-    shouldRemove = true;
-  }
-
   /// Method that checks if this component is visible on the screen
   bool _isVisibleInCamera() {
     if (!hasGameRef) return false;
@@ -184,6 +179,7 @@ abstract class GameComponent extends Component
         Vector2(dx - 50, dy),
       );
     }
+    super.renderDebugMode(canvas);
   }
 
   /// Returns true if for each time the defined millisecond interval passes.
@@ -200,8 +196,8 @@ abstract class GameComponent extends Component
 
   @override
   void update(double dt) {
-    isVisible = this._isVisibleInCamera();
     super.update(dt);
+    isVisible = this._isVisibleInCamera();
   }
 
   /// Return screen position of this component.
@@ -213,6 +209,51 @@ abstract class GameComponent extends Component
       return Vector2(offset.dx, offset.dy);
     } else {
       return Vector2.zero();
+    }
+  }
+
+  @override
+  void handlerPointerDown(PointerDownEvent event) {
+    children.forEach((i) {
+      if (i is GameComponent) {
+        i.handlerPointerDown(event);
+      }
+    });
+  }
+
+  @override
+  void handlerPointerUp(PointerUpEvent event) {
+    children.forEach((i) {
+      if (i is GameComponent) {
+        i.handlerPointerUp(event);
+      }
+    });
+  }
+
+  @override
+  void handlerPointerCancel(PointerCancelEvent event) {
+    children.forEach((i) {
+      if (i is GameComponent) {
+        i.handlerPointerCancel(event);
+      }
+    });
+  }
+
+  @override
+  Future<void> add(Component component) {
+    if (component is BonfireHasGameRef) {
+      (component as BonfireHasGameRef).gameRef = gameRef;
+    }
+    return super.add(component);
+  }
+
+  @override
+  void prepare(Component parent) {
+    super.prepare(parent);
+    debugMode |= parent.debugMode;
+    isPrepared = true;
+    if (hasGameRef) {
+      onGameResize(gameRef.size);
     }
   }
 }
