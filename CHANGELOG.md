@@ -1,5 +1,7 @@
 # 1.9.1
-- correction of loading visible collisions  on the map.
+- Correction of loading visible collisions  on the map.
+- Adds a simple example.
+
 
 # 1.9.0
 - Update flame to `1.0.0-releasecandidate.15`
