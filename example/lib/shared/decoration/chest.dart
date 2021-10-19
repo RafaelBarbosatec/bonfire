@@ -1,8 +1,8 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/vector2rect.dart';
-import 'package:example/decoration/potion_life.dart';
 import 'package:example/manual_map/dungeon_map.dart';
-import 'package:example/util/common_sprite_sheet.dart';
+import 'package:example/shared/decoration/potion_life.dart';
+import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class Chest extends GameDecoration with TapGesture {

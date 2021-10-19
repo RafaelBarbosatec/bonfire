@@ -1,11 +1,4 @@
 { "compressionlevel":-1,
- "editorsettings":
-    {
-     "export":
-        {
-         "target":"."
-        }
-    },
  "height":40,
  "infinite":false,
  "layers":[
@@ -73,36 +66,14 @@
                 }, 
                 {
                  "height":16,
-                 "id":15,
-                 "name":"barrel",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":138.845373843006,
-                 "y":225.40155895154
-                }, 
-                {
-                 "height":16,
                  "id":21,
                  "name":"goblin",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":162.511569124222,
-                 "y":195.528707088928
-                }, 
-                {
-                 "height":16,
-                 "id":24,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":57.6295015845578,
-                 "y":276.567559781043
+                 "x":184.372234261837,
+                 "y":266.8446474559
                 }, 
                 {
                  "height":16,
@@ -117,179 +88,14 @@
                 }, 
                 {
                  "height":16,
-                 "id":54,
-                 "name":"spike",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":182.884223825387,
-                 "y":260.202225944044
-                }, 
-                {
-                 "height":16,
-                 "id":57,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":210.841832324978,
-                 "y":277.911840968021
-                }, 
-                {
-                 "height":16,
-                 "id":58,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":182.838375108038,
-                 "y":239.536732929991
-                }, 
-                {
-                 "height":16,
-                 "id":59,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":187.33275713051,
-                 "y":279.986171132238
-                }, 
-                {
-                 "height":16,
-                 "id":60,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":117.151253241141,
-                 "y":278.603284356093
-                }, 
-                {
-                 "height":16,
-                 "id":61,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":160.020743301642,
-                 "y":259.588591184097
-                }, 
-                {
-                 "height":16,
-                 "id":62,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":161.057908383751,
-                 "y":222.942091616249
-                }, 
-                {
-                 "height":16,
-                 "id":63,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":142.388936905791,
-                 "y":280.331892826275
-                }, 
-                {
-                 "height":16,
-                 "id":64,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":139.277441659464,
-                 "y":253.019878997407
-                }, 
-                {
-                 "height":16,
-                 "id":65,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":58.724286949006,
-                 "y":240.228176318064
-                }, 
-                {
-                 "height":16,
-                 "id":66,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":59.4157303370787,
-                 "y":209.804667242869
-                }, 
-                {
-                 "height":16,
-                 "id":67,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":116.459809853068,
-                 "y":222.596369922213
-                }, 
-                {
-                 "height":16,
-                 "id":68,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":133.400172860847,
-                 "y":200.470181503889
-                }, 
-                {
-                 "height":16,
                  "id":69,
                  "name":"goblin",
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":58.724286949006,
-                 "y":180.76404494382
-                }, 
-                {
-                 "height":16,
-                 "id":70,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":168.66378565255,
-                 "y":172.466724286949
-                }, 
-                {
-                 "height":16,
-                 "id":71,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":104.705272255834,
-                 "y":177.652549697494
+                 "x":63.3831172242353,
+                 "y":205.850054118132
                 }, 
                 {
                  "height":16,
@@ -299,74 +105,8 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":184.912705272256,
-                 "y":207.730337078652
-                }, 
-                {
-                 "height":16,
-                 "id":73,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":78.7761452031115,
-                 "y":257.514261019879
-                }, 
-                {
-                 "height":16,
-                 "id":74,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":96.0622299049265,
-                 "y":278.603284356093
-                }, 
-                {
-                 "height":16,
-                 "id":75,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":99.5194468452895,
-                 "y":246.105445116681
-                }, 
-                {
-                 "height":16,
-                 "id":76,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":119.917026793431,
-                 "y":248.525496974935
-                }, 
-                {
-                 "height":16,
-                 "id":77,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":101.248055315471,
-                 "y":201.853068280035
-                }, 
-                {
-                 "height":16,
-                 "id":78,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":188.715643906655,
-                 "y":175.578219533276
+                 "x":144.775090593357,
+                 "y":213.46428203278
                 }, 
                 {
                  "height":16,
@@ -376,30 +116,8 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":148.266205704408,
-                 "y":170.392394122731
-                }, 
-                {
-                 "height":16,
-                 "id":80,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":206.693171996543,
-                 "y":245.068280034572
-                }, 
-                {
-                 "height":16,
-                 "id":81,
-                 "name":"goblin",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":165.206568712187,
-                 "y":280.677614520311
+                 "x":113.504164420004,
+                 "y":274.320146416309
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -411,7 +129,7 @@
  "nextobjectid":82,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.3.5",
+ "tiledversion":"1.5.0",
  "tileheight":16,
  "tilesets":[
         {
@@ -420,6 +138,6 @@
         }],
  "tilewidth":16,
  "type":"map",
- "version":1.2,
+ "version":1.5,
  "width":60
 }

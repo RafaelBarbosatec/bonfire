@@ -1,19 +1,19 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:example/decoration/barrel_dragable.dart';
-import 'package:example/decoration/chest.dart';
-import 'package:example/decoration/spikes.dart';
-import 'package:example/decoration/torch.dart';
-import 'package:example/enemy/goblin.dart';
-import 'package:example/interface/knight_interface.dart';
 import 'package:example/manual_map/dungeon_map.dart';
-import 'package:example/player/knight.dart';
+import 'package:example/shared/decoration/barrel_dragable.dart';
+import 'package:example/shared/decoration/chest.dart';
+import 'package:example/shared/decoration/spikes.dart';
+import 'package:example/shared/decoration/torch.dart';
+import 'package:example/shared/enemy/goblin.dart';
+import 'package:example/shared/interface/knight_interface.dart';
+import 'package:example/shared/player/knight.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'decoration/column.dart';
+import '../shared/decoration/column.dart';
 
 class GameTiledMap extends StatelessWidget {
   final int map;

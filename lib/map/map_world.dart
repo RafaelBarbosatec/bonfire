@@ -46,11 +46,8 @@ class MapWorld extends MapGame {
   @override
   // ignore: must_call_super
   void renderTree(Canvas canvas) {
-    for (final tile in children) {
+    for (final tile in childrenTiles) {
       tile.render(canvas);
-      if (tile.shouldRemove) {
-        _tilesToRemove.add(tile as Tile);
-      }
     }
     _drawPathLine(canvas);
 
@@ -58,8 +55,14 @@ class MapWorld extends MapGame {
   }
 
   @override
+  // ignore: must_call_super
   void update(double dt) {
-    super.update(dt);
+    for (final tile in childrenTiles) {
+      tile.update(dt);
+      if (tile.shouldRemove) {
+        _tilesToRemove.add(tile);
+      }
+    }
     if (!_buildingTiles && _checkNeedUpdateTiles()) {
       _buildingTiles = true;
       scheduleMicrotask(_searchTilesToRender);
@@ -80,10 +83,11 @@ class MapWorld extends MapGame {
 
     _visibleSet = visibleTileModel.map((e) => e.id).toSet();
 
-    children.removeWhere((element) {
-      return !_visibleSet.contains((element as Tile).id);
+    childrenTiles.removeWhere((element) {
+      return !_visibleSet.contains((element).id);
     });
-    children.addAll(_buildTiles(_tilesToAdd));
+
+    childrenTiles.addAll(_buildTiles(_tilesToAdd));
 
     _findVisibleCollisions();
 
@@ -92,7 +96,7 @@ class MapWorld extends MapGame {
 
   @override
   Iterable<Tile> getRendered() {
-    return children.cast();
+    return childrenTiles.cast();
   }
 
   @override
@@ -238,7 +242,7 @@ class MapWorld extends MapGame {
     if (_tilesToRemove.isNotEmpty) {
       for (Tile tile in _tilesToRemove) {
         if (tile.shouldRemove) {
-          children.remove(tile);
+          childrenTiles.remove(tile);
           tiles.removeWhere((element) => element.id == tile.id);
           quadTree?.removeById(tile.id);
           if (tile is ObjectCollision) {
@@ -260,7 +264,7 @@ class MapWorld extends MapGame {
     await _loadTile(tileModel);
     final tile = tileModel.getTile(gameRef);
     tiles.add(tileModel);
-    children.add(tile);
+    childrenTiles.add(tile);
     quadTree?.insert(
       tileModel,
       Point(tileModel.x, tileModel.y),
@@ -276,8 +280,8 @@ class MapWorld extends MapGame {
   @override
   void removeTile(String id) {
     try {
-      children
-          .firstWhere((element) => (element as Tile).id == id)
+      childrenTiles
+          .firstWhere((element) => (element).id == id)
           .removeFromParent();
     } catch (e) {
       print('Not found visible tile with $id id');
@@ -285,7 +289,8 @@ class MapWorld extends MapGame {
   }
 
   void _findVisibleCollisions() {
-    _tilesVisibleCollisions = children.whereType<ObjectCollision>().toList();
+    _tilesVisibleCollisions =
+        childrenTiles.whereType<ObjectCollision>().toList();
   }
 
   Future<void> _loadTile(TileModel element) async {

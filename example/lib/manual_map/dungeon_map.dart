@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:example/decoration/barrel_dragable.dart';
-import 'package:example/decoration/chest.dart';
-import 'package:example/decoration/spikes.dart';
-import 'package:example/decoration/torch.dart';
-import 'package:example/enemy/goblin.dart';
+import 'package:example/shared/decoration/barrel_dragable.dart';
+import 'package:example/shared/decoration/chest.dart';
+import 'package:example/shared/decoration/spikes.dart';
+import 'package:example/shared/decoration/torch.dart';
+import 'package:example/shared/enemy/goblin.dart';
 import 'package:flutter/material.dart';
 
 class DungeonMap {

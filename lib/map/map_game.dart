@@ -12,6 +12,7 @@ abstract class MapGame extends GameComponent {
   Size? mapSize;
   Vector2? mapStartPosition;
   double tileSizeToUpdate;
+  List<Tile> childrenTiles = [];
 
   MapGame(this.tiles, {this.tileSizeToUpdate = 0});
 
