@@ -1,3 +1,6 @@
+# 1.9.1
+- correction of loading visible collisions  on the map.
+
 # 1.9.0
 - Update flame to `1.0.0-releasecandidate.15`
 - Adds  methods `changeJoystickTarget` in BonfireGame to make it easy to switch the default joystick events watcher.
