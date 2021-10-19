@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/game_controller.dart';
-import 'package:example/enemy/goblin.dart';
-import 'package:example/interface/knight_interface.dart';
 import 'package:example/manual_map/dungeon_map.dart';
-import 'package:example/player/knight.dart';
-import 'package:example/util/common_sprite_sheet.dart';
+import 'package:example/shared/enemy/goblin.dart';
+import 'package:example/shared/interface/knight_interface.dart';
+import 'package:example/shared/player/knight.dart';
+import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
