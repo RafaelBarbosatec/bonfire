@@ -56,6 +56,9 @@ class Menu extends StatelessWidget {
               ),
             ),
             SizedBox(
+              height: 10,
+            ),
+            SizedBox(
               width: 200,
               child: ElevatedButton(
                 style: ButtonStyle(

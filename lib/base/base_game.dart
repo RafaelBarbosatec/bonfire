@@ -16,7 +16,7 @@ import 'package:flutter/widgets.dart';
 /// Apply zoom in canvas.
 /// Reorder components per time frame.
 abstract class BaseGame extends Component
-    with Loadable, Game, FPSCounter, PointerDetector {
+    with Game, FPSCounter, PointerDetector {
   Camera camera = Camera(CameraConfig());
 
   /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
