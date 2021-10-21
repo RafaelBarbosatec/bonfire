@@ -8,6 +8,7 @@
 - Adds  methods `changeJoystickTarget` in BonfireGame to make it easy to switch the default joystick events watcher.
 - [BREAKING CHANGE] Component `remove()` method was replaced by `removeFromParent()`. Use it to remove a component from the game.
 - [BREAKING CHANGE] Improvements in Keyboard events. Removed params `keyboardEnable` and `keyboardDirectionalType` in `Joystick`. Set these attributes through `keyboardConfig`.
+- [BREAKING CHANGE] gameRef.components changed to gameRef.children.
 
 # 1.8.1
 - Adds `Focus` in `CustomGameWidget` to remove "system ding" in MACOS.
