@@ -180,4 +180,12 @@ abstract class BaseGame extends Component
       super.attach(owner, gameRenderBox);
     }
   }
+
+  @override
+  void onGameResize(Vector2 size) {
+    for (final child in children) {
+      child.onGameResize(size);
+    }
+    super.onGameResize(size);
+  }
 }
