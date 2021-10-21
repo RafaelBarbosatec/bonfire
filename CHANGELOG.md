@@ -1,3 +1,6 @@
+# 1.9.2
+- Fix onGameResize. It works again when the window size is changed
+
 # 1.9.1
 - Correction of loading visible collisions  on the map.
 - Adds a simple example.
