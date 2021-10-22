@@ -76,6 +76,7 @@ class Joystick extends JoystickController {
   }
 
   void render(Canvas canvas) {
+    super.render(canvas);
     directional?.render(canvas);
     actions?.forEach((action) => action.render(canvas));
   }

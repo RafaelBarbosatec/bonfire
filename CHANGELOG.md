@@ -1,3 +1,6 @@
+# [next]
+- Update flame to `1.0.0-releasecandidate.16`
+
 # 1.9.2
 - Fix onGameResize. It works again when the window size is changed
 

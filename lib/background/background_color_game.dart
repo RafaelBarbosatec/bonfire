@@ -8,6 +8,7 @@ class BackgroundColorGame extends GameBackground {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     canvas.drawColor(
       color,
       BlendMode.src,
