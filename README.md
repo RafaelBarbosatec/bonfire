@@ -34,3 +34,8 @@ For more information and [examples](https://bonfire-engine.github.io/#/examples)
 [![buymeacoffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/rafaelbarbosa)
 
  
+## Contribution
+
+If you find any errors or want to add improvements, you can open a issue or develop the fix and open a pull request. Thank you for your cooperation!
+
+[Documentation repository](https://github.com/bonfire-engine/bonfire-engine.github.io)
