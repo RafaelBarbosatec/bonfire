@@ -51,6 +51,7 @@ class RotationPlayer extends Player {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     if (currentRadAngle == null) return;
     canvas.save();
     canvas.translate(position.center.dx, position.center.dy);

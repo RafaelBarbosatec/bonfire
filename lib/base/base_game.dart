@@ -6,7 +6,6 @@ import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart' hide Camera;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -83,6 +82,7 @@ abstract class BaseGame extends Component
   /// You can override it further to add more custom behaviour.
   /// Beware of however you are rendering components if not using this; you must be careful to save and restore the canvas to avoid components messing up with each other.
   @override
+  // ignore: must_call_super
   void render(Canvas canvas) {
     if (!hasLayout) return;
     canvas.save();
@@ -163,22 +163,6 @@ abstract class BaseGame extends Component
   void updateOrderPriority() {
     children.rebalanceAll();
     _highestPriority = children.last.priority;
-  }
-
-  @override
-  void detach() {
-    if (kReleaseMode) {
-      super.detach();
-    }
-  }
-
-  @override
-  void attach(owner, gameRenderBox) {
-    if (!kReleaseMode && !isAttached) {
-      super.attach(owner, gameRenderBox);
-    } else if (kReleaseMode) {
-      super.attach(owner, gameRenderBox);
-    }
   }
 
   @override

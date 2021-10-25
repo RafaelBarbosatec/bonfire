@@ -44,14 +44,12 @@ class MapWorld extends MapGame {
         );
 
   @override
-  // ignore: must_call_super
-  void renderTree(Canvas canvas) {
+  void render(Canvas canvas) {
     for (final tile in childrenTiles) {
       tile.render(canvas);
     }
     _drawPathLine(canvas);
-
-    /// not used super.renderTree(canvas); to avoid render twice.
+    super.render(canvas);
   }
 
   @override

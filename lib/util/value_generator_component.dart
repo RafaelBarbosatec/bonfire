@@ -30,9 +30,6 @@ class ValueGeneratorComponent extends Component {
   }
 
   @override
-  void render(Canvas c) {}
-
-  @override
   void update(double dt) {
     super.update(dt);
     if (!_isRunning) return;

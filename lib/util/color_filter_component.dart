@@ -11,6 +11,7 @@ class ColorFilterComponent extends GameComponent {
   ColorFilterComponent(this.colorFilter);
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     if (colorFilter.enable == true) {
       canvas.save();
       canvas.drawColor(

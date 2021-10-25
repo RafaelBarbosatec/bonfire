@@ -28,6 +28,7 @@ class LightingComponent extends GameComponent {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     if (!containsColor()) return;
     Vector2 size = gameRef.size;
     canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
