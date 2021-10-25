@@ -1,4 +1,4 @@
-# [next]
+# 1.9.3
 - Update flame to `1.0.0-releasecandidate.16`
 
 # 1.9.2
