@@ -54,8 +54,6 @@ abstract class GameComponent extends Component
   /// Range [0.0..1.0]
   double opacity = 1.0;
 
-  final Transform2D _transform = Transform2D();
-
   /// Rotation angle (in radians) of the component. The component will be
   /// rotated around its anchor point in the clockwise direction if the
   /// angle is positive, or counterclockwise if the angle is negative.
