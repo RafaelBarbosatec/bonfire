@@ -1,6 +1,6 @@
 # 1.9.4
 - Small improvements in map loading.
-- Adds `angle` param in `GameComponent`.
+- Adds `angle` param in `GameComponent` to rotate component render.
 
 # 1.9.3
 - Update flame to `1.0.0-releasecandidate.16`
