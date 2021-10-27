@@ -1,5 +1,6 @@
 # 1.9.4
 - Small improvements in map loading.
+- Adds `angle` param in `GameComponent`.
 
 # 1.9.3
 - Update flame to `1.0.0-releasecandidate.16`

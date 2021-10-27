@@ -64,12 +64,12 @@ class GameDecoration extends AnimatedObject {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     sprite?.renderFromVector2Rect(
       canvas,
       this.position,
       opacity: opacity,
     );
-    super.render(canvas);
   }
 
   Vector2Rect generateRectWithBleedingPixel(

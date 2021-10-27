@@ -9,6 +9,7 @@ import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 
 /// Base of the all components in the Bonfire
@@ -52,6 +53,13 @@ abstract class GameComponent extends Component
   /// Use to set opacity in render
   /// Range [0.0..1.0]
   double opacity = 1.0;
+
+  final Transform2D _transform = Transform2D();
+
+  /// Rotation angle (in radians) of the component. The component will be
+  /// rotated around its anchor point in the clockwise direction if the
+  /// angle is positive, or counterclockwise if the angle is negative.
+  double angle = 0;
 
   /// Param checks if this component is visible on the screen
   bool isVisible = false;
@@ -180,6 +188,17 @@ abstract class GameComponent extends Component
       );
     }
     super.renderDebugMode(canvas);
+  }
+
+  @override
+  void preRender(Canvas canvas) {
+    if (angle != 0) {
+      canvas.save();
+      canvas.translate(position.center.dx, position.center.dy);
+      canvas.rotate(angle);
+      canvas.translate(-position.center.dx, -position.center.dy);
+    }
+    super.preRender(canvas);
   }
 
   /// Returns true if for each time the defined millisecond interval passes.

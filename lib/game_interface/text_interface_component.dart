@@ -29,6 +29,7 @@ class TextInterfaceComponent extends InterfaceComponent {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     if (_measuredWidth == null) {
       _measuredWidth = textConfig.measureTextWidth(text);
       _measuredHeight = textConfig.measureTextHeight(text);
@@ -42,6 +43,5 @@ class TextInterfaceComponent extends InterfaceComponent {
       text,
       Vector2(this.position.left, this.position.top),
     );
-    super.render(canvas);
   }
 }

@@ -54,13 +54,13 @@ class RotationEnemy extends Enemy {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     canvas.save();
     canvas.translate(position.center.dx, position.center.dy);
     canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));
     canvas.translate(-position.center.dx, -position.center.dy);
     _renderAnimation(canvas);
     canvas.restore();
-    super.render(canvas);
   }
 
   @override
