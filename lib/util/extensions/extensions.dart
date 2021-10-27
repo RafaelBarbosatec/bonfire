@@ -104,10 +104,10 @@ extension RectExt on Rect {
   }
 
   Rectangle getRectangleByTileSize(double tileSize) {
-    final left = this.left / tileSize;
-    final top = this.top / tileSize;
-    final width = this.width / tileSize;
-    final height = this.height / tileSize;
+    final left = (this.left / tileSize).floorToDouble();
+    final top = (this.top / tileSize).floorToDouble();
+    final width = (this.width / tileSize).ceilToDouble();
+    final height = (this.height / tileSize).ceilToDouble();
 
     return Rectangle(
       left,
