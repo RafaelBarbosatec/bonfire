@@ -132,7 +132,7 @@ class MapWorld extends MapGame {
     if (tileSizeToUpdate == 0) {
       tileSizeToUpdate = (tileSize * 4).ceilToDouble();
     }
-    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.2);
+    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.4);
 
     _getTileCollisions();
 

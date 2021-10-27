@@ -12,8 +12,8 @@ mixin DirectionAnimation on Movement {
 
   @override
   void render(Canvas canvas) {
-    animation?.render(canvas);
     super.render(canvas);
+    animation?.render(canvas);
   }
 
   @override

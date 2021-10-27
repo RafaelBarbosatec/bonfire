@@ -114,13 +114,13 @@ class Tile extends GameComponent {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     _animation?.render(canvas, position);
     _sprite?.renderFromVector2Rect(
       canvas,
       position,
       overridePaint: MapPaint.instance.paint,
     );
-    super.render(canvas);
   }
 
   @override

@@ -22,12 +22,12 @@ class AnimatedFollowerObject extends FollowerObject {
 
   @override
   void render(Canvas canvas) {
+    super.render(canvas);
     animation?.getSprite().renderFromVector2Rect(
           canvas,
           this.position,
           opacity: opacity,
         );
-    super.render(canvas);
   }
 
   @override

@@ -32,7 +32,6 @@ class FlyingAttackAngleObject extends AnimatedObject
 
   late double _cosAngle;
   late double _senAngle;
-  late double _rotate;
 
   final IntervalTick _timerVerifyCollision = IntervalTick(40);
 
@@ -66,13 +65,15 @@ class FlyingAttackAngleObject extends AnimatedObject
     setupCollision(
       collision ??
           CollisionConfig(
-            collisions: [CollisionArea.rectangle(size: Size(width, height))],
+            collisions: [
+              CollisionArea.rectangle(size: Size(width, height)),
+            ],
           ),
     );
 
     _cosAngle = cos(radAngle);
     _senAngle = sin(radAngle);
-    _rotate = radAngle == 0.0 ? 0.0 : radAngle + (pi / 2);
+    angle = radAngle + (pi / 2);
   }
 
   @override
@@ -94,16 +95,6 @@ class FlyingAttackAngleObject extends AnimatedObject
     } else {
       _verifyCollision(dt);
     }
-  }
-
-  @override
-  void render(Canvas canvas) {
-    canvas.save();
-    canvas.translate(position.rect.center.dx, position.rect.center.dy);
-    canvas.rotate(_rotate);
-    canvas.translate(-position.rect.center.dx, -position.rect.center.dy);
-    super.render(canvas);
-    canvas.restore();
   }
 
   void _verifyCollision(double dt) {
