@@ -1,3 +1,5 @@
+# next
+- option to disable touch input on `Joystick` for desktop only controls
 # 1.9.4
 - Small improvements in map loading.
 - Adds `angle` param in `GameComponent` to rotate component render.

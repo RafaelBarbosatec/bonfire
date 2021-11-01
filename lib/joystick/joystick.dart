@@ -45,12 +45,14 @@ class KeyboardConfig {
 class Joystick extends JoystickController {
   final List<JoystickAction>? actions;
   final JoystickDirectional? directional;
+  final bool disableTouch;
 
   List<LogicalKeyboardKey> _currentKeyboardKeys = [];
 
   Joystick({
     this.actions,
     this.directional,
+    this.disableTouch = false,
     KeyboardConfig? keyboardConfig,
   }) {
     if (keyboardConfig != null) {
@@ -76,6 +78,7 @@ class Joystick extends JoystickController {
   }
 
   void render(Canvas canvas) {
+    if (disableTouch) return;
     super.render(canvas);
     directional?.render(canvas);
     actions?.forEach((action) => action.render(canvas));
@@ -90,12 +93,14 @@ class Joystick extends JoystickController {
 
   @override
   void handlerPointerCancel(PointerCancelEvent event) {
+    if (disableTouch) return;
     actions?.forEach((action) => action.actionUp(event.pointer));
     directional?.directionalUp(event.pointer);
   }
 
   @override
   void handlerPointerDown(PointerDownEvent event) {
+    if (disableTouch) return;
     directional?.directionalDown(event.pointer, event.localPosition);
     actions?.forEach((action) {
       action.actionDown(event.pointer, event.localPosition);
@@ -104,6 +109,7 @@ class Joystick extends JoystickController {
 
   @override
   void handlerPointerMove(PointerMoveEvent event) {
+    if (disableTouch) return;
     actions?.forEach((action) {
       action.actionMove(event.pointer, event.localPosition);
     });
@@ -112,6 +118,7 @@ class Joystick extends JoystickController {
 
   @override
   void handlerPointerUp(PointerUpEvent event) {
+    if (disableTouch) return;
     actions?.forEach((action) => action.actionUp(event.pointer));
     directional?.directionalUp(event.pointer);
   }
