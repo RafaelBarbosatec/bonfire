@@ -75,10 +75,10 @@ extension EnemyExtensions on Enemy {
     bool withPush = false,
     double? sizePush,
     Direction? direction,
-    Future<SpriteAnimation>? attackEffectRightAnim,
-    Future<SpriteAnimation>? attackEffectBottomAnim,
-    Future<SpriteAnimation>? attackEffectLeftAnim,
-    Future<SpriteAnimation>? attackEffectTopAnim,
+    Future<SpriteAnimation>? animationRight,
+    Future<SpriteAnimation>? animationBottom,
+    Future<SpriteAnimation>? animationLeft,
+    Future<SpriteAnimation>? animationTop,
     VoidCallback? execute,
   }) {
     if (!this.checkInterval('attackMelee', interval, dtUpdate)) return;
@@ -95,10 +95,10 @@ extension EnemyExtensions on Enemy {
       id: id,
       withPush: withPush,
       sizePush: sizePush,
-      animationTop: attackEffectTopAnim,
-      animationBottom: attackEffectBottomAnim,
-      animationLeft: attackEffectLeftAnim,
-      animationRight: attackEffectRightAnim,
+      animationTop: animationTop,
+      animationBottom: animationBottom,
+      animationLeft: animationLeft,
+      animationRight: animationRight,
     );
 
     execute?.call();

@@ -1,3 +1,7 @@
+# 1.9.5
+- Update params name of `simpleAttackMelee` in Enemy.
+- Improvements in `MoveToPositionAlongThePath`
+
 # 1.9.4
 - Small improvements in map loading.
 - Adds `angle` param in `GameComponent` to rotate component render.
