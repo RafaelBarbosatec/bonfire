@@ -1,5 +1,6 @@
 # [next]
 - Update params name of `simpleAttackMelee` in Enemy.
+- Improvements in `MoveToPositionAlongThePath`
 
 # 1.9.4
 - Small improvements in map loading.

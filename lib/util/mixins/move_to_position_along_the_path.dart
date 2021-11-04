@@ -9,11 +9,12 @@ import 'package:flutter/material.dart';
 /// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
 mixin MoveToPositionAlongThePath on Movement {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
+  static const REDUCTION_TO_AVOID_ROUNDING_PROBLEMS = 4;
 
   List<Offset> _currentPath = [];
   int _currentIndex = 0;
   bool _showBarriers = false;
-  bool _tileSizeIsSizeCollision = false;
+  bool _gridSizeIsCollisionSize = false;
 
   List<Offset> _barriers = [];
   List ignoreCollisions = [];
@@ -24,18 +25,25 @@ mixin MoveToPositionAlongThePath on Movement {
   Paint _paintShowBarriers = Paint()..color = Colors.blue.withOpacity(0.5);
 
   void setupMoveToPositionAlongThePath({
+    /// Use to set line path color
     Color? pathLineColor,
     Color? barriersCalculatedColor,
+
+    /// Use to set line path width
     double pathLineStrokeWidth = 4,
+
+    /// Use to debug and show area collision calculated
     bool showBarriersCalculated = false,
-    bool tileSizeIsSizeCollision = false,
+
+    /// If `false` the algorithm use map tile size with base of the grid. if true this use collision size of the component.
+    bool gridSizeIsCollisionSize = false,
   }) {
     _paintShowBarriers.color =
         barriersCalculatedColor ?? Colors.blue.withOpacity(0.5);
     this._showBarriers = showBarriersCalculated;
     _pathLineColor = pathLineColor ?? Colors.lightBlueAccent.withOpacity(0.5);
     _pathLineStrokeWidth = pathLineStrokeWidth;
-    _tileSizeIsSizeCollision = tileSizeIsSizeCollision;
+    _gridSizeIsCollisionSize = gridSizeIsCollisionSize;
   }
 
   void moveToPositionAlongThePath(
@@ -211,17 +219,22 @@ mixin MoveToPositionAlongThePath on Movement {
 
   /// Get size of the grid used on algorithm to calculate path
   double get _tileSize {
-    if (_tileSizeIsSizeCollision) {
-      if (this.isObjectCollision()) {
-        return max((this as ObjectCollision).rectCollision.width,
-            (this as ObjectCollision).rectCollision.height);
-      }
-      return max(position.height, position.width);
-    }
+    double tileSize = 0.0;
     if (gameRef.map.tiles.isNotEmpty) {
-      return gameRef.map.tiles.first.width;
+      tileSize = gameRef.map.tiles.first.width;
     }
-    return 0.0;
+    if (_gridSizeIsCollisionSize) {
+      if (this.isObjectCollision()) {
+        return max(
+              (this as ObjectCollision).rectCollision.width,
+              (this as ObjectCollision).rectCollision.height,
+            ) +
+            REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
+      }
+      return max(position.height, position.width) +
+          REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
+    }
+    return tileSize;
   }
 
   bool get isMovingAlongThePath => _currentPath.isNotEmpty;
@@ -247,10 +260,14 @@ mixin MoveToPositionAlongThePath on Movement {
     List.generate(countRows, (r) {
       List.generate(countColumns, (c) {
         grid.add(Rect.fromLTWH(
-          leftTop.dx + (c * _tileSize),
-          leftTop.dy + (r * _tileSize),
-          _tileSize,
-          _tileSize,
+          leftTop.dx +
+              (c * _tileSize) +
+              REDUCTION_TO_AVOID_ROUNDING_PROBLEMS / 2,
+          leftTop.dy +
+              (r * _tileSize) +
+              REDUCTION_TO_AVOID_ROUNDING_PROBLEMS / 2,
+          _tileSize - REDUCTION_TO_AVOID_ROUNDING_PROBLEMS,
+          _tileSize - REDUCTION_TO_AVOID_ROUNDING_PROBLEMS,
         ));
       });
     });
@@ -328,12 +345,10 @@ mixin MoveToPositionAlongThePath on Movement {
   }
 
   bool _isNeighbor(Offset playerPosition, Offset targetPosition) {
-    if ((playerPosition.dx - targetPosition.dx).abs() == 1 &&
-        playerPosition.dy == targetPosition.dy) {
+    if ((playerPosition.dx - targetPosition.dx).abs() == 1) {
       return true;
     }
-    if ((playerPosition.dy - targetPosition.dy).abs() == 1 &&
-        playerPosition.dx == targetPosition.dx) {
+    if ((playerPosition.dy - targetPosition.dy).abs() == 1) {
       return true;
     }
     return false;
