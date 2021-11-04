@@ -149,10 +149,10 @@ class Goblin extends SimpleEnemy
       damage: attack / 2,
       interval: 400,
       sizePush: DungeonMap.tileSize / 2,
-      attackEffectBottomAnim: CommonSpriteSheet.blackAttackEffectBottom,
-      attackEffectLeftAnim: CommonSpriteSheet.blackAttackEffectLeft,
-      attackEffectRightAnim: CommonSpriteSheet.blackAttackEffectRight,
-      attackEffectTopAnim: CommonSpriteSheet.blackAttackEffectTop,
+      animationBottom: CommonSpriteSheet.blackAttackEffectBottom,
+      animationLeft: CommonSpriteSheet.blackAttackEffectLeft,
+      animationRight: CommonSpriteSheet.blackAttackEffectRight,
+      animationTop: CommonSpriteSheet.blackAttackEffectTop,
     );
   }
 
