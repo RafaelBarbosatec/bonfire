@@ -1,4 +1,4 @@
-# [next]
+# 1.9.5
 - Update params name of `simpleAttackMelee` in Enemy.
 - Improvements in `MoveToPositionAlongThePath`
 
