@@ -8,7 +8,7 @@ class TalkDialog extends StatefulWidget {
   const TalkDialog({
     Key? key,
     required this.says,
-    this.finish,
+    this.onFinish,
     this.onChangeTalk,
     this.textBoxMinHeight = 100,
     this.keyboardKeysToNext,
@@ -18,22 +18,20 @@ class TalkDialog extends StatefulWidget {
   static show(
     BuildContext context,
     List<Say> sayList, {
-    VoidCallback? finish,
+    VoidCallback? onFinish,
     ValueChanged<int>? onChangeTalk,
     Color? backgroundColor,
     double boxTextHeight = 100,
     List<LogicalKeyboardKey>? logicalKeyboardKeysToNext,
     EdgeInsetsGeometry? padding,
-    bool dismissible = true,
   }) {
     showDialog(
       barrierColor: backgroundColor,
       context: context,
-      barrierDismissible: dismissible,
       builder: (BuildContext context) {
         return TalkDialog(
           says: sayList,
-          finish: finish,
+          onFinish: onFinish,
           onChangeTalk: onChangeTalk,
           textBoxMinHeight: boxTextHeight,
           keyboardKeysToNext: logicalKeyboardKeysToNext,
@@ -44,7 +42,7 @@ class TalkDialog extends StatefulWidget {
   }
 
   final List<Say> says;
-  final VoidCallback? finish;
+  final VoidCallback? onFinish;
   final ValueChanged<int>? onChangeTalk;
   final double? textBoxMinHeight;
   final List<LogicalKeyboardKey>? keyboardKeysToNext;
@@ -75,6 +73,7 @@ class _TalkDialogState extends State<TalkDialog> {
 
   @override
   void dispose() {
+    widget.onFinish?.call();
     _textShowController.close();
     _focusNode.dispose();
     super.dispose();
@@ -188,7 +187,6 @@ class _TalkDialogState extends State<TalkDialog> {
       if (widget.onChangeTalk != null)
         widget.onChangeTalk?.call(currentIndexTalk);
     } else {
-      widget.finish?.call();
       Navigator.pop(context);
     }
   }
@@ -206,12 +204,14 @@ class _TalkDialogState extends State<TalkDialog> {
     _textShowController.add([TextSpan()]);
 
     await Future.forEach<TextSpan>(currentSay.text, (span) async {
+      if (_textShowController.isClosed) return;
       for (int i = 0; i < (span.text?.length ?? 0); i++) {
         if (finishedCurrentSay) {
           _textShowController.add([...currentSay.text]);
           break;
         }
         await Future.delayed(Duration(milliseconds: currentSay.speed ?? 50));
+        if (_textShowController.isClosed) return;
         _textShowController.add([
           ...currentSay.text.sublist(0, currentSay.text.indexOf(span)),
           TextSpan(

@@ -1,5 +1,5 @@
 # [NEXT]
-- Adds param `dismissible` in `TalkDialog.show`.
+- Improvements in `TalkDialog.show` (`onFinish`).
 
 
 # 1.9.6
