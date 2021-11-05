@@ -6,6 +6,15 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/mixins/movement.dart';
 import 'package:flutter/material.dart';
 
+enum TypeResumeDirection {
+  axisX,
+  axisY,
+  topLeft,
+  bottomLeft,
+  topRight,
+  bottomRight,
+}
+
 /// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
 mixin MoveToPositionAlongThePath on Movement {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
@@ -105,35 +114,47 @@ mixin MoveToPositionAlongThePath on Movement {
     double displacementY = diffY.abs() > innerSpeed ? speed : diffY.abs() / dt;
 
     if (diffX.abs() < 0.5 && diffY.abs() < 0.5) {
-      if (_currentIndex < _currentPath.length - 1) {
-        _currentIndex++;
-      } else {
-        stopMoveAlongThePath();
-      }
+      _goToNextPosition();
     } else {
       if (diffX.abs() > 0.5 && diffY.abs() > 0.5) {
         final displacementXDiagonal = displacementX * REDUCTION_SPEED_DIAGONAL;
         final displacementYDiagonal = displacementY * REDUCTION_SPEED_DIAGONAL;
         if (diffX > 0 && diffY > 0) {
-          this.moveDownRight(displacementXDiagonal, displacementYDiagonal);
+          this.moveDownRight(
+            displacementXDiagonal,
+            displacementYDiagonal,
+            onCollision: _goToNextPosition,
+          );
         } else if (diffX < 0 && diffY > 0) {
-          this.moveDownLeft(displacementXDiagonal, displacementYDiagonal);
+          this.moveDownLeft(
+            displacementXDiagonal,
+            displacementYDiagonal,
+            onCollision: _goToNextPosition,
+          );
         } else if (diffX > 0 && diffY < 0) {
-          this.moveUpRight(displacementXDiagonal, displacementYDiagonal);
+          this.moveUpRight(
+            displacementXDiagonal,
+            displacementYDiagonal,
+            onCollision: _goToNextPosition,
+          );
         } else if (diffX < 0 && diffY < 0) {
-          this.moveUpLeft(displacementXDiagonal, displacementYDiagonal);
+          this.moveUpLeft(
+            displacementXDiagonal,
+            displacementYDiagonal,
+            onCollision: _goToNextPosition,
+          );
         }
       } else if (diffX.abs() > 0.5) {
         if (diffX > 0) {
-          this.moveRight(displacementX);
+          this.moveRight(displacementX, onCollision: _goToNextPosition);
         } else if (diffX < 0) {
-          this.moveLeft(displacementX);
+          this.moveLeft(displacementX, onCollision: _goToNextPosition);
         }
       } else if (diffY.abs() > 0.5) {
         if (diffY > 0) {
-          this.moveDown(displacementY);
+          this.moveDown(displacementY, onCollision: _goToNextPosition);
         } else if (diffY < 0) {
-          this.moveUp(displacementY);
+          this.moveUp(displacementY, onCollision: _goToNextPosition);
         }
       }
     }
@@ -226,10 +247,9 @@ mixin MoveToPositionAlongThePath on Movement {
     if (_gridSizeIsCollisionSize) {
       if (this.isObjectCollision()) {
         return max(
-              (this as ObjectCollision).rectCollision.width,
-              (this as ObjectCollision).rectCollision.height,
-            ) +
-            REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
+          (this as ObjectCollision).rectCollision.width,
+          (this as ObjectCollision).rectCollision.height,
+        );
       }
       return max(position.height, position.width) +
           REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
@@ -294,42 +314,87 @@ mixin MoveToPositionAlongThePath on Movement {
   /// Example:
   /// [(1,2),(1,3),(1,4),(1,5)] = [(1,2),(1,5)]
   List<Offset> _resumePath(List<Offset> path) {
-    List<Offset> newPath = [];
-    List<Offset> newPathStep1 = [];
+    List<Offset> newPath = _resumeDirection(path, TypeResumeDirection.axisX);
+    newPath = _resumeDirection(newPath, TypeResumeDirection.axisY);
+    newPath = _resumeDirection(newPath, TypeResumeDirection.bottomLeft);
+    newPath = _resumeDirection(newPath, TypeResumeDirection.bottomRight);
+    newPath = _resumeDirection(newPath, TypeResumeDirection.topLeft);
+    newPath = _resumeDirection(newPath, TypeResumeDirection.topRight);
+    return newPath;
+  }
 
+  List<Offset> _resumeDirection(List<Offset> path, TypeResumeDirection type) {
+    List<Offset> newPath = [];
     List<List<Offset>> listOffset = [];
     int indexList = -1;
-    double currentY = 0;
-    path.forEach((element) {
-      if (element.dy == currentY) {
-        listOffset[indexList].add(element);
-      } else {
-        currentY = element.dy;
-        listOffset.add([element]);
-        indexList++;
-      }
-    });
-
-    listOffset.forEach((element) {
-      if (element.length > 1) {
-        newPathStep1.add(element.first);
-        newPathStep1.add(element.last);
-      } else {
-        newPathStep1.add(element.first);
-      }
-    });
-
-    indexList = -1;
     double currentX = 0;
-    listOffset.clear();
-    newPathStep1.forEach((element) {
-      if (element.dx == currentX) {
-        listOffset[indexList].add(element);
-      } else {
-        currentX = element.dx;
-        listOffset.add([element]);
-        indexList++;
+    double currentY = 0;
+
+    path.forEach((element) {
+      final dxDiagonal = element.dx.floor();
+      final dyDiagonal = element.dy.floor();
+
+      switch (type) {
+        case TypeResumeDirection.axisX:
+          if (element.dx == currentX) {
+            listOffset[indexList].add(element);
+          } else {
+            listOffset.add([element]);
+            indexList++;
+          }
+          break;
+        case TypeResumeDirection.axisY:
+          if (element.dy == currentY) {
+            listOffset[indexList].add(element);
+          } else {
+            listOffset.add([element]);
+            indexList++;
+          }
+          break;
+        case TypeResumeDirection.topLeft:
+          final nextDxDiagonal = (currentX - _tileSize).floor();
+          final nextDyDiagonal = (currentY - _tileSize).floor();
+          if (dxDiagonal == nextDxDiagonal && dyDiagonal == nextDyDiagonal) {
+            listOffset[indexList].add(element);
+          } else {
+            listOffset.add([element]);
+            indexList++;
+          }
+          break;
+        case TypeResumeDirection.bottomLeft:
+          final nextDxDiagonal = (currentX - _tileSize).floor();
+          final nextDyDiagonal = (currentY + _tileSize).floor();
+          if (dxDiagonal == nextDxDiagonal && dyDiagonal == nextDyDiagonal) {
+            listOffset[indexList].add(element);
+          } else {
+            listOffset.add([element]);
+            indexList++;
+          }
+          break;
+        case TypeResumeDirection.topRight:
+          final nextDxDiagonal = (currentX + _tileSize).floor();
+          final nextDyDiagonal = (currentY - _tileSize).floor();
+          if (dxDiagonal == nextDxDiagonal && dyDiagonal == nextDyDiagonal) {
+            listOffset[indexList].add(element);
+          } else {
+            listOffset.add([element]);
+            indexList++;
+          }
+          break;
+        case TypeResumeDirection.bottomRight:
+          final nextDxDiagonal = (currentX + _tileSize).floor();
+          final nextDyDiagonal = (currentY + _tileSize).floor();
+          if (dxDiagonal == nextDxDiagonal && dyDiagonal == nextDyDiagonal) {
+            listOffset[indexList].add(element);
+          } else {
+            listOffset.add([element]);
+            indexList++;
+          }
+          break;
       }
+
+      currentX = element.dx;
+      currentY = element.dy;
     });
 
     listOffset.forEach((element) {
@@ -352,5 +417,13 @@ mixin MoveToPositionAlongThePath on Movement {
       return true;
     }
     return false;
+  }
+
+  void _goToNextPosition() {
+    if (_currentIndex < _currentPath.length - 1) {
+      _currentIndex++;
+    } else {
+      stopMoveAlongThePath();
+    }
   }
 }
