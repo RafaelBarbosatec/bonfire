@@ -1,3 +1,7 @@
+# [NEXT]
+- Adds param `dismissible` in `TalkDialog.show`.
+
+
 # 1.9.6
 - Fix bug "getting stuck" in `MoveToPositionAlongThePath`
 - [BREAKING CHANGE] Change param `logicalKeyboardKeyToNext` in `TalkDialog` to `logicalKeyboardKeysToNext`, now multiple keys are accepted to advance in the dialogue

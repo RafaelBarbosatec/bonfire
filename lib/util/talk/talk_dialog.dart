@@ -24,10 +24,12 @@ class TalkDialog extends StatefulWidget {
     double boxTextHeight = 100,
     List<LogicalKeyboardKey>? logicalKeyboardKeysToNext,
     EdgeInsetsGeometry? padding,
+    bool dismissible = true,
   }) {
     showDialog(
       barrierColor: backgroundColor,
       context: context,
+      barrierDismissible: dismissible,
       builder: (BuildContext context) {
         return TalkDialog(
           says: sayList,
