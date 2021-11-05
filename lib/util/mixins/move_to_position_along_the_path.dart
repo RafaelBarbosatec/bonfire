@@ -105,35 +105,47 @@ mixin MoveToPositionAlongThePath on Movement {
     double displacementY = diffY.abs() > innerSpeed ? speed : diffY.abs() / dt;
 
     if (diffX.abs() < 0.5 && diffY.abs() < 0.5) {
-      if (_currentIndex < _currentPath.length - 1) {
-        _currentIndex++;
-      } else {
-        stopMoveAlongThePath();
-      }
+      _goToNextPosition();
     } else {
       if (diffX.abs() > 0.5 && diffY.abs() > 0.5) {
         final displacementXDiagonal = displacementX * REDUCTION_SPEED_DIAGONAL;
         final displacementYDiagonal = displacementY * REDUCTION_SPEED_DIAGONAL;
         if (diffX > 0 && diffY > 0) {
-          this.moveDownRight(displacementXDiagonal, displacementYDiagonal);
+          this.moveDownRight(
+            displacementXDiagonal,
+            displacementYDiagonal,
+            onCollision: _goToNextPosition,
+          );
         } else if (diffX < 0 && diffY > 0) {
-          this.moveDownLeft(displacementXDiagonal, displacementYDiagonal);
+          this.moveDownLeft(
+            displacementXDiagonal,
+            displacementYDiagonal,
+            onCollision: _goToNextPosition,
+          );
         } else if (diffX > 0 && diffY < 0) {
-          this.moveUpRight(displacementXDiagonal, displacementYDiagonal);
+          this.moveUpRight(
+            displacementXDiagonal,
+            displacementYDiagonal,
+            onCollision: _goToNextPosition,
+          );
         } else if (diffX < 0 && diffY < 0) {
-          this.moveUpLeft(displacementXDiagonal, displacementYDiagonal);
+          this.moveUpLeft(
+            displacementXDiagonal,
+            displacementYDiagonal,
+            onCollision: _goToNextPosition,
+          );
         }
       } else if (diffX.abs() > 0.5) {
         if (diffX > 0) {
-          this.moveRight(displacementX);
+          this.moveRight(displacementX, onCollision: _goToNextPosition);
         } else if (diffX < 0) {
-          this.moveLeft(displacementX);
+          this.moveLeft(displacementX, onCollision: _goToNextPosition);
         }
       } else if (diffY.abs() > 0.5) {
         if (diffY > 0) {
-          this.moveDown(displacementY);
+          this.moveDown(displacementY, onCollision: _goToNextPosition);
         } else if (diffY < 0) {
-          this.moveUp(displacementY);
+          this.moveUp(displacementY, onCollision: _goToNextPosition);
         }
       }
     }
@@ -226,10 +238,9 @@ mixin MoveToPositionAlongThePath on Movement {
     if (_gridSizeIsCollisionSize) {
       if (this.isObjectCollision()) {
         return max(
-              (this as ObjectCollision).rectCollision.width,
-              (this as ObjectCollision).rectCollision.height,
-            ) +
-            REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
+          (this as ObjectCollision).rectCollision.width,
+          (this as ObjectCollision).rectCollision.height,
+        );
       }
       return max(position.height, position.width) +
           REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
@@ -352,5 +363,13 @@ mixin MoveToPositionAlongThePath on Movement {
       return true;
     }
     return false;
+  }
+
+  void _goToNextPosition() {
+    if (_currentIndex < _currentPath.length - 1) {
+      _currentIndex++;
+    } else {
+      stopMoveAlongThePath();
+    }
   }
 }

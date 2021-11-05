@@ -1,3 +1,6 @@
+# [next]
+- Fix bug "getting stuck" in `MoveToPositionAlongThePath`
+
 # 1.9.5
 - Update params name of `simpleAttackMelee` in Enemy.
 - Improvements in `MoveToPositionAlongThePath`
