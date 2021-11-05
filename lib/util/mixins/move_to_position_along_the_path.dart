@@ -307,7 +307,12 @@ mixin MoveToPositionAlongThePath on Movement {
   List<Offset> _resumePath(List<Offset> path) {
     List<Offset> newPath = [];
     List<Offset> newPathStep1 = [];
+    List<Offset> newPathResumeDiagonal1 = [];
+    List<Offset> newPathResumeDiagonal2 = [];
+    List<Offset> newPathResumeDiagonal3 = [];
+    List<Offset> newPathResumeDiagonal4 = [];
 
+    /// resume axis Y
     List<List<Offset>> listOffset = [];
     int indexList = -1;
     double currentY = 0;
@@ -315,12 +320,13 @@ mixin MoveToPositionAlongThePath on Movement {
       if (element.dy == currentY) {
         listOffset[indexList].add(element);
       } else {
-        currentY = element.dy;
         listOffset.add([element]);
         indexList++;
       }
+      currentY = element.dy;
     });
 
+    /// resume axis X
     listOffset.forEach((element) {
       if (element.length > 1) {
         newPathStep1.add(element.first);
@@ -337,10 +343,130 @@ mixin MoveToPositionAlongThePath on Movement {
       if (element.dx == currentX) {
         listOffset[indexList].add(element);
       } else {
-        currentX = element.dx;
         listOffset.add([element]);
         indexList++;
       }
+      currentX = element.dx;
+    });
+
+    /// resume diagonal right-down
+    listOffset.forEach((element) {
+      if (element.length > 1) {
+        newPathResumeDiagonal1.add(element.first);
+        newPathResumeDiagonal1.add(element.last);
+      } else {
+        newPathResumeDiagonal1.add(element.first);
+      }
+    });
+
+    indexList = -1;
+    currentX = newPathResumeDiagonal1.first.dx;
+    currentY = newPathResumeDiagonal1.first.dy;
+    listOffset.clear();
+    newPathResumeDiagonal1.forEach((element) {
+      final dx = element.dx.floor();
+      final nextDxDiagonal = (currentX + _tileSize).floor();
+
+      final dy = element.dy.floor();
+      final nextDyDiagonal = (currentY + _tileSize).floor();
+      if (dx == nextDxDiagonal && dy == nextDyDiagonal) {
+        listOffset[indexList].add(element);
+      } else {
+        listOffset.add([element]);
+        indexList++;
+      }
+      currentX = element.dx;
+      currentY = element.dy;
+    });
+
+    /// resume diagonal right-up
+    listOffset.forEach((element) {
+      if (element.length > 1) {
+        newPathResumeDiagonal2.add(element.first);
+        newPathResumeDiagonal2.add(element.last);
+      } else {
+        newPathResumeDiagonal2.add(element.first);
+      }
+    });
+
+    indexList = -1;
+    currentX = newPathResumeDiagonal2.first.dx;
+    currentY = newPathResumeDiagonal2.first.dy;
+    listOffset.clear();
+    newPathResumeDiagonal2.forEach((element) {
+      final dx = element.dx.floor();
+      final nextDxDiagonal = (currentX + _tileSize).floor();
+
+      final dy = element.dy.floor();
+      final nextDyDiagonal = (currentY - _tileSize).floor();
+      if (dx == nextDxDiagonal && dy == nextDyDiagonal) {
+        listOffset[indexList].add(element);
+      } else {
+        listOffset.add([element]);
+        indexList++;
+      }
+      currentX = element.dx;
+      currentY = element.dy;
+    });
+
+    /// resume diagonal left-up
+    listOffset.forEach((element) {
+      if (element.length > 1) {
+        newPathResumeDiagonal3.add(element.first);
+        newPathResumeDiagonal3.add(element.last);
+      } else {
+        newPathResumeDiagonal3.add(element.first);
+      }
+    });
+
+    indexList = -1;
+    currentX = newPathResumeDiagonal3.first.dx;
+    currentY = newPathResumeDiagonal3.first.dy;
+    listOffset.clear();
+    newPathResumeDiagonal3.forEach((element) {
+      final dx = element.dx.floor();
+      final nextDxDiagonal = (currentX - _tileSize).floor();
+
+      final dy = element.dy.floor();
+      final nextDyDiagonal = (currentY - _tileSize).floor();
+      if (dx == nextDxDiagonal && dy == nextDyDiagonal) {
+        listOffset[indexList].add(element);
+      } else {
+        listOffset.add([element]);
+        indexList++;
+      }
+      currentX = element.dx;
+      currentY = element.dy;
+    });
+
+    /// resume diagonal left-down
+    listOffset.forEach((element) {
+      if (element.length > 1) {
+        newPathResumeDiagonal4.add(element.first);
+        newPathResumeDiagonal4.add(element.last);
+      } else {
+        newPathResumeDiagonal4.add(element.first);
+      }
+    });
+
+    indexList = -1;
+    currentX = newPathResumeDiagonal4.first.dx;
+    currentY = newPathResumeDiagonal4.first.dy;
+    listOffset.clear();
+    newPathResumeDiagonal4.forEach((element) {
+      final dx = element.dx.floor();
+      final nextDxDiagonal = (currentX - _tileSize).floor();
+
+      final dy = element.dy.floor();
+      final nextDyDiagonal = (currentY + _tileSize).floor();
+      if (dx == nextDxDiagonal && dy == nextDyDiagonal) {
+        listOffset[indexList].add(element);
+      } else {
+        listOffset.add([element]);
+        indexList++;
+      }
+      currentX = element.dx;
+      currentY = element.dy;
     });
 
     listOffset.forEach((element) {
@@ -351,7 +477,6 @@ mixin MoveToPositionAlongThePath on Movement {
         newPath.add(element.first);
       }
     });
-
     return newPath;
   }
 
