@@ -6,6 +6,15 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/mixins/movement.dart';
 import 'package:flutter/material.dart';
 
+enum TypeResumeDirection {
+  axisX,
+  axisY,
+  topLeft,
+  bottomLeft,
+  topRight,
+  bottomRight,
+}
+
 /// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
 mixin MoveToPositionAlongThePath on Movement {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
@@ -305,166 +314,85 @@ mixin MoveToPositionAlongThePath on Movement {
   /// Example:
   /// [(1,2),(1,3),(1,4),(1,5)] = [(1,2),(1,5)]
   List<Offset> _resumePath(List<Offset> path) {
-    List<Offset> newPath = [];
-    List<Offset> newPathStep1 = [];
-    List<Offset> newPathResumeDiagonal1 = [];
-    List<Offset> newPathResumeDiagonal2 = [];
-    List<Offset> newPathResumeDiagonal3 = [];
-    List<Offset> newPathResumeDiagonal4 = [];
+    List<Offset> newPath = _resumeDirection(path, TypeResumeDirection.axisX);
+    newPath = _resumeDirection(newPath, TypeResumeDirection.axisY);
+    newPath = _resumeDirection(newPath, TypeResumeDirection.bottomLeft);
+    newPath = _resumeDirection(newPath, TypeResumeDirection.bottomRight);
+    newPath = _resumeDirection(newPath, TypeResumeDirection.topLeft);
+    newPath = _resumeDirection(newPath, TypeResumeDirection.topRight);
+    return newPath;
+  }
 
-    /// resume axis Y
+  List<Offset> _resumeDirection(List<Offset> path, TypeResumeDirection type) {
+    List<Offset> newPath = [];
     List<List<Offset>> listOffset = [];
     int indexList = -1;
-    double currentY = 0;
-    path.forEach((element) {
-      if (element.dy == currentY) {
-        listOffset[indexList].add(element);
-      } else {
-        listOffset.add([element]);
-        indexList++;
-      }
-      currentY = element.dy;
-    });
-
-    /// resume axis X
-    listOffset.forEach((element) {
-      if (element.length > 1) {
-        newPathStep1.add(element.first);
-        newPathStep1.add(element.last);
-      } else {
-        newPathStep1.add(element.first);
-      }
-    });
-
-    indexList = -1;
     double currentX = 0;
-    listOffset.clear();
-    newPathStep1.forEach((element) {
-      if (element.dx == currentX) {
-        listOffset[indexList].add(element);
-      } else {
-        listOffset.add([element]);
-        indexList++;
+    double currentY = 0;
+
+    path.forEach((element) {
+      final dxDiagonal = element.dx.floor();
+      final dyDiagonal = element.dy.floor();
+
+      switch (type) {
+        case TypeResumeDirection.axisX:
+          if (element.dx == currentX) {
+            listOffset[indexList].add(element);
+          } else {
+            listOffset.add([element]);
+            indexList++;
+          }
+          break;
+        case TypeResumeDirection.axisY:
+          if (element.dy == currentY) {
+            listOffset[indexList].add(element);
+          } else {
+            listOffset.add([element]);
+            indexList++;
+          }
+          break;
+        case TypeResumeDirection.topLeft:
+          final nextDxDiagonal = (currentX - _tileSize).floor();
+          final nextDyDiagonal = (currentY - _tileSize).floor();
+          if (dxDiagonal == nextDxDiagonal && dyDiagonal == nextDyDiagonal) {
+            listOffset[indexList].add(element);
+          } else {
+            listOffset.add([element]);
+            indexList++;
+          }
+          break;
+        case TypeResumeDirection.bottomLeft:
+          final nextDxDiagonal = (currentX - _tileSize).floor();
+          final nextDyDiagonal = (currentY + _tileSize).floor();
+          if (dxDiagonal == nextDxDiagonal && dyDiagonal == nextDyDiagonal) {
+            listOffset[indexList].add(element);
+          } else {
+            listOffset.add([element]);
+            indexList++;
+          }
+          break;
+        case TypeResumeDirection.topRight:
+          final nextDxDiagonal = (currentX + _tileSize).floor();
+          final nextDyDiagonal = (currentY - _tileSize).floor();
+          if (dxDiagonal == nextDxDiagonal && dyDiagonal == nextDyDiagonal) {
+            listOffset[indexList].add(element);
+          } else {
+            listOffset.add([element]);
+            indexList++;
+          }
+          break;
+        case TypeResumeDirection.bottomRight:
+          final nextDxDiagonal = (currentX + _tileSize).floor();
+          final nextDyDiagonal = (currentY + _tileSize).floor();
+          if (dxDiagonal == nextDxDiagonal && dyDiagonal == nextDyDiagonal) {
+            listOffset[indexList].add(element);
+          } else {
+            listOffset.add([element]);
+            indexList++;
+          }
+          break;
       }
-      currentX = element.dx;
-    });
 
-    /// resume diagonal right-down
-    listOffset.forEach((element) {
-      if (element.length > 1) {
-        newPathResumeDiagonal1.add(element.first);
-        newPathResumeDiagonal1.add(element.last);
-      } else {
-        newPathResumeDiagonal1.add(element.first);
-      }
-    });
-
-    indexList = -1;
-    currentX = newPathResumeDiagonal1.first.dx;
-    currentY = newPathResumeDiagonal1.first.dy;
-    listOffset.clear();
-    newPathResumeDiagonal1.forEach((element) {
-      final dx = element.dx.floor();
-      final nextDxDiagonal = (currentX + _tileSize).floor();
-
-      final dy = element.dy.floor();
-      final nextDyDiagonal = (currentY + _tileSize).floor();
-      if (dx == nextDxDiagonal && dy == nextDyDiagonal) {
-        listOffset[indexList].add(element);
-      } else {
-        listOffset.add([element]);
-        indexList++;
-      }
-      currentX = element.dx;
-      currentY = element.dy;
-    });
-
-    /// resume diagonal right-up
-    listOffset.forEach((element) {
-      if (element.length > 1) {
-        newPathResumeDiagonal2.add(element.first);
-        newPathResumeDiagonal2.add(element.last);
-      } else {
-        newPathResumeDiagonal2.add(element.first);
-      }
-    });
-
-    indexList = -1;
-    currentX = newPathResumeDiagonal2.first.dx;
-    currentY = newPathResumeDiagonal2.first.dy;
-    listOffset.clear();
-    newPathResumeDiagonal2.forEach((element) {
-      final dx = element.dx.floor();
-      final nextDxDiagonal = (currentX + _tileSize).floor();
-
-      final dy = element.dy.floor();
-      final nextDyDiagonal = (currentY - _tileSize).floor();
-      if (dx == nextDxDiagonal && dy == nextDyDiagonal) {
-        listOffset[indexList].add(element);
-      } else {
-        listOffset.add([element]);
-        indexList++;
-      }
-      currentX = element.dx;
-      currentY = element.dy;
-    });
-
-    /// resume diagonal left-up
-    listOffset.forEach((element) {
-      if (element.length > 1) {
-        newPathResumeDiagonal3.add(element.first);
-        newPathResumeDiagonal3.add(element.last);
-      } else {
-        newPathResumeDiagonal3.add(element.first);
-      }
-    });
-
-    indexList = -1;
-    currentX = newPathResumeDiagonal3.first.dx;
-    currentY = newPathResumeDiagonal3.first.dy;
-    listOffset.clear();
-    newPathResumeDiagonal3.forEach((element) {
-      final dx = element.dx.floor();
-      final nextDxDiagonal = (currentX - _tileSize).floor();
-
-      final dy = element.dy.floor();
-      final nextDyDiagonal = (currentY - _tileSize).floor();
-      if (dx == nextDxDiagonal && dy == nextDyDiagonal) {
-        listOffset[indexList].add(element);
-      } else {
-        listOffset.add([element]);
-        indexList++;
-      }
-      currentX = element.dx;
-      currentY = element.dy;
-    });
-
-    /// resume diagonal left-down
-    listOffset.forEach((element) {
-      if (element.length > 1) {
-        newPathResumeDiagonal4.add(element.first);
-        newPathResumeDiagonal4.add(element.last);
-      } else {
-        newPathResumeDiagonal4.add(element.first);
-      }
-    });
-
-    indexList = -1;
-    currentX = newPathResumeDiagonal4.first.dx;
-    currentY = newPathResumeDiagonal4.first.dy;
-    listOffset.clear();
-    newPathResumeDiagonal4.forEach((element) {
-      final dx = element.dx.floor();
-      final nextDxDiagonal = (currentX - _tileSize).floor();
-
-      final dy = element.dy.floor();
-      final nextDyDiagonal = (currentY + _tileSize).floor();
-      if (dx == nextDxDiagonal && dy == nextDyDiagonal) {
-        listOffset[indexList].add(element);
-      } else {
-        listOffset.add([element]);
-        indexList++;
-      }
       currentX = element.dx;
       currentY = element.dy;
     });
@@ -477,6 +405,7 @@ mixin MoveToPositionAlongThePath on Movement {
         newPath.add(element.first);
       }
     });
+
     return newPath;
   }
 
