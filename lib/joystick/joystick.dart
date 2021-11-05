@@ -12,7 +12,7 @@ class KeyboardConfig {
   /// Use to enable ou disable keyboard events
   final bool enable;
 
-  /// Type of the directional (arrows, wasd or wasdAndArrow)
+  /// Type of the directional (arrows, wasd or wasdAndArrows)
   final KeyboardDirectionalType keyboardDirectionalType;
 
   /// You can pass specific Keys accepted. If null accept all keys
