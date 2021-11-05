@@ -1,5 +1,7 @@
 # [next]
 - Fix bug "getting stuck" in `MoveToPositionAlongThePath`
+- [BREAKING CHANGE] Change param `logicalKeyboardKeyToNext` in `TalkDialog` to `logicalKeyboardKeysToNext`, now multiple keys are accepted to advance in the dialogue
+- Add option `wasdAndArrows` to `KeyboardDirectionalType` allowing both arrows and wasd keys to control the joystick
 
 # 1.9.5
 - Update params name of `simpleAttackMelee` in Enemy.
