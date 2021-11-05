@@ -1,5 +1,5 @@
 # [NEXT]
-- Improvements in `TalkDialog.show` (`onFinish`).
+- Improvements in `TalkDialog.show` : add `onClose`.
 
 
 # 1.9.6

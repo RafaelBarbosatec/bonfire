@@ -13,12 +13,14 @@ class TalkDialog extends StatefulWidget {
     this.textBoxMinHeight = 100,
     this.keyboardKeysToNext,
     this.padding,
+    this.onClose,
   }) : super(key: key);
 
   static show(
     BuildContext context,
     List<Say> sayList, {
     VoidCallback? onFinish,
+    VoidCallback? onClose,
     ValueChanged<int>? onChangeTalk,
     Color? backgroundColor,
     double boxTextHeight = 100,
@@ -32,6 +34,7 @@ class TalkDialog extends StatefulWidget {
         return TalkDialog(
           says: sayList,
           onFinish: onFinish,
+          onClose: onClose,
           onChangeTalk: onChangeTalk,
           textBoxMinHeight: boxTextHeight,
           keyboardKeysToNext: logicalKeyboardKeysToNext,
@@ -43,6 +46,7 @@ class TalkDialog extends StatefulWidget {
 
   final List<Say> says;
   final VoidCallback? onFinish;
+  final VoidCallback? onClose;
   final ValueChanged<int>? onChangeTalk;
   final double? textBoxMinHeight;
   final List<LogicalKeyboardKey>? keyboardKeysToNext;
@@ -73,7 +77,7 @@ class _TalkDialogState extends State<TalkDialog> {
 
   @override
   void dispose() {
-    widget.onFinish?.call();
+    widget.onClose?.call();
     _textShowController.close();
     _focusNode.dispose();
     super.dispose();
@@ -187,6 +191,7 @@ class _TalkDialogState extends State<TalkDialog> {
       if (widget.onChangeTalk != null)
         widget.onChangeTalk?.call(currentIndexTalk);
     } else {
+      widget.onFinish?.call();
       Navigator.pop(context);
     }
   }
