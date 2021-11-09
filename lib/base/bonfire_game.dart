@@ -188,6 +188,13 @@ class BonfireGame extends BaseGame with KeyboardEvents {
     _intervalAllCollisions?.update(t);
   }
 
+  void render(Canvas canvas) {
+    canvas.translate(camera.position.dx, camera.position.dy);
+    canvas.rotate(camera.angle);
+    canvas.translate(-(camera.position.dx), -(camera.position.dy));
+    super.render(canvas);
+  }
+
   @override
   void onMount() {
     onReady?.call(this);

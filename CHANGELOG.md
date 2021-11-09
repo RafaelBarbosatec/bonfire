@@ -1,5 +1,6 @@
 # [NEXT]
 - Improvements in `TalkDialog.show` : add `onClose`.
+- Add rotation functionality to the camera. Set `angle` or `animateRotate` to rotate the camera view
 
 
 # 1.9.6
