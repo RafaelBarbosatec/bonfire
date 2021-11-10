@@ -1,5 +1,6 @@
 # 1.9.8
 - Fix rounding of movement in `MoveToPositionAlongThePath`.
+- Fix loaded map by url.
 
 # 1.9.7
 - Improvements in `TalkDialog.show` : add `onClose`.
