@@ -48,7 +48,6 @@ class MapAssetsManager {
 
     Image spriteSheetImg = await loadImage(
       image,
-      fromServer: image.contains('http'),
     );
 
     return spriteCache['$image/$row/$column'] = spriteSheetImg.getSprite(
@@ -114,9 +113,9 @@ class MapAssetsManager {
   }
 
   static Future<Image> loadImage(
-    String image, {
-    bool fromServer = false,
-  }) async {
+    String image,
+  ) async {
+    final fromServer = image.contains('http');
     if (_imageCache.containsKey(image)) {
       return Future.value(_imageCache[image]);
     }
