@@ -14,6 +14,7 @@ class TalkDialog extends StatefulWidget {
     this.keyboardKeysToNext,
     this.padding,
     this.onClose,
+    this.dismissible = false,
   }) : super(key: key);
 
   static show(
@@ -26,8 +27,10 @@ class TalkDialog extends StatefulWidget {
     double boxTextHeight = 100,
     List<LogicalKeyboardKey>? logicalKeyboardKeysToNext,
     EdgeInsetsGeometry? padding,
+    bool dismissible = false,
   }) {
     showDialog(
+      barrierDismissible: dismissible,
       barrierColor: backgroundColor,
       context: context,
       builder: (BuildContext context) {
@@ -39,6 +42,7 @@ class TalkDialog extends StatefulWidget {
           textBoxMinHeight: boxTextHeight,
           keyboardKeysToNext: logicalKeyboardKeysToNext,
           padding: padding,
+          dismissible: dismissible,
         );
       },
     );
@@ -51,6 +55,7 @@ class TalkDialog extends StatefulWidget {
   final double? textBoxMinHeight;
   final List<LogicalKeyboardKey>? keyboardKeysToNext;
   final EdgeInsetsGeometry? padding;
+  final bool dismissible;
 
   @override
   _TalkDialogState createState() => _TalkDialogState();
