@@ -190,7 +190,7 @@ class BonfireGame extends BaseGame with KeyboardEvents {
 
   void render(Canvas canvas) {
     canvas.translate(camera.position.dx, camera.position.dy);
-    canvas.rotate(camera.angle);
+    canvas.rotate(camera.config.angle);
     canvas.translate(-(camera.position.dx), -(camera.position.dy));
     super.render(canvas);
   }

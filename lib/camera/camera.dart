@@ -14,7 +14,6 @@ class Camera with BonfireHasGameRef<BonfireGame> {
   bool _isMoving = false;
   double _spacingMap = 32.0;
   Offset position = Offset.zero;
-  double angle = 0.0;
   final CameraConfig config;
 
   Camera(this.config);
@@ -81,8 +80,8 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     double diffZoom = config.zoom - zoom;
     double initialZoom = config.zoom;
 
-    double diffAngle = this.angle - angle;
-    double originAngle = this.angle;
+    double diffAngle = config.angle - angle;
+    double originAngle = config.angle;
 
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
@@ -94,7 +93,7 @@ class Camera with BonfireHasGameRef<BonfireGame> {
               y: originY - (diffY * value),
             );
         config.zoom = initialZoom - (diffZoom * value);
-        this.angle = originAngle - (diffAngle * value);
+        config.angle = originAngle - (diffAngle * value);
 
         if (config.moveOnlyMapArea) {
           _keepInMapArea();
@@ -279,13 +278,13 @@ class Camera with BonfireHasGameRef<BonfireGame> {
   }) {
     _isMoving = true;
 
-    final diffAngle = this.angle - angle;
-    final originAngle = this.angle;
+    final diffAngle = config.angle - angle;
+    final originAngle = config.angle;
 
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
-        this.angle = originAngle - (diffAngle * value);
+        config.angle = originAngle - (diffAngle * value);
       },
       onFinish: () {
         _isMoving = false;
