@@ -12,15 +12,19 @@ abstract class GameListener {
 }
 
 class GameController with BonfireHasGameRef<BonfireGame> {
-  GameListener? _gameListener;
+  List<GameListener> _gameListeners = [];
   int _lastCountLiveEnemies = 0;
 
   void addGameComponent(GameComponent component) {
     gameRef.addGameComponent(component);
   }
 
-  void setListener(GameListener listener) {
-    _gameListener = listener;
+  void addListener(GameListener listener) {
+    _gameListeners.add(listener);
+  }
+
+  void removeListener(GameListener listener) {
+    _gameListeners.remove(listener);
   }
 
   void notifyListeners() {
@@ -32,10 +36,13 @@ class GameController with BonfireHasGameRef<BonfireGame> {
       _lastCountLiveEnemies = countLive;
       notifyChangeEnemy = true;
     }
-    if (_gameListener != null) {
-      _gameListener?.updateGame();
-      if (notifyChangeEnemy)
-        _gameListener?.changeCountLiveEnemies(_lastCountLiveEnemies);
+    if (_gameListeners.isNotEmpty) {
+      _gameListeners.forEach((element) {
+        element.updateGame();
+        if (notifyChangeEnemy) {
+          element.changeCountLiveEnemies(_lastCountLiveEnemies);
+        }
+      });
     }
   }
 

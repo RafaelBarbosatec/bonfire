@@ -58,7 +58,7 @@ class GameManualMap extends StatelessWidget implements GameListener {
         enemies: DungeonMap.enemies(),
         decorations: DungeonMap.decorations(),
         background: BackgroundColorGame(Colors.blueGrey[900]!),
-        gameController: _controller..setListener(this),
+        gameController: _controller..addListener(this),
         lightingColorGame: Colors.black.withOpacity(0.75),
       );
     });
