@@ -113,10 +113,10 @@ mixin MoveToPositionAlongThePath on Movement {
     double displacementX = diffX.abs() > innerSpeed ? speed : diffX.abs() / dt;
     double displacementY = diffY.abs() > innerSpeed ? speed : diffY.abs() / dt;
 
-    if (diffX.abs() < 0.5 && diffY.abs() < 0.5) {
+    if (diffX.abs() < 0.01 && diffY.abs() < 0.01) {
       _goToNextPosition();
     } else {
-      if (diffX.abs() > 0.5 && diffY.abs() > 0.5) {
+      if (diffX.abs() > 0.01 && diffY.abs() > 0.01) {
         final displacementXDiagonal = displacementX * REDUCTION_SPEED_DIAGONAL;
         final displacementYDiagonal = displacementY * REDUCTION_SPEED_DIAGONAL;
         if (diffX > 0 && diffY > 0) {
@@ -144,18 +144,20 @@ mixin MoveToPositionAlongThePath on Movement {
             onCollision: _goToNextPosition,
           );
         }
-      } else if (diffX.abs() > 0.5) {
+      } else if (diffX.abs() > 0.01) {
         if (diffX > 0) {
           this.moveRight(displacementX, onCollision: _goToNextPosition);
         } else if (diffX < 0) {
           this.moveLeft(displacementX, onCollision: _goToNextPosition);
         }
-      } else if (diffY.abs() > 0.5) {
+      } else if (diffY.abs() > 0.01) {
         if (diffY > 0) {
           this.moveDown(displacementY, onCollision: _goToNextPosition);
         } else if (diffY < 0) {
           this.moveUp(displacementY, onCollision: _goToNextPosition);
         }
+      } else {
+        _goToNextPosition();
       }
     }
   }

@@ -1,7 +1,9 @@
+# 1.9.8
+- Fix rounding of movement in `MoveToPositionAlongThePath`.
+
 # 1.9.7
 - Improvements in `TalkDialog.show` : add `onClose`.
 - Add rotation functionality to the camera. Set `angle` on `CameraConfig` or `animateRotate` to rotate the camera view
-
 
 # 1.9.6
 - Fix bug "getting stuck" in `MoveToPositionAlongThePath`
