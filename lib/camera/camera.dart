@@ -63,6 +63,7 @@ class Camera with BonfireHasGameRef<BonfireGame> {
   void moveToPositionAnimated(
     Offset position, {
     double zoom = 1,
+    double angle = 0,
     VoidCallback? finish,
     Duration? duration,
     Curve curve = Curves.decelerate,
@@ -79,6 +80,9 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     double diffZoom = config.zoom - zoom;
     double initialZoom = config.zoom;
 
+    double diffAngle = config.angle - angle;
+    double originAngle = config.angle;
+
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
@@ -89,6 +93,7 @@ class Camera with BonfireHasGameRef<BonfireGame> {
               y: originY - (diffY * value),
             );
         config.zoom = initialZoom - (diffZoom * value);
+        config.angle = originAngle - (diffAngle * value);
 
         if (config.moveOnlyMapArea) {
           _keepInMapArea();
@@ -256,6 +261,30 @@ class Camera with BonfireHasGameRef<BonfireGame> {
       duration ?? Duration(seconds: 1),
       onChange: (value) {
         config.zoom = initialZoom - (diffZoom * value);
+      },
+      onFinish: () {
+        _isMoving = false;
+        finish?.call();
+      },
+      curve: curve,
+    ).start();
+  }
+
+  void animateRotate({
+    required double angle,
+    Duration? duration,
+    VoidCallback? finish,
+    Curve curve = Curves.decelerate,
+  }) {
+    _isMoving = true;
+
+    final diffAngle = config.angle - angle;
+    final originAngle = config.angle;
+
+    gameRef.getValueGenerator(
+      duration ?? Duration(seconds: 1),
+      onChange: (value) {
+        config.angle = originAngle - (diffAngle * value);
       },
       onFinish: () {
         _isMoving = false;
