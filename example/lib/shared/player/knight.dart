@@ -309,9 +309,12 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
               ),
             ),
           ],
-          finish: () {
-            print('finish talk');
+          onClose: () {
+            print('close talk');
             gameRef.camera.moveToPlayerAnimated();
+          },
+          onFinish: () {
+            print('finish talk');
           },
           logicalKeyboardKeysToNext: [
             LogicalKeyboardKey.space,
