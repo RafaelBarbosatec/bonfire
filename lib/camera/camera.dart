@@ -280,10 +280,10 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     ).start();
   }
 
-  void animateRotate({
+  void animateSimpleRotation({
     required double angle,
     Duration? duration,
-    VoidCallback? finish,
+    VoidCallback? onFinish,
     Curve curve = Curves.decelerate,
   }) {
     _isMoving = true;
@@ -292,16 +292,47 @@ class Camera with BonfireHasGameRef<BonfireGame> {
     final originAngle = config.angle;
 
     gameRef.getValueGenerator(
-      duration ?? Duration(seconds: 1),
+      duration ?? const Duration(seconds: 1),
       onChange: (value) {
         config.angle = originAngle - (diffAngle * value);
       },
       onFinish: () {
         _isMoving = false;
-        finish?.call();
+        onFinish?.call();
       },
       curve: curve,
     ).start();
+  }
+
+  void animateLoopRotation({
+    required List<double> angles,
+    required int repeatCount,
+    bool normalizeOnFinish = true,
+    List<Duration>? pauseDuration,
+    List<Duration>? rotationDuration,
+    List<Curve>? curves,
+    VoidCallback? onFinish,
+  }) async {
+    int currentRepetition = 0;
+    int currentRotation = 0;
+
+    while (currentRepetition < repeatCount) {
+      currentRotation = 0;
+      await Future.forEach<double>(angles, (rotateAngle) async {
+        animateSimpleRotation(
+          angle: rotateAngle,
+          duration: rotationDuration?[currentRotation],
+          curve: curves?[currentRotation] ?? Curves.decelerate,
+        );
+        await Future.delayed(
+          pauseDuration?[currentRotation] ?? const Duration(seconds: 1),
+        );
+        currentRotation++;
+      });
+      currentRepetition++;
+    }
+    if (normalizeOnFinish) gameRef.camera.animateSimpleRotation(angle: 0.0);
+    onFinish?.call();
   }
 
   bool isComponentOnCamera(GameComponent c) {

@@ -74,13 +74,51 @@ class KnightInterface extends GameInterface {
         });
       },
     ));
+    add(InterfaceComponent(
+      sprite: Sprite.load('blue_button1.png'),
+      spriteSelected: Sprite.load('blue_button2.png'),
+      height: 40,
+      width: 40,
+      id: 5,
+      position: Vector2(300, 20),
+      selectable: false,
+      onTapComponent: (selected) {
+        // Simple rotation loop
+        gameRef.camera.animateLoopRotation(
+          angles: [0.1, -0.1],
+          repeatCount: 3,
+          onFinish: () {
+            print('finished loop rotation');
+          },
+        );
+        // Advanced example
+        // gameRef.camera.animateLoopRotation(
+        //   angles: [0.1, -0.1, -0.2],
+        //   rotationDuration: [
+        //     Duration(seconds: 2),
+        //     Duration(milliseconds: 100),
+        //     Duration(seconds: 1),
+        //   ],
+        //   pauseDuration: [
+        //     Duration(seconds: 4),
+        //     Duration(milliseconds: 500),
+        //     Duration(seconds: 1),
+        //   ],
+        //   curves: [Curves.bounceIn, Curves.ease, Curves.elasticIn],
+        //   repeatCount: 3,
+        //   onFinish: () {
+        //     print('finished loop rotation');
+        //   },
+        // );
+      },
+    ));
     add(TextInterfaceComponent(
       text: 'Text example',
       textConfig: TextPaintConfig(
         color: Colors.white,
       ),
       id: 5,
-      position: Vector2(300, 20),
+      position: Vector2(350, 20),
       onTapComponent: (selected) {
         if (gameRef.player != null) {
           (gameRef.player as Knight).showEmote();
