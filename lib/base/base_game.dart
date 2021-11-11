@@ -89,6 +89,7 @@ abstract class BaseGame extends Component
 
     canvas.translate(size.x / 2, size.y / 2);
     canvas.scale(camera.config.zoom);
+    canvas.rotate(camera.config.angle);
     canvas.translate(-camera.position.dx, -camera.position.dy);
 
     for (final comp in children) {
@@ -112,6 +113,7 @@ abstract class BaseGame extends Component
     if (comp.isHud) {
       canvas.translate(camera.position.dx, camera.position.dy);
       canvas.scale(1 / camera.config.zoom);
+      canvas.rotate(-1 * camera.config.angle);
       canvas.translate(-size.x / 2, -size.y / 2);
     }
 
