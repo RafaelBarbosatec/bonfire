@@ -1,7 +1,8 @@
-# next
+# 1.9.9
 - Add `dismissible` param in `TalkDialog.show` to avoid the dialogue being dismissed when the back button is pressed or esc key is pressed on desktop.
 - Add `animateLoopRotation` method in camera.
 - Rename `animateRotate` to `animateSimpleRotation`.
+- Improvements in rotation effect.
 
 # 1.9.8
 - Fix rounding of movement in `MoveToPositionAlongThePath`.
