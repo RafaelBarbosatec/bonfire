@@ -243,11 +243,11 @@ class TiledWorldMap {
       final pathSprite = '$_basePath$_pathTileset${tileSetContain.image}';
 
       TileModelSprite sprite;
-      if (_tileModelSpriteCache.containsKey('$pathSprite$row$column')) {
-        sprite = _tileModelSpriteCache['$pathSprite$row$column']!;
+      String tileKey = '$pathSprite/$row/$column';
+      if (_tileModelSpriteCache.containsKey(tileKey)) {
+        sprite = _tileModelSpriteCache[tileKey]!;
       } else {
-        sprite =
-            _tileModelSpriteCache['$pathSprite$row$column'] = TileModelSprite(
+        sprite = _tileModelSpriteCache[tileKey] = TileModelSprite(
           path: pathSprite,
           width: tileSetContain.tileWidth ?? 0,
           height: tileSetContain.tileHeight ?? 0,
