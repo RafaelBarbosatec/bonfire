@@ -1,3 +1,6 @@
+# 1.9.10
+- Fix problem render big tilesets [#200](https://github.com/RafaelBarbosatec/bonfire/issues/200).
+
 # 1.9.9
 - Add `dismissible` param in `TalkDialog.show` to avoid the dialogue being dismissed when the back button is pressed or esc key is pressed on desktop.
 - Add `animateLoopRotation` method in camera.
