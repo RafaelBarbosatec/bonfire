@@ -1,4 +1,4 @@
-# next
+# [next]
 - Fix [#203](https://github.com/RafaelBarbosatec/bonfire/issues/203) - Web build with late initialisation on animations
 
 # 1.9.10
