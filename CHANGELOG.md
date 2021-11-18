@@ -1,6 +1,7 @@
 # [next]
 - Fix [#203](https://github.com/RafaelBarbosatec/bonfire/issues/203) - Web build with late initialisation on animations
 - Create interfaces to facility access methods of the `ColorFilter` and `Lighting`.
+- Add `replaceAnimation` method in `DirectionAnimation`
 
 # 1.9.10
 - Fix problem render big tilesets [#200](https://github.com/RafaelBarbosatec/bonfire/issues/200).
