@@ -84,7 +84,7 @@ class BonfireGame extends BaseGame with KeyboardEvents {
   ColorFilterComponent _colorFilterComponent = ColorFilterComponent(
     GameColorFilter(),
   );
-  LightingComponent? lighting;
+  LightingComponent? _lighting;
 
   List<Enemy>? _initialEnemies;
   List<GameDecoration>? _initialDecorations;
@@ -93,6 +93,9 @@ class BonfireGame extends BaseGame with KeyboardEvents {
   GameColorFilter? _colorFilter;
 
   ValueChanged<BonfireGame>? onReady;
+
+  LightingInterface? get lighting => _lighting;
+  ColorFilterInterface? get colorFilter => _colorFilterComponent;
 
   BonfireGame({
     required this.context,
@@ -173,8 +176,9 @@ class BonfireGame extends BaseGame with KeyboardEvents {
     if (player != null) {
       await add(player!);
     }
-    lighting = LightingComponent(color: lightingColorGame ?? Color(0x00000000));
-    await add(lighting!);
+    _lighting =
+        LightingComponent(color: lightingColorGame ?? Color(0x00000000));
+    await add(_lighting!);
     await add(interface ?? GameInterface());
     await add(joystickController ?? Joystick());
     joystickController?.addObserver(player ?? MapExplorer(camera));
@@ -330,8 +334,6 @@ class BonfireGame extends BaseGame with KeyboardEvents {
 
     _collisions.addAll(map.getCollisions());
   }
-
-  GameColorFilter get colorFilter => _colorFilterComponent.colorFilter;
 
   Offset worldPositionToScreen(Offset position) {
     return camera.worldPositionToScreen(position);
