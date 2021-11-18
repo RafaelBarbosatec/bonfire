@@ -9,10 +9,10 @@ import 'package:flutter/foundation.dart';
 
 /// Class responsible to manager animation on `SimplePlayer` and `SimpleEnemy`
 class SimpleDirectionAnimation {
-  late SpriteAnimation idleLeft;
-  late SpriteAnimation idleRight;
-  late SpriteAnimation runLeft;
-  late SpriteAnimation runRight;
+  SpriteAnimation? idleLeft;
+  SpriteAnimation? idleRight;
+  SpriteAnimation? runLeft;
+  SpriteAnimation? runRight;
 
   SpriteAnimation? idleUp;
   SpriteAnimation? idleDown;
