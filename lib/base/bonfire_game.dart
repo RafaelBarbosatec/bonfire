@@ -51,7 +51,7 @@ class BonfireGame extends BaseGame
   final MapGame map;
 
   /// The player-controlling component.
-  JoystickController? _joystickController;
+  final JoystickController? _joystickController;
 
   /// Background of the game. This can be a color or custom component
   final GameBackground? background;
@@ -131,8 +131,7 @@ class BonfireGame extends BaseGame
     this.onTapUp,
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
-  }) {
-    _joystickController = joystickController;
+  }) : _joystickController = joystickController {
     _initialEnemies = enemies;
     _initialDecorations = decorations;
     _initialComponents = components;
