@@ -1,4 +1,4 @@
-# 1.9.11
+# 1.10.0
 - Fix [#203](https://github.com/RafaelBarbosatec/bonfire/issues/203) - Web build with late initialisation on animations
 - Create interfaces to facility access methods of the `ColorFilter` and `Lighting`.
 - Add `replaceAnimation` method in `DirectionAnimation`. now you can use this method in SimplePlayer or Enemy to replace `SimpleDirectionAnimation`.
