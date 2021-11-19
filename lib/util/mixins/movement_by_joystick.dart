@@ -14,9 +14,8 @@ mixin MovementByJoystick on Movement {
   @override
   void update(double dt) {
     if (this is JoystickListener) {
-      bool joystickContainThisComponent = gameRef.joystickController
-              ?.containObserver(this as JoystickListener) ??
-          false;
+      bool joystickContainThisComponent =
+          gameRef.joystick?.containObserver(this as JoystickListener) ?? false;
       if (dPadAngles) {
         if (innerCurrentDirectional != null && joystickContainThisComponent) {
           final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;

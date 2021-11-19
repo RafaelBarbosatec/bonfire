@@ -66,7 +66,7 @@ mixin Sensor on GameComponent {
   @override
   void render(Canvas c) {
     super.render(c);
-    if (gameRef.showCollisionArea) {
+    if ((gameRef as BonfireGame).showCollisionArea) {
       c.drawRect(sensorArea.rect, _paintSensor);
     }
   }

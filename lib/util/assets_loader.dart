@@ -1,6 +1,8 @@
+import 'dart:async';
+
 class AssetToLoad<T> {
   Function(T? value)? callback;
-  final Future<T>? future;
+  final FutureOr<T>? future;
 
   AssetToLoad(this.future, this.callback);
   Future<void> load() async {

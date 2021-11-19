@@ -6,8 +6,16 @@ import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flutter/widgets.dart';
 
+abstract class LightingInterface {
+  void animateToColor(
+    Color color, {
+    Duration duration = const Duration(milliseconds: 500),
+    Curve curve = Curves.decelerate,
+  });
+}
+
 /// Layer component responsible for adding lighting to the game.
-class LightingComponent extends GameComponent {
+class LightingComponent extends GameComponent implements LightingInterface {
   Color? color;
   late Paint _paintFocus;
   Paint _paintLighting = Paint();
@@ -23,13 +31,14 @@ class LightingComponent extends GameComponent {
   }
 
   @override
-  int get priority =>
-      LayerPriority.getLightingPriority(gameRef.highestPriority);
+  int get priority {
+    return LayerPriority.getLightingPriority(gameRef.highestPriority);
+  }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (!containsColor()) return;
+    if (!_containsColor()) return;
     Vector2 size = gameRef.size;
     canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
     canvas.drawColor(color!, BlendMode.dstATop);
@@ -90,7 +99,7 @@ class LightingComponent extends GameComponent {
   @override
   // ignore: must_call_super
   void update(double dt) {
-    if (!containsColor()) return;
+    if (!_containsColor()) return;
     _dtUpdate = dt;
     _visibleLight = gameRef.lightVisible();
   }
@@ -114,7 +123,7 @@ class LightingComponent extends GameComponent {
     ).start();
   }
 
-  bool containsColor() {
+  bool _containsColor() {
     return color != null && color != Color(0x00000000);
   }
 }

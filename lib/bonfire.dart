@@ -42,6 +42,7 @@ export 'package:bonfire/player/player.dart';
 export 'package:bonfire/player/rotation_player.dart';
 export 'package:bonfire/player/simple_player.dart';
 export 'package:bonfire/tiled/tiled_world_map.dart';
+export 'package:bonfire/util/bonfire_game_ref.dart';
 export 'package:bonfire/util/direction.dart';
 export 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 export 'package:bonfire/util/direction_animations/simple_direction_animation.dart';

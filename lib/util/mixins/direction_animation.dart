@@ -176,4 +176,9 @@ mixin DirectionAnimation on Movement {
     await animation?.onLoad();
     idle();
   }
+
+  Future<void> replaceAnimation(SimpleDirectionAnimation newAnimation) async {
+    await newAnimation.onLoad();
+    animation = newAnimation;
+  }
 }

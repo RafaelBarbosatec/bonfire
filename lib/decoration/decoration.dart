@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -35,7 +36,7 @@ class GameDecoration extends AnimatedObject {
   }
 
   GameDecoration.withSprite(
-    Future<Sprite> sprite, {
+    FutureOr<Sprite> sprite, {
     required Vector2 position,
     required double height,
     required double width,
@@ -49,7 +50,7 @@ class GameDecoration extends AnimatedObject {
   }
 
   GameDecoration.withAnimation(
-    Future<SpriteAnimation> animation, {
+    FutureOr<SpriteAnimation> animation, {
     required Vector2 position,
     required double height,
     required double width,
