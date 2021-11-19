@@ -137,15 +137,16 @@ class Tile extends GameComponent {
     canvas.drawRect(
       position.rect,
       _paintText!
-        ..color = gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+        ..color = (gameRef as BonfireGame).constructionModeColor ??
+            Colors.cyan.withOpacity(0.5),
     );
     if (_positionText.x % 2 == 0) {
       if (_textPaintConfig == null) {
         _textPaintConfig = TextPaint(
           config: TextPaintConfig(
             fontSize: width / 3,
-            color:
-                gameRef.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+            color: (gameRef as BonfireGame).constructionModeColor ??
+                Colors.cyan.withOpacity(0.5),
           ),
         );
       }

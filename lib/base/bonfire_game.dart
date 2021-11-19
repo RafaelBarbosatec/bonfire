@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bonfire/base/base_game.dart';
+import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera.dart';
@@ -14,6 +15,7 @@ import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/color_filter_component.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/game_controller.dart';
@@ -27,15 +29,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
-class BonfireGame extends BaseGame with KeyboardEvents {
+class BonfireGame extends BaseGame
+    with KeyboardEvents
+    implements BonfireGameInterface {
   static const INTERVAL_UPDATE_CACHE = 200;
   static const INTERVAL_UPDATE_ORDER = 253;
   static const INTERVAL_UPDATE_COLLISIONS = 1003;
 
   /// Context used to access all Flutter power in your game.
+  @override
   final BuildContext context;
 
   /// Represents the character controlled by the user in the game. Instances of this class has actions and movements ready to be used and configured.
+  @override
   final Player? player;
 
   /// The way you can draw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
@@ -45,7 +51,7 @@ class BonfireGame extends BaseGame with KeyboardEvents {
   final MapGame map;
 
   /// The player-controlling component.
-  final JoystickController? joystickController;
+  JoystickController? _joystickController;
 
   /// Background of the game. This can be a color or custom component
   final GameBackground? background;
@@ -94,13 +100,19 @@ class BonfireGame extends BaseGame with KeyboardEvents {
 
   ValueChanged<BonfireGame>? onReady;
 
+  @override
   LightingInterface? get lighting => _lighting;
+
+  @override
   ColorFilterInterface? get colorFilter => _colorFilterComponent;
+
+  @override
+  JoystickController? get joystick => _joystickController;
 
   BonfireGame({
     required this.context,
     required this.map,
-    this.joystickController,
+    JoystickController? joystickController,
     this.player,
     this.interface,
     List<Enemy>? enemies,
@@ -120,6 +132,7 @@ class BonfireGame extends BaseGame with KeyboardEvents {
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
   }) {
+    _joystickController = joystickController;
     _initialEnemies = enemies;
     _initialDecorations = decorations;
     _initialComponents = components;
@@ -180,8 +193,8 @@ class BonfireGame extends BaseGame with KeyboardEvents {
         LightingComponent(color: lightingColorGame ?? Color(0x00000000));
     await add(_lighting!);
     await add(interface ?? GameInterface());
-    await add(joystickController ?? Joystick());
-    joystickController?.addObserver(player ?? MapExplorer(camera));
+    await add(_joystickController ?? Joystick());
+    _joystickController?.addObserver(player ?? MapExplorer(camera));
   }
 
   @override
@@ -198,68 +211,97 @@ class BonfireGame extends BaseGame with KeyboardEvents {
     super.onMount();
   }
 
-  void addGameComponent(GameComponent component) {
-    add(component);
+  @override
+  Future<void> add(Component component) {
+    if (component is BonfireHasGameRef) {
+      (component as BonfireHasGameRef).gameRef = this;
+    }
+    return super.add(component);
   }
 
+  @override
+  Future<void> addAll(List<Component> components) {
+    components.forEach((element) {
+      if (element is BonfireHasGameRef) {
+        (element as BonfireHasGameRef).gameRef = this;
+      }
+    });
+    return super.addAll(components);
+  }
+
+  @override
   Iterable<GameComponent> visibleComponents() => _visibleComponents;
 
+  @override
   Iterable<Enemy> visibleEnemies() {
     return _visibleComponents.where((element) => (element is Enemy)).cast();
   }
 
+  @override
   Iterable<Enemy> livingEnemies() {
     return enemies().where((element) => !element.isDead).cast();
   }
 
+  @override
   Iterable<Enemy> enemies() {
     return children.where((element) => (element is Enemy)).cast();
   }
 
+  @override
   Iterable<GameDecoration> visibleDecorations() {
     return _visibleComponents
         .where((element) => (element is GameDecoration))
         .cast();
   }
 
+  @override
   Iterable<GameDecoration> decorations() {
     return children.where((element) => (element is GameDecoration)).cast();
   }
 
+  @override
   Iterable<Lighting> lightVisible() => _visibleLights;
 
+  @override
   Iterable<Attackable> attackables() {
     return children.where((element) => (element is Attackable)).cast();
   }
 
+  @override
   Iterable<Attackable> visibleAttackables() {
     return _visibleComponents
         .where((element) => (element is Attackable))
         .cast();
   }
 
+  @override
   Iterable<Sensor> visibleSensors() {
     return _visibleComponents.where((element) {
       return (element is Sensor);
     }).cast();
   }
 
+  @override
   Iterable<ObjectCollision> collisions() {
     return _collisions;
   }
 
+  @override
   Iterable<ObjectCollision> visibleCollisions() {
     return _visibleCollisions;
   }
 
+  @override
   Iterable<T> visibleComponentsByType<T>() {
     return _visibleComponents.whereType<T>();
   }
 
+  @override
   Iterable<T> componentsByType<T>() {
     return children.whereType<T>();
   }
 
+  @override
   ValueGeneratorComponent getValueGenerator(
     Duration duration, {
     double begin = 0.0,
@@ -285,16 +327,16 @@ class BonfireGame extends BaseGame with KeyboardEvents {
     RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    if (joystickController?.keyboardConfig.acceptedKeys != null) {
-      final keyAccepted = joystickController?.keyboardConfig.acceptedKeys;
+    if (_joystickController?.keyboardConfig.acceptedKeys != null) {
+      final keyAccepted = _joystickController?.keyboardConfig.acceptedKeys;
       if (keyAccepted!.contains(event.logicalKey)) {
-        joystickController?.onKeyboard(event);
+        _joystickController?.onKeyboard(event);
         return KeyEventResult.handled;
       } else {
         return KeyEventResult.ignored;
       }
     }
-    joystickController?.onKeyboard(event);
+    _joystickController?.onKeyboard(event);
     return KeyEventResult.handled;
   }
 
@@ -335,14 +377,17 @@ class BonfireGame extends BaseGame with KeyboardEvents {
     _collisions.addAll(map.getCollisions());
   }
 
+  @override
   Offset worldPositionToScreen(Offset position) {
     return camera.worldPositionToScreen(position);
   }
 
+  @override
   Offset screenPositionToWorld(Offset position) {
     return camera.screenPositionToWorld(position);
   }
 
+  @override
   bool isVisibleInCamera(GameComponent c) {
     if (!hasLayout) return false;
     if (c.shouldRemove) return false;
@@ -370,16 +415,20 @@ class BonfireGame extends BaseGame with KeyboardEvents {
   }
 
   /// Use this method to change default observer of the Joystick events.
-  void changeJoystickTarget(
+  @override
+  void addJoystickObserver(
     GameComponent target, {
-    bool cleanObservers = true,
+    bool cleanObservers = false,
+    bool moveCameraToTarget = false,
   }) {
     if (target is JoystickListener) {
       if (cleanObservers) {
-        joystickController?.cleanObservers();
+        _joystickController?.cleanObservers();
       }
-      joystickController?.addObserver(target as JoystickListener);
-      camera.moveToTargetAnimated(target);
+      _joystickController?.addObserver(target as JoystickListener);
+      if (moveCameraToTarget) {
+        camera.moveToTargetAnimated(target);
+      }
     } else {
       print('$target is not a JoystickListener');
     }

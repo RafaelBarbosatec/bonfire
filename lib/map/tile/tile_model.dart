@@ -1,4 +1,4 @@
-import 'package:bonfire/base/bonfire_game.dart';
+import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/collision/collision_area.dart';
 import 'package:bonfire/map/map_assets_manager.dart';
 import 'package:bonfire/map/tile/tile.dart';
@@ -141,7 +141,7 @@ class TileModel {
   double get top => (y * height);
   double get bottom => (y * height) + height;
 
-  Tile getTile(BonfireGame gameRef) {
+  Tile getTile(BonfireGameInterface gameRef) {
     if (animation == null) {
       if (collisions?.isNotEmpty == true) {
         final tile = TileWithCollision.fromSprite(

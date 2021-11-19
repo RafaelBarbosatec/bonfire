@@ -2,7 +2,6 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera.dart';
 import 'package:bonfire/camera/camera_config.dart';
-import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart' hide Camera;
@@ -124,24 +123,6 @@ abstract class BaseGame extends Component
     }
 
     canvas.restore();
-  }
-
-  @override
-  Future<void> add(Component component) {
-    if (component is BonfireHasGameRef) {
-      (component as BonfireHasGameRef).gameRef = this;
-    }
-    return super.add(component);
-  }
-
-  @override
-  Future<void> addAll(List<Component> components) {
-    components.forEach((element) {
-      if (element is BonfireHasGameRef) {
-        (element as BonfireHasGameRef).gameRef = this;
-      }
-    });
-    return super.addAll(components);
   }
 
   /// This implementation of update updates every component in the list.

@@ -1,10 +1,10 @@
-import 'package:bonfire/base/base_game.dart';
+import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:flame/components.dart';
 
-mixin BonfireHasGameRef<T extends BaseGame> {
-  T? _gameRef;
+mixin BonfireHasGameRef {
+  BonfireGameInterface? _gameRef;
 
-  T get gameRef {
+  BonfireGameInterface get gameRef {
     final ref = _gameRef;
     if (ref == null) {
       throw 'Accessing gameRef before the component was added to the game!';
@@ -14,12 +14,12 @@ mixin BonfireHasGameRef<T extends BaseGame> {
 
   bool get hasGameRef => _gameRef != null;
 
-  set gameRef(T gameRef) {
+  set gameRef(BonfireGameInterface gameRef) {
     _gameRef = gameRef;
     if (this is Component) {
       (this as Component)
           .children
-          .whereType<BonfireHasGameRef<T>>()
+          .whereType<BonfireHasGameRef>()
           .forEach((e) => e.gameRef = gameRef);
     }
   }

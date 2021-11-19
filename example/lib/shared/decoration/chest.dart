@@ -68,7 +68,7 @@ class Chest extends GameDecoration with TapGesture {
   void onTapCancel() {}
 
   void _addPotions() {
-    gameRef.addGameComponent(
+    gameRef.add(
       PotionLife(
         Vector2(
           position.translate(width * 2, 0).left,
@@ -78,7 +78,7 @@ class Chest extends GameDecoration with TapGesture {
       ),
     );
 
-    gameRef.addGameComponent(
+    gameRef.add(
       PotionLife(
         Vector2(
           position.translate(width * 2, 0).left,

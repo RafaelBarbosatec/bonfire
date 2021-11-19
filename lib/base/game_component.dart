@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/interval_tick.dart';
@@ -14,7 +13,7 @@ import 'package:flutter/cupertino.dart';
 
 /// Base of the all components in the Bonfire
 abstract class GameComponent extends Component
-    with BonfireHasGameRef<BonfireGame>, PointerDetectorHandler {
+    with BonfireHasGameRef, PointerDetectorHandler {
   /// Position used to draw on the screen
   Vector2Rect position = Vector2Rect.zero();
 

@@ -114,7 +114,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   @override
   void die() {
     removeFromParent();
-    gameRef.addGameComponent(
+    gameRef.add(
       GameDecoration.withSprite(
         Sprite.load('player/crypt.png'),
         position: Vector2(
@@ -262,10 +262,18 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
         if (v.isNotEmpty) {
           enemyControlled = v.first;
           enemyControlled?.enableBehaviors = false;
-          gameRef.changeJoystickTarget(enemyControlled!);
+          gameRef.addJoystickObserver(
+            enemyControlled!,
+            cleanObservers: true,
+            moveCameraToTarget: true,
+          );
         }
       } else {
-        gameRef.changeJoystickTarget(this);
+        gameRef.addJoystickObserver(
+          this,
+          cleanObservers: true,
+          moveCameraToTarget: true,
+        );
         enemyControlled?.enableBehaviors = true;
         enemyControlled = null;
       }
