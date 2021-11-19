@@ -38,7 +38,7 @@ class EnemySpriteSheet {
       );
 
   static SimpleDirectionAnimation get simpleDirectionAnimation =>
-      SimpleDirectionAnimation(
+      SimpleDirectionAnimation.fromFuture(
         idleLeft: idleLeft,
         idleRight: idleRight,
         runLeft: runLeft,

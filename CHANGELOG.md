@@ -6,6 +6,7 @@
 - BREAKING CHANGE:
     - rename `gameRef.changeJoystickTarget` to `gameRef.addJoystickObserver`
     - remove `gameRef.addComponent`. now use `gameRef.add` or `gameRef.addAll`
+    - new constructor in `SimpleDirectionAnimation` named `fromFuture` to load Future<SpriteAnimation>.
 
 # 1.9.10
 - Fix problem render big tilesets [#200](https://github.com/RafaelBarbosatec/bonfire/issues/200).

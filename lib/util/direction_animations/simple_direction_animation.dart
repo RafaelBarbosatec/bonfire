@@ -41,6 +41,29 @@ class SimpleDirectionAnimation {
   double opacity = 1.0;
 
   SimpleDirectionAnimation({
+    required this.idleLeft,
+    required this.idleRight,
+    required this.runRight,
+    required this.runLeft,
+    this.idleUp,
+    this.idleDown,
+    this.idleUpLeft,
+    this.idleUpRight,
+    this.idleDownLeft,
+    this.idleDownRight,
+    this.runUp,
+    this.runDown,
+    this.runUpLeft,
+    this.runUpRight,
+    this.runDownLeft,
+    this.runDownRight,
+    this.others = const {},
+    SimpleAnimationEnum initAnimation = SimpleAnimationEnum.idleRight,
+  }) {
+    _currentType = initAnimation;
+  }
+
+  SimpleDirectionAnimation.fromFuture({
     required Future<SpriteAnimation> idleLeft,
     required Future<SpriteAnimation> idleRight,
     required Future<SpriteAnimation> runRight,
