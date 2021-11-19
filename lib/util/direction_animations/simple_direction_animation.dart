@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -40,47 +41,24 @@ class SimpleDirectionAnimation {
 
   double opacity = 1.0;
 
-  SimpleDirectionAnimation({
-    required this.idleLeft,
-    required this.idleRight,
-    required this.runRight,
-    required this.runLeft,
-    this.idleUp,
-    this.idleDown,
-    this.idleUpLeft,
-    this.idleUpRight,
-    this.idleDownLeft,
-    this.idleDownRight,
-    this.runUp,
-    this.runDown,
-    this.runUpLeft,
-    this.runUpRight,
-    this.runDownLeft,
-    this.runDownRight,
-    this.others = const {},
-    SimpleAnimationEnum initAnimation = SimpleAnimationEnum.idleRight,
-  }) {
-    _currentType = initAnimation;
-  }
-
   SimpleDirectionAnimation.fromFuture({
-    required Future<SpriteAnimation> idleLeft,
-    required Future<SpriteAnimation> idleRight,
-    required Future<SpriteAnimation> runRight,
-    required Future<SpriteAnimation> runLeft,
-    Future<SpriteAnimation>? idleUp,
-    Future<SpriteAnimation>? idleDown,
-    Future<SpriteAnimation>? idleUpLeft,
-    Future<SpriteAnimation>? idleUpRight,
-    Future<SpriteAnimation>? idleDownLeft,
-    Future<SpriteAnimation>? idleDownRight,
-    Future<SpriteAnimation>? runUp,
-    Future<SpriteAnimation>? runDown,
-    Future<SpriteAnimation>? runUpLeft,
-    Future<SpriteAnimation>? runUpRight,
-    Future<SpriteAnimation>? runDownLeft,
-    Future<SpriteAnimation>? runDownRight,
-    Map<String, Future<SpriteAnimation>>? others,
+    required FutureOr<SpriteAnimation> idleLeft,
+    required FutureOr<SpriteAnimation> idleRight,
+    required FutureOr<SpriteAnimation> runRight,
+    required FutureOr<SpriteAnimation> runLeft,
+    FutureOr<SpriteAnimation>? idleUp,
+    FutureOr<SpriteAnimation>? idleDown,
+    FutureOr<SpriteAnimation>? idleUpLeft,
+    FutureOr<SpriteAnimation>? idleUpRight,
+    FutureOr<SpriteAnimation>? idleDownLeft,
+    FutureOr<SpriteAnimation>? idleDownRight,
+    FutureOr<SpriteAnimation>? runUp,
+    FutureOr<SpriteAnimation>? runDown,
+    FutureOr<SpriteAnimation>? runUpLeft,
+    FutureOr<SpriteAnimation>? runUpRight,
+    FutureOr<SpriteAnimation>? runDownLeft,
+    FutureOr<SpriteAnimation>? runDownRight,
+    Map<String, FutureOr<SpriteAnimation>>? others,
     SimpleAnimationEnum initAnimation = SimpleAnimationEnum.idleRight,
   }) {
     _currentType = initAnimation;

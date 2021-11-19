@@ -3,10 +3,10 @@
 - Create interfaces to facility access methods of the `ColorFilter` and `Lighting`.
 - Add `replaceAnimation` method in `DirectionAnimation`. now you can use this method in SimplePlayer or Enemy to replace `SimpleDirectionAnimation`.
 - Now gameRef is `BonfireGameInterface`.
+- Improvements in SimpleDirectionAnimation.
 - BREAKING CHANGE:
     - rename `gameRef.changeJoystickTarget` to `gameRef.addJoystickObserver`
     - remove `gameRef.addComponent`. now use `gameRef.add` or `gameRef.addAll`
-    - new constructor in `SimpleDirectionAnimation` named `fromFuture` to load Future<SpriteAnimation>.
 
 # 1.9.10
 - Fix problem render big tilesets [#200](https://github.com/RafaelBarbosatec/bonfire/issues/200).
