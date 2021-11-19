@@ -41,7 +41,7 @@ class SimpleDirectionAnimation {
 
   double opacity = 1.0;
 
-  SimpleDirectionAnimation.fromFuture({
+  SimpleDirectionAnimation({
     required FutureOr<SpriteAnimation> idleLeft,
     required FutureOr<SpriteAnimation> idleRight,
     required FutureOr<SpriteAnimation> runRight,
