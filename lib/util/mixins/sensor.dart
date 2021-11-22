@@ -34,14 +34,24 @@ mixin Sensor on GameComponent {
     }
   }
 
-  void setupSensorArea(Vector2Rect s, {int intervalCheck = 250}) {
-    _sensorArea = s;
+  void setupSensorArea({
+    Vector2? size,
+    Vector2? align,
+    int intervalCheck = 250,
+  }) {
     _intervalCheckContact = intervalCheck;
-    _collisionConfig = CollisionConfig(
-      collisions: [
-        CollisionArea.fromVector2Rect(rect: s),
-      ],
-    );
+    if (size != null || align != null) {
+      if (size != null) {
+        _sensorArea = Vector2Rect(align ?? Vector2.zero(), size);
+      } else if (align != null) {
+        _sensorArea = Vector2Rect(align, this.position.size);
+      }
+      _collisionConfig = CollisionConfig(
+        collisions: [
+          CollisionArea.fromVector2Rect(rect: _sensorArea!),
+        ],
+      );
+    }
   }
 
   @override
@@ -74,15 +84,17 @@ mixin Sensor on GameComponent {
   void _verifyContact() {
     _collisionConfig?.updatePosition(sensorArea);
     for (final i in gameRef.visibleComponents()) {
-      if (i.isObjectCollision()) {
-        if ((i as ObjectCollision)
-                .collisionConfig
-                ?.verifyCollision(_collisionConfig) ??
-            false) {
+      if (i != this) {
+        if (i.isObjectCollision()) {
+          if (((i as ObjectCollision)
+                  .collisionConfig
+                  ?.verifyCollision(_collisionConfig) ??
+              false)) {
+            onContact(i);
+          }
+        } else if (i.position.overlaps(sensorArea)) {
           onContact(i);
         }
-      } else if (i.position.overlaps(sensorArea)) {
-        onContact(i);
       }
     }
   }

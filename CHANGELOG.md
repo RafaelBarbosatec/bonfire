@@ -1,3 +1,6 @@
+# [next]
+- improvements in `Sensor` mixin.
+
 # 1.10.0
 - Fix [#203](https://github.com/RafaelBarbosatec/bonfire/issues/203) - Web build with late initialisation on animations
 - Create interfaces to facility access methods of the `ColorFilter` and `Lighting`.
