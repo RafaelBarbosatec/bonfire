@@ -7,6 +7,10 @@ class TiledItemTileSet {
   final List<CollisionArea>? collisions;
   final String? type;
   final Map<String, dynamic>? properties;
+  final double angle;
+  final bool isFlipVertical;
+  final bool isFlipHorizontal;
+  final int id;
 
   TiledItemTileSet({
     this.sprite,
@@ -14,5 +18,9 @@ class TiledItemTileSet {
     this.animation,
     this.type,
     this.properties,
+    this.angle = 0,
+    this.isFlipVertical = false,
+    this.isFlipHorizontal = false,
+    this.id = 0,
   });
 }

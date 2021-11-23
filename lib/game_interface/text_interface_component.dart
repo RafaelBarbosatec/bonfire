@@ -16,7 +16,7 @@ class TextInterfaceComponent extends InterfaceComponent {
     required Vector2 position,
     this.text = '',
     ValueChanged<bool>? onTapComponent,
-    TextPaintConfig? textConfig,
+    TextStyle? textConfig,
   }) : super(
           id: id,
           position: position,
@@ -24,7 +24,7 @@ class TextInterfaceComponent extends InterfaceComponent {
           height: 0.0,
           onTapComponent: onTapComponent,
         ) {
-    this.textConfig = TextPaint(config: textConfig ?? TextPaintConfig());
+    this.textConfig = TextPaint(style: textConfig);
   }
 
   @override

@@ -1,9 +1,6 @@
-import 'dart:ui';
-
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/game_color_filter.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class ColorFilterInterface {
@@ -48,7 +45,7 @@ class ColorFilterComponent extends GameComponent
   }) {
     colorFilter.blendMode = blendMode;
     _tween = ColorTween(
-      begin: colorFilter.color ?? Colors.transparent,
+      begin: colorFilter.color ?? Color(0x00000000),
       end: color,
     );
 

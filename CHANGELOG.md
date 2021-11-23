@@ -1,3 +1,9 @@
+# 1.11.0
+- Improvements in `Sensor` mixin.
+- Add support to flip vertical, flip horizontal and rotate in Tiled. [#182](https://github.com/RafaelBarbosatec/bonfire/issues/182)
+- Update flame to `1.0.0-releasecandidate.17`
+    - BRAKING CHANGE: Replace `TextPaintConfig` to `TextStyle`
+
 # 1.10.0
 - Fix [#203](https://github.com/RafaelBarbosatec/bonfire/issues/203) - Web build with late initialisation on animations
 - Create interfaces to facility access methods of the `ColorFilter` and `Lighting`.

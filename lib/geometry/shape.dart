@@ -1,8 +1,6 @@
-import 'dart:ui';
-
 import 'package:bonfire/geometry/shape_collision.dart';
 import 'package:flame/extensions.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 abstract class Shape {
   Vector2 _position;

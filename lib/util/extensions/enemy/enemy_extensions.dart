@@ -10,7 +10,6 @@ import 'package:bonfire/util/extensions/game_component_extensions.dart';
 import 'package:bonfire/util/extensions/movement_extensions.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 /// Functions util to use in your [Enemy]

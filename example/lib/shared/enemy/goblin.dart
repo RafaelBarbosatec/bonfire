@@ -160,7 +160,7 @@ class Goblin extends SimpleEnemy
   void receiveDamage(double damage, dynamic from) {
     this.showDamage(
       damage,
-      config: TextPaintConfig(
+      config: TextStyle(
         fontSize: width / 3,
         color: Colors.white,
       ),

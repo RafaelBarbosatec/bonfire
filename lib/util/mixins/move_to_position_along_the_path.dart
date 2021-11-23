@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:a_star_algorithm/a_star_algorithm.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/mixins/movement.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 enum TypeResumeDirection {
   axisX,
@@ -28,10 +28,11 @@ mixin MoveToPositionAlongThePath on Movement {
   List<Offset> _barriers = [];
   List ignoreCollisions = [];
 
-  Color _pathLineColor = Colors.lightBlueAccent.withOpacity(0.5);
+  Color _pathLineColor = Color(0xFF40C4FF).withOpacity(0.5);
   double _pathLineStrokeWidth = 4;
 
-  Paint _paintShowBarriers = Paint()..color = Colors.blue.withOpacity(0.5);
+  Paint _paintShowBarriers = Paint()
+    ..color = Color(0xFF2196F3).withOpacity(0.5);
 
   void setupMoveToPositionAlongThePath({
     /// Use to set line path color
@@ -48,9 +49,9 @@ mixin MoveToPositionAlongThePath on Movement {
     bool gridSizeIsCollisionSize = false,
   }) {
     _paintShowBarriers.color =
-        barriersCalculatedColor ?? Colors.blue.withOpacity(0.5);
+        barriersCalculatedColor ?? Color(0xFF2196F3).withOpacity(0.5);
     this._showBarriers = showBarriersCalculated;
-    _pathLineColor = pathLineColor ?? Colors.lightBlueAccent.withOpacity(0.5);
+    _pathLineColor = pathLineColor ?? Color(0xFF40C4FF).withOpacity(0.5);
     _pathLineStrokeWidth = pathLineStrokeWidth;
     _gridSizeIsCollisionSize = gridSizeIsCollisionSize;
   }

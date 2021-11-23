@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'bonfire_game_ref.dart';
 
@@ -22,15 +23,15 @@ class TextDamageComponent extends TextComponent with BonfireHasGameRef {
     this.text,
     Vector2 position, {
     this.onlyUp = false,
-    TextPaintConfig? config,
+    TextStyle? config,
     double initVelocityTop = -4,
     this.maxDownSize = 20,
     this.gravity = 0.5,
     this.direction = DirectionTextDamage.RANDOM,
   }) : super(
-          text,
+          text: text,
           textRenderer: TextPaint(
-            config: config ?? TextPaintConfig(),
+            style: config,
           ),
           position: position,
         ) {

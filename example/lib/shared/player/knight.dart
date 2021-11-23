@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
+import 'package:example/shared/decoration/potion_life.dart';
 import 'package:example/shared/enemy/goblin.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:example/shared/util/player_sprite_sheet.dart';
@@ -202,11 +203,11 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   @override
   void render(Canvas c) {
+    super.render(c);
     _drawDirectionAttack(c);
     if (_rectHover.left != 0 || _rectHover.top != 0) {
       c.drawRect(_rectHover, paintHover);
     }
-    super.render(c);
   }
 
   void _verifyStamina(double dt) {
@@ -229,7 +230,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   void receiveDamage(double damage, dynamic from) {
     this.showDamage(
       damage,
-      config: TextPaintConfig(
+      config: TextStyle(
         fontSize: width / 3,
         color: Colors.red,
       ),
@@ -412,5 +413,11 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       enableMouseGesture =
           (Platform.isAndroid || Platform.isIOS) ? false : true;
     }
+  }
+
+  @override
+  void onMount() {
+    add(PotionLife(vectorPosition.translate(50, 0), 30));
+    super.onMount();
   }
 }

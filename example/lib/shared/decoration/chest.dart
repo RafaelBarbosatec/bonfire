@@ -3,7 +3,7 @@ import 'package:bonfire/util/vector2rect.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/decoration/potion_life.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Chest extends GameDecoration with TapGesture {
   bool _observedPlayer = false;
@@ -17,8 +17,8 @@ class Chest extends GameDecoration with TapGesture {
           position: position,
         ) {
     _textConfig = TextPaint(
-      config: TextPaintConfig(
-        color: Colors.white,
+      style: TextStyle(
+        color: Color(0xFFFFFFFF),
         fontSize: width / 2,
       ),
     );

@@ -3,8 +3,7 @@ import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/mixins/movement.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// It is used to represent your enemies.
 class Enemy extends GameComponent with Movement, Attackable {

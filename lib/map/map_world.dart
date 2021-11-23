@@ -46,7 +46,7 @@ class MapWorld extends MapGame {
   @override
   void render(Canvas canvas) {
     for (final tile in childrenTiles) {
-      tile.render(canvas);
+      tile.renderTree(canvas);
     }
     _drawPathLine(canvas);
     super.render(canvas);
