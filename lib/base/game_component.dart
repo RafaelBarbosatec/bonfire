@@ -193,15 +193,15 @@ abstract class GameComponent extends Component
   void renderTree(Canvas canvas) {
     canvas.save();
 
-    if (isFlipHorizontal || isFlipVertical) {
+    if (isFlipHorizontal || isFlipVertical || angle != 0) {
       canvas.translate(position.center.dx, position.center.dy);
-      canvas.scale(isFlipHorizontal ? -1 : 1, isFlipVertical ? -1 : 1);
-      canvas.translate(-position.center.dx, -position.center.dy);
-    }
+      if (angle != 0) {
+        canvas.rotate(angle);
+      }
+      if (isFlipHorizontal || isFlipVertical) {
+        canvas.scale(isFlipHorizontal ? -1 : 1, isFlipVertical ? -1 : 1);
+      }
 
-    if (angle != 0) {
-      canvas.translate(position.center.dx, position.center.dy);
-      canvas.rotate(angle);
       canvas.translate(-position.center.dx, -position.center.dy);
     }
 

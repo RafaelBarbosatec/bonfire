@@ -10,6 +10,7 @@ class TiledItemTileSet {
   final double angle;
   final bool isFlipVertical;
   final bool isFlipHorizontal;
+  final int id;
 
   TiledItemTileSet({
     this.sprite,
@@ -20,5 +21,6 @@ class TiledItemTileSet {
     this.angle = 0,
     this.isFlipVertical = false,
     this.isFlipHorizontal = false,
+    this.id = 0,
   });
 }

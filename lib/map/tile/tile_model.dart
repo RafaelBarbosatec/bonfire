@@ -116,7 +116,7 @@ class TileModel {
   final double angle;
   final bool isFlipVertical;
   final bool isFlipHorizontal;
-  String id = '';
+  final String id;
 
   Offset center = Offset.zero;
 
@@ -135,12 +135,12 @@ class TileModel {
     this.angle = 0,
     this.isFlipVertical = false,
     this.isFlipHorizontal = false,
+    this.id = '',
   }) {
     center = Offset(
       (x * width) + (width / 2.0),
       (y * height) + (height / 2.0),
     );
-    id = '$x/$y:${DateTime.now().microsecondsSinceEpoch}';
   }
   double get left => (x * width);
   double get right => (x * width) + width;
