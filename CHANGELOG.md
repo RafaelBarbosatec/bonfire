@@ -1,5 +1,7 @@
 # [next]
-- improvements in `Sensor` mixin.
+- Improvements in `Sensor` mixin.
+- Update flame to `1.0.0-releasecandidate.17`
+    - BRAKING CHANGE: Replace `TextPaintConfig` to `TextStyle`
 
 # 1.10.0
 - Fix [#203](https://github.com/RafaelBarbosatec/bonfire/issues/203) - Web build with late initialisation on animations

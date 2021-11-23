@@ -202,11 +202,11 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   @override
   void render(Canvas c) {
+    super.render(c);
     _drawDirectionAttack(c);
     if (_rectHover.left != 0 || _rectHover.top != 0) {
       c.drawRect(_rectHover, paintHover);
     }
-    super.render(c);
   }
 
   void _verifyStamina(double dt) {
@@ -229,7 +229,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   void receiveDamage(double damage, dynamic from) {
     this.showDamage(
       damage,
-      config: TextPaintConfig(
+      config: TextStyle(
         fontSize: width / 3,
         color: Colors.red,
       ),

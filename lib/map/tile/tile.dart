@@ -8,7 +8,7 @@ import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Tile extends GameComponent {
   Sprite? _sprite;
@@ -138,15 +138,15 @@ class Tile extends GameComponent {
       position.rect,
       _paintText!
         ..color = (gameRef as BonfireGame).constructionModeColor ??
-            Colors.cyan.withOpacity(0.5),
+            Color(0xFF00BCD4).withOpacity(0.5),
     );
     if (_positionText.x % 2 == 0) {
       if (_textPaintConfig == null) {
         _textPaintConfig = TextPaint(
-          config: TextPaintConfig(
+          style: TextStyle(
             fontSize: width / 3,
             color: (gameRef as BonfireGame).constructionModeColor ??
-                Colors.cyan.withOpacity(0.5),
+                Color(0xFF00BCD4).withOpacity(0.5),
           ),
         );
       }

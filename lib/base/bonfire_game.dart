@@ -219,7 +219,7 @@ class BonfireGame extends BaseGame
   }
 
   @override
-  Future<void> addAll(List<Component> components) {
+  Future<void> addAll(Iterable<Component> components) {
     components.forEach((element) {
       if (element is BonfireHasGameRef) {
         (element as BonfireHasGameRef).gameRef = this;

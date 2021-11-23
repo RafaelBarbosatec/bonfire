@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 extension GameComponentExtensions on GameComponent {
   /// This method we notify when detect the component when enter in [radiusVision] configuration
@@ -75,7 +75,7 @@ extension GameComponentExtensions on GameComponent {
   /// Add in the game a text with animation representing damage received
   void showDamage(
     double damage, {
-    TextPaintConfig? config,
+    TextStyle? config,
     double initVelocityTop = -5,
     double gravity = 0.5,
     double maxDownSize = 20,
@@ -90,9 +90,9 @@ extension GameComponentExtensions on GameComponent {
           position.top,
         ),
         config: config ??
-            TextPaintConfig(
+            TextStyle(
               fontSize: 14,
-              color: Colors.white,
+              color: Color(0xFFFFFFFF),
             ),
         initVelocityTop: initVelocityTop,
         gravity: gravity,

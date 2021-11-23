@@ -1,7 +1,5 @@
-import 'dart:ui';
-
 import 'package:bonfire/util/mixins/attackable.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 Paint _barLiveBgPaint = Paint();
 Paint _barLivePaint = Paint();
@@ -17,10 +15,10 @@ extension AttackableExtensions on Attackable {
     double height = 4,
     double? width,
     List<Color>? colorsLife,
-    Color backgroundColor = Colors.black,
+    Color backgroundColor = const Color(0xFF000000),
     BorderRadius borderRadius = BorderRadius.zero,
     double borderWidth = 0,
-    Color borderColor = Colors.white,
+    Color borderColor = const Color(0xFFFFFFFF),
   }) {
     double yPosition = (position.top - height) - margin;
 
@@ -80,7 +78,8 @@ extension AttackableExtensions on Attackable {
         ..color = _getColorLife(
           currentBarLife,
           w,
-          colorsLife ?? [Colors.red, Colors.yellow, Colors.green],
+          colorsLife ??
+              [Color(0xFFF44336), Color(0xFFFFEB3B), Color(0xFF4CAF50)],
         )
         ..style = PaintingStyle.fill,
     );

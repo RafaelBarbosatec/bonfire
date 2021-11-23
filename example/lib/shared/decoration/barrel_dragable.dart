@@ -31,7 +31,7 @@ class BarrelDraggable extends GameDecoration with DragGesture, ObjectCollision {
       ),
     );
     _textConfig = TextPaint(
-      config: TextPaintConfig(color: Colors.white, fontSize: width / 4),
+      style: TextStyle(color: Colors.white, fontSize: width / 4),
     );
   }
 

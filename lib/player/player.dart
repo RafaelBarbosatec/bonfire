@@ -5,8 +5,7 @@ import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/mixins/move_to_position_along_the_path.dart';
 import 'package:bonfire/util/mixins/movement.dart';
 import 'package:bonfire/util/mixins/movement_by_joystick.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Player extends GameComponent
     with

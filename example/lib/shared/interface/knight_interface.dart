@@ -114,7 +114,7 @@ class KnightInterface extends GameInterface {
     ));
     add(TextInterfaceComponent(
       text: 'Text example',
-      textConfig: TextPaintConfig(
+      textConfig: TextStyle(
         color: Colors.white,
       ),
       id: 5,

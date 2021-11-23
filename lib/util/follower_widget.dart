@@ -1,7 +1,7 @@
 import 'dart:async' as async;
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 ///
 /// Created by

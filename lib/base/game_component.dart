@@ -70,7 +70,7 @@ abstract class GameComponent extends Component
     ..style = PaintingStyle.stroke;
 
   TextPaint get debugTextPaint => TextPaint(
-        config: TextPaintConfig(
+        style: TextStyle(
           color: debugColor,
           fontSize: 12,
         ),
@@ -188,14 +188,14 @@ abstract class GameComponent extends Component
   }
 
   @override
-  void preRender(Canvas canvas) {
+  void renderTree(Canvas canvas) {
     if (angle != 0) {
       canvas.save();
       canvas.translate(position.center.dx, position.center.dy);
       canvas.rotate(angle);
       canvas.translate(-position.center.dx, -position.center.dy);
     }
-    super.preRender(canvas);
+    super.renderTree(canvas);
   }
 
   /// Returns true if for each time the defined millisecond interval passes.

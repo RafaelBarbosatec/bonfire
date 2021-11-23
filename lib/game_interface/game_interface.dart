@@ -11,17 +11,17 @@ import 'package:flutter/widgets.dart';
 class GameInterface extends GameComponent {
   /// textConfig used to show FPS
   final textConfigGreen = TextPaint(
-    config: TextPaintConfig(color: Colors.green, fontSize: 14),
+    style: TextStyle(color: Colors.green, fontSize: 14),
   );
 
   /// textConfig used to show FPS
   final textConfigYellow = TextPaint(
-    config: TextPaintConfig(color: Colors.yellow, fontSize: 14),
+    style: TextStyle(color: Colors.yellow, fontSize: 14),
   );
 
   /// textConfig used to show FPS
   final textConfigRed = TextPaint(
-    config: TextPaintConfig(color: Colors.red, fontSize: 14),
+    style: TextStyle(color: Colors.red, fontSize: 14),
   );
 
   @override
