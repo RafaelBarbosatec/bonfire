@@ -1,5 +1,6 @@
 # [next]
 - Improvements in `Sensor` mixin.
+- Add support to flip vertical, flip horizontal and rotate in Tiled.
 - Update flame to `1.0.0-releasecandidate.17`
     - BRAKING CHANGE: Replace `TextPaintConfig` to `TextStyle`
 

@@ -58,6 +58,9 @@ abstract class GameComponent extends Component
   /// angle is positive, or counterclockwise if the angle is negative.
   double angle = 0;
 
+  bool isFlipVertical = false;
+  bool isFlipHorizontal = false;
+
   /// Param checks if this component is visible on the screen
   bool isVisible = false;
 
@@ -187,15 +190,31 @@ abstract class GameComponent extends Component
     super.renderDebugMode(canvas);
   }
 
-  @override
   void renderTree(Canvas canvas) {
+    canvas.save();
+
+    if (isFlipHorizontal || isFlipVertical) {
+      canvas.translate(position.center.dx, position.center.dy);
+      canvas.scale(isFlipHorizontal ? -1 : 1, isFlipVertical ? -1 : 1);
+      canvas.translate(-position.center.dx, -position.center.dy);
+    }
+
     if (angle != 0) {
-      canvas.save();
       canvas.translate(position.center.dx, position.center.dy);
       canvas.rotate(angle);
       canvas.translate(-position.center.dx, -position.center.dy);
     }
-    super.renderTree(canvas);
+
+    render(canvas);
+
+    canvas.restore();
+
+    children.forEach((c) => c.renderTree(canvas));
+
+    // Any debug rendering should be rendered on top of everything
+    if (debugMode) {
+      renderDebugMode(canvas);
+    }
   }
 
   /// Returns true if for each time the defined millisecond interval passes.

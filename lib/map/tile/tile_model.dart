@@ -113,6 +113,9 @@ class TileModel {
   final TileModelSprite? sprite;
   final TileModelAnimation? animation;
   final List<CollisionArea>? collisions;
+  final double angle;
+  final bool isFlipVertical;
+  final bool isFlipHorizontal;
   String id = '';
 
   Offset center = Offset.zero;
@@ -129,6 +132,9 @@ class TileModel {
     this.sprite,
     this.animation,
     this.collisions,
+    this.angle = 0,
+    this.isFlipVertical = false,
+    this.isFlipHorizontal = false,
   }) {
     center = Offset(
       (x * width) + (width / 2.0),
@@ -158,6 +164,10 @@ class TileModel {
           type: type,
           properties: properties,
         );
+        tile.angle = angle;
+        tile.isFlipHorizontal = isFlipHorizontal;
+        tile.isFlipVertical = isFlipVertical;
+
         tile.gameRef = gameRef;
         tile.id = id;
 
@@ -176,6 +186,9 @@ class TileModel {
           type: type,
           properties: properties,
         );
+        tile.angle = angle;
+        tile.isFlipHorizontal = isFlipHorizontal;
+        tile.isFlipVertical = isFlipVertical;
 
         tile.gameRef = gameRef;
         tile.id = id;
@@ -200,6 +213,9 @@ class TileModel {
           type: type,
           properties: properties,
         );
+        tile.angle = angle;
+        tile.isFlipHorizontal = isFlipHorizontal;
+        tile.isFlipVertical = isFlipVertical;
 
         tile.gameRef = gameRef;
         tile.id = id;
@@ -221,6 +237,10 @@ class TileModel {
           type: type,
           properties: properties,
         );
+        tile.angle = angle;
+        tile.isFlipHorizontal = isFlipHorizontal;
+        tile.isFlipVertical = isFlipVertical;
+
         tile.gameRef = gameRef;
         tile.id = id;
 
