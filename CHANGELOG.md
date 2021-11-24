@@ -1,3 +1,6 @@
+# 1.11.1
+- Fix problem render Map.
+
 # 1.11.0
 - Improvements in `Sensor` mixin.
 - Add support to flip vertical, flip horizontal and rotate in Tiled. [#182](https://github.com/RafaelBarbosatec/bonfire/issues/182)
