@@ -155,7 +155,6 @@ class TiledWorldMap {
   ) {
     _tiles.add(
       TileModel(
-        id: data.id.toString(),
         x: _getX(count, tileLayer.width?.toInt() ?? 0),
         y: _getY(count, tileLayer.width?.toInt() ?? 0),
         offsetX: offsetX,
@@ -311,7 +310,6 @@ class TiledWorldMap {
       );
 
       return TiledItemTileSet(
-        id: index,
         type: object.type,
         collisions: object.collisions,
         properties: object.properties,

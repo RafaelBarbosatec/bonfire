@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
-import 'package:example/shared/decoration/potion_life.dart';
 import 'package:example/shared/enemy/goblin.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:example/shared/util/player_sprite_sheet.dart';
@@ -413,11 +412,5 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       enableMouseGesture =
           (Platform.isAndroid || Platform.isIOS) ? false : true;
     }
-  }
-
-  @override
-  void onMount() {
-    add(PotionLife(vectorPosition.translate(50, 0), 30));
-    super.onMount();
   }
 }
