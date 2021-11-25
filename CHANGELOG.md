@@ -1,5 +1,6 @@
 # [NEXT]
--  Add SpriteAnimation extension: method `asWidget`.(You can use this to SpriteAnimation os Future<SpriteAnimation>)
+-  Add SpriteAnimation extension: method `asWidget`.(You can use this to SpriteAnimation or Future<SpriteAnimation>)
+-  Add Sprite extension: method `asWidget`.(You can use this to Sprite or Future<Sprite>)
 
 # 1.11.1
 - Fix problem render Map.
