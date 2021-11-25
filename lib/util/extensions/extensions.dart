@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/vector2rect.dart';
+import 'package:flutter/widgets.dart' as widget;
 
 export 'attackable_extensions.dart';
 export 'enemy/enemy_extensions.dart';
@@ -181,5 +182,38 @@ extension Vector2Ext on Vector2 {
 extension ObjectExt<T> on T {
   Future<T> asFuture() {
     return Future.value(this);
+  }
+}
+
+extension FutureSpriteAnimationExt on FutureOr<SpriteAnimation> {
+  widget.Widget asWidget({
+    bool playing = true,
+    Anchor anchor = Anchor.topLeft,
+    widget.WidgetBuilder? errorBuilder,
+    widget.WidgetBuilder? loadingBuilder,
+  }) {
+    if (this is Future) {
+      return widget.FutureBuilder<SpriteAnimation>(
+        future: this as Future<SpriteAnimation>,
+        builder: (context, anim) {
+          if (!anim.hasData) return widget.SizedBox.shrink();
+          return SpriteAnimationWidget(
+            animation: anim.data!,
+            playing: playing,
+            anchor: anchor,
+            errorBuilder: errorBuilder,
+            loadingBuilder: loadingBuilder,
+          );
+        },
+      );
+    }
+
+    return SpriteAnimationWidget(
+      animation: this as SpriteAnimation ,
+      playing: playing,
+      anchor: anchor,
+      errorBuilder: errorBuilder,
+      loadingBuilder: loadingBuilder,
+    );
   }
 }
