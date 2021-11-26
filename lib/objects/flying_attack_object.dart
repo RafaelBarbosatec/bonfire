@@ -145,9 +145,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     });
 
     if (withDecorationCollision && !destroy) {
-      destroy = isCollision(
-        shouldTriggerSensors: false,
-      );
+      destroy = isCollision().isNotEmpty;
     }
 
     if (destroy) {

@@ -114,9 +114,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     });
 
     if (withCollision && !destroy) {
-      destroy = isCollision(
-        shouldTriggerSensors: false,
-      );
+      destroy = isCollision().isNotEmpty;
     }
 
     if (destroy) {

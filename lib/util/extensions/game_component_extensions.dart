@@ -384,7 +384,8 @@ extension GameComponentExtensions on GameComponent {
         if (withPush &&
             (enemy is ObjectCollision &&
                 !(enemy as ObjectCollision)
-                    .isCollision(displacement: rectAfterPush))) {
+                    .isCollision(displacement: rectAfterPush)
+                    .isNotEmpty)) {
           enemy.translate(pushLeft, pushTop);
         }
       },
@@ -435,7 +436,8 @@ extension GameComponentExtensions on GameComponent {
       if (withPush &&
           (enemy is ObjectCollision &&
               !(enemy as ObjectCollision)
-                  .isCollision(displacement: rectAfterPush))) {
+                  .isCollision(displacement: rectAfterPush)
+                  .isNotEmpty)) {
         enemy.translate(diffBase.dx, diffBase.dy);
       }
     });
