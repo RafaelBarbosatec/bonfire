@@ -123,8 +123,10 @@ class FlyingAttackAngleObject extends AnimatedObject
         double nextY = (height / 4) * _senAngle;
         Offset nextPoint = Offset(nextX, nextY);
 
-        Offset diffBase = Offset(rectCollision.rect.center.dx + nextPoint.dx,
-                rectCollision.rect.center.dy + nextPoint.dy) -
+        Offset diffBase = Offset(
+              rectCollision.rect.center.dx + nextPoint.dx,
+              rectCollision.rect.center.dy + nextPoint.dy,
+            ) -
             rectCollision.rect.center;
 
         final positionDestroy = Vector2Rect.fromRect(
