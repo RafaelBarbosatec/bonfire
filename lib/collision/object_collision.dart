@@ -29,10 +29,14 @@ mixin ObjectCollision on GameComponent {
 
   List<ObjectCollision> isCollision({
     Vector2? displacement,
+    bool stopSearchOnFirstCollision = true,
   }) {
     if (!containCollision()) return [];
 
-    return _verifyWorldCollision(displacement: displacement);
+    return _verifyWorldCollision(
+      displacement: displacement,
+      stopSearchOnFirstCollision: stopSearchOnFirstCollision,
+    );
   }
 
   bool checkCollision(ObjectCollision component, {Vector2? displacement}) {
@@ -50,7 +54,10 @@ mixin ObjectCollision on GameComponent {
     return _collisionConfig!.vector2rect;
   }
 
-  List<ObjectCollision> _verifyWorldCollision({Vector2? displacement}) {
+  List<ObjectCollision> _verifyWorldCollision({
+    Vector2? displacement,
+    bool stopSearchOnFirstCollision = true,
+  }) {
     List<ObjectCollision> collisions = [];
     final compCollisions = _getWorldCollisions();
 
@@ -59,6 +66,9 @@ mixin ObjectCollision on GameComponent {
         onCollision(i, true);
         i.onCollision(this, false);
         collisions.add(i);
+        if (stopSearchOnFirstCollision) {
+          return collisions;
+        }
       }
     }
     return collisions;
