@@ -3,6 +3,18 @@
  "infinite":false,
  "layers":[
         {
+         "id":13,
+         "image":"image_bg.jpeg",
+         "name":"Image Layer 1",
+         "opacity":0.5,
+         "parallaxx":1.2,
+         "parallaxy":1.2,
+         "type":"imagelayer",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
          "id":9,
          "layers":[
                 {
@@ -762,7 +774,7 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":13,
+ "nextlayerid":14,
  "nextobjectid":81,
  "orientation":"orthogonal",
  "renderorder":"right-down",

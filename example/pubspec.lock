@@ -360,7 +360,7 @@ packages:
       name: tiledjsonreader
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.7"
   typed_data:
     dependency: transitive
     description:

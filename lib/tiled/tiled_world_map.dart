@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:bonfire/background/background_image_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tile/tile_model.dart';
 import 'package:bonfire/tiled/model/tiled_world_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiledjsonreader/map/layer/group_layer.dart';
+import 'package:tiledjsonreader/map/layer/image_layer.dart';
 import 'package:tiledjsonreader/map/layer/map_layer.dart';
 import 'package:tiledjsonreader/map/layer/object_group.dart';
 import 'package:tiledjsonreader/map/layer/objects.dart';
@@ -115,6 +117,10 @@ class TiledWorldMap {
 
     if (layer is ObjectGroup) {
       _addObjects(layer);
+    }
+
+    if (layer is ImageLayer) {
+      _addImageLayer(layer);
     }
 
     if (layer is GroupLayer) {
@@ -533,5 +539,22 @@ class TiledWorldMap {
       }
     });
     return map;
+  }
+
+  void _addImageLayer(ImageLayer layer) {
+    if (!(layer.visible ?? false)) return;
+    _components.add(
+      BackgroundImageGame(
+        imagePath: '$_basePath${layer.image}',
+        offset: Vector2(
+          (layer.x ?? 0.0) + (layer.offsetX ?? 0.0),
+          (layer.y ?? 0.0) + (layer.offsetY ?? 0.0),
+        ),
+        parallaxX: layer.parallaxY,
+        parallaxY: layer.parallaxX,
+        factor: _tileWidth / _tileWidthOrigin,
+        opacity: layer.opacity ?? 1,
+      ),
+    );
   }
 }
