@@ -1,3 +1,9 @@
+# [1.12.0]
+-  Adds SpriteAnimation extension: method `asWidget`.(You can use this to SpriteAnimation or Future<SpriteAnimation>)
+-  Adds Sprite extension: method `asWidget`.(You can use this to Sprite or Future<Sprite>)
+-  Adds Support to ImageLayer in map built by Tiled. [issue 76](https://github.com/RafaelBarbosatec/bonfire/issues/76)
+-  Adds Support to Text Object in map built by Tiled.
+
 # 1.11.1
 - Fix problem render Map.
 

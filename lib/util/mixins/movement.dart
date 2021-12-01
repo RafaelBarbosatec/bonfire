@@ -194,9 +194,14 @@ mixin Movement on GameComponent {
     double translateY,
   ) {
     if (this.isObjectCollision()) {
-      return (this as ObjectCollision).isCollision(
-        displacement: this.position.position.translate(translateX, translateY),
-      );
+      return (this as ObjectCollision)
+          .isCollision(
+            displacement: this.position.position.translate(
+                  translateX,
+                  translateY,
+                ),
+          )
+          .isNotEmpty;
     } else {
       return false;
     }
@@ -215,9 +220,11 @@ mixin Movement on GameComponent {
   bool _isCollision(Vector2 displacement) {
     if (this.isObjectCollision()) {
       (this as ObjectCollision).setCollisionOnlyVisibleScreen(this.isVisible);
-      return (this as ObjectCollision).isCollision(
-        displacement: displacement,
-      );
+      return (this as ObjectCollision)
+          .isCollision(
+            displacement: displacement,
+          )
+          .isNotEmpty;
     } else {
       return false;
     }

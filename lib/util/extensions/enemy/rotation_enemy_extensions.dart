@@ -155,7 +155,8 @@ extension RotationEnemyExtensions on RotationEnemy {
       if (withPush &&
           (attackable is ObjectCollision &&
               !(attackable as ObjectCollision)
-                  .isCollision(displacement: rectAfterPush.position))) {
+                  .isCollision(displacement: rectAfterPush.position)
+                  .isNotEmpty)) {
         attackable.position = rectAfterPush;
       }
     });

@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/vector2rect.dart';
+import 'package:flutter/widgets.dart' as widget;
 
 export 'attackable_extensions.dart';
 export 'enemy/enemy_extensions.dart';
@@ -181,5 +182,107 @@ extension Vector2Ext on Vector2 {
 extension ObjectExt<T> on T {
   Future<T> asFuture() {
     return Future.value(this);
+  }
+}
+
+extension FutureSpriteAnimationExt on FutureOr<SpriteAnimation> {
+  widget.Widget asWidget({
+    widget.Key? key,
+    bool playing = true,
+    Anchor anchor = Anchor.topLeft,
+    widget.WidgetBuilder? errorBuilder,
+    widget.WidgetBuilder? loadingBuilder,
+  }) {
+    if (this is Future) {
+      return widget.FutureBuilder<SpriteAnimation>(
+        key: key,
+        future: this as Future<SpriteAnimation>,
+        builder: (context, data) {
+          if (!data.hasData) return widget.SizedBox.shrink();
+          return widget.Container(
+            constraints: widget.BoxConstraints(
+              minWidth: data.data!.frames.first.sprite.src.width,
+              minHeight: data.data!.frames.first.sprite.src.height,
+            ),
+            child: SpriteAnimationWidget(
+              animation: data.data!,
+              playing: playing,
+              anchor: anchor,
+              errorBuilder: errorBuilder,
+              loadingBuilder: loadingBuilder,
+            ),
+          );
+        },
+      );
+    }
+
+    return widget.Container(
+      key: key,
+      constraints: widget.BoxConstraints(
+        minWidth: (this as SpriteAnimation).frames.first.sprite.src.width,
+        minHeight: (this as SpriteAnimation).frames.first.sprite.src.height,
+      ),
+      child: SpriteAnimationWidget(
+        animation: this as SpriteAnimation,
+        playing: playing,
+        anchor: anchor,
+        errorBuilder: errorBuilder,
+        loadingBuilder: loadingBuilder,
+      ),
+    );
+  }
+}
+
+extension FutureSpriteExt on FutureOr<Sprite> {
+  widget.Widget asWidget({
+    widget.Key? key,
+    Anchor anchor = Anchor.topLeft,
+    widget.WidgetBuilder? errorBuilder,
+    widget.WidgetBuilder? loadingBuilder,
+    double angle = 0,
+    Vector2? srcPosition,
+    Vector2? srcSize,
+  }) {
+    if (this is Future) {
+      return widget.FutureBuilder<Sprite>(
+        key: key,
+        future: this as Future<Sprite>,
+        builder: (context, data) {
+          if (!data.hasData) return widget.SizedBox.shrink();
+          return widget.Container(
+            constraints: widget.BoxConstraints(
+              minWidth: data.data!.src.width,
+              minHeight: data.data!.src.height,
+            ),
+            child: SpriteWidget(
+              sprite: data.data!,
+              anchor: anchor,
+              errorBuilder: errorBuilder,
+              loadingBuilder: loadingBuilder,
+              angle: angle,
+              srcPosition: srcPosition,
+              srcSize: srcSize,
+            ),
+          );
+        },
+      );
+    }
+
+    return widget.Container(
+      key: key,
+      constraints: widget.BoxConstraints(
+        minWidth: (this as Sprite).src.width,
+        minHeight: (this as Sprite).src.height,
+      ),
+      child: SpriteWidget(
+        sprite: this as Sprite,
+        anchor: anchor,
+        errorBuilder: errorBuilder,
+        loadingBuilder: loadingBuilder,
+        angle: angle,
+        srcPosition: srcPosition,
+        srcSize: srcSize,
+      ),
+    );
   }
 }

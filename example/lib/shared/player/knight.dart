@@ -304,16 +304,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
               person: Container(
                 width: 100,
                 height: 100,
-                child: FutureBuilder<SpriteAnimation>(
-                  future: PlayerSpriteSheet.idleRight,
-                  builder: (context, anim) {
-                    if (!anim.hasData) return SizedBox.shrink();
-                    return SpriteAnimationWidget(
-                      animation: anim.data!,
-                      playing: true,
-                    );
-                  },
-                ),
+                child: PlayerSpriteSheet.idleRight.asWidget(),
               ),
             ),
           ],

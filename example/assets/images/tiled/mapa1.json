@@ -3,6 +3,18 @@
  "infinite":false,
  "layers":[
         {
+         "id":13,
+         "image":"image_bg.jpeg",
+         "name":"Image Layer 1",
+         "opacity":0.6,
+         "parallaxx":1.2,
+         "parallaxy":1.2,
+         "type":"imagelayer",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
          "id":9,
          "layers":[
                 {
@@ -755,6 +767,23 @@
                  "width":16,
                  "x":255.703640192486,
                  "y":543.000656665122
+                }, 
+                {
+                 "height":18.84375,
+                 "id":81,
+                 "name":"",
+                 "rotation":0,
+                 "text":
+                    {
+                     "color":"#ffffff",
+                     "text":"Bonfire",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":53.953125,
+                 "x":102.0859375,
+                 "y":4.453125
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -762,8 +791,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":13,
- "nextobjectid":81,
+ "nextlayerid":14,
+ "nextobjectid":82,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.5.0",

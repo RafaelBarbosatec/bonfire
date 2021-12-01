@@ -27,45 +27,57 @@ mixin ObjectCollision on GameComponent {
     _collisionConfig?.collisionOnlyVisibleScreen = onlyVisible;
   }
 
-  bool isCollision({
+  List<ObjectCollision> isCollision({
     Vector2? displacement,
-    bool shouldTriggerSensors = true,
+    bool stopSearchOnFirstCollision = true,
   }) {
-    if (!containCollision()) return false;
+    if (!containCollision()) return [];
 
-    if (_verifyComponentCollision(position: displacement)) {
-      return true;
-    }
-
-    return false;
+    return _verifyWorldCollision(
+      displacement: displacement,
+      stopSearchOnFirstCollision: stopSearchOnFirstCollision,
+    );
   }
 
-  Vector2Rect getRectCollision() {
-    if (!containCollision()) return Vector2Rect.zero();
-    return _collisionConfig!.vector2rect;
+  bool checkCollision(ObjectCollision component, {Vector2? displacement}) {
+    return _collisionConfig?.verifyCollision(
+          component.collisionConfig,
+          displacement: displacement,
+        ) ??
+        false;
   }
 
   bool containCollision() => _containCollision;
 
-  Vector2Rect get rectCollision => getRectCollision();
+  Vector2Rect get rectCollision {
+    if (!containCollision()) return Vector2Rect.zero();
+    return _collisionConfig!.vector2rect;
+  }
 
-  bool _verifyComponentCollision({Vector2? position}) {
-    final compCollisions =
-        ((_collisionConfig?.collisionOnlyVisibleScreen ?? true)
-            ? gameRef.visibleCollisions()
-            : gameRef.collisions());
+  List<ObjectCollision> _verifyWorldCollision({
+    Vector2? displacement,
+    bool stopSearchOnFirstCollision = true,
+  }) {
+    List<ObjectCollision> collisions = [];
+    final compCollisions = _getWorldCollisions();
 
     for (final i in compCollisions) {
-      if (i != this &&
-          (_collisionConfig?.verifyCollision(i.collisionConfig,
-                  position: position) ??
-              false)) {
+      if (i != this && checkCollision(i, displacement: displacement)) {
         onCollision(i, true);
         i.onCollision(this, false);
-        return true;
+        collisions.add(i);
+        if (stopSearchOnFirstCollision) {
+          return collisions;
+        }
       }
     }
-    return false;
+    return collisions;
+  }
+
+  Iterable<ObjectCollision> _getWorldCollisions() {
+    return (_collisionConfig?.collisionOnlyVisibleScreen ?? true)
+        ? gameRef.visibleCollisions()
+        : gameRef.collisions();
   }
 
   @override

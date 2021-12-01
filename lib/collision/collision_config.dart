@@ -23,12 +23,12 @@ class CollisionConfig {
 
   Rect get rect => vector2rect.rect;
 
-  bool verifyCollision(CollisionConfig? other, {Vector2? position}) {
+  bool verifyCollision(CollisionConfig? other, {Vector2? displacement}) {
     if (other == null) return false;
     for (final element1 in collisions) {
       for (final element2 in other.collisions) {
-        if (position != null
-            ? element1.verifyCollisionSimulate(position, element2)
+        if (displacement != null
+            ? element1.verifyCollisionSimulate(displacement, element2)
             : element1.verifyCollision(element2)) {
           return true;
         }

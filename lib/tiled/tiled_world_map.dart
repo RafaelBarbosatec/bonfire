@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:bonfire/background/background_image_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tile/tile_model.dart';
 import 'package:bonfire/tiled/model/tiled_world_data.dart';
+import 'package:bonfire/util/text_game_component.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:http/http.dart' as http;
 import 'package:tiledjsonreader/map/layer/group_layer.dart';
+import 'package:tiledjsonreader/map/layer/image_layer.dart';
 import 'package:tiledjsonreader/map/layer/map_layer.dart';
 import 'package:tiledjsonreader/map/layer/object_group.dart';
 import 'package:tiledjsonreader/map/layer/objects.dart';
@@ -115,6 +119,10 @@ class TiledWorldMap {
 
     if (layer is ObjectGroup) {
       _addObjects(layer);
+    }
+
+    if (layer is ImageLayer) {
+      _addImageLayer(layer);
     }
 
     if (layer is GroupLayer) {
@@ -330,16 +338,39 @@ class TiledWorldMap {
     double offsetY = ((layer.offsetY ?? 0.0) * _tileHeight) / _tileHeightOrigin;
     layer.objects?.forEach(
       (element) {
-        if (_objectsBuilder[element.name] != null) {
-          double x =
-              (((element.x ?? 0.0) * _tileWidth) / _tileWidthOrigin) + offsetX;
-          double y = (((element.y ?? 0.0) * _tileHeight) / _tileHeightOrigin) +
-              offsetY;
-          double width =
-              ((element.width ?? 0.0) * _tileWidth) / _tileWidthOrigin;
-          double height =
-              ((element.height ?? 0.0) * _tileHeight) / _tileHeightOrigin;
+        double x =
+            (((element.x ?? 0.0) * _tileWidth) / _tileWidthOrigin) + offsetX;
+        double y =
+            (((element.y ?? 0.0) * _tileHeight) / _tileHeightOrigin) + offsetY;
+        double width = ((element.width ?? 0.0) * _tileWidth) / _tileWidthOrigin;
+        double height =
+            ((element.height ?? 0.0) * _tileHeight) / _tileHeightOrigin;
 
+        if (element.text != null) {
+          double fontSize = element.text!.pixelSize.toDouble();
+          fontSize = (_tileWidth * fontSize) / _tileWidthOrigin;
+          _components.add(
+            TextGameComponent(
+              text: element.text!.text,
+              position: Vector2(x, y),
+              style: material.TextStyle(
+                fontSize: fontSize,
+                fontFamily: element.text!.fontFamily,
+                decoration:
+                    element.text!.underline ? TextDecoration.underline : null,
+                fontWeight: element.text!.bold
+                    ? material.FontWeight.bold
+                    : material.FontWeight.normal,
+                fontStyle: element.text!.italic
+                    ? material.FontStyle.italic
+                    : material.FontStyle.normal,
+                color: Color(
+                  int.parse('0xFF${element.text!.color.replaceAll('#', '')}'),
+                ),
+              ),
+            ),
+          );
+        } else if (_objectsBuilder[element.name] != null) {
           final object = _objectsBuilder[element.name]?.call(
             TiledObjectProperties(
               Vector2(x, y),
@@ -533,5 +564,22 @@ class TiledWorldMap {
       }
     });
     return map;
+  }
+
+  void _addImageLayer(ImageLayer layer) {
+    if (!(layer.visible ?? false)) return;
+    _components.add(
+      BackgroundImageGame(
+        imagePath: '$_basePath${layer.image}',
+        offset: Vector2(
+          (layer.x ?? 0.0) + (layer.offsetX ?? 0.0),
+          (layer.y ?? 0.0) + (layer.offsetY ?? 0.0),
+        ),
+        parallaxX: layer.parallaxY,
+        parallaxY: layer.parallaxX,
+        factor: _tileWidth / _tileWidthOrigin,
+        opacity: layer.opacity ?? 1,
+      ),
+    );
   }
 }

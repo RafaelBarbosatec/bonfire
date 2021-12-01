@@ -111,7 +111,7 @@ abstract class GameComponent extends Component
     final map = gameRef.map;
     if (map.getRendered().isNotEmpty) {
       Vector2Rect position = this.isObjectCollision()
-          ? (this as ObjectCollision).getRectCollision()
+          ? (this as ObjectCollision).rectCollision
           : this.position;
       return map
           .getRendered()
@@ -140,7 +140,7 @@ abstract class GameComponent extends Component
     final map = gameRef.map;
     if (map.tiles.isNotEmpty) {
       Vector2Rect position = this.isObjectCollision()
-          ? (this as ObjectCollision).getRectCollision()
+          ? (this as ObjectCollision).rectCollision
           : this.position;
       return map
           .getRendered()

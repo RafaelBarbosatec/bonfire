@@ -1,5 +1,5 @@
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/util/game_color_filter.dart';
+import 'package:bonfire/color_filter/game_color_filter.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flutter/widgets.dart';
 
