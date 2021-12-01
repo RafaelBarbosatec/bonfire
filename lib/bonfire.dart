@@ -8,6 +8,7 @@ export 'package:bonfire/camera/camera_config.dart';
 export 'package:bonfire/collision/collision_area.dart';
 export 'package:bonfire/collision/collision_config.dart';
 export 'package:bonfire/collision/object_collision.dart';
+export 'package:bonfire/color_filter/game_color_filter.dart';
 export 'package:bonfire/decoration/decoration.dart';
 export 'package:bonfire/decoration/decoration_with_collision.dart';
 export 'package:bonfire/enemy/enemy.dart';
@@ -49,7 +50,6 @@ export 'package:bonfire/util/direction_animations/simple_direction_animation.dar
 export 'package:bonfire/util/extensions/extensions.dart';
 export 'package:bonfire/util/follower_widget.dart';
 export 'package:bonfire/util/functions.dart';
-export 'package:bonfire/util/game_color_filter.dart';
 export 'package:bonfire/util/game_controller.dart';
 export 'package:bonfire/util/interval_tick.dart';
 export 'package:bonfire/util/mixins/attackable.dart';
