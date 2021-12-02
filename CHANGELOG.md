@@ -1,3 +1,6 @@
+# [next]
+- improvements in sprite load of the `BackgroundImageGame`.
+
 # [1.12.0]
 -  Adds SpriteAnimation extension: method `asWidget`.(You can use this to SpriteAnimation or Future<SpriteAnimation>)
 -  Adds Sprite extension: method `asWidget`.(You can use this to Sprite or Future<Sprite>)

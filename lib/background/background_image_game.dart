@@ -13,6 +13,7 @@ import 'dart:ui';
 
 import 'package:bonfire/background/game_background.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/map/map_assets_manager.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/sprite.dart';
 
@@ -53,7 +54,7 @@ class BackgroundImageGame extends GameBackground {
 
   @override
   Future<void>? onLoad() async {
-    imageSprite = await Sprite.load(imagePath);
+    imageSprite = await MapAssetsManager.getFutureSprite(imagePath);
     position = Rect.fromLTWH(
             offset.x,
             offset.y,

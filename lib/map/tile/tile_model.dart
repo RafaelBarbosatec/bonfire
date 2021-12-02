@@ -35,10 +35,10 @@ class TileModelSprite {
   Future<Sprite> getFutureSprite() {
     return MapAssetsManager.getFutureSprite(
       path,
-      row,
-      column,
-      width,
-      height,
+      row: row,
+      column: column,
+      tileWidth: width,
+      tileHeight: height,
     );
   }
 
