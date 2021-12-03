@@ -134,10 +134,10 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     decrementStamina(15);
     this.simpleAttackMelee(
       damage: attack,
-      animationBottom: CommonSpriteSheet.whiteAttackEffectBottom,
+      animationDown: CommonSpriteSheet.whiteAttackEffectBottom,
       animationLeft: CommonSpriteSheet.whiteAttackEffectLeft,
       animationRight: CommonSpriteSheet.whiteAttackEffectRight,
-      animationTop: CommonSpriteSheet.whiteAttackEffectTop,
+      animationUp: CommonSpriteSheet.whiteAttackEffectTop,
       height: DungeonMap.tileSize,
       width: DungeonMap.tileSize,
     );
@@ -147,7 +147,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     if (stamina < 10) return;
 
     this.simpleAttackRangeByAngle(
-      animationTop: CommonSpriteSheet.fireBallTop,
+      animationUp: CommonSpriteSheet.fireBallTop,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       radAngleDirection: angleRadAttack,
       width: width * 0.7,
@@ -328,8 +328,8 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     if (execAttackRange) {
       double radius = position.height;
       rectDirectionAttack = Rect.fromLTWH(
-        position.center.dx - radius,
-        position.center.dy - radius,
+        rectCollision.center.dx - radius,
+        rectCollision.center.dy - radius,
         radius * 2,
         radius * 2,
       );

@@ -24,9 +24,9 @@ extension PlayerExtensions on Player {
 
   void simpleAttackMelee({
     Future<SpriteAnimation>? animationRight,
-    Future<SpriteAnimation>? animationBottom,
+    Future<SpriteAnimation>? animationDown,
     Future<SpriteAnimation>? animationLeft,
-    Future<SpriteAnimation>? animationTop,
+    Future<SpriteAnimation>? animationUp,
     required double damage,
     dynamic id,
     Direction? direction,
@@ -39,9 +39,9 @@ extension PlayerExtensions on Player {
     this.simpleAttackMeleeByDirection(
       direction: attackDirection,
       animationRight: animationRight,
-      animationBottom: animationBottom,
+      animationDown: animationDown,
       animationLeft: animationLeft,
-      animationTop: animationTop,
+      animationUp: animationUp,
       damage: damage,
       id: id,
       height: height,

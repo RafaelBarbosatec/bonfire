@@ -166,7 +166,7 @@ extension RotationEnemyExtensions on RotationEnemy {
 
   /// Execute the ranged attack using a component with animation
   void simpleAttackRange({
-    required Future<SpriteAnimation> animationTop,
+    required Future<SpriteAnimation> animationUp,
     required Future<SpriteAnimation> animationDestroy,
     required double width,
     required double height,
@@ -186,7 +186,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     if (isDead) return;
 
     this.simpleAttackRangeByAngle(
-      animationTop: animationTop,
+      animationUp: animationUp,
       animationDestroy: animationDestroy,
       width: width,
       height: height,

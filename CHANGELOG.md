@@ -1,5 +1,8 @@
 # [next]
 - improvements in sprite load of the `BackgroundImageGame`.
+- improvements in `simpleAttackRangeByAngle`.
+- rename `animationTop` to `animationUp`
+- rename `animationBottom` to `animationDown`
 
 # [1.12.0]
 -  Adds SpriteAnimation extension: method `asWidget`.(You can use this to SpriteAnimation or Future<SpriteAnimation>)
