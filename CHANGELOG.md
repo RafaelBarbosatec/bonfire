@@ -1,4 +1,4 @@
-# [next]
+# [1.12.1]
 - improvements in sprite load of the `BackgroundImageGame`.
 - improvements in `simpleAttackRangeByAngle`.
 - rename `animationTop` to `animationUp`
