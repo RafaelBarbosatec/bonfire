@@ -105,7 +105,7 @@ extension GameComponentExtensions on GameComponent {
 
   /// Execute the ranged attack using a component with animation
   void simpleAttackRangeByAngle({
-    required Future<SpriteAnimation> animationTop,
+    required Future<SpriteAnimation> animationUp,
     required double width,
     required double height,
     required double radAngleDirection,
@@ -118,22 +118,26 @@ extension GameComponentExtensions on GameComponent {
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
   }) {
-    double angle = radAngleDirection;
-    double nextX = this.width * cos(angle);
-    double nextY = this.height * sin(angle);
-    Offset nextPoint = Offset(nextX, nextY);
+    var initPosition = (isObjectCollision()
+        ? (this as ObjectCollision).rectCollision
+        : this.position);
 
-    Offset diffBase = Offset(
-          this.position.center.dx + nextPoint.dx,
-          this.position.center.dy + nextPoint.dy,
-        ) -
-        this.position.center;
+    initPosition = initPosition.translate(
+      (initPosition.width - width) / 2,
+      (initPosition.height - height) / 2,
+    );
 
-    Vector2Rect position = this.position.shift(diffBase);
+    double displacement = max(initPosition.width, initPosition.height);
+    double nextX = displacement * cos(radAngleDirection);
+    double nextY = displacement * sin(radAngleDirection);
+
+    Offset diffBase = Offset(nextX, nextY);
+
+    Vector2Rect position = initPosition.shift(diffBase);
     gameRef.add(FlyingAttackAngleObject(
       id: id,
       position: position.position,
-      radAngle: angle,
+      radAngle: radAngleDirection,
       width: width,
       height: height,
       damage: damage,
@@ -142,7 +146,7 @@ extension GameComponentExtensions on GameComponent {
       collision: collision,
       withCollision: withCollision,
       onDestroy: onDestroy,
-      flyAnimation: animationTop,
+      flyAnimation: animationUp,
       destroyAnimation: animationDestroy,
       lightingConfig: lightingConfig,
     ));
@@ -154,7 +158,6 @@ extension GameComponentExtensions on GameComponent {
     required Future<SpriteAnimation> animationLeft,
     required Future<SpriteAnimation> animationUp,
     required Future<SpriteAnimation> animationDown,
-    Future<SpriteAnimation>? animationDestroy,
     required double width,
     required double height,
     required Direction direction,
@@ -166,6 +169,7 @@ extension GameComponentExtensions on GameComponent {
     VoidCallback? destroy,
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
+    Future<SpriteAnimation>? animationDestroy,
   }) {
     Vector2 startPosition;
     Future<SpriteAnimation> attackRangeAnimation;
@@ -260,9 +264,9 @@ extension GameComponentExtensions on GameComponent {
   ///Execute simple attack melee using animation
   void simpleAttackMeleeByDirection({
     Future<SpriteAnimation>? animationRight,
-    Future<SpriteAnimation>? animationBottom,
+    Future<SpriteAnimation>? animationDown,
     Future<SpriteAnimation>? animationLeft,
-    Future<SpriteAnimation>? animationTop,
+    Future<SpriteAnimation>? animationUp,
     dynamic id,
     required double damage,
     required Direction direction,
@@ -289,7 +293,7 @@ extension GameComponentExtensions on GameComponent {
           width,
           height,
         );
-        if (animationTop != null) anim = animationTop;
+        if (animationUp != null) anim = animationUp;
         pushTop = (sizePush ?? height) * -1;
         break;
       case Direction.right:
@@ -309,7 +313,7 @@ extension GameComponentExtensions on GameComponent {
           width,
           height,
         );
-        if (animationBottom != null) anim = animationBottom;
+        if (animationDown != null) anim = animationDown;
         pushTop = (sizePush ?? height);
         break;
       case Direction.left:

@@ -62,16 +62,38 @@ mixin ObjectCollision on GameComponent {
     final compCollisions = _getWorldCollisions();
 
     for (final i in compCollisions) {
-      if (i != this && checkCollision(i, displacement: displacement)) {
-        onCollision(i, true);
-        i.onCollision(this, false);
+      bool occurred = _checkItemCollision(i, displacement: displacement);
+      if (occurred) {
         collisions.add(i);
         if (stopSearchOnFirstCollision) {
           return collisions;
         }
       }
+      for (final child in i.children) {
+        if (child is ObjectCollision) {
+          bool occurred = _checkItemCollision(
+            child,
+            displacement: displacement,
+          );
+          if (occurred) {
+            collisions.add(child);
+            if (stopSearchOnFirstCollision) {
+              return collisions;
+            }
+          }
+        }
+      }
     }
     return collisions;
+  }
+
+  bool _checkItemCollision(ObjectCollision i, {Vector2? displacement}) {
+    if (i != this && checkCollision(i, displacement: displacement)) {
+      onCollision(i, true);
+      i.onCollision(this, false);
+      return true;
+    }
+    return false;
   }
 
   Iterable<ObjectCollision> _getWorldCollisions() {
@@ -83,12 +105,14 @@ mixin ObjectCollision on GameComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if ((gameRef as BonfireGame).showCollisionArea == true) {
-      _drawCollision(
-        canvas,
-        (gameRef as BonfireGame).collisionAreaColor ??
-            Colors.lightGreen.withOpacity(0.5),
-      );
+    if (hasGameRef) {
+      if ((gameRef as BonfireGame).showCollisionArea == true) {
+        _drawCollision(
+          canvas,
+          (gameRef as BonfireGame).collisionAreaColor ??
+              Colors.lightGreen.withOpacity(0.5),
+        );
+      }
     }
   }
 

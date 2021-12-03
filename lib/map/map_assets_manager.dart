@@ -36,12 +36,12 @@ class MapAssetsManager {
   }
 
   static Future<Sprite> getFutureSprite(
-    String image,
-    int row,
-    int column,
-    double tileWidth,
-    double tileHeight,
-  ) async {
+    String image, {
+    int row = 0,
+    int column = 0,
+    double tileWidth = 0,
+    double tileHeight = 0,
+  }) async {
     if (spriteCache.containsKey('$image/$row/$column')) {
       return Future.value(spriteCache['$image/$row/$column']);
     }
@@ -67,10 +67,10 @@ class MapAssetsManager {
     for (var frame in frames) {
       Sprite sprite = await MapAssetsManager.getFutureSprite(
         frame.path,
-        frame.row,
-        frame.column,
-        frame.width,
-        frame.height,
+        row: frame.row,
+        column: frame.column,
+        tileWidth: frame.width,
+        tileHeight: frame.height,
       );
       spriteList.add(sprite);
     }

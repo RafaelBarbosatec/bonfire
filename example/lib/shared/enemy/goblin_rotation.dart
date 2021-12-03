@@ -38,7 +38,7 @@ class GoblinRotation extends RotationEnemy {
     this.seeAndMoveToAttackRange(
       positioned: (player) {
         this.simpleAttackRange(
-          animationTop: SpriteAnimation.load(
+          animationUp: SpriteAnimation.load(
             "player/fireball_top.png",
             SpriteAnimationData.sequenced(
               amount: 3,
