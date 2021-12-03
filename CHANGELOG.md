@@ -3,6 +3,7 @@
 - improvements in `simpleAttackRangeByAngle`.
 - rename `animationTop` to `animationUp`
 - rename `animationBottom` to `animationDown`
+- improvements in `TalkDialog`
 
 # [1.12.0]
 -  Adds SpriteAnimation extension: method `asWidget`.(You can use this to SpriteAnimation or Future<SpriteAnimation>)

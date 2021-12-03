@@ -11,7 +11,7 @@ class TalkDialog extends StatefulWidget {
     this.onFinish,
     this.onChangeTalk,
     this.textBoxMinHeight = 100,
-    this.keyboardKeysToNext,
+    this.keyboardKeysToNext = const [],
     this.padding,
     this.onClose,
     this.dismissible = false,
@@ -25,7 +25,7 @@ class TalkDialog extends StatefulWidget {
     ValueChanged<int>? onChangeTalk,
     Color? backgroundColor,
     double boxTextHeight = 100,
-    List<LogicalKeyboardKey>? logicalKeyboardKeysToNext,
+    List<LogicalKeyboardKey> logicalKeyboardKeysToNext = const [],
     EdgeInsetsGeometry? padding,
     bool dismissible = false,
   }) {
@@ -53,7 +53,7 @@ class TalkDialog extends StatefulWidget {
   final VoidCallback? onClose;
   final ValueChanged<int>? onChangeTalk;
   final double? textBoxMinHeight;
-  final List<LogicalKeyboardKey>? keyboardKeysToNext;
+  final List<LogicalKeyboardKey> keyboardKeysToNext;
   final EdgeInsetsGeometry? padding;
   final bool dismissible;
 
@@ -95,13 +95,13 @@ class _TalkDialogState extends State<TalkDialog> {
       child: RawKeyboardListener(
         focusNode: _focusNode,
         onKey: (raw) {
-          if (widget.keyboardKeysToNext == null && raw is RawKeyDownEvent) {
+          if (widget.keyboardKeysToNext.isEmpty && raw is RawKeyDownEvent) {
             // Prevent volume buttons from triggering the next dialog
             if (raw.logicalKey != LogicalKeyboardKey.audioVolumeUp &&
                 raw.logicalKey != LogicalKeyboardKey.audioVolumeDown) {
               _nextOrFinish();
             }
-          } else if (widget.keyboardKeysToNext!.contains(raw.logicalKey) &&
+          } else if (widget.keyboardKeysToNext.contains(raw.logicalKey) &&
               raw is RawKeyDownEvent) {
             _nextOrFinish();
           }
