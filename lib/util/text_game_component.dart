@@ -17,9 +17,11 @@ import 'package:flutter/material.dart';
 class TextGameComponent extends GameComponent {
   TextPaint? _textPaint;
   final String text;
+  final String name;
   TextGameComponent({
     required this.text,
     required Vector2 position,
+    this.name = '',
     TextStyle? style,
   }) {
     this.position = this.position.copyWith(

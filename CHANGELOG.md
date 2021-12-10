@@ -1,3 +1,6 @@
+# [NEXT]
+- Adds support to add objects with collision by Tiled. Just add the object and set you type to `collision`.
+
 # [1.12.1]
 - improvements in sprite load of the `BackgroundImageGame`.
 - improvements in `simpleAttackRangeByAngle`.

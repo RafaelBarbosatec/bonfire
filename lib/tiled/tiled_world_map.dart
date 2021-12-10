@@ -5,6 +5,7 @@ import 'package:bonfire/background/background_image_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tile/tile_model.dart';
 import 'package:bonfire/tiled/model/tiled_world_data.dart';
+import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/text_game_component.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as material;
@@ -351,6 +352,7 @@ class TiledWorldMap {
           fontSize = (_tileWidth * fontSize) / _tileWidthOrigin;
           _components.add(
             TextGameComponent(
+              name: element.name ?? '',
               text: element.text!.text,
               position: Vector2(x, y),
               style: material.TextStyle(
@@ -368,6 +370,16 @@ class TiledWorldMap {
                   int.parse('0xFF${element.text!.color.replaceAll('#', '')}'),
                 ),
               ),
+            ),
+          );
+        } else if (element.type?.toLowerCase() == 'collision') {
+          _components.add(
+            CollisionGameComponent(
+              name: element.name ?? '',
+              position: Vector2(x, y),
+              collisions: [
+                _getCollisionObject(width, height, element),
+              ],
             ),
           );
         } else if (_objectsBuilder[element.name] != null) {
@@ -581,5 +593,62 @@ class TiledWorldMap {
         opacity: layer.opacity ?? 1,
       ),
     );
+  }
+
+  CollisionArea _getCollisionObject(
+    double width,
+    double height,
+    Objects object,
+  ) {
+    CollisionArea ca = CollisionArea.rectangle(
+      size: Size(width, height),
+    );
+
+    if (object.ellipse == true) {
+      ca = CollisionArea.circle(
+        radius: (width > height ? width : height) / 2,
+      );
+    }
+
+    if (object.polygon?.isNotEmpty == true) {
+      double? minorX;
+      double? minorY;
+      List<Vector2> points = object.polygon!.map((e) {
+        Vector2 vector = Vector2(
+          ((e.x ?? 0.0) * _tileWidth) / _tileWidthOrigin,
+          ((e.y ?? 0.0) * _tileHeight) / _tileHeightOrigin,
+        );
+
+        if (minorX == null) {
+          minorX = vector.x;
+        } else if (vector.x < (minorX ?? 0.0)) {
+          minorX = vector.x;
+        }
+
+        if (minorY == null) {
+          minorY = vector.y;
+        } else if (vector.y < (minorY ?? 0.0)) {
+          minorY = vector.y;
+        }
+        return vector;
+      }).toList();
+
+      if ((minorX ?? 0) < 0) {
+        points = points.map((e) {
+          return Vector2(e.x - minorX!, e.y);
+        }).toList();
+      }
+
+      if ((minorY ?? 0) < 0) {
+        points = points.map((e) {
+          return Vector2(e.x, e.y - minorY!);
+        }).toList();
+      }
+
+      ca = CollisionArea.polygon(
+        points: points,
+      );
+    }
+    return ca;
   }
 }
