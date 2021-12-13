@@ -346,15 +346,17 @@ class Camera with BonfireHasGameRef {
   }
 
   Offset worldPositionToScreen(Offset position) {
-    return position.translate(
-      this.cameraRect.left * -1,
-      this.cameraRect.top * -1,
+    double diffX = position.dx - this.cameraRect.center.dx;
+    double diffY = position.dy - this.cameraRect.center.dy;
+    return Offset(
+      (diffX * config.zoom) + (gameRef.size.x / 2),
+      (diffY * config.zoom) + (gameRef.size.y / 2),
     );
   }
 
   Offset screenPositionToWorld(Offset position) {
-    double diffX = position.dx - gameRef.size.x / 2;
-    double diffY = position.dy - gameRef.size.y / 2;
+    double diffX = position.dx - (gameRef.size.x / 2);
+    double diffY = position.dy - (gameRef.size.y / 2);
     return Offset(
       this.cameraRect.center.dx + (diffX / config.zoom),
       this.cameraRect.center.dy + (diffY / config.zoom),

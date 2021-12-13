@@ -39,6 +39,8 @@ extension EnemyExtensions on Enemy {
   /// Checks whether the player is within range. If so, move to it.
   void seeAndMoveToPlayer({
     required Function(Player) closePlayer,
+    VoidCallback? notObserved,
+    VoidCallback? observed,
     double radiusVision = 32,
     double margin = 10,
     bool runOnlyVisibleInScreen = true,
@@ -49,6 +51,7 @@ extension EnemyExtensions on Enemy {
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
+        observed?.call();
         this.followComponent(
           player,
           dtUpdate,
@@ -60,6 +63,7 @@ extension EnemyExtensions on Enemy {
         if (!this.isIdle) {
           this.idle();
         }
+        notObserved?.call();
       },
     );
   }
@@ -155,6 +159,8 @@ extension EnemyExtensions on Enemy {
   /// Checks whether the player is within range. If so, move to it.
   void seeAndMoveToAttackRange({
     required Function(Player) positioned,
+    VoidCallback? notObserved,
+    VoidCallback? observed,
     double radiusVision = 32,
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
@@ -164,6 +170,7 @@ extension EnemyExtensions on Enemy {
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
+        observed?.call();
         this.positionsItselfAndKeepDistance(
           player,
           minDistanceFromPlayer: minDistanceFromPlayer,
@@ -185,6 +192,7 @@ extension EnemyExtensions on Enemy {
         if (!this.isIdle) {
           this.idle();
         }
+        notObserved?.call();
       },
     );
   }
