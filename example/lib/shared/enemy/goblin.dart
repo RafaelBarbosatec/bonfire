@@ -12,8 +12,7 @@ class Goblin extends SimpleEnemy
         MovementByJoystick,
         AutomaticRandomMovement {
   double attack = 20;
-  bool _seePlayerClose = false;
-  bool _seePlayerAway = false;
+  bool _seePlayerToAttackMelee = false;
   bool enableBehaviors = true;
 
   Goblin(Vector2 position)
@@ -49,43 +48,32 @@ class Goblin extends SimpleEnemy
     if (this.isDead) return;
     if (!enableBehaviors) return;
 
-    _seePlayerClose = false;
-    _seePlayerAway = false;
+    _seePlayerToAttackMelee = false;
 
-    this.seePlayer(
-      observed: (player) {
-        _seePlayerClose = true;
-        this.seeAndMoveToPlayer(
-          closePlayer: (player) {
-            execAttack();
-          },
-          radiusVision: DungeonMap.tileSize * 1.5,
-        );
+    this.seeAndMoveToPlayer(
+      closePlayer: (player) {
+        execAttack();
+      },
+      observed: () {
+        _seePlayerToAttackMelee = true;
       },
       radiusVision: DungeonMap.tileSize * 1.5,
     );
 
-    if (!_seePlayerClose) {
-      seePlayer(
+    if (!_seePlayerToAttackMelee) {
+      this.seeAndMoveToAttackRange(
+        minDistanceFromPlayer: DungeonMap.tileSize * 2,
+        positioned: (p) {
+          execAttackRange();
+        },
         radiusVision: DungeonMap.tileSize * 3,
-        observed: (p) {
-          _seePlayerAway = true;
-          this.seeAndMoveToAttackRange(
-            minDistanceFromPlayer: DungeonMap.tileSize * 2,
-            positioned: (p) {
-              execAttackRange();
-            },
-            radiusVision: DungeonMap.tileSize * 3,
+        notObserved: () {
+          runRandomMovement(
+            dt,
+            speed: speed / 2,
+            maxDistance: (DungeonMap.tileSize * 3).toInt(),
           );
         },
-      );
-    }
-
-    if (!_seePlayerAway && !_seePlayerClose) {
-      runRandomMovement(
-        dt,
-        speed: speed / 2,
-        maxDistance: (DungeonMap.tileSize * 3).toInt(),
       );
     }
   }

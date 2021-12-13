@@ -1,5 +1,7 @@
 # [NEXT]
 - Adds support to add objects with collision by Tiled. Just add the object and set you type to `collision`. [#210](https://github.com/RafaelBarbosatec/bonfire/issues/210)
+- Improvements in `worldPositionToScreen`. Now considers zoom.
+- Improvements in `seeAndMoveToPlayer` and `seeAndMoveToAttackRange`. Adds `notObserved` and `observed`.
 
 # [1.12.1]
 - improvements in sprite load of the `BackgroundImageGame`.
