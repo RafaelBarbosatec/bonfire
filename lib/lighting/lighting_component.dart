@@ -24,7 +24,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
   ColorTween? _tween;
 
   @override
-  bool get isHud => true;
+  PositionType get positionType => PositionType.viewport;
 
   LightingComponent({this.color}) {
     _paintFocus = Paint()..blendMode = BlendMode.clear;

@@ -130,8 +130,11 @@ abstract class BaseGame extends Component
   /// You can override it further to add more custom behaviour.
   @override
   void update(double dt) {
-    camera.update(dt);
     super.update(dt);
+    camera.update(dt);
+    if (parent == null) {
+      super.updateTree(dt, callOwnUpdate: false);
+    }
   }
 
   /// Verify if the Component contain gestures.
@@ -143,8 +146,10 @@ abstract class BaseGame extends Component
 
   /// reorder components by priority
   void updateOrderPriority() {
-    children.rebalanceAll();
-    _highestPriority = children.last.priority;
+    if (children.length > 0) {
+      children.rebalanceAll();
+      _highestPriority = children.last.priority;
+    }
   }
 
   @override

@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flame: 1.0.0-releasecandidate.17
+  flame: ^1.0.0
   tiledjsonreader: 1.0.9
   http: 0.13.4
   a_star_algorithm: 0.1.1

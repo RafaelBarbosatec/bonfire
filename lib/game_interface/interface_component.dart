@@ -81,7 +81,7 @@ class InterfaceComponent extends GameComponent with TapGesture {
   }
 
   @override
-  bool get isHud => true;
+  PositionType get positionType => PositionType.viewport;
 
   @override
   Future<void>? onLoad() {

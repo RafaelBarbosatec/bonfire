@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flutter/widgets.dart';
 
 mixin TapGesture on GameComponent {

@@ -25,7 +25,7 @@ class GameInterface extends GameComponent {
   );
 
   @override
-  bool get isHud => true;
+  PositionType get positionType => PositionType.viewport;
 
   @override
   int get priority {

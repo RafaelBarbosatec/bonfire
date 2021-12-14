@@ -286,3 +286,7 @@ extension FutureSpriteExt on FutureOr<Sprite> {
     );
   }
 }
+
+extension ComponentExt on Component {
+  bool get isHud => positionType == PositionType.viewport;
+}

@@ -1,4 +1,5 @@
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flutter/gestures.dart';
 
 /// Mixin responsible to listen mouse gestures

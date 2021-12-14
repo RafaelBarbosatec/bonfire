@@ -98,7 +98,7 @@ abstract class JoystickController extends GameComponent
   }
 
   @override
-  bool get isHud => true;
+  PositionType get positionType => PositionType.viewport;
 
   @override
   bool hasGesture() => true;
