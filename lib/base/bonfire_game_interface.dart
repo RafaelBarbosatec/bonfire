@@ -80,9 +80,9 @@ abstract class BonfireGameInterface {
     ValueChanged<double>? onChange,
   });
 
-  Offset worldPositionToScreen(Offset position);
+  Vector2 worldPositionToScreen(Vector2 position);
 
-  Offset screenPositionToWorld(Offset position);
+  Vector2 screenPositionToWorld(Vector2 position);
 
   bool isVisibleInCamera(GameComponent c);
 

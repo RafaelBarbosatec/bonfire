@@ -132,8 +132,8 @@ class Camera with BonfireHasGameRef {
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
-        double diffX = originX - target.position.center.dx;
-        double diffY = originY - target.position.center.dy;
+        double diffX = originX - target.center.x;
+        double diffY = originY - target.center.y;
 
         this.position = position.copyWith(x: originX - (diffX * value));
         this.position = position.copyWith(y: originY - (diffY * value));
@@ -222,8 +222,8 @@ class Camera with BonfireHasGameRef {
     final centerTarget = _getCenterTarget();
     final positionTarget = worldPositionToScreen(centerTarget);
 
-    final horizontalDistance = screenCenter.dx - positionTarget.dx;
-    final verticalDistance = screenCenter.dy - positionTarget.dy;
+    final horizontalDistance = screenCenter.dx - positionTarget.x;
+    final verticalDistance = screenCenter.dy - positionTarget.y;
 
     double newX = this.position.dx;
     double newY = this.position.dy;
@@ -334,7 +334,7 @@ class Camera with BonfireHasGameRef {
   }
 
   bool isComponentOnCamera(GameComponent c) {
-    return isRectOnCamera(c.position.rect);
+    return isRectOnCamera(c.toRect());
   }
 
   bool contains(Offset c) {
@@ -345,19 +345,19 @@ class Camera with BonfireHasGameRef {
     return cameraRectWithSpacing.overlaps(c);
   }
 
-  Offset worldPositionToScreen(Offset position) {
-    double diffX = position.dx - this.cameraRect.center.dx;
-    double diffY = position.dy - this.cameraRect.center.dy;
-    return Offset(
+  Vector2 worldPositionToScreen(Vector2 position) {
+    double diffX = position.x - this.cameraRect.center.dx;
+    double diffY = position.y - this.cameraRect.center.dy;
+    return Vector2(
       (diffX * config.zoom) + (gameRef.size.x / 2),
       (diffY * config.zoom) + (gameRef.size.y / 2),
     );
   }
 
-  Offset screenPositionToWorld(Offset position) {
-    double diffX = position.dx - (gameRef.size.x / 2);
-    double diffY = position.dy - (gameRef.size.y / 2);
-    return Offset(
+  Vector2 screenPositionToWorld(Vector2 position) {
+    double diffX = position.x - (gameRef.size.x / 2);
+    double diffY = position.y - (gameRef.size.y / 2);
+    return Vector2(
       this.cameraRect.center.dx + (diffX / config.zoom),
       this.cameraRect.center.dy + (diffY / config.zoom),
     );
@@ -424,8 +424,8 @@ class Camera with BonfireHasGameRef {
       _shakeTimer -= 0.1;
       // Go back to target or last position before shake
       if (_shakeTimer < 0.0) {
-        this.position = config.target?.vectorPosition.toOffset() ??
-            _lastPositionBeforeShake;
+        this.position =
+            config.target?.position.toOffset() ?? _lastPositionBeforeShake;
         _shakeTimer = 0.0;
       }
     }
@@ -471,10 +471,13 @@ class Camera with BonfireHasGameRef {
     return 1 / config.zoom;
   }
 
-  Offset _getCenterTarget() {
+  Vector2 _getCenterTarget() {
     if (config.target?.isObjectCollision() == true) {
-      return (config.target as ObjectCollision).rectCollision.center;
+      return (config.target as ObjectCollision)
+          .rectCollision
+          .center
+          .toVector2();
     }
-    return config.target?.position.rect.center ?? Offset.zero;
+    return config.target?.toRect().center.toVector2() ?? Vector2.zero();
   }
 }

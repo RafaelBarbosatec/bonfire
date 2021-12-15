@@ -113,17 +113,15 @@ class _FollowerWidgetState extends State<FollowerWidget> {
   void _startFollow() {
     final camera = widget.target.gameRef.camera;
     _timerUpdate = async.Timer.periodic(Duration(milliseconds: 16), (timer) {
-      if (targetPosition != widget.target.vectorPosition ||
+      if (targetPosition != widget.target.position ||
           camera.config.zoom != lastZoom ||
           camera.position != lastCameraPosition) {
         lastCameraPosition = camera.position;
         lastZoom = camera.config.zoom;
-        targetPosition = widget.target.vectorPosition;
+        targetPosition = widget.target.position;
         if (mounted) {
           setState(() {
-            widgetPosition = camera.worldPositionToScreen(
-              targetPosition.toOffset(),
-            );
+            widgetPosition = widget.target.getScreenPosition().toOffset();
           });
         }
       }

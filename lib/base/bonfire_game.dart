@@ -377,12 +377,12 @@ class BonfireGame extends BaseGame
   }
 
   @override
-  Offset worldPositionToScreen(Offset position) {
+  Vector2 worldPositionToScreen(Vector2 position) {
     return camera.worldPositionToScreen(position);
   }
 
   @override
-  Offset screenPositionToWorld(Offset position) {
+  Vector2 screenPositionToWorld(Vector2 position) {
     return camera.screenPositionToWorld(position);
   }
 
@@ -395,20 +395,22 @@ class BonfireGame extends BaseGame
 
   @override
   void onPointerDown(PointerDownEvent event) {
+    final localPosition = event.localPosition.toVector2();
     onTapDown?.call(
       this,
-      event.localPosition,
-      camera.screenPositionToWorld(event.localPosition),
+      localPosition,
+      camera.screenPositionToWorld(localPosition),
     );
     super.onPointerDown(event);
   }
 
   @override
   void onPointerUp(PointerUpEvent event) {
+    final localPosition = event.localPosition.toVector2();
     onTapUp?.call(
       this,
-      event.localPosition,
-      camera.screenPositionToWorld(event.localPosition),
+      localPosition,
+      camera.screenPositionToWorld(localPosition),
     );
     super.onPointerUp(event);
   }

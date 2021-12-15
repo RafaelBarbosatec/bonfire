@@ -49,8 +49,8 @@ mixin ObjectCollision on GameComponent {
 
   bool containCollision() => _containCollision;
 
-  Vector2Rect get rectCollision {
-    if (!containCollision()) return Vector2Rect.zero();
+  Rect get rectCollision {
+    if (!containCollision()) return Rect.zero;
     return _collisionConfig!.vector2rect;
   }
 
