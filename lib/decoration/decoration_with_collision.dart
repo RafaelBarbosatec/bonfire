@@ -7,20 +7,18 @@ import 'package:flame/components.dart';
 class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
   bool aboveComponents = false;
 
-  GameDecorationWithCollision(
-    Vector2 position, {
+  GameDecorationWithCollision({
+    required Vector2 position,
+    required Vector2 size,
     Sprite? sprite,
     SpriteAnimation? animation,
-    double width = 32,
-    double height = 32,
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
     this.aboveComponents = false,
   }) : super(
           position: position,
-          height: height,
-          width: width,
+          size: size,
           animation: animation,
           sprite: sprite,
         ) {
@@ -31,20 +29,18 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     }
   }
 
-  GameDecorationWithCollision.withSprite(
-    Future<Sprite> sprite,
-    Vector2 position, {
-    double width = 32,
-    double height = 32,
+  GameDecorationWithCollision.withSprite({
+    required Future<Sprite> sprite,
+    required Vector2 position,
+    required Vector2 size,
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
     this.aboveComponents = false,
   }) : super.withSprite(
-          sprite,
+          sprite: sprite,
           position: position,
-          height: height,
-          width: width,
+          size: size,
         ) {
     if (collisions != null) {
       setupCollision(
@@ -53,9 +49,10 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     }
   }
 
-  GameDecorationWithCollision.withAnimation(
-    Future<SpriteAnimation> animation,
-    Vector2 position, {
+  GameDecorationWithCollision.withAnimation({
+    required Future<SpriteAnimation> animation,
+    required Vector2 position,
+    required Vector2 size,
     double width = 32,
     double height = 32,
     Iterable<CollisionArea>? collisions,
@@ -63,10 +60,9 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     double offsetY = 0,
     this.aboveComponents = false,
   }) : super.withAnimation(
-          animation,
+          animation: animation,
           position: position,
-          height: height,
-          width: width,
+          size: size,
         ) {
     if (collisions != null) {
       setupCollision(

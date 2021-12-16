@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
@@ -23,72 +22,65 @@ class GameDecoration extends AnimatedObject {
   GameDecoration({
     this.sprite,
     required Vector2 position,
-    required double height,
-    required double width,
+    required Vector2 size,
     SpriteAnimation? animation,
   }) {
     this.animation = animation;
-    this.position = generateRectWithBleedingPixel(
+    generateRectWithBleedingPixel(
       position,
-      width,
-      height,
+      size,
     );
   }
 
-  GameDecoration.withSprite(
-    FutureOr<Sprite> sprite, {
+  GameDecoration.withSprite({
+    required FutureOr<Sprite> sprite,
     required Vector2 position,
-    required double height,
-    required double width,
+    required Vector2 size,
   }) {
     _loader.add(AssetToLoad(sprite, (value) => this.sprite = value));
-    this.position = generateRectWithBleedingPixel(
+    generateRectWithBleedingPixel(
       position,
-      width,
-      height,
+      size,
     );
   }
 
-  GameDecoration.withAnimation(
-    FutureOr<SpriteAnimation> animation, {
+  GameDecoration.withAnimation({
+    required FutureOr<SpriteAnimation> animation,
     required Vector2 position,
-    required double height,
-    required double width,
+    required Vector2 size,
   }) {
     _loader.add(AssetToLoad(animation, (value) => this.animation = value));
-    this.position = generateRectWithBleedingPixel(
+    generateRectWithBleedingPixel(
       position,
-      width,
-      height,
+      size,
     );
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    sprite?.renderFromVector2Rect(
+    sprite?.renderRectWithOpacity(
       canvas,
-      this.position,
+      toRect(),
       opacity: opacity,
     );
   }
 
-  Vector2Rect generateRectWithBleedingPixel(
+  void generateRectWithBleedingPixel(
     Vector2 position,
-    double width,
-    double height,
+    Vector2 size,
   ) {
     double bleendingPixel = (width > height ? width : height) * 0.03;
     if (bleendingPixel > 2) {
       bleendingPixel = 2;
     }
-    return Vector2Rect.fromRect(
-      Rect.fromLTWH(
-        position.x - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0),
-        position.y - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0),
-        width + (position.x % 2 == 0 ? bleendingPixel : 0),
-        height + (position.y % 2 == 0 ? bleendingPixel : 0),
-      ),
+    position = Vector2(
+      position.x - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0),
+      position.y - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0),
+    );
+    size = Vector2(
+      size.x + (position.x % 2 == 0 ? bleendingPixel : 0),
+      size.y + (position.y % 2 == 0 ? bleendingPixel : 0),
     );
   }
 

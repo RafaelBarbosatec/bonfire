@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/collision_config.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/material.dart';
 
 /// Mixin responsible for adding collision
@@ -51,7 +50,7 @@ mixin ObjectCollision on GameComponent {
 
   Rect get rectCollision {
     if (!containCollision()) return Rect.zero;
-    return _collisionConfig!.vector2rect;
+    return _collisionConfig!.rect;
   }
 
   List<ObjectCollision> _verifyWorldCollision({
@@ -133,7 +132,7 @@ mixin ObjectCollision on GameComponent {
     super.update(dt);
   }
 
-  void updatePosition(Vector2Rect position) {
+  void updatePosition(Vector2 position) {
     _collisionConfig?.updatePosition(position);
   }
 }

@@ -104,6 +104,9 @@ extension RectExt on Rect {
     return Vector2Rect.fromRect(this);
   }
 
+  Vector2 get positionVector2 => Vector2(left, top);
+  Vector2 get sizeVector2 => Vector2(width, height);
+
   Rectangle getRectangleByTileSize(double tileSize) {
     final left = (this.left / tileSize).floorToDouble();
     final top = (this.top / tileSize).floorToDouble();
@@ -120,9 +123,9 @@ extension RectExt on Rect {
 }
 
 extension SpriteExt on Sprite {
-  void renderFromVector2Rect(
+  void renderRectWithOpacity(
     Canvas canvas,
-    Vector2Rect vector, {
+    Rect rect, {
     Paint? overridePaint,
     double opacity = 1,
   }) {
@@ -135,8 +138,8 @@ extension SpriteExt on Sprite {
 
     this.render(
       canvas,
-      position: vector.position,
-      size: vector.size,
+      position: rect.positionVector2,
+      size: rect.sizeVector2,
       overridePaint: overridePaint,
     );
   }
@@ -150,21 +153,21 @@ extension GameComponentExt on GameComponent {
   Direction? directionThePlayerIsIn() {
     Player? player = this.gameRef.player;
     if (player == null) return null;
-    var diffX = position.center.dx - player.position.center.dx;
+    var diffX = center.x - player.center.x;
     var diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;
-    var diffY = position.center.dy - player.position.center.dy;
+    var diffY = center.y - player.center.y;
     var diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
 
     if (diffPositiveX > diffPositiveY) {
-      if (player.position.center.dx > position.center.dx) {
+      if (player.center.x > center.y) {
         return Direction.right;
-      } else if (player.position.center.dx < position.center.dx) {
+      } else if (player.center.x < center.y) {
         return Direction.left;
       }
     } else {
-      if (player.position.center.dy > position.center.dy) {
+      if (player.center.y > center.x) {
         return Direction.down;
-      } else if (player.position.center.dy < position.center.dy) {
+      } else if (player.center.y < position.x) {
         return Direction.up;
       }
     }

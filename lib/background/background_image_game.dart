@@ -14,7 +14,6 @@ import 'dart:ui';
 import 'package:bonfire/background/game_background.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_assets_manager.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/sprite.dart';
 
 class BackgroundImageGame extends GameBackground {
@@ -38,16 +37,18 @@ class BackgroundImageGame extends GameBackground {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    imageSprite?.renderFromVector2Rect(canvas, position, opacity: opacity);
+    imageSprite?.renderRectWithOpacity(
+      canvas,
+      toRect(),
+      opacity: opacity,
+    );
   }
 
   @override
   void update(double dt) {
-    position = position.copyWith(
-      position: Vector2(
-        gameRef.camera.position.dx * -1 * parallaxX,
-        gameRef.camera.position.dy * -1 * parallaxY,
-      ),
+    position = Vector2(
+      gameRef.camera.position.dx * -1 * parallaxX,
+      gameRef.camera.position.dy * -1 * parallaxY,
     );
     super.update(dt);
   }
@@ -55,12 +56,12 @@ class BackgroundImageGame extends GameBackground {
   @override
   Future<void>? onLoad() async {
     imageSprite = await MapAssetsManager.getFutureSprite(imagePath);
-    position = Rect.fromLTWH(
-            offset.x,
-            offset.y,
-            imageSprite!.image.width * factor,
-            imageSprite!.image.height * factor)
-        .toVector2Rect();
+    position = Vector2(offset.x, offset.y);
+    size = Vector2(
+      imageSprite!.image.width * factor,
+      imageSprite!.image.height * factor,
+    );
+
     return super.onLoad();
   }
 }

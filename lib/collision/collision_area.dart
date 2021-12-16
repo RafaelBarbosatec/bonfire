@@ -33,10 +33,10 @@ class CollisionArea {
   })  : shape = RectangleShape(Size(rect.size.x, rect.size.y)),
         align = align ?? Vector2.zero();
 
-  void updatePosition(Vector2Rect position) {
+  void updatePosition(Vector2 position) {
     shape.position = Vector2(
-      position.position.x + (align?.x ?? 0.0),
-      position.position.y + (align?.y ?? 0.0),
+      position.x + (align?.x ?? 0.0),
+      position.y + (align?.y ?? 0.0),
     );
   }
 

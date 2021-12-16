@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/vector2rect.dart';
 
 import 'collision_area.dart';
 
@@ -12,16 +11,14 @@ class CollisionConfig {
   bool collisionOnlyVisibleScreen = true;
   bool enable;
 
-  Vector2Rect? _lastPosition;
+  Vector2? _lastPosition;
 
-  Vector2Rect vector2rect = Vector2Rect.zero();
+  Rect rect = Rect.zero;
 
   CollisionConfig({
     required this.collisions,
     this.enable = true,
   });
-
-  Rect get rect => vector2rect.rect;
 
   bool verifyCollision(CollisionConfig? other, {Vector2? displacement}) {
     if (other == null) return false;
@@ -37,7 +34,7 @@ class CollisionConfig {
     return false;
   }
 
-  void updatePosition(Vector2Rect position) {
+  void updatePosition(Vector2 position) {
     if (collisions.isNotEmpty && position != _lastPosition) {
       collisions.first.updatePosition(position);
       Rect? _rect;
@@ -50,7 +47,7 @@ class CollisionConfig {
         }
       }
       _lastPosition = position;
-      vector2rect = Vector2Rect.fromRect(_rect!);
+      rect = _rect!;
     }
   }
 }
