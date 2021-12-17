@@ -3,7 +3,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/widgets.dart' as widget;
 
 export 'attackable_extensions.dart';
@@ -100,10 +99,6 @@ extension OffSetExt on Offset {
 }
 
 extension RectExt on Rect {
-  Vector2Rect toVector2Rect() {
-    return Vector2Rect.fromRect(this);
-  }
-
   Vector2 get positionVector2 => Vector2(left, top);
   Vector2 get sizeVector2 => Vector2(width, height);
 

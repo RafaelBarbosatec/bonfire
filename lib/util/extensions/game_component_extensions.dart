@@ -22,13 +22,13 @@ extension GameComponentExtensions on GameComponent {
     double vision = radiusVision * 2;
 
     Rect fieldOfVision = Rect.fromLTWH(
-      this.position.center.dx - radiusVision,
-      this.position.center.dy - radiusVision,
+      this.center.x - radiusVision,
+      this.center.y - radiusVision,
       vision,
       vision,
     );
 
-    if (fieldOfVision.overlaps(getRectAndCollision(component).rect)) {
+    if (fieldOfVision.overlaps(getRectAndCollision(component))) {
       observed(component);
     } else {
       notObserved?.call();
@@ -55,14 +55,14 @@ extension GameComponentExtensions on GameComponent {
     double visionHeight = radiusVision * 2;
 
     Rect fieldOfVision = Rect.fromLTWH(
-      this.position.center.dx - radiusVision,
-      this.position.center.dy - radiusVision,
+      this.center.x - radiusVision,
+      this.center.y - radiusVision,
       visionWidth,
       visionHeight,
     );
 
     List<T> compObserved = compVisible
-        .where((comp) => fieldOfVision.overlaps(comp.position.rect))
+        .where((comp) => fieldOfVision.overlaps(comp.toRect()))
         .toList();
 
     if (compObserved.isNotEmpty) {
@@ -86,8 +86,8 @@ extension GameComponentExtensions on GameComponent {
       TextDamageComponent(
         damage.toInt().toString(),
         Vector2(
-          position.center.dx,
-          position.top,
+          center.x,
+          y,
         ),
         config: config ??
             TextStyle(
@@ -106,8 +106,7 @@ extension GameComponentExtensions on GameComponent {
   /// Execute the ranged attack using a component with animation
   void simpleAttackRangeByAngle({
     required Future<SpriteAnimation> animationUp,
-    required double width,
-    required double height,
+    required Vector2 size,
     required double radAngleDirection,
     Future<SpriteAnimation>? animationDestroy,
     dynamic id,
@@ -120,11 +119,11 @@ extension GameComponentExtensions on GameComponent {
   }) {
     var initPosition = (isObjectCollision()
         ? (this as ObjectCollision).rectCollision
-        : this.position);
+        : this.toRect());
 
     initPosition = initPosition.translate(
-      (initPosition.width - width) / 2,
-      (initPosition.height - height) / 2,
+      (initPosition.width - size.x) / 2,
+      (initPosition.height - size.y) / 2,
     );
 
     double displacement = max(initPosition.width, initPosition.height);
@@ -133,13 +132,12 @@ extension GameComponentExtensions on GameComponent {
 
     Offset diffBase = Offset(nextX, nextY);
 
-    Vector2Rect position = initPosition.shift(diffBase);
+    Rect position = initPosition.shift(diffBase);
     gameRef.add(FlyingAttackAngleObject(
       id: id,
-      position: position.position,
+      position: position.positionVector2,
+      size: position.sizeVector2,
       radAngle: radAngleDirection,
-      width: width,
-      height: height,
       damage: damage,
       speed: speed,
       attackFrom: this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
@@ -158,8 +156,7 @@ extension GameComponentExtensions on GameComponent {
     required Future<SpriteAnimation> animationLeft,
     required Future<SpriteAnimation> animationUp,
     required Future<SpriteAnimation> animationDown,
-    required double width,
-    required double height,
+    required Vector2 size,
     required Direction direction,
     dynamic id,
     double speed = 150,
@@ -176,65 +173,65 @@ extension GameComponentExtensions on GameComponent {
 
     Direction attackDirection = direction;
 
-    Vector2Rect rectBase = (this.isObjectCollision())
+    Rect rectBase = (this.isObjectCollision())
         ? (this as ObjectCollision).rectCollision
-        : position;
+        : toRect();
 
     switch (attackDirection) {
       case Direction.left:
         attackRangeAnimation = animationLeft;
         startPosition = Vector2(
-          rectBase.rect.left - width,
-          (rectBase.rect.top + (rectBase.rect.height - height) / 2),
+          rectBase.left - size.x,
+          (rectBase.top + (rectBase.height - size.y) / 2),
         );
         break;
       case Direction.right:
         attackRangeAnimation = animationRight;
         startPosition = Vector2(
-          rectBase.rect.right,
-          (rectBase.rect.top + (rectBase.rect.height - height) / 2),
+          rectBase.right,
+          (rectBase.top + (rectBase.height - size.y) / 2),
         );
         break;
       case Direction.up:
         attackRangeAnimation = animationUp;
         startPosition = Vector2(
-          (rectBase.rect.left + (rectBase.rect.width - width) / 2),
-          rectBase.rect.top - height,
+          (rectBase.left + (rectBase.width - size.x) / 2),
+          rectBase.top - size.y,
         );
         break;
       case Direction.down:
         attackRangeAnimation = animationDown;
         startPosition = Vector2(
-          (rectBase.rect.left + (rectBase.rect.width - width) / 2),
-          rectBase.rect.bottom,
+          (rectBase.left + (rectBase.width - size.x) / 2),
+          rectBase.bottom,
         );
         break;
       case Direction.upLeft:
         attackRangeAnimation = animationLeft;
         startPosition = Vector2(
-          rectBase.rect.left - width,
-          (rectBase.rect.top + (rectBase.rect.height - height) / 2),
+          rectBase.left - size.x,
+          (rectBase.top + (rectBase.height - size.y) / 2),
         );
         break;
       case Direction.upRight:
         attackRangeAnimation = animationRight;
         startPosition = Vector2(
-          rectBase.rect.right,
-          (rectBase.rect.top + (rectBase.rect.height - height) / 2),
+          rectBase.right,
+          (rectBase.top + (rectBase.height - size.y) / 2),
         );
         break;
       case Direction.downLeft:
         attackRangeAnimation = animationLeft;
         startPosition = Vector2(
-          rectBase.rect.left - width,
-          (rectBase.rect.top + (rectBase.rect.height - height) / 2),
+          rectBase.left - size.x,
+          (rectBase.top + (rectBase.height - size.y) / 2),
         );
         break;
       case Direction.downRight:
         attackRangeAnimation = animationRight;
         startPosition = Vector2(
-          rectBase.rect.right,
-          (rectBase.rect.top + (rectBase.rect.height - height) / 2),
+          rectBase.right,
+          (rectBase.top + (rectBase.height - size.y) / 2),
         );
         break;
     }
@@ -246,8 +243,7 @@ extension GameComponentExtensions on GameComponent {
         flyAnimation: attackRangeAnimation,
         destroyAnimation: animationDestroy,
         position: startPosition,
-        height: height,
-        width: width,
+        size: size,
         damage: damage,
         speed: speed,
         enableDiagonal: enableDiagonal,
@@ -270,98 +266,81 @@ extension GameComponentExtensions on GameComponent {
     dynamic id,
     required double damage,
     required Direction direction,
-    required double height,
-    required double width,
+    required Vector2 size,
     bool withPush = true,
     double? sizePush,
   }) {
-    Rect positionAttack;
+    Vector2 positionAttack;
     Future<SpriteAnimation>? anim;
     double pushLeft = 0;
     double pushTop = 0;
     Direction attackDirection = direction;
 
-    Vector2Rect rectBase = (this.isObjectCollision())
+    Rect rectBase = (this.isObjectCollision())
         ? (this as ObjectCollision).rectCollision
-        : position;
+        : toRect();
 
     switch (attackDirection) {
       case Direction.up:
-        positionAttack = Rect.fromLTWH(
-          rectBase.rect.center.dx - width / 2,
-          rectBase.rect.top - height,
-          width,
-          height,
+        positionAttack = Vector2(
+          rectBase.center.dx - size.x / 2,
+          rectBase.top - size.y,
         );
         if (animationUp != null) anim = animationUp;
         pushTop = (sizePush ?? height) * -1;
         break;
       case Direction.right:
-        positionAttack = Rect.fromLTWH(
-          rectBase.rect.right,
-          rectBase.rect.center.dy - height / 2,
-          width,
-          height,
+        positionAttack = Vector2(
+          rectBase.right,
+          rectBase.center.dy - size.y / 2,
         );
         if (animationRight != null) anim = animationRight;
         pushLeft = (sizePush ?? width);
         break;
       case Direction.down:
-        positionAttack = Rect.fromLTWH(
-          rectBase.rect.center.dx - width / 2,
-          rectBase.rect.bottom,
-          width,
-          height,
+        positionAttack = Vector2(
+          rectBase.center.dx - size.x / 2,
+          rectBase.bottom,
         );
         if (animationDown != null) anim = animationDown;
         pushTop = (sizePush ?? height);
         break;
       case Direction.left:
-        positionAttack = Rect.fromLTWH(
-          rectBase.rect.left - width,
-          rectBase.rect.center.dy - height / 2,
-          width,
-          height,
+        positionAttack = Vector2(
+          rectBase.left - size.x,
+          rectBase.center.dy - size.y / 2,
         );
         if (animationLeft != null) anim = animationLeft;
         pushLeft = (sizePush ?? width) * -1;
         break;
       case Direction.upLeft:
-        positionAttack = Rect.fromLTWH(
-          rectBase.rect.left - width,
-          rectBase.rect.center.dy - height / 2,
-          width,
-          height,
+        positionAttack = Vector2(
+          rectBase.left - size.x,
+          rectBase.center.dy - size.y / 2,
         );
         if (animationLeft != null) anim = animationLeft;
         pushLeft = (sizePush ?? width) * -1;
         break;
       case Direction.upRight:
-        positionAttack = Rect.fromLTWH(
-          rectBase.rect.right,
-          rectBase.rect.center.dy - height / 2,
-          width,
-          height,
+        positionAttack = Vector2(
+          rectBase.right,
+          rectBase.center.dy - size.y / 2,
         );
         if (animationRight != null) anim = animationRight;
         pushLeft = (sizePush ?? width);
         break;
       case Direction.downLeft:
-        positionAttack = Rect.fromLTWH(
-          rectBase.rect.left - width,
-          rectBase.rect.center.dy - height / 2,
-          width,
-          height,
+        positionAttack = Vector2(
+          rectBase.left - size.x,
+          rectBase.center.dy - size.y / 2,
         );
         if (animationLeft != null) anim = animationLeft;
         pushLeft = (sizePush ?? width) * -1;
         break;
       case Direction.downRight:
-        positionAttack = Rect.fromLTWH(
-          rectBase.rect.right,
-          rectBase.rect.center.dy - height / 2,
-          width,
-          height,
+        positionAttack = Vector2(
+          rectBase.right,
+          rectBase.center.dy - size.y / 2,
         );
         if (animationRight != null) anim = animationRight;
         pushLeft = (sizePush ?? width);
@@ -369,22 +348,31 @@ extension GameComponentExtensions on GameComponent {
     }
 
     if (anim != null) {
-      gameRef.add(AnimatedObjectOnce(
-        animation: anim,
-        position: positionAttack.toVector2Rect(),
-      ));
+      gameRef.add(
+        AnimatedObjectOnce(
+          animation: anim,
+          position: positionAttack,
+          size: size,
+        ),
+      );
     }
 
     gameRef.visibleAttackables().where((a) {
       return (this is Player
               ? a.receivesAttackFromPlayer()
               : a.receivesAttackFromEnemy()) &&
-          a.rectAttackable().rect.overlaps(positionAttack);
+          a.rectAttackable().overlaps(
+                Rect.fromLTWH(
+                  positionAttack.x,
+                  positionAttack.y,
+                  size.x,
+                  size.y,
+                ),
+              );
     }).forEach(
       (enemy) {
         enemy.receiveDamage(damage, id);
-        final rectAfterPush =
-            enemy.position.position.translate(pushLeft, pushTop);
+        final rectAfterPush = enemy.position.translate(pushLeft, pushTop);
         if (withPush &&
             (enemy is ObjectCollision &&
                 !(enemy as ObjectCollision)
@@ -402,8 +390,7 @@ extension GameComponentExtensions on GameComponent {
     required double damage,
     required double radAngleDirection,
     dynamic id,
-    required double height,
-    required double width,
+    required Vector2 size,
     bool withPush = true,
   }) {
     double angle = radAngleDirection;
@@ -412,19 +399,22 @@ extension GameComponentExtensions on GameComponent {
     double nextY = width * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(
-          this.position.center.dx + nextPoint.dx,
-          this.position.center.dy + nextPoint.dy,
+    Vector2 diffBase = Vector2(
+          this.center.x + nextPoint.dx,
+          this.center.y + nextPoint.dy,
         ) -
-        this.position.center;
+        this.center;
 
-    Vector2Rect positionAttack = this.position.shift(diffBase);
+    Rect positionAttack = this.toRect().shift(diffBase.toOffset());
 
-    gameRef.add(AnimatedObjectOnce(
-      animation: animationTop,
-      position: positionAttack,
-      rotateRadAngle: angle,
-    ));
+    gameRef.add(
+      AnimatedObjectOnce(
+        animation: animationTop,
+        position: positionAttack.positionVector2,
+        size: size,
+        rotateRadAngle: angle,
+      ),
+    );
 
     gameRef
         .visibleAttackables()
@@ -435,22 +425,21 @@ extension GameComponentExtensions on GameComponent {
             a.rectAttackable().overlaps(positionAttack))
         .forEach((enemy) {
       enemy.receiveDamage(damage, id);
-      final rectAfterPush =
-          enemy.position.position.translate(diffBase.dx, diffBase.dy);
+      final rectAfterPush = enemy.position.translate(diffBase.x, diffBase.y);
       if (withPush &&
           (enemy is ObjectCollision &&
               !(enemy as ObjectCollision)
                   .isCollision(displacement: rectAfterPush)
                   .isNotEmpty)) {
-        enemy.translate(diffBase.dx, diffBase.dy);
+        enemy.translate(diffBase.x, diffBase.y);
       }
     });
   }
 
   Direction getComponentDirectionFromMe(GameComponent? comp) {
-    Vector2Rect rectToMove = getRectAndCollision(this);
-    double centerXPlayer = comp?.position.center.dx ?? 0;
-    double centerYPlayer = comp?.position.center.dy ?? 0;
+    Rect rectToMove = getRectAndCollision(this);
+    double centerXPlayer = comp?.center.x ?? 0;
+    double centerYPlayer = comp?.center.y ?? 0;
 
     double centerYEnemy = rectToMove.center.dy;
     double centerXEnemy = rectToMove.center.dx;

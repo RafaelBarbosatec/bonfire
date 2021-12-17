@@ -8,8 +8,7 @@ import 'package:flutter/widgets.dart';
 extension RotationPlayerExtensions on RotationPlayer {
   void simpleAttackRange({
     required Future<SpriteAnimation> animationUp,
-    required double width,
-    required double height,
+    required Vector2 size,
     Future<SpriteAnimation>? animationDestroy,
     dynamic id,
     double speed = 150,
@@ -29,8 +28,7 @@ extension RotationPlayerExtensions on RotationPlayer {
         radAngleDirection: angle,
         animationUp: animationUp,
         animationDestroy: animationDestroy,
-        width: width,
-        height: height,
+        size: size,
         id: id,
         speed: speed,
         damage: damage,
@@ -45,8 +43,7 @@ extension RotationPlayerExtensions on RotationPlayer {
   void simpleAttackMelee({
     required Future<SpriteAnimation> animationTop,
     required double damage,
-    required double height,
-    required double width,
+    required Vector2 size,
     dynamic id,
     double? radAngleDirection,
     bool withPush = true,
@@ -58,8 +55,7 @@ extension RotationPlayerExtensions on RotationPlayer {
         animationTop: animationTop,
         damage: damage,
         id: id,
-        height: height,
-        width: width,
+        size: size,
         withPush: withPush,
       );
     }

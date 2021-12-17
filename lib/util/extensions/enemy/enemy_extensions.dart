@@ -8,7 +8,6 @@ import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/extensions/game_component_extensions.dart';
 import 'package:bonfire/util/extensions/movement_extensions.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
@@ -71,8 +70,7 @@ extension EnemyExtensions on Enemy {
   ///Execute simple attack melee using animation
   void simpleAttackMelee({
     required double damage,
-    required double height,
-    required double width,
+    required Vector2 size,
     int? id,
     int interval = 1000,
     bool withPush = false,
@@ -93,8 +91,7 @@ extension EnemyExtensions on Enemy {
     this.simpleAttackMeleeByDirection(
       damage: damage,
       direction: direct,
-      height: height,
-      width: width,
+      size: size,
       id: id,
       withPush: withPush,
       sizePush: sizePush,
@@ -114,8 +111,7 @@ extension EnemyExtensions on Enemy {
     required Future<SpriteAnimation> animationUp,
     required Future<SpriteAnimation> animationDown,
     required Future<SpriteAnimation> animationDestroy,
-    required double width,
-    required double height,
+    required Vector2 size,
     int? id,
     double speed = 150,
     double damage = 1,
@@ -140,8 +136,7 @@ extension EnemyExtensions on Enemy {
       animationUp: animationUp,
       animationDown: animationDown,
       animationDestroy: animationDestroy,
-      width: width,
-      height: height,
+      size: size,
       direction: direct,
       id: id,
       speed: speed,
@@ -203,8 +198,8 @@ extension EnemyExtensions on Enemy {
     Player? player = this.gameRef.player;
     if (player == null) return 0.0;
     return atan2(
-      playerRect.center.dy - this.position.center.dy,
-      playerRect.center.dx - this.position.center.dx,
+      playerRect.center.dy - this.center.x,
+      playerRect.center.dx - this.center.y,
     );
   }
 
@@ -214,16 +209,16 @@ extension EnemyExtensions on Enemy {
     Player? player = this.gameRef.player;
     if (player == null) return 0.0;
     return atan2(
-      this.position.center.dy - playerRect.center.dy,
-      this.position.center.dx - playerRect.center.dx,
+      this.position.y - playerRect.center.dy,
+      this.position.x - playerRect.center.dx,
     );
   }
 
   /// Gets player position used how base in calculations
-  Vector2Rect get playerRect {
+  Rect get playerRect {
     return (gameRef.player is ObjectCollision
             ? (gameRef.player as ObjectCollision).rectCollision
-            : gameRef.player?.position) ??
-        Vector2Rect.zero();
+            : gameRef.player?.toRect()) ??
+        Rect.zero;
   }
 }

@@ -7,8 +7,8 @@ import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/extensions/enemy/enemy_extensions.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:bonfire/util/extensions/game_component_extensions.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -29,21 +29,21 @@ extension RotationEnemyExtensions on RotationEnemy {
       observed: (player) {
         double _radAngle = getAngleFomPlayer();
 
-        Vector2Rect playerRect = player is ObjectCollision
+        Rect playerRect = player is ObjectCollision
             ? (player as ObjectCollision).rectCollision
-            : player.position;
+            : player.toRect();
         Rect rectPlayerCollision = Rect.fromLTWH(
-          playerRect.rect.left - margin,
-          playerRect.rect.top - margin,
-          playerRect.rect.width + (margin * 2),
-          playerRect.rect.height + (margin * 2),
+          playerRect.left - margin,
+          playerRect.top - margin,
+          playerRect.width + (margin * 2),
+          playerRect.height + (margin * 2),
         );
 
-        Vector2Rect rectToMove = this.isObjectCollision()
+        Rect rectToMove = this.isObjectCollision()
             ? (this as ObjectCollision).rectCollision
-            : position;
+            : toRect();
 
-        if (rectToMove.rect.overlaps(rectPlayerCollision)) {
+        if (rectToMove.overlaps(rectPlayerCollision)) {
           closePlayer(player);
           this.idle();
           this.moveFromAngleDodgeObstacles(0, _radAngle);
@@ -73,15 +73,15 @@ extension RotationEnemyExtensions on RotationEnemy {
       observed: (player) {
         positioned(player);
 
-        Vector2Rect playerRect = player is ObjectCollision
+        Rect playerRect = player is ObjectCollision
             ? (player as ObjectCollision).rectCollision
-            : player.position;
+            : player.toRect();
         double distance = (minDistanceCellsFromPlayer ?? radiusVision);
         double _radAngle = getAngleFomPlayer();
 
         Vector2 myPosition = Vector2(
-          this.position.center.dx,
-          this.position.center.dy,
+          this.center.x,
+          this.center.y,
         );
 
         Vector2 playerPosition = Vector2(
@@ -113,8 +113,7 @@ extension RotationEnemyExtensions on RotationEnemy {
   void simpleAttackMelee({
     required Future<SpriteAnimation> attackEffectTopAnim,
     required double damage,
-    required double height,
-    required double width,
+    required Vector2 size,
     int? id,
     bool withPush = false,
     double? radAngleDirection,
@@ -131,15 +130,16 @@ extension RotationEnemyExtensions on RotationEnemy {
     double nextY = this.height * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(this.position.center.dx + nextPoint.dx,
-            this.position.center.dy + nextPoint.dy) -
-        this.position.center;
+    Vector2 diffBase =
+        Vector2(this.center.x + nextPoint.dx, this.position.y + nextPoint.dy) -
+            this.center;
 
-    Vector2Rect positionAttack = this.position.shift(diffBase);
+    Rect positionAttack = this.toRect().shift(diffBase.toOffset());
 
     gameRef.add(AnimatedObjectOnce(
       animation: attackEffectTopAnim,
-      position: positionAttack,
+      position: positionAttack.positionVector2,
+      size: size,
       rotateRadAngle: angle,
     ));
 
@@ -147,15 +147,14 @@ extension RotationEnemyExtensions on RotationEnemy {
         .visibleAttackables()
         .where((a) =>
             a.receivesAttackFromEnemy() &&
-            a.rectAttackable().rect.overlaps(positionAttack.rect))
+            a.rectAttackable().overlaps(positionAttack))
         .forEach((attackable) {
       attackable.receiveDamage(damage, id);
-      final rectAfterPush =
-          attackable.position.translate(diffBase.dx, diffBase.dy);
+      final rectAfterPush = attackable.position + diffBase;
       if (withPush &&
           (attackable is ObjectCollision &&
               !(attackable as ObjectCollision)
-                  .isCollision(displacement: rectAfterPush.position)
+                  .isCollision(displacement: rectAfterPush)
                   .isNotEmpty)) {
         attackable.position = rectAfterPush;
       }
@@ -168,8 +167,7 @@ extension RotationEnemyExtensions on RotationEnemy {
   void simpleAttackRange({
     required Future<SpriteAnimation> animationUp,
     required Future<SpriteAnimation> animationDestroy,
-    required double width,
-    required double height,
+    required Vector2 size,
     double? radAngleDirection,
     int? id,
     double speed = 150,
@@ -188,8 +186,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     this.simpleAttackRangeByAngle(
       animationUp: animationUp,
       animationDestroy: animationDestroy,
-      width: width,
-      height: height,
+      size: size,
       radAngleDirection: radAngleDirection ?? this.currentRadAngle,
       id: id,
       speed: speed,
