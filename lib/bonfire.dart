@@ -63,7 +63,6 @@ export 'package:bonfire/util/talk/say.dart';
 export 'package:bonfire/util/talk/talk_dialog.dart';
 export 'package:bonfire/util/text_damage_component.dart';
 export 'package:bonfire/util/value_generator_component.dart';
-export 'package:bonfire/util/vector2rect.dart';
 export 'package:bonfire/widgets/bonfire_tiled_widget.dart';
 export 'package:bonfire/widgets/bonfire_widget.dart';
 export 'package:flame/components.dart' hide JoystickComponent, HasGameRef;

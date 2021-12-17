@@ -40,8 +40,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   Knight(Vector2 position)
       : super(
           animation: PlayerSpriteSheet.simpleDirectionAnimation,
-          width: DungeonMap.tileSize,
-          height: DungeonMap.tileSize,
+          size: Vector2.all(DungeonMap.tileSize),
           position: position,
           life: 200,
           speed: maxSpeed,
@@ -62,7 +61,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       CollisionConfig(
         collisions: [
           CollisionArea.rectangle(
-            size: Size(
+            size: Vector2(
               DungeonMap.tileSize / 2,
               DungeonMap.tileSize / 2.2,
             ),
@@ -116,14 +115,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     removeFromParent();
     gameRef.add(
       GameDecoration.withSprite(
-        Sprite.load('player/crypt.png'),
-        position: Vector2(
-          position.left,
-          position.top,
-        ),
-        height: DungeonMap.tileSize,
-        width: DungeonMap.tileSize,
-      ),
+          sprite: Sprite.load('player/crypt.png'),
+          position: position,
+          size: Vector2.all(DungeonMap.tileSize)),
     );
     super.die();
   }
@@ -133,14 +127,12 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
     decrementStamina(15);
     this.simpleAttackMelee(
-      damage: attack,
-      animationDown: CommonSpriteSheet.whiteAttackEffectBottom,
-      animationLeft: CommonSpriteSheet.whiteAttackEffectLeft,
-      animationRight: CommonSpriteSheet.whiteAttackEffectRight,
-      animationUp: CommonSpriteSheet.whiteAttackEffectTop,
-      height: DungeonMap.tileSize,
-      width: DungeonMap.tileSize,
-    );
+        damage: attack,
+        animationDown: CommonSpriteSheet.whiteAttackEffectBottom,
+        animationLeft: CommonSpriteSheet.whiteAttackEffectLeft,
+        animationRight: CommonSpriteSheet.whiteAttackEffectRight,
+        animationUp: CommonSpriteSheet.whiteAttackEffectTop,
+        size: Vector2.all(DungeonMap.tileSize));
   }
 
   void actionAttackRange() {
@@ -150,14 +142,13 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       animationUp: CommonSpriteSheet.fireBallTop,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       radAngleDirection: angleRadAttack,
-      width: width * 0.7,
-      height: width * 0.7,
+      size: Vector2.all(width * 0.7),
       damage: 10,
       speed: maxSpeed * 2,
       collision: CollisionConfig(
         collisions: [
           CollisionArea.rectangle(
-            size: Size(width / 3, width / 3),
+            size: Vector2(width / 3, width / 3),
             align: Vector2(width * 0.1, 0),
           ),
         ],
@@ -242,12 +233,11 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       AnimatedFollowerObject(
         animation: CommonSpriteSheet.emote,
         target: this,
-        positionFromTarget: Rect.fromLTWH(
+        size: Vector2.all(width / 2),
+        positionFromTarget: Vector2(
           18,
           -6,
-          width / 2,
-          height / 2,
-        ).toVector2Rect(),
+        ),
       ),
     );
   }
@@ -326,7 +316,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   void _drawDirectionAttack(Canvas c) {
     if (execAttackRange) {
-      double radius = position.height;
+      double radius = height;
       rectDirectionAttack = Rect.fromLTWH(
         rectCollision.center.dx - radius,
         rectCollision.center.dy - radius,
@@ -338,7 +328,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
         renderSpriteByRadAngle(
           c,
           angleRadAttack,
-          rectDirectionAttack!.toVector2Rect(),
+          rectDirectionAttack!,
           spriteDirectionAttack!,
         );
       }
@@ -352,7 +342,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   }
 
   @override
-  void onHoverEnter(int pointer, Offset position) {
+  void onHoverEnter(int pointer, Vector2 position) {
     if (canShowEmoteFromHover) {
       canShowEmoteFromHover = false;
       showEmote();
@@ -360,20 +350,20 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   }
 
   @override
-  void onHoverExit(int pointer, Offset position) {
+  void onHoverExit(int pointer, Vector2 position) {
     canShowEmoteFromHover = true;
   }
 
   @override
-  void onHoverScreen(int pointer, Offset position) {
-    Offset p = gameRef.screenPositionToWorld(position);
-    double left = p.dx - (p.dx % DungeonMap.tileSize);
-    double top = p.dy - (p.dy % DungeonMap.tileSize);
+  void onHoverScreen(int pointer, Vector2 position) {
+    Vector2 p = gameRef.screenPositionToWorld(position);
+    double left = p.x - (p.x % DungeonMap.tileSize);
+    double top = p.y - (p.y % DungeonMap.tileSize);
     _rectHover = Rect.fromLTWH(left, top, _rectHover.width, _rectHover.height);
   }
 
   @override
-  void onScroll(int pointer, Offset position, Offset scrollDelta) {
+  void onScroll(int pointer, Vector2 position, Vector2 scrollDelta) {
     print(scrollDelta);
     // do anything when use scroll of the mouse in your component
   }

@@ -10,10 +10,9 @@ class PotionLife extends GameDecoration with Sensor {
 
   PotionLife(Vector2 position, this.life)
       : super.withSprite(
-          CommonSpriteSheet.potionLifeSprite,
+          sprite: CommonSpriteSheet.potionLifeSprite,
           position: position,
-          width: DungeonMap.tileSize * 0.5,
-          height: DungeonMap.tileSize * 0.5,
+          size: Vector2.all(DungeonMap.tileSize * 0.5),
         );
 
   @override

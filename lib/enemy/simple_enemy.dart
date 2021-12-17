@@ -9,8 +9,6 @@ class SimpleEnemy extends Enemy with DirectionAnimation {
   SimpleEnemy({
     required Vector2 position,
     required Vector2 size,
-    required double height,
-    required double width,
     required SimpleDirectionAnimation animation,
     double life = 100,
     double speed = 100,

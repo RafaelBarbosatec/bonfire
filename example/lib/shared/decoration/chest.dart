@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/decoration/potion_life.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
@@ -11,9 +10,8 @@ class Chest extends GameDecoration with TapGesture {
   late TextPaint _textConfig;
   Chest(Vector2 position)
       : super.withAnimation(
-          CommonSpriteSheet.chestAnimated,
-          width: DungeonMap.tileSize * 0.6,
-          height: DungeonMap.tileSize * 0.6,
+          animation: CommonSpriteSheet.chestAnimated,
+          size: Vector2.all(DungeonMap.tileSize * 0.6),
           position: position,
         ) {
     _textConfig = TextPaint(
@@ -51,7 +49,7 @@ class Chest extends GameDecoration with TapGesture {
       _textConfig.render(
         canvas,
         'Touch me !!',
-        Vector2(position.left - width / 1.5, position.center.dy - (height + 5)),
+        Vector2(x - width / 1.5, center.y - (height + 5)),
       );
     }
   }
@@ -71,8 +69,8 @@ class Chest extends GameDecoration with TapGesture {
     gameRef.add(
       PotionLife(
         Vector2(
-          position.translate(width * 2, 0).left,
-          position.top - height * 2,
+          position.translate(width * 2, 0).x,
+          position.y - height * 2,
         ),
         30,
       ),
@@ -81,8 +79,8 @@ class Chest extends GameDecoration with TapGesture {
     gameRef.add(
       PotionLife(
         Vector2(
-          position.translate(width * 2, 0).left,
-          position.top + height * 2,
+          position.translate(width * 2, 0).x,
+          position.y + height * 2,
         ),
         30,
       ),
@@ -92,11 +90,12 @@ class Chest extends GameDecoration with TapGesture {
     _addSmokeExplosion(position.translate(width * 2, height * 2));
   }
 
-  void _addSmokeExplosion(Vector2Rect position) {
+  void _addSmokeExplosion(Vector2 position) {
     gameRef.add(
       AnimatedObjectOnce(
         animation: CommonSpriteSheet.smokeExplosion,
         position: position,
+        size: Vector2.all(DungeonMap.tileSize),
       ),
     );
   }
@@ -106,14 +105,15 @@ class Chest extends GameDecoration with TapGesture {
       AnimatedFollowerObject(
         animation: CommonSpriteSheet.emote,
         target: this,
-        positionFromTarget: Rect.fromLTWH(18, -6, 16, 16).toVector2Rect(),
+        size: Vector2.all(16),
+        positionFromTarget: Vector2(18, -6),
       ),
     );
   }
 
   @override
-  void onTapDown(int pointer, Offset position) {}
+  void onTapDown(int pointer, Vector2 position) {}
 
   @override
-  void onTapUp(int pointer, Offset position) {}
+  void onTapUp(int pointer, Vector2 position) {}
 }

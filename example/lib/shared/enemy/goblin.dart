@@ -19,8 +19,7 @@ class Goblin extends SimpleEnemy
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,
           position: position,
-          width: DungeonMap.tileSize * 0.8,
-          height: DungeonMap.tileSize * 0.8,
+          size: Vector2.all(DungeonMap.tileSize * 0.8),
           speed: DungeonMap.tileSize * 1.6,
           life: 100,
         ) {
@@ -28,7 +27,7 @@ class Goblin extends SimpleEnemy
       CollisionConfig(
         collisions: [
           CollisionArea.rectangle(
-            size: Size(
+            size: Vector2(
               DungeonMap.tileSize * 0.4,
               DungeonMap.tileSize * 0.4,
             ),
@@ -92,9 +91,9 @@ class Goblin extends SimpleEnemy
   void die() {
     gameRef.add(
       AnimatedObjectOnce(
-        animation: CommonSpriteSheet.smokeExplosion,
-        position: position,
-      ),
+          animation: CommonSpriteSheet.smokeExplosion,
+          position: position,
+          size: Vector2.all(DungeonMap.tileSize)),
     );
     removeFromParent();
     super.die();
@@ -109,14 +108,13 @@ class Goblin extends SimpleEnemy
       animationDown: CommonSpriteSheet.fireBallBottom,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       id: 35,
-      width: width * 0.9,
-      height: width * 0.9,
+      size: Vector2.all(width * 0.9),
       damage: attack,
       speed: DungeonMap.tileSize * 3,
       collision: CollisionConfig(
         collisions: [
           CollisionArea.rectangle(
-            size: Size(width / 2, width / 2),
+            size: Vector2.all(width / 2),
             align: Vector2(width * 0.25, width * 0.25),
           ),
         ],
@@ -132,8 +130,7 @@ class Goblin extends SimpleEnemy
   void execAttack() {
     if (gameRef.player != null && gameRef.player?.isDead == true) return;
     this.simpleAttackMelee(
-      height: width,
-      width: width,
+      size: Vector2.all(width),
       damage: attack / 2,
       interval: 400,
       sizePush: DungeonMap.tileSize / 2,

@@ -17,7 +17,7 @@ class CircleShape extends Shape {
         this.offsetToDraw = Offset((position ?? Vector2.zero()).x + radius,
             (position ?? Vector2.zero()).y + radius),
         this.rect = RectangleShape(
-          Size(2 * radius, 2 * radius),
+          Vector2(2 * radius, 2 * radius),
           position: position,
         ),
         super(position ?? Vector2.zero());

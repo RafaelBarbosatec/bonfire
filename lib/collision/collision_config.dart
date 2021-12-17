@@ -46,7 +46,7 @@ class CollisionConfig {
           _rect = _rect.expandToInclude(element.rect);
         }
       }
-      _lastPosition = position;
+      _lastPosition = position.clone();
       rect = _rect!;
     }
   }

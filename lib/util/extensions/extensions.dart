@@ -130,11 +130,9 @@ extension SpriteExt on Sprite {
     if (overridePaint != null && overridePaint.color.opacity != opacity) {
       overridePaint.color = overridePaint.color.withOpacity(opacity);
     }
-
-    this.render(
+    this.renderRect(
       canvas,
-      position: rect.positionVector2,
-      size: rect.sizeVector2,
+      rect,
       overridePaint: overridePaint,
     );
   }

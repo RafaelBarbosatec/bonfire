@@ -45,8 +45,8 @@ class BarLifeComponent extends InterfaceComponent {
   }
 
   void _drawLife(Canvas canvas) {
-    double xBar = position.left + 26;
-    double yBar = position.top + 10;
+    double xBar = position.x + 26;
+    double yBar = position.y + 10;
     canvas.drawLine(
         Offset(xBar, yBar),
         Offset(xBar + widthBar, yBar),
@@ -67,8 +67,8 @@ class BarLifeComponent extends InterfaceComponent {
   }
 
   void _drawStamina(Canvas canvas) {
-    double xBar = position.left + 26;
-    double yBar = position.top + 28;
+    double xBar = position.x + 26;
+    double yBar = position.y + 28;
 
     double currentBarStamina = (stamina * widthBar) / maxStamina;
 

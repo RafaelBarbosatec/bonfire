@@ -67,7 +67,7 @@ mixin MoveToPositionAlongThePath on Movement {
     }
 
     _currentIndex = 0;
-    _calculatePath(position.toOffset());
+    _calculatePath(position);
   }
 
   @override
@@ -105,7 +105,7 @@ mixin MoveToPositionAlongThePath on Movement {
   void _move(double dt) {
     double innerSpeed = speed * dt;
 
-    Vector2Rect componentPosition = position;
+    Rect componentPosition = toRect();
     if (this.isObjectCollision()) {
       componentPosition = (this as ObjectCollision).rectCollision;
     }
@@ -163,12 +163,12 @@ mixin MoveToPositionAlongThePath on Movement {
     }
   }
 
-  void _calculatePath(Offset finalPosition) {
+  void _calculatePath(Vector2 finalPosition) {
     final player = this;
 
     final positionPlayer = player is ObjectCollision
-        ? (player as ObjectCollision).rectCollision.center
-        : player.position.center;
+        ? (player as ObjectCollision).rectCollision.center.toVector2()
+        : player.center;
 
     Offset playerPosition = _getCenterPositionByTile(positionPlayer);
 
@@ -254,23 +254,22 @@ mixin MoveToPositionAlongThePath on Movement {
           (this as ObjectCollision).rectCollision.height,
         );
       }
-      return max(position.height, position.width) +
-          REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
+      return max(height, width) + REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
     }
     return tileSize;
   }
 
   bool get isMovingAlongThePath => _currentPath.isNotEmpty;
 
-  Offset _getCenterPositionByTile(Offset center) {
+  Offset _getCenterPositionByTile(Vector2 center) {
     return Offset(
-      (center.dx / _tileSize).floor().toDouble(),
-      (center.dy / _tileSize).floor().toDouble(),
+      (center.x / _tileSize).floor().toDouble(),
+      (center.y / _tileSize).floor().toDouble(),
     );
   }
 
   /// creating an imaginary grid would calculate how many tile this object is occupying.
-  void _addCollisionOffsetsPositionByTile(Vector2Rect rect) {
+  void _addCollisionOffsetsPositionByTile(Rect rect) {
     final leftTop = Offset(
       ((rect.left / _tileSize).floor() * _tileSize),
       ((rect.top / _tileSize).floor() * _tileSize),
@@ -296,7 +295,7 @@ mixin MoveToPositionAlongThePath on Movement {
     });
 
     List<Rect> listRect = grid.where((element) {
-      return rect.rect.overlaps(element);
+      return rect.overlaps(element);
     }).toList();
 
     final result = listRect.map((e) {

@@ -24,9 +24,7 @@ class TextGameComponent extends GameComponent {
     this.name = '',
     TextStyle? style,
   }) {
-    this.position = this.position.copyWith(
-          position: position,
-        );
+    this.position = position;
     _textPaint = TextPaint(
       style: style,
     );
@@ -34,7 +32,7 @@ class TextGameComponent extends GameComponent {
 
   @override
   void render(Canvas canvas) {
-    _textPaint?.render(canvas, text, position.position);
+    _textPaint?.render(canvas, text, position);
     super.render(canvas);
   }
 

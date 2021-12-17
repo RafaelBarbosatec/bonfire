@@ -23,8 +23,7 @@ class GoblinRotation extends RotationEnemy {
             ),
           ),
           position: position,
-          width: 25,
-          height: 25,
+          size: Vector2.all(DungeonMap.tileSize),
         );
 
   @override
@@ -54,14 +53,13 @@ class GoblinRotation extends RotationEnemy {
               textureSize: Vector2(32, 32),
             ),
           ),
-          width: 25,
-          height: 25,
+          size: Vector2.all(25),
           damage: 10,
           speed: speed * 1.5,
           collision: CollisionConfig(
             collisions: [
               CollisionArea.rectangle(
-                size: Size(width / 2, width / 2),
+                size: Vector2(width / 2, width / 2),
                 align: Vector2(width * 0.1, 0),
               ),
             ],
@@ -93,6 +91,7 @@ class GoblinRotation extends RotationEnemy {
           ),
         ),
         position: position,
+        size: Vector2.all(DungeonMap.tileSize),
       ),
     );
     removeFromParent();

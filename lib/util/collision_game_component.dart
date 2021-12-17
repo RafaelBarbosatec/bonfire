@@ -26,10 +26,8 @@ class CollisionGameComponent extends GameComponent with ObjectCollision {
     required Vector2 size,
     List<CollisionArea> collisions = const [],
   }) {
-    this.position = this.position.copyWith(
-          position: position,
-          size: size,
-        );
+    this.position = position;
+    this.size = size;
     setupCollision(
       CollisionConfig(collisions: collisions),
     );

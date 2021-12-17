@@ -75,11 +75,11 @@ class GameDecoration extends AnimatedObject {
     if (bleendingPixel > 2) {
       bleendingPixel = 2;
     }
-    position = Vector2(
+    this.position = Vector2(
       position.x - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0),
       position.y - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0),
     );
-    size = Vector2(
+    this.size = Vector2(
       size.x + (position.x % 2 == 0 ? bleendingPixel : 0),
       size.y + (position.y % 2 == 0 ? bleendingPixel : 0),
     );

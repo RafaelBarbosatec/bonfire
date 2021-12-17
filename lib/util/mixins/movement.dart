@@ -5,7 +5,6 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 
 /// Mixin responsible for adding movements
@@ -19,9 +18,9 @@ mixin Movement on GameComponent {
   /// Move player to Up
   void moveUp(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * dtUpdate;
-    Vector2Rect displacement = position.translate(0, (innerSpeed * -1));
+    Vector2 displacement = position.translate(0, (innerSpeed * -1));
 
-    if (_isCollision(displacement.position)) {
+    if (_isCollision(displacement)) {
       onCollision?.call();
       return;
     }
@@ -34,9 +33,9 @@ mixin Movement on GameComponent {
   /// Move player to Down
   void moveDown(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * dtUpdate;
-    Vector2Rect displacement = position.translate(0, innerSpeed);
+    Vector2 displacement = position.translate(0, innerSpeed);
 
-    if (_isCollision(displacement.position)) {
+    if (_isCollision(displacement)) {
       onCollision?.call();
       return;
     }
@@ -49,9 +48,9 @@ mixin Movement on GameComponent {
   /// Move player to Left
   void moveLeft(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * dtUpdate;
-    Vector2Rect displacement = position.translate((innerSpeed * -1), 0);
+    Vector2 displacement = position.translate((innerSpeed * -1), 0);
 
-    if (_isCollision(displacement.position)) {
+    if (_isCollision(displacement)) {
       onCollision?.call();
       return;
     }
@@ -65,9 +64,9 @@ mixin Movement on GameComponent {
   /// Move player to Right
   void moveRight(double speed, {VoidCallback? onCollision}) {
     double innerSpeed = speed * dtUpdate;
-    Vector2Rect displacement = position.translate(innerSpeed, 0);
+    Vector2 displacement = position.translate(innerSpeed, 0);
 
-    if (_isCollision(displacement.position)) {
+    if (_isCollision(displacement)) {
       onCollision?.call();
       return;
     }
@@ -113,23 +112,24 @@ mixin Movement on GameComponent {
     double nextY = (speed * dtUpdate) * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
+    final rect = toRect();
     Offset diffBase = Offset(
-          position.rect.center.dx + nextPoint.dx,
-          position.rect.center.dy + nextPoint.dy,
+          rect.center.dx + nextPoint.dx,
+          rect.center.dy + nextPoint.dy,
         ) -
-        position.rect.center;
+        rect.center;
 
     Offset newDiffBase = diffBase;
 
-    Vector2Rect newPosition = position.shift(newDiffBase);
+    Rect newPosition = rect.shift(newDiffBase);
 
-    if (_isCollision(newPosition.position)) {
+    if (_isCollision(newPosition.positionVector2)) {
       onCollision?.call();
       return;
     }
 
     isIdle = false;
-    position = newPosition;
+    position = newPosition.positionVector2;
   }
 
   /// Move to direction by radAngle with dodge obstacles
@@ -144,48 +144,48 @@ mixin Movement on GameComponent {
     double nextY = innerSpeed * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
-            position.center.dy + nextPoint.dy) -
-        position.center;
+    Vector2 diffBase =
+        Vector2(this.center.x + nextPoint.dx, this.center.y + nextPoint.dy) -
+            this.center;
 
     var collisionX = _verifyTranslateCollision(
-      diffBase.dx,
+      diffBase.x,
       0,
     );
     var collisionY = _verifyTranslateCollision(
       0,
-      diffBase.dy,
+      diffBase.y,
     );
 
-    Offset newDiffBase = diffBase;
+    Vector2 newDiffBase = diffBase;
 
     if (collisionX) {
-      newDiffBase = Offset(0, newDiffBase.dy);
+      newDiffBase = Vector2(0, newDiffBase.y);
     }
     if (collisionY) {
-      newDiffBase = Offset(newDiffBase.dx, 0);
+      newDiffBase = Vector2(newDiffBase.x, 0);
     }
 
-    if (collisionX && !collisionY && newDiffBase.dy != 0) {
+    if (collisionX && !collisionY && newDiffBase.y != 0) {
       var collisionY = _verifyTranslateCollision(
         0,
         innerSpeed,
       );
-      if (!collisionY) newDiffBase = Offset(0, innerSpeed);
+      if (!collisionY) newDiffBase = Vector2(0, innerSpeed);
     }
 
-    if (collisionY && !collisionX && newDiffBase.dx != 0) {
+    if (collisionY && !collisionX && newDiffBase.x != 0) {
       var collisionX = _verifyTranslateCollision(
         innerSpeed,
         0,
       );
-      if (!collisionX) newDiffBase = Offset(innerSpeed, 0);
+      if (!collisionX) newDiffBase = Vector2(innerSpeed, 0);
     }
 
-    if (newDiffBase == Offset.zero) {
+    if (newDiffBase == Vector2.zero()) {
       onCollision?.call();
     }
-    this.position = position.shift(newDiffBase);
+    this.position.add(newDiffBase);
   }
 
   /// Check if performing a certain translate on the enemy collision occurs
@@ -196,7 +196,7 @@ mixin Movement on GameComponent {
     if (this.isObjectCollision()) {
       return (this as ObjectCollision)
           .isCollision(
-            displacement: this.position.position.translate(
+            displacement: this.position.translate(
                   translateX,
                   translateY,
                 ),

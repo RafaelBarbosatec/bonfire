@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/collision_area.dart';
 import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/collision/object_collision.dart';
@@ -10,7 +11,6 @@ import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
@@ -60,7 +60,7 @@ class FlyingAttackAngleObject extends AnimatedObject
       collision ??
           CollisionConfig(
             collisions: [
-              CollisionArea.rectangle(size: Size(width, height)),
+              CollisionArea.rectangle(size: Vector2(width, height)),
             ],
           ),
     );
