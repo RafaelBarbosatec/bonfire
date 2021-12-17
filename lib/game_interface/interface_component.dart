@@ -2,7 +2,7 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/gestures/tap_gesture.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/vector2rect.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
@@ -43,22 +43,16 @@ class InterfaceComponent extends GameComponent with TapGesture {
     _loader.add(AssetToLoad(spriteSelected, (value) {
       this.spriteSelected = value;
     }));
-    this.position = Vector2Rect.fromRect(
-      Rect.fromLTWH(
-        position.x,
-        position.y,
-        width,
-        height,
-      ),
-    );
+    this.position = Vector2(position.x, position.y);
+    this.size = Vector2(width, height);
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    (selected ? spriteSelected : sprite)?.renderFromVector2Rect(
+    (selected ? spriteSelected : sprite)?.renderRectWithOpacity(
       canvas,
-      this.position,
+      toRect(),
       opacity: opacity,
     );
   }
@@ -90,10 +84,10 @@ class InterfaceComponent extends GameComponent with TapGesture {
   }
 
   @override
-  void onTapDown(int pointer, Offset position) {
+  void onTapDown(int pointer, Vector2 position) {
     selected = true;
   }
 
   @override
-  void onTapUp(int pointer, Offset position) {}
+  void onTapUp(int pointer, Vector2 position) {}
 }

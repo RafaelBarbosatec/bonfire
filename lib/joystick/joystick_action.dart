@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -28,8 +27,8 @@ class JoystickAction {
   late double _tileSize;
 
   int? _pointer;
-  Vector2Rect? _rect;
-  Vector2Rect? _rectBackgroundDirection;
+  Rect? _rect;
+  Rect? _rectBackgroundDirection;
   bool _dragging = false;
   Sprite? _spriteToRender;
   Offset? _dragPosition;
@@ -93,12 +92,12 @@ class JoystickAction {
     _rect = Rect.fromCircle(
       center: Offset(dx, dy),
       radius: radius,
-    ).toVector2Rect();
+    );
 
     _rectBackgroundDirection = Rect.fromCircle(
       center: Offset(dx, dy),
       radius: _sizeBackgroundDirection / 2,
-    ).toVector2Rect();
+    );
 
     _dragPosition = _rect!.center;
   }
@@ -107,18 +106,18 @@ class JoystickAction {
     if (_rectBackgroundDirection != null && _dragging && enableDirection) {
       if (spriteBackgroundDirection == null) {
         _paintBackground?.let((paintBackground) {
-          double radiusBackground = _rectBackgroundDirection!.rect.width / 2;
+          double radiusBackground = _rectBackgroundDirection!.width / 2;
           c.drawCircle(
             Offset(
-              _rectBackgroundDirection!.rect.left + radiusBackground,
-              _rectBackgroundDirection!.rect.top + radiusBackground,
+              _rectBackgroundDirection!.left + radiusBackground,
+              _rectBackgroundDirection!.top + radiusBackground,
             ),
             radiusBackground,
             paintBackground,
           );
         });
       } else {
-        spriteBackgroundDirection?.renderFromVector2Rect(
+        spriteBackgroundDirection?.renderRect(
           c,
           _rectBackgroundDirection!,
         );
@@ -127,10 +126,9 @@ class JoystickAction {
 
     _rect?.let((rect) {
       if (_spriteToRender != null) {
-        _spriteToRender?.render(
+        _spriteToRender?.renderRect(
           c,
-          position: rect.position,
-          size: rect.size,
+          rect,
         );
       } else {
         double radiusAction = rect.width / 2;

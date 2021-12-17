@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
@@ -16,10 +15,10 @@ class JoystickDirectional {
   Paint? _paintBackground;
   Paint? _paintKnob;
 
-  Vector2Rect? _backgroundRect;
+  Rect? _backgroundRect;
   Sprite? _backgroundSprite;
 
-  Vector2Rect? _knobRect;
+  Rect? _knobRect;
   Sprite? _knobSprite;
 
   bool _dragging = false;
@@ -65,7 +64,7 @@ class JoystickDirectional {
     _backgroundRect = Rect.fromCircle(
       center: osBackground,
       radius: size / 2,
-    ).toVector2Rect();
+    );
 
     Offset osKnob = Offset(
       _backgroundRect!.center.dx,
@@ -75,7 +74,7 @@ class JoystickDirectional {
     _knobRect = Rect.fromCircle(
       center: osKnob,
       radius: size / 4,
-    ).toVector2Rect();
+    );
 
     _dragPosition = _knobRect!.center;
   }
@@ -83,16 +82,16 @@ class JoystickDirectional {
   void render(Canvas canvas) {
     _backgroundRect?.let((background) {
       if (_backgroundSprite != null) {
-        _backgroundSprite?.renderFromVector2Rect(
+        _backgroundSprite?.renderRect(
           canvas,
           background,
         );
       } else {
         _paintBackground?.let((paintBg) {
-          double radiusBackground = background.rect.width / 2;
+          double radiusBackground = background.width / 2;
           canvas.drawCircle(
-            Offset(background.rect.left + radiusBackground,
-                background.rect.top + radiusBackground),
+            Offset(background.left + radiusBackground,
+                background.top + radiusBackground),
             radiusBackground,
             paintBg,
           );
@@ -102,13 +101,15 @@ class JoystickDirectional {
 
     _knobRect?.let((knobRect) {
       if (_knobSprite != null) {
-        _knobSprite?.renderFromVector2Rect(canvas, knobRect);
+        _knobSprite?.renderRect(canvas, knobRect);
       } else {
         _paintKnob?.let((paintKnob) {
-          double radiusKnob = knobRect.rect.width / 2;
+          double radiusKnob = knobRect.width / 2;
           canvas.drawCircle(
-            Offset(knobRect.rect.left + radiusKnob,
-                knobRect.rect.top + radiusKnob),
+            Offset(
+              knobRect.left + radiusKnob,
+              knobRect.top + radiusKnob,
+            ),
             radiusKnob,
             paintKnob,
           );
@@ -241,10 +242,10 @@ class JoystickDirectional {
 
     _backgroundRect?.let((backgroundRect) {
       Rect directional = Rect.fromLTWH(
-        backgroundRect.rect.left - 50,
-        backgroundRect.rect.top - 50,
-        backgroundRect.rect.width + 100,
-        backgroundRect.rect.height + 100,
+        backgroundRect.left - 50,
+        backgroundRect.top - 50,
+        backgroundRect.width + 100,
+        backgroundRect.height + 100,
       );
       if (!_dragging && directional.contains(localPosition)) {
         _dragging = true;
@@ -285,7 +286,7 @@ class JoystickDirectional {
     _backgroundRect = Rect.fromCircle(
       center: position,
       radius: size / 2,
-    ).toVector2Rect();
+    );
 
     Offset osKnob = Offset(
       _backgroundRect!.center.dx,
@@ -294,7 +295,7 @@ class JoystickDirectional {
     _knobRect = Rect.fromCircle(
       center: osKnob,
       radius: size / 4,
-    ).toVector2Rect();
+    );
   }
 
   Future<void> onLoad() async {

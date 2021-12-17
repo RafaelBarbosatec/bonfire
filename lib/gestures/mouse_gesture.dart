@@ -1,5 +1,6 @@
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/gestures.dart';
 
 /// Mixin responsible to listen mouse gestures
@@ -12,17 +13,17 @@ mixin MouseGesture on GameComponent {
   void handlerPointerHover(PointerHoverEvent event) {
     if (!enableMouseGesture) return;
     int pointer = event.pointer;
-    Offset position = event.localPosition;
+    Vector2 position = event.localPosition.toVector2();
     onHoverScreen(pointer, position);
     if (this.isHud) {
-      if (this.position.contains(position)) {
+      if (containsPoint(position)) {
         onHoverEnter(pointer, position);
       } else {
         onHoverExit(pointer, position);
       }
     } else {
       final absolutePosition = this.gameRef.screenPositionToWorld(position);
-      if (this.position.contains(absolutePosition)) {
+      if (containsPoint(absolutePosition)) {
         onHoverEnter(pointer, position);
       } else {
         onHoverExit(pointer, position);
@@ -35,16 +36,16 @@ mixin MouseGesture on GameComponent {
   void handlerPointerSignal(PointerSignalEvent event) {
     if (!enableMouseGesture) return;
     int pointer = event.pointer;
-    Offset position = event.localPosition;
-    Offset scrollDelta = (event as PointerScrollEvent).scrollDelta;
+    Vector2 position = event.localPosition.toVector2();
+    Vector2 scrollDelta = (event as PointerScrollEvent).scrollDelta.toVector2();
     onScrollScreen(pointer, position, scrollDelta);
     if (this.isHud) {
-      if (this.position.contains(position)) {
+      if (containsPoint(position)) {
         onScroll(pointer, position, scrollDelta);
       }
     } else {
       final absolutePosition = this.gameRef.screenPositionToWorld(position);
-      if (this.position.contains(absolutePosition)) {
+      if (containsPoint(absolutePosition)) {
         onScroll(pointer, position, scrollDelta);
       }
     }
@@ -56,10 +57,10 @@ mixin MouseGesture on GameComponent {
     if (!enableMouseGesture) return;
     if (event.kind != PointerDeviceKind.mouse) return;
     final pointer = event.pointer;
-    final position = event.localPosition;
+    final position = event.localPosition.toVector2();
     if (hasGameRef) {
       if (this.isHud) {
-        if (this.position.contains(position)) {
+        if (containsPoint(position)) {
           _pointer = pointer;
           _buttonClicked = event.buttons;
 
@@ -77,7 +78,7 @@ mixin MouseGesture on GameComponent {
         }
       } else {
         final absolutePosition = this.gameRef.screenPositionToWorld(position);
-        if (this.position.contains(absolutePosition)) {
+        if (containsPoint(absolutePosition)) {
           _pointer = pointer;
           _buttonClicked = event.buttons;
           switch (_buttonClicked) {
@@ -102,10 +103,10 @@ mixin MouseGesture on GameComponent {
     if (!enableMouseGesture) return;
     if (event.kind != PointerDeviceKind.mouse) return;
     final pointer = event.pointer;
-    final position = event.localPosition;
+    final position = event.localPosition.toVector2();
     if (pointer == _pointer && hasGameRef) {
       if (this.isHud) {
-        if (this.position.contains(position)) {
+        if (containsPoint(position)) {
           switch (_buttonClicked) {
             case kPrimaryMouseButton:
               onMouseTapUpLeft(pointer, position);
@@ -125,7 +126,7 @@ mixin MouseGesture on GameComponent {
         }
       } else {
         final absolutePosition = this.gameRef.screenPositionToWorld(position);
-        if (this.position.contains(absolutePosition)) {
+        if (containsPoint(absolutePosition)) {
           switch (_buttonClicked) {
             case kPrimaryMouseButton:
               onMouseTapUpLeft(pointer, position);
@@ -150,26 +151,26 @@ mixin MouseGesture on GameComponent {
   }
 
   /// Listen to the mouse cursor across the screen
-  void onHoverScreen(int pointer, Offset position) {}
+  void onHoverScreen(int pointer, Vector2 position) {}
 
   /// Listen when the mouse cursor hover in this component
-  void onHoverEnter(int pointer, Offset position);
+  void onHoverEnter(int pointer, Vector2 position);
 
   /// Listen when the mouse cursor passes outside this component
-  void onHoverExit(int pointer, Offset position);
+  void onHoverExit(int pointer, Vector2 position);
 
   /// Listen when use scroll of the mouse across the screen
-  void onScrollScreen(int pointer, Offset position, Offset scrollDelta) {}
+  void onScrollScreen(int pointer, Vector2 position, Vector2 scrollDelta) {}
 
   /// Listen when use scroll of the mouse in your component
-  void onScroll(int pointer, Offset position, Offset scrollDelta);
+  void onScroll(int pointer, Vector2 position, Vector2 scrollDelta);
 
-  void onMouseTapDownLeft(int pointer, Offset position) {}
-  void onMouseTapDownRight(int pointer, Offset position) {}
-  void onMouseTapDownMiddle(int pointer, Offset position) {}
-  void onMouseTapUpLeft(int pointer, Offset position) {}
-  void onMouseTapUpRight(int pointer, Offset position) {}
-  void onMouseTapUpMiddle(int pointer, Offset position) {}
+  void onMouseTapDownLeft(int pointer, Vector2 position) {}
+  void onMouseTapDownRight(int pointer, Vector2 position) {}
+  void onMouseTapDownMiddle(int pointer, Vector2 position) {}
+  void onMouseTapUpLeft(int pointer, Vector2 position) {}
+  void onMouseTapUpRight(int pointer, Vector2 position) {}
+  void onMouseTapUpMiddle(int pointer, Vector2 position) {}
 
   void onMouseTapLeft();
   void onMouseTapRight();

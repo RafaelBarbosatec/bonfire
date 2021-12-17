@@ -20,8 +20,8 @@ class JoystickMoveToPosition extends JoystickController {
     if (_pointer == event.pointer) {
       if (!_interfaceReceiveInteraction) {
         final absolutePosition =
-            this.gameRef.screenPositionToWorld(event.position);
-        moveTo(absolutePosition.toVector2());
+            this.gameRef.screenPositionToWorld(event.position.toVector2());
+        moveTo(absolutePosition);
       }
     }
     _interfaceReceiveInteraction = false;

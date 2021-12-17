@@ -33,15 +33,13 @@ class TextInterfaceComponent extends InterfaceComponent {
     if (_measuredWidth == null) {
       _measuredWidth = textConfig.measureTextWidth(text);
       _measuredHeight = textConfig.measureTextHeight(text);
-      position = position.copyWith(
-        size: Vector2(_measuredWidth!, _measuredHeight!),
-      );
+      size = Vector2(_measuredWidth!, _measuredHeight!);
     }
 
     textConfig.render(
       canvas,
       text,
-      Vector2(this.position.left, this.position.top),
+      Vector2(x, y),
     );
   }
 }

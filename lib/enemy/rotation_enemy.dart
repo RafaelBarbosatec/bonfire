@@ -19,17 +19,15 @@ class RotationEnemy extends Enemy {
 
   RotationEnemy({
     required Vector2 position,
+    required Vector2 size,
     required Future<SpriteAnimation> animIdle,
     required Future<SpriteAnimation> animRun,
-    double height = 32,
-    double width = 32,
     this.currentRadAngle = -1.55,
     double speed = 100,
     double life = 100,
   }) : super(
           position: position,
-          height: height,
-          width: width,
+          size: size,
           life: life,
           speed: speed,
         ) {
@@ -56,9 +54,9 @@ class RotationEnemy extends Enemy {
   void render(Canvas canvas) {
     super.render(canvas);
     canvas.save();
-    canvas.translate(position.center.dx, position.center.dy);
+    canvas.translate(center.x, center.y);
     canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));
-    canvas.translate(-position.center.dx, -position.center.dy);
+    canvas.translate(-center.x, -center.y);
     _renderAnimation(canvas);
     canvas.restore();
   }
@@ -77,9 +75,9 @@ class RotationEnemy extends Enemy {
   }
 
   void _renderAnimation(Canvas canvas) {
-    animation?.getSprite().renderFromVector2Rect(
+    animation?.getSprite().renderRectWithOpacity(
           canvas,
-          this.position,
+          toRect(),
           opacity: opacity,
         );
   }
