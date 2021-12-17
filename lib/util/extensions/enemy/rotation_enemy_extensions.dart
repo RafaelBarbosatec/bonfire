@@ -150,7 +150,10 @@ extension RotationEnemyExtensions on RotationEnemy {
             a.rectAttackable().overlaps(positionAttack))
         .forEach((attackable) {
       attackable.receiveDamage(damage, id);
-      final rectAfterPush = attackable.position + diffBase;
+      final rectAfterPush = attackable.position.translate(
+        diffBase.x,
+        diffBase.y,
+      );
       if (withPush &&
           (attackable is ObjectCollision &&
               !(attackable as ObjectCollision)

@@ -114,15 +114,14 @@ class FlyingAttackAngleObject extends AnimatedObject
       if (destroyAnimation != null) {
         double nextX = (width / 4) * _cosAngle;
         double nextY = (height / 4) * _senAngle;
-        Offset nextPoint = Offset(nextX, nextY);
 
         Offset diffBase = Offset(
-              rectCollision.center.dx + nextPoint.dx,
-              rectCollision.center.dy + nextPoint.dy,
+              rectCollision.center.dx + nextX,
+              rectCollision.center.dy + nextY,
             ) -
             rectCollision.center;
 
-        final positionDestroy = position + diffBase.toVector2();
+        final positionDestroy = position.translate(diffBase.dx, diffBase.dy);
 
         gameRef.add(
           AnimatedObjectOnce(
