@@ -58,8 +58,8 @@ class LightingComponent extends GameComponent implements LightingInterface {
 
       canvas.drawCircle(
         Offset(
-          light.position.center.dx,
-          light.position.center.dy,
+          light.center.x,
+          light.center.y,
         ),
         config.radius *
             (config.withPulse
@@ -79,7 +79,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
           sigma,
         );
       canvas.drawCircle(
-        light.position.center,
+        light.center.toOffset(),
         config.radius *
             (config.withPulse
                 ? (1 - config.valuePulse * config.pulseVariation)

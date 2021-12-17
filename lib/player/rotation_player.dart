@@ -14,17 +14,15 @@ class RotationPlayer extends Player {
 
   RotationPlayer({
     required Vector2 position,
+    required Vector2 size,
     required Future<SpriteAnimation> animIdle,
     required Future<SpriteAnimation> animRun,
     double speed = 150,
     this.currentRadAngle = -1.55,
-    double width = 32,
-    double height = 32,
     double life = 100,
   }) : super(
           position: position,
-          width: width,
-          height: height,
+          size: size,
           life: life,
           speed: speed,
         ) {
@@ -54,18 +52,18 @@ class RotationPlayer extends Player {
     super.render(canvas);
     if (currentRadAngle == null) return;
     canvas.save();
-    canvas.translate(position.center.dx, position.center.dy);
+    canvas.translate(this.center.x, this.center.y);
     canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle! + (pi / 2));
-    canvas.translate(-position.center.dx, -position.center.dy);
+    canvas.translate(-this.center.x, -this.center.y);
     _renderAnimation(canvas);
     canvas.restore();
   }
 
   void _renderAnimation(Canvas canvas) {
     if (animation == null) return;
-    animation?.getSprite().renderFromVector2Rect(
+    animation?.getSprite().renderRectWithOpacity(
           canvas,
-          position,
+          toRect(),
           opacity: opacity,
         );
   }

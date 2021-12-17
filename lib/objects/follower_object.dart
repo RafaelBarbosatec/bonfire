@@ -1,32 +1,27 @@
-import 'dart:ui';
-
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/util/vector2rect.dart';
+import 'package:flame/components.dart';
 
 abstract class FollowerObject extends GameComponent {
   final GameComponent target;
-  final Vector2Rect? positionFromTarget;
+  final Vector2? positionFromTarget;
 
   FollowerObject(
     this.target,
     this.positionFromTarget,
-  );
+    Vector2 size,
+  ) {
+    this.size = size;
+  }
 
   @override
   void update(double dt) {
     super.update(dt);
-    final newPosition = positionFromTarget ?? Vector2Rect.zero();
-    this.position = Vector2Rect.fromRect(
-      Rect.fromLTWH(
-        target.position.rect.left,
-        target.position.rect.top,
-        newPosition.rect.width,
-        newPosition.rect.height,
-      ).translate(
-        newPosition.rect.left,
-        newPosition.rect.top,
-      ),
-    );
+    final newPosition = positionFromTarget ?? Vector2.zero();
+    this.position = target.position +
+        Vector2(
+          newPosition.x,
+          newPosition.y,
+        );
   }
 
   @override

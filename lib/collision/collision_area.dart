@@ -1,6 +1,5 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/geometry/shape.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/widgets.dart';
 
 Paint _paintCollision = Paint();
@@ -8,6 +7,8 @@ Paint _paintCollision = Paint();
 class CollisionArea {
   final Shape shape;
   final Vector2? align;
+
+  CollisionArea(this.shape, {this.align});
 
   CollisionArea.rectangle({
     required Size size,
@@ -27,10 +28,10 @@ class CollisionArea {
   })  : shape = PolygonShape(points),
         align = align ?? Vector2.zero();
 
-  CollisionArea.fromVector2Rect({
-    required Vector2Rect rect,
+  CollisionArea.fromVector2({
+    required Vector2 size,
     Vector2? align,
-  })  : shape = RectangleShape(Size(rect.size.x, rect.size.y)),
+  })  : shape = RectangleShape(Size(size.x, size.y)),
         align = align ?? Vector2.zero();
 
   void updatePosition(Vector2 position) {

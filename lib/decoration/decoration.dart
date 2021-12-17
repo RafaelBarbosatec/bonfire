@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -70,7 +71,7 @@ class GameDecoration extends AnimatedObject {
     Vector2 position,
     Vector2 size,
   ) {
-    double bleendingPixel = (width > height ? width : height) * 0.03;
+    double bleendingPixel = max(size.x, size.y) * 0.03;
     if (bleendingPixel > 2) {
       bleendingPixel = 2;
     }

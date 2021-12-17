@@ -22,10 +22,8 @@ mixin Lighting on GameComponent {
     if (lightingConfig == null) return super.isVisible;
 
     Rect rectLight = Rect.fromLTWH(
-      this.position.rect.center.dx -
-          (lightingConfig!.radius + lightingConfig!.blurBorder / 2),
-      this.position.rect.center.dy -
-          (lightingConfig!.radius + lightingConfig!.blurBorder / 2),
+      this.center.x - (lightingConfig!.radius + lightingConfig!.blurBorder / 2),
+      this.center.y - (lightingConfig!.radius + lightingConfig!.blurBorder / 2),
       (lightingConfig!.radius * 2) + lightingConfig!.blurBorder,
       (lightingConfig!.radius * 2) + lightingConfig!.blurBorder,
     );

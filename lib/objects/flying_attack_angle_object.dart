@@ -10,7 +10,6 @@ import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
@@ -20,11 +19,8 @@ class FlyingAttackAngleObject extends AnimatedObject
   final dynamic id;
   SpriteAnimation? flyAnimation;
   Future<SpriteAnimation>? destroyAnimation;
-  final double radAngle;
   final double speed;
   final double damage;
-  final double width;
-  final double height;
   final AttackFromEnum attackFrom;
   final bool withCollision;
   final VoidCallback? onDestroy;
@@ -37,10 +33,9 @@ class FlyingAttackAngleObject extends AnimatedObject
 
   FlyingAttackAngleObject({
     required Vector2 position,
+    required Vector2 size,
     required Future<SpriteAnimation> flyAnimation,
-    required this.radAngle,
-    required this.width,
-    required this.height,
+    double radAngle = 0,
     this.id,
     this.destroyAnimation,
     this.speed = 150,
@@ -55,10 +50,9 @@ class FlyingAttackAngleObject extends AnimatedObject
       return this.flyAnimation = value;
     }));
 
-    this.position = Vector2Rect(
-      position,
-      Vector2(width, height),
-    );
+    this.angle = radAngle;
+    this.size = size;
+    this.position = position;
 
     if (lightingConfig != null) setupLighting(lightingConfig);
 
@@ -84,11 +78,10 @@ class FlyingAttackAngleObject extends AnimatedObject
     double nextY = (speed * dt) * _senAngle;
     Offset nextPoint = Offset(nextX, nextY);
 
-    Offset diffBase = Offset(position.center.dx + nextPoint.dx,
-            position.center.dy + nextPoint.dy) -
-        position.center;
+    Offset diffBase = Offset(center.x + nextPoint.dx, center.y + nextPoint.dy) -
+        center.toOffset();
 
-    position = Vector2Rect.fromRect(position.rect.shift(diffBase));
+    position.add(diffBase.toVector2());
 
     if (!_verifyExistInWorld()) {
       removeFromParent();
@@ -107,7 +100,7 @@ class FlyingAttackAngleObject extends AnimatedObject
       return (attackFrom == AttackFromEnum.ENEMY
               ? a.receivesAttackFromEnemy()
               : a.receivesAttackFromPlayer()) &&
-          a.rectAttackable().rect.overlaps(position.rect);
+          a.rectAttackable().overlaps(toRect());
     }).forEach((enemy) {
       enemy.receiveDamage(damage, id);
       destroy = true;
@@ -124,20 +117,19 @@ class FlyingAttackAngleObject extends AnimatedObject
         Offset nextPoint = Offset(nextX, nextY);
 
         Offset diffBase = Offset(
-              rectCollision.rect.center.dx + nextPoint.dx,
-              rectCollision.rect.center.dy + nextPoint.dy,
+              rectCollision.center.dx + nextPoint.dx,
+              rectCollision.center.dy + nextPoint.dy,
             ) -
-            rectCollision.rect.center;
+            rectCollision.center;
 
-        final positionDestroy = Vector2Rect.fromRect(
-          position.rect.shift(diffBase),
-        );
+        final positionDestroy = position + diffBase.toVector2();
 
         gameRef.add(
           AnimatedObjectOnce(
             animation: destroyAnimation!,
             position: positionDestroy,
             lightingConfig: lightingConfig,
+            size: size,
           ),
         );
       }
@@ -149,17 +141,18 @@ class FlyingAttackAngleObject extends AnimatedObject
 
   bool _verifyExistInWorld() {
     Size? mapSize = gameRef.map.mapSize;
+    final _rect = toRect();
     if (mapSize == null) return true;
-    if (position.rect.left < 0) {
+    if (_rect.left < 0) {
       return false;
     }
-    if (position.rect.right > mapSize.width) {
+    if (_rect.right > mapSize.width) {
       return false;
     }
-    if (position.rect.top < 0) {
+    if (_rect.top < 0) {
       return false;
     }
-    if (position.rect.bottom > mapSize.height) {
+    if (_rect.bottom > mapSize.height) {
       return false;
     }
 

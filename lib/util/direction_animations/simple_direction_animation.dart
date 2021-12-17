@@ -5,7 +5,6 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/foundation.dart';
 
 /// Class responsible to manager animation on `SimplePlayer` and `SimpleEnemy`
@@ -35,7 +34,7 @@ class SimpleDirectionAnimation {
   SpriteAnimation? _current;
   late SimpleAnimationEnum _currentType;
   AnimatedObjectOnce? _fastAnimation;
-  Vector2Rect? position;
+  Rect? position;
 
   bool runToTheEndFastAnimation = false;
 
@@ -176,7 +175,8 @@ class SimpleDirectionAnimation {
     if (position != null) {
       runToTheEndFastAnimation = runToTheEnd;
       final anim = AnimatedObjectOnce(
-        position: position!,
+        position: position!.positionVector2,
+        size: position!.sizeVector2,
         animation: animation,
         onFinish: () {
           onFinish?.call();
@@ -201,7 +201,7 @@ class SimpleDirectionAnimation {
     if (_fastAnimation != null) {
       _fastAnimation?.render(canvas);
     } else {
-      _current?.getSprite().renderFromVector2Rect(
+      _current?.getSprite().renderRectWithOpacity(
             canvas,
             position!,
             opacity: opacity,
@@ -209,10 +209,11 @@ class SimpleDirectionAnimation {
     }
   }
 
-  void update(double dt, Vector2Rect position) {
+  void update(double dt, Rect position) {
     this.position = position;
     _fastAnimation?.opacity = opacity;
-    _fastAnimation?.position = position;
+    _fastAnimation?.position = position.positionVector2;
+    _fastAnimation?.size = position.sizeVector2;
     _fastAnimation?.update(dt);
     _current?.update(dt);
   }

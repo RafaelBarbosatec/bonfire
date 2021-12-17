@@ -53,8 +53,6 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     required Future<SpriteAnimation> animation,
     required Vector2 position,
     required Vector2 size,
-    double width = 32,
-    double height = 32,
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,

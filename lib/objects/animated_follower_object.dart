@@ -4,7 +4,6 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/objects/follower_object.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/vector2rect.dart';
 
 class AnimatedFollowerObject extends FollowerObject {
   final bool loopAnimation;
@@ -14,18 +13,19 @@ class AnimatedFollowerObject extends FollowerObject {
   AnimatedFollowerObject({
     required Future<SpriteAnimation> animation,
     required GameComponent target,
-    Vector2Rect? positionFromTarget,
+    required Vector2 size,
+    Vector2? positionFromTarget,
     this.loopAnimation = false,
-  }) : super(target, positionFromTarget) {
+  }) : super(target, positionFromTarget, size) {
     _loader.add(AssetToLoad(animation, (value) => this.animation = value));
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    animation?.getSprite().renderFromVector2Rect(
+    animation?.getSprite().renderRectWithOpacity(
           canvas,
-          this.position,
+          this.toRect(),
           opacity: opacity,
         );
   }

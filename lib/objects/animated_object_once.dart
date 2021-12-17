@@ -1,11 +1,9 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/sprite.dart';
 
 class AnimatedObjectOnce extends AnimatedObject with Lighting {
@@ -17,7 +15,8 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
   final _loader = AssetsLoader();
 
   AnimatedObjectOnce({
-    required Vector2Rect position,
+    required Vector2 position,
+    required Vector2 size,
     Future<SpriteAnimation>? animation,
     this.onFinish,
     this.onStartAnimation,
@@ -29,20 +28,22 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     }));
     setupLighting(lightingConfig);
     this.position = position;
+    this.size = size;
+    this.angle = rotateRadAngle ?? 0.0;
   }
 
   @override
   void render(Canvas canvas) {
-    if (rotateRadAngle != null) {
-      canvas.save();
-      canvas.translate(position.center.dx, position.center.dy);
-      canvas.rotate(rotateRadAngle == 0.0 ? 0.0 : rotateRadAngle! + (pi / 2));
-      canvas.translate(-position.center.dx, -position.center.dy);
-      super.render(canvas);
-      canvas.restore();
-    } else {
-      super.render(canvas);
-    }
+    // if (rotateRadAngle != null) {
+    //   canvas.save();
+    //   canvas.translate(center.x, center.y);
+    //   canvas.rotate(rotateRadAngle == 0.0 ? 0.0 : rotateRadAngle! + (pi / 2));
+    //   canvas.translate(-center.x, -center.y);
+    //   super.render(canvas);
+    //   canvas.restore();
+    // } else {
+    //   super.render(canvas);
+    // }
     if (animation?.done() == true) {
       onFinish?.call();
       removeFromParent();

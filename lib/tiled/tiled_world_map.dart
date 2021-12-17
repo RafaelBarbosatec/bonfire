@@ -191,13 +191,12 @@ class TiledWorldMap {
       if (data.animation != null) {
         _components.add(
           GameDecorationWithCollision.withAnimation(
-            data.animation!.getFutureSpriteAnimation(),
-            Vector2(
+            animation: data.animation!.getFutureSpriteAnimation(),
+            position: Vector2(
               _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
               _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
             ),
-            height: _tileHeight,
-            width: _tileWidth,
+            size: Vector2(_tileWidth, _tileHeight),
             collisions: data.collisions,
             aboveComponents: true,
           ),
@@ -207,13 +206,12 @@ class TiledWorldMap {
       if (data.sprite != null) {
         _components.add(
           GameDecorationWithCollision.withSprite(
-            data.sprite!.getFutureSprite(),
-            Vector2(
+            sprite: data.sprite!.getFutureSprite(),
+            position: Vector2(
               _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
               _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
             ),
-            height: _tileHeight,
-            width: _tileWidth,
+            size: Vector2(_tileWidth, _tileHeight),
             collisions: data.collisions,
             aboveComponents: true,
           ),
@@ -373,12 +371,15 @@ class TiledWorldMap {
             ),
           );
         } else if (element.type?.toLowerCase() == 'collision') {
+          final collision = _getCollisionObject(x, y, width, height, element);
+
           _components.add(
             CollisionGameComponent(
               name: element.name ?? '',
-              position: Vector2(x, y),
+              position: Vector2(x, y) + (collision.align ?? Vector2.zero()),
+              size: Vector2(collision.rect.width, collision.rect.height),
               collisions: [
-                _getCollisionObject(width, height, element),
+                CollisionArea(collision.shape),
               ],
             ),
           );
@@ -596,6 +597,8 @@ class TiledWorldMap {
   }
 
   CollisionArea _getCollisionObject(
+    double x,
+    double y,
     double width,
     double height,
     Objects object,
@@ -647,6 +650,7 @@ class TiledWorldMap {
 
       ca = CollisionArea.polygon(
         points: points,
+        align: Vector2(minorX ?? 0.0, minorY ?? 0.0),
       );
     }
     return ca;

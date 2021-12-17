@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_paint.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/vector2rect.dart';
 
 class ControlledUpdateAnimation {
   bool _alreadyUpdate = false;
@@ -19,11 +18,11 @@ class ControlledUpdateAnimation {
     this.animation = animation;
   }
 
-  void render(Canvas canvas, Vector2Rect position) {
+  void render(Canvas canvas, Rect rect) {
     if (animation != null) {
-      animation?.getSprite().renderFromVector2Rect(
+      animation?.getSprite().renderRect(
             canvas,
-            position,
+            rect,
             overridePaint: MapPaint.instance.paint,
           );
     }
