@@ -141,7 +141,6 @@ abstract class GameComponent extends PositionComponent
         Vector2(dx - 50, dy),
       );
     }
-    super.renderDebugMode(canvas);
   }
 
   void renderTree(Canvas canvas) {

@@ -77,6 +77,7 @@ class GameTiledMap extends StatelessWidget {
               'chest': (properties) => Chest(properties.position),
             },
           ),
+          constructionMode: true,
           background: BackgroundColorGame(Colors.blueGrey[900]!),
           lightingColorGame: Colors.black.withOpacity(0.7),
           cameraConfig: CameraConfig(
