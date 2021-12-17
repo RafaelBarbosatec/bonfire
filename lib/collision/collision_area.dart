@@ -9,6 +9,8 @@ class CollisionArea {
   final Shape shape;
   final Vector2? align;
 
+  CollisionArea(this.shape, {this.align});
+
   CollisionArea.rectangle({
     required Size size,
     Vector2? align,

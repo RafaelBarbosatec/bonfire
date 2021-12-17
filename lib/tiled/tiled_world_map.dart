@@ -373,12 +373,15 @@ class TiledWorldMap {
             ),
           );
         } else if (element.type?.toLowerCase() == 'collision') {
+          final collision = _getCollisionObject(x, y, width, height, element);
+
           _components.add(
             CollisionGameComponent(
               name: element.name ?? '',
-              position: Vector2(x, y),
+              position: Vector2(x, y) + (collision.align ?? Vector2.zero()),
+              size: Vector2(collision.rect.width, collision.rect.height),
               collisions: [
-                _getCollisionObject(width, height, element),
+                CollisionArea(collision.shape),
               ],
             ),
           );
@@ -596,6 +599,8 @@ class TiledWorldMap {
   }
 
   CollisionArea _getCollisionObject(
+    double x,
+    double y,
     double width,
     double height,
     Objects object,
@@ -647,6 +652,7 @@ class TiledWorldMap {
 
       ca = CollisionArea.polygon(
         points: points,
+        align: Vector2(minorX ?? 0.0, minorY ?? 0.0),
       );
     }
     return ca;
