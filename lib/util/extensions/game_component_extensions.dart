@@ -122,21 +122,19 @@ extension GameComponentExtensions on GameComponent {
         ? (this as ObjectCollision).rectCollision
         : this.position);
 
-    initPosition = initPosition.translate(
-      (initPosition.width - width) / 2,
-      (initPosition.height - height) / 2,
-    );
+    Vector2 startPosition = initPosition.center.toVector2();
 
-    double displacement = max(initPosition.width, initPosition.height);
+    double displacement = max(initPosition.width, initPosition.height) * 1.2;
     double nextX = displacement * cos(radAngleDirection);
     double nextY = displacement * sin(radAngleDirection);
 
-    Offset diffBase = Offset(nextX, nextY);
+    Vector2 diffBase = Vector2(nextX, nextY);
 
-    Vector2Rect position = initPosition.shift(diffBase);
+    startPosition.add(diffBase);
+    startPosition.add(Vector2(-width / 2, -height / 2));
     gameRef.add(FlyingAttackAngleObject(
       id: id,
-      position: position.position,
+      position: startPosition,
       radAngle: radAngleDirection,
       width: width,
       height: height,

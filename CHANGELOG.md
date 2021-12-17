@@ -1,3 +1,6 @@
+# [NEXT]
+- fix bug in `simpleAttackRangeByAngle`
+
 # [1.12.3]
 - Improvements in collision objects by Tiled.
 
