@@ -16,8 +16,6 @@ abstract class GameComponent extends PositionComponent
   /// When true this component render above all components in game.
   bool aboveComponents = false;
 
-  Color debugColor = const Color(0xFFFF00FF);
-
   /// Map available to store times that can be used to control the frequency of any action.
   Map<String, IntervalTick> _timers = Map();
 
@@ -38,18 +36,6 @@ abstract class GameComponent extends PositionComponent
 
   /// Get BuildContext
   BuildContext get context => gameRef.context;
-
-  Paint get debugPaint => Paint()
-    ..color = debugColor
-    ..strokeWidth = 1
-    ..style = PaintingStyle.stroke;
-
-  TextPaint get debugTextPaint => TextPaint(
-        style: TextStyle(
-          color: debugColor,
-          fontSize: 12,
-        ),
-      );
 
   /// Method that checks if this component is visible on the screen
   bool _isVisibleInCamera() {
