@@ -131,7 +131,8 @@ class BonfireGame extends BaseGame
     this.onTapUp,
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
-  }) : _joystickController = joystickController {
+  })  : _joystickController = joystickController,
+        super(camera: BonfireCamera(cameraConfig ?? CameraConfig())) {
     _initialEnemies = enemies;
     _initialDecorations = decorations;
     _initialComponents = components;
@@ -139,10 +140,10 @@ class BonfireGame extends BaseGame
     debugMode = constructionMode;
 
     gameController?.gameRef = this;
-    camera = Camera(cameraConfig ?? CameraConfig());
-    camera.gameRef = this;
+
+    camera.setGame(this);
     if (camera.config.target == null && player != null) {
-      camera.moveToTarget(player!);
+      camera.config.target = player;
     }
 
     _interval = IntervalTick(
@@ -193,7 +194,8 @@ class BonfireGame extends BaseGame
     await add(_lighting!);
     await add(interface ?? GameInterface());
     await add(_joystickController ?? Joystick());
-    _joystickController?.addObserver(player ?? MapExplorer(camera));
+    _joystickController
+        ?.addObserver(player ?? MapExplorer(camera as BonfireCamera));
   }
 
   @override
@@ -378,12 +380,12 @@ class BonfireGame extends BaseGame
 
   @override
   Vector2 worldPositionToScreen(Vector2 position) {
-    return camera.worldPositionToScreen(position);
+    return camera.worldToScreen(position);
   }
 
   @override
   Vector2 screenPositionToWorld(Vector2 position) {
-    return camera.screenPositionToWorld(position);
+    return camera.screenToWorld(position);
   }
 
   @override
@@ -399,7 +401,7 @@ class BonfireGame extends BaseGame
     onTapDown?.call(
       this,
       localPosition,
-      camera.screenPositionToWorld(localPosition),
+      camera.screenToWorld(localPosition),
     );
     super.onPointerDown(event);
   }
@@ -410,7 +412,7 @@ class BonfireGame extends BaseGame
     onTapUp?.call(
       this,
       localPosition,
-      camera.screenPositionToWorld(localPosition),
+      camera.screenToWorld(localPosition),
     );
     super.onPointerUp(event);
   }

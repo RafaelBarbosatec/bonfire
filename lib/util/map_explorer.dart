@@ -4,7 +4,7 @@ import 'package:bonfire/joystick/joystick_controller.dart';
 import '../bonfire.dart';
 
 class MapExplorer with JoystickListener {
-  final Camera camera;
+  final BonfireCamera camera;
 
   MapExplorer(this.camera);
 

@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/camera/camera.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/decoration/decoration.dart';
@@ -37,7 +36,7 @@ abstract class BonfireGameInterface {
   JoystickController? get joystick;
   LightingInterface? get lighting;
   ColorFilterInterface? get colorFilter;
-  Camera get camera;
+  flameGame.Camera get camera;
   MapGame get map;
   ComponentSet get children;
   int get highestPriority;

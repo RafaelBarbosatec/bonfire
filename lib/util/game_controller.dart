@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/camera/camera.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/enemy/enemy.dart';
+import 'package:flame/game.dart';
 
 import 'bonfire_game_ref.dart';
 

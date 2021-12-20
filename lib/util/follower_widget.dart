@@ -82,7 +82,7 @@ class _FollowerWidgetState extends State<FollowerWidget> {
   Vector2 targetPosition = Vector2.zero();
   Offset? widgetPosition;
   double lastZoom = 0.0;
-  Offset lastCameraPosition = Offset.zero;
+  Vector2 lastCameraPosition = Vector2.zero();
 
   async.Timer? _timerUpdate;
   @override

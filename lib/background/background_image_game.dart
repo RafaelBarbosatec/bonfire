@@ -47,8 +47,8 @@ class BackgroundImageGame extends GameBackground {
   @override
   void update(double dt) {
     position = Vector2(
-      gameRef.camera.position.dx * -1 * parallaxX,
-      gameRef.camera.position.dy * -1 * parallaxY,
+      gameRef.camera.position.x * -1 * parallaxX,
+      gameRef.camera.position.y * -1 * parallaxY,
     );
     super.update(dt);
   }

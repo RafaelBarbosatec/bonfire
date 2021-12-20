@@ -39,7 +39,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
   void render(Canvas canvas) {
     super.render(canvas);
     if (!_containsColor()) return;
-    Vector2 size = gameRef.size;
+    Vector2 size = gameRef.camera.canvasSize;
     canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
     canvas.drawColor(color!, BlendMode.dstATop);
     _visibleLight.forEach((light) {
@@ -49,11 +49,9 @@ class LightingComponent extends GameComponent implements LightingInterface {
       config.update(_dtUpdate);
       canvas.save();
 
-      canvas.translate(size.x / 2, size.y / 2);
-      canvas.scale(gameRef.camera.config.zoom);
       canvas.translate(
-        -(gameRef.camera.position.dx),
-        -(gameRef.camera.position.dy),
+        -(gameRef.camera.position.x),
+        -(gameRef.camera.position.y),
       );
 
       canvas.drawCircle(

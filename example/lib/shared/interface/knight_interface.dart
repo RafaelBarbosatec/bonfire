@@ -32,9 +32,9 @@ class KnightInterface extends GameInterface {
       position: Vector2(200, 20),
       selectable: true,
       onTapComponent: (selected) {
-        if (gameRef.player != null) {
-          (gameRef.player as Knight).changeControllerToVisibleEnemy();
-        }
+        // if (gameRef.player != null) {
+        //   (gameRef.player as Knight).changeControllerToVisibleEnemy();
+        // }
       },
     ));
     add(InterfaceComponent(
@@ -84,13 +84,13 @@ class KnightInterface extends GameInterface {
       selectable: false,
       onTapComponent: (selected) {
         // Simple rotation loop
-        gameRef.camera.animateLoopRotation(
-          angles: [0.1, -0.1],
-          repeatCount: 3,
-          onFinish: () {
-            print('finished loop rotation');
-          },
-        );
+        // gameRef.camera.animateLoopRotation(
+        //   angles: [0.1, -0.1],
+        //   repeatCount: 3,
+        //   onFinish: () {
+        //     print('finished loop rotation');
+        //   },
+        // );
         // Advanced example
         // gameRef.camera.animateLoopRotation(
         //   angles: [0.1, -0.1, -0.2],

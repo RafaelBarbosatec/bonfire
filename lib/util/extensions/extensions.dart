@@ -3,6 +3,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/camera/camera.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart' as widget;
 
 export 'attackable_extensions.dart';
@@ -173,6 +175,10 @@ extension Vector2Ext on Vector2 {
   Vector2 translate(double x, double y) {
     return Vector2(this.x + x, this.y + y);
   }
+
+  Vector2 copyWith({double? x, double? y}) {
+    return Vector2(x ?? this.x, y ?? this.y);
+  }
 }
 
 extension ObjectExt<T> on T {
@@ -285,4 +291,70 @@ extension FutureSpriteExt on FutureOr<Sprite> {
 
 extension ComponentExt on Component {
   bool get isHud => positionType == PositionType.viewport;
+}
+
+extension CameraExt on Camera {
+  void setGame(BonfireGame game) {
+    if (!(this is BonfireCamera)) {
+      return;
+    }
+    (this as BonfireCamera).gameRef = game;
+  }
+
+  bool get isMoving => (this as BonfireCamera).isMoving;
+  CameraConfig get config => (this as BonfireCamera).config;
+
+  Rect get cameraRectWithSpacing =>
+      (this as BonfireCamera).cameraRectWithSpacing;
+
+  Rect get cameraRect => (this as BonfireCamera).cameraRect;
+
+  void updateSpacingVisibleMap(double space) =>
+      (this as BonfireCamera).updateSpacingVisibleMap(space);
+
+  bool isComponentOnCamera(GameComponent c) {
+    return isRectOnCamera(c.toRect());
+  }
+
+  bool contains(Offset c) {
+    return cameraRectWithSpacing.contains(c);
+  }
+
+  bool isRectOnCamera(Rect c) {
+    return cameraRectWithSpacing.overlaps(c);
+  }
+
+  void moveToTargetAnimated(
+    GameComponent target, {
+    double zoom = 1,
+    double angle = 0,
+    VoidCallback? finish,
+    Duration? duration,
+    widget.Curve curve = widget.Curves.decelerate,
+  }) {
+    (this as BonfireCamera).moveToTargetAnimated(
+      target,
+      zoom: zoom,
+      angle: angle,
+      finish: finish,
+      duration: duration,
+      curve: curve,
+    );
+  }
+
+  void moveToPlayerAnimated({
+    Duration? duration,
+    VoidCallback? finish,
+    double zoom = 1,
+    double angle = 0,
+    widget.Curve curve = widget.Curves.decelerate,
+  }) {
+    (this as BonfireCamera).moveToPlayerAnimated(
+      zoom: zoom,
+      angle: angle,
+      finish: finish,
+      duration: duration,
+      curve: curve,
+    );
+  }
 }
