@@ -9,17 +9,27 @@ import 'camera_config.dart';
 
 class BonfireCamera extends Camera {
   bool _isMoving = false;
+  bool moveOnlyMapArea = false;
+  bool smoothCameraEnable = false;
   double _spacingMap = 32.0;
-  final CameraConfig config;
+  double angle = 0;
+  Vector2 sizeMovementWindow = Vector2(50, 50);
+  GameComponent? target;
   late BonfireGame gameRef;
 
   BonfireCamera(
-    this.config,
+    CameraConfig config,
   ) {
+    sizeMovementWindow = config.sizeMovementWindow;
+    smoothCameraEnable = config.smoothCameraEnable;
     speed = config.smoothCameraSpeed;
-    if (config.target != null) {
-      snapTo(config.target!.position);
-      followComponent(config.target!);
+    zoom = config.zoom;
+    angle = config.angle;
+    target = config.target;
+    moveOnlyMapArea = config.moveOnlyMapArea;
+    if (target != null) {
+      snapTo(target!.position);
+      followComponent(target!);
     }
   }
 
@@ -38,8 +48,6 @@ class BonfireCamera extends Camera {
         cameraRect.width + (_spacingMap * 2),
         cameraRect.height + (_spacingMap * 2),
       );
-
-  double get angle => config.angle;
 
   void moveTop(double displacement) {
     moveTo(position.translate(0, displacement * -1));
@@ -66,7 +74,7 @@ class BonfireCamera extends Camera {
     Curve curve = Curves.decelerate,
   }) {
     if (zoom <= 0.0 || _isMoving) return;
-    config.target = null;
+    this.target = null;
     _isMoving = true;
 
     double diffX = this.position.x - position.dx;
@@ -74,11 +82,11 @@ class BonfireCamera extends Camera {
     double originX = this.position.x;
     double originY = this.position.y;
 
-    double diffZoom = config.zoom - zoom;
-    double initialZoom = config.zoom;
+    double diffZoom = this.zoom - zoom;
+    double initialZoom = this.zoom;
 
-    double diffAngle = config.angle - angle;
-    double originAngle = config.angle;
+    double diffAngle = this.angle - angle;
+    double originAngle = this.angle;
 
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
@@ -94,9 +102,9 @@ class BonfireCamera extends Camera {
               ),
         );
         this.zoom = initialZoom - (diffZoom * value);
-        config.angle = originAngle - (diffAngle * value);
+        this.angle = originAngle - (diffAngle * value);
 
-        if (config.moveOnlyMapArea) {
+        if (this.moveOnlyMapArea) {
           _keepInMapArea();
         }
       },
@@ -117,7 +125,7 @@ class BonfireCamera extends Camera {
     Curve curve = Curves.decelerate,
   }) {
     if (zoom <= 0.0 || _isMoving) return;
-    config.target = null;
+    this.target = null;
     _isMoving = true;
 
     Vector2 originPosition = this.position.clone();
@@ -125,8 +133,8 @@ class BonfireCamera extends Camera {
     double diffZoom = this.zoom - zoom;
     double initialZoom = this.zoom;
 
-    double diffAngle = config.angle - angle;
-    double originAngle = config.angle;
+    double diffAngle = this.angle - angle;
+    double originAngle = this.angle;
 
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
@@ -141,14 +149,14 @@ class BonfireCamera extends Camera {
           ),
         );
         this.zoom = initialZoom - (diffZoom * value);
-        config.angle = originAngle - (diffAngle * value);
+        this.angle = originAngle - (diffAngle * value);
 
-        if (config.moveOnlyMapArea) {
+        if (this.moveOnlyMapArea) {
           _keepInMapArea();
         }
       },
       onFinish: () {
-        config.target = target;
+        this.target = target;
         _isMoving = false;
         finish?.call();
       },
@@ -157,16 +165,16 @@ class BonfireCamera extends Camera {
   }
 
   void moveToPosition(Vector2 position) {
-    config.target = null;
+    target = null;
     snapTo(position);
   }
 
   void moveToPlayer() {
-    config.target = gameRef.player;
+    this.target = gameRef.player;
   }
 
   void moveToTarget(GameComponent? target) {
-    config.target = target;
+    this.target = target;
   }
 
   void moveToPlayerAnimated({
@@ -192,16 +200,16 @@ class BonfireCamera extends Camera {
     double sizeHorizontal = 50,
     double sizeVertical = 50,
   }) {
-    if (config.target != null && !_isMoving) {
+    if (this.target != null && !_isMoving) {
       _moveCameraToTarget(
         dt,
-        enableSmooth: config.smoothCameraEnable,
+        enableSmooth: this.smoothCameraEnable,
         sizeHorizontal: sizeHorizontal,
         sizeVertical: sizeVertical,
       );
     }
 
-    if (config.moveOnlyMapArea) {
+    if (this.moveOnlyMapArea) {
       _keepInMapArea();
     }
   }
@@ -265,13 +273,13 @@ class BonfireCamera extends Camera {
 
     _isMoving = true;
 
-    double diffZoom = config.zoom - (zoom);
-    double initialZoom = config.zoom;
+    double diffZoom = this.zoom - zoom;
+    double initialZoom = this.zoom;
 
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
-        config.zoom = initialZoom - (diffZoom * value);
+        this.zoom = initialZoom - (diffZoom * value);
       },
       onFinish: () {
         _isMoving = false;
@@ -289,13 +297,13 @@ class BonfireCamera extends Camera {
   }) {
     _isMoving = true;
 
-    final diffAngle = config.angle - angle;
-    final originAngle = config.angle;
+    final diffAngle = this.angle - angle;
+    final originAngle = this.angle;
 
     gameRef.getValueGenerator(
       duration ?? const Duration(seconds: 1),
       onChange: (value) {
-        config.angle = originAngle - (diffAngle * value);
+        this.angle = originAngle - (diffAngle * value);
       },
       onFinish: () {
         _isMoving = false;
@@ -353,8 +361,8 @@ class BonfireCamera extends Camera {
     if (dt != 0) {
       _followTarget(
         dt,
-        sizeVertical: config.sizeMovementWindow.height,
-        sizeHorizontal: config.sizeMovementWindow.width,
+        sizeVertical: this.sizeMovementWindow.y,
+        sizeHorizontal: this.sizeMovementWindow.x,
       );
     }
   }
@@ -394,17 +402,14 @@ class BonfireCamera extends Camera {
   }
 
   double _zoomFactor() {
-    if (config.zoom > 1) return 1;
-    return 1 / config.zoom;
+    if (this.zoom > 1) return 1;
+    return 1 / this.zoom;
   }
 
   Vector2 _getCenterTarget() {
-    if (config.target?.isObjectCollision() == true) {
-      return (config.target as ObjectCollision)
-          .rectCollision
-          .center
-          .toVector2();
+    if (this.target?.isObjectCollision() == true) {
+      return (this.target as ObjectCollision).rectCollision.center.toVector2();
     }
-    return config.target?.center ?? Vector2.zero();
+    return this.target?.center ?? Vector2.zero();
   }
 }

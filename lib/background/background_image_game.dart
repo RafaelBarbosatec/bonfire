@@ -46,9 +46,11 @@ class BackgroundImageGame extends GameBackground {
 
   @override
   void update(double dt) {
+    double camX = gameRef.camera.position.x;
+    double camY = gameRef.camera.position.y;
     position = Vector2(
-      gameRef.camera.position.x * -1 * parallaxX,
-      gameRef.camera.position.y * -1 * parallaxY,
+      offset.x + (camX * -1 * parallaxX),
+      offset.y + (camY * -1 * parallaxY),
     );
     super.update(dt);
   }
@@ -57,6 +59,7 @@ class BackgroundImageGame extends GameBackground {
   Future<void>? onLoad() async {
     imageSprite = await MapAssetsManager.getFutureSprite(imagePath);
     position = Vector2(offset.x, offset.y);
+
     size = Vector2(
       imageSprite!.image.width * factor,
       imageSprite!.image.height * factor,

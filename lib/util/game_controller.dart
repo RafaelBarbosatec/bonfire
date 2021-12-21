@@ -10,7 +10,7 @@ abstract class GameListener {
   void changeCountLiveEnemies(int count);
 }
 
-class GameController with BonfireHasGameRef {
+class GameController extends Component with BonfireHasGameRef {
   List<GameListener> _gameListeners = [];
   int _lastCountLiveEnemies = 0;
 

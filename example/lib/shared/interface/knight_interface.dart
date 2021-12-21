@@ -32,9 +32,9 @@ class KnightInterface extends GameInterface {
       position: Vector2(200, 20),
       selectable: true,
       onTapComponent: (selected) {
-        // if (gameRef.player != null) {
-        //   (gameRef.player as Knight).changeControllerToVisibleEnemy();
-        // }
+        if (gameRef.player != null) {
+          (gameRef.player as Knight).changeControllerToVisibleEnemy();
+        }
       },
     ));
     add(InterfaceComponent(

@@ -114,14 +114,14 @@ class _FollowerWidgetState extends State<FollowerWidget> {
     final camera = widget.target.gameRef.camera;
     _timerUpdate = async.Timer.periodic(Duration(milliseconds: 16), (timer) {
       if (targetPosition != widget.target.position ||
-          camera.config.zoom != lastZoom ||
+          camera.zoom != lastZoom ||
           camera.position != lastCameraPosition) {
         lastCameraPosition = camera.position;
-        lastZoom = camera.config.zoom;
+        lastZoom = camera.zoom;
         targetPosition = widget.target.position;
         if (mounted) {
           setState(() {
-            widgetPosition = widget.target.getScreenPosition().toOffset();
+            widgetPosition = widget.target.screenPosition().toOffset();
           });
         }
       }

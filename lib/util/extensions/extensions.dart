@@ -301,8 +301,9 @@ extension CameraExt on Camera {
     (this as BonfireCamera).gameRef = game;
   }
 
+  GameComponent? get target => (this as BonfireCamera).target;
+  set target(GameComponent? t) => (this as BonfireCamera).target = t;
   bool get isMoving => (this as BonfireCamera).isMoving;
-  CameraConfig get config => (this as BonfireCamera).config;
 
   Rect get cameraRectWithSpacing =>
       (this as BonfireCamera).cameraRectWithSpacing;

@@ -17,7 +17,6 @@ import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/map_explorer.dart';
@@ -139,11 +138,9 @@ class BonfireGame extends BaseGame
     _colorFilter = colorFilter;
     debugMode = constructionMode;
 
-    gameController?.gameRef = this;
-
     camera.setGame(this);
-    if (camera.config.target == null && player != null) {
-      camera.config.target = player;
+    if (camera.target == null && player != null) {
+      camera.target = player;
     }
 
     _interval = IntervalTick(
@@ -189,13 +186,17 @@ class BonfireGame extends BaseGame
     if (player != null) {
       await add(player!);
     }
-    _lighting =
-        LightingComponent(color: lightingColorGame ?? Color(0x00000000));
+    _lighting = LightingComponent(
+      color: lightingColorGame ?? Color(0x00000000),
+    );
     await add(_lighting!);
     await add(interface ?? GameInterface());
     await add(_joystickController ?? Joystick());
     _joystickController
         ?.addObserver(player ?? MapExplorer(camera as BonfireCamera));
+    if (gameController != null) {
+      await add(gameController!);
+    }
   }
 
   @override
@@ -210,24 +211,6 @@ class BonfireGame extends BaseGame
   void onMount() {
     onReady?.call(this);
     super.onMount();
-  }
-
-  @override
-  Future<void> add(Component component) {
-    if (component is BonfireHasGameRef) {
-      (component as BonfireHasGameRef).gameRef = this;
-    }
-    return super.add(component);
-  }
-
-  @override
-  Future<void> addAll(Iterable<Component> components) {
-    components.forEach((element) {
-      if (element is BonfireHasGameRef) {
-        (element as BonfireHasGameRef).gameRef = this;
-      }
-    });
-    return super.addAll(components);
   }
 
   @override

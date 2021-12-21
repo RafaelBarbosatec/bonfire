@@ -313,10 +313,10 @@ class MapWorld extends MapGame {
 
   bool _checkNeedUpdateTiles() {
     final camera = _getCameraTileUpdate();
-    if (lastCamera != camera || lastMinorZoom > gameRef.camera.config.zoom) {
+    if (lastCamera != camera || lastMinorZoom > gameRef.camera.zoom) {
       lastCamera = camera;
-      if (lastMinorZoom > gameRef.camera.config.zoom) {
-        lastMinorZoom = gameRef.camera.config.zoom;
+      if (lastMinorZoom > gameRef.camera.zoom) {
+        lastMinorZoom = gameRef.camera.zoom;
       }
       return true;
     }
