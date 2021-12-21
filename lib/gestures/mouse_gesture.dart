@@ -22,7 +22,7 @@ mixin MouseGesture on GameComponent {
         onHoverExit(pointer, position);
       }
     } else {
-      final absolutePosition = this.gameRef.screenPositionToWorld(position);
+      final absolutePosition = this.gameRef.screenToWorld(position);
       if (containsPoint(absolutePosition)) {
         onHoverEnter(pointer, position);
       } else {
@@ -44,7 +44,7 @@ mixin MouseGesture on GameComponent {
         onScroll(pointer, position, scrollDelta);
       }
     } else {
-      final absolutePosition = this.gameRef.screenPositionToWorld(position);
+      final absolutePosition = this.gameRef.screenToWorld(position);
       if (containsPoint(absolutePosition)) {
         onScroll(pointer, position, scrollDelta);
       }
@@ -77,7 +77,7 @@ mixin MouseGesture on GameComponent {
           }
         }
       } else {
-        final absolutePosition = this.gameRef.screenPositionToWorld(position);
+        final absolutePosition = this.gameRef.screenToWorld(position);
         if (containsPoint(absolutePosition)) {
           _pointer = pointer;
           _buttonClicked = event.buttons;
@@ -125,7 +125,7 @@ mixin MouseGesture on GameComponent {
           onMouseCancel();
         }
       } else {
-        final absolutePosition = this.gameRef.screenPositionToWorld(position);
+        final absolutePosition = this.gameRef.screenToWorld(position);
         if (containsPoint(absolutePosition)) {
           switch (_buttonClicked) {
             case kPrimaryMouseButton:

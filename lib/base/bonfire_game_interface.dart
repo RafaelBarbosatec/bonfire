@@ -79,9 +79,9 @@ abstract class BonfireGameInterface {
     ValueChanged<double>? onChange,
   });
 
-  Vector2 worldPositionToScreen(Vector2 position);
+  Vector2 worldToScreen(Vector2 position);
 
-  Vector2 screenPositionToWorld(Vector2 position);
+  Vector2 screenToWorld(Vector2 position);
 
   bool isVisibleInCamera(GameComponent c);
 

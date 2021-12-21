@@ -362,12 +362,12 @@ class BonfireGame extends BaseGame
   }
 
   @override
-  Vector2 worldPositionToScreen(Vector2 position) {
+  Vector2 worldToScreen(Vector2 position) {
     return camera.worldToScreen(position);
   }
 
   @override
-  Vector2 screenPositionToWorld(Vector2 position) {
+  Vector2 screenToWorld(Vector2 position) {
     return camera.screenToWorld(position);
   }
 

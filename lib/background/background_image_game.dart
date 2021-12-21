@@ -56,7 +56,6 @@ class BackgroundImageGame extends GameBackground {
 
   @override
   Future<void>? onLoad() async {
-    print(factor);
     imageSprite = await MapAssetsManager.getFutureSprite(imagePath);
     _parallaxOffset = Vector2(offset.x * factor, offset.y * factor);
     position = _parallaxOffset.clone();
