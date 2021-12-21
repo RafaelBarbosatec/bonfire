@@ -1,5 +1,6 @@
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flutter/widgets.dart';
 
 /// Mixin used to configure lighting in your component

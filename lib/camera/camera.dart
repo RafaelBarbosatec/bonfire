@@ -1,64 +1,68 @@
-import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/bonfire_game_ref.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
 
 import 'camera_config.dart';
 
-class Camera with BonfireHasGameRef {
+class BonfireCamera extends Camera {
   bool _isMoving = false;
+  bool moveOnlyMapArea = false;
+  bool smoothCameraEnable = false;
   double _spacingMap = 32.0;
-  Offset position = Offset.zero;
-  final CameraConfig config;
+  double angle = 0;
+  Vector2 sizeMovementWindow = Vector2(50, 50);
+  GameComponent? target;
+  late BonfireGame gameRef;
 
-  Camera(this.config);
+  BonfireCamera(
+    CameraConfig config,
+  ) {
+    sizeMovementWindow = config.sizeMovementWindow;
+    smoothCameraEnable = config.smoothCameraEnable;
+    speed = config.smoothCameraSpeed;
+    zoom = config.zoom;
+    angle = config.angle;
+    target = config.target;
+    moveOnlyMapArea = config.moveOnlyMapArea;
+    if (target != null) {
+      snapTo(target!.position);
+      followComponent(target!);
+    }
+  }
 
   bool get isMoving => _isMoving;
 
-  Rect get cameraRect => Rect.fromCenter(
-        center: Offset(position.dx, position.dy),
-        width: (gameRef.size.x) * _zoomFactor(),
-        height: (gameRef.size.y) * _zoomFactor(),
+  Rect get cameraRect => Rect.fromLTWH(
+        position.x,
+        position.y,
+        (canvasSize.x) * _zoomFactor(),
+        (canvasSize.y) * _zoomFactor(),
       );
 
-  Rect get cameraRectWithSpacing => Rect.fromCenter(
-        center: Offset(position.dx, position.dy),
-        width: cameraRect.width + (_spacingMap * 2),
-        height: cameraRect.height + (_spacingMap * 2),
+  Rect get cameraRectWithSpacing => Rect.fromLTWH(
+        position.x - _spacingMap,
+        position.y - _spacingMap,
+        cameraRect.width + (_spacingMap * 2),
+        cameraRect.height + (_spacingMap * 2),
       );
-
-  /// Remaining time in seconds for the camera shake.
-  double _shakeTimer = 0.0;
-
-  /// The intensity of the current shake action.
-  double _shakeIntensity = 0.0;
-
-  /// Save the last position before shaking starts
-  Offset _lastPositionBeforeShake = Offset.zero;
-
-  double defaultShakeIntensity = 8.0; // in pixels
-  double defaultShakeDuration = 1; // in seconds
-
-  double get zoom => config.zoom;
-  double get angle => config.angle;
 
   void moveTop(double displacement) {
-    position = position.translate(0, displacement * -1);
+    snapTo(position.translate(0, displacement * -1));
   }
 
   void moveRight(double displacement) {
-    position = position.translate(displacement, 0);
+    snapTo(position.translate(displacement, 0));
   }
 
   void moveDown(double displacement) {
-    position = position.translate(0, displacement);
+    snapTo(position.translate(0, displacement));
   }
 
   void moveUp(double displacement) {
-    position = position.translate(displacement * -1, 0);
+    snapTo(position.translate(displacement * -1, 0));
   }
 
   void moveToPositionAnimated(
@@ -70,33 +74,37 @@ class Camera with BonfireHasGameRef {
     Curve curve = Curves.decelerate,
   }) {
     if (zoom <= 0.0 || _isMoving) return;
-    config.target = null;
+    this.target = null;
     _isMoving = true;
 
-    double diffX = this.position.dx - position.dx;
-    double diffY = this.position.dy - position.dy;
-    double originX = this.position.dx;
-    double originY = this.position.dy;
+    double diffX = this.position.x - position.dx;
+    double diffY = this.position.y - position.dy;
+    double originX = this.position.x;
+    double originY = this.position.y;
 
-    double diffZoom = config.zoom - zoom;
-    double initialZoom = config.zoom;
+    double diffZoom = this.zoom - zoom;
+    double initialZoom = this.zoom;
 
-    double diffAngle = config.angle - angle;
-    double originAngle = config.angle;
+    double diffAngle = this.angle - angle;
+    double originAngle = this.angle;
 
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
-        this.position = this.position.copyWith(
-              x: originX - (diffX * value),
-            );
-        this.position = this.position.copyWith(
-              y: originY - (diffY * value),
-            );
-        config.zoom = initialZoom - (diffZoom * value);
-        config.angle = originAngle - (diffAngle * value);
+        snapTo(
+          this.position.copyWith(
+                x: originX - (diffX * value),
+              ),
+        );
+        snapTo(
+          this.position.copyWith(
+                y: originY - (diffY * value),
+              ),
+        );
+        this.zoom = initialZoom - (diffZoom * value);
+        this.angle = originAngle - (diffAngle * value);
 
-        if (config.moveOnlyMapArea) {
+        if (this.moveOnlyMapArea) {
           _keepInMapArea();
         }
       },
@@ -117,35 +125,38 @@ class Camera with BonfireHasGameRef {
     Curve curve = Curves.decelerate,
   }) {
     if (zoom <= 0.0 || _isMoving) return;
-    config.target = null;
+    this.target = null;
     _isMoving = true;
 
-    double originX = this.position.dx;
-    double originY = this.position.dy;
+    Vector2 originPosition = this.position.clone();
 
-    double diffZoom = config.zoom - zoom;
-    double initialZoom = config.zoom;
+    double diffZoom = this.zoom - zoom;
+    double initialZoom = this.zoom;
 
-    double diffAngle = config.angle - angle;
-    double originAngle = config.angle;
+    double diffAngle = this.angle - angle;
+    double originAngle = this.angle;
 
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
-        double diffX = originX - target.center.x;
-        double diffY = originY - target.center.y;
+        double diffX = (originPosition.x + gameSize.x / 2) - target.center.x;
+        double diffY = (originPosition.y + gameSize.y / 2) - target.center.y;
 
-        this.position = position.copyWith(x: originX - (diffX * value));
-        this.position = position.copyWith(y: originY - (diffY * value));
-        config.zoom = initialZoom - (diffZoom * value);
-        config.angle = originAngle - (diffAngle * value);
+        snapTo(
+          Vector2(
+            originPosition.x - (diffX * value),
+            originPosition.y - (diffY * value),
+          ),
+        );
+        this.zoom = initialZoom - (diffZoom * value);
+        this.angle = originAngle - (diffAngle * value);
 
-        if (config.moveOnlyMapArea) {
+        if (this.moveOnlyMapArea) {
           _keepInMapArea();
         }
       },
       onFinish: () {
-        config.target = target;
+        this.target = target;
         _isMoving = false;
         finish?.call();
       },
@@ -153,17 +164,17 @@ class Camera with BonfireHasGameRef {
     ).start();
   }
 
-  void moveToPosition(Offset position) {
-    config.target = null;
-    this.position = position;
+  void moveToPosition(Vector2 position) {
+    target = null;
+    snapTo(position);
   }
 
   void moveToPlayer() {
-    config.target = gameRef.player;
+    this.target = gameRef.player;
   }
 
   void moveToTarget(GameComponent? target) {
-    config.target = target;
+    this.target = target;
   }
 
   void moveToPlayerAnimated({
@@ -189,16 +200,16 @@ class Camera with BonfireHasGameRef {
     double sizeHorizontal = 50,
     double sizeVertical = 50,
   }) {
-    if (config.target == null) return;
+    if (this.target != null && !_isMoving) {
+      _moveCameraToTarget(
+        dt,
+        enableSmooth: this.smoothCameraEnable,
+        sizeHorizontal: sizeHorizontal,
+        sizeVertical: sizeVertical,
+      );
+    }
 
-    _moveCameraToTarget(
-      dt,
-      enableSmooth: config.smoothCameraEnable,
-      sizeHorizontal: sizeHorizontal,
-      sizeVertical: sizeVertical,
-    );
-
-    if (config.moveOnlyMapArea) {
+    if (this.moveOnlyMapArea) {
       _keepInMapArea();
     }
   }
@@ -209,47 +220,47 @@ class Camera with BonfireHasGameRef {
     double sizeVertical = 50,
     bool enableSmooth = false,
   }) {
-    final speedSmooth = config.smoothCameraSpeed;
-
     double horizontal = enableSmooth ? 0 : sizeHorizontal;
     double vertical = enableSmooth ? 0 : sizeVertical;
 
     final screenCenter = Offset(
-      gameRef.size.x / 2,
-      gameRef.size.y / 2,
+      canvasSize.x / 2,
+      canvasSize.y / 2,
     );
 
     final centerTarget = _getCenterTarget();
-    final positionTarget = worldPositionToScreen(centerTarget);
+    final positionTarget = worldToScreen(centerTarget);
 
     final horizontalDistance = screenCenter.dx - positionTarget.x;
     final verticalDistance = screenCenter.dy - positionTarget.y;
 
-    double newX = this.position.dx;
-    double newY = this.position.dy;
+    double newX = this.position.x;
+    double newY = this.position.y;
 
     if (horizontalDistance.abs() > horizontal) {
-      newX = this.position.dx +
+      newX = this.position.x +
           (horizontalDistance > 0
               ? horizontal - horizontalDistance
               : -horizontalDistance - horizontal);
     }
 
     if (verticalDistance.abs() > vertical) {
-      newY = this.position.dy +
+      newY = this.position.y +
           (verticalDistance > 0
               ? vertical - verticalDistance
               : -verticalDistance - vertical);
     }
 
-    this.position = this.position.copyWith(
-          x: enableSmooth
-              ? lerpDouble(this.position.dx, newX, dt * speedSmooth)
-              : newX,
-          y: enableSmooth
-              ? lerpDouble(this.position.dy, newY, dt * speedSmooth)
-              : newY,
-        );
+    snapTo(
+      this.position.copyWith(
+            x: enableSmooth
+                ? lerpDouble(this.position.x, newX, dt * speed)
+                : newX,
+            y: enableSmooth
+                ? lerpDouble(this.position.y, newY, dt * speed)
+                : newY,
+          ),
+    );
   }
 
   void animateZoom({
@@ -262,13 +273,13 @@ class Camera with BonfireHasGameRef {
 
     _isMoving = true;
 
-    double diffZoom = config.zoom - (zoom);
-    double initialZoom = config.zoom;
+    double diffZoom = this.zoom - zoom;
+    double initialZoom = this.zoom;
 
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
-        config.zoom = initialZoom - (diffZoom * value);
+        this.zoom = initialZoom - (diffZoom * value);
       },
       onFinish: () {
         _isMoving = false;
@@ -286,13 +297,13 @@ class Camera with BonfireHasGameRef {
   }) {
     _isMoving = true;
 
-    final diffAngle = config.angle - angle;
-    final originAngle = config.angle;
+    final diffAngle = this.angle - angle;
+    final originAngle = this.angle;
 
     gameRef.getValueGenerator(
       duration ?? const Duration(seconds: 1),
       onChange: (value) {
-        config.angle = originAngle - (diffAngle * value);
+        this.angle = originAngle - (diffAngle * value);
       },
       onFinish: () {
         _isMoving = false;
@@ -329,7 +340,7 @@ class Camera with BonfireHasGameRef {
       });
       currentRepetition++;
     }
-    if (normalizeOnFinish) gameRef.camera.animateSimpleRotation(angle: 0.0);
+    if (normalizeOnFinish) animateSimpleRotation(angle: 0.0);
     onFinish?.call();
   }
 
@@ -345,89 +356,14 @@ class Camera with BonfireHasGameRef {
     return cameraRectWithSpacing.overlaps(c);
   }
 
-  Vector2 worldPositionToScreen(Vector2 position) {
-    double diffX = position.x - this.cameraRect.center.dx;
-    double diffY = position.y - this.cameraRect.center.dy;
-    return Vector2(
-      (diffX * config.zoom) + (gameRef.size.x / 2),
-      (diffY * config.zoom) + (gameRef.size.y / 2),
-    );
-  }
-
-  Vector2 screenPositionToWorld(Vector2 position) {
-    double diffX = position.x - (gameRef.size.x / 2);
-    double diffY = position.y - (gameRef.size.y / 2);
-    return Vector2(
-      this.cameraRect.center.dx + (diffX / config.zoom),
-      this.cameraRect.center.dy + (diffY / config.zoom),
-    );
-  }
-
-  /// Applies a shaking effect to the camera for [duration] seconds and with
-  /// [intensity] expressed in pixels. If [focusPlayerOnFinishShake] is true,
-  /// camera will focus on player after shaking instead of its last position
-  void shake({
-    double? duration,
-    double? intensity,
-  }) {
-    _shakeTimer += duration ?? defaultShakeDuration;
-    _shakeIntensity = intensity ?? defaultShakeIntensity;
-  }
-
-  /// Whether the camera is currently shaking or not.
-  bool get shaking => _shakeTimer > 0.0;
-
-  /// Buffer to re-use for the shake delta.
-  final _shakeBuffer = Vector2.zero();
-
-  /// The random number generator to use for shaking
-  final _shakeRng = math.Random();
-
-  /// Generates one value between [-1, 1] * [_shakeIntensity] used once for each
-  /// of the axis in the shake delta.
-  double _shakeValue() => (_shakeRng.nextDouble() - 0.5) * 2 * _shakeIntensity;
-
-  /// Generates a random [Offset] of displacement applied to the camera.
-  /// This will be a random [Offset] every tick causing a shakiness effect.
-  Offset _shakeDelta() {
-    if (shaking) {
-      _shakeBuffer.setValues(_shakeValue(), _shakeValue());
-    } else if (!_shakeBuffer.isZero()) {
-      _shakeBuffer.setZero();
-    }
-    return _shakeBuffer.toOffset();
-  }
-
   void update(double dt) {
-    if (!gameRef.hasLayout) return;
-    _doShake();
-
-    _followTarget(
-      dt,
-      sizeVertical: config.sizeMovementWindow.height,
-      sizeHorizontal: config.sizeMovementWindow.width,
-    );
-  }
-
-  void _doShake() {
-    // Update last position if not shaking
-    if (!shaking) {
-      _lastPositionBeforeShake = this.position;
-      return;
-    }
-    // Generate shake Offset
-    final shake = _shakeDelta();
-
-    // Update camera position applying shake effect
-    this.position = this.position + shake;
-    if (shaking) {
-      _shakeTimer -= 0.1;
-      // Go back to target or last position before shake
-      if (_shakeTimer < 0.0) {
-        this.position =
-            config.target?.position.toOffset() ?? _lastPositionBeforeShake;
-        _shakeTimer = 0.0;
-      }
+    super.update(dt);
+    if (dt != 0) {
+      _followTarget(
+        dt,
+        sizeVertical: this.sizeMovementWindow.y,
+        sizeHorizontal: this.sizeMovementWindow.x,
+      );
     }
   }
 
@@ -436,12 +372,11 @@ class Camera with BonfireHasGameRef {
   }
 
   void _keepInMapArea() {
-    if (!hasGameRef) return;
     final startPosition = gameRef.map.mapStartPosition;
     final sizeMap = gameRef.map.mapSize;
     if (startPosition == null || sizeMap == null) return;
 
-    double zoomFactor = 1 / config.zoom;
+    double zoomFactor = 1 / zoom;
 
     double gameWidth = (gameRef.size.x * zoomFactor) / 2;
     double gameHeight = (gameRef.size.y * zoomFactor) / 2;
@@ -451,33 +386,30 @@ class Camera with BonfireHasGameRef {
     final limitMaxX = (sizeMap.width - gameWidth);
     final limitMaxY = (sizeMap.height - gameHeight);
 
-    if (this.position.dx > limitMaxX) {
-      this.position = Offset(limitMaxX, position.dy);
+    if (this.position.x > limitMaxX) {
+      snapTo(Vector2(limitMaxX, position.y));
     }
-    if (this.position.dy > limitMaxY) {
-      this.position = Offset(position.dx, limitMaxY);
+    if (this.position.y > limitMaxY) {
+      snapTo(Vector2(position.x, limitMaxY));
     }
 
-    if (this.position.dx < limitX) {
-      this.position = Offset(limitX, position.dy);
+    if (this.position.x < limitX) {
+      snapTo(Vector2(limitX, position.y));
     }
-    if (this.position.dy < limitY) {
-      this.position = Offset(position.dx, limitY);
+    if (this.position.y < limitY) {
+      snapTo(Vector2(position.x, limitY));
     }
   }
 
   double _zoomFactor() {
-    if (config.zoom > 1) return 1;
-    return 1 / config.zoom;
+    if (this.zoom > 1) return 1;
+    return 1 / this.zoom;
   }
 
   Vector2 _getCenterTarget() {
-    if (config.target?.isObjectCollision() == true) {
-      return (config.target as ObjectCollision)
-          .rectCollision
-          .center
-          .toVector2();
+    if (this.target?.isObjectCollision() == true) {
+      return (this.target as ObjectCollision).rectCollision.center.toVector2();
     }
-    return config.target?.toRect().center.toVector2() ?? Vector2.zero();
+    return this.target?.center ?? Vector2.zero();
   }
 }

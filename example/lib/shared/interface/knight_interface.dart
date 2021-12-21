@@ -84,13 +84,13 @@ class KnightInterface extends GameInterface {
       selectable: false,
       onTapComponent: (selected) {
         // Simple rotation loop
-        gameRef.camera.animateLoopRotation(
-          angles: [0.1, -0.1],
-          repeatCount: 3,
-          onFinish: () {
-            print('finished loop rotation');
-          },
-        );
+        // gameRef.camera.animateLoopRotation(
+        //   angles: [0.1, -0.1],
+        //   repeatCount: 3,
+        //   onFinish: () {
+        //     print('finished loop rotation');
+        //   },
+        // );
         // Advanced example
         // gameRef.camera.animateLoopRotation(
         //   angles: [0.1, -0.1, -0.2],

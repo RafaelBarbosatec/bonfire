@@ -70,6 +70,7 @@ class MapWorld extends MapGame {
 
   void _searchTilesToRender() {
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
+
     final visibleTileModel = quadTree?.query(
           rectCamera.getRectangleByTileSize(tileSize),
         ) ??
@@ -305,17 +306,17 @@ class MapWorld extends MapGame {
 
   Vector2 _getCameraTileUpdate() {
     return Vector2(
-      (gameRef.camera.position.dx / tileSizeToUpdate).floorToDouble(),
-      (gameRef.camera.position.dy / tileSizeToUpdate).floorToDouble(),
+      (gameRef.camera.position.x / tileSizeToUpdate).floorToDouble(),
+      (gameRef.camera.position.y / tileSizeToUpdate).floorToDouble(),
     );
   }
 
   bool _checkNeedUpdateTiles() {
     final camera = _getCameraTileUpdate();
-    if (lastCamera != camera || lastMinorZoom > gameRef.camera.config.zoom) {
+    if (lastCamera != camera || lastMinorZoom > gameRef.camera.zoom) {
       lastCamera = camera;
-      if (lastMinorZoom > gameRef.camera.config.zoom) {
-        lastMinorZoom = gameRef.camera.config.zoom;
+      if (lastMinorZoom > gameRef.camera.zoom) {
+        lastMinorZoom = gameRef.camera.zoom;
       }
       return true;
     }

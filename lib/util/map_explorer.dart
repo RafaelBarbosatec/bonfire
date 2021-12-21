@@ -4,7 +4,7 @@ import 'package:bonfire/joystick/joystick_controller.dart';
 import '../bonfire.dart';
 
 class MapExplorer with JoystickListener {
-  final Camera camera;
+  final BonfireCamera camera;
 
   MapExplorer(this.camera);
 
@@ -13,7 +13,7 @@ class MapExplorer with JoystickListener {
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    double speed = 10 * event.intensity;
+    double speed = 20 * event.intensity;
 
     switch (event.directional) {
       case JoystickMoveDirectional.MOVE_UP:

@@ -23,6 +23,7 @@ class BackgroundImageGame extends GameBackground {
   final double parallaxX;
   final double parallaxY;
   final double opacity;
+  Vector2 _parallaxOffset = Vector2.zero();
 
   Sprite? imageSprite;
   BackgroundImageGame({
@@ -46,9 +47,9 @@ class BackgroundImageGame extends GameBackground {
 
   @override
   void update(double dt) {
-    position = Vector2(
-      gameRef.camera.position.dx * -1 * parallaxX,
-      gameRef.camera.position.dy * -1 * parallaxY,
+    position = _parallaxOffset.translate(
+      (gameRef.camera.position.x * -1 * parallaxX),
+      (gameRef.camera.position.y * -1 * parallaxY),
     );
     super.update(dt);
   }
@@ -56,7 +57,8 @@ class BackgroundImageGame extends GameBackground {
   @override
   Future<void>? onLoad() async {
     imageSprite = await MapAssetsManager.getFutureSprite(imagePath);
-    position = Vector2(offset.x, offset.y);
+    _parallaxOffset = Vector2(offset.x * factor, offset.y * factor);
+    position = _parallaxOffset.clone();
     size = Vector2(
       imageSprite!.image.width * factor,
       imageSprite!.image.height * factor,

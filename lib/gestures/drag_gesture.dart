@@ -20,15 +20,15 @@ mixin DragGesture on GameComponent {
         if (containsPoint(position)) {
           _pointer = pointer;
           _startDragOffset = position;
-          _startDragPosition = this.position;
+          _startDragPosition = this.position.clone();
           onStartDrag(pointer, position);
         }
       } else {
-        final absolutePosition = this.gameRef.screenPositionToWorld(position);
+        final absolutePosition = this.gameRef.screenToWorld(position);
         if (containsPoint(absolutePosition)) {
           _pointer = pointer;
           _startDragOffset = absolutePosition;
-          _startDragPosition = this.position;
+          _startDragPosition = this.position.clone();
         }
       }
     }
@@ -52,7 +52,7 @@ mixin DragGesture on GameComponent {
           _startDragPosition!.y + (position.y - _startDragOffset!.y),
         );
       } else {
-        final absolutePosition = this.gameRef.screenPositionToWorld(position);
+        final absolutePosition = this.gameRef.screenToWorld(position);
         this.position = Vector2(
           _startDragPosition!.x + (absolutePosition.x - _startDragOffset!.x),
           _startDragPosition!.y + (absolutePosition.y - _startDragOffset!.y),

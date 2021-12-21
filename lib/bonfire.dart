@@ -66,6 +66,7 @@ export 'package:bonfire/util/value_generator_component.dart';
 export 'package:bonfire/widgets/bonfire_tiled_widget.dart';
 export 'package:bonfire/widgets/bonfire_widget.dart';
 export 'package:flame/components.dart' hide JoystickComponent, HasGameRef;
+export 'package:flame/effects.dart';
 export 'package:flame/flame.dart';
 export 'package:flame/sprite.dart';
 export 'package:flame/widgets.dart' hide NineTileBox;

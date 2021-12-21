@@ -356,7 +356,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   @override
   void onHoverScreen(int pointer, Vector2 position) {
-    Vector2 p = gameRef.screenPositionToWorld(position);
+    Vector2 p = gameRef.screenToWorld(position);
     double left = p.x - (p.x % DungeonMap.tileSize);
     double top = p.y - (p.y % DungeonMap.tileSize);
     _rectHover = Rect.fromLTWH(left, top, _rectHover.width, _rectHover.height);

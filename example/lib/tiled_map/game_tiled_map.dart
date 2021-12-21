@@ -82,6 +82,7 @@ class GameTiledMap extends StatelessWidget {
           cameraConfig: CameraConfig(
             smoothCameraEnable: true,
             smoothCameraSpeed: 2,
+            // moveOnlyMapArea: true,
           ),
         );
       },

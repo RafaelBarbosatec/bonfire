@@ -17,7 +17,6 @@ import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/map_explorer.dart';
@@ -131,18 +130,17 @@ class BonfireGame extends BaseGame
     this.onTapUp,
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
-  }) : _joystickController = joystickController {
+  })  : _joystickController = joystickController,
+        super(camera: BonfireCamera(cameraConfig ?? CameraConfig())) {
     _initialEnemies = enemies;
     _initialDecorations = decorations;
     _initialComponents = components;
     _colorFilter = colorFilter;
     debugMode = constructionMode;
 
-    gameController?.gameRef = this;
-    camera = Camera(cameraConfig ?? CameraConfig());
-    camera.gameRef = this;
-    if (camera.config.target == null && player != null) {
-      camera.moveToTarget(player!);
+    camera.setGame(this);
+    if (camera.target == null && player != null) {
+      camera.target = player;
     }
 
     _interval = IntervalTick(
@@ -188,12 +186,17 @@ class BonfireGame extends BaseGame
     if (player != null) {
       await add(player!);
     }
-    _lighting =
-        LightingComponent(color: lightingColorGame ?? Color(0x00000000));
+    _lighting = LightingComponent(
+      color: lightingColorGame ?? Color(0x00000000),
+    );
     await add(_lighting!);
     await add(interface ?? GameInterface());
     await add(_joystickController ?? Joystick());
-    _joystickController?.addObserver(player ?? MapExplorer(camera));
+    _joystickController
+        ?.addObserver(player ?? MapExplorer(camera as BonfireCamera));
+    if (gameController != null) {
+      await add(gameController!);
+    }
   }
 
   @override
@@ -208,24 +211,6 @@ class BonfireGame extends BaseGame
   void onMount() {
     onReady?.call(this);
     super.onMount();
-  }
-
-  @override
-  Future<void> add(Component component) {
-    if (component is BonfireHasGameRef) {
-      (component as BonfireHasGameRef).gameRef = this;
-    }
-    return super.add(component);
-  }
-
-  @override
-  Future<void> addAll(Iterable<Component> components) {
-    components.forEach((element) {
-      if (element is BonfireHasGameRef) {
-        (element as BonfireHasGameRef).gameRef = this;
-      }
-    });
-    return super.addAll(components);
   }
 
   @override
@@ -377,13 +362,13 @@ class BonfireGame extends BaseGame
   }
 
   @override
-  Vector2 worldPositionToScreen(Vector2 position) {
-    return camera.worldPositionToScreen(position);
+  Vector2 worldToScreen(Vector2 position) {
+    return camera.worldToScreen(position);
   }
 
   @override
-  Vector2 screenPositionToWorld(Vector2 position) {
-    return camera.screenPositionToWorld(position);
+  Vector2 screenToWorld(Vector2 position) {
+    return camera.screenToWorld(position);
   }
 
   @override
@@ -399,7 +384,7 @@ class BonfireGame extends BaseGame
     onTapDown?.call(
       this,
       localPosition,
-      camera.screenPositionToWorld(localPosition),
+      camera.screenToWorld(localPosition),
     );
     super.onPointerDown(event);
   }
@@ -410,7 +395,7 @@ class BonfireGame extends BaseGame
     onTapUp?.call(
       this,
       localPosition,
-      camera.screenPositionToWorld(localPosition),
+      camera.screenToWorld(localPosition),
     );
     super.onPointerUp(event);
   }

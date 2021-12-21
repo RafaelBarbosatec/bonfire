@@ -189,9 +189,9 @@ abstract class GameComponent extends PositionComponent
   }
 
   /// Return screen position of this component.
-  Vector2 getScreenPosition() {
+  Vector2 screenPosition() {
     if (hasGameRef) {
-      return gameRef.camera.worldPositionToScreen(
+      return gameRef.camera.worldToScreen(
         position,
       );
     } else {
@@ -224,23 +224,5 @@ abstract class GameComponent extends PositionComponent
         i.handlerPointerCancel(event);
       }
     });
-  }
-
-  @override
-  Future<void> add(Component component) {
-    if (component is BonfireHasGameRef) {
-      (component as BonfireHasGameRef).gameRef = gameRef;
-    }
-    return super.add(component);
-  }
-
-  @override
-  void prepare(Component parent) {
-    super.prepare(parent);
-    debugMode |= parent.debugMode;
-    isPrepared = true;
-    if (hasGameRef) {
-      onGameResize(gameRef.size);
-    }
   }
 }
