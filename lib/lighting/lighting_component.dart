@@ -49,6 +49,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
       config.update(_dtUpdate);
       canvas.save();
 
+      canvas.scale(gameRef.camera.zoom);
       canvas.translate(
         -(gameRef.camera.position.x),
         -(gameRef.camera.position.y),

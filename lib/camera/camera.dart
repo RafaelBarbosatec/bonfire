@@ -28,13 +28,13 @@ class BonfireCamera extends Camera {
   Rect get cameraRect => Rect.fromLTWH(
         position.x,
         position.y,
-        (gameRef.canvasSize.x) * _zoomFactor(),
-        (gameRef.canvasSize.y) * _zoomFactor(),
+        (canvasSize.x) * _zoomFactor(),
+        (canvasSize.y) * _zoomFactor(),
       );
 
   Rect get cameraRectWithSpacing => Rect.fromLTWH(
-        position.x,
-        position.y,
+        position.x - _spacingMap,
+        position.y - _spacingMap,
         cameraRect.width + (_spacingMap * 2),
         cameraRect.height + (_spacingMap * 2),
       );
@@ -120,11 +120,10 @@ class BonfireCamera extends Camera {
     config.target = null;
     _isMoving = true;
 
-    double originX = this.position.x;
-    double originY = this.position.y;
+    Vector2 originPosition = this.position.clone();
 
-    double diffZoom = config.zoom - zoom;
-    double initialZoom = config.zoom;
+    double diffZoom = this.zoom - zoom;
+    double initialZoom = this.zoom;
 
     double diffAngle = config.angle - angle;
     double originAngle = config.angle;
@@ -132,12 +131,16 @@ class BonfireCamera extends Camera {
     gameRef.getValueGenerator(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
-        double diffX = originX - target.center.x;
-        double diffY = originY - target.center.y;
+        double diffX = (originPosition.x + gameSize.x / 2) - target.center.x;
+        double diffY = (originPosition.y + gameSize.y / 2) - target.center.y;
 
-        snapTo(position.copyWith(x: originX - (diffX * value)));
-        snapTo(position.copyWith(y: originY - (diffY * value)));
-        zoom = initialZoom - (diffZoom * value);
+        snapTo(
+          Vector2(
+            originPosition.x - (diffX * value),
+            originPosition.y - (diffY * value),
+          ),
+        );
+        this.zoom = initialZoom - (diffZoom * value);
         config.angle = originAngle - (diffAngle * value);
 
         if (config.moveOnlyMapArea) {
@@ -189,14 +192,14 @@ class BonfireCamera extends Camera {
     double sizeHorizontal = 50,
     double sizeVertical = 50,
   }) {
-    if (config.target == null) return;
-
-    _moveCameraToTarget(
-      dt,
-      enableSmooth: config.smoothCameraEnable,
-      sizeHorizontal: sizeHorizontal,
-      sizeVertical: sizeVertical,
-    );
+    if (config.target != null && !_isMoving) {
+      _moveCameraToTarget(
+        dt,
+        enableSmooth: config.smoothCameraEnable,
+        sizeHorizontal: sizeHorizontal,
+        sizeVertical: sizeVertical,
+      );
+    }
 
     if (config.moveOnlyMapArea) {
       _keepInMapArea();
@@ -213,8 +216,8 @@ class BonfireCamera extends Camera {
     double vertical = enableSmooth ? 0 : sizeVertical;
 
     final screenCenter = Offset(
-      gameSize.x / 2,
-      gameSize.y / 2,
+      canvasSize.x / 2,
+      canvasSize.y / 2,
     );
 
     final centerTarget = _getCenterTarget();
