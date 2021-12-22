@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'camera_config.dart';
 
 class BonfireCamera extends Camera {
+  static final sizeWidowsDefault = Vector2(50, 50);
   bool _isMoving = false;
   bool moveOnlyMapArea = false;
   bool smoothCameraEnable = false;
@@ -197,15 +198,13 @@ class BonfireCamera extends Camera {
 
   void _followTarget(
     double dt, {
-    double sizeHorizontal = 50,
-    double sizeVertical = 50,
+    Vector2? sizeWindows,
   }) {
     if (this.target != null && !_isMoving) {
       _moveCameraToTarget(
         dt,
         enableSmooth: this.smoothCameraEnable,
-        sizeHorizontal: sizeHorizontal,
-        sizeVertical: sizeVertical,
+        sizeWindows: sizeWindows ?? sizeWidowsDefault,
       );
     }
 
@@ -216,12 +215,12 @@ class BonfireCamera extends Camera {
 
   void _moveCameraToTarget(
     double dt, {
-    double sizeHorizontal = 50,
-    double sizeVertical = 50,
+    Vector2? sizeWindows,
     bool enableSmooth = false,
   }) {
-    double horizontal = enableSmooth ? 0 : sizeHorizontal;
-    double vertical = enableSmooth ? 0 : sizeVertical;
+    Vector2 sizeW = sizeWindows ?? sizeWidowsDefault;
+    double horizontal = sizeW.x;
+    double vertical = sizeW.y;
 
     final screenCenter = Offset(
       canvasSize.x / 2,
@@ -345,7 +344,7 @@ class BonfireCamera extends Camera {
   }
 
   bool isComponentOnCamera(GameComponent c) {
-    return isRectOnCamera(c.toRect());
+    return cameraRectWithSpacing.overlapComponent(c);
   }
 
   bool contains(Offset c) {
@@ -361,8 +360,7 @@ class BonfireCamera extends Camera {
     if (dt != 0) {
       _followTarget(
         dt,
-        sizeVertical: this.sizeMovementWindow.y,
-        sizeHorizontal: this.sizeMovementWindow.x,
+        sizeWindows: this.sizeMovementWindow,
       );
     }
   }

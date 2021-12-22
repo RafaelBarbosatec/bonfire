@@ -134,9 +134,10 @@ extension RectExt on Rect {
 }
 
 extension SpriteExt on Sprite {
-  void renderRectWithOpacity(
+  void renderWithOpacity(
     Canvas canvas,
-    Rect rect, {
+    Vector2 position,
+    Vector2 size, {
     Paint? overridePaint,
     double opacity = 1,
   }) {
@@ -146,9 +147,10 @@ extension SpriteExt on Sprite {
     if (overridePaint != null && overridePaint.color.opacity != opacity) {
       overridePaint.color = overridePaint.color.withOpacity(opacity);
     }
-    this.renderRect(
+    this.render(
       canvas,
-      rect,
+      position: position,
+      size: size,
       overridePaint: overridePaint,
     );
   }
@@ -327,17 +329,12 @@ extension CameraExt on Camera {
   void updateSpacingVisibleMap(double space) =>
       (this as BonfireCamera).updateSpacingVisibleMap(space);
 
-  bool isComponentOnCamera(GameComponent c) {
-    return cameraRectWithSpacing.overlapComponent(c);
-  }
+  bool isComponentOnCamera(GameComponent c) =>
+      (this as BonfireCamera).isComponentOnCamera(c);
 
-  bool contains(Offset c) {
-    return cameraRectWithSpacing.contains(c);
-  }
+  bool contains(Offset c) => (this as BonfireCamera).contains(c);
 
-  bool isRectOnCamera(Rect c) {
-    return cameraRectWithSpacing.overlaps(c);
-  }
+  bool isRectOnCamera(Rect c) => (this as BonfireCamera).isRectOnCamera(c);
 
   void moveToTargetAnimated(
     GameComponent target, {

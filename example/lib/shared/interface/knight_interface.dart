@@ -12,8 +12,7 @@ class KnightInterface extends GameInterface {
     add(InterfaceComponent(
       sprite: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
-      height: 40,
-      width: 40,
+      size: Vector2(40, 40),
       id: 5,
       position: Vector2(150, 20),
       onTapComponent: (selected) {
@@ -26,8 +25,7 @@ class KnightInterface extends GameInterface {
     add(InterfaceComponent(
       sprite: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
-      height: 40,
-      width: 40,
+      size: Vector2(40, 40),
       id: 5,
       position: Vector2(200, 20),
       selectable: true,
@@ -40,8 +38,7 @@ class KnightInterface extends GameInterface {
     add(InterfaceComponent(
       sprite: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
-      height: 40,
-      width: 40,
+      size: Vector2(40, 40),
       id: 5,
       position: Vector2(250, 20),
       selectable: true,
@@ -77,8 +74,7 @@ class KnightInterface extends GameInterface {
     add(InterfaceComponent(
       sprite: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
-      height: 40,
-      width: 40,
+      size: Vector2(40, 40),
       id: 5,
       position: Vector2(300, 20),
       selectable: false,

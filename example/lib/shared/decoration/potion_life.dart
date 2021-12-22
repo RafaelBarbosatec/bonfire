@@ -1,5 +1,3 @@
-import 'dart:async' as async;
-
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
@@ -18,14 +16,14 @@ class PotionLife extends GameDecoration with Sensor {
   @override
   void onContact(GameComponent collision) {
     if (collision is Player) {
-      async.Timer.periodic(Duration(milliseconds: 100), (timer) {
-        if (_lifeDistributed >= life) {
-          timer.cancel();
-        } else {
-          _lifeDistributed += 2;
-          gameRef.player?.addLife(5);
+      gameRef.getValueGenerator(Duration(seconds: 1), onChange: (value) {
+        if (_lifeDistributed < life) {
+          double newLife = life * value - _lifeDistributed;
+          _lifeDistributed += newLife;
+          collision.addLife(newLife);
         }
-      });
+      }).start();
+
       removeFromParent();
     }
   }

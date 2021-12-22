@@ -75,9 +75,10 @@ class RotationEnemy extends Enemy {
   }
 
   void _renderAnimation(Canvas canvas) {
-    animation?.getSprite().renderRectWithOpacity(
+    animation?.getSprite().renderWithOpacity(
           canvas,
-          toRect(),
+          position,
+          size,
           opacity: opacity,
         );
   }

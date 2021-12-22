@@ -34,7 +34,8 @@ class SimpleDirectionAnimation {
   SpriteAnimation? _current;
   late SimpleAnimationEnum _currentType;
   AnimatedObjectOnce? _fastAnimation;
-  Rect? position;
+  Vector2? position;
+  Vector2? size;
 
   bool runToTheEndFastAnimation = false;
 
@@ -175,8 +176,8 @@ class SimpleDirectionAnimation {
     if (position != null) {
       runToTheEndFastAnimation = runToTheEnd;
       final anim = AnimatedObjectOnce(
-        position: position!.positionVector2,
-        size: position!.sizeVector2,
+        position: position!,
+        size: size!,
         animation: animation,
         onFinish: () {
           onFinish?.call();
@@ -197,23 +198,25 @@ class SimpleDirectionAnimation {
   }
 
   void render(Canvas canvas) {
-    if (position == null) return;
+    if (position == null || size == null) return;
     if (_fastAnimation != null) {
       _fastAnimation?.render(canvas);
     } else {
-      _current?.getSprite().renderRectWithOpacity(
+      _current?.getSprite().renderWithOpacity(
             canvas,
             position!,
+            size!,
             opacity: opacity,
           );
     }
   }
 
-  void update(double dt, Rect position) {
+  void update(double dt, Vector2 position, Vector2 size) {
     this.position = position;
+    this.size = size;
     _fastAnimation?.opacity = opacity;
-    _fastAnimation?.position = position.positionVector2;
-    _fastAnimation?.size = position.sizeVector2;
+    _fastAnimation?.position = position;
+    _fastAnimation?.size = size;
     _fastAnimation?.update(dt);
     _current?.update(dt);
   }

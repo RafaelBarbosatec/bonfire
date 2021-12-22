@@ -38,9 +38,10 @@ class BackgroundImageGame extends GameBackground {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    imageSprite?.renderRectWithOpacity(
+    imageSprite?.renderWithOpacity(
       canvas,
-      toRect(),
+      position,
+      size,
       opacity: opacity,
     );
   }

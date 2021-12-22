@@ -17,7 +17,12 @@ void renderSpriteByRadAngle(
   canvas.translate(position.center.dx, position.center.dy);
   canvas.rotate(radAngle == 0.0 ? 0.0 : radAngle + (pi / 2));
   canvas.translate(-position.center.dx, -position.center.dy);
-  sprite.renderRectWithOpacity(canvas, position, opacity: opacity);
+  sprite.renderWithOpacity(
+    canvas,
+    position.positionVector2,
+    position.sizeVector2,
+    opacity: opacity,
+  );
   canvas.restore();
 }
 

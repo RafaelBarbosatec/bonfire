@@ -9,8 +9,6 @@ class SimplePlayer extends Player with DirectionAnimation {
     required SimpleDirectionAnimation animation,
     Direction initDirection = Direction.right,
     double speed = 150,
-    double width = 32,
-    double height = 32,
     double life = 100,
   }) : super(
           position: position,

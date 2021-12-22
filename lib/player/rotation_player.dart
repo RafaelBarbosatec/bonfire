@@ -61,9 +61,10 @@ class RotationPlayer extends Player {
 
   void _renderAnimation(Canvas canvas) {
     if (animation == null) return;
-    animation?.getSprite().renderRectWithOpacity(
+    animation?.getSprite().renderWithOpacity(
           canvas,
-          toRect(),
+          position,
+          size,
           opacity: opacity,
         );
   }

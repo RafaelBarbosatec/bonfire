@@ -243,7 +243,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   }
 
   void changeControllerToVisibleEnemy() {
-    if (!gameRef.camera.isMoving) {
+    if (hasGameRef && !gameRef.camera.isMoving) {
       if (enemyControlled == null) {
         final v = gameRef
             .visibleEnemies()

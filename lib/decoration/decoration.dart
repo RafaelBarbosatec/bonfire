@@ -60,9 +60,10 @@ class GameDecoration extends AnimatedObject {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    sprite?.renderRectWithOpacity(
+    sprite?.renderWithOpacity(
       canvas,
-      toRect(),
+      position,
+      size,
       opacity: opacity,
     );
   }

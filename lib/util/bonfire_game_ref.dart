@@ -54,4 +54,10 @@ mixin BonfireHasGameRef on Component {
           .forEach((e) => e.gameRef = gameRef);
     }
   }
+
+  @override
+  void onRemove() {
+    _gameRef = null;
+    super.onRemove();
+  }
 }

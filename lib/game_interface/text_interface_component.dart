@@ -20,8 +20,7 @@ class TextInterfaceComponent extends InterfaceComponent {
   }) : super(
           id: id,
           position: position,
-          width: 0.0,
-          height: 0.0,
+          size: Vector2.zero(),
           onTapComponent: onTapComponent,
         ) {
     this.textConfig = TextPaint(style: textConfig);

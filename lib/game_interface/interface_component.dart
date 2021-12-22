@@ -19,8 +19,6 @@ class InterfaceComponent extends GameComponent with TapGesture {
 
   /// Callback used to receive onTab gesture in your component. this return if is selected
   final ValueChanged<bool>? onTapComponent;
-  final double width;
-  final double height;
   final bool selectable;
   bool _lastSelected = false;
   bool selected = false;
@@ -30,8 +28,7 @@ class InterfaceComponent extends GameComponent with TapGesture {
   InterfaceComponent({
     required this.id,
     required Vector2 position,
-    required this.width,
-    required this.height,
+    required Vector2 size,
     Future<Sprite>? sprite,
     Future<Sprite>? spriteSelected,
     this.selectable = false,
@@ -44,15 +41,16 @@ class InterfaceComponent extends GameComponent with TapGesture {
       this.spriteSelected = value;
     }));
     this.position = Vector2(position.x, position.y);
-    this.size = Vector2(width, height);
+    this.size = size;
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    (selected ? spriteSelected : sprite)?.renderRectWithOpacity(
+    (selected ? spriteSelected : sprite)?.renderWithOpacity(
       canvas,
-      toRect(),
+      position,
+      size,
       opacity: opacity,
     );
   }

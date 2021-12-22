@@ -16,9 +16,10 @@ class AnimatedObject extends GameComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    animation?.getSprite().renderRectWithOpacity(
+    animation?.getSprite().renderWithOpacity(
           canvas,
-          this.toRect(),
+          this.position,
+          this.size,
           opacity: opacity,
         );
   }

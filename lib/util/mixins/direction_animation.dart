@@ -20,7 +20,7 @@ mixin DirectionAnimation on Movement {
   void update(double dt) {
     if (isVisible) {
       animation?.opacity = opacity;
-      animation?.update(dt, toRect());
+      animation?.update(dt, position, size);
     }
     super.update(dt);
   }
