@@ -376,15 +376,10 @@ class BonfireCamera extends Camera {
     final sizeMap = gameRef.map.mapSize;
     if (startPosition == null || sizeMap == null) return;
 
-    double zoomFactor = 1 / zoom;
-
-    double gameWidth = (gameRef.size.x * zoomFactor) / 2;
-    double gameHeight = (gameRef.size.y * zoomFactor) / 2;
-
-    final limitX = (startPosition.x + gameWidth);
-    final limitY = (startPosition.y + gameHeight);
-    final limitMaxX = (sizeMap.width - gameWidth);
-    final limitMaxY = (sizeMap.height - gameHeight);
+    final limitX = (startPosition.x);
+    final limitY = (startPosition.y);
+    final limitMaxX = (sizeMap.width + startPosition.x - gameRef.canvasSize.x);
+    final limitMaxY = (sizeMap.height + startPosition.y - gameRef.canvasSize.y);
 
     if (this.position.x > limitMaxX) {
       snapTo(Vector2(limitMaxX, position.y));
