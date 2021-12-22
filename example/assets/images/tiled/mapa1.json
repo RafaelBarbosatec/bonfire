@@ -496,17 +496,6 @@
                  "y":263.380514943718
                 }, 
                 {
-                 "height":16,
-                 "id":56,
-                 "name":"chest",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":662.763617544314,
-                 "y":89.2741622460862
-                }, 
-                {
                  "height":48,
                  "id":57,
                  "name":"column",
@@ -786,6 +775,17 @@
                  "width":53.953125,
                  "x":102.0859375,
                  "y":4.453125
+                }, 
+                {
+                 "height":16,
+                 "id":90,
+                 "name":"chest",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":664.5,
+                 "y":89
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -794,7 +794,7 @@
          "y":0
         }],
  "nextlayerid":14,
- "nextobjectid":90,
+ "nextobjectid":91,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.5.0",

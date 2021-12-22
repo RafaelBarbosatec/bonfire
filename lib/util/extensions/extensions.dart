@@ -117,6 +117,20 @@ extension RectExt on Rect {
       height,
     );
   }
+
+  bool overlapComponent(PositionComponent c) {
+    double left = c.position.x;
+    double top = c.position.y;
+    double right = c.position.x + c.size.x;
+    double bottom = c.position.y + c.size.y;
+    if (this.right <= left || right <= this.left) {
+      return false;
+    }
+    if (this.bottom <= top || bottom <= this.top) {
+      return false;
+    }
+    return true;
+  }
 }
 
 extension SpriteExt on Sprite {
@@ -314,7 +328,7 @@ extension CameraExt on Camera {
       (this as BonfireCamera).updateSpacingVisibleMap(space);
 
   bool isComponentOnCamera(GameComponent c) {
-    return isRectOnCamera(c.toRect());
+    return cameraRectWithSpacing.overlapComponent(c);
   }
 
   bool contains(Offset c) {
