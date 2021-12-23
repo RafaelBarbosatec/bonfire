@@ -1,6 +1,5 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/geometry/shape.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/widgets.dart';
 
 Paint _paintCollision = Paint();

@@ -1,14 +1,7 @@
 import 'dart:ui';
 
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/collision/collision_area.dart';
-import 'package:bonfire/collision/collision_config.dart';
-import 'package:bonfire/collision/object_collision.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/widgets.dart';
-
-import '../interval_tick.dart';
 
 Paint _paintSensor = Paint()..color = Color(0xFFF44336).withOpacity(0.5);
 

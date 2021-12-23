@@ -1,3 +1,7 @@
+# [1.12.4]
+- fix bug in `simpleAttackRangeByAngle`
+- improvements in `AutomaticRandomMovement`
+
 # [1.12.3]
 - Improvements in collision objects by Tiled.
 

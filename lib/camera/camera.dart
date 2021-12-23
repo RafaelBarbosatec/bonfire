@@ -1,12 +1,8 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:flutter/widgets.dart';
-
-import 'camera_config.dart';
 
 class Camera with BonfireHasGameRef {
   bool _isMoving = false;
@@ -211,8 +207,8 @@ class Camera with BonfireHasGameRef {
   }) {
     final speedSmooth = config.smoothCameraSpeed;
 
-    double horizontal = enableSmooth ? 0 : sizeHorizontal;
-    double vertical = enableSmooth ? 0 : sizeVertical;
+    double horizontal = sizeHorizontal;
+    double vertical = sizeHorizontal;
 
     final screenCenter = Offset(
       gameRef.size.x / 2,

@@ -1,10 +1,7 @@
 import 'dart:ui';
 
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/objects/follower_object.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/vector2rect.dart';
 
 class AnimatedFollowerObject extends FollowerObject {
   final bool loopAnimation;

@@ -1,5 +1,4 @@
 import 'package:bonfire/util/pulse_value.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
 /// Class used to configure lighting

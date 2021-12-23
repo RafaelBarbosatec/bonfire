@@ -1,9 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 /// Enemy used for top-down perspective

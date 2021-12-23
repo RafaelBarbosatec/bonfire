@@ -11,11 +11,8 @@
 /// on 30/11/21
 import 'dart:ui';
 
-import 'package:bonfire/background/game_background.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_assets_manager.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:flame/sprite.dart';
 
 class BackgroundImageGame extends GameBackground {
   final String imagePath;
