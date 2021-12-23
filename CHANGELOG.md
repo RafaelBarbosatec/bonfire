@@ -1,6 +1,7 @@
 # [2.0.0-flamev1.1] - FLAME V1.0
-- Update to flame 1.0
+- Update to flame 1.0.
 - Improvements in `ObjectCollision`. Now if you do override in `onCollision` and return `false` this object no will not impede the passage.
+- Add mixin `Pushable`.
 
 # [1.12.3]
 - Improvements in collision objects by Tiled.
