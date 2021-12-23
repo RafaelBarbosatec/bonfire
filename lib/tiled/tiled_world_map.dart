@@ -390,6 +390,8 @@ class TiledWorldMap {
               element.type,
               element.rotation,
               _extractOtherProperties(element.properties),
+              element.name,
+              element.id,
             ),
           );
 
