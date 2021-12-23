@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:a_star_algorithm/a_star_algorithm.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/mixins/movement.dart';
 import 'package:flutter/widgets.dart';
 
 enum TypeResumeDirection {

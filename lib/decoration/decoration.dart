@@ -1,13 +1,8 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/sprite.dart';
-import 'package:flutter/widgets.dart';
 
 /// This component represents anything you want to add to the scene, it can be
 /// a simple "barrel" halfway to an NPC that you can use to interact with your

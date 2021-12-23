@@ -1,9 +1,6 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/vector2rect.dart';
-
-import 'collision_area.dart';
 
 class CollisionConfig {
   /// Representing the collision area

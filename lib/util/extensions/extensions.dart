@@ -3,7 +3,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flutter/widgets.dart' as widget;
 
 export 'attackable_extensions.dart';

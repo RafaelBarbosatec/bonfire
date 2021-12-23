@@ -1,7 +1,4 @@
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/collision/object_collision.dart';
-import 'package:flame/extensions.dart';
 
 ///
 /// Created by

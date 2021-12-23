@@ -1,12 +1,8 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:flutter/widgets.dart';
-
-import 'camera_config.dart';
 
 class Camera with BonfireHasGameRef {
   bool _isMoving = false;

@@ -1,9 +1,6 @@
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera.dart';
-import 'package:bonfire/camera/camera_config.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
-import 'package:flame/components.dart';
 import 'package:flame/game.dart' hide Camera;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
