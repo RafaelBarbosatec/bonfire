@@ -172,7 +172,7 @@ class TiledWorldMap {
         width: _tileHeight,
         animation: data.animation,
         sprite: data.sprite,
-        properties: data.properties?.isEmpty == true ? null : data.properties,
+        properties: data.properties,
         type: data.type,
         angle: data.angle,
         isFlipVertical: data.isFlipVertical,
