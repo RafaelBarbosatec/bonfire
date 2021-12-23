@@ -387,7 +387,7 @@ class TiledWorldMap {
           final object = _objectsBuilder[element.name]?.call(
             TiledObjectProperties(
               Vector2(x, y),
-              Size(width, height),
+              Vector2(width, height),
               element.type,
               element.rotation,
               _extractOtherProperties(element.properties),
