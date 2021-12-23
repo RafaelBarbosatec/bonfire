@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
 import 'package:bonfire/util/mixins/direction_animation.dart';
 
 class SimplePlayer extends Player with DirectionAnimation {

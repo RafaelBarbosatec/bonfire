@@ -4,8 +4,6 @@ import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 /// CustomBaseGame created to use `Listener` to capture touch screen gestures.
 /// Apply zoom in canvas.

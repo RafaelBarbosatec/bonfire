@@ -1,12 +1,9 @@
 import 'dart:math';
-import 'dart:ui';
 
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_paint.dart';
 import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
-import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
 class Tile extends GameComponent {

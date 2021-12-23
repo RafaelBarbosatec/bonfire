@@ -1,5 +1,4 @@
 import 'package:bonfire/camera/camera.dart';
-import 'package:bonfire/joystick/joystick_controller.dart';
 
 import '../bonfire.dart';
 

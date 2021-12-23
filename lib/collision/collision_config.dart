@@ -2,8 +2,6 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 
-import 'collision_area.dart';
-
 class CollisionConfig {
   /// Representing the collision area
   final Iterable<CollisionArea> collisions;

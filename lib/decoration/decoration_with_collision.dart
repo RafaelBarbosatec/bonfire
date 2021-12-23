@@ -1,7 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/collision/collision_config.dart';
-import 'package:bonfire/collision/object_collision.dart';
-import 'package:flame/components.dart';
 
 /// GameDecoration with collision used in construct of the map with Tiled
 class GameDecorationWithCollision extends GameDecoration with ObjectCollision {

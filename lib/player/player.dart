@@ -1,10 +1,4 @@
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/util/mixins/attackable.dart';
-import 'package:bonfire/util/mixins/move_to_position_along_the_path.dart';
-import 'package:bonfire/util/mixins/movement.dart';
-import 'package:bonfire/util/mixins/movement_by_joystick.dart';
 
 class Player extends GameComponent
     with

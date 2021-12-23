@@ -2,10 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
-import 'package:flutter/foundation.dart';
 
 /// Class responsible to manager animation on `SimplePlayer` and `SimpleEnemy`
 class SimpleDirectionAnimation {

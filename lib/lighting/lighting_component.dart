@@ -1,9 +1,4 @@
-import 'dart:ui';
-
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/lighting/lighting.dart';
-import 'package:bonfire/util/priority_layer.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class LightingInterface {

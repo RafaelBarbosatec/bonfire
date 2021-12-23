@@ -47,12 +47,10 @@ mixin BonfireHasGameRef on Component {
 
   set gameRef(BonfireGameInterface gameRef) {
     _gameRef = gameRef;
-    if (this is Component) {
-      this
-          .children
-          .whereType<BonfireHasGameRef>()
-          .forEach((e) => e.gameRef = gameRef);
-    }
+    this
+        .children
+        .whereType<BonfireHasGameRef>()
+        .forEach((e) => e.gameRef = gameRef);
   }
 
   @override

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/player/knight.dart';
 import 'package:flutter/material.dart';

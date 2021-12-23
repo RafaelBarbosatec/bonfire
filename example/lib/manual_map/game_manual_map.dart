@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/game_controller.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/enemy/goblin.dart';
 import 'package:example/shared/interface/knight_interface.dart';

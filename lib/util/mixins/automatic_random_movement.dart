@@ -2,8 +2,6 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 
-import 'movement.dart';
-
 /// Mixin responsible for adding random movement like enemy walking through the scene
 mixin AutomaticRandomMovement on Movement {
   Vector2 _targetRandomMovement = Vector2.zero();

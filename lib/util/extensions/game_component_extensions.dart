@@ -1,7 +1,5 @@
 import 'dart:math';
-import 'dart:ui';
 
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 

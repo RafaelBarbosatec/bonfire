@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/interval_tick.dart';
@@ -7,8 +5,7 @@ import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/game.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 /// Base of the all components in the Bonfire
 abstract class GameComponent extends PositionComponent

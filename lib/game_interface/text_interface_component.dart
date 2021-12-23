@@ -1,9 +1,5 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/game_interface/interface_component.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// Component used to add Text in your [GameInterface]
 class TextInterfaceComponent extends InterfaceComponent {

@@ -1,9 +1,5 @@
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/gestures/tap_gesture.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:flame/sprite.dart';
 import 'package:flutter/widgets.dart';
 
 /// Component used to add in your [GameInterface]

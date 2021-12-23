@@ -4,7 +4,6 @@ import 'package:example/simple_example/simple_example_game.dart';
 import 'package:example/tiled_map/game_tiled_map.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

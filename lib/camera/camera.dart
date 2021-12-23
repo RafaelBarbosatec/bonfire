@@ -1,11 +1,8 @@
 import 'dart:ui';
 
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
-
-import 'camera_config.dart';
 
 class BonfireCamera extends Camera {
   static final sizeWidowsDefault = Vector2(50, 50);

@@ -6,11 +6,8 @@ import 'package:bonfire/enemy/rotation_enemy.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/extensions/enemy/enemy_extensions.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:bonfire/util/extensions/game_component_extensions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 extension RotationEnemyExtensions on RotationEnemy {

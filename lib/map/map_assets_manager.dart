@@ -2,10 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/map/tile/tile_model.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
-import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:http/http.dart' as http;
 
 class MapAssetsManager {

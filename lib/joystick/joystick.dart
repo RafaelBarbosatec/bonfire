@@ -1,8 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/joystick/joystick_action.dart';
-import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/joystick/joystick_directional.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 

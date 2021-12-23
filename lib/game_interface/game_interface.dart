@@ -1,11 +1,5 @@
-import 'dart:ui';
-
-import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/game_interface/interface_component.dart';
-import 'package:bonfire/util/priority_layer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 /// The way you cand raw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
 class GameInterface extends GameComponent {

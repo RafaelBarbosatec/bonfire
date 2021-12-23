@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/collision/collision_config.dart';
 import 'package:flutter/material.dart';
 
 /// Mixin responsible for adding collision

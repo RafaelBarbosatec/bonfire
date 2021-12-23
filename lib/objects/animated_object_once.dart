@@ -1,10 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/lighting/lighting_config.dart';
-import 'package:bonfire/objects/animated_object.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:flame/sprite.dart';
 
 class AnimatedObjectOnce extends AnimatedObject with Lighting {
   final VoidCallback? onFinish;

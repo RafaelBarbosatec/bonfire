@@ -1,10 +1,6 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
-import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
-import 'package:bonfire/util/mixins/movement.dart';
 
 /// Mixin responsible for adding animations to movements
 mixin DirectionAnimation on Movement {

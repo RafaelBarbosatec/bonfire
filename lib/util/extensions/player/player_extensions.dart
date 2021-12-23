@@ -1,9 +1,6 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/enemy/enemy.dart';
-import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/extensions/game_component_extensions.dart';
 import 'package:flutter/widgets.dart';
 
 extension PlayerExtensions on Player {
