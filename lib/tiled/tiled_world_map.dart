@@ -382,6 +382,7 @@ class TiledWorldMap {
               collisions: [
                 CollisionArea(collision.shape),
               ],
+              properties: _extractOtherProperties(element.properties),
             ),
           );
         } else if (_objectsBuilder[element.name] != null) {
@@ -392,6 +393,8 @@ class TiledWorldMap {
               element.type,
               element.rotation,
               _extractOtherProperties(element.properties),
+              element.name,
+              element.id,
             ),
           );
 
