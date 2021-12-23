@@ -116,9 +116,9 @@ class _FollowerWidgetState extends State<FollowerWidget> {
       if (targetPosition != widget.target.position ||
           camera.zoom != lastZoom ||
           camera.position != lastCameraPosition) {
-        lastCameraPosition = camera.position;
         lastZoom = camera.zoom;
-        targetPosition = widget.target.position;
+        targetPosition = widget.target.position.clone();
+        lastCameraPosition = camera.position.clone();
         if (mounted) {
           setState(() {
             widgetPosition = widget.target.screenPosition().toOffset();

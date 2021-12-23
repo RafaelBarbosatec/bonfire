@@ -19,8 +19,7 @@ export 'player/rotation_player_extensions.dart';
 
 extension ImageExtension on Image {
   SpriteAnimation getAnimation({
-    required double width,
-    required double height,
+    required Vector2 size,
     required double count,
     int startDx = 0,
     int startDy = 0,
@@ -35,10 +34,7 @@ extension ImageExtension on Image {
           (startDx + (i * width)).toDouble(),
           startDy.toDouble(),
         ),
-        srcSize: Vector2(
-          width,
-          height,
-        ),
+        srcSize: size,
       ));
     }
     return SpriteAnimation.spriteList(
@@ -49,15 +45,13 @@ extension ImageExtension on Image {
   }
 
   Sprite getSprite({
-    required double x,
-    required double y,
-    required double width,
-    required double height,
+    Vector2? position,
+    Vector2? size,
   }) {
     return Sprite(
       this,
-      srcPosition: Vector2(x, y),
-      srcSize: Vector2(width, height),
+      srcPosition: position,
+      srcSize: size,
     );
   }
 
