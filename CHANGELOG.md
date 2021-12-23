@@ -1,4 +1,4 @@
-# [NEXT]
+# [1.12.4]
 - fix bug in `simpleAttackRangeByAngle`
 - improvements in `AutomaticRandomMovement`
 
