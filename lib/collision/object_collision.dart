@@ -9,7 +9,9 @@ mixin ObjectCollision on GameComponent {
 
   bool _containCollision = false;
 
-  void onCollision(GameComponent component, bool active) {}
+  bool onCollision(GameComponent component, bool active) {
+    return true;
+  }
 
   void setupCollision(CollisionConfig collisionConfig) {
     _collisionConfig = collisionConfig;
@@ -86,8 +88,7 @@ mixin ObjectCollision on GameComponent {
   bool _checkItemCollision(ObjectCollision i, {Vector2? displacement}) {
     if (i != this && checkCollision(i, displacement: displacement)) {
       onCollision(i, true);
-      i.onCollision(this, false);
-      return true;
+      return i.onCollision(this, false);
     }
     return false;
   }
