@@ -42,7 +42,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.12.3"
+    version: "2.0.0-flamev1.1"
   boolean_selector:
     dependency: transitive
     description:
