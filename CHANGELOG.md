@@ -1,3 +1,6 @@
+# [2.0.0-flamev1.1] - FLAME V1.0
+- Update to flame 1.0
+
 # [1.12.3]
 - Improvements in collision objects by Tiled.
 
