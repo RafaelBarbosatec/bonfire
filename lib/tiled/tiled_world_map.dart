@@ -198,7 +198,11 @@ class TiledWorldMap {
             size: Vector2(_tileWidth, _tileHeight),
             collisions: data.collisions,
             aboveComponents: true,
-          ),
+          )
+            ..angle = data.angle
+            ..isFlipHorizontal = data.isFlipHorizontal
+            ..isFlipVertical = data.isFlipVertical
+            ..properties = data.properties,
         );
       }
     } else {
@@ -213,7 +217,11 @@ class TiledWorldMap {
             size: Vector2(_tileWidth, _tileHeight),
             collisions: data.collisions,
             aboveComponents: true,
-          ),
+          )
+            ..angle = data.angle
+            ..isFlipHorizontal = data.isFlipHorizontal
+            ..isFlipVertical = data.isFlipVertical
+            ..properties = data.properties,
         );
       }
     }
@@ -415,8 +423,9 @@ class TiledWorldMap {
           tileSetItemList.first.objectGroup?.objects ?? [];
 
       String type = tileSetItemList.first.type ?? '';
-      Map<String, dynamic> properties =
-          _extractOtherProperties(tileSetItemList.first.properties);
+      Map<String, dynamic> properties = _extractOtherProperties(
+        tileSetItemList.first.properties,
+      );
 
       List<CollisionArea> collisions = [];
 

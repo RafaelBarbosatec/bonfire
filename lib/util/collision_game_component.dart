@@ -14,15 +14,15 @@ import 'package:bonfire/bonfire.dart';
 
 class CollisionGameComponent extends GameComponent with ObjectCollision {
   final String name;
-  final Map<String, dynamic>? properties;
 
   CollisionGameComponent({
     this.name = '',
-    this.properties,
+    Map<String, dynamic>? properties,
     required Vector2 position,
     required Vector2 size,
     List<CollisionArea> collisions = const [],
   }) {
+    this.properties = properties;
     this.position = position;
     this.size = size;
     setupCollision(

@@ -10,6 +10,8 @@ import 'package:flutter/widgets.dart';
 /// Base of the all components in the Bonfire
 abstract class GameComponent extends PositionComponent
     with BonfireHasGameRef, PointerDetectorHandler {
+  Map<String, dynamic>? properties;
+
   /// When true this component render above all components in game.
   bool aboveComponents = false;
 
