@@ -20,4 +20,9 @@ class TiledObjectProperties {
     this.name,
     this.id,
   );
+
+  @override
+  String toString() {
+    return 'TiledObjectProperties{position: $position, size: $size, rotation: $rotation, type: $type, name: $name, id: $id, others: $others}';
+  }
 }
