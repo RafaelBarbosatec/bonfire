@@ -199,7 +199,10 @@ class TiledWorldMap {
             width: _tileWidth,
             collisions: data.collisions,
             aboveComponents: true,
-          ),
+          )
+            ..angle = data.angle
+            ..isFlipVertical = data.isFlipVertical
+            ..isFlipHorizontal = data.isFlipHorizontal,
         );
       }
     } else {
@@ -215,7 +218,10 @@ class TiledWorldMap {
             width: _tileWidth,
             collisions: data.collisions,
             aboveComponents: true,
-          ),
+          )
+            ..angle = data.angle
+            ..isFlipVertical = data.isFlipVertical
+            ..isFlipHorizontal = data.isFlipHorizontal,
         );
       }
     }

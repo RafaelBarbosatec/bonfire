@@ -1,4 +1,4 @@
-# [NEXT]
+# [1.12.5]
 - Add params `name` and `id` in `TiledObjectProperties`.
 
 # [1.12.4]
