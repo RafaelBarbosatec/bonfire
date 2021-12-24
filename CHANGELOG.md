@@ -1,10 +1,11 @@
 # [2.0.0-flamev1.1] - FLAME V1.0
 
-In order to reduce the distance of implementations between Flame and Bonfire. In this version we are following the standardization of using `Vector2` for `position` and `size` and we are using resources available by Flame such as `PositionedComponent` to base our components, 'FlameGame' and the camera instead of using our own implementations. You lost some small features, but nothing that Flame's team won't add over time.
+In order to reduce the distance of implementations between Flame and Bonfire. In this version we are following the standardization of using `Vector2` for `position` and `size` and we are using resources available by Flame such as `PositionComponent` to base our components, 'FlameGame' and the camera instead of using our own implementations. You lost some small features, but nothing that Flame's team won't add over time.
 
 - Update to flame 1.0.
     - BRAKING CHANGE: Now use `Vector2 size` instead of `double height` and `double width`.
     - BRAKING CHANGE: Where before was `Offset` and `Size`, now is `Vector2`.
+    - BRAKING CHANGE: `camera.animateSimpleRotation` and `camera.animateLoopRotation` not working in the moment.
 - Improvements in `ObjectCollision`. Now if you do override in `onCollision` and return `false` this object no will not impede the passage.
 - Add mixin `Pushable`.
 - Add params `name` and `id` in `TiledObjectProperties`.
