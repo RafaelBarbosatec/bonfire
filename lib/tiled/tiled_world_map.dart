@@ -199,7 +199,10 @@ class TiledWorldMap {
             width: _tileWidth,
             collisions: data.collisions,
             aboveComponents: true,
-          ),
+          )
+            ..angle = data.angle
+            ..isFlipVertical = data.isFlipVertical
+            ..isFlipHorizontal = data.isFlipHorizontal,
         );
       }
     } else {
@@ -215,7 +218,10 @@ class TiledWorldMap {
             width: _tileWidth,
             collisions: data.collisions,
             aboveComponents: true,
-          ),
+          )
+            ..angle = data.angle
+            ..isFlipVertical = data.isFlipVertical
+            ..isFlipHorizontal = data.isFlipHorizontal,
         );
       }
     }
@@ -382,6 +388,7 @@ class TiledWorldMap {
               collisions: [
                 CollisionArea(collision.shape),
               ],
+              properties: _extractOtherProperties(element.properties),
             ),
           );
         } else if (_objectsBuilder[element.name] != null) {
@@ -392,6 +399,8 @@ class TiledWorldMap {
               element.type,
               element.rotation,
               _extractOtherProperties(element.properties),
+              element.name,
+              element.id,
             ),
           );
 

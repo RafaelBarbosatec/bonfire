@@ -7,6 +7,8 @@ class TiledObjectProperties {
   final Size size;
   final double? rotation;
   final String? type;
+  final String? name;
+  final int? id;
   final Map<String, dynamic> others;
 
   TiledObjectProperties(
@@ -15,5 +17,12 @@ class TiledObjectProperties {
     this.type,
     this.rotation,
     this.others,
+    this.name,
+    this.id,
   );
+
+  @override
+  String toString() {
+    return 'TiledObjectProperties{position: $position, size: $size, rotation: $rotation, type: $type, name: $name, id: $id, others: $others}';
+  }
 }
