@@ -6,8 +6,8 @@ In order to reduce the distance of implementations between Flame and Bonfire. In
     - BRAKING CHANGE: Now use `Vector2 size` instead of `double height` and `double width`.
     - BRAKING CHANGE: Where before was `Offset` and `Size`, now is `Vector2`.
     - BRAKING CHANGE: `camera.animateSimpleRotation` and `camera.animateLoopRotation` not working in the moment.
-- Improvements in `ObjectCollision`. Now if you do override in `onCollision` and return `false` this object no will not impede the passage.
-- Add mixin `Pushable`.
+- Improvements in `ObjectCollision`. Now if you do override in `onCollision` and return `false` when collision is passive this object no will not impede the passage.
+- Add new mixin `Pushable`.
 - Add params `name` and `id` in `TiledObjectProperties`.
 - Now we can use [Flame Effects](https://docs.flame-engine.org/1.0.0/effects.html)
 

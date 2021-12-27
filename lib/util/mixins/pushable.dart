@@ -21,6 +21,9 @@ mixin Pushable on ObjectCollision {
     if (enablePushable) {
       if (this is Movement) {
         if (!active && component is Movement) {
+          if (!onPush(component)) {
+            return super.onCollision(component, active);
+          }
           Vector2 displacement = this.center - component.center;
           if (displacement.x.abs() > displacement.y.abs()) {
             if (displacement.x < 0) {
@@ -42,5 +45,10 @@ mixin Pushable on ObjectCollision {
       }
     }
     return super.onCollision(component, active);
+  }
+
+  /// If return true this component receives a push. If false not.
+  bool onPush(GameComponent component) {
+    return true;
   }
 }
