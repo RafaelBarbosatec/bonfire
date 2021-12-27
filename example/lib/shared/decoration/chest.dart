@@ -105,8 +105,8 @@ class Chest extends GameDecoration with TapGesture {
       AnimatedFollowerObject(
         animation: CommonSpriteSheet.emote,
         target: this,
-        size: Vector2.all(16),
-        positionFromTarget: Vector2(18, -6),
+        size: size,
+        positionFromTarget: size / -2,
       ),
     );
   }
