@@ -408,12 +408,16 @@ class BonfireCamera extends Camera {
     PositionComponent component, {
     Anchor relativeOffset = Anchor.center,
     Rect? worldBounds,
-  }) {}
+  }) {
+    print('followComponent method not work in Bonfire. Use moveToTarget');
+  }
 
   @override
   void followVector2(
     Vector2 vector2, {
     Anchor relativeOffset = Anchor.center,
     Rect? worldBounds,
-  }) {}
+  }) {
+    print('followVector2 method not work in Bonfire.');
+  }
 }
