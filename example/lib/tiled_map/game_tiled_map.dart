@@ -80,7 +80,7 @@ class GameTiledMap extends StatelessWidget {
           background: BackgroundColorGame(Colors.blueGrey[900]!),
           lightingColorGame: Colors.black.withOpacity(0.7),
           cameraConfig: CameraConfig(
-            smoothCameraEnable: true,
+            smoothCameraEnabled: true,
             smoothCameraSpeed: 2,
           ),
         );

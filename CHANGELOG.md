@@ -9,6 +9,7 @@ In order to reduce the distance of implementations between Flame and Bonfire. In
 - Improvements in `ObjectCollision`. Now if you do override in `onCollision` and return `false` this object no will not impede the passage.
 - Add mixin `Pushable`.
 - Add params `name` and `id` in `TiledObjectProperties`.
+- Now we can use [Flame Effects](https://docs.flame-engine.org/1.0.0/effects.html)
 
 
 

@@ -8,7 +8,7 @@ class BonfireCamera extends Camera {
   static final sizeWidowsDefault = Vector2(50, 50);
   bool _isMoving = false;
   bool moveOnlyMapArea = false;
-  bool smoothCameraEnable = false;
+  bool smoothCameraEnabled = false;
   double _spacingMap = 32.0;
   double angle = 0;
   Vector2 sizeMovementWindow = Vector2(50, 50);
@@ -19,7 +19,7 @@ class BonfireCamera extends Camera {
     CameraConfig config,
   ) {
     sizeMovementWindow = config.sizeMovementWindow;
-    smoothCameraEnable = config.smoothCameraEnable;
+    smoothCameraEnabled = config.smoothCameraEnabled;
     speed = config.smoothCameraSpeed;
     zoom = config.zoom;
     angle = config.angle;
@@ -200,7 +200,7 @@ class BonfireCamera extends Camera {
     if (this.target != null && !_isMoving) {
       _moveCameraToTarget(
         dt,
-        enableSmooth: this.smoothCameraEnable,
+        enableSmooth: this.smoothCameraEnabled,
         sizeWindows: sizeWindows ?? sizeWidowsDefault,
       );
     }
@@ -402,4 +402,18 @@ class BonfireCamera extends Camera {
     }
     return this.target?.center ?? Vector2.zero();
   }
+
+  @override
+  void followComponent(
+    PositionComponent component, {
+    Anchor relativeOffset = Anchor.center,
+    Rect? worldBounds,
+  }) {}
+
+  @override
+  void followVector2(
+    Vector2 vector2, {
+    Anchor relativeOffset = Anchor.center,
+    Rect? worldBounds,
+  }) {}
 }
