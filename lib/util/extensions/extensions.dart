@@ -31,7 +31,7 @@ extension ImageExtension on Image {
       spriteList.add(Sprite(
         this,
         srcPosition: Vector2(
-          (startDx + (i * width)).toDouble(),
+          (startDx + (i * size.x)).toDouble(),
           startDy.toDouble(),
         ),
         srcSize: size,

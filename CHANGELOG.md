@@ -1,3 +1,6 @@
+# [2.0.0-flamev1.2]
+- Fix bug in `getAnimation` (ImageExtension).
+
 # [2.0.0-flamev1.1] - FLAME V1.0
 
 In order to reduce the distance of implementations between Flame and Bonfire. In this version we are following the standardization of using `Vector2` for `position` and `size` and we are using resources available by Flame such as `PositionComponent` to base our components, 'FlameGame' and the camera instead of using our own implementations. You lost some small features, but nothing that Flame's team won't add over time.
