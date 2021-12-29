@@ -3,7 +3,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/camera/camera.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart' as widget;
 

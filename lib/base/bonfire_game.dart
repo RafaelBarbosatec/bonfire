@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/camera/camera.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/util/map_explorer.dart';
@@ -124,9 +124,7 @@ class BonfireGame extends BaseGame
     debugMode = constructionMode;
 
     camera.setGame(this);
-    if (camera.target == null && player != null) {
-      camera.target = player;
-    }
+    camera.target ??= player;
 
     _interval = IntervalTick(
       INTERVAL_UPDATE_CACHE,

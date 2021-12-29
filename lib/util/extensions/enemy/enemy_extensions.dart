@@ -21,10 +21,8 @@ extension EnemyExtensions on Enemy {
     double radiusVision = 32,
   }) {
     Player? player = gameRef.player;
-    if (player == null) return;
-
-    if (player.isDead) {
-      if (notObserved != null) notObserved();
+    if (player == null || player.isDead) {
+      notObserved?.call();
       return;
     }
     this.seeComponent(

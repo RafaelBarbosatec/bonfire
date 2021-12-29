@@ -13,17 +13,13 @@ extension GameComponentExtensions on GameComponent {
     double radiusVision = 32,
   }) {
     if (component.shouldRemove) {
-      if (notObserved != null) notObserved();
+      notObserved?.call();
       return;
     }
 
-    double vision = radiusVision * 2;
-
-    Rect fieldOfVision = Rect.fromLTWH(
-      this.center.x - radiusVision,
-      this.center.y - radiusVision,
-      vision,
-      vision,
+    Rect fieldOfVision = Rect.fromCircle(
+      center: this.center.toOffset(),
+      radius: radiusVision,
     );
 
     if (fieldOfVision.overlaps(getRectAndCollision(component))) {
@@ -45,7 +41,7 @@ extension GameComponentExtensions on GameComponent {
     }).cast<T>();
 
     if (compVisible.isEmpty) {
-      if (notObserved != null) notObserved();
+      notObserved?.call();
       return;
     }
 

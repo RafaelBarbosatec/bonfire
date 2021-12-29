@@ -25,10 +25,6 @@ class BonfireCamera extends Camera {
     angle = config.angle;
     target = config.target;
     moveOnlyMapArea = config.moveOnlyMapArea;
-    if (target != null) {
-      snapTo(target!.position);
-      followComponent(target!);
-    }
   }
 
   bool get isMoving => _isMoving;

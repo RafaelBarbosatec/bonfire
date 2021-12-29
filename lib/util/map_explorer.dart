@@ -1,4 +1,4 @@
-import 'package:bonfire/camera/camera.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
 
 import '../bonfire.dart';
 
