@@ -1,5 +1,6 @@
 # [2.0.0-flamev1.2]
 - Fix bug in `getAnimation` (ImageExtension).
+- Fix bug in `progress` (BonfireTiledWidget).
 
 # [2.0.0-flamev1.1] - FLAME V1.0
 

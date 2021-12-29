@@ -134,7 +134,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
               duration: widget.progressTransitionDuration ??
                   Duration(milliseconds: 500),
               transitionBuilder: widget.transitionBuilder,
-              child: _loading ? _defaultProgress() : Center(),
+              child: _loading ? _defaultProgress() : SizedBox.shrink(),
             );
           },
         ),
