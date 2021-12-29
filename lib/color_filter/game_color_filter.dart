@@ -2,9 +2,9 @@ import 'package:flutter/painting.dart';
 
 class GameColorFilter {
   Color? color;
-  BlendMode? blendMode;
+  BlendMode blendMode;
 
-  GameColorFilter({this.color, this.blendMode});
+  GameColorFilter({this.color, this.blendMode = BlendMode.color});
 
-  bool get enable => color != null && blendMode != null;
+  bool get enable => color != null;
 }

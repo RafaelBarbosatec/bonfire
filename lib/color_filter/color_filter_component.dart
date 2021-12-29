@@ -4,28 +4,33 @@ import 'package:bonfire/util/priority_layer.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class ColorFilterInterface {
+  GameColorFilter config = GameColorFilter();
   void animateTo(
-    Color color,
-    BlendMode blendMode, {
+    Color color, {
+    BlendMode? blendMode,
     Duration duration = const Duration(milliseconds: 500),
     Curve curve = Curves.decelerate,
+    VoidCallback? onFinish,
   });
 }
 
 class ColorFilterComponent extends GameComponent
     implements ColorFilterInterface {
-  final GameColorFilter colorFilter;
   ColorTween? _tween;
 
-  ColorFilterComponent(this.colorFilter);
+  @override
+  GameColorFilter config;
+
+  ColorFilterComponent(this.config);
+
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (colorFilter.enable == true) {
+    if (config.enable == true) {
       canvas.save();
       canvas.drawColor(
-        colorFilter.color!,
-        colorFilter.blendMode!,
+        config.color!,
+        config.blendMode,
       );
       canvas.restore();
     }
@@ -38,24 +43,28 @@ class ColorFilterComponent extends GameComponent
 
   @override
   void animateTo(
-    Color color,
-    BlendMode blendMode, {
+    Color color, {
+    BlendMode? blendMode,
     Duration duration = const Duration(milliseconds: 500),
     curve = Curves.decelerate,
+    VoidCallback? onFinish,
   }) {
-    colorFilter.blendMode = blendMode;
+    if (blendMode != null) {
+      config.blendMode = blendMode;
+    }
     _tween = ColorTween(
-      begin: colorFilter.color ?? Color(0x00000000),
+      begin: config.color ?? Color(0x00000000),
       end: color,
     );
 
     gameRef.getValueGenerator(
       duration,
       onChange: (value) {
-        colorFilter.color = _tween?.transform(value);
+        config.color = _tween?.transform(value);
       },
       onFinish: () {
-        colorFilter.color = color;
+        config.color = color;
+        onFinish?.call();
       },
       curve: curve,
     ).start();

@@ -5,13 +5,12 @@ import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
 
 class BonfireCamera extends Camera {
-  static final sizeWidowsDefault = Vector2(50, 50);
   bool _isMoving = false;
   bool moveOnlyMapArea = false;
   bool smoothCameraEnabled = false;
   double _spacingMap = 32.0;
   double angle = 0;
-  Vector2 sizeMovementWindow = Vector2(50, 50);
+  Vector2 sizeMovementWindow = CameraConfig.sizeWidowsDefault;
   GameComponent? target;
   late BonfireGame gameRef;
 
@@ -197,7 +196,7 @@ class BonfireCamera extends Camera {
       _moveCameraToTarget(
         dt,
         enableSmooth: this.smoothCameraEnabled,
-        sizeWindows: sizeWindows ?? sizeWidowsDefault,
+        sizeWindows: sizeWindows ?? CameraConfig.sizeWidowsDefault,
       );
     }
 
@@ -211,7 +210,7 @@ class BonfireCamera extends Camera {
     Vector2? sizeWindows,
     bool enableSmooth = false,
   }) {
-    Vector2 sizeW = sizeWindows ?? sizeWidowsDefault;
+    Vector2 sizeW = sizeWindows ?? CameraConfig.sizeWidowsDefault;
     double horizontal = sizeW.x;
     double vertical = sizeW.y;
 

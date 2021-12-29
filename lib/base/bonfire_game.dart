@@ -120,7 +120,7 @@ class BonfireGame extends BaseGame
     _initialEnemies = enemies;
     _initialDecorations = decorations;
     _initialComponents = components;
-    _colorFilter = colorFilter;
+    _colorFilter = colorFilter ?? GameColorFilter();
     debugMode = constructionMode;
 
     camera.setGame(this);

@@ -79,6 +79,15 @@ class KnightInterface extends GameInterface {
       position: Vector2(300, 20),
       selectable: false,
       onTapComponent: (selected) {
+        if (gameRef.colorFilter?.config.color == null) {
+          gameRef.colorFilter?.animateTo(
+            Colors.red.withOpacity(0.5),
+          );
+        } else {
+          gameRef.colorFilter?.animateTo(Colors.transparent, onFinish: () {
+            gameRef.colorFilter?.config.color = null;
+          });
+        }
         // Simple rotation loop
         // gameRef.camera.animateLoopRotation(
         //   angles: [0.1, -0.1],

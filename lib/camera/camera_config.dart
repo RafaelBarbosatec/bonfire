@@ -3,6 +3,8 @@ import 'package:flame/components.dart';
 
 /// Class use to configure camera behavior.
 class CameraConfig {
+  static final sizeWidowsDefault = Vector2(50, 50);
+
   ///Player movement window before the camera moves
   Vector2 sizeMovementWindow;
 
@@ -29,5 +31,5 @@ class CameraConfig {
     this.target,
     this.smoothCameraEnabled = false,
     this.smoothCameraSpeed = 1.0,
-  }) : sizeMovementWindow = sizeMovementWindow ?? Vector2(50, 50);
+  }) : sizeMovementWindow = sizeMovementWindow ?? sizeWidowsDefault;
 }
