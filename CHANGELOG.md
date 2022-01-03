@@ -1,4 +1,4 @@
-# [NEXT]
+# [2.0.0-flamev1.3]
 - Extensions improvements
 - `GameColorFilter` Improvements
 - adds `left`,`right`,`top`,`bottom` in `GameComponent`
@@ -20,8 +20,6 @@ In order to reduce the distance of implementations between Flame and Bonfire. In
 - Add new mixin `Pushable`.
 - Add params `name` and `id` in `TiledObjectProperties`.
 - Now we can use [Flame Effects](https://docs.flame-engine.org/1.0.0/effects.html)
-
-
 
 # [1.12.3]
 - Improvements in collision objects by Tiled.
