@@ -1,6 +1,8 @@
 # [NEXT]
 - Extensions improvements
 - `GameColorFilter` Improvements
+- adds `left`,`right`,`top`,`bottom` in `GameComponent`
+- add `enabledSensor` in `Sensor`
 
 # [2.0.0-flamev1.2]
 - Fix bug in `getAnimation` (ImageExtension).

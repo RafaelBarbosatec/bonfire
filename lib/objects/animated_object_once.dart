@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -6,7 +7,6 @@ import 'package:bonfire/util/assets_loader.dart';
 class AnimatedObjectOnce extends AnimatedObject with Lighting {
   final VoidCallback? onFinish;
   final VoidCallback? onStartAnimation;
-  final double? rotateRadAngle;
   bool _notifyStart = false;
 
   final _loader = AssetsLoader();
@@ -14,10 +14,10 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
   AnimatedObjectOnce({
     required Vector2 position,
     required Vector2 size,
-    Future<SpriteAnimation>? animation,
+    FutureOr<SpriteAnimation>? animation,
     this.onFinish,
     this.onStartAnimation,
-    this.rotateRadAngle,
+    double rotateRadAngle = 0,
     LightingConfig? lightingConfig,
   }) {
     _loader.add(AssetToLoad(animation, (value) {
@@ -26,21 +26,11 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     setupLighting(lightingConfig);
     this.position = position;
     this.size = size;
-    this.angle = rotateRadAngle ?? 0.0;
+    this.angle = rotateRadAngle;
   }
 
   @override
   void render(Canvas canvas) {
-    // if (rotateRadAngle != null) {
-    //   canvas.save();
-    //   canvas.translate(center.x, center.y);
-    //   canvas.rotate(rotateRadAngle == 0.0 ? 0.0 : rotateRadAngle! + (pi / 2));
-    //   canvas.translate(-center.x, -center.y);
-    //   super.render(canvas);
-    //   canvas.restore();
-    // } else {
-    //   super.render(canvas);
-    // }
     super.render(canvas);
     if (animation?.done() == true) {
       onFinish?.call();

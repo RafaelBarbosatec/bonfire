@@ -9,12 +9,14 @@ Color sensorColor = Color(0xFFF44336).withOpacity(0.5);
 mixin Sensor on GameComponent {
   void onContact(GameComponent component);
 
+  bool enabledSensor = true;
+
   int _intervalCheckContact = 250;
   IntervalTick? _tick;
 
   CollisionConfig? _collisionConfig;
 
-  Iterable<CollisionArea> get sensorArea {
+  Iterable<CollisionArea> get _sensorArea {
     if (_collisionConfig != null) {
       return _collisionConfig!.collisions;
     }
@@ -45,13 +47,15 @@ mixin Sensor on GameComponent {
   void update(double dt) {
     if (_collisionConfig == null) {
       _collisionConfig = CollisionConfig(
-        collisions: sensorArea,
+        collisions: _sensorArea,
       );
     }
-    if (_tick == null || _tick?.interval != _intervalCheckContact) {
-      _tick = IntervalTick(_intervalCheckContact, tick: _verifyContact);
-    } else {
-      _tick?.update(dt);
+    if (enabledSensor) {
+      if (_tick == null || _tick?.interval != _intervalCheckContact) {
+        _tick = IntervalTick(_intervalCheckContact, tick: _verifyContact);
+      } else {
+        _tick?.update(dt);
+      }
     }
     super.update(dt);
   }
@@ -60,7 +64,7 @@ mixin Sensor on GameComponent {
   void render(Canvas c) {
     super.render(c);
     if ((gameRef as BonfireGame).showCollisionArea) {
-      sensorArea.forEach((element) {
+      _sensorArea.forEach((element) {
         element.render(c, sensorColor);
       });
     }

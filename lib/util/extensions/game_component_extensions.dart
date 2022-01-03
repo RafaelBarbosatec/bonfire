@@ -445,4 +445,9 @@ extension GameComponentExtensions on GameComponent {
       return diffY > 0 ? Direction.up : Direction.down;
     }
   }
+
+  double get top => position.y;
+  double get bottom => absolutePositionOfAnchor(Anchor.bottomRight).y;
+  double get left => position.x;
+  double get right => absolutePositionOfAnchor(Anchor.bottomRight).x;
 }
