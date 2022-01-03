@@ -39,9 +39,7 @@ class PlayerSpriteSheet {
 
   static SimpleDirectionAnimation get simpleDirectionAnimation =>
       SimpleDirectionAnimation(
-        idleLeft: idleLeft,
         idleRight: idleRight,
-        runLeft: runLeft,
         runRight: runRight,
       );
 }

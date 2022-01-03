@@ -38,11 +38,17 @@ class SimpleDirectionAnimation {
 
   double opacity = 1.0;
 
+  bool _flipX = false;
+  bool _flipY = false;
+
+  final bool enabledFlipX;
+  final bool enabledFlipY;
+
   SimpleDirectionAnimation({
-    required FutureOr<SpriteAnimation> idleLeft,
     required FutureOr<SpriteAnimation> idleRight,
     required FutureOr<SpriteAnimation> runRight,
-    required FutureOr<SpriteAnimation> runLeft,
+    FutureOr<SpriteAnimation>? idleLeft,
+    FutureOr<SpriteAnimation>? runLeft,
     FutureOr<SpriteAnimation>? idleUp,
     FutureOr<SpriteAnimation>? idleDown,
     FutureOr<SpriteAnimation>? idleUpLeft,
@@ -57,6 +63,8 @@ class SimpleDirectionAnimation {
     FutureOr<SpriteAnimation>? runDownRight,
     Map<String, FutureOr<SpriteAnimation>>? others,
     SimpleAnimationEnum initAnimation = SimpleAnimationEnum.idleRight,
+    this.enabledFlipX = true,
+    this.enabledFlipY = false,
   }) {
     _currentType = initAnimation;
     _loader.add(AssetToLoad(idleLeft, (value) => this.idleLeft = value));
@@ -95,13 +103,20 @@ class SimpleDirectionAnimation {
 
   /// Method used to play specific default animation
   void play(SimpleAnimationEnum animation) {
+    _flipX = false;
+    _flipY = false;
     _currentType = animation;
     if (!runToTheEndFastAnimation) {
       _fastAnimation = null;
     }
     switch (animation) {
       case SimpleAnimationEnum.idleLeft:
-        _current = idleLeft;
+        if (idleLeft != null) {
+          _current = idleLeft;
+        } else if (enabledFlipX) {
+          _flipX = true;
+          _current = idleRight;
+        }
         break;
       case SimpleAnimationEnum.idleRight:
         _current = idleRight;
@@ -110,7 +125,12 @@ class SimpleDirectionAnimation {
         if (idleUp != null) _current = idleUp;
         break;
       case SimpleAnimationEnum.idleDown:
-        if (idleDown != null) _current = idleDown;
+        if (idleDown != null) {
+          _current = idleDown;
+        } else if (enabledFlipY && idleUp != null) {
+          _flipY = true;
+          _current = idleUp;
+        }
         break;
       case SimpleAnimationEnum.idleTopLeft:
         if (idleUpLeft != null) _current = idleUpLeft;
@@ -131,10 +151,20 @@ class SimpleDirectionAnimation {
         _current = runRight;
         break;
       case SimpleAnimationEnum.runDown:
-        if (runDown != null) _current = runDown;
+        if (runDown != null) {
+          _current = runDown;
+        } else if (enabledFlipY && runUp != null) {
+          _flipY = true;
+          _current = runUp;
+        }
         break;
       case SimpleAnimationEnum.runLeft:
-        _current = runLeft;
+        if (runLeft != null) {
+          _current = runLeft;
+        } else if (enabledFlipX) {
+          _flipX = true;
+          _current = runRight;
+        }
         break;
       case SimpleAnimationEnum.runUpLeft:
         if (runUpLeft != null) _current = runUpLeft;
@@ -154,11 +184,13 @@ class SimpleDirectionAnimation {
   }
 
   /// Method used to play specific animation registred in `others`
-  void playOther(String key) {
+  void playOther(String key, {bool flipX = false, bool flipY = false}) {
     if (others.containsKey(key) == true) {
       if (!runToTheEndFastAnimation) {
         _fastAnimation = null;
       }
+      _flipX = flipX;
+      _flipY = flipY;
       _current = others[key];
       _currentType = SimpleAnimationEnum.custom;
     }
@@ -169,6 +201,8 @@ class SimpleDirectionAnimation {
     Future<SpriteAnimation> animation, {
     VoidCallback? onFinish,
     bool runToTheEnd = false,
+    bool flipX = false,
+    bool flipY = false,
   }) async {
     if (position != null) {
       runToTheEndFastAnimation = runToTheEnd;
@@ -176,6 +210,8 @@ class SimpleDirectionAnimation {
         position: position!,
         size: size!,
         animation: animation,
+        flipX: flipX,
+        flipY: flipY,
         onFinish: () {
           onFinish?.call();
           _fastAnimation = null;
@@ -199,22 +235,37 @@ class SimpleDirectionAnimation {
     if (_fastAnimation != null) {
       _fastAnimation?.render(canvas);
     } else {
+      if (_flipX || _flipY) {
+        canvas.save();
+        Vector2 center = Vector2(
+          position!.x + size!.x / 2,
+          position!.y + size!.y / 2,
+        );
+        canvas.translate(center.x, center.y);
+        canvas.scale(_flipX ? -1 : 1, _flipY ? -1 : 1);
+        canvas.translate(-center.x, -center.y);
+      }
       _current?.getSprite().renderWithOpacity(
             canvas,
             position!,
             size!,
             opacity: opacity,
           );
+
+      if (_flipX || _flipY) {
+        canvas.restore();
+      }
     }
   }
 
   void update(double dt, Vector2 position, Vector2 size) {
-    this.position = position;
-    this.size = size;
     _fastAnimation?.opacity = opacity;
     _fastAnimation?.position = position;
     _fastAnimation?.size = size;
     _fastAnimation?.update(dt);
+
+    this.position = position;
+    this.size = size;
     _current?.update(dt);
   }
 

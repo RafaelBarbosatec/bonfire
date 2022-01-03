@@ -18,6 +18,8 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     this.onFinish,
     this.onStartAnimation,
     double rotateRadAngle = 0,
+    bool flipX = false,
+    bool flipY = false,
     LightingConfig? lightingConfig,
   }) {
     _loader.add(AssetToLoad(animation, (value) {
@@ -27,6 +29,8 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     this.position = position;
     this.size = size;
     this.angle = rotateRadAngle;
+    this.isFlipHorizontal = flipX;
+    this.isFlipVertical = flipY;
   }
 
   @override

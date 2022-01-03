@@ -2,7 +2,8 @@
 - Extensions improvements
 - `GameColorFilter` Improvements
 - adds `left`,`right`,`top`,`bottom` in `GameComponent`
-- add `enabledSensor` in `Sensor`
+- adds `enabledSensor` in `Sensor`
+- Now is only required `idleRight` and `runRight` in `SimpleDirectionAnimation`. It's do flip horizontal to run left animation. You can enable and disable using the params `enabledFlipX` (default = true) and `enabledFlipY` (default = false / if you set this params to true, is only necessary set `idleUp` and `runUp`).
 
 # [2.0.0-flamev1.2]
 - Fix bug in `getAnimation` (ImageExtension).
