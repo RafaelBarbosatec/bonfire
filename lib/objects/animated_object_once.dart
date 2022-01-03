@@ -9,7 +9,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
   final VoidCallback? onStartAnimation;
   bool _notifyStart = false;
 
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   AnimatedObjectOnce({
     required Vector2 position,
@@ -22,7 +22,7 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     bool flipY = false,
     LightingConfig? lightingConfig,
   }) {
-    _loader.add(AssetToLoad(animation, (value) {
+    _loader?.add(AssetToLoad(animation, (value) {
       this.animation = value..loop = false;
     }));
     setupLighting(lightingConfig);
@@ -54,8 +54,9 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
   }
 
   @override
-  Future<void> onLoad() {
-    super.onLoad();
-    return _loader.load();
+  Future<void> onLoad() async {
+    await _loader?.load();
+    _loader = null;
+    return super.onLoad();
   }
 }

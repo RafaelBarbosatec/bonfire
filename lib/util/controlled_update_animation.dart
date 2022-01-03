@@ -38,5 +38,6 @@ class ControlledUpdateAnimation {
 
   Future<void> onLoad() async {
     await _loader?.load();
+    _loader = null;
   }
 }

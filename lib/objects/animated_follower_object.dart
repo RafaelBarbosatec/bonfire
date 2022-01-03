@@ -5,7 +5,7 @@ import 'package:bonfire/util/assets_loader.dart';
 
 class AnimatedFollowerObject extends FollowerObject {
   final bool loopAnimation;
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
   SpriteAnimation? animation;
 
   AnimatedFollowerObject({
@@ -15,7 +15,7 @@ class AnimatedFollowerObject extends FollowerObject {
     Vector2? positionFromTarget,
     this.loopAnimation = false,
   }) : super(target, positionFromTarget, size) {
-    _loader.add(AssetToLoad(animation, (value) => this.animation = value));
+    _loader?.add(AssetToLoad(animation, (value) => this.animation = value));
   }
 
   @override
@@ -41,8 +41,9 @@ class AnimatedFollowerObject extends FollowerObject {
   }
 
   @override
-  Future<void> onLoad() {
-    super.onLoad();
-    return _loader.load();
+  Future<void> onLoad() async {
+    await _loader?.load();
+    _loader = null;
+    return super.onLoad();
   }
 }

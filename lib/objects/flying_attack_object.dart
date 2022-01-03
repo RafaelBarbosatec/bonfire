@@ -13,7 +13,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final AttackFromEnum attackFrom;
   final bool withDecorationCollision;
   final VoidCallback? onDestroyedObject;
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
   final bool enableDiagonal;
 
   final IntervalTick _timerVerifyCollision = IntervalTick(50);
@@ -34,7 +34,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) {
-    _loader.add(AssetToLoad(flyAnimation, (value) {
+    _loader?.add(AssetToLoad(flyAnimation, (value) {
       return this.flyAnimation = value;
     }));
 
@@ -242,8 +242,9 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-    await _loader.load();
+    await _loader?.load();
+    _loader = null;
     animation = this.flyAnimation;
+    return super.onLoad();
   }
 }

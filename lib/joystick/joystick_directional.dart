@@ -31,7 +31,7 @@ class JoystickDirectional {
 
   Vector2? _screenSize;
 
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   JoystickDirectional({
     Future<Sprite>? spriteBackgroundDirectional,
@@ -41,11 +41,11 @@ class JoystickDirectional {
     this.size = 80,
     this.color = Colors.blueGrey,
   }) {
-    _loader.add(AssetToLoad(spriteBackgroundDirectional, (value) {
+    _loader?.add(AssetToLoad(spriteBackgroundDirectional, (value) {
       _backgroundSprite = value;
     }));
 
-    _loader.add(AssetToLoad(spriteKnobDirectional, (value) {
+    _loader?.add(AssetToLoad(spriteKnobDirectional, (value) {
       _knobSprite = value;
     }));
 
@@ -297,7 +297,7 @@ class JoystickDirectional {
   }
 
   Future<void> onLoad() async {
-    await _loader.load();
+    await _loader?.load();
     if (_backgroundSprite == null) {
       _paintBackground = Paint()
         ..color = color.withOpacity(0.5)
@@ -309,5 +309,7 @@ class JoystickDirectional {
         ..color = color.withOpacity(0.8)
         ..style = PaintingStyle.fill;
     }
+
+    _loader = null;
   }
 }

@@ -14,7 +14,7 @@ class FlyingAttackAngleObject extends AnimatedObject
   final AttackFromEnum attackFrom;
   final bool withCollision;
   final VoidCallback? onDestroy;
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   late double _cosAngle;
   late double _senAngle;
@@ -36,7 +36,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) {
-    _loader.add(AssetToLoad(flyAnimation, (value) {
+    _loader?.add(AssetToLoad(flyAnimation, (value) {
       return this.flyAnimation = value;
     }));
 
@@ -150,8 +150,9 @@ class FlyingAttackAngleObject extends AnimatedObject
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-    await _loader.load();
+    await _loader?.load();
+    _loader = null;
     animation = this.flyAnimation;
+    return super.onLoad();
   }
 }

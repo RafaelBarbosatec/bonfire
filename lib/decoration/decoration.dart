@@ -14,7 +14,7 @@ class GameDecoration extends AnimatedObject {
   Sprite? sprite;
 
   /// Used to load assets in [onLoad]
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   GameDecoration({
     this.sprite,
@@ -34,7 +34,7 @@ class GameDecoration extends AnimatedObject {
     required Vector2 position,
     required Vector2 size,
   }) {
-    _loader.add(AssetToLoad(sprite, (value) => this.sprite = value));
+    _loader?.add(AssetToLoad(sprite, (value) => this.sprite = value));
     generateRectWithBleedingPixel(
       position,
       size,
@@ -46,7 +46,7 @@ class GameDecoration extends AnimatedObject {
     required Vector2 position,
     required Vector2 size,
   }) {
-    _loader.add(AssetToLoad(animation, (value) => this.animation = value));
+    _loader?.add(AssetToLoad(animation, (value) => this.animation = value));
     generateRectWithBleedingPixel(
       position,
       size,
@@ -85,6 +85,7 @@ class GameDecoration extends AnimatedObject {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    return _loader.load();
+    await _loader?.load();
+    _loader = null;
   }
 }

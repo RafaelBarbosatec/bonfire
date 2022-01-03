@@ -39,7 +39,7 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    for (final tile in childrenTiles) {
+    for (Tile tile in childrenTiles) {
       tile.renderTree(canvas);
     }
     _drawPathLine(canvas);
@@ -49,7 +49,7 @@ class MapWorld extends MapGame {
   @override
   // ignore: must_call_super
   void update(double dt) {
-    for (final tile in childrenTiles) {
+    for (Tile tile in childrenTiles) {
       tile.update(dt);
       if (tile.shouldRemove) {
         _tilesToRemove.add(tile);
@@ -89,7 +89,7 @@ class MapWorld extends MapGame {
 
   @override
   Iterable<Tile> getRendered() {
-    return childrenTiles.cast();
+    return childrenTiles;
   }
 
   @override

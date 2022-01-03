@@ -19,7 +19,7 @@ class InterfaceComponent extends GameComponent with TapGesture {
   bool _lastSelected = false;
   bool selected = false;
 
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   InterfaceComponent({
     required this.id,
@@ -30,10 +30,10 @@ class InterfaceComponent extends GameComponent with TapGesture {
     this.selectable = false,
     this.onTapComponent,
   }) {
-    _loader.add(AssetToLoad(sprite, (value) {
+    _loader?.add(AssetToLoad(sprite, (value) {
       this.sprite = value;
     }));
-    _loader.add(AssetToLoad(spriteSelected, (value) {
+    _loader?.add(AssetToLoad(spriteSelected, (value) {
       this.spriteSelected = value;
     }));
     this.position = Vector2(position.x, position.y);
@@ -72,9 +72,10 @@ class InterfaceComponent extends GameComponent with TapGesture {
   PositionType get positionType => PositionType.viewport;
 
   @override
-  Future<void>? onLoad() {
-    super.onLoad();
-    return _loader.load();
+  Future<void>? onLoad() async {
+    await _loader?.load();
+    _loader = null;
+    return super.onLoad();
   }
 
   @override

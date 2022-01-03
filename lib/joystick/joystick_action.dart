@@ -35,7 +35,7 @@ class JoystickAction {
   JoystickController? _joystickController;
   bool isPressed = false;
 
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   JoystickAction({
     required this.actionId,
@@ -51,13 +51,13 @@ class JoystickAction {
     this.opacityBackground = 0.5,
     this.opacityKnob = 0.8,
   }) {
-    _loader.add(AssetToLoad(sprite, (value) {
+    _loader?.add(AssetToLoad(sprite, (value) {
       this.sprite = value;
     }));
-    _loader.add(AssetToLoad(spritePressed, (value) {
+    _loader?.add(AssetToLoad(spritePressed, (value) {
       this.spritePressed = value;
     }));
-    _loader.add(AssetToLoad(spriteBackgroundDirection, (value) {
+    _loader?.add(AssetToLoad(spriteBackgroundDirection, (value) {
       this.spriteBackgroundDirection = value;
     }));
     _sizeBackgroundDirection = sizeFactorBackgroundDirection * size;
@@ -245,7 +245,7 @@ class JoystickAction {
   }
 
   Future<void> onLoad() async {
-    await _loader.load();
+    await _loader?.load();
 
     _spriteToRender = sprite;
 
@@ -266,5 +266,7 @@ class JoystickAction {
         ..color = color.withOpacity(opacityBackground)
         ..style = PaintingStyle.fill;
     }
+
+    _loader = null;
   }
 }

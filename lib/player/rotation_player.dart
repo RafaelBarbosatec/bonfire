@@ -10,7 +10,7 @@ class RotationPlayer extends Player {
   SpriteAnimation? animRun;
   double? currentRadAngle;
   SpriteAnimation? animation;
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   RotationPlayer({
     required Vector2 position,
@@ -26,8 +26,8 @@ class RotationPlayer extends Player {
           life: life,
           speed: speed,
         ) {
-    _loader.add(AssetToLoad(animIdle, (value) => this.animIdle = value));
-    _loader.add(AssetToLoad(animRun, (value) => this.animRun = value));
+    _loader?.add(AssetToLoad(animIdle, (value) => this.animIdle = value));
+    _loader?.add(AssetToLoad(animRun, (value) => this.animRun = value));
   }
 
   @override
@@ -71,8 +71,9 @@ class RotationPlayer extends Player {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-    await _loader.load();
+    await _loader?.load();
+    _loader = null;
     this.animation = this.animIdle;
+    return super.onLoad();
   }
 }

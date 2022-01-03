@@ -26,7 +26,7 @@ class SimpleDirectionAnimation {
 
   Map<String, SpriteAnimation> others = {};
 
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   SpriteAnimation? _current;
   late SimpleAnimationEnum _currentType;
@@ -67,35 +67,35 @@ class SimpleDirectionAnimation {
     this.enabledFlipY = false,
   }) {
     _currentType = initAnimation;
-    _loader.add(AssetToLoad(idleLeft, (value) => this.idleLeft = value));
-    _loader.add(AssetToLoad(idleRight, (value) => this.idleRight = value));
-    _loader.add(AssetToLoad(idleDown, (value) => this.idleDown = value));
-    _loader.add(AssetToLoad(idleUp, (value) => this.idleUp = value));
-    _loader.add(AssetToLoad(idleUpLeft, (value) => this.idleUpLeft = value));
-    _loader.add(AssetToLoad(idleUpRight, (value) {
+    _loader?.add(AssetToLoad(idleLeft, (value) => this.idleLeft = value));
+    _loader?.add(AssetToLoad(idleRight, (value) => this.idleRight = value));
+    _loader?.add(AssetToLoad(idleDown, (value) => this.idleDown = value));
+    _loader?.add(AssetToLoad(idleUp, (value) => this.idleUp = value));
+    _loader?.add(AssetToLoad(idleUpLeft, (value) => this.idleUpLeft = value));
+    _loader?.add(AssetToLoad(idleUpRight, (value) {
       return this.idleUpRight = value;
     }));
-    _loader.add(AssetToLoad(idleDownLeft, (value) {
+    _loader?.add(AssetToLoad(idleDownLeft, (value) {
       return this.idleDownLeft = value;
     }));
-    _loader.add(AssetToLoad(idleDownRight, (value) {
+    _loader?.add(AssetToLoad(idleDownRight, (value) {
       return this.idleDownRight = value;
     }));
-    _loader.add(AssetToLoad(runUp, (value) => this.runUp = value));
-    _loader.add(AssetToLoad(runRight, (value) => this.runRight = value));
-    _loader.add(AssetToLoad(runDown, (value) => this.runDown = value));
-    _loader.add(AssetToLoad(runLeft, (value) => this.runLeft = value));
-    _loader.add(AssetToLoad(runUpLeft, (value) => this.runUpLeft = value));
-    _loader.add(AssetToLoad(runUpRight, (value) => this.runUpRight = value));
-    _loader.add(AssetToLoad(runDownLeft, (value) {
+    _loader?.add(AssetToLoad(runUp, (value) => this.runUp = value));
+    _loader?.add(AssetToLoad(runRight, (value) => this.runRight = value));
+    _loader?.add(AssetToLoad(runDown, (value) => this.runDown = value));
+    _loader?.add(AssetToLoad(runLeft, (value) => this.runLeft = value));
+    _loader?.add(AssetToLoad(runUpLeft, (value) => this.runUpLeft = value));
+    _loader?.add(AssetToLoad(runUpRight, (value) => this.runUpRight = value));
+    _loader?.add(AssetToLoad(runDownLeft, (value) {
       return this.runDownLeft = value;
     }));
-    _loader.add(AssetToLoad(runDownRight, (value) {
+    _loader?.add(AssetToLoad(runDownRight, (value) {
       return this.runDownRight = value;
     }));
 
     others?.forEach((key, anim) {
-      _loader.add(AssetToLoad(anim, (value) {
+      _loader?.add(AssetToLoad(anim, (value) {
         return this.others[key] = value;
       }));
     });
@@ -270,7 +270,8 @@ class SimpleDirectionAnimation {
   }
 
   Future<void> onLoad() async {
-    return _loader.load();
+    await _loader?.load();
+    _loader = null;
   }
 
   SimpleAnimationEnum? get currentType => _currentType;

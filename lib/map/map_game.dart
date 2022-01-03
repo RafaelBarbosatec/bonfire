@@ -33,7 +33,7 @@ abstract class MapGame extends GameComponent {
 
   void renderDebugMode(Canvas canvas) {
     super.renderDebugMode(canvas);
-    for (final t in getRendered()) {
+    for (Tile t in getRendered()) {
       t.renderDebugMode(canvas);
     }
   }

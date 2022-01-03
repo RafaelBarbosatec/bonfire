@@ -13,7 +13,7 @@ class RotationEnemy extends Enemy {
 
   double currentRadAngle;
 
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   RotationEnemy({
     required Vector2 position,
@@ -29,10 +29,10 @@ class RotationEnemy extends Enemy {
           life: life,
           speed: speed,
         ) {
-    _loader.add(AssetToLoad(animIdle, (value) {
+    _loader?.add(AssetToLoad(animIdle, (value) {
       this.animIdle = value;
     }));
-    _loader.add(AssetToLoad(animRun, (value) {
+    _loader?.add(AssetToLoad(animRun, (value) {
       this.animRun = value;
     }));
   }
@@ -84,7 +84,8 @@ class RotationEnemy extends Enemy {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    await _loader.load();
+    await _loader?.load();
+    _loader = null;
     idle();
   }
 }
