@@ -24,6 +24,8 @@ class LightingConfig {
   /// Configure blur in lighting
   final double blurBorder;
 
+  double _blurSigma = 0;
+
   PulseValue? _pulseAnimation;
 
   LightingConfig({
@@ -36,6 +38,7 @@ class LightingConfig {
     this.blurBorder = 20,
   }) {
     _pulseAnimation = PulseValue(speed: pulseSpeed, curve: pulseCurve);
+    _blurSigma = _convertRadiusToSigma(blurBorder);
   }
 
   void update(double dt) {
@@ -43,4 +46,9 @@ class LightingConfig {
   }
 
   double get valuePulse => _pulseAnimation?.value ?? 0.0;
+  double get blurSigma => _blurSigma;
+
+  static double _convertRadiusToSigma(double radius) {
+    return radius * 0.57735 + 0.5;
+  }
 }

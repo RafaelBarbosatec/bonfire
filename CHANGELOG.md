@@ -1,5 +1,6 @@
 # [NEXT]
 - little improvements in `SimpleDirectionAnimation`
+- improvements in `Lighting`
 
 # [2.0.0-flamev1.3]
 - Extensions improvements

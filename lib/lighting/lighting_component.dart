@@ -2,6 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class LightingInterface {
+  Color? color;
   void animateToColor(
     Color color, {
     Duration duration = const Duration(milliseconds: 500),
@@ -17,6 +18,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
   Iterable<Lighting> _visibleLight = [];
   double _dtUpdate = 0.0;
   ColorTween? _tween;
+  bool _containColor = false;
 
   @override
   PositionType get positionType => PositionType.viewport;
@@ -33,14 +35,13 @@ class LightingComponent extends GameComponent implements LightingInterface {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (!_containsColor()) return;
+    if (!_containColor) return;
     Vector2 size = gameRef.camera.canvasSize;
     canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
     canvas.drawColor(color!, BlendMode.dstATop);
     _visibleLight.forEach((light) {
       final config = light.lightingConfig;
       if (config == null) return;
-      final sigma = _convertRadiusToSigma(config.blurBorder);
       config.update(_dtUpdate);
       canvas.save();
 
@@ -62,7 +63,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
         _paintFocus
           ..maskFilter = MaskFilter.blur(
             BlurStyle.normal,
-            sigma,
+            config.blurSigma,
           ),
       );
 
@@ -70,7 +71,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
         ..color = config.color
         ..maskFilter = MaskFilter.blur(
           BlurStyle.normal,
-          sigma,
+          config.blurSigma,
         );
       canvas.drawCircle(
         light.center.toOffset(),
@@ -86,14 +87,11 @@ class LightingComponent extends GameComponent implements LightingInterface {
     canvas.restore();
   }
 
-  static double _convertRadiusToSigma(double radius) {
-    return radius * 0.57735 + 0.5;
-  }
-
   @override
   // ignore: must_call_super
   void update(double dt) {
-    if (!_containsColor()) return;
+    _containColor = _containsColor();
+    if (!_containColor) return;
     _dtUpdate = dt;
     _visibleLight = gameRef.lightVisible();
   }
@@ -103,7 +101,10 @@ class LightingComponent extends GameComponent implements LightingInterface {
     Duration duration = const Duration(milliseconds: 500),
     Curve curve = Curves.decelerate,
   }) {
-    _tween = ColorTween(begin: this.color ?? Color(0x00000000), end: color);
+    _tween = ColorTween(
+      begin: this.color ?? Color(0x00000000),
+      end: color,
+    );
 
     gameRef.getValueGenerator(
       duration,
