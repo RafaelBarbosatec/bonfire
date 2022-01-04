@@ -1,29 +1,29 @@
 # [NEXT]
-- little improvements in `SimpleDirectionAnimation`
-- improvements in `Lighting`
+- Small improvements in `SimpleDirectionAnimation`
+- Improvements in `Lighting`
 
 # [2.0.0-flamev1.3]
 - Extensions improvements
-- `GameColorFilter` Improvements
-- adds `left`,`right`,`top`,`bottom` in `GameComponent`
-- adds `enabledSensor` in `Sensor`
-- Now is only required `idleRight` and `runRight` in `SimpleDirectionAnimation`. It's do flip horizontal to run left animation. You can enable and disable using the params `enabledFlipX` (default = true) and `enabledFlipY` (default = false / if you set this params to true, is only necessary set `idleUp` and `runUp`).
+- Improvements in `GameColorFilter`
+- Add `left`,`right`,`top`,`bottom` in `GameComponent`
+- Add `enabledSensor` in `Sensor`
+- `SimpleDirectionAnimation` now only requires `idleRight` and `runRight`. It will automatically flip horizontally to perform the idle/run left animations. You can disable this feature setting the param `enabledFlipX` to false (default = true). `enabledFlipY` is also available, but defaults to false (if you set this param to true, only `idleUp` and `runUp` are needed).
 
 # [2.0.0-flamev1.2]
-- Fix bug in `getAnimation` (ImageExtension).
-- Fix bug in `progress` (BonfireTiledWidget).
+- Bug fix in `getAnimation` (ImageExtension).
+- Bug fix in `progress` (BonfireTiledWidget).
 
 # [2.0.0-flamev1.1] - FLAME V1.0
-In order to reduce the distance of implementations between Flame and Bonfire. In this version we are following the standardization of using `Vector2` for `position` and `size` and we are using resources available by Flame such as `PositionComponent` to base our components, 'FlameGame' and the camera instead of using our own implementations. You lost some small features, but nothing that Flame's team won't add over time.
+We're striving to reduce the distance between Flame and Bonfire, relying more and more on Flame components under the hood now that it is stable. In this version we are following the standardization of using `Vector2` for `position` and `size` and using `PositionComponent` as the base for Bonfire components. Also, 'FlameGame' and the Flame's Camera are now used instead of custom implementations we had before. Some small features were lost, but nothing that the Flame's team isn't capable of adding over time.
 
 - Update to flame 1.0.
-    - BRAKING CHANGE: Now use `Vector2 size` instead of `double height` and `double width`.
-    - BRAKING CHANGE: Where before was `Offset` and `Size`, now is `Vector2`.
-    - BRAKING CHANGE: `camera.animateSimpleRotation` and `camera.animateLoopRotation` not working in the moment.
-- Improvements in `ObjectCollision`. Now if you do override in `onCollision` and return `false` when collision is passive this object not will impede the passage.
+    - BREAKING CHANGE: Use `Vector2 size` instead of `double height` and `double width`.
+    - BREAKING CHANGE: Use `Vector2` instead of `Offset` and `Size`.
+    - BREAKING CHANGE: `camera.animateSimpleRotation` and `camera.animateLoopRotation` are not available anymore.
+- Improvements in `ObjectCollision`. Now it is possible to override `onCollision` and return `false` so the object will not collide with anything or block the passage.
 - Add new mixin `Pushable`.
 - Add params `name` and `id` in `TiledObjectProperties`.
-- Now we can use [Flame Effects](https://docs.flame-engine.org/1.0.0/effects.html)
+- Add support to use [Flame Effects](https://docs.flame-engine.org/1.0.0/effects.html)
 
 # [1.12.3]
 - Improvements in collision objects by Tiled.
