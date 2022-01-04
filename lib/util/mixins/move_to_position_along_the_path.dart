@@ -103,13 +103,12 @@ mixin MoveToPositionAlongThePath on Movement {
 
   void _move(double dt) {
     double innerSpeed = speed * dt;
-
-    Rect componentPosition = toRect();
+    Vector2 center = this.center;
     if (this.isObjectCollision()) {
-      componentPosition = (this as ObjectCollision).rectCollision;
+      center = (this as ObjectCollision).rectCollision.center.toVector2();
     }
-    double diffX = _currentPath[_currentIndex].dx - componentPosition.center.dx;
-    double diffY = _currentPath[_currentIndex].dy - componentPosition.center.dy;
+    double diffX = _currentPath[_currentIndex].dx - center.x;
+    double diffY = _currentPath[_currentIndex].dy - center.y;
     double displacementX = diffX.abs() > innerSpeed ? speed : diffX.abs() / dt;
     double displacementY = diffY.abs() > innerSpeed ? speed : diffY.abs() / dt;
 

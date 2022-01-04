@@ -1,5 +1,6 @@
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/bonfire_game_ref.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
@@ -68,7 +69,7 @@ abstract class GameComponent extends PositionComponent
       return map
           .getRendered()
           .where((element) {
-            return (element.toRect().overlaps(position) &&
+            return (element.overlaps(position) &&
                 (element.type?.isNotEmpty ?? false));
           })
           .map<String>((e) => e.type!)
@@ -97,8 +98,7 @@ abstract class GameComponent extends PositionComponent
       return map
           .getRendered()
           .where((element) {
-            return (element.toRect().overlaps(position) &&
-                (element.properties != null));
+            return (element.overlaps(position) && (element.properties != null));
           })
           .map<Map<String, dynamic>>((e) => e.properties!)
           .toList();
@@ -120,7 +120,7 @@ abstract class GameComponent extends PositionComponent
   }
 
   int _getBottomPriority() {
-    int bottomPriority = toRect().bottom.round();
+    int bottomPriority = bottom.round();
     if (this.isObjectCollision()) {
       bottomPriority = (this as ObjectCollision).rectCollision.bottom.round();
     }

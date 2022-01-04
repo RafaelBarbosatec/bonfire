@@ -90,7 +90,7 @@ class FlyingAttackAngleObject extends AnimatedObject
       return (attackFrom == AttackFromEnum.ENEMY
               ? a.receivesAttackFromEnemy()
               : a.receivesAttackFromPlayer()) &&
-          a.rectAttackable().overlaps(toRect());
+          overlaps(a.rectAttackable());
     }).forEach((enemy) {
       enemy.receiveDamage(damage, id);
       destroy = true;
@@ -130,18 +130,18 @@ class FlyingAttackAngleObject extends AnimatedObject
 
   bool _verifyExistInWorld() {
     Size? mapSize = gameRef.map.mapSize;
-    final _rect = toRect();
+
     if (mapSize == null) return true;
-    if (_rect.left < 0) {
+    if (left < 0) {
       return false;
     }
-    if (_rect.right > mapSize.width) {
+    if (right > mapSize.width) {
       return false;
     }
-    if (_rect.top < 0) {
+    if (top < 0) {
       return false;
     }
-    if (_rect.bottom > mapSize.height) {
+    if (bottom > mapSize.height) {
       return false;
     }
 

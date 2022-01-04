@@ -450,4 +450,10 @@ extension GameComponentExtensions on GameComponent {
   double get bottom => absolutePositionOfAnchor(Anchor.bottomRight).y;
   double get left => position.x;
   double get right => absolutePositionOfAnchor(Anchor.bottomRight).x;
+
+  bool overlaps(Rect other) {
+    if (right <= other.left || other.right <= left) return false;
+    if (bottom <= other.top || other.bottom <= top) return false;
+    return true;
+  }
 }
