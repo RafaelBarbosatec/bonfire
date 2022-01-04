@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/map/map_paint.dart';
 import 'package:bonfire/util/assets_loader.dart';
 
 class ControlledUpdateAnimation {
@@ -18,14 +17,18 @@ class ControlledUpdateAnimation {
     this.animation = animation;
   }
 
-  void render(Canvas canvas, Rect rect) {
-    if (animation != null) {
-      animation?.getSprite().renderRect(
-            canvas,
-            rect,
-            overridePaint: MapPaint.instance.paint,
-          );
-    }
+  void render(
+    Canvas canvas, {
+    Vector2? position,
+    Vector2? size,
+    Paint? overridePaint,
+  }) {
+    animation?.getSprite().render(
+          canvas,
+          position: position,
+          size: size,
+          overridePaint: overridePaint,
+        );
     _alreadyUpdate = false;
   }
 
