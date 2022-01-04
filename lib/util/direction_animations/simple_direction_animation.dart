@@ -31,8 +31,8 @@ class SimpleDirectionAnimation {
   SpriteAnimation? _current;
   late SimpleAnimationEnum _currentType;
   AnimatedObjectOnce? _fastAnimation;
-  Vector2? position;
-  Vector2? size;
+  Vector2 position = Vector2.zero();
+  Vector2 size = Vector2.zero();
 
   bool runToTheEndFastAnimation = false;
 
@@ -198,48 +198,45 @@ class SimpleDirectionAnimation {
 
   /// Method used to play animation once time
   Future playOnce(
-    Future<SpriteAnimation> animation, {
+    FutureOr<SpriteAnimation> animation, {
     VoidCallback? onFinish,
     bool runToTheEnd = false,
     bool flipX = false,
     bool flipY = false,
   }) async {
-    if (position != null) {
-      runToTheEndFastAnimation = runToTheEnd;
-      final anim = AnimatedObjectOnce(
-        position: position!,
-        size: size!,
-        animation: animation,
-        flipX: flipX,
-        flipY: flipY,
-        onFinish: () {
-          onFinish?.call();
-          _fastAnimation = null;
-        },
-      );
-      await anim.onLoad();
-      _fastAnimation = anim;
-    }
+    runToTheEndFastAnimation = runToTheEnd;
+    final anim = AnimatedObjectOnce(
+      position: position,
+      size: size,
+      animation: animation,
+      flipX: flipX,
+      flipY: flipY,
+      onFinish: () {
+        onFinish?.call();
+        _fastAnimation = null;
+      },
+    );
+    await anim.onLoad();
+    _fastAnimation = anim;
   }
 
   /// Method used to register new animation in others
   Future<void> addOtherAnimation(
     String key,
-    Future<SpriteAnimation> animation,
+    FutureOr<SpriteAnimation> animation,
   ) async {
     others[key] = await animation;
   }
 
   void render(Canvas canvas) {
-    if (position == null || size == null) return;
     if (_fastAnimation != null) {
       _fastAnimation?.render(canvas);
     } else {
       if (_flipX || _flipY) {
         canvas.save();
         Vector2 center = Vector2(
-          position!.x + size!.x / 2,
-          position!.y + size!.y / 2,
+          position.x + size.x / 2,
+          position.y + size.y / 2,
         );
         canvas.translate(center.x, center.y);
         canvas.scale(_flipX ? -1 : 1, _flipY ? -1 : 1);
@@ -247,8 +244,8 @@ class SimpleDirectionAnimation {
       }
       _current?.getSprite().renderWithOpacity(
             canvas,
-            position!,
-            size!,
+            position,
+            size,
             opacity: opacity,
           );
 

@@ -1,3 +1,6 @@
+# [NEXT]
+- little improvements in `SimpleDirectionAnimation`
+
 # [2.0.0-flamev1.3]
 - Extensions improvements
 - `GameColorFilter` Improvements
