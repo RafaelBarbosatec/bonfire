@@ -63,7 +63,7 @@ mixin Sensor on GameComponent {
   @override
   void render(Canvas c) {
     super.render(c);
-    if ((gameRef as BonfireGame).showCollisionArea) {
+    if (gameRef.showCollisionArea) {
       _sensorArea.forEach((element) {
         element.render(c, sensorColor);
       });

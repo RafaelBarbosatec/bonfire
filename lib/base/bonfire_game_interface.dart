@@ -40,6 +40,10 @@ abstract class BonfireGameInterface {
   int get highestPriority;
   Vector2 get size;
   bool get hasLayout;
+  bool get showCollisionArea;
+  bool get showFPS;
+  Color? get constructionModeColor;
+  Color? get collisionAreaColor;
   GameInterface? get interface;
   flameGame.ActiveOverlaysNotifier get overlays;
   void pauseEngine();

@@ -363,4 +363,13 @@ extension CameraExt on Camera {
       curve: curve,
     );
   }
+
+  void moveTop(double displacement) =>
+      (this as BonfireCamera).moveTop(displacement);
+  void moveRight(double displacement) =>
+      (this as BonfireCamera).moveRight(displacement);
+  void moveDown(double displacement) =>
+      (this as BonfireCamera).moveDown(displacement);
+  void moveUp(double displacement) =>
+      (this as BonfireCamera).moveUp(displacement);
 }

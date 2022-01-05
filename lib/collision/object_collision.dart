@@ -103,11 +103,10 @@ mixin ObjectCollision on GameComponent {
   void render(Canvas canvas) {
     super.render(canvas);
     if (hasGameRef) {
-      if ((gameRef as BonfireGame).showCollisionArea == true) {
+      if (gameRef.showCollisionArea == true) {
         _drawCollision(
           canvas,
-          (gameRef as BonfireGame).collisionAreaColor ??
-              Colors.lightGreen.withOpacity(0.5),
+          gameRef.collisionAreaColor ?? Colors.lightGreen.withOpacity(0.5),
         );
       }
     }

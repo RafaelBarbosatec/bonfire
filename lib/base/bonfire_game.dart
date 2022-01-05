@@ -175,8 +175,7 @@ class BonfireGame extends BaseGame
     await add(_lighting!);
     await add(interface ?? GameInterface());
     await add(_joystickController ?? Joystick());
-    _joystickController
-        ?.addObserver(player ?? MapExplorer(camera as BonfireCamera));
+    _joystickController?.addObserver(player ?? MapExplorer(camera));
     if (gameController != null) {
       await add(gameController!);
     }

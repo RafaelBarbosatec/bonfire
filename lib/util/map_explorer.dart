@@ -1,9 +1,9 @@
-import 'package:bonfire/camera/bonfire_camera.dart';
+import 'package:flame/game.dart';
 
 import '../bonfire.dart';
 
 class MapExplorer with JoystickListener {
-  final BonfireCamera camera;
+  final Camera camera;
 
   MapExplorer(this.camera);
 
