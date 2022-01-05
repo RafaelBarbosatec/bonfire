@@ -28,7 +28,10 @@ abstract class GameComponent extends PositionComponent
   /// angle is positive, or counterclockwise if the angle is negative.
   double angle = 0;
 
+  /// Use to do vertical flip in de render.
   bool isFlipVertical = false;
+
+  /// Use to do horizontal flip in de render.
   bool isFlipHorizontal = false;
 
   /// Param checks if this component is visible on the screen
@@ -142,6 +145,7 @@ abstract class GameComponent extends PositionComponent
     }
   }
 
+  @override
   void renderTree(Canvas canvas) {
     canvas.save();
 

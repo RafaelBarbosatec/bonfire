@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
-Color sensorColor = Color(0xFFF44336).withOpacity(0.5);
+final Color sensorColor = Color(0xFFF44336).withOpacity(0.5);
 
 /// Mixin responsible for adding trigger to detect other objects above
 mixin Sensor on GameComponent {

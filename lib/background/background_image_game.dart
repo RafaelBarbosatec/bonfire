@@ -16,6 +16,7 @@ import 'package:bonfire/map/map_assets_manager.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/components.dart';
 
+/// Used to define parallax image as background
 class BackgroundImageGame extends GameBackground {
   final String imagePath;
   final Vector2 offset;

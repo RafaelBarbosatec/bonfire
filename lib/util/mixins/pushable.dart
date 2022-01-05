@@ -12,6 +12,7 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 23/12/21
 
+/// This mixin give to the component the pushable behavior.
 /// To use this mixin the Component must have a `Movement` mixin.
 mixin Pushable on ObjectCollision {
   bool enablePushable = true;

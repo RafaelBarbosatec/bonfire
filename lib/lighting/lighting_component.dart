@@ -93,7 +93,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
     _containColor = _containsColor();
     if (!_containColor) return;
     _dtUpdate = dt;
-    _visibleLight = gameRef.lightVisible();
+    _visibleLight = gameRef.visibleLighting();
   }
 
   void animateToColor(

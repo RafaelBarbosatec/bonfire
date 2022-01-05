@@ -8,8 +8,10 @@ class CustomGameWidget<T extends Game> extends StatelessWidget {
   /// instance of the game
   final T game;
 
+  /// A map to show widgets overlay.
   final Map<String, OverlayWidgetBuilder<T>>? overlayBuilderMap;
 
+  /// "Overlay" which must be shown in the game.
   final List<String>? initialActiveOverlays;
 
   const CustomGameWidget({

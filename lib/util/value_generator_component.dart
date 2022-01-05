@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
+/// Component used to generate numbers using the gameLoop.
 class ValueGeneratorComponent extends Component {
   bool _isFinished = false;
   final int _maxInMicroSeconds = 1000000;

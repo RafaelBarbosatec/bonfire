@@ -61,7 +61,10 @@ class BonfireGame extends BaseGame
   /// Used to show in the interface the FPS.
   final bool showFPS;
 
+  /// Callback to receive the tapDown event from the game.
   final TapInGame? onTapDown;
+
+  /// Callback to receive the onTapUp event from the game.
   final TapInGame? onTapUp;
 
   Iterable<Lighting> _visibleLights = List.empty();
@@ -226,7 +229,7 @@ class BonfireGame extends BaseGame
   }
 
   @override
-  Iterable<Lighting> lightVisible() => _visibleLights;
+  Iterable<Lighting> visibleLighting() => _visibleLights;
 
   @override
   Iterable<Attackable> attackables() {
