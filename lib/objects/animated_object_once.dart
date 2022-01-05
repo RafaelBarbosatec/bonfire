@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -7,38 +7,35 @@ import 'package:bonfire/util/assets_loader.dart';
 class AnimatedObjectOnce extends AnimatedObject with Lighting {
   final VoidCallback? onFinish;
   final VoidCallback? onStartAnimation;
-  final double? rotateRadAngle;
   bool _notifyStart = false;
 
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   AnimatedObjectOnce({
-    required Vector2Rect position,
-    Future<SpriteAnimation>? animation,
+    required Vector2 position,
+    required Vector2 size,
+    FutureOr<SpriteAnimation>? animation,
     this.onFinish,
     this.onStartAnimation,
-    this.rotateRadAngle,
+    double rotateRadAngle = 0,
+    bool flipX = false,
+    bool flipY = false,
     LightingConfig? lightingConfig,
   }) {
-    _loader.add(AssetToLoad(animation, (value) {
+    _loader?.add(AssetToLoad(animation, (value) {
       this.animation = value..loop = false;
     }));
     setupLighting(lightingConfig);
     this.position = position;
+    this.size = size;
+    this.angle = rotateRadAngle;
+    this.isFlipHorizontal = flipX;
+    this.isFlipVertical = flipY;
   }
 
   @override
   void render(Canvas canvas) {
-    if (rotateRadAngle != null) {
-      canvas.save();
-      canvas.translate(position.center.dx, position.center.dy);
-      canvas.rotate(rotateRadAngle == 0.0 ? 0.0 : rotateRadAngle! + (pi / 2));
-      canvas.translate(-position.center.dx, -position.center.dy);
-      super.render(canvas);
-      canvas.restore();
-    } else {
-      super.render(canvas);
-    }
+    super.render(canvas);
     if (animation?.done() == true) {
       onFinish?.call();
       removeFromParent();
@@ -57,8 +54,9 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
   }
 
   @override
-  Future<void> onLoad() {
-    super.onLoad();
-    return _loader.load();
+  Future<void> onLoad() async {
+    await _loader?.load();
+    _loader = null;
+    return super.onLoad();
   }
 }

@@ -1,6 +1,5 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/enemy_sprite_sheet.dart';
-import 'package:flutter/material.dart';
 
 ///
 /// Created by
@@ -18,15 +17,14 @@ class MyEnemy extends SimpleEnemy with ObjectCollision {
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,
           position: position,
-          width: 32,
-          height: 32,
+          size: Vector2.all(32),
           life: 100,
         ) {
     /// here we configure collision of the enemy
     setupCollision(
       CollisionConfig(
         collisions: [
-          CollisionArea.rectangle(size: Size(32, 32)),
+          CollisionArea.rectangle(size: Vector2.all(32)),
         ],
       ),
     );

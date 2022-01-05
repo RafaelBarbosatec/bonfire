@@ -1,12 +1,12 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/camera/camera.dart';
+import 'package:flame/game.dart';
 
 abstract class GameListener {
   void updateGame();
   void changeCountLiveEnemies(int count);
 }
 
-class GameController with BonfireHasGameRef {
+class GameController extends Component with BonfireHasGameRef {
   List<GameListener> _gameListeners = [];
   int _lastCountLiveEnemies = 0;
 

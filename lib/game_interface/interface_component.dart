@@ -15,46 +15,38 @@ class InterfaceComponent extends GameComponent with TapGesture {
 
   /// Callback used to receive onTab gesture in your component. this return if is selected
   final ValueChanged<bool>? onTapComponent;
-  final double width;
-  final double height;
   final bool selectable;
   bool _lastSelected = false;
   bool selected = false;
 
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   InterfaceComponent({
     required this.id,
     required Vector2 position,
-    required this.width,
-    required this.height,
+    required Vector2 size,
     Future<Sprite>? sprite,
     Future<Sprite>? spriteSelected,
     this.selectable = false,
     this.onTapComponent,
   }) {
-    _loader.add(AssetToLoad(sprite, (value) {
+    _loader?.add(AssetToLoad(sprite, (value) {
       this.sprite = value;
     }));
-    _loader.add(AssetToLoad(spriteSelected, (value) {
+    _loader?.add(AssetToLoad(spriteSelected, (value) {
       this.spriteSelected = value;
     }));
-    this.position = Vector2Rect.fromRect(
-      Rect.fromLTWH(
-        position.x,
-        position.y,
-        width,
-        height,
-      ),
-    );
+    this.position = Vector2(position.x, position.y);
+    this.size = size;
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    (selected ? spriteSelected : sprite)?.renderFromVector2Rect(
+    (selected ? spriteSelected : sprite)?.renderWithOpacity(
       canvas,
-      this.position,
+      position,
+      size,
       opacity: opacity,
     );
   }
@@ -77,19 +69,20 @@ class InterfaceComponent extends GameComponent with TapGesture {
   }
 
   @override
-  bool get isHud => true;
+  PositionType get positionType => PositionType.viewport;
 
   @override
-  Future<void>? onLoad() {
-    super.onLoad();
-    return _loader.load();
+  Future<void>? onLoad() async {
+    await _loader?.load();
+    _loader = null;
+    return super.onLoad();
   }
 
   @override
-  void onTapDown(int pointer, Offset position) {
+  void onTapDown(int pointer, Vector2 position) {
     selected = true;
   }
 
   @override
-  void onTapUp(int pointer, Offset position) {}
+  void onTapUp(int pointer, Vector2 position) {}
 }

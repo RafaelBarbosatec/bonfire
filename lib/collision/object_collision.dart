@@ -9,7 +9,9 @@ mixin ObjectCollision on GameComponent {
 
   bool _containCollision = false;
 
-  void onCollision(GameComponent component, bool active) {}
+  bool onCollision(GameComponent component, bool active) {
+    return true;
+  }
 
   void setupCollision(CollisionConfig collisionConfig) {
     _collisionConfig = collisionConfig;
@@ -45,9 +47,9 @@ mixin ObjectCollision on GameComponent {
 
   bool containCollision() => _containCollision;
 
-  Vector2Rect get rectCollision {
-    if (!containCollision()) return Vector2Rect.zero();
-    return _collisionConfig!.vector2rect;
+  Rect get rectCollision {
+    if (!containCollision()) return Rect.zero;
+    return _collisionConfig!.rect;
   }
 
   List<ObjectCollision> _verifyWorldCollision({
@@ -86,8 +88,7 @@ mixin ObjectCollision on GameComponent {
   bool _checkItemCollision(ObjectCollision i, {Vector2? displacement}) {
     if (i != this && checkCollision(i, displacement: displacement)) {
       onCollision(i, true);
-      i.onCollision(this, false);
-      return true;
+      return i.onCollision(this, false);
     }
     return false;
   }
@@ -102,11 +103,10 @@ mixin ObjectCollision on GameComponent {
   void render(Canvas canvas) {
     super.render(canvas);
     if (hasGameRef) {
-      if ((gameRef as BonfireGame).showCollisionArea == true) {
+      if (gameRef.showCollisionArea == true) {
         _drawCollision(
           canvas,
-          (gameRef as BonfireGame).collisionAreaColor ??
-              Colors.lightGreen.withOpacity(0.5),
+          gameRef.collisionAreaColor ?? Colors.lightGreen.withOpacity(0.5),
         );
       }
     }
@@ -129,7 +129,7 @@ mixin ObjectCollision on GameComponent {
     super.update(dt);
   }
 
-  void updatePosition(Vector2Rect position) {
+  void updatePosition(Vector2 position) {
     _collisionConfig?.updatePosition(position);
   }
 }

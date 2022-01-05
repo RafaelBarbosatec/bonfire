@@ -7,10 +7,9 @@ class Spikes extends GameDecoration with Sensor {
 
   Spikes(Vector2 position)
       : super.withSprite(
-          CommonSpriteSheet.spikesSprite,
+          sprite: CommonSpriteSheet.spikesSprite,
           position: position,
-          width: DungeonMap.tileSize / 1.5,
-          height: DungeonMap.tileSize / 1.5,
+          size: Vector2.all(DungeonMap.tileSize / 1.5),
         ) {
     setupSensorArea(intervalCheck: 500);
   }

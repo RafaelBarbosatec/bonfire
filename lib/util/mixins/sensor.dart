@@ -3,46 +3,42 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
-Paint _paintSensor = Paint()..color = Color(0xFFF44336).withOpacity(0.5);
+final Color sensorColor = Color(0xFFF44336).withOpacity(0.5);
 
 /// Mixin responsible for adding trigger to detect other objects above
 mixin Sensor on GameComponent {
   void onContact(GameComponent component);
 
+  bool enabledSensor = true;
+
   int _intervalCheckContact = 250;
   IntervalTick? _tick;
-  Vector2Rect? _sensorArea;
 
   CollisionConfig? _collisionConfig;
 
-  Vector2Rect get sensorArea {
-    if (_sensorArea != null) {
-      return _sensorArea!.translate(position.left, position.top);
+  Iterable<CollisionArea> get _sensorArea {
+    if (_collisionConfig != null) {
+      return _collisionConfig!.collisions;
+    }
+    if (this.isObjectCollision()) {
+      return (this as ObjectCollision).collisionConfig!.collisions;
     } else {
-      if (this.isObjectCollision()) {
-        return (this as ObjectCollision).rectCollision;
-      } else {
-        return this.position;
-      }
+      return [
+        CollisionArea.rectangle(
+          size: size,
+        )
+      ];
     }
   }
 
   void setupSensorArea({
-    Vector2? size,
-    Vector2? align,
+    List<CollisionArea>? areaSensor,
     int intervalCheck = 250,
   }) {
     _intervalCheckContact = intervalCheck;
-    if (size != null || align != null) {
-      if (size != null) {
-        _sensorArea = Vector2Rect(align ?? Vector2.zero(), size);
-      } else if (align != null) {
-        _sensorArea = Vector2Rect(align, this.position.size);
-      }
+    if (areaSensor != null) {
       _collisionConfig = CollisionConfig(
-        collisions: [
-          CollisionArea.fromVector2Rect(rect: _sensorArea!),
-        ],
+        collisions: areaSensor,
       );
     }
   }
@@ -51,17 +47,15 @@ mixin Sensor on GameComponent {
   void update(double dt) {
     if (_collisionConfig == null) {
       _collisionConfig = CollisionConfig(
-        collisions: [
-          CollisionArea.fromVector2Rect(
-            rect: Vector2Rect(Vector2.zero(), position.size),
-          ),
-        ],
+        collisions: _sensorArea,
       );
     }
-    if (_tick == null || _tick?.interval != _intervalCheckContact) {
-      _tick = IntervalTick(_intervalCheckContact, tick: _verifyContact);
-    } else {
-      _tick?.update(dt);
+    if (enabledSensor) {
+      if (_tick == null || _tick?.interval != _intervalCheckContact) {
+        _tick = IntervalTick(_intervalCheckContact, tick: _verifyContact);
+      } else {
+        _tick?.update(dt);
+      }
     }
     super.update(dt);
   }
@@ -69,13 +63,15 @@ mixin Sensor on GameComponent {
   @override
   void render(Canvas c) {
     super.render(c);
-    if ((gameRef as BonfireGame).showCollisionArea) {
-      c.drawRect(sensorArea.rect, _paintSensor);
+    if (gameRef.showCollisionArea) {
+      _sensorArea.forEach((element) {
+        element.render(c, sensorColor);
+      });
     }
   }
 
   void _verifyContact() {
-    _collisionConfig?.updatePosition(sensorArea);
+    _collisionConfig?.updatePosition(position);
     for (final i in gameRef.visibleComponents()) {
       if (i != this) {
         if (i.isObjectCollision()) {
@@ -85,7 +81,7 @@ mixin Sensor on GameComponent {
               false)) {
             onContact(i);
           }
-        } else if (i.position.overlaps(sensorArea)) {
+        } else if (i.toRect().overlaps(_collisionConfig?.rect ?? Rect.zero)) {
           onContact(i);
         }
       }

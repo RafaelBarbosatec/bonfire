@@ -11,12 +11,12 @@ class RectangleShape extends Shape {
   late Vector2 rightBottom;
   late Vector2 leftBottom;
 
-  RectangleShape(Size size, {Vector2? position})
+  RectangleShape(Vector2 size, {Vector2? position})
       : _rect = Rect.fromLTWH(
           position?.x ?? 0,
           position?.y ?? 0,
-          size.width,
-          size.height,
+          size.x,
+          size.y,
         ),
         super(position ?? Vector2.zero()) {
     _updateExtremities(this.position);

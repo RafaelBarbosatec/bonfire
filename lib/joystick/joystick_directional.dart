@@ -13,10 +13,10 @@ class JoystickDirectional {
   Paint? _paintBackground;
   Paint? _paintKnob;
 
-  Vector2Rect? _backgroundRect;
+  Rect? _backgroundRect;
   Sprite? _backgroundSprite;
 
-  Vector2Rect? _knobRect;
+  Rect? _knobRect;
   Sprite? _knobSprite;
 
   bool _dragging = false;
@@ -31,7 +31,7 @@ class JoystickDirectional {
 
   Vector2? _screenSize;
 
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   JoystickDirectional({
     Future<Sprite>? spriteBackgroundDirectional,
@@ -41,11 +41,11 @@ class JoystickDirectional {
     this.size = 80,
     this.color = Colors.blueGrey,
   }) {
-    _loader.add(AssetToLoad(spriteBackgroundDirectional, (value) {
+    _loader?.add(AssetToLoad(spriteBackgroundDirectional, (value) {
       _backgroundSprite = value;
     }));
 
-    _loader.add(AssetToLoad(spriteKnobDirectional, (value) {
+    _loader?.add(AssetToLoad(spriteKnobDirectional, (value) {
       _knobSprite = value;
     }));
 
@@ -62,7 +62,7 @@ class JoystickDirectional {
     _backgroundRect = Rect.fromCircle(
       center: osBackground,
       radius: size / 2,
-    ).toVector2Rect();
+    );
 
     Offset osKnob = Offset(
       _backgroundRect!.center.dx,
@@ -72,7 +72,7 @@ class JoystickDirectional {
     _knobRect = Rect.fromCircle(
       center: osKnob,
       radius: size / 4,
-    ).toVector2Rect();
+    );
 
     _dragPosition = _knobRect!.center;
   }
@@ -80,16 +80,16 @@ class JoystickDirectional {
   void render(Canvas canvas) {
     _backgroundRect?.let((background) {
       if (_backgroundSprite != null) {
-        _backgroundSprite?.renderFromVector2Rect(
+        _backgroundSprite?.renderRect(
           canvas,
           background,
         );
       } else {
         _paintBackground?.let((paintBg) {
-          double radiusBackground = background.rect.width / 2;
+          double radiusBackground = background.width / 2;
           canvas.drawCircle(
-            Offset(background.rect.left + radiusBackground,
-                background.rect.top + radiusBackground),
+            Offset(background.left + radiusBackground,
+                background.top + radiusBackground),
             radiusBackground,
             paintBg,
           );
@@ -99,13 +99,15 @@ class JoystickDirectional {
 
     _knobRect?.let((knobRect) {
       if (_knobSprite != null) {
-        _knobSprite?.renderFromVector2Rect(canvas, knobRect);
+        _knobSprite?.renderRect(canvas, knobRect);
       } else {
         _paintKnob?.let((paintKnob) {
-          double radiusKnob = knobRect.rect.width / 2;
+          double radiusKnob = knobRect.width / 2;
           canvas.drawCircle(
-            Offset(knobRect.rect.left + radiusKnob,
-                knobRect.rect.top + radiusKnob),
+            Offset(
+              knobRect.left + radiusKnob,
+              knobRect.top + radiusKnob,
+            ),
             radiusKnob,
             paintKnob,
           );
@@ -238,10 +240,10 @@ class JoystickDirectional {
 
     _backgroundRect?.let((backgroundRect) {
       Rect directional = Rect.fromLTWH(
-        backgroundRect.rect.left - 50,
-        backgroundRect.rect.top - 50,
-        backgroundRect.rect.width + 100,
-        backgroundRect.rect.height + 100,
+        backgroundRect.left - 50,
+        backgroundRect.top - 50,
+        backgroundRect.width + 100,
+        backgroundRect.height + 100,
       );
       if (!_dragging && directional.contains(localPosition)) {
         _dragging = true;
@@ -282,7 +284,7 @@ class JoystickDirectional {
     _backgroundRect = Rect.fromCircle(
       center: position,
       radius: size / 2,
-    ).toVector2Rect();
+    );
 
     Offset osKnob = Offset(
       _backgroundRect!.center.dx,
@@ -291,11 +293,11 @@ class JoystickDirectional {
     _knobRect = Rect.fromCircle(
       center: osKnob,
       radius: size / 4,
-    ).toVector2Rect();
+    );
   }
 
   Future<void> onLoad() async {
-    await _loader.load();
+    await _loader?.load();
     if (_backgroundSprite == null) {
       _paintBackground = Paint()
         ..color = color.withOpacity(0.5)
@@ -307,5 +309,7 @@ class JoystickDirectional {
         ..color = color.withOpacity(0.8)
         ..style = PaintingStyle.fill;
     }
+
+    _loader = null;
   }
 }

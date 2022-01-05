@@ -40,7 +40,7 @@ class PolygonShape extends Shape {
       }
     });
 
-    return RectangleShape(Size(width, height), position: position);
+    return RectangleShape(Vector2(width, height), position: position);
   }
 
   @override

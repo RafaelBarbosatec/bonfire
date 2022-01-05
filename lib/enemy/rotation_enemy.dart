@@ -13,28 +13,26 @@ class RotationEnemy extends Enemy {
 
   double currentRadAngle;
 
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   RotationEnemy({
     required Vector2 position,
+    required Vector2 size,
     required Future<SpriteAnimation> animIdle,
     required Future<SpriteAnimation> animRun,
-    double height = 32,
-    double width = 32,
     this.currentRadAngle = -1.55,
     double speed = 100,
     double life = 100,
   }) : super(
           position: position,
-          height: height,
-          width: width,
+          size: size,
           life: life,
           speed: speed,
         ) {
-    _loader.add(AssetToLoad(animIdle, (value) {
+    _loader?.add(AssetToLoad(animIdle, (value) {
       this.animIdle = value;
     }));
-    _loader.add(AssetToLoad(animRun, (value) {
+    _loader?.add(AssetToLoad(animRun, (value) {
       this.animRun = value;
     }));
   }
@@ -54,9 +52,9 @@ class RotationEnemy extends Enemy {
   void render(Canvas canvas) {
     super.render(canvas);
     canvas.save();
-    canvas.translate(position.center.dx, position.center.dy);
+    canvas.translate(center.x, center.y);
     canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));
-    canvas.translate(-position.center.dx, -position.center.dy);
+    canvas.translate(-center.x, -center.y);
     _renderAnimation(canvas);
     canvas.restore();
   }
@@ -75,9 +73,10 @@ class RotationEnemy extends Enemy {
   }
 
   void _renderAnimation(Canvas canvas) {
-    animation?.getSprite().renderFromVector2Rect(
+    animation?.getSprite().renderWithOpacity(
           canvas,
-          this.position,
+          position,
+          size,
           opacity: opacity,
         );
   }
@@ -85,7 +84,8 @@ class RotationEnemy extends Enemy {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    await _loader.load();
+    await _loader?.load();
+    _loader = null;
     idle();
   }
 }

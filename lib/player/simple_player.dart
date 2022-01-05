@@ -4,16 +4,14 @@ import 'package:bonfire/util/mixins/direction_animation.dart';
 class SimplePlayer extends Player with DirectionAnimation {
   SimplePlayer({
     required Vector2 position,
+    required Vector2 size,
     required SimpleDirectionAnimation animation,
     Direction initDirection = Direction.right,
     double speed = 150,
-    double width = 32,
-    double height = 32,
     double life = 100,
   }) : super(
           position: position,
-          width: width,
-          height: height,
+          size: size,
           life: life,
           speed: speed,
         ) {

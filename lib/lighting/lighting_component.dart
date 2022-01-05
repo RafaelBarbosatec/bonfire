@@ -2,6 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class LightingInterface {
+  Color? color;
   void animateToColor(
     Color color, {
     Duration duration = const Duration(milliseconds: 500),
@@ -17,9 +18,10 @@ class LightingComponent extends GameComponent implements LightingInterface {
   Iterable<Lighting> _visibleLight = [];
   double _dtUpdate = 0.0;
   ColorTween? _tween;
+  bool _containColor = false;
 
   @override
-  bool get isHud => true;
+  PositionType get positionType => PositionType.viewport;
 
   LightingComponent({this.color}) {
     _paintFocus = Paint()..blendMode = BlendMode.clear;
@@ -33,28 +35,26 @@ class LightingComponent extends GameComponent implements LightingInterface {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (!_containsColor()) return;
-    Vector2 size = gameRef.size;
+    if (!_containColor) return;
+    Vector2 size = gameRef.camera.canvasSize;
     canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
     canvas.drawColor(color!, BlendMode.dstATop);
     _visibleLight.forEach((light) {
       final config = light.lightingConfig;
       if (config == null) return;
-      final sigma = _convertRadiusToSigma(config.blurBorder);
       config.update(_dtUpdate);
       canvas.save();
 
-      canvas.translate(size.x / 2, size.y / 2);
-      canvas.scale(gameRef.camera.config.zoom);
+      canvas.scale(gameRef.camera.zoom);
       canvas.translate(
-        -(gameRef.camera.position.dx),
-        -(gameRef.camera.position.dy),
+        -(gameRef.camera.position.x),
+        -(gameRef.camera.position.y),
       );
 
       canvas.drawCircle(
         Offset(
-          light.position.center.dx,
-          light.position.center.dy,
+          light.center.x,
+          light.center.y,
         ),
         config.radius *
             (config.withPulse
@@ -63,7 +63,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
         _paintFocus
           ..maskFilter = MaskFilter.blur(
             BlurStyle.normal,
-            sigma,
+            config.blurSigma,
           ),
       );
 
@@ -71,10 +71,10 @@ class LightingComponent extends GameComponent implements LightingInterface {
         ..color = config.color
         ..maskFilter = MaskFilter.blur(
           BlurStyle.normal,
-          sigma,
+          config.blurSigma,
         );
       canvas.drawCircle(
-        light.position.center,
+        light.center.toOffset(),
         config.radius *
             (config.withPulse
                 ? (1 - config.valuePulse * config.pulseVariation)
@@ -87,16 +87,13 @@ class LightingComponent extends GameComponent implements LightingInterface {
     canvas.restore();
   }
 
-  static double _convertRadiusToSigma(double radius) {
-    return radius * 0.57735 + 0.5;
-  }
-
   @override
   // ignore: must_call_super
   void update(double dt) {
-    if (!_containsColor()) return;
+    _containColor = _containsColor();
+    if (!_containColor) return;
     _dtUpdate = dt;
-    _visibleLight = gameRef.lightVisible();
+    _visibleLight = gameRef.visibleLighting();
   }
 
   void animateToColor(
@@ -104,7 +101,10 @@ class LightingComponent extends GameComponent implements LightingInterface {
     Duration duration = const Duration(milliseconds: 500),
     Curve curve = Curves.decelerate,
   }) {
-    _tween = ColorTween(begin: this.color ?? Color(0x00000000), end: color);
+    _tween = ColorTween(
+      begin: this.color ?? Color(0x00000000),
+      end: color,
+    );
 
     gameRef.getValueGenerator(
       duration,

@@ -1,10 +1,8 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 
 class TiledObjectProperties {
   final Vector2 position;
-  final Size size;
+  final Vector2 size;
   final double? rotation;
   final String? type;
   final String? name;

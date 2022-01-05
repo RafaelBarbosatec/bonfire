@@ -3,6 +3,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart' as widget;
 
 export 'attackable_extensions.dart';
@@ -17,8 +19,7 @@ export 'player/rotation_player_extensions.dart';
 
 extension ImageExtension on Image {
   SpriteAnimation getAnimation({
-    required double width,
-    required double height,
+    required Vector2 size,
     required double count,
     int startDx = 0,
     int startDy = 0,
@@ -30,13 +31,10 @@ extension ImageExtension on Image {
       spriteList.add(Sprite(
         this,
         srcPosition: Vector2(
-          (startDx + (i * width)).toDouble(),
+          (startDx + (i * size.x)).toDouble(),
           startDy.toDouble(),
         ),
-        srcSize: Vector2(
-          width,
-          height,
-        ),
+        srcSize: size,
       ));
     }
     return SpriteAnimation.spriteList(
@@ -47,15 +45,13 @@ extension ImageExtension on Image {
   }
 
   Sprite getSprite({
-    required double x,
-    required double y,
-    required double width,
-    required double height,
+    Vector2? position,
+    Vector2? size,
   }) {
     return Sprite(
       this,
-      srcPosition: Vector2(x, y),
-      srcSize: Vector2(width, height),
+      srcPosition: position,
+      srcSize: size,
     );
   }
 
@@ -99,9 +95,8 @@ extension OffSetExt on Offset {
 }
 
 extension RectExt on Rect {
-  Vector2Rect toVector2Rect() {
-    return Vector2Rect.fromRect(this);
-  }
+  Vector2 get positionVector2 => Vector2(left, top);
+  Vector2 get sizeVector2 => Vector2(width, height);
 
   Rectangle getRectangleByTileSize(double tileSize) {
     final left = (this.left / tileSize).floorToDouble();
@@ -116,12 +111,27 @@ extension RectExt on Rect {
       height,
     );
   }
+
+  bool overlapComponent(PositionComponent c) {
+    double left = c.position.x;
+    double top = c.position.y;
+    double right = c.position.x + c.size.x;
+    double bottom = c.position.y + c.size.y;
+    if (this.right <= left || right <= this.left) {
+      return false;
+    }
+    if (this.bottom <= top || bottom <= this.top) {
+      return false;
+    }
+    return true;
+  }
 }
 
 extension SpriteExt on Sprite {
-  void renderFromVector2Rect(
+  void renderWithOpacity(
     Canvas canvas,
-    Vector2Rect vector, {
+    Vector2 position,
+    Vector2 size, {
     Paint? overridePaint,
     double opacity = 1,
   }) {
@@ -131,11 +141,10 @@ extension SpriteExt on Sprite {
     if (overridePaint != null && overridePaint.color.opacity != opacity) {
       overridePaint.color = overridePaint.color.withOpacity(opacity);
     }
-
     this.render(
       canvas,
-      position: vector.position,
-      size: vector.size,
+      position: position,
+      size: size,
       overridePaint: overridePaint,
     );
   }
@@ -149,21 +158,21 @@ extension GameComponentExt on GameComponent {
   Direction? directionThePlayerIsIn() {
     Player? player = this.gameRef.player;
     if (player == null) return null;
-    var diffX = position.center.dx - player.position.center.dx;
+    var diffX = center.x - player.center.x;
     var diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;
-    var diffY = position.center.dy - player.position.center.dy;
+    var diffY = center.y - player.center.y;
     var diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
 
     if (diffPositiveX > diffPositiveY) {
-      if (player.position.center.dx > position.center.dx) {
+      if (player.center.x > center.y) {
         return Direction.right;
-      } else if (player.position.center.dx < position.center.dx) {
+      } else if (player.center.x < center.y) {
         return Direction.left;
       }
     } else {
-      if (player.position.center.dy > position.center.dy) {
+      if (player.center.y > center.x) {
         return Direction.down;
-      } else if (player.position.center.dy < position.center.dy) {
+      } else if (player.center.y < position.x) {
         return Direction.up;
       }
     }
@@ -175,6 +184,10 @@ extension GameComponentExt on GameComponent {
 extension Vector2Ext on Vector2 {
   Vector2 translate(double x, double y) {
     return Vector2(this.x + x, this.y + y);
+  }
+
+  Vector2 copyWith({double? x, double? y}) {
+    return Vector2(x ?? this.x, y ?? this.y);
   }
 }
 
@@ -284,4 +297,79 @@ extension FutureSpriteExt on FutureOr<Sprite> {
       ),
     );
   }
+}
+
+extension ComponentExt on Component {
+  bool get isHud => positionType == PositionType.viewport;
+}
+
+extension CameraExt on Camera {
+  void setGame(BonfireGame game) {
+    if (!(this is BonfireCamera)) {
+      return;
+    }
+    (this as BonfireCamera).gameRef = game;
+  }
+
+  GameComponent? get target => (this as BonfireCamera).target;
+  set target(GameComponent? t) => (this as BonfireCamera).target = t;
+  bool get isMoving => (this as BonfireCamera).isMoving;
+
+  Rect get cameraRectWithSpacing =>
+      (this as BonfireCamera).cameraRectWithSpacing;
+
+  Rect get cameraRect => (this as BonfireCamera).cameraRect;
+
+  void updateSpacingVisibleMap(double space) =>
+      (this as BonfireCamera).updateSpacingVisibleMap(space);
+
+  bool isComponentOnCamera(GameComponent c) =>
+      (this as BonfireCamera).isComponentOnCamera(c);
+
+  bool contains(Offset c) => (this as BonfireCamera).contains(c);
+
+  bool isRectOnCamera(Rect c) => (this as BonfireCamera).isRectOnCamera(c);
+
+  void moveToTargetAnimated(
+    GameComponent target, {
+    double zoom = 1,
+    double angle = 0,
+    VoidCallback? finish,
+    Duration? duration,
+    widget.Curve curve = widget.Curves.decelerate,
+  }) {
+    (this as BonfireCamera).moveToTargetAnimated(
+      target,
+      zoom: zoom,
+      angle: angle,
+      finish: finish,
+      duration: duration,
+      curve: curve,
+    );
+  }
+
+  void moveToPlayerAnimated({
+    Duration? duration,
+    VoidCallback? finish,
+    double zoom = 1,
+    double angle = 0,
+    widget.Curve curve = widget.Curves.decelerate,
+  }) {
+    (this as BonfireCamera).moveToPlayerAnimated(
+      zoom: zoom,
+      angle: angle,
+      finish: finish,
+      duration: duration,
+      curve: curve,
+    );
+  }
+
+  void moveTop(double displacement) =>
+      (this as BonfireCamera).moveTop(displacement);
+  void moveRight(double displacement) =>
+      (this as BonfireCamera).moveRight(displacement);
+  void moveDown(double displacement) =>
+      (this as BonfireCamera).moveDown(displacement);
+  void moveUp(double displacement) =>
+      (this as BonfireCamera).moveUp(displacement);
 }

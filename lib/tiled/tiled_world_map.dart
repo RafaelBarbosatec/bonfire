@@ -172,7 +172,7 @@ class TiledWorldMap {
         width: _tileHeight,
         animation: data.animation,
         sprite: data.sprite,
-        properties: data.properties?.isEmpty == true ? null : data.properties,
+        properties: data.properties,
         type: data.type,
         angle: data.angle,
         isFlipVertical: data.isFlipVertical,
@@ -190,38 +190,38 @@ class TiledWorldMap {
       if (data.animation != null) {
         _components.add(
           GameDecorationWithCollision.withAnimation(
-            data.animation!.getFutureSpriteAnimation(),
-            Vector2(
+            animation: data.animation!.getFutureSpriteAnimation(),
+            position: Vector2(
               _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
               _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
             ),
-            height: _tileHeight,
-            width: _tileWidth,
+            size: Vector2(_tileWidth, _tileHeight),
             collisions: data.collisions,
             aboveComponents: true,
           )
             ..angle = data.angle
+            ..isFlipHorizontal = data.isFlipHorizontal
             ..isFlipVertical = data.isFlipVertical
-            ..isFlipHorizontal = data.isFlipHorizontal,
+            ..properties = data.properties,
         );
       }
     } else {
       if (data.sprite != null) {
         _components.add(
           GameDecorationWithCollision.withSprite(
-            data.sprite!.getFutureSprite(),
-            Vector2(
+            sprite: data.sprite!.getFutureSprite(),
+            position: Vector2(
               _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
               _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
             ),
-            height: _tileHeight,
-            width: _tileWidth,
+            size: Vector2(_tileWidth, _tileHeight),
             collisions: data.collisions,
             aboveComponents: true,
           )
             ..angle = data.angle
+            ..isFlipHorizontal = data.isFlipHorizontal
             ..isFlipVertical = data.isFlipVertical
-            ..isFlipHorizontal = data.isFlipHorizontal,
+            ..properties = data.properties,
         );
       }
     }
@@ -395,7 +395,7 @@ class TiledWorldMap {
           final object = _objectsBuilder[element.name]?.call(
             TiledObjectProperties(
               Vector2(x, y),
-              Size(width, height),
+              Vector2(width, height),
               element.type,
               element.rotation,
               _extractOtherProperties(element.properties),
@@ -423,8 +423,9 @@ class TiledWorldMap {
           tileSetItemList.first.objectGroup?.objects ?? [];
 
       String type = tileSetItemList.first.type ?? '';
-      Map<String, dynamic> properties =
-          _extractOtherProperties(tileSetItemList.first.properties);
+      Map<String, dynamic> properties = _extractOtherProperties(
+        tileSetItemList.first.properties,
+      );
 
       List<CollisionArea> collisions = [];
 
@@ -439,7 +440,7 @@ class TiledWorldMap {
           double y = ((object.y ?? 0.0) * _tileHeight) / _tileHeightOrigin;
 
           CollisionArea ca = CollisionArea.rectangle(
-            size: Size(width, height),
+            size: Vector2(width, height),
             align: Vector2(x, y),
           );
 
@@ -614,7 +615,7 @@ class TiledWorldMap {
     Objects object,
   ) {
     CollisionArea ca = CollisionArea.rectangle(
-      size: Size(width, height),
+      size: Vector2(width, height),
     );
 
     if (object.ellipse == true) {
