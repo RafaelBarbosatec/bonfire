@@ -1,19 +1,4 @@
-# [NEXT]
-- Small improvements in `SimpleDirectionAnimation`
-- Improvements in `Lighting`
-
-# [2.0.0-flamev1.3]
-- Extensions improvements
-- Improvements in `GameColorFilter`
-- Add `left`,`right`,`top`,`bottom` in `GameComponent`
-- Add `enabledSensor` in `Sensor`
-- `SimpleDirectionAnimation` now only requires `idleRight` and `runRight`. It will automatically flip horizontally to perform the idle/run left animations. You can disable this feature setting the param `enabledFlipX` to false (default = true). `enabledFlipY` is also available, but defaults to false (if you set this param to true, only `idleUp` and `runUp` are needed).
-
-# [2.0.0-flamev1.2]
-- Bug fix in `getAnimation` (ImageExtension).
-- Bug fix in `progress` (BonfireTiledWidget).
-
-# [2.0.0-flamev1.1] - FLAME V1.0
+# [2.0.0]
 We're striving to reduce the distance between Flame and Bonfire, relying more and more on Flame components under the hood now that it is stable. In this version we are following the standardization of using `Vector2` for `position` and `size` and using `PositionComponent` as the base for Bonfire components. Also, 'FlameGame' and the Flame's Camera are now used instead of custom implementations we had before. Some small features were lost, but nothing that the Flame's team isn't capable of adding over time.
 
 - Update to flame 1.0.
@@ -24,6 +9,15 @@ We're striving to reduce the distance between Flame and Bonfire, relying more an
 - Add new mixin `Pushable`.
 - Add params `name` and `id` in `TiledObjectProperties`.
 - Add support to use [Flame Effects](https://docs.flame-engine.org/1.0.0/effects.html)
+- Small improvements in `SimpleDirectionAnimation`
+- Improvements in `Lighting`
+- Extensions improvements
+- Improvements in `GameColorFilter`
+- Add `left`,`right`,`top`,`bottom` in `GameComponent`
+- Add `enabledSensor` in `Sensor`
+- `SimpleDirectionAnimation` now only requires `idleRight` and `runRight`. It will automatically flip horizontally to perform the idle/run left animations. You can disable this feature setting the param `enabledFlipX` to false (default = true). `enabledFlipY` is also available, but defaults to false (if you set this param to true, only `idleUp` and `runUp` are needed).
+- Bug fix in `getAnimation` (ImageExtension).
+- Bug fix in `progress` (BonfireTiledWidget).
 
 # [1.12.3]
 - Improvements in collision objects by Tiled.
