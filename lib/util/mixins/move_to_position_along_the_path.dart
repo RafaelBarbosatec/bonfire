@@ -195,7 +195,7 @@ mixin MoveToPositionAlongThePath on Movement {
       }
     });
 
-    List<Offset> result = [];
+    Iterable<Offset> result = [];
     List<Offset> path = [];
 
     if (_barriers.contains(targetPosition)) {
@@ -213,10 +213,7 @@ mixin MoveToPositionAlongThePath on Movement {
       ).findThePath();
 
       if (result.isNotEmpty || _isNeighbor(playerPosition, targetPosition)) {
-        path.add(playerPosition);
-        path.addAll(result.reversed);
-        path.add(targetPosition);
-        path = path.map((e) {
+        path = result.map((e) {
           return Offset(e.dx * _tileSize, e.dy * _tileSize)
               .translate(_tileSize / 2, _tileSize / 2);
         }).toList();
