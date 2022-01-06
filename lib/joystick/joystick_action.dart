@@ -24,8 +24,8 @@ class JoystickAction {
   late double _tileSize;
 
   int? _pointer;
-  Vector2Rect? _rect;
-  Vector2Rect? _rectBackgroundDirection;
+  Rect? _rect;
+  Rect? _rectBackgroundDirection;
   bool _dragging = false;
   Sprite? _spriteToRender;
   Offset? _dragPosition;
@@ -35,7 +35,7 @@ class JoystickAction {
   JoystickController? _joystickController;
   bool isPressed = false;
 
-  final _loader = AssetsLoader();
+  AssetsLoader? _loader = AssetsLoader();
 
   JoystickAction({
     required this.actionId,
@@ -51,13 +51,13 @@ class JoystickAction {
     this.opacityBackground = 0.5,
     this.opacityKnob = 0.8,
   }) {
-    _loader.add(AssetToLoad(sprite, (value) {
+    _loader?.add(AssetToLoad(sprite, (value) {
       this.sprite = value;
     }));
-    _loader.add(AssetToLoad(spritePressed, (value) {
+    _loader?.add(AssetToLoad(spritePressed, (value) {
       this.spritePressed = value;
     }));
-    _loader.add(AssetToLoad(spriteBackgroundDirection, (value) {
+    _loader?.add(AssetToLoad(spriteBackgroundDirection, (value) {
       this.spriteBackgroundDirection = value;
     }));
     _sizeBackgroundDirection = sizeFactorBackgroundDirection * size;
@@ -89,12 +89,12 @@ class JoystickAction {
     _rect = Rect.fromCircle(
       center: Offset(dx, dy),
       radius: radius,
-    ).toVector2Rect();
+    );
 
     _rectBackgroundDirection = Rect.fromCircle(
       center: Offset(dx, dy),
       radius: _sizeBackgroundDirection / 2,
-    ).toVector2Rect();
+    );
 
     _dragPosition = _rect!.center;
   }
@@ -103,18 +103,18 @@ class JoystickAction {
     if (_rectBackgroundDirection != null && _dragging && enableDirection) {
       if (spriteBackgroundDirection == null) {
         _paintBackground?.let((paintBackground) {
-          double radiusBackground = _rectBackgroundDirection!.rect.width / 2;
+          double radiusBackground = _rectBackgroundDirection!.width / 2;
           c.drawCircle(
             Offset(
-              _rectBackgroundDirection!.rect.left + radiusBackground,
-              _rectBackgroundDirection!.rect.top + radiusBackground,
+              _rectBackgroundDirection!.left + radiusBackground,
+              _rectBackgroundDirection!.top + radiusBackground,
             ),
             radiusBackground,
             paintBackground,
           );
         });
       } else {
-        spriteBackgroundDirection?.renderFromVector2Rect(
+        spriteBackgroundDirection?.renderRect(
           c,
           _rectBackgroundDirection!,
         );
@@ -123,10 +123,9 @@ class JoystickAction {
 
     _rect?.let((rect) {
       if (_spriteToRender != null) {
-        _spriteToRender?.render(
+        _spriteToRender?.renderRect(
           c,
-          position: rect.position,
-          size: rect.size,
+          rect,
         );
       } else {
         double radiusAction = rect.width / 2;
@@ -246,7 +245,7 @@ class JoystickAction {
   }
 
   Future<void> onLoad() async {
-    await _loader.load();
+    await _loader?.load();
 
     _spriteToRender = sprite;
 
@@ -267,5 +266,7 @@ class JoystickAction {
         ..color = color.withOpacity(opacityBackground)
         ..style = PaintingStyle.fill;
     }
+
+    _loader = null;
   }
 }

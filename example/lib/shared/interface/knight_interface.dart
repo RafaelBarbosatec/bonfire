@@ -12,8 +12,7 @@ class KnightInterface extends GameInterface {
     add(InterfaceComponent(
       sprite: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
-      height: 40,
-      width: 40,
+      size: Vector2(40, 40),
       id: 5,
       position: Vector2(150, 20),
       onTapComponent: (selected) {
@@ -26,8 +25,7 @@ class KnightInterface extends GameInterface {
     add(InterfaceComponent(
       sprite: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
-      height: 40,
-      width: 40,
+      size: Vector2(40, 40),
       id: 5,
       position: Vector2(200, 20),
       selectable: true,
@@ -40,8 +38,7 @@ class KnightInterface extends GameInterface {
     add(InterfaceComponent(
       sprite: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
-      height: 40,
-      width: 40,
+      size: Vector2(40, 40),
       id: 5,
       position: Vector2(250, 20),
       selectable: true,
@@ -77,39 +74,20 @@ class KnightInterface extends GameInterface {
     add(InterfaceComponent(
       sprite: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
-      height: 40,
-      width: 40,
+      size: Vector2(40, 40),
       id: 5,
       position: Vector2(300, 20),
       selectable: false,
       onTapComponent: (selected) {
-        // Simple rotation loop
-        gameRef.camera.animateLoopRotation(
-          angles: [0.1, -0.1],
-          repeatCount: 3,
-          onFinish: () {
-            print('finished loop rotation');
-          },
-        );
-        // Advanced example
-        // gameRef.camera.animateLoopRotation(
-        //   angles: [0.1, -0.1, -0.2],
-        //   rotationDuration: [
-        //     Duration(seconds: 2),
-        //     Duration(milliseconds: 100),
-        //     Duration(seconds: 1),
-        //   ],
-        //   pauseDuration: [
-        //     Duration(seconds: 4),
-        //     Duration(milliseconds: 500),
-        //     Duration(seconds: 1),
-        //   ],
-        //   curves: [Curves.bounceIn, Curves.ease, Curves.elasticIn],
-        //   repeatCount: 3,
-        //   onFinish: () {
-        //     print('finished loop rotation');
-        //   },
-        // );
+        if (gameRef.colorFilter?.config.color == null) {
+          gameRef.colorFilter?.animateTo(
+            Colors.red.withOpacity(0.5),
+          );
+        } else {
+          gameRef.colorFilter?.animateTo(Colors.transparent, onFinish: () {
+            gameRef.colorFilter?.config.color = null;
+          });
+        }
       },
     ));
     add(TextInterfaceComponent(

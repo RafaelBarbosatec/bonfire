@@ -170,7 +170,7 @@ class Joystick extends JoystickController {
 
   @override
   void onGameResize(Vector2 gameSize) {
-    initialize(gameSize);
+    initialize(gameRef.camera.canvasSize);
     super.onGameResize(gameSize);
   }
 

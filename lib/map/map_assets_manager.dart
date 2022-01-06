@@ -25,10 +25,14 @@ class MapAssetsManager {
     Image? spriteSheetImg = getImageCache(image);
 
     return spriteCache['$image/$row/$column'] = spriteSheetImg!.getSprite(
-      x: (column * tileWidth).toDouble(),
-      y: (row * tileHeight).toDouble(),
-      width: tileWidth == 0.0 ? spriteSheetImg.width.toDouble() : tileWidth,
-      height: tileHeight == 0.0 ? spriteSheetImg.height.toDouble() : tileHeight,
+      position: Vector2(
+        (column * tileWidth).toDouble(),
+        (row * tileHeight).toDouble(),
+      ),
+      size: Vector2(
+        tileWidth == 0.0 ? spriteSheetImg.width.toDouble() : tileWidth,
+        tileHeight == 0.0 ? spriteSheetImg.height.toDouble() : tileHeight,
+      ),
     );
   }
 
@@ -48,10 +52,14 @@ class MapAssetsManager {
     );
 
     return spriteCache['$image/$row/$column'] = spriteSheetImg.getSprite(
-      x: (column * tileWidth).toDouble(),
-      y: (row * tileHeight).toDouble(),
-      width: tileWidth == 0.0 ? spriteSheetImg.width.toDouble() : tileWidth,
-      height: tileHeight == 0.0 ? spriteSheetImg.height.toDouble() : tileHeight,
+      position: Vector2(
+        (column * tileWidth).toDouble(),
+        (row * tileHeight).toDouble(),
+      ),
+      size: Vector2(
+        tileWidth == 0.0 ? spriteSheetImg.width.toDouble() : tileWidth,
+        tileHeight == 0.0 ? spriteSheetImg.height.toDouble() : tileHeight,
+      ),
     );
   }
 

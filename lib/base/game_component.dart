@@ -1,47 +1,20 @@
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/bonfire_game_ref.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:bonfire/util/interval_tick.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:bonfire/util/vector2rect.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/widgets.dart';
 
 /// Base of the all components in the Bonfire
-abstract class GameComponent extends Component
+abstract class GameComponent extends PositionComponent
     with BonfireHasGameRef, PointerDetectorHandler {
-  /// Position used to draw on the screen
-  Vector2Rect position = Vector2Rect.zero();
-
-  /// Height of the Component.
-  double get height => this.position.height;
-
-  /// set Height of the Component.
-  set height(double newHeight) {
-    this.position = this.position.copyWith(size: Vector2(width, newHeight));
-  }
-
-  /// Width of the Component.
-  double get width => this.position.width;
-
-  /// set Height of the Component.
-  set width(double newWidth) {
-    this.position = this.position.copyWith(size: Vector2(newWidth, height));
-  }
-
-  /// get vectorPosition of the Component.
-  Vector2 get vectorPosition => this.position.position;
-
-  /// set vectorPosition of the Component.
-  set vectorPosition(Vector2 newPosition) {
-    this.position = this.position.copyWith(position: newPosition);
-  }
+  Map<String, dynamic>? properties;
 
   /// When true this component render above all components in game.
   bool aboveComponents = false;
-
-  Color debugColor = const Color(0xFFFF00FF);
 
   /// Map available to store times that can be used to control the frequency of any action.
   Map<String, IntervalTick> _timers = Map();
@@ -55,7 +28,10 @@ abstract class GameComponent extends Component
   /// angle is positive, or counterclockwise if the angle is negative.
   double angle = 0;
 
+  /// Use to do vertical flip in de render.
   bool isFlipVertical = false;
+
+  /// Use to do horizontal flip in de render.
   bool isFlipHorizontal = false;
 
   /// Param checks if this component is visible on the screen
@@ -63,18 +39,6 @@ abstract class GameComponent extends Component
 
   /// Get BuildContext
   BuildContext get context => gameRef.context;
-
-  Paint get debugPaint => Paint()
-    ..color = debugColor
-    ..strokeWidth = 1
-    ..style = PaintingStyle.stroke;
-
-  TextPaint get debugTextPaint => TextPaint(
-        style: TextStyle(
-          color: debugColor,
-          fontSize: 12,
-        ),
-      );
 
   /// Method that checks if this component is visible on the screen
   bool _isVisibleInCamera() {
@@ -86,11 +50,6 @@ abstract class GameComponent extends Component
   bool isObjectCollision() {
     return (this is ObjectCollision &&
         (this as ObjectCollision).containCollision());
-  }
-
-  /// Method return screen position
-  Offset screenPosition() {
-    return gameRef.worldPositionToScreen(position.offset);
   }
 
   /// Method that checks what type map tile is currently
@@ -107,13 +66,13 @@ abstract class GameComponent extends Component
   List<String>? tileTypeListBelow() {
     final map = gameRef.map;
     if (map.getRendered().isNotEmpty) {
-      Vector2Rect position = this.isObjectCollision()
+      Rect position = this.isObjectCollision()
           ? (this as ObjectCollision).rectCollision
-          : this.position;
+          : this.toRect();
       return map
           .getRendered()
           .where((element) {
-            return (element.position.overlaps(position) &&
+            return (element.overlaps(position) &&
                 (element.type?.isNotEmpty ?? false));
           })
           .map<String>((e) => e.type!)
@@ -136,14 +95,13 @@ abstract class GameComponent extends Component
   List<Map<String, dynamic>>? tilePropertiesListBelow() {
     final map = gameRef.map;
     if (map.tiles.isNotEmpty) {
-      Vector2Rect position = this.isObjectCollision()
+      Rect position = this.isObjectCollision()
           ? (this as ObjectCollision).rectCollision
-          : this.position;
+          : this.toRect();
       return map
           .getRendered()
           .where((element) {
-            return (element.position.overlaps(position) &&
-                (element.properties != null));
+            return (element.overlaps(position) && (element.properties != null));
           })
           .map<Map<String, dynamic>>((e) => e.properties!)
           .toList();
@@ -153,7 +111,7 @@ abstract class GameComponent extends Component
 
   /// Method used to translate component
   void translate(double translateX, double translateY) {
-    position = position.translate(translateX, translateY);
+    position.add(Vector2(translateX, translateY));
   }
 
   @override
@@ -165,7 +123,7 @@ abstract class GameComponent extends Component
   }
 
   int _getBottomPriority() {
-    int bottomPriority = position.bottom.round();
+    int bottomPriority = bottom.round();
     if (this.isObjectCollision()) {
       bottomPriority = (this as ObjectCollision).rectCollision.bottom.round();
     }
@@ -174,8 +132,9 @@ abstract class GameComponent extends Component
 
   void renderDebugMode(Canvas canvas) {
     if (isVisible) {
-      canvas.drawRect(position.rect, debugPaint);
-      final rect = position.rect;
+      final rect = toRect();
+      canvas.drawRect(rect, debugPaint);
+
       final dx = rect.right;
       final dy = rect.bottom;
       debugTextPaint.render(
@@ -184,14 +143,14 @@ abstract class GameComponent extends Component
         Vector2(dx - 50, dy),
       );
     }
-    super.renderDebugMode(canvas);
   }
 
+  @override
   void renderTree(Canvas canvas) {
     canvas.save();
 
     if (isFlipHorizontal || isFlipVertical || angle != 0) {
-      canvas.translate(position.center.dx, position.center.dy);
+      canvas.translate(this.center.x, this.center.y);
       if (angle != 0) {
         canvas.rotate(angle);
       }
@@ -199,7 +158,7 @@ abstract class GameComponent extends Component
         canvas.scale(isFlipHorizontal ? -1 : 1, isFlipVertical ? -1 : 1);
       }
 
-      canvas.translate(-position.center.dx, -position.center.dy);
+      canvas.translate(-this.center.x, -this.center.y);
     }
 
     render(canvas);
@@ -233,12 +192,11 @@ abstract class GameComponent extends Component
   }
 
   /// Return screen position of this component.
-  Vector2 getScreenPosition() {
+  Vector2 screenPosition() {
     if (hasGameRef) {
-      final offset = gameRef.camera.worldPositionToScreen(
-        vectorPosition.toOffset(),
+      return gameRef.camera.worldToScreen(
+        position,
       );
-      return Vector2(offset.dx, offset.dy);
     } else {
       return Vector2.zero();
     }
@@ -269,23 +227,5 @@ abstract class GameComponent extends Component
         i.handlerPointerCancel(event);
       }
     });
-  }
-
-  @override
-  Future<void> add(Component component) {
-    if (component is BonfireHasGameRef) {
-      (component as BonfireHasGameRef).gameRef = gameRef;
-    }
-    return super.add(component);
-  }
-
-  @override
-  void prepare(Component parent) {
-    super.prepare(parent);
-    debugMode |= parent.debugMode;
-    isPrepared = true;
-    if (hasGameRef) {
-      onGameResize(gameRef.size);
-    }
   }
 }

@@ -19,7 +19,7 @@ mixin AutomaticRandomMovement on Movement {
     /// milliseconds
   }) {
     if (runOnlyVisibleInCamera &&
-        !gameRef.camera.cameraRect.overlaps(position.rect)) return;
+        !gameRef.camera.cameraRect.overlapComponent(this)) return;
     if (_targetRandomMovement == Vector2.zero()) {
       if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
         int randomX = Random().nextInt(maxDistance.toInt());
@@ -28,30 +28,28 @@ mixin AutomaticRandomMovement on Movement {
         randomY = randomY < minDistance ? minDistance : randomY;
         int randomNegativeX = Random().nextBool() ? -1 : 1;
         int randomNegativeY = Random().nextBool() ? -1 : 1;
-        _targetRandomMovement = vectorPosition.translate(
+        _targetRandomMovement = position.translate(
           randomX.toDouble() * randomNegativeX,
           randomY.toDouble() * randomNegativeY,
         );
       }
     } else {
-      bool canMoveX =
-          (_targetRandomMovement.x - vectorPosition.x).abs() > speed;
-      bool canMoveY =
-          (_targetRandomMovement.y - vectorPosition.y).abs() > speed;
+      bool canMoveX = (_targetRandomMovement.x - x).abs() > speed;
+      bool canMoveY = (_targetRandomMovement.y - y).abs() > speed;
 
       bool canMoveLeft = false;
       bool canMoveRight = false;
       bool canMoveUp = false;
       bool canMoveDown = false;
       if (canMoveX) {
-        if (_targetRandomMovement.x > vectorPosition.x) {
+        if (_targetRandomMovement.x > x) {
           canMoveRight = true;
         } else {
           canMoveLeft = true;
         }
       }
       if (canMoveY) {
-        if (_targetRandomMovement.y > vectorPosition.y) {
+        if (_targetRandomMovement.y > y) {
           canMoveDown = true;
         } else {
           canMoveUp = true;

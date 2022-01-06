@@ -151,16 +151,12 @@ class TileModel {
     if (animation == null) {
       if (collisions?.isNotEmpty == true) {
         final tile = TileWithCollision.fromSprite(
-          sprite!.getSprite(),
-          Vector2(
-            x,
-            y,
-          ),
+          sprite: sprite!.getSprite(),
+          position: Vector2(x, y),
+          size: Vector2(width, height),
           offsetX: offsetX,
           offsetY: offsetY,
           collisions: collisions,
-          width: width,
-          height: height,
           type: type,
           properties: properties,
         );
@@ -174,15 +170,11 @@ class TileModel {
         return tile;
       } else {
         final tile = Tile.fromSprite(
-          sprite!.getSprite(),
-          Vector2(
-            x,
-            y,
-          ),
+          sprite: sprite!.getSprite(),
+          position: Vector2(x, y),
+          size: Vector2(width, height),
           offsetX: offsetX,
           offsetY: offsetY,
-          width: width,
-          height: height,
           type: type,
           properties: properties,
         );
@@ -200,16 +192,12 @@ class TileModel {
         ControlledUpdateAnimation animationControlled =
             animation!.getSpriteControlledAnimation();
         final tile = TileWithCollision.withAnimation(
-          animationControlled,
-          Vector2(
-            x,
-            y,
-          ),
+          animation: animationControlled,
+          position: Vector2(x, y),
+          size: Vector2(width, height),
           offsetX: offsetX,
           offsetY: offsetY,
           collisions: collisions,
-          width: width,
-          height: height,
           type: type,
           properties: properties,
         );
@@ -225,15 +213,11 @@ class TileModel {
         ControlledUpdateAnimation animationControlled =
             animation!.getSpriteControlledAnimation();
         final tile = Tile.fromAnimation(
-          animationControlled,
-          Vector2(
-            x,
-            y,
-          ),
+          animation: animationControlled,
+          position: Vector2(x, y),
+          size: Vector2(width, height),
           offsetX: offsetX,
           offsetY: offsetY,
-          width: width,
-          height: height,
           type: type,
           properties: properties,
         );

@@ -11,9 +11,12 @@
 /// on 30/11/21
 import 'dart:ui';
 
-import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/background/game_background.dart';
 import 'package:bonfire/map/map_assets_manager.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
+import 'package:flame/components.dart';
 
+/// Used to define parallax image as background
 class BackgroundImageGame extends GameBackground {
   final String imagePath;
   final Vector2 offset;
@@ -21,6 +24,7 @@ class BackgroundImageGame extends GameBackground {
   final double parallaxX;
   final double parallaxY;
   final double opacity;
+  Vector2 _parallaxOffset = Vector2.zero();
 
   Sprite? imageSprite;
   BackgroundImageGame({
@@ -35,16 +39,19 @@ class BackgroundImageGame extends GameBackground {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    imageSprite?.renderFromVector2Rect(canvas, position, opacity: opacity);
+    imageSprite?.renderWithOpacity(
+      canvas,
+      position,
+      size,
+      opacity: opacity,
+    );
   }
 
   @override
   void update(double dt) {
-    position = position.copyWith(
-      position: Vector2(
-        gameRef.camera.position.dx * -1 * parallaxX,
-        gameRef.camera.position.dy * -1 * parallaxY,
-      ),
+    position = _parallaxOffset.translate(
+      (gameRef.camera.position.x * -1 * parallaxX),
+      (gameRef.camera.position.y * -1 * parallaxY),
     );
     super.update(dt);
   }
@@ -52,12 +59,13 @@ class BackgroundImageGame extends GameBackground {
   @override
   Future<void>? onLoad() async {
     imageSprite = await MapAssetsManager.getFutureSprite(imagePath);
-    position = Rect.fromLTWH(
-            offset.x,
-            offset.y,
-            imageSprite!.image.width * factor,
-            imageSprite!.image.height * factor)
-        .toVector2Rect();
+    _parallaxOffset = Vector2(offset.x * factor, offset.y * factor);
+    position = _parallaxOffset.clone();
+    size = Vector2(
+      imageSprite!.image.width * factor,
+      imageSprite!.image.height * factor,
+    );
+
     return super.onLoad();
   }
 }

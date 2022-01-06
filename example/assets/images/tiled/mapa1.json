@@ -6,6 +6,8 @@
          "id":13,
          "image":"image_bg.jpeg",
          "name":"Image Layer 1",
+         "offsetx":-100,
+         "offsety":-100,
          "opacity":0.6,
          "parallaxx":1.2,
          "parallaxy":1.2,
@@ -494,17 +496,6 @@
                  "y":263.380514943718
                 }, 
                 {
-                 "height":16,
-                 "id":56,
-                 "name":"chest",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":662.763617544314,
-                 "y":89.2741622460862
-                }, 
-                {
                  "height":48,
                  "id":57,
                  "name":"column",
@@ -784,6 +775,28 @@
                  "width":53.953125,
                  "x":102.0859375,
                  "y":4.453125
+                }, 
+                {
+                 "height":16,
+                 "id":90,
+                 "name":"chest",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":664.5,
+                 "y":89
+                }, 
+                {
+                 "height":16,
+                 "id":91,
+                 "name":"chest",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":160.356490173989,
+                 "y":64.5998247590437
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -792,7 +805,7 @@
          "y":0
         }],
  "nextlayerid":14,
- "nextobjectid":90,
+ "nextobjectid":92,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.5.0",

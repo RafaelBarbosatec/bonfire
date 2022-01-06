@@ -11,7 +11,7 @@ class CollisionArea {
   CollisionArea(this.shape, {this.align});
 
   CollisionArea.rectangle({
-    required Size size,
+    required Vector2 size,
     Vector2? align,
   })  : shape = RectangleShape(size),
         align = align ?? Vector2.zero();
@@ -28,16 +28,10 @@ class CollisionArea {
   })  : shape = PolygonShape(points),
         align = align ?? Vector2.zero();
 
-  CollisionArea.fromVector2Rect({
-    required Vector2Rect rect,
-    Vector2? align,
-  })  : shape = RectangleShape(Size(rect.size.x, rect.size.y)),
-        align = align ?? Vector2.zero();
-
-  void updatePosition(Vector2Rect position) {
+  void updatePosition(Vector2 position) {
     shape.position = Vector2(
-      position.position.x + (align?.x ?? 0.0),
-      position.position.y + (align?.y ?? 0.0),
+      position.x + (align?.x ?? 0.0),
+      position.y + (align?.y ?? 0.0),
     );
   }
 
@@ -57,7 +51,10 @@ class CollisionArea {
       );
     } else if (shape is RectangleShape) {
       shapeAux = RectangleShape(
-        (shape as RectangleShape).rect.size,
+        Vector2(
+          (shape as RectangleShape).rect.width,
+          (shape as RectangleShape).rect.height,
+        ),
       );
     } else if (shape is PolygonShape) {
       shapeAux = PolygonShape(
@@ -95,7 +92,7 @@ class CollisionArea {
     );
     if (map['shape']['type'] == 'RectangleShape') {
       return CollisionArea.rectangle(
-          size: Size(
+          size: Vector2(
             map['shape']['size']['width'],
             map['shape']['size']['height'],
           ),
@@ -115,7 +112,7 @@ class CollisionArea {
     }
 
     return CollisionArea.rectangle(
-      size: Size.zero,
+      size: Vector2.zero(),
       align: align,
     );
   }

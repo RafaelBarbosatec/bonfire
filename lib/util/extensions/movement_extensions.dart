@@ -5,7 +5,6 @@ import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/mixins/movement.dart';
 
 import '../functions.dart';
-import '../vector2rect.dart';
 
 extension MovementExtensions on Movement {
   /// This method move this component to target
@@ -25,24 +24,22 @@ extension MovementExtensions on Movement {
     double translateY = 0;
     double speed = this.speed * dt;
 
-    Vector2Rect rectToMove = this.isObjectCollision()
+    Rect rectToMove = this.isObjectCollision()
         ? (this as ObjectCollision).rectCollision
-        : position;
+        : toRect();
 
-    translateX =
-        rectToMove.rect.center.dx > centerXPlayer ? (-1 * speed) : speed;
+    translateX = rectToMove.center.dx > centerXPlayer ? (-1 * speed) : speed;
 
     translateX = _adjustTranslate(
       translateX,
-      rectToMove.rect.center.dx,
+      rectToMove.center.dx,
       centerXPlayer,
       speed,
     );
-    translateY =
-        rectToMove.rect.center.dy > centerYPlayer ? (-1 * speed) : speed;
+    translateY = rectToMove.center.dy > centerYPlayer ? (-1 * speed) : speed;
     translateY = _adjustTranslate(
       translateY,
-      rectToMove.rect.center.dy,
+      rectToMove.center.dy,
       centerYPlayer,
       speed,
     );
@@ -64,7 +61,7 @@ extension MovementExtensions on Movement {
       comp.height + (margin * 2),
     );
 
-    if (rectToMove.rect.overlaps(rectPlayerCollision)) {
+    if (rectToMove.overlaps(rectPlayerCollision)) {
       closeComponent(target);
       if (!this.isIdle) {
         this.idle();
@@ -109,7 +106,7 @@ extension MovementExtensions on Movement {
     if (runOnlyVisibleInScreen && !this.isVisible) return;
     double distance = (minDistanceFromPlayer ?? radiusVision);
 
-    Vector2Rect rectTarget = getRectAndCollision(target);
+    Rect rectTarget = getRectAndCollision(target);
     double centerXPlayer = rectTarget.center.dx;
     double centerYPlayer = rectTarget.center.dy;
 
@@ -118,22 +115,20 @@ extension MovementExtensions on Movement {
 
     double speed = this.speed * this.dtUpdate;
 
-    Vector2Rect rectToMove = getRectAndCollision(this);
+    Rect rectToMove = getRectAndCollision(this);
 
-    translateX =
-        rectToMove.rect.center.dx > centerXPlayer ? (-1 * speed) : speed;
+    translateX = rectToMove.center.dx > centerXPlayer ? (-1 * speed) : speed;
     translateX = _adjustTranslate(
       translateX,
-      rectToMove.rect.center.dx,
+      rectToMove.center.dx,
       centerXPlayer,
       speed,
     );
 
-    translateY =
-        rectToMove.rect.center.dy > centerYPlayer ? (-1 * speed) : speed;
+    translateY = rectToMove.center.dy > centerYPlayer ? (-1 * speed) : speed;
     translateY = _adjustTranslate(
       translateY,
-      rectToMove.rect.center.dy,
+      rectToMove.center.dy,
       centerYPlayer,
       speed,
     );
@@ -148,13 +143,11 @@ extension MovementExtensions on Movement {
       translateY = 0;
     }
 
-    double translateXPositive =
-        rectToMove.rect.center.dx - rectTarget.center.dx;
+    double translateXPositive = rectToMove.center.dx - rectTarget.center.dx;
     translateXPositive =
         translateXPositive >= 0 ? translateXPositive : translateXPositive * -1;
 
-    double translateYPositive =
-        rectToMove.rect.center.dy - rectTarget.center.dy;
+    double translateYPositive = rectToMove.center.dy - rectTarget.center.dy;
     translateYPositive =
         translateYPositive >= 0 ? translateYPositive : translateYPositive * -1;
 

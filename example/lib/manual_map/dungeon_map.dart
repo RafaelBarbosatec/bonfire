@@ -6,7 +6,6 @@ import 'package:example/shared/decoration/chest.dart';
 import 'package:example/shared/decoration/spikes.dart';
 import 'package:example/shared/decoration/torch.dart';
 import 'package:example/shared/enemy/goblin.dart';
-import 'package:flutter/material.dart';
 
 class DungeonMap {
   static double tileSize = 45;
@@ -31,7 +30,7 @@ class DungeonMap {
             x: indexColumm.toDouble(),
             y: indexRow.toDouble(),
             collisions: [
-              CollisionArea.rectangle(size: Size(tileSize, tileSize))
+              CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
             ],
             width: tileSize,
             height: tileSize,
@@ -44,7 +43,7 @@ class DungeonMap {
             x: indexColumm.toDouble(),
             y: indexRow.toDouble(),
             collisions: [
-              CollisionArea.rectangle(size: Size(tileSize, tileSize))
+              CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
             ],
             width: tileSize,
             height: tileSize,
@@ -58,7 +57,7 @@ class DungeonMap {
             x: indexColumm.toDouble(),
             y: indexRow.toDouble(),
             collisions: [
-              CollisionArea.rectangle(size: Size(tileSize, tileSize))
+              CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
             ],
             width: tileSize,
             height: tileSize,
@@ -88,7 +87,7 @@ class DungeonMap {
             x: indexColumm.toDouble(),
             y: indexRow.toDouble(),
             collisions: [
-              CollisionArea.rectangle(size: Size(tileSize, tileSize))
+              CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
             ],
             width: tileSize,
             height: tileSize,
@@ -100,7 +99,7 @@ class DungeonMap {
             x: indexColumm.toDouble(),
             y: indexRow.toDouble(),
             collisions: [
-              CollisionArea.rectangle(size: Size(tileSize, tileSize))
+              CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
             ],
             width: tileSize,
             height: tileSize,
@@ -113,7 +112,7 @@ class DungeonMap {
             x: indexColumm.toDouble(),
             y: indexRow.toDouble(),
             collisions: [
-              CollisionArea.rectangle(size: Size(tileSize, tileSize))
+              CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
             ],
             width: tileSize,
             height: tileSize,
@@ -132,31 +131,28 @@ class DungeonMap {
       ),
       BarrelDraggable(getRelativeTilePosition(8, 6)),
       GameDecorationWithCollision.withSprite(
-        Sprite.load('itens/barrel.png'),
-        getRelativeTilePosition(10, 6),
-        width: tileSize,
-        height: tileSize,
+        sprite: Sprite.load('itens/barrel.png'),
+        position: getRelativeTilePosition(10, 6),
+        size: Vector2(tileSize, tileSize),
         collisions: [
-          CollisionArea.rectangle(size: Size(tileSize / 1.5, tileSize / 1.5))
+          CollisionArea.rectangle(size: Vector2(tileSize / 1.5, tileSize / 1.5))
         ],
       ),
       Chest(getRelativeTilePosition(18, 7)),
       GameDecorationWithCollision.withSprite(
-        Sprite.load('itens/table.png'),
-        getRelativeTilePosition(15, 7),
-        width: tileSize,
-        height: tileSize,
+        sprite: Sprite.load('itens/table.png'),
+        position: getRelativeTilePosition(15, 7),
+        size: Vector2(tileSize, tileSize),
         collisions: [
-          CollisionArea.rectangle(size: Size(tileSize, tileSize * 0.8)),
+          CollisionArea.rectangle(size: Vector2(tileSize, tileSize * 0.8)),
         ],
       ),
       GameDecorationWithCollision.withSprite(
-        Sprite.load('itens/table.png'),
-        getRelativeTilePosition(27, 6),
-        width: tileSize,
-        height: tileSize,
+        sprite: Sprite.load('itens/table.png'),
+        position: getRelativeTilePosition(27, 6),
+        size: Vector2(tileSize, tileSize),
         collisions: [
-          CollisionArea.rectangle(size: Size(tileSize, tileSize * 0.8)),
+          CollisionArea.rectangle(size: Vector2(tileSize, tileSize * 0.8)),
         ],
       ),
       Torch(getRelativeTilePosition(4, 4)),
@@ -164,28 +160,24 @@ class DungeonMap {
       Torch(getRelativeTilePosition(20, 4)),
       Torch(getRelativeTilePosition(28, 4)),
       GameDecoration.withSprite(
-        Sprite.load('itens/flag_red.png'),
+        sprite: Sprite.load('itens/flag_red.png'),
         position: getRelativeTilePosition(24, 4),
-        width: tileSize,
-        height: tileSize,
+        size: Vector2(tileSize, tileSize),
       ),
       GameDecoration.withSprite(
-        Sprite.load('itens/flag_red.png'),
+        sprite: Sprite.load('itens/flag_red.png'),
         position: getRelativeTilePosition(6, 4),
-        width: tileSize,
-        height: tileSize,
+        size: Vector2(tileSize, tileSize),
       ),
       GameDecoration.withSprite(
-        Sprite.load('itens/prisoner.png'),
+        sprite: Sprite.load('itens/prisoner.png'),
         position: getRelativeTilePosition(10, 4),
-        width: tileSize,
-        height: tileSize,
+        size: Vector2(tileSize, tileSize),
       ),
       GameDecoration.withSprite(
-        Sprite.load('itens/flag_red.png'),
+        sprite: Sprite.load('itens/flag_red.png'),
         position: getRelativeTilePosition(14, 4),
-        width: tileSize,
-        height: tileSize,
+        size: Vector2(tileSize, tileSize),
       )
     ];
   }

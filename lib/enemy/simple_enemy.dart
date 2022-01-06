@@ -8,16 +8,14 @@ import 'package:flame/components.dart';
 class SimpleEnemy extends Enemy with DirectionAnimation {
   SimpleEnemy({
     required Vector2 position,
-    required double height,
-    required double width,
+    required Vector2 size,
     required SimpleDirectionAnimation animation,
     double life = 100,
     double speed = 100,
     Direction initDirection = Direction.right,
   }) : super(
           position: position,
-          height: height,
-          width: width,
+          size: size,
           life: life,
           speed: speed,
         ) {

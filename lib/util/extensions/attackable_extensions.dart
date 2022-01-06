@@ -20,17 +20,17 @@ extension AttackableExtensions on Attackable {
     double borderWidth = 0,
     Color borderColor = const Color(0xFFFFFFFF),
   }) {
-    double yPosition = (position.top - height) - margin;
+    double yPosition = (y - height) - margin;
 
-    double xPosition = position.left + align.dx;
+    double xPosition = x + align.dx;
 
     if (drawInBottom) {
-      yPosition = position.bottom + margin;
+      yPosition = toRect().bottom + margin;
     }
 
     yPosition = yPosition - align.dy;
 
-    final w = width ?? position.width;
+    final w = width ?? this.width;
 
     double currentBarLife = (life * w) / maxLife;
 

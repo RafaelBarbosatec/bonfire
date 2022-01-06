@@ -39,7 +39,7 @@ class MapWorld extends MapGame {
 
   @override
   void render(Canvas canvas) {
-    for (final tile in childrenTiles) {
+    for (Tile tile in childrenTiles) {
       tile.renderTree(canvas);
     }
     _drawPathLine(canvas);
@@ -49,7 +49,7 @@ class MapWorld extends MapGame {
   @override
   // ignore: must_call_super
   void update(double dt) {
-    for (final tile in childrenTiles) {
+    for (Tile tile in childrenTiles) {
       tile.update(dt);
       if (tile.shouldRemove) {
         _tilesToRemove.add(tile);
@@ -64,6 +64,7 @@ class MapWorld extends MapGame {
 
   void _searchTilesToRender() {
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
+
     final visibleTileModel = quadTree?.query(
           rectCamera.getRectangleByTileSize(tileSize),
         ) ??
@@ -88,7 +89,7 @@ class MapWorld extends MapGame {
 
   @override
   Iterable<Tile> getRendered() {
-    return childrenTiles.cast();
+    return childrenTiles;
   }
 
   @override
@@ -299,17 +300,17 @@ class MapWorld extends MapGame {
 
   Vector2 _getCameraTileUpdate() {
     return Vector2(
-      (gameRef.camera.position.dx / tileSizeToUpdate).floorToDouble(),
-      (gameRef.camera.position.dy / tileSizeToUpdate).floorToDouble(),
+      (gameRef.camera.position.x / tileSizeToUpdate).floorToDouble(),
+      (gameRef.camera.position.y / tileSizeToUpdate).floorToDouble(),
     );
   }
 
   bool _checkNeedUpdateTiles() {
     final camera = _getCameraTileUpdate();
-    if (lastCamera != camera || lastMinorZoom > gameRef.camera.config.zoom) {
+    if (lastCamera != camera || lastMinorZoom > gameRef.camera.zoom) {
       lastCamera = camera;
-      if (lastMinorZoom > gameRef.camera.config.zoom) {
-        lastMinorZoom = gameRef.camera.config.zoom;
+      if (lastMinorZoom > gameRef.camera.zoom) {
+        lastMinorZoom = gameRef.camera.zoom;
       }
       return true;
     }

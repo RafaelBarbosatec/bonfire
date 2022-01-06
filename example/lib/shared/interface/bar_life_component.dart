@@ -17,8 +17,7 @@ class BarLifeComponent extends InterfaceComponent {
           id: 1,
           position: Vector2(20, 20),
           sprite: Sprite.load('health_ui.png'),
-          width: 120,
-          height: 40,
+          size: Vector2(120, 40),
         );
 
   @override
@@ -43,8 +42,8 @@ class BarLifeComponent extends InterfaceComponent {
   }
 
   void _drawLife(Canvas canvas) {
-    double xBar = position.left + 26;
-    double yBar = position.top + 10;
+    double xBar = position.x + 26;
+    double yBar = position.y + 10;
     canvas.drawLine(
         Offset(xBar, yBar),
         Offset(xBar + widthBar, yBar),
@@ -65,8 +64,8 @@ class BarLifeComponent extends InterfaceComponent {
   }
 
   void _drawStamina(Canvas canvas) {
-    double xBar = position.left + 26;
-    double yBar = position.top + 28;
+    double xBar = position.x + 26;
+    double yBar = position.y + 28;
 
     double currentBarStamina = (stamina * widthBar) / maxStamina;
 

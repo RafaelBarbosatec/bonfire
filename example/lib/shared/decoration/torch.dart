@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 class Torch extends GameDecoration with Lighting {
   Torch(Vector2 position)
       : super.withAnimation(
-          CommonSpriteSheet.torchAnimated,
-          width: DungeonMap.tileSize,
-          height: DungeonMap.tileSize,
+          animation: CommonSpriteSheet.torchAnimated,
+          size: Vector2.all(DungeonMap.tileSize),
           position: position,
         ) {
     setupLighting(

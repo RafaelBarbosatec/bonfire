@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/camera/camera.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/util/map_explorer.dart';
@@ -61,7 +61,10 @@ class BonfireGame extends BaseGame
   /// Used to show in the interface the FPS.
   final bool showFPS;
 
+  /// Callback to receive the tapDown event from the game.
   final TapInGame? onTapDown;
+
+  /// Callback to receive the onTapUp event from the game.
   final TapInGame? onTapUp;
 
   Iterable<Lighting> _visibleLights = List.empty();
@@ -115,19 +118,16 @@ class BonfireGame extends BaseGame
     this.onTapUp,
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
-  }) : _joystickController = joystickController {
+  })  : _joystickController = joystickController,
+        super(camera: BonfireCamera(cameraConfig ?? CameraConfig())) {
     _initialEnemies = enemies;
     _initialDecorations = decorations;
     _initialComponents = components;
-    _colorFilter = colorFilter;
+    _colorFilter = colorFilter ?? GameColorFilter();
     debugMode = constructionMode;
 
-    gameController?.gameRef = this;
-    camera = Camera(cameraConfig ?? CameraConfig());
-    camera.gameRef = this;
-    if (camera.config.target == null && player != null) {
-      camera.moveToTarget(player!);
-    }
+    camera.setGame(this);
+    camera.target ??= player;
 
     _interval = IntervalTick(
       INTERVAL_UPDATE_CACHE,
@@ -172,12 +172,16 @@ class BonfireGame extends BaseGame
     if (player != null) {
       await add(player!);
     }
-    _lighting =
-        LightingComponent(color: lightingColorGame ?? Color(0x00000000));
+    _lighting = LightingComponent(
+      color: lightingColorGame ?? Color(0x00000000),
+    );
     await add(_lighting!);
     await add(interface ?? GameInterface());
     await add(_joystickController ?? Joystick());
     _joystickController?.addObserver(player ?? MapExplorer(camera));
+    if (gameController != null) {
+      await add(gameController!);
+    }
   }
 
   @override
@@ -192,24 +196,6 @@ class BonfireGame extends BaseGame
   void onMount() {
     onReady?.call(this);
     super.onMount();
-  }
-
-  @override
-  Future<void> add(Component component) {
-    if (component is BonfireHasGameRef) {
-      (component as BonfireHasGameRef).gameRef = this;
-    }
-    return super.add(component);
-  }
-
-  @override
-  Future<void> addAll(Iterable<Component> components) {
-    components.forEach((element) {
-      if (element is BonfireHasGameRef) {
-        (element as BonfireHasGameRef).gameRef = this;
-      }
-    });
-    return super.addAll(components);
   }
 
   @override
@@ -243,7 +229,7 @@ class BonfireGame extends BaseGame
   }
 
   @override
-  Iterable<Lighting> lightVisible() => _visibleLights;
+  Iterable<Lighting> visibleLighting() => _visibleLights;
 
   @override
   Iterable<Attackable> attackables() {
@@ -361,13 +347,13 @@ class BonfireGame extends BaseGame
   }
 
   @override
-  Offset worldPositionToScreen(Offset position) {
-    return camera.worldPositionToScreen(position);
+  Vector2 worldToScreen(Vector2 position) {
+    return camera.worldToScreen(position);
   }
 
   @override
-  Offset screenPositionToWorld(Offset position) {
-    return camera.screenPositionToWorld(position);
+  Vector2 screenToWorld(Vector2 position) {
+    return camera.screenToWorld(position);
   }
 
   @override
@@ -379,20 +365,22 @@ class BonfireGame extends BaseGame
 
   @override
   void onPointerDown(PointerDownEvent event) {
+    final localPosition = event.localPosition.toVector2();
     onTapDown?.call(
       this,
-      event.localPosition,
-      camera.screenPositionToWorld(event.localPosition),
+      localPosition,
+      camera.screenToWorld(localPosition),
     );
     super.onPointerDown(event);
   }
 
   @override
   void onPointerUp(PointerUpEvent event) {
+    final localPosition = event.localPosition.toVector2();
     onTapUp?.call(
       this,
-      event.localPosition,
-      camera.screenPositionToWorld(event.localPosition),
+      localPosition,
+      camera.screenToWorld(localPosition),
     );
     super.onPointerUp(event);
   }
