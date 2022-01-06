@@ -9,6 +9,7 @@ mixin ObjectCollision on GameComponent {
 
   bool _containCollision = false;
 
+  /// if return `false` so the object will not collide with anything or block the passage.
   bool onCollision(GameComponent component, bool active) {
     return true;
   }
