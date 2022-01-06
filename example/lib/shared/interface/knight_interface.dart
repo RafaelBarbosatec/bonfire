@@ -88,33 +88,6 @@ class KnightInterface extends GameInterface {
             gameRef.colorFilter?.config.color = null;
           });
         }
-        // Simple rotation loop
-        // gameRef.camera.animateLoopRotation(
-        //   angles: [0.1, -0.1],
-        //   repeatCount: 3,
-        //   onFinish: () {
-        //     print('finished loop rotation');
-        //   },
-        // );
-        // Advanced example
-        // gameRef.camera.animateLoopRotation(
-        //   angles: [0.1, -0.1, -0.2],
-        //   rotationDuration: [
-        //     Duration(seconds: 2),
-        //     Duration(milliseconds: 100),
-        //     Duration(seconds: 1),
-        //   ],
-        //   pauseDuration: [
-        //     Duration(seconds: 4),
-        //     Duration(milliseconds: 500),
-        //     Duration(seconds: 1),
-        //   ],
-        //   curves: [Curves.bounceIn, Curves.ease, Curves.elasticIn],
-        //   repeatCount: 3,
-        //   onFinish: () {
-        //     print('finished loop rotation');
-        //   },
-        // );
       },
     ));
     add(TextInterfaceComponent(
