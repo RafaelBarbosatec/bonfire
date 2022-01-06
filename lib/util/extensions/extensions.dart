@@ -364,6 +364,24 @@ extension CameraExt on Camera {
     );
   }
 
+  void moveToPositionAnimated(
+    Vector2 position, {
+    double zoom = 1,
+    double angle = 0,
+    VoidCallback? finish,
+    Duration? duration,
+    widget.Curve curve = widget.Curves.decelerate,
+  }) {
+    (this as BonfireCamera).moveToPositionAnimated(
+      position,
+      zoom: zoom,
+      angle: angle,
+      finish: finish,
+      duration: duration,
+      curve: curve,
+    );
+  }
+
   void moveTop(double displacement) =>
       (this as BonfireCamera).moveTop(displacement);
   void moveRight(double displacement) =>

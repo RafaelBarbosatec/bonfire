@@ -59,7 +59,7 @@ class BonfireCamera extends Camera {
   }
 
   void moveToPositionAnimated(
-    Offset position, {
+    Vector2 position, {
     double zoom = 1,
     double angle = 0,
     VoidCallback? finish,
@@ -70,8 +70,8 @@ class BonfireCamera extends Camera {
     this.target = null;
     _isMoving = true;
 
-    double diffX = this.position.x - position.dx;
-    double diffY = this.position.y - position.dy;
+    double diffX = this.position.x - position.x;
+    double diffY = this.position.y - position.y;
     double originX = this.position.x;
     double originY = this.position.y;
 
@@ -85,15 +85,12 @@ class BonfireCamera extends Camera {
       duration ?? Duration(seconds: 1),
       onChange: (value) {
         snapTo(
-          this.position.copyWith(
-                x: originX - (diffX * value),
-              ),
+          Vector2(
+            originX - (diffX * value),
+            originY - (diffY * value),
+          ),
         );
-        snapTo(
-          this.position.copyWith(
-                y: originY - (diffY * value),
-              ),
-        );
+
         this.zoom = initialZoom - (diffZoom * value);
         this.angle = originAngle - (diffAngle * value);
 
