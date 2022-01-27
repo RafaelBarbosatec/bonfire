@@ -19,9 +19,9 @@ extension RotationPlayerExtensions on RotationPlayer {
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
   }) {
-    if (this.currentRadAngle == 0) return;
+    if (this.angle == 0) return;
 
-    double? angle = radAngleDirection ?? this.currentRadAngle;
+    double? angle = radAngleDirection ?? this.angle;
 
     if (angle != null) {
       this.simpleAttackRangeByAngle(
@@ -48,7 +48,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     double? radAngleDirection,
     bool withPush = true,
   }) {
-    double? angle = radAngleDirection ?? this.currentRadAngle;
+    double? angle = radAngleDirection ?? this.angle;
     if (angle != null) {
       this.simpleAttackMeleeByAngle(
         radAngleDirection: angle,

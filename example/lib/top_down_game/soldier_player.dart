@@ -1,0 +1,52 @@
+import 'package:bonfire/bonfire.dart';
+import 'package:flutter/material.dart';
+
+///
+/// Created by
+///
+/// ─▄▀─▄▀
+/// ──▀──▀
+/// █▀▀▀▀▀█▄
+/// █░░░░░█─█
+/// ▀▄▄▄▄▄▀▀
+///
+/// Rafaelbarbosatec
+/// on 27/01/22
+class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
+  SoldierPlayer(Vector2 position)
+      : super(
+          position: position,
+          size: Vector2(68, 43),
+          animIdle: _getSoldierSprite(),
+          animRun: _getSoldierSprite(),
+        ) {
+    dPadAngles = false;
+    setupCollision(
+      CollisionConfig(
+        collisions: [
+          CollisionArea.circle(
+            radius: 21.5,
+            align: Vector2(
+              12.5,
+              0,
+            ),
+          ),
+        ],
+      ),
+    );
+    setupLighting(
+      LightingConfig(radius: size.y * 2, color: Colors.transparent),
+    );
+  }
+
+  static Future<SpriteAnimation> _getSoldierSprite() async {
+    var sprite = await Sprite.load('soldier.png');
+    return SpriteAnimation.spriteList([sprite], stepTime: 0);
+  }
+
+  @override
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    print(event.radAngle);
+    super.joystickChangeDirectional(event);
+  }
+}

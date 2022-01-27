@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
@@ -32,6 +34,21 @@ class LightingComponent extends GameComponent implements LightingInterface {
     return LayerPriority.getLightingPriority(gameRef.highestPriority);
   }
 
+  Path getWheelPath(double wheelSize, double fromRadius, double toRadius) {
+    return new Path()
+      ..moveTo(wheelSize, wheelSize)
+      ..arcTo(
+        Rect.fromCircle(
+          radius: wheelSize,
+          center: Offset(wheelSize, wheelSize),
+        ),
+        fromRadius,
+        toRadius,
+        false,
+      )
+      ..close();
+  }
+
   @override
   void render(Canvas canvas) {
     super.render(canvas);
@@ -51,36 +68,61 @@ class LightingComponent extends GameComponent implements LightingInterface {
         -(gameRef.camera.position.y),
       );
 
-      canvas.drawCircle(
-        Offset(
-          light.center.x,
-          light.center.y,
-        ),
-        config.radius *
-            (config.withPulse
-                ? (1 - config.valuePulse * config.pulseVariation)
-                : 1),
+      double nbElem = 6;
+      double endRadius = (2 * pi) / nbElem;
+      double startRadius = 0;
+      canvas.drawPath(
+        Path()
+          ..moveTo(light.center.x, light.center.y)
+          ..arcTo(
+            Rect.fromCircle(
+              radius: config.radius * 2,
+              center: Offset(
+                light.center.x,
+                light.center.y,
+              ),
+            ),
+            startRadius,
+            endRadius,
+            false,
+          )
+          ..close(),
         _paintFocus
           ..maskFilter = MaskFilter.blur(
             BlurStyle.normal,
-            config.blurSigma,
+            5,
           ),
       );
+      // canvas.drawCircle(
+      //   Offset(
+      //     light.center.x,
+      //     light.center.y,
+      //   ),
+      //   config.radius *
+      //       (config.withPulse
+      //           ? (1 - config.valuePulse * config.pulseVariation)
+      //           : 1),
+      //   _paintFocus
+      //     ..maskFilter = MaskFilter.blur(
+      //       BlurStyle.normal,
+      //       config.blurSigma,
+      //     ),
+      // );
 
-      _paintLighting
-        ..color = config.color
-        ..maskFilter = MaskFilter.blur(
-          BlurStyle.normal,
-          config.blurSigma,
-        );
-      canvas.drawCircle(
-        light.center.toOffset(),
-        config.radius *
-            (config.withPulse
-                ? (1 - config.valuePulse * config.pulseVariation)
-                : 1),
-        _paintLighting,
-      );
+      // _paintLighting
+      //   ..color = config.color
+      //   ..maskFilter = MaskFilter.blur(
+      //     BlurStyle.normal,
+      //     config.blurSigma,
+      //   );
+      // canvas.drawCircle(
+      //   light.center.toOffset(),
+      //   config.radius *
+      //       (config.withPulse
+      //           ? (1 - config.valuePulse * config.pulseVariation)
+      //           : 1),
+      //   _paintLighting,
+      // );
 
       canvas.restore();
     });
