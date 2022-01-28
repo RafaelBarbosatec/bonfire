@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/lighting/lighting_type.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class LightingInterface {
@@ -68,71 +67,13 @@ class LightingComponent extends GameComponent implements LightingInterface {
         -(gameRef.camera.position.y),
       );
 
-      canvas.save();
+      if (config.type is CircleLightingType) {
+        _drawCircle(canvas, light);
+      }
 
-      double nbElem = 6;
-      double endRadius = (2 * pi) / nbElem;
-      double startRadius = 0;
-
-      canvas.translate(light.center.x, light.center.y);
-      canvas.rotate(light.angle - (endRadius / 2));
-      canvas.translate(-light.center.x, -light.center.y);
-
-      canvas.drawPath(
-        Path()
-          ..moveTo(light.center.x, light.center.y)
-          ..arcTo(
-            Rect.fromCircle(
-              radius: config.radius * 2,
-              center: Offset(
-                light.center.x,
-                light.center.y,
-              ),
-            ),
-            startRadius,
-            endRadius,
-            false,
-          )
-          ..close(),
-        _paintFocus
-          ..maskFilter = MaskFilter.blur(
-            BlurStyle.normal,
-            5,
-          ),
-      );
-
-      canvas.restore();
-
-      // canvas.drawCircle(
-      //   Offset(
-      //     light.center.x,
-      //     light.center.y,
-      //   ),
-      //   config.radius *
-      //       (config.withPulse
-      //           ? (1 - config.valuePulse * config.pulseVariation)
-      //           : 1),
-      //   _paintFocus
-      //     ..maskFilter = MaskFilter.blur(
-      //       BlurStyle.normal,
-      //       config.blurSigma,
-      //     ),
-      // );
-
-      // _paintLighting
-      //   ..color = config.color
-      //   ..maskFilter = MaskFilter.blur(
-      //     BlurStyle.normal,
-      //     config.blurSigma,
-      //   );
-      // canvas.drawCircle(
-      //   light.center.toOffset(),
-      //   config.radius *
-      //       (config.withPulse
-      //           ? (1 - config.valuePulse * config.pulseVariation)
-      //           : 1),
-      //   _paintLighting,
-      // );
+      if (config.type is ArcLightingType) {
+        _drawArc(canvas, light);
+      }
 
       canvas.restore();
     });
@@ -172,5 +113,104 @@ class LightingComponent extends GameComponent implements LightingInterface {
 
   bool _containsColor() {
     return color != null && color != Color(0x00000000);
+  }
+
+  void _drawArc(Canvas canvas, Lighting light) {
+    var config = light.lightingConfig!;
+    var type = config.type as ArcLightingType;
+    canvas.save();
+
+    canvas.translate(light.center.x, light.center.y);
+    if (type.isCenter) {
+      canvas.rotate(light.angle - (type.endRadAngle / 2));
+    } else {
+      canvas.rotate(light.angle - type.endRadAngle);
+    }
+    canvas.translate(-light.center.x, -light.center.y);
+
+    canvas.drawPath(
+      Path()
+        ..moveTo(light.center.x, light.center.y)
+        ..arcTo(
+          Rect.fromCircle(
+            radius: config.radius * 2,
+            center: Offset(
+              light.center.x,
+              light.center.y,
+            ),
+          ),
+          type.startRadAngle,
+          type.endRadAngle,
+          false,
+        )
+        ..close(),
+      _paintFocus
+        ..maskFilter = MaskFilter.blur(
+          BlurStyle.normal,
+          5,
+        ),
+    );
+
+    _paintLighting
+      ..color = config.color
+      ..maskFilter = MaskFilter.blur(
+        BlurStyle.normal,
+        config.blurSigma,
+      );
+
+    canvas.drawPath(
+      Path()
+        ..moveTo(light.center.x, light.center.y)
+        ..arcTo(
+          Rect.fromCircle(
+            radius: light.lightingConfig!.radius * 2,
+            center: Offset(
+              light.center.x,
+              light.center.y,
+            ),
+          ),
+          type.startRadAngle,
+          type.endRadAngle,
+          false,
+        )
+        ..close(),
+      _paintLighting,
+    );
+
+    canvas.restore();
+  }
+
+  void _drawCircle(Canvas canvas, Lighting light) {
+    var config = light.lightingConfig!;
+    canvas.drawCircle(
+      Offset(
+        light.center.x,
+        light.center.y,
+      ),
+      config.radius *
+          (config.withPulse
+              ? (1 - config.valuePulse * config.pulseVariation)
+              : 1),
+      _paintFocus
+        ..maskFilter = MaskFilter.blur(
+          BlurStyle.normal,
+          config.blurSigma,
+        ),
+    );
+
+    _paintLighting
+      ..color = config.color
+      ..maskFilter = MaskFilter.blur(
+        BlurStyle.normal,
+        config.blurSigma,
+      );
+    canvas.drawCircle(
+      light.center.toOffset(),
+      config.radius *
+          (config.withPulse
+              ? (1 - config.valuePulse * config.pulseVariation)
+              : 1),
+      _paintLighting,
+    );
   }
 }

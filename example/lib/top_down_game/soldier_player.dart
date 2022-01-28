@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +37,14 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
       ),
     );
     setupLighting(
-      LightingConfig(radius: size.y * 2, color: Colors.transparent),
+      LightingConfig(
+        radius: size.y * 2,
+        color: Colors.yellow.withOpacity(0.3),
+        type: LightingType.arc(
+          endRadAngle: (2 * pi) / 6,
+          isCenter: true,
+        ),
+      ),
     );
   }
 
