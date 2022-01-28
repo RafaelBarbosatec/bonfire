@@ -26,7 +26,7 @@ class TopDownGame extends StatelessWidget {
         directional: JoystickDirectional(),
       ),
       player: SoldierPlayer(Vector2.zero()),
-      lightingColorGame: Colors.black.withOpacity(0.5),
+      lightingColorGame: Colors.black.withOpacity(0.7),
     );
   }
 }

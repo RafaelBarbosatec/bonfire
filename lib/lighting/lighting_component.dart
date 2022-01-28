@@ -68,9 +68,16 @@ class LightingComponent extends GameComponent implements LightingInterface {
         -(gameRef.camera.position.y),
       );
 
+      canvas.save();
+
       double nbElem = 6;
       double endRadius = (2 * pi) / nbElem;
       double startRadius = 0;
+
+      canvas.translate(light.center.x, light.center.y);
+      canvas.rotate(light.angle - (endRadius / 2));
+      canvas.translate(-light.center.x, -light.center.y);
+
       canvas.drawPath(
         Path()
           ..moveTo(light.center.x, light.center.y)
@@ -93,6 +100,9 @@ class LightingComponent extends GameComponent implements LightingInterface {
             5,
           ),
       );
+
+      canvas.restore();
+
       // canvas.drawCircle(
       //   Offset(
       //     light.center.x,

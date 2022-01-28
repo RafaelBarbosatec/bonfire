@@ -46,7 +46,7 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    print(event.radAngle);
+    speed = 150 * event.intensity;
     super.joystickChangeDirectional(event);
   }
 }
