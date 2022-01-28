@@ -121,11 +121,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
     canvas.save();
 
     canvas.translate(light.center.x, light.center.y);
-    if (type.isCenter) {
-      canvas.rotate(light.angle - (type.endRadAngle / 2));
-    } else {
-      canvas.rotate(light.angle - type.endRadAngle);
-    }
+    canvas.rotate(light.lightingAngle);
     canvas.translate(-light.center.x, -light.center.y);
 
     canvas.drawPath(
