@@ -196,8 +196,8 @@ extension EnemyExtensions on Enemy {
     Player? player = this.gameRef.player;
     if (player == null) return 0.0;
     return atan2(
-      playerRect.center.dy - this.center.x,
-      playerRect.center.dx - this.center.y,
+      playerRect.center.dy - enemyRect.center.dy,
+      playerRect.center.dx - enemyRect.center.dx,
     );
   }
 
@@ -218,5 +218,12 @@ extension EnemyExtensions on Enemy {
             ? (gameRef.player as ObjectCollision).rectCollision
             : gameRef.player?.toRect()) ??
         Rect.zero;
+  }
+
+  /// Gets enemy position used how base in calculations
+  Rect get enemyRect {
+    return (this.isObjectCollision()
+        ? (this as ObjectCollision).rectCollision
+        : toRect());
   }
 }

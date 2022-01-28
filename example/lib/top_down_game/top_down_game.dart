@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/top_down_game/robot_enemy.dart';
 import 'package:example/top_down_game/soldier_player.dart';
 import 'package:flutter/material.dart';
 
@@ -19,9 +20,9 @@ class TopDownGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BonfireTiledWidget(
-      map: TiledWorldMap(
-        'tiled/top_down/map.json',
-      ),
+      map: TiledWorldMap('tiled/top_down/map.json', objectsBuilder: {
+        'enemy': (prop) => RobotEnemy(prop.position),
+      }),
       joystick: Joystick(
         directional: JoystickDirectional(),
       ),

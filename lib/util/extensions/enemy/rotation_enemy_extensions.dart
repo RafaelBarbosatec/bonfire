@@ -36,11 +36,7 @@ extension RotationEnemyExtensions on RotationEnemy {
           playerRect.height + (margin * 2),
         );
 
-        Rect rectToMove = this.isObjectCollision()
-            ? (this as ObjectCollision).rectCollision
-            : toRect();
-
-        if (rectToMove.overlaps(rectPlayerCollision)) {
+        if (enemyRect.overlaps(rectPlayerCollision)) {
           closePlayer(player);
           this.idle();
           this.moveFromAngleDodgeObstacles(0, _radAngle);
@@ -121,7 +117,7 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     if (isDead) return;
 
-    double angle = radAngleDirection ?? this.currentRadAngle;
+    double angle = radAngleDirection ?? this.angle;
 
     double nextX = this.height * cos(angle);
     double nextY = this.height * sin(angle);
@@ -187,7 +183,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       animationUp: animationUp,
       animationDestroy: animationDestroy,
       size: size,
-      radAngleDirection: radAngleDirection ?? this.currentRadAngle,
+      radAngleDirection: radAngleDirection ?? this.angle,
       id: id,
       speed: speed,
       damage: damage,
