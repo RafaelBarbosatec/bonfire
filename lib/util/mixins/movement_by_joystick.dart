@@ -10,6 +10,9 @@ mixin MovementByJoystick on Movement {
   /// flag to set if you only want the 8 directions movement. Set to false to have full 360 movement
   bool dPadAngles = true;
 
+  /// the angle the player should move in 360 mode
+  double movementRadAngle = 0;
+
   @override
   void update(double dt) {
     if (this is JoystickListener) {
@@ -22,7 +25,7 @@ mixin MovementByJoystick on Movement {
       }
       if (innerCurrentDirectional != JoystickMoveDirectional.IDLE &&
           newAngle != 0.0) {
-        angle = newAngle;
+        movementRadAngle = newAngle;
       }
 
       if (dPadAngles) {
@@ -33,7 +36,7 @@ mixin MovementByJoystick on Movement {
       } else {
         if (innerCurrentDirectional != null && joystickContainThisComponent) {
           if (innerCurrentDirectional != JoystickMoveDirectional.IDLE) {
-            moveFromAngle(speed, angle);
+            moveFromAngle(speed, movementRadAngle);
           }
           // movement was done on the above line, this is only for the animation
           // which is why we use zero speed as we don't want to translate position twice

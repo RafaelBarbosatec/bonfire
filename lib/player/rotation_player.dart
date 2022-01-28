@@ -23,7 +23,7 @@ class RotationPlayer extends Player {
           life: life,
           speed: speed,
         ) {
-    angle = currentRadAngle;
+    movementRadAngle = currentRadAngle;
     _loader?.add(AssetToLoad(animIdle, (value) => this.animIdle = value));
     _loader?.add(AssetToLoad(animRun, (value) => this.animRun = value));
   }
@@ -41,6 +41,7 @@ class RotationPlayer extends Player {
   @override
   void update(double dt) {
     super.update(dt);
+    angle = movementRadAngle;
     animation?.update(dt);
   }
 
