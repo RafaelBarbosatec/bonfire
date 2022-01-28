@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/lighting/lighting_type.dart';
 import 'package:flutter/widgets.dart';
 
 abstract class LightingInterface {
@@ -74,7 +73,6 @@ class LightingComponent extends GameComponent implements LightingInterface {
       if (config.type is ArcLightingType) {
         _drawArc(canvas, light);
       }
-
       canvas.restore();
     });
     canvas.restore();
@@ -143,7 +141,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
       _paintFocus
         ..maskFilter = MaskFilter.blur(
           BlurStyle.normal,
-          5,
+          config.blurSigma,
         ),
     );
 
