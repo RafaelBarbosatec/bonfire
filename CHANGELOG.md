@@ -1,4 +1,4 @@
-# [NEXT]
+# [2.1.0]
 - Update `a_star_algorithm`.
 - Change `Offset` to `Vector2` in `Camera.moveToPositionAnimated`.
 - Adds `moveToPositionAnimated` in `camera`.
