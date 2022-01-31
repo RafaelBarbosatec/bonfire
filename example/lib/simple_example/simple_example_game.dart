@@ -21,6 +21,7 @@ class SimpleExampleGame extends StatelessWidget {
   Widget build(BuildContext context) {
     return BonfireTiledWidget(
       joystick: Joystick(
+        keyboardConfig: KeyboardConfig(),
         directional: JoystickDirectional(),
       ),
       map: TiledWorldMap(

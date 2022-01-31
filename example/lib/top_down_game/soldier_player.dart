@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 ///
 /// Created by
@@ -61,17 +62,21 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
 
   @override
   void joystickAction(JoystickActionEvent event) {
-    if (event.id == 1) {
-      if (event.event == ActionEvent.DOWN) {
-        simpleAttackRangeByAngle(
-          radAngleDirection: angle,
-          size: Vector2(4, 8),
-          speed: 500,
-          animationUp: Sprite.load('bullet.png').toAnimation(),
-          damage: 30,
-        );
-      }
+    if ((event.id == 1 || event.id == LogicalKeyboardKey.space.keyId) &&
+        event.event == ActionEvent.DOWN) {
+      actionAttack();
     }
+
     super.joystickAction(event);
+  }
+
+  void actionAttack() {
+    simpleAttackRangeByAngle(
+      radAngleDirection: angle,
+      size: Vector2(4, 8),
+      speed: 500,
+      animationUp: Sprite.load('bullet.png').toAnimation(),
+      damage: 30,
+    );
   }
 }

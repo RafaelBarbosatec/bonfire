@@ -30,6 +30,7 @@ class TopDownGame extends StatelessWidget {
         },
       ),
       joystick: Joystick(
+        keyboardConfig: KeyboardConfig(),
         directional: JoystickDirectional(),
         actions: [
           JoystickAction(

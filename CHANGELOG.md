@@ -2,6 +2,7 @@
 - Update `a_star_algorithm`.
 - Change `Offset` to `Vector2` in `Camera.moveToPositionAnimated`.
 - Adds `moveToPositionAnimated` in `camera`.
+- Adds `marginFromOrigin` param in `simpleAttackRangeByAngle`.
 - Adds top-down game example.
 - Fix bug in `RotationPlayer`.
 - Improvements in Lighting mixin:

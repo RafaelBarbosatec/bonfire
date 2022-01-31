@@ -110,6 +110,7 @@ extension GameComponentExtensions on GameComponent {
     VoidCallback? onDestroy,
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
+    double marginFromOrigin = 16,
   }) {
     var initPosition = (isObjectCollision()
         ? (this as ObjectCollision).rectCollision
@@ -117,7 +118,8 @@ extension GameComponentExtensions on GameComponent {
 
     Vector2 startPosition = initPosition.center.toVector2();
 
-    double displacement = max(initPosition.width, initPosition.height) * 1.2;
+    double displacement =
+        max(initPosition.width / 2, initPosition.height / 2) + marginFromOrigin;
     double nextX = displacement * cos(radAngleDirection);
     double nextY = displacement * sin(radAngleDirection);
 
