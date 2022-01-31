@@ -68,7 +68,7 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
           size: Vector2(4, 8),
           speed: 500,
           animationUp: Sprite.load('bullet.png').toAnimation(),
-          damage: 10,
+          damage: 30,
         );
       }
     }

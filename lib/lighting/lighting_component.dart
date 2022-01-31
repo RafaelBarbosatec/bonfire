@@ -56,7 +56,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
     canvas.drawColor(color!, BlendMode.dstATop);
     _visibleLight.forEach((light) {
       final config = light.lightingConfig;
-      if (config == null) return;
+      if (config == null || !light.lightingEnabled) return;
       config.update(_dtUpdate);
       canvas.save();
 
@@ -116,6 +116,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
   void _drawArc(Canvas canvas, Lighting light) {
     var config = light.lightingConfig!;
     var type = config.type as ArcLightingType;
+    Offset offset = light.center.toOffset() + config.align.toOffset();
     canvas.save();
 
     canvas.translate(light.center.x, light.center.y);
@@ -124,14 +125,11 @@ class LightingComponent extends GameComponent implements LightingInterface {
 
     canvas.drawPath(
       Path()
-        ..moveTo(light.center.x, light.center.y)
+        ..moveTo(offset.dx, offset.dy)
         ..arcTo(
           Rect.fromCircle(
             radius: config.radius * 2,
-            center: Offset(
-              light.center.x,
-              light.center.y,
-            ),
+            center: offset,
           ),
           type.startRadAngle,
           type.endRadAngle,
@@ -147,14 +145,11 @@ class LightingComponent extends GameComponent implements LightingInterface {
 
     canvas.drawPath(
       Path()
-        ..moveTo(light.center.x, light.center.y)
+        ..moveTo(offset.dx, offset.dy)
         ..arcTo(
           Rect.fromCircle(
             radius: light.lightingConfig!.radius * 2,
-            center: Offset(
-              light.center.x,
-              light.center.y,
-            ),
+            center: offset,
           ),
           type.startRadAngle,
           type.endRadAngle,
@@ -174,11 +169,9 @@ class LightingComponent extends GameComponent implements LightingInterface {
 
   void _drawCircle(Canvas canvas, Lighting light) {
     var config = light.lightingConfig!;
+    Offset offset = light.center.toOffset() + config.align.toOffset();
     canvas.drawCircle(
-      Offset(
-        light.center.x,
-        light.center.y,
-      ),
+      offset,
       config.radius *
           (config.withPulse
               ? (1 - config.valuePulse * config.pulseVariation)
@@ -197,7 +190,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
         config.blurSigma,
       );
     canvas.drawCircle(
-      light.center.toOffset(),
+      offset,
       config.radius *
           (config.withPulse
               ? (1 - config.valuePulse * config.pulseVariation)

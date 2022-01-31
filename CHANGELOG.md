@@ -2,6 +2,12 @@
 - Update `a_star_algorithm`.
 - Change `Offset` to `Vector2` in `Camera.moveToPositionAnimated`.
 - Adds `moveToPositionAnimated` in `camera`.
+- Adds top-down game example.
+- Fix bug in `RotationPlayer`.
+- Improvements in Lighting mixin:
+   - Adds type: type: LightingType.circle or LightingType.arc;
+   - Adds align param;
+   - Adds lightingEnabled param;
 
 # [2.0.0]
 We're striving to reduce the distance between Flame and Bonfire, relying more and more on Flame components under the hood now that it is stable. In this version we are following the standardization of using `Vector2` for `position` and `size` and using `PositionComponent` as the base for Bonfire components. Also, 'FlameGame' and the Flame's Camera are now used instead of custom implementations we had before. Some small features were lost, but nothing that the Flame's team isn't capable of adding over time.

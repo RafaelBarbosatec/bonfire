@@ -6,7 +6,11 @@ import 'package:bonfire/lighting/lighting_type.dart';
 mixin Lighting on GameComponent {
   LightingConfig? _lightingConfig;
 
+  /// Used to define rotation angle
   double lightingAngle = 0.0;
+
+  /// Used to enable and disable light
+  bool lightingEnabled = true;
 
   /// Used to set configuration
   void setupLighting(LightingConfig? config) => _lightingConfig = config;

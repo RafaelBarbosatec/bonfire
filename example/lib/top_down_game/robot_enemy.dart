@@ -49,9 +49,8 @@ class RobotEnemy extends RotationEnemy with ObjectCollision, Lighting {
     );
   }
 
-  static Future<SpriteAnimation> _getSoldierSprite() async {
-    var sprite = await Sprite.load('robot.png');
-    return SpriteAnimation.spriteList([sprite], stepTime: 0);
+  static Future<SpriteAnimation> _getSoldierSprite() {
+    return Sprite.load('robot.png').toAnimation();
   }
 
   @override

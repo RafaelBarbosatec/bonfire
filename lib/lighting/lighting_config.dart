@@ -1,3 +1,4 @@
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/pulse_value.dart';
 import 'package:flutter/widgets.dart';
 
@@ -32,6 +33,8 @@ class LightingConfig {
   /// Configure type of the lighting
   final LightingType type;
 
+  final Vector2 align;
+
   double _blurSigma = 0;
 
   PulseValue? _pulseAnimation;
@@ -46,7 +49,8 @@ class LightingConfig {
     this.pulseSpeed = 1,
     this.blurBorder = 20,
     this.type = LightingType.circle,
-  }) {
+    Vector2? align,
+  }) : this.align = align ?? Vector2.zero() {
     _pulseAnimation = PulseValue(speed: pulseSpeed, curve: pulseCurve);
     _blurSigma = _convertRadiusToSigma(blurBorder);
   }
