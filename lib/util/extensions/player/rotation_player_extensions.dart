@@ -19,25 +19,21 @@ extension RotationPlayerExtensions on RotationPlayer {
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
   }) {
-    if (this.angle == 0) return;
-
     double? angle = radAngleDirection ?? this.angle;
 
-    if (angle != null) {
-      this.simpleAttackRangeByAngle(
-        radAngleDirection: angle,
-        animationUp: animationUp,
-        animationDestroy: animationDestroy,
-        size: size,
-        id: id,
-        speed: speed,
-        damage: damage,
-        withCollision: withCollision,
-        onDestroy: onDestroy,
-        collision: collision,
-        lightingConfig: lightingConfig,
-      );
-    }
+    this.simpleAttackRangeByAngle(
+      radAngleDirection: angle,
+      animationUp: animationUp,
+      animationDestroy: animationDestroy,
+      size: size,
+      id: id,
+      speed: speed,
+      damage: damage,
+      withCollision: withCollision,
+      onDestroy: onDestroy,
+      collision: collision,
+      lightingConfig: lightingConfig,
+    );
   }
 
   void simpleAttackMelee({
@@ -49,15 +45,13 @@ extension RotationPlayerExtensions on RotationPlayer {
     bool withPush = true,
   }) {
     double? angle = radAngleDirection ?? this.angle;
-    if (angle != null) {
-      this.simpleAttackMeleeByAngle(
-        radAngleDirection: angle,
-        animationTop: animationTop,
-        damage: damage,
-        id: id,
-        size: size,
-        withPush: withPush,
-      );
-    }
+    this.simpleAttackMeleeByAngle(
+      radAngleDirection: angle,
+      animationTop: animationTop,
+      damage: damage,
+      id: id,
+      size: size,
+      withPush: withPush,
+    );
   }
 }
