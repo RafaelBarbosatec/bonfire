@@ -40,6 +40,50 @@
         }, 
         {
          "draworder":"topdown",
+         "id":5,
+         "name":"objects",
+         "objects":[
+                {
+                 "height":64,
+                 "id":6,
+                 "name":"armchair",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":681,
+                 "y":307
+                }, 
+                {
+                 "height":64,
+                 "id":7,
+                 "name":"armchair",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":385,
+                 "y":633
+                }, 
+                {
+                 "height":64,
+                 "id":8,
+                 "name":"armchair",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":614,
+                 "y":602
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":3,
          "name":"enemy",
          "objects":[
@@ -104,8 +148,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":5,
- "nextobjectid":6,
+ "nextlayerid":6,
+ "nextobjectid":9,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.5.0",

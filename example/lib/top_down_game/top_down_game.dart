@@ -3,6 +3,8 @@ import 'package:example/top_down_game/robot_enemy.dart';
 import 'package:example/top_down_game/soldier_player.dart';
 import 'package:flutter/material.dart';
 
+import 'armchair_decoration.dart';
+
 ///
 /// Created by
 ///
@@ -24,6 +26,7 @@ class TopDownGame extends StatelessWidget {
         'tiled/top_down/map.json',
         objectsBuilder: {
           'enemy': (prop) => ZombieEnemy(prop.position),
+          'armchair': (prop) => ArmchairDecoration(prop.position),
         },
       ),
       joystick: Joystick(
