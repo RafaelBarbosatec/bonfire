@@ -14,6 +14,9 @@ class LightingConfig {
   /// Enable pulse effect in lighting
   final bool withPulse;
 
+  /// Light follow component angle
+  final bool useComponentAngle;
+
   /// Configure variation in pulse effect
   final double pulseVariation;
 
@@ -37,6 +40,7 @@ class LightingConfig {
     required this.radius,
     required this.color,
     this.withPulse = false,
+    this.useComponentAngle = false,
     this.pulseCurve = Curves.decelerate,
     this.pulseVariation = 0.1,
     this.pulseSpeed = 1,
@@ -56,5 +60,29 @@ class LightingConfig {
 
   static double _convertRadiusToSigma(double radius) {
     return radius * 0.57735 + 0.5;
+  }
+
+  LightingConfig copyWith({
+    double? radius,
+    Color? color,
+    bool? withPulse,
+    bool? useComponentAngle,
+    double? pulseVariation,
+    double? pulseSpeed,
+    Curve? pulseCurve,
+    double? blurBorder,
+    LightingType? type,
+  }) {
+    return LightingConfig(
+      radius: radius ?? this.radius,
+      color: color ?? this.color,
+      withPulse: withPulse ?? this.withPulse,
+      useComponentAngle: useComponentAngle ?? this.useComponentAngle,
+      pulseVariation: pulseVariation ?? this.pulseVariation,
+      pulseSpeed: pulseSpeed ?? this.pulseSpeed,
+      pulseCurve: pulseCurve ?? this.pulseCurve,
+      blurBorder: blurBorder ?? this.blurBorder,
+      type: type ?? this.type,
+    );
   }
 }

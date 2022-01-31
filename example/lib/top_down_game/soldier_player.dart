@@ -44,6 +44,7 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
           endRadAngle: (2 * pi) / 6,
           isCenter: true,
         ),
+        useComponentAngle: true,
       ),
     );
   }
@@ -57,5 +58,18 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     speed = 150 * event.intensity;
     super.joystickChangeDirectional(event);
+  }
+
+  @override
+  void joystickAction(JoystickActionEvent event) {
+    if (event.id == 1) {
+      if (event.event == ActionEvent.MOVE) {
+        lightingAngle = event.radAngle;
+      }
+      if (event.event == ActionEvent.UP) {
+        lightingAngle = angle;
+      }
+    }
+    super.joystickAction(event);
   }
 }

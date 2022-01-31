@@ -13,8 +13,10 @@ abstract class LightingInterface {
 /// Layer component responsible for adding lighting to the game.
 class LightingComponent extends GameComponent implements LightingInterface {
   Color? color;
-  late Paint _paintFocus;
+  Paint _paintFocus = Paint()..blendMode = BlendMode.clear;
   Paint _paintLighting = Paint();
+  Paint _paintFocusArc = Paint()..blendMode = BlendMode.clear;
+  Paint _paintLightingArc = Paint();
   Iterable<Lighting> _visibleLight = [];
   double _dtUpdate = 0.0;
   ColorTween? _tween;
@@ -23,9 +25,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
   @override
   PositionType get positionType => PositionType.viewport;
 
-  LightingComponent({this.color}) {
-    _paintFocus = Paint()..blendMode = BlendMode.clear;
-  }
+  LightingComponent({this.color});
 
   @override
   int get priority {
@@ -138,19 +138,12 @@ class LightingComponent extends GameComponent implements LightingInterface {
           false,
         )
         ..close(),
-      _paintFocus
+      _paintFocusArc
         ..maskFilter = MaskFilter.blur(
           BlurStyle.normal,
           config.blurSigma,
         ),
     );
-
-    _paintLighting
-      ..color = config.color
-      ..maskFilter = MaskFilter.blur(
-        BlurStyle.normal,
-        config.blurSigma,
-      );
 
     canvas.drawPath(
       Path()
@@ -168,7 +161,12 @@ class LightingComponent extends GameComponent implements LightingInterface {
           false,
         )
         ..close(),
-      _paintLighting,
+      _paintLightingArc
+        ..color = config.color
+        ..maskFilter = MaskFilter.blur(
+          BlurStyle.normal,
+          config.blurSigma,
+        ),
     );
 
     canvas.restore();

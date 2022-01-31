@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
@@ -37,11 +39,11 @@ class RobotEnemy extends RotationEnemy with ObjectCollision, Lighting {
       LightingConfig(
         radius: size.y * 2,
         color: Colors.yellow.withOpacity(0.3),
-        type: LightingType.circle,
-        // type: LightingType.arc(
-        //   endRadAngle: (2 * pi) / 6,
-        //   isCenter: true,
-        // ),
+        type: LightingType.arc(
+          endRadAngle: (2 * pi) / 6,
+          isCenter: true,
+        ),
+        useComponentAngle: true,
       ),
     );
   }

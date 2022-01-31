@@ -6,12 +6,14 @@ import 'package:bonfire/lighting/lighting_type.dart';
 mixin Lighting on GameComponent {
   LightingConfig? _lightingConfig;
 
+  double lightingAngle = 0.0;
+
   /// Used to set configuration
   void setupLighting(LightingConfig? config) => _lightingConfig = config;
 
   LightingConfig? get lightingConfig => _lightingConfig;
 
-  double get lightingAngle {
+  double _lightingAngle() {
     if (_lightingConfig != null && _lightingConfig?.type is ArcLightingType) {
       var type = _lightingConfig?.type as ArcLightingType;
       if (type.isCenter) {
@@ -21,5 +23,13 @@ mixin Lighting on GameComponent {
       }
     }
     return 0.0;
+  }
+
+  @override
+  void update(double dt) {
+    if (_lightingConfig?.useComponentAngle == true) {
+      lightingAngle = _lightingAngle();
+    }
+    super.update(dt);
   }
 }
