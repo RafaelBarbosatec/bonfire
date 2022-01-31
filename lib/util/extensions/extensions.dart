@@ -150,6 +150,13 @@ extension SpriteExt on Sprite {
   }
 }
 
+extension SpriteFutureExt on Future<Sprite> {
+  Future<SpriteAnimation> toAnimation() async {
+    var sprite = await this;
+    return SpriteAnimation.spriteList([sprite], stepTime: 0);
+  }
+}
+
 extension NullableExt<T> on T? {
   FutureOr<void> let(FutureOr<void> Function(T i) call) => call(this!);
 }

@@ -49,9 +49,8 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
     );
   }
 
-  static Future<SpriteAnimation> _getSoldierSprite() async {
-    var sprite = await Sprite.load('soldier.png');
-    return SpriteAnimation.spriteList([sprite], stepTime: 0);
+  static Future<SpriteAnimation> _getSoldierSprite() {
+    return Sprite.load('soldier.png').toAnimation();
   }
 
   @override
@@ -63,11 +62,14 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
   @override
   void joystickAction(JoystickActionEvent event) {
     if (event.id == 1) {
-      if (event.event == ActionEvent.MOVE) {
-        lightingAngle = event.radAngle;
-      }
-      if (event.event == ActionEvent.UP) {
-        lightingAngle = angle;
+      if (event.event == ActionEvent.DOWN) {
+        simpleAttackRangeByAngle(
+          radAngleDirection: angle,
+          size: Vector2(4, 8),
+          speed: 500,
+          animationUp: Sprite.load('bullet.png').toAnimation(),
+          damage: 10,
+        );
       }
     }
     super.joystickAction(event);

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 ///
@@ -61,5 +62,19 @@ class RobotEnemy extends RotationEnemy with ObjectCollision, Lighting {
       margin: 64,
     );
     super.update(dt);
+  }
+
+  @override
+  void die() {
+    gameRef.add(
+      AnimatedObjectOnce(
+        animation: CommonSpriteSheet.smokeExplosion,
+        position: position,
+        size: Vector2.all(64),
+      ),
+    );
+    removeFromParent();
+
+    super.die();
   }
 }

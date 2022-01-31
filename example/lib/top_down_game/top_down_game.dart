@@ -28,7 +28,6 @@ class TopDownGame extends StatelessWidget {
         actions: [
           JoystickAction(
             actionId: 1,
-            enableDirection: true,
             margin: EdgeInsets.all(50),
           ),
         ],
