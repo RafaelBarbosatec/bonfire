@@ -117,7 +117,7 @@ extension GameComponentExtensions on GameComponent {
 
     Vector2 startPosition = initPosition.center.toVector2();
 
-    double displacement = max(initPosition.width, initPosition.height);
+    double displacement = max(initPosition.width, initPosition.height) * 1.2;
     double nextX = displacement * cos(radAngleDirection);
     double nextY = displacement * sin(radAngleDirection);
 
