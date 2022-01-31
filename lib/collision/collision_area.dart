@@ -35,8 +35,8 @@ class CollisionArea {
     );
   }
 
-  void render(Canvas c, Color color) {
-    shape.render(c, _paintCollision..color = color);
+  void render(Canvas c, Color color, {Paint? overridePaint}) {
+    shape.render(c, (overridePaint ?? _paintCollision)..color = color);
   }
 
   bool verifyCollision(CollisionArea other) {
