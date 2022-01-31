@@ -28,6 +28,7 @@ export 'package:bonfire/joystick/joystick_directional.dart';
 export 'package:bonfire/joystick/joystick_move_to_position.dart';
 export 'package:bonfire/lighting/lighting.dart';
 export 'package:bonfire/lighting/lighting_config.dart';
+export 'package:bonfire/lighting/lighting_type.dart';
 export 'package:bonfire/map/map_game.dart';
 export 'package:bonfire/map/map_world.dart';
 export 'package:bonfire/map/tile/tile.dart';

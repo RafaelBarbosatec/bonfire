@@ -150,6 +150,13 @@ extension SpriteExt on Sprite {
   }
 }
 
+extension SpriteFutureExt on Future<Sprite> {
+  Future<SpriteAnimation> toAnimation() async {
+    var sprite = await this;
+    return SpriteAnimation.spriteList([sprite], stepTime: 0);
+  }
+}
+
 extension NullableExt<T> on T? {
   FutureOr<void> let(FutureOr<void> Function(T i) call) => call(this!);
 }
@@ -356,6 +363,24 @@ extension CameraExt on Camera {
     widget.Curve curve = widget.Curves.decelerate,
   }) {
     (this as BonfireCamera).moveToPlayerAnimated(
+      zoom: zoom,
+      angle: angle,
+      finish: finish,
+      duration: duration,
+      curve: curve,
+    );
+  }
+
+  void moveToPositionAnimated(
+    Vector2 position, {
+    double zoom = 1,
+    double angle = 0,
+    VoidCallback? finish,
+    Duration? duration,
+    widget.Curve curve = widget.Curves.decelerate,
+  }) {
+    (this as BonfireCamera).moveToPositionAnimated(
+      position,
       zoom: zoom,
       angle: angle,
       finish: finish,

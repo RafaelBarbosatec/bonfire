@@ -13,8 +13,10 @@ abstract class LightingInterface {
 /// Layer component responsible for adding lighting to the game.
 class LightingComponent extends GameComponent implements LightingInterface {
   Color? color;
-  late Paint _paintFocus;
+  Paint _paintFocus = Paint()..blendMode = BlendMode.clear;
   Paint _paintLighting = Paint();
+  Paint _paintFocusArc = Paint()..blendMode = BlendMode.clear;
+  Paint _paintLightingArc = Paint();
   Iterable<Lighting> _visibleLight = [];
   double _dtUpdate = 0.0;
   ColorTween? _tween;
@@ -23,13 +25,26 @@ class LightingComponent extends GameComponent implements LightingInterface {
   @override
   PositionType get positionType => PositionType.viewport;
 
-  LightingComponent({this.color}) {
-    _paintFocus = Paint()..blendMode = BlendMode.clear;
-  }
+  LightingComponent({this.color});
 
   @override
   int get priority {
     return LayerPriority.getLightingPriority(gameRef.highestPriority);
+  }
+
+  Path getWheelPath(double wheelSize, double fromRadius, double toRadius) {
+    return new Path()
+      ..moveTo(wheelSize, wheelSize)
+      ..arcTo(
+        Rect.fromCircle(
+          radius: wheelSize,
+          center: Offset(wheelSize, wheelSize),
+        ),
+        fromRadius,
+        toRadius,
+        false,
+      )
+      ..close();
   }
 
   @override
@@ -41,7 +56,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
     canvas.drawColor(color!, BlendMode.dstATop);
     _visibleLight.forEach((light) {
       final config = light.lightingConfig;
-      if (config == null) return;
+      if (config == null || !light.lightingEnabled) return;
       config.update(_dtUpdate);
       canvas.save();
 
@@ -51,37 +66,13 @@ class LightingComponent extends GameComponent implements LightingInterface {
         -(gameRef.camera.position.y),
       );
 
-      canvas.drawCircle(
-        Offset(
-          light.center.x,
-          light.center.y,
-        ),
-        config.radius *
-            (config.withPulse
-                ? (1 - config.valuePulse * config.pulseVariation)
-                : 1),
-        _paintFocus
-          ..maskFilter = MaskFilter.blur(
-            BlurStyle.normal,
-            config.blurSigma,
-          ),
-      );
+      if (config.type is CircleLightingType) {
+        _drawCircle(canvas, light);
+      }
 
-      _paintLighting
-        ..color = config.color
-        ..maskFilter = MaskFilter.blur(
-          BlurStyle.normal,
-          config.blurSigma,
-        );
-      canvas.drawCircle(
-        light.center.toOffset(),
-        config.radius *
-            (config.withPulse
-                ? (1 - config.valuePulse * config.pulseVariation)
-                : 1),
-        _paintLighting,
-      );
-
+      if (config.type is ArcLightingType) {
+        _drawArc(canvas, light);
+      }
       canvas.restore();
     });
     canvas.restore();
@@ -120,5 +111,91 @@ class LightingComponent extends GameComponent implements LightingInterface {
 
   bool _containsColor() {
     return color != null && color != Color(0x00000000);
+  }
+
+  void _drawArc(Canvas canvas, Lighting light) {
+    var config = light.lightingConfig!;
+    var type = config.type as ArcLightingType;
+    Offset offset = light.center.toOffset() + config.align.toOffset();
+    canvas.save();
+
+    canvas.translate(light.center.x, light.center.y);
+    canvas.rotate(light.lightingAngle);
+    canvas.translate(-light.center.x, -light.center.y);
+
+    canvas.drawPath(
+      Path()
+        ..moveTo(offset.dx, offset.dy)
+        ..arcTo(
+          Rect.fromCircle(
+            radius: config.radius * 2,
+            center: offset,
+          ),
+          type.startRadAngle,
+          type.endRadAngle,
+          false,
+        )
+        ..close(),
+      _paintFocusArc
+        ..maskFilter = MaskFilter.blur(
+          BlurStyle.normal,
+          config.blurSigma,
+        ),
+    );
+
+    canvas.drawPath(
+      Path()
+        ..moveTo(offset.dx, offset.dy)
+        ..arcTo(
+          Rect.fromCircle(
+            radius: light.lightingConfig!.radius * 2,
+            center: offset,
+          ),
+          type.startRadAngle,
+          type.endRadAngle,
+          false,
+        )
+        ..close(),
+      _paintLightingArc
+        ..color = config.color
+        ..maskFilter = MaskFilter.blur(
+          BlurStyle.normal,
+          config.blurSigma,
+        ),
+    );
+
+    canvas.restore();
+  }
+
+  void _drawCircle(Canvas canvas, Lighting light) {
+    var config = light.lightingConfig!;
+    Offset offset = light.center.toOffset() + config.align.toOffset();
+    canvas.drawCircle(
+      offset,
+      config.radius *
+          (config.withPulse
+              ? (1 - config.valuePulse * config.pulseVariation)
+              : 1),
+      _paintFocus
+        ..maskFilter = MaskFilter.blur(
+          BlurStyle.normal,
+          config.blurSigma,
+        ),
+    );
+
+    _paintLighting
+      ..color = config.color
+      ..maskFilter = MaskFilter.blur(
+        BlurStyle.normal,
+        config.blurSigma,
+      );
+    canvas.drawCircle(
+      offset,
+      config.radius *
+          (config.withPulse
+              ? (1 - config.valuePulse * config.pulseVariation)
+              : 1),
+      _paintLighting,
+    );
   }
 }

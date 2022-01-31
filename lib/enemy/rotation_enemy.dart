@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/assets_loader.dart';
 import 'package:flutter/widgets.dart';
@@ -11,8 +9,6 @@ class RotationEnemy extends Enemy {
 
   SpriteAnimation? animation;
 
-  double currentRadAngle;
-
   AssetsLoader? _loader = AssetsLoader();
 
   RotationEnemy({
@@ -20,7 +16,7 @@ class RotationEnemy extends Enemy {
     required Vector2 size,
     required Future<SpriteAnimation> animIdle,
     required Future<SpriteAnimation> animRun,
-    this.currentRadAngle = -1.55,
+    double currentRadAngle = -1.55,
     double speed = 100,
     double life = 100,
   }) : super(
@@ -29,6 +25,7 @@ class RotationEnemy extends Enemy {
           life: life,
           speed: speed,
         ) {
+    angle = currentRadAngle;
     _loader?.add(AssetToLoad(animIdle, (value) {
       this.animIdle = value;
     }));
@@ -44,19 +41,14 @@ class RotationEnemy extends Enemy {
     VoidCallback? onCollision,
   }) {
     this.animation = animRun;
-    currentRadAngle = angle;
+    this.angle = angle;
     super.moveFromAngleDodgeObstacles(speed, angle, onCollision: onCollision);
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.save();
-    canvas.translate(center.x, center.y);
-    canvas.rotate(currentRadAngle == 0.0 ? 0.0 : currentRadAngle + (pi / 2));
-    canvas.translate(-center.x, -center.y);
     _renderAnimation(canvas);
-    canvas.restore();
   }
 
   @override

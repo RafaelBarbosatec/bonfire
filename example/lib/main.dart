@@ -2,6 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/game_manual_map.dart';
 import 'package:example/simple_example/simple_example_game.dart';
 import 'package:example/tiled_map/game_tiled_map.dart';
+import 'package:example/top_down_game/top_down_game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -95,6 +96,30 @@ class Menu extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => GameTiledMap(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ),
+                child: Text('Top down game'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TopDownGame(),
                     ),
                   );
                 },
