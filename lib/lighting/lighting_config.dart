@@ -2,8 +2,6 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/pulse_value.dart';
 import 'package:flutter/widgets.dart';
 
-import 'lighting_type.dart';
-
 /// Class used to configure lighting
 class LightingConfig {
   /// Radius of the lighting
