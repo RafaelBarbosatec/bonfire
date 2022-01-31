@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
-import 'package:flutter/material.dart';
 
 ///
 /// Created by
@@ -15,13 +12,13 @@ import 'package:flutter/material.dart';
 ///
 /// Rafaelbarbosatec
 /// on 28/01/22
-class RobotEnemy extends RotationEnemy with ObjectCollision, Lighting {
-  RobotEnemy(Vector2 position)
+class ZombieEnemy extends RotationEnemy with ObjectCollision {
+  ZombieEnemy(Vector2 position)
       : super(
           position: position,
           size: Vector2(68, 43),
-          animIdle: _getSoldierSprite(),
-          animRun: _getSoldierSprite(),
+          animIdle: _getAnimation(),
+          animRun: _getAnimation(),
         ) {
     setupCollision(
       CollisionConfig(
@@ -36,21 +33,10 @@ class RobotEnemy extends RotationEnemy with ObjectCollision, Lighting {
         ],
       ),
     );
-    setupLighting(
-      LightingConfig(
-        radius: size.y * 2,
-        color: Colors.yellow.withOpacity(0.3),
-        type: LightingType.arc(
-          endRadAngle: (2 * pi) / 6,
-          isCenter: true,
-        ),
-        useComponentAngle: true,
-      ),
-    );
   }
 
-  static Future<SpriteAnimation> _getSoldierSprite() {
-    return Sprite.load('robot.png').toAnimation();
+  static Future<SpriteAnimation> _getAnimation() {
+    return Sprite.load('zombie.png').toAnimation();
   }
 
   @override
@@ -58,7 +44,6 @@ class RobotEnemy extends RotationEnemy with ObjectCollision, Lighting {
     this.seeAndMoveToPlayer(
       closePlayer: (player) {},
       radiusVision: 128,
-      margin: 64,
     );
     super.update(dt);
   }

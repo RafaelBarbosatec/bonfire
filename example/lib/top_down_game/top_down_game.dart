@@ -20,9 +20,12 @@ class TopDownGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BonfireTiledWidget(
-      map: TiledWorldMap('tiled/top_down/map.json', objectsBuilder: {
-        'enemy': (prop) => RobotEnemy(prop.position),
-      }),
+      map: TiledWorldMap(
+        'tiled/top_down/map.json',
+        objectsBuilder: {
+          'enemy': (prop) => ZombieEnemy(prop.position),
+        },
+      ),
       joystick: Joystick(
         directional: JoystickDirectional(),
         actions: [
@@ -32,7 +35,10 @@ class TopDownGame extends StatelessWidget {
           ),
         ],
       ),
-      player: SoldierPlayer(Vector2.zero()),
+      cameraConfig: CameraConfig(
+        moveOnlyMapArea: true,
+      ),
+      player: SoldierPlayer(Vector2(64 * 17, 64 * 4)),
       lightingColorGame: Colors.black.withOpacity(0.7),
     );
   }
