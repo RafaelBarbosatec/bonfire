@@ -1,6 +1,6 @@
 # [NEXT]
 - BREAKING CHANGE:
-    - Renamed `animationUp` to `animation`. Use animation facing right in `simpleAttackRange` and `simpleAttackRangeByAngle`.
+    - Renamed `animationUp` to `animation` in `simpleAttackRange` and `simpleAttackRangeByAngle`.Now use animation facing right.
 
 # [2.1.0]
 - Update `a_star_algorithm`.
