@@ -1,3 +1,7 @@
+# [NEXT]
+- BREAKING CHANGE:
+    - Renamed `animationUp` to `animation`. Use animation facing right in `simpleAttackRange` and `simpleAttackRangeByAngle`.
+
 # [2.1.0]
 - Update `a_star_algorithm`.
 - Change `Offset` to `Vector2` in `Camera.moveToPositionAnimated`.

@@ -99,7 +99,8 @@ extension GameComponentExtensions on GameComponent {
 
   /// Execute the ranged attack using a component with animation
   void simpleAttackRangeByAngle({
-    required Future<SpriteAnimation> animationUp,
+    /// use animation facing right.
+    required Future<SpriteAnimation> animation,
     required Vector2 size,
     required double radAngleDirection,
     required double damage,
@@ -138,7 +139,7 @@ extension GameComponentExtensions on GameComponent {
       collision: collision,
       withCollision: withCollision,
       onDestroy: onDestroy,
-      flyAnimation: animationUp,
+      flyAnimation: animation,
       destroyAnimation: animationDestroy,
       lightingConfig: lightingConfig,
     ));

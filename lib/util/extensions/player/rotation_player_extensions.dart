@@ -7,7 +7,8 @@ import 'package:flutter/widgets.dart';
 
 extension RotationPlayerExtensions on RotationPlayer {
   void simpleAttackRange({
-    required Future<SpriteAnimation> animationUp,
+    /// use animation facing right.
+    required Future<SpriteAnimation> animation,
     required Vector2 size,
     Future<SpriteAnimation>? animationDestroy,
     dynamic id,
@@ -23,7 +24,7 @@ extension RotationPlayerExtensions on RotationPlayer {
 
     this.simpleAttackRangeByAngle(
       radAngleDirection: angle,
-      animationUp: animationUp,
+      animation: animation,
       animationDestroy: animationDestroy,
       size: size,
       id: id,

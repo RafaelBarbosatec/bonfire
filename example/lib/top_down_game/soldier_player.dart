@@ -73,9 +73,9 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
   void actionAttack() {
     simpleAttackRangeByAngle(
       radAngleDirection: angle,
-      size: Vector2(4, 8),
+      size: Vector2(8, 4),
       speed: 500,
-      animationUp: Sprite.load('bullet.png').toAnimation(),
+      animation: Sprite.load('bullet.png').toAnimation(),
       damage: 30,
     );
   }

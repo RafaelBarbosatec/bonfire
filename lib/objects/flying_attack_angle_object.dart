@@ -57,7 +57,7 @@ class FlyingAttackAngleObject extends AnimatedObject
 
     _cosAngle = cos(radAngle);
     _senAngle = sin(radAngle);
-    angle = radAngle + (pi / 2);
+    angle = radAngle;
   }
 
   @override
