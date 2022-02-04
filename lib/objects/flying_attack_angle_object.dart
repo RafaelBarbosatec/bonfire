@@ -2,10 +2,11 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/assets_loader.dart';
+import 'package:bonfire/util/mixins/with_sprite_animation.dart';
 import 'package:flutter/widgets.dart';
 
-class FlyingAttackAngleObject extends AnimatedObject
-    with ObjectCollision, Lighting {
+class FlyingAttackAngleObject extends GameComponent
+    with WithSpriteAnimation, WithAssetsLoader, ObjectCollision, Lighting {
   final dynamic id;
   SpriteAnimation? flyAnimation;
   Future<SpriteAnimation>? destroyAnimation;
@@ -14,7 +15,6 @@ class FlyingAttackAngleObject extends AnimatedObject
   final AttackFromEnum attackFrom;
   final bool withCollision;
   final VoidCallback? onDestroy;
-  AssetsLoader? _loader = AssetsLoader();
 
   late double _cosAngle;
   late double _senAngle;
@@ -36,7 +36,7 @@ class FlyingAttackAngleObject extends AnimatedObject
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) {
-    _loader?.add(AssetToLoad(flyAnimation, (value) {
+    loader?.add(AssetToLoad(flyAnimation, (value) {
       return this.flyAnimation = value;
     }));
 
@@ -150,9 +150,7 @@ class FlyingAttackAngleObject extends AnimatedObject
 
   @override
   Future<void> onLoad() async {
-    await _loader?.load();
-    _loader = null;
+    await super.onLoad();
     animation = this.flyAnimation;
-    return super.onLoad();
   }
 }

@@ -3,12 +3,13 @@ import 'package:bonfire/util/assets_loader.dart';
 import 'package:flutter/widgets.dart';
 
 /// Component used to add in your [GameInterface]
-class InterfaceComponent extends GameComponent with TapGesture {
+class InterfaceComponent extends GameComponent
+    with WithAssetsLoader, WithSprite, TapGesture {
   /// identifier
   final int id;
 
   /// sprite that will be render
-  Sprite? sprite;
+  Sprite? spriteUnSelected;
 
   /// sprite that will be render when pressed
   Sprite? spriteSelected;
@@ -19,21 +20,19 @@ class InterfaceComponent extends GameComponent with TapGesture {
   bool _lastSelected = false;
   bool selected = false;
 
-  AssetsLoader? _loader = AssetsLoader();
-
   InterfaceComponent({
     required this.id,
     required Vector2 position,
     required Vector2 size,
-    Future<Sprite>? sprite,
+    Future<Sprite>? spriteUnSelected,
     Future<Sprite>? spriteSelected,
     this.selectable = false,
     this.onTapComponent,
   }) {
-    _loader?.add(AssetToLoad(sprite, (value) {
-      this.sprite = value;
+    loader?.add(AssetToLoad(spriteUnSelected, (value) {
+      this.spriteUnSelected = value;
     }));
-    _loader?.add(AssetToLoad(spriteSelected, (value) {
+    loader?.add(AssetToLoad(spriteSelected, (value) {
       this.spriteSelected = value;
     }));
     this.position = Vector2(position.x, position.y);
@@ -41,14 +40,9 @@ class InterfaceComponent extends GameComponent with TapGesture {
   }
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    (selected ? spriteSelected : sprite)?.renderWithOpacity(
-      canvas,
-      position,
-      size,
-      opacity: opacity,
-    );
+  void update(double dt) {
+    sprite = selected ? spriteSelected : spriteUnSelected;
+    super.update(dt);
   }
 
   @override
@@ -72,17 +66,13 @@ class InterfaceComponent extends GameComponent with TapGesture {
   PositionType get positionType => PositionType.viewport;
 
   @override
-  Future<void>? onLoad() async {
-    await _loader?.load();
-    _loader = null;
-    return super.onLoad();
-  }
-
-  @override
   void onTapDown(int pointer, Vector2 position) {
     selected = true;
   }
 
   @override
   void onTapUp(int pointer, Vector2 position) {}
+
+  @override
+  bool get isVisible => true;
 }

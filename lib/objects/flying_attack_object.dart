@@ -3,7 +3,8 @@ import 'package:bonfire/util/assets_loader.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/widgets.dart';
 
-class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
+class FlyingAttackObject extends GameComponent
+    with WithSpriteAnimation, WithAssetsLoader, ObjectCollision, Lighting {
   final dynamic id;
   SpriteAnimation? flyAnimation;
   Future<SpriteAnimation>? destroyAnimation;
@@ -13,7 +14,6 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
   final AttackFromEnum attackFrom;
   final bool withDecorationCollision;
   final VoidCallback? onDestroyedObject;
-  AssetsLoader? _loader = AssetsLoader();
   final bool enableDiagonal;
 
   final IntervalTick _timerVerifyCollision = IntervalTick(50);
@@ -34,7 +34,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) {
-    _loader?.add(AssetToLoad(flyAnimation, (value) {
+    loader?.add(AssetToLoad(flyAnimation, (value) {
       return this.flyAnimation = value;
     }));
 
@@ -242,9 +242,7 @@ class FlyingAttackObject extends AnimatedObject with ObjectCollision, Lighting {
 
   @override
   Future<void> onLoad() async {
-    await _loader?.load();
-    _loader = null;
+    await super.onLoad();
     animation = this.flyAnimation;
-    return super.onLoad();
   }
 }

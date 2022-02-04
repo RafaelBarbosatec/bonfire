@@ -3,25 +3,21 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:flame/extensions.dart';
 
 /// This component represents anything you want to add to the scene, it can be
 /// a simple "barrel" halfway to an NPC that you can use to interact with your
 /// player.
 ///
 /// You can use ImageSprite or Animation[FlameAnimation.Animation]
-class GameDecoration extends AnimatedObject {
-  Sprite? sprite;
-
-  /// Used to load assets in [onLoad]
-  AssetsLoader? _loader = AssetsLoader();
-
+class GameDecoration extends GameComponent
+    with WithSpriteAnimation, WithSprite, WithAssetsLoader {
   GameDecoration({
-    this.sprite,
+    Sprite? sprite,
     required Vector2 position,
     required Vector2 size,
     SpriteAnimation? animation,
   }) {
+    this.sprite = sprite;
     this.animation = animation;
     generateRectWithBleedingPixel(
       position,
@@ -34,7 +30,7 @@ class GameDecoration extends AnimatedObject {
     required Vector2 position,
     required Vector2 size,
   }) {
-    _loader?.add(AssetToLoad(sprite, (value) => this.sprite = value));
+    loader?.add(AssetToLoad(sprite, (value) => this.sprite = value));
     generateRectWithBleedingPixel(
       position,
       size,
@@ -46,21 +42,10 @@ class GameDecoration extends AnimatedObject {
     required Vector2 position,
     required Vector2 size,
   }) {
-    _loader?.add(AssetToLoad(animation, (value) => this.animation = value));
+    loader?.add(AssetToLoad(animation, (value) => this.animation = value));
     generateRectWithBleedingPixel(
       position,
       size,
-    );
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    sprite?.renderWithOpacity(
-      canvas,
-      position,
-      size,
-      opacity: opacity,
     );
   }
 
@@ -80,12 +65,5 @@ class GameDecoration extends AnimatedObject {
       size.x + (position.x % 2 == 0 ? bleendingPixel : 0),
       size.y + (position.y % 2 == 0 ? bleendingPixel : 0),
     );
-  }
-
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    await _loader?.load();
-    _loader = null;
   }
 }

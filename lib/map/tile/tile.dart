@@ -6,13 +6,12 @@ import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:flutter/widgets.dart';
 
-class Tile extends GameComponent {
+class Tile extends GameComponent with WithAssetsLoader {
   Sprite? _sprite;
   ControlledUpdateAnimation? _animation;
   final String? type;
   late Vector2 _positionText;
   Paint? _paintText;
-  AssetsLoader? _loader;
   final Map<String, dynamic>? properties;
   TextPaint? _textPaintConfig;
   String id = '';
@@ -33,8 +32,7 @@ class Tile extends GameComponent {
       offsetY: offsetY,
     );
     if (spritePath.isNotEmpty) {
-      _loader = AssetsLoader();
-      _loader?.add(
+      loader?.add(
         AssetToLoad(Sprite.load(spritePath), (value) => this._sprite = value),
       );
     }
@@ -73,8 +71,7 @@ class Tile extends GameComponent {
     double offsetY = 0,
   }) {
     id = '${position.x}/${position.y}';
-    _loader = AssetsLoader();
-    _loader?.add(AssetToLoad(sprite, (value) => this._sprite = value));
+    loader?.add(AssetToLoad(sprite, (value) => this._sprite = value));
     generateRectWithBleedingPixel(
       position,
       size,
@@ -187,11 +184,9 @@ class Tile extends GameComponent {
   }
 
   @override
-  Future<void>? onLoad() async {
+  Future<void> onLoad() async {
     await super.onLoad();
-    await _loader?.load();
     await _animation?.onLoad();
-    _loader = null;
   }
 
   bool get containAnimation => _animation != null;

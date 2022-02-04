@@ -27,6 +27,9 @@ class GameInterface extends GameComponent {
   }
 
   @override
+  bool get isVisible => true;
+
+  @override
   void render(Canvas c) {
     super.render(c);
     _drawFPS(c);

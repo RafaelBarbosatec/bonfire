@@ -1,4 +1,9 @@
 # [NEXT]
+- Improvements in performance.
+- Adds 'Follower' mixin.
+- Adds 'WithAssetsLoader' mixin.
+- Adds 'WithSprite' mixin.
+- Adds 'WithSpriteAnimation' mixin.
 - BREAKING CHANGE:
     - Renamed `animationUp` to `animation` in `simpleAttackRange` and `simpleAttackRangeByAngle`.Now use animation facing right.
 

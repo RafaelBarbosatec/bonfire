@@ -209,13 +209,13 @@ class SimpleDirectionAnimation {
       position: position,
       size: size,
       animation: animation,
-      flipX: flipX,
-      flipY: flipY,
       onFinish: () {
         onFinish?.call();
         _fastAnimation = null;
       },
     );
+    anim.isFlipVertical = flipY;
+    anim.isFlipHorizontal = flipX;
     await anim.onLoad();
     _fastAnimation = anim;
   }
