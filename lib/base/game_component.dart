@@ -188,7 +188,8 @@ abstract class GameComponent extends PositionComponent
   @override
   void update(double dt) {
     super.update(dt);
-    isVisible = this._isVisibleInCamera();
+    isVisible =
+        this._isVisibleInCamera() || positionType == PositionType.viewport;
   }
 
   /// Return screen position of this component.

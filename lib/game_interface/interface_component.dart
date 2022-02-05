@@ -72,7 +72,4 @@ class InterfaceComponent extends GameComponent
 
   @override
   void onTapUp(int pointer, Vector2 position) {}
-
-  @override
-  bool get isVisible => true;
 }

@@ -37,12 +37,11 @@ class SimpleDirectionAnimation {
   bool runToTheEndFastAnimation = false;
 
   double opacity = 1.0;
-
   bool _flipX = false;
   bool _flipY = false;
 
-  final bool enabledFlipX;
-  final bool enabledFlipY;
+  bool enabledFlipX;
+  bool enabledFlipY;
 
   SimpleDirectionAnimation({
     required FutureOr<SpriteAnimation> idleRight,

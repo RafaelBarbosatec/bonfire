@@ -37,7 +37,4 @@ class TextInterfaceComponent extends InterfaceComponent {
       Vector2(x, y),
     );
   }
-
-  @override
-  bool get isVisible => true;
 }
