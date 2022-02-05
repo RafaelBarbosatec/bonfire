@@ -11,6 +11,8 @@ import 'package:flutter/widgets.dart';
 /// Base of the all components in the Bonfire
 abstract class GameComponent extends PositionComponent
     with BonfireHasGameRef, PointerDetectorHandler {
+  final String _keyIntervalCheckIsVisible = "CHECK_VISIBLE";
+  final int _intervalCheckIsVisible = 200;
   Map<String, dynamic>? properties;
 
   /// When true this component render above all components in game.
@@ -188,8 +190,11 @@ abstract class GameComponent extends PositionComponent
   @override
   void update(double dt) {
     super.update(dt);
-    isVisible =
-        this._isVisibleInCamera() || positionType == PositionType.viewport;
+    if (checkInterval(
+        _keyIntervalCheckIsVisible, _intervalCheckIsVisible, dt)) {
+      isVisible =
+          this._isVisibleInCamera() || positionType == PositionType.viewport;
+    }
   }
 
   /// Return screen position of this component.
