@@ -231,19 +231,19 @@ class BonfireCamera extends Camera {
 
     bool needMove = false;
     if (horizontalDistance.abs() > horizontal) {
-      double deslocamntoX = (horizontalDistance > 0
+      double displacementX = (horizontalDistance > 0
           ? horizontal - horizontalDistance
           : -horizontalDistance - horizontal);
 
-      newX = this.position.x + (deslocamntoX * _zoomFactor());
+      newX = this.position.x + (displacementX * _zoomFactor());
       needMove = true;
     }
 
     if (verticalDistance.abs() > vertical) {
-      double deslocamntoY = (verticalDistance > 0
+      double displacementY = (verticalDistance > 0
           ? vertical - verticalDistance
           : -verticalDistance - vertical);
-      newY = this.position.y + (deslocamntoY * _zoomFactor());
+      newY = this.position.y + (displacementY * _zoomFactor());
       needMove = true;
     }
 
