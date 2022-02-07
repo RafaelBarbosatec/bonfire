@@ -298,7 +298,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
           ],
           onClose: () {
             print('close talk');
-            gameRef.camera.moveToPlayerAnimated();
+            gameRef.camera.moveToPlayerAnimated(zoom: 1);
           },
           onFinish: () {
             print('finish talk');

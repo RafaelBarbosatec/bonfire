@@ -60,25 +60,27 @@ class BonfireCamera extends Camera {
 
   void moveToPositionAnimated(
     Vector2 position, {
-    double zoom = 1,
-    double angle = 0,
+    double? zoom,
+    double? angle,
     VoidCallback? finish,
     Duration? duration,
     Curve curve = Curves.decelerate,
   }) {
-    if (zoom <= 0.0 || _isMoving) return;
+    if ((zoom != null && zoom <= 0.0) || _isMoving) return;
     this.target = null;
     _isMoving = true;
 
+    double newZoom = zoom ?? this.zoom;
+    double newAngle = angle ?? this.angle;
     double diffX = this.position.x - position.x;
     double diffY = this.position.y - position.y;
     double originX = this.position.x;
     double originY = this.position.y;
 
-    double diffZoom = this.zoom - zoom;
+    double diffZoom = this.zoom - newZoom;
     double initialZoom = this.zoom;
 
-    double diffAngle = this.angle - angle;
+    double diffAngle = this.angle - newAngle;
     double originAngle = this.angle;
 
     gameRef.getValueGenerator(
@@ -108,22 +110,24 @@ class BonfireCamera extends Camera {
 
   void moveToTargetAnimated(
     GameComponent target, {
-    double zoom = 1,
-    double angle = 0,
+    double? zoom,
+    double? angle,
     VoidCallback? finish,
     Duration? duration,
     Curve curve = Curves.decelerate,
   }) {
-    if (zoom <= 0.0 || _isMoving) return;
+    if ((zoom != null && zoom <= 0.0) || _isMoving) return;
     this.target = null;
     _isMoving = true;
 
+    double newZoom = zoom ?? this.zoom;
+    double newAngle = angle ?? this.angle;
     Vector2 originPosition = this.position.clone();
 
-    double diffZoom = this.zoom - zoom;
+    double diffZoom = this.zoom - newZoom;
     double initialZoom = this.zoom;
 
-    double diffAngle = this.angle - angle;
+    double diffAngle = this.angle - newAngle;
     double originAngle = this.angle;
 
     gameRef.getValueGenerator(
@@ -170,8 +174,8 @@ class BonfireCamera extends Camera {
   void moveToPlayerAnimated({
     Duration? duration,
     VoidCallback? finish,
-    double zoom = 1,
-    double angle = 0,
+    double? zoom,
+    double? angle,
     Curve curve = Curves.decelerate,
   }) {
     if (gameRef.player == null) return;
