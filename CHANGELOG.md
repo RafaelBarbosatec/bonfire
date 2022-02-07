@@ -7,7 +7,7 @@
 - Fix camera movement bug in game with zoom.
 - Improvements in `FlyingAttackObject`
 - BREAKING CHANGE:
-    - Renamed `radAngleDirection` to `angle` in `simpleAttackRangeByAngle`.
+    - Renamed `radAngleDirection` param to `angle` in `simpleAttackRangeByAngle`.
     - Renamed `animationUp` to `animation` in `simpleAttackRange` and `simpleAttackRangeByAngle`.Now use animation facing right.
 
 # [2.1.0]
