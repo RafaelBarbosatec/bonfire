@@ -10,7 +10,7 @@ class KnightInterface extends GameInterface {
   void onMount() {
     add(BarLifeComponent());
     add(InterfaceComponent(
-      spriteUnSelected: Sprite.load('blue_button1.png'),
+      spriteUnselected: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
       size: Vector2(40, 40),
       id: 5,
@@ -23,7 +23,7 @@ class KnightInterface extends GameInterface {
       },
     ));
     add(InterfaceComponent(
-      spriteUnSelected: Sprite.load('blue_button1.png'),
+      spriteUnselected: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
       size: Vector2(40, 40),
       id: 5,
@@ -36,7 +36,7 @@ class KnightInterface extends GameInterface {
       },
     ));
     add(InterfaceComponent(
-      spriteUnSelected: Sprite.load('blue_button1.png'),
+      spriteUnselected: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
       size: Vector2(40, 40),
       id: 5,
@@ -72,7 +72,7 @@ class KnightInterface extends GameInterface {
       },
     ));
     add(InterfaceComponent(
-      spriteUnSelected: Sprite.load('blue_button1.png'),
+      spriteUnselected: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
       size: Vector2(40, 40),
       id: 5,

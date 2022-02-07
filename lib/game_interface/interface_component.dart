@@ -9,7 +9,7 @@ class InterfaceComponent extends GameComponent
   final int id;
 
   /// sprite that will be render
-  Sprite? spriteUnSelected;
+  Sprite? spriteUnselected;
 
   /// sprite that will be render when pressed
   Sprite? spriteSelected;
@@ -24,13 +24,13 @@ class InterfaceComponent extends GameComponent
     required this.id,
     required Vector2 position,
     required Vector2 size,
-    Future<Sprite>? spriteUnSelected,
+    Future<Sprite>? spriteUnselected,
     Future<Sprite>? spriteSelected,
     this.selectable = false,
     this.onTapComponent,
   }) {
-    loader?.add(AssetToLoad(spriteUnSelected, (value) {
-      this.spriteUnSelected = value;
+    loader?.add(AssetToLoad(spriteUnselected, (value) {
+      this.spriteUnselected = value;
     }));
     loader?.add(AssetToLoad(spriteSelected, (value) {
       this.spriteSelected = value;
@@ -41,7 +41,7 @@ class InterfaceComponent extends GameComponent
 
   @override
   void update(double dt) {
-    sprite = selected ? spriteSelected : spriteUnSelected;
+    sprite = selected ? spriteSelected : spriteUnselected;
     super.update(dt);
   }
 
