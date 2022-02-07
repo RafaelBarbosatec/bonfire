@@ -229,14 +229,14 @@ class BonfireCamera extends Camera {
     double newX = this.position.x;
     double newY = this.position.y;
 
-    bool needMove = false;
+    bool shouldMove = false;
     if (horizontalDistance.abs() > horizontal) {
       double displacementX = (horizontalDistance > 0
           ? horizontal - horizontalDistance
           : -horizontalDistance - horizontal);
 
       newX = this.position.x + (displacementX * _zoomFactor());
-      needMove = true;
+      shouldMove = true;
     }
 
     if (verticalDistance.abs() > vertical) {
@@ -244,10 +244,10 @@ class BonfireCamera extends Camera {
           ? vertical - verticalDistance
           : -verticalDistance - vertical);
       newY = this.position.y + (displacementY * _zoomFactor());
-      needMove = true;
+      shouldMove = true;
     }
 
-    if (needMove) {
+    if (shouldMove) {
       snapTo(
         this.position.copyWith(
               x: enableSmooth
