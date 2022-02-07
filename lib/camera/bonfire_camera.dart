@@ -231,18 +231,19 @@ class BonfireCamera extends Camera {
 
     bool shouldMove = false;
     if (horizontalDistance.abs() > horizontal) {
-      double displacementX = (horizontalDistance > 0
-          ? horizontal - horizontalDistance
-          : -horizontalDistance - horizontal);
-
+      double displacementX = _getMoveDisplacement(
+        horizontal,
+        horizontalDistance,
+      );
       newX = this.position.x + (displacementX * _zoomFactor());
       shouldMove = true;
     }
 
     if (verticalDistance.abs() > vertical) {
-      double displacementY = (verticalDistance > 0
-          ? vertical - verticalDistance
-          : -verticalDistance - vertical);
+      double displacementY = _getMoveDisplacement(
+        vertical,
+        verticalDistance,
+      );
       newY = this.position.y + (displacementY * _zoomFactor());
       shouldMove = true;
     }
@@ -406,6 +407,13 @@ class BonfireCamera extends Camera {
       return (this.target as ObjectCollision).rectCollision.center.toVector2();
     }
     return this.target?.center ?? Vector2.zero();
+  }
+
+  double _getMoveDisplacement(double baseValue, double distance) {
+    if (distance > 0) {
+      return baseValue - distance;
+    }
+    return -distance - baseValue;
   }
 
   @override
