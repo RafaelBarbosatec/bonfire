@@ -88,14 +88,15 @@ class Goblin extends SimpleEnemy
 
   @override
   void die() {
+    super.die();
     gameRef.add(
       AnimatedObjectOnce(
-          animation: CommonSpriteSheet.smokeExplosion,
-          position: position,
-          size: Vector2.all(DungeonMap.tileSize)),
+        animation: CommonSpriteSheet.smokeExplosion,
+        position: position,
+        size: Vector2.all(DungeonMap.tileSize),
+      ),
     );
     removeFromParent();
-    super.die();
   }
 
   void execAttackRange() {

@@ -76,6 +76,7 @@ extension GameComponentExtensions on GameComponent {
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
     bool onlyUp = false,
   }) {
+    if (!hasGameRef) return;
     gameRef.add(
       TextDamageComponent(
         damage.toInt().toString(),
@@ -110,7 +111,7 @@ extension GameComponentExtensions on GameComponent {
     Future<SpriteAnimation>? animationDestroy,
     dynamic id,
     double speed = 150,
-    bool withCollision = true,
+    bool withDecorationCollision = true,
     VoidCallback? onDestroy,
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
@@ -140,7 +141,7 @@ extension GameComponentExtensions on GameComponent {
       speed: speed,
       attackFrom: this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
       collision: collision,
-      withDecorationCollision: withCollision,
+      withDecorationCollision: withDecorationCollision,
       onDestroy: onDestroy,
       destroySize: destroySize,
       flyAnimation: animation,
@@ -246,7 +247,7 @@ extension GameComponentExtensions on GameComponent {
         size: size,
         damage: damage,
         speed: speed,
-        enableDiagonal: enableDiagonal,
+        enabledDiagonal: enableDiagonal,
         attackFrom:
             this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
         onDestroy: onDestroy,

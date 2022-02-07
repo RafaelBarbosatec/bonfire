@@ -9,6 +9,8 @@ import 'package:flame/components.dart';
 
 /// Mixin responsible for adding movements
 mixin Movement on GameComponent {
+  static const REDUCTION_SPEED_DIAGONAL = 0.7;
+
   bool isIdle = true;
   double dtUpdate = 0;
   double speed = 100;
@@ -227,6 +229,58 @@ mixin Movement on GameComponent {
           .isNotEmpty;
     } else {
       return false;
+    }
+  }
+
+  void moveFromDirection(Direction direction, {bool enabledDiagonal = true}) {
+    switch (direction) {
+      case Direction.left:
+        moveLeft(speed);
+        break;
+      case Direction.right:
+        moveRight(speed);
+        break;
+      case Direction.up:
+        moveUp(speed);
+        break;
+      case Direction.down:
+        moveDown(speed);
+        break;
+      case Direction.upLeft:
+        if (enabledDiagonal) {
+          moveUpLeft(speed * REDUCTION_SPEED_DIAGONAL,
+              speed * REDUCTION_SPEED_DIAGONAL);
+        } else {
+          moveRight(speed);
+        }
+
+        break;
+      case Direction.upRight:
+        if (enabledDiagonal) {
+          moveUpRight(speed * REDUCTION_SPEED_DIAGONAL,
+              speed * REDUCTION_SPEED_DIAGONAL);
+        } else {
+          moveRight(speed);
+        }
+
+        break;
+      case Direction.downLeft:
+        if (enabledDiagonal) {
+          moveDownLeft(speed * REDUCTION_SPEED_DIAGONAL,
+              speed * REDUCTION_SPEED_DIAGONAL);
+        } else {
+          moveLeft(speed);
+        }
+
+        break;
+      case Direction.downRight:
+        if (enabledDiagonal) {
+          moveDownRight(speed * REDUCTION_SPEED_DIAGONAL,
+              speed * REDUCTION_SPEED_DIAGONAL);
+        } else {
+          moveRight(speed);
+        }
+        break;
     }
   }
 }

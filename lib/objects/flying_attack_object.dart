@@ -5,7 +5,12 @@ import 'package:bonfire/util/assets_loader.dart';
 import 'package:flutter/widgets.dart';
 
 class FlyingAttackObject extends GameComponent
-    with WithSpriteAnimation, WithAssetsLoader, ObjectCollision, Lighting {
+    with
+        WithSpriteAnimation,
+        WithAssetsLoader,
+        ObjectCollision,
+        Lighting,
+        Movement {
   final dynamic id;
   SpriteAnimation? flyAnimation;
   Future<SpriteAnimation>? animationDestroy;
@@ -15,12 +20,10 @@ class FlyingAttackObject extends GameComponent
   final AttackFromEnum attackFrom;
   final bool withDecorationCollision;
   final VoidCallback? onDestroy;
-  final bool enableDiagonal;
+  final bool enabledDiagonal;
   final Vector2? destroySize;
   double _cosAngle = 0;
   double _senAngle = 0;
-
-  final IntervalTick _timerVerifyCollision = IntervalTick(50);
 
   FlyingAttackObject({
     required Vector2 position,
@@ -36,7 +39,7 @@ class FlyingAttackObject extends GameComponent
     this.attackFrom = AttackFromEnum.ENEMY,
     this.withDecorationCollision = true,
     this.onDestroy,
-    this.enableDiagonal = true,
+    this.enabledDiagonal = true,
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) {
@@ -77,7 +80,7 @@ class FlyingAttackObject extends GameComponent
     this.attackFrom = AttackFromEnum.ENEMY,
     this.withDecorationCollision = true,
     this.onDestroy,
-    this.enableDiagonal = true,
+    this.enabledDiagonal = true,
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) {
@@ -115,7 +118,7 @@ class FlyingAttackObject extends GameComponent
     this.attackFrom = AttackFromEnum.ENEMY,
     this.withDecorationCollision = true,
     this.onDestroy,
-    this.enableDiagonal = true,
+    this.enabledDiagonal = true,
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) : direction = null {
@@ -148,53 +151,49 @@ class FlyingAttackObject extends GameComponent
     super.update(dt);
 
     if (direction != null) {
-      _meveByDirection(direction!, dt);
+      moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
     } else {
-      _moveByAngle(dt);
+      moveFromAngle(speed, angle);
     }
 
     if (!_verifyExistInWorld()) {
       removeFromParent();
-    } else {
-      _verifyCollision(dt);
     }
   }
 
-  void _verifyCollision(double dt) {
-    if (shouldRemove) return;
-    if (!_timerVerifyCollision.update(dt)) return;
-
-    bool destroy = false;
-
-    gameRef.visibleAttackables().where((a) {
-      final fromCorrect = (attackFrom == AttackFromEnum.ENEMY
-          ? a.receivesAttackFromEnemy()
-          : a.receivesAttackFromPlayer());
-
-      final overlap = a.rectAttackable().overlaps(rectCollision);
-
-      return fromCorrect && overlap;
-    }).forEach((enemy) {
-      enemy.receiveDamage(damage, id);
-      destroy = true;
-    });
-
-    if (withDecorationCollision && !destroy) {
-      destroy = isCollision().isNotEmpty;
-    }
-
-    if (destroy) {
-      if (animationDestroy != null) {
-        if (direction != null) {
-          _destroyByDiretion(direction!, dt);
-        } else {
-          _destroyByAngle();
+  @override
+  bool onCollision(GameComponent component, bool active) {
+    if (component is Attackable && !component.shouldRemove) {
+      if (attackFrom == AttackFromEnum.ENEMY) {
+        if (component.receivesAttackFrom == ReceivesAttackFromEnum.ALL ||
+            component.receivesAttackFrom == ReceivesAttackFromEnum.ENEMY) {
+          component.receiveDamage(damage, id);
+        }
+      } else if (attackFrom == AttackFromEnum.PLAYER) {
+        if (component.receivesAttackFrom == ReceivesAttackFromEnum.ALL ||
+            component.receivesAttackFrom == ReceivesAttackFromEnum.PLAYER) {
+          component.receiveDamage(damage, id);
         }
       }
-      setupCollision(CollisionConfig(collisions: []));
-      removeFromParent();
-      this.onDestroy?.call();
+    } else if (!withDecorationCollision) {
+      return false;
     }
+    _destroyObject();
+    return true;
+  }
+
+  void _destroyObject() {
+    if (shouldRemove) return;
+    if (animationDestroy != null) {
+      if (direction != null) {
+        _destroyByDirection(direction!, dtUpdate);
+      } else {
+        _destroyByAngle();
+      }
+    }
+    setupCollision(CollisionConfig(collisions: []));
+    removeFromParent();
+    this.onDestroy?.call();
   }
 
   bool _verifyExistInWorld() {
@@ -224,65 +223,7 @@ class FlyingAttackObject extends GameComponent
     animation = this.flyAnimation;
   }
 
-  void _meveByDirection(Direction direction, double dt) {
-    switch (direction) {
-      case Direction.left:
-        position = position.translate((speed * dt) * -1, 0);
-        break;
-      case Direction.right:
-        position = position.translate((speed * dt), 0);
-        break;
-      case Direction.up:
-        position = position.translate(0, (speed * dt) * -1);
-        break;
-      case Direction.down:
-        position = position.translate(0, (speed * dt));
-        break;
-      case Direction.upLeft:
-        if (enableDiagonal) {
-          position = position.translate((speed * dt) * -1, (speed * dt) * -1);
-        } else {
-          position = position.translate((speed * dt) * -1, 0);
-        }
-        break;
-      case Direction.upRight:
-        if (enableDiagonal) {
-          position = position.translate((speed * dt), (speed * dt) * -1);
-        } else {
-          position = position.translate((speed * dt), 0);
-        }
-
-        break;
-      case Direction.downLeft:
-        if (enableDiagonal) {
-          position = position.translate((speed * dt) * -1, (speed * dt));
-        } else {
-          position = position.translate((speed * dt) * -1, 0);
-        }
-
-        break;
-      case Direction.downRight:
-        if (enableDiagonal) {
-          position = position.translate((speed * dt), (speed * dt));
-        } else {
-          position = position.translate((speed * dt), 0);
-        }
-        break;
-    }
-  }
-
-  void _moveByAngle(double dt) {
-    double nextX = (speed * dt) * _cosAngle;
-    double nextY = (speed * dt) * _senAngle;
-    Offset nextPoint = Offset(nextX, nextY);
-
-    Offset diffBase = Offset(center.x + nextPoint.dx, center.y + nextPoint.dy) -
-        center.toOffset();
-
-    position.add(diffBase.toVector2());
-  }
-
-  void _destroyByDiretion(Direction direction, double dt) {
+  void _destroyByDirection(Direction direction, double dt) {
     Vector2 positionDestroy;
 
     double biggerSide = max(width, height);

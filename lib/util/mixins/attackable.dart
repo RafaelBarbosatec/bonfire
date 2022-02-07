@@ -40,7 +40,7 @@ mixin Attackable on GameComponent {
     if (life > 0) {
       life -= damage;
     }
-    if (life <= 0) {
+    if (life <= 0 && !_isDead) {
       die();
     }
   }
