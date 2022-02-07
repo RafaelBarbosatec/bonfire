@@ -1,4 +1,4 @@
-# [NEXT]
+# [2.2.0]
 - Improvements in performance.
 - Adds 'Follower' mixin.
 - Adds 'WithAssetsLoader' mixin.
