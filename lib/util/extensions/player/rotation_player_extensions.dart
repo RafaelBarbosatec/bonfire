@@ -11,6 +11,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     required Future<SpriteAnimation> animation,
     required Vector2 size,
     Future<SpriteAnimation>? animationDestroy,
+    Vector2? destroySize,
     dynamic id,
     double speed = 150,
     double damage = 1,
@@ -23,7 +24,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     double? angle = radAngleDirection ?? this.angle;
 
     this.simpleAttackRangeByAngle(
-      radAngleDirection: angle,
+      angle: angle,
       animation: animation,
       animationDestroy: animationDestroy,
       size: size,
@@ -32,6 +33,7 @@ extension RotationPlayerExtensions on RotationPlayer {
       damage: damage,
       withCollision: withCollision,
       onDestroy: onDestroy,
+      destroySize: destroySize,
       collision: collision,
       lightingConfig: lightingConfig,
     );

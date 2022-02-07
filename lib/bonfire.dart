@@ -36,7 +36,6 @@ export 'package:bonfire/map/tile/tile_model.dart';
 export 'package:bonfire/map/tile/tile_with_collision.dart';
 export 'package:bonfire/objects/animated_follower_object.dart';
 export 'package:bonfire/objects/animated_object_once.dart';
-export 'package:bonfire/objects/flying_attack_angle_object.dart';
 export 'package:bonfire/objects/flying_attack_object.dart';
 export 'package:bonfire/player/player.dart';
 export 'package:bonfire/player/rotation_player.dart';

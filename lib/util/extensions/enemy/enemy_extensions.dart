@@ -110,6 +110,7 @@ extension EnemyExtensions on Enemy {
     required Future<SpriteAnimation> animationDown,
     required Future<SpriteAnimation> animationDestroy,
     required Vector2 size,
+    Vector2? destroySize,
     int? id,
     double speed = 150,
     double damage = 1,
@@ -118,7 +119,7 @@ extension EnemyExtensions on Enemy {
     bool withCollision = true,
     bool enableDiagonal = true,
     CollisionConfig? collision,
-    VoidCallback? destroy,
+    VoidCallback? onDestroy,
     VoidCallback? execute,
     LightingConfig? lightingConfig,
   }) {
@@ -141,7 +142,8 @@ extension EnemyExtensions on Enemy {
       damage: damage,
       withCollision: withCollision,
       collision: collision,
-      destroy: destroy,
+      onDestroy: onDestroy,
+      destroySize: destroySize,
       lightingConfig: lightingConfig,
       enableDiagonal: enableDiagonal,
     );

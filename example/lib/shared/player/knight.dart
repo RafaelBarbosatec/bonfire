@@ -139,7 +139,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     this.simpleAttackRangeByAngle(
       animation: CommonSpriteSheet.fireBallRight,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
-      radAngleDirection: angleRadAttack,
+      angle: angleRadAttack,
       size: Vector2.all(width * 0.7),
       damage: 10,
       speed: maxSpeed * 2,

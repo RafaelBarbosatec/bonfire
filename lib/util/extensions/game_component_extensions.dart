@@ -102,8 +102,11 @@ extension GameComponentExtensions on GameComponent {
     /// use animation facing right.
     required Future<SpriteAnimation> animation,
     required Vector2 size,
-    required double radAngleDirection,
+
+    /// Use radians angle
+    required double angle,
     required double damage,
+    Vector2? destroySize,
     Future<SpriteAnimation>? animationDestroy,
     dynamic id,
     double speed = 150,
@@ -121,26 +124,27 @@ extension GameComponentExtensions on GameComponent {
 
     double displacement =
         max(initPosition.width / 2, initPosition.height / 2) + marginFromOrigin;
-    double nextX = displacement * cos(radAngleDirection);
-    double nextY = displacement * sin(radAngleDirection);
+    double nextX = displacement * cos(angle);
+    double nextY = displacement * sin(angle);
 
     Vector2 diffBase = Vector2(nextX, nextY);
 
     startPosition.add(diffBase);
     startPosition.add(Vector2(-size.x / 2, -size.y / 2));
-    gameRef.add(FlyingAttackAngleObject(
+    gameRef.add(FlyingAttackObject.byAngle(
       id: id,
       position: startPosition,
       size: size,
-      radAngle: radAngleDirection,
+      angle: angle,
       damage: damage,
       speed: speed,
       attackFrom: this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
       collision: collision,
-      withCollision: withCollision,
+      withDecorationCollision: withCollision,
       onDestroy: onDestroy,
+      destroySize: destroySize,
       flyAnimation: animation,
-      destroyAnimation: animationDestroy,
+      animationDestroy: animationDestroy,
       lightingConfig: lightingConfig,
     ));
   }
@@ -153,12 +157,13 @@ extension GameComponentExtensions on GameComponent {
     required Future<SpriteAnimation> animationDown,
     required Vector2 size,
     required Direction direction,
+    Vector2? destroySize,
     dynamic id,
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
     bool enableDiagonal = true,
-    VoidCallback? destroy,
+    VoidCallback? onDestroy,
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
     Future<SpriteAnimation>? animationDestroy,
@@ -232,11 +237,11 @@ extension GameComponentExtensions on GameComponent {
     }
 
     gameRef.add(
-      FlyingAttackObject(
+      FlyingAttackObject.byDirection(
         id: id,
         direction: attackDirection,
         flyAnimation: attackRangeAnimation,
-        destroyAnimation: animationDestroy,
+        animationDestroy: animationDestroy,
         position: startPosition,
         size: size,
         damage: damage,
@@ -244,7 +249,8 @@ extension GameComponentExtensions on GameComponent {
         enableDiagonal: enableDiagonal,
         attackFrom:
             this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
-        onDestroyedObject: destroy,
+        onDestroy: onDestroy,
+        destroySize: destroySize,
         withDecorationCollision: withCollision,
         collision: collision,
         lightingConfig: lightingConfig,

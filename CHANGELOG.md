@@ -4,6 +4,8 @@
 - Adds 'WithAssetsLoader' mixin.
 - Adds 'WithSprite' mixin.
 - Adds 'WithSpriteAnimation' mixin.
+- Fix camera movement bug in game with zoom.
+- Improvements in `FlyingAttackObject`
 - BREAKING CHANGE:
     - Renamed `animationUp` to `animation` in `simpleAttackRange` and `simpleAttackRangeByAngle`.Now use animation facing right.
 
