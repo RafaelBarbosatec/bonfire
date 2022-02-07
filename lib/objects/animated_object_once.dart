@@ -4,12 +4,11 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/assets_loader.dart';
 
-class AnimatedObjectOnce extends AnimatedObject with Lighting {
+class AnimatedObjectOnce extends GameComponent
+    with WithSpriteAnimation, WithAssetsLoader, Lighting {
   final VoidCallback? onFinish;
   final VoidCallback? onStartAnimation;
   bool _notifyStart = false;
-
-  AssetsLoader? _loader = AssetsLoader();
 
   AnimatedObjectOnce({
     required Vector2 position,
@@ -18,19 +17,15 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
     this.onFinish,
     this.onStartAnimation,
     double rotateRadAngle = 0,
-    bool flipX = false,
-    bool flipY = false,
     LightingConfig? lightingConfig,
   }) {
-    _loader?.add(AssetToLoad(animation, (value) {
+    loader?.add(AssetToLoad(animation, (value) {
       this.animation = value..loop = false;
     }));
     setupLighting(lightingConfig);
     this.position = position;
     this.size = size;
     this.angle = rotateRadAngle;
-    this.isFlipHorizontal = flipX;
-    this.isFlipVertical = flipY;
   }
 
   @override
@@ -51,12 +46,5 @@ class AnimatedObjectOnce extends AnimatedObject with Lighting {
         onStartAnimation?.call();
       }
     }
-  }
-
-  @override
-  Future<void> onLoad() async {
-    await _loader?.load();
-    _loader = null;
-    return super.onLoad();
   }
 }

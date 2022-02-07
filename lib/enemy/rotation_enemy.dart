@@ -3,13 +3,9 @@ import 'package:bonfire/util/assets_loader.dart';
 import 'package:flutter/widgets.dart';
 
 /// Enemy used for top-down perspective
-class RotationEnemy extends Enemy {
+class RotationEnemy extends Enemy with WithSpriteAnimation, WithAssetsLoader {
   SpriteAnimation? animIdle;
   SpriteAnimation? animRun;
-
-  SpriteAnimation? animation;
-
-  AssetsLoader? _loader = AssetsLoader();
 
   RotationEnemy({
     required Vector2 position,
@@ -26,10 +22,10 @@ class RotationEnemy extends Enemy {
           speed: speed,
         ) {
     angle = currentRadAngle;
-    _loader?.add(AssetToLoad(animIdle, (value) {
+    loader?.add(AssetToLoad(animIdle, (value) {
       this.animIdle = value;
     }));
-    _loader?.add(AssetToLoad(animRun, (value) {
+    loader?.add(AssetToLoad(animRun, (value) {
       this.animRun = value;
     }));
   }
@@ -45,39 +41,14 @@ class RotationEnemy extends Enemy {
     super.moveFromAngleDodgeObstacles(speed, angle, onCollision: onCollision);
   }
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    _renderAnimation(canvas);
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    if (this.isVisible) {
-      animation?.update(dt);
-    }
-  }
-
   void idle() {
     this.animation = animIdle;
     super.idle();
   }
 
-  void _renderAnimation(Canvas canvas) {
-    animation?.getSprite().renderWithOpacity(
-          canvas,
-          position,
-          size,
-          opacity: opacity,
-        );
-  }
-
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    await _loader?.load();
-    _loader = null;
     idle();
   }
 }

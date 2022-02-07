@@ -1,14 +1,26 @@
+# [2.2.0]
+- Improvements in performance.
+- Add `Follower` mixin.
+- Add `WithAssetsLoader` mixin.
+- Add `WithSprite` mixin.
+- Add `WithSpriteAnimation` mixin.
+- Fix bug in camera movement for games with zoom applied.
+- Improvements in `FlyingAttackObject`.
+- BREAKING CHANGE:
+    - Renamed `radAngleDirection` param to `angle` in `simpleAttackRangeByAngle`;
+    - Renamed `animationUp` to `animation` in `simpleAttackRange` and `simpleAttackRangeByAngle`. You should now use the default animation (to the right).
+
 # [2.1.0]
 - Update `a_star_algorithm`.
 - Change `Offset` to `Vector2` in `Camera.moveToPositionAnimated`.
-- Adds `moveToPositionAnimated` in `camera`.
-- Adds `marginFromOrigin` param in `simpleAttackRangeByAngle`.
-- Adds top-down game example.
+- Add `moveToPositionAnimated` in `camera`.
+- Add `marginFromOrigin` param in `simpleAttackRangeByAngle`.
+- Add top-down game example.
 - Fix bug in `RotationPlayer`.
 - Improvements in Lighting mixin:
-   - Adds type: type: LightingType.circle or LightingType.arc;
-   - Adds align param;
-   - Adds lightingEnabled param;
+   - Add types LightingType.circle and LightingType.arc;
+   - Add align param;
+   - Add lightingEnabled param.
 
 # [2.0.0]
 We're striving to reduce the distance between Flame and Bonfire, relying more and more on Flame components under the hood now that it is stable. In this version we are following the standardization of using `Vector2` for `position` and `size` and using `PositionComponent` as the base for Bonfire components. Also, 'FlameGame' and the Flame's Camera are now used instead of custom implementations we had before. Some small features were lost, but nothing that the Flame's team isn't capable of adding over time.

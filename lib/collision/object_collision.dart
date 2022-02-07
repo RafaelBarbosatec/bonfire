@@ -88,8 +88,7 @@ mixin ObjectCollision on GameComponent {
 
   bool _checkItemCollision(ObjectCollision i, {Vector2? displacement}) {
     if (i != this && checkCollision(i, displacement: displacement)) {
-      onCollision(i, true);
-      return i.onCollision(this, false);
+      return i.onCollision(this, false) && onCollision(i, true);
     }
     return false;
   }

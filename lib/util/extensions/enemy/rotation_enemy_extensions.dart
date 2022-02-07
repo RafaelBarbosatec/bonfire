@@ -161,15 +161,17 @@ extension RotationEnemyExtensions on RotationEnemy {
 
   /// Execute the ranged attack using a component with animation
   void simpleAttackRange({
-    required Future<SpriteAnimation> animationUp,
+    /// use animation facing right.
+    required Future<SpriteAnimation> animation,
     required Future<SpriteAnimation> animationDestroy,
     required Vector2 size,
+    Vector2? destroySize,
     double? radAngleDirection,
     int? id,
     double speed = 150,
     double damage = 1,
     int interval = 1000,
-    bool withCollision = true,
+    bool withDecorationCollision = true,
     VoidCallback? onDestroy,
     CollisionConfig? collision,
     VoidCallback? onExecute,
@@ -180,15 +182,16 @@ extension RotationEnemyExtensions on RotationEnemy {
     if (isDead) return;
 
     this.simpleAttackRangeByAngle(
-      animationUp: animationUp,
+      animation: animation,
       animationDestroy: animationDestroy,
       size: size,
-      radAngleDirection: radAngleDirection ?? this.angle,
+      angle: radAngleDirection ?? this.angle,
       id: id,
       speed: speed,
       damage: damage,
-      withCollision: withCollision,
+      withDecorationCollision: withDecorationCollision,
       onDestroy: onDestroy,
+      destroySize: destroySize,
       collision: collision,
       lightingConfig: lightingConfig,
     );

@@ -7,14 +7,16 @@ import 'package:flutter/widgets.dart';
 
 extension RotationPlayerExtensions on RotationPlayer {
   void simpleAttackRange({
-    required Future<SpriteAnimation> animationUp,
+    /// use animation facing right.
+    required Future<SpriteAnimation> animation,
     required Vector2 size,
     Future<SpriteAnimation>? animationDestroy,
+    Vector2? destroySize,
     dynamic id,
     double speed = 150,
     double damage = 1,
     double? radAngleDirection,
-    bool withCollision = true,
+    bool withDecorationCollision = true,
     VoidCallback? onDestroy,
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
@@ -22,15 +24,16 @@ extension RotationPlayerExtensions on RotationPlayer {
     double? angle = radAngleDirection ?? this.angle;
 
     this.simpleAttackRangeByAngle(
-      radAngleDirection: angle,
-      animationUp: animationUp,
+      angle: angle,
+      animation: animation,
       animationDestroy: animationDestroy,
       size: size,
       id: id,
       speed: speed,
       damage: damage,
-      withCollision: withCollision,
+      withDecorationCollision: withDecorationCollision,
       onDestroy: onDestroy,
+      destroySize: destroySize,
       collision: collision,
       lightingConfig: lightingConfig,
     );

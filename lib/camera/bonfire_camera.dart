@@ -31,8 +31,8 @@ class BonfireCamera extends Camera {
   Rect get cameraRect => Rect.fromLTWH(
         position.x,
         position.y,
-        (canvasSize.x) * _zoomFactor(),
-        (canvasSize.y) * _zoomFactor(),
+        (canvasSize.x),
+        (canvasSize.y),
       );
 
   Rect get cameraRectWithSpacing => Rect.fromLTWH(
@@ -60,25 +60,27 @@ class BonfireCamera extends Camera {
 
   void moveToPositionAnimated(
     Vector2 position, {
-    double zoom = 1,
-    double angle = 0,
+    double? zoom,
+    double? angle,
     VoidCallback? finish,
     Duration? duration,
     Curve curve = Curves.decelerate,
   }) {
-    if (zoom <= 0.0 || _isMoving) return;
+    if ((zoom != null && zoom <= 0.0) || _isMoving) return;
     this.target = null;
     _isMoving = true;
 
+    double newZoom = zoom ?? this.zoom;
+    double newAngle = angle ?? this.angle;
     double diffX = this.position.x - position.x;
     double diffY = this.position.y - position.y;
     double originX = this.position.x;
     double originY = this.position.y;
 
-    double diffZoom = this.zoom - zoom;
+    double diffZoom = this.zoom - newZoom;
     double initialZoom = this.zoom;
 
-    double diffAngle = this.angle - angle;
+    double diffAngle = this.angle - newAngle;
     double originAngle = this.angle;
 
     gameRef.getValueGenerator(
@@ -108,22 +110,24 @@ class BonfireCamera extends Camera {
 
   void moveToTargetAnimated(
     GameComponent target, {
-    double zoom = 1,
-    double angle = 0,
+    double? zoom,
+    double? angle,
     VoidCallback? finish,
     Duration? duration,
     Curve curve = Curves.decelerate,
   }) {
-    if (zoom <= 0.0 || _isMoving) return;
+    if ((zoom != null && zoom <= 0.0) || _isMoving) return;
     this.target = null;
     _isMoving = true;
 
+    double newZoom = zoom ?? this.zoom;
+    double newAngle = angle ?? this.angle;
     Vector2 originPosition = this.position.clone();
 
-    double diffZoom = this.zoom - zoom;
+    double diffZoom = this.zoom - newZoom;
     double initialZoom = this.zoom;
 
-    double diffAngle = this.angle - angle;
+    double diffAngle = this.angle - newAngle;
     double originAngle = this.angle;
 
     gameRef.getValueGenerator(
@@ -170,8 +174,8 @@ class BonfireCamera extends Camera {
   void moveToPlayerAnimated({
     Duration? duration,
     VoidCallback? finish,
-    double zoom = 1,
-    double angle = 0,
+    double? zoom,
+    double? angle,
     Curve curve = Curves.decelerate,
   }) {
     if (gameRef.player == null) return;
@@ -225,30 +229,37 @@ class BonfireCamera extends Camera {
     double newX = this.position.x;
     double newY = this.position.y;
 
+    bool shouldMove = false;
     if (horizontalDistance.abs() > horizontal) {
-      newX = this.position.x +
-          (horizontalDistance > 0
-              ? horizontal - horizontalDistance
-              : -horizontalDistance - horizontal);
+      double displacementX = _getMoveDisplacement(
+        horizontal,
+        horizontalDistance,
+      );
+      newX = this.position.x + (displacementX * _zoomFactor());
+      shouldMove = true;
     }
 
     if (verticalDistance.abs() > vertical) {
-      newY = this.position.y +
-          (verticalDistance > 0
-              ? vertical - verticalDistance
-              : -verticalDistance - vertical);
+      double displacementY = _getMoveDisplacement(
+        vertical,
+        verticalDistance,
+      );
+      newY = this.position.y + (displacementY * _zoomFactor());
+      shouldMove = true;
     }
 
-    snapTo(
-      this.position.copyWith(
-            x: enableSmooth
-                ? lerpDouble(this.position.x, newX, dt * speed)
-                : newX,
-            y: enableSmooth
-                ? lerpDouble(this.position.y, newY, dt * speed)
-                : newY,
-          ),
-    );
+    if (shouldMove) {
+      snapTo(
+        this.position.copyWith(
+              x: enableSmooth
+                  ? lerpDouble(this.position.x, newX, dt * speed)
+                  : newX,
+              y: enableSmooth
+                  ? lerpDouble(this.position.y, newY, dt * speed)
+                  : newY,
+            ),
+      );
+    }
   }
 
   void animateZoom({
@@ -346,7 +357,7 @@ class BonfireCamera extends Camera {
 
   void update(double dt) {
     super.update(dt);
-    if (dt != 0) {
+    if (dt != 0 && gameRef.isLoaded == true) {
       _followTarget(
         dt,
         sizeWindows: this.sizeMovementWindow,
@@ -365,8 +376,12 @@ class BonfireCamera extends Camera {
 
     final limitX = (startPosition.x);
     final limitY = (startPosition.y);
-    final limitMaxX = (sizeMap.width + startPosition.x - gameRef.canvasSize.x);
-    final limitMaxY = (sizeMap.height + startPosition.y - gameRef.canvasSize.y);
+    final limitMaxX = (sizeMap.width +
+        startPosition.x -
+        (gameRef.canvasSize.x * _zoomFactor()));
+    final limitMaxY = (sizeMap.height +
+        startPosition.y -
+        (gameRef.canvasSize.y * _zoomFactor()));
 
     if (this.position.x > limitMaxX) {
       snapTo(Vector2(limitMaxX, position.y));
@@ -384,7 +399,6 @@ class BonfireCamera extends Camera {
   }
 
   double _zoomFactor() {
-    if (this.zoom > 1) return 1;
     return 1 / this.zoom;
   }
 
@@ -393,6 +407,13 @@ class BonfireCamera extends Camera {
       return (this.target as ObjectCollision).rectCollision.center.toVector2();
     }
     return this.target?.center ?? Vector2.zero();
+  }
+
+  double _getMoveDisplacement(double baseValue, double distance) {
+    if (distance > 0) {
+      return baseValue - distance;
+    }
+    return -distance - baseValue;
   }
 
   @override

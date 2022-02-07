@@ -339,8 +339,8 @@ extension CameraExt on Camera {
 
   void moveToTargetAnimated(
     GameComponent target, {
-    double zoom = 1,
-    double angle = 0,
+    double? zoom,
+    double? angle,
     VoidCallback? finish,
     Duration? duration,
     widget.Curve curve = widget.Curves.decelerate,
@@ -358,8 +358,8 @@ extension CameraExt on Camera {
   void moveToPlayerAnimated({
     Duration? duration,
     VoidCallback? finish,
-    double zoom = 1,
-    double angle = 0,
+    double? zoom,
+    double? angle,
     widget.Curve curve = widget.Curves.decelerate,
   }) {
     (this as BonfireCamera).moveToPlayerAnimated(
@@ -373,8 +373,8 @@ extension CameraExt on Camera {
 
   void moveToPositionAnimated(
     Vector2 position, {
-    double zoom = 1,
-    double angle = 0,
+    double? zoom,
+    double? angle,
     VoidCallback? finish,
     Duration? duration,
     widget.Curve curve = widget.Curves.decelerate,

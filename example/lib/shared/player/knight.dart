@@ -137,9 +137,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     if (stamina < 10) return;
 
     this.simpleAttackRangeByAngle(
-      animationUp: CommonSpriteSheet.fireBallTop,
+      animation: CommonSpriteSheet.fireBallRight,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
-      radAngleDirection: angleRadAttack,
+      angle: angleRadAttack,
       size: Vector2.all(width * 0.7),
       damage: 10,
       speed: maxSpeed * 2,
@@ -151,6 +151,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
           ),
         ],
       ),
+      marginFromOrigin: 20,
       lightingConfig: LightingConfig(
         radius: width / 2,
         blurBorder: width,
@@ -298,7 +299,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
           ],
           onClose: () {
             print('close talk');
-            gameRef.camera.moveToPlayerAnimated();
+            gameRef.camera.moveToPlayerAnimated(zoom: 1);
           },
           onFinish: () {
             print('finish talk');
