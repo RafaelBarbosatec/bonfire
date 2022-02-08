@@ -1,3 +1,6 @@
+# [NEXT]
+- Improvements in `DirectionAnimation`.
+
 # [2.2.1]
 - Fix `WithSpriteAnimation`
 

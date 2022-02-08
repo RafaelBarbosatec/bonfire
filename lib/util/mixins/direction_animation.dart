@@ -9,15 +9,14 @@ mixin DirectionAnimation on Movement {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    animation?.render(canvas);
+    if (isVisible) {
+      animation?.render(canvas);
+    }
   }
 
   @override
   void update(double dt) {
-    if (isVisible) {
-      animation?.opacity = opacity;
-      animation?.update(dt, position, size, gameRef);
-    }
+    animation?.update(dt, position, size, opacity);
     super.update(dt);
   }
 
@@ -169,12 +168,12 @@ mixin DirectionAnimation on Movement {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    await animation?.onLoad();
+    await animation?.onLoad(gameRef);
     idle();
   }
 
   Future<void> replaceAnimation(SimpleDirectionAnimation newAnimation) async {
-    await newAnimation.onLoad();
+    await newAnimation.onLoad(gameRef);
     animation = newAnimation;
   }
 }

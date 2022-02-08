@@ -237,52 +237,51 @@ class FlyingAttackObject extends GameComponent
     switch (direction) {
       case Direction.left:
         positionDestroy = Vector2(
-          left - (biggerSide / 4) + addCenterX,
+          left - (biggerSide / 2) + addCenterX,
           top + addCenterY,
         );
         break;
       case Direction.right:
         positionDestroy = Vector2(
-          left + (biggerSide / 4) + addCenterX,
+          left + (biggerSide / 2) + addCenterX,
           top + addCenterY,
         );
         break;
       case Direction.up:
         positionDestroy = Vector2(
           left + addCenterX,
-          top - (biggerSide / 4) + addCenterY,
+          top - (biggerSide / 2) + addCenterY,
         );
         break;
       case Direction.down:
         positionDestroy = Vector2(
           left + addCenterX,
-          top + (biggerSide / 4) + addCenterY,
+          top + (biggerSide / 2) + addCenterY,
         );
         break;
       case Direction.upLeft:
         positionDestroy = Vector2(
-          left - (biggerSide / 4) + addCenterX,
-          top - (biggerSide / 4) + addCenterY,
+          left - (biggerSide / 2) + addCenterX,
+          top - (biggerSide / 2) + addCenterY,
         );
         break;
       case Direction.upRight:
         positionDestroy = Vector2(
-          left + (biggerSide / 4) + addCenterX,
-          top - (biggerSide / 4) + addCenterY,
+          left + (biggerSide / 2) + addCenterX,
+          top - (biggerSide / 2) + addCenterY,
         );
         break;
       case Direction.downLeft:
         positionDestroy = Vector2(
-          left - (biggerSide / 4) + addCenterX,
-          top + (biggerSide / 4) + addCenterY,
+          left - (biggerSide / 2) + addCenterX,
+          top + (biggerSide / 2) + addCenterY,
         );
         break;
       case Direction.downRight:
         positionDestroy = Vector2(
-          left + (biggerSide / 4) + addCenterX,
-          top + (biggerSide / 4) + addCenterY,
+          left + (biggerSide / 2) + addCenterX,
+          top + (biggerSide / 2) + addCenterY,
         );
-
         break;
     }
 
@@ -297,8 +296,8 @@ class FlyingAttackObject extends GameComponent
   }
 
   void _destroyByAngle() {
-    double nextX = (width / 4) * _cosAngle;
-    double nextY = (height / 4) * _senAngle;
+    double nextX = (width / 2) * _cosAngle;
+    double nextY = (height / 2) * _senAngle;
 
     Offset diffBase = Offset(
           rectCollision.center.dx + nextX,

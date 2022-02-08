@@ -1,4 +1,3 @@
-import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/extensions/extensions.dart';

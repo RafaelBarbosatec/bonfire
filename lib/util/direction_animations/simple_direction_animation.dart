@@ -44,6 +44,8 @@ class SimpleDirectionAnimation {
   bool enabledFlipX;
   bool enabledFlipY;
 
+  BonfireGameInterface? gameRef;
+
   SimpleDirectionAnimation({
     required FutureOr<SpriteAnimation> idleRight,
     required FutureOr<SpriteAnimation> runRight,
@@ -216,7 +218,9 @@ class SimpleDirectionAnimation {
     );
     anim.isFlipVertical = flipY;
     anim.isFlipHorizontal = flipX;
-
+    if (gameRef != null) {
+      anim.gameRef = gameRef!;
+    }
     await anim.onLoad();
     _fastAnimation = anim;
   }
@@ -260,20 +264,21 @@ class SimpleDirectionAnimation {
     double dt,
     Vector2 position,
     Vector2 size,
-    BonfireGameInterface gameRef,
+    double opacity,
   ) {
     _fastAnimation?.opacity = opacity;
     _fastAnimation?.position = position;
     _fastAnimation?.size = size;
-    _fastAnimation?.gameRef = gameRef;
     _fastAnimation?.update(dt);
 
+    this.opacity = opacity;
     this.position = position;
     this.size = size;
     _current?.update(dt);
   }
 
-  Future<void> onLoad() async {
+  Future<void> onLoad(BonfireGameInterface gameRef) async {
+    this.gameRef = gameRef;
     await _loader?.load();
     _loader = null;
   }
