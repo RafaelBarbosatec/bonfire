@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/assets_loader.dart';
 
@@ -215,6 +216,7 @@ class SimpleDirectionAnimation {
     );
     anim.isFlipVertical = flipY;
     anim.isFlipHorizontal = flipX;
+
     await anim.onLoad();
     _fastAnimation = anim;
   }
@@ -254,10 +256,16 @@ class SimpleDirectionAnimation {
     }
   }
 
-  void update(double dt, Vector2 position, Vector2 size) {
+  void update(
+    double dt,
+    Vector2 position,
+    Vector2 size,
+    BonfireGameInterface gameRef,
+  ) {
     _fastAnimation?.opacity = opacity;
     _fastAnimation?.position = position;
     _fastAnimation?.size = size;
+    _fastAnimation?.gameRef = gameRef;
     _fastAnimation?.update(dt);
 
     this.position = position;

@@ -1,3 +1,6 @@
+# [2.2.1]
+- Fix `WithSpriteAnimation`
+
 # [2.2.0]
 - Improvements in performance.
 - Add `Follower` mixin.

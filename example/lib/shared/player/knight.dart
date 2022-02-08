@@ -125,12 +125,13 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
     decrementStamina(15);
     this.simpleAttackMelee(
-        damage: attack,
-        animationDown: CommonSpriteSheet.whiteAttackEffectBottom,
-        animationLeft: CommonSpriteSheet.whiteAttackEffectLeft,
-        animationRight: CommonSpriteSheet.whiteAttackEffectRight,
-        animationUp: CommonSpriteSheet.whiteAttackEffectTop,
-        size: Vector2.all(DungeonMap.tileSize));
+      damage: attack,
+      animationDown: CommonSpriteSheet.whiteAttackEffectBottom,
+      animationLeft: CommonSpriteSheet.whiteAttackEffectLeft,
+      animationRight: CommonSpriteSheet.whiteAttackEffectRight,
+      animationUp: CommonSpriteSheet.whiteAttackEffectTop,
+      size: Vector2.all(DungeonMap.tileSize),
+    );
   }
 
   void actionAttackRange() {

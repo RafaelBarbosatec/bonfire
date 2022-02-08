@@ -16,7 +16,7 @@ mixin DirectionAnimation on Movement {
   void update(double dt) {
     if (isVisible) {
       animation?.opacity = opacity;
-      animation?.update(dt, position, size);
+      animation?.update(dt, position, size, gameRef);
     }
     super.update(dt);
   }

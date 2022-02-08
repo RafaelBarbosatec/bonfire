@@ -22,7 +22,7 @@ mixin WithSpriteAnimation on GameComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (this.isVisible) {
+    if (isVisible) {
       animation?.getSprite().renderWithOpacity(
             canvas,
             this.position,

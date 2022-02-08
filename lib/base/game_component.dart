@@ -1,3 +1,4 @@
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
@@ -191,7 +192,10 @@ abstract class GameComponent extends PositionComponent
   void update(double dt) {
     super.update(dt);
     if (checkInterval(
-        _keyIntervalCheckIsVisible, _intervalCheckIsVisible, dt)) {
+      _keyIntervalCheckIsVisible,
+      _intervalCheckIsVisible,
+      dt,
+    )) {
       isVisible =
           this._isVisibleInCamera() || positionType == PositionType.viewport;
     }
