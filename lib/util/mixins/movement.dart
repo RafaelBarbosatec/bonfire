@@ -17,99 +17,138 @@ mixin Movement on GameComponent {
   Direction lastDirection = Direction.right;
   Direction lastDirectionHorizontal = Direction.right;
 
+  /// You can override this method to listen the movement of this component
+  void onMove(
+    double speed,
+    Direction direction,
+    double angle,
+  ) {}
+
   /// Move player to Up
-  void moveUp(double speed, {VoidCallback? onCollision}) {
+  bool moveUp(double speed, {bool notifyOnMove = true}) {
     double innerSpeed = speed * dtUpdate;
     Vector2 displacement = position.translate(0, (innerSpeed * -1));
 
     if (_isCollision(displacement)) {
-      onCollision?.call();
-      return;
+      return false;
     }
 
     isIdle = false;
     position = displacement;
     lastDirection = Direction.up;
+    if (notifyOnMove) {
+      onMove(speed, lastDirection, 0);
+    }
+    return true;
   }
 
   /// Move player to Down
-  void moveDown(double speed, {VoidCallback? onCollision}) {
+  bool moveDown(double speed, {bool notifyOnMove = true}) {
     double innerSpeed = speed * dtUpdate;
     Vector2 displacement = position.translate(0, innerSpeed);
 
     if (_isCollision(displacement)) {
-      onCollision?.call();
-      return;
+      return false;
     }
 
     isIdle = false;
     position = displacement;
     lastDirection = Direction.down;
+    if (notifyOnMove) {
+      onMove(speed, lastDirection, 0);
+    }
+    return true;
   }
 
   /// Move player to Left
-  void moveLeft(double speed, {VoidCallback? onCollision}) {
+  bool moveLeft(double speed, {bool notifyOnMove = true}) {
     double innerSpeed = speed * dtUpdate;
     Vector2 displacement = position.translate((innerSpeed * -1), 0);
 
     if (_isCollision(displacement)) {
-      onCollision?.call();
-      return;
+      return false;
     }
 
     isIdle = false;
     position = displacement;
     lastDirection = Direction.left;
     lastDirectionHorizontal = Direction.left;
+    if (notifyOnMove) {
+      onMove(speed, lastDirection, 0);
+    }
+    return true;
   }
 
   /// Move player to Right
-  void moveRight(double speed, {VoidCallback? onCollision}) {
+  bool moveRight(double speed, {bool notifyOnMove = true}) {
     double innerSpeed = speed * dtUpdate;
     Vector2 displacement = position.translate(innerSpeed, 0);
 
     if (_isCollision(displacement)) {
-      onCollision?.call();
-      return;
+      return false;
     }
 
     isIdle = false;
     position = displacement;
     lastDirection = Direction.right;
     lastDirectionHorizontal = Direction.right;
+    if (notifyOnMove) {
+      onMove(speed, lastDirection, 0);
+    }
+    return true;
   }
 
   /// Move player to Up and Right
-  void moveUpRight(double speedX, double speedY, {VoidCallback? onCollision}) {
-    moveRight(speedX, onCollision: onCollision);
-    moveUp(speedY, onCollision: onCollision);
-    lastDirection = Direction.upRight;
+  bool moveUpRight(double speedX, double speedY) {
+    bool successRight = moveRight(speedX, notifyOnMove: false);
+    bool successUp = moveUp(speedY, notifyOnMove: false);
+    if (successRight && successUp) {
+      lastDirection = Direction.upRight;
+    }
+    onMove(speed, lastDirection, 0);
+    return successRight | successUp;
   }
 
   /// Move player to Up and Left
-  void moveUpLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
-    moveLeft(speedX, onCollision: onCollision);
-    moveUp(speedY, onCollision: onCollision);
-    lastDirection = Direction.upLeft;
+  bool moveUpLeft(
+    double speedX,
+    double speedY,
+  ) {
+    bool successLeft = moveLeft(speedX, notifyOnMove: false);
+    bool successUp = moveUp(speedY, notifyOnMove: false);
+    if (successLeft && successUp) {
+      lastDirection = Direction.upLeft;
+    }
+    onMove(speed, lastDirection, 0);
+    return successLeft | successUp;
   }
 
   /// Move player to Down and Left
-  void moveDownLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
-    moveLeft(speedX, onCollision: onCollision);
-    moveDown(speedY, onCollision: onCollision);
-    lastDirection = Direction.downLeft;
+  bool moveDownLeft(double speedX, double speedY) {
+    bool successLeft = moveLeft(speedX, notifyOnMove: false);
+    bool successDown = moveDown(speedY, notifyOnMove: false);
+
+    if (successLeft && successDown) {
+      lastDirection = Direction.downLeft;
+    }
+    onMove(speed, lastDirection, 0);
+    return successLeft | successDown;
   }
 
   /// Move player to Down and Right
-  void moveDownRight(double speedX, double speedY,
-      {VoidCallback? onCollision}) {
-    moveRight(speedX, onCollision: onCollision);
-    moveDown(speedY, onCollision: onCollision);
-    lastDirection = Direction.downRight;
+  bool moveDownRight(double speedX, double speedY) {
+    bool successRight = moveRight(speedX, notifyOnMove: false);
+    bool successDown = moveDown(speedY, notifyOnMove: false);
+
+    if (successRight && successDown) {
+      lastDirection = Direction.downRight;
+    }
+    onMove(speed, lastDirection, 0);
+    return successRight | successDown;
   }
 
   /// Move Player to direction by radAngle
-  void moveFromAngle(double speed, double angle, {VoidCallback? onCollision}) {
+  bool moveFromAngle(double speed, double angle) {
     double nextX = (speed * dtUpdate) * cos(angle);
     double nextY = (speed * dtUpdate) * sin(angle);
     Offset nextPoint = Offset(nextX, nextY);
@@ -126,20 +165,20 @@ mixin Movement on GameComponent {
     Rect newPosition = rect.shift(newDiffBase);
 
     if (_isCollision(newPosition.positionVector2)) {
-      onCollision?.call();
-      return;
+      return false;
     }
 
     isIdle = false;
     position = newPosition.positionVector2;
+    onMove(speed, _getDirectionByAngle(angle), angle);
+    return true;
   }
 
   /// Move to direction by radAngle with dodge obstacles
-  void moveFromAngleDodgeObstacles(
+  bool moveFromAngleDodgeObstacles(
     double speed,
-    double angle, {
-    VoidCallback? onCollision,
-  }) {
+    double angle,
+  ) {
     isIdle = false;
     double innerSpeed = (speed * dtUpdate);
     double nextX = innerSpeed * cos(angle);
@@ -185,9 +224,11 @@ mixin Movement on GameComponent {
     }
 
     if (newDiffBase == Vector2.zero()) {
-      onCollision?.call();
+      return false;
     }
     this.position.add(newDiffBase);
+    onMove(speed, _getDirectionByAngle(angle), angle);
+    return true;
   }
 
   /// Check if performing a certain translate on the enemy collision occurs
@@ -232,55 +273,52 @@ mixin Movement on GameComponent {
     }
   }
 
-  void moveFromDirection(Direction direction, {bool enabledDiagonal = true}) {
+  bool moveFromDirection(Direction direction, {bool enabledDiagonal = true}) {
     switch (direction) {
       case Direction.left:
-        moveLeft(speed);
-        break;
+        return moveLeft(speed);
       case Direction.right:
-        moveRight(speed);
-        break;
+        return moveRight(speed);
       case Direction.up:
-        moveUp(speed);
-        break;
+        return moveUp(speed);
       case Direction.down:
-        moveDown(speed);
-        break;
+        return moveDown(speed);
       case Direction.upLeft:
         if (enabledDiagonal) {
-          moveUpLeft(speed * REDUCTION_SPEED_DIAGONAL,
+          return moveUpLeft(speed * REDUCTION_SPEED_DIAGONAL,
               speed * REDUCTION_SPEED_DIAGONAL);
         } else {
-          moveRight(speed);
+          return moveRight(speed);
         }
 
-        break;
       case Direction.upRight:
         if (enabledDiagonal) {
-          moveUpRight(speed * REDUCTION_SPEED_DIAGONAL,
+          return moveUpRight(speed * REDUCTION_SPEED_DIAGONAL,
               speed * REDUCTION_SPEED_DIAGONAL);
         } else {
-          moveRight(speed);
+          return moveRight(speed);
         }
 
-        break;
       case Direction.downLeft:
         if (enabledDiagonal) {
-          moveDownLeft(speed * REDUCTION_SPEED_DIAGONAL,
+          return moveDownLeft(speed * REDUCTION_SPEED_DIAGONAL,
               speed * REDUCTION_SPEED_DIAGONAL);
         } else {
-          moveLeft(speed);
+          return moveLeft(speed);
         }
 
-        break;
       case Direction.downRight:
         if (enabledDiagonal) {
-          moveDownRight(speed * REDUCTION_SPEED_DIAGONAL,
+          return moveDownRight(speed * REDUCTION_SPEED_DIAGONAL,
               speed * REDUCTION_SPEED_DIAGONAL);
         } else {
-          moveRight(speed);
+          return moveRight(speed);
         }
-        break;
     }
+  }
+
+  Direction _getDirectionByAngle(double angle) {
+    /// TODO IMPLEMENTAR E SETAR lastDirection e lastDirectionHorizontal
+    return Direction.left;
   }
 }

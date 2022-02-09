@@ -43,7 +43,10 @@ extension RotationEnemyExtensions on RotationEnemy {
           return;
         }
 
-        this.moveFromAngleDodgeObstacles(speed, _radAngle, onCollision: idle);
+        bool onMove = this.moveFromAngleDodgeObstacles(speed, _radAngle);
+        if (!onMove) {
+          this.idle();
+        }
       },
       notObserved: () {
         this.idle();
@@ -90,11 +93,14 @@ extension RotationEnemyExtensions on RotationEnemy {
           return;
         }
 
-        this.moveFromAngleDodgeObstacles(
+        bool onMove = this.moveFromAngleDodgeObstacles(
           speed,
           getInverseAngleFomPlayer(),
-          onCollision: idle,
         );
+
+        if (!onMove) {
+          this.idle();
+        }
       },
       notObserved: () {
         this.idle();

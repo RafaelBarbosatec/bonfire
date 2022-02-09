@@ -38,9 +38,6 @@ mixin MovementByJoystick on Movement {
           if (innerCurrentDirectional != JoystickMoveDirectional.IDLE) {
             moveFromAngle(speed, movementRadAngle);
           }
-          // movement was done on the above line, this is only for the animation
-          // which is why we use zero speed as we don't want to translate position twice
-          _moveDirectional(innerCurrentDirectional!, 0, 0);
         }
       }
     }

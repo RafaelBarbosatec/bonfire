@@ -56,23 +56,28 @@ mixin AutomaticRandomMovement on Movement {
         }
       }
 
+      bool onMove = false;
       if (canMoveLeft && canMoveUp) {
-        moveUpLeft(speed, speed, onCollision: _cleanTargetMovementRandom);
+        onMove = moveUpLeft(speed, speed);
       } else if (canMoveLeft && canMoveDown) {
-        moveDownLeft(speed, speed, onCollision: _cleanTargetMovementRandom);
+        onMove = moveDownLeft(speed, speed);
       } else if (canMoveRight && canMoveUp) {
-        moveUpRight(speed, speed, onCollision: _cleanTargetMovementRandom);
+        onMove = moveUpRight(speed, speed);
       } else if (canMoveRight && canMoveDown) {
-        moveDownRight(speed, speed, onCollision: _cleanTargetMovementRandom);
+        onMove = moveDownRight(speed, speed);
       } else if (canMoveRight) {
-        moveRight(speed, onCollision: _cleanTargetMovementRandom);
+        onMove = moveRight(speed);
       } else if (canMoveLeft) {
-        moveLeft(speed, onCollision: _cleanTargetMovementRandom);
+        onMove = moveLeft(speed);
       } else if (canMoveUp) {
-        moveUp(speed, onCollision: _cleanTargetMovementRandom);
+        onMove = moveUp(speed);
       } else if (canMoveDown) {
-        moveDown(speed, onCollision: _cleanTargetMovementRandom);
+        onMove = moveDown(speed);
       } else {
+        _cleanTargetMovementRandom();
+      }
+
+      if (!onMove) {
         _cleanTargetMovementRandom();
       }
     }

@@ -1,5 +1,6 @@
 # [NEXT]
-- Improvements in `DirectionAnimation`.
+- Improvements in `DirectionAnimation` mixin.
+- Improvements in `Movement` mixin.
 
 # [2.2.1]
 - Fix `WithSpriteAnimation`
