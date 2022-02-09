@@ -230,57 +230,59 @@ class FlyingAttackObject extends GameComponent
     double addCenterX = 0;
     double addCenterY = 0;
 
+    const double divisionFactor = 2;
+
     if (destroySize != null) {
-      addCenterX = ((size.x - destroySize!.x) / 2);
-      addCenterY = ((size.y - destroySize!.y) / 2);
+      addCenterX = ((size.x - destroySize!.x) / divisionFactor);
+      addCenterY = ((size.y - destroySize!.y) / divisionFactor);
     }
     switch (direction) {
       case Direction.left:
         positionDestroy = Vector2(
-          left - (biggerSide / 2) + addCenterX,
+          left - (biggerSide / divisionFactor) + addCenterX,
           top + addCenterY,
         );
         break;
       case Direction.right:
         positionDestroy = Vector2(
-          left + (biggerSide / 2) + addCenterX,
+          left + (biggerSide / divisionFactor) + addCenterX,
           top + addCenterY,
         );
         break;
       case Direction.up:
         positionDestroy = Vector2(
           left + addCenterX,
-          top - (biggerSide / 2) + addCenterY,
+          top - (biggerSide / divisionFactor) + addCenterY,
         );
         break;
       case Direction.down:
         positionDestroy = Vector2(
           left + addCenterX,
-          top + (biggerSide / 2) + addCenterY,
+          top + (biggerSide / divisionFactor) + addCenterY,
         );
         break;
       case Direction.upLeft:
         positionDestroy = Vector2(
-          left - (biggerSide / 2) + addCenterX,
-          top - (biggerSide / 2) + addCenterY,
+          left - (biggerSide / divisionFactor) + addCenterX,
+          top - (biggerSide / divisionFactor) + addCenterY,
         );
         break;
       case Direction.upRight:
         positionDestroy = Vector2(
-          left + (biggerSide / 2) + addCenterX,
-          top - (biggerSide / 2) + addCenterY,
+          left + (biggerSide / divisionFactor) + addCenterX,
+          top - (biggerSide / divisionFactor) + addCenterY,
         );
         break;
       case Direction.downLeft:
         positionDestroy = Vector2(
-          left - (biggerSide / 2) + addCenterX,
-          top + (biggerSide / 2) + addCenterY,
+          left - (biggerSide / divisionFactor) + addCenterX,
+          top + (biggerSide / divisionFactor) + addCenterY,
         );
         break;
       case Direction.downRight:
         positionDestroy = Vector2(
-          left + (biggerSide / 2) + addCenterX,
-          top + (biggerSide / 2) + addCenterY,
+          left + (biggerSide / divisionFactor) + addCenterX,
+          top + (biggerSide / divisionFactor) + addCenterY,
         );
         break;
     }
