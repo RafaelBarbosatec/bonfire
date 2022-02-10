@@ -55,7 +55,7 @@ mixin BonfireHasGameRef on Component {
 
   @override
   void onRemove() {
-    _gameRef = null;
     super.onRemove();
+    _gameRef = null;
   }
 }
