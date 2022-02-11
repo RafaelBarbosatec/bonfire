@@ -10,6 +10,7 @@ import 'package:flame/components.dart';
 /// Mixin responsible for adding movements
 mixin Movement on GameComponent {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
+  static const PI_180 = (180 / pi);
 
   bool isIdle = true;
   double dtUpdate = 0;
@@ -37,7 +38,7 @@ mixin Movement on GameComponent {
     position = displacement;
     lastDirection = Direction.up;
     if (notifyOnMove) {
-      onMove(speed, lastDirection, 0);
+      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
     }
     return true;
   }
@@ -55,7 +56,7 @@ mixin Movement on GameComponent {
     position = displacement;
     lastDirection = Direction.down;
     if (notifyOnMove) {
-      onMove(speed, lastDirection, 0);
+      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
     }
     return true;
   }
@@ -74,7 +75,7 @@ mixin Movement on GameComponent {
     lastDirection = Direction.left;
     lastDirectionHorizontal = Direction.left;
     if (notifyOnMove) {
-      onMove(speed, lastDirection, 0);
+      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
     }
     return true;
   }
@@ -93,7 +94,7 @@ mixin Movement on GameComponent {
     lastDirection = Direction.right;
     lastDirectionHorizontal = Direction.right;
     if (notifyOnMove) {
-      onMove(speed, lastDirection, 0);
+      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
     }
     return true;
   }
@@ -105,7 +106,7 @@ mixin Movement on GameComponent {
     if (successRight && successUp) {
       lastDirection = Direction.upRight;
     }
-    onMove(speed, lastDirection, 0);
+    onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
     return successRight | successUp;
   }
 
@@ -119,7 +120,7 @@ mixin Movement on GameComponent {
     if (successLeft && successUp) {
       lastDirection = Direction.upLeft;
     }
-    onMove(speed, lastDirection, 0);
+    onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
     return successLeft | successUp;
   }
 
@@ -131,7 +132,7 @@ mixin Movement on GameComponent {
     if (successLeft && successDown) {
       lastDirection = Direction.downLeft;
     }
-    onMove(speed, lastDirection, 0);
+    onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
     return successLeft | successDown;
   }
 
@@ -143,7 +144,7 @@ mixin Movement on GameComponent {
     if (successRight && successDown) {
       lastDirection = Direction.downRight;
     }
-    onMove(speed, lastDirection, 0);
+    onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
     return successRight | successDown;
   }
 
@@ -170,7 +171,7 @@ mixin Movement on GameComponent {
 
     isIdle = false;
     position = newPosition.positionVector2;
-    onMove(speed, _getDirectionByAngle(angle), angle);
+    onMove(speed, getDirectionByAngle(angle), angle);
     return true;
   }
 
@@ -227,7 +228,7 @@ mixin Movement on GameComponent {
       return false;
     }
     this.position.add(newDiffBase);
-    onMove(speed, _getDirectionByAngle(angle), angle);
+    onMove(speed, getDirectionByAngle(angle), angle);
     return true;
   }
 
@@ -317,8 +318,67 @@ mixin Movement on GameComponent {
     }
   }
 
-  Direction _getDirectionByAngle(double angle) {
-    /// TODO IMPLEMENTAR E SETAR lastDirection e lastDirectionHorizontal
+  Direction getDirectionByAngle(double angle) {
+    double degrees = angle * 180 / pi;
+
+    if (degrees > -22.5 && degrees <= 22.5) {
+      return Direction.right;
+    }
+
+    if (degrees > 22.5 && degrees <= 67.5) {
+      return Direction.downRight;
+    }
+
+    if (degrees > 67.5 && degrees <= 112.5) {
+      return Direction.down;
+    }
+
+    if (degrees > 112.5 && degrees <= 157.5) {
+      return Direction.downLeft;
+    }
+
+    if ((degrees > 157.5 && degrees <= 180) ||
+        (degrees >= -180 && degrees <= -157.5)) {
+      return Direction.left;
+    }
+
+    if (degrees > -157.5 && degrees <= -112.5) {
+      return Direction.upLeft;
+    }
+
+    if (degrees > -112.5 && degrees <= -67.5) {
+      return Direction.up;
+    }
+
+    if (degrees > -67.5 && degrees <= -22.5) {
+      return Direction.upRight;
+    }
     return Direction.left;
+  }
+
+  double getAngleByDirectional(Direction direction) {
+    switch (direction) {
+      case Direction.left:
+        return 180 / PI_180;
+      case Direction.right:
+        // we can't use 0 here because then no movement happens
+        // we're just going as close to 0.0 without being exactly 0.0
+        // if you have a better idea. Please be my guest
+        return 0.0000001 / PI_180;
+      case Direction.up:
+        return -90 / PI_180;
+      case Direction.down:
+        return 90 / PI_180;
+      case Direction.upLeft:
+        return -135 / PI_180;
+      case Direction.upRight:
+        return -45 / PI_180;
+      case Direction.downLeft:
+        return 135 / PI_180;
+      case Direction.downRight:
+        return 45 / PI_180;
+      default:
+        return 0;
+    }
   }
 }
