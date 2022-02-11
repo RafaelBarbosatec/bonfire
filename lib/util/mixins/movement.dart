@@ -31,6 +31,9 @@ mixin Movement on GameComponent {
     Vector2 displacement = position.translate(0, (innerSpeed * -1));
 
     if (_isCollision(displacement)) {
+      if (notifyOnMove) {
+        onMove(0, Direction.up, getAngleByDirectional(Direction.up));
+      }
       return false;
     }
 
@@ -49,6 +52,9 @@ mixin Movement on GameComponent {
     Vector2 displacement = position.translate(0, innerSpeed);
 
     if (_isCollision(displacement)) {
+      if (notifyOnMove) {
+        onMove(0, Direction.down, getAngleByDirectional(Direction.down));
+      }
       return false;
     }
 
@@ -67,6 +73,10 @@ mixin Movement on GameComponent {
     Vector2 displacement = position.translate((innerSpeed * -1), 0);
 
     if (_isCollision(displacement)) {
+      if (notifyOnMove) {
+        onMove(0, Direction.left, getAngleByDirectional(Direction.left));
+      }
+
       return false;
     }
 
@@ -86,6 +96,9 @@ mixin Movement on GameComponent {
     Vector2 displacement = position.translate(innerSpeed, 0);
 
     if (_isCollision(displacement)) {
+      if (notifyOnMove) {
+        onMove(0, Direction.right, getAngleByDirectional(Direction.right));
+      }
       return false;
     }
 
@@ -106,8 +119,13 @@ mixin Movement on GameComponent {
     if (successRight && successUp) {
       lastDirection = Direction.upRight;
     }
-    onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
-    return successRight | successUp;
+    if (successRight | successUp) {
+      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
+      return true;
+    } else {
+      onMove(0, Direction.upRight, getAngleByDirectional(Direction.upRight));
+      return false;
+    }
   }
 
   /// Move player to Up and Left
@@ -120,8 +138,14 @@ mixin Movement on GameComponent {
     if (successLeft && successUp) {
       lastDirection = Direction.upLeft;
     }
-    onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
-    return successLeft | successUp;
+
+    if (successLeft | successUp) {
+      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
+      return true;
+    } else {
+      onMove(0, Direction.upLeft, getAngleByDirectional(Direction.upLeft));
+      return false;
+    }
   }
 
   /// Move player to Down and Left
@@ -132,8 +156,14 @@ mixin Movement on GameComponent {
     if (successLeft && successDown) {
       lastDirection = Direction.downLeft;
     }
-    onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
-    return successLeft | successDown;
+
+    if (successLeft | successDown) {
+      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
+      return true;
+    } else {
+      onMove(0, Direction.downLeft, getAngleByDirectional(Direction.downLeft));
+      return false;
+    }
   }
 
   /// Move player to Down and Right
@@ -144,8 +174,15 @@ mixin Movement on GameComponent {
     if (successRight && successDown) {
       lastDirection = Direction.downRight;
     }
-    onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
-    return successRight | successDown;
+
+    if (successRight | successDown) {
+      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
+      return true;
+    } else {
+      onMove(
+          0, Direction.downRight, getAngleByDirectional(Direction.downRight));
+      return false;
+    }
   }
 
   /// Move Player to direction by radAngle
@@ -166,6 +203,7 @@ mixin Movement on GameComponent {
     Rect newPosition = rect.shift(newDiffBase);
 
     if (_isCollision(newPosition.positionVector2)) {
+      onMove(0, getDirectionByAngle(angle), angle);
       return false;
     }
 
@@ -225,6 +263,7 @@ mixin Movement on GameComponent {
     }
 
     if (newDiffBase == Vector2.zero()) {
+      onMove(0, getDirectionByAngle(angle), angle);
       return false;
     }
     this.position.add(newDiffBase);
