@@ -23,7 +23,6 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
           animIdle: _getSoldierSprite(),
           animRun: _getSoldierSprite(),
         ) {
-    dPadAngles = false;
     setupCollision(
       CollisionConfig(
         collisions: [

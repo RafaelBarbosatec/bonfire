@@ -8,7 +8,7 @@ mixin MovementByJoystick on Movement {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
   /// flag to set if you only want the 8 directions movement. Set to false to have full 360 movement
-  bool dPadAngles = true;
+  bool dPadAngles = false;
 
   /// the angle the player should move in 360 mode
   double movementRadAngle = 0;
