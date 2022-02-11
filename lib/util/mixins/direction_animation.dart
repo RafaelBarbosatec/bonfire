@@ -9,20 +9,19 @@ mixin DirectionAnimation on Movement {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    animation?.render(canvas);
+    if (isVisible) {
+      animation?.render(canvas);
+    }
   }
 
   @override
   void update(double dt) {
-    if (isVisible) {
-      animation?.opacity = opacity;
-      animation?.update(dt, position, size, gameRef);
-    }
+    animation?.update(dt, position, size, opacity);
     super.update(dt);
   }
 
   @override
-  void moveUp(double speed, {VoidCallback? onCollision}) {
+  bool moveUp(double speed, {bool notifyOnMove = true}) {
     if (animation?.runUp != null) {
       animation?.play(SimpleAnimationEnum.runUp);
     } else {
@@ -32,17 +31,17 @@ mixin DirectionAnimation on Movement {
         animation?.play(SimpleAnimationEnum.runRight);
       }
     }
-    super.moveUp(speed, onCollision: onCollision);
+    return super.moveUp(speed, notifyOnMove: notifyOnMove);
   }
 
   @override
-  void moveRight(double speed, {VoidCallback? onCollision}) {
+  bool moveRight(double speed, {bool notifyOnMove = true}) {
     animation?.play(SimpleAnimationEnum.runRight);
-    super.moveRight(speed, onCollision: onCollision);
+    return super.moveRight(speed, notifyOnMove: notifyOnMove);
   }
 
   @override
-  void moveDown(double speed, {VoidCallback? onCollision}) {
+  bool moveDown(double speed, {bool notifyOnMove = true}) {
     if (animation?.runDown != null) {
       animation?.play(SimpleAnimationEnum.runDown);
     } else {
@@ -53,54 +52,53 @@ mixin DirectionAnimation on Movement {
       }
     }
 
-    super.moveDown(speed, onCollision: onCollision);
+    return super.moveDown(speed, notifyOnMove: notifyOnMove);
   }
 
   @override
-  void moveLeft(double speed, {VoidCallback? onCollision}) {
+  bool moveLeft(double speed, {bool notifyOnMove = true}) {
     animation?.play(SimpleAnimationEnum.runLeft);
-    super.moveLeft(speed, onCollision: onCollision);
+    return super.moveLeft(speed, notifyOnMove: notifyOnMove);
   }
 
   @override
-  void moveUpLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
+  bool moveUpLeft(double speedX, double speedY) {
     if (animation?.runUpLeft != null) {
       animation?.play(SimpleAnimationEnum.runUpLeft);
     } else {
       animation?.play(SimpleAnimationEnum.runLeft);
     }
-    super.moveUpLeft(speedX, speedY, onCollision: onCollision);
+    return super.moveUpLeft(speedX, speedY);
   }
 
   @override
-  void moveUpRight(double speedX, double speedY, {VoidCallback? onCollision}) {
+  bool moveUpRight(double speedX, double speedY) {
     if (animation?.runUpRight != null) {
       animation?.play(SimpleAnimationEnum.runUpRight);
     } else {
       animation?.play(SimpleAnimationEnum.runRight);
     }
-    super.moveUpRight(speedX, speedY, onCollision: onCollision);
+    return super.moveUpRight(speedX, speedY);
   }
 
   @override
-  void moveDownRight(double speedX, double speedY,
-      {VoidCallback? onCollision}) {
+  bool moveDownRight(double speedX, double speedY) {
     if (animation?.runDownRight != null) {
       animation?.play(SimpleAnimationEnum.runDownRight);
     } else {
       animation?.play(SimpleAnimationEnum.runRight);
     }
-    super.moveDownRight(speedX, speedY, onCollision: onCollision);
+    return super.moveDownRight(speedX, speedY);
   }
 
   @override
-  void moveDownLeft(double speedX, double speedY, {VoidCallback? onCollision}) {
+  bool moveDownLeft(double speedX, double speedY) {
     if (animation?.runDownLeft != null) {
       animation?.play(SimpleAnimationEnum.runDownLeft);
     } else {
       animation?.play(SimpleAnimationEnum.runLeft);
     }
-    super.moveDownLeft(speedX, speedY, onCollision: onCollision);
+    return super.moveDownLeft(speedX, speedY);
   }
 
   @override
@@ -169,12 +167,12 @@ mixin DirectionAnimation on Movement {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    await animation?.onLoad();
+    await animation?.onLoad(gameRef);
     idle();
   }
 
   Future<void> replaceAnimation(SimpleDirectionAnimation newAnimation) async {
-    await newAnimation.onLoad();
+    await newAnimation.onLoad(gameRef);
     animation = newAnimation;
   }
 }

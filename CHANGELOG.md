@@ -1,4 +1,9 @@
-# [2.2.1]
+# [2.2.2]
+- Improvements in `DirectionAnimation` mixin.
+- Improvements in `Movement` mixin. Adds `onMove` method, you can override this to listen component movements.
+- Sets `dPadAngles` default value equals false in `MovementByJoystick`.
+
+# [2.2.1]s
 - Fix `WithSpriteAnimation`
 
 # [2.2.0]

@@ -106,47 +106,46 @@ mixin MoveToPositionAlongThePath on Movement {
     if (diffX.abs() < 0.01 && diffY.abs() < 0.01) {
       _goToNextPosition();
     } else {
+      bool onMove = false;
       if (diffX.abs() > 0.01 && diffY.abs() > 0.01) {
         final displacementXDiagonal = displacementX * REDUCTION_SPEED_DIAGONAL;
         final displacementYDiagonal = displacementY * REDUCTION_SPEED_DIAGONAL;
         if (diffX > 0 && diffY > 0) {
-          this.moveDownRight(
+          onMove = this.moveDownRight(
             displacementXDiagonal,
             displacementYDiagonal,
-            onCollision: _goToNextPosition,
           );
         } else if (diffX < 0 && diffY > 0) {
-          this.moveDownLeft(
+          onMove = this.moveDownLeft(
             displacementXDiagonal,
             displacementYDiagonal,
-            onCollision: _goToNextPosition,
           );
         } else if (diffX > 0 && diffY < 0) {
-          this.moveUpRight(
+          onMove = this.moveUpRight(
             displacementXDiagonal,
             displacementYDiagonal,
-            onCollision: _goToNextPosition,
           );
         } else if (diffX < 0 && diffY < 0) {
-          this.moveUpLeft(
+          onMove = this.moveUpLeft(
             displacementXDiagonal,
             displacementYDiagonal,
-            onCollision: _goToNextPosition,
           );
         }
       } else if (diffX.abs() > 0.01) {
         if (diffX > 0) {
-          this.moveRight(displacementX, onCollision: _goToNextPosition);
+          onMove = this.moveRight(displacementX);
         } else if (diffX < 0) {
-          this.moveLeft(displacementX, onCollision: _goToNextPosition);
+          onMove = this.moveLeft(displacementX);
         }
       } else if (diffY.abs() > 0.01) {
         if (diffY > 0) {
-          this.moveDown(displacementY, onCollision: _goToNextPosition);
+          onMove = this.moveDown(displacementY);
         } else if (diffY < 0) {
-          this.moveUp(displacementY, onCollision: _goToNextPosition);
+          onMove = this.moveUp(displacementY);
         }
-      } else {
+      }
+
+      if (!onMove) {
         _goToNextPosition();
       }
     }

@@ -1,6 +1,5 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:flutter/widgets.dart';
 
 /// Enemy used for top-down perspective
 class RotationEnemy extends Enemy with WithSpriteAnimation, WithAssetsLoader {
@@ -31,14 +30,10 @@ class RotationEnemy extends Enemy with WithSpriteAnimation, WithAssetsLoader {
   }
 
   @override
-  void moveFromAngleDodgeObstacles(
-    double speed,
-    double angle, {
-    VoidCallback? onCollision,
-  }) {
+  bool moveFromAngleDodgeObstacles(double speed, double angle) {
     this.animation = animRun;
     this.angle = angle;
-    super.moveFromAngleDodgeObstacles(speed, angle, onCollision: onCollision);
+    return super.moveFromAngleDodgeObstacles(speed, angle);
   }
 
   void idle() {
