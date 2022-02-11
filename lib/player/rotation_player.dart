@@ -22,6 +22,7 @@ class RotationPlayer extends Player with WithAssetsLoader {
           life: life,
           speed: speed,
         ) {
+    dPadAngles = false;
     movementRadAngle = currentRadAngle;
     loader?.add(AssetToLoad(animIdle, (value) => this.animIdle = value));
     loader?.add(AssetToLoad(animRun, (value) => this.animRun = value));
