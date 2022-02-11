@@ -1,3 +1,6 @@
+# [2.2.3]
+- ROLLBACK - Sets `dPadAngles` default value equals false in `MovementByJoystick`.
+
 # [2.2.2]
 - Improvements in `DirectionAnimation` mixin.
 - Improvements in `Movement` mixin. Adds `onMove` method, you can override this to listen component movements.
