@@ -22,6 +22,7 @@ class BackgroundImageGame extends GameBackground with WithSprite {
   final double parallaxY;
   final double opacity;
   final bool isBackground;
+  final int priorityImage;
   Vector2 _parallaxOffset = Vector2.zero();
 
   BackgroundImageGame({
@@ -33,6 +34,7 @@ class BackgroundImageGame extends GameBackground with WithSprite {
     this.parallaxY = 1,
     this.opacity = 1,
     this.isBackground = true,
+    this.priorityImage = 0,
   });
 
   @override
@@ -62,7 +64,7 @@ class BackgroundImageGame extends GameBackground with WithSprite {
     if (isBackground) {
       return LayerPriority.BACKGROUND;
     } else {
-      return LayerPriority.MAP + 1;
+      return LayerPriority.MAP + 1 + priorityImage;
     }
   }
 }

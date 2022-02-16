@@ -58,6 +58,7 @@ class TiledWorldMap {
   Map<String, ObjectBuilder> _objectsBuilder = Map();
   Map<String, TileModelSprite> _tileModelSpriteCache = Map();
   int countTileLayer = 0;
+  int countImageLayer = 0;
 
   TiledWorldMap(
     this.path, {
@@ -125,6 +126,7 @@ class TiledWorldMap {
 
     if (layer is ImageLayer) {
       _addImageLayer(layer);
+      countImageLayer++;
     }
 
     if (layer is GroupLayer) {
@@ -607,6 +609,7 @@ class TiledWorldMap {
         factor: _tileWidth / _tileWidthOrigin,
         opacity: layer.opacity ?? 1,
         isBackground: countTileLayer == 0,
+        priorityImage: countImageLayer,
       ),
     );
   }
