@@ -62,7 +62,7 @@ class BackgroundImageGame extends GameBackground with WithSprite {
   @override
   int get priority {
     if (isBackground) {
-      return LayerPriority.BACKGROUND;
+      return LayerPriority.BACKGROUND + priorityImage;
     } else {
       return LayerPriority.MAP + 1 + priorityImage;
     }
