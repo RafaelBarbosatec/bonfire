@@ -1,4 +1,4 @@
-# [NEXT]
+# [2.2.3]
 - Improvements in `MovementByJoystick`.
 - Improvements in access to gameRef in `GameComponent`.
 - Improvements in `ImageLayer`.
