@@ -14,21 +14,25 @@ import 'package:bonfire/map/map_assets_manager.dart';
 
 /// Used to define parallax image as background
 class BackgroundImageGame extends GameBackground with WithSprite {
+  final int? id;
   final String imagePath;
   final Vector2 offset;
   final double factor;
   final double parallaxX;
   final double parallaxY;
   final double opacity;
+  final bool isBackground;
   Vector2 _parallaxOffset = Vector2.zero();
 
   BackgroundImageGame({
     required this.offset,
     required this.imagePath,
+    this.id,
     this.factor = 1,
     this.parallaxX = 1,
     this.parallaxY = 1,
     this.opacity = 1,
+    this.isBackground = true,
   });
 
   @override
@@ -51,5 +55,14 @@ class BackgroundImageGame extends GameBackground with WithSprite {
     );
 
     return super.onLoad();
+  }
+
+  @override
+  int get priority {
+    if (isBackground) {
+      return LayerPriority.BACKGROUND;
+    } else {
+      return LayerPriority.MAP + 1;
+    }
   }
 }
