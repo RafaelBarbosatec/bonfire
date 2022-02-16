@@ -26,7 +26,6 @@ class RotationPlayer extends Player with WithAssetsLoader {
     dPadAngles = false;
     // for the default 8 way movement
     // dPadAngles = true;
-
     movementRadAngle = currentRadAngle;
     loader?.add(AssetToLoad(animIdle, (value) => this.animIdle = value));
     loader?.add(AssetToLoad(animRun, (value) => this.animRun = value));
