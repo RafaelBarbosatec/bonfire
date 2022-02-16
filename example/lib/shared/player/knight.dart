@@ -4,6 +4,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/enemy/goblin.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
+import 'package:example/shared/util/enemy_sprite_sheet.dart';
 import 'package:example/shared/util/player_sprite_sheet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -108,9 +109,10 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     removeFromParent();
     gameRef.add(
       GameDecoration.withSprite(
-          sprite: Sprite.load('player/crypt.png'),
-          position: position,
-          size: Vector2.all(DungeonMap.tileSize)),
+        sprite: Sprite.load('player/crypt.png'),
+        position: position,
+        size: Vector2.all(DungeonMap.tileSize),
+      ),
     );
     super.die();
   }
@@ -291,6 +293,30 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
                 height: 100,
                 child: PlayerSpriteSheet.idleRight.asWidget(),
               ),
+            ),
+            Say(
+              text: [
+                TextSpan(
+                  text: 'Lok Tar Ogr!',
+                ),
+                TextSpan(
+                  text: ' Lok Tar Ogr! ',
+                  style: TextStyle(color: Colors.green),
+                ),
+                TextSpan(
+                  text: ' Lok Tar Ogr! ',
+                ),
+                TextSpan(
+                  text: 'Lok Tar Ogr!',
+                  style: TextStyle(color: Colors.green),
+                ),
+              ],
+              person: Container(
+                width: 100,
+                height: 100,
+                child: EnemySpriteSheet.idleLeft.asWidget(),
+              ),
+              personSayDirection: PersonSayDirection.RIGHT,
             ),
           ],
           onClose: () {
