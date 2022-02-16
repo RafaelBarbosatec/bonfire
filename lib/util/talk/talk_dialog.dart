@@ -193,8 +193,7 @@ class _TalkDialogState extends State<TalkDialog> {
         currentSay = widget.says[currentIndexTalk];
       });
       _startShowText();
-      if (widget.onChangeTalk != null)
-        widget.onChangeTalk?.call(currentIndexTalk);
+      widget.onChangeTalk?.call(currentIndexTalk);
     } else {
       widget.onFinish?.call();
       Navigator.pop(context);
@@ -236,13 +235,17 @@ class _TalkDialogState extends State<TalkDialog> {
   }
 
   List<Widget> _buildPerson(PersonSayDirection direction) {
+    print(currentSay.person);
     if (currentSay.personSayDirection == direction) {
       return [
         if (direction == PersonSayDirection.RIGHT && currentSay.person != null)
           SizedBox(
             width: (widget.padding ?? EdgeInsets.all(10)).horizontal / 2,
           ),
-        currentSay.person ?? SizedBox.shrink(),
+        SizedBox(
+          key: UniqueKey(),
+          child: currentSay.person,
+        ),
         if (direction == PersonSayDirection.LEFT && currentSay.person != null)
           SizedBox(
             width: (widget.padding ?? EdgeInsets.all(10)).horizontal / 2,

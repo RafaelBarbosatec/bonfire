@@ -1,6 +1,7 @@
 # [NEXT]
 - Improvements in `MovementByJoystick`
 - Improvements in access to gameRef in `GameComponent`
+- Fix bug in `TalkDialog`. issue [#224](https://github.com/RafaelBarbosatec/bonfire/issues/224).
 
 # [2.2.2]
 - Improvements in `DirectionAnimation` mixin.
