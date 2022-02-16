@@ -1,3 +1,7 @@
+# [NEXT]
+- Improvements in `MovementByJoystick`
+- Improvements in access to gameRef in `GameComponent`
+
 # [2.2.2]
 - Improvements in `DirectionAnimation` mixin.
 - Improvements in `Movement` mixin. Adds `onMove` method, you can override this to listen component movements.

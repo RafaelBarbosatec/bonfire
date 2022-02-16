@@ -57,15 +57,16 @@ abstract class GameComponent extends PositionComponent
   /// Method that checks what type map tile is currently
   String? tileTypeBelow() {
     final list = tileTypeListBelow();
-    if (list?.isNotEmpty == true) {
-      return list?.first;
+    if (list.isNotEmpty) {
+      return list.first;
     }
 
     return null;
   }
 
   /// Method that checks what types map tile is currently
-  List<String>? tileTypeListBelow() {
+  List<String> tileTypeListBelow() {
+    if (!hasGameRef) return [];
     final map = gameRef.map;
     if (map.getRendered().isNotEmpty) {
       Rect position = this.isObjectCollision()
@@ -80,7 +81,7 @@ abstract class GameComponent extends PositionComponent
           .map<String>((e) => e.type!)
           .toList();
     }
-    return null;
+    return [];
   }
 
   /// Method that checks what properties map tile is currently
@@ -95,6 +96,7 @@ abstract class GameComponent extends PositionComponent
 
   /// Method that checks what properties list map tile is currently
   List<Map<String, dynamic>>? tilePropertiesListBelow() {
+    if (!hasGameRef) return null;
     final map = gameRef.map;
     if (map.tiles.isNotEmpty) {
       Rect position = this.isObjectCollision()
@@ -118,7 +120,7 @@ abstract class GameComponent extends PositionComponent
 
   @override
   int get priority {
-    if (aboveComponents) {
+    if (aboveComponents && hasGameRef) {
       return LayerPriority.getAbovePriority(gameRef.highestPriority);
     }
     return LayerPriority.getComponentPriority(_getBottomPriority());
