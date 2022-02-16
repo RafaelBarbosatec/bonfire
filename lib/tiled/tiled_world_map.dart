@@ -57,6 +57,8 @@ class TiledWorldMap {
   bool fromServer = false;
   Map<String, ObjectBuilder> _objectsBuilder = Map();
   Map<String, TileModelSprite> _tileModelSpriteCache = Map();
+  int countTileLayer = 0;
+  int countImageLayer = 0;
 
   TiledWorldMap(
     this.path, {
@@ -115,6 +117,7 @@ class TiledWorldMap {
 
     if (layer is TileLayer) {
       await _addTileLayer(layer);
+      countTileLayer++;
     }
 
     if (layer is ObjectGroup) {
@@ -123,6 +126,7 @@ class TiledWorldMap {
 
     if (layer is ImageLayer) {
       _addImageLayer(layer);
+      countImageLayer++;
     }
 
     if (layer is GroupLayer) {
@@ -594,6 +598,7 @@ class TiledWorldMap {
     if (!(layer.visible ?? false)) return;
     _components.add(
       BackgroundImageGame(
+        id: layer.id,
         imagePath: '$_basePath${layer.image}',
         offset: Vector2(
           (layer.x ?? 0.0) + (layer.offsetX ?? 0.0),
@@ -603,6 +608,8 @@ class TiledWorldMap {
         parallaxY: layer.parallaxX,
         factor: _tileWidth / _tileWidthOrigin,
         opacity: layer.opacity ?? 1,
+        isBackground: countTileLayer == 0,
+        priorityImage: countImageLayer,
       ),
     );
   }

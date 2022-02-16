@@ -9,43 +9,33 @@
 ///
 /// Rafaelbarbosatec
 /// on 30/11/21
-import 'dart:ui';
-
-import 'package:bonfire/background/game_background.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_assets_manager.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:flame/components.dart';
 
 /// Used to define parallax image as background
-class BackgroundImageGame extends GameBackground {
+class BackgroundImageGame extends GameBackground with WithSprite {
+  final int? id;
   final String imagePath;
   final Vector2 offset;
   final double factor;
   final double parallaxX;
   final double parallaxY;
   final double opacity;
+  final bool isBackground;
+  final int priorityImage;
   Vector2 _parallaxOffset = Vector2.zero();
 
-  Sprite? imageSprite;
   BackgroundImageGame({
     required this.offset,
     required this.imagePath,
+    this.id,
     this.factor = 1,
     this.parallaxX = 1,
     this.parallaxY = 1,
     this.opacity = 1,
+    this.isBackground = true,
+    this.priorityImage = 0,
   });
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    imageSprite?.renderWithOpacity(
-      canvas,
-      position,
-      size,
-      opacity: opacity,
-    );
-  }
 
   @override
   void update(double dt) {
@@ -58,14 +48,23 @@ class BackgroundImageGame extends GameBackground {
 
   @override
   Future<void>? onLoad() async {
-    imageSprite = await MapAssetsManager.getFutureSprite(imagePath);
+    sprite = await MapAssetsManager.getFutureSprite(imagePath);
     _parallaxOffset = Vector2(offset.x * factor, offset.y * factor);
     position = _parallaxOffset.clone();
     size = Vector2(
-      imageSprite!.image.width * factor,
-      imageSprite!.image.height * factor,
+      sprite!.image.width * factor,
+      sprite!.image.height * factor,
     );
 
     return super.onLoad();
+  }
+
+  @override
+  int get priority {
+    if (isBackground) {
+      return LayerPriority.BACKGROUND;
+    } else {
+      return LayerPriority.MAP + 1 + priorityImage;
+    }
   }
 }

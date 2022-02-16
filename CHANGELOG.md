@@ -1,5 +1,8 @@
-# [2.2.3]
-- ROLLBACK - Sets `dPadAngles` default value equals false in `MovementByJoystick`.
+# [2.2.4]
+- Improvements in `MovementByJoystick`.
+- Improvements in access to gameRef in `GameComponent`.
+- Improvements in `ImageLayer`.
+- Fix bug in `TalkDialog`. issue [#224](https://github.com/RafaelBarbosatec/bonfire/issues/224).
 
 # [2.2.2]
 - Improvements in `DirectionAnimation` mixin.
