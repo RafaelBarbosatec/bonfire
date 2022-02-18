@@ -44,7 +44,7 @@ class FlyingAttackObject extends GameComponent
     CollisionConfig? collision,
   }) {
     loader?.add(AssetToLoad(flyAnimation, (value) {
-      return this.flyAnimation = value;
+      this.flyAnimation = value;
     }));
 
     this.position = position;
@@ -184,6 +184,7 @@ class FlyingAttackObject extends GameComponent
 
   void _destroyObject() {
     if (shouldRemove) return;
+    removeFromParent();
     if (animationDestroy != null) {
       if (direction != null) {
         _destroyByDirection(direction!, dtUpdate);
@@ -192,7 +193,6 @@ class FlyingAttackObject extends GameComponent
       }
     }
     setupCollision(CollisionConfig(collisions: []));
-    removeFromParent();
     this.onDestroy?.call();
   }
 
@@ -287,14 +287,16 @@ class FlyingAttackObject extends GameComponent
         break;
     }
 
-    gameRef.add(
-      AnimatedObjectOnce(
-        animation: animationDestroy!,
-        position: positionDestroy,
-        size: destroySize ?? size,
-        lightingConfig: lightingConfig,
-      ),
-    );
+    if (hasGameRef) {
+      gameRef.add(
+        AnimatedObjectOnce(
+          animation: animationDestroy!,
+          position: positionDestroy,
+          size: destroySize ?? size,
+          lightingConfig: lightingConfig,
+        ),
+      );
+    }
   }
 
   void _destroyByAngle() {
@@ -309,13 +311,15 @@ class FlyingAttackObject extends GameComponent
 
     final positionDestroy = position.translate(diffBase.dx, diffBase.dy);
 
-    gameRef.add(
-      AnimatedObjectOnce(
-        animation: animationDestroy!,
-        position: positionDestroy,
-        lightingConfig: lightingConfig,
-        size: destroySize ?? size,
-      ),
-    );
+    if (hasGameRef) {
+      gameRef.add(
+        AnimatedObjectOnce(
+          animation: animationDestroy!,
+          position: positionDestroy,
+          lightingConfig: lightingConfig,
+          size: destroySize ?? size,
+        ),
+      );
+    }
   }
 }

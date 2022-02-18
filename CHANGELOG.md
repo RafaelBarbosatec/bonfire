@@ -1,3 +1,6 @@
+# [NEXT]
+- Fix crash mentioned in th issue [#255](https://github.com/RafaelBarbosatec/bonfire/issues/225)
+
 # [2.2.4]
 - Improvements in `MovementByJoystick`.
 - Improvements in access to gameRef in `GameComponent`.
