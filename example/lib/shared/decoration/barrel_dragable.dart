@@ -36,10 +36,14 @@ class BarrelDraggable extends GameDecoration
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+    String text = 'Drag here';
+    Vector2 size = _textConfig.measureText(text);
+    double xCenter = (width - size.x) / 2;
+    double yCenter = (height - size.y) / 2;
     _textConfig.render(
       canvas,
-      'Drag',
-      Vector2(this.x + width / 5, this.y - width / 3),
+      text,
+      Vector2(this.x + xCenter, this.y - yCenter),
     );
   }
 }
