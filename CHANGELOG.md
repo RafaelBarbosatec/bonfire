@@ -1,5 +1,6 @@
 # [NEXT]
 - Fix crash mentioned in th issue [#255](https://github.com/RafaelBarbosatec/bonfire/issues/225)
+- Fix crash mentioned in th issue [#227](https://github.com/RafaelBarbosatec/bonfire/issues/227)
 
 # [2.2.4]
 - Improvements in `MovementByJoystick`.

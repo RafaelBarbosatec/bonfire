@@ -153,6 +153,7 @@ class MapWorld extends MapGame {
   Future<void> updateTiles(List<TileModel> map) async {
     lastSizeScreen = null;
     this.tiles = map;
+    await Future.forEach<TileModel>(tiles, _loadTile);
     _verifyMaxTopAndLeft(gameRef.size, isUpdate: true);
   }
 
