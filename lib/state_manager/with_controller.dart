@@ -22,27 +22,19 @@ class EventMap<T> {
 }
 
 mixin WithController<T extends GameComponentController> on GameComponent {
-  late T _controller;
+  late final T controller;
 
-  final List<EventMap> _onEventList = [];
   @override
   void onMount() {
-    _controller = BonfireInjector().get();
-    _controller.component = this;
+    controller = BonfireInjector().get();
+    controller.component = this;
+    controller.gameRef = gameRef;
     super.onMount();
   }
 
-  void sendEvent<T extends GameComponentEvent>(T event) {
-    _controller.onEvent(event);
-  }
-
-  void onEvent<T extends GameComponentEvent>(T event) {
-    _onEventList.where((element) => element is EventMap<T>).forEach((element) {
-      (element as EventMap<T>).onEvent(event);
-    });
-  }
-
-  void on<T extends GameComponentEvent>(EventChanged<T> onEvent) {
-    _onEventList.add(EventMap<T>(T, onEvent));
+  @override
+  void update(double dt) {
+    controller.update(dt);
+    super.update(dt);
   }
 }

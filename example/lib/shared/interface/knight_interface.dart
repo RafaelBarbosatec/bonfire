@@ -18,7 +18,7 @@ class KnightInterface extends GameInterface {
       onTapComponent: (selected) {
         final player = gameRef.player;
         if (player != null) {
-          (player as Knight).showEmote();
+          (player as Knight).execShowEmote();
         }
       },
     ));
@@ -99,7 +99,7 @@ class KnightInterface extends GameInterface {
       position: Vector2(350, 20),
       onTapComponent: (selected) {
         if (gameRef.player != null) {
-          (gameRef.player as Knight).showEmote();
+          (gameRef.player as Knight).execShowEmote();
         }
       },
     ));

@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'knight_controller.dart';
-import 'knight_events.dart';
 
 enum PlayerAttackType { AttackMelee, AttackRange }
 
@@ -22,13 +21,12 @@ class Knight extends SimplePlayer
         MouseGesture,
         WithController<KnightController> {
   static final double maxSpeed = DungeonMap.tileSize * 3;
-  double attack = 20;
+
   double stamina = 100;
   double angleRadAttack = 0.0;
   Rect? rectDirectionAttack;
   Sprite? spriteDirectionAttack;
-  bool execAttackRange = false;
-  bool canShowEmoteFromHover = true;
+  bool showBgRangeAttack = false;
   Goblin? enemyControlled;
 
   Rect _rectHover = Rect.fromLTWH(
@@ -75,15 +73,6 @@ class Knight extends SimplePlayer
     );
 
     _enableMouseGesture();
-
-    on((ExecMeleeAttack action) => _execMeleeAttack());
-    on((ExecRangeAttack action) {
-      execAttackRange = action.enabled;
-      angleRadAttack = action.radAngle;
-    });
-    on((ExecDie action) => _execDie());
-    on((ExecShowEmote action) => showEmote());
-    on((ExecShowTalk action) => _showTalk(action.target));
   }
 
   @override
@@ -94,21 +83,24 @@ class Knight extends SimplePlayer
 
   @override
   void joystickAction(JoystickActionEvent event) {
-    if (isDead) return;
-    sendEvent(OnInteractJoystick(event.id, event.event, event.radAngle));
+    controller.handleInteractJoystick(event);
     super.joystickAction(event);
   }
 
   @override
   void die() {
-    sendEvent(OnDie());
+    removeFromParent();
+    gameRef.add(
+      GameDecoration.withSprite(
+        sprite: Sprite.load('player/crypt.png'),
+        position: position,
+        size: Vector2.all(DungeonMap.tileSize),
+      ),
+    );
     super.die();
   }
 
-  void _execMeleeAttack() {
-    if (stamina < 15) return;
-
-    decrementStamina(15);
+  void execMeleeAttack(double attack) {
     this.simpleAttackMelee(
       damage: attack,
       animationDown: CommonSpriteSheet.whiteAttackEffectBottom,
@@ -119,15 +111,13 @@ class Knight extends SimplePlayer
     );
   }
 
-  void _actionAttackRange() {
-    if (stamina < 10) return;
-
+  void execRangeAttack(double angle, double attack) {
     this.simpleAttackRangeByAngle(
       animation: CommonSpriteSheet.fireBallRight,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
-      angle: angleRadAttack,
+      angle: angle,
       size: Vector2.all(width * 0.7),
-      damage: 10,
+      damage: attack,
       speed: maxSpeed * 2,
       collision: CollisionConfig(
         collisions: [
@@ -147,46 +137,11 @@ class Knight extends SimplePlayer
   }
 
   @override
-  void update(double dt) {
-    if (this.isDead) return;
-    _verifyStamina(dt);
-
-    if (checkInterval('seeEnemy', 250, dt)) {
-      this.seeEnemy(
-        radiusVision: width * 4,
-        notObserved: () => sendEvent(OnNotObserveEnemy()),
-        observed: (enemies) => sendEvent(OnObserveEnemy(enemies.first)),
-      );
-    }
-
-    if (execAttackRange && checkInterval('ATTACK_RANGE', 150, dt)) {
-      _actionAttackRange();
-    }
-    super.update(dt);
-  }
-
-  @override
   void render(Canvas c) {
     super.render(c);
     _drawDirectionAttack(c);
     if (_rectHover.left != 0 || _rectHover.top != 0) {
       c.drawRect(_rectHover, paintHover);
-    }
-  }
-
-  void _verifyStamina(double dt) {
-    if (stamina < 100 && checkInterval('INCREMENT_STAMINA', 100, dt)) {
-      stamina += 2;
-      if (stamina > 100) {
-        stamina = 100;
-      }
-    }
-  }
-
-  void decrementStamina(int i) {
-    stamina -= i;
-    if (stamina < 0) {
-      stamina = 0;
     }
   }
 
@@ -202,7 +157,7 @@ class Knight extends SimplePlayer
     super.receiveDamage(damage, from);
   }
 
-  void showEmote() {
+  void execShowEmote() {
     gameRef.add(
       AnimatedFollowerObject(
         animation: CommonSpriteSheet.emote,
@@ -244,7 +199,7 @@ class Knight extends SimplePlayer
     }
   }
 
-  void _showTalk(GameComponent first) {
+  void execShowTalk(GameComponent first) {
     gameRef.camera.moveToTargetAnimated(
       first,
       zoom: 2,
@@ -315,7 +270,7 @@ class Knight extends SimplePlayer
   }
 
   void _drawDirectionAttack(Canvas c) {
-    if (execAttackRange) {
+    if (showBgRangeAttack) {
       double radius = height;
       rectDirectionAttack = Rect.fromLTWH(
         rectCollision.center.dx - radius,
@@ -342,17 +297,10 @@ class Knight extends SimplePlayer
   }
 
   @override
-  void onHoverEnter(int pointer, Vector2 position) {
-    if (canShowEmoteFromHover) {
-      canShowEmoteFromHover = false;
-      showEmote();
-    }
-  }
+  void onHoverEnter(int pointer, Vector2 position) {}
 
   @override
-  void onHoverExit(int pointer, Vector2 position) {
-    canShowEmoteFromHover = true;
-  }
+  void onHoverExit(int pointer, Vector2 position) {}
 
   @override
   void onHoverScreen(int pointer, Vector2 position) {
@@ -395,14 +343,8 @@ class Knight extends SimplePlayer
     }
   }
 
-  void _execDie() {
-    removeFromParent();
-    gameRef.add(
-      GameDecoration.withSprite(
-        sprite: Sprite.load('player/crypt.png'),
-        position: position,
-        size: Vector2.all(DungeonMap.tileSize),
-      ),
-    );
+  void execEnableBGRangeAttack(bool enabled, double angle) {
+    showBgRangeAttack = enabled;
+    angleRadAttack = angle;
   }
 }
