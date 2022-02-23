@@ -10,14 +10,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'knight_controller.dart';
+import 'knight_events.dart';
+
 enum PlayerAttackType { AttackMelee, AttackRange }
 
-class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
+class Knight extends SimplePlayer
+    with
+        Lighting,
+        ObjectCollision,
+        MouseGesture,
+        WithController<KnightController> {
   static final double maxSpeed = DungeonMap.tileSize * 3;
   double attack = 20;
   double stamina = 100;
-  bool showObserveEnemy = false;
-  bool showTalk = false;
   double angleRadAttack = 0.0;
   Rect? rectDirectionAttack;
   Sprite? spriteDirectionAttack;
@@ -69,6 +75,15 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     );
 
     _enableMouseGesture();
+
+    on((ExecMeleeAttack action) => _execMeleeAttack());
+    on((ExecRangeAttack action) {
+      execAttackRange = action.enabled;
+      angleRadAttack = action.radAngle;
+    });
+    on((ExecDie action) => _execDie());
+    on((ExecShowEmote action) => showEmote());
+    on((ExecShowTalk action) => _showTalk(action.target));
   }
 
   @override
@@ -80,44 +95,17 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   @override
   void joystickAction(JoystickActionEvent event) {
     if (isDead) return;
-
-    if (event.id == LogicalKeyboardKey.space.keyId &&
-        event.event == ActionEvent.DOWN) {
-      actionAttack();
-    }
-
-    if (event.id == PlayerAttackType.AttackMelee &&
-        event.event == ActionEvent.DOWN) {
-      actionAttack();
-    }
-
-    if (event.id == PlayerAttackType.AttackRange) {
-      if (event.event == ActionEvent.MOVE) {
-        execAttackRange = true;
-        angleRadAttack = event.radAngle;
-      }
-      if (event.event == ActionEvent.UP) {
-        execAttackRange = false;
-      }
-    }
-
+    sendEvent(OnInteractJoystick(event.id, event.event, event.radAngle));
     super.joystickAction(event);
   }
 
   @override
   void die() {
-    removeFromParent();
-    gameRef.add(
-      GameDecoration.withSprite(
-        sprite: Sprite.load('player/crypt.png'),
-        position: position,
-        size: Vector2.all(DungeonMap.tileSize),
-      ),
-    );
+    sendEvent(OnDie());
     super.die();
   }
 
-  void actionAttack() {
+  void _execMeleeAttack() {
     if (stamina < 15) return;
 
     decrementStamina(15);
@@ -131,7 +119,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     );
   }
 
-  void actionAttackRange() {
+  void _actionAttackRange() {
     if (stamina < 10) return;
 
     this.simpleAttackRangeByAngle(
@@ -166,24 +154,13 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     if (checkInterval('seeEnemy', 250, dt)) {
       this.seeEnemy(
         radiusVision: width * 4,
-        notObserved: () {
-          showObserveEnemy = false;
-        },
-        observed: (enemies) {
-          if (!showObserveEnemy) {
-            showObserveEnemy = true;
-            showEmote();
-          }
-          if (!showTalk) {
-            showTalk = true;
-            _showTalk(enemies.first);
-          }
-        },
+        notObserved: () => sendEvent(OnNotObserveEnemy()),
+        observed: (enemies) => sendEvent(OnObserveEnemy(enemies.first)),
       );
     }
 
     if (execAttackRange && checkInterval('ATTACK_RANGE', 150, dt)) {
-      actionAttackRange();
+      _actionAttackRange();
     }
     super.update(dt);
   }
@@ -267,7 +244,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     }
   }
 
-  void _showTalk(Enemy first) {
+  void _showTalk(GameComponent first) {
     gameRef.camera.moveToTargetAnimated(
       first,
       zoom: 2,
@@ -416,5 +393,16 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
       enableMouseGesture =
           (Platform.isAndroid || Platform.isIOS) ? false : true;
     }
+  }
+
+  void _execDie() {
+    removeFromParent();
+    gameRef.add(
+      GameDecoration.withSprite(
+        sprite: Sprite.load('player/crypt.png'),
+        position: position,
+        size: Vector2.all(DungeonMap.tileSize),
+      ),
+    );
   }
 }

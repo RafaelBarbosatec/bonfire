@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/game_manual_map.dart';
+import 'package:example/shared/player/knight_controller.dart';
 import 'package:example/simple_example/simple_example_game.dart';
 import 'package:example/tiled_map/game_tiled_map.dart';
 import 'package:example/top_down_game/top_down_game.dart';
@@ -12,6 +13,8 @@ void main() async {
     await Flame.device.setLandscape();
     await Flame.device.fullScreen();
   }
+
+  BonfireInjector.instance().put((i) => KnightController());
   runApp(
     MaterialApp(
       home: Menu(),
