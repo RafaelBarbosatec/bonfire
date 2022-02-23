@@ -22,13 +22,13 @@ class KnightController extends GameComponentController<Knight> {
   bool showedDialog = false;
 
   KnightController() {
-    on((OnInteractJoystick event) => _handleJoystick(event));
+    on((OnInteractJoystick event) => _handleInteractJoystick(event));
     on((OnDie event) => sendEvent(ExecDie()));
     on((OnObserveEnemy event) => _handleObserveEnemy(event));
     on((OnNotObserveEnemy event) => _handleNotObserveEnemy());
   }
 
-  void _handleJoystick(OnInteractJoystick event) {
+  void _handleInteractJoystick(OnInteractJoystick event) {
     if (event.action == ActionEvent.DOWN) {
       if (event.id == LogicalKeyboardKey.space.keyId ||
           event.id == PlayerAttackType.AttackMelee) {
