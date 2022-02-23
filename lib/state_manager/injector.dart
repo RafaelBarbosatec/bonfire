@@ -19,9 +19,10 @@ class BonfireInjector {
     return _singleton;
   }
 
-  static BonfireInjector instance() => _singleton;
+  static final BonfireInjector instance = _singleton;
 
   BonfireInjector._internal();
+
   static final Map<Type, BuildDependency> _dependencies = {};
 
   void put<T>(BuildDependency<T> build) {

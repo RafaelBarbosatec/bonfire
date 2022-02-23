@@ -14,7 +14,8 @@ void main() async {
     await Flame.device.fullScreen();
   }
 
-  BonfireInjector.instance().put((i) => KnightController());
+  BonfireInjector.instance.put((i) => KnightController());
+
   runApp(
     MaterialApp(
       home: Menu(),
