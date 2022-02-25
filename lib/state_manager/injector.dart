@@ -24,14 +24,26 @@ class BonfireInjector {
   BonfireInjector._internal();
 
   static final Map<Type, BuildDependency> _dependencies = {};
+  static final Map<Type, dynamic> _dependenciesSingleton = {};
 
-  void put<T>(BuildDependency<T> build) {
+  void put<T>(BuildDependency<T> build, {bool isSingleton = false}) {
     _dependencies[T] = build;
+    if (isSingleton) {
+      _dependenciesSingleton[T] = null;
+    }
   }
 
   T get<T>() {
+    if (_dependenciesSingleton.containsKey(T) &&
+        _dependenciesSingleton[T] != null) {
+      return _dependenciesSingleton[T];
+    }
     if (_dependencies.containsKey(T)) {
-      return _dependencies[T]?.call(this);
+      final d = _dependencies[T]?.call(this);
+      if (_dependenciesSingleton.containsKey(T)) {
+        _dependenciesSingleton[T] = d;
+      }
+      return d;
     }
     throw Exception('Not found $T dependecy');
   }

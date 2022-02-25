@@ -21,20 +21,28 @@ class EventMap<T> {
   EventMap(this.type, this.onEvent);
 }
 
-mixin WithController<T extends GameComponentController> on GameComponent {
+mixin StateController<T extends GameComponentController> on GameComponent {
   late final T controller;
 
   @override
   void onMount() {
     controller = BonfireInjector().get();
-    controller.component = this;
+    controller.components.add(this);
     controller.gameRef = gameRef;
     super.onMount();
   }
 
   @override
   void update(double dt) {
-    controller.update(dt);
+    if (!shouldRemove) {
+      controller.update(dt);
+    }
     super.update(dt);
+  }
+
+  @override
+  void onRemove() {
+    controller.components.remove(this);
+    super.onRemove();
   }
 }

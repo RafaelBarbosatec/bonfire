@@ -16,8 +16,13 @@ import 'package:bonfire/bonfire.dart';
 abstract class GameComponentEvent {}
 
 abstract class GameComponentController<T extends GameComponent> {
-  late final T component;
+  final List<T> components = [];
+  T get component => components.first;
   late BonfireGameInterface gameRef;
 
   void update(double dt) {}
+
+  T get<T extends GameComponentController>() {
+    return BonfireInjector().get();
+  }
 }

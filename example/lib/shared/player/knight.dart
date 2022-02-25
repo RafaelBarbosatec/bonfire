@@ -1,12 +1,9 @@
-import 'dart:io';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/enemy/goblin.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:example/shared/util/enemy_sprite_sheet.dart';
 import 'package:example/shared/util/player_sprite_sheet.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,11 +12,7 @@ import 'knight_controller.dart';
 enum PlayerAttackType { AttackMelee, AttackRange }
 
 class Knight extends SimplePlayer
-    with
-        Lighting,
-        ObjectCollision,
-        MouseGesture,
-        WithController<KnightController> {
+    with Lighting, ObjectCollision, StateController<KnightController> {
   static final double maxSpeed = DungeonMap.tileSize * 3;
 
   double stamina = 100;
@@ -71,8 +64,6 @@ class Knight extends SimplePlayer
         ],
       ),
     );
-
-    _enableMouseGesture();
   }
 
   @override
@@ -294,53 +285,6 @@ class Knight extends SimplePlayer
   Future<void> onLoad() async {
     await super.onLoad();
     spriteDirectionAttack = await Sprite.load('direction_attack.png');
-  }
-
-  @override
-  void onHoverEnter(int pointer, Vector2 position) {}
-
-  @override
-  void onHoverExit(int pointer, Vector2 position) {}
-
-  @override
-  void onHoverScreen(int pointer, Vector2 position) {
-    Vector2 p = gameRef.screenToWorld(position);
-    double left = p.x - (p.x % DungeonMap.tileSize);
-    double top = p.y - (p.y % DungeonMap.tileSize);
-    _rectHover = Rect.fromLTWH(left, top, _rectHover.width, _rectHover.height);
-  }
-
-  @override
-  void onScroll(int pointer, Vector2 position, Vector2 scrollDelta) {
-    print(scrollDelta);
-    // do anything when use scroll of the mouse in your component
-  }
-
-  @override
-  void onMouseCancel() {
-    print('onMouseCancel');
-  }
-
-  @override
-  void onMouseTapLeft() {
-    print('onMouseTapLeft');
-  }
-
-  @override
-  void onMouseTapRight() {
-    print('onMouseTapRight');
-  }
-
-  @override
-  void onMouseTapMiddle() {
-    print('onMouseTapMiddle');
-  }
-
-  void _enableMouseGesture() {
-    if (!kIsWeb) {
-      enableMouseGesture =
-          (Platform.isAndroid || Platform.isIOS) ? false : true;
-    }
   }
 
   void execEnableBGRangeAttack(bool enabled, double angle) {
