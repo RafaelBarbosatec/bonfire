@@ -33,6 +33,7 @@ mixin StateController<T extends GameComponentController> on GameComponent {
     controller = BonfireInjector().get();
     controller.components.add(this);
     controller.gameRef = gameRef;
+    controller.onReady();
     super.onMount();
   }
 
@@ -55,5 +56,9 @@ mixin StateController<T extends GameComponentController> on GameComponent {
   void onRemove() {
     controller.components.remove(this);
     super.onRemove();
+  }
+
+  T get<T extends GameComponentController>() {
+    return BonfireInjector().get();
   }
 }

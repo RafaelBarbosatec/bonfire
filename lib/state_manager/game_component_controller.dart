@@ -21,8 +21,5 @@ abstract class GameComponentController<T extends GameComponent> {
   late BonfireGameInterface gameRef;
 
   void update(double dt) {}
-
-  T get<T extends GameComponentController>() {
-    return BonfireInjector().get();
-  }
+  void onReady() {}
 }

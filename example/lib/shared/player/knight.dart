@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/enemy/goblin.dart';
+import 'package:example/shared/interface/bar_life_controller.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:example/shared/util/enemy_sprite_sheet.dart';
 import 'package:example/shared/util/player_sprite_sheet.dart';
@@ -15,7 +16,6 @@ class Knight extends SimplePlayer
     with Lighting, ObjectCollision, StateController<KnightController> {
   static final double maxSpeed = DungeonMap.tileSize * 3;
 
-  double stamina = 100;
   double angleRadAttack = 0.0;
   Rect? rectDirectionAttack;
   Sprite? spriteDirectionAttack;
@@ -32,6 +32,8 @@ class Knight extends SimplePlayer
     ..color = Colors.white
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2;
+
+  BarLifeController? barLifeController;
 
   Knight(Vector2 position)
       : super(
@@ -128,6 +130,12 @@ class Knight extends SimplePlayer
   }
 
   @override
+  void update(double dt) {
+    barLifeController?.life = life;
+    super.update(dt);
+  }
+
+  @override
   void render(Canvas c) {
     super.render(c);
     _drawDirectionAttack(c);
@@ -138,14 +146,8 @@ class Knight extends SimplePlayer
 
   @override
   void receiveDamage(double damage, dynamic from) {
-    this.showDamage(
-      damage,
-      config: TextStyle(
-        fontSize: width / 3,
-        color: Colors.red,
-      ),
-    );
     super.receiveDamage(damage, from);
+    controller.onReceiveDamage(damage);
   }
 
   void execShowEmote() {
@@ -283,12 +285,34 @@ class Knight extends SimplePlayer
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     spriteDirectionAttack = await Sprite.load('direction_attack.png');
+    return super.onLoad();
+  }
+
+  @override
+  void onMount() {
+    barLifeController = get();
+    barLifeController?.maxLife = maxLife;
+    barLifeController?.maxStamina = 100;
+    super.onMount();
   }
 
   void execEnableBGRangeAttack(bool enabled, double angle) {
     showBgRangeAttack = enabled;
     angleRadAttack = angle;
+  }
+
+  void execShowDamage(double damage) {
+    this.showDamage(
+      damage,
+      config: TextStyle(
+        fontSize: width / 3,
+        color: Colors.red,
+      ),
+    );
+  }
+
+  void updateStamina(double stamina) {
+    barLifeController?.stamina = stamina;
   }
 }
