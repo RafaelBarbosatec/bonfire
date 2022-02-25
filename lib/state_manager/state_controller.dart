@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bonfire/bonfire.dart';
 
 ///
@@ -24,6 +26,8 @@ class EventMap<T> {
 mixin StateController<T extends GameComponentController> on GameComponent {
   late final T controller;
 
+  bool _doUpdate = false;
+
   @override
   void onMount() {
     controller = BonfireInjector().get();
@@ -34,10 +38,17 @@ mixin StateController<T extends GameComponentController> on GameComponent {
 
   @override
   void update(double dt) {
-    if (!shouldRemove) {
+    if (!shouldRemove && !_doUpdate) {
+      _doUpdate = true;
       controller.update(dt);
     }
     super.update(dt);
+  }
+
+  @override
+  void render(Canvas c) {
+    _doUpdate = false;
+    super.render(c);
   }
 
   @override
