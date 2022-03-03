@@ -24,14 +24,25 @@ class EventMap<T> {
 }
 
 mixin UseStateController<T extends StateController> on GameComponent {
-  late final T controller;
+  T? _controller;
 
   bool _doUpdate = false;
 
+  T get controller {
+    if (_controller == null) {
+      throw StateError(
+        'Cannot find reference $T in the component',
+      );
+    }
+    return _controller!;
+  }
+
+  bool get hasController => _controller != null;
+
   @override
   void onMount() {
-    controller = BonfireInjector().get();
-    controller.onReady(this);
+    _controller = get<T>();
+    _controller?.onReady(this);
     super.onMount();
   }
 
@@ -39,7 +50,7 @@ mixin UseStateController<T extends StateController> on GameComponent {
   void update(double dt) {
     if (!shouldRemove && !_doUpdate) {
       _doUpdate = true;
-      controller.update(dt);
+      _controller?.update(dt);
     }
     super.update(dt);
   }
@@ -52,7 +63,10 @@ mixin UseStateController<T extends StateController> on GameComponent {
 
   @override
   void onRemove() {
-    controller.onRemove(this);
+    _controller?.onRemove(this);
+    if (_controller?.components.isEmpty == true) {
+      _controller = null;
+    }
     super.onRemove();
   }
 

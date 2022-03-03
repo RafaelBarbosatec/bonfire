@@ -65,7 +65,7 @@ class Knight extends SimplePlayer
 
   @override
   void joystickAction(JoystickActionEvent event) {
-    if (!isDead) {
+    if (hasController) {
       controller.handleJoystickAction(event);
     }
     super.joystickAction(event);
@@ -135,21 +135,25 @@ class Knight extends SimplePlayer
   @override
   void receiveDamage(double damage, dynamic from) {
     super.receiveDamage(damage, from);
-    controller.onReceiveDamage(damage);
+    if (hasController) {
+      controller.onReceiveDamage(damage);
+    }
   }
 
   void execShowEmote() {
-    gameRef.add(
-      AnimatedFollowerObject(
-        animation: CommonSpriteSheet.emote,
-        target: this,
-        size: Vector2.all(width / 2),
-        positionFromTarget: Vector2(
-          18,
-          -6,
+    if (hasGameRef) {
+      gameRef.add(
+        AnimatedFollowerObject(
+          animation: CommonSpriteSheet.emote,
+          target: this,
+          size: Vector2.all(width / 2),
+          positionFromTarget: Vector2(
+            18,
+            -6,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   void changeControllerToVisibleEnemy() {

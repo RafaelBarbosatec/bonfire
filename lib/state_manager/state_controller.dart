@@ -17,16 +17,28 @@ abstract class GameComponentEvent {}
 
 abstract class StateController<T extends GameComponent> {
   final List<T> components = [];
-  T get component => components.first;
-  late BonfireGameInterface gameRef;
+  T? get component => components.isNotEmpty ? components.first : null;
+  BonfireGameInterface? _gameRef;
+
+  BonfireGameInterface get gameRef {
+    if (_gameRef == null) {
+      throw StateError(
+        'Cannot find reference $BonfireGameInterface in the component',
+      );
+    }
+    return _gameRef!;
+  }
 
   void update(double dt) {}
   void onReady(T component) {
     components.add(component);
-    gameRef = component.gameRef;
+    _gameRef = component.gameRef;
   }
 
   void onRemove(T component) {
     components.remove(component);
+    if (components.isEmpty) {
+      _gameRef = null;
+    }
   }
 }

@@ -22,12 +22,13 @@ class GoblinController extends StateController<Goblin> {
   @override
   void update(double dt) {
     if (!enableBehaviors) return;
+    if (component == null) return;
 
     _seePlayerToAttackMelee = false;
 
-    component.seeAndMoveToPlayer(
+    component?.seeAndMoveToPlayer(
       closePlayer: (player) {
-        component.execAttack(attack);
+        component?.execAttack(attack);
       },
       observed: () {
         _seePlayerToAttackMelee = true;
@@ -36,16 +37,16 @@ class GoblinController extends StateController<Goblin> {
     );
 
     if (!_seePlayerToAttackMelee) {
-      component.seeAndMoveToAttackRange(
+      component?.seeAndMoveToAttackRange(
         minDistanceFromPlayer: DungeonMap.tileSize * 2,
         positioned: (p) {
-          component.execAttackRange(attack);
+          component?.execAttackRange(attack);
         },
         radiusVision: DungeonMap.tileSize * 3,
         notObserved: () {
-          component.runRandomMovement(
+          component?.runRandomMovement(
             dt,
-            speed: component.speed / 2,
+            speed: component!.speed / 2,
             maxDistance: (DungeonMap.tileSize * 3).toInt(),
           );
         },
