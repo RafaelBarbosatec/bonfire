@@ -37,7 +37,6 @@ class KnightController extends StateController<Knight> {
 
   @override
   void update(double dt) {
-    if (component.isDead) return;
     if (component.checkInterval('seeEnemy', 250, dt)) {
       component.seeEnemy(
         radiusVision: component.width * 4,

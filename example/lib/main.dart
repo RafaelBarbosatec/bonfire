@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/game_manual_map.dart';
+import 'package:example/shared/enemy/goblin_controller.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
 import 'package:example/shared/player/knight_controller.dart';
 import 'package:example/simple_example/simple_example_game.dart';
@@ -16,6 +17,7 @@ void main() async {
   }
 
   BonfireInjector().put((i) => KnightController());
+  BonfireInjector().put((i) => GoblinController());
   BonfireInjector().put(
     (i) => BarLifeController(),
     isSingleton: true,

@@ -65,7 +65,9 @@ class Knight extends SimplePlayer
 
   @override
   void joystickAction(JoystickActionEvent event) {
-    controller.handleJoystickAction(event);
+    if (!isDead) {
+      controller.handleJoystickAction(event);
+    }
     super.joystickAction(event);
   }
 
@@ -159,7 +161,7 @@ class Knight extends SimplePlayer
             .cast<Goblin>();
         if (v.isNotEmpty) {
           enemyControlled = v.first;
-          enemyControlled?.enableBehaviors = false;
+          enemyControlled?.controller.enableBehaviors = false;
           gameRef.addJoystickObserver(
             enemyControlled!,
             cleanObservers: true,
@@ -172,7 +174,7 @@ class Knight extends SimplePlayer
           cleanObservers: true,
           moveCameraToTarget: true,
         );
-        enemyControlled?.enableBehaviors = true;
+        enemyControlled?.controller.enableBehaviors = true;
         enemyControlled = null;
       }
     }
