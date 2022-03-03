@@ -22,17 +22,6 @@ class Knight extends SimplePlayer
   bool showBgRangeAttack = false;
   Goblin? enemyControlled;
 
-  Rect _rectHover = Rect.fromLTWH(
-    0,
-    0,
-    DungeonMap.tileSize,
-    DungeonMap.tileSize,
-  );
-  Paint paintHover = new Paint()
-    ..color = Colors.white
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 2;
-
   BarLifeController? barLifeController;
 
   Knight(Vector2 position)
@@ -76,7 +65,7 @@ class Knight extends SimplePlayer
 
   @override
   void joystickAction(JoystickActionEvent event) {
-    controller.handleInteractJoystick(event);
+    controller.handleJoystickAction(event);
     super.joystickAction(event);
   }
 
@@ -139,9 +128,6 @@ class Knight extends SimplePlayer
   void render(Canvas c) {
     super.render(c);
     _drawDirectionAttack(c);
-    if (_rectHover.left != 0 || _rectHover.top != 0) {
-      c.drawRect(_rectHover, paintHover);
-    }
   }
 
   @override

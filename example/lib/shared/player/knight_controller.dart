@@ -50,7 +50,7 @@ class KnightController extends GameComponentController<Knight> {
     super.update(dt);
   }
 
-  void handleInteractJoystick(JoystickActionEvent event) {
+  void handleJoystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN) {
       if (event.id == LogicalKeyboardKey.space.keyId ||
           event.id == PlayerAttackType.AttackMelee) {
