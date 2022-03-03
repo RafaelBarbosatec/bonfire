@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
 
 ///
@@ -14,49 +13,20 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 23/02/22
 
-typedef EventChanged<T> = void Function(T value);
+abstract class GameComponentEvent {}
 
-class EventMap<T> {
-  final Type type;
-  final EventChanged<T> onEvent;
+abstract class StateController<T extends GameComponent> {
+  final List<T> components = [];
+  T get component => components.first;
+  late BonfireGameInterface gameRef;
 
-  EventMap(this.type, this.onEvent);
-}
-
-mixin StateController<T extends GameStateController> on GameComponent {
-  late final T controller;
-
-  bool _doUpdate = false;
-
-  @override
-  void onMount() {
-    controller = BonfireInjector().get();
-    controller.onReady(this);
-    super.onMount();
+  void update(double dt) {}
+  void onReady(T component) {
+    components.add(component);
+    gameRef = component.gameRef;
   }
 
-  @override
-  void update(double dt) {
-    if (!shouldRemove && !_doUpdate) {
-      _doUpdate = true;
-      controller.update(dt);
-    }
-    super.update(dt);
-  }
-
-  @override
-  void render(Canvas c) {
-    _doUpdate = false;
-    super.render(c);
-  }
-
-  @override
-  void onRemove() {
-    controller.onRemove(this);
-    super.onRemove();
-  }
-
-  T get<T extends GameStateController>() {
-    return BonfireInjector().get();
+  void onRemove(T component) {
+    components.remove(component);
   }
 }

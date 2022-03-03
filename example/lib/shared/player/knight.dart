@@ -13,7 +13,7 @@ import 'knight_controller.dart';
 enum PlayerAttackType { AttackMelee, AttackRange }
 
 class Knight extends SimplePlayer
-    with Lighting, ObjectCollision, StateController<KnightController> {
+    with Lighting, ObjectCollision, UseStateController<KnightController> {
   static final double maxSpeed = DungeonMap.tileSize * 3;
 
   double angleRadAttack = 0.0;
@@ -278,8 +278,7 @@ class Knight extends SimplePlayer
   @override
   void onMount() {
     barLifeController = get();
-    barLifeController?.maxLife = maxLife;
-    barLifeController?.maxStamina = 100;
+    barLifeController?.configure(maxLife: maxLife, maxStamina: 100);
     super.onMount();
   }
 

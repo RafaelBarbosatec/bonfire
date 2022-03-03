@@ -15,7 +15,7 @@ import 'package:flutter/services.dart';
 /// on 23/02/22
 ///
 
-class KnightController extends GameStateController<Knight> {
+class KnightController extends StateController<Knight> {
   double stamina = 100;
   double attack = 20;
   bool canShowEmote = true;

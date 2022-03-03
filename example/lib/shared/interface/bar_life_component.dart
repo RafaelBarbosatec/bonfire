@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'bar_life_controller.dart';
 
 class BarLifeComponent extends InterfaceComponent
-    with StateController<BarLifeController> {
+    with UseStateController<BarLifeController> {
   final double padding = 20;
   final double widthBar = 90;
   final double strokeWidth = 12;

@@ -4,7 +4,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/assets_loader.dart';
 
 class AnimatedFollowerObject extends GameComponent
-    with Follower, WithSpriteAnimation, WithAssetsLoader {
+    with Follower, UseSpriteAnimation, UseAssetsLoader {
   final bool loopAnimation;
 
   AnimatedFollowerObject({
