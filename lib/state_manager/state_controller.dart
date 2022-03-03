@@ -23,7 +23,7 @@ class EventMap<T> {
   EventMap(this.type, this.onEvent);
 }
 
-mixin StateController<T extends GameComponentController> on GameComponent {
+mixin StateController<T extends GameStateController> on GameComponent {
   late final T controller;
 
   bool _doUpdate = false;
@@ -31,9 +31,7 @@ mixin StateController<T extends GameComponentController> on GameComponent {
   @override
   void onMount() {
     controller = BonfireInjector().get();
-    controller.components.add(this);
-    controller.gameRef = gameRef;
-    controller.onReady();
+    controller.onReady(this);
     super.onMount();
   }
 
@@ -54,11 +52,11 @@ mixin StateController<T extends GameComponentController> on GameComponent {
 
   @override
   void onRemove() {
-    controller.components.remove(this);
+    controller.onRemove(this);
     super.onRemove();
   }
 
-  T get<T extends GameComponentController>() {
+  T get<T extends GameStateController>() {
     return BonfireInjector().get();
   }
 }

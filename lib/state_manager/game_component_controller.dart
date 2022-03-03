@@ -15,11 +15,18 @@ import 'package:bonfire/bonfire.dart';
 
 abstract class GameComponentEvent {}
 
-abstract class GameComponentController<T extends GameComponent> {
+abstract class GameStateController<T extends GameComponent> {
   final List<T> components = [];
   T get component => components.first;
   late BonfireGameInterface gameRef;
 
   void update(double dt) {}
-  void onReady() {}
+  void onReady(T component) {
+    components.add(component);
+    gameRef = component.gameRef;
+  }
+
+  void onRemove(T component) {
+    components.remove(component);
+  }
 }

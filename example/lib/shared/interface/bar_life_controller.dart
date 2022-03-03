@@ -11,7 +11,7 @@ import 'package:bonfire/bonfire.dart';
 ///
 /// Rafaelbarbosatec
 /// on 25/02/22
-class BarLifeController extends GameComponentController {
+class BarLifeController extends GameStateController {
   double maxLife = 0;
   double life = 0;
   double maxStamina = 100;

@@ -15,7 +15,7 @@ import 'package:flutter/services.dart';
 /// on 23/02/22
 ///
 
-class KnightController extends GameComponentController<Knight> {
+class KnightController extends GameStateController<Knight> {
   double stamina = 100;
   double attack = 20;
   bool canShowEmote = true;
@@ -24,8 +24,15 @@ class KnightController extends GameComponentController<Knight> {
   double radAngleRangeAttack = 0;
 
   @override
-  void onReady() {
-    super.onReady();
+  void onReady(Knight component) {
+    // TODO: implement onReady
+    super.onReady(component);
+  }
+
+  @override
+  void onRemove(Knight component) {
+    // TODO: implement onRemove
+    super.onRemove(component);
   }
 
   @override
