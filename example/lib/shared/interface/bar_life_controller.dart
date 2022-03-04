@@ -1,5 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
+import 'bar_life_component.dart';
+
 ///
 /// Created by
 ///
@@ -11,7 +13,7 @@ import 'package:bonfire/bonfire.dart';
 ///
 /// Rafaelbarbosatec
 /// on 25/02/22
-class BarLifeController extends StateController {
+class BarLifeController extends StateController<BarLifeComponent> {
   double _maxLife = 100;
   double _maxStamina = 100;
   get maxLife => _maxLife;
