@@ -69,8 +69,4 @@ mixin UseStateController<T extends StateController> on GameComponent {
     }
     super.onRemove();
   }
-
-  T get<T extends StateController>() {
-    return BonfireInjector().get();
-  }
 }

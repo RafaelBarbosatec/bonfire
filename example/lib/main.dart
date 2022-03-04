@@ -17,11 +17,8 @@ void main() async {
   }
 
   BonfireInjector().put((i) => KnightController());
-  BonfireInjector().put((i) => GoblinController());
-  BonfireInjector().put(
-    (i) => BarLifeController(),
-    isSingleton: true,
-  );
+  BonfireInjector().putFactory((i) => GoblinController());
+  BonfireInjector().put((i) => BarLifeController());
 
   runApp(
     MaterialApp(

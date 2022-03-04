@@ -1,5 +1,6 @@
 import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:flutter/cupertino.dart';
 
 ///
 /// Created by
@@ -15,7 +16,7 @@ import 'package:bonfire/bonfire.dart';
 
 abstract class GameComponentEvent {}
 
-abstract class StateController<T extends GameComponent> {
+abstract class StateController<T extends GameComponent> extends ChangeNotifier {
   final List<T> components = [];
   T? get component => components.isNotEmpty ? components.first : null;
   BonfireGameInterface? _gameRef;

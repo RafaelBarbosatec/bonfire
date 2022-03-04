@@ -1,3 +1,5 @@
+import 'package:bonfire/state_manager/state_controller.dart';
+
 ///
 /// Created by
 ///
@@ -26,11 +28,13 @@ class BonfireInjector {
   static final Map<Type, BuildDependency> _dependencies = {};
   static final Map<Type, dynamic> _dependenciesSingleton = {};
 
-  void put<T>(BuildDependency<T> build, {bool isSingleton = false}) {
+  void put<T>(BuildDependency<T> build) {
     _dependencies[T] = build;
-    if (isSingleton) {
-      _dependenciesSingleton[T] = null;
-    }
+    _dependenciesSingleton[T] = null;
+  }
+
+  void putFactory<T>(BuildDependency<T> build) {
+    _dependencies[T] = build;
   }
 
   T get<T>() {
@@ -51,4 +55,8 @@ class BonfireInjector {
   void dispose() {
     _dependencies.clear();
   }
+}
+
+T get<T extends StateController>() {
+  return BonfireInjector().get<T>();
 }
