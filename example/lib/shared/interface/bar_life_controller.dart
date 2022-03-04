@@ -24,12 +24,12 @@ class BarLifeController extends StateController {
   double get stamina => _stamina;
 
   set life(double newLife) {
-    life = newLife;
+    _life = newLife;
     notifyListeners();
   }
 
   set stamina(double newStamina) {
-    _life = newStamina;
+    _stamina = newStamina;
     notifyListeners();
   }
 

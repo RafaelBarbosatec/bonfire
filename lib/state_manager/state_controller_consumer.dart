@@ -19,7 +19,7 @@ typedef StateControllerWidgetBuilder<T> = Widget Function(
 class StateControllerConsumer<T extends StateController>
     extends StatefulWidget {
   final T? controller;
-  final StateControllerWidgetBuilder builder;
+  final StateControllerWidgetBuilder<T> builder;
   const StateControllerConsumer({
     Key? key,
     required this.builder,
@@ -49,7 +49,7 @@ class _StateControllerConsumerState<T extends StateController>
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context, controller);
+    return (widget as StateControllerConsumer<T>).builder(context, controller);
   }
 
   void _listener() {
