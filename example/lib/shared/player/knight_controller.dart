@@ -54,7 +54,6 @@ class KnightController extends StateController<Knight> {
       }
     }
     _verifyStamina(dt);
-    super.update(dt);
   }
 
   void handleJoystickAction(JoystickActionEvent event) {

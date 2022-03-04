@@ -20,6 +20,8 @@ abstract class StateController<T extends GameComponent> extends ChangeNotifier {
   final List<T> components = [];
   T? get component => components.isNotEmpty ? components.first : null;
 
+  void update(double dt);
+
   BonfireGameInterface get gameRef {
     if (component == null) {
       throw StateError(
@@ -29,7 +31,6 @@ abstract class StateController<T extends GameComponent> extends ChangeNotifier {
     return component!.gameRef;
   }
 
-  void update(double dt) {}
   void onReady(T component) {
     components.add(component);
   }

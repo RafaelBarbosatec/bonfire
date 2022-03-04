@@ -17,11 +17,27 @@ class BarLifeController extends StateController {
   get maxLife => _maxLife;
   get maxStamina => _maxStamina;
 
-  double life = 0;
-  double stamina = 0;
+  double _life = 0;
+  double _stamina = 0;
+
+  double get life => _life;
+  double get stamina => _stamina;
+
+  set life(double newLife) {
+    life = newLife;
+    notifyListeners();
+  }
+
+  set stamina(double newStamina) {
+    _life = newStamina;
+    notifyListeners();
+  }
 
   void configure({required double maxLife, required double maxStamina}) {
     _maxLife = maxLife;
     _maxStamina = maxStamina;
   }
+
+  @override
+  void update(double dt) {}
 }
