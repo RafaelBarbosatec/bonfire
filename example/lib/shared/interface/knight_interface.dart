@@ -99,7 +99,19 @@ class KnightInterface extends GameInterface {
       position: Vector2(350, 20),
       onTapComponent: (selected) {
         if (gameRef.player != null) {
-          (gameRef.player as Knight).showEmote();
+          // (gameRef.player as Knight).showEmote();
+          final enemy = gameRef.visibleEnemies().first;
+          gameRef.add(SceneBuilderComponent([
+            CameraSceneAction.position(Vector2(800, 800)),
+            CameraSceneAction.target(gameRef.player!),
+            CameraSceneAction.target(enemy),
+            MoveComponentSceneAction(gameRef.player!, Vector2(250, 130),
+                speed: 100),
+            CameraSceneAction.target(enemy),
+            CameraSceneAction.position(Vector2(200, 200)),
+            CameraSceneAction.position(Vector2(0, 200)),
+            CameraSceneAction.target(gameRef.player!),
+          ]));
         }
       },
     ));
