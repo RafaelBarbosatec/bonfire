@@ -19,27 +19,22 @@ abstract class GameComponentEvent {}
 abstract class StateController<T extends GameComponent> extends ChangeNotifier {
   final List<T> components = [];
   T? get component => components.isNotEmpty ? components.first : null;
-  BonfireGameInterface? _gameRef;
 
   BonfireGameInterface get gameRef {
-    if (_gameRef == null) {
+    if (component == null) {
       throw StateError(
         'Cannot find reference $BonfireGameInterface in the component',
       );
     }
-    return _gameRef!;
+    return component!.gameRef;
   }
 
   void update(double dt) {}
   void onReady(T component) {
     components.add(component);
-    _gameRef = component.gameRef;
   }
 
   void onRemove(T component) {
     components.remove(component);
-    if (components.isEmpty) {
-      _gameRef = null;
-    }
   }
 }
