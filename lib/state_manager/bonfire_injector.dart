@@ -54,6 +54,7 @@ class BonfireInjector {
 
   void dispose() {
     _dependencies.clear();
+    _dependenciesSingleton.clear();
   }
 }
 
