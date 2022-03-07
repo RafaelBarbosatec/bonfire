@@ -14,8 +14,6 @@ import 'package:flutter/cupertino.dart';
 /// Rafaelbarbosatec
 /// on 23/02/22
 
-abstract class GameComponentEvent {}
-
 abstract class StateController<T extends GameComponent> extends ChangeNotifier {
   final List<T> components = [];
   T? get component => components.isNotEmpty ? components.first : null;
