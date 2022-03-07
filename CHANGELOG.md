@@ -1,10 +1,8 @@
 # [NEXT]
-- Experimental State manager. Example [here](https://github.com/RafaelBarbosatec/bonfire/issues/218#issuecomment-1058121200)
-    - abstract class`StateController`;
-    - mixin `UseStateController`;
-    - Widget `StateControllerConsumer`;
-    - `BonfireInjector`;
 
+- Fix bug zoom out.
+- Adds `animateZoom` method in `Camera`.
+- Experimental State manager. Example [here](https://github.com/RafaelBarbosatec/bonfire/issues/218#issuecomment-1058121200)
 
 # [2.2.5]
 - Fix crash mentioned in th issue [#255](https://github.com/RafaelBarbosatec/bonfire/issues/225)

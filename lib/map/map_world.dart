@@ -116,7 +116,7 @@ class MapWorld extends MapGame {
 
     if (isUpdate) {
       lastCamera = Vector2.zero();
-      lastMinorZoom = 1.0;
+      lastMinorZoom = gameRef.camera.zoom;
     }
 
     tileSize = tiles.first.width;
