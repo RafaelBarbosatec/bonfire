@@ -31,8 +31,8 @@ class BonfireCamera extends Camera {
   Rect get cameraRect => Rect.fromLTWH(
         position.x,
         position.y,
-        (canvasSize.x),
-        (canvasSize.y),
+        (canvasSize.x * _zoomFactor()),
+        (canvasSize.y * _zoomFactor()),
       );
 
   Rect get cameraRectWithSpacing => Rect.fromLTWH(

@@ -1,4 +1,5 @@
 # [NEXT]
+- Fix bug zoom out.
 - Adds `animateZoom` method in `Camera`.
 
 # [2.2.5]
