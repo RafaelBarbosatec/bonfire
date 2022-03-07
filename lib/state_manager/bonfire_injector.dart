@@ -1,5 +1,3 @@
-import 'package:bonfire/state_manager/state_controller.dart';
-
 ///
 /// Created by
 ///
@@ -56,8 +54,4 @@ class BonfireInjector {
     _dependencies.clear();
     _dependenciesSingleton.clear();
   }
-}
-
-T get<T extends StateController>() {
-  return BonfireInjector().get<T>();
 }

@@ -283,7 +283,7 @@ class Knight extends SimplePlayer
 
   @override
   void onMount() {
-    barLifeController = get();
+    barLifeController = BonfireInjector().get<BarLifeController>();
     barLifeController?.configure(maxLife: maxLife, maxStamina: 100);
     super.onMount();
   }

@@ -14,15 +14,6 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 23/02/22
 
-typedef EventChanged<T> = void Function(T value);
-
-class EventMap<T> {
-  final Type type;
-  final EventChanged<T> onEvent;
-
-  EventMap(this.type, this.onEvent);
-}
-
 mixin UseStateController<T extends StateController> on GameComponent {
   T? _controller;
 
@@ -41,7 +32,7 @@ mixin UseStateController<T extends StateController> on GameComponent {
 
   @override
   void onMount() {
-    _controller = get<T>();
+    _controller = BonfireInjector().get<T>();
     _controller?.onReady(this);
     super.onMount();
   }

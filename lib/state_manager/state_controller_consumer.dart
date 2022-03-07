@@ -36,7 +36,7 @@ class _StateControllerConsumerState<T extends StateController>
   late T controller;
   @override
   void initState() {
-    controller = (widget as StateControllerConsumer<T>).controller ?? get<T>();
+    controller = myWidget.controller ?? BonfireInjector().get<T>();
     controller.addListener(_listener);
     super.initState();
   }
@@ -49,12 +49,18 @@ class _StateControllerConsumerState<T extends StateController>
 
   @override
   Widget build(BuildContext context) {
-    return (widget as StateControllerConsumer<T>).builder(context, controller);
+    return myWidget.builder(context, controller);
+  }
+
+  StateControllerConsumer<T> get myWidget {
+    return widget as StateControllerConsumer<T>;
   }
 
   void _listener() {
     Future.delayed(Duration.zero, () {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 }
