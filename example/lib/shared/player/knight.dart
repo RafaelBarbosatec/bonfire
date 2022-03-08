@@ -95,13 +95,13 @@ class Knight extends SimplePlayer
     );
   }
 
-  void execRangeAttack(double angle, double attack) {
+  void execRangeAttack(double angle, double damage) {
     this.simpleAttackRangeByAngle(
       animation: CommonSpriteSheet.fireBallRight,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       angle: angle,
       size: Vector2.all(width * 0.7),
-      damage: attack,
+      damage: damage,
       speed: maxSpeed * 2,
       collision: CollisionConfig(
         collisions: [
