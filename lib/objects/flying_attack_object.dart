@@ -6,8 +6,8 @@ import 'package:flutter/widgets.dart';
 
 class FlyingAttackObject extends GameComponent
     with
-        WithSpriteAnimation,
-        WithAssetsLoader,
+        UseSpriteAnimation,
+        UseAssetsLoader,
         ObjectCollision,
         Lighting,
         Movement {

@@ -3,7 +3,7 @@ import 'package:bonfire/util/assets_loader.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 
-class RotationPlayer extends Player with WithAssetsLoader {
+class RotationPlayer extends Player with UseAssetsLoader {
   SpriteAnimation? animIdle;
   SpriteAnimation? animRun;
   SpriteAnimation? animation;

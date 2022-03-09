@@ -235,7 +235,6 @@ class _TalkDialogState extends State<TalkDialog> {
   }
 
   List<Widget> _buildPerson(PersonSayDirection direction) {
-    print(currentSay.person);
     if (currentSay.personSayDirection == direction) {
       return [
         if (direction == PersonSayDirection.RIGHT && currentSay.person != null)

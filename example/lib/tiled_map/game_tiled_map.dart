@@ -7,6 +7,7 @@ import 'package:example/shared/decoration/chest.dart';
 import 'package:example/shared/decoration/spikes.dart';
 import 'package:example/shared/decoration/torch.dart';
 import 'package:example/shared/enemy/goblin.dart';
+import 'package:example/shared/interface/bar_life_widget.dart';
 import 'package:example/shared/interface/knight_interface.dart';
 import 'package:example/shared/player/knight.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -79,6 +80,12 @@ class GameTiledMap extends StatelessWidget {
           ),
           background: BackgroundColorGame(Colors.blueGrey[900]!),
           lightingColorGame: Colors.black.withOpacity(0.7),
+          overlayBuilderMap: {
+            'barLife': (context, game) => BarLifeWidget(),
+          },
+          initialActiveOverlays: [
+            'barLife',
+          ],
           cameraConfig: CameraConfig(
             smoothCameraEnabled: true,
             smoothCameraSpeed: 2,

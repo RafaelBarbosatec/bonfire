@@ -10,7 +10,7 @@ import 'package:bonfire/util/assets_loader.dart';
 ///
 /// You can use ImageSprite or Animation[FlameAnimation.Animation]
 class GameDecoration extends GameComponent
-    with WithSpriteAnimation, WithSprite, WithAssetsLoader {
+    with UseSpriteAnimation, UseSprite, UseAssetsLoader {
   GameDecoration({
     Sprite? sprite,
     required Vector2 position,

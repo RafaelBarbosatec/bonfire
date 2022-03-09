@@ -15,7 +15,7 @@ import 'package:flame/components.dart';
 ///
 /// Rafaelbarbosatec
 /// on 04/02/22
-mixin WithSpriteAnimation on GameComponent {
+mixin UseSpriteAnimation on GameComponent {
   /// Animation that will be drawn on the screen.
   SpriteAnimation? animation;
 
