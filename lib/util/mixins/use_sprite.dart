@@ -15,7 +15,7 @@ import 'package:flame/sprite.dart';
 ///
 /// Rafaelbarbosatec
 /// on 04/02/22
-mixin WithSprite on GameComponent {
+mixin UseSprite on GameComponent {
   Sprite? sprite;
 
   @override

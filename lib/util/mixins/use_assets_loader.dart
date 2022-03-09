@@ -13,7 +13,7 @@ import '../assets_loader.dart';
 ///
 /// Rafaelbarbosatec
 /// on 04/02/22
-mixin WithAssetsLoader on GameComponent {
+mixin UseAssetsLoader on GameComponent {
   /// Used to load assets in [onLoad]
   AssetsLoader? loader = AssetsLoader();
   @override

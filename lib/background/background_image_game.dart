@@ -13,7 +13,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_assets_manager.dart';
 
 /// Used to define parallax image as background
-class BackgroundImageGame extends GameBackground with WithSprite {
+class BackgroundImageGame extends GameBackground with UseSprite {
   final int? id;
   final String imagePath;
   final Vector2 offset;

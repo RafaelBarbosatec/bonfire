@@ -5,7 +5,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/assets_loader.dart';
 
 class AnimatedObjectOnce extends GameComponent
-    with WithSpriteAnimation, WithAssetsLoader, Lighting {
+    with UseSpriteAnimation, UseAssetsLoader, Lighting {
   final VoidCallback? onFinish;
   final VoidCallback? onStartAnimation;
   bool _notifyStart = false;

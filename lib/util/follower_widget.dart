@@ -111,20 +111,25 @@ class _FollowerWidgetState extends State<FollowerWidget> {
   }
 
   void _startFollow() {
-    final camera = widget.target.gameRef.camera;
-    _timerUpdate = async.Timer.periodic(Duration(milliseconds: 16), (timer) {
-      if (targetPosition != widget.target.position ||
-          camera.zoom != lastZoom ||
-          camera.position != lastCameraPosition) {
-        lastZoom = camera.zoom;
-        targetPosition = widget.target.position.clone();
-        lastCameraPosition = camera.position.clone();
-        if (mounted) {
-          setState(() {
-            widgetPosition = widget.target.screenPosition().toOffset();
-          });
-        }
-      }
-    });
+    if (widget.target.hasGameRef) {
+      final camera = widget.target.gameRef.camera;
+      _timerUpdate = async.Timer.periodic(
+        Duration(milliseconds: 16),
+        (timer) {
+          if (targetPosition != widget.target.position ||
+              camera.zoom != lastZoom ||
+              camera.position != lastCameraPosition) {
+            lastZoom = camera.zoom;
+            targetPosition = widget.target.position.clone();
+            lastCameraPosition = camera.position.clone();
+            if (mounted) {
+              setState(() {
+                widgetPosition = widget.target.screenPosition().toOffset();
+              });
+            }
+          }
+        },
+      );
+    }
   }
 }

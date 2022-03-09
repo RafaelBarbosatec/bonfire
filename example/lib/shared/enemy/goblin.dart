@@ -4,16 +4,15 @@ import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:example/shared/util/enemy_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
+import 'goblin_controller.dart';
+
 class Goblin extends SimpleEnemy
     with
         ObjectCollision,
         JoystickListener,
         MovementByJoystick,
-        AutomaticRandomMovement {
-  double attack = 20;
-  bool _seePlayerToAttackMelee = false;
-  bool enableBehaviors = true;
-
+        AutomaticRandomMovement,
+        UseStateController<GoblinController> {
   Goblin(Vector2 position)
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,
@@ -41,42 +40,6 @@ class Goblin extends SimpleEnemy
   }
 
   @override
-  void update(double dt) {
-    super.update(dt);
-    if (this.isDead) return;
-    if (!enableBehaviors) return;
-
-    _seePlayerToAttackMelee = false;
-
-    this.seeAndMoveToPlayer(
-      closePlayer: (player) {
-        execAttack();
-      },
-      observed: () {
-        _seePlayerToAttackMelee = true;
-      },
-      radiusVision: DungeonMap.tileSize * 1.5,
-    );
-
-    if (!_seePlayerToAttackMelee) {
-      this.seeAndMoveToAttackRange(
-        minDistanceFromPlayer: DungeonMap.tileSize * 2,
-        positioned: (p) {
-          execAttackRange();
-        },
-        radiusVision: DungeonMap.tileSize * 3,
-        notObserved: () {
-          runRandomMovement(
-            dt,
-            speed: speed / 2,
-            maxDistance: (DungeonMap.tileSize * 3).toInt(),
-          );
-        },
-      );
-    }
-  }
-
-  @override
   void render(Canvas canvas) {
     super.render(canvas);
     this.drawDefaultLifeBar(
@@ -99,7 +62,7 @@ class Goblin extends SimpleEnemy
     removeFromParent();
   }
 
-  void execAttackRange() {
+  void execAttackRange(double damage) {
     if (gameRef.player != null && gameRef.player?.isDead == true) return;
     this.simpleAttackRange(
       animationRight: CommonSpriteSheet.fireBallRight,
@@ -109,7 +72,7 @@ class Goblin extends SimpleEnemy
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       id: 35,
       size: Vector2.all(width * 0.9),
-      damage: attack,
+      damage: damage,
       speed: DungeonMap.tileSize * 3,
       collision: CollisionConfig(
         collisions: [
@@ -127,11 +90,11 @@ class Goblin extends SimpleEnemy
     );
   }
 
-  void execAttack() {
+  void execAttack(double damage) {
     if (gameRef.player != null && gameRef.player?.isDead == true) return;
     this.simpleAttackMelee(
       size: Vector2.all(width),
-      damage: attack / 2,
+      damage: damage / 2,
       interval: 400,
       sizePush: DungeonMap.tileSize / 2,
       animationDown: CommonSpriteSheet.blackAttackEffectBottom,

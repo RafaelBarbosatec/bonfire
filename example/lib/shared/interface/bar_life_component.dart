@@ -1,16 +1,13 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/shared/player/knight.dart';
 import 'package:flutter/material.dart';
 
-class BarLifeComponent extends InterfaceComponent {
-  double padding = 20;
-  double widthBar = 90;
-  double strokeWidth = 12;
+import 'bar_life_controller.dart';
 
-  double maxLife = 0;
-  double life = 0;
-  double maxStamina = 100;
-  double stamina = 0;
+class BarLifeComponent extends InterfaceComponent
+    with UseStateController<BarLifeController> {
+  final double padding = 20;
+  final double widthBar = 90;
+  final double strokeWidth = 12;
 
   BarLifeComponent()
       : super(
@@ -19,18 +16,6 @@ class BarLifeComponent extends InterfaceComponent {
           spriteUnselected: Sprite.load('health_ui.png'),
           size: Vector2(120, 40),
         );
-
-  @override
-  void update(double dt) {
-    if (this.gameRef.player != null) {
-      life = this.gameRef.player?.life ?? 0.0;
-      maxLife = this.gameRef.player?.maxLife ?? 0.0;
-      if (this.gameRef.player is Knight) {
-        stamina = (this.gameRef.player as Knight).stamina;
-      }
-    }
-    super.update(dt);
-  }
 
   @override
   void render(Canvas c) {
@@ -52,7 +37,7 @@ class BarLifeComponent extends InterfaceComponent {
           ..strokeWidth = strokeWidth
           ..style = PaintingStyle.fill);
 
-    double currentBarLife = (life * widthBar) / maxLife;
+    double currentBarLife = (controller.life * widthBar) / controller.maxLife;
 
     canvas.drawLine(
         Offset(xBar, yBar),
@@ -67,7 +52,8 @@ class BarLifeComponent extends InterfaceComponent {
     double xBar = position.x + 26;
     double yBar = position.y + 28;
 
-    double currentBarStamina = (stamina * widthBar) / maxStamina;
+    double currentBarStamina =
+        (controller.stamina * widthBar) / controller.maxStamina;
 
     canvas.drawLine(
         Offset(xBar, yBar),
