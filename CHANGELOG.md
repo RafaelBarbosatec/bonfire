@@ -1,5 +1,4 @@
-# [NEXT]
-
+# [2.3.0]
 - Fix bug zoom out.
 - Adds `animateZoom` method in `Camera`.
 - Experimental State manager. Example [here](https://github.com/RafaelBarbosatec/bonfire/issues/218#issuecomment-1058121200)
