@@ -1,3 +1,6 @@
+# [Next]
+- Update example to Android embedding V2.
+
 # [2.3.0]
 - Fix bug in camera zoom out.
 - Add `animateZoom` method in `Camera`.
