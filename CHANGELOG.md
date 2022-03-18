@@ -1,20 +1,28 @@
+# [Next]
+- Update example to Android embedding V2.
+
+# [2.3.0]
+- Fix bug in camera zoom out.
+- Add `animateZoom` method in `Camera`.
+- Add Experimental State Manager. Example [here](https://github.com/RafaelBarbosatec/bonfire/issues/218#issuecomment-1058121200).
+
 # [2.2.5]
-- Fix crash mentioned in th issue [#255](https://github.com/RafaelBarbosatec/bonfire/issues/225)
-- Fix crash mentioned in th issue [#227](https://github.com/RafaelBarbosatec/bonfire/issues/227)
+- Fix crash mentioned in [#255](https://github.com/RafaelBarbosatec/bonfire/issues/225).
+- Fix crash mentioned in [#227](https://github.com/RafaelBarbosatec/bonfire/issues/227).
 
 # [2.2.4]
 - Improvements in `MovementByJoystick`.
-- Improvements in access to gameRef in `GameComponent`.
+- Improvements in how to access the `gameRef` from a `GameComponent`.
 - Improvements in `ImageLayer`.
-- Fix bug in `TalkDialog`. issue [#224](https://github.com/RafaelBarbosatec/bonfire/issues/224).
+- Fix issue [#224](https://github.com/RafaelBarbosatec/bonfire/issues/224) in `TalkDialog`.
 
 # [2.2.2]
 - Improvements in `DirectionAnimation` mixin.
-- Improvements in `Movement` mixin. Adds `onMove` method, you can override this to listen component movements.
-- Sets `dPadAngles` default value equals false in `MovementByJoystick`.
+- Improvements in `Movement` mixin. Added `onMove` method, which you can override to listen to component movements.
+- Set `dPadAngles` default value equals false in `MovementByJoystick`.
 
-# [2.2.1]s
-- Fix `WithSpriteAnimation`
+# [2.2.1]
+- Fix `WithSpriteAnimation`.
 
 # [2.2.0]
 - Improvements in performance.

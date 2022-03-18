@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 /// Component used to add in your [GameInterface]
 class InterfaceComponent extends GameComponent
-    with WithAssetsLoader, WithSprite, TapGesture {
+    with UseAssetsLoader, UseSprite, TapGesture {
   /// identifier
   final int id;
 

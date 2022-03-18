@@ -1,40 +1,28 @@
-import 'dart:io';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/enemy/goblin.dart';
+import 'package:example/shared/interface/bar_life_controller.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:example/shared/util/enemy_sprite_sheet.dart';
 import 'package:example/shared/util/player_sprite_sheet.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'knight_controller.dart';
+
 enum PlayerAttackType { AttackMelee, AttackRange }
 
-class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
+class Knight extends SimplePlayer
+    with Lighting, ObjectCollision, UseStateController<KnightController> {
   static final double maxSpeed = DungeonMap.tileSize * 3;
-  double attack = 20;
-  double stamina = 100;
-  bool showObserveEnemy = false;
-  bool showTalk = false;
+
   double angleRadAttack = 0.0;
   Rect? rectDirectionAttack;
   Sprite? spriteDirectionAttack;
-  bool execAttackRange = false;
-  bool canShowEmoteFromHover = true;
+  bool showBgRangeAttack = false;
   Goblin? enemyControlled;
 
-  Rect _rectHover = Rect.fromLTWH(
-    0,
-    0,
-    DungeonMap.tileSize,
-    DungeonMap.tileSize,
-  );
-  Paint paintHover = new Paint()
-    ..color = Colors.white
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 2;
+  BarLifeController? barLifeController;
 
   Knight(Vector2 position)
       : super(
@@ -67,8 +55,6 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
         ],
       ),
     );
-
-    _enableMouseGesture();
   }
 
   @override
@@ -79,28 +65,9 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   @override
   void joystickAction(JoystickActionEvent event) {
-    if (isDead) return;
-
-    if (event.id == LogicalKeyboardKey.space.keyId &&
-        event.event == ActionEvent.DOWN) {
-      actionAttack();
+    if (hasController) {
+      controller.handleJoystickAction(event);
     }
-
-    if (event.id == PlayerAttackType.AttackMelee &&
-        event.event == ActionEvent.DOWN) {
-      actionAttack();
-    }
-
-    if (event.id == PlayerAttackType.AttackRange) {
-      if (event.event == ActionEvent.MOVE) {
-        execAttackRange = true;
-        angleRadAttack = event.radAngle;
-      }
-      if (event.event == ActionEvent.UP) {
-        execAttackRange = false;
-      }
-    }
-
     super.joystickAction(event);
   }
 
@@ -117,10 +84,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     super.die();
   }
 
-  void actionAttack() {
-    if (stamina < 15) return;
-
-    decrementStamina(15);
+  void execMeleeAttack(double attack) {
     this.simpleAttackMelee(
       damage: attack,
       animationDown: CommonSpriteSheet.whiteAttackEffectBottom,
@@ -131,15 +95,13 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
     );
   }
 
-  void actionAttackRange() {
-    if (stamina < 10) return;
-
+  void execRangeAttack(double angle, double damage) {
     this.simpleAttackRangeByAngle(
       animation: CommonSpriteSheet.fireBallRight,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
-      angle: angleRadAttack,
+      angle: angle,
       size: Vector2.all(width * 0.7),
-      damage: 10,
+      damage: damage,
       speed: maxSpeed * 2,
       collision: CollisionConfig(
         collisions: [
@@ -160,31 +122,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   @override
   void update(double dt) {
-    if (this.isDead) return;
-    _verifyStamina(dt);
-
-    if (checkInterval('seeEnemy', 250, dt)) {
-      this.seeEnemy(
-        radiusVision: width * 4,
-        notObserved: () {
-          showObserveEnemy = false;
-        },
-        observed: (enemies) {
-          if (!showObserveEnemy) {
-            showObserveEnemy = true;
-            showEmote();
-          }
-          if (!showTalk) {
-            showTalk = true;
-            _showTalk(enemies.first);
-          }
-        },
-      );
-    }
-
-    if (execAttackRange && checkInterval('ATTACK_RANGE', 150, dt)) {
-      actionAttackRange();
-    }
+    barLifeController?.life = life;
     super.update(dt);
   }
 
@@ -192,51 +130,30 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   void render(Canvas c) {
     super.render(c);
     _drawDirectionAttack(c);
-    if (_rectHover.left != 0 || _rectHover.top != 0) {
-      c.drawRect(_rectHover, paintHover);
-    }
-  }
-
-  void _verifyStamina(double dt) {
-    if (stamina < 100 && checkInterval('INCREMENT_STAMINA', 100, dt)) {
-      stamina += 2;
-      if (stamina > 100) {
-        stamina = 100;
-      }
-    }
-  }
-
-  void decrementStamina(int i) {
-    stamina -= i;
-    if (stamina < 0) {
-      stamina = 0;
-    }
   }
 
   @override
   void receiveDamage(double damage, dynamic from) {
-    this.showDamage(
-      damage,
-      config: TextStyle(
-        fontSize: width / 3,
-        color: Colors.red,
-      ),
-    );
     super.receiveDamage(damage, from);
+    if (hasController) {
+      controller.onReceiveDamage(damage);
+    }
   }
 
-  void showEmote() {
-    gameRef.add(
-      AnimatedFollowerObject(
-        animation: CommonSpriteSheet.emote,
-        target: this,
-        size: Vector2.all(width / 2),
-        positionFromTarget: Vector2(
-          18,
-          -6,
+  void execShowEmote() {
+    if (hasGameRef) {
+      gameRef.add(
+        AnimatedFollowerObject(
+          animation: CommonSpriteSheet.emote,
+          target: this,
+          size: Vector2.all(width / 2),
+          positionFromTarget: Vector2(
+            18,
+            -6,
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   void changeControllerToVisibleEnemy() {
@@ -248,7 +165,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
             .cast<Goblin>();
         if (v.isNotEmpty) {
           enemyControlled = v.first;
-          enemyControlled?.enableBehaviors = false;
+          enemyControlled?.controller.enableBehaviors = false;
           gameRef.addJoystickObserver(
             enemyControlled!,
             cleanObservers: true,
@@ -261,13 +178,13 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
           cleanObservers: true,
           moveCameraToTarget: true,
         );
-        enemyControlled?.enableBehaviors = true;
+        enemyControlled?.controller.enableBehaviors = true;
         enemyControlled = null;
       }
     }
   }
 
-  void _showTalk(Enemy first) {
+  void execShowTalk(GameComponent first) {
     gameRef.camera.moveToTargetAnimated(
       first,
       zoom: 2,
@@ -338,7 +255,7 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
   }
 
   void _drawDirectionAttack(Canvas c) {
-    if (execAttackRange) {
+    if (showBgRangeAttack) {
       double radius = height;
       rectDirectionAttack = Rect.fromLTWH(
         rectCollision.center.dx - radius,
@@ -360,61 +277,33 @@ class Knight extends SimplePlayer with Lighting, ObjectCollision, MouseGesture {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     spriteDirectionAttack = await Sprite.load('direction_attack.png');
+    return super.onLoad();
   }
 
   @override
-  void onHoverEnter(int pointer, Vector2 position) {
-    if (canShowEmoteFromHover) {
-      canShowEmoteFromHover = false;
-      showEmote();
-    }
+  void onMount() {
+    barLifeController = BonfireInjector().get<BarLifeController>();
+    barLifeController?.configure(maxLife: maxLife, maxStamina: 100);
+    super.onMount();
   }
 
-  @override
-  void onHoverExit(int pointer, Vector2 position) {
-    canShowEmoteFromHover = true;
+  void execEnableBGRangeAttack(bool enabled, double angle) {
+    showBgRangeAttack = enabled;
+    angleRadAttack = angle;
   }
 
-  @override
-  void onHoverScreen(int pointer, Vector2 position) {
-    Vector2 p = gameRef.screenToWorld(position);
-    double left = p.x - (p.x % DungeonMap.tileSize);
-    double top = p.y - (p.y % DungeonMap.tileSize);
-    _rectHover = Rect.fromLTWH(left, top, _rectHover.width, _rectHover.height);
+  void execShowDamage(double damage) {
+    this.showDamage(
+      damage,
+      config: TextStyle(
+        fontSize: width / 3,
+        color: Colors.red,
+      ),
+    );
   }
 
-  @override
-  void onScroll(int pointer, Vector2 position, Vector2 scrollDelta) {
-    print(scrollDelta);
-    // do anything when use scroll of the mouse in your component
-  }
-
-  @override
-  void onMouseCancel() {
-    print('onMouseCancel');
-  }
-
-  @override
-  void onMouseTapLeft() {
-    print('onMouseTapLeft');
-  }
-
-  @override
-  void onMouseTapRight() {
-    print('onMouseTapRight');
-  }
-
-  @override
-  void onMouseTapMiddle() {
-    print('onMouseTapMiddle');
-  }
-
-  void _enableMouseGesture() {
-    if (!kIsWeb) {
-      enableMouseGesture =
-          (Platform.isAndroid || Platform.isIOS) ? false : true;
-    }
+  void updateStamina(double stamina) {
+    barLifeController?.stamina = stamina;
   }
 }

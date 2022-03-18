@@ -6,7 +6,7 @@ import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:flutter/widgets.dart';
 
-class Tile extends GameComponent with WithAssetsLoader {
+class Tile extends GameComponent with UseAssetsLoader {
   final String? type;
   final Map<String, dynamic>? properties;
   late Vector2 _positionText;
