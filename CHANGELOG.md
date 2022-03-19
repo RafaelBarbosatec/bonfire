@@ -1,4 +1,5 @@
 # [Next]
+- Fixed 8-Direction Animation mentioned in [#234](https://github.com/RafaelBarbosatec/bonfire/issues/234).
 - Update example to Android embedding V2.
 
 # [2.3.0]
@@ -7,7 +8,7 @@
 - Add Experimental State Manager. Example [here](https://github.com/RafaelBarbosatec/bonfire/issues/218#issuecomment-1058121200).
 
 # [2.2.5]
-- Fix crash mentioned in [#255](https://github.com/RafaelBarbosatec/bonfire/issues/225).
+- Fix crash mentioned in [#225](https://github.com/RafaelBarbosatec/bonfire/issues/225).
 - Fix crash mentioned in [#227](https://github.com/RafaelBarbosatec/bonfire/issues/227).
 
 # [2.2.4]
