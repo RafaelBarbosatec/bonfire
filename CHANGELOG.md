@@ -1,4 +1,5 @@
 # [Next]
+- Updated example with NPCs
 - Update example to Android embedding V2.
 
 # [2.3.0]
