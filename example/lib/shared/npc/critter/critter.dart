@@ -12,9 +12,9 @@ class Critter extends SimpleEnemy
       : super(
           animation: CritterSpriteSheet.simpleDirectionAnimation,
           position: position,
-          size: Vector2.all(DungeonMap.tileSize *0.8),
+          size: Vector2.all(DungeonMap.tileSize * 0.8),
           speed: DungeonMap.tileSize * 1.6,
-          life: 100,          
+          life: 100,
           receivesAttackFrom: ReceivesAttackFromEnum.NONE,
         ) {
     setupCollision(
@@ -34,7 +34,6 @@ class Critter extends SimpleEnemy
       ),
     );
   }
-
 
 // Ignore all damage received
   @override

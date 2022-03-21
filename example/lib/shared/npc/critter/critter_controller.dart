@@ -3,25 +3,21 @@ import 'package:example/manual_map/dungeon_map.dart';
 import 'critter.dart';
 
 class CritterController extends StateController<Critter> {
-  bool enableBehaviors = true;  
+  bool enableBehaviors = true;
   @override
   void update(double dt) {
     if (!enableBehaviors) return;
     if (component == null) return;
 
-  
     component?.seeAndMoveToPlayer(
-      closePlayer: (player) {        
-      },
-      observed: () {
-
-      },
+      closePlayer: (player) {},
+      observed: () {},
       radiusVision: DungeonMap.tileSize * 1.5,
       notObserved: () {
         component?.runRandomMovement(
           dt,
           speed: component!.speed / 10,
-          maxDistance: (DungeonMap.tileSize ).toInt(),
+          maxDistance: (DungeonMap.tileSize).toInt(),
         );
       },
     );
