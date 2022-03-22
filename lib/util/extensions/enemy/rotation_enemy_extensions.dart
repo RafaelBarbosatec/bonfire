@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/collision/object_collision.dart';
-import 'package:bonfire/enemy/rotation_enemy.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
+import 'package:bonfire/npc/enemy/rotation_enemy.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/extensions/extensions.dart';

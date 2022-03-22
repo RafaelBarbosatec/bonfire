@@ -2,69 +2,18 @@ import 'dart:math';
 
 import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/collision/object_collision.dart';
-import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
+import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/extensions/game_component_extensions.dart';
 import 'package:bonfire/util/extensions/movement_extensions.dart';
+import 'package:bonfire/util/extensions/npc/npc_extensions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 /// Functions util to use in your [Enemy]
 extension EnemyExtensions on Enemy {
-  /// This method we notify when detect the player when enter in [radiusVision] configuration
-  /// Method that bo used in [update] method.
-  void seePlayer({
-    required Function(Player) observed,
-    VoidCallback? notObserved,
-    double radiusVision = 32,
-  }) {
-    Player? player = gameRef.player;
-    if (player == null || player.isDead) {
-      notObserved?.call();
-      return;
-    }
-    this.seeComponent(
-      player,
-      observed: (c) => observed(c as Player),
-      notObserved: notObserved,
-      radiusVision: radiusVision,
-    );
-  }
-
-  /// Checks whether the player is within range. If so, move to it.
-  void seeAndMoveToPlayer({
-    required Function(Player) closePlayer,
-    VoidCallback? notObserved,
-    VoidCallback? observed,
-    double radiusVision = 32,
-    double margin = 10,
-    bool runOnlyVisibleInScreen = true,
-  }) {
-    if (isDead) return;
-    if (runOnlyVisibleInScreen && !this.isVisible) return;
-
-    seePlayer(
-      radiusVision: radiusVision,
-      observed: (player) {
-        observed?.call();
-        this.followComponent(
-          player,
-          dtUpdate,
-          closeComponent: (comp) => closePlayer(comp as Player),
-          margin: margin,
-        );
-      },
-      notObserved: () {
-        if (!this.isIdle) {
-          this.idle();
-        }
-        notObserved?.call();
-      },
-    );
-  }
-
   ///Execute simple attack melee using animation
   void simpleAttackMelee({
     required double damage,
