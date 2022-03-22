@@ -35,6 +35,7 @@ export 'package:bonfire/npc/enemy/enemy.dart';
 export 'package:bonfire/npc/enemy/rotation_enemy.dart';
 export 'package:bonfire/npc/enemy/simple_enemy.dart';
 export 'package:bonfire/npc/npc.dart';
+export 'package:bonfire/npc/rotation_npc.dart';
 export 'package:bonfire/npc/simple_npc.dart';
 export 'package:bonfire/objects/animated_follower_object.dart';
 export 'package:bonfire/objects/animated_object_once.dart';
