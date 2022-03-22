@@ -1,4 +1,5 @@
 # [Next]
+- Updated example with NPCs
 - Fixed 8-Direction Animation mentioned in [#234](https://github.com/RafaelBarbosatec/bonfire/issues/234).
 - Update example to Android embedding V2.
 

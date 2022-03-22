@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
 
-enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER }
+enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER, NONE }
 enum AttackFromEnum { ENEMY, PLAYER }
 
 /// Mixin responsible for adding damage-taking behavior to the component.
