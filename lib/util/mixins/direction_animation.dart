@@ -134,14 +134,14 @@ mixin DirectionAnimation on Movement {
         break;
       case Direction.upLeft:
         if (animation?.idleUpLeft != null) {
-          animation?.play(SimpleAnimationEnum.idleTopLeft);
+          animation?.play(SimpleAnimationEnum.idleUpLeft);
         } else {
           animation?.play(SimpleAnimationEnum.idleLeft);
         }
         break;
       case Direction.upRight:
         if (animation?.idleUpRight != null) {
-          animation?.play(SimpleAnimationEnum.idleTopRight);
+          animation?.play(SimpleAnimationEnum.idleUpRight);
         } else {
           animation?.play(SimpleAnimationEnum.idleRight);
         }
