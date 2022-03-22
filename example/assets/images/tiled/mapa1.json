@@ -184,7 +184,7 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":58.6666666666667,
+                 "x":97.3333333333334,
                  "y":279.333333333333
                 }, 
                 {
@@ -790,6 +790,28 @@
                 {
                  "height":16,
                  "id":91,
+                 "name":"wizard",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":56.3564901739897,
+                 "y":280.599824759044
+                }, 
+                {
+                 "height":16,
+                 "id":93,
+                 "name":"critter",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":258,
+                 "y":241
+                }, 
+                {
+                 "height":16,
+                 "id":94,
                  "name":"chest",
                  "rotation":0,
                  "type":"",
@@ -805,7 +827,7 @@
          "y":0
         }],
  "nextlayerid":14,
- "nextobjectid":92,
+ "nextobjectid":95,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.5.0",

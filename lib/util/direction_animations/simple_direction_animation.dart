@@ -46,6 +46,10 @@ class SimpleDirectionAnimation {
 
   BonfireGameInterface? gameRef;
 
+  bool eightDirection;
+  SimpleAnimationEnum? lastPlayedAnimation = SimpleAnimationEnum.idleDown;
+  SimpleAnimationEnum? beforeLastPlayedAnimation = SimpleAnimationEnum.idleDown;
+
   SimpleDirectionAnimation({
     required FutureOr<SpriteAnimation> idleRight,
     required FutureOr<SpriteAnimation> runRight,
@@ -67,6 +71,7 @@ class SimpleDirectionAnimation {
     SimpleAnimationEnum initAnimation = SimpleAnimationEnum.idleRight,
     this.enabledFlipX = true,
     this.enabledFlipY = false,
+    this.eightDirection = false,
   }) {
     _currentType = initAnimation;
     _loader?.add(AssetToLoad(idleLeft, (value) => this.idleLeft = value));
@@ -74,27 +79,20 @@ class SimpleDirectionAnimation {
     _loader?.add(AssetToLoad(idleDown, (value) => this.idleDown = value));
     _loader?.add(AssetToLoad(idleUp, (value) => this.idleUp = value));
     _loader?.add(AssetToLoad(idleUpLeft, (value) => this.idleUpLeft = value));
-    _loader?.add(AssetToLoad(idleUpRight, (value) {
-      return this.idleUpRight = value;
-    }));
-    _loader?.add(AssetToLoad(idleDownLeft, (value) {
-      return this.idleDownLeft = value;
-    }));
-    _loader?.add(AssetToLoad(idleDownRight, (value) {
-      return this.idleDownRight = value;
-    }));
+    _loader?.add(AssetToLoad(idleUpRight, (value) => this.idleUpRight = value));
+    _loader
+        ?.add(AssetToLoad(idleDownLeft, (value) => this.idleDownLeft = value));
+    _loader?.add(
+        AssetToLoad(idleDownRight, (value) => this.idleDownRight = value));
     _loader?.add(AssetToLoad(runUp, (value) => this.runUp = value));
     _loader?.add(AssetToLoad(runRight, (value) => this.runRight = value));
     _loader?.add(AssetToLoad(runDown, (value) => this.runDown = value));
     _loader?.add(AssetToLoad(runLeft, (value) => this.runLeft = value));
     _loader?.add(AssetToLoad(runUpLeft, (value) => this.runUpLeft = value));
     _loader?.add(AssetToLoad(runUpRight, (value) => this.runUpRight = value));
-    _loader?.add(AssetToLoad(runDownLeft, (value) {
-      return this.runDownLeft = value;
-    }));
-    _loader?.add(AssetToLoad(runDownRight, (value) {
-      return this.runDownRight = value;
-    }));
+    _loader?.add(AssetToLoad(runDownLeft, (value) => this.runDownLeft = value));
+    _loader
+        ?.add(AssetToLoad(runDownRight, (value) => this.runDownRight = value));
 
     others?.forEach((key, anim) {
       _loader?.add(AssetToLoad(anim, (value) {
@@ -134,10 +132,10 @@ class SimpleDirectionAnimation {
           _current = idleUp;
         }
         break;
-      case SimpleAnimationEnum.idleTopLeft:
+      case SimpleAnimationEnum.idleUpLeft:
         if (idleUpLeft != null) _current = idleUpLeft;
         break;
-      case SimpleAnimationEnum.idleTopRight:
+      case SimpleAnimationEnum.idleUpRight:
         if (idleUpRight != null) _current = idleUpRight;
         break;
       case SimpleAnimationEnum.idleDownLeft:
@@ -147,38 +145,136 @@ class SimpleDirectionAnimation {
         if (idleDownRight != null) _current = idleDownRight;
         break;
       case SimpleAnimationEnum.runUp:
-        if (runUp != null) _current = runUp;
-        break;
-      case SimpleAnimationEnum.runRight:
-        _current = runRight;
-        break;
-      case SimpleAnimationEnum.runDown:
-        if (runDown != null) {
-          _current = runDown;
-        } else if (enabledFlipY && runUp != null) {
-          _flipY = true;
+        if (eightDirection) {
+          if (lastPlayedAnimation == SimpleAnimationEnum.runRight ||
+              lastPlayedAnimation == SimpleAnimationEnum.runLeft) {
+            if (beforeLastPlayedAnimation == SimpleAnimationEnum.runUpRight) {
+              _current = runUpRight;
+            } else if (beforeLastPlayedAnimation ==
+                SimpleAnimationEnum.runUpLeft) {
+              _current = runUpLeft;
+            } else if (runUp != null) {
+              _current = runUp;
+            }
+          } else if (runUp != null) {
+            _current = runUp;
+          }
+          changeLastAnimation(SimpleAnimationEnum.runUp);
+        } else if (runUp != null) {
           _current = runUp;
         }
         break;
-      case SimpleAnimationEnum.runLeft:
-        if (runLeft != null) {
-          _current = runLeft;
-        } else if (enabledFlipX) {
-          _flipX = true;
+      case SimpleAnimationEnum.runRight:
+        if (eightDirection) {
+          if (lastPlayedAnimation == SimpleAnimationEnum.runUpRight ||
+              lastPlayedAnimation == SimpleAnimationEnum.runDownRight) {
+            if (beforeLastPlayedAnimation == SimpleAnimationEnum.runDown) {
+              _current = runDownRight;
+            } else if (beforeLastPlayedAnimation == SimpleAnimationEnum.runUp) {
+              _current = runUpRight;
+            } else {
+              _current = runRight;
+            }
+          } else {
+            _current = runRight;
+          }
+          changeLastAnimation(SimpleAnimationEnum.runRight);
+        } else {
           _current = runRight;
         }
         break;
+      case SimpleAnimationEnum.runDown:
+        if (eightDirection) {
+          if (lastPlayedAnimation == SimpleAnimationEnum.runRight ||
+              lastPlayedAnimation == SimpleAnimationEnum.runLeft) {
+            if (beforeLastPlayedAnimation == SimpleAnimationEnum.runDownRight) {
+              _current = runDownRight;
+            } else if (beforeLastPlayedAnimation ==
+                SimpleAnimationEnum.runDownLeft) {
+              _current = runDownLeft;
+            } else {
+              if (runDown != null) {
+                _current = runDown;
+              } else if (enabledFlipY && runUp != null) {
+                _flipY = true;
+                _current = runUp;
+              }
+            }
+          } else {
+            if (runDown != null) {
+              _current = runDown;
+            } else if (enabledFlipY && runUp != null) {
+              _flipY = true;
+              _current = runUp;
+            }
+          }
+          changeLastAnimation(SimpleAnimationEnum.runDown);
+        } else {
+          if (runDown != null) {
+            _current = runDown;
+          } else if (enabledFlipY && runUp != null) {
+            _flipY = true;
+            _current = runUp;
+          }
+        }
+        break;
+      case SimpleAnimationEnum.runLeft:
+        if (eightDirection) {
+          if (lastPlayedAnimation == SimpleAnimationEnum.runUpLeft ||
+              lastPlayedAnimation == SimpleAnimationEnum.runDownLeft) {
+            if (beforeLastPlayedAnimation == SimpleAnimationEnum.runDown) {
+              _current = runDownLeft;
+            } else if (beforeLastPlayedAnimation == SimpleAnimationEnum.runUp) {
+              _current = runUpLeft;
+            } else {
+              if (runLeft != null) {
+                _current = runLeft;
+              } else if (enabledFlipX) {
+                _flipX = true;
+                _current = runRight;
+              }
+            }
+          } else {
+            if (runLeft != null) {
+              _current = runLeft;
+            } else if (enabledFlipX) {
+              _flipX = true;
+              _current = runRight;
+            }
+          }
+          changeLastAnimation(SimpleAnimationEnum.runLeft);
+        } else {
+          if (runLeft != null) {
+            _current = runLeft;
+          } else if (enabledFlipX) {
+            _flipX = true;
+            _current = runRight;
+          }
+        }
+        break;
       case SimpleAnimationEnum.runUpLeft:
-        if (runUpLeft != null) _current = runUpLeft;
+        if (runUpLeft != null) {
+          _current = runUpLeft;
+          changeLastAnimation(SimpleAnimationEnum.runUpLeft);
+        }
         break;
       case SimpleAnimationEnum.runUpRight:
-        if (runUpRight != null) _current = runUpRight;
+        if (runUpRight != null) {
+          _current = runUpRight;
+          changeLastAnimation(SimpleAnimationEnum.runUpRight);
+        }
         break;
       case SimpleAnimationEnum.runDownLeft:
-        if (runDownLeft != null) _current = runDownLeft;
+        if (runDownLeft != null) {
+          _current = runDownLeft;
+          changeLastAnimation(SimpleAnimationEnum.runDownLeft);
+        }
         break;
       case SimpleAnimationEnum.runDownRight:
-        if (runDownRight != null) _current = runDownRight;
+        if (runDownRight != null) {
+          _current = runDownRight;
+          changeLastAnimation(SimpleAnimationEnum.runDownRight);
+        }
         break;
       case SimpleAnimationEnum.custom:
         break;
@@ -275,6 +371,11 @@ class SimpleDirectionAnimation {
     this.position = position;
     this.size = size;
     _current?.update(dt);
+  }
+
+  void changeLastAnimation(SimpleAnimationEnum lastAnimation) {
+    beforeLastPlayedAnimation = lastPlayedAnimation;
+    lastPlayedAnimation = lastAnimation;
   }
 
   Future<void> onLoad(BonfireGameInterface gameRef) async {
