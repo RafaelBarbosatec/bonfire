@@ -1,7 +1,7 @@
 # [2.3.1]
-- Updated example with NPCs
-- Fixed 8-Direction Animation mentioned in [#234](https://github.com/RafaelBarbosatec/bonfire/issues/234).
-- Update example to Android embedding V2.
+- Updated example with NPCs. Thanks [4mitabh](https://github.com/4mitabh)!
+- Fixed 8-Direction Animation mentioned in [#234](https://github.com/RafaelBarbosatec/bonfire/issues/234). Thanks [TaylorHo](https://github.com/TaylorHo)!
+- Update example to Android embedding V2. Thanks [4mitabh](https://github.com/4mitabh)!
 
 # [2.3.0]
 - Fix bug in camera zoom out.
