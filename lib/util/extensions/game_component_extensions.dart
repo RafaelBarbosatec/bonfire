@@ -107,6 +107,7 @@ extension GameComponentExtensions on GameComponent {
     /// Use radians angle
     required double angle,
     required double damage,
+    required AttackFromEnum attackFrom,
     Vector2? destroySize,
     Future<SpriteAnimation>? animationDestroy,
     dynamic id,
@@ -139,7 +140,7 @@ extension GameComponentExtensions on GameComponent {
       angle: angle,
       damage: damage,
       speed: speed,
-      attackFrom: this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
+      attackFrom: attackFrom,
       collision: collision,
       withDecorationCollision: withDecorationCollision,
       onDestroy: onDestroy,
@@ -158,6 +159,7 @@ extension GameComponentExtensions on GameComponent {
     required Future<SpriteAnimation> animationDown,
     required Vector2 size,
     required Direction direction,
+    required AttackFromEnum attackFrom,
     Vector2? destroySize,
     dynamic id,
     double speed = 150,
@@ -248,8 +250,7 @@ extension GameComponentExtensions on GameComponent {
         damage: damage,
         speed: speed,
         enabledDiagonal: enableDiagonal,
-        attackFrom:
-            this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
+        attackFrom: attackFrom,
         onDestroy: onDestroy,
         destroySize: destroySize,
         withDecorationCollision: withCollision,
@@ -269,7 +270,7 @@ extension GameComponentExtensions on GameComponent {
     required double damage,
     required Direction direction,
     required Vector2 size,
-    required AttackFromEnum attacker,
+    required AttackFromEnum attackFrom,
     bool withPush = true,
     double? sizePush,
   }) {
@@ -371,7 +372,7 @@ extension GameComponentExtensions on GameComponent {
           );
     }).forEach(
       (enemy) {
-        enemy.receiveDamage(attacker, damage, id);
+        enemy.receiveDamage(attackFrom, damage, id);
         final rectAfterPush = enemy.position.translate(pushLeft, pushTop);
         if (withPush &&
             (enemy is ObjectCollision &&

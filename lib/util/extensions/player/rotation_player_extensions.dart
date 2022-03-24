@@ -38,6 +38,7 @@ extension RotationPlayerExtensions on RotationPlayer {
       destroySize: destroySize,
       collision: collision,
       lightingConfig: lightingConfig,
+      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
     );
   }
 
@@ -57,7 +58,7 @@ extension RotationPlayerExtensions on RotationPlayer {
       id: id,
       size: size,
       withPush: withPush,
-      attacker: AttackFromEnum.PLAYER,
+      attacker: AttackFromEnum.PLAYER_OR_ALLY,
     );
   }
 }

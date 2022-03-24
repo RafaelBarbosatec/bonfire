@@ -65,4 +65,66 @@ extension NpcExtensions on Npc {
       },
     );
   }
+
+  /// Checks whether the player is within range. If so, move to it.
+  void seeAndMoveToEnemy({
+    required Function(Enemy) closeEnemy,
+    VoidCallback? notObserved,
+    VoidCallback? observed,
+    double radiusVision = 32,
+    double margin = 10,
+    bool runOnlyVisibleInScreen = true,
+  }) {
+    if (runOnlyVisibleInScreen && !this.isVisible) return;
+
+    seeComponentType<Enemy>(
+      radiusVision: radiusVision,
+      observed: (enemy) {
+        observed?.call();
+        this.followComponent(
+          enemy.first,
+          dtUpdate,
+          closeComponent: (comp) => closeEnemy(comp as Enemy),
+          margin: margin,
+        );
+      },
+      notObserved: () {
+        if (!this.isIdle) {
+          this.idle();
+        }
+        notObserved?.call();
+      },
+    );
+  }
+
+  /// Checks whether the ally is within range. If so, move to it.
+  void seeAndMoveToAlly({
+    required Function(Ally) closeAlly,
+    VoidCallback? notObserved,
+    VoidCallback? observed,
+    double radiusVision = 32,
+    double margin = 10,
+    bool runOnlyVisibleInScreen = true,
+  }) {
+    if (runOnlyVisibleInScreen && !this.isVisible) return;
+
+    seeComponentType<Ally>(
+      radiusVision: radiusVision,
+      observed: (ally) {
+        observed?.call();
+        this.followComponent(
+          ally.first,
+          dtUpdate,
+          closeComponent: (comp) => closeAlly(comp as Ally),
+          margin: margin,
+        );
+      },
+      notObserved: () {
+        if (!this.isIdle) {
+          this.idle();
+        }
+        notObserved?.call();
+      },
+    );
+  }
 }

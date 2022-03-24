@@ -97,6 +97,7 @@ class Knight extends SimplePlayer
 
   void execRangeAttack(double angle, double damage) {
     this.simpleAttackRangeByAngle(
+      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
       animation: CommonSpriteSheet.fireBallRight,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       angle: angle,

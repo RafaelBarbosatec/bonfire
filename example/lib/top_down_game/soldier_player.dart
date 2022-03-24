@@ -71,6 +71,7 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
 
   void actionAttack() {
     simpleAttackRangeByAngle(
+      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
       angle: angle,
       size: Vector2(8, 4),
       speed: 500,

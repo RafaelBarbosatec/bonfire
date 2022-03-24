@@ -14,6 +14,7 @@ export 'enemy/rotation_enemy_extensions.dart';
 export 'game_component_extensions.dart';
 export 'joystick_extensions.dart';
 export 'movement_extensions.dart';
+export 'ally/ally_extensions.dart';
 export 'npc/npc_extensions.dart';
 export 'player/player_extensions.dart';
 export 'player/rotation_player_extensions.dart';

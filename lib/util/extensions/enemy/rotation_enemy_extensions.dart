@@ -137,12 +137,14 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     Rect positionAttack = this.toRect().shift(diffBase.toOffset());
 
-    gameRef.add(AnimatedObjectOnce(
-      animation: attackEffectTopAnim,
-      position: positionAttack.positionVector2,
-      size: size,
-      rotateRadAngle: angle,
-    ));
+    gameRef.add(
+      AnimatedObjectOnce(
+        animation: attackEffectTopAnim,
+        position: positionAttack.positionVector2,
+        size: size,
+        rotateRadAngle: angle,
+      ),
+    );
 
     gameRef
         .visibleAttackables()
@@ -200,6 +202,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       destroySize: destroySize,
       collision: collision,
       lightingConfig: lightingConfig,
+      attackFrom: AttackFromEnum.ENEMY,
     );
 
     onExecute?.call();
