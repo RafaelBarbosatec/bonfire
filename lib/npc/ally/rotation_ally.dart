@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/npc/ally/ally.dart';
 import 'package:bonfire/util/assets_loader.dart';
 
 ///
