@@ -176,9 +176,7 @@ extension GameComponentExtensions on GameComponent {
 
     Direction attackDirection = direction;
 
-    Rect rectBase = (this.isObjectCollision())
-        ? (this as ObjectCollision).rectCollision
-        : toRect();
+    Rect rectBase = rectConsideringCollision;
 
     switch (attackDirection) {
       case Direction.left:
@@ -280,9 +278,7 @@ extension GameComponentExtensions on GameComponent {
     double pushTop = 0;
     Direction attackDirection = direction;
 
-    Rect rectBase = (this.isObjectCollision())
-        ? (this as ObjectCollision).rectCollision
-        : toRect();
+    Rect rectBase = rectConsideringCollision;
 
     switch (attackDirection) {
       case Direction.up:
@@ -461,5 +457,12 @@ extension GameComponentExtensions on GameComponent {
     if (right <= other.left || other.right <= left) return false;
     if (bottom <= other.top || other.bottom <= top) return false;
     return true;
+  }
+
+  /// Gets rect used how base in calculations considering collision
+  Rect get rectConsideringCollision {
+    return (this.isObjectCollision()
+        ? (this as ObjectCollision).rectCollision
+        : toRect());
   }
 }

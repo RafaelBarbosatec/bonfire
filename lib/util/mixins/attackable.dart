@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/collision/object_collision.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 
 enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER_AND_ALLY, NONE }
 enum AttackFromEnum { ENEMY, PLAYER_OR_ALLY }
@@ -85,7 +85,5 @@ mixin Attackable on GameComponent {
 
   bool get isDead => _isDead;
 
-  Rect rectAttackable() => this.isObjectCollision()
-      ? (this as ObjectCollision).rectCollision
-      : toRect();
+  Rect rectAttackable() => rectConsideringCollision;
 }

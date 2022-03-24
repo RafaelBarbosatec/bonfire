@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:bonfire/collision/collision_config.dart';
-import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
@@ -143,42 +140,5 @@ extension EnemyExtensions on Enemy {
         notObserved?.call();
       },
     );
-  }
-
-  /// Get angle between enemy and player
-  /// player as a base
-  double getAngleFomPlayer() {
-    Player? player = this.gameRef.player;
-    if (player == null) return 0.0;
-    return atan2(
-      playerRect.center.dy - enemyRect.center.dy,
-      playerRect.center.dx - enemyRect.center.dx,
-    );
-  }
-
-  /// Get angle between enemy and player
-  /// enemy position as a base
-  double getInverseAngleFomPlayer() {
-    Player? player = this.gameRef.player;
-    if (player == null) return 0.0;
-    return atan2(
-      this.position.y - playerRect.center.dy,
-      this.position.x - playerRect.center.dx,
-    );
-  }
-
-  /// Gets player position used how base in calculations
-  Rect get playerRect {
-    return (gameRef.player is ObjectCollision
-            ? (gameRef.player as ObjectCollision).rectCollision
-            : gameRef.player?.toRect()) ??
-        Rect.zero;
-  }
-
-  /// Gets enemy position used how base in calculations
-  Rect get enemyRect {
-    return (this.isObjectCollision()
-        ? (this as ObjectCollision).rectCollision
-        : toRect());
   }
 }

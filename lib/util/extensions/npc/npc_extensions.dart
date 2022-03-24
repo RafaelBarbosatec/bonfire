@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -126,5 +127,35 @@ extension NpcExtensions on Npc {
         notObserved?.call();
       },
     );
+  }
+
+  /// Get angle between enemy and player
+  /// player as a base
+  double getAngleFomPlayer() {
+    Player? player = this.gameRef.player;
+    if (player == null) return 0.0;
+    return atan2(
+      playerRect.center.dy - rectConsideringCollision.center.dy,
+      playerRect.center.dx - rectConsideringCollision.center.dx,
+    );
+  }
+
+  /// Get angle between enemy and player
+  /// enemy position as a base
+  double getInverseAngleFomPlayer() {
+    Player? player = this.gameRef.player;
+    if (player == null) return 0.0;
+    return atan2(
+      this.position.y - playerRect.center.dy,
+      this.position.x - playerRect.center.dx,
+    );
+  }
+
+  /// Gets player position used how base in calculations
+  Rect get playerRect {
+    return (gameRef.player is ObjectCollision
+            ? (gameRef.player as ObjectCollision).rectCollision
+            : gameRef.player?.toRect()) ??
+        Rect.zero;
   }
 }

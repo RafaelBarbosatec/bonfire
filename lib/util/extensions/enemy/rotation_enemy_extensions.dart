@@ -38,7 +38,7 @@ extension RotationEnemyExtensions on RotationEnemy {
           playerRect.height + (margin * 2),
         );
 
-        if (enemyRect.overlaps(rectPlayerCollision)) {
+        if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
           closePlayer(player);
           this.idle();
           this.moveFromAngleDodgeObstacles(0, _radAngle);
