@@ -43,6 +43,7 @@ extension PlayerExtensions on Player {
       size: size,
       withPush: withPush,
       sizePush: sizePush,
+      attacker: AttackFromEnum.PLAYER,
     );
   }
 

@@ -12,6 +12,8 @@ import 'package:bonfire/util/extensions/npc/npc_extensions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../mixins/attackable.dart';
+
 /// Functions util to use in your [Enemy]
 extension EnemyExtensions on Enemy {
   ///Execute simple attack melee using animation
@@ -46,6 +48,7 @@ extension EnemyExtensions on Enemy {
       animationDown: animationDown,
       animationLeft: animationLeft,
       animationRight: animationRight,
+      attacker: AttackFromEnum.ENEMY,
     );
 
     execute?.call();

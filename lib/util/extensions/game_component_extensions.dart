@@ -269,6 +269,7 @@ extension GameComponentExtensions on GameComponent {
     required double damage,
     required Direction direction,
     required Vector2 size,
+    required AttackFromEnum attacker,
     bool withPush = true,
     double? sizePush,
   }) {
@@ -360,20 +361,17 @@ extension GameComponentExtensions on GameComponent {
     }
 
     gameRef.visibleAttackables().where((a) {
-      return (this is Player
-              ? a.receivesAttackFromPlayer()
-              : a.receivesAttackFromEnemy()) &&
-          a.rectAttackable().overlaps(
-                Rect.fromLTWH(
-                  positionAttack.x,
-                  positionAttack.y,
-                  size.x,
-                  size.y,
-                ),
-              );
+      return a.rectAttackable().overlaps(
+            Rect.fromLTWH(
+              positionAttack.x,
+              positionAttack.y,
+              size.x,
+              size.y,
+            ),
+          );
     }).forEach(
       (enemy) {
-        enemy.receiveDamage(damage, id);
+        enemy.receiveDamage(attacker, damage, id);
         final rectAfterPush = enemy.position.translate(pushLeft, pushTop);
         if (withPush &&
             (enemy is ObjectCollision &&
@@ -391,6 +389,7 @@ extension GameComponentExtensions on GameComponent {
     required Future<SpriteAnimation> animationTop,
     required double damage,
     required double radAngleDirection,
+    required AttackFromEnum attacker,
     dynamic id,
     required Vector2 size,
     bool withPush = true,
@@ -420,13 +419,9 @@ extension GameComponentExtensions on GameComponent {
 
     gameRef
         .visibleAttackables()
-        .where((a) =>
-            (this is Player
-                ? a.receivesAttackFromPlayer()
-                : a.receivesAttackFromEnemy()) &&
-            a.rectAttackable().overlaps(positionAttack))
+        .where((a) => a.rectAttackable().overlaps(positionAttack))
         .forEach((enemy) {
-      enemy.receiveDamage(damage, id);
+      enemy.receiveDamage(attacker, damage, id);
       final rectAfterPush = enemy.position.translate(diffBase.x, diffBase.y);
       if (withPush &&
           (enemy is ObjectCollision &&

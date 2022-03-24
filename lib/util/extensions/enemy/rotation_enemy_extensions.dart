@@ -10,6 +10,8 @@ import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../mixins/attackable.dart';
+
 extension RotationEnemyExtensions on RotationEnemy {
   /// Checks whether the player is within range. If so, move to it.
   void seeAndMoveToPlayer({
@@ -144,11 +146,9 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     gameRef
         .visibleAttackables()
-        .where((a) =>
-            a.receivesAttackFromEnemy() &&
-            a.rectAttackable().overlaps(positionAttack))
+        .where((a) => a.rectAttackable().overlaps(positionAttack))
         .forEach((attackable) {
-      attackable.receiveDamage(damage, id);
+      attackable.receiveDamage(AttackFromEnum.ENEMY, damage, id);
       final rectAfterPush = attackable.position.translate(
         diffBase.x,
         diffBase.y,
