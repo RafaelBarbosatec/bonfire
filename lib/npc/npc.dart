@@ -2,6 +2,9 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/mixins/movement.dart';
 import 'package:flame/components.dart';
 
+export 'rotation_npc.dart';
+export 'simple_npc.dart';
+
 ///
 /// Created by
 ///

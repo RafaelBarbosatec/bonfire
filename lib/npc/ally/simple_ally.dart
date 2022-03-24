@@ -1,14 +1,25 @@
+import 'package:bonfire/npc/ally/ally.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/mixins/direction_animation.dart';
 import 'package:flame/components.dart';
 
-import 'enemy.dart';
+///
+/// Created by
+///
+/// ─▄▀─▄▀
+/// ──▀──▀
+/// █▀▀▀▀▀█▄
+/// █░░░░░█─█
+/// ▀▄▄▄▄▄▀▀
+///
+/// Rafaelbarbosatec
+/// on 24/03/22
 
 /// Enemy with animation in all direction
-class SimpleEnemy extends Enemy with DirectionAnimation {
-  SimpleEnemy({
+class SimpleAlly extends Ally with DirectionAnimation {
+  SimpleAlly({
     required Vector2 position,
     required Vector2 size,
     required SimpleDirectionAnimation animation,

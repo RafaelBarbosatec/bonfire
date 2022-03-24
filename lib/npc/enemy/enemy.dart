@@ -2,6 +2,9 @@ import 'package:bonfire/npc/npc.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:flame/components.dart';
 
+export 'rotation_enemy.dart';
+export 'simple_enemy.dart';
+
 /// It is used to represent your enemies.
 class Enemy extends Npc with Attackable {
   Enemy({

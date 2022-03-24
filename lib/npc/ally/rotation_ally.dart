@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/npc/ally/ally.dart';
 import 'package:bonfire/util/assets_loader.dart';
 
 ///
@@ -11,24 +12,28 @@ import 'package:bonfire/util/assets_loader.dart';
 /// ▀▄▄▄▄▄▀▀
 ///
 /// Rafaelbarbosatec
-/// on 22/03/22
+/// on 24/03/22
 
-/// Npc used for top-down perspective
-class RotationNpc extends Npc with UseSpriteAnimation, UseAssetsLoader {
+/// Enemy used for top-down perspective
+class RotationAlly extends Ally with UseSpriteAnimation, UseAssetsLoader {
   SpriteAnimation? animIdle;
   SpriteAnimation? animRun;
 
-  RotationNpc({
+  RotationAlly({
     required Vector2 position,
     required Vector2 size,
     required Future<SpriteAnimation> animIdle,
     required Future<SpriteAnimation> animRun,
     double currentRadAngle = -1.55,
     double speed = 100,
+    double life = 100,
+    ReceivesAttackFromEnum receivesAttackFrom = ReceivesAttackFromEnum.PLAYER,
   }) : super(
           position: position,
           size: size,
+          life: life,
           speed: speed,
+          receivesAttackFrom: receivesAttackFrom,
         ) {
     angle = currentRadAngle;
     loader?.add(AssetToLoad(animIdle, (value) {
