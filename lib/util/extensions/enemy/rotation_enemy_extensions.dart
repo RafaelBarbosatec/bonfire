@@ -26,7 +26,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
-        double _radAngle = getAngleFomPlayer();
+        double _radAngle = getAngleFromPlayer();
 
         Rect playerRect = player is ObjectCollision
             ? (player as ObjectCollision).rectCollision
@@ -75,7 +75,7 @@ extension RotationEnemyExtensions on RotationEnemy {
             ? (player as ObjectCollision).rectCollision
             : player.toRect();
         double distance = (minDistanceCellsFromPlayer ?? radiusVision);
-        double _radAngle = getAngleFomPlayer();
+        double _radAngle = getAngleFromPlayer();
 
         Vector2 myPosition = Vector2(
           this.center.x,
@@ -97,7 +97,7 @@ extension RotationEnemyExtensions on RotationEnemy {
 
         bool onMove = this.moveFromAngleDodgeObstacles(
           speed,
-          getInverseAngleFomPlayer(),
+          getInverseAngleFromPlayer(),
         );
 
         if (!onMove) {

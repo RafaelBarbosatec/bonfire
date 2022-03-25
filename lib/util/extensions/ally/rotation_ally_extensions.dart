@@ -31,7 +31,7 @@ extension RotationEnemyExtensions on RotationAlly {
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
-        double _radAngle = getAngleFomPlayer();
+        double _radAngle = getAngleFromPlayer();
 
         Rect playerRect = player is ObjectCollision
             ? (player as ObjectCollision).rectCollision

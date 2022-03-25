@@ -131,7 +131,7 @@ extension NpcExtensions on Npc {
 
   /// Get angle between enemy and player
   /// player as a base
-  double getAngleFomPlayer() {
+  double getAngleFromPlayer() {
     Player? player = this.gameRef.player;
     if (player == null) return 0.0;
     return atan2(
@@ -142,7 +142,7 @@ extension NpcExtensions on Npc {
 
   /// Get angle between enemy and player
   /// enemy position as a base
-  double getInverseAngleFomPlayer() {
+  double getInverseAngleFromPlayer() {
     Player? player = this.gameRef.player;
     if (player == null) return 0.0;
     return atan2(
