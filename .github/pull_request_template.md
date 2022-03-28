@@ -6,7 +6,7 @@
 
 Before you create this PR confirm that it meets all requirements listed below by checking the relevant checkboxes (`[x]`). This will ensure a smooth and quick review process.
 
-- [ ] I open this PR to `develop` branch.
+- [ ] I open this PR to the `develop` branch.
 - [ ] I have added a description of the change under `[next]` in `CHANGELOG.md`.
 - [ ] I ran `flutter format --set-exit-if-changed --dry-run .` and has success.
 
