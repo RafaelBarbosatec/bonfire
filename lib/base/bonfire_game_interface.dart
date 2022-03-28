@@ -73,7 +73,7 @@ abstract class BonfireGameInterface {
   void resumeEngine();
 
   /// Used to add component in the game.
-  Future<void> add(Component component);
+  Future<void>? add(Component component);
 
   /// Used to add component list in the game.
   Future<void> addAll(List<Component> components);

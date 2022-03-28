@@ -183,7 +183,7 @@ class BonfireGame extends BaseGame
     if (gameController != null) {
       await add(gameController!);
     }
-    isLoaded = true;
+    // isLoaded = true;
   }
 
   @override
