@@ -1,3 +1,6 @@
+# [next]
+- Updated Flame to version 1.1.0
+
 # [2.3.1]
 - Updated example with NPCs. Thanks [4mitabh](https://github.com/4mitabh)!
 - Fixed 8-Direction Animation mentioned in [#234](https://github.com/RafaelBarbosatec/bonfire/issues/234). Thanks [TaylorHo](https://github.com/TaylorHo)!
