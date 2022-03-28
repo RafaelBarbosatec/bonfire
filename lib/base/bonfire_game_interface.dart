@@ -14,6 +14,7 @@ import 'package:bonfire/util/mixins/sensor.dart';
 import 'package:bonfire/util/value_generator_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/particles.dart';
 import 'package:flutter/widgets.dart';
 
 ///
@@ -144,4 +145,7 @@ abstract class BonfireGameInterface {
     bool cleanObservers = false,
     bool moveCameraToTarget = false,
   });
+
+  /// Used to add particles in game.
+  void addParticle(Particle particle);
 }
