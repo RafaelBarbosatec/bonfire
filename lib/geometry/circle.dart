@@ -24,11 +24,12 @@ class CircleShape extends Shape {
 
   @override
   set position(Vector2 value) {
-    super.position = value;
-
-    rect.position = value;
-    center = value.translate(radius, radius);
-    offsetToDraw = Offset(position.x + radius, position.y + radius);
+    if (value != super.position) {
+      super.position = value;
+      rect.position = value;
+      center = value.translate(radius, radius);
+      offsetToDraw = Offset(position.x + radius, position.y + radius);
+    }
   }
 
   @override

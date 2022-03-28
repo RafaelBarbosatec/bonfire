@@ -23,7 +23,7 @@ class Wizard extends SimpleNpc with ObjectCollision, TapGesture {
             ),
             align: Vector2(
               DungeonMap.tileSize * 0.2,
-              DungeonMap.tileSize * 0.2,
+              DungeonMap.tileSize * 0.4,
             ),
           ),
         ],
