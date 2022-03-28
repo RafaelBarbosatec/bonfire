@@ -1,18 +1,19 @@
-import 'package:bonfire/collision/collision_config.dart';
-import 'package:bonfire/lighting/lighting_config.dart';
-import 'package:bonfire/npc/enemy/enemy.dart';
-import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/extensions/game_component_extensions.dart';
-import 'package:bonfire/util/extensions/movement_extensions.dart';
-import 'package:bonfire/util/extensions/npc/npc_extensions.dart';
-import 'package:flame/components.dart';
-import 'package:flutter/widgets.dart';
+import 'dart:ui';
 
-import '../../mixins/attackable.dart';
+import 'package:bonfire/bonfire.dart';
 
-/// Functions util to use in your [Enemy]
-extension EnemyExtensions on Enemy {
+///
+/// Created by
+///
+/// ─▄▀─▄▀
+/// ──▀──▀
+/// █▀▀▀▀▀█▄
+/// █░░░░░█─█
+/// ▀▄▄▄▄▄▀▀
+///
+/// Rafaelbarbosatec
+/// on 24/03/22
+extension AllyExtensions on Ally {
   ///Execute simple attack melee using animation
   void simpleAttackMelee({
     required double damage,
@@ -45,7 +46,7 @@ extension EnemyExtensions on Enemy {
       animationDown: animationDown,
       animationLeft: animationLeft,
       animationRight: animationRight,
-      attackFrom: AttackFromEnum.ENEMY,
+      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
     );
 
     execute?.call();
@@ -95,15 +96,15 @@ extension EnemyExtensions on Enemy {
       destroySize: destroySize,
       lightingConfig: lightingConfig,
       enableDiagonal: enableDiagonal,
-      attackFrom: AttackFromEnum.ENEMY,
+      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
     );
 
     if (execute != null) execute();
   }
 
-  /// Checks whether the player is within range. If so, move to it.
+  /// Checks whether the Enemy is within range. If so, move to it.
   void seeAndMoveToAttackRange({
-    required Function(Player) positioned,
+    required Function(Enemy) positioned,
     VoidCallback? notObserved,
     VoidCallback? observed,
     double radiusVision = 32,
@@ -112,24 +113,24 @@ extension EnemyExtensions on Enemy {
   }) {
     if (isDead) return;
 
-    seePlayer(
+    seeComponentType<Enemy>(
       radiusVision: radiusVision,
-      observed: (player) {
+      observed: (enemy) {
         observed?.call();
         this.positionsItselfAndKeepDistance(
-          player,
+          enemy.first,
           minDistanceFromPlayer: minDistanceFromPlayer,
           radiusVision: radiusVision,
           runOnlyVisibleInScreen: runOnlyVisibleInScreen,
-          positioned: (player) {
-            final playerDirection = this.getComponentDirectionFromMe(player);
+          positioned: (enemy) {
+            final playerDirection = this.getComponentDirectionFromMe(enemy);
             lastDirection = playerDirection;
             if (lastDirection == Direction.left ||
                 lastDirection == Direction.right) {
               lastDirectionHorizontal = lastDirection;
             }
             idle();
-            positioned(player as Player);
+            positioned(enemy as Enemy);
           },
         );
       },

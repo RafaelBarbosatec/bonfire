@@ -107,6 +107,7 @@ extension GameComponentExtensions on GameComponent {
     /// Use radians angle
     required double angle,
     required double damage,
+    required AttackFromEnum attackFrom,
     Vector2? destroySize,
     Future<SpriteAnimation>? animationDestroy,
     dynamic id,
@@ -139,7 +140,7 @@ extension GameComponentExtensions on GameComponent {
       angle: angle,
       damage: damage,
       speed: speed,
-      attackFrom: this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
+      attackFrom: attackFrom,
       collision: collision,
       withDecorationCollision: withDecorationCollision,
       onDestroy: onDestroy,
@@ -158,6 +159,7 @@ extension GameComponentExtensions on GameComponent {
     required Future<SpriteAnimation> animationDown,
     required Vector2 size,
     required Direction direction,
+    required AttackFromEnum attackFrom,
     Vector2? destroySize,
     dynamic id,
     double speed = 150,
@@ -174,9 +176,7 @@ extension GameComponentExtensions on GameComponent {
 
     Direction attackDirection = direction;
 
-    Rect rectBase = (this.isObjectCollision())
-        ? (this as ObjectCollision).rectCollision
-        : toRect();
+    Rect rectBase = rectConsideringCollision;
 
     switch (attackDirection) {
       case Direction.left:
@@ -248,8 +248,7 @@ extension GameComponentExtensions on GameComponent {
         damage: damage,
         speed: speed,
         enabledDiagonal: enableDiagonal,
-        attackFrom:
-            this is Player ? AttackFromEnum.PLAYER : AttackFromEnum.ENEMY,
+        attackFrom: attackFrom,
         onDestroy: onDestroy,
         destroySize: destroySize,
         withDecorationCollision: withCollision,
@@ -269,6 +268,7 @@ extension GameComponentExtensions on GameComponent {
     required double damage,
     required Direction direction,
     required Vector2 size,
+    required AttackFromEnum attackFrom,
     bool withPush = true,
     double? sizePush,
   }) {
@@ -278,9 +278,7 @@ extension GameComponentExtensions on GameComponent {
     double pushTop = 0;
     Direction attackDirection = direction;
 
-    Rect rectBase = (this.isObjectCollision())
-        ? (this as ObjectCollision).rectCollision
-        : toRect();
+    Rect rectBase = rectConsideringCollision;
 
     switch (attackDirection) {
       case Direction.up:
@@ -360,20 +358,17 @@ extension GameComponentExtensions on GameComponent {
     }
 
     gameRef.visibleAttackables().where((a) {
-      return (this is Player
-              ? a.receivesAttackFromPlayer()
-              : a.receivesAttackFromEnemy()) &&
-          a.rectAttackable().overlaps(
-                Rect.fromLTWH(
-                  positionAttack.x,
-                  positionAttack.y,
-                  size.x,
-                  size.y,
-                ),
-              );
+      return a.rectAttackable().overlaps(
+            Rect.fromLTWH(
+              positionAttack.x,
+              positionAttack.y,
+              size.x,
+              size.y,
+            ),
+          );
     }).forEach(
       (enemy) {
-        enemy.receiveDamage(damage, id);
+        enemy.receiveDamage(attackFrom, damage, id);
         final rectAfterPush = enemy.position.translate(pushLeft, pushTop);
         if (withPush &&
             (enemy is ObjectCollision &&
@@ -391,6 +386,7 @@ extension GameComponentExtensions on GameComponent {
     required Future<SpriteAnimation> animationTop,
     required double damage,
     required double radAngleDirection,
+    required AttackFromEnum attacker,
     dynamic id,
     required Vector2 size,
     bool withPush = true,
@@ -420,13 +416,9 @@ extension GameComponentExtensions on GameComponent {
 
     gameRef
         .visibleAttackables()
-        .where((a) =>
-            (this is Player
-                ? a.receivesAttackFromPlayer()
-                : a.receivesAttackFromEnemy()) &&
-            a.rectAttackable().overlaps(positionAttack))
+        .where((a) => a.rectAttackable().overlaps(positionAttack))
         .forEach((enemy) {
-      enemy.receiveDamage(damage, id);
+      enemy.receiveDamage(attacker, damage, id);
       final rectAfterPush = enemy.position.translate(diffBase.x, diffBase.y);
       if (withPush &&
           (enemy is ObjectCollision &&
@@ -465,5 +457,12 @@ extension GameComponentExtensions on GameComponent {
     if (right <= other.left || other.right <= left) return false;
     if (bottom <= other.top || other.bottom <= top) return false;
     return true;
+  }
+
+  /// Gets rect used how base in calculations considering collision
+  Rect get rectConsideringCollision {
+    return (this.isObjectCollision()
+        ? (this as ObjectCollision).rectCollision
+        : toRect());
   }
 }

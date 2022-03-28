@@ -1,9 +1,10 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/critter_sprite_sheet.dart';
+
 import 'critter_controller.dart';
 
-class Critter extends SimpleEnemy
+class Critter extends SimpleNpc
     with
         ObjectCollision,
         AutomaticRandomMovement,
@@ -14,8 +15,6 @@ class Critter extends SimpleEnemy
           position: position,
           size: Vector2.all(DungeonMap.tileSize * 0.8),
           speed: DungeonMap.tileSize * 1.6,
-          life: 100,
-          receivesAttackFrom: ReceivesAttackFromEnum.NONE,
         ) {
     setupCollision(
       CollisionConfig(
@@ -34,8 +33,4 @@ class Critter extends SimpleEnemy
       ),
     );
   }
-
-// Ignore all damage received
-  @override
-  void receiveDamage(double damage, dynamic from) {}
 }

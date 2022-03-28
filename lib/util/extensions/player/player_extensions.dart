@@ -43,6 +43,7 @@ extension PlayerExtensions on Player {
       size: size,
       withPush: withPush,
       sizePush: sizePush,
+      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
     );
   }
 
@@ -82,6 +83,7 @@ extension PlayerExtensions on Player {
       collision: collision,
       enableDiagonal: enableDiagonal,
       lightingConfig: lightingConfig,
+      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
     );
   }
 }

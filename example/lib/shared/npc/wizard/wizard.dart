@@ -5,15 +5,13 @@ import 'package:example/shared/util/wizard_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Wizard extends SimpleEnemy with ObjectCollision, TapGesture {
+class Wizard extends SimpleNpc with ObjectCollision, TapGesture {
   Wizard(Vector2 position)
       : super(
           animation: WizardSpriteSheet.simpleDirectionAnimation,
           position: position,
           size: Vector2.all(DungeonMap.tileSize * 0.8),
           speed: DungeonMap.tileSize * 1.6,
-          life: 100,
-          receivesAttackFrom: ReceivesAttackFromEnum.NONE,
         ) {
     setupCollision(
       CollisionConfig(
@@ -94,9 +92,7 @@ class Wizard extends SimpleEnemy with ObjectCollision, TapGesture {
             ),
           ],
           onClose: () {
-            if (!this.isDead) {
-              gameRef.camera.moveToPlayerAnimated(zoom: 1);
-            }
+            gameRef.camera.moveToPlayerAnimated(zoom: 1);
           },
           onFinish: () {},
           logicalKeyboardKeysToNext: [
@@ -107,10 +103,6 @@ class Wizard extends SimpleEnemy with ObjectCollision, TapGesture {
       },
     );
   }
-
-// Ignore all damage received
-  @override
-  void receiveDamage(double damage, dynamic from) {}
 
   @override
   void onTap() {
