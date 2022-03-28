@@ -105,7 +105,7 @@ class Goblin extends SimpleEnemy
   }
 
   @override
-  void receiveDamage(double damage, dynamic from) {
+  void receiveDamage(AttackFromEnum attacker, double damage, dynamic identify) {
     this.showDamage(
       damage,
       config: TextStyle(
@@ -113,7 +113,7 @@ class Goblin extends SimpleEnemy
         color: Colors.white,
       ),
     );
-    super.receiveDamage(damage, from);
+    super.receiveDamage(attacker, damage, identify);
   }
 
   @override

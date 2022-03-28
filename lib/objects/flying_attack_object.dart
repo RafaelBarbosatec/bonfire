@@ -164,17 +164,7 @@ class FlyingAttackObject extends GameComponent
   @override
   bool onCollision(GameComponent component, bool active) {
     if (component is Attackable && !component.shouldRemove) {
-      if (attackFrom == AttackFromEnum.ENEMY) {
-        if (component.receivesAttackFrom == ReceivesAttackFromEnum.ALL ||
-            component.receivesAttackFrom == ReceivesAttackFromEnum.ENEMY) {
-          component.receiveDamage(damage, id);
-        }
-      } else if (attackFrom == AttackFromEnum.PLAYER) {
-        if (component.receivesAttackFrom == ReceivesAttackFromEnum.ALL ||
-            component.receivesAttackFrom == ReceivesAttackFromEnum.PLAYER) {
-          component.receiveDamage(damage, id);
-        }
-      }
+      component.receiveDamage(attackFrom, damage, id);
     } else if (!withDecorationCollision) {
       return false;
     }
