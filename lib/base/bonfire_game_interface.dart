@@ -11,6 +11,7 @@ import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/mixins/sensor.dart';
+import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/value_generator_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -147,5 +148,13 @@ abstract class BonfireGameInterface {
   });
 
   /// Used to add particles in game.
-  void addParticle(Particle particle);
+  void addParticle(
+    Particle particle, {
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority = LayerPriority.MAP + 1,
+  });
 }
