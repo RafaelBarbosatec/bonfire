@@ -1,5 +1,7 @@
+
 # [next]
 - Updated Flame to version 1.1.0
+- Adds `addParticle(Particle particle)` in `gameRef`.
 - Implements NPC component. Suggested by [4mitabh](https://github.com/4mitabh).
 - Improvements in `Attackable` system.
 - Adds `checkCanReceiveDamage` method in `Attackable` mixin. You can do override this method to implements your own rule that who can receive damage or not.

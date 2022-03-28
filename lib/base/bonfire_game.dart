@@ -6,6 +6,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
+import 'package:bonfire/util/custom_particle_component.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/input.dart';
@@ -404,5 +405,10 @@ class BonfireGame extends BaseGame
     } else {
       print('$target is not a JoystickListener');
     }
+  }
+
+  @override
+  void addParticle(Particle particle) {
+    this.add(CustomParticleComponent(particle));
   }
 }
