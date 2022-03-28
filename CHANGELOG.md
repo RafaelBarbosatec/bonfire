@@ -1,3 +1,25 @@
+# [2.4.0]
+- Updated Flame to version 1.1.0
+- Adds `addParticle(Particle particle)` in `gameRef`.
+- Implements NPC component. Suggested by [4mitabh](https://github.com/4mitabh).
+- Improvements in `Attackable` system.
+- Adds `checkCanReceiveDamage` method in `Attackable` mixin. You can do override this method to implements your own rule that who can receive damage or not.
+- BREAKING CHANGES:
+    - ```dart
+      void receiveDamage(
+         double damage,
+         dynamic identify,
+      )
+      ```
+      in `Attackable` now is
+      ```dart
+      void receiveDamage(
+         AttackFromEnum attacker,
+         double damage,
+         dynamic identify,
+      )
+      ```
+
 # [2.3.1]
 - Updated example with NPCs. Thanks [4mitabh](https://github.com/4mitabh)!
 - Fixed 8-Direction Animation mentioned in [#234](https://github.com/RafaelBarbosatec/bonfire/issues/234). Thanks [TaylorHo](https://github.com/TaylorHo)!

@@ -33,7 +33,7 @@ class GameInterface extends GameComponent {
   }
 
   /// Used to add components in your interface like a Button.
-  Future<void> add(Component component) {
+  Future<void>? add(Component component) {
     if (component is InterfaceComponent) {
       removeById(component.id);
     }

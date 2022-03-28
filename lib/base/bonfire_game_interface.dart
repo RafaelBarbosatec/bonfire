@@ -2,18 +2,20 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/decoration/decoration.dart';
-import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/map/map_game.dart';
+import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/mixins/sensor.dart';
+import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/value_generator_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/particles.dart';
 import 'package:flutter/widgets.dart';
 
 ///
@@ -72,7 +74,7 @@ abstract class BonfireGameInterface {
   void resumeEngine();
 
   /// Used to add component in the game.
-  Future<void> add(Component component);
+  Future<void>? add(Component component);
 
   /// Used to add component list in the game.
   Future<void> addAll(List<Component> components);
@@ -143,5 +145,16 @@ abstract class BonfireGameInterface {
     GameComponent target, {
     bool cleanObservers = false,
     bool moveCameraToTarget = false,
+  });
+
+  /// Used to add particles in game.
+  void addParticle(
+    Particle particle, {
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority = LayerPriority.MAP + 1,
   });
 }

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:bonfire/geometry/shape.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:flame/extensions.dart';
+import 'package:flame/components.dart';
 
 class RectangleShape extends Shape {
   Rect _rect;
@@ -24,21 +24,23 @@ class RectangleShape extends Shape {
 
   @override
   set position(Vector2 value) {
-    super.position = value;
+    if (value != super.position) {
+      super.position = value;
+      _updateExtremities(value);
+    }
+  }
+
+  void _updateExtremities(Vector2 value) {
     _rect = Rect.fromLTWH(
       value.x,
       value.y,
       _rect.width,
       _rect.height,
     );
-    _updateExtremities(value);
-  }
-
-  void _updateExtremities(Vector2 value) {
-    this.leftTop = value;
-    this.rightTop = value.translate(_rect.width, 0);
-    this.rightBottom = value.translate(_rect.width, _rect.height);
-    this.leftBottom = value.translate(0, _rect.height);
+    this.leftTop = _rect.topLeft.toVector2();
+    this.rightTop = _rect.topRight.toVector2();
+    this.rightBottom = _rect.bottomRight.toVector2();
+    this.leftBottom = _rect.bottomLeft.toVector2();
   }
 
   Rect get rect => _rect;

@@ -45,11 +45,13 @@ class PolygonShape extends Shape {
 
   @override
   set position(Vector2 value) {
-    super.position = value;
+    if (value != this.position) {
+      super.position = value;
 
-    rect.position = value;
-    for (var i = 0; i < points.length; i++) {
-      points[i] = relativePoints[i] + value;
+      rect.position = value;
+      for (var i = 0; i < points.length; i++) {
+        points[i] = relativePoints[i] + value;
+      }
     }
   }
 

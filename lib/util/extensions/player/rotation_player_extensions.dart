@@ -5,6 +5,8 @@ import 'package:bonfire/util/extensions/game_component_extensions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
+import '../../mixins/attackable.dart';
+
 extension RotationPlayerExtensions on RotationPlayer {
   void simpleAttackRange({
     /// use animation facing right.
@@ -36,6 +38,7 @@ extension RotationPlayerExtensions on RotationPlayer {
       destroySize: destroySize,
       collision: collision,
       lightingConfig: lightingConfig,
+      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
     );
   }
 
@@ -55,6 +58,7 @@ extension RotationPlayerExtensions on RotationPlayer {
       id: id,
       size: size,
       withPush: withPush,
+      attacker: AttackFromEnum.PLAYER_OR_ALLY,
     );
   }
 }
