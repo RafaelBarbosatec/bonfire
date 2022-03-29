@@ -28,11 +28,21 @@ mixin Attackable on GameComponent {
     _maxLife = life;
   }
 
-  /// increase life in the player
+  /// increase life
   void addLife(double life) {
     this.life += life;
     if (this.life > maxLife) {
       this.life = maxLife;
+    }
+  }
+
+  /// reduce life
+  void removeLife(double life) {
+    if (this.life > 0) {
+      this.life -= life;
+    }
+    if (this.life <= 0 && !_isDead) {
+      die();
     }
   }
 
@@ -44,12 +54,7 @@ mixin Attackable on GameComponent {
     dynamic identify,
   ) {
     if (checkCanReceiveDamage(attacker, damage, identify)) {
-      if (life > 0) {
-        life -= damage;
-      }
-      if (life <= 0 && !_isDead) {
-        die();
-      }
+      removeLife(damage);
     }
   }
 

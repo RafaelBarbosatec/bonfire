@@ -1,3 +1,6 @@
+# [next]
+- adds `removeLife` method in `Attackable`.
+
 # [2.4.0]
 - Updated Flame to version 1.1.0
 - Adds `addParticle(Particle particle)` in `gameRef`.
