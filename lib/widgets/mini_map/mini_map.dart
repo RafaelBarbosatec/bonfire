@@ -17,41 +17,24 @@ import 'mini_map_canvas.dart';
 /// Rafaelbarbosatec
 /// on 12/04/22
 
-typedef MiniMapCustomRender = void Function(
-    Canvas canvas, GameComponent component);
+typedef MiniMapCustomRender<T extends GameComponent> = void Function(
+    Canvas canvas, T component);
 
 class MiniMap extends StatefulWidget {
-  static MiniMapCustomRender tilesRenderDefault = (canvas, component) {
-    if (component is ObjectCollision) {
-      component.renderCollision(canvas, Colors.black);
-    }
-  };
-
-  static MiniMapCustomRender componentsRenderDefault = (canvas, component) {
-    if (component is ObjectCollision) {
-      if (component is GameDecoration) {
-        component.renderCollision(canvas, Colors.black);
-      }
-      if (component is Player) {
-        component.renderCollision(canvas, Colors.cyan);
-      } else if (component is Ally) {
-        component.renderCollision(canvas, Colors.yellow);
-      } else if (component is Enemy) {
-        component.renderCollision(canvas, Colors.red);
-      } else if (component is Npc) {
-        component.renderCollision(canvas, Colors.green);
-      }
-    }
-  };
-
   final BonfireGame game;
-  final MiniMapCustomRender? tileRender;
+  final MiniMapCustomRender<Tile>? tileRender;
   final MiniMapCustomRender? componentsRender;
   final Vector2 size;
   final EdgeInsetsGeometry? margin;
   final BorderRadius? borderRadius;
   final Color? backgroundColor;
   final BoxBorder? border;
+  final Color? tileCollisionColor;
+  final Color? tileColor;
+  final Color? playerColor;
+  final Color? enemyColor;
+  final Color? npcColor;
+  final Color? decorationColor;
   MiniMap({
     Key? key,
     required this.game,
@@ -62,6 +45,12 @@ class MiniMap extends StatefulWidget {
     this.borderRadius,
     this.backgroundColor = Colors.grey,
     this.border,
+    this.tileCollisionColor,
+    this.tileColor,
+    this.playerColor,
+    this.enemyColor,
+    this.npcColor,
+    this.decorationColor,
   })  : this.size = size ?? Vector2(200, 200),
         super(key: key);
 
@@ -111,8 +100,8 @@ class _MiniMapState extends State<MiniMap> {
                 cameraPosition: cameraPosition,
                 gameSize: widget.game.size,
                 componentsRender:
-                    widget.componentsRender ?? MiniMap.componentsRenderDefault,
-                tileRender: widget.tileRender ?? MiniMap.tilesRenderDefault,
+                    widget.componentsRender ?? componentsRenderDefault(),
+                tileRender: widget.tileRender ?? tilesRenderDefault(),
               ),
             ),
           ),
@@ -134,4 +123,37 @@ class _MiniMapState extends State<MiniMap> {
       }
     });
   }
+
+  MiniMapCustomRender<Tile> tilesRenderDefault() => (canvas, component) {
+        if (component is ObjectCollision) {
+          (component as ObjectCollision).renderCollision(
+              canvas, widget.tileCollisionColor ?? Colors.black);
+        } else if (widget.tileColor != null) {
+          (component as ObjectCollision)
+              .renderCollision(canvas, widget.tileColor!);
+        }
+      };
+
+  MiniMapCustomRender componentsRenderDefault() => (canvas, component) {
+        if (component is ObjectCollision) {
+          if (component is GameDecoration) {
+            component.renderCollision(
+              canvas,
+              widget.decorationColor ?? Colors.black,
+            );
+          }
+          if (component is Player) {
+            component.renderCollision(
+              canvas,
+              widget.playerColor ?? Colors.cyan,
+            );
+          } else if (component is Ally) {
+            component.renderCollision(canvas, Colors.yellow);
+          } else if (component is Enemy) {
+            component.renderCollision(canvas, widget.playerColor ?? Colors.red);
+          } else if (component is Npc) {
+            component.renderCollision(canvas, widget.npcColor ?? Colors.green);
+          }
+        }
+      };
 }

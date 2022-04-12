@@ -18,7 +18,7 @@ class MiniMapCanvas extends CustomPainter {
   final Iterable<GameComponent> components;
   final Vector2 cameraPosition;
   final Vector2 gameSize;
-  final MiniMapCustomRender? tileRender;
+  final MiniMapCustomRender<Tile>? tileRender;
   final MiniMapCustomRender? componentsRender;
   final double zoom;
 
