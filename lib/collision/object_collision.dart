@@ -104,7 +104,7 @@ mixin ObjectCollision on GameComponent {
     super.render(canvas);
     if (hasGameRef) {
       if (gameRef.showCollisionArea == true) {
-        _drawCollision(
+        renderCollision(
           canvas,
           gameRef.collisionAreaColor ?? Colors.lightGreen.withOpacity(0.5),
         );
@@ -112,7 +112,7 @@ mixin ObjectCollision on GameComponent {
     }
   }
 
-  void _drawCollision(Canvas canvas, Color color) {
+  void renderCollision(Canvas canvas, Color color) {
     if (!containCollision()) return;
 
     for (final element in _collisionConfig!.collisions) {
