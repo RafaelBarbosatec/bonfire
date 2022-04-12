@@ -51,7 +51,8 @@ class _MiniMapState extends State<MiniMap> {
             ),
             child: CustomPaint(
               painter: MiniMapCanvas(
-                widget.game.visibleCollisions(),
+                widget.game.visibleComponents().toList()
+                  ..addAll(widget.game.map.getRendered()),
                 widget.game.camera,
                 widget.game.size,
               ),

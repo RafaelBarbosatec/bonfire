@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 /// Rafaelbarbosatec
 /// on 12/04/22
 class MiniMapCanvas extends CustomPainter {
-  final Iterable<ObjectCollision> components;
+  final Iterable<GameComponent> components;
   final Camera camera;
   final Vector2 gameSize;
   final double zoom;
@@ -33,16 +33,18 @@ class MiniMapCanvas extends CustomPainter {
     canvas.scale(scale);
     components.forEach(
       (element) {
-        if (element is Player) {
-          element.renderCollision(canvas, Colors.cyan);
-        } else if (element is Ally) {
-          element.renderCollision(canvas, Colors.yellow);
-        } else if (element is Enemy) {
-          element.renderCollision(canvas, Colors.red);
-        } else if (element is Npc) {
-          element.renderCollision(canvas, Colors.green);
-        } else if (element is Tile || element is GameDecoration) {
-          element.renderCollision(canvas, Colors.black);
+        if (element is ObjectCollision) {
+          if (element is Player) {
+            element.renderCollision(canvas, Colors.cyan);
+          } else if (element is Ally) {
+            element.renderCollision(canvas, Colors.yellow);
+          } else if (element is Enemy) {
+            element.renderCollision(canvas, Colors.red);
+          } else if (element is Npc) {
+            element.renderCollision(canvas, Colors.green);
+          } else if (element is Tile || element is GameDecoration) {
+            element.renderCollision(canvas, Colors.black);
+          }
         }
       },
     );
