@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 ///
@@ -17,37 +16,42 @@ import 'package:flutter/material.dart';
 /// on 12/04/22
 class MiniMapCanvas extends CustomPainter {
   final Iterable<GameComponent> components;
-  final Camera camera;
+  final Vector2 cameraPosition;
   final Vector2 gameSize;
+  final MiniMapCustomRender? tileRender;
+  final MiniMapCustomRender? componentsRender;
   final double zoom;
 
-  MiniMapCanvas(this.components, this.camera, this.gameSize, {this.zoom = 1});
+  MiniMapCanvas({
+    required this.components,
+    required this.cameraPosition,
+    required this.gameSize,
+    this.zoom = 1,
+    this.tileRender,
+    this.componentsRender,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    double minnor = min(gameSize.x, gameSize.y);
-    double scale = size.width / minnor * zoom;
+    double scaleX = size.width / gameSize.x * zoom;
+    double scaleY = size.height / gameSize.y * zoom;
+    double scale = max(scaleX, scaleY);
+    double restX = (gameSize.x * scale - size.width) / 2;
+    double restY = (gameSize.y * scale - size.height) / 2;
+
     canvas.translate(
-        camera.position.x * scale * -1, camera.position.y * scale * -1);
+      (cameraPosition.x + restX) * scale * -1,
+      (cameraPosition.y + restY) * scale * -1,
+    );
     canvas.save();
     canvas.scale(scale);
-    components.forEach(
-      (element) {
-        if (element is ObjectCollision) {
-          if (element is Player) {
-            element.renderCollision(canvas, Colors.cyan);
-          } else if (element is Ally) {
-            element.renderCollision(canvas, Colors.yellow);
-          } else if (element is Enemy) {
-            element.renderCollision(canvas, Colors.red);
-          } else if (element is Npc) {
-            element.renderCollision(canvas, Colors.green);
-          } else if (element is Tile || element is GameDecoration) {
-            element.renderCollision(canvas, Colors.black);
-          }
-        }
-      },
-    );
+    for (var element in components) {
+      if (element is Tile) {
+        tileRender?.call(canvas, element);
+      } else {
+        componentsRender?.call(canvas, element);
+      }
+    }
     canvas.restore();
   }
 

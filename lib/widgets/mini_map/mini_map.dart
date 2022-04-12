@@ -16,9 +16,54 @@ import 'mini_map_canvas.dart';
 ///
 /// Rafaelbarbosatec
 /// on 12/04/22
+
+typedef MiniMapCustomRender = void Function(
+    Canvas canvas, GameComponent component);
+
 class MiniMap extends StatefulWidget {
+  static MiniMapCustomRender tilesRenderDefault = (canvas, component) {
+    if (component is ObjectCollision) {
+      component.renderCollision(canvas, Colors.black);
+    }
+  };
+
+  static MiniMapCustomRender componentsRenderDefault = (canvas, component) {
+    if (component is ObjectCollision) {
+      if (component is GameDecoration) {
+        component.renderCollision(canvas, Colors.black);
+      }
+      if (component is Player) {
+        component.renderCollision(canvas, Colors.cyan);
+      } else if (component is Ally) {
+        component.renderCollision(canvas, Colors.yellow);
+      } else if (component is Enemy) {
+        component.renderCollision(canvas, Colors.red);
+      } else if (component is Npc) {
+        component.renderCollision(canvas, Colors.green);
+      }
+    }
+  };
+
   final BonfireGame game;
-  const MiniMap({Key? key, required this.game}) : super(key: key);
+  final MiniMapCustomRender? tileRender;
+  final MiniMapCustomRender? componentsRender;
+  final Vector2 size;
+  final EdgeInsetsGeometry? margin;
+  final BorderRadius? borderRadius;
+  final Color? backgroundColor;
+  final BoxBorder? border;
+  MiniMap({
+    Key? key,
+    required this.game,
+    this.tileRender,
+    this.componentsRender,
+    Vector2? size,
+    this.margin,
+    this.borderRadius,
+    this.backgroundColor = Colors.grey,
+    this.border,
+  })  : this.size = size ?? Vector2(200, 200),
+        super(key: key);
 
   @override
   State<MiniMap> createState() => _MiniMapState();
@@ -38,23 +83,28 @@ class _MiniMapState extends State<MiniMap> {
     return Align(
       alignment: Alignment.topRight,
       child: Padding(
-        padding: EdgeInsets.all(20),
+        padding: widget.margin ?? EdgeInsets.zero,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: widget.borderRadius ?? BorderRadius.zero,
           child: Container(
-            width: 200,
-            height: 200,
+            width: widget.size.x,
+            height: widget.size.y,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.white),
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(10),
+              border: widget.border,
+              color: widget.backgroundColor,
+              borderRadius: widget.borderRadius,
             ),
             child: CustomPaint(
               painter: MiniMapCanvas(
-                widget.game.visibleComponents().toList()
-                  ..addAll(widget.game.map.getRendered()),
-                widget.game.camera,
-                widget.game.size,
+                components: widget.game.visibleComponents().toList()
+                  ..addAll(
+                    widget.game.map.getRendered(),
+                  ),
+                cameraPosition: cameraPosition,
+                gameSize: widget.game.size,
+                componentsRender:
+                    widget.componentsRender ?? MiniMap.componentsRenderDefault,
+                tileRender: widget.tileRender ?? MiniMap.tilesRenderDefault,
               ),
             ),
           ),
