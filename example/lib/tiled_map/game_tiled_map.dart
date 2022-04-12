@@ -88,6 +88,9 @@ class GameTiledMap extends StatelessWidget {
             'barLife': (context, game) => BarLifeWidget(),
             'miniMap': (context, game) => MiniMap(
                   game: game,
+                  margin: EdgeInsets.all(20),
+                  borderRadius: BorderRadius.circular(10),
+                  size: Vector2.all(constraints.maxHeight / 2.5),
                 ),
           },
           initialActiveOverlays: [

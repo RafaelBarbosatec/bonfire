@@ -72,10 +72,18 @@ class MiniMap extends StatefulWidget {
 class _MiniMapState extends State<MiniMap> {
   Vector2 cameraPosition = Vector2.zero();
   Vector2 playerPosition = Vector2.zero();
+
+  late async.Timer timer;
   @override
   void initState() {
     _initInterval();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -114,7 +122,7 @@ class _MiniMapState extends State<MiniMap> {
   }
 
   void _initInterval() {
-    async.Timer.periodic(Duration(milliseconds: 16), (timer) {
+    timer = async.Timer.periodic(Duration(milliseconds: 20), (timer) {
       if (widget.game.camera.position != cameraPosition) {
         cameraPosition = widget.game.camera.position.clone();
         setState(() {});
