@@ -36,8 +36,8 @@ class MiniMapCanvas extends CustomPainter {
     double scaleX = size.width / gameSize.x * zoom;
     double scaleY = size.height / gameSize.y * zoom;
     double scale = max(scaleX, scaleY);
-    double restX = (gameSize.x * scale - size.width) / 2;
-    double restY = (gameSize.y * scale - size.height) / 2;
+    double restX = (gameSize.x * scale - size.width);
+    double restY = (gameSize.y * scale - size.height);
 
     canvas.translate(
       (cameraPosition.x + restX) * scale * -1,
