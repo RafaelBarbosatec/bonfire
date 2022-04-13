@@ -2,6 +2,7 @@
 - adds `removeLife` method in `Attackable`.
 - considers `offset` in layers of the Tiled.
 - Adds type `dynamicAbove` in tile.
+- Adds `MiniMap` widget.
 
 # [2.4.0]
 - Updated Flame to version 1.1.0
