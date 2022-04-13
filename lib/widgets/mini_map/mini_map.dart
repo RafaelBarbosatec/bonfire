@@ -34,6 +34,7 @@ class MiniMap extends StatefulWidget {
   final Color? playerColor;
   final Color? enemyColor;
   final Color? npcColor;
+  final Color? allyColor;
   final Color? decorationColor;
   MiniMap({
     Key? key,
@@ -43,13 +44,14 @@ class MiniMap extends StatefulWidget {
     Vector2? size,
     this.margin,
     this.borderRadius,
-    this.backgroundColor = Colors.grey,
+    this.backgroundColor,
     this.border,
     this.tileCollisionColor,
     this.tileColor,
     this.playerColor,
     this.enemyColor,
     this.npcColor,
+    this.allyColor,
     this.decorationColor,
   })  : this.size = size ?? Vector2(200, 200),
         super(key: key);
@@ -88,20 +90,23 @@ class _MiniMapState extends State<MiniMap> {
             height: widget.size.y,
             decoration: BoxDecoration(
               border: widget.border,
-              color: widget.backgroundColor,
+              color: widget.backgroundColor ?? Colors.grey.withOpacity(0.5),
               borderRadius: widget.borderRadius,
             ),
-            child: CustomPaint(
-              painter: MiniMapCanvas(
-                components: widget.game.visibleComponents().toList()
-                  ..addAll(
-                    widget.game.map.getRendered(),
-                  ),
-                cameraPosition: cameraPosition,
-                gameSize: widget.game.size,
-                componentsRender:
-                    widget.componentsRender ?? componentsRenderDefault(),
-                tileRender: widget.tileRender ?? tilesRenderDefault(),
+            child: ClipRRect(
+              borderRadius: widget.borderRadius ?? BorderRadius.zero,
+              child: CustomPaint(
+                painter: MiniMapCanvas(
+                  components: widget.game.visibleComponents().toList()
+                    ..addAll(
+                      widget.game.map.getRendered(),
+                    ),
+                  cameraPosition: cameraPosition,
+                  gameSize: widget.game.size,
+                  componentsRender:
+                      widget.componentsRender ?? componentsRenderDefault(),
+                  tileRender: widget.tileRender ?? tilesRenderDefault(),
+                ),
               ),
             ),
           ),
@@ -126,8 +131,8 @@ class _MiniMapState extends State<MiniMap> {
 
   MiniMapCustomRender<Tile> tilesRenderDefault() => (canvas, component) {
         if (component is ObjectCollision) {
-          (component as ObjectCollision).renderCollision(
-              canvas, widget.tileCollisionColor ?? Colors.black);
+          (component as ObjectCollision).renderCollision(canvas,
+              widget.tileCollisionColor ?? Colors.black.withOpacity(0.5));
         } else if (widget.tileColor != null) {
           (component as ObjectCollision)
               .renderCollision(canvas, widget.tileColor!);
@@ -139,20 +144,29 @@ class _MiniMapState extends State<MiniMap> {
           if (component is GameDecoration) {
             component.renderCollision(
               canvas,
-              widget.decorationColor ?? Colors.black,
+              widget.decorationColor ?? Colors.black.withOpacity(0.5),
             );
           }
           if (component is Player) {
             component.renderCollision(
               canvas,
-              widget.playerColor ?? Colors.cyan,
+              widget.playerColor ?? Colors.cyan.withOpacity(0.5),
             );
           } else if (component is Ally) {
-            component.renderCollision(canvas, Colors.yellow);
+            component.renderCollision(
+              canvas,
+              widget.allyColor ?? Colors.yellow.withOpacity(0.5),
+            );
           } else if (component is Enemy) {
-            component.renderCollision(canvas, widget.playerColor ?? Colors.red);
+            component.renderCollision(
+              canvas,
+              widget.playerColor ?? Colors.red.withOpacity(0.5),
+            );
           } else if (component is Npc) {
-            component.renderCollision(canvas, widget.npcColor ?? Colors.green);
+            component.renderCollision(
+              canvas,
+              widget.npcColor ?? Colors.green.withOpacity(0.5),
+            );
           }
         }
       };
