@@ -33,6 +33,7 @@ typedef ObjectBuilder = GameComponent Function(
 class TiledWorldMap {
   static const ORIENTATION_SUPPORTED = 'orthogonal';
   static const ABOVE_TYPE = 'above';
+  static const DYNAMIC_ABOVE_TYPE = 'dynamicAbove';
   static const GIT_ROTATE_180 = 3221225472;
   static const GIT_ROTATE_90 = 2684354560;
   static const GIT_ROTATE_270 = 1610612736;
@@ -148,6 +149,8 @@ class TiledWorldMap {
         var data = _getDataTile(tile);
         if (data != null) {
           if (data.type?.contains(ABOVE_TYPE) ?? false) {
+            _addGameDecorationAbove(data, count, tileLayer, above: true);
+          } else if (data.type?.contains(DYNAMIC_ABOVE_TYPE) ?? false) {
             _addGameDecorationAbove(data, count, tileLayer);
           } else {
             _addTile(data, count, tileLayer, offsetX, offsetY);
@@ -188,8 +191,9 @@ class TiledWorldMap {
   void _addGameDecorationAbove(
     TiledItemTileSet data,
     int count,
-    TileLayer tileLayer,
-  ) {
+    TileLayer tileLayer, {
+    bool above = false,
+  }) {
     if (data.animation != null) {
       if (data.animation != null) {
         _components.add(
@@ -201,7 +205,7 @@ class TiledWorldMap {
             ),
             size: Vector2(_tileWidth, _tileHeight),
             collisions: data.collisions,
-            aboveComponents: true,
+            aboveComponents: above,
           )
             ..angle = data.angle
             ..isFlipHorizontal = data.isFlipHorizontal
@@ -220,7 +224,7 @@ class TiledWorldMap {
             ),
             size: Vector2(_tileWidth, _tileHeight),
             collisions: data.collisions,
-            aboveComponents: true,
+            aboveComponents: above,
           )
             ..angle = data.angle
             ..isFlipHorizontal = data.isFlipHorizontal

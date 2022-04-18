@@ -69,6 +69,7 @@ export 'package:bonfire/util/text_damage_component.dart';
 export 'package:bonfire/util/value_generator_component.dart';
 export 'package:bonfire/widgets/bonfire_tiled_widget.dart';
 export 'package:bonfire/widgets/bonfire_widget.dart';
+export 'package:bonfire/widgets/mini_map/mini_map.dart';
 export 'package:flame/components.dart' hide JoystickComponent, HasGameRef;
 export 'package:flame/effects.dart';
 export 'package:flame/flame.dart';

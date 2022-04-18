@@ -86,9 +86,17 @@ class GameTiledMap extends StatelessWidget {
           lightingColorGame: Colors.black.withOpacity(0.7),
           overlayBuilderMap: {
             'barLife': (context, game) => BarLifeWidget(),
+            'miniMap': (context, game) => MiniMap(
+                  game: game,
+                  margin: EdgeInsets.all(20),
+                  borderRadius: BorderRadius.circular(10),
+                  size: Vector2.all(constraints.maxHeight / 3),
+                  border: Border.all(color: Colors.white.withOpacity(0.5)),
+                ),
           },
           initialActiveOverlays: [
             'barLife',
+            'miniMap',
           ],
           cameraConfig: CameraConfig(
             smoothCameraEnabled: true,
