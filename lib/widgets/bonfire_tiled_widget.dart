@@ -44,6 +44,18 @@ class BonfireTiledWidget extends StatefulWidget {
   /// Represents a map (or world) where the game occurs.
   final TiledWorldMap map;
 
+  /// The [FocusNode] to control the games focus to receive event inputs.
+  /// If omitted, defaults to an internally controlled focus node.
+  final FocusNode? focusNode;
+
+  /// Whether the [focusNode] requests focus once the game is mounted.
+  /// Defaults to true.
+  final bool autofocus;
+
+  /// Initial mouse cursor for this [GameWidget]
+  /// mouse cursor can be changed in runtime using [Game.mouseCursor]
+  final MouseCursor? mouseCursor;
+
   final TapInGame? onTapDown;
   final TapInGame? onTapUp;
 
@@ -82,6 +94,9 @@ class BonfireTiledWidget extends StatefulWidget {
     this.onTapDown,
     this.onTapUp,
     this.onReady,
+    this.focusNode,
+    this.autofocus = true,
+    this.mouseCursor,
   }) : super(key: key);
   @override
   _BonfireTiledWidgetState createState() => _BonfireTiledWidgetState();
@@ -196,6 +211,9 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       game: _game!,
       overlayBuilderMap: widget.overlayBuilderMap,
       initialActiveOverlays: widget.initialActiveOverlays,
+      mouseCursor: widget.mouseCursor,
+      autofocus: widget.autofocus,
+      focusNode: widget.focusNode,
     );
   }
 

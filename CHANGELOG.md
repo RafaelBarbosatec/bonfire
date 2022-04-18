@@ -1,3 +1,6 @@
+# [next]
+- Adds params `focusNode`, `autofocus` and `mouseCursor` in `BonfireWidget` and `BonfireTiledWidget`
+
 # [2.4.1]
 - adds `removeLife` method in `Attackable`.
 - considers `offset` in layers of the Tiled.

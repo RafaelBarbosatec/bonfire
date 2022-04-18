@@ -46,6 +46,18 @@ class BonfireWidget extends StatefulWidget {
   /// Used to configure lighting in the game
   final Color? lightingColorGame;
 
+  /// The [FocusNode] to control the games focus to receive event inputs.
+  /// If omitted, defaults to an internally controlled focus node.
+  final FocusNode? focusNode;
+
+  /// Whether the [focusNode] requests focus once the game is mounted.
+  /// Defaults to true.
+  final bool autofocus;
+
+  /// Initial mouse cursor for this [GameWidget]
+  /// mouse cursor can be changed in runtime using [Game.mouseCursor]
+  final MouseCursor? mouseCursor;
+
   final TapInGame? onTapDown;
   final TapInGame? onTapUp;
 
@@ -84,6 +96,9 @@ class BonfireWidget extends StatefulWidget {
     this.onTapDown,
     this.onTapUp,
     this.onReady,
+    this.focusNode,
+    this.autofocus = true,
+    this.mouseCursor,
   }) : super(key: key);
 
   @override
@@ -137,6 +152,9 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       game: _game,
       overlayBuilderMap: widget.overlayBuilderMap,
       initialActiveOverlays: widget.initialActiveOverlays,
+      focusNode: widget.focusNode,
+      autofocus: widget.autofocus,
+      mouseCursor: widget.mouseCursor,
     );
   }
 
