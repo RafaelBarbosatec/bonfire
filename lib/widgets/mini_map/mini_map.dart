@@ -131,11 +131,15 @@ class _MiniMapState extends State<MiniMap> {
 
   MiniMapCustomRender<Tile> tilesRenderDefault() => (canvas, component) {
         if (component is ObjectCollision) {
-          (component as ObjectCollision).renderCollision(canvas,
-              widget.tileCollisionColor ?? Colors.black.withOpacity(0.5));
+          (component as ObjectCollision).renderCollision(
+            canvas,
+            widget.tileCollisionColor ?? Colors.black.withOpacity(0.5),
+          );
         } else if (widget.tileColor != null) {
-          (component as ObjectCollision)
-              .renderCollision(canvas, widget.tileColor!);
+          (component as ObjectCollision).renderCollision(
+            canvas,
+            widget.tileColor!,
+          );
         }
       };
 
