@@ -165,35 +165,36 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
     try {
       TiledWorldData tiled = await widget.map.build();
 
-      List<GameComponent> components = (tiled.components ?? []);
-      components.addAll(widget.components ?? []);
-      _game = BonfireGame(
-        context: context,
-        joystickController: widget.joystick,
-        player: widget.player,
-        interface: widget.interface,
-        map: tiled.map,
-        components: components,
-        background: widget.background,
-        constructionMode: widget.constructionMode,
-        showCollisionArea: widget.showCollisionArea,
-        showFPS: widget.showFPS,
-        gameController: widget.gameController,
-        constructionModeColor:
-            widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
-        collisionAreaColor: widget.collisionAreaColor ??
-            Colors.lightGreenAccent.withOpacity(0.5),
-        lightingColorGame: widget.lightingColorGame,
-        cameraConfig: widget.cameraConfig,
-        colorFilter: widget.colorFilter,
-        onTapDown: widget.onTapDown,
-        onTapUp: widget.onTapUp,
-        onReady: (game) {
-          _showProgress(false);
-          widget.onReady?.call(game);
-        },
-      );
-      setState(() {});
+      setState(() {
+        List<GameComponent> components = (tiled.components ?? []);
+        components.addAll(widget.components ?? []);
+        _game = BonfireGame(
+          context: context,
+          joystickController: widget.joystick,
+          player: widget.player,
+          interface: widget.interface,
+          map: tiled.map,
+          components: components,
+          background: widget.background,
+          constructionMode: widget.constructionMode,
+          showCollisionArea: widget.showCollisionArea,
+          showFPS: widget.showFPS,
+          gameController: widget.gameController,
+          constructionModeColor:
+              widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+          collisionAreaColor: widget.collisionAreaColor ??
+              Colors.lightGreenAccent.withOpacity(0.5),
+          lightingColorGame: widget.lightingColorGame,
+          cameraConfig: widget.cameraConfig,
+          colorFilter: widget.colorFilter,
+          onTapDown: widget.onTapDown,
+          onTapUp: widget.onTapUp,
+          onReady: (game) {
+            _showProgress(false);
+            widget.onReady?.call(game);
+          },
+        );
+      });
     } catch (e) {
       print('(BonfireTiledWidget) Error: $e');
     }
