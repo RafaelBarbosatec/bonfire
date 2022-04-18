@@ -66,7 +66,7 @@ class BonfireTiledWidget extends StatefulWidget {
   final Widget? progress;
   final CameraConfig? cameraConfig;
   final AnimatedSwitcherTransitionBuilder transitionBuilder;
-  final Duration? progressTransitionDuration;
+  final Duration progressTransitionDuration;
   final GameColorFilter? colorFilter;
 
   const BonfireTiledWidget({
@@ -86,7 +86,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.progress,
     this.cameraConfig,
     this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
-    this.progressTransitionDuration,
+    this.progressTransitionDuration = const Duration(milliseconds: 500),
     this.colorFilter,
     this.components,
     this.overlayBuilderMap,
@@ -137,17 +137,21 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        _buildGame(),
+        if (_game != null)
+          CustomGameWidget(
+            game: _game!,
+            overlayBuilderMap: widget.overlayBuilderMap,
+            initialActiveOverlays: widget.initialActiveOverlays,
+            mouseCursor: widget.mouseCursor,
+            autofocus: widget.autofocus,
+            focusNode: widget.focusNode,
+          ),
         StreamBuilder<bool>(
           stream: _loadingStream.stream,
           builder: (context, snapshot) {
-            bool _loading = true;
-            if (snapshot.hasData) {
-              _loading = snapshot.data!;
-            }
+            bool _loading = !snapshot.hasData || snapshot.data == true;
             return AnimatedSwitcher(
-              duration: widget.progressTransitionDuration ??
-                  Duration(milliseconds: 500),
+              duration: widget.progressTransitionDuration,
               transitionBuilder: widget.transitionBuilder,
               child: _loading ? _defaultProgress() : SizedBox.shrink(),
             );
@@ -162,7 +166,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
       TiledWorldData tiled = await widget.map.build();
 
       List<GameComponent> components = (tiled.components ?? []);
-      if (widget.components != null) components.addAll(widget.components!);
+      components.addAll(widget.components ?? []);
       _game = BonfireGame(
         context: context,
         joystickController: widget.joystick,
@@ -203,18 +207,6 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
             child: CircularProgressIndicator(),
           ),
         );
-  }
-
-  Widget _buildGame() {
-    if (_game == null) return SizedBox.shrink();
-    return CustomGameWidget(
-      game: _game!,
-      overlayBuilderMap: widget.overlayBuilderMap,
-      initialActiveOverlays: widget.initialActiveOverlays,
-      mouseCursor: widget.mouseCursor,
-      autofocus: widget.autofocus,
-      focusNode: widget.focusNode,
-    );
   }
 
   void _showProgress(bool show) async {
