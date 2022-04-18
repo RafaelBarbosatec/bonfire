@@ -2,7 +2,7 @@
 - adds `removeLife` method in `Attackable`.
 - considers `offset` in layers of the Tiled.
 - Adds type `dynamicAbove` in tile.
-- Adds `MiniMap` widget.
+- Adds `MiniMap` widget [DOC](https://bonfire-engine.github.io/#/minimap).
 - Update Flame to 1.1.1.
 
 # [2.4.0]
