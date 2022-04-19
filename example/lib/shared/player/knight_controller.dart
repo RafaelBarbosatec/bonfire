@@ -25,7 +25,8 @@ class KnightController extends StateController<Knight> {
 
   @override
   void update(double dt, Knight component) {
-    if (component.checkInterval('seeEnemy', 250, dt) == true) {
+    bool seeEnemyInterval = component.checkInterval('seeEnemy', 250, dt);
+    if (seeEnemyInterval) {
       component.seeEnemy(
         radiusVision: component.width * 4,
         notObserved: _handleNotObserveEnemy,
@@ -33,8 +34,12 @@ class KnightController extends StateController<Knight> {
       );
     }
 
-    if (executingRangeAttack &&
-        component.checkInterval('ATTACK_RANGE', 150, dt) == true) {
+    bool execRangeAttackInterval = component.checkInterval(
+      'ATTACK_RANGE',
+      150,
+      dt,
+    );
+    if (executingRangeAttack && execRangeAttackInterval) {
       if (stamina > 10) {
         _decrementStamina(10);
         component.execRangeAttack(radAngleRangeAttack, attack / 2);
