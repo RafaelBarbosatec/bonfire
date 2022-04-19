@@ -1,5 +1,6 @@
 # [next]
 - Adds params `focusNode`, `autofocus` and `mouseCursor` in `BonfireWidget` and `BonfireTiledWidget`
+- BREAKING CHANGE: Update `StateController`. the method `update` now is `void update(double dt, T component)`. Now you receive what component belongs this update in case that your controller is used in many components.
 
 # [2.4.1]
 - adds `removeLife` method in `Attackable`.
