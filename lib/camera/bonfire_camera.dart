@@ -14,6 +14,12 @@ class BonfireCamera extends Camera {
   GameComponent? target;
   late BonfireGame gameRef;
 
+  Size? _lastMapSize;
+  double limitMinX = 0;
+  double limitMinY = 0;
+  double limitMaxX = 0;
+  double limitMaxY = 0;
+
   BonfireCamera(
     CameraConfig config,
   ) {
@@ -95,10 +101,6 @@ class BonfireCamera extends Camera {
 
         this.zoom = initialZoom - (diffZoom * value);
         this.angle = originAngle - (diffAngle * value);
-
-        if (this.moveOnlyMapArea) {
-          _keepInMapArea();
-        }
       },
       onFinish: () {
         _isMoving = false;
@@ -144,10 +146,6 @@ class BonfireCamera extends Camera {
         );
         this.zoom = initialZoom - (diffZoom * value);
         this.angle = originAngle - (diffAngle * value);
-
-        if (this.moveOnlyMapArea) {
-          _keepInMapArea();
-        }
       },
       onFinish: () {
         this.target = target;
@@ -200,10 +198,6 @@ class BonfireCamera extends Camera {
         sizeWindows: sizeWindows ?? CameraConfig.sizeWidowsDefault,
       );
     }
-
-    if (this.moveOnlyMapArea) {
-      _keepInMapArea();
-    }
   }
 
   void _moveCameraToTarget(
@@ -249,16 +243,14 @@ class BonfireCamera extends Camera {
     }
 
     if (shouldMove) {
-      snapTo(
-        this.position.copyWith(
-              x: enableSmooth
-                  ? lerpDouble(this.position.x, newX, dt * speed)
-                  : newX,
-              y: enableSmooth
-                  ? lerpDouble(this.position.y, newY, dt * speed)
-                  : newY,
-            ),
-      );
+      snapTo(this.position.copyWith(
+            x: enableSmooth
+                ? lerpDouble(this.position.x, newX, dt * speed)
+                : newX,
+            y: enableSmooth
+                ? lerpDouble(this.position.y, newY, dt * speed)
+                : newY,
+          ));
     }
   }
 
@@ -357,6 +349,7 @@ class BonfireCamera extends Camera {
 
   void update(double dt) {
     super.update(dt);
+    _updateLimits(canvasSize);
     if (dt != 0 && gameRef.isLoaded == true) {
       _followTarget(
         dt,
@@ -369,33 +362,54 @@ class BonfireCamera extends Camera {
     _spacingMap = space;
   }
 
-  void _keepInMapArea() {
+  void _updateLimits(Vector2 canvasSize) {
     final startPosition = gameRef.map.mapStartPosition;
     final sizeMap = gameRef.map.mapSize;
+
     if (startPosition == null || sizeMap == null) return;
+    if (_lastMapSize != sizeMap) {
+      _lastMapSize = sizeMap;
+      limitMinX = startPosition.x;
+      limitMinY = startPosition.y;
+      limitMaxX =
+          (sizeMap.width + startPosition.x - (canvasSize.x * _zoomFactor()));
+      limitMaxY =
+          (sizeMap.height + startPosition.y - (canvasSize.y * _zoomFactor()));
+    }
+  }
 
-    final limitX = (startPosition.x);
-    final limitY = (startPosition.y);
-    final limitMaxX = (sizeMap.width +
-        startPosition.x -
-        (gameRef.canvasSize.x * _zoomFactor()));
-    final limitMaxY = (sizeMap.height +
-        startPosition.y -
-        (gameRef.canvasSize.y * _zoomFactor()));
-
-    if (this.position.x > limitMaxX) {
-      snapTo(Vector2(limitMaxX, position.y));
-    }
-    if (this.position.y > limitMaxY) {
-      snapTo(Vector2(position.x, limitMaxY));
+  Vector2 _verifyLimits(Vector2 position) {
+    if (!this.moveOnlyMapArea) {
+      return position;
     }
 
-    if (this.position.x < limitX) {
-      snapTo(Vector2(limitX, position.y));
+    Vector2 newPosition = position.clone();
+
+    if (position.x > limitMaxX) {
+      newPosition = newPosition.copyWith(
+        x: limitMaxX,
+      );
+    } else if (position.x < limitMinX) {
+      newPosition = newPosition.copyWith(
+        x: limitMinX,
+      );
     }
-    if (this.position.y < limitY) {
-      snapTo(Vector2(position.x, limitY));
+
+    if (position.y > limitMaxY) {
+      newPosition = newPosition.copyWith(
+        y: limitMaxY,
+      );
+    } else if (position.y < limitMinY) {
+      newPosition = newPosition.copyWith(
+        y: limitMinY,
+      );
     }
+
+    return newPosition;
+  }
+
+  void snapTo(Vector2 position) {
+    super.snapTo(_verifyLimits(position));
   }
 
   double _zoomFactor() {
