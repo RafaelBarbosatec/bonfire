@@ -41,5 +41,5 @@ class BarLifeController extends StateController<BarLifeComponent> {
   }
 
   @override
-  void update(double dt) {}
+  void update(double dt, BarLifeComponent component) {}
 }

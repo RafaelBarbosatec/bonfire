@@ -14,11 +14,26 @@ class CustomGameWidget<T extends Game> extends StatelessWidget {
   /// "Overlay" which must be shown in the game.
   final List<String>? initialActiveOverlays;
 
+  /// The [FocusNode] to control the games focus to receive event inputs.
+  /// If omitted, defaults to an internally controlled focus node.
+  final FocusNode? focusNode;
+
+  /// Whether the [focusNode] requests focus once the game is mounted.
+  /// Defaults to true.
+  final bool autofocus;
+
+  /// Initial mouse cursor for this [GameWidget]
+  /// mouse cursor can be changed in runtime using [Game.mouseCursor]
+  final MouseCursor? mouseCursor;
+
   const CustomGameWidget({
     Key? key,
     required this.game,
     this.overlayBuilderMap,
     this.initialActiveOverlays,
+    this.focusNode,
+    this.autofocus = true,
+    this.mouseCursor,
   }) : super(key: key);
 
   @override
@@ -47,6 +62,9 @@ class CustomGameWidget<T extends Game> extends StatelessWidget {
           game: game,
           overlayBuilderMap: overlayBuilderMap,
           initialActiveOverlays: initialActiveOverlays,
+          focusNode: focusNode,
+          autofocus: autofocus,
+          mouseCursor: mouseCursor,
         ),
       ),
     );
