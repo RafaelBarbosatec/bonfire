@@ -68,12 +68,10 @@ class SimpleDirectionAnimation {
     FutureOr<SpriteAnimation>? runDownLeft,
     FutureOr<SpriteAnimation>? runDownRight,
     Map<String, FutureOr<SpriteAnimation>>? others,
-    SimpleAnimationEnum initAnimation = SimpleAnimationEnum.idleRight,
     this.enabledFlipX = true,
     this.enabledFlipY = false,
     this.eightDirection = false,
   }) {
-    _currentType = initAnimation;
     _loader?.add(AssetToLoad(idleLeft, (value) => this.idleLeft = value));
     _loader?.add(AssetToLoad(idleRight, (value) => this.idleRight = value));
     _loader?.add(AssetToLoad(idleDown, (value) => this.idleDown = value));
