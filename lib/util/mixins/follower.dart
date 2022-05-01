@@ -1,4 +1,3 @@
-import 'package:bonfire/base/game_component.dart';
 import 'package:flame/components.dart';
 
 ///
@@ -12,12 +11,12 @@ import 'package:flame/components.dart';
 ///
 /// Rafaelbarbosatec
 /// on 04/02/22
-mixin Follower on GameComponent {
-  GameComponent? followerTarget;
+mixin Follower on PositionComponent {
+  PositionComponent? followerTarget;
   Vector2? followerPositionFromTarget;
 
   void setupFollower(
-    GameComponent followerTarget, {
+    PositionComponent followerTarget, {
     Vector2? followerPositionFromTarget,
   }) {
     this.followerTarget = followerTarget;
