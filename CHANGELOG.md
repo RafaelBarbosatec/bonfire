@@ -1,3 +1,6 @@
+# [next]
+- Expand follower mixin support
+
 # [2.4.2]
 - Adds params `focusNode`, `autofocus` and `mouseCursor` in `BonfireWidget` and `BonfireTiledWidget`
 - Improvements in `Camera`
