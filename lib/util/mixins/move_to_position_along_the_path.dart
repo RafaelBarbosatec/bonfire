@@ -50,6 +50,9 @@ mixin MoveToPositionAlongThePath on Movement {
     Vector2 position, {
     List? ignoreCollisions,
   }) {
+    if (!hasGameRef) {
+      return;
+    }
     this.ignoreCollisions.clear();
     this.ignoreCollisions.add(this);
     if (ignoreCollisions != null) {
