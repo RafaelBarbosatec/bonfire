@@ -42,12 +42,6 @@ abstract class GameComponent extends PositionComponent
   /// Get BuildContext
   BuildContext get context => gameRef.context;
 
-  /// Method that checks if this component is visible on the screen
-  bool _isVisibleInCamera() {
-    if (!hasGameRef) return false;
-    return gameRef.isVisibleInCamera(this);
-  }
-
   /// Method that checks if this component contain collisions
   bool isObjectCollision() {
     return (this is ObjectCollision &&
@@ -183,8 +177,7 @@ abstract class GameComponent extends PositionComponent
       _intervalCheckIsVisible,
       dt,
     )) {
-      isVisible =
-          this._isVisibleInCamera() || positionType == PositionType.viewport;
+      isVisible = this._isVisibleInCamera();
     }
   }
 
@@ -224,6 +217,13 @@ abstract class GameComponent extends PositionComponent
         i.handlerPointerCancel(event);
       }
     });
+  }
+
+  /// Method that checks if this component is visible on the screen
+  bool _isVisibleInCamera() {
+    if (!hasGameRef) return false;
+    return gameRef.isVisibleInCamera(this) ||
+        positionType == PositionType.viewport;
   }
 
   void _applyFlipAndRotation(Canvas canvas) {
