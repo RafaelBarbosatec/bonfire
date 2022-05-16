@@ -147,29 +147,16 @@ abstract class GameComponent extends PositionComponent
   @override
   void renderTree(Canvas canvas) {
     canvas.save();
-
-    if (isFlipHorizontal || isFlipVertical || angle != 0) {
-      canvas.translate(this.center.x, this.center.y);
-      if (angle != 0) {
-        canvas.rotate(angle);
-      }
-      if (isFlipHorizontal || isFlipVertical) {
-        canvas.scale(isFlipHorizontal ? -1 : 1, isFlipVertical ? -1 : 1);
-      }
-
-      canvas.translate(-this.center.x, -this.center.y);
-    }
-
+    _applyFlipAndRotation(canvas);
     render(canvas);
-
-    canvas.restore();
-
     children.forEach((c) => c.renderTree(canvas));
 
     // Any debug rendering should be rendered on top of everything
     if (debugMode) {
       renderDebugMode(canvas);
     }
+
+    canvas.restore();
   }
 
   /// Returns true if for each time the defined millisecond interval passes.
@@ -187,6 +174,10 @@ abstract class GameComponent extends PositionComponent
   @override
   void update(double dt) {
     super.update(dt);
+    _checkIsVisible(dt);
+  }
+
+  void _checkIsVisible(double dt) {
     if (checkInterval(
       _keyIntervalCheckIsVisible,
       _intervalCheckIsVisible,
@@ -233,5 +224,19 @@ abstract class GameComponent extends PositionComponent
         i.handlerPointerCancel(event);
       }
     });
+  }
+
+  void _applyFlipAndRotation(Canvas canvas) {
+    if (isFlipHorizontal || isFlipVertical || angle != 0) {
+      canvas.translate(this.center.x, this.center.y);
+      if (angle != 0) {
+        canvas.rotate(angle);
+      }
+      if (isFlipHorizontal || isFlipVertical) {
+        canvas.scale(isFlipHorizontal ? -1 : 1, isFlipVertical ? -1 : 1);
+      }
+
+      canvas.translate(-this.center.x, -this.center.y);
+    }
   }
 }
