@@ -59,6 +59,7 @@ export 'package:bonfire/util/mixins/movement.dart';
 export 'package:bonfire/util/mixins/movement_by_joystick.dart';
 export 'package:bonfire/util/mixins/pushable.dart';
 export 'package:bonfire/util/mixins/sensor.dart';
+export 'package:bonfire/util/mixins/tile_recognizer.dart';
 export 'package:bonfire/util/mixins/use_assets_loader.dart';
 export 'package:bonfire/util/mixins/use_sprite.dart';
 export 'package:bonfire/util/mixins/use_sprite_animation.dart';

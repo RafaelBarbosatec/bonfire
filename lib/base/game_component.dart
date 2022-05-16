@@ -42,66 +42,6 @@ abstract class GameComponent extends PositionComponent
   /// Get BuildContext
   BuildContext get context => gameRef.context;
 
-  /// Method that checks if this component contain collisions
-  bool isObjectCollision() {
-    return (this is ObjectCollision &&
-        (this as ObjectCollision).containCollision());
-  }
-
-  /// Method that checks what type map tile is currently
-  String? tileTypeBelow() {
-    final list = tileTypeListBelow();
-    if (list.isNotEmpty) {
-      return list.first;
-    }
-
-    return null;
-  }
-
-  /// Method that checks what types map tile is currently
-  List<String> tileTypeListBelow() {
-    if (!hasGameRef) return [];
-    final map = gameRef.map;
-    if (map.getRendered().isNotEmpty) {
-      return map
-          .getRendered()
-          .where((element) {
-            return (element.overlaps(rectConsideringCollision) &&
-                (element.type?.isNotEmpty ?? false));
-          })
-          .map<String>((e) => e.type!)
-          .toList();
-    }
-    return [];
-  }
-
-  /// Method that checks what properties map tile is currently
-  Map<String, dynamic>? tilePropertiesBelow() {
-    final list = tilePropertiesListBelow();
-    if (list?.isNotEmpty == true) {
-      return list?.first;
-    }
-
-    return null;
-  }
-
-  /// Method that checks what properties list map tile is currently
-  List<Map<String, dynamic>>? tilePropertiesListBelow() {
-    if (!hasGameRef) return null;
-    final map = gameRef.map;
-    if (map.tiles.isNotEmpty) {
-      return map
-          .getRendered()
-          .where((element) {
-            return (element.overlaps(rectConsideringCollision) &&
-                (element.properties != null));
-          })
-          .map<Map<String, dynamic>>((e) => e.properties!)
-          .toList();
-    }
-    return null;
-  }
-
   /// Method used to translate component
   void translate(double translateX, double translateY) {
     position.add(Vector2(translateX, translateY));
@@ -183,13 +123,12 @@ abstract class GameComponent extends PositionComponent
 
   /// Return screen position of this component.
   Vector2 screenPosition() {
-    if (hasGameRef) {
-      return gameRef.camera.worldToScreen(
-        position,
-      );
-    } else {
+    if (!hasGameRef) {
       return Vector2.zero();
     }
+    return gameRef.camera.worldToScreen(
+      position,
+    );
   }
 
   @override
