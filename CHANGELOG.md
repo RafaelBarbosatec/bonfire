@@ -3,6 +3,7 @@
     - adds `enabledMoveCameraWithClick` param to enable movements of the camera with click and move.movements
     - adds `mouseButtonUsedToMoveCamera` param to set what button of the mouse you can use to move the camera.
     - adds `mouseButtonUseToMoveToPosition` param to set what button of the mouse you can use to set the position target. Default is `secondary` (right mouse button).
+- Extracted functions about check `Tiles` to the mixin `TileRecognizer`.
 
 # [2.4.2]
 - Adds params `focusNode`, `autofocus` and `mouseCursor` in `BonfireWidget` and `BonfireTiledWidget`
