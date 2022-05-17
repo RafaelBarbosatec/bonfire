@@ -102,34 +102,32 @@ mixin ObjectCollision on GameComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (hasGameRef) {
-      if (gameRef.showCollisionArea == true) {
-        renderCollision(
-          canvas,
-          gameRef.collisionAreaColor ?? Colors.lightGreen.withOpacity(0.5),
-        );
-      }
+    if (hasGameRef && gameRef.showCollisionArea == true) {
+      renderCollision(
+        canvas,
+        gameRef.collisionAreaColor ?? Colors.lightGreen.withOpacity(0.5),
+      );
     }
   }
 
   void renderCollision(Canvas canvas, Color color) {
-    if (!containCollision()) return;
-
-    for (final element in _collisionConfig!.collisions) {
-      element.render(canvas, color);
+    if (containCollision()) {
+      for (final element in _collisionConfig!.collisions) {
+        element.render(canvas, color);
+      }
     }
   }
 
   @override
   void update(double dt) {
-    updatePosition(this.position);
-    _containCollision = _collisionConfig?.collisions != null &&
-        _collisionConfig?.collisions.isNotEmpty == true &&
-        _collisionConfig?.enable == true;
+    _collisionConfig?.updatePosition(position);
+    _verifyIfContainCollision();
     super.update(dt);
   }
 
-  void updatePosition(Vector2 position) {
-    _collisionConfig?.updatePosition(position);
+  void _verifyIfContainCollision() {
+    _containCollision = _collisionConfig?.collisions != null &&
+        _collisionConfig?.collisions.isNotEmpty == true &&
+        _collisionConfig?.enable == true;
   }
 }

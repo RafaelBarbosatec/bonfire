@@ -19,13 +19,14 @@ class CollisionConfig {
   });
 
   bool verifyCollision(CollisionConfig? other, {Vector2? displacement}) {
-    if (other == null) return false;
-    for (final element1 in collisions) {
-      for (final element2 in other.collisions) {
-        if (displacement != null
-            ? element1.verifyCollisionSimulate(displacement, element2)
-            : element1.verifyCollision(element2)) {
-          return true;
+    if (other != null) {
+      for (final element1 in collisions) {
+        for (final element2 in other.collisions) {
+          if (displacement != null
+              ? element1.verifyCollisionSimulate(displacement, element2)
+              : element1.verifyCollision(element2)) {
+            return true;
+          }
         }
       }
     }
@@ -36,7 +37,7 @@ class CollisionConfig {
     if (collisions.isNotEmpty && position != _lastPosition) {
       collisions.first.updatePosition(position);
       Rect? _rect;
-      for (final element in collisions) {
+      for (var element in collisions) {
         element.updatePosition(position);
         if (_rect == null) {
           _rect = element.rect;
