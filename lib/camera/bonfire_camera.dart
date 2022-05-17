@@ -56,6 +56,10 @@ class BonfireCamera extends Camera {
     snapTo(position.translate(displacement, 0));
   }
 
+  void moveLeft(double displacement) {
+    snapTo(position.translate(displacement * -1, 0));
+  }
+
   void moveDown(double displacement) {
     snapTo(position.translate(0, displacement));
   }

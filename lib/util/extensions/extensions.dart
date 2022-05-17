@@ -409,6 +409,8 @@ extension CameraExt on Camera {
       (this as BonfireCamera).moveTop(displacement);
   void moveRight(double displacement) =>
       (this as BonfireCamera).moveRight(displacement);
+  void moveLeft(double displacement) =>
+      (this as BonfireCamera).moveLeft(displacement);
   void moveDown(double displacement) =>
       (this as BonfireCamera).moveDown(displacement);
   void moveUp(double displacement) =>

@@ -68,22 +68,22 @@ class SimpleDirectionAnimation {
     FutureOr<SpriteAnimation>? runDownLeft,
     FutureOr<SpriteAnimation>? runDownRight,
     Map<String, FutureOr<SpriteAnimation>>? others,
-    SimpleAnimationEnum initAnimation = SimpleAnimationEnum.idleRight,
     this.enabledFlipX = true,
     this.enabledFlipY = false,
     this.eightDirection = false,
   }) {
-    _currentType = initAnimation;
     _loader?.add(AssetToLoad(idleLeft, (value) => this.idleLeft = value));
     _loader?.add(AssetToLoad(idleRight, (value) => this.idleRight = value));
     _loader?.add(AssetToLoad(idleDown, (value) => this.idleDown = value));
     _loader?.add(AssetToLoad(idleUp, (value) => this.idleUp = value));
     _loader?.add(AssetToLoad(idleUpLeft, (value) => this.idleUpLeft = value));
     _loader?.add(AssetToLoad(idleUpRight, (value) => this.idleUpRight = value));
-    _loader
-        ?.add(AssetToLoad(idleDownLeft, (value) => this.idleDownLeft = value));
     _loader?.add(
-        AssetToLoad(idleDownRight, (value) => this.idleDownRight = value));
+      AssetToLoad(idleDownLeft, (value) => this.idleDownLeft = value),
+    );
+    _loader?.add(
+      AssetToLoad(idleDownRight, (value) => this.idleDownRight = value),
+    );
     _loader?.add(AssetToLoad(runUp, (value) => this.runUp = value));
     _loader?.add(AssetToLoad(runRight, (value) => this.runRight = value));
     _loader?.add(AssetToLoad(runDown, (value) => this.runDown = value));
@@ -91,8 +91,9 @@ class SimpleDirectionAnimation {
     _loader?.add(AssetToLoad(runUpLeft, (value) => this.runUpLeft = value));
     _loader?.add(AssetToLoad(runUpRight, (value) => this.runUpRight = value));
     _loader?.add(AssetToLoad(runDownLeft, (value) => this.runDownLeft = value));
-    _loader
-        ?.add(AssetToLoad(runDownRight, (value) => this.runDownRight = value));
+    _loader?.add(
+      AssetToLoad(runDownRight, (value) => this.runDownRight = value),
+    );
 
     others?.forEach((key, anim) {
       _loader?.add(AssetToLoad(anim, (value) {

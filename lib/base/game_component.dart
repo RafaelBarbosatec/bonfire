@@ -1,7 +1,7 @@
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:bonfire/util/interval_tick.dart';
+import 'package:bonfire/util/mixins/interval_checker.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
@@ -10,16 +10,13 @@ import 'package:flutter/widgets.dart';
 
 /// Base of the all components in the Bonfire
 abstract class GameComponent extends PositionComponent
-    with BonfireHasGameRef, PointerDetectorHandler {
+    with BonfireHasGameRef, PointerDetectorHandler, InternalChecker {
   final String _keyIntervalCheckIsVisible = "CHECK_VISIBLE";
   final int _intervalCheckIsVisible = 200;
   Map<String, dynamic>? properties;
 
   /// When true this component render above all components in game.
   bool aboveComponents = false;
-
-  /// Map available to store times that can be used to control the frequency of any action.
-  Map<String, IntervalTick> _timers = Map();
 
   /// Use to set opacity in render
   /// Range [0.0..1.0]
@@ -42,72 +39,6 @@ abstract class GameComponent extends PositionComponent
   /// Get BuildContext
   BuildContext get context => gameRef.context;
 
-  /// Method that checks if this component is visible on the screen
-  bool _isVisibleInCamera() {
-    if (!hasGameRef) return false;
-    return gameRef.isVisibleInCamera(this);
-  }
-
-  /// Method that checks if this component contain collisions
-  bool isObjectCollision() {
-    return (this is ObjectCollision &&
-        (this as ObjectCollision).containCollision());
-  }
-
-  /// Method that checks what type map tile is currently
-  String? tileTypeBelow() {
-    final list = tileTypeListBelow();
-    if (list.isNotEmpty) {
-      return list.first;
-    }
-
-    return null;
-  }
-
-  /// Method that checks what types map tile is currently
-  List<String> tileTypeListBelow() {
-    if (!hasGameRef) return [];
-    final map = gameRef.map;
-    if (map.getRendered().isNotEmpty) {
-      return map
-          .getRendered()
-          .where((element) {
-            return (element.overlaps(rectConsideringCollision) &&
-                (element.type?.isNotEmpty ?? false));
-          })
-          .map<String>((e) => e.type!)
-          .toList();
-    }
-    return [];
-  }
-
-  /// Method that checks what properties map tile is currently
-  Map<String, dynamic>? tilePropertiesBelow() {
-    final list = tilePropertiesListBelow();
-    if (list?.isNotEmpty == true) {
-      return list?.first;
-    }
-
-    return null;
-  }
-
-  /// Method that checks what properties list map tile is currently
-  List<Map<String, dynamic>>? tilePropertiesListBelow() {
-    if (!hasGameRef) return null;
-    final map = gameRef.map;
-    if (map.tiles.isNotEmpty) {
-      return map
-          .getRendered()
-          .where((element) {
-            return (element.overlaps(rectConsideringCollision) &&
-                (element.properties != null));
-          })
-          .map<Map<String, dynamic>>((e) => e.properties!)
-          .toList();
-    }
-    return null;
-  }
-
   /// Method used to translate component
   void translate(double translateX, double translateY) {
     position.add(Vector2(translateX, translateY));
@@ -122,78 +53,53 @@ abstract class GameComponent extends PositionComponent
   }
 
   int _getBottomPriority() {
-    int bottomPriority = bottom.round();
     if (this.isObjectCollision()) {
-      bottomPriority = (this as ObjectCollision).rectCollision.bottom.round();
+      return (this as ObjectCollision).rectCollision.bottom.round();
     }
-    return bottomPriority;
+    return bottom.round();
   }
 
   void renderDebugMode(Canvas canvas) {
-    if (isVisible) {
-      final rect = toRect();
-      canvas.drawRect(rect, debugPaint);
+    final rect = toRect();
+    canvas.drawRect(rect, debugPaint);
 
-      final dx = rect.right;
-      final dy = rect.bottom;
-      debugTextPaint.render(
-        canvas,
-        'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
-        Vector2(dx - 50, dy),
-      );
-    }
+    final dx = rect.right;
+    final dy = rect.bottom;
+    debugTextPaint.render(
+      canvas,
+      'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
+      Vector2(dx - 50, dy),
+    );
   }
 
   @override
   void renderTree(Canvas canvas) {
     canvas.save();
-
-    if (isFlipHorizontal || isFlipVertical || angle != 0) {
-      canvas.translate(this.center.x, this.center.y);
-      if (angle != 0) {
-        canvas.rotate(angle);
-      }
-      if (isFlipHorizontal || isFlipVertical) {
-        canvas.scale(isFlipHorizontal ? -1 : 1, isFlipVertical ? -1 : 1);
-      }
-
-      canvas.translate(-this.center.x, -this.center.y);
-    }
-
+    _applyFlipAndRotation(canvas);
     render(canvas);
-
-    canvas.restore();
-
     children.forEach((c) => c.renderTree(canvas));
 
     // Any debug rendering should be rendered on top of everything
-    if (debugMode) {
+    if (debugMode && isVisible) {
       renderDebugMode(canvas);
     }
-  }
 
-  /// Returns true if for each time the defined millisecond interval passes.
-  /// Like a `Timer.periodic`
-  /// Used in flows involved in the [update]
-  bool checkInterval(String key, int intervalInMilli, double dt) {
-    if (this._timers[key]?.interval != intervalInMilli) {
-      this._timers[key] = IntervalTick(intervalInMilli);
-      return true;
-    } else {
-      return this._timers[key]?.update(dt) ?? false;
-    }
+    canvas.restore();
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+    _checkIsVisible(dt);
+  }
+
+  void _checkIsVisible(double dt) {
     if (checkInterval(
       _keyIntervalCheckIsVisible,
       _intervalCheckIsVisible,
       dt,
     )) {
-      isVisible =
-          this._isVisibleInCamera() || positionType == PositionType.viewport;
+      isVisible = this._isVisibleInCamera();
     }
   }
 
@@ -203,35 +109,56 @@ abstract class GameComponent extends PositionComponent
       return gameRef.camera.worldToScreen(
         position,
       );
-    } else {
-      return Vector2.zero();
     }
+    return Vector2.zero();
   }
 
   @override
   void handlerPointerDown(PointerDownEvent event) {
-    children.forEach((i) {
-      if (i is GameComponent) {
-        i.handlerPointerDown(event);
+    for (var child in children) {
+      if (child is GameComponent) {
+        child.handlerPointerDown(event);
       }
-    });
+    }
   }
 
   @override
   void handlerPointerUp(PointerUpEvent event) {
-    children.forEach((i) {
-      if (i is GameComponent) {
-        i.handlerPointerUp(event);
+    for (var child in children) {
+      if (child is GameComponent) {
+        child.handlerPointerUp(event);
       }
-    });
+    }
   }
 
   @override
   void handlerPointerCancel(PointerCancelEvent event) {
-    children.forEach((i) {
-      if (i is GameComponent) {
-        i.handlerPointerCancel(event);
+    for (var child in children) {
+      if (child is GameComponent) {
+        child.handlerPointerCancel(event);
       }
-    });
+    }
+  }
+
+  /// Method that checks if this component is visible on the screen
+  bool _isVisibleInCamera() {
+    if (hasGameRef) {
+      return gameRef.isVisibleInCamera(this) ||
+          positionType == PositionType.viewport;
+    }
+    return false;
+  }
+
+  void _applyFlipAndRotation(Canvas canvas) {
+    if (isFlipHorizontal || isFlipVertical || angle != 0) {
+      canvas.translate(this.center.x, this.center.y);
+      if (angle != 0) {
+        canvas.rotate(angle);
+      }
+      if (isFlipHorizontal || isFlipVertical) {
+        canvas.scale(isFlipHorizontal ? -1 : 1, isFlipVertical ? -1 : 1);
+      }
+      canvas.translate(-this.center.x, -this.center.y);
+    }
   }
 }

@@ -465,4 +465,10 @@ extension GameComponentExtensions on GameComponent {
         ? (this as ObjectCollision).rectCollision
         : toRect());
   }
+
+  /// Method that checks if this component contain collisions
+  bool isObjectCollision() {
+    return (this is ObjectCollision &&
+        (this as ObjectCollision).containCollision());
+  }
 }

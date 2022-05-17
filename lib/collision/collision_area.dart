@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/geometry/shape.dart';
 import 'package:flutter/widgets.dart';
 
-Paint _paintCollision = Paint();
+final Paint _paintCollision = Paint();
 
 class CollisionArea {
   final Shape shape;
