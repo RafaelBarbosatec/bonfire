@@ -105,15 +105,15 @@ class Goblin extends SimpleEnemy
   }
 
   @override
-  void receiveDamage(AttackFromEnum attacker, double damage, dynamic identify) {
+  void removeLife(double life) {
     this.showDamage(
-      damage,
+      life,
       config: TextStyle(
         fontSize: width / 3,
         color: Colors.white,
       ),
     );
-    super.receiveDamage(attacker, damage, identify);
+    super.removeLife(life);
   }
 
   @override
