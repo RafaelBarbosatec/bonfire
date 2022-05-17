@@ -6,7 +6,7 @@ enum MouseButton { primary, secondary, tertiary }
 class JoystickMoveToPosition extends JoystickController {
   final bool enabledMoveCameraWithClick;
   final MouseButton mouseButtonUsedToMoveCamera;
-  final MouseButton mouseButtonUseToMoveToPosition;
+  final MouseButton mouseButtonUsedToMoveToPosition;
   int? _pointer;
   bool _interfaceReceiveInteraction = false;
   bool _initMove = false;
@@ -17,7 +17,7 @@ class JoystickMoveToPosition extends JoystickController {
   JoystickMoveToPosition({
     this.enabledMoveCameraWithClick = false,
     this.mouseButtonUsedToMoveCamera = MouseButton.primary,
-    this.mouseButtonUseToMoveToPosition = MouseButton.secondary,
+    this.mouseButtonUsedToMoveToPosition = MouseButton.secondary,
   });
 
   @override
@@ -27,7 +27,7 @@ class JoystickMoveToPosition extends JoystickController {
     _startCameraPosition = gameRef.camera.position;
     _actionMoveToPosition = _acceptFromMouse(
       event,
-      mouseButtonUseToMoveToPosition,
+      mouseButtonUsedToMoveToPosition,
     );
     super.handlerPointerDown(event);
     _interfaceReceiveInteraction =
