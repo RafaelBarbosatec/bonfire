@@ -1,4 +1,4 @@
-# [NEXT]
+# [2.4.3]
 - Improvement in `JoystickMoveToPosition`. New:
     - adds `enabledMoveCameraWithClick` param to enable movements of the camera with click and move movements.
     - adds `mouseButtonUsedToMoveCamera` param to set what button of the mouse you can use to move the camera.
