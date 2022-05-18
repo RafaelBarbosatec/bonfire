@@ -25,28 +25,33 @@ class CameraSceneAction extends SceneAction {
   bool _done = false;
 
   CameraSceneAction({
+    dynamic id,
     this.position,
     this.target,
     this.zoom,
     this.angle,
     this.curve = widget.Curves.decelerate,
     required this.duration,
-  });
+  }) : super(id);
   CameraSceneAction.position(
     this.position, {
+    dynamic id,
     this.duration = const Duration(seconds: 1),
     this.zoom,
     this.angle,
     this.curve = widget.Curves.decelerate,
-  }) : this.target = null;
+  })  : this.target = null,
+        super(id);
 
   CameraSceneAction.target(
     this.target, {
+    dynamic id,
     this.duration = const Duration(seconds: 1),
     this.zoom,
     this.angle,
     this.curve = widget.Curves.decelerate,
-  }) : this.position = null;
+  })  : this.position = null,
+        super(id);
 
   @override
   bool runAction(double dt, BonfireGameInterface game) {

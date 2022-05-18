@@ -18,10 +18,12 @@ class MoveComponentSceneAction<T extends Movement> extends SceneAction {
   final double? speed;
 
   MoveComponentSceneAction({
+    dynamic id,
     required this.component,
     required this.newPosition,
     this.speed,
-  });
+  }) : super(id);
+
   @override
   bool runAction(double dt, BonfireGameInterface game) {
     double diffX = (component.position.x - newPosition.x).abs();

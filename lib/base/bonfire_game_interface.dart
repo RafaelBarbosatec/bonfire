@@ -162,4 +162,5 @@ abstract class BonfireGameInterface {
   });
 
   void startScene(List<SceneAction> actions);
+  void stopScene();
 }

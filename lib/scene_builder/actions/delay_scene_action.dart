@@ -17,7 +17,7 @@ class DelaySceneAction extends SceneAction {
   late IntervalTick _tick;
   final Duration delay;
 
-  DelaySceneAction(this.delay) {
+  DelaySceneAction(this.delay) : super(null) {
     _tick = IntervalTick(delay.inMilliseconds);
   }
 

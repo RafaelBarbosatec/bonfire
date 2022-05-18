@@ -22,12 +22,12 @@ class SceneBuilderStatus {
     bool? isRunning,
     SceneAction? currentAction,
   }) {
+    if (isRunning == this.isRunning && currentAction == this.currentAction) {
+      return this;
+    }
     return SceneBuilderStatus(
       isRunning: isRunning ?? this.isRunning,
-      currentAction:
-          currentAction != null && currentAction != this.currentAction
-              ? currentAction
-              : this.currentAction,
+      currentAction: currentAction ?? this.currentAction,
     );
   }
 }
@@ -41,10 +41,11 @@ class SceneBuilderComponent extends Component with BonfireHasGameRef {
   @override
   void update(double dt) {
     final currentAction = actions[_indexCurrent];
-    _modifyStatus(currentAction: currentAction);
+
     if (currentAction.runAction(dt, gameRef)) {
       if (_indexCurrent < actions.length - 1) {
         _indexCurrent++;
+        _modifyStatus(currentAction: actions[_indexCurrent]);
       } else {
         removeFromParent();
       }
@@ -54,7 +55,7 @@ class SceneBuilderComponent extends Component with BonfireHasGameRef {
 
   @override
   void onMount() {
-    _modifyStatus(isRunning: true);
+    _modifyStatus(isRunning: true, currentAction: actions[_indexCurrent]);
     super.onMount();
   }
 
@@ -70,7 +71,7 @@ class SceneBuilderComponent extends Component with BonfireHasGameRef {
 
   @override
   void onRemove() {
-    _modifyStatus(isRunning: false);
+    gameRef.sceneBuilderStatus = SceneBuilderStatus();
     super.onRemove();
   }
 }

@@ -1,6 +1,5 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
-import 'package:example/shared/enemy/goblin.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:example/shared/util/enemy_sprite_sheet.dart';
@@ -20,7 +19,6 @@ class Knight extends SimplePlayer
   Rect? rectDirectionAttack;
   Sprite? spriteDirectionAttack;
   bool showBgRangeAttack = false;
-  Goblin? enemyControlled;
 
   BarLifeController? barLifeController;
 
@@ -155,34 +153,6 @@ class Knight extends SimplePlayer
           ),
         ),
       );
-    }
-  }
-
-  void changeControllerToVisibleEnemy() {
-    if (hasGameRef && !gameRef.camera.isMoving) {
-      if (enemyControlled == null) {
-        final v = gameRef
-            .visibleEnemies()
-            .where((element) => element is Goblin)
-            .cast<Goblin>();
-        if (v.isNotEmpty) {
-          enemyControlled = v.first;
-          enemyControlled?.controller.enableBehaviors = false;
-          gameRef.addJoystickObserver(
-            enemyControlled!,
-            cleanObservers: true,
-            moveCameraToTarget: true,
-          );
-        }
-      } else {
-        gameRef.addJoystickObserver(
-          this,
-          cleanObservers: true,
-          moveCameraToTarget: true,
-        );
-        enemyControlled?.controller.enableBehaviors = true;
-        enemyControlled = null;
-      }
     }
   }
 

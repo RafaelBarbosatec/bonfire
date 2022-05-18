@@ -438,4 +438,15 @@ class BonfireGame extends BaseGame
       add(SceneBuilderComponent(actions));
     }
   }
+
+  @override
+  void stopScene() {
+    try {
+      children
+          .firstWhere(
+            (value) => value is SceneBuilderComponent,
+          )
+          .removeFromParent();
+    } catch (e) {}
+  }
 }
