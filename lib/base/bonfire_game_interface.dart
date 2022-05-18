@@ -9,6 +9,8 @@ import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/map/map_game.dart';
 import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/scene_builder/scene_action.dart';
+import 'package:bonfire/scene_builder/scene_manager_component.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/mixins/sensor.dart';
 import 'package:bonfire/util/priority_layer.dart';
@@ -47,6 +49,7 @@ abstract class BonfireGameInterface {
   Color? get constructionModeColor;
   Color? get collisionAreaColor;
   GameInterface? get interface;
+  SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
   /// A property that stores an [ActiveOverlaysNotifier]
   ///
@@ -157,4 +160,6 @@ abstract class BonfireGameInterface {
     Anchor? anchor,
     int? priority = LayerPriority.MAP + 1,
   });
+
+  void startScene(List<SceneAction> actions);
 }

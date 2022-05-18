@@ -1,6 +1,6 @@
 import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/scene_builder/scene_action.dart';
+import 'package:flutter/widgets.dart' as widget;
 
 ///
 /// Created by
@@ -17,6 +17,9 @@ class CameraSceneAction extends SceneAction {
   final Vector2? position;
   final GameComponent? target;
   final Duration duration;
+  final double? zoom;
+  final double? angle;
+  final widget.Curve curve;
 
   bool _running = false;
   bool _done = false;
@@ -24,19 +27,26 @@ class CameraSceneAction extends SceneAction {
   CameraSceneAction({
     this.position,
     this.target,
+    this.zoom,
+    this.angle,
+    this.curve = widget.Curves.decelerate,
     required this.duration,
   });
-  CameraSceneAction.position(Vector2 position,
-      {Duration duration = const Duration(seconds: 1)})
-      : this.position = position,
-        this.target = null,
-        this.duration = duration;
+  CameraSceneAction.position(
+    this.position, {
+    this.duration = const Duration(seconds: 1),
+    this.zoom,
+    this.angle,
+    this.curve = widget.Curves.decelerate,
+  }) : this.target = null;
 
-  CameraSceneAction.target(GameComponent target,
-      {Duration duration = const Duration(seconds: 1)})
-      : this.position = null,
-        this.target = target,
-        this.duration = duration;
+  CameraSceneAction.target(
+    this.target, {
+    this.duration = const Duration(seconds: 1),
+    this.zoom,
+    this.angle,
+    this.curve = widget.Curves.decelerate,
+  }) : this.position = null;
 
   @override
   bool runAction(double dt, BonfireGameInterface game) {
@@ -46,17 +56,19 @@ class CameraSceneAction extends SceneAction {
         game.camera.moveToPositionAnimated(
           position!,
           duration: duration,
-          finish: () {
-            _done = true;
-          },
+          finish: _actionDone,
+          curve: curve,
+          angle: angle,
+          zoom: zoom,
         );
       } else if (target != null) {
         game.camera.moveToTargetAnimated(
           target!,
           duration: duration,
-          finish: () {
-            _done = true;
-          },
+          finish: _actionDone,
+          curve: curve,
+          angle: angle,
+          zoom: zoom,
         );
       } else {
         return true;
@@ -66,5 +78,9 @@ class CameraSceneAction extends SceneAction {
       return true;
     }
     return false;
+  }
+
+  void _actionDone() {
+    _done = true;
   }
 }
