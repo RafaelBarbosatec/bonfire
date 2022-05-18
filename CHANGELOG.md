@@ -1,5 +1,49 @@
-# [Next]
-- Update example to Android embedding V2.
+# [2.4.3]
+- Improvement in `JoystickMoveToPosition`. New:
+    - adds `enabledMoveCameraWithClick` param to enable movements of the camera with click and move movements.
+    - adds `mouseButtonUsedToMoveCamera` param to set what button of the mouse you can use to move the camera.
+    - adds `mouseButtonUsedToMoveToPosition` param to set what button of the mouse you can use to set the position target. Default is `secondary` (right mouse button).
+- Extracted functions about check `Tiles` to the mixin `TileRecognizer`.
+
+# [2.4.2]
+- Adds params `focusNode`, `autofocus` and `mouseCursor` in `BonfireWidget` and `BonfireTiledWidget`
+- Improvements in `Camera`
+- BREAKING CHANGE: Update `StateController`. the method `update` now is `void update(double dt, T component)`. Now you receive what component belongs this update in case that your controller is used in many components.
+
+# [2.4.1]
+- adds `removeLife` method in `Attackable`.
+- considers `offset` in layers of the Tiled.
+- Adds type `dynamicAbove` in tile.
+- Adds `MiniMap` widget [DOC](https://bonfire-engine.github.io/#/minimap).
+- Update Flame to 1.1.1.
+
+# [2.4.0]
+- Updated Flame to version 1.1.0
+- Added `addParticle(Particle particle)` in `gameRef`.
+- Added NPC component. `Enemy` class now inherits from `Npc` class. Suggested by [4mitabh](https://github.com/4mitabh).
+- Improvements in `Attackable` system.
+- Added `checkCanReceiveDamage` method in `Attackable` mixin. You can override this method to implement your own filters on who should receive damage or not.
+- BREAKING CHANGE - `receiveDamage` method in `Attackable` now requires a new `AttackFromEnum` param.
+    - Before:
+    ```dart
+      void receiveDamage(
+         double damage,
+         dynamic identify,
+      )
+    ```
+    - Now:
+    ```dart
+      void receiveDamage(
+         AttackFromEnum attacker,
+         double damage,
+         dynamic identify,
+      )
+    ```
+
+# [2.3.1]
+- Updated example with NPCs. Thanks [4mitabh](https://github.com/4mitabh)!
+- Fixed 8-Direction Animation mentioned in [#234](https://github.com/RafaelBarbosatec/bonfire/issues/234). Thanks [TaylorHo](https://github.com/TaylorHo)!
+- Update example to Android embedding V2. Thanks [4mitabh](https://github.com/4mitabh)!
 
 # [2.3.0]
 - Fix bug in camera zoom out.
@@ -7,7 +51,7 @@
 - Add Experimental State Manager. Example [here](https://github.com/RafaelBarbosatec/bonfire/issues/218#issuecomment-1058121200).
 
 # [2.2.5]
-- Fix crash mentioned in [#255](https://github.com/RafaelBarbosatec/bonfire/issues/225).
+- Fix crash mentioned in [#225](https://github.com/RafaelBarbosatec/bonfire/issues/225).
 - Fix crash mentioned in [#227](https://github.com/RafaelBarbosatec/bonfire/issues/227).
 
 # [2.2.4]

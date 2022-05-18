@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/collision/object_collision.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 
-enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER }
-enum AttackFromEnum { ENEMY, PLAYER }
+enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER_AND_ALLY, NONE }
+enum AttackFromEnum { ENEMY, PLAYER_OR_ALLY }
 
 /// Mixin responsible for adding damage-taking behavior to the component.
 mixin Attackable on GameComponent {
@@ -28,7 +28,7 @@ mixin Attackable on GameComponent {
     _maxLife = life;
   }
 
-  /// increase life in the player
+  /// increase life
   void addLife(double life) {
     this.life += life;
     if (this.life > maxLife) {
@@ -36,13 +36,52 @@ mixin Attackable on GameComponent {
     }
   }
 
-  void receiveDamage(double damage, dynamic from) {
-    if (life > 0) {
-      life -= damage;
+  /// reduce life
+  void removeLife(double life) {
+    if (this.life > 0) {
+      this.life -= life;
     }
-    if (life <= 0 && !_isDead) {
+    if (this.life <= 0 && !_isDead) {
       die();
     }
+  }
+
+  /// This method is called to give damage a this component.
+  /// Only receive damage if the method [checkCanReceiveDamage] return `true`.
+  void receiveDamage(
+    AttackFromEnum attacker,
+    double damage,
+    dynamic identify,
+  ) {
+    if (checkCanReceiveDamage(attacker, damage, identify)) {
+      removeLife(damage);
+    }
+  }
+
+  /// This method is used to check if this component can receive damage from any attacker.
+  bool checkCanReceiveDamage(
+    AttackFromEnum attacker,
+    double damage,
+    dynamic from,
+  ) {
+    switch (receivesAttackFrom) {
+      case ReceivesAttackFromEnum.ALL:
+        return true;
+      case ReceivesAttackFromEnum.ENEMY:
+        if (attacker == AttackFromEnum.ENEMY) {
+          return true;
+        }
+        break;
+      case ReceivesAttackFromEnum.PLAYER_AND_ALLY:
+        if (attacker == AttackFromEnum.PLAYER_OR_ALLY) {
+          return true;
+        }
+        break;
+      case ReceivesAttackFromEnum.NONE:
+        return false;
+    }
+
+    return false;
   }
 
   void die() {
@@ -51,17 +90,5 @@ mixin Attackable on GameComponent {
 
   bool get isDead => _isDead;
 
-  Rect rectAttackable() => this.isObjectCollision()
-      ? (this as ObjectCollision).rectCollision
-      : toRect();
-
-  bool receivesAttackFromPlayer() {
-    return receivesAttackFrom == ReceivesAttackFromEnum.ALL ||
-        receivesAttackFrom == ReceivesAttackFromEnum.PLAYER;
-  }
-
-  bool receivesAttackFromEnemy() {
-    return receivesAttackFrom == ReceivesAttackFromEnum.ALL ||
-        receivesAttackFrom == ReceivesAttackFromEnum.ENEMY;
-  }
+  Rect rectAttackable() => rectConsideringCollision;
 }

@@ -43,6 +43,7 @@ flutter:
     - assets/images/
     - assets/images/player/
     - assets/images/enemy/
+    - assets/images/npc/
     - assets/images/tile/
     - assets/images/tiled/
     - assets/images/tiled/top_down/

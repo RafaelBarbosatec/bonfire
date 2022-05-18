@@ -9,6 +9,8 @@ import 'package:example/shared/decoration/torch.dart';
 import 'package:example/shared/enemy/goblin.dart';
 import 'package:example/shared/interface/bar_life_widget.dart';
 import 'package:example/shared/interface/knight_interface.dart';
+import 'package:example/shared/npc/critter/critter.dart';
+import 'package:example/shared/npc/wizard/wizard.dart';
 import 'package:example/shared/player/knight.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -76,15 +78,27 @@ class GameTiledMap extends StatelessWidget {
               'spike': (properties) => Spikes(properties.position),
               'column': (properties) => ColumnDecoration(properties.position),
               'chest': (properties) => Chest(properties.position),
+              'critter': (properties) => Critter(properties.position),
+              'wizard': (properties) => Wizard(properties.position),
             },
           ),
           background: BackgroundColorGame(Colors.blueGrey[900]!),
           lightingColorGame: Colors.black.withOpacity(0.7),
           overlayBuilderMap: {
             'barLife': (context, game) => BarLifeWidget(),
+            'miniMap': (context, game) => MiniMap(
+                  game: game,
+                  margin: EdgeInsets.all(20),
+                  borderRadius: BorderRadius.circular(10),
+                  size: Vector2.all(
+                    min(constraints.maxHeight, constraints.maxWidth) / 3,
+                  ),
+                  border: Border.all(color: Colors.white.withOpacity(0.5)),
+                ),
           },
           initialActiveOverlays: [
             'barLife',
+            'miniMap',
           ],
           cameraConfig: CameraConfig(
             smoothCameraEnabled: true,

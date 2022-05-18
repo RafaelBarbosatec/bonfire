@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/collision/object_collision.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:bonfire/util/mixins/movement.dart';
 
 import '../functions.dart';
@@ -24,9 +24,7 @@ extension MovementExtensions on Movement {
     double translateY = 0;
     double speed = this.speed * dt;
 
-    Rect rectToMove = this.isObjectCollision()
-        ? (this as ObjectCollision).rectCollision
-        : toRect();
+    Rect rectToMove = rectConsideringCollision;
 
     translateX = rectToMove.center.dx > centerXPlayer ? (-1 * speed) : speed;
 

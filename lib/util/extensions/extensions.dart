@@ -7,6 +7,7 @@ import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart' as widget;
 
+export 'ally/ally_extensions.dart';
 export 'attackable_extensions.dart';
 export 'enemy/enemy_extensions.dart';
 export 'enemy/enemy_extensions.dart';
@@ -14,6 +15,7 @@ export 'enemy/rotation_enemy_extensions.dart';
 export 'game_component_extensions.dart';
 export 'joystick_extensions.dart';
 export 'movement_extensions.dart';
+export 'npc/npc_extensions.dart';
 export 'player/player_extensions.dart';
 export 'player/rotation_player_extensions.dart';
 
@@ -153,7 +155,7 @@ extension SpriteExt on Sprite {
 extension SpriteFutureExt on Future<Sprite> {
   Future<SpriteAnimation> toAnimation() async {
     var sprite = await this;
-    return SpriteAnimation.spriteList([sprite], stepTime: 0);
+    return SpriteAnimation.spriteList([sprite], stepTime: 1);
   }
 }
 
@@ -407,6 +409,8 @@ extension CameraExt on Camera {
       (this as BonfireCamera).moveTop(displacement);
   void moveRight(double displacement) =>
       (this as BonfireCamera).moveRight(displacement);
+  void moveLeft(double displacement) =>
+      (this as BonfireCamera).moveLeft(displacement);
   void moveDown(double displacement) =>
       (this as BonfireCamera).moveDown(displacement);
   void moveUp(double displacement) =>

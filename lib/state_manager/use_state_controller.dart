@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
 
 ///
@@ -16,8 +14,6 @@ import 'package:bonfire/bonfire.dart';
 
 mixin UseStateController<T extends StateController> on GameComponent {
   T? _controller;
-
-  bool _doUpdate = false;
 
   T get controller {
     if (_controller == null) {
@@ -39,17 +35,10 @@ mixin UseStateController<T extends StateController> on GameComponent {
 
   @override
   void update(double dt) {
-    if (!shouldRemove && !_doUpdate) {
-      _doUpdate = true;
-      _controller?.update(dt);
+    if (!shouldRemove) {
+      _controller?.update(dt, this);
     }
     super.update(dt);
-  }
-
-  @override
-  void render(Canvas c) {
-    _doUpdate = false;
-    super.render(c);
   }
 
   @override

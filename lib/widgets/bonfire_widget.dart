@@ -5,10 +5,10 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/camera/camera_config.dart';
 import 'package:bonfire/color_filter/game_color_filter.dart';
 import 'package:bonfire/decoration/decoration.dart';
-import 'package:bonfire/enemy/enemy.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/map_game.dart';
+import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
@@ -45,6 +45,18 @@ class BonfireWidget extends StatefulWidget {
 
   /// Used to configure lighting in the game
   final Color? lightingColorGame;
+
+  /// The [FocusNode] to control the games focus to receive event inputs.
+  /// If omitted, defaults to an internally controlled focus node.
+  final FocusNode? focusNode;
+
+  /// Whether the [focusNode] requests focus once the game is mounted.
+  /// Defaults to true.
+  final bool autofocus;
+
+  /// Initial mouse cursor for this [GameWidget]
+  /// mouse cursor can be changed in runtime using [Game.mouseCursor]
+  final MouseCursor? mouseCursor;
 
   final TapInGame? onTapDown;
   final TapInGame? onTapUp;
@@ -84,6 +96,9 @@ class BonfireWidget extends StatefulWidget {
     this.onTapDown,
     this.onTapUp,
     this.onReady,
+    this.focusNode,
+    this.autofocus = true,
+    this.mouseCursor,
   }) : super(key: key);
 
   @override
@@ -137,6 +152,9 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       game: _game,
       overlayBuilderMap: widget.overlayBuilderMap,
       initialActiveOverlays: widget.initialActiveOverlays,
+      focusNode: widget.focusNode,
+      autofocus: widget.autofocus,
+      mouseCursor: widget.mouseCursor,
     );
   }
 

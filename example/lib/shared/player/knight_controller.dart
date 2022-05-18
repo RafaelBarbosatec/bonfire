@@ -24,33 +24,25 @@ class KnightController extends StateController<Knight> {
   double radAngleRangeAttack = 0;
 
   @override
-  void onReady(Knight component) {
-    // TODO: implement onReady
-    super.onReady(component);
-  }
-
-  @override
-  void onRemove(Knight component) {
-    // TODO: implement onRemove
-    super.onRemove(component);
-  }
-
-  @override
-  void update(double dt) {
-    if (component == null) return;
-    if (component?.checkInterval('seeEnemy', 250, dt) == true) {
-      component?.seeEnemy(
-        radiusVision: component!.width * 4,
+  void update(double dt, Knight component) {
+    bool seeEnemyInterval = component.checkInterval('seeEnemy', 250, dt);
+    if (seeEnemyInterval) {
+      component.seeEnemy(
+        radiusVision: component.width * 4,
         notObserved: _handleNotObserveEnemy,
         observed: (enemies) => _handleObserveEnemy(enemies.first),
       );
     }
 
-    if (executingRangeAttack &&
-        component?.checkInterval('ATTACK_RANGE', 150, dt) == true) {
+    bool execRangeAttackInterval = component.checkInterval(
+      'ATTACK_RANGE',
+      150,
+      dt,
+    );
+    if (executingRangeAttack && execRangeAttackInterval) {
       if (stamina > 10) {
         _decrementStamina(10);
-        component?.execRangeAttack(radAngleRangeAttack, attack / 2);
+        component.execRangeAttack(radAngleRangeAttack, attack / 2);
       }
     }
     _verifyStamina(dt);

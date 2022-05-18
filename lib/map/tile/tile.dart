@@ -166,8 +166,12 @@ class Tile extends GameComponent with UseAssetsLoader {
       bleendingPixel = 2;
     }
     this.position = Vector2(
-      (position.x * size.x) - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0),
-      (position.y * size.y) - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0),
+      (position.x * size.x) -
+          (position.x % 2 == 0 ? (bleendingPixel / 2) : 0) +
+          offsetX,
+      (position.y * size.y) -
+          (position.y % 2 == 0 ? (bleendingPixel / 2) : 0) +
+          offsetY,
     );
     this.size = Vector2(
       size.x + (position.x % 2 == 0 ? bleendingPixel : 0),

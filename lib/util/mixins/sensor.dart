@@ -12,7 +12,7 @@ mixin Sensor on GameComponent {
   bool enabledSensor = true;
 
   int _intervalCheckContact = 250;
-  IntervalTick? _tick;
+  String _intervalCheckContactKey = 'KEY_CHECK_SENSOR_CONTACT';
 
   CollisionConfig? _collisionConfig;
 
@@ -20,15 +20,14 @@ mixin Sensor on GameComponent {
     if (_collisionConfig != null) {
       return _collisionConfig!.collisions;
     }
+
     if (this.isObjectCollision()) {
       return (this as ObjectCollision).collisionConfig!.collisions;
-    } else {
-      return [
-        CollisionArea.rectangle(
-          size: size,
-        )
-      ];
     }
+
+    return [
+      CollisionArea.rectangle(size: size),
+    ];
   }
 
   void setupSensorArea({
@@ -36,25 +35,20 @@ mixin Sensor on GameComponent {
     int intervalCheck = 250,
   }) {
     _intervalCheckContact = intervalCheck;
-    if (areaSensor != null) {
-      _collisionConfig = CollisionConfig(
-        collisions: areaSensor,
-      );
-    }
+    _collisionConfig = CollisionConfig(
+      collisions: areaSensor ?? _sensorArea,
+    );
   }
 
   @override
   void update(double dt) {
-    if (_collisionConfig == null) {
-      _collisionConfig = CollisionConfig(
-        collisions: _sensorArea,
-      );
-    }
     if (enabledSensor) {
-      if (_tick == null || _tick?.interval != _intervalCheckContact) {
-        _tick = IntervalTick(_intervalCheckContact, tick: _verifyContact);
-      } else {
-        _tick?.update(dt);
+      if (_collisionConfig == null) {
+        _collisionConfig = CollisionConfig(collisions: _sensorArea);
+      }
+      if (checkInterval(_intervalCheckContactKey, _intervalCheckContact, dt)) {
+        _collisionConfig?.updatePosition(position);
+        _verifyContact();
       }
     }
     super.update(dt);
@@ -64,25 +58,24 @@ mixin Sensor on GameComponent {
   void render(Canvas c) {
     super.render(c);
     if (gameRef.showCollisionArea) {
-      _sensorArea.forEach((element) {
-        element.render(c, sensorColor);
-      });
+      for (final area in _sensorArea) {
+        area.render(c, sensorColor);
+      }
     }
   }
 
   void _verifyContact() {
-    _collisionConfig?.updatePosition(position);
-    for (final i in gameRef.visibleComponents()) {
-      if (i != this) {
-        if (i.isObjectCollision()) {
-          if (((i as ObjectCollision)
-                  .collisionConfig
-                  ?.verifyCollision(_collisionConfig) ??
-              false)) {
-            onContact(i);
+    for (final vComp in gameRef.visibleComponents()) {
+      if (vComp != this) {
+        if (vComp.isObjectCollision()) {
+          final hasContact = (vComp as ObjectCollision)
+              .collisionConfig!
+              .verifyCollision(_collisionConfig);
+          if (hasContact) {
+            onContact(vComp);
           }
-        } else if (i.toRect().overlaps(_collisionConfig?.rect ?? Rect.zero)) {
-          onContact(i);
+        } else if (vComp.toRect().overlaps(_collisionConfig!.rect)) {
+          onContact(vComp);
         }
       }
     }

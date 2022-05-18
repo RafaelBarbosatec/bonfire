@@ -2,13 +2,15 @@ import 'dart:math';
 
 import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/collision/object_collision.dart';
-import 'package:bonfire/enemy/rotation_enemy.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
+import 'package:bonfire/npc/enemy/rotation_enemy.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
+
+import '../../mixins/attackable.dart';
 
 extension RotationEnemyExtensions on RotationEnemy {
   /// Checks whether the player is within range. If so, move to it.
@@ -24,7 +26,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
-        double _radAngle = getAngleFomPlayer();
+        double _radAngle = getAngleFromPlayer();
 
         Rect playerRect = player is ObjectCollision
             ? (player as ObjectCollision).rectCollision
@@ -36,7 +38,7 @@ extension RotationEnemyExtensions on RotationEnemy {
           playerRect.height + (margin * 2),
         );
 
-        if (enemyRect.overlaps(rectPlayerCollision)) {
+        if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
           closePlayer(player);
           this.idle();
           this.moveFromAngleDodgeObstacles(0, _radAngle);
@@ -73,7 +75,7 @@ extension RotationEnemyExtensions on RotationEnemy {
             ? (player as ObjectCollision).rectCollision
             : player.toRect();
         double distance = (minDistanceCellsFromPlayer ?? radiusVision);
-        double _radAngle = getAngleFomPlayer();
+        double _radAngle = getAngleFromPlayer();
 
         Vector2 myPosition = Vector2(
           this.center.x,
@@ -95,7 +97,7 @@ extension RotationEnemyExtensions on RotationEnemy {
 
         bool onMove = this.moveFromAngleDodgeObstacles(
           speed,
-          getInverseAngleFomPlayer(),
+          getInverseAngleFromPlayer(),
         );
 
         if (!onMove) {
@@ -135,20 +137,20 @@ extension RotationEnemyExtensions on RotationEnemy {
 
     Rect positionAttack = this.toRect().shift(diffBase.toOffset());
 
-    gameRef.add(AnimatedObjectOnce(
-      animation: attackEffectTopAnim,
-      position: positionAttack.positionVector2,
-      size: size,
-      rotateRadAngle: angle,
-    ));
+    gameRef.add(
+      AnimatedObjectOnce(
+        animation: attackEffectTopAnim,
+        position: positionAttack.positionVector2,
+        size: size,
+        rotateRadAngle: angle,
+      ),
+    );
 
     gameRef
         .visibleAttackables()
-        .where((a) =>
-            a.receivesAttackFromEnemy() &&
-            a.rectAttackable().overlaps(positionAttack))
+        .where((a) => a.rectAttackable().overlaps(positionAttack))
         .forEach((attackable) {
-      attackable.receiveDamage(damage, id);
+      attackable.receiveDamage(AttackFromEnum.ENEMY, damage, id);
       final rectAfterPush = attackable.position.translate(
         diffBase.x,
         diffBase.y,
@@ -200,6 +202,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       destroySize: destroySize,
       collision: collision,
       lightingConfig: lightingConfig,
+      attackFrom: AttackFromEnum.ENEMY,
     );
 
     onExecute?.call();
