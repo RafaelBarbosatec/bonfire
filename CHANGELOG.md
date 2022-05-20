@@ -1,3 +1,13 @@
+# [NEXT]
+- Adds `scene` support. Now you can create a "cutscene" of easy way.
+    - Only call `gameRef.startScene([CameraSceneAction()])`.
+    - To stop: `gameRef.stopScene()`.
+    - SceneActions available:
+        - `CameraSceneAction`
+        - `DelaySceneAction`
+        - `MoveComponentSceneAction`
+        - `AwaitCallbackSceneAction`
+
 # [2.4.3]
 - Improvement in `JoystickMoveToPosition`. New:
     - adds `enabledMoveCameraWithClick` param to enable movements of the camera with click and move movements.
