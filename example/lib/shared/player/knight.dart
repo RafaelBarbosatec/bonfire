@@ -57,12 +57,18 @@ class Knight extends SimplePlayer
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    if (gameRef.sceneBuilderStatus.isRunning) {
+      return;
+    }
     this.speed = maxSpeed * event.intensity;
     super.joystickChangeDirectional(event);
   }
 
   @override
   void joystickAction(JoystickActionEvent event) {
+    if (gameRef.sceneBuilderStatus.isRunning) {
+      return;
+    }
     if (hasController) {
       controller.handleJoystickAction(event);
     }

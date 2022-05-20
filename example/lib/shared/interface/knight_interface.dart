@@ -43,32 +43,7 @@ class KnightInterface extends GameInterface {
       position: Vector2(250, 20),
       selectable: true,
       onTapComponent: (selected) {
-        if (!selected && FollowerWidget.isVisible(followerWidgetTestId)) {
-          FollowerWidget.remove(followerWidgetTestId);
-          return;
-        }
-        gameRef.player?.let((player) {
-          FollowerWidget.show(
-            identify: followerWidgetTestId,
-            context: context,
-            target: player,
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-              ),
-              padding: EdgeInsets.all(10),
-              child: ElevatedButton(
-                onPressed: () {
-                  print('Tapped');
-                },
-                child: Text('Tap here'),
-              ),
-            ),
-            align: Offset(0, -55),
-          );
-        });
+        _addFollowerWidgetExample(selected);
       },
     ));
     add(InterfaceComponent(
@@ -79,62 +54,18 @@ class KnightInterface extends GameInterface {
       position: Vector2(300, 20),
       selectable: false,
       onTapComponent: (selected) {
-        if (gameRef.colorFilter?.config.color == null) {
-          gameRef.colorFilter?.animateTo(
-            Colors.red.withOpacity(0.5),
-          );
-        } else {
-          gameRef.colorFilter?.animateTo(Colors.transparent, onFinish: () {
-            gameRef.colorFilter?.config.color = null;
-          });
-        }
+        _animateColorFilter();
       },
     ));
     add(TextInterfaceComponent(
-      text: 'Text example',
+      text: 'Start scene',
       textConfig: TextStyle(
         color: Colors.white,
       ),
       id: 5,
       position: Vector2(350, 20),
       onTapComponent: (selected) {
-        if (gameRef.player != null) {
-          // (gameRef.player as Knight).showEmote();
-          final enemy = gameRef.visibleEnemies().first;
-          gameRef.startScene(
-            [
-              CameraSceneAction.position(Vector2(800, 800)),
-              CameraSceneAction.target(gameRef.player!),
-              CameraSceneAction.target(enemy),
-              DelaySceneAction(Duration(seconds: 2)),
-              MoveComponentSceneAction(
-                component: enemy,
-                newPosition: enemy.position.clone()..add(Vector2(-40, -10)),
-                speed: 20,
-              ),
-              CameraSceneAction.target(gameRef.player!),
-              AwaitCallbackSceneAction(
-                completedCallback: (completed) {
-                  _showDialogTest(completed);
-                },
-              ),
-              MoveComponentSceneAction(
-                component: gameRef.player!,
-                newPosition: Vector2(250, 130),
-                speed: 100,
-              ),
-              MoveComponentSceneAction(
-                component: gameRef.player!,
-                newPosition: Vector2(500, 130),
-                speed: 100,
-              ),
-              CameraSceneAction.target(enemy),
-              CameraSceneAction.position(Vector2(200, 200)),
-              CameraSceneAction.position(Vector2(0, 200)),
-              CameraSceneAction.target(gameRef.player!),
-            ],
-          );
-        }
+        _startSceneExample();
       },
     ));
     super.onMount();
@@ -207,5 +138,85 @@ class KnightInterface extends GameInterface {
         );
       },
     );
+  }
+
+  void _startSceneExample() {
+    if (gameRef.player != null) {
+      final enemy = gameRef.visibleEnemies().first;
+      gameRef.startScene(
+        [
+          CameraSceneAction.position(Vector2(800, 800)),
+          CameraSceneAction.target(gameRef.player!),
+          CameraSceneAction.target(enemy, zoom: 2),
+          DelaySceneAction(Duration(seconds: 2)),
+          MoveComponentSceneAction(
+            component: enemy,
+            newPosition: enemy.position.clone()..add(Vector2(-40, -10)),
+            speed: 20,
+          ),
+          CameraSceneAction.target(gameRef.player!),
+          AwaitCallbackSceneAction(
+            completedCallback: (completed) {
+              _showDialogTest(completed);
+            },
+          ),
+          MoveComponentSceneAction(
+            component: gameRef.player!,
+            newPosition: Vector2(250, 130),
+            speed: 100,
+          ),
+          MoveComponentSceneAction(
+            component: gameRef.player!,
+            newPosition: Vector2(500, 130),
+            speed: 100,
+          ),
+          CameraSceneAction.target(enemy),
+          CameraSceneAction.position(Vector2(200, 200)),
+          CameraSceneAction.position(Vector2(0, 200)),
+          CameraSceneAction.target(gameRef.player!),
+        ],
+      );
+    }
+  }
+
+  void _addFollowerWidgetExample(bool selected) {
+    if (!selected && FollowerWidget.isVisible(followerWidgetTestId)) {
+      FollowerWidget.remove(followerWidgetTestId);
+      return;
+    }
+    gameRef.player?.let((player) {
+      FollowerWidget.show(
+        identify: followerWidgetTestId,
+        context: context,
+        target: player,
+        child: Container(
+          height: 50,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          padding: EdgeInsets.all(10),
+          child: ElevatedButton(
+            onPressed: () {
+              print('Tapped');
+            },
+            child: Text('Tap here'),
+          ),
+        ),
+        align: Offset(0, -55),
+      );
+    });
+  }
+
+  void _animateColorFilter() {
+    if (gameRef.colorFilter?.config.color == null) {
+      gameRef.colorFilter?.animateTo(
+        Colors.red.withOpacity(0.5),
+      );
+    } else {
+      gameRef.colorFilter?.animateTo(Colors.transparent, onFinish: () {
+        gameRef.colorFilter?.config.color = null;
+      });
+    }
   }
 }
