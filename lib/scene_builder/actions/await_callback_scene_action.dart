@@ -26,7 +26,7 @@ class AwaitCallbackSceneAction extends SceneAction {
   bool runAction(double dt, BonfireGameInterface game) {
     if (_isFirstRun) {
       _isFirstRun = false;
-      completedCallback(() =>  _isDone = true);
+      completedCallback(() => _isDone = true);
     }
     return _isDone;
   }
