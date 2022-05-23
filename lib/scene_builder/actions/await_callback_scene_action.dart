@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 /// Rafaelbarbosatec
 /// on 18/05/22
 
+/// SceneAction that do something until the `completed` callback is called.
 class AwaitCallbackSceneAction extends SceneAction {
   bool _isDone = false;
   bool _isFirstRun = true;

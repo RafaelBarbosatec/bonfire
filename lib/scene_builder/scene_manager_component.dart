@@ -12,6 +12,7 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 04/03/22
 
+/// Class that represents the sceneBuilder status.
 class SceneBuilderStatus {
   final bool isRunning;
   final SceneAction? currentAction;
@@ -32,6 +33,7 @@ class SceneBuilderStatus {
   }
 }
 
+/// Component responsible for run the `SceneActions`
 class SceneBuilderComponent extends Component with BonfireHasGameRef {
   final List<SceneAction> actions;
   int _indexCurrent = 0;
