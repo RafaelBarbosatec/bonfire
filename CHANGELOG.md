@@ -1,4 +1,4 @@
-# [NEXT]
+# [2.4.4]
 - Adds `scene` support. Now you can create a "cutscene" of easy way.
     - Only call `gameRef.startScene([CameraSceneAction()])`.
     - To stop: `gameRef.stopScene()`.
