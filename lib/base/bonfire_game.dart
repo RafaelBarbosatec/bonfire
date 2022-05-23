@@ -67,6 +67,9 @@ class BonfireGame extends BaseGame
   /// Callback to receive the onTapUp event from the game.
   final TapInGame? onTapUp;
 
+  @override
+  SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
+
   Iterable<Lighting> _visibleLights = List.empty();
   Iterable<GameComponent> _visibleComponents = List.empty();
   List<ObjectCollision> _visibleCollisions = List.empty();
@@ -427,5 +430,23 @@ class BonfireGame extends BaseGame
         priority: priority,
       ),
     );
+  }
+
+  @override
+  void startScene(List<SceneAction> actions) {
+    if (!sceneBuilderStatus.isRunning) {
+      add(SceneBuilderComponent(actions));
+    }
+  }
+
+  @override
+  void stopScene() {
+    try {
+      children
+          .firstWhere(
+            (value) => value is SceneBuilderComponent,
+          )
+          .removeFromParent();
+    } catch (e) {}
   }
 }

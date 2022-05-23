@@ -13,6 +13,8 @@ mixin MovementByJoystick on Movement {
   /// the angle the player should move in 360 mode
   double movementRadAngle = 0;
 
+  bool _isIdleJoystick = true;
+
   @override
   void update(double dt) {
     if (this is JoystickListener) {
@@ -36,6 +38,7 @@ mixin MovementByJoystick on Movement {
       } else {
         if (innerCurrentDirectional != null && joystickContainThisComponent) {
           if (innerCurrentDirectional != JoystickMoveDirectional.IDLE) {
+            _isIdleJoystick = false;
             moveFromAngle(speed, movementRadAngle);
           }
         }
@@ -52,31 +55,40 @@ mixin MovementByJoystick on Movement {
   ) {
     switch (direction) {
       case JoystickMoveDirectional.MOVE_UP:
+        _isIdleJoystick = false;
         moveUp(speed);
         break;
       case JoystickMoveDirectional.MOVE_UP_LEFT:
+        _isIdleJoystick = false;
         moveUpLeft(diagonalSpeed, diagonalSpeed);
         break;
       case JoystickMoveDirectional.MOVE_UP_RIGHT:
+        _isIdleJoystick = false;
         moveUpRight(diagonalSpeed, diagonalSpeed);
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
+        _isIdleJoystick = false;
         moveRight(speed);
         break;
       case JoystickMoveDirectional.MOVE_DOWN:
+        _isIdleJoystick = false;
         moveDown(speed);
         break;
       case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
+        _isIdleJoystick = false;
         moveDownRight(diagonalSpeed, diagonalSpeed);
         break;
       case JoystickMoveDirectional.MOVE_DOWN_LEFT:
+        _isIdleJoystick = false;
         moveDownLeft(diagonalSpeed, diagonalSpeed);
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
+        _isIdleJoystick = false;
         moveLeft(speed);
         break;
       case JoystickMoveDirectional.IDLE:
-        if (!isIdle) {
+        if (!_isIdleJoystick) {
+          _isIdleJoystick = true;
           idle();
         }
         break;

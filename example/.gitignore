@@ -35,3 +35,14 @@ lib/generated_plugin_registrant.dart
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+macos/Flutter/ephemeral/Flutter-Generated.xcconfig
+macos/Flutter/ephemeral/flutter_export_environment.sh
+macos/Pods/Local Podspecs/FlutterMacOS.podspec.json
+macos/Pods/Local Podspecs/shared_preferences_macos.podspec.json
+macos/Pods/Pods.xcodeproj/project.pbxproj
+macos/Pods/Pods.xcodeproj/xcuserdata/rafaelbarbosa.xcuserdatad/xcschemes/FlutterMacOS.xcscheme
+macos/Pods/Pods.xcodeproj/xcuserdata/rafaelbarbosa.xcuserdatad/xcschemes/Pods-Runner.xcscheme
+macos/Pods/Pods.xcodeproj/xcuserdata/rafaelbarbosa.xcuserdatad/xcschemes/xcschememanagement.plist
+macos/Pods/Target Support Files/FlutterMacOS/FlutterMacOS.debug.xcconfig
+macos/Pods/Target Support Files/FlutterMacOS/FlutterMacOS.release.xcconfig

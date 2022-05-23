@@ -40,6 +40,7 @@ export 'package:bonfire/objects/flying_attack_object.dart';
 export 'package:bonfire/player/player.dart';
 export 'package:bonfire/player/rotation_player.dart';
 export 'package:bonfire/player/simple_player.dart';
+export 'package:bonfire/scene_builder/scene_builder.dart';
 export 'package:bonfire/state_manager/state_manager.dart';
 export 'package:bonfire/tiled/tiled_world_map.dart';
 export 'package:bonfire/util/bonfire_game_ref.dart';

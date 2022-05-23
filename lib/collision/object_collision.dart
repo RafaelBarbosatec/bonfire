@@ -94,9 +94,13 @@ mixin ObjectCollision on GameComponent {
   }
 
   Iterable<ObjectCollision> _getWorldCollisions() {
-    return (_collisionConfig?.collisionOnlyVisibleScreen ?? true)
-        ? gameRef.visibleCollisions()
-        : gameRef.collisions();
+    if (hasGameRef) {
+      return (_collisionConfig?.collisionOnlyVisibleScreen ?? true)
+          ? gameRef.visibleCollisions()
+          : gameRef.collisions();
+    } else {
+      return [];
+    }
   }
 
   @override
