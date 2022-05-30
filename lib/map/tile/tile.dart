@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
@@ -15,6 +16,7 @@ class Tile extends GameComponent with UseAssetsLoader {
   String id = '';
   Sprite? _sprite;
   ControlledUpdateAnimation? _animation;
+  Color? color;
 
   Tile({
     required String spritePath,
@@ -22,6 +24,7 @@ class Tile extends GameComponent with UseAssetsLoader {
     required Vector2 size,
     this.type,
     this.properties,
+    this.color,
     double offsetX = 0,
     double offsetY = 0,
   }) {
@@ -41,34 +44,14 @@ class Tile extends GameComponent with UseAssetsLoader {
   }
 
   Tile.fromSprite({
-    required Sprite sprite,
+    required FutureOr<Sprite>? sprite,
     required Vector2 position,
     required Vector2 size,
     this.type,
     this.properties,
     double offsetX = 0,
     double offsetY = 0,
-  }) {
-    id = '${position.x}/${position.y}';
-    this._sprite = sprite;
-    generateRectWithBleedingPixel(
-      position,
-      size,
-      offsetX: offsetX,
-      offsetY: offsetY,
-    );
-
-    _positionText = position;
-  }
-
-  Tile.fromFutureSprite({
-    required Future<Sprite> sprite,
-    required Vector2 position,
-    required Vector2 size,
-    this.type,
-    this.properties,
-    double offsetX = 0,
-    double offsetY = 0,
+    this.color,
   }) {
     id = '${position.x}/${position.y}';
     loader?.add(AssetToLoad(sprite, (value) => this._sprite = value));
@@ -118,6 +101,9 @@ class Tile extends GameComponent with UseAssetsLoader {
       size: size,
       overridePaint: MapPaint.instance.paint,
     );
+    if (_animation == null && _sprite == null && color != null) {
+      canvas.drawRect(toRect(), MapPaint.instance.paint..color = color!);
+    }
   }
 
   @override

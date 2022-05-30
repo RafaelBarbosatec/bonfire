@@ -116,6 +116,7 @@ class TileModel {
   final double angle;
   final bool isFlipVertical;
   final bool isFlipHorizontal;
+  final Color? color;
   String id = '';
 
   Offset center = Offset.zero;
@@ -130,6 +131,7 @@ class TileModel {
     this.type,
     this.properties,
     this.sprite,
+    this.color,
     this.animation,
     this.collisions,
     this.angle = 0,
@@ -151,7 +153,7 @@ class TileModel {
     if (animation == null) {
       if (collisions?.isNotEmpty == true) {
         final tile = TileWithCollision.fromSprite(
-          sprite: sprite!.getSprite(),
+          sprite: sprite?.getSprite(),
           position: Vector2(x, y),
           size: Vector2(width, height),
           offsetX: offsetX,
@@ -159,6 +161,7 @@ class TileModel {
           collisions: collisions,
           type: type,
           properties: properties,
+          color: color,
         );
         tile.angle = angle;
         tile.isFlipHorizontal = isFlipHorizontal;
@@ -166,17 +169,19 @@ class TileModel {
 
         tile.gameRef = gameRef;
         tile.id = id;
+        tile.onLoad();
 
         return tile;
       } else {
         final tile = Tile.fromSprite(
-          sprite: sprite!.getSprite(),
+          sprite: sprite?.getSprite(),
           position: Vector2(x, y),
           size: Vector2(width, height),
           offsetX: offsetX,
           offsetY: offsetY,
           type: type,
           properties: properties,
+          color: color,
         );
         tile.angle = angle;
         tile.isFlipHorizontal = isFlipHorizontal;
@@ -184,6 +189,7 @@ class TileModel {
 
         tile.gameRef = gameRef;
         tile.id = id;
+        tile.onLoad();
 
         return tile;
       }
@@ -207,6 +213,7 @@ class TileModel {
 
         tile.gameRef = gameRef;
         tile.id = id;
+        tile.onLoad();
 
         return tile;
       } else {
@@ -227,6 +234,7 @@ class TileModel {
 
         tile.gameRef = gameRef;
         tile.id = id;
+        tile.onLoad();
 
         return tile;
       }
