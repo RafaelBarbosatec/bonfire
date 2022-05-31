@@ -61,7 +61,12 @@ class Menu extends StatelessWidget {
               height: 10,
             ),
             _buildButton(context, 'Random Map', () {
-              _navTo(context, RandomMap());
+              _navTo(
+                context,
+                RandomMap(
+                  size: Vector2(300, 300),
+                ),
+              );
             }),
             SizedBox(
               height: 10,

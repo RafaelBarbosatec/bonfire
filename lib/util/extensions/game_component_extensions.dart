@@ -493,8 +493,8 @@ extension GameComponentExtensions on GameComponent {
       baseP.y - (baseP.y % 2 == 0 ? (bleedingPixel / 2) : 0) + offsetY,
     );
     this.size = Vector2(
-      size.x + (position.x % 2 == 0 ? bleedingPixel : 0),
-      size.y + (position.y % 2 == 0 ? bleedingPixel : 0),
+      size.x + (baseP.x % 2 == 0 ? bleedingPixel : 0),
+      size.y + (baseP.y % 2 == 0 ? bleedingPixel : 0),
     );
   }
 }
