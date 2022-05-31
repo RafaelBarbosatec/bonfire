@@ -79,23 +79,23 @@ class _RandomMapState extends State<RandomMap> {
               cameraConfig: CameraConfig(
                 moveOnlyMapArea: true,
               ),
-              map: NoiseMapGenerator.generate(
+              map: MatrixMapGenerator.generate(
                 matrix: snapshot.data ?? [],
                 builder: (prop) {
                   Color? color = Colors.blue[900];
-                  if (prop.height > -0.35) {
+                  if (prop.value > -0.35) {
                     color = Colors.blue;
                   }
 
-                  if (prop.height > -0.1) {
+                  if (prop.value > -0.1) {
                     color = Colors.orangeAccent;
                   }
 
-                  if (prop.height > 0) {
+                  if (prop.value > 0) {
                     color = Colors.green;
                   }
 
-                  if (prop.height > 0.35) {
+                  if (prop.value > 0.35) {
                     color = Colors.white;
                   }
                   return TileModel(
