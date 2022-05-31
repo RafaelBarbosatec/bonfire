@@ -1,6 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/map/map_world.dart';
-import 'package:bonfire/map/tile/tile_model.dart';
 
 ///
 /// Created by
@@ -26,19 +24,19 @@ typedef TileModelBuilder = TileModel Function(NoiseProperties properties);
 
 class NoiseMapGenerator {
   static MapWorld generate({
-    required List<List<double>> noiseMatrix,
+    required List<List<double>> matrix,
     required TileModelBuilder builder,
   }) {
     List<TileModel> tiles = [];
 
-    final w = noiseMatrix.length;
-    final h = noiseMatrix.first.length;
+    final w = matrix.first.length;
+    final h = matrix.length;
     for (var x = 0; x < w; x++) {
       for (var y = 0; y < h; y++) {
         tiles.add(
           builder(
             NoiseProperties(
-              noiseMatrix[x][y],
+              matrix[x][y],
               Vector2(x.toDouble(), y.toDouble()),
             ),
           ),

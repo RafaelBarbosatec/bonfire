@@ -39,7 +39,7 @@ class RandomMap extends StatelessWidget {
           moveOnlyMapArea: true,
         ),
         map: NoiseMapGenerator.generate(
-          noiseMatrix: noise2(
+          matrix: noise2(
             100,
             100,
             seed: Random().nextInt(2000),
