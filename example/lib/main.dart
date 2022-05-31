@@ -1,8 +1,9 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/game_manual_map.dart';
+import 'package:example/random_map/random_map.dart';
 import 'package:example/shared/enemy/goblin_controller.dart';
-import 'package:example/shared/npc/critter/critter_controller.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
+import 'package:example/shared/npc/critter/critter_controller.dart';
 import 'package:example/shared/player/knight_controller.dart';
 import 'package:example/simple_example/simple_example_game.dart';
 import 'package:example/tiled_map/game_tiled_map.dart';
@@ -35,106 +36,45 @@ class Menu extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.cyan[900],
       body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: ListView(
+          shrinkWrap: true,
           children: <Widget>[
-            Text(
-              'Bonfire',
-              style: TextStyle(fontSize: 30, color: Colors.white),
+            Center(
+              child: Text(
+                'Bonfire',
+                style: TextStyle(fontSize: 30, color: Colors.white),
+              ),
             ),
             SizedBox(
               height: 30,
             ),
-            SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-                child: Text('Simple example'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SimpleExampleGame()),
-                  );
-                },
-              ),
-            ),
+            _buildButton(context, 'Simple example', () {
+              _navTo(context, SimpleExampleGame());
+            }),
             SizedBox(
               height: 10,
             ),
-            SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-                child: Text('Manual Map'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => GameManualMap()),
-                  );
-                },
-              ),
-            ),
+            _buildButton(context, 'Manual Map', () {
+              _navTo(context, GameManualMap());
+            }),
             SizedBox(
               height: 10,
             ),
-            SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-                child: Text('Tiled Map'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GameTiledMap(),
-                    ),
-                  );
-                },
-              ),
-            ),
+            _buildButton(context, 'Random Map', () {
+              _navTo(context, RandomMap());
+            }),
             SizedBox(
               height: 10,
             ),
+            _buildButton(context, 'Tiled Map', () {
+              _navTo(context, GameTiledMap());
+            }),
             SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-                child: Text('Top down game'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TopDownGame(),
-                    ),
-                  );
-                },
-              ),
+              height: 10,
             ),
+            _buildButton(context, 'Top down game', () {
+              _navTo(context, TopDownGame());
+            }),
           ],
         ),
       ),
@@ -146,6 +86,34 @@ class Menu extends StatelessWidget {
             style: TextStyle(fontSize: 18),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildButton(BuildContext context, String label, VoidCallback onTap) {
+    return Center(
+      child: SizedBox(
+        width: 200,
+        child: ElevatedButton(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
+          child: Text(label),
+          onPressed: onTap,
+        ),
+      ),
+    );
+  }
+
+  void _navTo(BuildContext context, Widget page) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => page,
       ),
     );
   }

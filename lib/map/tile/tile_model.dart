@@ -169,7 +169,6 @@ class TileModel {
 
         tile.gameRef = gameRef;
         tile.id = id;
-        tile.onLoad();
 
         return tile;
       } else {
@@ -189,7 +188,6 @@ class TileModel {
 
         tile.gameRef = gameRef;
         tile.id = id;
-        tile.onLoad();
 
         return tile;
       }

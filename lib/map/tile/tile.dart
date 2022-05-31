@@ -44,7 +44,7 @@ class Tile extends GameComponent with UseAssetsLoader {
   }
 
   Tile.fromSprite({
-    required FutureOr<Sprite>? sprite,
+    required Sprite? sprite,
     required Vector2 position,
     required Vector2 size,
     this.type,
@@ -54,7 +54,7 @@ class Tile extends GameComponent with UseAssetsLoader {
     this.color,
   }) {
     id = '${position.x}/${position.y}';
-    loader?.add(AssetToLoad(sprite, (value) => this._sprite = value));
+    this._sprite = sprite;
     generateRectWithBleedingPixel(
       position,
       size,

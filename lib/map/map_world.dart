@@ -257,6 +257,7 @@ class MapWorld extends MapGame {
   Future addTile(TileModel tileModel) async {
     await _loadTile(tileModel);
     final tile = tileModel.getTile(gameRef);
+    await tile.onLoad();
     tiles.add(tileModel);
     childrenTiles.add(tile);
     quadTree?.insert(

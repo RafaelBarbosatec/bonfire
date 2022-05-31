@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -29,7 +28,7 @@ class TileWithCollision extends Tile with ObjectCollision {
   }
 
   TileWithCollision.fromSprite({
-    required FutureOr<Sprite>? sprite,
+    required Sprite? sprite,
     required Vector2 position,
     required Vector2 size,
     String? type,
