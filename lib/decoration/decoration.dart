@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/assets_loader.dart';
@@ -12,17 +11,14 @@ import 'package:bonfire/util/assets_loader.dart';
 class GameDecoration extends GameComponent
     with UseSpriteAnimation, UseSprite, UseAssetsLoader {
   GameDecoration({
-    Sprite? sprite,
     required Vector2 position,
     required Vector2 size,
+    Sprite? sprite,
     SpriteAnimation? animation,
   }) {
     this.sprite = sprite;
     this.animation = animation;
-    generateRectWithBleedingPixel(
-      position,
-      size,
-    );
+    applyBleedingPixel(position: position, size: size);
   }
 
   GameDecoration.withSprite({
@@ -31,10 +27,7 @@ class GameDecoration extends GameComponent
     required Vector2 size,
   }) {
     loader?.add(AssetToLoad(sprite, (value) => this.sprite = value));
-    generateRectWithBleedingPixel(
-      position,
-      size,
-    );
+    applyBleedingPixel(position: position, size: size);
   }
 
   GameDecoration.withAnimation({
@@ -43,27 +36,6 @@ class GameDecoration extends GameComponent
     required Vector2 size,
   }) {
     loader?.add(AssetToLoad(animation, (value) => this.animation = value));
-    generateRectWithBleedingPixel(
-      position,
-      size,
-    );
-  }
-
-  void generateRectWithBleedingPixel(
-    Vector2 position,
-    Vector2 size,
-  ) {
-    double bleendingPixel = max(size.x, size.y) * 0.03;
-    if (bleendingPixel > 2) {
-      bleendingPixel = 2;
-    }
-    this.position = Vector2(
-      position.x - (position.x % 2 == 0 ? (bleendingPixel / 2) : 0),
-      position.y - (position.y % 2 == 0 ? (bleendingPixel / 2) : 0),
-    );
-    this.size = Vector2(
-      size.x + (position.x % 2 == 0 ? bleendingPixel : 0),
-      size.y + (position.y % 2 == 0 ? bleendingPixel : 0),
-    );
+    applyBleedingPixel(position: position, size: size);
   }
 }
