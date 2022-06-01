@@ -72,8 +72,8 @@ class MapAssetsManager {
     for (var frame in frames) {
       Sprite sprite = await MapAssetsManager.getFutureSprite(
         frame.path,
-        row: frame.row,
-        column: frame.column,
+        row: frame.y,
+        column: frame.x,
         tileWidth: frame.width,
         tileHeight: frame.height,
       );
@@ -96,12 +96,12 @@ class MapAssetsManager {
     for (var frame in frames) {
       Sprite sprite = MapAssetsManager.getSprite(
         frame.path,
-        frame.row,
-        frame.column,
+        frame.y,
+        frame.x,
         frame.width,
         frame.height,
       );
-      key += '${frame.path}${frame.row}${frame.column}';
+      key += '${frame.path}${frame.y}${frame.x}';
       spriteList.add(sprite);
     }
 

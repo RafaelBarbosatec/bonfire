@@ -1,5 +1,8 @@
 import 'package:bonfire/bonfire.dart';
 
+export 'map_terrain.dart';
+export 'terrain_builder.dart';
+
 ///
 /// Created by
 ///
@@ -13,7 +16,7 @@ import 'package:bonfire/bonfire.dart';
 /// on 30/05/22
 ///
 
-class NoiseProperties {
+class ItemMatrixProperties {
   final double value;
   final double? valueTop;
   final double? valueTopLeft;
@@ -25,7 +28,7 @@ class NoiseProperties {
   final double? valueRight;
   final Vector2 position;
 
-  NoiseProperties(
+  ItemMatrixProperties(
     this.value,
     this.position, {
     this.valueTop,
@@ -44,7 +47,7 @@ class NoiseProperties {
   }
 }
 
-typedef TileModelBuilder = TileModel Function(NoiseProperties properties);
+typedef TileModelBuilder = TileModel Function(ItemMatrixProperties properties);
 
 class MatrixMapGenerator {
   static MapWorld generate({
@@ -59,7 +62,7 @@ class MatrixMapGenerator {
       for (var y = 0; y < h; y++) {
         tiles.add(
           builder(
-            NoiseProperties(
+            ItemMatrixProperties(
               matrix[x][y],
               Vector2(x.toDouble(), y.toDouble()),
               valueTop: _tryGetValue(() => matrix[x][y - 1]),

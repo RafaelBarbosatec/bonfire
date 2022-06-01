@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bonfire/background/game_background.dart';
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/custom_game_widget.dart';
@@ -26,7 +28,7 @@ class BonfireWidget extends StatefulWidget {
   final GameInterface? interface;
 
   /// Represents a map (or world) where the game occurs.
-  final MapGame map;
+  final FutureOr<MapGame> map;
 
   /// Used to show grid in the map and facilitate the construction and testing of the map
   final bool constructionMode;
@@ -57,6 +59,9 @@ class BonfireWidget extends StatefulWidget {
   /// Initial mouse cursor for this [GameWidget]
   /// mouse cursor can be changed in runtime using [Game.mouseCursor]
   final MouseCursor? mouseCursor;
+
+  final Widget? progress;
+  final Duration progressTransitionDuration;
 
   final TapInGame? onTapDown;
   final TapInGame? onTapUp;
@@ -99,6 +104,8 @@ class BonfireWidget extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     this.mouseCursor,
+    this.progress,
+    this.progressTransitionDuration = const Duration(milliseconds: 300),
   }) : super(key: key);
 
   @override
@@ -118,12 +125,64 @@ class _BonfireWidgetState extends State<BonfireWidget> {
 
   @override
   void initState() {
-    _game = BonfireGame(
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<BonfireGame>(
+        future: _buildGame(),
+        builder: (context, snapshot) {
+          return Stack(
+            children: [
+              if (snapshot.hasData)
+                CustomGameWidget(
+                  game: snapshot.data!,
+                  overlayBuilderMap: widget.overlayBuilderMap,
+                  initialActiveOverlays: widget.initialActiveOverlays,
+                  focusNode: widget.focusNode,
+                  autofocus: widget.autofocus,
+                  mouseCursor: widget.mouseCursor,
+                ),
+              AnimatedSwitcher(
+                duration: widget.progressTransitionDuration,
+                child:
+                    !snapshot.hasData ? _defaultProgress() : SizedBox.shrink(),
+              ),
+            ],
+          );
+        });
+  }
+
+  Widget _defaultProgress() {
+    return widget.progress ??
+        Container(
+          color: Colors.black,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+  }
+
+  void _refreshGame() async {
+    final map = await widget.map;
+    await _game.map.updateTiles(map.tiles);
+
+    _game.decorations().forEach((d) => d.removeFromParent());
+    widget.decorations?.forEach((d) => _game.add(d));
+
+    _game.enemies().forEach((e) => e.removeFromParent());
+    widget.enemies?.forEach((e) => _game.add(e));
+  }
+
+  Future<BonfireGame> _buildGame() async {
+    final map = await widget.map;
+    return _game = BonfireGame(
       context: context,
       joystickController: widget.joystick,
       player: widget.player,
       interface: widget.interface,
-      map: widget.map,
+      map: map,
       decorations: widget.decorations,
       enemies: widget.enemies,
       components: widget.components ?? [],
@@ -143,28 +202,5 @@ class _BonfireWidgetState extends State<BonfireWidget> {
       onTapDown: widget.onTapDown,
       onTapUp: widget.onTapUp,
     );
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomGameWidget(
-      game: _game,
-      overlayBuilderMap: widget.overlayBuilderMap,
-      initialActiveOverlays: widget.initialActiveOverlays,
-      focusNode: widget.focusNode,
-      autofocus: widget.autofocus,
-      mouseCursor: widget.mouseCursor,
-    );
-  }
-
-  void _refreshGame() async {
-    await _game.map.updateTiles(widget.map.tiles);
-
-    _game.decorations().forEach((d) => d.removeFromParent());
-    widget.decorations?.forEach((d) => _game.add(d));
-
-    _game.enemies().forEach((e) => e.removeFromParent());
-    widget.enemies?.forEach((e) => _game.add(e));
   }
 }

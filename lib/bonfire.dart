@@ -52,7 +52,7 @@ export 'package:bonfire/util/follower_widget.dart';
 export 'package:bonfire/util/functions.dart';
 export 'package:bonfire/util/game_controller.dart';
 export 'package:bonfire/util/interval_tick.dart';
-export 'package:bonfire/util/matrix_map_generator.dart';
+export 'package:bonfire/util/matrix_map/matrix_map_generator.dart';
 export 'package:bonfire/util/mixins/attackable.dart';
 export 'package:bonfire/util/mixins/automatic_random_movement.dart';
 export 'package:bonfire/util/mixins/follower.dart';

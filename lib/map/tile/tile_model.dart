@@ -9,15 +9,15 @@ import 'package:flutter/widgets.dart';
 
 class TileModelSprite {
   final String path;
-  final int row;
-  final int column;
+  final int y;
+  final int x;
   final double width;
   final double height;
 
   TileModelSprite({
     required this.path,
-    this.row = 0,
-    this.column = 0,
+    this.y = 0,
+    this.x = 0,
     this.width = 0,
     this.height = 0,
   });
@@ -25,8 +25,8 @@ class TileModelSprite {
   Sprite getSprite() {
     return MapAssetsManager.getSprite(
       path,
-      row,
-      column,
+      y,
+      x,
       width,
       height,
     );
@@ -35,8 +35,8 @@ class TileModelSprite {
   Future<Sprite> getFutureSprite() {
     return MapAssetsManager.getFutureSprite(
       path,
-      row: row,
-      column: column,
+      row: y,
+      column: x,
       tileWidth: width,
       tileHeight: height,
     );
@@ -45,8 +45,8 @@ class TileModelSprite {
   factory TileModelSprite.fromMap(Map<String, dynamic> map) {
     return new TileModelSprite(
       path: map['path'],
-      row: map['row'],
-      column: map['column'],
+      y: map['row'],
+      x: map['column'],
       width: map['width'],
       height: map['height'],
     );
@@ -56,8 +56,8 @@ class TileModelSprite {
     // ignore: unnecessary_cast
     return {
       'path': this.path,
-      'row': this.row,
-      'column': this.column,
+      'row': this.y,
+      'column': this.x,
       'width': this.width,
       'height': this.height,
     } as Map<String, dynamic>;

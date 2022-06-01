@@ -314,8 +314,8 @@ class TiledWorldMap {
           path: pathSprite,
           width: tileSetContain.tileWidth ?? 0,
           height: tileSetContain.tileHeight ?? 0,
-          row: row,
-          column: column,
+          y: row,
+          x: column,
         );
       }
 
@@ -542,8 +542,8 @@ class TiledWorldMap {
             path: spritePath,
             width: tileSetContain.tileWidth ?? 0,
             height: tileSetContain.tileHeight ?? 0,
-            row: row,
-            column: column,
+            y: row,
+            x: column,
           );
           frames.add(sprite);
         });
