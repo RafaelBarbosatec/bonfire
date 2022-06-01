@@ -42,7 +42,7 @@ List<List<double>> generateNoise(Map<String, dynamic> data) {
         newValue = 1;
       }
 
-      if (original[x][y] > 0) {
+      if (original[x][y] > 0.1) {
         newValue = 2;
       }
       newMatrix[x][y] = newValue;
