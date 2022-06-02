@@ -72,7 +72,7 @@ class BonfireWidget extends StatefulWidget {
   final List<String>? initialActiveOverlays;
   final List<Enemy>? enemies;
   final List<GameDecoration>? decorations;
-  final List<GameComponent>? components;
+  final FutureOr<List<GameComponent>?> components;
   final GameBackground? background;
   final GameController? gameController;
   final CameraConfig? cameraConfig;
@@ -190,6 +190,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
 
   void _buildGame() async {
     final map = await widget.map;
+    final components = await widget.components;
     await Future.delayed(Duration.zero);
     setState(() {
       _game = BonfireGame(
@@ -200,7 +201,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
         map: map,
         decorations: widget.decorations,
         enemies: widget.enemies,
-        components: widget.components ?? [],
+        components: components ?? [],
         background: widget.background,
         constructionMode: widget.constructionMode,
         showCollisionArea: widget.showCollisionArea,
