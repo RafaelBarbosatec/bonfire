@@ -24,7 +24,11 @@ List<List<double>> generateNoise(Map<String, dynamic> data) {
   int width = original.first.length;
   int height = original.length;
   List<List<double>> newMatrix = List<List<double>>.generate(
-      width, (_) => List<double>.generate(height, (_) => .0));
+    width,
+    (_) => List<double>.generate(height, (_) => .0),
+  );
+
+  /// Normalises the matrix creating 3 categories: Water,Earth and Grass
   for (var x = 0; x < width; x++) {
     for (var y = 0; y < height; y++) {
       double newValue = 0;
