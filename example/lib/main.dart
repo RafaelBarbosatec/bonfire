@@ -64,7 +64,7 @@ class Menu extends StatelessWidget {
               _navTo(
                 context,
                 RandomMap(
-                  size: Vector2(300, 300),
+                  size: Vector2(200, 200),
                 ),
               );
             }),
