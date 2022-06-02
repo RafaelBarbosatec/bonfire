@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
+import 'package:example/shared/player/knight.dart';
 import 'package:fast_noise/fast_noise.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -76,8 +77,7 @@ class _RandomMapState extends State<RandomMap> {
             isFixed: false,
           ),
         ),
-        showCollisionArea: true,
-        // player: Knight(Vector2(100, 100)),
+        player: Knight(Vector2(100, 100)),
         cameraConfig: CameraConfig(
           moveOnlyMapArea: true,
         ),
@@ -115,6 +115,7 @@ class _RandomMapState extends State<RandomMap> {
       terrainList: [
         MapTerrain(
           value: 0,
+          collisionOnlyCloseCorners: true,
           collisions: [
             CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
           ],

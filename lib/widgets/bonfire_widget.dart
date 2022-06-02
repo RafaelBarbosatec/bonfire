@@ -62,6 +62,7 @@ class BonfireWidget extends StatefulWidget {
 
   final Widget? progress;
   final Duration progressTransitionDuration;
+  final AnimatedSwitcherTransitionBuilder progressTransitionBuilder;
 
   final TapInGame? onTapDown;
   final TapInGame? onTapUp;
@@ -105,7 +106,8 @@ class BonfireWidget extends StatefulWidget {
     this.autofocus = true,
     this.mouseCursor,
     this.progress,
-    this.progressTransitionDuration = const Duration(milliseconds: 300),
+    this.progressTransitionDuration = const Duration(milliseconds: 500),
+    this.progressTransitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
   }) : super(key: key);
 
   @override
@@ -113,7 +115,14 @@ class BonfireWidget extends StatefulWidget {
 }
 
 class _BonfireWidgetState extends State<BonfireWidget> {
-  late BonfireGame _game;
+  BonfireGame? _game;
+  late StreamController<bool> _loadingStream;
+
+  @override
+  void dispose() {
+    _loadingStream.close();
+    super.dispose();
+  }
 
   @override
   void didUpdateWidget(BonfireWidget oldWidget) {
@@ -125,33 +134,37 @@ class _BonfireWidgetState extends State<BonfireWidget> {
 
   @override
   void initState() {
+    _loadingStream = StreamController<bool>();
+    _buildGame();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<BonfireGame>(
-        future: _buildGame(),
-        builder: (context, snapshot) {
-          return Stack(
-            children: [
-              if (snapshot.hasData)
-                CustomGameWidget(
-                  game: snapshot.data!,
-                  overlayBuilderMap: widget.overlayBuilderMap,
-                  initialActiveOverlays: widget.initialActiveOverlays,
-                  focusNode: widget.focusNode,
-                  autofocus: widget.autofocus,
-                  mouseCursor: widget.mouseCursor,
-                ),
-              AnimatedSwitcher(
-                duration: widget.progressTransitionDuration,
-                child:
-                    !snapshot.hasData ? _defaultProgress() : SizedBox.shrink(),
-              ),
-            ],
-          );
-        });
+    return Stack(
+      children: [
+        if (_game != null)
+          CustomGameWidget(
+            game: _game!,
+            overlayBuilderMap: widget.overlayBuilderMap,
+            initialActiveOverlays: widget.initialActiveOverlays,
+            focusNode: widget.focusNode,
+            autofocus: widget.autofocus,
+            mouseCursor: widget.mouseCursor,
+          ),
+        StreamBuilder<bool>(
+          stream: _loadingStream.stream,
+          builder: (context, snapshot) {
+            bool _loading = !snapshot.hasData || snapshot.data == true;
+            return AnimatedSwitcher(
+              duration: widget.progressTransitionDuration,
+              transitionBuilder: widget.progressTransitionBuilder,
+              child: _loading ? _defaultProgress() : SizedBox.shrink(),
+            );
+          },
+        ),
+      ],
+    );
   }
 
   Widget _defaultProgress() {
@@ -166,41 +179,52 @@ class _BonfireWidgetState extends State<BonfireWidget> {
 
   void _refreshGame() async {
     final map = await widget.map;
-    await _game.map.updateTiles(map.tiles);
+    await _game?.map.updateTiles(map.tiles);
 
-    _game.decorations().forEach((d) => d.removeFromParent());
-    widget.decorations?.forEach((d) => _game.add(d));
+    _game?.decorations().forEach((d) => d.removeFromParent());
+    widget.decorations?.forEach((d) => _game!.add(d));
 
-    _game.enemies().forEach((e) => e.removeFromParent());
-    widget.enemies?.forEach((e) => _game.add(e));
+    _game?.enemies().forEach((e) => e.removeFromParent());
+    widget.enemies?.forEach((e) => _game!.add(e));
   }
 
-  Future<BonfireGame> _buildGame() async {
+  void _buildGame() async {
     final map = await widget.map;
-    return _game = BonfireGame(
-      context: context,
-      joystickController: widget.joystick,
-      player: widget.player,
-      interface: widget.interface,
-      map: map,
-      decorations: widget.decorations,
-      enemies: widget.enemies,
-      components: widget.components ?? [],
-      background: widget.background,
-      constructionMode: widget.constructionMode,
-      showCollisionArea: widget.showCollisionArea,
-      showFPS: widget.showFPS,
-      gameController: widget.gameController,
-      constructionModeColor:
-          widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
-      collisionAreaColor:
-          widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
-      lightingColorGame: widget.lightingColorGame,
-      cameraConfig: widget.cameraConfig,
-      colorFilter: widget.colorFilter,
-      onReady: widget.onReady,
-      onTapDown: widget.onTapDown,
-      onTapUp: widget.onTapUp,
-    );
+    await Future.delayed(Duration.zero);
+    setState(() {
+      _game = BonfireGame(
+        context: context,
+        joystickController: widget.joystick,
+        player: widget.player,
+        interface: widget.interface,
+        map: map,
+        decorations: widget.decorations,
+        enemies: widget.enemies,
+        components: widget.components ?? [],
+        background: widget.background,
+        constructionMode: widget.constructionMode,
+        showCollisionArea: widget.showCollisionArea,
+        showFPS: widget.showFPS,
+        gameController: widget.gameController,
+        constructionModeColor:
+            widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+        collisionAreaColor: widget.collisionAreaColor ??
+            Colors.lightGreenAccent.withOpacity(0.5),
+        lightingColorGame: widget.lightingColorGame,
+        cameraConfig: widget.cameraConfig,
+        colorFilter: widget.colorFilter,
+        onReady: (game) {
+          widget.onReady?.call(game);
+          _showProgress(false);
+        },
+        onTapDown: widget.onTapDown,
+        onTapUp: widget.onTapUp,
+      );
+    });
+  }
+
+  void _showProgress(bool show) async {
+    await Future.delayed(Duration.zero);
+    _loadingStream.add(show);
   }
 }

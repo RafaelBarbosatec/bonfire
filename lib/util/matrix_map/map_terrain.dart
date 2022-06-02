@@ -150,12 +150,12 @@ class _RandomRange {
 
 class MapTerrain {
   final double value;
-
   final List<TileModelSprite> sprites;
   final List<double> spriteRandom;
   final String? type;
   final Map<String, dynamic>? properties;
   final List<CollisionArea>? collisions;
+  final bool collisionOnlyCloseCorners;
   List<_RandomRange> _rangeRandom = [];
 
   MapTerrain({
@@ -165,6 +165,7 @@ class MapTerrain {
     this.type,
     this.properties,
     this.collisions,
+    this.collisionOnlyCloseCorners = false,
   }) {
     int last = 0;
     spriteRandom.forEach((element) {
@@ -172,7 +173,6 @@ class MapTerrain {
       _rangeRandom.add(_RandomRange(last, (last + value)));
       last += value;
     });
-    print(_rangeRandom);
   }
 
   int inRange(int value) {

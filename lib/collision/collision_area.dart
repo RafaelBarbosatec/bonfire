@@ -28,6 +28,21 @@ class CollisionArea {
   })  : shape = PolygonShape(points),
         align = align ?? Vector2.zero();
 
+  CollisionArea clone() {
+    late Shape newShape;
+    if (shape is PolygonShape) {
+      newShape = PolygonShape((shape as PolygonShape).points);
+    } else if (shape is CircleShape) {
+      newShape = CircleShape((shape as CircleShape).radius);
+    } else {
+      newShape = RectangleShape((shape as RectangleShape).rect.sizeVector2);
+    }
+    return CollisionArea(
+      newShape,
+      align: align?.clone(),
+    );
+  }
+
   void updatePosition(Vector2 position) {
     shape.position = Vector2(
       position.x + (align?.x ?? 0.0),

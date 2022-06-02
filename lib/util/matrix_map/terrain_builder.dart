@@ -133,7 +133,7 @@ class TerrainBuilder {
       height: tileSize,
       sprite: sprite,
       properties: terrain?.properties,
-      collisions: terrain?.collisions,
+      collisions: terrain?.collisions?.map((e) => e.clone()).toList(),
       type: terrain?.type,
     );
   }
@@ -146,7 +146,9 @@ class TerrainBuilder {
       height: tileSize,
       sprite: _getSingleSprite(terrain),
       properties: terrain.properties,
-      collisions: terrain.collisions,
+      collisions: terrain.collisionOnlyCloseCorners
+          ? null
+          : terrain.collisions?.map((e) => e.clone()).toList(),
       type: terrain.type,
     );
   }
