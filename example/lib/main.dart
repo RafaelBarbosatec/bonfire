@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/game_manual_map.dart';
-import 'package:example/random_map/random_map.dart';
+import 'package:example/random_map/random_map_game.dart';
 import 'package:example/shared/enemy/goblin_controller.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
 import 'package:example/shared/npc/critter/critter_controller.dart';
@@ -63,7 +63,7 @@ class Menu extends StatelessWidget {
             _buildButton(context, 'Random Map', () {
               _navTo(
                 context,
-                RandomMap(
+                RandomMapGame(
                   size: Vector2(200, 200),
                 ),
               );
