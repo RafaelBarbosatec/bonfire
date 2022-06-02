@@ -76,7 +76,7 @@ class MapGenerator {
       ),
       MapTerrain(
         value: TILE_GRASS,
-        spriteRandom: [0.93, 0.05, 0.02],
+        spritesProportion: [0.93, 0.05, 0.02],
         sprites: [
           TileModelSprite(
             path: 'tile_random/grass_types.png',
@@ -98,16 +98,16 @@ class MapGenerator {
         value: TILE_EARTH,
         to: TILE_WATER,
         spriteSheet: TerrainSpriteSheet.create(
-          'tile_random/earth_to_water.png',
-          Vector2.all(16),
+          path: 'tile_random/earth_to_water.png',
+          tileSize: Vector2.all(16),
         ),
       ),
       MapTerrainCorners(
         value: TILE_EARTH,
         to: TILE_GRASS,
         spriteSheet: TerrainSpriteSheet.create(
-          'tile_random/earth_to_grass.png',
-          Vector2.all(16),
+          path: 'tile_random/earth_to_grass.png',
+          tileSize: Vector2.all(16),
         ),
       ),
     ];

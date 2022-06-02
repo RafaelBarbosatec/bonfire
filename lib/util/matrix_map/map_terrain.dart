@@ -42,67 +42,71 @@ class TerrainSpriteSheet {
     required this.invertedBottomRight,
   });
 
-  static TerrainSpriteSheet create(String path, Vector2 size) {
+  static TerrainSpriteSheet create({
+    required String path,
+    required Vector2 tileSize,
+    Vector2? position,
+  }) {
     return TerrainSpriteSheet(
       left: TileModelSprite(
         path: path,
-        size: size,
-        position: Vector2(0, 1),
+        size: tileSize,
+        position: Vector2(0, 1) + (position ?? Vector2.zero()),
       ),
       topLeft: TileModelSprite(
         path: path,
-        size: size,
-        position: Vector2(0, 0),
+        size: tileSize,
+        position: Vector2(0, 0) + (position ?? Vector2.zero()),
       ),
       bottomLeft: TileModelSprite(
         path: path,
-        size: size,
-        position: Vector2(0, 2),
+        size: tileSize,
+        position: Vector2(0, 2) + (position ?? Vector2.zero()),
       ),
       right: TileModelSprite(
         path: path,
-        size: size,
-        position: Vector2(2, 1),
+        size: tileSize,
+        position: Vector2(2, 1) + (position ?? Vector2.zero()),
       ),
       topRight: TileModelSprite(
         path: path,
-        size: size,
-        position: Vector2(2, 0),
+        size: tileSize,
+        position: Vector2(2, 0) + (position ?? Vector2.zero()),
       ),
       bottomRight: TileModelSprite(
         path: path,
-        size: size,
-        position: Vector2(2, 2),
+        size: tileSize,
+        position: Vector2(2, 2) + (position ?? Vector2.zero()),
       ),
       top: TileModelSprite(
         path: path,
-        size: size,
-        position: Vector2(1, 0),
+        size: tileSize,
+        position: Vector2(1, 0) + (position ?? Vector2.zero()),
       ),
       bottom: TileModelSprite(
         path: path,
-        size: size,
-        position: Vector2(1, 2),
+        size: tileSize,
+        position: Vector2(1, 2) + (position ?? Vector2.zero()),
       ),
       invertedTopLeft: TileModelSprite(
         path: path,
-        size: size,
-        position: Vector2(3, 0),
+        size: tileSize,
+        position: Vector2(3, 0) + (position ?? Vector2.zero()),
       ),
       invertedTopRight: TileModelSprite(
         path: path,
-        size: size,
-        position: Vector2(5, 0),
+        size: tileSize,
+        position: Vector2(5, 0) + (position ?? Vector2.zero()),
       ),
       invertedBottomRight: TileModelSprite(
         path: path,
-        size: size,
-        position: Vector2(5, 2),
+        size: tileSize,
+        position: Vector2(5, 2) + (position ?? Vector2.zero()),
       ),
       invertedBottomLeft: TileModelSprite(
         path: path,
-        size: size,
-        position: Vector2(3, 2),
+        size: tileSize,
+        position: Vector2(3, 2) + (position ?? Vector2.zero()),
       ),
     );
   }
@@ -127,36 +131,37 @@ class _RandomRange {
 class MapTerrain {
   final double value;
   final List<TileModelSprite> sprites;
-  final List<double> spriteRandom;
+  final List<double> spritesProportion;
   final String? type;
   final Map<String, dynamic>? properties;
   final List<CollisionArea>? collisions;
   final bool collisionOnlyCloseCorners;
-  List<_RandomRange> _rangeRandom = [];
+  List<_RandomRange> _rangeProportion = [];
 
   MapTerrain({
     required this.value,
     required this.sprites,
-    this.spriteRandom = const [],
+    this.spritesProportion = const [],
     this.type,
     this.properties,
     this.collisions,
     this.collisionOnlyCloseCorners = false,
   }) {
     int last = 0;
-    spriteRandom.forEach((element) {
+    spritesProportion.forEach((element) {
       final value = (element * 100).toInt();
-      _rangeRandom.add(_RandomRange(last, (last + value)));
+      _rangeProportion.add(_RandomRange(last, (last + value)));
       last += value;
     });
   }
 
   int inRange(int value) {
-    int index = _rangeRandom.indexWhere((element) => element.inRange(value));
+    int index =
+        _rangeProportion.indexWhere((element) => element.inRange(value));
     return index == -1 ? 0 : index;
   }
 
-  int get maxRandomValue => _rangeRandom.last.end;
+  int get maxRandomValue => _rangeProportion.last.end;
 }
 
 class MapTerrainCorners extends MapTerrain {

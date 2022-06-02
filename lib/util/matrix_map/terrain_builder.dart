@@ -21,8 +21,9 @@ class TerrainBuilder {
   TerrainBuilder({required this.tileSize, required this.terrainList});
 
   TileModel build(ItemMatrixProperties prop) {
-    Iterable<MapTerrain> findList =
-        terrainList.where((element) => element.value == prop.value);
+    Iterable<MapTerrain> findList = terrainList.where(
+      (element) => element.value == prop.value,
+    );
 
     if (findList.isEmpty) {
       return _buildDefault(prop);
@@ -44,7 +45,7 @@ class TerrainBuilder {
       } else {
         return _buildTileCorner(findList, prop);
       }
-    } catch (E) {
+    } catch (e) {
       return _buildDefault(prop);
     }
   }
@@ -174,7 +175,7 @@ class TerrainBuilder {
 
   TileModelSprite? _getSingleSprite(MapTerrain terrain) {
     if (terrain.sprites.length > 1 &&
-        terrain.sprites.length == terrain.spriteRandom.length) {
+        terrain.sprites.length == terrain.spritesProportion.length) {
       int randomValue = Random().nextInt(terrain.maxRandomValue);
       int index = terrain.inRange(randomValue);
 
