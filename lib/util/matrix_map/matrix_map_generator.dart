@@ -56,8 +56,8 @@ class MatrixMapGenerator {
   }) {
     List<TileModel> tiles = [];
 
-    final w = matrix.first.length;
-    final h = matrix.length;
+    final h = matrix.first.length;
+    final w = matrix.length;
     for (var x = 0; x < w; x++) {
       for (var y = 0; y < h; y++) {
         tiles.add(

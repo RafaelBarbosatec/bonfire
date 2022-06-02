@@ -30,14 +30,7 @@ class TerrainBuilder {
     }
 
     try {
-      if (prop.valueLeft == prop.value &&
-          prop.valueRight == prop.value &&
-          prop.valueTop == prop.value &&
-          prop.valueBottom == prop.value &&
-          prop.valueBottomLeft == prop.value &&
-          prop.valueBottomRight == prop.value &&
-          prop.valueTopLeft == prop.value &&
-          prop.valueTopRight == prop.value) {
+      if (_isCenterTile(prop)) {
         MapTerrain terrain = findList.where((element) {
           return !(element is MapTerrainCorners);
         }).first;
@@ -289,6 +282,17 @@ class TerrainBuilder {
     }
 
     return Duo<TileModelSprite?, MapTerrain?>(sprite, terrain);
+  }
+
+  bool _isCenterTile(ItemMatrixProperties prop) {
+    return prop.valueLeft == prop.value &&
+        prop.valueRight == prop.value &&
+        prop.valueTop == prop.value &&
+        prop.valueBottom == prop.value &&
+        prop.valueBottomLeft == prop.value &&
+        prop.valueBottomRight == prop.value &&
+        prop.valueTopLeft == prop.value &&
+        prop.valueTopRight == prop.value;
   }
 }
 
