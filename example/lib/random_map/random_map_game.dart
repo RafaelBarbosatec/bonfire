@@ -27,7 +27,6 @@ class RandomMapGame extends StatefulWidget {
 }
 
 class _RandomMapGameState extends State<RandomMapGame> {
-  TerrainBuilder? terrainBuilder;
   MapGenerator? _mapGenerator;
 
   @override
