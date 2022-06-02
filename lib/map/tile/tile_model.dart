@@ -9,46 +9,37 @@ import 'package:flutter/widgets.dart';
 
 class TileModelSprite {
   final String path;
-  final int y;
-  final int x;
-  final double width;
-  final double height;
+  final Vector2 position;
+  final Vector2 size;
 
   TileModelSprite({
     required this.path,
-    this.y = 0,
-    this.x = 0,
-    this.width = 0,
-    this.height = 0,
-  });
+    Vector2? position,
+    Vector2? size,
+  })  : this.position = position ?? Vector2.zero(),
+        this.size = size ?? Vector2.zero();
 
   Sprite getSprite() {
     return MapAssetsManager.getSprite(
       path,
-      y,
-      x,
-      width,
-      height,
+      position,
+      size,
     );
   }
 
   Future<Sprite> getFutureSprite() {
     return MapAssetsManager.getFutureSprite(
       path,
-      row: y,
-      column: x,
-      tileWidth: width,
-      tileHeight: height,
+      position: position,
+      size: size,
     );
   }
 
   factory TileModelSprite.fromMap(Map<String, dynamic> map) {
     return new TileModelSprite(
       path: map['path'],
-      y: map['row'],
-      x: map['column'],
-      width: map['width'],
-      height: map['height'],
+      position: Vector2(map['column'], map['row']),
+      size: Vector2(map['width'], map['height']),
     );
   }
 
@@ -56,10 +47,10 @@ class TileModelSprite {
     // ignore: unnecessary_cast
     return {
       'path': this.path,
-      'row': this.y,
-      'column': this.x,
-      'width': this.width,
-      'height': this.height,
+      'row': this.position.y,
+      'column': this.position.x,
+      'width': this.size.x,
+      'height': this.size.y,
     } as Map<String, dynamic>;
   }
 }

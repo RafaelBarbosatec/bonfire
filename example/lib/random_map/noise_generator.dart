@@ -1,3 +1,4 @@
+import 'package:example/random_map/map_generator.dart';
 import 'package:fast_noise/fast_noise.dart';
 
 ///
@@ -28,15 +29,15 @@ List<List<double>> generateNoise(Map<String, dynamic> data) {
     for (var y = 0; y < height; y++) {
       double newValue = 0;
       if (original[x][y] > -0.35) {
-        newValue = 0;
+        newValue = MapGenerator.TILE_WATER;
       }
 
       if (original[x][y] > -0.1) {
-        newValue = 1;
+        newValue = MapGenerator.TILE_EARTH;
       }
 
       if (original[x][y] > 0.1) {
-        newValue = 2;
+        newValue = MapGenerator.TILE_GRASS;
       }
       newMatrix[x][y] = newValue;
     }

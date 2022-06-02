@@ -17,6 +17,9 @@ import 'package:flutter/foundation.dart';
 /// Rafaelbarbosatec
 /// on 02/06/22
 class MapGenerator {
+  static const double TILE_WATER = 0;
+  static const double TILE_EARTH = 1;
+  static const double TILE_GRASS = 2;
   late TerrainBuilder _terrainBuilder;
   final double tileSize;
   final Vector2 size;
@@ -50,72 +53,61 @@ class MapGenerator {
   List<MapTerrain> _buildTerrainList() {
     return [
       MapTerrain(
-        value: 0,
+        value: TILE_WATER,
         collisionOnlyCloseCorners: true,
-        collisions: [
-          CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
-        ],
+        collisions: [CollisionArea.rectangle(size: Vector2.all(tileSize))],
         sprites: [
           TileModelSprite(
             path: 'tile_random/earth_to_water.png',
-            width: 16,
-            height: 16,
-            x: 4,
-            y: 1,
+            size: Vector2.all(16),
+            position: Vector2(4, 1),
           ),
         ],
       ),
       MapTerrain(
-        value: 1,
+        value: TILE_EARTH,
         sprites: [
           TileModelSprite(
             path: 'tile_random/earth_to_grass.png',
-            width: 16,
-            height: 16,
-            x: 1,
-            y: 1,
+            size: Vector2.all(16),
+            position: Vector2(1, 1),
           ),
         ],
       ),
       MapTerrain(
-        value: 2,
+        value: TILE_GRASS,
         spriteRandom: [0.93, 0.05, 0.02],
         sprites: [
           TileModelSprite(
             path: 'tile_random/grass_types.png',
-            width: 16,
-            height: 16,
+            size: Vector2.all(16),
           ),
           TileModelSprite(
             path: 'tile_random/grass_types.png',
-            width: 16,
-            height: 16,
-            x: 1,
-            y: 0,
+            size: Vector2.all(16),
+            position: Vector2(1, 0),
           ),
           TileModelSprite(
             path: 'tile_random/grass_types.png',
-            width: 16,
-            height: 16,
-            x: 2,
-            y: 0,
+            size: Vector2.all(16),
+            position: Vector2(2, 0),
           ),
         ],
       ),
       MapTerrainCorners(
-        value: 1,
-        to: 0,
+        value: TILE_EARTH,
+        to: TILE_WATER,
         spriteSheet: TerrainSpriteSheet.create(
           'tile_random/earth_to_water.png',
-          Vector2(16, 16),
+          Vector2.all(16),
         ),
       ),
       MapTerrainCorners(
-        value: 1,
-        to: 2,
+        value: TILE_EARTH,
+        to: TILE_GRASS,
         spriteSheet: TerrainSpriteSheet.create(
           'tile_random/earth_to_grass.png',
-          Vector2(16, 16),
+          Vector2.all(16),
         ),
       ),
     ];

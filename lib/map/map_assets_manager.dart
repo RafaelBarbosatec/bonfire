@@ -13,52 +13,48 @@ class MapAssetsManager {
 
   static Sprite getSprite(
     String image,
-    int row,
-    int column,
-    double tileWidth,
-    double tileHeight,
+    Vector2 position,
+    Vector2 size,
   ) {
-    if (spriteCache.containsKey('$image/$row/$column')) {
-      return spriteCache['$image/$row/$column']!;
+    String pathCache = '$image/${position.x}/${position.y}';
+    if (spriteCache.containsKey(pathCache)) {
+      return spriteCache[pathCache]!;
     }
 
     Image? spriteSheetImg = getImageCache(image);
 
-    return spriteCache['$image/$row/$column'] = spriteSheetImg!.getSprite(
-      position: Vector2(
-        (column * tileWidth).toDouble(),
-        (row * tileHeight).toDouble(),
-      ),
+    return spriteCache[pathCache] = spriteSheetImg!.getSprite(
+      position: Vector2(position.x * size.x, position.y * size.y),
       size: Vector2(
-        tileWidth == 0.0 ? spriteSheetImg.width.toDouble() : tileWidth,
-        tileHeight == 0.0 ? spriteSheetImg.height.toDouble() : tileHeight,
+        size.x == 0.0 ? spriteSheetImg.width.toDouble() : size.x,
+        size.y == 0.0 ? spriteSheetImg.height.toDouble() : size.y,
       ),
     );
   }
 
   static Future<Sprite> getFutureSprite(
     String image, {
-    int row = 0,
-    int column = 0,
-    double tileWidth = 0,
-    double tileHeight = 0,
+    Vector2? position,
+    Vector2? size,
   }) async {
-    if (spriteCache.containsKey('$image/$row/$column')) {
-      return Future.value(spriteCache['$image/$row/$column']);
+    String pathCache = '$image/${position?.x ?? 0}/${position?.y ?? 0}';
+
+    if (spriteCache.containsKey(pathCache)) {
+      return Future.value(spriteCache[pathCache]);
     }
 
     Image spriteSheetImg = await loadImage(
       image,
     );
 
-    return spriteCache['$image/$row/$column'] = spriteSheetImg.getSprite(
+    return spriteCache[pathCache] = spriteSheetImg.getSprite(
       position: Vector2(
-        (column * tileWidth).toDouble(),
-        (row * tileHeight).toDouble(),
+        ((position?.x ?? 0.0) * (size?.x ?? 0.0)),
+        ((position?.y ?? 0.0) * (size?.y ?? 0.0)),
       ),
       size: Vector2(
-        tileWidth == 0.0 ? spriteSheetImg.width.toDouble() : tileWidth,
-        tileHeight == 0.0 ? spriteSheetImg.height.toDouble() : tileHeight,
+        (size?.x ?? 0.0) == 0.0 ? spriteSheetImg.width.toDouble() : size!.x,
+        (size?.y ?? 0.0) == 0.0 ? spriteSheetImg.height.toDouble() : size!.y,
       ),
     );
   }
@@ -72,10 +68,8 @@ class MapAssetsManager {
     for (var frame in frames) {
       Sprite sprite = await MapAssetsManager.getFutureSprite(
         frame.path,
-        row: frame.y,
-        column: frame.x,
-        tileWidth: frame.width,
-        tileHeight: frame.height,
+        position: frame.position,
+        size: frame.size,
       );
       spriteList.add(sprite);
     }
@@ -96,12 +90,10 @@ class MapAssetsManager {
     for (var frame in frames) {
       Sprite sprite = MapAssetsManager.getSprite(
         frame.path,
-        frame.y,
-        frame.x,
-        frame.width,
-        frame.height,
+        frame.position,
+        frame.size,
       );
-      key += '${frame.path}${frame.y}${frame.x}';
+      key += '${frame.path}${frame.position.x}${frame.position.y}';
       spriteList.add(sprite);
     }
 

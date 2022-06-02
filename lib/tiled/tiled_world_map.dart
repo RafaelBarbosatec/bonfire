@@ -300,22 +300,23 @@ class TiledWorldMap {
       final int widthCount =
           (tileSetContain.imageWidth ?? 0) ~/ (tileSetContain.tileWidth ?? 0);
 
-      int row = _getY((index - firsTgId), widthCount).toInt();
-      int column = _getX((index - firsTgId), widthCount).toInt();
+      double y = _getY((index - firsTgId), widthCount);
+      double x = _getX((index - firsTgId), widthCount);
 
       final pathSprite = '$_basePath$_pathTileset${tileSetContain.image}';
 
       TileModelSprite sprite;
-      String tileKey = '$pathSprite/$row/$column';
+      String tileKey = '$pathSprite/$x/$y';
       if (_tileModelSpriteCache.containsKey(tileKey)) {
         sprite = _tileModelSpriteCache[tileKey]!;
       } else {
         sprite = _tileModelSpriteCache[tileKey] = TileModelSprite(
           path: pathSprite,
-          width: tileSetContain.tileWidth ?? 0,
-          height: tileSetContain.tileHeight ?? 0,
-          y: row,
-          x: column,
+          size: Vector2(
+            tileSetContain.tileWidth ?? 0,
+            tileSetContain.tileHeight ?? 0,
+          ),
+          position: Vector2(x, y),
         );
       }
 
@@ -533,17 +534,18 @@ class TiledWorldMap {
         double stepTime = (animationFrames[0].duration ?? 100) / 1000;
 
         animationFrames.forEach((frame) {
-          int row = _getY((frame.tileid ?? 0), widthCount).toInt();
-          int column = _getX((frame.tileid ?? 0), widthCount).toInt();
+          double y = _getY((frame.tileid ?? 0), widthCount);
+          double x = _getX((frame.tileid ?? 0), widthCount);
 
           final spritePath = '$_basePath$pathTileset${tileSetContain.image}';
 
           TileModelSprite sprite = TileModelSprite(
             path: spritePath,
-            width: tileSetContain.tileWidth ?? 0,
-            height: tileSetContain.tileHeight ?? 0,
-            y: row,
-            x: column,
+            size: Vector2(
+              tileSetContain.tileWidth ?? 0,
+              tileSetContain.tileHeight ?? 0,
+            ),
+            position: Vector2(x, y),
           );
           frames.add(sprite);
         });
