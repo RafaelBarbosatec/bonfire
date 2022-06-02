@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/map/tile/tile_model.dart';
-import 'package:bonfire/util/matrix_map/map_terrain.dart';
 import 'package:bonfire/util/matrix_map/matrix_map_generator.dart';
 
 ///
@@ -58,67 +57,72 @@ class TerrainBuilder {
     Iterable<MapTerrainCorners> corners =
         terrains.whereType<MapTerrainCorners>();
 
-    // if (prop.valueTop == prop.valueTopLeft && prop.valueTop == prop.valueLeft) {
-    //   MapTerrainCorners? topLeft =
-    //       firstWhere(corners, (element) => element.to == prop.valueTop);
-    //   if (topLeft != null) {
-    //     sprite = topLeft.spriteSheet.topLeft;
-    //   }
-    // }
-    //
-    // if (prop.valueTop == prop.valueTopRight &&
-    //     prop.valueTop == prop.valueRight) {
-    //   MapTerrainCorners? topRight =
-    //       firstWhere(corners, (element) => element.to == prop.valueTop);
-    //   if (topRight != null) {
-    //     sprite = topRight.spriteSheet.topRight;
-    //   }
-    // }
+    MapTerrain? terrain;
 
-    sprite = _handleTopCorners(corners, prop);
+    final corner = _handleTopCorners(corners, prop);
+    sprite = corner.first;
+    terrain = corner.second;
 
     if (sprite == null) {
-      sprite = _handleBottomCorners(corners, prop);
+      final corner = _handleBottomCorners(corners, prop);
+      sprite = corner.first;
+      terrain = corner.second;
     }
 
     if (sprite == null) {
-      MapTerrainCorners? left =
-          firstWhere(corners, (element) => element.to == prop.valueLeft);
+      MapTerrainCorners? left = firstWhere(
+        corners,
+        (element) => element.to == prop.valueLeft,
+      );
+
       if (left != null) {
+        terrain = left;
         sprite = left.spriteSheet.left;
       }
     }
 
     if (sprite == null) {
-      MapTerrainCorners? right =
-          firstWhere(corners, (element) => element.to == prop.valueRight);
+      MapTerrainCorners? right = firstWhere(
+        corners,
+        (element) => element.to == prop.valueRight,
+      );
+
       if (right != null) {
+        terrain = right;
         sprite = right.spriteSheet.right;
       }
     }
 
     if (sprite == null) {
-      MapTerrainCorners? top =
-          firstWhere(corners, (element) => element.to == prop.valueTop);
+      MapTerrainCorners? top = firstWhere(
+        corners,
+        (element) => element.to == prop.valueTop,
+      );
       if (top != null) {
+        terrain = top;
         sprite = top.spriteSheet.top;
       }
     }
 
     if (sprite == null) {
-      MapTerrainCorners? bottom =
-          firstWhere(corners, (element) => element.to == prop.valueBottom);
+      MapTerrainCorners? bottom = firstWhere(
+        corners,
+        (element) => element.to == prop.valueBottom,
+      );
       if (bottom != null) {
+        terrain = bottom;
         sprite = bottom.spriteSheet.bottom;
       }
     }
 
     if (sprite == null) {
-      MapTerrain? terrain = firstWhere(terrains, (element) {
-        return !(element is MapTerrainCorners);
-      });
-      if (terrain != null) {
-        sprite = _getSingleSprite(terrain);
+      MapTerrain? center = firstWhere(
+        terrains,
+        (element) => !(element is MapTerrainCorners),
+      );
+      if (center != null) {
+        terrain = center;
+        sprite = _getSingleSprite(center);
       }
     }
 
@@ -128,18 +132,22 @@ class TerrainBuilder {
       width: tileSize,
       height: tileSize,
       sprite: sprite,
+      properties: terrain?.properties,
+      collisions: terrain?.collisions,
+      type: terrain?.type,
     );
   }
 
   TileModel _buildTile(MapTerrain terrain, ItemMatrixProperties prop) {
-    TileModelSprite? sprite = _getSingleSprite(terrain);
-
     return TileModel(
       x: prop.position.x,
       y: prop.position.y,
       width: tileSize,
       height: tileSize,
-      sprite: sprite,
+      sprite: _getSingleSprite(terrain),
+      properties: terrain.properties,
+      collisions: terrain.collisions,
+      type: terrain.type,
     );
   }
 
@@ -165,26 +173,28 @@ class TerrainBuilder {
   TileModelSprite? _getSingleSprite(MapTerrain terrain) {
     if (terrain.sprites.length > 1 &&
         terrain.sprites.length == terrain.spriteRandom.length) {
-      double ran = Random().nextDouble();
-      return terrain.sprites[terrain.spriteRandom.indexWhere((element) {
-        return element <= ran;
-      })];
+      int randomValue = Random().nextInt(terrain.maxRandomValue);
+      int index = terrain.inRange(randomValue);
+
+      return terrain.sprites[index];
     } else {
       return terrain.sprites.first;
     }
   }
 
-  TileModelSprite? _handleBottomCorners(
+  Duo<TileModelSprite?, MapTerrain?> _handleBottomCorners(
     Iterable<MapTerrainCorners> corners,
     ItemMatrixProperties prop,
   ) {
     TileModelSprite? sprite;
+    MapTerrain? terrain;
     if (prop.valueBottom != prop.value &&
         prop.valueBottom == prop.valueBottomLeft &&
         prop.valueBottom == prop.valueLeft) {
       MapTerrainCorners? bottomLeft =
           firstWhere(corners, (element) => element.to == prop.valueBottom);
       if (bottomLeft != null) {
+        terrain = bottomLeft;
         sprite = bottomLeft.spriteSheet.bottomLeft;
       }
     }
@@ -195,6 +205,7 @@ class TerrainBuilder {
       MapTerrainCorners? bottomRight =
           firstWhere(corners, (element) => element.to == prop.valueBottom);
       if (bottomRight != null) {
+        terrain = bottomRight;
         sprite = bottomRight.spriteSheet.bottomRight;
       }
     }
@@ -205,6 +216,7 @@ class TerrainBuilder {
       MapTerrainCorners? bottomLeft =
           firstWhere(corners, (element) => element.to == prop.valueBottomLeft);
       if (bottomLeft != null) {
+        terrain = bottomLeft;
         sprite = bottomLeft.spriteSheet.invertedTopRight;
       }
     }
@@ -215,22 +227,27 @@ class TerrainBuilder {
       MapTerrainCorners? bottomRight =
           firstWhere(corners, (element) => element.to == prop.valueBottomRight);
       if (bottomRight != null) {
+        terrain = bottomRight;
         sprite = bottomRight.spriteSheet.invertedTopLeft;
       }
     }
 
-    return sprite;
+    return Duo<TileModelSprite?, MapTerrain?>(sprite, terrain);
   }
 
-  TileModelSprite? _handleTopCorners(
-      Iterable<MapTerrainCorners> corners, ItemMatrixProperties prop) {
+  Duo<TileModelSprite?, MapTerrain?> _handleTopCorners(
+    Iterable<MapTerrainCorners> corners,
+    ItemMatrixProperties prop,
+  ) {
     TileModelSprite? sprite;
+    MapTerrain? terrain;
     if (prop.valueTop != prop.value &&
         prop.valueTop == prop.valueTopLeft &&
         prop.valueTop == prop.valueLeft) {
       MapTerrainCorners? topLeft =
           firstWhere(corners, (element) => element.to == prop.valueTop);
       if (topLeft != null) {
+        terrain = topLeft;
         sprite = topLeft.spriteSheet.topLeft;
       }
     }
@@ -241,6 +258,7 @@ class TerrainBuilder {
       MapTerrainCorners? topRight =
           firstWhere(corners, (element) => element.to == prop.valueTop);
       if (topRight != null) {
+        terrain = topRight;
         sprite = topRight.spriteSheet.topRight;
       }
     }
@@ -251,6 +269,7 @@ class TerrainBuilder {
       MapTerrainCorners? topLeftInverted =
           firstWhere(corners, (element) => element.to == prop.valueTopLeft);
       if (topLeftInverted != null) {
+        terrain = topLeftInverted;
         sprite = topLeftInverted.spriteSheet.invertedBottomRight;
       }
     }
@@ -261,10 +280,18 @@ class TerrainBuilder {
       MapTerrainCorners? topRightInverted =
           firstWhere(corners, (element) => element.to == prop.valueTopRight);
       if (topRightInverted != null) {
+        terrain = topRightInverted;
         sprite = topRightInverted.spriteSheet.invertedBottomLeft;
       }
     }
 
-    return sprite;
+    return Duo<TileModelSprite?, MapTerrain?>(sprite, terrain);
   }
+}
+
+class Duo<T, A> {
+  final T first;
+  final A second;
+
+  Duo(this.first, this.second);
 }

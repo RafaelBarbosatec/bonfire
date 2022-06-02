@@ -67,7 +67,6 @@ class _RandomMapState extends State<RandomMap> {
     return LayoutBuilder(builder: (context, constraints) {
       DungeonMap.tileSize =
           max(constraints.maxHeight, constraints.maxWidth) / (kIsWeb ? 25 : 22);
-      _buildTerrainBuilder(DungeonMap.tileSize);
       return BonfireWidget(
         joystick: Joystick(
           directional: JoystickDirectional(
@@ -77,6 +76,8 @@ class _RandomMapState extends State<RandomMap> {
             isFixed: false,
           ),
         ),
+        showCollisionArea: true,
+        // player: Knight(Vector2(100, 100)),
         cameraConfig: CameraConfig(
           moveOnlyMapArea: true,
         ),
@@ -86,6 +87,7 @@ class _RandomMapState extends State<RandomMap> {
   }
 
   Future<MapGame> _buildMap() async {
+    _buildTerrainBuilder(DungeonMap.tileSize);
     final matrix = await compute(
       generateNoise,
       {
@@ -100,32 +102,7 @@ class _RandomMapState extends State<RandomMap> {
 
     return MatrixMapGenerator.generate(
       matrix: matrix,
-      builder: (prop) {
-        return terrainBuilder!.build(prop);
-        Color? color = Colors.blue[900];
-        if (prop.value == 0) {
-          color = Colors.blue;
-        }
-
-        if (prop.value == 1) {
-          color = Colors.orangeAccent;
-        }
-
-        if (prop.value == 2) {
-          color = Colors.green;
-        }
-
-        // if (prop.value > 0.35) {
-        //   color = Colors.white;
-        // }
-        return TileModel(
-          x: prop.position.x,
-          y: prop.position.y,
-          width: DungeonMap.tileSize,
-          height: DungeonMap.tileSize,
-          color: color,
-        );
-      },
+      builder: terrainBuilder!.build,
     );
   }
 
@@ -138,6 +115,9 @@ class _RandomMapState extends State<RandomMap> {
       terrainList: [
         MapTerrain(
           value: 0,
+          collisions: [
+            CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
+          ],
           sprites: [
             TileModelSprite(
               path: 'tile_random/earth_to_water.png',
@@ -162,13 +142,26 @@ class _RandomMapState extends State<RandomMap> {
         ),
         MapTerrain(
           value: 2,
+          spriteRandom: [0.93, 0.05, 0.02],
           sprites: [
             TileModelSprite(
-              path: 'tile_random/earth_to_grass.png',
+              path: 'tile_random/grass_types.png',
               width: 16,
               height: 16,
-              x: 4,
-              y: 1,
+            ),
+            TileModelSprite(
+              path: 'tile_random/grass_types.png',
+              width: 16,
+              height: 16,
+              x: 1,
+              y: 0,
+            ),
+            TileModelSprite(
+              path: 'tile_random/grass_types.png',
+              width: 16,
+              height: 16,
+              x: 2,
+              y: 0,
             ),
           ],
         ),

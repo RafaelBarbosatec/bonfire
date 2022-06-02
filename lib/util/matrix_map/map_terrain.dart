@@ -132,17 +132,55 @@ class TerrainSpriteSheet {
   }
 }
 
+class _RandomRange {
+  final int start;
+  final int end;
+
+  _RandomRange(this.start, this.end);
+
+  bool inRange(int value) {
+    return value > start && value <= end;
+  }
+
+  @override
+  String toString() {
+    return 'RandomRange{start: $start, end: $end}';
+  }
+}
+
 class MapTerrain {
   final double value;
 
   final List<TileModelSprite> sprites;
   final List<double> spriteRandom;
+  final String? type;
+  final Map<String, dynamic>? properties;
+  final List<CollisionArea>? collisions;
+  List<_RandomRange> _rangeRandom = [];
 
   MapTerrain({
     required this.value,
     required this.sprites,
     this.spriteRandom = const [],
-  });
+    this.type,
+    this.properties,
+    this.collisions,
+  }) {
+    int last = 0;
+    spriteRandom.forEach((element) {
+      final value = (element * 100).toInt();
+      _rangeRandom.add(_RandomRange(last, (last + value)));
+      last += value;
+    });
+    print(_rangeRandom);
+  }
+
+  int inRange(int value) {
+    int index = _rangeRandom.indexWhere((element) => element.inRange(value));
+    return index == -1 ? 0 : index;
+  }
+
+  int get maxRandomValue => _rangeRandom.last.end;
 }
 
 class MapTerrainCorners extends MapTerrain {
