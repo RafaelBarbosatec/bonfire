@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:example/random_map/decoration/tree.dart';
 import 'package:example/random_map/noise_generator.dart';
 import 'package:fast_noise/fast_noise.dart';
 import 'package:flutter/foundation.dart';
@@ -23,6 +25,7 @@ class MapGenerator {
   late TerrainBuilder _terrainBuilder;
   final double tileSize;
   final Vector2 size;
+  var matrixCompleter = Completer<List<List<double>>>();
 
   MapGenerator(this.size, this.tileSize) {
     _terrainBuilder = TerrainBuilder(
@@ -44,6 +47,11 @@ class MapGenerator {
       },
     );
 
+    if (matrixCompleter.isCompleted) {
+      matrixCompleter = Completer<List<List<double>>>();
+    }
+    matrixCompleter.complete(matrix);
+
     return MatrixMapGenerator.generate(
       matrix: matrix,
       // matrix: [
@@ -61,6 +69,21 @@ class MapGenerator {
       // ],
       builder: _terrainBuilder.build,
     );
+  }
+
+  Future<List<GameComponent>> buildComponents() async {
+    List<GameComponent> compList = [];
+    final matrix = await matrixCompleter.future;
+    int width = matrix.length;
+    int height = matrix.first.length;
+    for (var x = 0; x < width; x++) {
+      for (var y = 0; y < height; y++) {
+        if (verifyIfAddTree(x, y, matrix)) {
+          compList.add(Tree(Vector2(x * tileSize, y * tileSize)));
+        }
+      }
+    }
+    return compList;
   }
 
   List<MapTerrain> _buildTerrainList() {
@@ -124,5 +147,19 @@ class MapGenerator {
         ),
       ),
     ];
+  }
+
+  bool verifyIfAddTree(int x, int y, List<List<double>> matrix) {
+    bool terrainIsGrass =
+        ((x % 5 == 0 && y % 3 == 0) || (x % 7 == 0 && y % 5 == 0)) &&
+            matrix[x][y] == TILE_GRASS;
+
+    bool baseTreeInGrass = false;
+    try {
+      baseTreeInGrass = matrix[x + 3][y + 3] == TILE_GRASS;
+    } catch (e) {}
+
+    bool randomFactor = Random().nextDouble() > 0.5;
+    return terrainIsGrass && baseTreeInGrass && randomFactor;
   }
 }

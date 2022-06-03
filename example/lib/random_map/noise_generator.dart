@@ -21,8 +21,8 @@ List<List<double>> generateNoise(Map<String, dynamic> data) {
     noiseType: data['noiseType'],
     cellularDistanceFunction: data['cellularDistanceFunction'],
   );
-  int width = original.first.length;
-  int height = original.length;
+  int width = original.length;
+  int height = original.first.length;
   List<List<double>> newMatrix = List<List<double>>.generate(
     width,
     (_) => List<double>.generate(height, (_) => .0),
