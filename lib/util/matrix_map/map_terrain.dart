@@ -96,17 +96,17 @@ class TerrainSpriteSheet {
       invertedTopRight: TileModelSprite(
         path: path,
         size: tileSize,
-        position: Vector2(5, 0) + (position ?? Vector2.zero()),
+        position: Vector2(4, 0) + (position ?? Vector2.zero()),
       ),
       invertedBottomRight: TileModelSprite(
         path: path,
         size: tileSize,
-        position: Vector2(5, 2) + (position ?? Vector2.zero()),
+        position: Vector2(4, 1) + (position ?? Vector2.zero()),
       ),
       invertedBottomLeft: TileModelSprite(
         path: path,
         size: tileSize,
-        position: Vector2(3, 2) + (position ?? Vector2.zero()),
+        position: Vector2(3, 1) + (position ?? Vector2.zero()),
       ),
     );
   }

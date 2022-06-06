@@ -22,17 +22,11 @@ class MapGenerator {
   static const double TILE_WATER = 0;
   static const double TILE_EARTH = 1;
   static const double TILE_GRASS = 2;
-  late TerrainBuilder _terrainBuilder;
   final double tileSize;
   final Vector2 size;
   var matrixCompleter = Completer<List<List<double>>>();
 
-  MapGenerator(this.size, this.tileSize) {
-    _terrainBuilder = TerrainBuilder(
-      tileSize: tileSize,
-      terrainList: _buildTerrainList(),
-    );
-  }
+  MapGenerator(this.size, this.tileSize);
 
   Future<MapGame> buildMap() async {
     final matrix = await compute(
@@ -67,7 +61,7 @@ class MapGenerator {
       //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       // ],
-      builder: _terrainBuilder.build,
+      builder: _buildTerrainBuilder().build,
     );
   }
 
@@ -86,67 +80,70 @@ class MapGenerator {
     return compList;
   }
 
-  List<MapTerrain> _buildTerrainList() {
-    return [
-      MapTerrain(
-        value: TILE_WATER,
-        collisionOnlyCloseCorners: true,
-        collisions: [CollisionArea.rectangle(size: Vector2.all(tileSize))],
-        sprites: [
-          TileModelSprite(
+  TerrainBuilder _buildTerrainBuilder() {
+    return TerrainBuilder(
+      tileSize: tileSize,
+      terrainList: [
+        MapTerrain(
+          value: TILE_WATER,
+          collisionOnlyCloseCorners: true,
+          collisions: [CollisionArea.rectangle(size: Vector2.all(tileSize))],
+          sprites: [
+            TileModelSprite(
+              path: 'tile_random/tile_types.png',
+              size: Vector2.all(16),
+              position: Vector2(0, 1),
+            ),
+          ],
+        ),
+        MapTerrain(
+          value: TILE_EARTH,
+          sprites: [
+            TileModelSprite(
+              path: 'tile_random/tile_types.png',
+              size: Vector2.all(16),
+              position: Vector2(0, 2),
+            ),
+          ],
+        ),
+        MapTerrain(
+          value: TILE_GRASS,
+          spritesProportion: [0.93, 0.05, 0.02],
+          sprites: [
+            TileModelSprite(
+              path: 'tile_random/tile_types.png',
+              size: Vector2.all(16),
+            ),
+            TileModelSprite(
+              path: 'tile_random/tile_types.png',
+              size: Vector2.all(16),
+              position: Vector2(1, 0),
+            ),
+            TileModelSprite(
+              path: 'tile_random/tile_types.png',
+              size: Vector2.all(16),
+              position: Vector2(2, 0),
+            ),
+          ],
+        ),
+        MapTerrainCorners(
+          value: TILE_EARTH,
+          to: TILE_WATER,
+          spriteSheet: TerrainSpriteSheet.create(
             path: 'tile_random/earth_to_water.png',
-            size: Vector2.all(16),
-            position: Vector2(4, 1),
+            tileSize: Vector2.all(16),
           ),
-        ],
-      ),
-      MapTerrain(
-        value: TILE_EARTH,
-        sprites: [
-          TileModelSprite(
+        ),
+        MapTerrainCorners(
+          value: TILE_EARTH,
+          to: TILE_GRASS,
+          spriteSheet: TerrainSpriteSheet.create(
             path: 'tile_random/earth_to_grass.png',
-            size: Vector2.all(16),
-            position: Vector2(1, 1),
+            tileSize: Vector2.all(16),
           ),
-        ],
-      ),
-      MapTerrain(
-        value: TILE_GRASS,
-        spritesProportion: [0.93, 0.05, 0.02],
-        sprites: [
-          TileModelSprite(
-            path: 'tile_random/grass_types.png',
-            size: Vector2.all(16),
-          ),
-          TileModelSprite(
-            path: 'tile_random/grass_types.png',
-            size: Vector2.all(16),
-            position: Vector2(1, 0),
-          ),
-          TileModelSprite(
-            path: 'tile_random/grass_types.png',
-            size: Vector2.all(16),
-            position: Vector2(2, 0),
-          ),
-        ],
-      ),
-      MapTerrainCorners(
-        value: TILE_EARTH,
-        to: TILE_WATER,
-        spriteSheet: TerrainSpriteSheet.create(
-          path: 'tile_random/earth_to_water.png',
-          tileSize: Vector2.all(16),
         ),
-      ),
-      MapTerrainCorners(
-        value: TILE_EARTH,
-        to: TILE_GRASS,
-        spriteSheet: TerrainSpriteSheet.create(
-          path: 'tile_random/earth_to_grass.png',
-          tileSize: Vector2.all(16),
-        ),
-      ),
-    ];
+      ],
+    );
   }
 
   bool verifyIfAddTree(int x, int y, List<List<double>> matrix) {
