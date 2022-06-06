@@ -44,11 +44,7 @@ class MapGenerator {
       },
     );
 
-    try {
-      _createCompsAndPlayerPosition(matrix);
-    } catch (E) {
-      print(e);
-    }
+    _createCompsAndPlayerPosition(matrix);
 
     if (matrixCompleter.isCompleted) {
       matrixCompleter = Completer<List<List<double>>>();

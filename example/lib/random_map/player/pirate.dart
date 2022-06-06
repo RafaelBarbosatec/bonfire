@@ -21,6 +21,7 @@ class Pirate extends SimplePlayer with ObjectCollision {
           size: Vector2.all(DungeonMap.tileSize * 1.5),
           animation: PirateSpriteSheet.getAnimation(),
         ) {
+    enabledDiagonalMovements = false;
     setupCollision(
       CollisionConfig(
         collisions: [
