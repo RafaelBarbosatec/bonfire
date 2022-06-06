@@ -67,23 +67,23 @@ class MatrixMapGenerator {
   }) {
     List<TileModel> tiles = [];
 
-    final h = matrix.first.length;
-    final w = matrix.length;
-    for (var x = 0; x < w; x++) {
-      for (var y = 0; y < h; y++) {
+    final w = matrix.first.length;
+    final h = matrix.length;
+    for (var y = 0; y < h; y++) {
+      for (var x = 0; x < w; x++) {
         tiles.add(
           builder(
             ItemMatrixProperties(
-              matrix[x][y],
+              matrix[y][x],
               Vector2(x.toDouble(), y.toDouble()),
-              valueTop: _tryGetValue(() => matrix[x][y - 1]),
-              valueBottom: _tryGetValue(() => matrix[x][y + 1]),
-              valueLeft: _tryGetValue(() => matrix[x - 1][y]),
-              valueRight: _tryGetValue(() => matrix[x + 1][y]),
-              valueBottomLeft: _tryGetValue(() => matrix[x - 1][y + 1]),
-              valueBottomRight: _tryGetValue(() => matrix[x + 1][y + 1]),
-              valueTopLeft: _tryGetValue(() => matrix[x - 1][y - 1]),
-              valueTopRight: _tryGetValue(() => matrix[x + 1][y - 1]),
+              valueTop: _tryGetValue(() => matrix[y - 1][x]),
+              valueBottom: _tryGetValue(() => matrix[y + 1][x]),
+              valueLeft: _tryGetValue(() => matrix[y][x - 1]),
+              valueRight: _tryGetValue(() => matrix[y][x + 1]),
+              valueBottomLeft: _tryGetValue(() => matrix[y + 1][x - 1]),
+              valueBottomRight: _tryGetValue(() => matrix[y + 1][x + 1]),
+              valueTopLeft: _tryGetValue(() => matrix[y - 1][x - 1]),
+              valueTopRight: _tryGetValue(() => matrix[y - 1][x + 1]),
             ),
           ),
         );
