@@ -40,6 +40,7 @@ class _RandomMapGameState extends State<RandomMapGame> {
         }
         return BonfireWidget(
           joystick: Joystick(
+            keyboardConfig: KeyboardConfig(),
             directional: JoystickDirectional(
               size: 100,
               isFixed: false,
