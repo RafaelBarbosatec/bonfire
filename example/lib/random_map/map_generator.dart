@@ -21,7 +21,7 @@ import 'package:flutter/foundation.dart';
 /// on 02/06/22
 class MapGenerator {
   static const double TILE_WATER = 0;
-  static const double TILE_EARTH = 1;
+  static const double TILE_SAND = 1;
   static const double TILE_GRASS = 2;
   final double tileSize;
   final Vector2 size;
@@ -87,7 +87,7 @@ class MapGenerator {
           ],
         ),
         MapTerrain(
-          value: TILE_EARTH,
+          value: TILE_SAND,
           sprites: [
             TileModelSprite(
               path: 'tile_random/tile_types.png',
@@ -117,7 +117,7 @@ class MapGenerator {
           ],
         ),
         MapTerrainCorners(
-          value: TILE_EARTH,
+          value: TILE_SAND,
           to: TILE_WATER,
           spriteSheet: TerrainSpriteSheet.create(
             path: 'tile_random/earth_to_water.png',
@@ -125,7 +125,7 @@ class MapGenerator {
           ),
         ),
         MapTerrainCorners(
-          value: TILE_EARTH,
+          value: TILE_SAND,
           to: TILE_GRASS,
           spriteSheet: TerrainSpriteSheet.create(
             path: 'tile_random/earth_to_grass.png',

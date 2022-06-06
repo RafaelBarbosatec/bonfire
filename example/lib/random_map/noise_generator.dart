@@ -37,7 +37,7 @@ List<List<double>> generateNoise(Map<String, dynamic> data) {
       }
 
       if (original[x][y] > -0.1) {
-        newValue = MapGenerator.TILE_EARTH;
+        newValue = MapGenerator.TILE_SAND;
       }
 
       if (original[x][y] > 0.1) {
