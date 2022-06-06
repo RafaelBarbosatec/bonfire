@@ -53,6 +53,7 @@ class MapGenerator {
 
     return MatrixMapGenerator.generate(
       matrix: matrix,
+      // axisInverted: true,
       // matrix: [
       //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       //   [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0],
