@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bonfire/bonfire.dart';
 
 ///
@@ -11,6 +13,8 @@ import 'package:bonfire/bonfire.dart';
 ///
 /// Rafaelbarbosatec
 /// on 01/06/22
+
+final Random _random = Random();
 
 class TerrainSpriteSheet {
   final TileModelSprite left;
@@ -156,12 +160,30 @@ class MapTerrain {
   }
 
   int inRange(int value) {
-    int index =
-        _rangeProportion.indexWhere((element) => element.inRange(value));
+    int index = _rangeProportion.indexWhere(
+      (element) => element.inRange(value),
+    );
     return index == -1 ? 0 : index;
   }
 
   int get maxRandomValue => _rangeProportion.last.end;
+
+  List<CollisionArea>? getCollisionClone({bool checkOnlyClose = false}) {
+    return (collisionOnlyCloseCorners && checkOnlyClose)
+        ? null
+        : collisions?.map((e) => e.clone()).toList();
+  }
+
+  TileModelSprite? getSingleSprite() {
+    if (sprites.length > 1 && sprites.length == spritesProportion.length) {
+      int randomValue = _random.nextInt(maxRandomValue);
+      int index = inRange(randomValue);
+
+      return sprites[index];
+    } else {
+      return sprites.first;
+    }
+  }
 }
 
 class MapTerrainCorners extends MapTerrain {

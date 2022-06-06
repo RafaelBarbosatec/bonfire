@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:example/random_map/decoration/tree.dart';
 import 'package:example/random_map/noise_generator.dart';
+import 'package:example/random_map/player/pirate.dart';
 import 'package:fast_noise/fast_noise.dart';
 import 'package:flutter/foundation.dart';
 
@@ -24,6 +25,8 @@ class MapGenerator {
   static const double TILE_GRASS = 2;
   final double tileSize;
   final Vector2 size;
+  List<GameComponent> _compList = [];
+  Vector2 _playerPosition = Vector2.zero();
   var matrixCompleter = Completer<List<List<double>>>();
 
   MapGenerator(this.size, this.tileSize);
@@ -40,6 +43,12 @@ class MapGenerator {
         'cellularDistanceFunction': CellularDistanceFunction.Natural,
       },
     );
+
+    try {
+      _createCompsAndPlayerPosition(matrix);
+    } catch (E) {
+      print(e);
+    }
 
     if (matrixCompleter.isCompleted) {
       matrixCompleter = Completer<List<List<double>>>();
@@ -63,21 +72,6 @@ class MapGenerator {
       // ],
       builder: _buildTerrainBuilder().build,
     );
-  }
-
-  Future<List<GameComponent>> buildComponents() async {
-    List<GameComponent> compList = [];
-    final matrix = await matrixCompleter.future;
-    int width = matrix.length;
-    int height = matrix.first.length;
-    for (var x = 0; x < width; x++) {
-      for (var y = 0; y < height; y++) {
-        if (verifyIfAddTree(x, y, matrix)) {
-          compList.add(Tree(Vector2(x * tileSize, y * tileSize)));
-        }
-      }
-    }
-    return compList;
   }
 
   TerrainBuilder _buildTerrainBuilder() {
@@ -144,6 +138,33 @@ class MapGenerator {
         ),
       ],
     );
+  }
+
+  Future<Player> getPlayer() async {
+    await matrixCompleter.future;
+    return Pirate(position: _playerPosition);
+  }
+
+  Future<List<GameComponent>> buildComponents() async {
+    await matrixCompleter.future;
+    return _compList;
+  }
+
+  void _createCompsAndPlayerPosition(List<List<double>> matrix) {
+    int width = matrix.length;
+    int height = matrix.first.length;
+    for (var x = 0; x < width; x++) {
+      for (var y = 0; y < height; y++) {
+        if (_playerPosition == Vector2.zero() &&
+            x > width / 2 &&
+            matrix[x][y] == TILE_GRASS) {
+          _playerPosition = Vector2(x * tileSize, y * tileSize);
+        }
+        if (verifyIfAddTree(x, y, matrix)) {
+          _compList.add(Tree(Vector2(x * tileSize, y * tileSize)));
+        }
+      }
+    }
   }
 
   bool verifyIfAddTree(int x, int y, List<List<double>> matrix) {

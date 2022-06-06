@@ -41,6 +41,17 @@ class ItemMatrixProperties {
     this.valueRight,
   });
 
+  bool get isCenterTile {
+    return valueLeft == value &&
+        valueRight == value &&
+        valueTop == value &&
+        valueBottom == value &&
+        valueBottomLeft == value &&
+        valueBottomRight == value &&
+        valueTopLeft == value &&
+        valueTopRight == value;
+  }
+
   @override
   String toString() {
     return 'NoiseProperties{value: $value, valueTop: $valueTop, valueTopLeft: $valueTopLeft, valueTopRight: $valueTopRight, valueBottom: $valueBottom, valueBottomLeft: $valueBottomLeft, valueBottomRight: $valueBottomRight, valueLeft: $valueLeft, valueRight: $valueRight, position: $position}';

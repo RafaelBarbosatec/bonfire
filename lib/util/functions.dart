@@ -33,3 +33,13 @@ Rect getRectAndCollision(GameComponent? comp) {
           : comp?.toRect()) ??
       Rect.zero;
 }
+
+E? firstWhere<E>(
+  Iterable<E> list,
+  bool test(E element),
+) {
+  for (E element in list) {
+    if (test(element)) return element;
+  }
+  return null;
+}

@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/random_map/map_generator.dart';
-import 'package:example/random_map/player/pirate.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +45,7 @@ class _RandomMapGameState extends State<RandomMapGame> {
               isFixed: false,
             ),
           ),
-          player: Pirate(position: Vector2(100, 100)),
+          player: _mapGenerator!.getPlayer(),
           cameraConfig: CameraConfig(
             moveOnlyMapArea: true,
           ),
