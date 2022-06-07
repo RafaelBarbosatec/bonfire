@@ -1,11 +1,11 @@
 # [NEXT]
-- Adds `MatrixMapGenerator`. Class that can help you create a map by double matrix.
-- Adds `TerrainBuilder`. Class that can help you create a map by double matrix with Sprite. [SpriteSheetModel](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/assets/images/tile_random/earth_to_grass.png)
+- Adds `MatrixMapGenerator`. Class that can help you create a map using a double matrix.
+- Adds `TerrainBuilder`. Class that can help you create a map using a double matrix with Sprite. [SpriteSheetModel](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/assets/images/tile_random/earth_to_grass.png)
 - Adds `enabledDiagonalMovements` param in `MovementByJoystick` to control if you want diagonal movements.
 
 # [2.4.4]
-- Adds `scene` support. Now you can create a "cutscene" of easy way.
-    - Only call `gameRef.startScene([CameraSceneAction()])`.
+- Adds `scene` support. Now you can create a "cutscene" in an easy way:
+    - Just call `gameRef.startScene([CameraSceneAction()])`.
     - To stop: `gameRef.stopScene()`.
     - SceneActions available:
         - `CameraSceneAction`
@@ -21,13 +21,13 @@
 - Extracted functions about check `Tiles` to the mixin `TileRecognizer`.
 
 # [2.4.2]
-- Adds params `focusNode`, `autofocus` and `mouseCursor` in `BonfireWidget` and `BonfireTiledWidget`
-- Improvements in `Camera`
-- BREAKING CHANGE: Update `StateController`. the method `update` now is `void update(double dt, T component)`. Now you receive what component belongs this update in case that your controller is used in many components.
+- Adds params `focusNode`, `autofocus` and `mouseCursor` in `BonfireWidget` and `BonfireTiledWidget`.
+- Improvements in `Camera`.
+- BREAKING CHANGE: Update `StateController`. The method `update` is now `void update(double dt, T component)`. Now you can receive what component belongs to the update method in case that your controller is used in many components.
 
 # [2.4.1]
-- adds `removeLife` method in `Attackable`.
-- considers `offset` in layers of the Tiled.
+- Adds `removeLife` method in `Attackable`.
+- The `offset` param from Tiled layers are now considered.
 - Adds type `dynamicAbove` in tile.
 - Adds `MiniMap` widget [DOC](https://bonfire-engine.github.io/#/minimap).
 - Update Flame to 1.1.1.
