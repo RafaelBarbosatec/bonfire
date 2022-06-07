@@ -4,6 +4,7 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
 
 enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER_AND_ALLY, NONE }
+
 enum AttackFromEnum { ENEMY, PLAYER_OR_ALLY }
 
 /// Mixin responsible for adding damage-taking behavior to the component.
