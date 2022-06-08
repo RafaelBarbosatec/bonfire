@@ -13,6 +13,8 @@ import 'package:flutter/widgets.dart' as widget;
 ///
 /// Rafaelbarbosatec
 /// on 04/03/22
+
+/// SceneAction that move camera to specific position os to follow the Component in the game.
 class CameraSceneAction extends SceneAction {
   final Vector2? position;
   final GameComponent? target;

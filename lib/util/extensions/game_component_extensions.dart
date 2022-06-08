@@ -471,4 +471,30 @@ extension GameComponentExtensions on GameComponent {
     return (this is ObjectCollision &&
         (this as ObjectCollision).containCollision());
   }
+
+  void applyBleedingPixel({
+    required Vector2 position,
+    required Vector2 size,
+    double factor = 0.05,
+    double offsetX = 0,
+    double offsetY = 0,
+    bool calculatePosition = false,
+  }) {
+    double bleedingPixel = max(size.x, size.y) * factor;
+    if (bleedingPixel > 2) {
+      bleedingPixel = 2;
+    }
+    Vector2 baseP = position;
+    if (calculatePosition) {
+      baseP = Vector2(position.x * size.x, position.y * size.y);
+    }
+    this.position = Vector2(
+      baseP.x - (baseP.x % 2 == 0 ? (bleedingPixel / 2) : 0) + offsetX,
+      baseP.y - (baseP.y % 2 == 0 ? (bleedingPixel / 2) : 0) + offsetY,
+    );
+    this.size = Vector2(
+      size.x + (baseP.x % 2 == 0 ? bleedingPixel : 0),
+      size.y + (baseP.y % 2 == 0 ? bleedingPixel : 0),
+    );
+  }
 }

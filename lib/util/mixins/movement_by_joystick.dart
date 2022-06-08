@@ -15,6 +15,8 @@ mixin MovementByJoystick on Movement {
 
   bool _isIdleJoystick = true;
 
+  bool enabledDiagonalMovements = true;
+
   @override
   void update(double dt) {
     if (this is JoystickListener) {
@@ -60,11 +62,19 @@ mixin MovementByJoystick on Movement {
         break;
       case JoystickMoveDirectional.MOVE_UP_LEFT:
         _isIdleJoystick = false;
-        moveUpLeft(diagonalSpeed, diagonalSpeed);
+        if (enabledDiagonalMovements) {
+          moveUpLeft(diagonalSpeed, diagonalSpeed);
+        } else {
+          moveLeft(speed);
+        }
         break;
       case JoystickMoveDirectional.MOVE_UP_RIGHT:
         _isIdleJoystick = false;
-        moveUpRight(diagonalSpeed, diagonalSpeed);
+        if (enabledDiagonalMovements) {
+          moveUpRight(diagonalSpeed, diagonalSpeed);
+        } else {
+          moveRight(speed);
+        }
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
         _isIdleJoystick = false;
@@ -76,11 +86,19 @@ mixin MovementByJoystick on Movement {
         break;
       case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
         _isIdleJoystick = false;
-        moveDownRight(diagonalSpeed, diagonalSpeed);
+        if (enabledDiagonalMovements) {
+          moveDownRight(diagonalSpeed, diagonalSpeed);
+        } else {
+          moveRight(speed);
+        }
         break;
       case JoystickMoveDirectional.MOVE_DOWN_LEFT:
         _isIdleJoystick = false;
-        moveDownLeft(diagonalSpeed, diagonalSpeed);
+        if (enabledDiagonalMovements) {
+          moveDownLeft(diagonalSpeed, diagonalSpeed);
+        } else {
+          moveLeft(speed);
+        }
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
         _isIdleJoystick = false;

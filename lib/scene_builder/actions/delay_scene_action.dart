@@ -13,6 +13,8 @@ import 'package:bonfire/util/interval_tick.dart';
 ///
 /// Rafaelbarbosatec
 /// on 18/05/22
+
+/// SceneAction that apply a delay in your scene.
 class DelaySceneAction extends SceneAction {
   late IntervalTick _tick;
   final Duration delay;

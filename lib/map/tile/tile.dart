@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_paint.dart';
@@ -15,6 +15,7 @@ class Tile extends GameComponent with UseAssetsLoader {
   String id = '';
   Sprite? _sprite;
   ControlledUpdateAnimation? _animation;
+  Color? color;
 
   Tile({
     required String spritePath,
@@ -22,14 +23,16 @@ class Tile extends GameComponent with UseAssetsLoader {
     required Vector2 size,
     this.type,
     this.properties,
+    this.color,
     double offsetX = 0,
     double offsetY = 0,
   }) {
-    generateRectWithBleedingPixel(
-      position,
-      size,
+    applyBleedingPixel(
+      position: position,
+      size: size,
       offsetX: offsetX,
       offsetY: offsetY,
+      calculatePosition: true,
     );
     if (spritePath.isNotEmpty) {
       loader?.add(
@@ -41,42 +44,23 @@ class Tile extends GameComponent with UseAssetsLoader {
   }
 
   Tile.fromSprite({
-    required Sprite sprite,
+    required Sprite? sprite,
     required Vector2 position,
     required Vector2 size,
     this.type,
     this.properties,
     double offsetX = 0,
     double offsetY = 0,
+    this.color,
   }) {
     id = '${position.x}/${position.y}';
     this._sprite = sprite;
-    generateRectWithBleedingPixel(
-      position,
-      size,
+    applyBleedingPixel(
+      position: position,
+      size: size,
       offsetX: offsetX,
       offsetY: offsetY,
-    );
-
-    _positionText = position;
-  }
-
-  Tile.fromFutureSprite({
-    required Future<Sprite> sprite,
-    required Vector2 position,
-    required Vector2 size,
-    this.type,
-    this.properties,
-    double offsetX = 0,
-    double offsetY = 0,
-  }) {
-    id = '${position.x}/${position.y}';
-    loader?.add(AssetToLoad(sprite, (value) => this._sprite = value));
-    generateRectWithBleedingPixel(
-      position,
-      size,
-      offsetX: offsetX,
-      offsetY: offsetY,
+      calculatePosition: true,
     );
 
     _positionText = position;
@@ -93,11 +77,12 @@ class Tile extends GameComponent with UseAssetsLoader {
   }) {
     id = '${position.x}/${position.y}';
     this._animation = animation;
-    generateRectWithBleedingPixel(
-      position,
-      size,
+    applyBleedingPixel(
+      position: position,
+      size: size,
       offsetX: offsetX,
       offsetY: offsetY,
+      calculatePosition: true,
     );
 
     _positionText = position;
@@ -118,6 +103,9 @@ class Tile extends GameComponent with UseAssetsLoader {
       size: size,
       overridePaint: MapPaint.instance.paint,
     );
+    if (_animation == null && _sprite == null && color != null) {
+      canvas.drawRect(toRect(), MapPaint.instance.paint..color = color!);
+    }
   }
 
   @override
@@ -153,30 +141,6 @@ class Tile extends GameComponent with UseAssetsLoader {
         Vector2(position.x + 2, position.y + 2),
       );
     }
-  }
-
-  void generateRectWithBleedingPixel(
-    Vector2 position,
-    Vector2 size, {
-    double offsetX = 0,
-    double offsetY = 0,
-  }) {
-    double bleendingPixel = max(size.x, size.y) * 0.05;
-    if (bleendingPixel > 2) {
-      bleendingPixel = 2;
-    }
-    this.position = Vector2(
-      (position.x * size.x) -
-          (position.x % 2 == 0 ? (bleendingPixel / 2) : 0) +
-          offsetX,
-      (position.y * size.y) -
-          (position.y % 2 == 0 ? (bleendingPixel / 2) : 0) +
-          offsetY,
-    );
-    this.size = Vector2(
-      size.x + (position.x % 2 == 0 ? bleendingPixel : 0),
-      size.y + (position.y % 2 == 0 ? bleendingPixel : 0),
-    );
   }
 
   @override

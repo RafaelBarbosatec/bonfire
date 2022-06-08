@@ -9,46 +9,37 @@ import 'package:flutter/widgets.dart';
 
 class TileModelSprite {
   final String path;
-  final int row;
-  final int column;
-  final double width;
-  final double height;
+  final Vector2 position;
+  final Vector2 size;
 
   TileModelSprite({
     required this.path,
-    this.row = 0,
-    this.column = 0,
-    this.width = 0,
-    this.height = 0,
-  });
+    Vector2? position,
+    Vector2? size,
+  })  : this.position = position ?? Vector2.zero(),
+        this.size = size ?? Vector2.zero();
 
   Sprite getSprite() {
     return MapAssetsManager.getSprite(
       path,
-      row,
-      column,
-      width,
-      height,
+      position,
+      size,
     );
   }
 
   Future<Sprite> getFutureSprite() {
     return MapAssetsManager.getFutureSprite(
       path,
-      row: row,
-      column: column,
-      tileWidth: width,
-      tileHeight: height,
+      position: position,
+      size: size,
     );
   }
 
   factory TileModelSprite.fromMap(Map<String, dynamic> map) {
     return new TileModelSprite(
       path: map['path'],
-      row: map['row'],
-      column: map['column'],
-      width: map['width'],
-      height: map['height'],
+      position: Vector2(map['column'], map['row']),
+      size: Vector2(map['width'], map['height']),
     );
   }
 
@@ -56,10 +47,10 @@ class TileModelSprite {
     // ignore: unnecessary_cast
     return {
       'path': this.path,
-      'row': this.row,
-      'column': this.column,
-      'width': this.width,
-      'height': this.height,
+      'row': this.position.y,
+      'column': this.position.x,
+      'width': this.size.x,
+      'height': this.size.y,
     } as Map<String, dynamic>;
   }
 }
@@ -116,6 +107,7 @@ class TileModel {
   final double angle;
   final bool isFlipVertical;
   final bool isFlipHorizontal;
+  final Color? color;
   String id = '';
 
   Offset center = Offset.zero;
@@ -130,6 +122,7 @@ class TileModel {
     this.type,
     this.properties,
     this.sprite,
+    this.color,
     this.animation,
     this.collisions,
     this.angle = 0,
@@ -151,7 +144,7 @@ class TileModel {
     if (animation == null) {
       if (collisions?.isNotEmpty == true) {
         final tile = TileWithCollision.fromSprite(
-          sprite: sprite!.getSprite(),
+          sprite: sprite?.getSprite(),
           position: Vector2(x, y),
           size: Vector2(width, height),
           offsetX: offsetX,
@@ -159,6 +152,7 @@ class TileModel {
           collisions: collisions,
           type: type,
           properties: properties,
+          color: color,
         );
         tile.angle = angle;
         tile.isFlipHorizontal = isFlipHorizontal;
@@ -170,13 +164,14 @@ class TileModel {
         return tile;
       } else {
         final tile = Tile.fromSprite(
-          sprite: sprite!.getSprite(),
+          sprite: sprite?.getSprite(),
           position: Vector2(x, y),
           size: Vector2(width, height),
           offsetX: offsetX,
           offsetY: offsetY,
           type: type,
           properties: properties,
+          color: color,
         );
         tile.angle = angle;
         tile.isFlipHorizontal = isFlipHorizontal;
@@ -207,6 +202,7 @@ class TileModel {
 
         tile.gameRef = gameRef;
         tile.id = id;
+        tile.onLoad();
 
         return tile;
       } else {
@@ -227,6 +223,7 @@ class TileModel {
 
         tile.gameRef = gameRef;
         tile.id = id;
+        tile.onLoad();
 
         return tile;
       }

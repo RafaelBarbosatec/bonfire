@@ -99,6 +99,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.1"
+  fast_noise:
+    dependency: "direct main"
+    description:
+      name: fast_noise
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
+  fixnum:
+    dependency: transitive
+    description:
+      name: fixnum
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   flame:
     dependency: transitive
     description:

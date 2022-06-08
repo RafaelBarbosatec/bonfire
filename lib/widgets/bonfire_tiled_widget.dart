@@ -65,7 +65,7 @@ class BonfireTiledWidget extends StatefulWidget {
   final List<GameComponent>? components;
   final Widget? progress;
   final CameraConfig? cameraConfig;
-  final AnimatedSwitcherTransitionBuilder transitionBuilder;
+  final AnimatedSwitcherTransitionBuilder progressTransitionBuilder;
   final Duration progressTransitionDuration;
   final GameColorFilter? colorFilter;
 
@@ -85,7 +85,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.lightingColorGame,
     this.progress,
     this.cameraConfig,
-    this.transitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
+    this.progressTransitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
     this.progressTransitionDuration = const Duration(milliseconds: 500),
     this.colorFilter,
     this.components,
@@ -152,7 +152,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
             bool _loading = !snapshot.hasData || snapshot.data == true;
             return AnimatedSwitcher(
               duration: widget.progressTransitionDuration,
-              transitionBuilder: widget.transitionBuilder,
+              transitionBuilder: widget.progressTransitionBuilder,
               child: _loading ? _defaultProgress() : SizedBox.shrink(),
             );
           },
