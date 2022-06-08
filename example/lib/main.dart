@@ -40,9 +40,16 @@ class Menu extends StatelessWidget {
           shrinkWrap: true,
           children: <Widget>[
             Center(
-              child: Text(
-                'Bonfire',
-                style: TextStyle(fontSize: 30, color: Colors.white),
+              child: RichText(
+                text: TextSpan(
+                    text: 'Bonfire',
+                    style: TextStyle(fontSize: 30, color: Colors.white),
+                    children: [
+                      TextSpan(
+                        text: '  v2.5.0',
+                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      )
+                    ]),
               ),
             ),
             SizedBox(
