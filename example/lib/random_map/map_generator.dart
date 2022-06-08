@@ -44,7 +44,7 @@ class MapGenerator {
       },
     );
 
-    _createCompsAndPlayerPosition(matrix);
+    _createTreesAndPlayerPosition(matrix);
 
     if (matrixCompleter.isCompleted) {
       matrixCompleter = Completer<List<List<double>>>();
@@ -147,7 +147,7 @@ class MapGenerator {
     return _compList;
   }
 
-  void _createCompsAndPlayerPosition(List<List<double>> matrix) {
+  void _createTreesAndPlayerPosition(List<List<double>> matrix) {
     int width = matrix.length;
     int height = matrix.first.length;
     for (var x = 0; x < width; x++) {

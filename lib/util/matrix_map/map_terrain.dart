@@ -194,5 +194,14 @@ class MapTerrainCorners extends MapTerrain {
     required double value,
     required this.to,
     required this.spriteSheet,
-  }) : super(value: value, sprites: []);
+    String? type,
+    Map<String, dynamic>? properties,
+    List<CollisionArea>? collisions,
+  }) : super(
+          value: value,
+          sprites: [],
+          type: type,
+          properties: properties,
+          collisions: collisions,
+        );
 }
