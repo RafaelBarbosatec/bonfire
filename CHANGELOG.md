@@ -1,11 +1,6 @@
 # [NEXT]
-<<<<<<< HEAD
-- Adds `MatrixMapGenerator`. Class that can help you create a map by double matrix. [Doc](https://bonfire-engine.github.io/#/map?id=creating-map-by-matrix)
-- Adds `TerrainBuilder`. Class that can help you create a map by double matrix with Sprite. [SpriteSheetModel](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/assets/images/tile_random/earth_to_grass.png)
-=======
-- Adds `MatrixMapGenerator`. Class that can help you create a map using a double matrix.
+- Adds `MatrixMapGenerator`. Class that can help you create a map using a double matrix. [Doc](https://bonfire-engine.github.io/#/map?id=creating-map-by-matrix)
 - Adds `TerrainBuilder`. Class that can help you create a map using a double matrix with Sprite. [SpriteSheetModel](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/assets/images/tile_random/earth_to_grass.png)
->>>>>>> b838be5b523e7204e150ba506436cb0b9518cc1f
 - Adds `enabledDiagonalMovements` param in `MovementByJoystick` to control if you want diagonal movements.
 
 # [2.4.4]
