@@ -163,7 +163,7 @@ class FlyingAttackObject extends GameComponent
 
   @override
   bool onCollision(GameComponent component, bool active) {
-    if (component is Attackable && !component.shouldRemove) {
+    if (component is Attackable && !component.isRemoving) {
       component.receiveDamage(attackFrom, damage, id);
     } else if (!withDecorationCollision) {
       return false;
@@ -173,7 +173,7 @@ class FlyingAttackObject extends GameComponent
   }
 
   void _destroyObject() {
-    if (shouldRemove) return;
+    if (isRemoving) return;
     removeFromParent();
     if (animationDestroy != null) {
       if (direction != null) {

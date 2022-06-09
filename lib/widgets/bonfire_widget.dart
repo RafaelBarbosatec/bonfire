@@ -36,9 +36,6 @@ class BonfireWidget extends StatefulWidget {
   /// Used to draw area collision in objects.
   final bool showCollisionArea;
 
-  /// Used to show in the interface the FPS.
-  final bool showFPS;
-
   /// Color grid when `constructionMode` is true
   final Color? constructionModeColor;
 
@@ -90,7 +87,6 @@ class BonfireWidget extends StatefulWidget {
     this.background,
     this.constructionMode = false,
     this.showCollisionArea = false,
-    this.showFPS = false,
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
@@ -206,7 +202,6 @@ class _BonfireWidgetState extends State<BonfireWidget> {
         background: widget.background,
         constructionMode: widget.constructionMode,
         showCollisionArea: widget.showCollisionArea,
-        showFPS: widget.showFPS,
         gameController: widget.gameController,
         constructionModeColor:
             widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),

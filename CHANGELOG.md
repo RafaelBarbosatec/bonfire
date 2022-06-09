@@ -1,3 +1,9 @@
+# [NEXT]
+- Update `flame`
+- Renamed `gameRef.overlays` to `gameRef.overlayManager`
+- Renamed `GameComponent.shouldRemove` to `GameComponent.isRemoving`
+- Remove `showFPS` in `BonfireTiledWidget` and `BonfireWidget`.
+
 # [2.5.0]
 - Adds `MatrixMapGenerator`. Class that can help you create a map using a double matrix. [Doc](https://bonfire-engine.github.io/#/map?id=creating-map-by-matrix)
 - Adds `TerrainBuilder`. Class that can help you create a map using a double matrix with Sprite. [SpriteSheetModel](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/assets/images/tile_random/earth_to_grass.png)

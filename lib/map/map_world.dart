@@ -51,7 +51,7 @@ class MapWorld extends MapGame {
   void update(double dt) {
     for (Tile tile in childrenTiles) {
       tile.update(dt);
-      if (tile.shouldRemove) {
+      if (tile.isRemoving) {
         _tilesToRemove.add(tile);
       }
     }
@@ -235,7 +235,7 @@ class MapWorld extends MapGame {
   void _verifyRemoveTileOfWord() {
     if (_tilesToRemove.isNotEmpty) {
       for (Tile tile in _tilesToRemove) {
-        if (tile.shouldRemove) {
+        if (tile.isRemoving) {
           childrenTiles.remove(tile);
           tiles.removeWhere((element) => element.id == tile.id);
           quadTree?.removeById(tile.id);

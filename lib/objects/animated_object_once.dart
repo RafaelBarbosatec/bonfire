@@ -40,7 +40,7 @@ class AnimatedObjectOnce extends GameComponent
   @override
   void update(double dt) {
     super.update(dt);
-    if (animation != null && !shouldRemove) {
+    if (animation != null && !isRemoving) {
       if (animation?.currentIndex == 1 && !_notifyStart) {
         _notifyStart = true;
         onStartAnimation?.call();

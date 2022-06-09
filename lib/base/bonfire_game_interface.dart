@@ -13,6 +13,7 @@ import 'package:bonfire/scene_builder/scene_action.dart';
 import 'package:bonfire/scene_builder/scene_manager_component.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/mixins/sensor.dart';
+import 'package:bonfire/util/overlay_manager.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:bonfire/util/value_generator_component.dart';
 import 'package:flame/components.dart';
@@ -45,7 +46,6 @@ abstract class BonfireGameInterface {
   Vector2 get size;
   bool get hasLayout;
   bool get showCollisionArea;
-  bool get showFPS;
   Color? get constructionModeColor;
   Color? get collisionAreaColor;
   GameInterface? get interface;
@@ -67,8 +67,8 @@ abstract class BonfireGameInterface {
   ///
   /// See also:
   /// - GameWidget
-  /// - [Game.overlays]
-  ActiveOverlaysNotifier get overlays;
+  /// - [Game.overlayManager]
+  OverlayManager get overlayManager;
 
   /// Used to pause the engine.
   void pauseEngine();
