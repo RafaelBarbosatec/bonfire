@@ -320,7 +320,7 @@ class BonfireGame extends BaseGame
 
   void _updateTempList() {
     _visibleComponents = children.where((element) {
-      return (element is GameComponent) && (element).isVisible;
+      return (element is GameComponent) && element.isVisible;
     }).cast()
       ..toList(growable: false);
 
