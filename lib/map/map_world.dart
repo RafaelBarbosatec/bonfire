@@ -122,18 +122,18 @@ class MapWorld extends MapGame {
     if (isUpdate) {
       lastCamera = Vector2.zero();
       lastMinorZoom = gameRef.camera.zoom;
+      _updateMapSize = true;
+      _updateStartPosition = true;
     }
 
     tileSize = tiles.first.width;
 
     final mapSize = getMapSize();
 
-    if (_griSize == Vector2.zero()) {
-      _griSize = Vector2(
-        (mapSize.width.ceil() / tileSize).ceilToDouble(),
-        (mapSize.height.ceil() / tileSize).ceilToDouble(),
-      );
-    }
+    _griSize = Vector2(
+      (mapSize.width.ceil() / tileSize).ceilToDouble(),
+      (mapSize.height.ceil() / tileSize).ceilToDouble(),
+    );
 
     if (tileSizeToUpdate == 0) {
       tileSizeToUpdate = (tileSize * 4).ceilToDouble();
