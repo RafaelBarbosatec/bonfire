@@ -19,7 +19,12 @@ class MapWorld extends MapGame {
   List<Tile> _tilesToRemove = [];
   Set<String> _visibleSet = Set();
   bool _buildingTiles = false;
+  bool _updateMapSize = true;
+  bool _updateStartPosition = true;
   double tileSize = 0.0;
+  Vector2 _griSize = Vector2.zero();
+  Size _mapSize = Size.zero;
+  Vector2 _mapStartPosition = Vector2.zero();
 
   List<Offset> _linePath = [];
   Paint _paintPath = Paint()
@@ -121,8 +126,14 @@ class MapWorld extends MapGame {
 
     tileSize = tiles.first.width;
 
-    mapSize = getMapSize();
-    mapStartPosition = getStartPosition();
+    final mapSize = getMapSize();
+
+    if (_griSize == Vector2.zero()) {
+      _griSize = Vector2(
+        (mapSize.width.ceil() / tileSize).ceilToDouble(),
+        (mapSize.height.ceil() / tileSize).ceilToDouble(),
+      );
+    }
 
     if (tileSizeToUpdate == 0) {
       tileSizeToUpdate = (tileSize * 4).ceilToDouble();
@@ -138,8 +149,8 @@ class MapWorld extends MapGame {
       quadTree = QuadTree(
         0,
         0,
-        ((mapSize?.width ?? 0).ceil() / tileSize).ceil(),
-        ((mapSize?.height ?? 0).ceil() / tileSize).ceil(),
+        _griSize.x,
+        _griSize.y,
         maxItems: maxItems,
       );
 
@@ -159,19 +170,26 @@ class MapWorld extends MapGame {
 
   @override
   Size getMapSize() {
-    double height = 0;
-    double width = 0;
+    if (_updateMapSize && tiles.isNotEmpty) {
+      double height = 0;
+      double width = 0;
 
-    this.tiles.forEach((tile) {
-      if (tile.right > width) width = tile.right;
-      if (tile.bottom > height) height = tile.bottom;
-    });
+      this.tiles.forEach((tile) {
+        if (tile.right > width) width = tile.right;
+        if (tile.bottom > height) height = tile.bottom;
+      });
+      _updateMapSize = false;
+      return _mapSize = Size(width, height);
+    }
 
-    return Size(width, height);
+    return _mapSize;
   }
 
+  Vector2 getGridSize() => _griSize;
+
+  @override
   Vector2 getStartPosition() {
-    try {
+    if (_updateStartPosition && this.tiles.isNotEmpty) {
       double x = this.tiles.first.left;
       double y = this.tiles.first.top;
 
@@ -179,10 +197,10 @@ class MapWorld extends MapGame {
         if (tile.left < x) x = tile.left;
         if (tile.top < y) y = tile.top;
       });
-
-      return Vector2(x, y);
-    } catch (e) {
-      return Vector2.zero();
+      _updateStartPosition = false;
+      return _mapStartPosition = Vector2(x, y);
+    } else {
+      return _mapStartPosition;
     }
   }
 
@@ -270,6 +288,9 @@ class MapWorld extends MapGame {
       _tilesCollisions.add(tile as ObjectCollision);
       _findVisibleCollisions();
     }
+
+    _updateMapSize = true;
+    _updateStartPosition = true;
   }
 
   @override
@@ -281,6 +302,8 @@ class MapWorld extends MapGame {
     } catch (e) {
       print('Not found visible tile with $id id');
     }
+    _updateMapSize = true;
+    _updateStartPosition = true;
   }
 
   void _findVisibleCollisions() {

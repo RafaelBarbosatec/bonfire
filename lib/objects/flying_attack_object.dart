@@ -187,9 +187,9 @@ class FlyingAttackObject extends GameComponent
   }
 
   bool _verifyExistInWorld() {
-    Size? mapSize = gameRef.map.mapSize;
+    Size? mapSize = gameRef.map.getMapSize();
     final _rect = toRect();
-    if (mapSize == null) return true;
+    if (mapSize == Size.zero) return true;
 
     if (_rect.left < 0) {
       return false;

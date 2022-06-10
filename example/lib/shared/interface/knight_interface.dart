@@ -102,6 +102,7 @@ class KnightInterface extends GameInterface {
   void _showDialogTest(VoidCallback completed) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return Center(
           child: Card(
