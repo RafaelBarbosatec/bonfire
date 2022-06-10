@@ -26,8 +26,8 @@ class Pirate extends SimplePlayer with ObjectCollision {
       CollisionConfig(
         collisions: [
           CollisionArea.rectangle(
-            size: Vector2(size.x / 2, size.y / 2),
-            align: Vector2(size.x / 4, size.y / 2),
+            size: Vector2(size.x / 3, size.y / 3),
+            align: Vector2(size.x * 1 / 3, size.y * 2 / 3),
           ),
         ],
       ),
