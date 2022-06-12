@@ -13,7 +13,7 @@ class MapWorld extends MapGame {
   Vector2 lastCamera = Vector2.zero();
   double lastMinorZoom = 1.0;
   Vector2? lastSizeScreen;
-  List<ObjectCollision> _tilesCollisions = List.empty();
+  List<ObjectCollision> _tilesCollisions = List.empty(growable: true);
   List<ObjectCollision> _tilesVisibleCollisions = List.empty();
   List<TileModel> _tilesToAdd = [];
   List<Tile> _tilesToRemove = [];
@@ -110,12 +110,12 @@ class MapWorld extends MapGame {
   @override
   void onGameResize(Vector2 size) {
     if (isLoaded) {
-      _verifyMaxTopAndLeft(size);
+      _createQuadTree(size);
     }
     super.onGameResize(size);
   }
 
-  void _verifyMaxTopAndLeft(Vector2 size, {bool isUpdate = false}) {
+  void _createQuadTree(Vector2 size, {bool isUpdate = false}) {
     if (lastSizeScreen == size) return;
     lastSizeScreen = size.clone();
 
@@ -165,7 +165,7 @@ class MapWorld extends MapGame {
     lastSizeScreen = null;
     this.tiles = map;
     await Future.forEach<TileModel>(tiles, _loadTile);
-    _verifyMaxTopAndLeft(gameRef.size, isUpdate: true);
+    _createQuadTree(gameRef.size, isUpdate: true);
   }
 
   @override
@@ -224,16 +224,15 @@ class MapWorld extends MapGame {
   }
 
   void _getTileCollisions() {
-    List<ObjectCollision> aux = [];
+    _tilesCollisions.clear();
     final list = tiles.where((element) {
       return element.collisions?.isNotEmpty == true;
     });
 
     for (var element in list) {
-      final o = element.getTile(gameRef);
-      aux.add(o as ObjectCollision);
+      final collision = element.getTile(gameRef);
+      _tilesCollisions.add(collision as ObjectCollision);
     }
-    _tilesCollisions = aux;
   }
 
   List<Tile> _buildTiles(Iterable<TileModel> visibleTiles) {
@@ -246,7 +245,7 @@ class MapWorld extends MapGame {
   Future<void>? onLoad() async {
     await super.onLoad();
     await Future.forEach<TileModel>(tiles, _loadTile);
-    _verifyMaxTopAndLeft(gameRef.size);
+    _createQuadTree(gameRef.size);
     _searchTilesToRender();
   }
 
@@ -323,13 +322,6 @@ class MapWorld extends MapGame {
     return Future.value();
   }
 
-  Vector2 _getCameraTileUpdate() {
-    return Vector2(
-      (gameRef.camera.position.x / tileSizeToUpdate).floorToDouble(),
-      (gameRef.camera.position.y / tileSizeToUpdate).floorToDouble(),
-    );
-  }
-
   bool _checkNeedUpdateTiles() {
     final camera = _getCameraTileUpdate();
     if (lastCamera != camera || lastMinorZoom > gameRef.camera.zoom) {
@@ -340,5 +332,12 @@ class MapWorld extends MapGame {
       return true;
     }
     return false;
+  }
+
+  Vector2 _getCameraTileUpdate() {
+    return Vector2(
+      (gameRef.camera.position.x / tileSizeToUpdate).floorToDouble(),
+      (gameRef.camera.position.y / tileSizeToUpdate).floorToDouble(),
+    );
   }
 }
