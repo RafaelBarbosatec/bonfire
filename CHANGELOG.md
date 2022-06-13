@@ -1,4 +1,4 @@
-# [NEXT]
+# [2.6.0]
 - Update `flame` to `1.2.0` - [CHANGELOG](https://pub.dev/packages/flame/changelog)
 - Renamed `gameRef.overlays` to `gameRef.overlayManager`
 - Renamed `GameComponent.shouldRemove` to `GameComponent.isRemoving`
