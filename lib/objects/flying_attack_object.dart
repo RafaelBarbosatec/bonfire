@@ -163,7 +163,7 @@ class FlyingAttackObject extends GameComponent
 
   @override
   bool onCollision(GameComponent component, bool active) {
-    if (component is Attackable && !component.shouldRemove) {
+    if (component is Attackable && !component.isRemoving) {
       component.receiveDamage(attackFrom, damage, id);
     } else if (!withDecorationCollision) {
       return false;
@@ -173,7 +173,7 @@ class FlyingAttackObject extends GameComponent
   }
 
   void _destroyObject() {
-    if (shouldRemove) return;
+    if (isRemoving) return;
     removeFromParent();
     if (animationDestroy != null) {
       if (direction != null) {
@@ -187,9 +187,9 @@ class FlyingAttackObject extends GameComponent
   }
 
   bool _verifyExistInWorld() {
-    Size? mapSize = gameRef.map.mapSize;
+    Size? mapSize = gameRef.map.getMapSize();
     final _rect = toRect();
-    if (mapSize == null) return true;
+    if (mapSize == Size.zero) return true;
 
     if (_rect.left < 0) {
       return false;

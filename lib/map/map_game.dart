@@ -7,8 +7,6 @@ import 'package:flame/extensions.dart';
 
 abstract class MapGame extends GameComponent {
   List<TileModel> tiles;
-  Size? mapSize;
-  Vector2? mapStartPosition;
   double tileSizeToUpdate;
   List<Tile> childrenTiles = [];
 
@@ -22,6 +20,8 @@ abstract class MapGame extends GameComponent {
   Future<void> updateTiles(List<TileModel> map);
 
   Size getMapSize();
+  Vector2 getStartPosition();
+  Vector2 getGridSize();
 
   void removeTile(String id);
   Future addTile(TileModel tileModel);

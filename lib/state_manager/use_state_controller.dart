@@ -35,7 +35,7 @@ mixin UseStateController<T extends StateController> on GameComponent {
 
   @override
   void update(double dt) {
-    if (!shouldRemove) {
+    if (!isRemoving) {
       _controller?.update(dt, this);
     }
     super.update(dt);

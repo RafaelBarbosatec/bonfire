@@ -12,7 +12,7 @@ extension GameComponentExtensions on GameComponent {
     VoidCallback? notObserved,
     double radiusVision = 32,
   }) {
-    if (component.shouldRemove) {
+    if (component.isRemoving) {
       notObserved?.call();
       return;
     }

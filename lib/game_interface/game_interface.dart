@@ -29,7 +29,6 @@ class GameInterface extends GameComponent {
   @override
   void render(Canvas c) {
     super.render(c);
-    _drawFPS(c);
   }
 
   /// Used to add components in your interface like a Button.
@@ -47,17 +46,6 @@ class GameInterface extends GameComponent {
     children.removeWhere((element) {
       return element is InterfaceComponent && element.id == id;
     });
-  }
-
-  void _drawFPS(Canvas c) {
-    if (gameRef.showFPS == true) {
-      double? fps = (gameRef as BonfireGame).fps(100);
-      getTextConfigFps(fps).render(
-        c,
-        'FPS: ${fps.toStringAsFixed(2)}',
-        Vector2((gameRef.size.x) - 100, 20),
-      );
-    }
   }
 
   TextPaint getTextConfigFps(double fps) {

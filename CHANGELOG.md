@@ -1,3 +1,10 @@
+# [2.6.0]
+- Update `flame` to `1.2.0` - [CHANGELOG](https://pub.dev/packages/flame/changelog)
+- Renamed `gameRef.overlays` to `gameRef.overlayManager`
+- Renamed `GameComponent.shouldRemove` to `GameComponent.isRemoving`
+- Remove `showFPS` in `BonfireTiledWidget` and `BonfireWidget`.
+- Fix Camera bug in a small map that is not the size of the screen. [#261](https://github.com/RafaelBarbosatec/bonfire/issues/261)
+
 # [2.5.0]
 - Adds `MatrixMapGenerator`. Class that can help you create a map using a double matrix. [Doc](https://bonfire-engine.github.io/#/map?id=creating-map-by-matrix)
 - Adds `TerrainBuilder`. Class that can help you create a map using a double matrix with Sprite. [SpriteSheetModel](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/assets/images/tile_random/earth_to_grass.png)

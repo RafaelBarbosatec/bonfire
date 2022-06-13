@@ -211,8 +211,6 @@ extension FutureSpriteAnimationExt on FutureOr<SpriteAnimation> {
     widget.Key? key,
     bool playing = true,
     Anchor anchor = Anchor.topLeft,
-    widget.WidgetBuilder? errorBuilder,
-    widget.WidgetBuilder? loadingBuilder,
   }) {
     if (this is Future) {
       return widget.FutureBuilder<SpriteAnimation>(
@@ -229,8 +227,6 @@ extension FutureSpriteAnimationExt on FutureOr<SpriteAnimation> {
               animation: data.data!,
               playing: playing,
               anchor: anchor,
-              errorBuilder: errorBuilder,
-              loadingBuilder: loadingBuilder,
             ),
           );
         },
@@ -247,8 +243,6 @@ extension FutureSpriteAnimationExt on FutureOr<SpriteAnimation> {
         animation: this as SpriteAnimation,
         playing: playing,
         anchor: anchor,
-        errorBuilder: errorBuilder,
-        loadingBuilder: loadingBuilder,
       ),
     );
   }
@@ -258,8 +252,6 @@ extension FutureSpriteExt on FutureOr<Sprite> {
   widget.Widget asWidget({
     widget.Key? key,
     Anchor anchor = Anchor.topLeft,
-    widget.WidgetBuilder? errorBuilder,
-    widget.WidgetBuilder? loadingBuilder,
     double angle = 0,
     Vector2? srcPosition,
     Vector2? srcSize,
@@ -278,8 +270,6 @@ extension FutureSpriteExt on FutureOr<Sprite> {
             child: SpriteWidget(
               sprite: data.data!,
               anchor: anchor,
-              errorBuilder: errorBuilder,
-              loadingBuilder: loadingBuilder,
               angle: angle,
               srcPosition: srcPosition,
               srcSize: srcSize,
@@ -298,8 +288,6 @@ extension FutureSpriteExt on FutureOr<Sprite> {
       child: SpriteWidget(
         sprite: this as Sprite,
         anchor: anchor,
-        errorBuilder: errorBuilder,
-        loadingBuilder: loadingBuilder,
         angle: angle,
         srcPosition: srcPosition,
         srcSize: srcSize,

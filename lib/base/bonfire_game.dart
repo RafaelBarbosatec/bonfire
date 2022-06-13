@@ -8,6 +8,7 @@ import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
+import 'package:bonfire/util/overlay_manager.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -58,9 +59,6 @@ class BonfireGame extends BaseGame
   /// Used to configure lighting in the game
   final Color? lightingColorGame;
 
-  /// Used to show in the interface the FPS.
-  final bool showFPS;
-
   /// Callback to receive the tapDown event from the game.
   final TapInGame? onTapDown;
 
@@ -99,6 +97,8 @@ class BonfireGame extends BaseGame
   @override
   JoystickController? get joystick => _joystickController;
 
+  late OverlayManager overlayManager;
+
   BonfireGame({
     required this.context,
     required this.map,
@@ -115,7 +115,6 @@ class BonfireGame extends BaseGame
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
-    this.showFPS = false,
     this.onReady,
     this.onTapDown,
     this.onTapUp,
@@ -123,6 +122,7 @@ class BonfireGame extends BaseGame
     CameraConfig? cameraConfig,
   })  : _joystickController = joystickController,
         super(camera: BonfireCamera(cameraConfig ?? CameraConfig())) {
+    overlayManager = OverlayManager(this);
     _initialEnemies = enemies;
     _initialDecorations = decorations;
     _initialComponents = components;
@@ -185,7 +185,6 @@ class BonfireGame extends BaseGame
     if (gameController != null) {
       await add(gameController!);
     }
-    // isLoaded = true;
   }
 
   @override
@@ -321,7 +320,7 @@ class BonfireGame extends BaseGame
 
   void _updateTempList() {
     _visibleComponents = children.where((element) {
-      return (element is GameComponent) && (element).isVisible;
+      return (element is GameComponent) && element.isVisible;
     }).cast()
       ..toList(growable: false);
 
@@ -363,7 +362,7 @@ class BonfireGame extends BaseGame
   @override
   bool isVisibleInCamera(GameComponent c) {
     if (!hasLayout) return false;
-    if (c.shouldRemove) return false;
+    if (c.isRemoving) return false;
     return camera.isComponentOnCamera(c);
   }
 

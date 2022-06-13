@@ -308,9 +308,8 @@ mixin Movement on GameComponent {
             displacement: displacement,
           )
           .isNotEmpty;
-    } else {
-      return false;
     }
+    return false;
   }
 
   bool moveFromDirection(Direction direction, {bool enabledDiagonal = true}) {

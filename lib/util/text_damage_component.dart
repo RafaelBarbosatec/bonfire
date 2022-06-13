@@ -54,14 +54,14 @@ class TextDamageComponent extends TextComponent with BonfireHasGameRef {
 
   @override
   void render(Canvas c) {
-    if (shouldRemove) return;
+    if (isRemoving) return;
     super.render(c);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (shouldRemove) return;
+    if (isRemoving) return;
     position.y += _velocity;
     position.x += _moveAxisX;
     _velocity += gravity;
