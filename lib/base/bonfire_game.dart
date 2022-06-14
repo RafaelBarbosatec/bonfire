@@ -73,9 +73,9 @@ class BonfireGame extends BaseGame
   List<ObjectCollision> _visibleCollisions = List.empty();
   List<ObjectCollision> _collisions = List.empty();
   List<GameComponent> _addLater = [];
-  IntervalTick? _interval;
-  IntervalTick? _intervalUpdateOder;
-  IntervalTick? _intervalAllCollisions;
+  late IntervalTick _interval;
+  late IntervalTick _intervalUpdateOder;
+  late IntervalTick _intervalAllCollisions;
   late ColorFilterComponent _colorFilterComponent;
   late LightingComponent _lighting;
 
@@ -157,6 +157,7 @@ class BonfireGame extends BaseGame
     await add(map);
 
     await Future.forEach(_addLater, add);
+    _addLater.clear();
 
     if (player != null) {
       await add(player!);
@@ -181,9 +182,9 @@ class BonfireGame extends BaseGame
   @override
   void update(double t) {
     super.update(t);
-    _interval?.update(t);
-    _intervalUpdateOder?.update(t);
-    _intervalAllCollisions?.update(t);
+    _interval.update(t);
+    _intervalUpdateOder.update(t);
+    _intervalAllCollisions.update(t);
   }
 
   @override
