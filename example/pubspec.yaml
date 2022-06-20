@@ -48,7 +48,6 @@ flutter:
     - assets/images/tile/
     - assets/images/tile_random/
     - assets/images/tiled/
-    - assets/images/tiled8/
     - assets/images/tiled/top_down/
     - assets/images/tiled/tileset/
     - assets/images/itens/
