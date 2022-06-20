@@ -47,6 +47,7 @@ export 'package:bonfire/util/bonfire_game_ref.dart';
 export 'package:bonfire/util/direction.dart';
 export 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 export 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
+export 'package:bonfire/util/effects/opacity_effect.dart';
 export 'package:bonfire/util/extensions/extensions.dart';
 export 'package:bonfire/util/follower_widget.dart';
 export 'package:bonfire/util/functions.dart';
