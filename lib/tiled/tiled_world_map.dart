@@ -570,7 +570,8 @@ class TiledWorldMap {
         tiledMap = TiledMap.fromJson(jsonDecode(mapResponse.body));
         await Future.forEach<TileSetDetail>(tiledMap.tileSets ?? [],
             (tileSet) async {
-          if (tileSet.source?.contains('.json') == false) {
+          if (!(tileSet.source?.contains('.json') == true ||
+              tileSet.source?.contains('.tsj') == true)) {
             throw Exception('Invalid TileSet source: only supports json files');
           }
           final tileSetResponse = await http.get(

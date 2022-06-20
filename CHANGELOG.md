@@ -2,6 +2,7 @@
 - removed `getValueGenerator` from `BonfireGame`. Now use `generateValues` from your component.
 - removed `addParticle` from `BonfireGame`. Now use `addParticle` from your component.
 - improvements in `ValueGeneratorComponent`
+- Adds support to new files of the Tiled 1.8.0 (`tmj`,'tsj') .
 
 # [2.6.0]
 - Update `flame` to `1.2.0` - [CHANGELOG](https://pub.dev/packages/flame/changelog)
