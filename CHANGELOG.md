@@ -1,4 +1,4 @@
-# [NEXT]
+# [2.6.1]
 - removed `getValueGenerator` from `BonfireGame`. Now use `generateValues` from your component.
 - removed `addParticle` from `BonfireGame`. Now use `addParticle` from your component.
 - improvements in `ValueGeneratorComponent`
