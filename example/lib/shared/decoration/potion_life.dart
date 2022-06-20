@@ -16,13 +16,16 @@ class PotionLife extends GameDecoration with Sensor {
   @override
   void onContact(GameComponent collision) {
     if (collision is Player) {
-      gameRef.getValueGenerator(Duration(seconds: 1), onChange: (value) {
-        if (_lifeDistributed < life) {
-          double newLife = life * value - _lifeDistributed;
-          _lifeDistributed += newLife;
-          collision.addLife(newLife);
-        }
-      }).start();
+      generateValues(
+        Duration(seconds: 1),
+        onChange: (value) {
+          if (_lifeDistributed < life) {
+            double newLife = life * value - _lifeDistributed;
+            _lifeDistributed += newLife;
+            collision.addLife(newLife);
+          }
+        },
+      );
 
       removeFromParent();
     }

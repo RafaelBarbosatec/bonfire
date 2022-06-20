@@ -14,11 +14,8 @@ import 'package:bonfire/scene_builder/scene_manager_component.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/mixins/sensor.dart';
 import 'package:bonfire/util/overlay_manager.dart';
-import 'package:bonfire/util/priority_layer.dart';
-import 'package:bonfire/util/value_generator_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/particles.dart';
 import 'package:flutter/widgets.dart';
 
 ///
@@ -124,16 +121,6 @@ abstract class BonfireGameInterface {
   /// Used to find component by type.
   Iterable<T> componentsByType<T>();
 
-  /// Used to generate numbers to create your animations.
-  ValueGeneratorComponent getValueGenerator(
-    Duration duration, {
-    double begin = 0.0,
-    double end = 1.0,
-    Curve curve = Curves.decelerate,
-    VoidCallback? onFinish,
-    ValueChanged<double>? onChange,
-  });
-
   /// This  method convert word position to screen position
   Vector2 worldToScreen(Vector2 position);
 
@@ -148,17 +135,6 @@ abstract class BonfireGameInterface {
     GameComponent target, {
     bool cleanObservers = false,
     bool moveCameraToTarget = false,
-  });
-
-  /// Used to add particles in game.
-  void addParticle(
-    Particle particle, {
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    int? priority = LayerPriority.MAP + 1,
   });
 
   void startScene(List<SceneAction> actions);

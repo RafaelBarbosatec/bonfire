@@ -1,3 +1,8 @@
+# [NEXT]
+- remove `getValueGenerator` of `BonfireGame`. Now use `generateValues` from your component.
+- remove `addParticle` of `BonfireGame`. Now use `addParticle` from your component.
+- improvements in `ValueGeneratorComponent`
+
 # [2.6.0]
 - Update `flame` to `1.2.0` - [CHANGELOG](https://pub.dev/packages/flame/changelog)
 - Renamed `gameRef.overlays` to `gameRef.overlayManager`

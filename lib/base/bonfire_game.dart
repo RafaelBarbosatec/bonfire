@@ -266,27 +266,6 @@ class BonfireGame extends BaseGame
   }
 
   @override
-  ValueGeneratorComponent getValueGenerator(
-    Duration duration, {
-    double begin = 0.0,
-    double end = 1.0,
-    Curve curve = Curves.decelerate,
-    VoidCallback? onFinish,
-    ValueChanged<double>? onChange,
-  }) {
-    final valueGenerator = ValueGeneratorComponent(
-      duration,
-      end: end,
-      begin: begin,
-      curve: curve,
-      onFinish: onFinish,
-      onChange: onChange,
-    );
-    add(valueGenerator);
-    return valueGenerator;
-  }
-
-  @override
   KeyEventResult onKeyEvent(
     RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
@@ -402,29 +381,6 @@ class BonfireGame extends BaseGame
     } else {
       print('$target is not a JoystickListener');
     }
-  }
-
-  @override
-  void addParticle(
-    Particle particle, {
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    int? priority = LayerPriority.MAP + 1,
-  }) {
-    this.add(
-      ParticleSystemComponent(
-        particle: particle,
-        position: position,
-        size: size,
-        scale: scale,
-        angle: angle,
-        anchor: anchor,
-        priority: priority,
-      ),
-    );
   }
 
   @override

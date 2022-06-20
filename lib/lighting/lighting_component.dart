@@ -97,7 +97,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
       end: color,
     );
 
-    gameRef.getValueGenerator(
+    generateValues(
       duration,
       onChange: (value) {
         this.color = _tween?.transform(value);
@@ -106,7 +106,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
         this.color = color;
       },
       curve: curve,
-    ).start();
+    );
   }
 
   bool _containsColor() {

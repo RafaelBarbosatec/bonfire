@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 /// Component used to generate numbers using the gameLoop.
 class ValueGeneratorComponent extends Component {
   bool _isFinished = false;
-  final int _maxInMicroSeconds = 1000000;
+  final int _maxInMilliSeconds = 1000;
 
   final Duration duration;
   final double begin;
@@ -12,6 +12,7 @@ class ValueGeneratorComponent extends Component {
   final Curve curve;
   final VoidCallback? onFinish;
   final ValueChanged<double>? onChange;
+  final bool autoStart;
 
   double _currentValue = 0;
   double _displacement = 0;
@@ -24,7 +25,9 @@ class ValueGeneratorComponent extends Component {
     this.curve = Curves.decelerate,
     this.onFinish,
     this.onChange,
+    this.autoStart = false,
   }) {
+    _isRunning = autoStart;
     _displacement = end - begin;
   }
 
@@ -32,12 +35,12 @@ class ValueGeneratorComponent extends Component {
   void update(double dt) {
     super.update(dt);
     if (!_isRunning) return;
-    _currentValue += dt * _maxInMicroSeconds;
-    if (_currentValue >= duration.inMicroseconds) {
+
+    _currentValue += dt * _maxInMilliSeconds;
+    if (_currentValue >= duration.inMilliseconds) {
       finish();
     } else {
-      double value = _currentValue / duration.inMicroseconds;
-      value = curve.transform(value);
+      double value = curve.transform(_currentValue / duration.inMilliseconds);
       double realValue = begin + (_displacement * value);
       onChange?.call(realValue);
     }
