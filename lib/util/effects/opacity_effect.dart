@@ -12,6 +12,8 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 20/06/22
 
+///
+/// Responsible to apply opacity effect in GameComponents.
 class BonfireOpacityEffect extends Effect {
   final double targetOpacity;
   double _diffOpacity = 0;
