@@ -163,33 +163,6 @@ extension NullableExt<T> on T? {
   FutureOr<void> let(FutureOr<void> Function(T i) call) => call(this!);
 }
 
-extension GameComponentExt on GameComponent {
-  Direction? directionThePlayerIsIn() {
-    Player? player = this.gameRef.player;
-    if (player == null) return null;
-    var diffX = center.x - player.center.x;
-    var diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;
-    var diffY = center.y - player.center.y;
-    var diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
-
-    if (diffPositiveX > diffPositiveY) {
-      if (player.center.x > center.y) {
-        return Direction.right;
-      } else if (player.center.x < center.y) {
-        return Direction.left;
-      }
-    } else {
-      if (player.center.y > center.x) {
-        return Direction.down;
-      } else if (player.center.y < position.x) {
-        return Direction.up;
-      }
-    }
-
-    return Direction.left;
-  }
-}
-
 extension Vector2Ext on Vector2 {
   Vector2 translate(double x, double y) {
     return Vector2(this.x + x, this.y + y);

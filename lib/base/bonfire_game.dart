@@ -72,19 +72,12 @@ class BonfireGame extends BaseGame
   Iterable<GameComponent> _visibleComponents = List.empty();
   List<ObjectCollision> _visibleCollisions = List.empty();
   List<ObjectCollision> _collisions = List.empty();
-  IntervalTick? _interval;
-  IntervalTick? _intervalUpdateOder;
-  IntervalTick? _intervalAllCollisions;
-  ColorFilterComponent _colorFilterComponent = ColorFilterComponent(
-    GameColorFilter(),
-  );
-  LightingComponent? _lighting;
-
-  List<Enemy>? _initialEnemies;
-  List<GameDecoration>? _initialDecorations;
-  List<GameComponent>? _initialComponents;
-
-  GameColorFilter? _colorFilter;
+  List<GameComponent> _addLater = [];
+  late IntervalTick _interval;
+  late IntervalTick _intervalUpdateOder;
+  late IntervalTick _intervalAllCollisions;
+  late ColorFilterComponent _colorFilterComponent;
+  late LightingComponent _lighting;
 
   ValueChanged<BonfireGame>? onReady;
 
@@ -123,14 +116,21 @@ class BonfireGame extends BaseGame
   })  : _joystickController = joystickController,
         super(camera: BonfireCamera(cameraConfig ?? CameraConfig())) {
     overlayManager = OverlayManager(this);
-    _initialEnemies = enemies;
-    _initialDecorations = decorations;
-    _initialComponents = components;
-    _colorFilter = colorFilter ?? GameColorFilter();
-    debugMode = constructionMode;
-
     camera.setGame(this);
     camera.target ??= player;
+
+    _addLater.addAll(enemies ?? []);
+    _addLater.addAll(decorations ?? []);
+    _addLater.addAll(components ?? []);
+    _lighting = LightingComponent(
+      color: lightingColorGame ?? Color(0x00000000),
+    );
+    _colorFilterComponent = ColorFilterComponent(
+      colorFilter ?? GameColorFilter(),
+    );
+    _joystickController?.addObserver(player ?? MapExplorer(camera));
+
+    debugMode = constructionMode;
 
     _interval = IntervalTick(
       INTERVAL_UPDATE_CACHE,
@@ -148,10 +148,6 @@ class BonfireGame extends BaseGame
 
   @override
   Future<void>? onLoad() async {
-    await super.onLoad();
-    _colorFilterComponent = ColorFilterComponent(
-      _colorFilter ?? GameColorFilter(),
-    );
     await add(_colorFilterComponent);
 
     if (background != null) {
@@ -160,39 +156,35 @@ class BonfireGame extends BaseGame
 
     await add(map);
 
-    if (_initialDecorations != null) {
-      await Future.forEach<GameComponent>(
-          _initialDecorations!, (element) => add(element));
-    }
-    if (_initialEnemies != null) {
-      await Future.forEach<GameComponent>(
-          _initialEnemies!, (element) => add(element));
-    }
-    if (_initialComponents != null) {
-      await Future.forEach<GameComponent>(
-          _initialComponents!, (element) => add(element));
-    }
+    await Future.forEach(_addLater, add);
+    _addLater.clear();
+
     if (player != null) {
       await add(player!);
     }
-    _lighting = LightingComponent(
-      color: lightingColorGame ?? Color(0x00000000),
-    );
-    await add(_lighting!);
-    await add(interface ?? GameInterface());
-    await add(_joystickController ?? Joystick());
-    _joystickController?.addObserver(player ?? MapExplorer(camera));
+
+    await add(_lighting);
+
+    if (interface != null) {
+      await add(interface!);
+    }
+
+    if (_joystickController != null) {
+      await add(_joystickController!);
+    }
+
     if (gameController != null) {
       await add(gameController!);
     }
+    return super.onLoad();
   }
 
   @override
   void update(double t) {
     super.update(t);
-    _interval?.update(t);
-    _intervalUpdateOder?.update(t);
-    _intervalAllCollisions?.update(t);
+    _interval.update(t);
+    _intervalUpdateOder.update(t);
+    _intervalAllCollisions.update(t);
   }
 
   @override
@@ -274,27 +266,6 @@ class BonfireGame extends BaseGame
   }
 
   @override
-  ValueGeneratorComponent getValueGenerator(
-    Duration duration, {
-    double begin = 0.0,
-    double end = 1.0,
-    Curve curve = Curves.decelerate,
-    VoidCallback? onFinish,
-    ValueChanged<double>? onChange,
-  }) {
-    final valueGenerator = ValueGeneratorComponent(
-      duration,
-      end: end,
-      begin: begin,
-      curve: curve,
-      onFinish: onFinish,
-      onChange: onChange,
-    );
-    add(valueGenerator);
-    return valueGenerator;
-  }
-
-  @override
   KeyEventResult onKeyEvent(
     RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
@@ -368,23 +339,27 @@ class BonfireGame extends BaseGame
 
   @override
   void onPointerDown(PointerDownEvent event) {
-    final localPosition = event.localPosition.toVector2();
-    onTapDown?.call(
-      this,
-      localPosition,
-      camera.screenToWorld(localPosition),
-    );
+    if (onTapDown != null) {
+      final localPosition = event.localPosition.toVector2();
+      onTapDown?.call(
+        this,
+        localPosition,
+        camera.screenToWorld(localPosition),
+      );
+    }
     super.onPointerDown(event);
   }
 
   @override
   void onPointerUp(PointerUpEvent event) {
-    final localPosition = event.localPosition.toVector2();
-    onTapUp?.call(
-      this,
-      localPosition,
-      camera.screenToWorld(localPosition),
-    );
+    if (onTapUp != null) {
+      final localPosition = event.localPosition.toVector2();
+      onTapUp?.call(
+        this,
+        localPosition,
+        camera.screenToWorld(localPosition),
+      );
+    }
     super.onPointerUp(event);
   }
 
@@ -409,29 +384,6 @@ class BonfireGame extends BaseGame
   }
 
   @override
-  void addParticle(
-    Particle particle, {
-    Vector2? position,
-    Vector2? size,
-    Vector2? scale,
-    double? angle,
-    Anchor? anchor,
-    int? priority = LayerPriority.MAP + 1,
-  }) {
-    this.add(
-      ParticleSystemComponent(
-        particle: particle,
-        position: position,
-        size: size,
-        scale: scale,
-        angle: angle,
-        anchor: anchor,
-        priority: priority,
-      ),
-    );
-  }
-
-  @override
   void startScene(List<SceneAction> actions) {
     if (!sceneBuilderStatus.isRunning) {
       add(SceneBuilderComponent(actions));
@@ -446,6 +398,8 @@ class BonfireGame extends BaseGame
             (value) => value is SceneBuilderComponent,
           )
           .removeFromParent();
-    } catch (e) {}
+    } catch (e) {
+      /// Not found SceneBuilderComponent
+    }
   }
 }

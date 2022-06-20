@@ -93,7 +93,7 @@ class BonfireCamera extends Camera {
     double diffAngle = this.angle - newAngle;
     double originAngle = this.angle;
 
-    gameRef.getValueGenerator(
+    _generateValues(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
         snapTo(
@@ -111,7 +111,7 @@ class BonfireCamera extends Camera {
         finish?.call();
       },
       curve: curve,
-    ).start();
+    );
   }
 
   void moveToTargetAnimated(
@@ -136,7 +136,7 @@ class BonfireCamera extends Camera {
     double diffAngle = this.angle - newAngle;
     double originAngle = this.angle;
 
-    gameRef.getValueGenerator(
+    _generateValues(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
         double diffX = (originPosition.x + gameSize.x / 2) - target.center.x;
@@ -157,7 +157,7 @@ class BonfireCamera extends Camera {
         finish?.call();
       },
       curve: curve,
-    ).start();
+    );
   }
 
   void moveToPosition(Vector2 position) {
@@ -271,7 +271,7 @@ class BonfireCamera extends Camera {
     double diffZoom = this.zoom - zoom;
     double initialZoom = this.zoom;
 
-    gameRef.getValueGenerator(
+    _generateValues(
       duration ?? Duration(seconds: 1),
       onChange: (value) {
         this.zoom = initialZoom - (diffZoom * value);
@@ -281,7 +281,7 @@ class BonfireCamera extends Camera {
         finish?.call();
       },
       curve: curve,
-    ).start();
+    );
   }
 
   void animateSimpleRotation({
@@ -295,7 +295,7 @@ class BonfireCamera extends Camera {
     final diffAngle = this.angle - angle;
     final originAngle = this.angle;
 
-    gameRef.getValueGenerator(
+    _generateValues(
       duration ?? const Duration(seconds: 1),
       onChange: (value) {
         this.angle = originAngle - (diffAngle * value);
@@ -305,7 +305,7 @@ class BonfireCamera extends Camera {
         onFinish?.call();
       },
       curve: curve,
-    ).start();
+    );
   }
 
   void animateLoopRotation({
@@ -457,5 +457,26 @@ class BonfireCamera extends Camera {
     Rect? worldBounds,
   }) {
     print('followVector2 method not work in Bonfire.');
+  }
+
+  void _generateValues(
+    Duration duration, {
+    double begin = 0.0,
+    double end = 1.0,
+    Curve curve = Curves.decelerate,
+    VoidCallback? onFinish,
+    ValueChanged<double>? onChange,
+  }) {
+    gameRef.add(
+      ValueGeneratorComponent(
+        duration,
+        end: end,
+        begin: begin,
+        curve: curve,
+        autoStart: true,
+        onFinish: onFinish,
+        onChange: onChange,
+      ),
+    );
   }
 }

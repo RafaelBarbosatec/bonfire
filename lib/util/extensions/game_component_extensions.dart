@@ -497,4 +497,73 @@ extension GameComponentExtensions on GameComponent {
       size.y + (baseP.y % 2 == 0 ? bleedingPixel : 0),
     );
   }
+
+  Direction? directionThePlayerIsIn() {
+    Player? player = this.gameRef.player;
+    if (player == null) return null;
+    var diffX = center.x - player.center.x;
+    var diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;
+    var diffY = center.y - player.center.y;
+    var diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
+
+    if (diffPositiveX > diffPositiveY) {
+      if (player.center.x > center.y) {
+        return Direction.right;
+      } else if (player.center.x < center.y) {
+        return Direction.left;
+      }
+    } else {
+      if (player.center.y > center.x) {
+        return Direction.down;
+      } else if (player.center.y < position.x) {
+        return Direction.up;
+      }
+    }
+
+    return Direction.left;
+  }
+
+  /// Used to generate numbers to create your animations or anythings
+  ValueGeneratorComponent generateValues(
+    Duration duration, {
+    double begin = 0.0,
+    double end = 1.0,
+    Curve curve = Curves.linear,
+    bool autoStart = true,
+    VoidCallback? onFinish,
+    ValueChanged<double>? onChange,
+  }) {
+    final valueGenerator = ValueGeneratorComponent(duration,
+        end: end,
+        begin: begin,
+        curve: curve,
+        onFinish: onFinish,
+        onChange: onChange,
+        autoStart: autoStart);
+    add(valueGenerator);
+    return valueGenerator;
+  }
+
+  /// Used to add particles in your component.
+  void addParticle(
+    Particle particle, {
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
+  }) {
+    this.add(
+      ParticleSystemComponent(
+        particle: particle,
+        position: position,
+        size: size,
+        scale: scale,
+        angle: angle,
+        anchor: anchor,
+        priority: priority,
+      ),
+    );
+  }
 }
