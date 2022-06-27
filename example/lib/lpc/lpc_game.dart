@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/lpc/lpc_player.dart';
 import 'package:example/lpc/lpc_sprite_sheet_loader.dart';
+import 'package:example/lpc/widgets/button_interface.dart';
 import 'package:flutter/material.dart';
 
 ///
@@ -20,7 +21,7 @@ class LPCGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<SimpleDirectionAnimation>(
-      future: LPCSpriteSheetLoader.geSpriteSheet(hair: LPCHairEnum.xlong),
+      future: LPCSpriteSheetLoader.geSpriteSheet(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return SizedBox.shrink();
@@ -35,8 +36,16 @@ class LPCGame extends StatelessWidget {
             forceTileSize: Size(32, 32),
           ),
           cameraConfig: CameraConfig(zoom: 2),
-          player:
-              LPCPlayer(position: Vector2(140, 140), animation: snapshot.data!),
+          overlayBuilderMap: {
+            ButtonInterface.name: ButtonInterface.builder,
+          },
+          initialActiveOverlays: [
+            ButtonInterface.name,
+          ],
+          player: LPCPlayer(
+            position: Vector2(140, 140),
+            animation: snapshot.data!,
+          ),
         );
       },
     );

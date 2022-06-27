@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
 
 ///
 /// Created by
@@ -15,6 +14,50 @@ import 'package:bonfire/util/direction_animations/simple_direction_animation.dar
 /// Rafaelbarbosatec
 /// on 27/06/22
 
+class CustomStatus {
+  final LPCBodyEnum body;
+  final LPCHairEnum hair;
+  final bool withFeet;
+  final bool withHelm;
+  final bool withLeg;
+  final bool withChest;
+  final bool withArms;
+  final bool withGloves;
+
+  const CustomStatus({
+    this.body = LPCBodyEnum.light,
+    this.hair = LPCHairEnum.empty,
+    this.withFeet = false,
+    this.withHelm = false,
+    this.withLeg = false,
+    this.withChest = false,
+    this.withArms = false,
+    this.withGloves = false,
+  });
+
+  CustomStatus copyWith({
+    LPCBodyEnum? body,
+    LPCHairEnum? hair,
+    bool? withFeet,
+    bool? withHelm,
+    bool? withLeg,
+    bool? withChest,
+    bool? withArms,
+    bool? withGloves,
+  }) {
+    return CustomStatus(
+      body: body ?? this.body,
+      hair: hair ?? this.hair,
+      withFeet: withFeet ?? this.withFeet,
+      withHelm: withHelm ?? this.withHelm,
+      withLeg: withLeg ?? this.withLeg,
+      withChest: withChest ?? this.withChest,
+      withArms: withArms ?? this.withArms,
+      withGloves: withGloves ?? this.withGloves,
+    );
+  }
+}
+
 enum LPCBodyEnum { light, brown, orc, skeleton }
 
 enum LPCHairEnum { empty, curly, longknot, single, xlong }
@@ -22,62 +65,43 @@ enum LPCHairEnum { empty, curly, longknot, single, xlong }
 class LPCSpriteSheetLoader {
   static Vector2 size = Vector2(64, 64);
   static Future<SimpleDirectionAnimation> geSpriteSheet({
-    LPCBodyEnum body = LPCBodyEnum.light,
-    LPCHairEnum hair = LPCHairEnum.empty,
-    bool withFeet = false,
-    bool withHands = false,
-    bool withHelm = false,
-    bool withLeg = false,
-    bool withShoulder = false,
-    bool withChest = false,
-    bool withArms = false,
-    bool withGloves = false,
+    CustomStatus status = const CustomStatus(),
   }) async {
-    Image imagePlayerBase = await Flame.images.load(_getPathBody(body));
+    Image imagePlayerBase = await Flame.images.load(_getPathBody(status.body));
 
-    Image? imageHair = await _getHair(hair);
-    if (imageHair != null && !withHelm) {
-      imagePlayerBase = await imagePlayerBase.overlap(imageHair);
-    }
-
-    if (withFeet) {
+    if (status.withFeet) {
       Image imageFeet = await Flame.images.load('lpc/feet/1.png');
       imagePlayerBase = await imagePlayerBase.overlap(imageFeet);
     }
 
-    if (withHands) {
-      Image imageHands = await Flame.images.load('lpc/hands/1.png');
-      imagePlayerBase = await imagePlayerBase.overlap(imageHands);
-    }
-
-    if (withHelm) {
+    if (status.withHelm) {
       Image imageHelm = await Flame.images.load('lpc/head/1.png');
       imagePlayerBase = await imagePlayerBase.overlap(imageHelm);
     }
 
-    if (withLeg) {
+    if (status.withLeg) {
       Image imageEquip = await Flame.images.load('lpc/leg/1.png');
       imagePlayerBase = await imagePlayerBase.overlap(imageEquip);
     }
 
-    if (withShoulder) {
-      Image imageEquip = await Flame.images.load('lpc/shoulder/1.png');
-      imagePlayerBase = await imagePlayerBase.overlap(imageEquip);
-    }
-
-    if (withChest) {
+    if (status.withChest) {
       Image imageEquip = await Flame.images.load('lpc/torco/chest.png');
       imagePlayerBase = await imagePlayerBase.overlap(imageEquip);
     }
 
-    if (withArms) {
+    if (status.withArms) {
       Image imageEquip = await Flame.images.load('lpc/torco/arms.png');
       imagePlayerBase = await imagePlayerBase.overlap(imageEquip);
     }
 
-    if (withGloves) {
+    if (status.withGloves) {
       Image imageEquip = await Flame.images.load('lpc/gloves/2.png');
       imagePlayerBase = await imagePlayerBase.overlap(imageEquip);
+    }
+
+    Image? imageHair = await _getHair(status.hair);
+    if (imageHair != null && !status.withHelm) {
+      imagePlayerBase = await imagePlayerBase.overlap(imageHair);
     }
 
     return SimpleDirectionAnimation(
