@@ -54,9 +54,7 @@ flutter:
     - assets/images/lpc/body/
     - assets/images/lpc/feet/
     - assets/images/lpc/hair/
-    - assets/images/lpc/hands/
     - assets/images/lpc/leg/
-    - assets/images/lpc/shoulder/
     - assets/images/lpc/torco/
     - assets/images/lpc/head/
     - assets/images/lpc/gloves/

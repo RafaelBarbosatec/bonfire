@@ -15,6 +15,10 @@ import 'package:flutter/material.dart';
 ///
 /// Rafaelbarbosatec
 /// on 27/06/22
+/// Para funcionar corretamente na web deve executar com flag --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false
+/// flutter run -d chrome --web-renderer canvaskit --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false --release
+///
+/// issue: https://github.com/flutter/flutter/issues/103803
 class LPCGame extends StatelessWidget {
   const LPCGame({Key? key}) : super(key: key);
 
