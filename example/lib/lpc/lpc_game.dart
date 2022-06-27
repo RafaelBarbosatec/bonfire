@@ -20,7 +20,7 @@ class LPCGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<SimpleDirectionAnimation>(
-      future: LPCSpriteSheetLoader.geSpriteSheet(),
+      future: LPCSpriteSheetLoader.geSpriteSheet(hair: LPCHairEnum.xlong),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return SizedBox.shrink();

@@ -17,10 +17,13 @@ import 'package:bonfire/util/direction_animations/simple_direction_animation.dar
 
 enum LPCBodyEnum { light, brown, orc, skeleton }
 
+enum LPCHairEnum { empty, curly, longknot, single, xlong }
+
 class LPCSpriteSheetLoader {
   static Vector2 size = Vector2(64, 64);
   static Future<SimpleDirectionAnimation> geSpriteSheet({
     LPCBodyEnum body = LPCBodyEnum.light,
+    LPCHairEnum hair = LPCHairEnum.empty,
     bool withFeet = false,
     bool withHands = false,
     bool withHelm = false,
@@ -31,6 +34,11 @@ class LPCSpriteSheetLoader {
     bool withGloves = false,
   }) async {
     Image imagePlayerBase = await Flame.images.load(_getPathBody(body));
+
+    Image? imageHair = await _getHair(hair);
+    if (imageHair != null) {
+      imagePlayerBase = await imagePlayerBase.overlap(imageHair);
+    }
 
     if (withFeet) {
       Image imageFeet = await Flame.images.load('lpc/feet/1.png');
@@ -116,6 +124,22 @@ class LPCSpriteSheetLoader {
         return 'lpc/body/orc1.png';
       case LPCBodyEnum.skeleton:
         return 'lpc/body/skeleton.png';
+    }
+  }
+
+  static Future<Image?> _getHair(LPCHairEnum hair) async {
+    switch (hair) {
+      case LPCHairEnum.empty:
+        return Future.value(null);
+      case LPCHairEnum.curly:
+        return await Flame.images.load('lpc/hair/curly.png');
+
+      case LPCHairEnum.longknot:
+        return await Flame.images.load('lpc/hair/longknot.png');
+      case LPCHairEnum.single:
+        return await Flame.images.load('lpc/hair/single.png');
+      case LPCHairEnum.xlong:
+        return await Flame.images.load('lpc/hair/xlong.png');
     }
   }
 }
