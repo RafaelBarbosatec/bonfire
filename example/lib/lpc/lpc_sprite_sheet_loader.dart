@@ -36,7 +36,7 @@ class LPCSpriteSheetLoader {
     Image imagePlayerBase = await Flame.images.load(_getPathBody(body));
 
     Image? imageHair = await _getHair(hair);
-    if (imageHair != null) {
+    if (imageHair != null && !withHelm) {
       imagePlayerBase = await imagePlayerBase.overlap(imageHair);
     }
 
