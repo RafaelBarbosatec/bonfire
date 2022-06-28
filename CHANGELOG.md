@@ -1,4 +1,4 @@
-# [next]
+# [2.6.2]
 - Updated example.
 - Remove mandatory of the `SimpleDirectionAnimation` in  `SimpleAlly`, `SimpleEnemy`, `SimpleNpc` and `SimplePlayer`
 
