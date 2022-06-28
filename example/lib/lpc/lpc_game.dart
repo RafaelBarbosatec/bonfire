@@ -24,34 +24,26 @@ class LPCGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SimpleDirectionAnimation>(
-      future: LPCSpriteSheetLoader.geSpriteSheet(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return SizedBox.shrink();
-        }
-        return BonfireTiledWidget(
-          joystick: Joystick(
-            keyboardConfig: KeyboardConfig(),
-            directional: JoystickDirectional(),
-          ),
-          map: TiledWorldMap(
-            'tiled/mapa2.json',
-            forceTileSize: Size(32, 32),
-          ),
-          cameraConfig: CameraConfig(zoom: 2),
-          overlayBuilderMap: {
-            ButtonInterface.name: ButtonInterface.builder,
-          },
-          initialActiveOverlays: [
-            ButtonInterface.name,
-          ],
-          player: LPCPlayer(
-            position: Vector2(140, 140),
-            animation: snapshot.data!,
-          ),
-        );
+    return BonfireTiledWidget(
+      joystick: Joystick(
+        keyboardConfig: KeyboardConfig(),
+        directional: JoystickDirectional(),
+      ),
+      map: TiledWorldMap(
+        'tiled/mapa2.json',
+        forceTileSize: Size(32, 32),
+      ),
+      cameraConfig: CameraConfig(zoom: 2),
+      overlayBuilderMap: {
+        ButtonInterface.name: ButtonInterface.builder,
       },
+      initialActiveOverlays: [
+        ButtonInterface.name,
+      ],
+      player: LPCPlayer(
+        position: Vector2(140, 140),
+        customStatus: CustomStatus(),
+      ),
     );
   }
 }

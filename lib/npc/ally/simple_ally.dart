@@ -22,7 +22,7 @@ class SimpleAlly extends Ally with DirectionAnimation {
   SimpleAlly({
     required Vector2 position,
     required Vector2 size,
-    required SimpleDirectionAnimation animation,
+    SimpleDirectionAnimation? animation,
     double life = 100,
     double speed = 100,
     Direction initDirection = Direction.right,

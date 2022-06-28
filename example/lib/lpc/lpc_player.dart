@@ -17,14 +17,13 @@ import 'package:example/lpc/widgets/dialog_custom_character.dart';
 /// on 27/06/22
 class LPCPlayer extends SimplePlayer {
   static String _dialogKey = 'dialogCharacter';
-  CustomStatus customStatus = CustomStatus();
+  CustomStatus customStatus;
   LPCPlayer({
     required Vector2 position,
-    required SimpleDirectionAnimation animation,
+    required this.customStatus,
   }) : super(
           position: position,
           size: Vector2.all(48),
-          animation: animation,
         );
 
   void showEditCharacter() {
@@ -45,5 +44,11 @@ class LPCPlayer extends SimplePlayer {
         ),
       );
     }
+  }
+
+  @override
+  Future onLoad() async {
+    animation = await LPCSpriteSheetLoader.geSpriteSheet(status: customStatus);
+    return super.onLoad();
   }
 }
