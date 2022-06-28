@@ -44,6 +44,7 @@ class LPCGame extends StatelessWidget {
         position: Vector2(140, 140),
         customStatus: CustomStatus(),
       ),
+      onDispose: () => FollowerWidget.remove(LPCPlayer.customWidgetKey),
     );
   }
 }
