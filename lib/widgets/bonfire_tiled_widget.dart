@@ -65,6 +65,7 @@ class BonfireTiledWidget extends StatefulWidget {
   final AnimatedSwitcherTransitionBuilder progressTransitionBuilder;
   final Duration progressTransitionDuration;
   final GameColorFilter? colorFilter;
+  final VoidCallback? onDispose;
 
   const BonfireTiledWidget({
     Key? key,
@@ -93,6 +94,7 @@ class BonfireTiledWidget extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     this.mouseCursor,
+    this.onDispose,
   }) : super(key: key);
   @override
   _BonfireTiledWidgetState createState() => _BonfireTiledWidgetState();
@@ -126,6 +128,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
   @override
   void dispose() {
     _loadingStream.close();
+    widget.onDispose?.call();
     super.dispose();
   }
 

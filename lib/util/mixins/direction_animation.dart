@@ -171,8 +171,14 @@ mixin DirectionAnimation on Movement {
     idle();
   }
 
-  Future<void> replaceAnimation(SimpleDirectionAnimation newAnimation) async {
+  Future<void> replaceAnimation(
+    SimpleDirectionAnimation newAnimation, {
+    bool doIdle = true,
+  }) async {
     await newAnimation.onLoad(gameRef);
     animation = newAnimation;
+    if (doIdle) {
+      idle();
+    }
   }
 }

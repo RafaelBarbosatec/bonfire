@@ -1,3 +1,7 @@
+# [2.6.2]
+- Updated example.
+- Remove mandatory of the `SimpleDirectionAnimation` in  `SimpleAlly`, `SimpleEnemy`, `SimpleNpc` and `SimplePlayer`
+
 # [2.6.1]
 - removed `getValueGenerator` from `BonfireGame`. Now use `generateValues` from your component.
 - removed `addParticle` from `BonfireGame`. Now use `addParticle` from your component.

@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/lpc/lpc_game.dart';
 import 'package:example/manual_map/game_manual_map.dart';
 import 'package:example/random_map/random_map_game.dart';
 import 'package:example/shared/enemy/goblin_controller.dart';
@@ -86,6 +87,12 @@ class Menu extends StatelessWidget {
             ),
             _buildButton(context, 'Top down game', () {
               _navTo(context, TopDownGame());
+            }),
+            SizedBox(
+              height: 10,
+            ),
+            _buildButton(context, 'Dynamic spriteSheet', () {
+              _navTo(context, LPCGame());
             }),
           ],
         ),
