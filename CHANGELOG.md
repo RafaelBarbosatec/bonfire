@@ -1,3 +1,6 @@
+# [next]
+- Fix: update map limits using `moveOnlyMapArea` after camera zoom changes. [#267](https://github.com/RafaelBarbosatec/bonfire/issues/267)
+
 # [2.6.2]
 - Updated example.
 - Remove mandatory of the `SimpleDirectionAnimation` in  `SimpleAlly`, `SimpleEnemy`, `SimpleNpc` and `SimplePlayer`
