@@ -402,4 +402,12 @@ class BonfireGame extends BaseGame
       /// Not found SceneBuilderComponent
     }
   }
+
+  @override
+  void onDetach() {
+    children.query<GameComponent>().forEach((element) {
+      element.onGameDetach();
+    });
+    super.onDetach();
+  }
 }

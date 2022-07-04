@@ -60,7 +60,7 @@ class Joystick extends JoystickController {
     JoystickDirectional? directional,
     KeyboardConfig? keyboardConfig,
   }) {
-    _directional = _directional;
+    _directional = directional;
     if (keyboardConfig != null) {
       this.keyboardConfig = keyboardConfig;
     }
