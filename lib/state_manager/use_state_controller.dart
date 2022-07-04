@@ -43,10 +43,20 @@ mixin UseStateController<T extends StateController> on GameComponent {
 
   @override
   void onRemove() {
+    _removeViewFromController();
+    super.onRemove();
+  }
+
+  @override
+  void onGameDetach() {
+    _removeViewFromController();
+    super.onGameDetach();
+  }
+
+  void _removeViewFromController() {
     _controller?.onRemove(this);
     if (_controller?.components.isEmpty == true) {
       _controller = null;
     }
-    super.onRemove();
   }
 }

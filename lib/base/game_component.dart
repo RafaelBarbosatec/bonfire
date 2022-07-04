@@ -161,4 +161,6 @@ abstract class GameComponent extends PositionComponent
       canvas.translate(-this.center.x, -this.center.y);
     }
   }
+
+  void onGameDetach() {}
 }

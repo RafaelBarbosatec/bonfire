@@ -49,16 +49,18 @@ class KeyboardConfig {
 }
 
 class Joystick extends JoystickController {
-  final List<JoystickAction>? actions;
-  final JoystickDirectional? directional;
+  final List<JoystickAction> actions;
+  JoystickDirectional? _directional;
 
+  JoystickDirectional? get directional => _directional;
   List<LogicalKeyboardKey> _currentKeyboardKeys = [];
 
   Joystick({
-    this.actions,
-    this.directional,
+    this.actions = const [],
+    JoystickDirectional? directional,
     KeyboardConfig? keyboardConfig,
   }) {
+    _directional = directional;
     if (keyboardConfig != null) {
       this.keyboardConfig = keyboardConfig;
     }
@@ -66,59 +68,71 @@ class Joystick extends JoystickController {
 
   void initialize(Vector2 size) async {
     directional?.initialize(size, this);
-    actions?.forEach((action) => action.initialize(size, this));
+    actions.forEach((action) => action.initialize(size, this));
+  }
+
+  Future updateDirectional(JoystickDirectional? directional) async {
+    directional?.initialize(gameRef.size, this);
+    await directional?.onLoad();
+    _directional = directional;
   }
 
   Future addAction(JoystickAction action) async {
-    if (actions != null) {
-      action.initialize(gameRef.size, this);
-      await action.onLoad();
-      actions?.add(action);
-    }
+    action.initialize(gameRef.size, this);
+    await action.onLoad();
+    actions.add(action);
   }
 
   void removeAction(dynamic actionId) {
-    actions?.removeWhere((action) => action.actionId == actionId);
+    actions.removeWhere((action) => action.actionId == actionId);
   }
 
   void render(Canvas canvas) {
     super.render(canvas);
     directional?.render(canvas);
-    actions?.forEach((action) => action.render(canvas));
+    for (JoystickAction action in actions) {
+      action.render(canvas);
+    }
   }
 
   @override
   void update(double dt) {
     directional?.update(dt);
-    actions?.forEach((action) => action.update(dt));
+    for (JoystickAction action in actions) {
+      action.update(dt);
+    }
     super.update(dt);
   }
 
   @override
   void handlerPointerCancel(PointerCancelEvent event) {
-    actions?.forEach((action) => action.actionUp(event.pointer));
+    for (JoystickAction action in actions) {
+      action.actionUp(event.pointer);
+    }
     directional?.directionalUp(event.pointer);
   }
 
   @override
   void handlerPointerDown(PointerDownEvent event) {
     directional?.directionalDown(event.pointer, event.localPosition);
-    actions?.forEach((action) {
+    for (JoystickAction action in actions) {
       action.actionDown(event.pointer, event.localPosition);
-    });
+    }
   }
 
   @override
   void handlerPointerMove(PointerMoveEvent event) {
-    actions?.forEach((action) {
+    for (JoystickAction action in actions) {
       action.actionMove(event.pointer, event.localPosition);
-    });
+    }
     directional?.directionalMove(event.pointer, event.localPosition);
   }
 
   @override
   void handlerPointerUp(PointerUpEvent event) {
-    actions?.forEach((action) => action.actionUp(event.pointer));
+    for (JoystickAction action in actions) {
+      action.actionUp(event.pointer);
+    }
     directional?.directionalUp(event.pointer);
   }
 
@@ -178,11 +192,10 @@ class Joystick extends JoystickController {
   Future<void> onLoad() async {
     await super.onLoad();
     await directional?.onLoad();
-    if (actions != null) {
-      await Future.forEach<JoystickAction>(actions!, (element) {
-        return element.onLoad();
-      });
-    }
+    await Future.forEach<JoystickAction>(
+      actions,
+      (element) => element.onLoad(),
+    );
   }
 
   bool _isDirectional(RawKeyEvent event) {
