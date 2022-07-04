@@ -1,5 +1,6 @@
 # [next]
 - Fix: update map limits using `moveOnlyMapArea` after camera zoom changes. [#267](https://github.com/RafaelBarbosatec/bonfire/issues/267)
+- Adds `Future updateDirectional(JoystickDirectional? directional)`. [#269](https://github.com/RafaelBarbosatec/bonfire/issues/269)
 
 # [2.6.2]
 - Updated example.
