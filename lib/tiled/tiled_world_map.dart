@@ -137,18 +137,28 @@ class TiledWorldMap {
     }
   }
 
+  double _getDoubleByProportion(double? value) {
+    return ((value ?? 0.0) * _tileWidth) / _tileWidthOrigin;
+  }
+
   Future<void> _addTileLayer(TileLayer tileLayer) async {
     if (tileLayer.visible != true) return;
     int count = 0;
-    double offsetX =
-        ((tileLayer.offsetX ?? 0.0) * _tileWidth) / _tileWidthOrigin;
-    double offsetY =
-        ((tileLayer.offsetY ?? 0.0) * _tileHeight) / _tileHeightOrigin;
+    double offsetX = _getDoubleByProportion(tileLayer.offsetX);
+    double offsetY = _getDoubleByProportion(tileLayer.offsetY);
+    bool layerIsAbove = tileLayer.properties
+            ?.where((element) =>
+                element.name == 'type' && element.value == ABOVE_TYPE)
+            .isNotEmpty ??
+        false;
     (tileLayer.data ?? []).forEach((tile) async {
       if (tile != 0) {
         var data = _getDataTile(tile);
         if (data != null) {
-          if (data.type?.contains(ABOVE_TYPE) ?? false) {
+          bool tileIsAbove = ((data.type?.contains(ABOVE_TYPE) ?? false) ||
+              (data.tileClass?.contains(ABOVE_TYPE) ?? false) ||
+              layerIsAbove);
+          if (tileIsAbove) {
             _addGameDecorationAbove(data, count, tileLayer, above: true);
           } else if (data.type?.contains(DYNAMIC_ABOVE_TYPE) ?? false) {
             _addGameDecorationAbove(data, count, tileLayer);
@@ -334,6 +344,7 @@ class TiledWorldMap {
 
       return TiledItemTileSet(
         type: object.type,
+        tileClass: object.tileClass,
         collisions: object.collisions,
         properties: object.properties,
         sprite: sprite,
@@ -349,17 +360,14 @@ class TiledWorldMap {
 
   void _addObjects(ObjectGroup layer) {
     if (layer.visible != true) return;
-    double offsetX = ((layer.offsetX ?? 0.0) * _tileWidth) / _tileWidthOrigin;
-    double offsetY = ((layer.offsetY ?? 0.0) * _tileHeight) / _tileHeightOrigin;
+    double offsetX = _getDoubleByProportion(layer.offsetX);
+    double offsetY = _getDoubleByProportion(layer.offsetY);
     layer.objects?.forEach(
       (element) {
-        double x =
-            (((element.x ?? 0.0) * _tileWidth) / _tileWidthOrigin) + offsetX;
-        double y =
-            (((element.y ?? 0.0) * _tileHeight) / _tileHeightOrigin) + offsetY;
-        double width = ((element.width ?? 0.0) * _tileWidth) / _tileWidthOrigin;
-        double height =
-            ((element.height ?? 0.0) * _tileHeight) / _tileHeightOrigin;
+        double x = _getDoubleByProportion(element.x) + offsetX;
+        double y = _getDoubleByProportion(element.y) + offsetY;
+        double width = _getDoubleByProportion(element.width);
+        double height = _getDoubleByProportion(element.height);
 
         if (element.text != null) {
           double fontSize = element.text!.pixelSize.toDouble();
@@ -432,6 +440,7 @@ class TiledWorldMap {
           tileSetItemList.first.objectGroup?.objects ?? [];
 
       String type = tileSetItemList.first.type ?? '';
+      String tileClass = tileSetItemList.first.tileClass ?? '';
       Map<String, dynamic> properties = _extractOtherProperties(
         tileSetItemList.first.properties,
       );
@@ -440,13 +449,11 @@ class TiledWorldMap {
 
       if (tileSetObjectList.isNotEmpty) {
         tileSetObjectList.forEach((object) {
-          double width =
-              ((object.width ?? 0.0) * _tileWidth) / _tileWidthOrigin;
-          double height =
-              ((object.height ?? 0.0) * _tileHeight) / _tileHeightOrigin;
+          double width = _getDoubleByProportion(object.width);
+          double height = _getDoubleByProportion(object.height);
 
-          double x = ((object.x ?? 0.0) * _tileWidth) / _tileWidthOrigin;
-          double y = ((object.y ?? 0.0) * _tileHeight) / _tileHeightOrigin;
+          double x = _getDoubleByProportion(object.x);
+          double y = _getDoubleByProportion(object.y);
 
           CollisionArea ca = CollisionArea.rectangle(
             size: Vector2(width, height),
@@ -465,8 +472,8 @@ class TiledWorldMap {
             double? minorY;
             List<Vector2> points = object.polygon!.map((e) {
               Vector2 vector = Vector2(
-                ((e.x ?? 0.0) * _tileWidth) / _tileWidthOrigin,
-                ((e.y ?? 0.0) * _tileHeight) / _tileHeightOrigin,
+                _getDoubleByProportion(e.x),
+                _getDoubleByProportion(e.y),
               );
 
               if (minorX == null) {
@@ -510,6 +517,7 @@ class TiledWorldMap {
       return TiledDataObjectCollision(
         collisions: collisions,
         type: type,
+        tileClass: tileClass,
         properties: properties,
       );
     }

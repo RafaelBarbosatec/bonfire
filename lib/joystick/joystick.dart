@@ -152,11 +152,13 @@ class Joystick extends JoystickController {
       }
 
       if (_currentKeyboardKeys.isEmpty) {
-        joystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.IDLE,
-          intensity: 0.0,
-          radAngle: 0.0,
-        ));
+        joystickChangeDirectional(
+          JoystickDirectionalEvent(
+            directional: JoystickMoveDirectional.IDLE,
+            intensity: 0.0,
+            radAngle: 0.0,
+          ),
+        );
       } else {
         if (_currentKeyboardKeys.length == 1) {
           _sendOneDirection(_currentKeyboardKeys.first);
@@ -492,11 +494,17 @@ class Joystick extends JoystickController {
                 key2 == LogicalKeyboardKey.keyD) &&
             (key1 == LogicalKeyboardKey.arrowUp ||
                 key1 == LogicalKeyboardKey.keyW)) {
-      joystickChangeDirectional(JoystickDirectionalEvent(
-        directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
-        intensity: 1.0,
-        radAngle: 0.0,
-      ));
+      joystickChangeDirectional(
+        JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
+          intensity: 1.0,
+          radAngle: 0.0,
+        ),
+      );
     }
+  }
+
+  void resetDirectionalKeys() {
+    _currentKeyboardKeys.clear();
   }
 }
