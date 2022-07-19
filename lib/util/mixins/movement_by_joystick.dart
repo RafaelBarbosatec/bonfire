@@ -1,7 +1,6 @@
 import 'dart:math';
 
-import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/util/mixins/movement.dart';
+import 'package:bonfire/bonfire.dart';
 
 /// Mixin responsible for adding movements through joystick events
 mixin MovementByJoystick on Movement {
@@ -161,6 +160,10 @@ mixin MovementByJoystick on Movement {
 
   @override
   void idle() {
+    if (gameRef.joystick is Joystick) {
+      (gameRef.joystick as Joystick).resetDirectionalKeys();
+    }
+
     if (this is JoystickListener) {
       (this as JoystickListener).currentDirectional =
           JoystickMoveDirectional.IDLE;

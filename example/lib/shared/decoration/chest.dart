@@ -101,14 +101,27 @@ class Chest extends GameDecoration with TapGesture {
   }
 
   void _showEmote() {
-    gameRef.add(
-      AnimatedFollowerObject(
-        animation: CommonSpriteSheet.emote,
-        target: this,
-        size: size,
-        positionFromTarget: size / -2,
-      ),
+    gameRef.player?.idle();
+    TalkDialog.show(
+      context,
+      [
+        Say(
+          text: [
+            TextSpan(
+              text: 'example text',
+            ),
+          ],
+        ),
+      ],
     );
+    // gameRef.add(
+    //   AnimatedFollowerObject(
+    //     animation: CommonSpriteSheet.emote,
+    //     target: this,
+    //     size: size,
+    //     positionFromTarget: size / -2,
+    //   ),
+    // );
   }
 
   @override

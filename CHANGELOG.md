@@ -3,6 +3,7 @@
 - Update `tiledjsonreader` to `1.1.2`
 - Adds support to `class`. is new `type` in tiled version `1.9.0`.
 - Adds support to set type `above` in layer. Just create custom property with name `type` and value `above`.
+- Fix bug [#271](https://github.com/RafaelBarbosatec/bonfire/issues/271).
 
 # [2.6.3]
 - Fix: update map limits using `moveOnlyMapArea` after camera zoom changes. [#267](https://github.com/RafaelBarbosatec/bonfire/issues/267)
