@@ -1,4 +1,4 @@
-# [NEXT]
+# [2.6.4]
 - Update `flame` to `1.2.1`.
 - Update `tiledjsonreader` to `1.1.2`
 - Adds support to `class`. is new `type` in tiled version `1.9.0`.
