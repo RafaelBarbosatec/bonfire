@@ -94,6 +94,19 @@ extension OffSetExt on Offset {
   Vector2 toVector2() {
     return Vector2(this.dx, this.dy);
   }
+
+  Offset rotate(double angle, Offset center) {
+    final s = sin(angle);
+    final c = cos(angle);
+
+    double x1 = dx - center.dx;
+    double y1 = dy - center.dy;
+
+    double x2 = x1 * c - y1 * s;
+    double y2 = x1 * s + y1 * c;
+
+    return Offset(x2 + center.dx, y2 + center.dy);
+  }
 }
 
 extension RectExt on Rect {
@@ -376,4 +389,10 @@ extension CameraExt on Camera {
       (this as BonfireCamera).moveDown(displacement);
   void moveUp(double displacement) =>
       (this as BonfireCamera).moveUp(displacement);
+}
+
+extension DirectionExt on Direction {
+  double toRadians() {
+    return getAngleByDirectional(this);
+  }
 }

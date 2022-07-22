@@ -4,68 +4,6 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
 extension GameComponentExtensions on GameComponent {
-  /// This method we notify when detect the component when enter in [radiusVision] configuration
-  /// Method that bo used in [update] method.
-  void seeComponent(
-    GameComponent component, {
-    required Function(GameComponent) observed,
-    VoidCallback? notObserved,
-    double radiusVision = 32,
-  }) {
-    if (component.isRemoving) {
-      notObserved?.call();
-      return;
-    }
-
-    Rect fieldOfVision = Rect.fromCircle(
-      center: this.center.toOffset(),
-      radius: radiusVision,
-    );
-
-    if (fieldOfVision.overlaps(getRectAndCollision(component))) {
-      observed(component);
-    } else {
-      notObserved?.call();
-    }
-  }
-
-  /// This method we notify when detect components by type when enter in [radiusVision] configuration
-  /// Method that bo used in [update] method.
-  void seeComponentType<T extends GameComponent>({
-    required Function(List<T>) observed,
-    VoidCallback? notObserved,
-    double radiusVision = 32,
-  }) {
-    var compVisible = this.gameRef.visibleComponents().where((element) {
-      return element is T && element != this;
-    }).cast<T>();
-
-    if (compVisible.isEmpty) {
-      notObserved?.call();
-      return;
-    }
-
-    double visionWidth = radiusVision * 2;
-    double visionHeight = radiusVision * 2;
-
-    Rect fieldOfVision = Rect.fromLTWH(
-      this.center.x - radiusVision,
-      this.center.y - radiusVision,
-      visionWidth,
-      visionHeight,
-    );
-
-    List<T> compObserved = compVisible
-        .where((comp) => fieldOfVision.overlaps(comp.toRect()))
-        .toList();
-
-    if (compObserved.isNotEmpty) {
-      observed(compObserved);
-    } else {
-      notObserved?.call();
-    }
-  }
-
   /// Add in the game a text with animation representing damage received
   void showDamage(
     double damage, {

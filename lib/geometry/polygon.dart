@@ -8,11 +8,16 @@ class PolygonShape extends Shape {
   final List<Vector2> relativePoints;
   final List<Vector2> points;
   final RectangleShape rect;
+  double _minX = 0;
+  double _minY = 0;
   PolygonShape(this.relativePoints, {Vector2? position})
       : assert(relativePoints.length > 2),
         this.points = _initPoints(relativePoints, position ?? Vector2.zero()),
         this.rect = _initRect(relativePoints, position ?? Vector2.zero()),
-        super(position ?? Vector2.zero());
+        super(position ?? Vector2.zero()) {
+    _minX = rect.position.x - (position?.x ?? 0);
+    _minY = rect.position.y - (position?.y ?? 0);
+  }
 
   static List<Vector2> _initPoints(
     List<Vector2> relativePoints,
@@ -31,16 +36,34 @@ class PolygonShape extends Shape {
   ) {
     double height = 0;
     double width = 0;
+
+    double minX = relativePoints.first.x;
+    double maxX = relativePoints.first.x;
+
+    double minY = relativePoints.first.y;
+    double maxY = relativePoints.first.y;
     relativePoints.forEach((offset) {
-      if (offset.x > width) {
-        width = offset.x;
+      if (offset.x < minX) {
+        minX = offset.x;
       }
-      if (offset.y > height) {
-        height = offset.y;
+      if (offset.x > maxX) {
+        maxX = offset.x;
+      }
+      if (offset.y < minY) {
+        minY = offset.y;
+      }
+      if (offset.y > maxY) {
+        maxY = offset.y;
       }
     });
 
-    return RectangleShape(Vector2(width, height), position: position);
+    height = maxY - minY;
+    width = maxX - minX;
+
+    return RectangleShape(
+      Vector2(width, height),
+      position: Vector2(position.x + minX, position.y + minY),
+    );
   }
 
   @override
@@ -48,10 +71,11 @@ class PolygonShape extends Shape {
     if (value != this.position) {
       super.position = value;
 
-      rect.position = value;
       for (var i = 0; i < points.length; i++) {
         points[i] = relativePoints[i] + value;
       }
+
+      rect.position = Vector2(value.x + _minX, value.y + _minY);
     }
   }
 

@@ -4,6 +4,7 @@ class Player extends GameComponent
     with
         Movement,
         Attackable,
+        Vision,
         MoveToPositionAlongThePath,
         JoystickListener,
         MovementByJoystick {

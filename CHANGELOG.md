@@ -1,3 +1,7 @@
+# [2.6.5]
+- create `Vision` mixin
+- improvements in `seeComponent` and `seeComponentType`. now you can pass `visionAngle`(default = 6,28319 (360 graus)). resolve : [#273](https://github.com/RafaelBarbosatec/bonfire/issues/273)
+
 # [2.6.4]
 - Update `flame` to `1.2.1`.
 - Update `tiledjsonreader` to `1.1.2`
