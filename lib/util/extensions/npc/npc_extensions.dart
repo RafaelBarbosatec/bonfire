@@ -23,7 +23,8 @@ extension NpcExtensions on Npc {
     required Function(Player) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
-    double? angleVision,
+    double? visionAngle,
+    double? angle,
   }) {
     Player? player = gameRef.player;
     if (player == null || player.isDead) {
@@ -35,8 +36,8 @@ extension NpcExtensions on Npc {
       observed: (c) => observed(c as Player),
       notObserved: notObserved,
       radiusVision: radiusVision,
-      angleVision: angleVision,
-      angle: this.lastDirection.toRadians(),
+      visionAngle: visionAngle,
+      angle: angle ?? this.lastDirection.toRadians(),
     );
   }
 
@@ -47,14 +48,16 @@ extension NpcExtensions on Npc {
     VoidCallback? observed,
     double radiusVision = 32,
     double margin = 10,
-    double? angleVision,
+    double? visionAngle,
+    double? angle,
     bool runOnlyVisibleInScreen = true,
   }) {
     if (runOnlyVisibleInScreen && !this.isVisible) return null;
 
     return seePlayer(
       radiusVision: radiusVision,
-      angleVision: angleVision,
+      visionAngle: visionAngle,
+      angle: angle,
       observed: (player) {
         observed?.call();
         this.followComponent(
@@ -79,7 +82,8 @@ extension NpcExtensions on Npc {
     VoidCallback? notObserved,
     VoidCallback? observed,
     double radiusVision = 32,
-    double? angleVision,
+    double? visionAngle,
+    double? angle,
     double margin = 10,
     bool runOnlyVisibleInScreen = true,
   }) {
@@ -87,8 +91,8 @@ extension NpcExtensions on Npc {
 
     seeComponentType<Enemy>(
       radiusVision: radiusVision,
-      angleVision: angleVision,
-      angle: lastDirection.toRadians(),
+      visionAngle: visionAngle,
+      angle: angle ?? lastDirection.toRadians(),
       observed: (enemy) {
         observed?.call();
         this.followComponent(
@@ -113,7 +117,8 @@ extension NpcExtensions on Npc {
     VoidCallback? notObserved,
     VoidCallback? observed,
     double radiusVision = 32,
-    double? angleVision,
+    double? visionAngle,
+    double? angle,
     double margin = 10,
     bool runOnlyVisibleInScreen = true,
   }) {
@@ -121,8 +126,8 @@ extension NpcExtensions on Npc {
 
     seeComponentType<Ally>(
       radiusVision: radiusVision,
-      angleVision: angleVision,
-      angle: lastDirection.toRadians(),
+      visionAngle: visionAngle,
+      angle: angle ?? lastDirection.toRadians(),
       observed: (ally) {
         observed?.call();
         this.followComponent(

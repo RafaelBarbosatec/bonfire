@@ -10,15 +10,16 @@ extension PlayerExtensions on Player {
     required Function(List<Enemy>) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
-    double? angleVision,
+    double? visionAngle,
+    double? angle,
   }) {
     if (isDead) return;
     this.seeComponentType<Enemy>(
       observed: observed,
       notObserved: notObserved,
       radiusVision: radiusVision,
-      angle: this.lastDirection.toRadians(),
-      angleVision: angleVision,
+      angle: angle ?? this.lastDirection.toRadians(),
+      visionAngle: visionAngle,
     );
   }
 

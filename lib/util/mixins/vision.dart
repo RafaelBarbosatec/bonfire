@@ -15,7 +15,7 @@ mixin Vision on GameComponent {
     required Function(GameComponent) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
-    double? angleVision,
+    double? visionAngle,
     double angle = 3.14159,
   }) {
     if (component.isRemoving) {
@@ -23,13 +23,13 @@ mixin Vision on GameComponent {
       return null;
     }
 
-    String key = '$radiusVision/$angleVision/$angle';
+    String key = '$radiusVision/$visionAngle/$angle';
     PolygonShape shape;
     if (_polygonCache.containsKey(key)) {
       shape = _polygonCache[key]!;
       shape.position = this.center;
     } else {
-      shape = _buildShape(radiusVision, angleVision, angle, this.center);
+      shape = _buildShape(radiusVision, visionAngle, angle, this.center);
       _polygonCache[key] = shape;
     }
 
@@ -57,7 +57,7 @@ mixin Vision on GameComponent {
     required Function(List<T>) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
-    double? angleVision,
+    double? visionAngle,
     double angle = 3.14159,
   }) {
     var compVisible = this.gameRef.visibleComponents().where((element) {
@@ -69,13 +69,13 @@ mixin Vision on GameComponent {
       return null;
     }
 
-    String key = '$radiusVision/$angleVision/$angle';
+    String key = '$radiusVision/$visionAngle/$angle';
     PolygonShape shape;
     if (_polygonCache.containsKey(key)) {
       shape = _polygonCache[key]!;
       shape.position = this.center;
     } else {
-      shape = _buildShape(radiusVision, angleVision, angle, this.center);
+      shape = _buildShape(radiusVision, visionAngle, angle, this.center);
       _polygonCache[key] = shape;
     }
 
