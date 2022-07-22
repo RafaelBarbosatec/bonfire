@@ -48,7 +48,7 @@ mixin Vision on GameComponent {
     } else {
       notObserved?.call();
     }
-    return shape;
+    return shape.rect;
   }
 
   /// This method we notify when detect components by type when enter in [radiusVision] configuration

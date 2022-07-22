@@ -8,13 +8,16 @@ class PolygonShape extends Shape {
   final List<Vector2> relativePoints;
   final List<Vector2> points;
   final RectangleShape rect;
-  static double _minX = 0;
-  static double _minY = 0;
+  double _minX = 0;
+  double _minY = 0;
   PolygonShape(this.relativePoints, {Vector2? position})
       : assert(relativePoints.length > 2),
         this.points = _initPoints(relativePoints, position ?? Vector2.zero()),
         this.rect = _initRect(relativePoints, position ?? Vector2.zero()),
-        super(position ?? Vector2.zero());
+        super(position ?? Vector2.zero()) {
+    _minX = rect.position.x - (position?.x ?? 0);
+    _minY = rect.position.y - (position?.y ?? 0);
+  }
 
   static List<Vector2> _initPoints(
     List<Vector2> relativePoints,
@@ -33,32 +36,33 @@ class PolygonShape extends Shape {
   ) {
     double height = 0;
     double width = 0;
-    _minX = relativePoints.first.x;
+
+    double minX = relativePoints.first.x;
     double maxX = relativePoints.first.x;
 
-    _minY = relativePoints.first.y;
+    double minY = relativePoints.first.y;
     double maxY = relativePoints.first.y;
     relativePoints.forEach((offset) {
-      if (offset.x < _minX) {
-        _minX = offset.x;
+      if (offset.x < minX) {
+        minX = offset.x;
       }
       if (offset.x > maxX) {
         maxX = offset.x;
       }
-      if (offset.y < _minY) {
-        _minY = offset.y;
+      if (offset.y < minY) {
+        minY = offset.y;
       }
       if (offset.y > maxY) {
         maxY = offset.y;
       }
     });
 
-    height = maxY - _minY;
-    width = maxX - _minX;
+    height = maxY - minY;
+    width = maxX - minX;
 
     return RectangleShape(
       Vector2(width, height),
-      position: Vector2(position.x + _minX, position.y + _minY),
+      position: Vector2(position.x + minX, position.y + minY),
     );
   }
 
