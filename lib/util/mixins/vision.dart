@@ -135,4 +135,10 @@ mixin Vision on GameComponent {
       position: position,
     );
   }
+
+  @override
+  void onRemove() {
+    _polygonCache.clear();
+    super.onRemove();
+  }
 }
