@@ -31,16 +31,33 @@ class PolygonShape extends Shape {
   ) {
     double height = 0;
     double width = 0;
+    double minX = relativePoints.first.x;
+    double maxX = relativePoints.first.x;
+
+    double minY = relativePoints.first.y;
+    double maxY = relativePoints.first.y;
     relativePoints.forEach((offset) {
-      if (offset.x > width) {
-        width = offset.x;
+      if (offset.x < minX) {
+        minX = offset.x;
       }
-      if (offset.y > height) {
-        height = offset.y;
+      if (offset.x > maxX) {
+        maxX = offset.x;
+      }
+      if (offset.y < minY) {
+        minY = offset.y;
+      }
+      if (offset.y > maxY) {
+        maxY = offset.y;
       }
     });
 
-    return RectangleShape(Vector2(width, height), position: position);
+    height = maxY - minY;
+    width = maxX - minX;
+
+    return RectangleShape(
+      Vector2(width, height),
+      position: Vector2(position.x + minX, position.y + minY),
+    );
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/geometry/shape.dart';
 import 'package:flutter/widgets.dart';
 
 extension GameComponentExtensions on GameComponent {
@@ -27,6 +28,118 @@ extension GameComponentExtensions on GameComponent {
     } else {
       notObserved?.call();
     }
+  }
+
+  /// This method we notify when detect components by type when enter in arc configuration
+  /// Method that bo used in [update] method.
+  /// [angle] in radians
+  /// [angleVision] in radians
+  Shape seeComponentDirectionalByAngle(
+    GameComponent component, {
+    required Function(GameComponent) observed,
+    VoidCallback? notObserved,
+    double radiusVision = 32,
+    double? angleVision,
+    double angle = 3.14159,
+  }) {
+    double angleV = angleVision ?? 1.5708; // 9 graus
+    angleV = angleV > 1.74533 ? 1.74533 : angleV;
+    double nextX = radiusVision * cos(angle);
+    double nextY = radiusVision * sin(angle);
+    Offset point = Offset(nextX, nextY);
+    Offset point1 = point.rotate(angleV / 4, Offset.zero);
+    Offset point2 = point1.rotate(angleV / 4, Offset.zero);
+    Offset point3 = point.rotate(angleV / -4, Offset.zero);
+    Offset point4 = point3.rotate(angleV / -4, Offset.zero);
+
+    PolygonShape shape = PolygonShape(
+      [
+        Vector2(0, 0),
+        point2.toVector2(),
+        point1.toVector2(),
+        point.toVector2(),
+        point3.toVector2(),
+        point4.toVector2(),
+      ],
+      position: this.center,
+    );
+
+    if (component.isRemoving) {
+      notObserved?.call();
+    }
+
+    final rect = getRectAndCollision(component);
+    final otherShape = RectangleShape(
+      rect.sizeVector2,
+      position: rect.positionVector2,
+    );
+
+    if (shape.isCollision(otherShape)) {
+      observed(component);
+    } else {
+      notObserved?.call();
+    }
+    return shape;
+  }
+
+  /// This method we notify when detect components by type when enter in arc configuration
+  /// Method that bo used in [update] method.
+  /// [angle] in radians
+  /// [angleVision] in radians
+  Shape? seeComponentsDirectionalByAngleType<T extends GameComponent>({
+    required Function(List<T>) observed,
+    VoidCallback? notObserved,
+    double radiusVision = 32,
+    double? angleVision,
+    double angle = 3.14159,
+  }) {
+    var compVisible = this.gameRef.visibleComponents().where((element) {
+      return element is T && element != this;
+    }).cast<T>();
+
+    if (compVisible.isEmpty) {
+      notObserved?.call();
+      return null;
+    }
+
+    double angleV = angleVision ?? 1.74533;
+    angleV = angleV > 1.74533 ? 1.74533 : angleV;
+    double nextX = radiusVision * cos(angle);
+    double nextY = radiusVision * sin(angle);
+    Offset point = Offset(nextX, nextY);
+    Offset point1 = point.rotate(angleV / 4, Offset.zero);
+    Offset point2 = point1.rotate(angleV / 4, Offset.zero);
+    Offset point3 = point.rotate(angleV / -4, Offset.zero);
+    Offset point4 = point3.rotate(angleV / -4, Offset.zero);
+
+    PolygonShape shape = PolygonShape(
+      [
+        Vector2(0, 0),
+        point2.toVector2(),
+        point1.toVector2(),
+        point.toVector2(),
+        point3.toVector2(),
+        point4.toVector2(),
+      ],
+      position: this.center,
+    );
+
+    List<T> compObserved = compVisible.where((comp) {
+      final rect = getRectAndCollision(comp);
+      final otherShape = RectangleShape(
+        rect.sizeVector2,
+        position: rect.positionVector2,
+      );
+      return !comp.isRemoving && shape.isCollision(otherShape);
+    }).toList();
+
+    if (compObserved.isNotEmpty) {
+      observed(compObserved);
+    } else {
+      notObserved?.call();
+    }
+
+    return shape;
   }
 
   /// This method we notify when detect components by type when enter in [radiusVision] configuration

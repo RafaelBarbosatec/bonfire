@@ -68,9 +68,13 @@ class ShapeCollision {
 
   static bool rectToPolygon(RectangleShape a, PolygonShape b) {
     if (!rectToRect(a, b.rect)) return false;
+
     if (!isLinesShadowOver(
-        a.leftTop, a.rightBottom, b.rect.leftTop, b.rect.rightBottom))
-      return false;
+      a.leftTop,
+      a.rightBottom,
+      b.rect.leftTop,
+      b.rect.rightBottom,
+    )) return false;
 
     final pointsA = [
       a.leftTop,

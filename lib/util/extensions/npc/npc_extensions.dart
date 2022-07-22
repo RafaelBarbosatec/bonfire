@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/geometry/shape.dart';
 
 ///
 /// Created by
@@ -33,6 +34,29 @@ extension NpcExtensions on Npc {
       observed: (c) => observed(c as Player),
       notObserved: notObserved,
       radiusVision: radiusVision,
+    );
+  }
+
+  /// This method we notify when detect the player when enter in [radiusVision] configuration
+  /// Method that bo used in [update] method.
+  Shape? seePlayerDirectional({
+    required Function(Player) observed,
+    VoidCallback? notObserved,
+    double radiusVision = 32,
+    double? angleVision,
+  }) {
+    Player? player = gameRef.player;
+    if (player == null || player.isDead) {
+      notObserved?.call();
+      return null;
+    }
+    return this.seeComponentDirectionalByAngle(
+      player,
+      observed: (c) => observed(c as Player),
+      notObserved: notObserved,
+      radiusVision: radiusVision,
+      angleVision: angleVision,
+      angle: lastDirection.toRadians(),
     );
   }
 
