@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/mixins/vision.dart';
 
 class Player extends GameComponent
     with
