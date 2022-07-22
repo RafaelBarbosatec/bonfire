@@ -67,6 +67,7 @@ export 'package:bonfire/util/mixins/tile_recognizer.dart';
 export 'package:bonfire/util/mixins/use_assets_loader.dart';
 export 'package:bonfire/util/mixins/use_sprite.dart';
 export 'package:bonfire/util/mixins/use_sprite_animation.dart';
+export 'package:bonfire/util/mixins/vision.dart';
 export 'package:bonfire/util/priority_layer.dart';
 export 'package:bonfire/util/talk/say.dart';
 export 'package:bonfire/util/talk/talk_dialog.dart';
