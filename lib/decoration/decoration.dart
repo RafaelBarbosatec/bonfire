@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/assets_loader.dart';
+import 'package:bonfire/util/mixins/vision.dart';
 
 /// This component represents anything you want to add to the scene, it can be
 /// a simple "barrel" halfway to an NPC that you can use to interact with your
@@ -9,7 +10,7 @@ import 'package:bonfire/util/assets_loader.dart';
 ///
 /// You can use ImageSprite or Animation[FlameAnimation.Animation]
 class GameDecoration extends GameComponent
-    with UseSpriteAnimation, UseSprite, UseAssetsLoader {
+    with UseSpriteAnimation, Vision, UseSprite, UseAssetsLoader {
   GameDecoration({
     required Vector2 position,
     required Vector2 size,

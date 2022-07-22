@@ -76,6 +76,10 @@ class ShapeCollision {
       b.rect.rightBottom,
     )) return false;
 
+    if (polygonPoint(b, a.position)) {
+      return true;
+    }
+
     final pointsA = [
       a.leftTop,
       a.rightTop,
@@ -219,6 +223,38 @@ class ShapeCollision {
 
   static double vectorProduct(VectorVector a, VectorVector b) {
     return a.x * b.y - b.x * a.y;
+  }
+
+  // POLYGON/POINT
+// only needed if you're going to check if the rectangle
+// is INSIDE the polygon
+  static bool polygonPoint(PolygonShape b, Vector2 point) {
+    bool collision = false;
+
+    // go through each of the vertices, plus the next
+    // vertex in the list
+    List<Vector2> vertices = b.points;
+    int next = 0;
+    for (int current = 0; current < vertices.length; current++) {
+      // get next vertex in list
+      // if we've hit the end, wrap around to 0
+      next = current + 1;
+      if (next == vertices.length) next = 0;
+
+      // get the PVectors at our current position
+      // this makes our if statement a little cleaner
+      Vector2 vc = vertices[current]; // c for "current"
+      Vector2 vn = vertices[next]; // n for "next"
+
+      // compare position, flip 'collision' variable
+      // back and forth
+      if (((vc.y > point.y && vn.y < point.y) ||
+              (vc.y < point.y && vn.y > point.y)) &&
+          (point.x < (vn.x - vc.x) * (point.y - vc.y) / (vn.y - vc.y) + vc.x)) {
+        collision = !collision;
+      }
+    }
+    return collision;
   }
 }
 

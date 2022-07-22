@@ -19,27 +19,7 @@ import 'package:bonfire/geometry/shape.dart';
 extension NpcExtensions on Npc {
   /// This method we notify when detect the player when enter in [radiusVision] configuration
   /// Method that bo used in [update] method.
-  void seePlayer({
-    required Function(Player) observed,
-    VoidCallback? notObserved,
-    double radiusVision = 32,
-  }) {
-    Player? player = gameRef.player;
-    if (player == null || player.isDead) {
-      notObserved?.call();
-      return;
-    }
-    this.seeComponent(
-      player,
-      observed: (c) => observed(c as Player),
-      notObserved: notObserved,
-      radiusVision: radiusVision,
-    );
-  }
-
-  /// This method we notify when detect the player when enter in [radiusVision] configuration
-  /// Method that bo used in [update] method.
-  Shape? seePlayerDirectional({
+  Shape? seePlayer({
     required Function(Player) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
@@ -50,29 +30,31 @@ extension NpcExtensions on Npc {
       notObserved?.call();
       return null;
     }
-    return this.seeComponentDirectionalByAngle(
+    return this.seeComponent(
       player,
       observed: (c) => observed(c as Player),
       notObserved: notObserved,
       radiusVision: radiusVision,
       angleVision: angleVision,
-      angle: lastDirection.toRadians(),
+      angle: this.lastDirection.toRadians(),
     );
   }
 
   /// Checks whether the player is within range. If so, move to it.
-  void seeAndMoveToPlayer({
+  Shape? seeAndMoveToPlayer({
     required Function(Player) closePlayer,
     VoidCallback? notObserved,
     VoidCallback? observed,
     double radiusVision = 32,
     double margin = 10,
+    double? angleVision,
     bool runOnlyVisibleInScreen = true,
   }) {
-    if (runOnlyVisibleInScreen && !this.isVisible) return;
+    if (runOnlyVisibleInScreen && !this.isVisible) return null;
 
-    seePlayer(
+    return seePlayer(
       radiusVision: radiusVision,
+      angleVision: angleVision,
       observed: (player) {
         observed?.call();
         this.followComponent(
@@ -97,6 +79,7 @@ extension NpcExtensions on Npc {
     VoidCallback? notObserved,
     VoidCallback? observed,
     double radiusVision = 32,
+    double? angleVision,
     double margin = 10,
     bool runOnlyVisibleInScreen = true,
   }) {
@@ -104,6 +87,8 @@ extension NpcExtensions on Npc {
 
     seeComponentType<Enemy>(
       radiusVision: radiusVision,
+      angleVision: angleVision,
+      angle: lastDirection.toRadians(),
       observed: (enemy) {
         observed?.call();
         this.followComponent(
@@ -128,6 +113,7 @@ extension NpcExtensions on Npc {
     VoidCallback? notObserved,
     VoidCallback? observed,
     double radiusVision = 32,
+    double? angleVision,
     double margin = 10,
     bool runOnlyVisibleInScreen = true,
   }) {
@@ -135,6 +121,8 @@ extension NpcExtensions on Npc {
 
     seeComponentType<Ally>(
       radiusVision: radiusVision,
+      angleVision: angleVision,
+      angle: lastDirection.toRadians(),
       observed: (ally) {
         observed?.call();
         this.followComponent(

@@ -107,6 +107,7 @@ extension EnemyExtensions on Enemy {
     VoidCallback? notObserved,
     VoidCallback? observed,
     double radiusVision = 32,
+    double? angleVision,
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
   }) {
@@ -114,6 +115,7 @@ extension EnemyExtensions on Enemy {
 
     seePlayer(
       radiusVision: radiusVision,
+      angleVision: angleVision,
       observed: (player) {
         observed?.call();
         this.positionsItselfAndKeepDistance(

@@ -10,31 +10,15 @@ extension PlayerExtensions on Player {
     required Function(List<Enemy>) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
+    double? angleVision,
   }) {
     if (isDead) return;
     this.seeComponentType<Enemy>(
       observed: observed,
       notObserved: notObserved,
       radiusVision: radiusVision,
-    );
-  }
-
-  /// This method we notify when detect the enemy when enter in Arc configuration
-  /// Method that bo used in [update] method.
-  void seeEnemyDirectional({
-    required Function(List<Enemy>) observed,
-    VoidCallback? notObserved,
-    double radiusVision = 32,
-    double? angleVision,
-    double angle = 3.14159,
-  }) {
-    if (isDead) return;
-    this.seeComponentsDirectionalByAngleType<Enemy>(
-      observed: observed,
-      notObserved: notObserved,
-      radiusVision: radiusVision,
+      angle: this.lastDirection.toRadians(),
       angleVision: angleVision,
-      angle: lastDirection.toRadians(),
     );
   }
 

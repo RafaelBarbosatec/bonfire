@@ -1,8 +1,6 @@
 # [next]
-- adds `seeComponentDirectionalByAngle` in `GameComponentExtensions`.
-- adds `seeComponentsDirectionalByAngleType` in `GameComponentExtensions`.
-- adds `seePlayerDirectional` in `NpcExtensions`(Ally and Enemy).
-- adds `seeEnemyDirectional` in `PlayerExtensions`.
+- crate `Vision` mixin
+- improvements in `seeComponent` and `seeComponentType`
 
 # [2.6.4]
 - Update `flame` to `1.2.1`.

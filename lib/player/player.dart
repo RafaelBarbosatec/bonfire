@@ -1,9 +1,11 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/mixins/vision.dart';
 
 class Player extends GameComponent
     with
         Movement,
         Attackable,
+        Vision,
         MoveToPositionAlongThePath,
         JoystickListener,
         MovementByJoystick {

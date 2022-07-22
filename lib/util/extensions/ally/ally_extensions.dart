@@ -108,6 +108,7 @@ extension AllyExtensions on Ally {
     VoidCallback? notObserved,
     VoidCallback? observed,
     double radiusVision = 32,
+    double? angleVision,
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
   }) {
@@ -115,6 +116,8 @@ extension AllyExtensions on Ally {
 
     seeComponentType<Enemy>(
       radiusVision: radiusVision,
+      angle: lastDirection.toRadians(),
+      angleVision: angleVision,
       observed: (enemy) {
         observed?.call();
         this.positionsItselfAndKeepDistance(
