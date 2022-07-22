@@ -104,7 +104,7 @@ extension AllyExtensions on Ally {
 
   /// Checks whether the Enemy is within range. If so, move to it.
   /// [visionAngle] in radians
-  /// [angle] in radians. is automatically picked up using the component's direction. 
+  /// [angle] in radians. is automatically picked up using the component's direction.
   void seeAndMoveToAttackRange({
     required Function(Enemy) positioned,
     VoidCallback? notObserved,
@@ -121,7 +121,6 @@ extension AllyExtensions on Ally {
       radiusVision: radiusVision,
       angle: angle ?? lastDirection.toRadians(),
       visionAngle: visionAngle,
-
       observed: (enemy) {
         observed?.call();
         this.positionsItselfAndKeepDistance(
