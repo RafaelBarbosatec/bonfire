@@ -1,6 +1,6 @@
 # [next]
 - crate `Vision` mixin
-- improvements in `seeComponent` and `seeComponentType`
+- improvements in `seeComponent` and `seeComponentType`. now you can pass `visionAngle`(default = 6,28319 (360 graus))
 
 # [2.6.4]
 - Update `flame` to `1.2.1`.
