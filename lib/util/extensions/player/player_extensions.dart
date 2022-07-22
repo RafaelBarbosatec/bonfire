@@ -6,6 +6,8 @@ import 'package:flutter/widgets.dart';
 extension PlayerExtensions on Player {
   /// This method we notify when detect the enemy when enter in [radiusVision] configuration
   /// Method that bo used in [update] method.
+  /// [visionAngle] in radians
+  /// [angle] in radians. is automatically picked up using the component's direction. 
   void seeEnemy({
     required Function(List<Enemy>) observed,
     VoidCallback? notObserved,

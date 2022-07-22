@@ -10,6 +10,8 @@ mixin Vision on GameComponent {
 
   /// This method we notify when detect the component when enter in [radiusVision] configuration
   /// Method that bo used in [update] method.
+  /// [visionAngle] in radians
+  /// [angle] in radians.
   Shape? seeComponent(
     GameComponent component, {
     required Function(GameComponent) observed,
@@ -53,6 +55,8 @@ mixin Vision on GameComponent {
 
   /// This method we notify when detect components by type when enter in [radiusVision] configuration
   /// Method that bo used in [update] method.
+  /// [visionAngle] in radians
+  /// [angle] in radians.
   Shape? seeComponentType<T extends GameComponent>({
     required Function(List<T>) observed,
     VoidCallback? notObserved,

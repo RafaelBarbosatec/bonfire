@@ -19,6 +19,8 @@ import 'package:bonfire/geometry/shape.dart';
 extension NpcExtensions on Npc {
   /// This method we notify when detect the player when enter in [radiusVision] configuration
   /// Method that bo used in [update] method.
+  /// [visionAngle] in radians
+  /// [angle] in radians. is automatically picked up using the component's direction. 
   Shape? seePlayer({
     required Function(Player) observed,
     VoidCallback? notObserved,
@@ -42,6 +44,8 @@ extension NpcExtensions on Npc {
   }
 
   /// Checks whether the player is within range. If so, move to it.
+  /// [visionAngle] in radians
+  /// [angle] in radians. is automatically picked up using the component's direction. 
   Shape? seeAndMoveToPlayer({
     required Function(Player) closePlayer,
     VoidCallback? notObserved,
@@ -77,6 +81,8 @@ extension NpcExtensions on Npc {
   }
 
   /// Checks whether the player is within range. If so, move to it.
+  /// [visionAngle] in radians
+  /// [angle] in radians. is automatically picked up using the component's direction. 
   void seeAndMoveToEnemy({
     required Function(Enemy) closeEnemy,
     VoidCallback? notObserved,
@@ -112,6 +118,8 @@ extension NpcExtensions on Npc {
   }
 
   /// Checks whether the ally is within range. If so, move to it.
+  /// [visionAngle] in radians
+  /// [angle] in radians. is automatically picked up using the component's direction. 
   void seeAndMoveToAlly({
     required Function(Ally) closeAlly,
     VoidCallback? notObserved,

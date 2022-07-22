@@ -102,6 +102,8 @@ extension EnemyExtensions on Enemy {
   }
 
   /// Checks whether the player is within range. If so, move to it.
+  /// [visionAngle] in radians
+  /// [angle] in radians. is automatically picked up using the component's direction. 
   void seeAndMoveToAttackRange({
     required Function(Player) positioned,
     VoidCallback? notObserved,
