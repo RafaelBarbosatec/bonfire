@@ -6,7 +6,15 @@ import 'package:flutter/material.dart';
 
 mixin Vision on GameComponent {
   static const VISION_360 = 6.28319;
+  Paint _paint = Paint()..color = Colors.red.withOpacity(0.5);
+  bool _drawVision = false;
   Map<String, PolygonShape> _polygonCache = Map();
+  PolygonShape? _currentShape;
+
+  void setupVision({Color? color, bool drawVision = false}) {
+    _drawVision = drawVision;
+    _paint.color = color ?? Colors.red.withOpacity(0.5);
+  }
 
   /// This method we notify when detect the component when enter in [radiusVision] configuration
   /// Method that bo used in [update] method.
@@ -22,7 +30,7 @@ mixin Vision on GameComponent {
   }) {
     if (component.isRemoving) {
       notObserved?.call();
-      return null;
+      return _currentShape = null;
     }
 
     String key = '$radiusVision/$visionAngle/$angle';
@@ -50,7 +58,7 @@ mixin Vision on GameComponent {
     } else {
       notObserved?.call();
     }
-    return shape.rect;
+    return _currentShape = shape;
   }
 
   /// This method we notify when detect components by type when enter in [radiusVision] configuration
@@ -70,7 +78,7 @@ mixin Vision on GameComponent {
 
     if (compVisible.isEmpty) {
       notObserved?.call();
-      return null;
+      return _currentShape = null;
     }
 
     String key = '$radiusVision/$visionAngle/$angle';
@@ -98,7 +106,7 @@ mixin Vision on GameComponent {
       notObserved?.call();
     }
 
-    return shape;
+    return _currentShape = shape;
   }
 
   PolygonShape _buildShape(
@@ -138,7 +146,19 @@ mixin Vision on GameComponent {
 
   @override
   void onRemove() {
-    _polygonCache.clear();
+    cleanVisionCache();
     super.onRemove();
+  }
+
+  void cleanVisionCache() {
+    _polygonCache.clear();
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    if (_drawVision) {
+      _currentShape?.render(canvas, _paint);
+    }
   }
 }
