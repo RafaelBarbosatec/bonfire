@@ -12,13 +12,12 @@ import 'package:http/http.dart' as http;
 import 'package:tiledjsonreader/map/layer/group_layer.dart';
 import 'package:tiledjsonreader/map/layer/image_layer.dart';
 import 'package:tiledjsonreader/map/layer/map_layer.dart';
-import 'package:tiledjsonreader/map/layer/object_group.dart';
+import 'package:tiledjsonreader/map/layer/object_layer.dart';
 import 'package:tiledjsonreader/map/layer/objects.dart';
 import 'package:tiledjsonreader/map/layer/tile_layer.dart';
 import 'package:tiledjsonreader/map/tile_set_detail.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
 import 'package:tiledjsonreader/tile_set/frame_animation.dart';
-import 'package:tiledjsonreader/tile_set/tile_set.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
@@ -28,7 +27,8 @@ import 'model/tiled_item_tile_set.dart';
 import 'model/tiled_object_properties.dart';
 
 typedef ObjectBuilder = GameComponent Function(
-    TiledObjectProperties properties);
+  TiledObjectProperties properties,
+);
 
 class TiledWorldMap {
   static const ORIENTATION_SUPPORTED = 'orthogonal';
@@ -121,7 +121,7 @@ class TiledWorldMap {
       countTileLayer++;
     }
 
-    if (layer is ObjectGroup) {
+    if (layer is ObjectLayer) {
       _addObjects(layer);
     }
 
@@ -285,22 +285,19 @@ class TiledWorldMap {
       index = gid;
     }
 
-    TileSet? tileSetContain;
+    TileSetDetail? tileSetContain;
     String _pathTileset = '';
     int firsTgId = 0;
 
     try {
-      final findTileset = _tiledMap?.tileSets?.lastWhere((tileSet) {
-        return tileSet.tileSet != null &&
-            tileSet.firsTgId != null &&
-            index >= tileSet.firsTgId!;
+      tileSetContain = _tiledMap?.tileSets?.lastWhere((tileSet) {
+        return tileSet.firsTgId != null && index >= tileSet.firsTgId!;
       });
 
-      firsTgId = findTileset?.firsTgId ?? 0;
-      tileSetContain = findTileset?.tileSet;
-      if (findTileset?.source != null) {
-        _pathTileset = findTileset!.source!.replaceAll(
-          findTileset.source!.split('/').last,
+      firsTgId = tileSetContain?.firsTgId ?? 0;
+      if (tileSetContain?.source != null) {
+        _pathTileset = tileSetContain!.source!.replaceAll(
+          tileSetContain.source!.split('/').last,
           '',
         );
       }
@@ -308,7 +305,7 @@ class TiledWorldMap {
 
     if (tileSetContain != null) {
       final int widthCount =
-          (tileSetContain.imageWidth ?? 0) ~/ (tileSetContain.tileWidth ?? 0);
+          (tileSetContain.imageWidth!) ~/ (tileSetContain.tileWidth!);
 
       double y = _getY((index - firsTgId), widthCount);
       double x = _getX((index - firsTgId), widthCount);
@@ -358,7 +355,7 @@ class TiledWorldMap {
     }
   }
 
-  void _addObjects(ObjectGroup layer) {
+  void _addObjects(ObjectLayer layer) {
     if (layer.visible != true) return;
     double offsetX = _getDoubleByProportion(layer.offsetX);
     double offsetY = _getDoubleByProportion(layer.offsetY);
@@ -429,13 +426,14 @@ class TiledWorldMap {
     );
   }
 
-  TiledDataObjectCollision _getCollision(TileSet tileSetContain, int index) {
+  TiledDataObjectCollision _getCollision(
+      TileSetDetail tileSetContain, int index) {
     Iterable<TileSetItem> tileSetItemList = tileSetContain.tiles?.where(
           (element) => element.id == index,
         ) ??
         [];
 
-    if ((tileSetItemList.isNotEmpty)) {
+    if (tileSetItemList.isNotEmpty) {
       List<TileSetObject> tileSetObjectList =
           tileSetItemList.first.objectGroup?.objects ?? [];
 
@@ -525,7 +523,7 @@ class TiledWorldMap {
   }
 
   TileModelAnimation? _getAnimation(
-    TileSet tileSetContain,
+    TileSetDetail tileSetContain,
     String pathTileset,
     int index,
     int widthCount,
@@ -578,15 +576,17 @@ class TiledWorldMap {
         tiledMap = TiledMap.fromJson(jsonDecode(mapResponse.body));
         await Future.forEach<TileSetDetail>(tiledMap.tileSets ?? [],
             (tileSet) async {
-          if (!(tileSet.source?.contains('.json') == true ||
-              tileSet.source?.contains('.tsj') == true)) {
-            throw Exception('Invalid TileSet source: only supports json files');
+          if (tileSet.source != null) {
+            if (!(tileSet.source?.contains('.json') == true ||
+                tileSet.source?.contains('.tsj') == true)) {
+              throw Exception(
+                  'Invalid TileSet source: only supports json files');
+            }
+            final tileSetResponse = await http.get(
+              Uri.parse('$_basePath${tileSet.source}'),
+            );
+            tileSet.updateFromMap(jsonDecode(tileSetResponse.body));
           }
-          final tileSetResponse = await http.get(
-            Uri.parse('$_basePath${tileSet.source}'),
-          );
-          Map<String, dynamic> _result = jsonDecode(tileSetResponse.body);
-          tileSet.tileSet = TileSet.fromJson(_result);
         });
         return Future.value(tiledMap);
       } catch (e) {
