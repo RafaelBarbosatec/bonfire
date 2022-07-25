@@ -1,37 +1,35 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:bonfire/background/background_image_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/tiled/model/tiled_world_data.dart';
+import 'package:bonfire/tiled/tiled_reader.dart';
 import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/text_game_component.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:http/http.dart' as http;
 import 'package:tiledjsonreader/map/layer/group_layer.dart';
 import 'package:tiledjsonreader/map/layer/image_layer.dart';
 import 'package:tiledjsonreader/map/layer/map_layer.dart';
-import 'package:tiledjsonreader/map/layer/object_group.dart';
+import 'package:tiledjsonreader/map/layer/object_layer.dart';
 import 'package:tiledjsonreader/map/layer/objects.dart';
 import 'package:tiledjsonreader/map/layer/tile_layer.dart';
 import 'package:tiledjsonreader/map/tile_set_detail.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
 import 'package:tiledjsonreader/tile_set/frame_animation.dart';
-import 'package:tiledjsonreader/tile_set/tile_set.dart';
+import 'package:tiledjsonreader/tile_set/polygon.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
-import 'package:tiledjsonreader/tiledjsonreader.dart';
 
 import 'model/tiled_data_object_collision.dart';
 import 'model/tiled_item_tile_set.dart';
 import 'model/tiled_object_properties.dart';
 
 typedef ObjectBuilder = GameComponent Function(
-    TiledObjectProperties properties);
+  TiledObjectProperties properties,
+);
 
 class TiledWorldMap {
-  static const ORIENTATION_SUPPORTED = 'orthogonal';
   static const ABOVE_TYPE = 'above';
   static const DYNAMIC_ABOVE_TYPE = 'dynamicAbove';
   static const GIT_ROTATE_180 = 3221225472;
@@ -44,18 +42,16 @@ class TiledWorldMap {
   final String path;
   final Size? forceTileSize;
   final ValueChanged<Object>? onError;
-  late TiledJsonReader _reader;
+  late TiledReader _reader;
   final double tileSizeToUpdate;
   List<TileModel> _tiles = [];
   List<GameComponent> _components = [];
   String? _basePath;
-  String _basePathFlame = 'assets/images/';
   TiledMap? _tiledMap;
   double _tileWidth = 0;
   double _tileHeight = 0;
   double _tileWidthOrigin = 0;
   double _tileHeightOrigin = 0;
-  bool fromServer = false;
   Map<String, ObjectBuilder> _objectsBuilder = Map();
   Map<String, TileModelSprite> _tileModelSpriteCache = Map();
   int countTileLayer = 0;
@@ -70,8 +66,7 @@ class TiledWorldMap {
   }) {
     _objectsBuilder = objectsBuilder ?? Map();
     _basePath = path.replaceAll(path.split('/').last, '');
-    fromServer = path.contains('http');
-    _reader = TiledJsonReader(_basePathFlame + path);
+    _reader = TiledReader(path);
   }
 
   void registerObject(String name, ObjectBuilder builder) {
@@ -80,12 +75,7 @@ class TiledWorldMap {
 
   Future<TiledWorldData> build() async {
     try {
-      _tiledMap = await _readMap();
-      if (_tiledMap?.orientation != ORIENTATION_SUPPORTED) {
-        throw Exception(
-          'Orientation not supported. please use $ORIENTATION_SUPPORTED orientation',
-        );
-      }
+      _tiledMap = await _reader.readMap();
       _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble() ?? 0.0;
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble() ?? 0.0;
       _tileWidth = forceTileSize?.width ?? _tileWidthOrigin;
@@ -107,10 +97,8 @@ class TiledWorldMap {
     );
   }
 
-  Future<void> _load(TiledMap tiledMap) async {
-    await Future.forEach<MapLayer>(tiledMap.layers ?? [], (layer) async {
-      await _loadLayer(layer);
-    });
+  Future<void> _load(TiledMap tiledMap) {
+    return Future.forEach<MapLayer>(tiledMap.layers ?? [], _loadLayer);
   }
 
   Future<void> _loadLayer(MapLayer layer) async {
@@ -121,7 +109,7 @@ class TiledWorldMap {
       countTileLayer++;
     }
 
-    if (layer is ObjectGroup) {
+    if (layer is ObjectLayer) {
       _addObjects(layer);
     }
 
@@ -131,9 +119,7 @@ class TiledWorldMap {
     }
 
     if (layer is GroupLayer) {
-      await Future.forEach<MapLayer>(layer.layers ?? [], (subLayer) async {
-        await _loadLayer(subLayer);
-      });
+      await Future.forEach<MapLayer>(layer.layers ?? [], _loadLayer);
     }
   }
 
@@ -285,22 +271,19 @@ class TiledWorldMap {
       index = gid;
     }
 
-    TileSet? tileSetContain;
+    TileSetDetail? tileSetContain;
     String _pathTileset = '';
     int firsTgId = 0;
 
     try {
-      final findTileset = _tiledMap?.tileSets?.lastWhere((tileSet) {
-        return tileSet.tileSet != null &&
-            tileSet.firsTgId != null &&
-            index >= tileSet.firsTgId!;
+      tileSetContain = _tiledMap?.tileSets?.lastWhere((tileSet) {
+        return tileSet.firsTgId != null && index >= tileSet.firsTgId!;
       });
 
-      firsTgId = findTileset?.firsTgId ?? 0;
-      tileSetContain = findTileset?.tileSet;
-      if (findTileset?.source != null) {
-        _pathTileset = findTileset!.source!.replaceAll(
-          findTileset.source!.split('/').last,
+      firsTgId = tileSetContain?.firsTgId ?? 0;
+      if (tileSetContain?.source != null) {
+        _pathTileset = tileSetContain!.source!.replaceAll(
+          tileSetContain.source!.split('/').last,
           '',
         );
       }
@@ -308,7 +291,7 @@ class TiledWorldMap {
 
     if (tileSetContain != null) {
       final int widthCount =
-          (tileSetContain.imageWidth ?? 0) ~/ (tileSetContain.tileWidth ?? 0);
+          (tileSetContain.imageWidth!) ~/ (tileSetContain.tileWidth!);
 
       double y = _getY((index - firsTgId), widthCount);
       double x = _getX((index - firsTgId), widthCount);
@@ -344,7 +327,6 @@ class TiledWorldMap {
 
       return TiledItemTileSet(
         type: object.type,
-        tileClass: object.tileClass,
         collisions: object.collisions,
         properties: object.properties,
         sprite: sprite,
@@ -358,7 +340,7 @@ class TiledWorldMap {
     }
   }
 
-  void _addObjects(ObjectGroup layer) {
+  void _addObjects(ObjectLayer layer) {
     if (layer.visible != true) return;
     double offsetX = _getDoubleByProportion(layer.offsetX);
     double offsetY = _getDoubleByProportion(layer.offsetY);
@@ -394,7 +376,7 @@ class TiledWorldMap {
               ),
             ),
           );
-        } else if (element.type?.toLowerCase() == 'collision') {
+        } else if (element.typeOrClass?.toLowerCase() == 'collision') {
           final collision = _getCollisionObject(x, y, width, height, element);
 
           _components.add(
@@ -413,7 +395,7 @@ class TiledWorldMap {
             TiledObjectProperties(
               Vector2(x, y),
               Vector2(width, height),
-              element.type,
+              element.typeOrClass,
               element.rotation,
               _extractOtherProperties(element.properties),
               element.name,
@@ -429,18 +411,19 @@ class TiledWorldMap {
     );
   }
 
-  TiledDataObjectCollision _getCollision(TileSet tileSetContain, int index) {
+  TiledDataObjectCollision _getCollision(
+    TileSetDetail tileSetContain,
+    int index,
+  ) {
     Iterable<TileSetItem> tileSetItemList = tileSetContain.tiles?.where(
           (element) => element.id == index,
         ) ??
         [];
 
-    if ((tileSetItemList.isNotEmpty)) {
+    if (tileSetItemList.isNotEmpty) {
       List<TileSetObject> tileSetObjectList =
           tileSetItemList.first.objectGroup?.objects ?? [];
 
-      String type = tileSetItemList.first.type ?? '';
-      String tileClass = tileSetItemList.first.tileClass ?? '';
       Map<String, dynamic> properties = _extractOtherProperties(
         tileSetItemList.first.properties,
       );
@@ -468,47 +451,7 @@ class TiledWorldMap {
           }
 
           if (object.polygon?.isNotEmpty == true) {
-            double? minorX;
-            double? minorY;
-            List<Vector2> points = object.polygon!.map((e) {
-              Vector2 vector = Vector2(
-                _getDoubleByProportion(e.x),
-                _getDoubleByProportion(e.y),
-              );
-
-              if (minorX == null) {
-                minorX = vector.x;
-              } else if (vector.x < (minorX ?? 0.0)) {
-                minorX = vector.x;
-              }
-
-              if (minorY == null) {
-                minorY = vector.y;
-              } else if (vector.y < (minorY ?? 0.0)) {
-                minorY = vector.y;
-              }
-              return vector;
-            }).toList();
-
-            if ((minorX ?? 0) < 0) {
-              points = points.map((e) {
-                return Vector2(e.x - minorX!, e.y);
-              }).toList();
-            }
-
-            if ((minorY ?? 0) < 0) {
-              points = points.map((e) {
-                return Vector2(e.x, e.y - minorY!);
-              }).toList();
-            }
-
-            double xAlign = x - points.first.x;
-            double yAlign = y - points.first.y;
-
-            ca = CollisionArea.polygon(
-              points: points,
-              align: Vector2(xAlign, yAlign),
-            );
+            ca = _normalizePolygon(x, y, object.polygon!);
           }
 
           collisions.add(ca);
@@ -516,8 +459,7 @@ class TiledWorldMap {
       }
       return TiledDataObjectCollision(
         collisions: collisions,
-        type: type,
-        tileClass: tileClass,
+        type: tileSetItemList.first.typeOrClass ?? '',
         properties: properties,
       );
     }
@@ -525,7 +467,7 @@ class TiledWorldMap {
   }
 
   TileModelAnimation? _getAnimation(
-    TileSet tileSetContain,
+    TileSetDetail tileSetContain,
     String pathTileset,
     int index,
     int widthCount,
@@ -567,34 +509,6 @@ class TiledWorldMap {
       }
     } catch (e) {
       return null;
-    }
-  }
-
-  Future<TiledMap> _readMap() async {
-    if (fromServer) {
-      try {
-        TiledMap tiledMap;
-        final mapResponse = await http.get(Uri.parse(path));
-        tiledMap = TiledMap.fromJson(jsonDecode(mapResponse.body));
-        await Future.forEach<TileSetDetail>(tiledMap.tileSets ?? [],
-            (tileSet) async {
-          if (!(tileSet.source?.contains('.json') == true ||
-              tileSet.source?.contains('.tsj') == true)) {
-            throw Exception('Invalid TileSet source: only supports json files');
-          }
-          final tileSetResponse = await http.get(
-            Uri.parse('$_basePath${tileSet.source}'),
-          );
-          Map<String, dynamic> _result = jsonDecode(tileSetResponse.body);
-          tileSet.tileSet = TileSet.fromJson(_result);
-        });
-        return Future.value(tiledMap);
-      } catch (e) {
-        print('(TiledWorldMap) Error: $e');
-        return Future.value(TiledMap());
-      }
-    } else {
-      return _reader.read();
     }
   }
 
@@ -647,45 +561,58 @@ class TiledWorldMap {
     }
 
     if (object.polygon?.isNotEmpty == true) {
-      double? minorX;
-      double? minorY;
-      List<Vector2> points = object.polygon!.map((e) {
-        Vector2 vector = Vector2(
-          ((e.x ?? 0.0) * _tileWidth) / _tileWidthOrigin,
-          ((e.y ?? 0.0) * _tileHeight) / _tileHeightOrigin,
-        );
-
-        if (minorX == null) {
-          minorX = vector.x;
-        } else if (vector.x < (minorX ?? 0.0)) {
-          minorX = vector.x;
-        }
-
-        if (minorY == null) {
-          minorY = vector.y;
-        } else if (vector.y < (minorY ?? 0.0)) {
-          minorY = vector.y;
-        }
-        return vector;
-      }).toList();
-
-      if ((minorX ?? 0) < 0) {
-        points = points.map((e) {
-          return Vector2(e.x - minorX!, e.y);
-        }).toList();
-      }
-
-      if ((minorY ?? 0) < 0) {
-        points = points.map((e) {
-          return Vector2(e.x, e.y - minorY!);
-        }).toList();
-      }
-
-      ca = CollisionArea.polygon(
-        points: points,
-        align: Vector2(minorX ?? 0.0, minorY ?? 0.0),
-      );
+      ca = _normalizePolygon(x, y, object.polygon!, isObject: true);
     }
     return ca;
+  }
+
+  CollisionArea _normalizePolygon(
+    double x,
+    double y,
+    List<Polygon> polygon, {
+    bool isObject = false,
+  }) {
+    double minorX = _getDoubleByProportion(polygon.first.x);
+    double minorY = _getDoubleByProportion(polygon.first.y);
+    List<Vector2> points = polygon.map((e) {
+      Vector2 vector = Vector2(
+        _getDoubleByProportion(e.x),
+        _getDoubleByProportion(e.y),
+      );
+
+      if (vector.x < minorX) {
+        minorX = vector.x;
+      }
+
+      if (vector.y < minorY) {
+        minorY = vector.y;
+      }
+      return vector;
+    }).toList();
+
+    if (minorX < 0) {
+      points = points.map((e) {
+        return Vector2(e.x - minorX, e.y);
+      }).toList();
+    }
+
+    if (minorY < 0) {
+      points = points.map((e) {
+        return Vector2(e.x, e.y - minorY);
+      }).toList();
+    }
+
+    double alignX = x - points.first.x;
+    double alignY = y - points.first.y;
+
+    if (isObject) {
+      alignX = minorX;
+      alignY = minorY;
+    }
+
+    return CollisionArea.polygon(
+      points: points,
+      align: Vector2(alignX, alignY),
+    );
   }
 }

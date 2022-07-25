@@ -1,3 +1,7 @@
+# [2.6.6]
+- Adds support to `tileset` embeded in map (Tiled).
+- update `tiledjsonreader`.
+
 # [2.6.5]
 - create `Vision` mixin
 - improvements in `seeComponent` and `seeComponentType`. now you can pass `visionAngle`(default = 6,28319 (360 graus)). resolve : [#273](https://github.com/RafaelBarbosatec/bonfire/issues/273)
