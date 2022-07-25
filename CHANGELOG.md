@@ -1,4 +1,4 @@
-# [next]
+# [2.6.6]
 - Adds support to `tileset` embeded in map (Tiled).
 - update `tiledjsonreader`.
 
