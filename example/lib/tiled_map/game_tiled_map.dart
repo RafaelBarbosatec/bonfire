@@ -96,6 +96,7 @@ class GameTiledMap extends StatelessWidget {
                   border: Border.all(color: Colors.white.withOpacity(0.5)),
                 ),
           },
+          showCollisionArea: true,
           initialActiveOverlays: [
             'barLife',
             'miniMap',

@@ -1,5 +1,6 @@
 # [next]
 - Adds support to `tileset` embeded in map (Tiled).
+- update `tiledjsonreader`.
 
 # [2.6.5]
 - create `Vision` mixin
