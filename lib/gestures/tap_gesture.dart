@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 mixin TapGesture on GameComponent {
-  bool blockTapGestureRelay = false;
   bool enableTab = true;
   int _pointer = -1;
   bool handlerPointerDown(PointerDownEvent event) {
@@ -15,15 +14,13 @@ mixin TapGesture on GameComponent {
       if (this.isHud) {
         if (this.containsPoint(position)) {
           _pointer = pointer;
-          onTapDown(pointer, position);
-          return blockTapGestureRelay;
+          return onTapDown(pointer, position);
         }
       } else {
         final absolutePosition = this.gameRef.screenToWorld(position);
         if (this.containsPoint(absolutePosition)) {
           _pointer = pointer;
-          onTapDown(pointer, position);
-          return blockTapGestureRelay;
+          return onTapDown(pointer, position);
         }
       }
     }
@@ -57,10 +54,12 @@ mixin TapGesture on GameComponent {
     return super.handlerPointerUp(event);
   }
 
-  void onTapDown(int pointer, Vector2 position);
-  void onTapUp(int pointer, Vector2 position);
-  void onTapCancel();
-  void onTap();
+  // If return 'true' this event is not relay to others components.
+  bool onTapDown(int pointer, Vector2 position) {
+    return false;
+  }
 
-  bool get receiveInteraction => _pointer != -1;
+  void onTapUp(int pointer, Vector2 position) {}
+  void onTapCancel() {}
+  void onTap();
 }

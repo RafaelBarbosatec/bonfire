@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 mixin DragGesture on GameComponent {
-  bool blockDragGestureRelay = false;
   Vector2? _startDragOffset;
   Vector2? _startDragPosition;
   int _pointer = -1;
@@ -22,8 +21,7 @@ mixin DragGesture on GameComponent {
           _pointer = pointer;
           _startDragOffset = position;
           _startDragPosition = this.position.clone();
-          onStartDrag(pointer, position);
-          return blockDragGestureRelay;
+          return onStartDrag(pointer, position);
         }
       } else {
         final absolutePosition = this.gameRef.screenToWorld(position);
@@ -31,8 +29,7 @@ mixin DragGesture on GameComponent {
           _pointer = pointer;
           _startDragOffset = absolutePosition;
           _startDragPosition = this.position.clone();
-          onStartDrag(pointer, position);
-          return blockDragGestureRelay;
+          return onStartDrag(pointer, position);
         }
       }
     }
@@ -95,7 +92,11 @@ mixin DragGesture on GameComponent {
     return super.handlerPointerCancel(event);
   }
 
-  void onStartDrag(int pointer, Vector2 position) {}
+  // If return 'true' this event is not relay to others components.
+  bool onStartDrag(int pointer, Vector2 position) {
+    return false;
+  }
+
   void onMoveDrag(int pointer, Vector2 position) {}
   void onEndDrag(int pointer) {}
   void onCancelDrag(int pointer) {}
