@@ -105,35 +105,39 @@ class Joystick extends JoystickController {
   }
 
   @override
-  void handlerPointerCancel(PointerCancelEvent event) {
+  bool handlerPointerCancel(PointerCancelEvent event) {
     for (JoystickAction action in actions) {
       action.actionUp(event.pointer);
     }
     directional?.directionalUp(event.pointer);
+    return super.handlerPointerCancel(event);
   }
 
   @override
-  void handlerPointerDown(PointerDownEvent event) {
+  bool handlerPointerDown(PointerDownEvent event) {
     directional?.directionalDown(event.pointer, event.localPosition);
     for (JoystickAction action in actions) {
       action.actionDown(event.pointer, event.localPosition);
     }
+    return super.handlerPointerDown(event);
   }
 
   @override
-  void handlerPointerMove(PointerMoveEvent event) {
+  bool handlerPointerMove(PointerMoveEvent event) {
     for (JoystickAction action in actions) {
       action.actionMove(event.pointer, event.localPosition);
     }
     directional?.directionalMove(event.pointer, event.localPosition);
+    return super.handlerPointerMove(event);
   }
 
   @override
-  void handlerPointerUp(PointerUpEvent event) {
+  bool handlerPointerUp(PointerUpEvent event) {
     for (JoystickAction action in actions) {
       action.actionUp(event.pointer);
     }
     directional?.directionalUp(event.pointer);
+    return super.handlerPointerUp(event);
   }
 
   @override

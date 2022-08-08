@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:bonfire/base/custom_game_widget.dart';
+import 'package:bonfire/base/listener_game_widget.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class BonfireTiledWidget extends StatefulWidget {
@@ -137,7 +136,7 @@ class _BonfireTiledWidgetState extends State<BonfireTiledWidget>
     return Stack(
       children: [
         if (_game != null)
-          CustomGameWidget(
+          ListenerGameWidget(
             game: _game!,
             overlayBuilderMap: widget.overlayBuilderMap,
             initialActiveOverlays: widget.initialActiveOverlays,

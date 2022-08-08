@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bonfire/background/game_background.dart';
 import 'package:bonfire/base/bonfire_game.dart';
-import 'package:bonfire/base/custom_game_widget.dart';
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/base/listener_game_widget.dart';
 import 'package:bonfire/camera/camera_config.dart';
 import 'package:bonfire/color_filter/game_color_filter.dart';
 import 'package:bonfire/decoration/decoration.dart';
@@ -14,7 +14,6 @@ import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/game_controller.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {
@@ -140,7 +139,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
     return Stack(
       children: [
         if (_game != null)
-          CustomGameWidget(
+          ListenerGameWidget(
             game: _game!,
             overlayBuilderMap: widget.overlayBuilderMap,
             initialActiveOverlays: widget.initialActiveOverlays,

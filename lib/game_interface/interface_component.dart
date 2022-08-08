@@ -37,6 +37,7 @@ class InterfaceComponent extends GameComponent
     }));
     this.position = Vector2(position.x, position.y);
     this.size = size;
+    blockTapGestureRelay = true;
   }
 
   @override

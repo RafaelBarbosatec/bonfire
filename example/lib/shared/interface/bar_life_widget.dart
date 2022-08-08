@@ -18,9 +18,9 @@ class BarLifeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: StateControllerConsumer<BarLifeController>(
+    return Material(
+      type: MaterialType.transparency,
+      child: StateControllerConsumer<BarLifeController>(
         builder: (context, controller) {
           return Padding(
             padding: const EdgeInsets.only(left: 45, top: 60),

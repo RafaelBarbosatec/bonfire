@@ -26,7 +26,9 @@ abstract class BaseGame extends FlameGame with PointerDetector {
   void onPointerCancel(PointerCancelEvent event) {
     if (!hasLayout) return;
     for (final c in _gesturesComponents) {
-      c.handlerPointerCancel(event);
+      if (c.handlerPointerCancel(event)) {
+        return;
+      }
     }
   }
 
@@ -34,7 +36,9 @@ abstract class BaseGame extends FlameGame with PointerDetector {
   void onPointerUp(PointerUpEvent event) {
     if (!hasLayout) return;
     for (final c in _gesturesComponents) {
-      c.handlerPointerUp(event);
+      if (c.handlerPointerUp(event)) {
+        return;
+      }
     }
   }
 
@@ -42,7 +46,9 @@ abstract class BaseGame extends FlameGame with PointerDetector {
   void onPointerMove(PointerMoveEvent event) {
     if (!hasLayout) return;
     for (final c in _gesturesComponents) {
-      c.handlerPointerMove(event);
+      if (c.handlerPointerMove(event)) {
+        return;
+      }
     }
   }
 
@@ -50,7 +56,9 @@ abstract class BaseGame extends FlameGame with PointerDetector {
   void onPointerDown(PointerDownEvent event) {
     if (!hasLayout) return;
     for (final c in _gesturesComponents) {
-      c.handlerPointerDown(event);
+      if (c.handlerPointerDown(event)) {
+        return;
+      }
     }
   }
 
@@ -58,7 +66,9 @@ abstract class BaseGame extends FlameGame with PointerDetector {
   void onPointerHover(PointerHoverEvent event) {
     if (!hasLayout) return;
     for (final c in _gesturesComponents) {
-      c.handlerPointerHover(event);
+      if (c.handlerPointerHover(event)) {
+        return;
+      }
     }
   }
 
@@ -66,7 +76,9 @@ abstract class BaseGame extends FlameGame with PointerDetector {
   void onPointerSignal(PointerSignalEvent event) {
     if (!hasLayout) return;
     for (final c in _gesturesComponents) {
-      c.handlerPointerSignal(event);
+      if (c.handlerPointerSignal(event)) {
+        return;
+      }
     }
   }
 
