@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 mixin DragGesture on GameComponent {
+  bool blockDragGestureRelay = false;
   Vector2? _startDragOffset;
   Vector2? _startDragPosition;
   int _pointer = -1;
@@ -11,7 +12,7 @@ mixin DragGesture on GameComponent {
   bool inMoving = false;
 
   @override
-  void handlerPointerDown(PointerDownEvent event) {
+  bool handlerPointerDown(PointerDownEvent event) {
     final pointer = event.pointer;
     final position = event.localPosition.toVector2();
 
@@ -22,6 +23,7 @@ mixin DragGesture on GameComponent {
           _startDragOffset = position;
           _startDragPosition = this.position.clone();
           onStartDrag(pointer, position);
+          return blockDragGestureRelay;
         }
       } else {
         final absolutePosition = this.gameRef.screenToWorld(position);
@@ -29,15 +31,17 @@ mixin DragGesture on GameComponent {
           _pointer = pointer;
           _startDragOffset = absolutePosition;
           _startDragPosition = this.position.clone();
+          onStartDrag(pointer, position);
+          return blockDragGestureRelay;
         }
       }
     }
 
-    super.handlerPointerDown(event);
+    return super.handlerPointerDown(event);
   }
 
   @override
-  void handlerPointerMove(PointerMoveEvent event) {
+  bool handlerPointerMove(PointerMoveEvent event) {
     final pointer = event.pointer;
     final position = event.localPosition.toVector2();
     bool canMove = hasGameRef &&
@@ -61,11 +65,11 @@ mixin DragGesture on GameComponent {
       inMoving = true;
       onMoveDrag(pointer, position);
     }
-    super.handlerPointerMove(event);
+    return super.handlerPointerMove(event);
   }
 
   @override
-  void handlerPointerUp(PointerUpEvent event) {
+  bool handlerPointerUp(PointerUpEvent event) {
     final pointer = event.pointer;
     if (pointer == _pointer && inMoving) {
       _startDragPosition = null;
@@ -75,11 +79,11 @@ mixin DragGesture on GameComponent {
       onEndDrag(pointer);
     }
 
-    super.handlerPointerUp(event);
+    return super.handlerPointerUp(event);
   }
 
   @override
-  void handlerPointerCancel(PointerCancelEvent event) {
+  bool handlerPointerCancel(PointerCancelEvent event) {
     final pointer = event.pointer;
     if (pointer == _pointer && inMoving) {
       _startDragPosition = null;
@@ -88,7 +92,7 @@ mixin DragGesture on GameComponent {
       inMoving = false;
       onCancelDrag(pointer);
     }
-    super.handlerPointerCancel(event);
+    return super.handlerPointerCancel(event);
   }
 
   void onStartDrag(int pointer, Vector2 position) {}

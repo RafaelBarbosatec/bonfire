@@ -8,7 +8,6 @@ class JoystickMoveToPosition extends JoystickController {
   final MouseButton mouseButtonUsedToMoveCamera;
   final MouseButton mouseButtonUsedToMoveToPosition;
   int? _pointer;
-  bool _interfaceReceiveInteraction = false;
   bool _initMove = false;
   bool _actionMoveToPosition = false;
   Vector2 _startPoint = Vector2.zero();
@@ -21,7 +20,7 @@ class JoystickMoveToPosition extends JoystickController {
   });
 
   @override
-  void handlerPointerDown(PointerDownEvent event) {
+  bool handlerPointerDown(PointerDownEvent event) {
     _pointer = event.pointer;
     _startPoint = event.position.toVector2();
     _startCameraPosition = gameRef.camera.position;
@@ -29,13 +28,11 @@ class JoystickMoveToPosition extends JoystickController {
       event,
       mouseButtonUsedToMoveToPosition,
     );
-    super.handlerPointerDown(event);
-    _interfaceReceiveInteraction =
-        gameRef.interface?.receiveInteraction ?? false;
+    return super.handlerPointerDown(event);
   }
 
   @override
-  void handlerPointerMove(PointerMoveEvent event) {
+  bool handlerPointerMove(PointerMoveEvent event) {
     double distance = _startPoint.distanceTo(event.position.toVector2());
     if (distance > 1) {
       _initMove = true;
@@ -49,21 +46,18 @@ class JoystickMoveToPosition extends JoystickController {
       }
     }
 
-    super.handlerPointerMove(event);
+    return super.handlerPointerMove(event);
   }
 
   @override
-  void handlerPointerUp(PointerUpEvent event) {
+  bool handlerPointerUp(PointerUpEvent event) {
     if (_pointer == event.pointer && !_initMove && _actionMoveToPosition) {
-      if (!_interfaceReceiveInteraction) {
-        final absolutePosition =
+      final absolutePosition =
             this.gameRef.screenToWorld(event.position.toVector2());
         moveTo(absolutePosition);
-      }
     }
-    _interfaceReceiveInteraction = false;
     _initMove = false;
-    super.handlerPointerUp(event);
+    return super.handlerPointerUp(event);
   }
 
   bool _acceptFromMouse(PointerEvent event, MouseButton button) {

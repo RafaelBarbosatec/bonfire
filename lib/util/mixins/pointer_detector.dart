@@ -15,12 +15,29 @@ mixin PointerDetector {
 }
 
 abstract class PointerDetectorHandler {
-  void handlerPointerDown(PointerDownEvent event) {}
-  void handlerPointerMove(PointerMoveEvent event) {}
-  void handlerPointerUp(PointerUpEvent event) {}
-  void handlerPointerCancel(PointerCancelEvent event) {}
-  void handlerPointerHover(PointerHoverEvent event) {}
-  void handlerPointerSignal(PointerSignalEvent event) {}
+  bool handlerPointerDown(PointerDownEvent event) {
+    return false;
+  }
+
+  bool handlerPointerMove(PointerMoveEvent event) {
+    return false;
+  }
+
+  bool handlerPointerUp(PointerUpEvent event) {
+    return false;
+  }
+
+  bool handlerPointerCancel(PointerCancelEvent event) {
+    return false;
+  }
+
+  bool handlerPointerHover(PointerHoverEvent event) {
+    return false;
+  }
+
+  bool handlerPointerSignal(PointerSignalEvent event) {
+    return false;
+  }
 
   bool hasGesture() {
     if (this is DragGesture && (this as DragGesture).enableDrag) return true;

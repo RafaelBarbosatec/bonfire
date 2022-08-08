@@ -114,30 +114,39 @@ abstract class GameComponent extends PositionComponent
   }
 
   @override
-  void handlerPointerDown(PointerDownEvent event) {
+  bool handlerPointerDown(PointerDownEvent event) {
     for (var child in children) {
       if (child is GameComponent) {
-        child.handlerPointerDown(event);
+        if (child.handlerPointerDown(event)) {
+          return true;
+        }
       }
     }
+    return super.handlerPointerDown(event);
   }
 
   @override
-  void handlerPointerUp(PointerUpEvent event) {
+  bool handlerPointerUp(PointerUpEvent event) {
     for (var child in children) {
       if (child is GameComponent) {
-        child.handlerPointerUp(event);
+        if (child.handlerPointerUp(event)) {
+          return true;
+        }
       }
     }
+    return super.handlerPointerUp(event);
   }
 
   @override
-  void handlerPointerCancel(PointerCancelEvent event) {
+  bool handlerPointerCancel(PointerCancelEvent event) {
     for (var child in children) {
       if (child is GameComponent) {
-        child.handlerPointerCancel(event);
+        if (child.handlerPointerCancel(event)) {
+          return true;
+        }
       }
     }
+    return super.handlerPointerCancel(event);
   }
 
   /// Method that checks if this component is visible on the screen
