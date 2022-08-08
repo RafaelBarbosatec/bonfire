@@ -79,8 +79,11 @@ class _MiniMapState extends State<MiniMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topRight,
+    if (!widget.game.hasLayout) {
+      return SizedBox.shrink();
+    }
+    return Positioned(
+      right: 0,
       child: Padding(
         padding: widget.margin ?? EdgeInsets.zero,
         child: ClipRRect(
