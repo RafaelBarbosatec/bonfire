@@ -1,3 +1,6 @@
+# [NEXT]
+- Improvements in handle gestures events. Fix issue [#283](https://github.com/RafaelBarbosatec/bonfire/issues/283)
+
 # [2.6.6]
 - Adds support to `tileset` embeded in map (Tiled).
 - update `tiledjsonreader`.
