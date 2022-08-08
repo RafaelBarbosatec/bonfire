@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 mixin TapGesture on GameComponent {
   bool enableTab = true;
   int _pointer = -1;
-  void handlerPointerDown(PointerDownEvent event) {
+  bool handlerPointerDown(PointerDownEvent event) {
     final pointer = event.pointer;
     final position = event.localPosition.toVector2();
 
@@ -14,20 +14,20 @@ mixin TapGesture on GameComponent {
       if (this.isHud) {
         if (this.containsPoint(position)) {
           _pointer = pointer;
-          onTapDown(pointer, position);
+          return onTapDown(pointer, position);
         }
       } else {
         final absolutePosition = this.gameRef.screenToWorld(position);
         if (this.containsPoint(absolutePosition)) {
           _pointer = pointer;
-          onTapDown(pointer, position);
+          return onTapDown(pointer, position);
         }
       }
     }
-    super.handlerPointerDown(event);
+    return super.handlerPointerDown(event);
   }
 
-  void handlerPointerUp(PointerUpEvent event) {
+  bool handlerPointerUp(PointerUpEvent event) {
     final pointer = event.pointer;
     final position = event.localPosition.toVector2();
 
@@ -51,13 +51,15 @@ mixin TapGesture on GameComponent {
       _pointer = -1;
     }
 
-    super.handlerPointerUp(event);
+    return super.handlerPointerUp(event);
   }
 
-  void onTapDown(int pointer, Vector2 position);
-  void onTapUp(int pointer, Vector2 position);
-  void onTapCancel();
-  void onTap();
+  // If return 'true' this event is not relay to others components.
+  bool onTapDown(int pointer, Vector2 position) {
+    return false;
+  }
 
-  bool get receiveInteraction => _pointer != -1;
+  void onTapUp(int pointer, Vector2 position) {}
+  void onTapCancel() {}
+  void onTap();
 }

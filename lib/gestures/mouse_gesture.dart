@@ -10,8 +10,10 @@ mixin MouseGesture on GameComponent {
   int _buttonClicked = 0;
 
   @override
-  void handlerPointerHover(PointerHoverEvent event) {
-    if (!enableMouseGesture) return;
+  bool handlerPointerHover(PointerHoverEvent event) {
+    if (!enableMouseGesture) {
+      return super.handlerPointerHover(event);
+    }
     int pointer = event.pointer;
     Vector2 position = event.localPosition.toVector2();
     onHoverScreen(pointer, position);
@@ -29,12 +31,14 @@ mixin MouseGesture on GameComponent {
         onHoverExit(pointer, position);
       }
     }
-    super.handlerPointerHover(event);
+    return super.handlerPointerHover(event);
   }
 
   @override
-  void handlerPointerSignal(PointerSignalEvent event) {
-    if (!enableMouseGesture) return;
+  bool handlerPointerSignal(PointerSignalEvent event) {
+    if (!enableMouseGesture) {
+      return super.handlerPointerSignal(event);
+    }
     int pointer = event.pointer;
     Vector2 position = event.localPosition.toVector2();
     Vector2 scrollDelta = (event as PointerScrollEvent).scrollDelta.toVector2();
@@ -49,13 +53,15 @@ mixin MouseGesture on GameComponent {
         onScroll(pointer, position, scrollDelta);
       }
     }
-    super.handlerPointerSignal(event);
+    return super.handlerPointerSignal(event);
   }
 
   @override
-  void handlerPointerDown(PointerDownEvent event) {
-    if (!enableMouseGesture) return;
-    if (event.kind != PointerDeviceKind.mouse) return;
+  bool handlerPointerDown(PointerDownEvent event) {
+    if (!enableMouseGesture || event.kind != PointerDeviceKind.mouse) {
+      return super.handlerPointerDown(event);
+    }
+
     final pointer = event.pointer;
     final position = event.localPosition.toVector2();
     if (hasGameRef) {
@@ -95,13 +101,14 @@ mixin MouseGesture on GameComponent {
         }
       }
     }
-    super.handlerPointerDown(event);
+    return super.handlerPointerDown(event);
   }
 
   @override
-  void handlerPointerUp(PointerUpEvent event) {
-    if (!enableMouseGesture) return;
-    if (event.kind != PointerDeviceKind.mouse) return;
+  bool handlerPointerUp(PointerUpEvent event) {
+    if (!enableMouseGesture || event.kind != PointerDeviceKind.mouse) {
+      return super.handlerPointerUp(event);
+    }
     final pointer = event.pointer;
     final position = event.localPosition.toVector2();
     if (pointer == _pointer && hasGameRef) {
@@ -147,7 +154,7 @@ mixin MouseGesture on GameComponent {
       }
       _pointer = -1;
     }
-    super.handlerPointerUp(event);
+    return super.handlerPointerUp(event);
   }
 
   /// Listen to the mouse cursor across the screen

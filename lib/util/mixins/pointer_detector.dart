@@ -15,12 +15,35 @@ mixin PointerDetector {
 }
 
 abstract class PointerDetectorHandler {
-  void handlerPointerDown(PointerDownEvent event) {}
-  void handlerPointerMove(PointerMoveEvent event) {}
-  void handlerPointerUp(PointerUpEvent event) {}
-  void handlerPointerCancel(PointerCancelEvent event) {}
-  void handlerPointerHover(PointerHoverEvent event) {}
-  void handlerPointerSignal(PointerSignalEvent event) {}
+  // If return 'true' this event is not relay to others components.
+  bool handlerPointerDown(PointerDownEvent event) {
+    return false;
+  }
+
+  // If return 'true' this event is not relay to others components.
+  bool handlerPointerMove(PointerMoveEvent event) {
+    return false;
+  }
+
+  // If return 'true' this event is not relay to others components.
+  bool handlerPointerUp(PointerUpEvent event) {
+    return false;
+  }
+
+  // If return 'true' this event is not relay to others components.
+  bool handlerPointerCancel(PointerCancelEvent event) {
+    return false;
+  }
+
+  // If return 'true' this event is not relay to others components.
+  bool handlerPointerHover(PointerHoverEvent event) {
+    return false;
+  }
+
+  // If return 'true' this event is not relay to others components.
+  bool handlerPointerSignal(PointerSignalEvent event) {
+    return false;
+  }
 
   bool hasGesture() {
     if (this is DragGesture && (this as DragGesture).enableDrag) return true;

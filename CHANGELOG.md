@@ -1,3 +1,9 @@
+# [2.7.0]
+- Improvements in handle gestures events. Fix issue [#283](https://github.com/RafaelBarbosatec/bonfire/issues/283)
+- BREAKING CHANGE:
+  - `void onTapDown(int pointer, Vector2 position)` to `bool onTapDown(int pointer, Vector2 position)` in `TapGesture` 
+  - `void onStartDrag(int pointer, Vector2 position)` to `bool onStartDrag(int pointer, Vector2 position)` in `DragGesture`
+
 # [2.6.6]
 - Adds support to `tileset` embeded in map (Tiled).
 - update `tiledjsonreader`.

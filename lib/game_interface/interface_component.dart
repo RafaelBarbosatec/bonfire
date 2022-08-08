@@ -41,7 +41,7 @@ class InterfaceComponent extends GameComponent
 
   @override
   void update(double dt) {
-    sprite = selected ? spriteSelected : spriteUnselected;
+    sprite = selected ? (spriteSelected ?? spriteUnselected) : spriteUnselected;
     super.update(dt);
   }
 
@@ -66,10 +66,8 @@ class InterfaceComponent extends GameComponent
   PositionType get positionType => PositionType.viewport;
 
   @override
-  void onTapDown(int pointer, Vector2 position) {
+  bool onTapDown(int pointer, Vector2 position) {
     selected = true;
+    return true;
   }
-
-  @override
-  void onTapUp(int pointer, Vector2 position) {}
 }

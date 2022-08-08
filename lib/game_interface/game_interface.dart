@@ -62,8 +62,4 @@ class GameInterface extends GameComponent {
 
   @override
   bool hasGesture() => true;
-
-  bool get receiveInteraction => children.where((element) {
-        return element is InterfaceComponent && element.receiveInteraction;
-      }).isNotEmpty;
 }
