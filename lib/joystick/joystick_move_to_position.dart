@@ -52,9 +52,10 @@ class JoystickMoveToPosition extends JoystickController {
   @override
   bool handlerPointerUp(PointerUpEvent event) {
     if (_pointer == event.pointer && !_initMove && _actionMoveToPosition) {
-      final absolutePosition =
-            this.gameRef.screenToWorld(event.position.toVector2());
-        moveTo(absolutePosition);
+      final absolutePosition = this.gameRef.screenToWorld(
+            event.position.toVector2(),
+          );
+      moveTo(absolutePosition);
     }
     _initMove = false;
     return super.handlerPointerUp(event);
