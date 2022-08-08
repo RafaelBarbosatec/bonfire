@@ -110,6 +110,4 @@ class Chest extends GameDecoration with TapGesture {
       ),
     );
   }
-
-
 }
