@@ -1,9 +1,11 @@
+// ignore_for_file: implementation_imports
+
 import 'dart:async';
 
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gestures.dart';
 import 'package:flutter/services.dart';
@@ -150,6 +152,7 @@ class _ListenerGameWidgetState<T extends Game>
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
         assert(currentGame.hasLayout);
+        // ignore: invalid_use_of_internal_member
         final onLoad = currentGame.onLoadFuture;
         if (onLoad != null) {
           await onLoad;
