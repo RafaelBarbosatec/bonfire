@@ -1,3 +1,6 @@
+# [next]
+- adds `playSpriteAnimationOnce` in mixin `UseSpriteAnimation`
+
 # [2.7.1]
 - update `tiledjsonreader`
 - Improvements in `FlyingAttackObject`. Adds damage in area with base in `destroySize` if sets `animationDestroy`

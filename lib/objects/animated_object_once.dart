@@ -7,7 +7,7 @@ import 'package:bonfire/util/assets_loader.dart';
 class AnimatedObjectOnce extends GameComponent
     with UseSpriteAnimation, UseAssetsLoader, Lighting {
   final VoidCallback? onFinish;
-  final VoidCallback? onStartAnimation;
+  final VoidCallback? onStart;
   bool _notifyStart = false;
 
   AnimatedObjectOnce({
@@ -15,7 +15,7 @@ class AnimatedObjectOnce extends GameComponent
     required Vector2 size,
     FutureOr<SpriteAnimation>? animation,
     this.onFinish,
-    this.onStartAnimation,
+    this.onStart,
     double rotateRadAngle = 0,
     LightingConfig? lightingConfig,
   }) {
@@ -43,7 +43,7 @@ class AnimatedObjectOnce extends GameComponent
     if (animation != null && !isRemoving) {
       if (animation?.currentIndex == 1 && !_notifyStart) {
         _notifyStart = true;
-        onStartAnimation?.call();
+        onStart?.call();
       }
     }
   }
