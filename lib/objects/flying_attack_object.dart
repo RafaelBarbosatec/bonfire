@@ -168,18 +168,18 @@ class FlyingAttackObject extends GameComponent
     } else if (!withDecorationCollision) {
       return false;
     }
-    _destroyObject();
+    _destroyObject(component);
     return true;
   }
 
-  void _destroyObject() {
+  void _destroyObject(GameComponent component) {
     if (isRemoving) return;
     removeFromParent();
     if (animationDestroy != null) {
       if (direction != null) {
-        _destroyByDirection(direction!, dtUpdate);
+        _destroyByDirection(direction!, dtUpdate, component);
       } else {
-        _destroyByAngle();
+        _destroyByAngle(component);
       }
     }
     setupCollision(CollisionConfig(collisions: []));
@@ -213,7 +213,11 @@ class FlyingAttackObject extends GameComponent
     animation = this.flyAnimation;
   }
 
-  void _destroyByDirection(Direction direction, double dt) {
+  void _destroyByDirection(
+    Direction direction,
+    double dt,
+    GameComponent component,
+  ) {
     Vector2 positionDestroy;
 
     double biggerSide = max(width, height);
@@ -278,20 +282,32 @@ class FlyingAttackObject extends GameComponent
     }
 
     if (hasGameRef) {
+      Vector2 innerSize = destroySize ?? size;
       gameRef.add(
         AnimatedObjectOnce(
           animation: animationDestroy!,
           position: positionDestroy,
-          size: destroySize ?? size,
+          size: innerSize,
           lightingConfig: lightingConfig,
         ),
+      );
+      _applyDestroyDamage(
+        Rect.fromLTWH(
+          positionDestroy.x,
+          positionDestroy.y,
+          innerSize.x,
+          innerSize.y,
+        ),
+        component,
       );
     }
   }
 
-  void _destroyByAngle() {
+  void _destroyByAngle(GameComponent component) {
     double nextX = (width / 2) * _cosAngle;
     double nextY = (height / 2) * _senAngle;
+
+    Vector2 innerSize = destroySize ?? size;
 
     Offset diffBase = Offset(
           rectCollision.center.dx + nextX,
@@ -299,7 +315,10 @@ class FlyingAttackObject extends GameComponent
         ) -
         rectCollision.center;
 
-    final positionDestroy = position.translate(diffBase.dx, diffBase.dy);
+    final positionDestroy = position.translate(
+      diffBase.dx - (innerSize.x / 2),
+      diffBase.dy - (innerSize.y / 2),
+    );
 
     if (hasGameRef) {
       gameRef.add(
@@ -307,9 +326,27 @@ class FlyingAttackObject extends GameComponent
           animation: animationDestroy!,
           position: positionDestroy,
           lightingConfig: lightingConfig,
-          size: destroySize ?? size,
+          size: innerSize,
         ),
       );
+      _applyDestroyDamage(
+        Rect.fromLTWH(
+          positionDestroy.x,
+          positionDestroy.y,
+          innerSize.x,
+          innerSize.y,
+        ),
+        component,
+      );
     }
+  }
+
+  void _applyDestroyDamage(Rect rectPosition, GameComponent component) {
+    gameRef.visibleAttackables().forEach((element) {
+      if (element.rectAttackable().overlaps(rectPosition) &&
+          element != component) {
+        element.receiveDamage(attackFrom, damage, id);
+      }
+    });
   }
 }

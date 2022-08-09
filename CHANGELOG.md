@@ -1,3 +1,7 @@
+# [2.7.1]
+- update `tiledjsonreader`
+- Improvements in `FlyingAttackObject`. Adds damage in area with base in `destroySize` if sets `animationDestroy`
+
 # [2.7.0]
 - Improvements in handle gestures events. Fix issue [#283](https://github.com/RafaelBarbosatec/bonfire/issues/283)
 - BREAKING CHANGE:

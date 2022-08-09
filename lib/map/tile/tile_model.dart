@@ -36,7 +36,7 @@ class TileModelSprite {
   }
 
   factory TileModelSprite.fromMap(Map<String, dynamic> map) {
-    return new TileModelSprite(
+    return TileModelSprite(
       path: map['path'],
       position: Vector2(map['column'], map['row']),
       size: Vector2(map['width'], map['height']),
@@ -73,7 +73,7 @@ class TileModelAnimation {
   }
 
   factory TileModelAnimation.fromMap(Map<String, dynamic> map) {
-    return new TileModelAnimation(
+    return TileModelAnimation(
       stepTime: map['stepTime'],
       frames: map['frames'] != null
           ? (map['frames'] as List).map((e) {
@@ -231,7 +231,7 @@ class TileModel {
   }
 
   factory TileModel.fromMap(Map<String, dynamic> map) {
-    return new TileModel(
+    return TileModel(
       x: map['x'],
       y: map['y'],
       offsetX: map['offsetX'] ?? 0,

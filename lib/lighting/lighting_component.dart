@@ -33,7 +33,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
   }
 
   Path getWheelPath(double wheelSize, double fromRadius, double toRadius) {
-    return new Path()
+    return Path()
       ..moveTo(wheelSize, wheelSize)
       ..arcTo(
         Rect.fromCircle(
