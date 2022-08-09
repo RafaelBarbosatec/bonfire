@@ -15,6 +15,7 @@ class TalkDialog extends StatefulWidget {
     this.padding,
     this.onClose,
     this.dismissible = false,
+    this.talkAlignment = Alignment.bottomCenter,
   }) : super(key: key);
 
   static show(
@@ -28,6 +29,7 @@ class TalkDialog extends StatefulWidget {
     List<LogicalKeyboardKey> logicalKeyboardKeysToNext = const [],
     EdgeInsetsGeometry? padding,
     bool dismissible = false,
+    Alignment talkAlignment = Alignment.bottomCenter,
   }) {
     showDialog(
       barrierDismissible: dismissible,
@@ -43,7 +45,7 @@ class TalkDialog extends StatefulWidget {
           keyboardKeysToNext: logicalKeyboardKeysToNext,
           padding: padding,
           dismissible: dismissible,
-        );
+          talkAlignment: talkAlignment);
       },
     );
   }
@@ -56,6 +58,7 @@ class TalkDialog extends StatefulWidget {
   final List<LogicalKeyboardKey> keyboardKeysToNext;
   final EdgeInsetsGeometry? padding;
   final bool dismissible;
+  final Alignment talkAlignment;
 
   @override
   _TalkDialogState createState() => _TalkDialogState();
@@ -112,7 +115,7 @@ class _TalkDialogState extends State<TalkDialog> {
             color: Colors.transparent,
             padding: widget.padding ?? EdgeInsets.all(10),
             child: Stack(
-              alignment: Alignment.bottomCenter,
+              alignment: widget.talkAlignment,
               children: [
                 Align(
                   alignment: _getAlign(currentSay.personSayDirection),
