@@ -12,7 +12,7 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 23/02/22
 
-typedef T BuildDependency<T>(BonfireInjector i);
+typedef BuildDependency<T> = T Function(BonfireInjector i);
 
 /// Class used to manager dependencies
 class BonfireInjector {
