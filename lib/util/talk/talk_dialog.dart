@@ -37,15 +37,15 @@ class TalkDialog extends StatefulWidget {
       context: context,
       builder: (BuildContext context) {
         return TalkDialog(
-          says: sayList,
-          onFinish: onFinish,
-          onClose: onClose,
-          onChangeTalk: onChangeTalk,
-          textBoxMinHeight: boxTextHeight,
-          keyboardKeysToNext: logicalKeyboardKeysToNext,
-          padding: padding,
-          dismissible: dismissible,
-          talkAlignment: talkAlignment);
+            says: sayList,
+            onFinish: onFinish,
+            onClose: onClose,
+            onChangeTalk: onChangeTalk,
+            textBoxMinHeight: boxTextHeight,
+            keyboardKeysToNext: logicalKeyboardKeysToNext,
+            padding: padding,
+            dismissible: dismissible,
+            talkAlignment: talkAlignment);
       },
     );
   }
