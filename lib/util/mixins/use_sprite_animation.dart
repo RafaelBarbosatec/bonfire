@@ -20,7 +20,10 @@ import 'package:flame/components.dart';
 mixin UseSpriteAnimation on GameComponent {
   /// Animation that will be drawn on the screen.
   SpriteAnimation? animation;
+  Vector2 animationOffset = Vector2.zero();
+  Vector2? animationSize;
   AnimatedObjectOnce? _fastAnimation;
+  Vector2 _fastAnimOffset = Vector2.zero();
 
   @override
   void render(Canvas canvas) {
@@ -32,8 +35,8 @@ mixin UseSpriteAnimation on GameComponent {
       } else {
         animation?.getSprite().renderWithOpacity(
               canvas,
-              this.position,
-              this.size,
+              position + animationOffset,
+              animationSize ?? size,
               opacity: opacity,
             );
       }
@@ -44,7 +47,7 @@ mixin UseSpriteAnimation on GameComponent {
   void update(double dt) {
     super.update(dt);
     if (this.isVisible) {
-      _fastAnimation?.position = position;
+      _fastAnimation?.position = position + _fastAnimOffset;
       _fastAnimation?.opacity = opacity;
       _fastAnimation?.isFlipHorizontal = isFlipHorizontal;
       _fastAnimation?.isFlipVertical = isFlipVertical;
@@ -57,11 +60,13 @@ mixin UseSpriteAnimation on GameComponent {
   Future playSpriteAnimationOnce(
     FutureOr<SpriteAnimation> animation, {
     Vector2? size,
+    Vector2? offset,
     VoidCallback? onFinish,
     VoidCallback? onStart,
   }) async {
+    _fastAnimOffset = offset ?? Vector2.zero();
     final anim = AnimatedObjectOnce(
-      position: position,
+      position: position + _fastAnimOffset,
       size: size ?? this.size,
       animation: animation,
       onStart: onStart,
