@@ -413,7 +413,7 @@ extension GameComponentExtensions on GameComponent {
   void applyBleedingPixel({
     required Vector2 position,
     required Vector2 size,
-    double factor = 0.05,
+    double factor = 0.04,
     double offsetX = 0,
     double offsetY = 0,
     bool calculatePosition = false,
