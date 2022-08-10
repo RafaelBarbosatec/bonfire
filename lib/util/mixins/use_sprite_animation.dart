@@ -20,7 +20,11 @@ import 'package:flame/components.dart';
 mixin UseSpriteAnimation on GameComponent {
   /// Animation that will be drawn on the screen.
   SpriteAnimation? animation;
+
+  /// Offset of the render animation.
   Vector2 animationOffset = Vector2.zero();
+
+  /// Size animation. if null use component size
   Vector2? animationSize;
   AnimatedObjectOnce? _fastAnimation;
   Vector2 _fastAnimOffset = Vector2.zero();
