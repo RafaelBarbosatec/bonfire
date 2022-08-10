@@ -1,6 +1,6 @@
-# [next]
+# [2.7.2]
 - adds `playSpriteAnimationOnce` in mixin `UseSpriteAnimation`
-- Fix dextroy position in `FlyingAttackObject`
+- Fix destroy position in `FlyingAttackObject`
 
 # [2.7.1]
 - update `tiledjsonreader`
