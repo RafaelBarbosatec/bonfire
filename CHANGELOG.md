@@ -1,3 +1,8 @@
+# [2.7.2]
+- adds `playSpriteAnimationOnce` in mixin `UseSpriteAnimation`
+- Fix destroy position in `FlyingAttackObject`
+- Add talkAlignment in the talk box (optional), for default is Alignment.bottomCenter. Thanks [pmella16](https://github.com/pmella16)
+
 # [2.7.1]
 - update `tiledjsonreader`
 - Improvements in `FlyingAttackObject`. Adds damage in area with base in `destroySize` if sets `animationDestroy`

@@ -315,16 +315,17 @@ class FlyingAttackObject extends GameComponent
         ) -
         rectCollision.center;
 
-    final positionDestroy = position.translate(
-      diffBase.dx - (innerSize.x / 2),
-      diffBase.dy - (innerSize.y / 2),
-    );
+    final positionDestroy = center.translate(diffBase.dx, diffBase.dy);
 
     if (hasGameRef) {
       gameRef.add(
         AnimatedObjectOnce(
           animation: animationDestroy!,
-          position: positionDestroy,
+          position: Rect.fromCenter(
+            center: positionDestroy.toOffset(),
+            width: innerSize.x,
+            height: innerSize.y,
+          ).positionVector2,
           lightingConfig: lightingConfig,
           size: innerSize,
         ),

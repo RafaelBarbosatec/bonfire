@@ -299,6 +299,7 @@ class SimpleDirectionAnimation {
   Future playOnce(
     FutureOr<SpriteAnimation> animation, {
     VoidCallback? onFinish,
+    VoidCallback? onStart,
     bool runToTheEnd = false,
     bool flipX = false,
     bool flipY = false,
@@ -308,6 +309,7 @@ class SimpleDirectionAnimation {
       position: position,
       size: size,
       animation: animation,
+      onStart: onStart,
       onFinish: () {
         onFinish?.call();
         _fastAnimation = null;
