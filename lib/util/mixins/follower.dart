@@ -17,7 +17,7 @@ import 'package:flame/components.dart';
 mixin Follower on GameComponent {
   GameComponent? followerTarget;
   Vector2? followerOffset;
-  Vector2 _zero = Vector2.zero();
+  final Vector2 _zero = Vector2.zero();
 
   void setupFollower(
     GameComponent? followerTarget, {
@@ -31,8 +31,7 @@ mixin Follower on GameComponent {
   void update(double dt) {
     super.update(dt);
     if (followerTarget != null) {
-      final newPosition = followerOffset ?? _zero;
-      this.position = followerTarget!.position + newPosition;
+      this.position = followerTarget!.position + (followerOffset ?? _zero);
     }
   }
 
