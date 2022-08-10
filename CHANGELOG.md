@@ -1,3 +1,6 @@
+# [next]
+- Improvements in `Follower`.
+
 # [2.7.2]
 - adds `playSpriteAnimationOnce` in mixin `UseSpriteAnimation`
 - Fix destroy position in `FlyingAttackObject`
