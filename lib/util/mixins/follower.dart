@@ -38,10 +38,10 @@ mixin Follower on GameComponent {
 
   @override
   void onMount() {
+    super.onMount();
     if (followerTarget == null) {
       followParent();
     }
-    super.onMount();
   }
 
   void followParent() {
