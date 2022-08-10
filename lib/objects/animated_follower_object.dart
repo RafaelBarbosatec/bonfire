@@ -15,7 +15,7 @@ class AnimatedFollowerObject extends GameComponent
     this.loopAnimation = false,
   }) {
     this.size = size;
-    setupFollower(target, followerOffset: positionFromTarget);
+    setupFollower(target: target, offset: positionFromTarget);
     loader?.add(AssetToLoad(animation, (value) => this.animation = value));
   }
 

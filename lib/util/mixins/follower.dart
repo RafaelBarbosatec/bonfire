@@ -19,12 +19,12 @@ mixin Follower on GameComponent {
   Vector2? followerOffset;
   final Vector2 _zero = Vector2.zero();
 
-  void setupFollower(
-    GameComponent? followerTarget, {
-    Vector2? followerOffset,
+  void setupFollower({
+    GameComponent? target,
+    Vector2? offset,
   }) {
-    this.followerTarget = followerTarget;
-    this.followerOffset = followerOffset;
+    this.followerTarget = target;
+    this.followerOffset = offset;
   }
 
   @override
