@@ -44,6 +44,10 @@ mixin UseSpriteAnimation on GameComponent {
   void update(double dt) {
     super.update(dt);
     if (this.isVisible) {
+      _fastAnimation?.position = position;
+      _fastAnimation?.opacity = opacity;
+      _fastAnimation?.isFlipHorizontal = isFlipHorizontal;
+      _fastAnimation?.isFlipVertical = isFlipVertical;
       _fastAnimation?.update(dt);
       animation?.update(dt);
     }
@@ -52,23 +56,20 @@ mixin UseSpriteAnimation on GameComponent {
   /// Method used to play animation once time
   Future playSpriteAnimationOnce(
     FutureOr<SpriteAnimation> animation, {
+    Vector2? size,
     VoidCallback? onFinish,
     VoidCallback? onStart,
   }) async {
     final anim = AnimatedObjectOnce(
       position: position,
-      size: size,
+      size: size ?? this.size,
       animation: animation,
       onStart: onStart,
       onFinish: () {
         onFinish?.call();
         _fastAnimation = null;
       },
-    )
-      ..isFlipHorizontal = isFlipHorizontal
-      ..isFlipVertical = isFlipVertical
-      ..opacity = opacity
-      ..gameRef = gameRef;
+    )..gameRef = gameRef;
     await anim.onLoad();
     _fastAnimation = anim;
   }

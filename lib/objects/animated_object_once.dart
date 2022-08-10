@@ -4,10 +4,10 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/assets_loader.dart';
 
-class AnimatedObjectOnce extends GameComponent
-    with UseSpriteAnimation, UseAssetsLoader, Lighting {
+class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
   final VoidCallback? onFinish;
   final VoidCallback? onStart;
+  SpriteAnimation? animation;
   bool _notifyStart = false;
 
   AnimatedObjectOnce({
@@ -31,6 +31,14 @@ class AnimatedObjectOnce extends GameComponent
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+    if (isVisible) {
+      animation?.getSprite().renderWithOpacity(
+            canvas,
+            this.position,
+            this.size,
+            opacity: opacity,
+          );
+    }
     if (animation?.done() == true) {
       onFinish?.call();
       removeFromParent();
@@ -40,6 +48,7 @@ class AnimatedObjectOnce extends GameComponent
   @override
   void update(double dt) {
     super.update(dt);
+    animation?.update(dt);
     if (animation != null && !isRemoving) {
       if (animation?.currentIndex == 1 && !_notifyStart) {
         _notifyStart = true;
