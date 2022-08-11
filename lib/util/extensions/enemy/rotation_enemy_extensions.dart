@@ -184,6 +184,8 @@ extension RotationEnemyExtensions on RotationEnemy {
     CollisionConfig? collision,
     VoidCallback? onExecute,
     LightingConfig? lightingConfig,
+    Vector2? centerOffset,
+    double marginFromOrigin = 16,
   }) {
     if (!this.checkInterval('attackRange', interval, dtUpdate)) return;
 
@@ -202,6 +204,8 @@ extension RotationEnemyExtensions on RotationEnemy {
       destroySize: destroySize,
       collision: collision,
       lightingConfig: lightingConfig,
+      centerOffset: centerOffset,
+      marginFromOrigin: marginFromOrigin,
       attackFrom: AttackFromEnum.ENEMY,
     );
 

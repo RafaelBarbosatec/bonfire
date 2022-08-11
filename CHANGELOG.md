@@ -1,3 +1,7 @@
+# [2.7.3]
+- Improvements in `Follower`.
+- Improvements in `simpleAttackRangeByAngle` and `simpleAttackMeleeByAngle`
+
 # [2.7.2]
 - adds `playSpriteAnimationOnce` in mixin `UseSpriteAnimation`
 - Fix destroy position in `FlyingAttackObject`

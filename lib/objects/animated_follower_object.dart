@@ -9,13 +9,13 @@ class AnimatedFollowerObject extends GameComponent
 
   AnimatedFollowerObject({
     required FutureOr<SpriteAnimation> animation,
-    required GameComponent target,
     required Vector2 size,
+    GameComponent? target,
     Vector2? positionFromTarget,
     this.loopAnimation = false,
   }) {
     this.size = size;
-    setupFollower(target, followerPositionFromTarget: positionFromTarget);
+    setupFollower(target: target, offset: positionFromTarget);
     loader?.add(AssetToLoad(animation, (value) => this.animation = value));
   }
 

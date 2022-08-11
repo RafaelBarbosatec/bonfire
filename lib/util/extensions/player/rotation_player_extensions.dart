@@ -22,6 +22,8 @@ extension RotationPlayerExtensions on RotationPlayer {
     VoidCallback? onDestroy,
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
+    Vector2? centerOffset,
+    double marginFromOrigin = 16,
   }) {
     double? angle = radAngleDirection ?? this.angle;
 
@@ -38,26 +40,33 @@ extension RotationPlayerExtensions on RotationPlayer {
       destroySize: destroySize,
       collision: collision,
       lightingConfig: lightingConfig,
+      centerOffset: centerOffset,
+      marginFromOrigin: marginFromOrigin,
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
     );
   }
 
   void simpleAttackMelee({
-    required Future<SpriteAnimation> animationTop,
+    /// use animation facing right.
+    required Future<SpriteAnimation> animation,
     required double damage,
     required Vector2 size,
     dynamic id,
     double? radAngleDirection,
     bool withPush = true,
+    double marginFromOrigin = 16,
+    Vector2? centerOffset,
   }) {
     double? angle = radAngleDirection ?? this.angle;
     this.simpleAttackMeleeByAngle(
-      radAngleDirection: angle,
-      animationTop: animationTop,
+      angle: angle,
+      animation: animation,
       damage: damage,
       id: id,
       size: size,
       withPush: withPush,
+      marginFromOrigin: marginFromOrigin,
+      centerOffset: centerOffset,
       attacker: AttackFromEnum.PLAYER_OR_ALLY,
     );
   }

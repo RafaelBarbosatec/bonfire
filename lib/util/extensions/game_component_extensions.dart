@@ -55,12 +55,14 @@ extension GameComponentExtensions on GameComponent {
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
     double marginFromOrigin = 16,
+    Vector2? centerOffset,
   }) {
     var initPosition = (isObjectCollision()
         ? (this as ObjectCollision).rectCollision
         : this.toRect());
 
-    Vector2 startPosition = initPosition.center.toVector2();
+    Vector2 startPosition =
+        initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
 
     double displacement =
         max(initPosition.width / 2, initPosition.height / 2) + marginFromOrigin;
@@ -71,22 +73,24 @@ extension GameComponentExtensions on GameComponent {
 
     startPosition.add(diffBase);
     startPosition.add(Vector2(-size.x / 2, -size.y / 2));
-    gameRef.add(FlyingAttackObject.byAngle(
-      id: id,
-      position: startPosition,
-      size: size,
-      angle: angle,
-      damage: damage,
-      speed: speed,
-      attackFrom: attackFrom,
-      collision: collision,
-      withDecorationCollision: withDecorationCollision,
-      onDestroy: onDestroy,
-      destroySize: destroySize,
-      flyAnimation: animation,
-      animationDestroy: animationDestroy,
-      lightingConfig: lightingConfig,
-    ));
+    gameRef.add(
+      FlyingAttackObject.byAngle(
+        id: id,
+        position: startPosition,
+        size: size,
+        angle: angle,
+        damage: damage,
+        speed: speed,
+        attackFrom: attackFrom,
+        collision: collision,
+        withDecorationCollision: withDecorationCollision,
+        onDestroy: onDestroy,
+        destroySize: destroySize,
+        flyAnimation: animation,
+        animationDestroy: animationDestroy,
+        lightingConfig: lightingConfig,
+      ),
+    );
   }
 
   /// Execute the ranged attack using a component with animation
@@ -321,35 +325,50 @@ extension GameComponentExtensions on GameComponent {
 
   ///Execute simple attack melee using animation
   void simpleAttackMeleeByAngle({
-    required Future<SpriteAnimation> animationTop,
+    /// use animation facing right.
+    required Future<SpriteAnimation> animation,
     required double damage,
-    required double radAngleDirection,
+
+    /// Use radians angle
+    required double angle,
     required AttackFromEnum attacker,
     dynamic id,
     required Vector2 size,
     bool withPush = true,
+    double marginFromOrigin = 16,
+    Vector2? centerOffset,
   }) {
-    double angle = radAngleDirection;
+    var initPosition = (isObjectCollision()
+        ? (this as ObjectCollision).rectCollision
+        : this.toRect());
 
-    double nextX = height * cos(angle);
-    double nextY = width * sin(angle);
-    Offset nextPoint = Offset(nextX, nextY);
+    Vector2 startPosition =
+        initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
 
-    Vector2 diffBase = Vector2(
-          this.center.x + nextPoint.dx,
-          this.center.y + nextPoint.dy,
-        ) -
-        this.center;
+    double displacement =
+        max(initPosition.width, initPosition.height) + marginFromOrigin;
+    double nextX = displacement * cos(angle);
+    double nextY = displacement * sin(angle);
 
-    Rect positionAttack = this.toRect().shift(diffBase.toOffset());
+    Vector2 diffBase = Vector2(nextX, nextY);
+
+    startPosition.add(diffBase);
+    startPosition.add(Vector2(-size.x / 2, -size.y / 2));
 
     gameRef.add(
       AnimatedObjectOnce(
-        animation: animationTop,
-        position: positionAttack.positionVector2,
+        animation: animation,
+        position: startPosition,
         size: size,
         rotateRadAngle: angle,
       ),
+    );
+
+    Rect positionAttack = Rect.fromLTWH(
+      startPosition.x,
+      startPosition.y,
+      size.x,
+      size.y,
     );
 
     gameRef
@@ -413,7 +432,7 @@ extension GameComponentExtensions on GameComponent {
   void applyBleedingPixel({
     required Vector2 position,
     required Vector2 size,
-    double factor = 0.05,
+    double factor = 0.04,
     double offsetX = 0,
     double offsetY = 0,
     bool calculatePosition = false,
