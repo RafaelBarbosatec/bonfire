@@ -66,7 +66,7 @@ class Knight extends SimplePlayer
 
   @override
   void joystickAction(JoystickActionEvent event) {
-    if (gameRef.sceneBuilderStatus.isRunning) {
+    if (hasGameRef && gameRef.sceneBuilderStatus.isRunning) {
       return;
     }
     if (hasController) {

@@ -1,5 +1,6 @@
 # [next]
 - Improvements in `Follower`.
+- Improvements in `simpleAttackRangeByAngle` and `simpleAttackMeleeByAngle`
 
 # [2.7.2]
 - adds `playSpriteAnimationOnce` in mixin `UseSpriteAnimation`
