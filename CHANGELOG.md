@@ -1,4 +1,4 @@
-# [next]
+# [2.7.3]
 - Improvements in `Follower`.
 - Improvements in `simpleAttackRangeByAngle` and `simpleAttackMeleeByAngle`
 
