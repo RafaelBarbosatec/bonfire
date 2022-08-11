@@ -328,6 +328,7 @@ extension GameComponentExtensions on GameComponent {
     /// use animation facing right.
     required Future<SpriteAnimation> animation,
     required double damage,
+
     /// Use radians angle
     required double angle,
     required AttackFromEnum attacker,
