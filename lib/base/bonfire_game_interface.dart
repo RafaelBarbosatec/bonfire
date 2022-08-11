@@ -132,7 +132,7 @@ abstract class BonfireGameInterface {
 
   /// Used to change Joystick listener. And move camera to new target.
   void addJoystickObserver(
-    GameComponent target, {
+    JoystickListener target, {
     bool cleanObservers = false,
     bool moveCameraToTarget = false,
   });

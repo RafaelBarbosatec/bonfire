@@ -1,12 +1,9 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/assets_loader.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
 
-class RotationPlayer extends Player with UseAssetsLoader {
+class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
   SpriteAnimation? animIdle;
   SpriteAnimation? animRun;
-  SpriteAnimation? animation;
 
   RotationPlayer({
     required Vector2 position,
@@ -45,23 +42,6 @@ class RotationPlayer extends Player with UseAssetsLoader {
   void update(double dt) {
     super.update(dt);
     angle = movementRadAngle;
-    animation?.update(dt);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    _renderAnimation(canvas);
-  }
-
-  void _renderAnimation(Canvas canvas) {
-    if (animation == null) return;
-    animation?.getSprite().renderWithOpacity(
-          canvas,
-          position,
-          size,
-          opacity: opacity,
-        );
   }
 
   @override

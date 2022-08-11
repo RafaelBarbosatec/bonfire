@@ -366,20 +366,16 @@ class BonfireGame extends BaseGame
   /// Use this method to change default observer of the Joystick events.
   @override
   void addJoystickObserver(
-    GameComponent target, {
+    JoystickListener target, {
     bool cleanObservers = false,
     bool moveCameraToTarget = false,
   }) {
-    if (target is JoystickListener) {
-      if (cleanObservers) {
-        _joystickController?.cleanObservers();
-      }
-      _joystickController?.addObserver(target as JoystickListener);
-      if (moveCameraToTarget) {
-        camera.moveToTargetAnimated(target);
-      }
-    } else {
-      print('$target is not a JoystickListener');
+    if (cleanObservers) {
+      _joystickController?.cleanObservers();
+    }
+    _joystickController?.addObserver(target);
+    if (moveCameraToTarget && target is GameComponent) {
+      camera.moveToTargetAnimated(target as GameComponent);
     }
   }
 
