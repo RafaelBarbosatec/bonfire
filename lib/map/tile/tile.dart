@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/map_paint.dart';
-import 'package:bonfire/util/assets_loader.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:flutter/widgets.dart';
 

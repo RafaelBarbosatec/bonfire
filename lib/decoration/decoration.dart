@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/assets_loader.dart';
 
 /// This component represents anything you want to add to the scene, it can be
 /// a simple "barrel" halfway to an NPC that you can use to interact with your

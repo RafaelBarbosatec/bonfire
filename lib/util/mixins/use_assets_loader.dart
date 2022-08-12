@@ -1,6 +1,6 @@
-import 'package:bonfire/base/game_component.dart';
+import 'dart:async';
 
-import '../assets_loader.dart';
+import 'package:bonfire/base/game_component.dart';
 
 ///
 /// Created by
@@ -21,5 +21,32 @@ mixin UseAssetsLoader on GameComponent {
     await loader?.load();
     loader = null;
     return super.onLoad();
+  }
+}
+
+class AssetToLoad<T> {
+  Function(T? value)? callback;
+  final FutureOr<T>? future;
+
+  AssetToLoad(this.future, this.callback);
+  Future<void> load() async {
+    if (future == null) {
+      return Future.value();
+    }
+    callback?.call(await future);
+    callback = null;
+  }
+}
+
+class AssetsLoader<T> {
+  final List<AssetToLoad> _assets = [];
+
+  void add(AssetToLoad asset) => _assets.add(asset);
+
+  Future<void> load() async {
+    for (final element in _assets) {
+      await element.load();
+    }
+    _assets.clear();
   }
 }

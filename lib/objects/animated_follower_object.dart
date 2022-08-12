@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/assets_loader.dart';
 
 class AnimatedFollowerObject extends GameComponent
     with Follower, UseSpriteAnimation, UseAssetsLoader {
