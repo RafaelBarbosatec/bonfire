@@ -46,16 +46,9 @@ class JoystickActionEvent {
 }
 
 mixin JoystickListener {
-  JoystickMoveDirectional currentDirectional = JoystickMoveDirectional.IDLE;
-  double currentDirectionalAngle = 0;
-
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    currentDirectional = event.directional;
-    currentDirectionalAngle = event.radAngle;
-  }
-
-  void joystickAction(JoystickActionEvent event);
-  void moveTo(Vector2 position);
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {}
+  void joystickAction(JoystickActionEvent event) {}
+  void moveTo(Vector2 position) {}
 }
 
 abstract class JoystickController extends GameComponent

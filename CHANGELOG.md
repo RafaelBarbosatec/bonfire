@@ -1,3 +1,6 @@
+# [next]
+- adds bool `movementByJoystickEnabled` in `MovementByJoystick` mixin. to disable mixin.
+
 # [2.7.3]
 - Improvements in `Follower`.
 - Improvements in `simpleAttackRangeByAngle` and `simpleAttackMeleeByAngle`

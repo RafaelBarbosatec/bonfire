@@ -22,9 +22,6 @@ class Player extends GameComponent
   }
 
   @override
-  void joystickAction(JoystickActionEvent event) {}
-
-  @override
   void moveTo(Vector2 position) {
     this.moveToPositionAlongThePath(position);
   }
