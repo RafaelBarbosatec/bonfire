@@ -138,12 +138,11 @@ class Knight extends SimplePlayer
   }
 
   @override
-  bool checkCanReceiveDamage(AttackFromEnum attacker, double damage, from) {
-    bool shouldReceive = super.checkCanReceiveDamage(attacker, damage, from);
-    if (shouldReceive && hasController) {
+  void receiveDamage(AttackFromEnum attacker, double damage, identify) {
+    if (hasController) {
       controller.onReceiveDamage(damage);
     }
-    return shouldReceive;
+    super.receiveDamage(attacker, damage, identify);
   }
 
   void execShowEmote() {

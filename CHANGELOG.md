@@ -1,3 +1,8 @@
+# [2.7.4]
+- adds bool `movementByJoystickEnabled` in `MovementByJoystick` mixin. to disable mixin.
+- Improvements example game `TopDown`.
+- Adds `useTargetPriority` in AnimatedFollowerObject. (default = true)
+
 # [2.7.3]
 - Improvements in `Follower`.
 - Improvements in `simpleAttackRangeByAngle` and `simpleAttackMeleeByAngle`

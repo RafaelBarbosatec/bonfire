@@ -48,7 +48,7 @@ mixin Pushable on ObjectCollision {
     return super.onCollision(component, active);
   }
 
-  /// Returns true if the component is pushable, false otherwise.
+  /// Returning true if the component is pushable, false otherwise.
   bool onPush(GameComponent component) {
     return true;
   }

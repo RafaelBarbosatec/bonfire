@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/assets_loader.dart';
 
 /// Enemy used for top-down perspective
 class RotationEnemy extends Enemy with UseSpriteAnimation, UseAssetsLoader {

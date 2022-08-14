@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/assets_loader.dart';
 
 class AnimatedFollowerObject extends GameComponent
     with Follower, UseSpriteAnimation, UseAssetsLoader {
   final bool loopAnimation;
+  final bool useTargetPriority;
+  final int? objectPriority;
 
   AnimatedFollowerObject({
     required FutureOr<SpriteAnimation> animation,
@@ -13,6 +14,8 @@ class AnimatedFollowerObject extends GameComponent
     GameComponent? target,
     Vector2? positionFromTarget,
     this.loopAnimation = false,
+    this.useTargetPriority = true,
+    this.objectPriority,
   }) {
     this.size = size;
     setupFollower(target: target, offset: positionFromTarget);
@@ -24,6 +27,15 @@ class AnimatedFollowerObject extends GameComponent
     super.update(dt);
     if (!loopAnimation && animation?.isLastFrame == true) {
       removeFromParent();
+    }
+  }
+
+  @override
+  int get priority {
+    if (followerTarget != null && useTargetPriority) {
+      return followerTarget!.priority;
+    } else {
+      return objectPriority ?? super.priority;
     }
   }
 }

@@ -3,8 +3,11 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 
 /// Mixin responsible for adding movements through joystick events
-mixin MovementByJoystick on Movement {
+mixin MovementByJoystick on Movement, JoystickListener {
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
+
+  JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
+  double _currentDirectionalAngle = 0;
 
   /// flag to set if you only want the 8 directions movement. Set to false to have full 360 movement
   bool dPadAngles = true;
@@ -15,38 +18,37 @@ mixin MovementByJoystick on Movement {
   bool _isIdleJoystick = true;
 
   bool enabledDiagonalMovements = true;
+  bool movementByJoystickEnabled = true;
+
+  @override
+  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    _currentDirectional = event.directional;
+    if (dPadAngles || event.radAngle == 0) {
+      _currentDirectionalAngle = _getAngleByDirectional(_currentDirectional);
+    } else {
+      _currentDirectionalAngle = event.radAngle;
+    }
+
+    if (_currentDirectional != JoystickMoveDirectional.IDLE) {
+      movementRadAngle = _currentDirectionalAngle;
+    }
+    super.joystickChangeDirectional(event);
+  }
 
   @override
   void update(double dt) {
-    if (this is JoystickListener) {
-      bool joystickContainThisComponent =
-          gameRef.joystick?.containObserver(this as JoystickListener) ?? false;
-
-      var newAngle = innerCurrentDirectionalAngle;
-      if (dPadAngles || newAngle == 0.0) {
-        newAngle = _getAngleByDirectional();
-      }
-      if (innerCurrentDirectional != JoystickMoveDirectional.IDLE &&
-          newAngle != 0.0) {
-        movementRadAngle = newAngle;
-      }
-
+    super.update(dt);
+    if (_isEnabled()) {
       if (dPadAngles) {
-        if (innerCurrentDirectional != null && joystickContainThisComponent) {
-          final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
-          _moveDirectional(innerCurrentDirectional!, speed, diagonalSpeed);
-        }
+        final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
+        _moveDirectional(_currentDirectional, speed, diagonalSpeed);
       } else {
-        if (innerCurrentDirectional != null && joystickContainThisComponent) {
-          if (innerCurrentDirectional != JoystickMoveDirectional.IDLE) {
-            _isIdleJoystick = false;
-            moveFromAngle(speed, movementRadAngle);
-          }
+        if (_currentDirectional != JoystickMoveDirectional.IDLE) {
+          _isIdleJoystick = false;
+          moveFromAngle(speed, movementRadAngle);
         }
       }
     }
-
-    super.update(dt);
   }
 
   void _moveDirectional(
@@ -112,28 +114,8 @@ mixin MovementByJoystick on Movement {
     }
   }
 
-  /// get currentDirectional from `JoystickListener`
-  JoystickMoveDirectional? get innerCurrentDirectional {
-    if (this is JoystickListener) {
-      return (this as JoystickListener).currentDirectional;
-    } else {
-      print(
-          '(MovementByJoystick) ERROR: $this need use JoystickListener mixin');
-      return null;
-    }
-  }
-
-  /// get currentDirectional from `JoystickListener`
-  double get innerCurrentDirectionalAngle {
-    if (this is JoystickListener) {
-      return (this as JoystickListener).currentDirectionalAngle;
-    } else {
-      return 0;
-    }
-  }
-
-  double _getAngleByDirectional() {
-    switch (innerCurrentDirectional) {
+  double _getAngleByDirectional(JoystickMoveDirectional directional) {
+    switch (directional) {
       case JoystickMoveDirectional.MOVE_LEFT:
         return 180 / (180 / pi);
       case JoystickMoveDirectional.MOVE_RIGHT:
@@ -164,10 +146,12 @@ mixin MovementByJoystick on Movement {
       (gameRef.joystick as Joystick).resetDirectionalKeys();
     }
 
-    if (this is JoystickListener) {
-      (this as JoystickListener).currentDirectional =
-          JoystickMoveDirectional.IDLE;
-    }
+    _currentDirectional = JoystickMoveDirectional.IDLE;
     super.idle();
+  }
+
+  bool _isEnabled() {
+    return (gameRef.joystick?.containObserver(this) ?? false) &&
+        movementByJoystickEnabled;
   }
 }

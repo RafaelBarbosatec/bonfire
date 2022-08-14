@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/assets_loader.dart';
 import 'package:flutter/widgets.dart';
 
 class FlyingAttackObject extends GameComponent

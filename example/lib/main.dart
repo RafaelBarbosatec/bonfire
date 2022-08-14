@@ -37,63 +37,74 @@ class Menu extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.cyan[900],
       body: Center(
-        child: ListView(
-          shrinkWrap: true,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Center(
               child: RichText(
                 text: TextSpan(
-                    text: 'Bonfire',
-                    style: TextStyle(fontSize: 30, color: Colors.white),
-                    children: [
-                      TextSpan(
-                        text: '  v2.5.0',
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      )
-                    ]),
+                  text: 'Bonfire',
+                  style: TextStyle(fontSize: 30, color: Colors.white),
+                  children: [
+                    TextSpan(
+                      text: '  v2.7.4',
+                      style: TextStyle(fontSize: 15, color: Colors.white),
+                    )
+                  ],
+                ),
               ),
             ),
             SizedBox(
-              height: 30,
+              height: 40,
             ),
-            _buildButton(context, 'Simple example', () {
-              _navTo(context, SimpleExampleGame());
-            }),
-            SizedBox(
-              height: 10,
-            ),
-            _buildButton(context, 'Manual Map', () {
-              _navTo(context, GameManualMap());
-            }),
-            SizedBox(
-              height: 10,
-            ),
-            _buildButton(context, 'Random Map', () {
-              _navTo(
-                context,
-                RandomMapGame(
-                  size: Vector2(150, 150),
-                ),
-              );
-            }),
-            SizedBox(
-              height: 10,
-            ),
-            _buildButton(context, 'Tiled Map', () {
-              _navTo(context, GameTiledMap());
-            }),
-            SizedBox(
-              height: 10,
-            ),
-            _buildButton(context, 'Top down game', () {
-              _navTo(context, TopDownGame());
-            }),
-            SizedBox(
-              height: 10,
-            ),
-            _buildButton(context, 'Dynamic spriteSheet', () {
-              _navTo(context, LPCGame());
-            }),
+            SingleChildScrollView(
+              child: Wrap(
+                runSpacing: 20,
+                spacing: 20,
+                children: [
+                  _buildButton(context, 'Simple example', () {
+                    _navTo(context, SimpleExampleGame());
+                  }),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _buildButton(context, 'Manual Map', () {
+                    _navTo(context, GameManualMap());
+                  }),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _buildButton(context, 'Random Map', () {
+                    _navTo(
+                      context,
+                      RandomMapGame(
+                        size: Vector2(150, 150),
+                      ),
+                    );
+                  }),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _buildButton(context, 'Tiled Map', () {
+                    _navTo(context, GameTiledMap());
+                  }),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _buildButton(context, 'Top down game', () {
+                    _navTo(context, TopDownGame());
+                  }),
+                  if (!kIsWeb) ...[
+                    SizedBox(
+                      height: 10,
+                    ),
+                    _buildButton(context, 'Dynamic spriteSheet', () {
+                      _navTo(context, LPCGame());
+                    }),
+                  ]
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -110,20 +121,18 @@ class Menu extends StatelessWidget {
   }
 
   Widget _buildButton(BuildContext context, String label, VoidCallback onTap) {
-    return Center(
-      child: SizedBox(
-        width: 200,
-        child: ElevatedButton(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
+    return SizedBox(
+      width: 200,
+      child: ElevatedButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
           ),
-          child: Text(label),
-          onPressed: onTap,
         ),
+        child: Text(label),
+        onPressed: onTap,
       ),
     );
   }
@@ -131,9 +140,7 @@ class Menu extends StatelessWidget {
   void _navTo(BuildContext context, Widget page) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => page,
-      ),
+      MaterialPageRoute(builder: (context) => page),
     );
   }
 }
