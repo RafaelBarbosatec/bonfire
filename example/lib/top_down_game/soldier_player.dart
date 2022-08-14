@@ -70,10 +70,39 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
   }
 
   void actionAttack() {
+    Vector2 centerOffset = Vector2.zero();
+    switch (lastDirection) {
+      case Direction.left:
+        centerOffset = Vector2(0, -10);
+        break;
+      case Direction.right:
+        centerOffset = Vector2(0, 10);
+        break;
+      case Direction.up:
+        centerOffset = Vector2(10, 0);
+        break;
+      case Direction.down:
+        centerOffset = Vector2(-10, 0);
+        break;
+      case Direction.upLeft:
+        centerOffset = Vector2(12, 0);
+        break;
+      case Direction.upRight:
+        centerOffset = Vector2(12, 0);
+        break;
+      case Direction.downLeft:
+        centerOffset = Vector2(-12, 0);
+        break;
+      case Direction.downRight:
+        centerOffset = Vector2(-12, 0);
+        break;
+    }
     simpleAttackRangeByAngle(
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
       angle: angle,
       size: Vector2(8, 4),
+      centerOffset: centerOffset,
+      marginFromOrigin: 8,
       speed: 500,
       animation: Sprite.load('bullet.png').toAnimation(),
       damage: 30,

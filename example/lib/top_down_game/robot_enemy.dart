@@ -57,6 +57,7 @@ class ZombieEnemy extends RotationEnemy with ObjectCollision {
         size: Vector2.all(64),
       ),
     );
+    gameRef.camera.shake(intensity: 4);
     removeFromParent();
 
     super.die();

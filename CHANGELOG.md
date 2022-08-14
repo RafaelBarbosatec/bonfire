@@ -1,5 +1,6 @@
 # [next]
 - adds bool `movementByJoystickEnabled` in `MovementByJoystick` mixin. to disable mixin.
+- Improvements example game `TopDown`.
 
 # [2.7.3]
 - Improvements in `Follower`.

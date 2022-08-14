@@ -23,14 +23,13 @@ mixin MovementByJoystick on Movement, JoystickListener {
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     _currentDirectional = event.directional;
-    if (dPadAngles) {
+    if (dPadAngles || event.radAngle == 0) {
       _currentDirectionalAngle = _getAngleByDirectional(_currentDirectional);
     } else {
       _currentDirectionalAngle = event.radAngle;
     }
 
-    if (_currentDirectional != JoystickMoveDirectional.IDLE &&
-        _currentDirectionalAngle != 0.0) {
+    if (_currentDirectional != JoystickMoveDirectional.IDLE) {
       movementRadAngle = _currentDirectionalAngle;
     }
     super.joystickChangeDirectional(event);

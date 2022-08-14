@@ -202,14 +202,16 @@ mixin Movement on GameComponent {
 
     Rect newPosition = rect.shift(newDiffBase);
 
+    _updateDirectionBuAngle(angle);
+
     if (_isCollision(newPosition.positionVector2)) {
-      onMove(0, getDirectionByAngle(angle), angle);
+      onMove(0, lastDirection, angle);
       return false;
     }
 
     isIdle = false;
     position = newPosition.positionVector2;
-    onMove(speed, getDirectionByAngle(angle), angle);
+    onMove(speed, lastDirection, angle);
     return true;
   }
 
@@ -262,12 +264,14 @@ mixin Movement on GameComponent {
       if (!collisionX) newDiffBase = Vector2(innerSpeed, 0);
     }
 
+    _updateDirectionBuAngle(angle);
+
     if (newDiffBase == Vector2.zero()) {
-      onMove(0, getDirectionByAngle(angle), angle);
+      onMove(0, lastDirection, angle);
       return false;
     }
     this.position.add(newDiffBase);
-    onMove(speed, getDirectionByAngle(angle), angle);
+    onMove(speed, lastDirection, angle);
     return true;
   }
 
@@ -353,6 +357,14 @@ mixin Movement on GameComponent {
         } else {
           return moveRight(speed);
         }
+    }
+  }
+
+  void _updateDirectionBuAngle(double angle) {
+    lastDirection = getDirectionByAngle(angle);
+
+    if (lastDirection == Direction.right || lastDirection == Direction.left) {
+      lastDirectionHorizontal = lastDirection;
     }
   }
 }
