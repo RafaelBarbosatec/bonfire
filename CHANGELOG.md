@@ -1,5 +1,11 @@
 # [next]
 - Adds mixin `Acceleration`.
+- Rename methods in `MouseGesture`
+  - `onHoverScreen` to `onMouseHoverScreen`
+  - `onHoverEnter` to `onMouseHoverEnter`
+  - `onHoverExit` to `onMouseHoverExit`
+  - `onScrollScreen` to `onMouseScrollScreen`
+  - `onScroll` to `onMouseScroll`
 
 # [2.7.5]
 - Improvements in `MouseGesture`.

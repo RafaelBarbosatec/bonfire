@@ -11,6 +11,28 @@ mixin MouseGesture on GameComponent {
   int _pointer = -1;
   MouseButton? _buttonClicked;
 
+  /// Listen to the mouse cursor across the screen
+  void onMouseHoverScreen(int pointer, Vector2 position) {}
+
+  /// Listen when the mouse cursor hover in this component
+  void onMouseHoverEnter(int pointer, Vector2 position) {}
+
+  /// Listen when the mouse cursor passes outside this component
+  void onMouseHoverExit(int pointer, Vector2 position) {}
+
+  /// Listen when use scroll of the mouse across the screen
+  void onMouseScrollScreen(
+      int pointer, Vector2 position, Vector2 scrollDelta) {}
+
+  /// Listen when use scroll of the mouse in your component
+  void onMouseScroll(int pointer, Vector2 position, Vector2 scrollDelta) {}
+
+  void onMouseTapDown(int pointer, Vector2 position, MouseButton button) {}
+  void onMouseTapUp(int pointer, Vector2 position, MouseButton button) {}
+
+  void onMouseTap(MouseButton button);
+  void onMouseCancel();
+
   @override
   bool handlerPointerHover(PointerHoverEvent event) {
     if (!enableMouseGesture) {
@@ -21,12 +43,12 @@ mixin MouseGesture on GameComponent {
     if (!isHud) {
       realPosition = this.gameRef.screenToWorld(realPosition);
     }
-    onHoverScreen(pointer, position);
+    onMouseHoverScreen(pointer, position);
 
     if (containsPoint(realPosition)) {
-      onHoverEnter(pointer, position);
+      onMouseHoverEnter(pointer, position);
     } else {
-      onHoverExit(pointer, position);
+      onMouseHoverExit(pointer, position);
     }
 
     return super.handlerPointerHover(event);
@@ -43,9 +65,9 @@ mixin MouseGesture on GameComponent {
       realPosition = this.gameRef.screenToWorld(realPosition);
     }
     Vector2 scrollDelta = (event as PointerScrollEvent).scrollDelta.toVector2();
-    onScrollScreen(pointer, position, scrollDelta);
+    onMouseScrollScreen(pointer, position, scrollDelta);
     if (containsPoint(realPosition)) {
-      onScroll(pointer, position, scrollDelta);
+      onMouseScroll(pointer, position, scrollDelta);
     }
     return super.handlerPointerSignal(event);
   }
@@ -108,27 +130,6 @@ mixin MouseGesture on GameComponent {
     }
     _buttonClicked = null;
   }
-
-  /// Listen to the mouse cursor across the screen
-  void onHoverScreen(int pointer, Vector2 position) {}
-
-  /// Listen when the mouse cursor hover in this component
-  void onHoverEnter(int pointer, Vector2 position) {}
-
-  /// Listen when the mouse cursor passes outside this component
-  void onHoverExit(int pointer, Vector2 position) {}
-
-  /// Listen when use scroll of the mouse across the screen
-  void onScrollScreen(int pointer, Vector2 position, Vector2 scrollDelta) {}
-
-  /// Listen when use scroll of the mouse in your component
-  void onScroll(int pointer, Vector2 position, Vector2 scrollDelta) {}
-
-  void onMouseTapDown(int pointer, Vector2 position, MouseButton button) {}
-  void onMouseTapUp(int pointer, Vector2 position, MouseButton button) {}
-
-  void onMouseTap(MouseButton button);
-  void onMouseCancel();
 
   MouseButton _getMouseButtonByInt(int buttonClicked) {
     switch (buttonClicked) {
