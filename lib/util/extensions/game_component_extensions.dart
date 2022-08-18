@@ -388,7 +388,7 @@ extension GameComponentExtensions on GameComponent {
   }
 
   Direction getComponentDirectionFromMe(GameComponent? comp) {
-    Rect rectToMove = getRectAndCollision(this);
+    Rect rectToMove = rectConsideringCollision;
     double centerXPlayer = comp?.center.x ?? 0;
     double centerYPlayer = comp?.center.y ?? 0;
 
@@ -415,6 +415,7 @@ extension GameComponentExtensions on GameComponent {
     if (bottom <= other.top || other.bottom <= top) return false;
     return true;
   }
+
 
   /// Gets rect used how base in calculations considering collision
   Rect get rectConsideringCollision {

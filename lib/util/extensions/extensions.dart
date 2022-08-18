@@ -96,16 +96,7 @@ extension OffSetExt on Offset {
   }
 
   Offset rotate(double angle, Offset center) {
-    final s = sin(angle);
-    final c = cos(angle);
-
-    double x1 = dx - center.dx;
-    double y1 = dy - center.dy;
-
-    double x2 = x1 * c - y1 * s;
-    double y2 = x1 * s + y1 * c;
-
-    return Offset(x2 + center.dx, y2 + center.dy);
+    return BonfireUtil.rotatePoint(this, angle, center);
   }
 }
 
@@ -393,6 +384,6 @@ extension CameraExt on Camera {
 
 extension DirectionExt on Direction {
   double toRadians() {
-    return getAngleByDirectional(this);
+    return BonfireUtil.getAngleFromDirection(this);
   }
 }

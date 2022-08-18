@@ -5,7 +5,7 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:bonfire/util/functions.dart';
+import 'package:bonfire/util/util.dart';
 import 'package:flame/components.dart';
 
 /// Mixin responsible for adding movements
@@ -32,7 +32,8 @@ mixin Movement on GameComponent {
 
     if (_isCollision(displacement)) {
       if (notifyOnMove) {
-        onMove(0, Direction.up, getAngleByDirectional(Direction.up));
+        onMove(
+            0, Direction.up, BonfireUtil.getAngleFromDirection(Direction.up));
       }
       return false;
     }
@@ -41,7 +42,8 @@ mixin Movement on GameComponent {
     position = displacement;
     lastDirection = Direction.up;
     if (notifyOnMove) {
-      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
+      onMove(speed, lastDirection,
+          BonfireUtil.getAngleFromDirection(lastDirection));
     }
     return true;
   }
@@ -53,7 +55,8 @@ mixin Movement on GameComponent {
 
     if (_isCollision(displacement)) {
       if (notifyOnMove) {
-        onMove(0, Direction.down, getAngleByDirectional(Direction.down));
+        onMove(0, Direction.down,
+            BonfireUtil.getAngleFromDirection(Direction.down));
       }
       return false;
     }
@@ -62,7 +65,8 @@ mixin Movement on GameComponent {
     position = displacement;
     lastDirection = Direction.down;
     if (notifyOnMove) {
-      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
+      onMove(speed, lastDirection,
+          BonfireUtil.getAngleFromDirection(lastDirection));
     }
     return true;
   }
@@ -74,7 +78,8 @@ mixin Movement on GameComponent {
 
     if (_isCollision(displacement)) {
       if (notifyOnMove) {
-        onMove(0, Direction.left, getAngleByDirectional(Direction.left));
+        onMove(0, Direction.left,
+            BonfireUtil.getAngleFromDirection(Direction.left));
       }
 
       return false;
@@ -85,7 +90,8 @@ mixin Movement on GameComponent {
     lastDirection = Direction.left;
     lastDirectionHorizontal = Direction.left;
     if (notifyOnMove) {
-      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
+      onMove(speed, lastDirection,
+          BonfireUtil.getAngleFromDirection(lastDirection));
     }
     return true;
   }
@@ -97,7 +103,8 @@ mixin Movement on GameComponent {
 
     if (_isCollision(displacement)) {
       if (notifyOnMove) {
-        onMove(0, Direction.right, getAngleByDirectional(Direction.right));
+        onMove(0, Direction.right,
+            BonfireUtil.getAngleFromDirection(Direction.right));
       }
       return false;
     }
@@ -107,7 +114,8 @@ mixin Movement on GameComponent {
     lastDirection = Direction.right;
     lastDirectionHorizontal = Direction.right;
     if (notifyOnMove) {
-      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
+      onMove(speed, lastDirection,
+          BonfireUtil.getAngleFromDirection(lastDirection));
     }
     return true;
   }
@@ -120,10 +128,12 @@ mixin Movement on GameComponent {
       lastDirection = Direction.upRight;
     }
     if (successRight | successUp) {
-      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
+      onMove(speed, lastDirection,
+          BonfireUtil.getAngleFromDirection(lastDirection));
       return true;
     } else {
-      onMove(0, Direction.upRight, getAngleByDirectional(Direction.upRight));
+      onMove(0, Direction.upRight,
+          BonfireUtil.getAngleFromDirection(Direction.upRight));
       return false;
     }
   }
@@ -140,10 +150,12 @@ mixin Movement on GameComponent {
     }
 
     if (successLeft | successUp) {
-      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
+      onMove(speed, lastDirection,
+          BonfireUtil.getAngleFromDirection(lastDirection));
       return true;
     } else {
-      onMove(0, Direction.upLeft, getAngleByDirectional(Direction.upLeft));
+      onMove(0, Direction.upLeft,
+          BonfireUtil.getAngleFromDirection(Direction.upLeft));
       return false;
     }
   }
@@ -158,10 +170,12 @@ mixin Movement on GameComponent {
     }
 
     if (successLeft | successDown) {
-      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
+      onMove(speed, lastDirection,
+          BonfireUtil.getAngleFromDirection(lastDirection));
       return true;
     } else {
-      onMove(0, Direction.downLeft, getAngleByDirectional(Direction.downLeft));
+      onMove(0, Direction.downLeft,
+          BonfireUtil.getAngleFromDirection(Direction.downLeft));
       return false;
     }
   }
@@ -176,11 +190,12 @@ mixin Movement on GameComponent {
     }
 
     if (successRight | successDown) {
-      onMove(speed, lastDirection, getAngleByDirectional(lastDirection));
+      onMove(speed, lastDirection,
+          BonfireUtil.getAngleFromDirection(lastDirection));
       return true;
     } else {
-      onMove(
-          0, Direction.downRight, getAngleByDirectional(Direction.downRight));
+      onMove(0, Direction.downRight,
+          BonfireUtil.getAngleFromDirection(Direction.downRight));
       return false;
     }
   }
@@ -361,7 +376,7 @@ mixin Movement on GameComponent {
   }
 
   void _updateDirectionBuAngle(double angle) {
-    lastDirection = getDirectionByAngle(angle);
+    lastDirection = BonfireUtil.getDirectionFromAngle(angle);
 
     if (lastDirection == Direction.right || lastDirection == Direction.left) {
       lastDirectionHorizontal = lastDirection;

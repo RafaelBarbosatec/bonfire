@@ -47,7 +47,7 @@ mixin Vision on GameComponent {
       notObserved?.call();
     }
 
-    final rect = getRectAndCollision(component);
+    final rect = component.rectConsideringCollision;
     final otherShape = RectangleShape(
       rect.sizeVector2,
       position: rect.positionVector2,
@@ -92,7 +92,7 @@ mixin Vision on GameComponent {
     }
 
     List<T> compObserved = compVisible.where((comp) {
-      final rect = getRectAndCollision(comp);
+      final rect = comp.rectConsideringCollision;
       final otherShape = RectangleShape(
         rect.sizeVector2,
         position: rect.positionVector2,
