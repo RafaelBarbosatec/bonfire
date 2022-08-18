@@ -1,8 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/gestures.dart';
 
-enum MouseButton { primary, secondary, tertiary }
-
 class JoystickMoveToPosition extends JoystickController {
   final bool enabledMoveCameraWithClick;
   final MouseButton mouseButtonUsedToMoveCamera;
@@ -15,8 +13,8 @@ class JoystickMoveToPosition extends JoystickController {
 
   JoystickMoveToPosition({
     this.enabledMoveCameraWithClick = false,
-    this.mouseButtonUsedToMoveCamera = MouseButton.primary,
-    this.mouseButtonUsedToMoveToPosition = MouseButton.secondary,
+    this.mouseButtonUsedToMoveCamera = MouseButton.left,
+    this.mouseButtonUsedToMoveToPosition = MouseButton.right,
   });
 
   @override
@@ -75,12 +73,14 @@ class JoystickMoveToPosition extends JoystickController {
 
   int _getButtonByEnum(MouseButton button) {
     switch (button) {
-      case MouseButton.primary:
+      case MouseButton.left:
         return 1;
-      case MouseButton.secondary:
+      case MouseButton.right:
         return 2;
-      case MouseButton.tertiary:
+      case MouseButton.middle:
         return 4;
+      case MouseButton.unknow:
+        return 0;
     }
   }
 }

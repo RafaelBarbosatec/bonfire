@@ -1,3 +1,6 @@
+# [next]
+- Improvements in `MouseGesture`.
+
 # [2.7.4]
 - adds bool `movementByJoystickEnabled` in `MovementByJoystick` mixin. to disable mixin.
 - Improvements example game `TopDown`.
