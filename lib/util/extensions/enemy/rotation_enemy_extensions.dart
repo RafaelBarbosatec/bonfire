@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/npc/enemy/rotation_enemy.dart';
-import 'package:bonfire/objects/animated_object_once.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/components.dart';
@@ -16,6 +13,7 @@ extension RotationEnemyExtensions on RotationEnemy {
   /// Checks whether the player is within range. If so, move to it.
   void seeAndMoveToPlayer({
     required Function(Player) closePlayer,
+    VoidCallback? notObserved,
     double radiusVision = 32,
     double margin = 10,
     bool runOnlyVisibleInScreen = true,
@@ -52,6 +50,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       },
       notObserved: () {
         this.idle();
+        notObserved?.call();
       },
     );
   }
@@ -59,6 +58,7 @@ extension RotationEnemyExtensions on RotationEnemy {
   /// Checks whether the player is within range. If so, move to it.
   void seeAndMoveToAttackRange({
     required Function(Player) positioned,
+    VoidCallback? notObserved,
     double radiusVision = 32,
     double? minDistanceCellsFromPlayer,
     bool runOnlyVisibleInScreen = true,
@@ -106,65 +106,41 @@ extension RotationEnemyExtensions on RotationEnemy {
       },
       notObserved: () {
         this.idle();
+        notObserved?.call();
       },
     );
   }
 
   ///Execute simple attack melee using animation
   void simpleAttackMelee({
-    required Future<SpriteAnimation> attackEffectTopAnim,
+    required Future<SpriteAnimation> animationRight,
     required double damage,
     required Vector2 size,
     int? id,
-    bool withPush = false,
+    bool withPush = true,
     double? radAngleDirection,
     VoidCallback? execute,
     int interval = 1000,
+    double marginFromOrigin = 16,
+    Vector2? centerOffset,
   }) {
     if (!this.checkInterval('attackMelee', interval, dtUpdate)) return;
 
     if (isDead) return;
 
-    double angle = radAngleDirection ?? this.angle;
-
-    double nextX = this.height * cos(angle);
-    double nextY = this.height * sin(angle);
-    Offset nextPoint = Offset(nextX, nextY);
-
-    Vector2 diffBase =
-        Vector2(this.center.x + nextPoint.dx, this.position.y + nextPoint.dy) -
-            this.center;
-
-    Rect positionAttack = this.toRect().shift(diffBase.toOffset());
-
-    gameRef.add(
-      AnimatedObjectOnce(
-        animation: attackEffectTopAnim,
-        position: positionAttack.positionVector2,
-        size: size,
-        rotateRadAngle: angle,
-      ),
+    simpleAttackMeleeByAngle(
+      id: id,
+      withPush: withPush,
+      centerOffset: centerOffset,
+      marginFromOrigin: marginFromOrigin,
+      damage: damage,
+      size: size,
+      angle: angle,
+      animation: animationRight,
+      attacker: AttackFromEnum.ENEMY,
     );
 
-    gameRef
-        .visibleAttackables()
-        .where((a) => a.rectAttackable().overlaps(positionAttack))
-        .forEach((attackable) {
-      attackable.receiveDamage(AttackFromEnum.ENEMY, damage, id);
-      final rectAfterPush = attackable.position.translate(
-        diffBase.x,
-        diffBase.y,
-      );
-      if (withPush &&
-          (attackable is ObjectCollision &&
-              !(attackable as ObjectCollision)
-                  .isCollision(displacement: rectAfterPush)
-                  .isNotEmpty)) {
-        attackable.position = rectAfterPush;
-      }
-    });
-
-    if (execute != null) execute();
+    execute?.call();
   }
 
   /// Execute the ranged attack using a component with animation

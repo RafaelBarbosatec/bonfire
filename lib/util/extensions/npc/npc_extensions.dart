@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -159,9 +158,9 @@ extension NpcExtensions on Npc {
   double getAngleFromPlayer() {
     Player? player = this.gameRef.player;
     if (player == null) return 0.0;
-    return atan2(
-      playerRect.center.dy - rectConsideringCollision.center.dy,
-      playerRect.center.dx - rectConsideringCollision.center.dx,
+    return BonfireUtil.angleBetweenPoints(
+      rectConsideringCollision.center.toVector2(),
+      playerRect.center.toVector2(),
     );
   }
 
@@ -170,17 +169,14 @@ extension NpcExtensions on Npc {
   double getInverseAngleFromPlayer() {
     Player? player = this.gameRef.player;
     if (player == null) return 0.0;
-    return atan2(
-      this.position.y - playerRect.center.dy,
-      this.position.x - playerRect.center.dx,
+    return BonfireUtil.angleBetweenPoints(
+      playerRect.center.toVector2(),
+      rectConsideringCollision.center.toVector2(),
     );
   }
 
   /// Gets player position used how base in calculations
   Rect get playerRect {
-    return (gameRef.player is ObjectCollision
-            ? (gameRef.player as ObjectCollision).rectCollision
-            : gameRef.player?.toRect()) ??
-        Rect.zero;
+    return gameRef.player?.rectConsideringCollision ?? Rect.zero;
   }
 }

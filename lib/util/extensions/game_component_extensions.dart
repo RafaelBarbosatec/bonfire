@@ -57,21 +57,20 @@ extension GameComponentExtensions on GameComponent {
     double marginFromOrigin = 16,
     Vector2? centerOffset,
   }) {
-    var initPosition = (isObjectCollision()
-        ? (this as ObjectCollision).rectCollision
-        : this.toRect());
+    var initPosition = rectConsideringCollision;
 
     Vector2 startPosition =
         initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
 
     double displacement =
-        max(initPosition.width / 2, initPosition.height / 2) + marginFromOrigin;
-    double nextX = displacement * cos(angle);
-    double nextY = displacement * sin(angle);
+        max(initPosition.width, initPosition.height) / 2 + marginFromOrigin;
 
-    Vector2 diffBase = Vector2(nextX, nextY);
+    startPosition = BonfireUtil.movePointByAngle(
+      startPosition,
+      displacement,
+      angle,
+    );
 
-    startPosition.add(diffBase);
     startPosition.add(Vector2(-size.x / 2, -size.y / 2));
     gameRef.add(
       FlyingAttackObject.byAngle(
@@ -338,19 +337,19 @@ extension GameComponentExtensions on GameComponent {
     double marginFromOrigin = 16,
     Vector2? centerOffset,
   }) {
-    var initPosition = (isObjectCollision()
-        ? (this as ObjectCollision).rectCollision
-        : this.toRect());
+    var initPosition = rectConsideringCollision;
 
     Vector2 startPosition =
         initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
 
     double displacement =
-        max(initPosition.width, initPosition.height) + marginFromOrigin;
-    double nextX = displacement * cos(angle);
-    double nextY = displacement * sin(angle);
+        max(initPosition.width, initPosition.height) / 2 + marginFromOrigin;
 
-    Vector2 diffBase = Vector2(nextX, nextY);
+    Vector2 diffBase = BonfireUtil.diffMovePointByAngle(
+      startPosition,
+      displacement,
+      angle,
+    );
 
     startPosition.add(diffBase);
     startPosition.add(Vector2(-size.x / 2, -size.y / 2));
@@ -388,7 +387,7 @@ extension GameComponentExtensions on GameComponent {
   }
 
   Direction getComponentDirectionFromMe(GameComponent? comp) {
-    Rect rectToMove = getRectAndCollision(this);
+    Rect rectToMove = rectConsideringCollision;
     double centerXPlayer = comp?.center.x ?? 0;
     double centerYPlayer = comp?.center.y ?? 0;
 
