@@ -1,3 +1,6 @@
+# [next]
+- Adds mixin `Acceleration`.
+
 # [2.7.5]
 - Improvements in `MouseGesture`.
 - Improvements in `RotationEnemyExtensions`.
