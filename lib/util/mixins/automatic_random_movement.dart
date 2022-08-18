@@ -15,6 +15,7 @@ mixin AutomaticRandomMovement on Movement {
     int maxDistance = 50,
     int minDistance = 0,
     int timeKeepStopped = 2000,
+    bool useAngle = false,
 
     /// milliseconds
   }) {
@@ -28,10 +29,17 @@ mixin AutomaticRandomMovement on Movement {
         randomY = randomY < minDistance ? minDistance : randomY;
         int randomNegativeX = Random().nextBool() ? -1 : 1;
         int randomNegativeY = Random().nextBool() ? -1 : 1;
-        _targetRandomMovement = position.translate(
-          randomX.toDouble() * randomNegativeX,
-          randomY.toDouble() * randomNegativeY,
-        );
+        final rect = rectConsideringCollision;
+        double margin = max(rect.width, rect.height) / 2;
+        _targetRandomMovement = rect.center.toVector2().translate(
+              (randomX.toDouble() + margin) * randomNegativeX,
+              (randomY.toDouble() + margin) * randomNegativeY,
+            );
+        if (useAngle) {
+          angle = BonfireUtil.angleBetweenPoints(
+              rectConsideringCollision.center.toVector2(),
+              _targetRandomMovement);
+        }
       }
     } else {
       bool canMoveX = (_targetRandomMovement.x - x).abs() > speed;
@@ -55,26 +63,29 @@ mixin AutomaticRandomMovement on Movement {
           canMoveUp = true;
         }
       }
-
       bool onMove = false;
-      if (canMoveLeft && canMoveUp) {
-        onMove = moveUpLeft(speed, speed);
-      } else if (canMoveLeft && canMoveDown) {
-        onMove = moveDownLeft(speed, speed);
-      } else if (canMoveRight && canMoveUp) {
-        onMove = moveUpRight(speed, speed);
-      } else if (canMoveRight && canMoveDown) {
-        onMove = moveDownRight(speed, speed);
-      } else if (canMoveRight) {
-        onMove = moveRight(speed);
-      } else if (canMoveLeft) {
-        onMove = moveLeft(speed);
-      } else if (canMoveUp) {
-        onMove = moveUp(speed);
-      } else if (canMoveDown) {
-        onMove = moveDown(speed);
+      if (useAngle) {
+        if (canMoveX && canMoveY) {
+          onMove = moveFromAngle(speed, angle);
+        }
       } else {
-        _cleanTargetMovementRandom();
+        if (canMoveLeft && canMoveUp) {
+          onMove = moveUpLeft(speed, speed);
+        } else if (canMoveLeft && canMoveDown) {
+          onMove = moveDownLeft(speed, speed);
+        } else if (canMoveRight && canMoveUp) {
+          onMove = moveUpRight(speed, speed);
+        } else if (canMoveRight && canMoveDown) {
+          onMove = moveDownRight(speed, speed);
+        } else if (canMoveRight) {
+          onMove = moveRight(speed);
+        } else if (canMoveLeft) {
+          onMove = moveLeft(speed);
+        } else if (canMoveUp) {
+          onMove = moveUp(speed);
+        } else if (canMoveDown) {
+          onMove = moveDown(speed);
+        }
       }
 
       if (!onMove) {

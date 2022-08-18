@@ -108,4 +108,10 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
       damage: 30,
     );
   }
+
+  @override
+  void die() {
+    removeFromParent();
+    super.die();
+  }
 }

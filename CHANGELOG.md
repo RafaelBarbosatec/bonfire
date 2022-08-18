@@ -1,7 +1,10 @@
-# [next]
+# [2.7.5]
 - Improvements in `MouseGesture`.
+- Improvements in `RotationEnemyExtensions`.
 - Adds `BonfireUtil`.
 - Adds optional param `firstCheckIsTrue` in `checkInterval` method.
+- Adds param `useAngle` in `runRandomMovement` method (`AutomaticRandomMovement`). To use in components top-dow.
+- Update top-down example.
 
 # [2.7.4]
 - adds bool `movementByJoystickEnabled` in `MovementByJoystick` mixin. to disable mixin.
