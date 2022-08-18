@@ -3,7 +3,7 @@
 - Improvements in `RotationEnemyExtensions`.
 - Adds `BonfireUtil`.
 - Adds optional param `firstCheckIsTrue` in `checkInterval` method.
-- Adds param `useAngle` in `runRandomMovement` method (`AutomaticRandomMovement`). To use in components top-dow.
+- Adds param `useAngle` in `runRandomMovement` method (`AutomaticRandomMovement`). To use in components top-down.
 - Update top-down example.
 
 # [2.7.4]
