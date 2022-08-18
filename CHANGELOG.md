@@ -1,6 +1,7 @@
 # [next]
 - Improvements in `MouseGesture`.
-- Adds `BonfireUtil`
+- Adds `BonfireUtil`.
+- Adds optional param `firstCheckIsTrue` in `checkInterval` method.
 
 # [2.7.4]
 - adds bool `movementByJoystickEnabled` in `MovementByJoystick` mixin. to disable mixin.

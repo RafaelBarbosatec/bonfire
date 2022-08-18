@@ -18,13 +18,18 @@ mixin InternalChecker {
   /// Returns true if for each time the defined millisecond interval passes.
   /// Like a `Timer.periodic`
   /// Used in flows involved in the [update]
-  bool checkInterval(String key, int intervalInMilli, double dt) {
+  bool checkInterval(
+    String key,
+    int intervalInMilli,
+    double dt, {
+    bool firstCheckIsTrue = true,
+  }) {
     if (_timers == null) {
       _timers = Map();
     }
     if (this._timers![key]?.interval != intervalInMilli) {
       this._timers![key] = IntervalTick(intervalInMilli);
-      return true;
+      return firstCheckIsTrue;
     } else {
       return this._timers![key]?.update(dt) ?? false;
     }

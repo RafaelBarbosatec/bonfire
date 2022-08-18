@@ -86,4 +86,22 @@ class BonfireUtil {
 
     return Offset(x2 + center.dx, y2 + center.dy);
   }
+
+  static Vector2 movePointByAngle(
+    Vector2 point,
+    double speed,
+    double angle,
+  ) {
+    double nextX = speed * cos(angle);
+    double nextY = speed * sin(angle);
+    return Vector2(point.x + nextX, point.y + nextY);
+  }
+
+  static Vector2 diffMovePointByAngle(
+    Vector2 point,
+    double speed,
+    double angle,
+  ) {
+    return movePointByAngle(point, speed, angle) - point;
+  }
 }

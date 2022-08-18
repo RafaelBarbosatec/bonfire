@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
@@ -202,18 +201,15 @@ mixin Movement on GameComponent {
 
   /// Move Player to direction by radAngle
   bool moveFromAngle(double speed, double angle) {
-    double nextX = (speed * dtUpdate) * cos(angle);
-    double nextY = (speed * dtUpdate) * sin(angle);
-    Offset nextPoint = Offset(nextX, nextY);
-
     final rect = toRect();
-    Offset diffBase = Offset(
-          rect.center.dx + nextPoint.dx,
-          rect.center.dy + nextPoint.dy,
-        ) -
-        rect.center;
+    final center = rect.center.toVector2();
+    Vector2 diffBase = BonfireUtil.diffMovePointByAngle(
+      center,
+      speed * dtUpdate,
+      angle,
+    );
 
-    Offset newDiffBase = diffBase;
+    Offset newDiffBase = diffBase.toOffset();
 
     Rect newPosition = rect.shift(newDiffBase);
 
@@ -237,22 +233,16 @@ mixin Movement on GameComponent {
   ) {
     isIdle = false;
     double innerSpeed = (speed * dtUpdate);
-    double nextX = innerSpeed * cos(angle);
-    double nextY = innerSpeed * sin(angle);
-    Offset nextPoint = Offset(nextX, nextY);
 
-    Vector2 diffBase =
-        Vector2(this.center.x + nextPoint.dx, this.center.y + nextPoint.dy) -
-            this.center;
+    Vector2 diffBase = BonfireUtil.diffMovePointByAngle(
+      center,
+      innerSpeed,
+      angle,
+    );
 
-    var collisionX = _verifyTranslateCollision(
-      diffBase.x,
-      0,
-    );
-    var collisionY = _verifyTranslateCollision(
-      0,
-      diffBase.y,
-    );
+    var collisionX = _verifyTranslateCollision(diffBase.x, 0);
+
+    var collisionY = _verifyTranslateCollision(0, diffBase.y);
 
     Vector2 newDiffBase = diffBase;
 
@@ -263,20 +253,29 @@ mixin Movement on GameComponent {
       newDiffBase = Vector2(newDiffBase.x, 0);
     }
 
-    if (collisionX && !collisionY && newDiffBase.y != 0) {
-      var collisionY = _verifyTranslateCollision(
+    if (collisionX && newDiffBase.y != 0) {
+      double speedY = innerSpeed;
+      if (newDiffBase.y < 0) {
+        speedY *= -1;
+      }
+      final collisionY = _verifyTranslateCollision(
         0,
-        innerSpeed,
+        speedY,
       );
-      if (!collisionY) newDiffBase = Vector2(0, innerSpeed);
+
+      if (!collisionY) newDiffBase = Vector2(0, speedY);
     }
 
-    if (collisionY && !collisionX && newDiffBase.x != 0) {
-      var collisionX = _verifyTranslateCollision(
-        innerSpeed,
+    if (collisionY && newDiffBase.x != 0) {
+      double speedX = innerSpeed;
+      if (newDiffBase.x < 0) {
+        speedX *= -1;
+      }
+      final collisionX = _verifyTranslateCollision(
+        speedX,
         0,
       );
-      if (!collisionX) newDiffBase = Vector2(innerSpeed, 0);
+      if (!collisionX) newDiffBase = Vector2(speedX, 0);
     }
 
     _updateDirectionBuAngle(angle);
