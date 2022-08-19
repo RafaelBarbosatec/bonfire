@@ -32,7 +32,10 @@ mixin Movement on GameComponent {
     if (_isCollision(displacement)) {
       if (notifyOnMove) {
         onMove(
-            0, Direction.up, BonfireUtil.getAngleFromDirection(Direction.up));
+          0,
+          Direction.up,
+          BonfireUtil.getAngleFromDirection(Direction.up),
+        );
       }
       return false;
     }
@@ -41,8 +44,11 @@ mixin Movement on GameComponent {
     position = displacement;
     lastDirection = Direction.up;
     if (notifyOnMove) {
-      onMove(speed, lastDirection,
-          BonfireUtil.getAngleFromDirection(lastDirection));
+      onMove(
+        speed,
+        lastDirection,
+        BonfireUtil.getAngleFromDirection(lastDirection),
+      );
     }
     return true;
   }
@@ -54,8 +60,11 @@ mixin Movement on GameComponent {
 
     if (_isCollision(displacement)) {
       if (notifyOnMove) {
-        onMove(0, Direction.down,
-            BonfireUtil.getAngleFromDirection(Direction.down));
+        onMove(
+          0,
+          Direction.down,
+          BonfireUtil.getAngleFromDirection(Direction.down),
+        );
       }
       return false;
     }
@@ -64,8 +73,11 @@ mixin Movement on GameComponent {
     position = displacement;
     lastDirection = Direction.down;
     if (notifyOnMove) {
-      onMove(speed, lastDirection,
-          BonfireUtil.getAngleFromDirection(lastDirection));
+      onMove(
+        speed,
+        lastDirection,
+        BonfireUtil.getAngleFromDirection(lastDirection),
+      );
     }
     return true;
   }
@@ -77,8 +89,11 @@ mixin Movement on GameComponent {
 
     if (_isCollision(displacement)) {
       if (notifyOnMove) {
-        onMove(0, Direction.left,
-            BonfireUtil.getAngleFromDirection(Direction.left));
+        onMove(
+          0,
+          Direction.left,
+          BonfireUtil.getAngleFromDirection(Direction.left),
+        );
       }
 
       return false;
@@ -89,8 +104,11 @@ mixin Movement on GameComponent {
     lastDirection = Direction.left;
     lastDirectionHorizontal = Direction.left;
     if (notifyOnMove) {
-      onMove(speed, lastDirection,
-          BonfireUtil.getAngleFromDirection(lastDirection));
+      onMove(
+        speed,
+        lastDirection,
+        BonfireUtil.getAngleFromDirection(lastDirection),
+      );
     }
     return true;
   }
@@ -102,8 +120,11 @@ mixin Movement on GameComponent {
 
     if (_isCollision(displacement)) {
       if (notifyOnMove) {
-        onMove(0, Direction.right,
-            BonfireUtil.getAngleFromDirection(Direction.right));
+        onMove(
+          0,
+          Direction.right,
+          BonfireUtil.getAngleFromDirection(Direction.right),
+        );
       }
       return false;
     }
@@ -113,8 +134,11 @@ mixin Movement on GameComponent {
     lastDirection = Direction.right;
     lastDirectionHorizontal = Direction.right;
     if (notifyOnMove) {
-      onMove(speed, lastDirection,
-          BonfireUtil.getAngleFromDirection(lastDirection));
+      onMove(
+        speed,
+        lastDirection,
+        BonfireUtil.getAngleFromDirection(lastDirection),
+      );
     }
     return true;
   }
@@ -127,12 +151,18 @@ mixin Movement on GameComponent {
       lastDirection = Direction.upRight;
     }
     if (successRight | successUp) {
-      onMove(speed, lastDirection,
-          BonfireUtil.getAngleFromDirection(lastDirection));
+      onMove(
+        speed,
+        lastDirection,
+        BonfireUtil.getAngleFromDirection(lastDirection),
+      );
       return true;
     } else {
-      onMove(0, Direction.upRight,
-          BonfireUtil.getAngleFromDirection(Direction.upRight));
+      onMove(
+        0,
+        Direction.upRight,
+        BonfireUtil.getAngleFromDirection(Direction.upRight),
+      );
       return false;
     }
   }
@@ -149,12 +179,18 @@ mixin Movement on GameComponent {
     }
 
     if (successLeft | successUp) {
-      onMove(speed, lastDirection,
-          BonfireUtil.getAngleFromDirection(lastDirection));
+      onMove(
+        speed,
+        lastDirection,
+        BonfireUtil.getAngleFromDirection(lastDirection),
+      );
       return true;
     } else {
-      onMove(0, Direction.upLeft,
-          BonfireUtil.getAngleFromDirection(Direction.upLeft));
+      onMove(
+        0,
+        Direction.upLeft,
+        BonfireUtil.getAngleFromDirection(Direction.upLeft),
+      );
       return false;
     }
   }
@@ -169,12 +205,18 @@ mixin Movement on GameComponent {
     }
 
     if (successLeft | successDown) {
-      onMove(speed, lastDirection,
-          BonfireUtil.getAngleFromDirection(lastDirection));
+      onMove(
+        speed,
+        lastDirection,
+        BonfireUtil.getAngleFromDirection(lastDirection),
+      );
       return true;
     } else {
-      onMove(0, Direction.downLeft,
-          BonfireUtil.getAngleFromDirection(Direction.downLeft));
+      onMove(
+        0,
+        Direction.downLeft,
+        BonfireUtil.getAngleFromDirection(Direction.downLeft),
+      );
       return false;
     }
   }
@@ -189,14 +231,34 @@ mixin Movement on GameComponent {
     }
 
     if (successRight | successDown) {
-      onMove(speed, lastDirection,
-          BonfireUtil.getAngleFromDirection(lastDirection));
+      onMove(
+        speed,
+        lastDirection,
+        BonfireUtil.getAngleFromDirection(lastDirection),
+      );
       return true;
     } else {
-      onMove(0, Direction.downRight,
-          BonfireUtil.getAngleFromDirection(Direction.downRight));
+      onMove(
+        0,
+        Direction.downRight,
+        BonfireUtil.getAngleFromDirection(Direction.downRight),
+      );
       return false;
     }
+  }
+
+  bool moveByVector(Vector2 speed) {
+    double innerSpeedX = speed.x * dtUpdate;
+    double innerSpeedY = speed.y * dtUpdate;
+    Vector2 displacement = position.translate(innerSpeedX, innerSpeedY);
+
+    if (_isCollision(displacement)) {
+      return false;
+    }
+
+    isIdle = false;
+    position = displacement;
+    return true;
   }
 
   /// Move Player to direction by radAngle
@@ -330,44 +392,50 @@ mixin Movement on GameComponent {
     return false;
   }
 
-  bool moveFromDirection(Direction direction, {bool enabledDiagonal = true}) {
+  bool moveFromDirection(
+    Direction direction, {
+    Vector2? speedVector,
+    bool enabledDiagonal = true,
+  }) {
+    double speedX = speedVector?.x ?? speed;
+    double speedY = speedVector?.y ?? speed;
     switch (direction) {
       case Direction.left:
-        return moveLeft(speed);
+        return moveLeft(speedX);
       case Direction.right:
-        return moveRight(speed);
+        return moveRight(speedX);
       case Direction.up:
-        return moveUp(speed);
+        return moveUp(speedY);
       case Direction.down:
-        return moveDown(speed);
+        return moveDown(speedY);
       case Direction.upLeft:
         if (enabledDiagonal) {
-          return moveUpLeft(speed * REDUCTION_SPEED_DIAGONAL,
-              speed * REDUCTION_SPEED_DIAGONAL);
+          return moveUpLeft(speedX * REDUCTION_SPEED_DIAGONAL,
+              speedY * REDUCTION_SPEED_DIAGONAL);
         } else {
           return moveRight(speed);
         }
 
       case Direction.upRight:
         if (enabledDiagonal) {
-          return moveUpRight(speed * REDUCTION_SPEED_DIAGONAL,
-              speed * REDUCTION_SPEED_DIAGONAL);
+          return moveUpRight(speedX * REDUCTION_SPEED_DIAGONAL,
+              speedY * REDUCTION_SPEED_DIAGONAL);
         } else {
           return moveRight(speed);
         }
 
       case Direction.downLeft:
         if (enabledDiagonal) {
-          return moveDownLeft(speed * REDUCTION_SPEED_DIAGONAL,
-              speed * REDUCTION_SPEED_DIAGONAL);
+          return moveDownLeft(speedX * REDUCTION_SPEED_DIAGONAL,
+              speedY * REDUCTION_SPEED_DIAGONAL);
         } else {
           return moveLeft(speed);
         }
 
       case Direction.downRight:
         if (enabledDiagonal) {
-          return moveDownRight(speed * REDUCTION_SPEED_DIAGONAL,
-              speed * REDUCTION_SPEED_DIAGONAL);
+          return moveDownRight(speedX * REDUCTION_SPEED_DIAGONAL,
+              speedY * REDUCTION_SPEED_DIAGONAL);
         } else {
           return moveRight(speed);
         }
