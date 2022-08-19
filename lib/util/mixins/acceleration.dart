@@ -1,40 +1,49 @@
 import 'package:bonfire/bonfire.dart';
 
-enum _TypeAcceleration { direction, angle, custom, none }
+enum _TypeAcceleration { direction, angle, custom, function, none }
+
+typedef AccelerationChanged = Vector2 Function(double dt, Vector2 current);
 
 mixin Acceleration on Movement {
   _TypeAcceleration _type = _TypeAcceleration.direction;
   Vector2 customSpeed = Vector2.zero();
   Vector2 _acceleration = Vector2.zero();
+  AccelerationChanged? _accelerationFunction;
   final Vector2 _zero = Vector2.zero();
   Direction? _direction;
   double? _moveAngle;
-  bool _stopWhenZero = true;
+  bool _stopWhenSpeedZero = true;
   bool _updateAngleComponent = false;
 
-  void applyAccelerationDirection(
-    double initialSpeed,
+  void applyAccelerationByDirection(
     double acceleration,
     Direction direction, {
-    bool stopWhenZero = true,
+    bool stopWhenSpeedZero = false,
+    double? initialSpeed,
   }) {
     _type = _TypeAcceleration.direction;
-    customSpeed = Vector2.all(initialSpeed == 0 ? 0.1 : initialSpeed);
+    speed = initialSpeed ?? speed;
+    if (speed == 0) {
+      speed = 0.01;
+    }
     _acceleration = Vector2.all(acceleration);
-    _stopWhenZero = stopWhenZero;
+    _stopWhenSpeedZero = stopWhenSpeedZero;
     _direction = direction;
   }
 
-  void applyAccelerationAngle(
-    double initialSpeed,
+  void applyAccelerationByAngle(
     double acceleration,
     double angle, {
-    bool stopWhenZero = true,
+    bool stopWhenSpeedZero = false,
+    double? initialSpeed,
   }) {
     _type = _TypeAcceleration.angle;
-    customSpeed = Vector2.all(initialSpeed == 0 ? 0.1 : initialSpeed);
+    speed = initialSpeed ?? speed;
+    if (speed == 0) {
+      speed = 0.01;
+    }
     _acceleration = Vector2.all(acceleration);
-    _stopWhenZero = stopWhenZero;
+    _stopWhenSpeedZero = stopWhenSpeedZero;
     _moveAngle = angle;
     if (_updateAngleComponent) {
       this.angle = angle;
@@ -42,14 +51,31 @@ mixin Acceleration on Movement {
   }
 
   void applyAcceleration(
-    Vector2 initialSpeed,
-    Vector2 acceleration, {
-    bool stopWhenZero = true,
+    Vector2 acceleration,
+    Vector2 initialSpeed, {
+    bool stopWhenSpeedZero = false,
   }) {
     _type = _TypeAcceleration.custom;
-    customSpeed = initialSpeed == _zero ? Vector2.all(0.1) : initialSpeed;
+    customSpeed = initialSpeed;
+    if (customSpeed == _zero) {
+      customSpeed = Vector2.all(0.01);
+    }
     _acceleration = acceleration;
-    _stopWhenZero = stopWhenZero;
+    _stopWhenSpeedZero = stopWhenSpeedZero;
+  }
+
+  void applyAccelerationByFunction(
+    AccelerationChanged acceleration,
+    Vector2 initialSpeed, {
+    bool stopWhenSpeedZero = false,
+  }) {
+    _type = _TypeAcceleration.function;
+    customSpeed = initialSpeed;
+    if (customSpeed == _zero) {
+      customSpeed = Vector2.all(0.01);
+    }
+    _accelerationFunction = acceleration;
+    _stopWhenSpeedZero = stopWhenSpeedZero;
   }
 
   @override
@@ -67,11 +93,14 @@ mixin Acceleration on Movement {
         break;
       case _TypeAcceleration.none:
         break;
+      case _TypeAcceleration.function:
+        _applyFunction(dt);
+        break;
     }
   }
 
   void _applyDirection() {
-    if (customSpeed == _zero && _stopWhenZero) {
+    if (customSpeed == _zero && _stopWhenSpeedZero) {
       stopAcceleration();
     } else {
       moveFromDirection(_direction!);
@@ -80,7 +109,7 @@ mixin Acceleration on Movement {
   }
 
   void _applyAngle() {
-    if (customSpeed == _zero && _stopWhenZero) {
+    if (customSpeed == _zero && _stopWhenSpeedZero) {
       stopAcceleration();
     } else {
       moveFromAngle(speed, _moveAngle!);
@@ -89,7 +118,7 @@ mixin Acceleration on Movement {
   }
 
   void _applyCustom() {
-    if (customSpeed == _zero && _stopWhenZero) {
+    if (customSpeed == _zero && _stopWhenSpeedZero) {
       stopAcceleration();
     } else {
       moveByVector(customSpeed);
@@ -97,39 +126,61 @@ mixin Acceleration on Movement {
     }
   }
 
+  void _applyFunction(double dt) {
+    if (customSpeed == _zero && _stopWhenSpeedZero) {
+      stopAcceleration();
+    } else {
+      moveByVector(customSpeed);
+      _updateComplexSpeed(dt);
+    }
+  }
+
   void stopAcceleration() {
     _direction = null;
     _moveAngle = null;
+    _accelerationFunction = null;
     _type = _TypeAcceleration.none;
   }
 
   void _updateSpeed() {
-    if ((customSpeed.x - _acceleration.x).abs() < _acceleration.x.abs() &&
-        _stopWhenZero) {
-      customSpeed = _zero;
+    if ((speed - _acceleration.x).abs() < _acceleration.x.abs() &&
+        _stopWhenSpeedZero) {
       speed = 0;
     } else {
-      customSpeed += _acceleration;
-      speed = customSpeed.x;
+      speed += _acceleration.x;
     }
   }
 
   void _updateCustomSpeed() {
-    if (_stopWhenZero) {
-      if (customSpeed.x.abs() < _acceleration.x.abs()) {
-        customSpeed.x = 0;
-      }
-      if (customSpeed.y.abs() < _acceleration.y.abs()) {
-        customSpeed.y = 0;
-      }
-      if (customSpeed.x != 0) {
-        customSpeed.x += _acceleration.x;
-      }
-      if (customSpeed.y != 0) {
-        customSpeed.y += _acceleration.y;
-      }
+    if (_stopWhenSpeedZero) {
+      _updateCustomSpeedToZero(_acceleration);
     } else {
       customSpeed += _acceleration;
+    }
+  }
+
+  void _updateComplexSpeed(double dt) {
+    _acceleration =
+        _accelerationFunction?.call(dt, _acceleration) ?? Vector2.zero();
+    if (_stopWhenSpeedZero) {
+      _updateCustomSpeedToZero(_acceleration);
+    } else {
+      customSpeed += _acceleration;
+    }
+  }
+
+  void _updateCustomSpeedToZero(Vector2 acceletarion) {
+    if (customSpeed.x.abs() < acceletarion.x.abs()) {
+      customSpeed.x = 0;
+    }
+    if (customSpeed.y.abs() < acceletarion.y.abs()) {
+      customSpeed.y = 0;
+    }
+    if (customSpeed.x != 0) {
+      customSpeed.x += acceletarion.x;
+    }
+    if (customSpeed.y != 0) {
+      customSpeed.y += acceletarion.y;
     }
   }
 }
