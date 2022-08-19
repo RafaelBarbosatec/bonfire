@@ -100,7 +100,7 @@ mixin Acceleration on Movement {
   }
 
   void _applyDirection() {
-    if (customSpeed == _zero && _stopWhenSpeedZero) {
+    if (speed == 0 && _stopWhenSpeedZero) {
       stopAcceleration();
     } else {
       if (moveFromDirection(_direction!)) {
@@ -112,7 +112,7 @@ mixin Acceleration on Movement {
   }
 
   void _applyAngle() {
-    if (customSpeed == _zero && _stopWhenSpeedZero) {
+    if (speed == 0 && _stopWhenSpeedZero) {
       stopAcceleration();
     } else {
       if (moveFromAngle(speed, _moveAngle!)) {
