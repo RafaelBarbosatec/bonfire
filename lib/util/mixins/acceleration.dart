@@ -103,8 +103,11 @@ mixin Acceleration on Movement {
     if (customSpeed == _zero && _stopWhenSpeedZero) {
       stopAcceleration();
     } else {
-      moveFromDirection(_direction!);
-      _updateSpeed();
+      if (moveFromDirection(_direction!)) {
+        _updateSpeed();
+      } else {
+        stopAcceleration();
+      }
     }
   }
 
@@ -112,8 +115,11 @@ mixin Acceleration on Movement {
     if (customSpeed == _zero && _stopWhenSpeedZero) {
       stopAcceleration();
     } else {
-      moveFromAngle(speed, _moveAngle!);
-      _updateSpeed();
+      if (moveFromAngle(speed, _moveAngle!)) {
+        _updateSpeed();
+      } else {
+        stopAcceleration();
+      }
     }
   }
 
@@ -121,8 +127,11 @@ mixin Acceleration on Movement {
     if (customSpeed == _zero && _stopWhenSpeedZero) {
       stopAcceleration();
     } else {
-      moveByVector(customSpeed);
-      _updateCustomSpeed();
+      if (moveByVector(customSpeed)) {
+        _updateCustomSpeed();
+      } else {
+        stopAcceleration();
+      }
     }
   }
 
@@ -130,8 +139,11 @@ mixin Acceleration on Movement {
     if (customSpeed == _zero && _stopWhenSpeedZero) {
       stopAcceleration();
     } else {
-      moveByVector(customSpeed);
-      _updateComplexSpeed(dt);
+      if (moveByVector(customSpeed)) {
+        _updateComplexSpeed(dt);
+      } else {
+        stopAcceleration();
+      }
     }
   }
 
