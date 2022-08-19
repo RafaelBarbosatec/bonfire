@@ -1,3 +1,6 @@
+# [2.7.7]
+- fix in `Acceleration`.
+
 # [2.7.6]
 - Adds mixin `Acceleration`.
 - Rename methods in `MouseGesture`
