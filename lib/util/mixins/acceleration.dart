@@ -152,6 +152,7 @@ mixin Acceleration on Movement {
     _moveAngle = null;
     _accelerationFunction = null;
     _type = _TypeAcceleration.none;
+    idle();
   }
 
   void _updateSpeed() {
