@@ -9,6 +9,7 @@ enum MouseButton { left, right, middle, unknow }
 mixin MouseGesture on GameComponent {
   bool enableMouseGesture = true;
   int _pointer = -1;
+  bool _hoverEnter = false;
   MouseButton? _buttonClicked;
 
   /// Listen to the mouse cursor across the screen
@@ -39,15 +40,18 @@ mixin MouseGesture on GameComponent {
       return super.handlerPointerHover(event);
     }
     int pointer = event.pointer;
-    Vector2 realPosition = event.localPosition.toVector2();
+    Vector2 position = event.localPosition.toVector2();
+    Vector2 realPosition = position;
     if (!isHud) {
       realPosition = this.gameRef.screenToWorld(realPosition);
     }
     onMouseHoverScreen(pointer, position);
 
-    if (containsPoint(realPosition)) {
+    if (containsPoint(realPosition) && !_hoverEnter) {
+      _hoverEnter = true;
       onMouseHoverEnter(pointer, position);
-    } else {
+    } else if (!containsPoint(realPosition) && _hoverEnter) {
+      _hoverEnter = false;
       onMouseHoverExit(pointer, position);
     }
 
@@ -60,6 +64,7 @@ mixin MouseGesture on GameComponent {
       return super.handlerPointerSignal(event);
     }
     int pointer = event.pointer;
+    Vector2 position = event.localPosition.toVector2();
     Vector2 realPosition = event.localPosition.toVector2();
     if (!isHud) {
       realPosition = this.gameRef.screenToWorld(realPosition);

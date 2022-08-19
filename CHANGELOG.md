@@ -1,5 +1,6 @@
-# [2.7.7]
-- fix in `Acceleration`.
+# [2.7.8]
+- fix `Acceleration`.
+- fix `MouseGesture`
 
 # [2.7.6]
 - Adds mixin `Acceleration`.
