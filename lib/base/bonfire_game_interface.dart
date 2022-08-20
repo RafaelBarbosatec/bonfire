@@ -13,9 +13,10 @@ import 'package:bonfire/scene_builder/scene_action.dart';
 import 'package:bonfire/scene_builder/scene_manager_component.dart';
 import 'package:bonfire/util/mixins/attackable.dart';
 import 'package:bonfire/util/mixins/sensor.dart';
-import 'package:bonfire/util/overlay_manager.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+// ignore: implementation_imports
+import 'package:flame/src/game/overlay_manager.dart';
 import 'package:flutter/widgets.dart';
 
 ///
@@ -65,6 +66,7 @@ abstract class BonfireGameInterface {
   /// See also:
   /// - GameWidget
   /// - [Game.overlayManager]
+  // ignore: invalid_use_of_internal_member
   OverlayManager get overlayManager;
 
   /// Used to pause the engine.

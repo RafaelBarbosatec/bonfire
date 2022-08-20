@@ -8,8 +8,9 @@ import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/util/map_explorer.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
-import 'package:bonfire/util/overlay_manager.dart';
 import 'package:flame/input.dart';
+// ignore: implementation_imports
+import 'package:flame/src/game/overlay_manager.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -90,8 +91,6 @@ class BonfireGame extends BaseGame
   @override
   JoystickController? get joystick => _joystickController;
 
-  late OverlayManager overlayManager;
-
   BonfireGame({
     required this.context,
     required this.map,
@@ -115,7 +114,6 @@ class BonfireGame extends BaseGame
     CameraConfig? cameraConfig,
   })  : _joystickController = joystickController,
         super(camera: BonfireCamera(cameraConfig ?? CameraConfig())) {
-    overlayManager = OverlayManager(this);
     camera.setGame(this);
     camera.target ??= player;
 
@@ -406,4 +404,8 @@ class BonfireGame extends BaseGame
     });
     super.onDetach();
   }
+
+  @override
+  // ignore: invalid_use_of_internal_member
+  OverlayManager get overlayManager => overlays;
 }

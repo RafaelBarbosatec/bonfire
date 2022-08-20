@@ -1,3 +1,6 @@
+# [2.8.0]
+- Update flame to `1.3.0`
+
 # [2.7.8]
 - fix `Acceleration`.
 - fix `MouseGesture`
