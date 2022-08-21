@@ -70,7 +70,7 @@ mixin Sensor on GameComponent {
   }
 
   void _verifyContact() {
-    List<GameComponent> _compsInContact = [];
+    List<GameComponent> compsInContact = [];
     Iterable<GameComponent> compsToCheck = _checkOnlyVisible
         ? gameRef.visibleComponents()
         : gameRef.componentsByType<GameComponent>();
@@ -82,21 +82,21 @@ mixin Sensor on GameComponent {
               .collisionConfig!
               .verifyCollision(_collisionConfig);
           if (hasContact) {
-            _compsInContact.add(vComp);
+            compsInContact.add(vComp);
             onContact(vComp);
           }
         } else if (vComp.toRect().overlaps(_collisionConfig!.rect)) {
-          _compsInContact.add(vComp);
+          compsInContact.add(vComp);
           onContact(vComp);
         }
       }
     }
 
     for (final c in _componentsInContact) {
-      if (!_compsInContact.contains(c)) {
+      if (!compsInContact.contains(c)) {
         onContactExit(c);
       }
     }
-    _componentsInContact = _compsInContact;
+    _componentsInContact = compsInContact;
   }
 }
