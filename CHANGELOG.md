@@ -1,3 +1,6 @@
+# [2.8.1]
+- Adds `onContactExit` in `Sensor` mixin.
+
 # [2.8.0]
 - Update flame to `1.3.0`
 

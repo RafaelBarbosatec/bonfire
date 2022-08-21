@@ -30,4 +30,7 @@ class PotionLife extends GameDecoration with Sensor {
       removeFromParent();
     }
   }
+
+  @override
+  void onContactExit(GameComponent component) {}
 }

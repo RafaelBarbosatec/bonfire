@@ -8,10 +8,13 @@ final Color sensorColor = Color(0xFFF44336).withOpacity(0.5);
 /// Mixin responsible for adding trigger to detect other objects above
 mixin Sensor on GameComponent {
   void onContact(GameComponent component);
+  void onContactExit(GameComponent component);
 
   bool enabledSensor = true;
+  List<GameComponent> _componentsInContact = [];
 
   int _intervalCheckContact = 250;
+  bool _checkOnlyVisible = true;
   String _intervalCheckContactKey = 'KEY_CHECK_SENSOR_CONTACT';
 
   CollisionConfig? _collisionConfig;
@@ -33,7 +36,9 @@ mixin Sensor on GameComponent {
   void setupSensorArea({
     List<CollisionArea>? areaSensor,
     int intervalCheck = 250,
+    bool checkOnlyVisible = true,
   }) {
+    _checkOnlyVisible = checkOnlyVisible;
     _intervalCheckContact = intervalCheck;
     _collisionConfig = CollisionConfig(
       collisions: areaSensor ?? _sensorArea,
@@ -42,7 +47,7 @@ mixin Sensor on GameComponent {
 
   @override
   void update(double dt) {
-    if (enabledSensor) {
+    if (enabledSensor && (_checkOnlyVisible ? isVisible : true)) {
       if (_collisionConfig == null) {
         _collisionConfig = CollisionConfig(collisions: _sensorArea);
       }
@@ -65,19 +70,33 @@ mixin Sensor on GameComponent {
   }
 
   void _verifyContact() {
-    for (final vComp in gameRef.visibleComponents()) {
-      if (vComp != this) {
+    List<GameComponent> compsInContact = [];
+    Iterable<GameComponent> compsToCheck = _checkOnlyVisible
+        ? gameRef.visibleComponents()
+        : gameRef.componentsByType<GameComponent>();
+
+    for (final vComp in compsToCheck) {
+      if (vComp != this && !vComp.isHud) {
         if (vComp.isObjectCollision()) {
           final hasContact = (vComp as ObjectCollision)
               .collisionConfig!
               .verifyCollision(_collisionConfig);
           if (hasContact) {
+            compsInContact.add(vComp);
             onContact(vComp);
           }
         } else if (vComp.toRect().overlaps(_collisionConfig!.rect)) {
+          compsInContact.add(vComp);
           onContact(vComp);
         }
       }
     }
+
+    for (final c in _componentsInContact) {
+      if (!compsInContact.contains(c)) {
+        onContactExit(c);
+      }
+    }
+    _componentsInContact = compsInContact;
   }
 }
