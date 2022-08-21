@@ -8,8 +8,10 @@ final Color sensorColor = Color(0xFFF44336).withOpacity(0.5);
 /// Mixin responsible for adding trigger to detect other objects above
 mixin Sensor on GameComponent {
   void onContact(GameComponent component);
+  void onContactExit(GameComponent component);
 
   bool enabledSensor = true;
+  List<GameComponent> _componentsInContact = [];
 
   int _intervalCheckContact = 250;
   String _intervalCheckContactKey = 'KEY_CHECK_SENSOR_CONTACT';
@@ -65,19 +67,29 @@ mixin Sensor on GameComponent {
   }
 
   void _verifyContact() {
+    List<GameComponent> _compsInContact = [];
     for (final vComp in gameRef.visibleComponents()) {
-      if (vComp != this) {
+      if (vComp != this && !vComp.isHud) {
         if (vComp.isObjectCollision()) {
           final hasContact = (vComp as ObjectCollision)
               .collisionConfig!
               .verifyCollision(_collisionConfig);
           if (hasContact) {
+            _compsInContact.add(vComp);
             onContact(vComp);
           }
         } else if (vComp.toRect().overlaps(_collisionConfig!.rect)) {
+          _compsInContact.add(vComp);
           onContact(vComp);
         }
       }
     }
+
+    for (final c in _componentsInContact) {
+      if (!_compsInContact.contains(c)) {
+        onContactExit(c);
+      }
+    }
+    _componentsInContact = _compsInContact;
   }
 }
