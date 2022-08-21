@@ -1,4 +1,4 @@
-# [next]
+# [2.8.1]
 - Adds `onContactExit` in `Sensor` mixin.
 
 # [2.8.0]
