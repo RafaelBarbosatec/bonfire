@@ -91,10 +91,7 @@ class Knight extends SimplePlayer
   void execMeleeAttack(double attack) {
     this.simpleAttackMelee(
       damage: attack,
-      animationDown: CommonSpriteSheet.whiteAttackEffectBottom,
-      animationLeft: CommonSpriteSheet.whiteAttackEffectLeft,
       animationRight: CommonSpriteSheet.whiteAttackEffectRight,
-      animationUp: CommonSpriteSheet.whiteAttackEffectTop,
       size: Vector2.all(DungeonMap.tileSize),
     );
   }

@@ -27,29 +27,25 @@ extension PlayerExtensions on Player {
 
   void simpleAttackMelee({
     Future<SpriteAnimation>? animationRight,
-    Future<SpriteAnimation>? animationDown,
-    Future<SpriteAnimation>? animationLeft,
-    Future<SpriteAnimation>? animationUp,
     required double damage,
     required Vector2 size,
     dynamic id,
     Direction? direction,
     bool withPush = true,
     double? sizePush,
+    Vector2? centerOffset,
   }) {
     Direction attackDirection = direction ?? this.lastDirection;
     this.simpleAttackMeleeByDirection(
       direction: attackDirection,
       animationRight: animationRight,
-      animationDown: animationDown,
-      animationLeft: animationLeft,
-      animationUp: animationUp,
       damage: damage,
       id: id,
       size: size,
       withPush: withPush,
       sizePush: sizePush,
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
+      centerOffset: centerOffset,
     );
   }
 
@@ -75,9 +71,6 @@ extension PlayerExtensions on Player {
     this.simpleAttackRangeByDirection(
       direction: attackDirection,
       animationRight: animationRight,
-      animationLeft: animationLeft,
-      animationUp: animationUp,
-      animationDown: animationDown,
       animationDestroy: animationDestroy,
       size: size,
       id: id,

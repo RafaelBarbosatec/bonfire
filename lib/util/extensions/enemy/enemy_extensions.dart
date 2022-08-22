@@ -23,10 +23,8 @@ extension EnemyExtensions on Enemy {
     double? sizePush,
     Direction? direction,
     Future<SpriteAnimation>? animationRight,
-    Future<SpriteAnimation>? animationDown,
-    Future<SpriteAnimation>? animationLeft,
-    Future<SpriteAnimation>? animationUp,
     VoidCallback? execute,
+    Vector2? centerOffset,
   }) {
     if (!this.checkInterval('attackMelee', interval, dtUpdate)) return;
 
@@ -41,11 +39,9 @@ extension EnemyExtensions on Enemy {
       id: id,
       withPush: withPush,
       sizePush: sizePush,
-      animationUp: animationUp,
-      animationDown: animationDown,
-      animationLeft: animationLeft,
       animationRight: animationRight,
       attackFrom: AttackFromEnum.ENEMY,
+      centerOffset: centerOffset,
     );
 
     execute?.call();
@@ -54,9 +50,6 @@ extension EnemyExtensions on Enemy {
   /// Execute the ranged attack using a component with animation
   void simpleAttackRange({
     required Future<SpriteAnimation> animationRight,
-    required Future<SpriteAnimation> animationLeft,
-    required Future<SpriteAnimation> animationUp,
-    required Future<SpriteAnimation> animationDown,
     required Future<SpriteAnimation> animationDestroy,
     required Vector2 size,
     Vector2? destroySize,
@@ -80,9 +73,6 @@ extension EnemyExtensions on Enemy {
 
     this.simpleAttackRangeByDirection(
       animationRight: animationRight,
-      animationLeft: animationLeft,
-      animationUp: animationUp,
-      animationDown: animationDown,
       animationDestroy: animationDestroy,
       size: size,
       direction: direct,

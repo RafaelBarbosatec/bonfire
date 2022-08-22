@@ -45,7 +45,7 @@ class _RandomMapGameState extends State<RandomMapGame> {
               return Container(
                 color: Colors.black,
                 child: Center(
-                  child: CircularProgressIndicator(),
+                  child: Text('Generation nouse'),
                 ),
               );
             }

@@ -24,10 +24,8 @@ extension AllyExtensions on Ally {
     double? sizePush,
     Direction? direction,
     Future<SpriteAnimation>? animationRight,
-    Future<SpriteAnimation>? animationDown,
-    Future<SpriteAnimation>? animationLeft,
-    Future<SpriteAnimation>? animationUp,
     VoidCallback? execute,
+    Vector2? centerOffset,
   }) {
     if (!this.checkInterval('attackMelee', interval, dtUpdate)) return;
 
@@ -42,11 +40,9 @@ extension AllyExtensions on Ally {
       id: id,
       withPush: withPush,
       sizePush: sizePush,
-      animationUp: animationUp,
-      animationDown: animationDown,
-      animationLeft: animationLeft,
       animationRight: animationRight,
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
+      centerOffset: centerOffset,
     );
 
     execute?.call();
@@ -55,9 +51,6 @@ extension AllyExtensions on Ally {
   /// Execute the ranged attack using a component with animation
   void simpleAttackRange({
     required Future<SpriteAnimation> animationRight,
-    required Future<SpriteAnimation> animationLeft,
-    required Future<SpriteAnimation> animationUp,
-    required Future<SpriteAnimation> animationDown,
     required Future<SpriteAnimation> animationDestroy,
     required Vector2 size,
     Vector2? destroySize,
@@ -81,9 +74,6 @@ extension AllyExtensions on Ally {
 
     this.simpleAttackRangeByDirection(
       animationRight: animationRight,
-      animationLeft: animationLeft,
-      animationUp: animationUp,
-      animationDown: animationDown,
       animationDestroy: animationDestroy,
       size: size,
       direction: direct,

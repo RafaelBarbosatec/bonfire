@@ -66,9 +66,6 @@ class Goblin extends SimpleEnemy
     if (gameRef.player != null && gameRef.player?.isDead == true) return;
     this.simpleAttackRange(
       animationRight: CommonSpriteSheet.fireBallRight,
-      animationLeft: CommonSpriteSheet.fireBallLeft,
-      animationUp: CommonSpriteSheet.fireBallTop,
-      animationDown: CommonSpriteSheet.fireBallBottom,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       id: 35,
       size: Vector2.all(width * 0.9),
@@ -97,10 +94,7 @@ class Goblin extends SimpleEnemy
       damage: damage / 2,
       interval: 400,
       sizePush: DungeonMap.tileSize / 2,
-      animationDown: CommonSpriteSheet.blackAttackEffectBottom,
-      animationLeft: CommonSpriteSheet.blackAttackEffectLeft,
       animationRight: CommonSpriteSheet.blackAttackEffectRight,
-      animationUp: CommonSpriteSheet.blackAttackEffectTop,
     );
   }
 
