@@ -27,7 +27,7 @@ class BonfireWidget extends StatefulWidget {
   final GameInterface? interface;
 
   /// Represents a map (or world) where the game occurs.
-  final MapGame map;
+  final GameMap map;
 
   /// Used to show grid in the map and facilitate the construction and testing of the map
   final bool constructionMode;

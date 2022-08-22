@@ -2,9 +2,9 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/tiled/builder/tiled_world_builder.dart';
 import 'package:flutter/widgets.dart';
 
-class MapWordByTiled extends MapWorld {
+class WorldMapByTiled extends WorldMap {
   late TiledWorldBuilder _builder;
-  MapWordByTiled(
+  WorldMapByTiled(
     String path, {
     Vector2? forceTileSize,
     ValueChanged<Object>? onError,

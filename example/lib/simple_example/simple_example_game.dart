@@ -24,7 +24,7 @@ class SimpleExampleGame extends StatelessWidget {
         keyboardConfig: KeyboardConfig(),
         directional: JoystickDirectional(),
       ),
-      map: MapWordByTiled(
+      map: WorldMapByTiled(
         'tiled/mapa2.json',
         forceTileSize: Vector2(32, 32),
         objectsBuilder: {

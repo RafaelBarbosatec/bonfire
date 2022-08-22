@@ -65,7 +65,7 @@ typedef TileModelBuilder = TileModel Function(ItemMatrixProperties properties);
 /// * [build], Builder used to create the TileModel that represents each tile in the map.
 /// * [axisInverted], used to invert axis of the matrix. Example: matrix[x,y] turn matrix[y,x]. It's useful to use an easier-to-see array in code.
 class MatrixMapGenerator {
-  static MapWorld generate({
+  static WorldMap generate({
     required List<List<double>> matrix,
     required TileModelBuilder builder,
     bool axisInverted = false,
@@ -78,7 +78,7 @@ class MatrixMapGenerator {
       tiles = _buildNormal(matrix, builder);
     }
 
-    return MapWorld(tiles);
+    return WorldMap(tiles);
   }
 
   static double? _tryGetValue(double Function() getValue) {

@@ -20,7 +20,7 @@ import 'package:flutter/foundation.dart';
 /// Rafaelbarbosatec
 /// on 02/06/22
 class MapGenerated {
-  final MapGame map;
+  final GameMap map;
   final Player player;
   final List<GameComponent> components;
 

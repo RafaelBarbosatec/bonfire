@@ -34,7 +34,7 @@ class BonfireGame extends BaseGame
   final GameInterface? interface;
 
   /// Represents a map (or world) where the game occurs.
-  final MapGame map;
+  final GameMap map;
 
   /// The player-controlling component.
   final JoystickController? _joystickController;

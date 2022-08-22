@@ -38,7 +38,7 @@ abstract class BonfireGameInterface {
   LightingInterface? get lighting;
   ColorFilterInterface? get colorFilter;
   Camera get camera;
-  MapGame get map;
+  GameMap get map;
   ComponentSet get children;
   int get highestPriority;
   Vector2 get size;

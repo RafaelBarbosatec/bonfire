@@ -1,6 +1,8 @@
 # [next]
 - BREAKING CHANGE:
-  - remove `BonfireTiledWidget`. now use `BonfireWidget` pass map `MapWordByTiled`
+  - remove `BonfireTiledWidget`. now use `BonfireWidget` passing map `WorldMapByTiled`
+  - renamed `MapWorld` to `WorldMap`
+  - renamed `MapGame` to `GameMap`
 - improvements in `simpleAttackMeleeByDirection` and `simpleAttackMelee`. now it's not necessary set animation to all directions, only to right.
 
 # [2.8.1]

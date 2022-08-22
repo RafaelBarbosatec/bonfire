@@ -5,12 +5,12 @@ import 'package:bonfire/map/base/tile_model.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/extensions.dart';
 
-abstract class MapGame extends GameComponent {
+abstract class GameMap extends GameComponent {
   List<TileModel> tiles;
   double tileSizeToUpdate;
   List<Tile> childrenTiles = [];
 
-  MapGame(this.tiles, {this.tileSizeToUpdate = 0});
+  GameMap(this.tiles, {this.tileSizeToUpdate = 0});
 
   Iterable<Tile> getRendered();
 

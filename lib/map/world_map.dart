@@ -6,7 +6,7 @@ import 'package:bonfire/map/util/map_assets_manager.dart';
 import 'package:bonfire/util/quadtree.dart';
 import 'package:flutter/material.dart';
 
-class MapWorld extends MapGame {
+class WorldMap extends GameMap {
   static const COUNT_LOT = 2;
   int countBuildTileLot = 100;
   Vector2 lastCamera = Vector2.zero();
@@ -33,7 +33,7 @@ class MapWorld extends MapGame {
 
   QuadTree<TileModel>? quadTree;
 
-  MapWorld(
+  WorldMap(
     List<TileModel> tiles, {
     double tileSizeToUpdate = 0,
   }) : super(

@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:bonfire/background/background_image_game.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/tiled/builder/tiled_reader.dart';
+import 'package:bonfire/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/text_game_component.dart';
 import 'package:flutter/foundation.dart';
@@ -88,7 +88,7 @@ class TiledWorldBuilder {
 
     return Future.value(
       TiledWorldData(
-        map: MapWorld(
+        map: WorldMap(
           _tiles,
           tileSizeToUpdate: tileSizeToUpdate,
         ),
