@@ -42,10 +42,15 @@ class _RandomMapGameState extends State<RandomMapGame> {
           future: _mapGenerator!.buildMap(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Container(
+              return Material(
                 color: Colors.black,
                 child: Center(
-                  child: Text('Generation nouse'),
+                  child: Text(
+                    'Generation nouse...',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               );
             }
