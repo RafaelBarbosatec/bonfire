@@ -50,12 +50,12 @@ mixin MoveToPositionAlongThePath on Movement {
     _gridSizeIsCollisionSize = gridSizeIsCollisionSize;
   }
 
-  List<Offset> moveToPositionAlongThePath(
+  Future<List<Offset>> moveToPositionAlongThePath(
     Vector2 position, {
     List? ignoreCollisions,
   }) {
     if (!hasGameRef) {
-      return [];
+      return Future.value([]);
     }
     this.ignoreCollisions.clear();
     this.ignoreCollisions.add(this);
@@ -64,7 +64,11 @@ mixin MoveToPositionAlongThePath on Movement {
     }
 
     _currentIndex = 0;
-    return _calculatePath(position);
+    _linePathComponent?.removeFromParent();
+    _linePathComponent = null;
+    return Future.microtask(() {
+      return _calculatePath(position);
+    });
   }
 
   @override
