@@ -19,14 +19,14 @@ class SimpleExampleGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BonfireTiledWidget(
+    return BonfireWidget(
       joystick: Joystick(
         keyboardConfig: KeyboardConfig(),
         directional: JoystickDirectional(),
       ),
-      map: TiledWorldMap(
+      map: WorldMapByTiled(
         'tiled/mapa2.json',
-        forceTileSize: Size(32, 32),
+        forceTileSize: Vector2(32, 32),
         objectsBuilder: {
           'goblin': (properties) => MyEnemy(properties.position),
         },

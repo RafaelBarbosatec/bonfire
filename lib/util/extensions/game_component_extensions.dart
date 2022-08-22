@@ -95,9 +95,6 @@ extension GameComponentExtensions on GameComponent {
   /// Execute the ranged attack using a component with animation
   void simpleAttackRangeByDirection({
     required Future<SpriteAnimation> animationRight,
-    required Future<SpriteAnimation> animationLeft,
-    required Future<SpriteAnimation> animationUp,
-    required Future<SpriteAnimation> animationDown,
     required Vector2 size,
     required Direction direction,
     required AttackFromEnum attackFrom,
@@ -111,100 +108,31 @@ extension GameComponentExtensions on GameComponent {
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
     Future<SpriteAnimation>? animationDestroy,
+    double marginFromOrigin = 16,
+    Vector2? centerOffset,
   }) {
-    Vector2 startPosition;
-    Future<SpriteAnimation> attackRangeAnimation;
-
-    Direction attackDirection = direction;
-
-    Rect rectBase = rectConsideringCollision;
-
-    switch (attackDirection) {
-      case Direction.left:
-        attackRangeAnimation = animationLeft;
-        startPosition = Vector2(
-          rectBase.left - size.x,
-          (rectBase.top + (rectBase.height - size.y) / 2),
-        );
-        break;
-      case Direction.right:
-        attackRangeAnimation = animationRight;
-        startPosition = Vector2(
-          rectBase.right,
-          (rectBase.top + (rectBase.height - size.y) / 2),
-        );
-        break;
-      case Direction.up:
-        attackRangeAnimation = animationUp;
-        startPosition = Vector2(
-          (rectBase.left + (rectBase.width - size.x) / 2),
-          rectBase.top - size.y,
-        );
-        break;
-      case Direction.down:
-        attackRangeAnimation = animationDown;
-        startPosition = Vector2(
-          (rectBase.left + (rectBase.width - size.x) / 2),
-          rectBase.bottom,
-        );
-        break;
-      case Direction.upLeft:
-        attackRangeAnimation = animationLeft;
-        startPosition = Vector2(
-          rectBase.left - size.x,
-          (rectBase.top + (rectBase.height - size.y) / 2),
-        );
-        break;
-      case Direction.upRight:
-        attackRangeAnimation = animationRight;
-        startPosition = Vector2(
-          rectBase.right,
-          (rectBase.top + (rectBase.height - size.y) / 2),
-        );
-        break;
-      case Direction.downLeft:
-        attackRangeAnimation = animationLeft;
-        startPosition = Vector2(
-          rectBase.left - size.x,
-          (rectBase.top + (rectBase.height - size.y) / 2),
-        );
-        break;
-      case Direction.downRight:
-        attackRangeAnimation = animationRight;
-        startPosition = Vector2(
-          rectBase.right,
-          (rectBase.top + (rectBase.height - size.y) / 2),
-        );
-        break;
-    }
-
-    gameRef.add(
-      FlyingAttackObject.byDirection(
-        id: id,
-        direction: attackDirection,
-        flyAnimation: attackRangeAnimation,
-        animationDestroy: animationDestroy,
-        position: startPosition,
-        size: size,
-        damage: damage,
-        speed: speed,
-        enabledDiagonal: enableDiagonal,
-        attackFrom: attackFrom,
-        onDestroy: onDestroy,
-        destroySize: destroySize,
-        withDecorationCollision: withCollision,
-        collision: collision,
-        lightingConfig: lightingConfig,
-      ),
+    simpleAttackRangeByAngle(
+      angle: direction.toRadians(),
+      animation: animationRight,
+      attackFrom: attackFrom,
+      damage: damage,
+      size: size,
+      animationDestroy: animationDestroy,
+      centerOffset: centerOffset,
+      marginFromOrigin: marginFromOrigin,
+      collision: collision,
+      destroySize: destroySize,
+      id: id,
+      lightingConfig: lightingConfig,
+      onDestroy: onDestroy,
+      speed: speed,
+      withDecorationCollision: withCollision,
     );
   }
 
   ///Execute simple attack melee using animation
   void simpleAttackMeleeByDirection({
     Future<SpriteAnimation>? animationRight,
-    Future<SpriteAnimation>? animationDown,
-    Future<SpriteAnimation>? animationLeft,
-    Future<SpriteAnimation>? animationUp,
     dynamic id,
     required double damage,
     required Direction direction,
@@ -212,120 +140,26 @@ extension GameComponentExtensions on GameComponent {
     required AttackFromEnum attackFrom,
     bool withPush = true,
     double? sizePush,
+    Vector2? centerOffset,
   }) {
-    Vector2 positionAttack;
-    Future<SpriteAnimation>? anim;
-    double pushLeft = 0;
-    double pushTop = 0;
-    Direction attackDirection = direction;
-
-    Rect rectBase = rectConsideringCollision;
-
-    switch (attackDirection) {
-      case Direction.up:
-        positionAttack = Vector2(
-          rectBase.center.dx - size.x / 2,
-          rectBase.top - size.y,
-        );
-        if (animationUp != null) anim = animationUp;
-        pushTop = (sizePush ?? height) * -1;
-        break;
-      case Direction.right:
-        positionAttack = Vector2(
-          rectBase.right,
-          rectBase.center.dy - size.y / 2,
-        );
-        if (animationRight != null) anim = animationRight;
-        pushLeft = (sizePush ?? width);
-        break;
-      case Direction.down:
-        positionAttack = Vector2(
-          rectBase.center.dx - size.x / 2,
-          rectBase.bottom,
-        );
-        if (animationDown != null) anim = animationDown;
-        pushTop = (sizePush ?? height);
-        break;
-      case Direction.left:
-        positionAttack = Vector2(
-          rectBase.left - size.x,
-          rectBase.center.dy - size.y / 2,
-        );
-        if (animationLeft != null) anim = animationLeft;
-        pushLeft = (sizePush ?? width) * -1;
-        break;
-      case Direction.upLeft:
-        positionAttack = Vector2(
-          rectBase.left - size.x,
-          rectBase.center.dy - size.y / 2,
-        );
-        if (animationLeft != null) anim = animationLeft;
-        pushLeft = (sizePush ?? width) * -1;
-        break;
-      case Direction.upRight:
-        positionAttack = Vector2(
-          rectBase.right,
-          rectBase.center.dy - size.y / 2,
-        );
-        if (animationRight != null) anim = animationRight;
-        pushLeft = (sizePush ?? width);
-        break;
-      case Direction.downLeft:
-        positionAttack = Vector2(
-          rectBase.left - size.x,
-          rectBase.center.dy - size.y / 2,
-        );
-        if (animationLeft != null) anim = animationLeft;
-        pushLeft = (sizePush ?? width) * -1;
-        break;
-      case Direction.downRight:
-        positionAttack = Vector2(
-          rectBase.right,
-          rectBase.center.dy - size.y / 2,
-        );
-        if (animationRight != null) anim = animationRight;
-        pushLeft = (sizePush ?? width);
-        break;
-    }
-
-    if (anim != null) {
-      gameRef.add(
-        AnimatedObjectOnce(
-          animation: anim,
-          position: positionAttack,
-          size: size,
-        ),
-      );
-    }
-
-    gameRef.visibleAttackables().where((a) {
-      return a.rectAttackable().overlaps(
-            Rect.fromLTWH(
-              positionAttack.x,
-              positionAttack.y,
-              size.x,
-              size.y,
-            ),
-          );
-    }).forEach(
-      (enemy) {
-        enemy.receiveDamage(attackFrom, damage, id);
-        final rectAfterPush = enemy.position.translate(pushLeft, pushTop);
-        if (withPush &&
-            (enemy is ObjectCollision &&
-                !(enemy as ObjectCollision)
-                    .isCollision(displacement: rectAfterPush)
-                    .isNotEmpty)) {
-          enemy.translate(pushLeft, pushTop);
-        }
-      },
+    final rect = rectConsideringCollision;
+    simpleAttackMeleeByAngle(
+      angle: direction.toRadians(),
+      animation: animationRight,
+      attacker: attackFrom,
+      damage: damage,
+      size: size,
+      centerOffset: centerOffset,
+      marginFromOrigin: max(rect.width + 2, rect.height + 2),
+      id: id,
+      withPush: withPush,
     );
   }
 
   ///Execute simple attack melee using animation
   void simpleAttackMeleeByAngle({
     /// use animation facing right.
-    required Future<SpriteAnimation> animation,
+    required Future<SpriteAnimation>? animation,
     required double damage,
 
     /// Use radians angle
@@ -354,14 +188,16 @@ extension GameComponentExtensions on GameComponent {
     startPosition.add(diffBase);
     startPosition.add(Vector2(-size.x / 2, -size.y / 2));
 
-    gameRef.add(
-      AnimatedObjectOnce(
-        animation: animation,
-        position: startPosition,
-        size: size,
-        rotateRadAngle: angle,
-      ),
-    );
+    if (animation != null) {
+      gameRef.add(
+        AnimatedObjectOnce(
+          animation: animation,
+          position: startPosition,
+          size: size,
+          rotateRadAngle: angle,
+        ),
+      );
+    }
 
     Rect positionAttack = Rect.fromLTWH(
       startPosition.x,

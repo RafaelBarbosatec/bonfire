@@ -3,6 +3,8 @@ import 'dart:ui';
 
 import 'package:a_star_algorithm/a_star_algorithm.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/line_path_component.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 /// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
@@ -18,9 +20,9 @@ mixin MoveToPositionAlongThePath on Movement {
   List<Offset> _barriers = [];
   List ignoreCollisions = [];
 
+  LinePathComponent? _linePathComponent;
   Color _pathLineColor = Color(0xFF40C4FF).withOpacity(0.5);
   double _pathLineStrokeWidth = 4;
-
   Paint _paintShowBarriers = Paint()
     ..color = Color(0xFF2196F3).withOpacity(0.5);
 
@@ -41,17 +43,19 @@ mixin MoveToPositionAlongThePath on Movement {
     _paintShowBarriers.color =
         barriersCalculatedColor ?? Color(0xFF2196F3).withOpacity(0.5);
     this._showBarriers = showBarriersCalculated;
-    _pathLineColor = pathLineColor ?? Color(0xFF40C4FF).withOpacity(0.5);
+
+    _pathLineColor = pathLineColor ?? _pathLineColor;
     _pathLineStrokeWidth = pathLineStrokeWidth;
+    _pathLineColor = pathLineColor ?? Color(0xFF40C4FF).withOpacity(0.5);
     _gridSizeIsCollisionSize = gridSizeIsCollisionSize;
   }
 
-  void moveToPositionAlongThePath(
+  Future<List<Offset>> moveToPositionAlongThePath(
     Vector2 position, {
     List? ignoreCollisions,
   }) {
     if (!hasGameRef) {
-      return;
+      return Future.value([]);
     }
     this.ignoreCollisions.clear();
     this.ignoreCollisions.add(this);
@@ -60,7 +64,10 @@ mixin MoveToPositionAlongThePath on Movement {
     }
 
     _currentIndex = 0;
-    _calculatePath(position);
+    _removeLinePathComponent();
+    return Future.microtask(() {
+      return _calculatePath(position);
+    });
   }
 
   @override
@@ -71,28 +78,17 @@ mixin MoveToPositionAlongThePath on Movement {
     }
   }
 
-  void render(Canvas c) {
-    if (_showBarriers) {
-      _barriers.forEach((element) {
-        c.drawRect(
-          Rect.fromLTWH(
-            element.dx * _tileSize,
-            element.dy * _tileSize,
-            _tileSize,
-            _tileSize,
-          ),
-          _paintShowBarriers,
-        );
-      });
-    }
-    super.render(c);
+  @override
+  void preRenderBeforeTransformation(Canvas canvas) {
+    _drawBarrries(canvas);
+    super.preRenderBeforeTransformation(canvas);
   }
 
   void stopMoveAlongThePath() {
     _currentPath.clear();
     _currentIndex = 0;
+    _removeLinePathComponent();
     this.idle();
-    gameRef.map.setLinePath(_currentPath, _pathLineColor, _pathLineStrokeWidth);
   }
 
   void _move(double dt) {
@@ -114,37 +110,37 @@ mixin MoveToPositionAlongThePath on Movement {
         final displacementXDiagonal = displacementX * REDUCTION_SPEED_DIAGONAL;
         final displacementYDiagonal = displacementY * REDUCTION_SPEED_DIAGONAL;
         if (diffX > 0 && diffY > 0) {
-          onMove = this.moveDownRight(
+          onMove = moveDownRight(
             displacementXDiagonal,
             displacementYDiagonal,
           );
         } else if (diffX < 0 && diffY > 0) {
-          onMove = this.moveDownLeft(
+          onMove = moveDownLeft(
             displacementXDiagonal,
             displacementYDiagonal,
           );
         } else if (diffX > 0 && diffY < 0) {
-          onMove = this.moveUpRight(
+          onMove = moveUpRight(
             displacementXDiagonal,
             displacementYDiagonal,
           );
         } else if (diffX < 0 && diffY < 0) {
-          onMove = this.moveUpLeft(
+          onMove = moveUpLeft(
             displacementXDiagonal,
             displacementYDiagonal,
           );
         }
       } else if (diffX.abs() > 0.01) {
         if (diffX > 0) {
-          onMove = this.moveRight(displacementX);
+          onMove = moveRight(displacementX);
         } else if (diffX < 0) {
-          onMove = this.moveLeft(displacementX);
+          onMove = moveLeft(displacementX);
         }
       } else if (diffY.abs() > 0.01) {
         if (diffY > 0) {
-          onMove = this.moveDown(displacementY);
+          onMove = moveDown(displacementY);
         } else if (diffY < 0) {
-          onMove = this.moveUp(displacementY);
+          onMove = moveUp(displacementY);
         }
       }
 
@@ -154,7 +150,7 @@ mixin MoveToPositionAlongThePath on Movement {
     }
   }
 
-  void _calculatePath(Vector2 finalPosition) {
+  List<Offset> _calculatePath(Vector2 finalPosition) {
     final player = this;
 
     final positionPlayer = player is ObjectCollision
@@ -192,7 +188,7 @@ mixin MoveToPositionAlongThePath on Movement {
 
     if (_barriers.contains(targetPosition)) {
       stopMoveAlongThePath();
-      return;
+      return [];
     }
 
     try {
@@ -219,13 +215,20 @@ mixin MoveToPositionAlongThePath on Movement {
 
         if (pointsOutOfTheCamera.isNotEmpty) {
           stopMoveAlongThePath();
-          return;
+          return [];
         }
       }
     } catch (e) {
       print('ERROR(AStar):$e');
     }
-    gameRef.map.setLinePath(_currentPath, _pathLineColor, _pathLineStrokeWidth);
+    gameRef.add(
+      _linePathComponent = LinePathComponent(
+        _currentPath,
+        _pathLineColor,
+        _pathLineStrokeWidth,
+      ),
+    );
+    return _currentPath;
   }
 
   /// Get size of the grid used on algorithm to calculate path
@@ -315,5 +318,32 @@ mixin MoveToPositionAlongThePath on Movement {
     } else {
       stopMoveAlongThePath();
     }
+  }
+
+  void _drawBarrries(Canvas canvas) {
+    if (_showBarriers) {
+      _barriers.forEach((element) {
+        canvas.drawRect(
+          Rect.fromLTWH(
+            element.dx * _tileSize,
+            element.dy * _tileSize,
+            _tileSize,
+            _tileSize,
+          ),
+          _paintShowBarriers,
+        );
+      });
+    }
+  }
+
+  @override
+  void onRemove() {
+    _removeLinePathComponent();
+    super.onRemove();
+  }
+
+  void _removeLinePathComponent() {
+    _linePathComponent?.removeFromParent();
+    _linePathComponent = null;
   }
 }

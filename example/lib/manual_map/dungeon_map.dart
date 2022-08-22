@@ -20,7 +20,7 @@ class DungeonMap {
   static final String floor_3 = 'tile/floor_3.png';
   static final String floor_4 = 'tile/floor_4.png';
 
-  static MapWorld map() {
+  static WorldMap map() {
     List<TileModel> tileList = [];
     List.generate(35, (indexRow) {
       List.generate(70, (indexColumm) {
@@ -121,7 +121,7 @@ class DungeonMap {
       });
     });
 
-    return MapWorld(tileList);
+    return WorldMap(tileList);
   }
 
   static List<GameDecoration> decorations() {

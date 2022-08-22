@@ -74,8 +74,10 @@ abstract class GameComponent extends PositionComponent
 
   @override
   void renderTree(Canvas canvas) {
+    preRenderBeforeTransformation(canvas);
     canvas.save();
     _applyFlipAndRotation(canvas);
+    preRender(canvas);
     render(canvas);
     children.forEach((c) => c.renderTree(canvas));
 
@@ -86,6 +88,9 @@ abstract class GameComponent extends PositionComponent
 
     canvas.restore();
   }
+
+  void preRender(Canvas canvas) {}
+  void preRenderBeforeTransformation(Canvas canvas) {}
 
   @override
   void update(double dt) {

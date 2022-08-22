@@ -1,3 +1,12 @@
+# [2.9.0]
+- BREAKING CHANGE:
+  - remove `BonfireTiledWidget`. now use `BonfireWidget` passing map `WorldMapByTiled`
+  - renamed `MapWorld` to `WorldMap`
+  - renamed `MapGame` to `GameMap`
+- improvements in `simpleAttackMeleeByDirection` and `simpleAttackMelee`. now it's not necessary set animation to all directions, only to right.
+- return `Future<List<Offset>>` in `moveToPositionAlongThePath` method.
+- imprvements in `MoveToPositionAlongThePath` mixin.
+
 # [2.8.1]
 - Adds `onContactExit` in `Sensor` mixin.
 

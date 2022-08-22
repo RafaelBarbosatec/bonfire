@@ -28,7 +28,7 @@ class GameTiledMap extends StatelessWidget {
       builder: (context, constraints) {
         DungeonMap.tileSize = max(constraints.maxHeight, constraints.maxWidth) /
             (kIsWeb ? 25 : 22);
-        return BonfireTiledWidget(
+        return BonfireWidget(
           joystick: Joystick(
             keyboardConfig: KeyboardConfig(
               keyboardDirectionalType: KeyboardDirectionalType.wasdAndArrows,
@@ -68,9 +68,9 @@ class GameTiledMap extends StatelessWidget {
             Vector2((8 * DungeonMap.tileSize), (5 * DungeonMap.tileSize)),
           ),
           interface: KnightInterface(),
-          map: TiledWorldMap(
+          map: WorldMapByTiled(
             'tiled/mapa$map.json',
-            forceTileSize: Size(DungeonMap.tileSize, DungeonMap.tileSize),
+            forceTileSize: Vector2(DungeonMap.tileSize, DungeonMap.tileSize),
             objectsBuilder: {
               'goblin': (properties) => Goblin(properties.position),
               'torch': (properties) => Torch(properties.position),

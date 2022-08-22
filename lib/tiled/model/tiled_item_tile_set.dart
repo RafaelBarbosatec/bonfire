@@ -1,5 +1,5 @@
 import 'package:bonfire/collision/collision_area.dart';
-import 'package:bonfire/map/tile/tile_model.dart';
+import 'package:bonfire/map/base/tile_model.dart';
 
 class TiledItemTileSet {
   final TileModelAnimation? animation;

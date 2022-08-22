@@ -1,4 +1,4 @@
-import 'package:bonfire/map/tile/tile_model.dart';
+import 'package:bonfire/map/base/tile_model.dart';
 import 'package:bonfire/util/functions.dart';
 import 'package:bonfire/util/matrix_map/matrix_map_generator.dart';
 import 'package:bonfire/util/pair.dart';
