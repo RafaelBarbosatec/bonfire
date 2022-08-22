@@ -25,12 +25,6 @@ class WorldMap extends GameMap {
   Size _mapSize = Size.zero;
   Vector2 _mapStartPosition = Vector2.zero();
 
-  List<Offset> _linePath = [];
-  Paint _paintPath = Paint()
-    ..color = Colors.lightBlueAccent.withOpacity(0.8)
-    ..strokeWidth = 4
-    ..strokeCap = StrokeCap.round;
-
   QuadTree<TileModel>? quadTree;
 
   WorldMap(
@@ -46,7 +40,6 @@ class WorldMap extends GameMap {
     for (Tile tile in childrenTiles) {
       tile.renderTree(canvas);
     }
-    _drawPathLine(canvas);
     super.render(canvas);
   }
 
@@ -63,7 +56,7 @@ class WorldMap extends GameMap {
       _buildingTiles = true;
       scheduleMicrotask(_searchTilesToRender);
     }
-    _verifyRemoveTileOfWord();
+    _verifyRemoveTileOfWorld();
   }
 
   void _searchTilesToRender() {
@@ -203,25 +196,6 @@ class WorldMap extends GameMap {
     }
   }
 
-  @override
-  void setLinePath(List<Offset> path, Color color, double strokeWidth) {
-    _paintPath.color = color;
-    _paintPath.strokeWidth = strokeWidth;
-    _linePath = path;
-    super.setLinePath(path, color, strokeWidth);
-  }
-
-  void _drawPathLine(Canvas canvas) {
-    if (_linePath.isNotEmpty) {
-      _paintPath.style = PaintingStyle.stroke;
-      final path = Path()..moveTo(_linePath.first.dx, _linePath.first.dy);
-      for (var i = 1; i < _linePath.length; i++) {
-        path.lineTo(_linePath[i].dx, _linePath[i].dy);
-      }
-      canvas.drawPath(path, _paintPath);
-    }
-  }
-
   void _getTileCollisions() {
     _tilesCollisions.clear();
     final list = tiles.where((element) {
@@ -248,7 +222,7 @@ class WorldMap extends GameMap {
     _searchTilesToRender();
   }
 
-  void _verifyRemoveTileOfWord() {
+  void _verifyRemoveTileOfWorld() {
     if (_tilesToRemove.isNotEmpty) {
       for (Tile tile in _tilesToRemove) {
         if (tile.isRemoving) {

@@ -26,8 +26,6 @@ abstract class GameMap extends GameComponent {
   void removeTile(String id);
   Future addTile(TileModel tileModel);
 
-  void setLinePath(List<Offset> linePath, Color color, double strokeWidth) {}
-
   @override
   int get priority => LayerPriority.MAP;
 

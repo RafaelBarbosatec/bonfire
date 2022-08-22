@@ -4,6 +4,8 @@
   - renamed `MapWorld` to `WorldMap`
   - renamed `MapGame` to `GameMap`
 - improvements in `simpleAttackMeleeByDirection` and `simpleAttackMelee`. now it's not necessary set animation to all directions, only to right.
+- return `List<Offset>` in `moveToPositionAlongThePath` method.
+- imprvements in `MoveToPositionAlongThePath` mixin.
 
 # [2.8.1]
 - Adds `onContactExit` in `Sensor` mixin.
