@@ -62,7 +62,7 @@ typedef TileModelBuilder = TileModel Function(ItemMatrixProperties properties);
 
 /// Class useful to create radom map.
 /// * [matrix], Matrix used to create the map.
-/// * [builder], Builder used to create the TileModel that represents each tile in the map.
+/// * [build], Builder used to create the TileModel that represents each tile in the map.
 /// * [axisInverted], used to invert axis of the matrix. Example: matrix[x,y] turn matrix[y,x]. It's useful to use an easier-to-see array in code.
 class MatrixMapGenerator {
   static MapWorld generate({

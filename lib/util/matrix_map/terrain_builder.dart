@@ -22,7 +22,7 @@ class TerrainBuilder {
 
   TerrainBuilder({required this.tileSize, required this.terrainList});
 
-  TileModel builder(ItemMatrixProperties prop) {
+  TileModel build(ItemMatrixProperties prop) {
     Iterable<MapTerrain> findList = terrainList.where(
       (element) => element.value == prop.value,
     );
