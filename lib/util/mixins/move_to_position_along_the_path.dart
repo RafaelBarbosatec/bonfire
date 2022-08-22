@@ -64,8 +64,7 @@ mixin MoveToPositionAlongThePath on Movement {
     }
 
     _currentIndex = 0;
-    _linePathComponent?.removeFromParent();
-    _linePathComponent = null;
+    _removeLinePathComponent();
     return Future.microtask(() {
       return _calculatePath(position);
     });
@@ -88,8 +87,7 @@ mixin MoveToPositionAlongThePath on Movement {
   void stopMoveAlongThePath() {
     _currentPath.clear();
     _currentIndex = 0;
-    _linePathComponent?.removeFromParent();
-    _linePathComponent = null;
+    _removeLinePathComponent();
     this.idle();
   }
 
@@ -340,8 +338,12 @@ mixin MoveToPositionAlongThePath on Movement {
 
   @override
   void onRemove() {
+    _removeLinePathComponent();
+    super.onRemove();
+  }
+
+  void _removeLinePathComponent() {
     _linePathComponent?.removeFromParent();
     _linePathComponent = null;
-    super.onRemove();
   }
 }
