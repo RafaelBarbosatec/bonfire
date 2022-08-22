@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/background/background_image_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/tiled/model/tiled_world_data.dart';
-import 'package:bonfire/tiled/tiled_reader.dart';
+import 'package:bonfire/tiled/builder/tiled_reader.dart';
 import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/text_game_component.dart';
 import 'package:flutter/foundation.dart';
@@ -21,15 +21,15 @@ import 'package:tiledjsonreader/tile_set/polygon.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 
-import 'model/tiled_data_object_collision.dart';
-import 'model/tiled_item_tile_set.dart';
-import 'model/tiled_object_properties.dart';
+import '../model/tiled_data_object_collision.dart';
+import '../model/tiled_item_tile_set.dart';
+import '../model/tiled_object_properties.dart';
 
 typedef ObjectBuilder = GameComponent Function(
   TiledObjectProperties properties,
 );
 
-class TiledWorldMap {
+class TiledWorldBuilder {
   static const ABOVE_TYPE = 'above';
   static const DYNAMIC_ABOVE_TYPE = 'dynamicAbove';
   static const GIT_ROTATE_180 = 3221225472;
@@ -40,7 +40,7 @@ class TiledWorldMap {
   static const GIT_FLIP_HORIZONTAL_270 = 536870912;
   static const GIT_FLIP_HORIZONTAL_90 = 3758096384;
   final String path;
-  final Size? forceTileSize;
+  final Vector2? forceTileSize;
   final ValueChanged<Object>? onError;
   late TiledReader _reader;
   final double tileSizeToUpdate;
@@ -57,7 +57,7 @@ class TiledWorldMap {
   int countTileLayer = 0;
   int countImageLayer = 0;
 
-  TiledWorldMap(
+  TiledWorldBuilder(
     this.path, {
     this.forceTileSize,
     this.onError,
@@ -78,8 +78,8 @@ class TiledWorldMap {
       _tiledMap = await _reader.readMap();
       _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble() ?? 0.0;
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble() ?? 0.0;
-      _tileWidth = forceTileSize?.width ?? _tileWidthOrigin;
-      _tileHeight = forceTileSize?.height ?? _tileHeightOrigin;
+      _tileWidth = forceTileSize?.x ?? _tileWidthOrigin;
+      _tileHeight = forceTileSize?.y ?? _tileHeightOrigin;
       await _load(_tiledMap!);
     } catch (e) {
       onError?.call(e);

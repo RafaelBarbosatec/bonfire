@@ -24,14 +24,14 @@ class LPCGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BonfireTiledWidget(
+    return BonfireWidget(
       joystick: Joystick(
         keyboardConfig: KeyboardConfig(),
         directional: JoystickDirectional(),
       ),
-      map: TiledWorldMap(
+      map: MapWordByTiled(
         'tiled/mapa2.json',
-        forceTileSize: Size(32, 32),
+        forceTileSize: Vector2(32, 32),
       ),
       cameraConfig: CameraConfig(zoom: 2),
       overlayBuilderMap: {

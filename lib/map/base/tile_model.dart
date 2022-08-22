@@ -1,8 +1,8 @@
 import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/collision/collision_area.dart';
-import 'package:bonfire/map/map_assets_manager.dart';
-import 'package:bonfire/map/tile/tile.dart';
-import 'package:bonfire/map/tile/tile_with_collision.dart';
+import 'package:bonfire/map/base/tile.dart';
+import 'package:bonfire/map/base/tile_with_collision.dart';
+import 'package:bonfire/map/util/map_assets_manager.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';

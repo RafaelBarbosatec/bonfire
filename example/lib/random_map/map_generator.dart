@@ -67,7 +67,7 @@ class MapGenerator {
       //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       // ],
-      builder: _buildTerrainBuilder().build,
+      builder: _buildTerrainBuilder().builder,
     );
   }
 

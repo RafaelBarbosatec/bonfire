@@ -1,3 +1,7 @@
+# [next]
+- BREAKING CHANGE:
+  - remove `BonfireTiledWidget`. now use `BonfireWidget` pass map `MapWordByTiled`
+
 # [2.8.1]
 - Adds `onContactExit` in `Sensor` mixin.
 

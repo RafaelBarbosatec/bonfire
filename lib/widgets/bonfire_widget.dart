@@ -9,7 +9,7 @@ import 'package:bonfire/color_filter/game_color_filter.dart';
 import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
-import 'package:bonfire/map/map_game.dart';
+import 'package:bonfire/map/base/map_game.dart';
 import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/game_controller.dart';
@@ -73,6 +73,7 @@ class BonfireWidget extends StatefulWidget {
   final GameController? gameController;
   final CameraConfig? cameraConfig;
   final GameColorFilter? colorFilter;
+  final VoidCallback? onDispose;
 
   const BonfireWidget({
     Key? key,
@@ -103,6 +104,7 @@ class BonfireWidget extends StatefulWidget {
     this.progress,
     this.progressTransitionDuration = const Duration(milliseconds: 500),
     this.progressTransitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
+    this.onDispose,
   }) : super(key: key);
 
   @override
@@ -116,6 +118,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
   @override
   void dispose() {
     _loadingStream.close();
+    widget.onDispose?.call();
     super.dispose();
   }
 
@@ -146,6 +149,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
             focusNode: widget.focusNode,
             autofocus: widget.autofocus,
             mouseCursor: widget.mouseCursor,
+          
           ),
         StreamBuilder<bool>(
           stream: _loadingStream.stream,

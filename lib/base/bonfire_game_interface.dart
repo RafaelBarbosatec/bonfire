@@ -6,7 +6,7 @@ import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/lighting/lighting.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
-import 'package:bonfire/map/map_game.dart';
+import 'package:bonfire/map/base/map_game.dart';
 import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/scene_builder/scene_action.dart';

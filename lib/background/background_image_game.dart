@@ -10,7 +10,7 @@
 /// Rafaelbarbosatec
 /// on 30/11/21
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/map/map_assets_manager.dart';
+import 'package:bonfire/map/util/map_assets_manager.dart';
 
 /// Used to define parallax image as background
 class BackgroundImageGame extends GameBackground with UseSprite {

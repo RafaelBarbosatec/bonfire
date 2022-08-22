@@ -1,7 +1,7 @@
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
-import 'package:bonfire/map/tile/tile.dart';
-import 'package:bonfire/map/tile/tile_model.dart';
+import 'package:bonfire/map/base/tile.dart';
+import 'package:bonfire/map/base/tile_model.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/extensions.dart';
 

@@ -2,10 +2,9 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/map/util/map_assets_manager.dart';
 import 'package:bonfire/util/quadtree.dart';
 import 'package:flutter/material.dart';
-
-import 'map_assets_manager.dart';
 
 class MapWorld extends MapGame {
   static const COUNT_LOT = 2;
