@@ -21,13 +21,13 @@ class BonfireWidget extends StatefulWidget {
   final JoystickController? joystick;
 
   /// Represents the character controlled by the user in the game. Instances of this class has actions and movements ready to be used and configured.
-  final FutureOr<Player?> player;
+  final Player? player;
 
   /// The way you cand raw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
   final GameInterface? interface;
 
   /// Represents a map (or world) where the game occurs.
-  final FutureOr<MapGame> map;
+  final MapGame map;
 
   /// Used to show grid in the map and facilitate the construction and testing of the map
   final bool constructionMode;
@@ -68,12 +68,13 @@ class BonfireWidget extends StatefulWidget {
   final List<String>? initialActiveOverlays;
   final List<Enemy>? enemies;
   final List<GameDecoration>? decorations;
-  final FutureOr<List<GameComponent>?> components;
+  final List<GameComponent>? components;
   final GameBackground? background;
   final GameController? gameController;
   final CameraConfig? cameraConfig;
   final GameColorFilter? colorFilter;
   final VoidCallback? onDispose;
+  final Duration delayToHideProgress;
 
   const BonfireWidget({
     Key? key,
@@ -102,6 +103,7 @@ class BonfireWidget extends StatefulWidget {
     this.autofocus = true,
     this.mouseCursor,
     this.progress,
+    this.delayToHideProgress = Duration.zero,
     this.progressTransitionDuration = const Duration(milliseconds: 500),
     this.progressTransitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
     this.onDispose,
@@ -112,7 +114,7 @@ class BonfireWidget extends StatefulWidget {
 }
 
 class _BonfireWidgetState extends State<BonfireWidget> {
-  BonfireGame? _game;
+  late BonfireGame _game;
   late StreamController<bool> _loadingStream;
 
   @override
@@ -141,16 +143,14 @@ class _BonfireWidgetState extends State<BonfireWidget> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        if (_game != null)
-          ListenerGameWidget(
-            game: _game!,
-            overlayBuilderMap: widget.overlayBuilderMap,
-            initialActiveOverlays: widget.initialActiveOverlays,
-            focusNode: widget.focusNode,
-            autofocus: widget.autofocus,
-            mouseCursor: widget.mouseCursor,
-          
-          ),
+        ListenerGameWidget(
+          game: _game,
+          overlayBuilderMap: widget.overlayBuilderMap,
+          initialActiveOverlays: widget.initialActiveOverlays,
+          focusNode: widget.focusNode,
+          autofocus: widget.autofocus,
+          mouseCursor: widget.mouseCursor,
+        ),
         StreamBuilder<bool>(
           stream: _loadingStream.stream,
           builder: (context, snapshot) {
@@ -177,54 +177,48 @@ class _BonfireWidgetState extends State<BonfireWidget> {
   }
 
   void _refreshGame() async {
-    final map = await widget.map;
-    await _game?.map.updateTiles(map.tiles);
+    final map = widget.map;
+    await map.updateTiles(map.tiles);
 
-    _game?.decorations().forEach((d) => d.removeFromParent());
-    widget.decorations?.forEach((d) => _game!.add(d));
+    _game.decorations().forEach((d) => d.removeFromParent());
+    widget.decorations?.forEach((d) => _game.add(d));
 
-    _game?.enemies().forEach((e) => e.removeFromParent());
-    widget.enemies?.forEach((e) => _game!.add(e));
+    _game.enemies().forEach((e) => e.removeFromParent());
+    widget.enemies?.forEach((e) => _game.add(e));
   }
 
   void _buildGame() async {
-    final map = await widget.map;
-    final components = await widget.components;
-    final player = await widget.player;
-    await Future.delayed(Duration.zero);
-    setState(() {
-      _game = BonfireGame(
-        context: context,
-        joystickController: widget.joystick,
-        player: player,
-        interface: widget.interface,
-        map: map,
-        decorations: widget.decorations,
-        enemies: widget.enemies,
-        components: components ?? [],
-        background: widget.background,
-        constructionMode: widget.constructionMode,
-        showCollisionArea: widget.showCollisionArea,
-        gameController: widget.gameController,
-        constructionModeColor:
-            widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
-        collisionAreaColor: widget.collisionAreaColor ??
-            Colors.lightGreenAccent.withOpacity(0.5),
-        lightingColorGame: widget.lightingColorGame,
-        cameraConfig: widget.cameraConfig,
-        colorFilter: widget.colorFilter,
-        onReady: (game) {
-          widget.onReady?.call(game);
-          _showProgress(false);
-        },
-        onTapDown: widget.onTapDown,
-        onTapUp: widget.onTapUp,
-      );
-    });
+    _game = BonfireGame(
+      context: context,
+      joystickController: widget.joystick,
+      player: widget.player,
+      interface: widget.interface,
+      map: widget.map,
+      decorations: widget.decorations,
+      enemies: widget.enemies,
+      components: widget.components ?? [],
+      background: widget.background,
+      constructionMode: widget.constructionMode,
+      showCollisionArea: widget.showCollisionArea,
+      gameController: widget.gameController,
+      constructionModeColor:
+          widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
+      collisionAreaColor:
+          widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
+      lightingColorGame: widget.lightingColorGame,
+      cameraConfig: widget.cameraConfig,
+      colorFilter: widget.colorFilter,
+      onReady: (game) {
+        widget.onReady?.call(game);
+        _hideProgress();
+      },
+      onTapDown: widget.onTapDown,
+      onTapUp: widget.onTapUp,
+    );
   }
 
-  void _showProgress(bool show) async {
-    await Future.delayed(Duration.zero);
-    _loadingStream.add(show);
+  void _hideProgress() async {
+    await Future.delayed(widget.delayToHideProgress);
+    _loadingStream.add(false);
   }
 }

@@ -19,6 +19,14 @@ import 'package:flutter/foundation.dart';
 ///
 /// Rafaelbarbosatec
 /// on 02/06/22
+class MapGenerated {
+  final MapGame map;
+  final Player player;
+  final List<GameComponent> components;
+
+  MapGenerated(this.map, this.player, this.components);
+}
+
 class MapGenerator {
   static const double TILE_WATER = 0;
   static const double TILE_SAND = 1;
@@ -27,11 +35,10 @@ class MapGenerator {
   final Vector2 size;
   List<GameComponent> _compList = [];
   Vector2 _playerPosition = Vector2.zero();
-  var matrixCompleter = Completer<List<List<double>>>();
 
   MapGenerator(this.size, this.tileSize);
 
-  Future<MapGame> buildMap() async {
+  Future<MapGenerated> buildMap() async {
     final matrix = await compute(
       generateNoise,
       {
@@ -46,12 +53,7 @@ class MapGenerator {
 
     _createTreesAndPlayerPosition(matrix);
 
-    if (matrixCompleter.isCompleted) {
-      matrixCompleter = Completer<List<List<double>>>();
-    }
-    matrixCompleter.complete(matrix);
-
-    return MatrixMapGenerator.generate(
+    final map = MatrixMapGenerator.generate(
       matrix: matrix,
       // axisInverted: true,
       // matrix: [
@@ -68,6 +70,12 @@ class MapGenerator {
       //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       // ],
       builder: _buildTerrainBuilder().build,
+    );
+
+    return MapGenerated(
+      map,
+      Pirate(position: _playerPosition),
+      _compList,
     );
   }
 
@@ -135,16 +143,6 @@ class MapGenerator {
         ),
       ],
     );
-  }
-
-  Future<Player> getPlayer() async {
-    await matrixCompleter.future;
-    return Pirate(position: _playerPosition);
-  }
-
-  Future<List<GameComponent>> buildComponents() async {
-    await matrixCompleter.future;
-    return _compList;
   }
 
   void _createTreesAndPlayerPosition(List<List<double>> matrix) {

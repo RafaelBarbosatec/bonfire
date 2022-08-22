@@ -38,20 +38,35 @@ class _RandomMapGameState extends State<RandomMapGame> {
         if (_mapGenerator == null) {
           _mapGenerator = MapGenerator(widget.size, DungeonMap.tileSize);
         }
-        return BonfireWidget(
-          joystick: Joystick(
-            keyboardConfig: KeyboardConfig(),
-            directional: JoystickDirectional(
-              size: 100,
-              isFixed: false,
-            ),
-          ),
-          player: _mapGenerator!.getPlayer(),
-          cameraConfig: CameraConfig(
-            moveOnlyMapArea: true,
-          ),
-          map: _mapGenerator!.buildMap(),
-          components: _mapGenerator!.buildComponents(),
+        return FutureBuilder<MapGenerated>(
+          future: _mapGenerator!.buildMap(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Container(
+                color: Colors.black,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            MapGenerated result = snapshot.data!;
+            return BonfireWidget(
+              joystick: Joystick(
+                keyboardConfig: KeyboardConfig(),
+                directional: JoystickDirectional(
+                  size: 100,
+                  isFixed: false,
+                ),
+              ),
+              player: result.player,
+              cameraConfig: CameraConfig(
+                moveOnlyMapArea: true,
+              ),
+              map: result.map,
+              components: result.components,
+              delayToHideProgress: Duration(milliseconds: 500),
+            );
+          },
         );
       },
     );
