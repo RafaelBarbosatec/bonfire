@@ -163,26 +163,36 @@ mixin MoveToPositionAlongThePath on Movement {
 
     int columnsAdditional = ((gameRef.size.x / 2) / _tileSize).floor();
     int rowsAdditional = ((gameRef.size.y / 2) / _tileSize).floor();
+    double inflate = max(
+      rowsAdditional.toDouble(),
+      columnsAdditional.toDouble(),
+    );
 
-    int rows = max(
-          playerPosition.dy,
-          targetPosition.dy,
-        ).toInt() +
-        rowsAdditional;
+    double maxY = max(
+      playerPosition.dy,
+      targetPosition.dy,
+    );
 
-    int columns = max(
-          playerPosition.dx,
-          targetPosition.dx,
-        ).toInt() +
-        columnsAdditional;
+    double maxX = max(
+      playerPosition.dx,
+      targetPosition.dx,
+    );
+
+    int rows = maxY.toInt() + inflate.toInt();
+
+    int columns = maxX.toInt() + inflate.toInt();
 
     _barriers.clear();
 
-    gameRef.visibleCollisions().forEach((e) {
-      if (!ignoreCollisions.contains(e)) {
+    Rect area =
+        Rect.fromPoints(positionPlayer.toOffset(), finalPosition.toOffset())
+            .inflate(inflate);
+
+    for (final e in gameRef.collisions()) {
+      if (!ignoreCollisions.contains(e) && area.overlaps(e.rectCollision)) {
         _addCollisionOffsetsPositionByTile(e.rectCollision);
       }
-    });
+    }
 
     Iterable<Offset> result = [];
 
@@ -208,15 +218,6 @@ mixin MoveToPositionAlongThePath on Movement {
         }).toList();
 
         _currentIndex = 0;
-
-        final pointsOutOfTheCamera = _currentPath.where((element) {
-          return !gameRef.camera.cameraRect.contains(element);
-        });
-
-        if (pointsOutOfTheCamera.isNotEmpty) {
-          stopMoveAlongThePath();
-          return [];
-        }
       }
     } catch (e) {
       print('ERROR(AStar):$e');

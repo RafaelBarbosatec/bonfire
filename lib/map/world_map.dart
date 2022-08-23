@@ -204,6 +204,7 @@ class WorldMap extends GameMap {
 
     for (var element in list) {
       final collision = element.getTile(gameRef);
+      collision.update(1);
       _tilesCollisions.add(collision as ObjectCollision);
     }
   }
@@ -257,6 +258,7 @@ class WorldMap extends GameMap {
     );
 
     if (tile is ObjectCollision) {
+      tile.update(1);
       _tilesCollisions.add(tile as ObjectCollision);
       _findVisibleCollisions();
     }

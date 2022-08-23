@@ -1,3 +1,6 @@
+# [next]
+- improvements on `MoveToPositionAlongThePath`
+
 # [2.9.0]
 - BREAKING CHANGE:
   - remove `BonfireTiledWidget`. now use `BonfireWidget` passing map `WorldMapByTiled`
