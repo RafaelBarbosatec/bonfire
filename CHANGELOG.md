@@ -1,4 +1,4 @@
-# [next]
+# [2.9.0]
 - improvements in `MoveToPositionAlongThePath`
 - improvements in `followComponent`. Now return `true` if can move.
 
