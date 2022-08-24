@@ -8,7 +8,8 @@ extension MovementExtensions on Movement {
   /// This method move this component to target
   /// Need use Movement mixin.
   /// Method that bo used in [update] method.
-  void followComponent(
+  /// return true if moved.
+  bool followComponent(
     GameComponent target,
     double dt, {
     required Function(GameComponent) closeComponent,
@@ -30,25 +31,13 @@ extension MovementExtensions on Movement {
       translateX,
       rectToMove.center.dx,
       centerXPlayer,
-      speed,
     );
     translateY = rectToMove.center.dy > centerYPlayer ? (-1 * speed) : speed;
     translateY = _adjustTranslate(
       translateY,
       rectToMove.center.dy,
       centerYPlayer,
-      speed,
     );
-
-    if ((translateX < 0 && translateX > -0.1) ||
-        (translateX > 0 && translateX < 0.1)) {
-      translateX = 0;
-    }
-
-    if ((translateY < 0 && translateY > -0.1) ||
-        (translateY > 0 && translateY < 0.1)) {
-      translateY = 0;
-    }
 
     Rect rectPlayerCollision = Rect.fromLTWH(
       comp.left - margin,
@@ -62,32 +51,41 @@ extension MovementExtensions on Movement {
       if (!this.isIdle) {
         this.idle();
       }
-      return;
+      return false;
     }
 
-    translateX = translateX / dt;
-    translateY = translateY / dt;
+    translateX /= dt;
+    translateY /= dt;
+
+    bool moved = false;
 
     if (translateX > 0 && translateY > 0) {
-      this.moveDownRight(translateX, translateY);
+      moved = moveDownRight(translateX, translateY);
     } else if (translateX < 0 && translateY < 0) {
-      this.moveUpLeft(translateX.abs(), translateY.abs());
+      moved = moveUpLeft(translateX.abs(), translateY.abs());
     } else if (translateX > 0 && translateY < 0) {
-      this.moveUpRight(translateX, translateY.abs());
+      moved = moveUpRight(translateX, translateY.abs());
     } else if (translateX < 0 && translateY > 0) {
-      this.moveDownLeft(translateX.abs(), translateY);
+      moved = moveDownLeft(translateX.abs(), translateY);
     } else {
       if (translateX > 0) {
-        this.moveRight(translateX);
+        moved = moveRight(translateX);
       } else if (translateX < 0) {
-        this.moveLeft(translateX.abs());
+        moved = moveLeft(translateX.abs());
       }
       if (translateY > 0) {
-        this.moveDown(translateY);
+        moved = moveDown(translateY);
       } else if (translateY < 0) {
-        this.moveUp(translateY.abs());
+        moved = moveUp(translateY.abs());
       }
     }
+
+    if (!moved) {
+      this.idle();
+      return false;
+    }
+
+    return true;
   }
 
   /// Checks whether the component is within range. If so, position yourself and keep your distance.
@@ -98,6 +96,7 @@ extension MovementExtensions on Movement {
     double radiusVision = 32,
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
+    VoidCallback? canNotMove,
   }) {
     if (runOnlyVisibleInScreen && !this.isVisible) return;
     double distance = (minDistanceFromPlayer ?? radiusVision);
@@ -118,7 +117,6 @@ extension MovementExtensions on Movement {
       translateX,
       rectToMove.center.dx,
       centerXPlayer,
-      speed,
     );
 
     translateY = rectToMove.center.dy > centerYPlayer ? (-1 * speed) : speed;
@@ -126,7 +124,6 @@ extension MovementExtensions on Movement {
       translateY,
       rectToMove.center.dy,
       centerYPlayer,
-      speed,
     );
 
     if ((translateX < 0 && translateX > -0.1) ||
@@ -174,25 +171,31 @@ extension MovementExtensions on Movement {
     translateX = translateX / this.dtUpdate;
     translateY = translateY / this.dtUpdate;
 
+    bool moved = false;
     if (translateX > 0 && translateY > 0) {
-      moveDownRight(translateX, translateY);
+      moved = moveDownRight(translateX, translateY);
     } else if (translateX < 0 && translateY < 0) {
-      moveUpLeft(translateX.abs(), translateY.abs());
+      moved = moveUpLeft(translateX.abs(), translateY.abs());
     } else if (translateX > 0 && translateY < 0) {
-      moveUpRight(translateX, translateY.abs());
+      moved = moveUpRight(translateX, translateY.abs());
     } else if (translateX < 0 && translateY > 0) {
-      moveDownLeft(translateX.abs(), translateY);
+      moved = moveDownLeft(translateX.abs(), translateY);
     } else {
       if (translateX > 0) {
-        moveRight(translateX);
+        moved = moveRight(translateX);
       } else {
-        moveLeft(translateX.abs());
+        moved = moveLeft(translateX.abs());
       }
       if (translateY > 0) {
-        moveDown(translateY);
+        moved = moveDown(translateY);
       } else {
-        moveUp(translateY.abs());
+        moved = moveUp(translateY.abs());
       }
+    }
+
+    if (!moved) {
+      this.idle();
+      canNotMove?.call();
     }
   }
 
@@ -200,21 +203,13 @@ extension MovementExtensions on Movement {
     double translate,
     double centerEnemy,
     double centerPlayer,
-    double speed,
   ) {
-    double innerTranslate = translate;
-    if (innerTranslate > 0) {
-      double diffX = centerPlayer - centerEnemy;
-      if (diffX < speed) {
-        innerTranslate = diffX;
-      }
-    } else if (innerTranslate < 0) {
-      double diffX = centerPlayer - centerEnemy;
-      if (diffX > (speed * -1)) {
-        innerTranslate = diffX;
-      }
-    }
+    double diff = centerPlayer - centerEnemy;
 
-    return innerTranslate;
+    if (translate.abs() > diff.abs()) {
+      return diff;
+    } else {
+      return translate;
+    }
   }
 }

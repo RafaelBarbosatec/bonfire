@@ -62,13 +62,17 @@ extension NpcExtensions on Npc {
       visionAngle: visionAngle,
       angle: angle,
       observed: (player) {
-        observed?.call();
-        this.followComponent(
+        bool move = this.followComponent(
           player,
           dtUpdate,
           closeComponent: (comp) => closePlayer(comp as Player),
           margin: margin,
         );
+        if (move) {
+          observed?.call();
+        } else {
+          notObserved?.call();
+        }
       },
       notObserved: () {
         if (!this.isIdle) {
@@ -99,13 +103,17 @@ extension NpcExtensions on Npc {
       visionAngle: visionAngle,
       angle: angle ?? lastDirection.toRadians(),
       observed: (enemy) {
-        observed?.call();
-        this.followComponent(
+        bool move = this.followComponent(
           enemy.first,
           dtUpdate,
           closeComponent: (comp) => closeEnemy(comp as Enemy),
           margin: margin,
         );
+        if (move) {
+          observed?.call();
+        } else {
+          notObserved?.call();
+        }
       },
       notObserved: () {
         if (!this.isIdle) {
@@ -136,13 +144,17 @@ extension NpcExtensions on Npc {
       visionAngle: visionAngle,
       angle: angle ?? lastDirection.toRadians(),
       observed: (ally) {
-        observed?.call();
-        this.followComponent(
+        bool move = this.followComponent(
           ally.first,
           dtUpdate,
           closeComponent: (comp) => closeAlly(comp as Ally),
           margin: margin,
         );
+        if (move) {
+          observed?.call();
+        } else {
+          notObserved?.call();
+        }
       },
       notObserved: () {
         if (!this.isIdle) {
