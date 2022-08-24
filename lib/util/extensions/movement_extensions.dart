@@ -170,12 +170,12 @@ extension MovementExtensions on Movement {
     } else {
       if (translateX > 0) {
         moved = moveRight(translateX);
-      } else if (translateX != 0) {
+      } else if (translateX < 0) {
         moved = moveLeft(translateX.abs());
       }
       if (translateY > 0) {
         moved = moveDown(translateY);
-      } else if (translateY != 0) {
+      } else if (translateY < 0) {
         moved = moveUp(translateY.abs());
       }
     }
