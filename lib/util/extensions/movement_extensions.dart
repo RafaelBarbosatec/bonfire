@@ -90,20 +90,19 @@ extension MovementExtensions on Movement {
 
   /// Checks whether the component is within range. If so, position yourself and keep your distance.
   /// Method that bo used in [update] method.
-  void positionsItselfAndKeepDistance(
+  bool positionsItselfAndKeepDistance(
     GameComponent target, {
     required Function(GameComponent) positioned,
     double radiusVision = 32,
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
-    VoidCallback? canNotMove,
   }) {
-    if (runOnlyVisibleInScreen && !this.isVisible) return;
+    if (runOnlyVisibleInScreen && !this.isVisible) return false;
     double distance = (minDistanceFromPlayer ?? radiusVision);
 
     Rect rectTarget = target.rectConsideringCollision;
-    double centerXPlayer = rectTarget.center.dx;
-    double centerYPlayer = rectTarget.center.dy;
+    double centerXTarget = rectTarget.center.dx;
+    double centerYTarget = rectTarget.center.dy;
 
     double translateX = 0;
     double translateY = 0;
@@ -112,37 +111,25 @@ extension MovementExtensions on Movement {
 
     Rect rectToMove = rectConsideringCollision;
 
-    translateX = rectToMove.center.dx > centerXPlayer ? (-1 * speed) : speed;
+    translateX = rectToMove.center.dx > centerXTarget ? (-1 * speed) : speed;
     translateX = _adjustTranslate(
       translateX,
       rectToMove.center.dx,
-      centerXPlayer,
+      centerXTarget,
     );
 
-    translateY = rectToMove.center.dy > centerYPlayer ? (-1 * speed) : speed;
+    translateY = rectToMove.center.dy > centerYTarget ? (-1 * speed) : speed;
     translateY = _adjustTranslate(
       translateY,
       rectToMove.center.dy,
-      centerYPlayer,
+      centerYTarget,
     );
 
-    if ((translateX < 0 && translateX > -0.1) ||
-        (translateX > 0 && translateX < 0.1)) {
-      translateX = 0;
-    }
+    double translateXPositive =
+        (rectToMove.center.dx - rectTarget.center.dx).abs();
 
-    if ((translateY < 0 && translateY > -0.1) ||
-        (translateY > 0 && translateY < 0.1)) {
-      translateY = 0;
-    }
-
-    double translateXPositive = rectToMove.center.dx - rectTarget.center.dx;
-    translateXPositive =
-        translateXPositive >= 0 ? translateXPositive : translateXPositive * -1;
-
-    double translateYPositive = rectToMove.center.dy - rectTarget.center.dy;
-    translateYPositive =
-        translateYPositive >= 0 ? translateYPositive : translateYPositive * -1;
+    double translateYPositive =
+        (rectToMove.center.dy - rectTarget.center.dy).abs();
 
     if (translateXPositive >= distance &&
         translateXPositive > translateYPositive) {
@@ -165,11 +152,11 @@ extension MovementExtensions on Movement {
         this.idle();
       }
       positioned(target);
-      return;
+      return false;
     }
 
-    translateX = translateX / this.dtUpdate;
-    translateY = translateY / this.dtUpdate;
+    translateX /= this.dtUpdate;
+    translateY /= this.dtUpdate;
 
     bool moved = false;
     if (translateX > 0 && translateY > 0) {
@@ -183,20 +170,22 @@ extension MovementExtensions on Movement {
     } else {
       if (translateX > 0) {
         moved = moveRight(translateX);
-      } else {
+      } else if (translateX != 0) {
         moved = moveLeft(translateX.abs());
       }
       if (translateY > 0) {
         moved = moveDown(translateY);
-      } else {
+      } else if (translateY != 0) {
         moved = moveUp(translateY.abs());
       }
     }
 
     if (!moved) {
       this.idle();
-      canNotMove?.call();
+      return false;
     }
+
+    return true;
   }
 
   double _adjustTranslate(
@@ -205,11 +194,17 @@ extension MovementExtensions on Movement {
     double centerPlayer,
   ) {
     double diff = centerPlayer - centerEnemy;
-
+    double newTrasnlate = 0;
     if (translate.abs() > diff.abs()) {
-      return diff;
+      newTrasnlate = diff;
     } else {
-      return translate;
+      newTrasnlate = translate;
     }
+
+    if (newTrasnlate.abs() < 0.1) {
+      newTrasnlate = 0;
+    }
+
+    return newTrasnlate;
   }
 }

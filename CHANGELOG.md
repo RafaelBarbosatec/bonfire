@@ -1,5 +1,6 @@
 # [next]
 - Improvements in `seeAndMoveToPlayer`. Adds param `obstacleCollision` sugested by issue [303](https://github.com/RafaelBarbosatec/bonfire/issues/303)
+- Improvements in `positionsItselfAndKeepDistance`.
 
 # [2.9.1]
 - improvements in `MoveToPositionAlongThePath`. Resolve issue [299](https://github.com/RafaelBarbosatec/bonfire/issues/299)
