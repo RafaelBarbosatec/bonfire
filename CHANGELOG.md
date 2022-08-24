@@ -1,6 +1,6 @@
 # [2.9.0]
-- improvements in `MoveToPositionAlongThePath`
-- improvements in `followComponent`. Now return `true` if can move.
+- improvements in `MoveToPositionAlongThePath`. Resolve issue [299](https://github.com/RafaelBarbosatec/bonfire/issues/299)
+- improvements in `followComponent`. Now return `true` if can move. Resolve issue [301](https://github.com/RafaelBarbosatec/bonfire/issues/301)
 
 # [2.9.0]
 - BREAKING CHANGE:
