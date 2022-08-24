@@ -1,5 +1,6 @@
 # [next]
-- improvements on `MoveToPositionAlongThePath`
+- improvements in `MoveToPositionAlongThePath`
+- improvements in `followComponent`
 
 # [2.9.0]
 - BREAKING CHANGE:
