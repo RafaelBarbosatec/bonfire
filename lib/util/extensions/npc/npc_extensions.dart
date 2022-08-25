@@ -49,7 +49,7 @@ extension NpcExtensions on Npc {
     required Function(Player) closePlayer,
     VoidCallback? notObserved,
     VoidCallback? observed,
-    VoidCallback? obstacleCollision,
+    VoidCallback? notCanMove,
     double radiusVision = 32,
     double margin = 10,
     double? visionAngle,
@@ -71,7 +71,7 @@ extension NpcExtensions on Npc {
           margin: margin,
         );
         if (!move) {
-          obstacleCollision?.call();
+          notCanMove?.call();
         }
       },
       notObserved: () {
@@ -90,7 +90,7 @@ extension NpcExtensions on Npc {
     required Function(Enemy) closeEnemy,
     VoidCallback? notObserved,
     VoidCallback? observed,
-    VoidCallback? obstacleCollision,
+    VoidCallback? notCanMove,
     double radiusVision = 32,
     double? visionAngle,
     double? angle,
@@ -112,7 +112,7 @@ extension NpcExtensions on Npc {
           margin: margin,
         );
         if (!move) {
-          obstacleCollision?.call();
+          notCanMove?.call();
         }
       },
       notObserved: () {
@@ -131,7 +131,7 @@ extension NpcExtensions on Npc {
     required Function(Ally) closeAlly,
     VoidCallback? notObserved,
     VoidCallback? observed,
-    VoidCallback? obstacleCollision,
+    VoidCallback? notCanMove,
     double radiusVision = 32,
     double? visionAngle,
     double? angle,
@@ -153,7 +153,7 @@ extension NpcExtensions on Npc {
           margin: margin,
         );
         if (!move) {
-          obstacleCollision?.call();
+          notCanMove?.call();
         }
       },
       notObserved: () {
