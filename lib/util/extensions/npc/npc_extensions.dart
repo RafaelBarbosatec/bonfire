@@ -49,6 +49,7 @@ extension NpcExtensions on Npc {
     required Function(Player) closePlayer,
     VoidCallback? notObserved,
     VoidCallback? observed,
+    VoidCallback? notCanMove,
     double radiusVision = 32,
     double margin = 10,
     double? visionAngle,
@@ -62,16 +63,15 @@ extension NpcExtensions on Npc {
       visionAngle: visionAngle,
       angle: angle,
       observed: (player) {
+        observed?.call();
         bool move = this.followComponent(
           player,
           dtUpdate,
           closeComponent: (comp) => closePlayer(comp as Player),
           margin: margin,
         );
-        if (move) {
-          observed?.call();
-        } else {
-          notObserved?.call();
+        if (!move) {
+          notCanMove?.call();
         }
       },
       notObserved: () {
@@ -90,6 +90,7 @@ extension NpcExtensions on Npc {
     required Function(Enemy) closeEnemy,
     VoidCallback? notObserved,
     VoidCallback? observed,
+    VoidCallback? notCanMove,
     double radiusVision = 32,
     double? visionAngle,
     double? angle,
@@ -103,16 +104,15 @@ extension NpcExtensions on Npc {
       visionAngle: visionAngle,
       angle: angle ?? lastDirection.toRadians(),
       observed: (enemy) {
+        observed?.call();
         bool move = this.followComponent(
           enemy.first,
           dtUpdate,
           closeComponent: (comp) => closeEnemy(comp as Enemy),
           margin: margin,
         );
-        if (move) {
-          observed?.call();
-        } else {
-          notObserved?.call();
+        if (!move) {
+          notCanMove?.call();
         }
       },
       notObserved: () {
@@ -131,6 +131,7 @@ extension NpcExtensions on Npc {
     required Function(Ally) closeAlly,
     VoidCallback? notObserved,
     VoidCallback? observed,
+    VoidCallback? notCanMove,
     double radiusVision = 32,
     double? visionAngle,
     double? angle,
@@ -144,16 +145,15 @@ extension NpcExtensions on Npc {
       visionAngle: visionAngle,
       angle: angle ?? lastDirection.toRadians(),
       observed: (ally) {
+        observed?.call();
         bool move = this.followComponent(
           ally.first,
           dtUpdate,
           closeComponent: (comp) => closeAlly(comp as Ally),
           margin: margin,
         );
-        if (move) {
-          observed?.call();
-        } else {
-          notObserved?.call();
+        if (!move) {
+          notCanMove?.call();
         }
       },
       notObserved: () {

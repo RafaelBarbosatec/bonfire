@@ -1,3 +1,7 @@
+# [2.9.2]
+- Improvements in `seeAndMoveToPlayer`. Adds param `notCanMove` sugested by issue [303](https://github.com/RafaelBarbosatec/bonfire/issues/303)
+- Improvements in `positionsItselfAndKeepDistance`.
+
 # [2.9.1]
 - improvements in `MoveToPositionAlongThePath`. Resolve issue [299](https://github.com/RafaelBarbosatec/bonfire/issues/299)
 - improvements in `followComponent`. Now return `true` if can move. Resolve issue [301](https://github.com/RafaelBarbosatec/bonfire/issues/301)
