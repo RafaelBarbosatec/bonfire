@@ -1,3 +1,8 @@
+# [next]
+- Adds `pauseAnimation` and `resumeAnimation` in `UseSpriteAnimation` mixin.
+- Adds `pause` and `resume` in `SimpleDirectionAnimation`
+
+
 # [2.9.2]
 - Improvements in `seeAndMoveToPlayer`. Adds param `notCanMove` sugested by issue [303](https://github.com/RafaelBarbosatec/bonfire/issues/303)
 - Improvements in `positionsItselfAndKeepDistance`.
