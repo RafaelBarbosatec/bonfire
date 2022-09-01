@@ -16,6 +16,7 @@ mixin MoveToPositionAlongThePath on Movement {
   int _currentIndex = 0;
   bool _showBarriers = false;
   bool _gridSizeIsCollisionSize = false;
+  double _factorInflateFindArea = 2;
 
   List<Offset> _barriers = [];
   List ignoreCollisions = [];
@@ -39,7 +40,9 @@ mixin MoveToPositionAlongThePath on Movement {
 
     /// If `false` the algorithm use map tile size with base of the grid. if true this use collision size of the component.
     bool gridSizeIsCollisionSize = false,
+    double factorInflateFindArea = 2,
   }) {
+    _factorInflateFindArea = factorInflateFindArea;
     _paintShowBarriers.color =
         barriersCalculatedColor ?? Color(0xFF2196F3).withOpacity(0.5);
     this._showBarriers = showBarriersCalculated;
@@ -86,6 +89,7 @@ mixin MoveToPositionAlongThePath on Movement {
 
   void stopMoveAlongThePath() {
     _currentPath.clear();
+    _barriers.clear();
     _currentIndex = 0;
     _removeLinePathComponent();
     this.idle();
@@ -161,12 +165,7 @@ mixin MoveToPositionAlongThePath on Movement {
 
     Offset targetPosition = _getCenterPositionByTile(finalPosition);
 
-    int columnsAdditional = ((gameRef.size.x / 2) / _tileSize).floor();
-    int rowsAdditional = ((gameRef.size.y / 2) / _tileSize).floor();
-    double inflate = max(
-      rowsAdditional.toDouble(),
-      columnsAdditional.toDouble(),
-    );
+    double inflate = _tileSize * _factorInflateFindArea;
 
     double maxY = max(
       playerPosition.dy,
@@ -185,8 +184,26 @@ mixin MoveToPositionAlongThePath on Movement {
     _barriers.clear();
 
     Rect area =
-        Rect.fromPoints(positionPlayer.toOffset(), finalPosition.toOffset())
-            .inflate(inflate);
+        Rect.fromPoints(positionPlayer.toOffset(), finalPosition.toOffset());
+
+    double left = area.left;
+    double right = area.right;
+    double top = area.top;
+    double bottom = area.bottom;
+    double size = max(area.width, area.height);
+    if (positionPlayer.x < finalPosition.x) {
+      left -= size;
+    } else if (positionPlayer.x > finalPosition.x) {
+      right += size;
+    }
+
+    if (positionPlayer.y < finalPosition.y) {
+      top -= size;
+    } else if (positionPlayer.y > finalPosition.y) {
+      bottom += size;
+    }
+
+    area = Rect.fromLTRB(left, top, right, bottom).inflate(inflate);
 
     for (final e in gameRef.collisions()) {
       if (!ignoreCollisions.contains(e) && area.overlaps(e.rectCollision)) {

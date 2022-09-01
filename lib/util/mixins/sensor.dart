@@ -8,7 +8,7 @@ final Color sensorColor = Color(0xFFF44336).withOpacity(0.5);
 /// Mixin responsible for adding trigger to detect other objects above
 mixin Sensor on GameComponent {
   void onContact(GameComponent component);
-  void onContactExit(GameComponent component);
+  void onContactExit(GameComponent component){}
 
   bool enabledSensor = true;
   List<GameComponent> _componentsInContact = [];

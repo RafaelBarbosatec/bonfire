@@ -1,6 +1,8 @@
 # [next]
 - Adds `pauseAnimation` and `resumeAnimation` in `UseSpriteAnimation` mixin.
 - Adds `pause` and `resume` in `SimpleDirectionAnimation`
+- Improvements in `MoveToPositionAlongThePath`. Adds `factorInflateFindArea` in `setupMoveToPositionAlongThePath` method.
+- Improvements in `DirectionAnimation`.
 
 
 # [2.9.2]
