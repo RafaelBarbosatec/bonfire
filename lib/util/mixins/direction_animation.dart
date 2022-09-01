@@ -42,7 +42,8 @@ mixin DirectionAnimation on Movement {
 
   @override
   bool moveDown(double speed, {bool notifyOnMove = true}) {
-    if (animation?.runDown != null) {
+    if (animation?.runDown != null ||
+        (animation?.runUp != null && animation?.enabledFlipY == true)) {
       animation?.play(SimpleAnimationEnum.runDown);
     } else {
       if (lastDirectionHorizontal == Direction.left) {
@@ -122,7 +123,8 @@ mixin DirectionAnimation on Movement {
         }
         break;
       case Direction.down:
-        if (animation?.idleDown != null) {
+        if (animation?.idleDown != null ||
+            (animation?.idleUp != null && animation?.enabledFlipY == true)) {
           animation?.play(SimpleAnimationEnum.idleDown);
         } else {
           if (lastDirectionHorizontal == Direction.left) {

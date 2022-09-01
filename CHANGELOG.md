@@ -1,3 +1,10 @@
+# [2.9.3]
+- Adds `pauseAnimation` and `resumeAnimation` in `UseSpriteAnimation` mixin.
+- Adds `pause` and `resume` in `SimpleDirectionAnimation`
+- Improvements in `MoveToPositionAlongThePath`. Adds `factorInflateFindArea` in `setupMoveToPositionAlongThePath` method.
+- Improvements in `DirectionAnimation`.
+
+
 # [2.9.2]
 - Improvements in `seeAndMoveToPlayer`. Adds param `notCanMove` sugested by issue [303](https://github.com/RafaelBarbosatec/bonfire/issues/303)
 - Improvements in `positionsItselfAndKeepDistance`.

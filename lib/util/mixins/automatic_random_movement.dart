@@ -23,9 +23,9 @@ mixin AutomaticRandomMovement on Movement {
         !gameRef.camera.cameraRect.overlapComponent(this)) return;
     if (_targetRandomMovement == Vector2.zero()) {
       if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
-        int randomX = Random().nextInt(maxDistance.toInt());
+        int randomX = Random().nextInt(maxDistance);
         randomX = randomX < minDistance ? minDistance : randomX;
-        int randomY = Random().nextInt(maxDistance.toInt());
+        int randomY = Random().nextInt(maxDistance);
         randomY = randomY < minDistance ? minDistance : randomY;
         int randomNegativeX = Random().nextBool() ? -1 : 1;
         int randomNegativeY = Random().nextBool() ? -1 : 1;

@@ -49,6 +49,8 @@ class SimpleDirectionAnimation {
   SimpleAnimationEnum? lastPlayedAnimation = SimpleAnimationEnum.idleDown;
   SimpleAnimationEnum? beforeLastPlayedAnimation = SimpleAnimationEnum.idleDown;
 
+  bool _playing = true;
+
   SimpleDirectionAnimation({
     required FutureOr<SpriteAnimation> idleRight,
     required FutureOr<SpriteAnimation> runRight,
@@ -364,15 +366,17 @@ class SimpleDirectionAnimation {
     Vector2 size,
     double opacity,
   ) {
-    _fastAnimation?.opacity = opacity;
-    _fastAnimation?.position = position;
-    _fastAnimation?.size = size;
-    _fastAnimation?.update(dt);
+    if (_playing) {
+      _fastAnimation?.opacity = opacity;
+      _fastAnimation?.position = position;
+      _fastAnimation?.size = size;
+      _fastAnimation?.update(dt);
 
-    this.opacity = opacity;
-    this.position = position;
-    this.size = size;
-    _current?.update(dt);
+      this.opacity = opacity;
+      this.position = position;
+      this.size = size;
+      _current?.update(dt);
+    }
   }
 
   void changeLastAnimation(SimpleAnimationEnum lastAnimation) {
@@ -387,4 +391,8 @@ class SimpleDirectionAnimation {
   }
 
   SimpleAnimationEnum? get currentType => _currentType;
+
+  void pause() => _playing = false;
+
+  void resume() => _playing = true;
 }
