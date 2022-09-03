@@ -99,6 +99,7 @@ mixin MoveToPositionAlongThePath on Movement {
     _removeLinePathComponent();
     this.idle();
     _onFinish?.call();
+    _onFinish = null;
   }
 
   void _move(double dt) {
