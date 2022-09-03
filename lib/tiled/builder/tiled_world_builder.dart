@@ -97,8 +97,10 @@ class TiledWorldBuilder {
     );
   }
 
-  Future<void> _load(TiledMap tiledMap) {
-    return Future.forEach<MapLayer>(tiledMap.layers ?? [], _loadLayer);
+  Future<void> _load(TiledMap tiledMap) async {
+    for (var layer in tiledMap.layers ?? const <MapLayer>[]) {
+      await _loadLayer(layer);
+    }
   }
 
   Future<void> _loadLayer(MapLayer layer) async {
@@ -119,7 +121,9 @@ class TiledWorldBuilder {
     }
 
     if (layer is GroupLayer) {
-      await Future.forEach<MapLayer>(layer.layers ?? [], _loadLayer);
+      for (var layer in layer.layers ?? const <MapLayer>[]) {
+        await _loadLayer(layer);
+      }
     }
   }
 
@@ -137,7 +141,7 @@ class TiledWorldBuilder {
                 element.name == 'type' && element.value == ABOVE_TYPE)
             .isNotEmpty ??
         false;
-    (tileLayer.data ?? []).forEach((tile) async {
+    for (var tile in tileLayer.data ?? const <int>[]) {
       if (tile != 0) {
         var data = _getDataTile(tile);
         if (data != null) {
@@ -154,7 +158,7 @@ class TiledWorldBuilder {
         }
       }
       count++;
-    });
+    }
   }
 
   void _addTile(
@@ -191,24 +195,22 @@ class TiledWorldBuilder {
     bool above = false,
   }) {
     if (data.animation != null) {
-      if (data.animation != null) {
-        _components.add(
-          GameDecorationWithCollision.withAnimation(
-            animation: data.animation!.getFutureSpriteAnimation(),
-            position: Vector2(
-              _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
-              _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
-            ),
-            size: Vector2(_tileWidth, _tileHeight),
-            collisions: data.collisions,
-            aboveComponents: above,
-          )
-            ..angle = data.angle
-            ..isFlipHorizontal = data.isFlipHorizontal
-            ..isFlipVertical = data.isFlipVertical
-            ..properties = data.properties,
-        );
-      }
+      _components.add(
+        GameDecorationWithCollision.withAnimation(
+          animation: data.animation!.getFutureSpriteAnimation(),
+          position: Vector2(
+            _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
+            _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
+          ),
+          size: Vector2(_tileWidth, _tileHeight),
+          collisions: data.collisions,
+          aboveComponents: above,
+        )
+          ..angle = data.angle
+          ..isFlipHorizontal = data.isFlipHorizontal
+          ..isFlipVertical = data.isFlipVertical
+          ..properties = data.properties,
+      );
     } else {
       if (data.sprite != null) {
         _components.add(
@@ -344,71 +346,69 @@ class TiledWorldBuilder {
     if (layer.visible != true) return;
     double offsetX = _getDoubleByProportion(layer.offsetX);
     double offsetY = _getDoubleByProportion(layer.offsetY);
-    layer.objects?.forEach(
-      (element) {
-        double x = _getDoubleByProportion(element.x) + offsetX;
-        double y = _getDoubleByProportion(element.y) + offsetY;
-        double width = _getDoubleByProportion(element.width);
-        double height = _getDoubleByProportion(element.height);
+    for (var element in layer.objects ?? const <Objects>[]) {
+      double x = _getDoubleByProportion(element.x) + offsetX;
+      double y = _getDoubleByProportion(element.y) + offsetY;
+      double width = _getDoubleByProportion(element.width);
+      double height = _getDoubleByProportion(element.height);
 
-        if (element.text != null) {
-          double fontSize = element.text!.pixelSize.toDouble();
-          fontSize = (_tileWidth * fontSize) / _tileWidthOrigin;
-          _components.add(
-            TextGameComponent(
-              name: element.name ?? '',
-              text: element.text!.text,
-              position: Vector2(x, y),
-              style: material.TextStyle(
-                fontSize: fontSize,
-                fontFamily: element.text!.fontFamily,
-                decoration:
-                    element.text!.underline ? TextDecoration.underline : null,
-                fontWeight: element.text!.bold
-                    ? material.FontWeight.bold
-                    : material.FontWeight.normal,
-                fontStyle: element.text!.italic
-                    ? material.FontStyle.italic
-                    : material.FontStyle.normal,
-                color: Color(
-                  int.parse('0xFF${element.text!.color.replaceAll('#', '')}'),
-                ),
+      if (element.text != null) {
+        double fontSize = element.text!.pixelSize.toDouble();
+        fontSize = (_tileWidth * fontSize) / _tileWidthOrigin;
+        _components.add(
+          TextGameComponent(
+            name: element.name ?? '',
+            text: element.text!.text,
+            position: Vector2(x, y),
+            style: material.TextStyle(
+              fontSize: fontSize,
+              fontFamily: element.text!.fontFamily,
+              decoration:
+                  element.text!.underline ? TextDecoration.underline : null,
+              fontWeight: element.text!.bold
+                  ? material.FontWeight.bold
+                  : material.FontWeight.normal,
+              fontStyle: element.text!.italic
+                  ? material.FontStyle.italic
+                  : material.FontStyle.normal,
+              color: Color(
+                int.parse('0xFF${element.text!.color.replaceAll('#', '')}'),
               ),
             ),
-          );
-        } else if (element.typeOrClass?.toLowerCase() == 'collision') {
-          final collision = _getCollisionObject(x, y, width, height, element);
+          ),
+        );
+      } else if (element.typeOrClass?.toLowerCase() == 'collision') {
+        final collision = _getCollisionObject(x, y, width, height, element);
 
-          _components.add(
-            CollisionGameComponent(
-              name: element.name ?? '',
-              position: Vector2(x, y) + (collision.align ?? Vector2.zero()),
-              size: Vector2(collision.rect.width, collision.rect.height),
-              collisions: [
-                CollisionArea(collision.shape),
-              ],
-              properties: _extractOtherProperties(element.properties),
-            ),
-          );
-        } else if (_objectsBuilder[element.name] != null) {
-          final object = _objectsBuilder[element.name]?.call(
-            TiledObjectProperties(
-              Vector2(x, y),
-              Vector2(width, height),
-              element.typeOrClass,
-              element.rotation,
-              _extractOtherProperties(element.properties),
-              element.name,
-              element.id,
-            ),
-          );
+        _components.add(
+          CollisionGameComponent(
+            name: element.name ?? '',
+            position: Vector2(x, y) + (collision.align ?? Vector2.zero()),
+            size: Vector2(collision.rect.width, collision.rect.height),
+            collisions: [
+              CollisionArea(collision.shape),
+            ],
+            properties: _extractOtherProperties(element.properties),
+          ),
+        );
+      } else if (_objectsBuilder[element.name] != null) {
+        final object = _objectsBuilder[element.name]?.call(
+          TiledObjectProperties(
+            Vector2(x, y),
+            Vector2(width, height),
+            element.typeOrClass,
+            element.rotation,
+            _extractOtherProperties(element.properties),
+            element.name,
+            element.id,
+          ),
+        );
 
-          if (object != null) {
-            _components.add(object);
-          }
+        if (object != null) {
+          _components.add(object);
         }
-      },
-    );
+      }
+    }
   }
 
   TiledDataObjectCollision _getCollision(
@@ -431,7 +431,7 @@ class TiledWorldBuilder {
       List<CollisionArea> collisions = [];
 
       if (tileSetObjectList.isNotEmpty) {
-        tileSetObjectList.forEach((object) {
+        for (var object in tileSetObjectList) {
           double width = _getDoubleByProportion(object.width);
           double height = _getDoubleByProportion(object.height);
 
@@ -455,7 +455,7 @@ class TiledWorldBuilder {
           }
 
           collisions.add(ca);
-        });
+        }
       }
       return TiledDataObjectCollision(
         collisions: collisions,
@@ -483,7 +483,7 @@ class TiledWorldBuilder {
       if ((animationFrames.isNotEmpty)) {
         double stepTime = (animationFrames[0].duration ?? 100) / 1000;
 
-        animationFrames.forEach((frame) {
+        for (var frame in animationFrames) {
           double y = _getY((frame.tileid ?? 0), widthCount);
           double x = _getX((frame.tileid ?? 0), widthCount);
 
@@ -498,7 +498,7 @@ class TiledWorldBuilder {
             position: Vector2(x, y),
           );
           frames.add(sprite);
-        });
+        }
 
         return TileModelAnimation(
           stepTime: stepTime,
@@ -513,13 +513,13 @@ class TiledWorldBuilder {
   }
 
   Map<String, dynamic> _extractOtherProperties(List<Property>? properties) {
-    Map<String, dynamic> map = Map();
+    final map = <String, dynamic>{};
 
-    properties?.forEach((element) {
+    for (var element in properties ?? const <Property>[]) {
       if (element.value != null && element.name != null) {
         map[element.name!] = element.value;
       }
-    });
+    }
     return map;
   }
 
