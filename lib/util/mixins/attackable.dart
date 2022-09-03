@@ -35,6 +35,9 @@ mixin Attackable on GameComponent {
     if (this.life > maxLife) {
       this.life = maxLife;
     }
+    if (life > 0 && isDead) {
+      revive();
+    }
   }
 
   /// reduce life
@@ -87,6 +90,10 @@ mixin Attackable on GameComponent {
 
   void die() {
     _isDead = true;
+  }
+
+  void revive() {
+    _isDead = false;
   }
 
   bool get isDead => _isDead;
