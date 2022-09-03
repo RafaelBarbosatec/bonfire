@@ -332,7 +332,7 @@ extension GameComponentExtensions on GameComponent {
         onFinish: onFinish,
         onChange: onChange,
         autoStart: autoStart);
-    add(valueGenerator);
+    gameRef.add(valueGenerator);
     return valueGenerator;
   }
 

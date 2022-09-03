@@ -22,7 +22,7 @@ class PotionLife extends GameDecoration with Sensor {
           if (_lifeDistributed < life) {
             double newLife = life * value - _lifeDistributed;
             _lifeDistributed += newLife;
-            collision.addLife(newLife);
+            collision.addLife(newLife.roundToDouble());
           }
         },
       );

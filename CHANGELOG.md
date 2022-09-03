@@ -1,3 +1,9 @@
+# [2.9.4]
+- Adds `revive` method in `Attackable` mixin. Now if adds life to stay above 0 it's is revive.
+- Adds `onFinish` in `moveToPositionAlongThePath` method. (`MoveToPositionAlongThePath` mixin)
+- Improvements in `WorldMap`
+- Mostly dart cleanup while looking at tiled code. Thanks [jtmcdole](https://github.com/jtmcdole)!
+
 # [2.9.3]
 - Adds `pauseAnimation` and `resumeAnimation` in `UseSpriteAnimation` mixin.
 - Adds `pause` and `resume` in `SimpleDirectionAnimation`

@@ -22,7 +22,6 @@ mixin Attackable on GameComponent {
   bool _isDead = false;
 
   double get life => _life;
-  set life(double life) => _life = life;
 
   void initialLife(double life) {
     _life = life;
@@ -31,19 +30,31 @@ mixin Attackable on GameComponent {
 
   /// increase life
   void addLife(double life) {
-    this.life += life;
-    if (this.life > maxLife) {
-      this.life = maxLife;
-    }
+    _life += life;
+    _verifyLimitLife();
+  }
+
+  void updateLife(double life) {
+    _life = life;
+    _verifyLimitLife();
   }
 
   /// reduce life
   void removeLife(double life) {
-    if (this.life > 0) {
-      this.life -= life;
+    if (_life > 0) {
+      _life -= life;
     }
-    if (this.life <= 0 && !_isDead) {
+    if (_life <= 0 && !_isDead) {
       die();
+    }
+  }
+
+  void _verifyLimitLife() {
+    if (_life > maxLife) {
+      _life = maxLife;
+    }
+    if (_life > 0 && isDead) {
+      revive();
     }
   }
 
@@ -87,6 +98,10 @@ mixin Attackable on GameComponent {
 
   void die() {
     _isDead = true;
+  }
+
+  void revive() {
+    _isDead = false;
   }
 
   bool get isDead => _isDead;

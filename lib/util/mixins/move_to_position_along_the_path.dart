@@ -17,6 +17,7 @@ mixin MoveToPositionAlongThePath on Movement {
   bool _showBarriers = false;
   bool _gridSizeIsCollisionSize = false;
   double _factorInflateFindArea = 2;
+  VoidCallback? _onFinish;
 
   List<Offset> _barriers = [];
   List ignoreCollisions = [];
@@ -56,10 +57,13 @@ mixin MoveToPositionAlongThePath on Movement {
   Future<List<Offset>> moveToPositionAlongThePath(
     Vector2 position, {
     List? ignoreCollisions,
+    VoidCallback? onFinish,
   }) {
     if (!hasGameRef) {
       return Future.value([]);
     }
+
+    _onFinish = onFinish;
     this.ignoreCollisions.clear();
     this.ignoreCollisions.add(this);
     if (ignoreCollisions != null) {
@@ -68,6 +72,7 @@ mixin MoveToPositionAlongThePath on Movement {
 
     _currentIndex = 0;
     _removeLinePathComponent();
+
     return Future.microtask(() {
       return _calculatePath(position);
     });
@@ -93,6 +98,8 @@ mixin MoveToPositionAlongThePath on Movement {
     _currentIndex = 0;
     _removeLinePathComponent();
     this.idle();
+    _onFinish?.call();
+    _onFinish = null;
   }
 
   void _move(double dt) {
