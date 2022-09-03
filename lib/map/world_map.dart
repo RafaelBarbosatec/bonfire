@@ -4,25 +4,16 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
 import 'package:bonfire/util/quadtree.dart';
-import 'package:flutter/material.dart';
 
 class WorldMap extends GameMap {
-  static const COUNT_LOT = 2;
-  int countBuildTileLot = 100;
   Vector2 lastCamera = Vector2.zero();
   double lastMinorZoom = 1.0;
   Vector2? lastSizeScreen;
   List<ObjectCollision> _tilesCollisions = List.empty(growable: true);
-  List<ObjectCollision> _tilesVisibleCollisions = List.empty();
-  List<TileModel> _tilesToAdd = [];
-  List<Tile> _tilesToRemove = [];
   Set<String> _visibleSet = Set();
   bool _buildingTiles = false;
-  bool _updateMapSize = true;
-  bool _updateStartPosition = true;
   double tileSize = 0.0;
   Vector2 _griSize = Vector2.zero();
-  Size _mapSize = Size.zero;
   Vector2 _mapStartPosition = Vector2.zero();
 
   QuadTree<TileModel>? quadTree;
@@ -36,27 +27,12 @@ class WorldMap extends GameMap {
         );
 
   @override
-  void render(Canvas canvas) {
-    for (Tile tile in childrenTiles) {
-      tile.renderTree(canvas);
-    }
-    super.render(canvas);
-  }
-
-  @override
   // ignore: must_call_super
   void update(double dt) {
-    for (Tile tile in childrenTiles) {
-      tile.update(dt);
-      if (tile.isRemoving) {
-        _tilesToRemove.add(tile);
-      }
-    }
     if (!_buildingTiles && _checkNeedUpdateTiles()) {
       _buildingTiles = true;
       scheduleMicrotask(_searchTilesToRender);
     }
-    _verifyRemoveTileOfWorld();
   }
 
   void _searchTilesToRender() {
@@ -67,31 +43,32 @@ class WorldMap extends GameMap {
         ) ??
         [];
 
-    _tilesToAdd = visibleTileModel.where((element) {
+    final _tilesToAdd = visibleTileModel.where((element) {
       return !_visibleSet.contains(element.id);
     }).toList();
 
     _visibleSet = visibleTileModel.map((e) => e.id).toSet();
 
-    childrenTiles.removeWhere((element) {
-      return !_visibleSet.contains((element).id);
+    children.forEach((element) {
+      Tile tile = element as Tile;
+      if (!_visibleSet.contains(tile.id)) {
+        tile.removeFromParent();
+      }
     });
 
-    childrenTiles.addAll(_buildTiles(_tilesToAdd));
-
-    _findVisibleCollisions();
+    addAll(_buildTiles(_tilesToAdd));
 
     _buildingTiles = false;
   }
 
   @override
   Iterable<Tile> getRendered() {
-    return childrenTiles;
+    return children.cast();
   }
 
   @override
   Iterable<ObjectCollision> getCollisionsRendered() {
-    return _tilesVisibleCollisions;
+    return children.whereType<ObjectCollision>();
   }
 
   @override
@@ -107,24 +84,23 @@ class WorldMap extends GameMap {
     super.onGameResize(size);
   }
 
-  void _createQuadTree(Vector2 size, {bool isUpdate = false}) {
-    if (lastSizeScreen == size) return;
+  void _createQuadTree(Vector2 sizeScreen, {bool isUpdate = false}) {
+    if (lastSizeScreen == sizeScreen) return;
     lastSizeScreen = size.clone();
 
     if (isUpdate) {
       lastCamera = Vector2.zero();
       lastMinorZoom = gameRef.camera.zoom;
-      _updateMapSize = true;
-      _updateStartPosition = true;
+      _calculateStartPosition();
     }
 
     tileSize = tiles.first.width;
 
-    final mapSize = getMapSize();
+    size = _calculateMapSize();
 
     _griSize = Vector2(
-      (mapSize.width.ceil() / tileSize).ceilToDouble(),
-      (mapSize.height.ceil() / tileSize).ceilToDouble(),
+      (size.x.ceil() / tileSize).ceilToDouble(),
+      (size.y.ceil() / tileSize).ceilToDouble(),
     );
 
     if (tileSizeToUpdate == 0) {
@@ -135,7 +111,7 @@ class WorldMap extends GameMap {
     _getTileCollisions();
 
     if (tiles.isNotEmpty) {
-      int minSize = min(size.x, size.y).ceil();
+      int minSize = min(sizeScreen.x, sizeScreen.y).ceil();
       int maxItems = ((minSize / 2) / tileSize).ceil();
       maxItems *= maxItems;
       quadTree = QuadTree(
@@ -160,9 +136,8 @@ class WorldMap extends GameMap {
     _createQuadTree(gameRef.size, isUpdate: true);
   }
 
-  @override
-  Size getMapSize() {
-    if (_updateMapSize && tiles.isNotEmpty) {
+  Vector2 _calculateMapSize() {
+    if (tiles.isNotEmpty) {
       double height = 0;
       double width = 0;
 
@@ -170,18 +145,13 @@ class WorldMap extends GameMap {
         if (tile.right > width) width = tile.right;
         if (tile.bottom > height) height = tile.bottom;
       });
-      _updateMapSize = false;
-      return _mapSize = Size(width, height);
+      return Vector2(width, height);
     }
-
-    return _mapSize;
+    return size;
   }
 
-  Vector2 getGridSize() => _griSize;
-
-  @override
-  Vector2 getStartPosition() {
-    if (_updateStartPosition && this.tiles.isNotEmpty) {
+  void _calculateStartPosition() {
+    if (this.tiles.isNotEmpty) {
       double x = this.tiles.first.left;
       double y = this.tiles.first.top;
 
@@ -189,11 +159,15 @@ class WorldMap extends GameMap {
         if (tile.left < x) x = tile.left;
         if (tile.top < y) y = tile.top;
       });
-      _updateStartPosition = false;
-      return _mapStartPosition = Vector2(x, y);
-    } else {
-      return _mapStartPosition;
+      _mapStartPosition = Vector2(x, y);
     }
+  }
+
+  Vector2 getGridSize() => _griSize;
+
+  @override
+  Vector2 getStartPosition() {
+    return _mapStartPosition;
   }
 
   void _getTileCollisions() {
@@ -223,34 +197,12 @@ class WorldMap extends GameMap {
     _searchTilesToRender();
   }
 
-  void _verifyRemoveTileOfWorld() {
-    if (_tilesToRemove.isNotEmpty) {
-      for (Tile tile in _tilesToRemove) {
-        if (tile.isRemoving) {
-          childrenTiles.remove(tile);
-          tiles.removeWhere((element) => element.id == tile.id);
-          quadTree?.removeById(tile.id);
-          if (tile is ObjectCollision) {
-            _tilesCollisions.removeWhere((element) {
-              return (element as Tile).id == tile.id;
-            });
-            _tilesVisibleCollisions.removeWhere((element) {
-              return (element as Tile).id == tile.id;
-            });
-          }
-        }
-      }
-    }
-    _tilesToRemove.clear();
-  }
-
   @override
   Future addTile(TileModel tileModel) async {
     await _loadTile(tileModel);
-    final tile = tileModel.getTile(gameRef);
-    await tile.onLoad();
     tiles.add(tileModel);
-    childrenTiles.add(tile);
+    final tile = tileModel.getTile(gameRef);
+    add(tile);
     quadTree?.insert(
       tileModel,
       Point(tileModel.x, tileModel.y),
@@ -260,29 +212,25 @@ class WorldMap extends GameMap {
     if (tile is ObjectCollision) {
       tile.update(1);
       _tilesCollisions.add(tile as ObjectCollision);
-      _findVisibleCollisions();
     }
 
-    _updateMapSize = true;
-    _updateStartPosition = true;
+    size = _calculateMapSize();
+    _calculateStartPosition();
   }
 
   @override
   void removeTile(String id) {
     try {
-      childrenTiles
-          .firstWhere((element) => (element).id == id)
+      children
+          .firstWhere((element) => (element as Tile).id == id)
           .removeFromParent();
+      tiles.removeWhere((element) => element.id == id);
+      quadTree?.removeById(id);
+      size = _calculateMapSize();
+      _calculateStartPosition();
     } catch (e) {
       print('Not found visible tile with $id id');
     }
-    _updateMapSize = true;
-    _updateStartPosition = true;
-  }
-
-  void _findVisibleCollisions() {
-    _tilesVisibleCollisions =
-        childrenTiles.whereType<ObjectCollision>().toList();
   }
 
   Future<void> _loadTile(TileModel element) async {

@@ -11,7 +11,6 @@ class FlyingAttackObject extends GameComponent
         Lighting,
         Movement {
   final dynamic id;
-  SpriteAnimation? flyAnimation;
   Future<SpriteAnimation>? animationDestroy;
   final Direction? direction;
   final double speed;
@@ -43,7 +42,7 @@ class FlyingAttackObject extends GameComponent
     CollisionConfig? collision,
   }) {
     loader?.add(AssetToLoad(flyAnimation, (value) {
-      this.flyAnimation = value;
+      this.animation = value;
     }));
 
     this.position = position;
@@ -84,7 +83,7 @@ class FlyingAttackObject extends GameComponent
     CollisionConfig? collision,
   }) {
     loader?.add(AssetToLoad(flyAnimation, (value) {
-      return this.flyAnimation = value;
+      return this.animation = value;
     }));
 
     this.position = position;
@@ -122,7 +121,7 @@ class FlyingAttackObject extends GameComponent
     CollisionConfig? collision,
   }) : direction = null {
     loader?.add(AssetToLoad(flyAnimation, (value) {
-      return this.flyAnimation = value;
+      return this.animation = value;
     }));
 
     this.position = position;
@@ -186,30 +185,7 @@ class FlyingAttackObject extends GameComponent
   }
 
   bool _verifyExistInWorld() {
-    Size? mapSize = gameRef.map.getMapSize();
-    final _rect = toRect();
-    if (mapSize == Size.zero) return true;
-
-    if (_rect.left < 0) {
-      return false;
-    }
-    if (_rect.right > mapSize.width) {
-      return false;
-    }
-    if (_rect.top < 0) {
-      return false;
-    }
-    if (_rect.bottom > mapSize.height) {
-      return false;
-    }
-
-    return true;
-  }
-
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    animation = this.flyAnimation;
+    return gameRef.map.toRect().contains(center.toOffset());
   }
 
   void _destroyByDirection(

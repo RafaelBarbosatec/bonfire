@@ -1,14 +1,9 @@
-import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/collision/object_collision.dart';
-import 'package:bonfire/map/base/tile.dart';
-import 'package:bonfire/map/base/tile_model.dart';
-import 'package:bonfire/util/priority_layer.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:flame/extensions.dart';
 
 abstract class GameMap extends GameComponent {
   List<TileModel> tiles;
   double tileSizeToUpdate;
-  List<Tile> childrenTiles = [];
 
   GameMap(this.tiles, {this.tileSizeToUpdate = 0});
 
@@ -19,7 +14,6 @@ abstract class GameMap extends GameComponent {
 
   Future<void> updateTiles(List<TileModel> map);
 
-  Size getMapSize();
   Vector2 getStartPosition();
   Vector2 getGridSize();
 

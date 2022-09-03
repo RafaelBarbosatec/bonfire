@@ -1,6 +1,7 @@
 # [next]
 - Adds `revive` method in `Attackable` mixin. Now if adds life to stay above 0 it's is revive.
 - Adds `onFinish` in `moveToPositionAlongThePath` method. (`MoveToPositionAlongThePath` mixin)
+- Improvements in `WorldMap`
 
 # [2.9.3]
 - Adds `pauseAnimation` and `resumeAnimation` in `UseSpriteAnimation` mixin.

@@ -9,6 +9,8 @@ class Tile extends GameComponent with UseAssetsLoader {
   final String? type;
   final Map<String, dynamic>? properties;
   late Vector2 _positionText;
+  late Vector2 _startPosition;
+  Vector2 _lastParentPosition = Vector2.zero();
   Paint? _paintText;
   TextPaint? _textPaintConfig;
   String id = '';
@@ -33,6 +35,7 @@ class Tile extends GameComponent with UseAssetsLoader {
       offsetY: offsetY,
       calculatePosition: true,
     );
+    _startPosition = this.position.clone();
     if (spritePath.isNotEmpty) {
       loader?.add(
         AssetToLoad(Sprite.load(spritePath), (value) => this._sprite = value),
@@ -61,7 +64,7 @@ class Tile extends GameComponent with UseAssetsLoader {
       offsetY: offsetY,
       calculatePosition: true,
     );
-
+    _startPosition = this.position.clone();
     _positionText = position;
   }
 
@@ -83,7 +86,7 @@ class Tile extends GameComponent with UseAssetsLoader {
       offsetY: offsetY,
       calculatePosition: true,
     );
-
+    _startPosition = this.position.clone();
     _positionText = position;
   }
 
@@ -146,6 +149,13 @@ class Tile extends GameComponent with UseAssetsLoader {
   // ignore: must_call_super
   void update(double dt) {
     _animation?.update(dt);
+    if (parent != null) {
+      final parentComp = parent as GameComponent;
+      if (_lastParentPosition != parentComp.position) {
+        _lastParentPosition = parentComp.position.clone();
+        position = _lastParentPosition + _startPosition;
+      }
+    }
 
     /// not used super.update(dt); to avoid consulting unnecessary computational resources
   }
