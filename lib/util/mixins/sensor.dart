@@ -6,7 +6,8 @@ import 'package:flutter/widgets.dart';
 final Color sensorColor = Color(0xFFF44336).withOpacity(0.5);
 
 /// Mixin responsible for adding trigger to detect other objects above
-mixin Sensor on GameComponent {
+/// T is a type that Sensor will be find contact.
+mixin Sensor<T extends GameComponent> on GameComponent {
   void onContact(GameComponent component);
   void onContactExit(GameComponent component) {}
 
@@ -72,8 +73,8 @@ mixin Sensor on GameComponent {
   void _verifyContact() {
     List<GameComponent> compsInContact = [];
     Iterable<GameComponent> compsToCheck = _checkOnlyVisible
-        ? gameRef.visibleComponents()
-        : gameRef.componentsByType<GameComponent>();
+        ? gameRef.visibleComponents().whereType<T>()
+        : gameRef.componentsByType<T>();
 
     for (final vComp in compsToCheck) {
       if (vComp != this && !vComp.isHud) {

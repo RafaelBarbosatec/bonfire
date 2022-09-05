@@ -1,3 +1,6 @@
+# [next]
+- Improvements in `Sensor`. Now you can pass T type to find especific type to contact.
+
 # [2.9.4]
 - Adds `revive` method in `Attackable` mixin. Now if adds life to stay above 0 it's is revive.
 - Adds `onFinish` in `moveToPositionAlongThePath` method. (`MoveToPositionAlongThePath` mixin)
