@@ -1,14 +1,16 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:flutter/material.dart';
 
 enum _TypeAcceleration { direction, angle, custom, function, none }
 
 typedef AccelerationChanged = Vector2 Function(double dt, Vector2 current);
 
 mixin Acceleration on Movement {
-  _TypeAcceleration _type = _TypeAcceleration.direction;
+  _TypeAcceleration? _type;
   Vector2 customSpeed = Vector2.zero();
   Vector2 _acceleration = Vector2.zero();
   AccelerationChanged? _accelerationFunction;
+  VoidCallback? _onStop;
   final Vector2 _zero = Vector2.zero();
   Direction? _direction;
   double? _moveAngle;
@@ -20,7 +22,9 @@ mixin Acceleration on Movement {
     Direction direction, {
     bool stopWhenSpeedZero = false,
     double? initialSpeed,
+    VoidCallback? onStop,
   }) {
+    _onStop = onStop;
     _type = _TypeAcceleration.direction;
     speed = initialSpeed ?? speed;
     if (speed == 0) {
@@ -36,7 +40,9 @@ mixin Acceleration on Movement {
     double angle, {
     bool stopWhenSpeedZero = false,
     double? initialSpeed,
+    VoidCallback? onStop,
   }) {
+    _onStop = onStop;
     _type = _TypeAcceleration.angle;
     speed = initialSpeed ?? speed;
     if (speed == 0) {
@@ -54,7 +60,9 @@ mixin Acceleration on Movement {
     Vector2 acceleration,
     Vector2 initialSpeed, {
     bool stopWhenSpeedZero = false,
+    VoidCallback? onStop,
   }) {
+    _onStop = onStop;
     _type = _TypeAcceleration.custom;
     customSpeed = initialSpeed;
     if (customSpeed == _zero) {
@@ -68,7 +76,9 @@ mixin Acceleration on Movement {
     AccelerationChanged acceleration,
     Vector2 initialSpeed, {
     bool stopWhenSpeedZero = false,
+    VoidCallback? onStop,
   }) {
+    _onStop = onStop;
     _type = _TypeAcceleration.function;
     customSpeed = initialSpeed;
     if (customSpeed == _zero) {
@@ -95,6 +105,8 @@ mixin Acceleration on Movement {
         break;
       case _TypeAcceleration.function:
         _applyFunction(dt);
+        break;
+      default:
         break;
     }
   }
@@ -152,7 +164,9 @@ mixin Acceleration on Movement {
     _moveAngle = null;
     _accelerationFunction = null;
     _type = _TypeAcceleration.none;
+    _onStop = null;
     idle();
+    _onStop?.call();
   }
 
   void _updateSpeed() {
