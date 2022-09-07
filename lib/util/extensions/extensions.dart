@@ -133,29 +133,6 @@ extension RectExt on Rect {
   }
 }
 
-extension SpriteExt on Sprite {
-  void renderWithOpacity(
-    Canvas canvas,
-    Vector2 position,
-    Vector2 size, {
-    Paint? overridePaint,
-    double opacity = 1,
-  }) {
-    if (paint.color.opacity != opacity) {
-      paint.color = paint.color.withOpacity(opacity);
-    }
-    if (overridePaint != null && overridePaint.color.opacity != opacity) {
-      overridePaint.color = overridePaint.color.withOpacity(opacity);
-    }
-    this.render(
-      canvas,
-      position: position,
-      size: size,
-      overridePaint: overridePaint,
-    );
-  }
-}
-
 extension SpriteFutureExt on Future<Sprite> {
   Future<SpriteAnimation> toAnimation() async {
     var sprite = await this;

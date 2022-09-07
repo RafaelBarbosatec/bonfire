@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 
 /// Base of the all components in the Bonfire
 abstract class GameComponent extends PositionComponent
-    with BonfireHasGameRef, PointerDetectorHandler, InternalChecker {
+    with BonfireHasGameRef, PointerDetectorHandler, InternalChecker, HasPaint {
   final String _keyIntervalCheckIsVisible = "CHECK_VISIBLE";
   final int _intervalCheckIsVisible = 200;
   Map<String, dynamic>? properties;
@@ -20,7 +20,8 @@ abstract class GameComponent extends PositionComponent
 
   /// Use to set opacity in render
   /// Range [0.0..1.0]
-  double opacity = 1.0;
+  double get opacity => getOpacity();
+  set opacity(double opacoty) => setOpacity(opacity);
 
   /// Rotation angle (in radians) of the component. The component will be
   /// rotated around its anchor point in the clockwise direction if the

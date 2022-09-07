@@ -9,17 +9,17 @@ void renderSpriteByRadAngle(
   double radAngle,
   Rect position,
   Sprite sprite, {
-  double opacity = 1.0,
+  Paint? overridePaint,
 }) {
   canvas.save();
   canvas.translate(position.center.dx, position.center.dy);
   canvas.rotate(radAngle == 0.0 ? 0.0 : radAngle + (pi / 2));
   canvas.translate(-position.center.dx, -position.center.dy);
-  sprite.renderWithOpacity(
+  sprite.render(
     canvas,
-    position.positionVector2,
-    position.sizeVector2,
-    opacity: opacity,
+    position: position.positionVector2,
+    size: position.sizeVector2,
+    overridePaint: overridePaint,
   );
   canvas.restore();
 }

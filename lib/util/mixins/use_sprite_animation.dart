@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/objects/animated_object_once.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/components.dart';
 
 ///
@@ -38,11 +37,11 @@ mixin UseSpriteAnimation on GameComponent {
       if (_fastAnimation != null) {
         _fastAnimation?.render(canvas);
       } else {
-        animation?.getSprite().renderWithOpacity(
+        animation?.getSprite().render(
               canvas,
-              position + animationOffset,
-              animationSize ?? size,
-              opacity: opacity,
+              position: position + animationOffset,
+              size: animationSize ?? size,
+              overridePaint: paint,
             );
       }
     }
@@ -53,7 +52,7 @@ mixin UseSpriteAnimation on GameComponent {
     super.update(dt);
     if (this.isVisible && _playing) {
       _fastAnimation?.position = position + _fastAnimOffset;
-      _fastAnimation?.opacity = opacity;
+      _fastAnimation?.paint = paint;
       _fastAnimation?.isFlipHorizontal = isFlipHorizontal;
       _fastAnimation?.isFlipVertical = isFlipVertical;
       _fastAnimation?.update(dt);

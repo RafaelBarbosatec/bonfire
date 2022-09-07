@@ -33,10 +33,11 @@ class SimpleDirectionAnimation {
   AnimatedObjectOnce? _fastAnimation;
   Vector2 position = Vector2.zero();
   Vector2 size = Vector2.zero();
+  Vector2 _fastAnimationOffset = Vector2.zero();
+  final Vector2 _zero = Vector2.zero();
 
   bool runToTheEndFastAnimation = false;
 
-  double opacity = 1.0;
   bool _flipX = false;
   bool _flipY = false;
 
@@ -304,11 +305,14 @@ class SimpleDirectionAnimation {
     bool runToTheEnd = false,
     bool flipX = false,
     bool flipY = false,
+    Vector2? size,
+    Vector2? offset,
   }) async {
+    _fastAnimationOffset = offset ?? Vector2.zero();
     runToTheEndFastAnimation = runToTheEnd;
     final anim = AnimatedObjectOnce(
-      position: position,
-      size: size,
+      position: position + _fastAnimationOffset,
+      size: size ?? this.size,
       animation: animation,
       onStart: onStart,
       onFinish: () {
@@ -333,7 +337,7 @@ class SimpleDirectionAnimation {
     others[key] = await animation;
   }
 
-  void render(Canvas canvas) {
+  void render(Canvas canvas, Paint paint) {
     if (_fastAnimation != null) {
       _fastAnimation?.render(canvas);
     } else {
@@ -347,11 +351,11 @@ class SimpleDirectionAnimation {
         canvas.scale(_flipX ? -1 : 1, _flipY ? -1 : 1);
         canvas.translate(-center.x, -center.y);
       }
-      _current?.getSprite().renderWithOpacity(
+      _current?.getSprite().render(
             canvas,
-            position,
-            size,
-            opacity: opacity,
+            position: position,
+            size: size,
+            overridePaint: paint,
           );
 
       if (_flipX || _flipY) {
@@ -364,15 +368,13 @@ class SimpleDirectionAnimation {
     double dt,
     Vector2 position,
     Vector2 size,
-    double opacity,
   ) {
     if (_playing) {
-      _fastAnimation?.opacity = opacity;
       _fastAnimation?.position = position;
-      _fastAnimation?.size = size;
+      if (_fastAnimationOffset != _zero) {
+        _fastAnimation?.position += _fastAnimationOffset;
+      }
       _fastAnimation?.update(dt);
-
-      this.opacity = opacity;
       this.position = position;
       this.size = size;
       _current?.update(dt);
