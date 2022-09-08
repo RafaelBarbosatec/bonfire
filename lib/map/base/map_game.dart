@@ -5,7 +5,9 @@ abstract class GameMap extends GameComponent {
   List<TileModel> tiles;
   double tileSizeToUpdate;
 
-  GameMap(this.tiles, {this.tileSizeToUpdate = 0});
+  GameMap(this.tiles, {this.tileSizeToUpdate = 0}){
+    paint.isAntiAlias = false;
+  }
 
   Iterable<Tile> getRendered();
 
@@ -23,6 +25,7 @@ abstract class GameMap extends GameComponent {
   @override
   int get priority => LayerPriority.MAP;
 
+  @override
   void renderDebugMode(Canvas canvas) {
     super.renderDebugMode(canvas);
     for (Tile t in getRendered()) {

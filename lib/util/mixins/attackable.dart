@@ -31,12 +31,14 @@ mixin Attackable on GameComponent {
   /// increase life
   void addLife(double life) {
     _life += life;
-    _verifyLimitLife();
+    _verifyLimitsLife();
   }
 
-  void updateLife(double life) {
+  void updateLife(double life, {bool verifyDieOrRevive = true}) {
     _life = life;
-    _verifyLimitLife();
+    if (verifyDieOrRevive) {
+      _verifyLimitsLife();
+    }
   }
 
   /// reduce life
@@ -49,12 +51,14 @@ mixin Attackable on GameComponent {
     }
   }
 
-  void _verifyLimitLife() {
+  void _verifyLimitsLife() {
     if (_life > maxLife) {
       _life = maxLife;
     }
     if (_life > 0 && isDead) {
       revive();
+    } else if (_life <= 0 && !_isDead) {
+      die();
     }
   }
 

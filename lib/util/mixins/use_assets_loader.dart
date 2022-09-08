@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 
 ///
 /// Created by
@@ -13,7 +13,7 @@ import 'package:bonfire/base/game_component.dart';
 ///
 /// Rafaelbarbosatec
 /// on 04/02/22
-mixin UseAssetsLoader on GameComponent {
+mixin UseAssetsLoader on Component {
   /// Used to load assets in [onLoad]
   AssetsLoader? loader = AssetsLoader();
   @override
