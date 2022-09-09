@@ -50,7 +50,7 @@ mixin UseSpriteAnimation on GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (this.isVisible && _playing) {
+    if (isVisible && _playing) {
       _fastAnimation?.position = position + _fastAnimOffset;
       _fastAnimation?.paint = paint;
       _fastAnimation?.isFlipHorizontal = isFlipHorizontal;

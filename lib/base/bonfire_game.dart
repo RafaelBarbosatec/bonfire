@@ -75,7 +75,6 @@ class BonfireGame extends BaseGame
   @override
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
- 
   final List<GameComponent> _visibleComponents = List.empty(growable: true);
   List<ObjectCollision> _visibleCollisions = List.empty();
   final List<ObjectCollision> _collisions = List.empty(growable: true);
@@ -203,7 +202,7 @@ class BonfireGame extends BaseGame
 
   @override
   Iterable<Enemy> livingEnemies() {
-    return enemies().where((element) => !element.isDead).cast();
+    return enemies().where((element) => !element.isDead);
   }
 
   @override

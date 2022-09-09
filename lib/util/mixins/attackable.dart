@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
 
+// ignore: constant_identifier_names
 enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER_AND_ALLY, NONE }
 
+// ignore: constant_identifier_names
 enum AttackFromEnum { ENEMY, PLAYER_OR_ALLY }
 
 /// Mixin responsible for adding damage-taking behavior to the component.

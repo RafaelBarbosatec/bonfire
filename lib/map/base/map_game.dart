@@ -11,9 +11,6 @@ abstract class GameMap extends GameComponent {
 
   Iterable<Tile> getRendered();
 
-  Iterable<ObjectCollision> getCollisionsRendered();
-  Iterable<ObjectCollision> getCollisions();
-
   Future<void> updateTiles(List<TileModel> map);
 
   Vector2 getStartPosition();

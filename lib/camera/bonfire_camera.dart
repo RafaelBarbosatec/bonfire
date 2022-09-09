@@ -77,7 +77,7 @@ class BonfireCamera extends Camera {
     Curve curve = Curves.decelerate,
   }) {
     if ((zoom != null && zoom <= 0.0) || _isMoving) return;
-    this.target = null;
+    target = null;
     _isMoving = true;
 
     double newZoom = zoom ?? this.zoom;
@@ -94,7 +94,7 @@ class BonfireCamera extends Camera {
     double originAngle = this.angle;
 
     _generateValues(
-      duration ?? Duration(seconds: 1),
+      duration ?? const Duration(seconds: 1),
       onChange: (value) {
         snapTo(
           Vector2(
@@ -128,7 +128,7 @@ class BonfireCamera extends Camera {
 
     double newZoom = zoom ?? this.zoom;
     double newAngle = angle ?? this.angle;
-    Vector2 originPosition = this.position.clone();
+    Vector2 originPosition = position.clone();
 
     double diffZoom = this.zoom - newZoom;
     double initialZoom = this.zoom;
@@ -137,7 +137,7 @@ class BonfireCamera extends Camera {
     double originAngle = this.angle;
 
     _generateValues(
-      duration ?? Duration(seconds: 1),
+      duration ?? const Duration(seconds: 1),
       onChange: (value) {
         double diffX = (originPosition.x + gameSize.x / 2) - target.center.x;
         double diffY = (originPosition.y + gameSize.y / 2) - target.center.y;
@@ -166,7 +166,7 @@ class BonfireCamera extends Camera {
   }
 
   void moveToPlayer() {
-    this.target = gameRef.player;
+    target = gameRef.player;
   }
 
   void moveToTarget(GameComponent? target) {
@@ -195,10 +195,10 @@ class BonfireCamera extends Camera {
     double dt, {
     Vector2? sizeWindows,
   }) {
-    if (this.target != null && !_isMoving) {
+    if (target != null && !_isMoving) {
       _moveCameraToTarget(
         dt,
-        enableSmooth: this.smoothCameraEnabled,
+        enableSmooth: smoothCameraEnabled,
         sizeWindows: sizeWindows ?? CameraConfig.sizeWidowsDefault,
       );
     }
@@ -224,8 +224,8 @@ class BonfireCamera extends Camera {
     final horizontalDistance = screenCenter.dx - positionTarget.x;
     final verticalDistance = screenCenter.dy - positionTarget.y;
 
-    double newX = this.position.x;
-    double newY = this.position.y;
+    double newX = position.x;
+    double newY = position.y;
 
     bool shouldMove = false;
     if (horizontalDistance.abs() > horizontal) {
@@ -233,7 +233,7 @@ class BonfireCamera extends Camera {
         horizontal,
         horizontalDistance,
       );
-      newX = this.position.x + (displacementX * _zoomFactor());
+      newX = position.x + (displacementX * _zoomFactor());
       shouldMove = true;
     }
 
@@ -242,17 +242,17 @@ class BonfireCamera extends Camera {
         vertical,
         verticalDistance,
       );
-      newY = this.position.y + (displacementY * _zoomFactor());
+      newY = position.y + (displacementY * _zoomFactor());
       shouldMove = true;
     }
 
     if (shouldMove) {
-      snapTo(this.position.copyWith(
+      snapTo(position.copyWith(
             x: enableSmooth
-                ? lerpDouble(this.position.x, newX, dt * speed)
+                ? lerpDouble(position.x, newX, dt * speed)
                 : newX,
             y: enableSmooth
-                ? lerpDouble(this.position.y, newY, dt * speed)
+                ? lerpDouble(position.y, newY, dt * speed)
                 : newY,
           ));
     }
@@ -272,7 +272,7 @@ class BonfireCamera extends Camera {
     double initialZoom = this.zoom;
 
     _generateValues(
-      duration ?? Duration(seconds: 1),
+      duration ?? const Duration(seconds: 1),
       onChange: (value) {
         this.zoom = initialZoom - (diffZoom * value);
       },
@@ -351,13 +351,14 @@ class BonfireCamera extends Camera {
     return cameraRectWithSpacing.overlaps(c);
   }
 
+  @override
   void update(double dt) {
     super.update(dt);
     _updateLimits(canvasSize);
     if (dt != 0 && gameRef.isLoaded == true) {
       _followTarget(
         dt,
-        sizeWindows: this.sizeMovementWindow,
+        sizeWindows: sizeMovementWindow,
       );
     }
   }
@@ -369,8 +370,8 @@ class BonfireCamera extends Camera {
   void _updateLimits(Vector2 canvasSize) {
     final sizeMap = gameRef.map.size;
 
-    if (_lastZoomSize != this.zoom && sizeMap != Vector2.zero()) {
-      _lastZoomSize = this.zoom;
+    if (_lastZoomSize != zoom && sizeMap != Vector2.zero()) {
+      _lastZoomSize = zoom;
       final startPosition = gameRef.map.getStartPosition();
       limitMinX = startPosition.x;
       limitMinY = startPosition.y;
@@ -390,7 +391,7 @@ class BonfireCamera extends Camera {
   }
 
   Vector2 _verifyLimits(Vector2 position) {
-    if (!this.moveOnlyMapArea) {
+    if (!moveOnlyMapArea) {
       return position;
     }
 
@@ -419,19 +420,20 @@ class BonfireCamera extends Camera {
     return newPosition;
   }
 
+  @override
   void snapTo(Vector2 position) {
     super.snapTo(_verifyLimits(position));
   }
 
   double _zoomFactor() {
-    return 1 / this.zoom;
+    return 1 / zoom;
   }
 
   Vector2 _getCenterTarget() {
-    if (this.target?.isObjectCollision() == true) {
-      return (this.target as ObjectCollision).rectCollision.center.toVector2();
+    if (target?.isObjectCollision() == true) {
+      return (target as ObjectCollision).rectCollision.center.toVector2();
     }
-    return this.target?.center ?? Vector2.zero();
+    return target?.center ?? Vector2.zero();
   }
 
   double _getMoveDisplacement(double baseValue, double distance) {
@@ -447,6 +449,7 @@ class BonfireCamera extends Camera {
     Anchor relativeOffset = Anchor.center,
     Rect? worldBounds,
   }) {
+    // ignore: avoid_print
     print('followComponent method not work in Bonfire. Use moveToTarget');
   }
 
@@ -456,6 +459,7 @@ class BonfireCamera extends Camera {
     Anchor relativeOffset = Anchor.center,
     Rect? worldBounds,
   }) {
+    // ignore: avoid_print
     print('followVector2 method not work in Bonfire.');
   }
 

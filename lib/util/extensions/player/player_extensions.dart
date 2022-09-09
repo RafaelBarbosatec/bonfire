@@ -16,11 +16,11 @@ extension PlayerExtensions on Player {
     double? angle,
   }) {
     if (isDead) return;
-    this.seeComponentType<Enemy>(
+    seeComponentType<Enemy>(
       observed: observed,
       notObserved: notObserved,
       radiusVision: radiusVision,
-      angle: angle ?? this.lastDirection.toRadians(),
+      angle: angle ?? lastDirection.toRadians(),
       visionAngle: visionAngle,
     );
   }
@@ -35,8 +35,8 @@ extension PlayerExtensions on Player {
     double? sizePush,
     Vector2? centerOffset,
   }) {
-    Direction attackDirection = direction ?? this.lastDirection;
-    this.simpleAttackMeleeByDirection(
+    Direction attackDirection = direction ?? lastDirection;
+    simpleAttackMeleeByDirection(
       direction: attackDirection,
       animationRight: animationRight,
       damage: damage,
@@ -67,8 +67,8 @@ extension PlayerExtensions on Player {
     CollisionConfig? collision,
     LightingConfig? lightingConfig,
   }) {
-    Direction attackDirection = direction ?? this.lastDirection;
-    this.simpleAttackRangeByDirection(
+    Direction attackDirection = direction ?? lastDirection;
+    simpleAttackRangeByDirection(
       direction: attackDirection,
       animationRight: animationRight,
       animationDestroy: animationDestroy,

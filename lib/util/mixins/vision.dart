@@ -5,10 +5,11 @@ import 'package:bonfire/geometry/shape.dart';
 import 'package:flutter/material.dart';
 
 mixin Vision on GameComponent {
+  // ignore: constant_identifier_names
   static const VISION_360 = 6.28319;
-  Paint _paint = Paint()..color = Colors.red.withOpacity(0.5);
+  final Paint _paint = Paint()..color = Colors.red.withOpacity(0.5);
   bool _drawVision = false;
-  Map<String, PolygonShape> _polygonCache = Map();
+  final Map<String, PolygonShape> _polygonCache = {};
   PolygonShape? _currentShape;
 
   void setupVision({Color? color, bool drawVision = false}) {
@@ -37,9 +38,9 @@ mixin Vision on GameComponent {
     PolygonShape shape;
     if (_polygonCache.containsKey(key)) {
       shape = _polygonCache[key]!;
-      shape.position = this.center;
+      shape.position = center;
     } else {
-      shape = _buildShape(radiusVision, visionAngle, angle, this.center);
+      shape = _buildShape(radiusVision, visionAngle, angle, center);
       _polygonCache[key] = shape;
     }
 
@@ -72,7 +73,7 @@ mixin Vision on GameComponent {
     double? visionAngle,
     double angle = 3.14159,
   }) {
-    var compVisible = this.gameRef.visibleComponents().where((element) {
+    var compVisible = gameRef.visibleComponents().where((element) {
       return element is T && element != this;
     }).cast<T>();
 
@@ -85,9 +86,9 @@ mixin Vision on GameComponent {
     PolygonShape shape;
     if (_polygonCache.containsKey(key)) {
       shape = _polygonCache[key]!;
-      shape.position = this.center;
+      shape.position = center;
     } else {
-      shape = _buildShape(radiusVision, visionAngle, angle, this.center);
+      shape = _buildShape(radiusVision, visionAngle, angle, center);
       _polygonCache[key] = shape;
     }
 

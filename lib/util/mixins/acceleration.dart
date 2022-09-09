@@ -39,9 +39,11 @@ mixin Acceleration on Movement {
     double acceleration,
     double angle, {
     bool stopWhenSpeedZero = false,
+    bool updateAngleComponent = false,
     double? initialSpeed,
     VoidCallback? onStop,
   }) {
+    _updateAngleComponent = updateAngleComponent;
     _onStop = onStop;
     _type = _TypeAcceleration.angle;
     speed = initialSpeed ?? speed;

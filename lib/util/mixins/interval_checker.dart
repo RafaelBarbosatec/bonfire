@@ -24,14 +24,12 @@ mixin InternalChecker {
     double dt, {
     bool firstCheckIsTrue = true,
   }) {
-    if (_timers == null) {
-      _timers = Map();
-    }
-    if (this._timers![key]?.interval != intervalInMilli) {
-      this._timers![key] = IntervalTick(intervalInMilli);
+    _timers ??= {};
+    if (_timers![key]?.interval != intervalInMilli) {
+      _timers![key] = IntervalTick(intervalInMilli);
       return firstCheckIsTrue;
     } else {
-      return this._timers![key]?.update(dt) ?? false;
+      return _timers![key]?.update(dt) ?? false;
     }
   }
 }

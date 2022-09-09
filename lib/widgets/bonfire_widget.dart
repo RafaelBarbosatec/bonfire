@@ -110,10 +110,10 @@ class BonfireWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _BonfireWidgetState createState() => _BonfireWidgetState();
+  BonfireWidgetState createState() => BonfireWidgetState();
 }
 
-class _BonfireWidgetState extends State<BonfireWidget> {
+class BonfireWidgetState extends State<BonfireWidget> {
   late BonfireGame _game;
   late StreamController<bool> _loadingStream;
 
@@ -154,11 +154,11 @@ class _BonfireWidgetState extends State<BonfireWidget> {
         StreamBuilder<bool>(
           stream: _loadingStream.stream,
           builder: (context, snapshot) {
-            bool _loading = !snapshot.hasData || snapshot.data == true;
+            bool loading = !snapshot.hasData || snapshot.data == true;
             return AnimatedSwitcher(
               duration: widget.progressTransitionDuration,
               transitionBuilder: widget.progressTransitionBuilder,
-              child: _loading ? _defaultProgress() : SizedBox.shrink(),
+              child: loading ? _defaultProgress() : const SizedBox.shrink(),
             );
           },
         ),
@@ -170,7 +170,7 @@ class _BonfireWidgetState extends State<BonfireWidget> {
     return widget.progress ??
         Container(
           color: Colors.black,
-          child: Center(
+          child: const Center(
             child: CircularProgressIndicator(),
           ),
         );

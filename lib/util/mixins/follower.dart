@@ -23,15 +23,15 @@ mixin Follower on GameComponent {
     GameComponent? target,
     Vector2? offset,
   }) {
-    this.followerTarget = target;
-    this.followerOffset = offset;
+    followerTarget = target;
+    followerOffset = offset;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
     if (followerTarget != null) {
-      this.position = followerTarget!.position + (followerOffset ?? _zero);
+      position = followerTarget!.position + (followerOffset ?? _zero);
     }
   }
 

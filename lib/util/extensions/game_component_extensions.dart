@@ -23,7 +23,7 @@ extension GameComponentExtensions on GameComponent {
           y,
         ),
         config: config ??
-            TextStyle(
+            const TextStyle(
               fontSize: 14,
               color: Color(0xFFFFFFFF),
             ),
@@ -143,6 +143,7 @@ extension GameComponentExtensions on GameComponent {
     Vector2? centerOffset,
   }) {
     final rect = rectConsideringCollision;
+
     simpleAttackMeleeByAngle(
       angle: direction.toRadians(),
       animation: animationRight,
@@ -208,7 +209,7 @@ extension GameComponentExtensions on GameComponent {
 
     gameRef
         .visibleAttackables()
-        .where((a) => a.rectAttackable().overlaps(positionAttack))
+        .where((a) => a.rectAttackable().overlaps(positionAttack) && a != this)
         .forEach((enemy) {
       enemy.receiveDamage(attacker, damage, id);
       final rectAfterPush = enemy.position.translate(diffBase.x, diffBase.y);

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:ui';
 
 import 'package:bonfire/background/background_image_game.dart';
@@ -44,16 +46,16 @@ class TiledWorldBuilder {
   final ValueChanged<Object>? onError;
   late TiledReader _reader;
   final double tileSizeToUpdate;
-  List<TileModel> _tiles = [];
-  List<GameComponent> _components = [];
+  final List<TileModel> _tiles = [];
+  final List<GameComponent> _components = [];
   String? _basePath;
   TiledMap? _tiledMap;
   double _tileWidth = 0;
   double _tileHeight = 0;
   double _tileWidthOrigin = 0;
   double _tileHeightOrigin = 0;
-  Map<String, ObjectBuilder> _objectsBuilder = Map();
-  Map<String, TileModelSprite> _tileModelSpriteCache = Map();
+  Map<String, ObjectBuilder> _objectsBuilder = {};
+  final Map<String, TileModelSprite> _tileModelSpriteCache = {};
   int countTileLayer = 0;
   int countImageLayer = 0;
 
@@ -64,7 +66,7 @@ class TiledWorldBuilder {
     this.tileSizeToUpdate = 0,
     Map<String, ObjectBuilder>? objectsBuilder,
   }) {
-    _objectsBuilder = objectsBuilder ?? Map();
+    _objectsBuilder = objectsBuilder ?? {};
     _basePath = path.replaceAll(path.split('/').last, '');
     _reader = TiledReader(path);
   }
@@ -83,6 +85,7 @@ class TiledWorldBuilder {
       await _load(_tiledMap!);
     } catch (e) {
       onError?.call(e);
+      // ignore: avoid_print
       print('(TiledWorldMap) Error: $e');
     }
 
@@ -274,7 +277,7 @@ class TiledWorldBuilder {
     }
 
     TileSetDetail? tileSetContain;
-    String _pathTileset = '';
+    String pathTileset = '';
     int firsTgId = 0;
 
     try {
@@ -284,11 +287,12 @@ class TiledWorldBuilder {
 
       firsTgId = tileSetContain?.firsTgId ?? 0;
       if (tileSetContain?.source != null) {
-        _pathTileset = tileSetContain!.source!.replaceAll(
+        pathTileset = tileSetContain!.source!.replaceAll(
           tileSetContain.source!.split('/').last,
           '',
         );
       }
+    // ignore: empty_catches
     } catch (e) {}
 
     if (tileSetContain != null) {
@@ -298,7 +302,7 @@ class TiledWorldBuilder {
       double y = _getY((index - firsTgId), widthCount);
       double x = _getX((index - firsTgId), widthCount);
 
-      final pathSprite = '$_basePath$_pathTileset${tileSetContain.image}';
+      final pathSprite = '$_basePath$pathTileset${tileSetContain.image}';
 
       TileModelSprite sprite;
       String tileKey = '$pathSprite/$x/$y';
@@ -317,7 +321,7 @@ class TiledWorldBuilder {
 
       final animation = _getAnimation(
         tileSetContain,
-        _pathTileset,
+        pathTileset,
         (index - firsTgId),
         widthCount,
       );

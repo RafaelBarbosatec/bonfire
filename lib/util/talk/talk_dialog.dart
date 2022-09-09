@@ -61,16 +61,16 @@ class TalkDialog extends StatefulWidget {
   final Alignment talkAlignment;
 
   @override
-  _TalkDialogState createState() => _TalkDialogState();
+  TalkDialogState createState() => TalkDialogState();
 }
 
-class _TalkDialogState extends State<TalkDialog> {
+class TalkDialogState extends State<TalkDialog> {
   final FocusNode _focusNode = FocusNode();
   late Say currentSay;
   int currentIndexTalk = 0;
   bool finishedCurrentSay = false;
 
-  StreamController<List<TextSpan>> _textShowController =
+  final StreamController<List<TextSpan>> _textShowController =
       StreamController<List<TextSpan>>.broadcast();
 
   @override
@@ -113,13 +113,13 @@ class _TalkDialogState extends State<TalkDialog> {
           onTap: _nextOrFinish,
           child: Container(
             color: Colors.transparent,
-            padding: widget.padding ?? EdgeInsets.all(10),
+            padding: widget.padding ?? const EdgeInsets.all(10),
             child: Stack(
               alignment: widget.talkAlignment,
               children: [
                 Align(
                   alignment: _getAlign(currentSay.personSayDirection),
-                  child: currentSay.background ?? SizedBox.shrink(),
+                  child: currentSay.background ?? const SizedBox.shrink(),
                 ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -131,10 +131,10 @@ class _TalkDialogState extends State<TalkDialog> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          currentSay.header ?? SizedBox.shrink(),
+                          currentSay.header ?? const SizedBox.shrink(),
                           Container(
                             width: double.maxFinite,
-                            padding: currentSay.padding ?? EdgeInsets.all(10),
+                            padding: currentSay.padding ?? const EdgeInsets.all(10),
                             margin: currentSay.margin,
                             constraints: widget.textBoxMinHeight != null
                                 ? BoxConstraints(
@@ -154,11 +154,11 @@ class _TalkDialogState extends State<TalkDialog> {
                               builder: (context, snapshot) {
                                 return SingleChildScrollView(
                                   scrollDirection: Axis.vertical,
-                                  physics: BouncingScrollPhysics(),
+                                  physics: const BouncingScrollPhysics(),
                                   child: RichText(
                                     text: TextSpan(
                                       children: snapshot.data,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 18,
                                       ),
@@ -168,7 +168,7 @@ class _TalkDialogState extends State<TalkDialog> {
                               },
                             ),
                           ),
-                          currentSay.bottom ?? SizedBox.shrink(),
+                          currentSay.bottom ?? const SizedBox.shrink(),
                         ],
                       ),
                     ),
@@ -213,7 +213,7 @@ class _TalkDialogState extends State<TalkDialog> {
 
   void _startShowText() async {
     // Clean the stream to prevent textStyle from changing before the text
-    _textShowController.add([TextSpan()]);
+    _textShowController.add([const TextSpan()]);
 
     await Future.forEach<TextSpan>(currentSay.text, (span) async {
       if (_textShowController.isClosed) return;
@@ -242,7 +242,7 @@ class _TalkDialogState extends State<TalkDialog> {
       return [
         if (direction == PersonSayDirection.RIGHT && currentSay.person != null)
           SizedBox(
-            width: (widget.padding ?? EdgeInsets.all(10)).horizontal / 2,
+            width: (widget.padding ?? const EdgeInsets.all(10)).horizontal / 2,
           ),
         SizedBox(
           key: UniqueKey(),
@@ -250,7 +250,7 @@ class _TalkDialogState extends State<TalkDialog> {
         ),
         if (direction == PersonSayDirection.LEFT && currentSay.person != null)
           SizedBox(
-            width: (widget.padding ?? EdgeInsets.all(10)).horizontal / 2,
+            width: (widget.padding ?? const EdgeInsets.all(10)).horizontal / 2,
           ),
       ];
     } else {

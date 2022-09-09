@@ -75,9 +75,7 @@ class KnightInterface extends GameInterface {
     if (hasGameRef && !gameRef.camera.isMoving) {
       if (enemyControlled == null) {
         final v = gameRef
-            .visibleEnemies()
-            .where((element) => element is Goblin)
-            .cast<Goblin>();
+            .visibleComponentsByType<Goblin>();
         if (v.isNotEmpty) {
           enemyControlled = v.first;
           enemyControlled?.controller.enableBehaviors = false;

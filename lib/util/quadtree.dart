@@ -12,7 +12,9 @@
 import 'dart:math';
 
 // defaults should almost never be used, tune the quad tree to fit your problem
+// ignore: constant_identifier_names
 const int default_max_depth = 1000;
+// ignore: constant_identifier_names
 const int default_max_items = 100;
 
 // names reflect a coordinate system where values increase as one goes left or down
@@ -72,18 +74,18 @@ class QuadTree<T> extends Rectangle<num> {
     if (_children.isEmpty) {
       _items.removeWhere((item) => item.id == id);
     }
-    return _children.forEach((element) {
+    for (var element in _children) {
       element.removeById(id);
-    });
+    }
   }
 
   void remove(T item) {
     if (_children.isEmpty) {
       _items.removeWhere((i) => i.item == item);
     }
-    return _children.forEach((element) {
+    for (var element in _children) {
       element.remove(item);
-    });
+    }
   }
 
   List<T> query(Rectangle range) {
@@ -99,6 +101,7 @@ class QuadTree<T> extends Rectangle<num> {
         .toList();
   }
 
+  @override
   String toString() {
     return '[$_depth](${_items.map((item) => item.item).toList()}:$_children)';
   }

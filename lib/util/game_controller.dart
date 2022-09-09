@@ -7,7 +7,7 @@ abstract class GameListener {
 }
 
 class GameController extends Component with BonfireHasGameRef {
-  List<GameListener> _gameListeners = [];
+  final List<GameListener> _gameListeners = [];
   int _lastCountLiveEnemies = 0;
 
   void addGameComponent(GameComponent component) {
@@ -32,12 +32,12 @@ class GameController extends Component with BonfireHasGameRef {
       notifyChangeEnemy = true;
     }
     if (_gameListeners.isNotEmpty) {
-      _gameListeners.forEach((element) {
+      for (var element in _gameListeners) {
         element.updateGame();
         if (notifyChangeEnemy) {
           element.changeCountLiveEnemies(_lastCountLiveEnemies);
         }
-      });
+      }
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:bonfire/bonfire.dart';
 
 /// Mixin responsible for adding movements through joystick events
 mixin MovementByJoystick on Movement, JoystickListener {
+  // ignore: constant_identifier_names
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
@@ -40,7 +41,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
     super.update(dt);
     if (_isEnabled()) {
       if (dPadAngles) {
-        final diagonalSpeed = this.speed * REDUCTION_SPEED_DIAGONAL;
+        final diagonalSpeed = speed * REDUCTION_SPEED_DIAGONAL;
         _moveDirectional(_currentDirectional, speed, diagonalSpeed);
       } else {
         if (_currentDirectional != JoystickMoveDirectional.IDLE) {

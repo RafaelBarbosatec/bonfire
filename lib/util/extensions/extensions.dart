@@ -62,8 +62,8 @@ extension ImageExtension on Image {
     PictureRecorder recorder = PictureRecorder();
     final paint = Paint();
     Canvas canvas = Canvas(recorder);
-    final totalWidth = max(this.width, other.width);
-    final totalHeight = max(this.height, other.height);
+    final totalWidth = max(width, other.width);
+    final totalHeight = max(height, other.height);
     canvas.drawImage(this, Offset.zero, paint);
     canvas.drawImage(other, Offset.zero, paint);
     return recorder.endRecording().toImage(totalWidth, totalHeight);
@@ -74,25 +74,25 @@ extension ImageExtension on Image {
     PictureRecorder recorder = PictureRecorder();
     final paint = Paint();
     Canvas canvas = Canvas(recorder);
-    int totalWidth = this.width;
-    int totalHeight = this.height;
+    int totalWidth = width;
+    int totalHeight = height;
     canvas.drawImage(this, Offset.zero, paint);
-    others.forEach((i) {
+    for (var i in others) {
       totalWidth = max(totalWidth, i.width);
       totalHeight = max(totalHeight, i.height);
       canvas.drawImage(i, Offset.zero, paint);
-    });
+    }
     return recorder.endRecording().toImage(totalWidth, totalHeight);
   }
 }
 
 extension OffSetExt on Offset {
   Offset copyWith({double? x, double? y}) {
-    return Offset(x ?? this.dx, y ?? this.dy);
+    return Offset(x ?? dx, y ?? dy);
   }
 
   Vector2 toVector2() {
-    return Vector2(this.dx, this.dy);
+    return Vector2(dx, dy);
   }
 
   Offset rotate(double angle, Offset center) {
@@ -141,7 +141,11 @@ extension SpriteFutureExt on Future<Sprite> {
 }
 
 extension NullableExt<T> on T? {
-  FutureOr<void> let(FutureOr<void> Function(T i) call) => call(this!);
+  FutureOr<void> let(FutureOr<void> Function(T i) call) {
+    if (this != null) {
+      call(this as T);
+    }
+  }
 }
 
 extension Vector2Ext on Vector2 {
@@ -171,7 +175,7 @@ extension FutureSpriteAnimationExt on FutureOr<SpriteAnimation> {
         key: key,
         future: this as Future<SpriteAnimation>,
         builder: (context, data) {
-          if (!data.hasData) return widget.SizedBox.shrink();
+          if (!data.hasData) return const widget.SizedBox.shrink();
           return widget.Container(
             constraints: widget.BoxConstraints(
               minWidth: data.data!.frames.first.sprite.src.width,
@@ -215,7 +219,7 @@ extension FutureSpriteExt on FutureOr<Sprite> {
         key: key,
         future: this as Future<Sprite>,
         builder: (context, data) {
-          if (!data.hasData) return widget.SizedBox.shrink();
+          if (!data.hasData) return const widget.SizedBox.shrink();
           return widget.Container(
             constraints: widget.BoxConstraints(
               minWidth: data.data!.src.width,
@@ -256,7 +260,7 @@ extension ComponentExt on Component {
 
 extension CameraExt on Camera {
   void setGame(BonfireGame game) {
-    if (!(this is BonfireCamera)) {
+    if (this is! BonfireCamera) {
       return;
     }
     (this as BonfireCamera).gameRef = game;

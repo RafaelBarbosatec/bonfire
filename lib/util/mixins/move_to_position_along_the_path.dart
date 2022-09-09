@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:math';
 import 'dart:ui';
 
@@ -19,14 +21,14 @@ mixin MoveToPositionAlongThePath on Movement {
   double _factorInflateFindArea = 2;
   VoidCallback? _onFinish;
 
-  List<Offset> _barriers = [];
+  final List<Offset> _barriers = [];
   List ignoreCollisions = [];
 
   LinePathComponent? _linePathComponent;
-  Color _pathLineColor = Color(0xFF40C4FF).withOpacity(0.5);
+  Color _pathLineColor = const Color(0xFF40C4FF).withOpacity(0.5);
   double _pathLineStrokeWidth = 4;
-  Paint _paintShowBarriers = Paint()
-    ..color = Color(0xFF2196F3).withOpacity(0.5);
+  final Paint _paintShowBarriers = Paint()
+    ..color = const Color(0xFF2196F3).withOpacity(0.5);
 
   void setupMoveToPositionAlongThePath({
     /// Use to set line path color
@@ -45,12 +47,12 @@ mixin MoveToPositionAlongThePath on Movement {
   }) {
     _factorInflateFindArea = factorInflateFindArea;
     _paintShowBarriers.color =
-        barriersCalculatedColor ?? Color(0xFF2196F3).withOpacity(0.5);
-    this._showBarriers = showBarriersCalculated;
+        barriersCalculatedColor ?? const Color(0xFF2196F3).withOpacity(0.5);
+    _showBarriers = showBarriersCalculated;
 
     _pathLineColor = pathLineColor ?? _pathLineColor;
     _pathLineStrokeWidth = pathLineStrokeWidth;
-    _pathLineColor = pathLineColor ?? Color(0xFF40C4FF).withOpacity(0.5);
+    _pathLineColor = pathLineColor ?? const Color(0xFF40C4FF).withOpacity(0.5);
     _gridSizeIsCollisionSize = gridSizeIsCollisionSize;
   }
 
@@ -97,7 +99,7 @@ mixin MoveToPositionAlongThePath on Movement {
     _barriers.clear();
     _currentIndex = 0;
     _removeLinePathComponent();
-    this.idle();
+    idle();
     _onFinish?.call();
     _onFinish = null;
   }
@@ -105,7 +107,7 @@ mixin MoveToPositionAlongThePath on Movement {
   void _move(double dt) {
     double innerSpeed = speed * dt;
     Vector2 center = this.center;
-    if (this.isObjectCollision()) {
+    if (isObjectCollision()) {
       center = (this as ObjectCollision).rectCollision.center.toVector2();
     }
     double diffX = _currentPath[_currentIndex].dx - center.x;
@@ -244,6 +246,7 @@ mixin MoveToPositionAlongThePath on Movement {
         _currentIndex = 0;
       }
     } catch (e) {
+      // ignore: avoid_print
       print('ERROR(AStar):$e');
     }
     gameRef.add(
@@ -263,7 +266,7 @@ mixin MoveToPositionAlongThePath on Movement {
       tileSize = gameRef.map.tiles.first.width;
     }
     if (_gridSizeIsCollisionSize) {
-      if (this.isObjectCollision()) {
+      if (isObjectCollision()) {
         return max(
           (this as ObjectCollision).rectCollision.width,
           (this as ObjectCollision).rectCollision.height,
@@ -320,11 +323,11 @@ mixin MoveToPositionAlongThePath on Movement {
       );
     }).toList();
 
-    result.forEach((element) {
+    for (var element in result) {
       if (!_barriers.contains(element)) {
         _barriers.add(element);
       }
-    });
+    }
   }
 
   bool _isNeighbor(Offset playerPosition, Offset targetPosition) {
@@ -347,7 +350,7 @@ mixin MoveToPositionAlongThePath on Movement {
 
   void _drawBarrries(Canvas canvas) {
     if (_showBarriers) {
-      _barriers.forEach((element) {
+      for (var element in _barriers) {
         canvas.drawRect(
           Rect.fromLTWH(
             element.dx * _tileSize,
@@ -357,7 +360,7 @@ mixin MoveToPositionAlongThePath on Movement {
           ),
           _paintShowBarriers,
         );
-      });
+      }
     }
   }
 
