@@ -6,10 +6,9 @@ import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:http/http.dart' as http;
 
 class MapAssetsManager {
-  static final Map<String, Sprite> spriteCache = Map();
-  static final Map<String, Image> _imageCache = Map();
-  static final Map<String, ControlledUpdateAnimation> spriteAnimationCache =
-      Map();
+  static final Map<String, Sprite> spriteCache = {};
+  static final Map<String, Image> _imageCache = {};
+  static final Map<String, ControlledUpdateAnimation> spriteAnimationCache = {};
 
   static Sprite getSprite(
     String image,

@@ -1,9 +1,11 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/joystick/joystick.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 enum JoystickMoveDirectional {
   MOVE_UP,
@@ -53,22 +55,28 @@ mixin JoystickListener {
 
 abstract class JoystickController extends GameComponent
     with PointerDetectorHandler {
-  List<JoystickListener> _observers = [];
+  final List<JoystickListener> _observers = [];
 
   KeyboardConfig keyboardConfig = KeyboardConfig(enable: false);
 
-  void onKeyboard(RawKeyEvent event) {}
+  KeyEventResult onKeyboard(RawKeyEvent event) => KeyEventResult.handled;
 
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    _observers.forEach((o) => o.joystickChangeDirectional(event));
+    for (var o in _observers) {
+      o.joystickChangeDirectional(event);
+    }
   }
 
   void joystickAction(JoystickActionEvent event) {
-    _observers.forEach((o) => o.joystickAction(event));
+    for (var o in _observers) {
+      o.joystickAction(event);
+    }
   }
 
   void moveTo(Vector2 event) {
-    _observers.forEach((o) => o.moveTo(event));
+    for (var o in _observers) {
+      o.moveTo(event);
+    }
   }
 
   void addObserver(JoystickListener listener) {

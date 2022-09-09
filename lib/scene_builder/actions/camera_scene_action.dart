@@ -42,7 +42,7 @@ class CameraSceneAction extends SceneAction {
     this.zoom,
     this.angle,
     this.curve = widget.Curves.decelerate,
-  })  : this.target = null,
+  })  : target = null,
         super(id);
 
   CameraSceneAction.target(
@@ -52,7 +52,7 @@ class CameraSceneAction extends SceneAction {
     this.zoom,
     this.angle,
     this.curve = widget.Curves.decelerate,
-  })  : this.position = null,
+  })  : position = null,
         super(id);
 
   @override

@@ -79,7 +79,11 @@ extension AttackableExtensions on Attackable {
           currentBarLife,
           w,
           colorsLife ??
-              [Color(0xFFF44336), Color(0xFFFFEB3B), Color(0xFF4CAF50)],
+              [
+                const Color(0xFFF44336),
+                const Color(0xFFFFEB3B),
+                const Color(0xFF4CAF50),
+              ],
         )
         ..style = PaintingStyle.fill,
     );

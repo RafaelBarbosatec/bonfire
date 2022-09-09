@@ -53,7 +53,7 @@ class Joystick extends JoystickController {
   JoystickDirectional? _directional;
 
   JoystickDirectional? get directional => _directional;
-  List<LogicalKeyboardKey> _currentKeyboardKeys = [];
+  final List<LogicalKeyboardKey> _currentKeyboardKeys = [];
 
   Joystick({
     this.actions = const [],
@@ -68,7 +68,9 @@ class Joystick extends JoystickController {
 
   void initialize(Vector2 size) async {
     directional?.initialize(size, this);
-    actions.forEach((action) => action.initialize(size, this));
+    for (var action in actions) {
+      action.initialize(size, this);
+    }
   }
 
   Future updateDirectional(JoystickDirectional? directional) async {
@@ -87,6 +89,7 @@ class Joystick extends JoystickController {
     actions.removeWhere((action) => action.actionId == actionId);
   }
 
+  @override
   void render(Canvas canvas) {
     super.render(canvas);
     directional?.render(canvas);
@@ -141,8 +144,15 @@ class Joystick extends JoystickController {
   }
 
   @override
-  void onKeyboard(RawKeyEvent event) {
-    if (!keyboardConfig.enable) return;
+  KeyEventResult onKeyboard(RawKeyEvent event) {
+    if (!keyboardConfig.enable) return KeyEventResult.ignored;
+
+    if (keyboardConfig.acceptedKeys != null) {
+      final keyAccepted = keyboardConfig.acceptedKeys;
+      if (!keyAccepted!.contains(event.logicalKey)) {
+        return KeyEventResult.ignored;
+      }
+    }
 
     if (_isDirectional(event)) {
       if (event is RawKeyDownEvent && _currentKeyboardKeys.length < 2) {
@@ -151,7 +161,7 @@ class Joystick extends JoystickController {
         }
       }
 
-      if (event is RawKeyUpEvent && _currentKeyboardKeys.length > 0) {
+      if (event is RawKeyUpEvent && _currentKeyboardKeys.isNotEmpty) {
         _currentKeyboardKeys.remove(event.logicalKey);
       }
 
@@ -186,12 +196,14 @@ class Joystick extends JoystickController {
         ));
       }
     }
+
+    return KeyEventResult.handled;
   }
 
   @override
-  void onGameResize(Vector2 gameSize) {
+  void onGameResize(Vector2 size) {
     initialize(gameRef.camera.canvasSize);
-    super.onGameResize(gameSize);
+    super.onGameResize(size);
   }
 
   @override

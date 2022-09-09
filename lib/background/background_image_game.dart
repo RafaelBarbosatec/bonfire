@@ -20,7 +20,6 @@ class BackgroundImageGame extends GameBackground with UseSprite {
   final double factor;
   final double parallaxX;
   final double parallaxY;
-  final double opacity;
   final bool isBackground;
   final int priorityImage;
   Vector2 _parallaxOffset = Vector2.zero();
@@ -32,10 +31,12 @@ class BackgroundImageGame extends GameBackground with UseSprite {
     this.factor = 1,
     this.parallaxX = 1,
     this.parallaxY = 1,
-    this.opacity = 1,
+    double opacity = 1,
     this.isBackground = true,
     this.priorityImage = 0,
-  });
+  }) {
+    opacity = opacity;
+  }
 
   @override
   void update(double dt) {

@@ -36,17 +36,17 @@ class CollisionConfig {
   void updatePosition(Vector2 position) {
     if (collisions.isNotEmpty && position != _lastPosition) {
       collisions.first.updatePosition(position);
-      Rect? _rect;
+      Rect? newRect;
       for (var element in collisions) {
         element.updatePosition(position);
-        if (_rect == null) {
-          _rect = element.rect;
+        if (newRect == null) {
+          newRect = element.rect;
         } else {
-          _rect = _rect.expandToInclude(element.rect);
+          newRect = newRect.expandToInclude(element.rect);
         }
       }
       _lastPosition = position.clone();
-      rect = _rect!;
+      rect = newRect!;
     }
   }
 }

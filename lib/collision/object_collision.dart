@@ -134,4 +134,16 @@ mixin ObjectCollision on GameComponent {
         _collisionConfig?.collisions.isNotEmpty == true &&
         _collisionConfig?.enable == true;
   }
+
+  @override
+  void onMount() {
+    (gameRef as BonfireGame).addCollision(this);
+    super.onMount();
+  }
+
+  @override
+  void onRemove() {
+    (gameRef as BonfireGame).removeCollision(this);
+    super.onRemove();
+  }
 }

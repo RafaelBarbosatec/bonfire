@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/lighting/lighting_type.dart';
@@ -35,5 +37,21 @@ mixin Lighting on GameComponent {
       lightingAngle = _lightingAngle();
     }
     super.update(dt);
+  }
+
+  @override
+  void onSetIfVisible() {
+    super.onSetIfVisible();
+    if (isVisible) {
+      gameRef.lighting?.addVisibleLighting(this);
+    } else {
+      gameRef.lighting?.removeVisibleLighting(this);
+    }
+  }
+
+  @override
+  void onRemove() {
+    gameRef.lighting?.removeVisibleLighting(this);
+    super.onRemove();
   }
 }

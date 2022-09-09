@@ -5,6 +5,8 @@
 - Adds `onStop` params in `Acceleration` mixin. It's called when stop for collision or when speed is equals 0 in `stopWhenSpeedZero` setted true.
 - Use `HasPaint` mixin in `GameComponent`.
 - Improvements on Tile.
+- Improvements Collision system.
+- Improvements code by lint.
 
 # [2.9.4]
 - Adds `revive` method in `Attackable` mixin. Now if adds life to stay above 0 it's is revive.

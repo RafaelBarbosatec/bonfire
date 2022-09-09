@@ -7,6 +7,7 @@ import 'package:tiledjsonreader/map/tiled_map.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
 class TiledReader {
+  // ignore: constant_identifier_names
   static const ORIENTATION_SUPPORTED = 'orthogonal';
   final String path;
   late bool _fromServer;
@@ -16,7 +17,7 @@ class TiledReader {
   TiledReader(this.path) {
     _fromServer = path.contains('http');
     _basePath = path.replaceAll(path.split('/').last, '');
-    _reader = TiledJsonReader('assets/images/' + path);
+    _reader = TiledJsonReader('assets/images/$path');
   }
 
   Future<TiledMap> readMap() async {
@@ -35,6 +36,7 @@ class TiledReader {
         }
         return Future.value(tiledMap);
       } catch (e) {
+        // ignore: avoid_print
         print('(TiledReader) Error: $e');
         return Future.value(TiledMap());
       }

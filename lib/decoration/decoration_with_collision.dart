@@ -2,8 +2,6 @@ import 'package:bonfire/bonfire.dart';
 
 /// GameDecoration with collision used in construct of the map with Tiled
 class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
-  bool aboveComponents = false;
-
   GameDecorationWithCollision({
     required Vector2 position,
     required Vector2 size,
@@ -12,13 +10,14 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
-    this.aboveComponents = false,
+    bool aboveComponents = false,
   }) : super(
           position: position,
           size: size,
           animation: animation,
           sprite: sprite,
         ) {
+    this.aboveComponents = aboveComponents;
     if (collisions != null) {
       setupCollision(
         CollisionConfig(collisions: collisions),
@@ -33,12 +32,13 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
-    this.aboveComponents = false,
+    bool aboveComponents = false,
   }) : super.withSprite(
           sprite: sprite,
           position: position,
           size: size,
         ) {
+    this.aboveComponents = aboveComponents;
     if (collisions != null) {
       setupCollision(
         CollisionConfig(collisions: collisions),
@@ -53,12 +53,13 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
     Iterable<CollisionArea>? collisions,
     double offsetX = 0,
     double offsetY = 0,
-    this.aboveComponents = false,
+    bool aboveComponents = false,
   }) : super.withAnimation(
           animation: animation,
           position: position,
           size: size,
         ) {
+    this.aboveComponents = aboveComponents;
     if (collisions != null) {
       setupCollision(
         CollisionConfig(collisions: collisions),

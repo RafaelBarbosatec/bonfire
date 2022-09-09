@@ -26,13 +26,13 @@ extension EnemyExtensions on Enemy {
     VoidCallback? execute,
     Vector2? centerOffset,
   }) {
-    if (!this.checkInterval('attackMelee', interval, dtUpdate)) return;
+    if (!checkInterval('attackMelee', interval, dtUpdate)) return;
 
     if (isDead) return;
 
     Direction direct = direction ?? getComponentDirectionFromMe(gameRef.player);
 
-    this.simpleAttackMeleeByDirection(
+    simpleAttackMeleeByDirection(
       damage: damage,
       direction: direct,
       size: size,
@@ -65,13 +65,13 @@ extension EnemyExtensions on Enemy {
     VoidCallback? execute,
     LightingConfig? lightingConfig,
   }) {
-    if (!this.checkInterval('attackRange', interval, dtUpdate)) return;
+    if (!checkInterval('attackRange', interval, dtUpdate)) return;
 
     if (isDead) return;
 
     Direction direct = direction ?? getComponentDirectionFromMe(gameRef.player);
 
-    this.simpleAttackRangeByDirection(
+    simpleAttackRangeByDirection(
       animationRight: animationRight,
       animationDestroy: animationDestroy,
       size: size,
@@ -112,13 +112,13 @@ extension EnemyExtensions on Enemy {
       angle: angle,
       observed: (player) {
         observed?.call();
-        this.positionsItselfAndKeepDistance(
+        positionsItselfAndKeepDistance(
           player,
           minDistanceFromPlayer: minDistanceFromPlayer,
           radiusVision: radiusVision,
           runOnlyVisibleInScreen: runOnlyVisibleInScreen,
           positioned: (player) {
-            final playerDirection = this.getComponentDirectionFromMe(player);
+            final playerDirection = getComponentDirectionFromMe(player);
             lastDirection = playerDirection;
             if (lastDirection == Direction.left ||
                 lastDirection == Direction.right) {
@@ -130,8 +130,8 @@ extension EnemyExtensions on Enemy {
         );
       },
       notObserved: () {
-        if (!this.isIdle) {
-          this.idle();
+        if (!isIdle) {
+          idle();
         }
         notObserved?.call();
       },

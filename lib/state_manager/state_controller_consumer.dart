@@ -27,11 +27,11 @@ class StateControllerConsumer<T extends StateController>
   }) : super(key: key);
 
   @override
-  _StateControllerConsumerState<T> createState() =>
-      _StateControllerConsumerState<T>();
+  StateControllerConsumerState<T> createState() =>
+      StateControllerConsumerState<T>();
 }
 
-class _StateControllerConsumerState<T extends StateController>
+class StateControllerConsumerState<T extends StateController>
     extends State<StateControllerConsumer> {
   late T controller;
   @override

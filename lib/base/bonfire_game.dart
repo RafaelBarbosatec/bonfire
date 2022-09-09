@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:async';
 
 import 'package:bonfire/base/base_game.dart';
@@ -20,7 +22,6 @@ class BonfireGame extends BaseGame
     implements BonfireGameInterface {
   static const INTERVAL_UPDATE_CACHE = 200;
   static const INTERVAL_UPDATE_ORDER = 253;
-  static const INTERVAL_UPDATE_COLLISIONS = 1003;
 
   /// Context used to access all Flutter power in your game.
   @override
@@ -31,9 +32,11 @@ class BonfireGame extends BaseGame
   final Player? player;
 
   /// The way you can draw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
+  @override
   final GameInterface? interface;
 
   /// Represents a map (or world) where the game occurs.
+  @override
   final GameMap map;
 
   /// The player-controlling component.
@@ -46,12 +49,15 @@ class BonfireGame extends BaseGame
   final bool constructionMode;
 
   /// Color grid when `constructionMode` is true
+  @override
   final Color? constructionModeColor;
 
   /// Used to draw area collision in objects.
+  @override
   final bool showCollisionArea;
 
   /// Color of the collision area when `showCollisionArea` is true
+  @override
   final Color? collisionAreaColor;
 
   /// Used to extensively control game elements
@@ -69,14 +75,13 @@ class BonfireGame extends BaseGame
   @override
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
-  Iterable<Lighting> _visibleLights = List.empty();
-  Iterable<GameComponent> _visibleComponents = List.empty();
+ 
+  final List<GameComponent> _visibleComponents = List.empty(growable: true);
   List<ObjectCollision> _visibleCollisions = List.empty();
-  List<ObjectCollision> _collisions = List.empty();
-  List<GameComponent> _addLater = [];
+  final List<ObjectCollision> _collisions = List.empty(growable: true);
+  final List<GameComponent> _addLater = List.empty(growable: true);
   late IntervalTick _interval;
   late IntervalTick _intervalUpdateOder;
-  late IntervalTick _intervalAllCollisions;
   late ColorFilterComponent _colorFilterComponent;
   late LightingComponent _lighting;
 
@@ -121,7 +126,7 @@ class BonfireGame extends BaseGame
     _addLater.addAll(decorations ?? []);
     _addLater.addAll(components ?? []);
     _lighting = LightingComponent(
-      color: lightingColorGame ?? Color(0x00000000),
+      color: lightingColorGame ?? const Color(0x00000000),
     );
     _colorFilterComponent = ColorFilterComponent(
       colorFilter ?? GameColorFilter(),
@@ -138,10 +143,6 @@ class BonfireGame extends BaseGame
       INTERVAL_UPDATE_ORDER,
       tick: updateOrderPriority,
     );
-    _intervalAllCollisions = IntervalTick(
-      INTERVAL_UPDATE_COLLISIONS,
-      tick: () => scheduleMicrotask(_updateAllCollisions),
-    );
   }
 
   @override
@@ -154,7 +155,9 @@ class BonfireGame extends BaseGame
 
     await add(map);
 
-    await Future.forEach(_addLater, add);
+    for (var compLate in _addLater) {
+      await add(compLate);
+    }
     _addLater.clear();
 
     if (player != null) {
@@ -178,11 +181,10 @@ class BonfireGame extends BaseGame
   }
 
   @override
-  void update(double t) {
-    super.update(t);
-    _interval.update(t);
-    _intervalUpdateOder.update(t);
-    _intervalAllCollisions.update(t);
+  void update(double dt) {
+    super.update(dt);
+    _interval.update(dt);
+    _intervalUpdateOder.update(dt);
   }
 
   @override
@@ -196,7 +198,7 @@ class BonfireGame extends BaseGame
 
   @override
   Iterable<Enemy> visibleEnemies() {
-    return _visibleComponents.where((element) => (element is Enemy)).cast();
+    return visibleComponentsByType<Enemy>();
   }
 
   @override
@@ -206,41 +208,32 @@ class BonfireGame extends BaseGame
 
   @override
   Iterable<Enemy> enemies() {
-    return children.where((element) => (element is Enemy)).cast();
+    return componentsByType<Enemy>();
   }
 
   @override
   Iterable<GameDecoration> visibleDecorations() {
-    return _visibleComponents
-        .where((element) => (element is GameDecoration))
-        .cast();
+    return visibleComponentsByType<GameDecoration>();
   }
 
   @override
   Iterable<GameDecoration> decorations() {
-    return children.where((element) => (element is GameDecoration)).cast();
+    return componentsByType<GameDecoration>();
   }
 
   @override
-  Iterable<Lighting> visibleLighting() => _visibleLights;
-
-  @override
   Iterable<Attackable> attackables() {
-    return children.where((element) => (element is Attackable)).cast();
+    return componentsByType<Attackable>();
   }
 
   @override
   Iterable<Attackable> visibleAttackables() {
-    return _visibleComponents
-        .where((element) => (element is Attackable))
-        .cast();
+    return visibleComponentsByType<Attackable>();
   }
 
   @override
   Iterable<Sensor> visibleSensors() {
-    return _visibleComponents.where((element) {
-      return (element is Sensor);
-    }).cast();
+    return visibleComponentsByType<Sensor>();
   }
 
   @override
@@ -268,54 +261,22 @@ class BonfireGame extends BaseGame
     RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    if (_joystickController?.keyboardConfig.acceptedKeys != null) {
-      final keyAccepted = _joystickController?.keyboardConfig.acceptedKeys;
-      if (keyAccepted!.contains(event.logicalKey)) {
-        _joystickController?.onKeyboard(event);
-        return KeyEventResult.handled;
-      } else {
-        return KeyEventResult.ignored;
-      }
-    }
-    _joystickController?.onKeyboard(event);
-    return KeyEventResult.handled;
+    return _joystickController?.onKeyboard(event) ?? KeyEventResult.handled;
   }
 
   @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
+  void onGameResize(Vector2 canvasSize) {
+    super.onGameResize(canvasSize);
     _updateTempList();
   }
 
   void _updateTempList() {
-    _visibleComponents = children.where((element) {
-      return (element is GameComponent) && element.isVisible;
-    }).cast()
-      ..toList(growable: false);
-
-    _visibleCollisions = _visibleComponents
-        .where((element) {
-          return (element is ObjectCollision) && element.containCollision();
-        })
-        .toList()
-        .cast();
-
-    _visibleCollisions.addAll(map.getCollisionsRendered());
-
-    _visibleLights = _visibleComponents.whereType<Lighting>();
+    _visibleCollisions = _collisions.where((element) {
+      return (element.isVisible && element.containCollision()) ||
+          element is Tile;
+    }).toList();
 
     gameController?.notifyListeners();
-  }
-
-  void _updateAllCollisions() {
-    _collisions = children
-        .where((element) {
-          return (element is ObjectCollision) && (element).containCollision();
-        })
-        .toList()
-        .cast();
-
-    _collisions.addAll(map.getCollisions());
   }
 
   @override
@@ -403,6 +364,22 @@ class BonfireGame extends BaseGame
       element.onGameDetach();
     });
     super.onDetach();
+  }
+
+  void addCollision(ObjectCollision obj) {
+    _collisions.add(obj);
+  }
+
+  void removeCollision(ObjectCollision obj) {
+    _collisions.remove(obj);
+  }
+
+  void addVisible(GameComponent obj) {
+    _visibleComponents.add(obj);
+  }
+
+  void removeVisible(GameComponent obj) {
+    _visibleComponents.remove(obj);
   }
 
   @override

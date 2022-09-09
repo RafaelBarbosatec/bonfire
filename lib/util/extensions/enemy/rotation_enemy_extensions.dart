@@ -19,12 +19,12 @@ extension RotationEnemyExtensions on RotationEnemy {
     bool runOnlyVisibleInScreen = true,
   }) {
     if (isDead) return;
-    if (runOnlyVisibleInScreen && !this.isVisible) return;
+    if (runOnlyVisibleInScreen && !isVisible) return;
 
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
-        double _radAngle = getAngleFromPlayer();
+        double radAngle = getAngleFromPlayer();
 
         Rect playerRect = player is ObjectCollision
             ? (player as ObjectCollision).rectCollision
@@ -38,18 +38,18 @@ extension RotationEnemyExtensions on RotationEnemy {
 
         if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
           closePlayer(player);
-          this.idle();
-          this.moveFromAngleDodgeObstacles(0, _radAngle);
+          idle();
+          moveFromAngleDodgeObstacles(0, radAngle);
           return;
         }
 
-        bool onMove = this.moveFromAngleDodgeObstacles(speed, _radAngle);
+        bool onMove = moveFromAngleDodgeObstacles(speed, radAngle);
         if (!onMove) {
-          this.idle();
+          idle();
         }
       },
       notObserved: () {
-        this.idle();
+        idle();
         notObserved?.call();
       },
     );
@@ -64,7 +64,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     bool runOnlyVisibleInScreen = true,
   }) {
     if (isDead) return;
-    if (runOnlyVisibleInScreen && !this.isVisible) return;
+    if (runOnlyVisibleInScreen && !isVisible) return;
 
     seePlayer(
       radiusVision: radiusVision,
@@ -75,11 +75,11 @@ extension RotationEnemyExtensions on RotationEnemy {
             ? (player as ObjectCollision).rectCollision
             : player.toRect();
         double distance = (minDistanceCellsFromPlayer ?? radiusVision);
-        double _radAngle = getAngleFromPlayer();
+        double radAngle = getAngleFromPlayer();
 
         Vector2 myPosition = Vector2(
-          this.center.x,
-          this.center.y,
+          center.x,
+          center.y,
         );
 
         Vector2 playerPosition = Vector2(
@@ -90,22 +90,22 @@ extension RotationEnemyExtensions on RotationEnemy {
         double dist = myPosition.distanceTo(playerPosition);
 
         if (dist >= distance) {
-          this.moveFromAngleDodgeObstacles(0, _radAngle);
-          this.idle();
+          moveFromAngleDodgeObstacles(0, radAngle);
+          idle();
           return;
         }
 
-        bool onMove = this.moveFromAngleDodgeObstacles(
+        bool onMove = moveFromAngleDodgeObstacles(
           speed,
           getInverseAngleFromPlayer(),
         );
 
         if (!onMove) {
-          this.idle();
+          idle();
         }
       },
       notObserved: () {
-        this.idle();
+        idle();
         notObserved?.call();
       },
     );
@@ -124,7 +124,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     double marginFromOrigin = 16,
     Vector2? centerOffset,
   }) {
-    if (!this.checkInterval('attackMelee', interval, dtUpdate)) return;
+    if (!checkInterval('attackMelee', interval, dtUpdate)) return;
 
     if (isDead) return;
 
@@ -163,15 +163,15 @@ extension RotationEnemyExtensions on RotationEnemy {
     Vector2? centerOffset,
     double marginFromOrigin = 16,
   }) {
-    if (!this.checkInterval('attackRange', interval, dtUpdate)) return;
+    if (!checkInterval('attackRange', interval, dtUpdate)) return;
 
     if (isDead) return;
 
-    this.simpleAttackRangeByAngle(
+    simpleAttackRangeByAngle(
       animation: animation,
       animationDestroy: animationDestroy,
       size: size,
-      angle: radAngleDirection ?? this.angle,
+      angle: radAngleDirection ?? angle,
       id: id,
       speed: speed,
       damage: damage,

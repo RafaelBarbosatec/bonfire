@@ -3,21 +3,34 @@ import 'package:flutter/widgets.dart';
 
 abstract class LightingInterface {
   Color? color;
+  final List<Lighting> _visibleLight = [];
+  List<Lighting> get visibleLights => _visibleLight;
   void animateToColor(
     Color color, {
     Duration duration = const Duration(milliseconds: 500),
     Curve curve = Curves.decelerate,
   });
+
+  bool isEnabled();
+
+  void addVisibleLighting(Lighting lighting) {
+    if (!_visibleLight.contains(lighting)) {
+      _visibleLight.add(lighting);
+    }
+  }
+
+  void removeVisibleLighting(Lighting lighting) {
+    _visibleLight.remove(lighting);
+  }
 }
 
 /// Layer component responsible for adding lighting to the game.
-class LightingComponent extends GameComponent implements LightingInterface {
-  Color? color;
-  Paint _paintFocus = Paint()..blendMode = BlendMode.clear;
-  Paint _paintLighting = Paint();
-  Paint _paintFocusArc = Paint()..blendMode = BlendMode.clear;
-  Paint _paintLightingArc = Paint();
-  Iterable<Lighting> _visibleLight = [];
+class LightingComponent extends GameComponent with LightingInterface {
+  final Paint _paintFocus = Paint()..blendMode = BlendMode.clear;
+  final Paint _paintLighting = Paint();
+  final Paint _paintFocusArc = Paint()..blendMode = BlendMode.clear;
+  final Paint _paintLightingArc = Paint();
+
   double _dtUpdate = 0.0;
   ColorTween? _tween;
   bool _containColor = false;
@@ -25,7 +38,9 @@ class LightingComponent extends GameComponent implements LightingInterface {
   @override
   PositionType get positionType => PositionType.viewport;
 
-  LightingComponent({this.color});
+  LightingComponent({Color? color}) {
+    this.color = color;
+  }
 
   @override
   int get priority {
@@ -54,9 +69,9 @@ class LightingComponent extends GameComponent implements LightingInterface {
     Vector2 size = gameRef.camera.canvasSize;
     canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
     canvas.drawColor(color!, BlendMode.dstATop);
-    _visibleLight.forEach((light) {
+    for (var light in _visibleLight) {
       final config = light.lightingConfig;
-      if (config == null || !light.lightingEnabled) return;
+      if (config == null || !light.lightingEnabled) continue;
       config.update(_dtUpdate);
       canvas.save();
 
@@ -74,26 +89,30 @@ class LightingComponent extends GameComponent implements LightingInterface {
         _drawArc(canvas, light);
       }
       canvas.restore();
-    });
+    }
     canvas.restore();
   }
 
   @override
   // ignore: must_call_super
   void update(double dt) {
+    super.update(dt);
     _containColor = _containsColor();
     if (!_containColor) return;
     _dtUpdate = dt;
-    _visibleLight = gameRef.visibleLighting();
   }
 
+  @override
+  bool isEnabled() => _containColor;
+
+  @override
   void animateToColor(
     Color color, {
     Duration duration = const Duration(milliseconds: 500),
     Curve curve = Curves.decelerate,
   }) {
     _tween = ColorTween(
-      begin: this.color ?? Color(0x00000000),
+      begin: this.color ?? const Color(0x00000000),
       end: color,
     );
 
@@ -110,7 +129,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
   }
 
   bool _containsColor() {
-    return color != null && color != Color(0x00000000);
+    return color != null && color != const Color(0x00000000);
   }
 
   void _drawArc(Canvas canvas, Lighting light) {

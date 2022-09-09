@@ -16,7 +16,7 @@ mixin DragGesture on GameComponent {
     final position = event.localPosition.toVector2();
 
     if (enableDrag && hasGameRef) {
-      if (this.isHud) {
+      if (isHud) {
         if (containsPoint(position)) {
           _pointer = pointer;
           _startDragOffset = position;
@@ -24,7 +24,7 @@ mixin DragGesture on GameComponent {
           return onStartDrag(pointer, position);
         }
       } else {
-        final absolutePosition = this.gameRef.screenToWorld(position);
+        final absolutePosition = gameRef.screenToWorld(position);
         if (containsPoint(absolutePosition)) {
           _pointer = pointer;
           _startDragOffset = absolutePosition;
@@ -47,13 +47,13 @@ mixin DragGesture on GameComponent {
         pointer == _pointer;
 
     if (canMove) {
-      if (this.isHud) {
+      if (isHud) {
         this.position = Vector2(
           _startDragPosition!.x + (position.x - _startDragOffset!.x),
           _startDragPosition!.y + (position.y - _startDragOffset!.y),
         );
       } else {
-        final absolutePosition = this.gameRef.screenToWorld(position);
+        final absolutePosition = gameRef.screenToWorld(position);
         this.position = Vector2(
           _startDragPosition!.x + (absolutePosition.x - _startDragOffset!.x),
           _startDragPosition!.y + (absolutePosition.y - _startDragOffset!.y),

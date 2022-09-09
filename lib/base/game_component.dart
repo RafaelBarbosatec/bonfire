@@ -1,11 +1,6 @@
-import 'package:bonfire/collision/object_collision.dart';
-import 'package:bonfire/util/bonfire_game_ref.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:bonfire/util/mixins/interval_checker.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/mixins/paint_transformer.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
-import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
 /// Base of the all components in the Bonfire
@@ -69,7 +64,7 @@ abstract class GameComponent extends PositionComponent
       _intervalCheckIsVisible,
       dt,
     )) {
-      isVisible = _isVisibleInCamera();
+      onSetIfVisible();
     }
   }
 
@@ -129,4 +124,15 @@ abstract class GameComponent extends PositionComponent
   }
 
   void onGameDetach() {}
+
+  void onSetIfVisible() {
+    bool nowIsVisible = _isVisibleInCamera();
+    if (nowIsVisible && !isVisible) {
+      (gameRef as BonfireGame).addVisible(this);
+    }
+    if (!nowIsVisible && isVisible) {
+      (gameRef as BonfireGame).removeVisible(this);
+    }
+    isVisible = nowIsVisible;
+  }
 }

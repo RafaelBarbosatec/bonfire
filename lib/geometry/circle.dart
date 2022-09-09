@@ -13,10 +13,10 @@ class CircleShape extends Shape {
   Offset offsetToDraw;
 
   CircleShape(this.radius, {Vector2? position})
-      : this.center = (position ?? Vector2.zero()).translate(radius, radius),
-        this.offsetToDraw = Offset((position ?? Vector2.zero()).x + radius,
+      : center = (position ?? Vector2.zero()).translate(radius, radius),
+        offsetToDraw = Offset((position ?? Vector2.zero()).x + radius,
             (position ?? Vector2.zero()).y + radius),
-        this.rect = RectangleShape(
+        rect = RectangleShape(
           Vector2(2 * radius, 2 * radius),
           position: position,
         ),

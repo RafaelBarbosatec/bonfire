@@ -51,7 +51,7 @@ class ColorFilterComponent extends GameComponent
       config.blendMode = blendMode;
     }
     _tween = ColorTween(
-      begin: config.color ?? Color(0x00000000),
+      begin: config.color ?? const Color(0x00000000),
       end: color,
     );
 

@@ -48,7 +48,7 @@ class LightingConfig {
     this.blurBorder = 20,
     this.type = LightingType.circle,
     Vector2? align,
-  }) : this.align = align ?? Vector2.zero() {
+  }) : align = align ?? Vector2.zero() {
     _pulseAnimation = PulseValue(speed: pulseSpeed, curve: pulseCurve);
     _blurSigma = _convertRadiusToSigma(blurBorder);
   }

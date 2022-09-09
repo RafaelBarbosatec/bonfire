@@ -12,8 +12,8 @@ class PolygonShape extends Shape {
   double _minY = 0;
   PolygonShape(this.relativePoints, {Vector2? position})
       : assert(relativePoints.length > 2),
-        this.points = _initPoints(relativePoints, position ?? Vector2.zero()),
-        this.rect = _initRect(relativePoints, position ?? Vector2.zero()),
+        points = _initPoints(relativePoints, position ?? Vector2.zero()),
+        rect = _initRect(relativePoints, position ?? Vector2.zero()),
         super(position ?? Vector2.zero()) {
     _minX = rect.position.x - (position?.x ?? 0);
     _minY = rect.position.y - (position?.y ?? 0);
@@ -42,7 +42,7 @@ class PolygonShape extends Shape {
 
     double minY = relativePoints.first.y;
     double maxY = relativePoints.first.y;
-    relativePoints.forEach((offset) {
+    for (var offset in relativePoints) {
       if (offset.x < minX) {
         minX = offset.x;
       }
@@ -55,7 +55,7 @@ class PolygonShape extends Shape {
       if (offset.y > maxY) {
         maxY = offset.y;
       }
-    });
+    }
 
     height = maxY - minY;
     width = maxX - minX;
@@ -68,7 +68,7 @@ class PolygonShape extends Shape {
 
   @override
   set position(Vector2 value) {
-    if (value != this.position) {
+    if (value != position) {
       super.position = value;
 
       for (var i = 0; i < points.length; i++) {
