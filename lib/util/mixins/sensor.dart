@@ -71,7 +71,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   void _verifyContact() {
     List<GameComponent> compsInContact = [];
     Iterable<GameComponent> compsToCheck = _checkOnlyVisible
-        ? gameRef.visibleComponents().whereType<T>()
+        ? gameRef.visibleComponentsByType<T>()
         : gameRef.componentsByType<T>();
 
     for (final vComp in compsToCheck) {
