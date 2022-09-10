@@ -12,9 +12,7 @@ class ControlledUpdateAnimation {
     _loader?.add(AssetToLoad(animation, (value) => this.animation = value));
   }
 
-  ControlledUpdateAnimation.fromInstance(SpriteAnimation animation) {
-    this.animation = animation;
-  }
+  ControlledUpdateAnimation.fromInstance(this.animation);
 
   void render(
     Canvas canvas, {

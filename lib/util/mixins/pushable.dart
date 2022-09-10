@@ -25,7 +25,7 @@ mixin Pushable on ObjectCollision {
           if (!onPush(component)) {
             return super.onCollision(component, active);
           }
-          Vector2 displacement = this.center - component.center;
+          Vector2 displacement = center - component.center;
           if (displacement.x.abs() > displacement.y.abs()) {
             if (displacement.x < 0) {
               (this as Movement).moveLeft((this as Movement).speed);
@@ -41,6 +41,7 @@ mixin Pushable on ObjectCollision {
           }
         }
       } else {
+        // ignore: avoid_print
         print(
             'The mixin Pushable not working in ($this) because this component don`t have the `Movement` mixin');
       }

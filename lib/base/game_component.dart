@@ -1,18 +1,18 @@
-import 'package:bonfire/collision/object_collision.dart';
-import 'package:bonfire/util/bonfire_game_ref.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:bonfire/util/mixins/interval_checker.dart';
+import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/mixins/paint_transformer.dart';
 import 'package:bonfire/util/mixins/pointer_detector.dart';
-import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
 import 'package:flutter/widgets.dart';
 
 /// Base of the all components in the Bonfire
 abstract class GameComponent extends PositionComponent
-    with BonfireHasGameRef, PointerDetectorHandler, InternalChecker {
+    with
+        BonfireHasGameRef,
+        PointerDetectorHandler,
+        InternalChecker,
+        RenderTransformer,
+        HasPaint {
   final String _keyIntervalCheckIsVisible = "CHECK_VISIBLE";
-  final int _intervalCheckIsVisible = 200;
+  final int _intervalCheckIsVisible = 250;
   Map<String, dynamic>? properties;
 
   /// When true this component render above all components in game.
@@ -20,21 +20,13 @@ abstract class GameComponent extends PositionComponent
 
   /// Use to set opacity in render
   /// Range [0.0..1.0]
-  double opacity = 1.0;
-
-  /// Rotation angle (in radians) of the component. The component will be
-  /// rotated around its anchor point in the clockwise direction if the
-  /// angle is positive, or counterclockwise if the angle is negative.
-  double angle = 0;
-
-  /// Use to do vertical flip in de render.
-  bool isFlipVertical = false;
-
-  /// Use to do horizontal flip in de render.
-  bool isFlipHorizontal = false;
+  double get opacity => getOpacity();
+  set opacity(double opacoty) => setOpacity(opacity);
 
   /// Param checks if this component is visible on the screen
   bool isVisible = false;
+
+  bool enabledCheckIsVisible = true;
 
   /// Get BuildContext
   BuildContext get context => gameRef.context;
@@ -53,44 +45,11 @@ abstract class GameComponent extends PositionComponent
   }
 
   int _getBottomPriority() {
-    if (this.isObjectCollision()) {
+    if (isObjectCollision()) {
       return (this as ObjectCollision).rectCollision.bottom.round();
     }
     return bottom.round();
   }
-
-  void renderDebugMode(Canvas canvas) {
-    final rect = toRect();
-    canvas.drawRect(rect, debugPaint);
-
-    final dx = rect.right;
-    final dy = rect.bottom;
-    debugTextPaint.render(
-      canvas,
-      'x:${dx.toStringAsFixed(2)} y:${dy.toStringAsFixed(2)}',
-      Vector2(dx - 50, dy),
-    );
-  }
-
-  @override
-  void renderTree(Canvas canvas) {
-    preRenderBeforeTransformation(canvas);
-    canvas.save();
-    _applyFlipAndRotation(canvas);
-    preRender(canvas);
-    render(canvas);
-    children.forEach((c) => c.renderTree(canvas));
-
-    // Any debug rendering should be rendered on top of everything
-    if (debugMode && isVisible) {
-      renderDebugMode(canvas);
-    }
-
-    canvas.restore();
-  }
-
-  void preRender(Canvas canvas) {}
-  void preRenderBeforeTransformation(Canvas canvas) {}
 
   @override
   void update(double dt) {
@@ -99,12 +58,13 @@ abstract class GameComponent extends PositionComponent
   }
 
   void _checkIsVisible(double dt) {
+    if (!enabledCheckIsVisible) return;
     if (checkInterval(
       _keyIntervalCheckIsVisible,
       _intervalCheckIsVisible,
       dt,
     )) {
-      isVisible = this._isVisibleInCamera();
+      onSetIfVisible();
     }
   }
 
@@ -156,24 +116,24 @@ abstract class GameComponent extends PositionComponent
 
   /// Method that checks if this component is visible on the screen
   bool _isVisibleInCamera() {
-    if (hasGameRef) {
-      return gameRef.isVisibleInCamera(this) ||
-          positionType == PositionType.viewport;
-    }
-    return false;
+    return hasGameRef ? gameRef.isVisibleInCamera(this) : false;
   }
 
-  void _applyFlipAndRotation(Canvas canvas) {
-    if (isFlipHorizontal || isFlipVertical || angle != 0) {
-      canvas.translate(this.center.x, this.center.y);
-      if (angle != 0) {
-        canvas.rotate(angle);
-      }
-      if (isFlipHorizontal || isFlipVertical) {
-        canvas.scale(isFlipHorizontal ? -1 : 1, isFlipVertical ? -1 : 1);
-      }
-      canvas.translate(-this.center.x, -this.center.y);
+  @override
+  void onRemove() {
+    (gameRef as BonfireGame).removeVisible(this);
+    super.onRemove();
+  }
+
+  void onSetIfVisible() {
+    bool nowIsVisible = _isVisibleInCamera();
+    if (nowIsVisible && !isVisible) {
+      (gameRef as BonfireGame).addVisible(this);
     }
+    if (!nowIsVisible && isVisible) {
+      (gameRef as BonfireGame).removeVisible(this);
+    }
+    isVisible = nowIsVisible;
   }
 
   void onGameDetach() {}

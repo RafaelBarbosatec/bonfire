@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/sprite.dart';
 
 ///
@@ -21,12 +20,12 @@ mixin UseSprite on GameComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (this.isVisible) {
-      sprite?.renderWithOpacity(
+    if (isVisible) {
+      sprite?.render(
         canvas,
-        position,
-        size,
-        opacity: opacity,
+        position: position,
+        size: size,
+        overridePaint: paint,
       );
     }
   }

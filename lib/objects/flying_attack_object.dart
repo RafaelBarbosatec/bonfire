@@ -13,7 +13,6 @@ class FlyingAttackObject extends GameComponent
   final dynamic id;
   Future<SpriteAnimation>? animationDestroy;
   final Direction? direction;
-  final double speed;
   final double damage;
   final AttackFromEnum attackFrom;
   final bool withDecorationCollision;
@@ -32,7 +31,7 @@ class FlyingAttackObject extends GameComponent
     this.id,
     this.animationDestroy,
     this.destroySize,
-    this.speed = 150,
+    double speed = 150,
     this.damage = 1,
     this.attackFrom = AttackFromEnum.ENEMY,
     this.withDecorationCollision = true,
@@ -41,8 +40,9 @@ class FlyingAttackObject extends GameComponent
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) {
+    this.speed = speed;
     loader?.add(AssetToLoad(flyAnimation, (value) {
-      this.animation = value;
+      animation = value;
     }));
 
     this.position = position;
@@ -73,7 +73,7 @@ class FlyingAttackObject extends GameComponent
     this.id,
     this.animationDestroy,
     this.destroySize,
-    this.speed = 150,
+    double speed = 150,
     this.damage = 1,
     this.attackFrom = AttackFromEnum.ENEMY,
     this.withDecorationCollision = true,
@@ -82,8 +82,9 @@ class FlyingAttackObject extends GameComponent
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) {
+    this.speed = speed;
     loader?.add(AssetToLoad(flyAnimation, (value) {
-      return this.animation = value;
+      return animation = value;
     }));
 
     this.position = position;
@@ -111,7 +112,7 @@ class FlyingAttackObject extends GameComponent
     this.id,
     this.animationDestroy,
     this.destroySize,
-    this.speed = 150,
+    double speed = 150,
     this.damage = 1,
     this.attackFrom = AttackFromEnum.ENEMY,
     this.withDecorationCollision = true,
@@ -120,8 +121,9 @@ class FlyingAttackObject extends GameComponent
     LightingConfig? lightingConfig,
     CollisionConfig? collision,
   }) : direction = null {
+    this.speed = speed;
     loader?.add(AssetToLoad(flyAnimation, (value) {
-      return this.animation = value;
+      return animation = value;
     }));
 
     this.position = position;
@@ -181,7 +183,7 @@ class FlyingAttackObject extends GameComponent
       }
     }
     setupCollision(CollisionConfig(collisions: []));
-    this.onDestroy?.call();
+    onDestroy?.call();
   }
 
   bool _verifyExistInWorld() {

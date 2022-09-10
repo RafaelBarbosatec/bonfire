@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
 
+// ignore: constant_identifier_names
 enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER_AND_ALLY, NONE }
 
+// ignore: constant_identifier_names
 enum AttackFromEnum { ENEMY, PLAYER_OR_ALLY }
 
 /// Mixin responsible for adding damage-taking behavior to the component.
@@ -31,12 +33,14 @@ mixin Attackable on GameComponent {
   /// increase life
   void addLife(double life) {
     _life += life;
-    _verifyLimitLife();
+    _verifyLimitsLife();
   }
 
-  void updateLife(double life) {
+  void updateLife(double life, {bool verifyDieOrRevive = true}) {
     _life = life;
-    _verifyLimitLife();
+    if (verifyDieOrRevive) {
+      _verifyLimitsLife();
+    }
   }
 
   /// reduce life
@@ -49,12 +53,14 @@ mixin Attackable on GameComponent {
     }
   }
 
-  void _verifyLimitLife() {
+  void _verifyLimitsLife() {
     if (_life > maxLife) {
       _life = maxLife;
     }
     if (_life > 0 && isDead) {
       revive();
+    } else if (_life <= 0 && !_isDead) {
+      die();
     }
   }
 

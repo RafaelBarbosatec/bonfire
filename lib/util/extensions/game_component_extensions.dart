@@ -23,7 +23,7 @@ extension GameComponentExtensions on GameComponent {
           y,
         ),
         config: config ??
-            TextStyle(
+            const TextStyle(
               fontSize: 14,
               color: Color(0xFFFFFFFF),
             ),
@@ -143,6 +143,7 @@ extension GameComponentExtensions on GameComponent {
     Vector2? centerOffset,
   }) {
     final rect = rectConsideringCollision;
+
     simpleAttackMeleeByAngle(
       angle: direction.toRadians(),
       animation: animationRight,
@@ -208,7 +209,7 @@ extension GameComponentExtensions on GameComponent {
 
     gameRef
         .visibleAttackables()
-        .where((a) => a.rectAttackable().overlaps(positionAttack))
+        .where((a) => a.rectAttackable().overlaps(positionAttack) && a != this)
         .forEach((enemy) {
       enemy.receiveDamage(attacker, damage, id);
       final rectAfterPush = enemy.position.translate(diffBase.x, diffBase.y);
@@ -253,7 +254,7 @@ extension GameComponentExtensions on GameComponent {
 
   /// Gets rect used how base in calculations considering collision
   Rect get rectConsideringCollision {
-    return (this.isObjectCollision()
+    return (isObjectCollision()
         ? (this as ObjectCollision).rectCollision
         : toRect());
   }
@@ -264,34 +265,8 @@ extension GameComponentExtensions on GameComponent {
         (this as ObjectCollision).containCollision());
   }
 
-  void applyBleedingPixel({
-    required Vector2 position,
-    required Vector2 size,
-    double factor = 0.04,
-    double offsetX = 0,
-    double offsetY = 0,
-    bool calculatePosition = false,
-  }) {
-    double bleedingPixel = max(size.x, size.y) * factor;
-    if (bleedingPixel > 2) {
-      bleedingPixel = 2;
-    }
-    Vector2 baseP = position;
-    if (calculatePosition) {
-      baseP = Vector2(position.x * size.x, position.y * size.y);
-    }
-    this.position = Vector2(
-      baseP.x - (baseP.x % 2 == 0 ? (bleedingPixel / 2) : 0) + offsetX,
-      baseP.y - (baseP.y % 2 == 0 ? (bleedingPixel / 2) : 0) + offsetY,
-    );
-    this.size = Vector2(
-      size.x + (baseP.x % 2 == 0 ? bleedingPixel : 0),
-      size.y + (baseP.y % 2 == 0 ? bleedingPixel : 0),
-    );
-  }
-
   Direction? directionThePlayerIsIn() {
-    Player? player = this.gameRef.player;
+    Player? player = gameRef.player;
     if (player == null) return null;
     var diffX = center.x - player.center.x;
     var diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;
@@ -346,7 +321,7 @@ extension GameComponentExtensions on GameComponent {
     Anchor? anchor,
     int? priority,
   }) {
-    this.add(
+    add(
       ParticleSystemComponent(
         particle: particle,
         position: position,

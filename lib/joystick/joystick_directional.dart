@@ -51,12 +51,12 @@ class JoystickDirectional {
     _tileSize = size / 2;
   }
 
-  void initialize(Vector2 _screenSize, JoystickController joystickController) {
-    this._screenSize = _screenSize;
+  void initialize(Vector2 screenSize, JoystickController joystickController) {
+    _screenSize = screenSize;
     _joystickController = joystickController;
     Offset osBackground = Offset(
       margin.left,
-      _screenSize.y - margin.bottom,
+      screenSize.y - margin.bottom,
     );
     _backgroundRect = Rect.fromCircle(
       center: osBackground,
@@ -116,16 +116,17 @@ class JoystickDirectional {
   }
 
   void update(double dt) {
-    if (_dragPosition == null || _backgroundRect == null || _knobRect == null)
+    if (_dragPosition == null || _backgroundRect == null || _knobRect == null) {
       return;
+    }
 
     if (_dragging) {
-      double _radAngle = atan2(
+      double radAngle = atan2(
         _dragPosition!.dy - _backgroundRect!.center.dy,
         _dragPosition!.dx - _backgroundRect!.center.dx,
       );
 
-      double degrees = _radAngle * 180 / pi;
+      double degrees = radAngle * 180 / pi;
 
       // Distance between the center of joystick background & drag position
       Vector2 centerPosition = _backgroundRect!.center.toVector2();
@@ -138,8 +139,8 @@ class JoystickDirectional {
       dist = min(dist, _tileSize);
 
       // Calculation the knob position
-      double nextX = dist * cos(_radAngle);
-      double nextY = dist * sin(_radAngle);
+      double nextX = dist * cos(radAngle);
+      double nextY = dist * sin(radAngle);
       Offset nextPoint = Offset(nextX, nextY);
 
       Offset diff = Offset(
@@ -149,13 +150,13 @@ class JoystickDirectional {
           _knobRect!.center;
       _knobRect = _knobRect!.shift(diff);
 
-      double _intensity = dist / _tileSize;
+      double intensity = dist / _tileSize;
 
-      if (_intensity == 0) {
+      if (intensity == 0) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.IDLE,
-          intensity: _intensity,
-          radAngle: _radAngle,
+          intensity: intensity,
+          radAngle: radAngle,
         ));
         return;
       }
@@ -163,32 +164,32 @@ class JoystickDirectional {
       if (degrees > -22.5 && degrees <= 22.5) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_RIGHT,
-          intensity: _intensity,
-          radAngle: _radAngle,
+          intensity: intensity,
+          radAngle: radAngle,
         ));
       }
 
       if (degrees > 22.5 && degrees <= 67.5) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
-          intensity: _intensity,
-          radAngle: _radAngle,
+          intensity: intensity,
+          radAngle: radAngle,
         ));
       }
 
       if (degrees > 67.5 && degrees <= 112.5) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_DOWN,
-          intensity: _intensity,
-          radAngle: _radAngle,
+          intensity: intensity,
+          radAngle: radAngle,
         ));
       }
 
       if (degrees > 112.5 && degrees <= 157.5) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
-          intensity: _intensity,
-          radAngle: _radAngle,
+          intensity: intensity,
+          radAngle: radAngle,
         ));
       }
 
@@ -196,32 +197,32 @@ class JoystickDirectional {
           (degrees >= -180 && degrees <= -157.5)) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_LEFT,
-          intensity: _intensity,
-          radAngle: _radAngle,
+          intensity: intensity,
+          radAngle: radAngle,
         ));
       }
 
       if (degrees > -157.5 && degrees <= -112.5) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_UP_LEFT,
-          intensity: _intensity,
-          radAngle: _radAngle,
+          intensity: intensity,
+          radAngle: radAngle,
         ));
       }
 
       if (degrees > -112.5 && degrees <= -67.5) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_UP,
-          intensity: _intensity,
-          radAngle: _radAngle,
+          intensity: intensity,
+          radAngle: radAngle,
         ));
       }
 
       if (degrees > -67.5 && degrees <= -22.5) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
-          intensity: _intensity,
-          radAngle: _radAngle,
+          intensity: intensity,
+          radAngle: radAngle,
         ));
       }
     } else {
@@ -303,11 +304,9 @@ class JoystickDirectional {
         ..style = PaintingStyle.fill;
     }
 
-    if (_paintKnob == null) {
-      _paintKnob = Paint()
-        ..color = color.withOpacity(0.8)
-        ..style = PaintingStyle.fill;
-    }
+    _paintKnob ??= Paint()
+      ..color = color.withOpacity(0.8)
+      ..style = PaintingStyle.fill;
 
     _loader = null;
   }

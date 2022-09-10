@@ -9,6 +9,7 @@ import 'package:flame/components.dart';
 
 /// Mixin responsible for adding movements
 mixin Movement on GameComponent {
+  // ignore: constant_identifier_names
   static const REDUCTION_SPEED_DIAGONAL = 0.7;
 
   bool isIdle = true;
@@ -346,7 +347,7 @@ mixin Movement on GameComponent {
       onMove(0, lastDirection, angle);
       return false;
     }
-    this.position.add(newDiffBase);
+    position.add(newDiffBase);
     onMove(speed, lastDirection, angle);
     return true;
   }
@@ -356,13 +357,13 @@ mixin Movement on GameComponent {
     double translateX,
     double translateY,
   ) {
-    if (this.isObjectCollision()) {
+    if (isObjectCollision()) {
       return (this as ObjectCollision)
           .isCollision(
-            displacement: this.position.translate(
-                  translateX,
-                  translateY,
-                ),
+            displacement: position.translate(
+              translateX,
+              translateY,
+            ),
           )
           .isNotEmpty;
     } else {
@@ -381,8 +382,8 @@ mixin Movement on GameComponent {
   }
 
   bool _isCollision(Vector2 displacement) {
-    if (this.isObjectCollision()) {
-      (this as ObjectCollision).setCollisionOnlyVisibleScreen(this.isVisible);
+    if (isObjectCollision()) {
+      (this as ObjectCollision).setCollisionOnlyVisibleScreen(isVisible);
       return (this as ObjectCollision)
           .isCollision(
             displacement: displacement,

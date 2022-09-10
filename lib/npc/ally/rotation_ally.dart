@@ -45,13 +45,14 @@ class RotationAlly extends Ally with UseSpriteAnimation, UseAssetsLoader {
 
   @override
   bool moveFromAngleDodgeObstacles(double speed, double angle) {
-    this.animation = animRun;
+    animation = animRun;
     this.angle = angle;
     return super.moveFromAngleDodgeObstacles(speed, angle);
   }
 
+  @override
   void idle() {
-    this.animation = animIdle;
+    animation = animIdle;
     super.idle();
   }
 

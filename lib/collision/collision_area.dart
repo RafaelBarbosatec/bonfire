@@ -133,7 +133,7 @@ class CollisionArea {
   }
 
   Map<String, dynamic> toMap() {
-    Map shape = Map();
+    Map shape = {};
     if (this.shape is RectangleShape) {
       RectangleShape s = this.shape as RectangleShape;
       shape['type'] = 'RectangleShape';
@@ -156,7 +156,7 @@ class CollisionArea {
 
     return {
       'shape': shape,
-      'align': {'x': this.align?.x ?? 0.0, 'y': this.align?.y ?? 0.0},
+      'align': {'x': align?.x ?? 0.0, 'y': align?.y ?? 0.0},
     };
   }
 }

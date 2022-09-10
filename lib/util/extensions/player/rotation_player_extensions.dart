@@ -27,7 +27,7 @@ extension RotationPlayerExtensions on RotationPlayer {
   }) {
     double? angle = radAngleDirection ?? this.angle;
 
-    this.simpleAttackRangeByAngle(
+    simpleAttackRangeByAngle(
       angle: angle,
       animation: animation,
       animationDestroy: animationDestroy,
@@ -58,7 +58,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     Vector2? centerOffset,
   }) {
     double? angle = radAngleDirection ?? this.angle;
-    this.simpleAttackMeleeByAngle(
+    simpleAttackMeleeByAngle(
       angle: angle,
       animation: animation,
       damage: damage,

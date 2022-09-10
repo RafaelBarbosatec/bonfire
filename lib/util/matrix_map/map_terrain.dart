@@ -140,7 +140,7 @@ class MapTerrain {
   final Map<String, dynamic>? properties;
   final List<CollisionArea>? collisions;
   final bool collisionOnlyCloseCorners;
-  List<_RandomRange> _rangeProportion = [];
+  final List<_RandomRange> _rangeProportion = [];
 
   MapTerrain({
     required this.value,
@@ -152,11 +152,11 @@ class MapTerrain {
     this.collisionOnlyCloseCorners = false,
   }) {
     int last = 0;
-    spritesProportion.forEach((element) {
+    for (var element in spritesProportion) {
       final value = (element * 100).toInt();
       _rangeProportion.add(_RandomRange(last, (last + value)));
       last += value;
-    });
+    }
   }
 
   int inRange(int value) {

@@ -43,7 +43,7 @@ mixin MouseGesture on GameComponent {
     Vector2 position = event.localPosition.toVector2();
     Vector2 realPosition = position;
     if (!isHud) {
-      realPosition = this.gameRef.screenToWorld(realPosition);
+      realPosition = gameRef.screenToWorld(realPosition);
     }
     onMouseHoverScreen(pointer, position);
 
@@ -67,7 +67,7 @@ mixin MouseGesture on GameComponent {
     Vector2 position = event.localPosition.toVector2();
     Vector2 realPosition = event.localPosition.toVector2();
     if (!isHud) {
-      realPosition = this.gameRef.screenToWorld(realPosition);
+      realPosition = gameRef.screenToWorld(realPosition);
     }
     Vector2 scrollDelta = (event as PointerScrollEvent).scrollDelta.toVector2();
     onMouseScrollScreen(pointer, position, scrollDelta);
@@ -111,7 +111,7 @@ mixin MouseGesture on GameComponent {
   void onMouseScreenTapDown(int pointer, Vector2 position, MouseButton button) {
     Vector2 realPosition = position;
     if (!isHud) {
-      realPosition = this.gameRef.screenToWorld(realPosition);
+      realPosition = gameRef.screenToWorld(realPosition);
     }
     if (containsPoint(realPosition)) {
       _buttonClicked = button;
@@ -123,7 +123,7 @@ mixin MouseGesture on GameComponent {
   void onMouseScreenTapUp(int pointer, Vector2 position) {
     Vector2 realPosition = position;
     if (!isHud) {
-      realPosition = this.gameRef.screenToWorld(realPosition);
+      realPosition = gameRef.screenToWorld(realPosition);
     }
     if (containsPoint(realPosition) &&
         pointer == _pointer &&

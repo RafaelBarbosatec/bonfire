@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 class LayerPriority {
   static const int BACKGROUND = 10;
   static const int MAP = 20;

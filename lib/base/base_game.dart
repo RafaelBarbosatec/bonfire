@@ -91,7 +91,7 @@ abstract class BaseGame extends FlameGame with PointerDetector {
 
   /// reorder components by priority
   void updateOrderPriority() {
-    if (children.length > 0) {
+    if (children.isNotEmpty) {
       children.rebalanceAll();
       _highestPriority = children.last.priority;
     }

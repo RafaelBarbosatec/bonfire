@@ -53,7 +53,7 @@ class MiniMap extends StatefulWidget {
     this.npcColor,
     this.allyColor,
     this.decorationColor,
-  })  : this.size = size ?? Vector2(200, 200),
+  })  : size = size ?? Vector2(200, 200),
         super(key: key);
 
   @override
@@ -80,7 +80,7 @@ class _MiniMapState extends State<MiniMap> {
   @override
   Widget build(BuildContext context) {
     if (!widget.game.hasLayout) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
     return Positioned(
       right: 0,
@@ -119,7 +119,7 @@ class _MiniMapState extends State<MiniMap> {
   }
 
   void _initInterval() {
-    timer = async.Timer.periodic(Duration(milliseconds: 20), (timer) {
+    timer = async.Timer.periodic(const Duration(milliseconds: 20), (timer) {
       if (widget.game.camera.position != cameraPosition) {
         cameraPosition = widget.game.camera.position.clone();
         setState(() {});

@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:math';
 
 import 'package:bonfire/util/priority_layer.dart';
@@ -10,7 +12,6 @@ import 'bonfire_game_ref.dart';
 enum DirectionTextDamage { LEFT, RIGHT, RANDOM, NONE }
 
 class TextDamageComponent extends TextComponent with BonfireHasGameRef {
-  final String text;
   final DirectionTextDamage direction;
   final double maxDownSize;
   late double _initialY;
@@ -20,7 +21,7 @@ class TextDamageComponent extends TextComponent with BonfireHasGameRef {
   final bool onlyUp;
 
   TextDamageComponent(
-    this.text,
+    String text,
     Vector2 position, {
     this.onlyUp = false,
     TextStyle? config,
@@ -53,9 +54,9 @@ class TextDamageComponent extends TextComponent with BonfireHasGameRef {
   }
 
   @override
-  void render(Canvas c) {
+  void render(Canvas canvas) {
     if (isRemoving) return;
-    super.render(c);
+    super.render(canvas);
   }
 
   @override

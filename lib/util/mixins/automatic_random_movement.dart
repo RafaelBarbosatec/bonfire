@@ -5,6 +5,7 @@ import 'package:bonfire/bonfire.dart';
 /// Mixin responsible for adding random movement like enemy walking through the scene
 mixin AutomaticRandomMovement on Movement {
   Vector2 _targetRandomMovement = Vector2.zero();
+  // ignore: constant_identifier_names
   static const _KEY_INTERVAL_KEEP_STOPPED = 'INTERVAL_RANDOM_MOVEMENT';
 
   /// Method that bo used in [update] method.

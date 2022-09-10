@@ -75,10 +75,10 @@ class FollowerWidget extends StatefulWidget {
   }
 
   @override
-  _FollowerWidgetState createState() => _FollowerWidgetState();
+  FollowerWidgetState createState() => FollowerWidgetState();
 }
 
-class _FollowerWidgetState extends State<FollowerWidget> {
+class FollowerWidgetState extends State<FollowerWidget> {
   Vector2 targetPosition = Vector2.zero();
   Offset? widgetPosition;
   double lastZoom = 0.0;
@@ -107,14 +107,14 @@ class _FollowerWidgetState extends State<FollowerWidget> {
         child: widget.child,
       );
     }
-    return SizedBox.shrink();
+    return const SizedBox.shrink();
   }
 
   void _startFollow() {
     if (widget.target.hasGameRef) {
       final camera = widget.target.gameRef.camera;
       _timerUpdate = async.Timer.periodic(
-        Duration(milliseconds: 16),
+        const Duration(milliseconds: 16),
         (timer) {
           if (targetPosition != widget.target.position ||
               camera.zoom != lastZoom ||

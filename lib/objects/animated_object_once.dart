@@ -24,18 +24,18 @@ class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
     setupLighting(lightingConfig);
     this.position = position;
     this.size = size;
-    this.angle = rotateRadAngle;
+    angle = rotateRadAngle;
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
     if (isVisible) {
-      animation?.getSprite().renderWithOpacity(
+      animation?.getSprite().render(
             canvas,
-            this.position,
-            this.size,
-            opacity: opacity,
+            position: position,
+            size: size,
+            overridePaint: paint,
           );
     }
     if (animation?.done() == true) {

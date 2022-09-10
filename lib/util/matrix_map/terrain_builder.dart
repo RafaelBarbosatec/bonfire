@@ -34,7 +34,7 @@ class TerrainBuilder {
     try {
       if (prop.isCenterTile) {
         MapTerrain terrain = findList.where((element) {
-          return !(element is MapTerrainCorners);
+          return element is! MapTerrainCorners;
         }).first;
         return _buildTile(terrain, prop);
       } else {
@@ -114,7 +114,7 @@ class TerrainBuilder {
     if (sprite == null) {
       MapTerrain? center = firstWhere(
         terrains,
-        (element) => !(element is MapTerrainCorners),
+        (element) => element is! MapTerrainCorners,
       );
       if (center != null) {
         terrain = center;

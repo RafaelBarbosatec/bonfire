@@ -26,12 +26,12 @@ extension RotationEnemyExtensions on RotationAlly {
     bool runOnlyVisibleInScreen = true,
   }) {
     if (isDead) return;
-    if (runOnlyVisibleInScreen && !this.isVisible) return;
+    if (runOnlyVisibleInScreen && !isVisible) return;
 
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
-        double _radAngle = getAngleFromPlayer();
+        double radAngle = getAngleFromPlayer();
 
         Rect playerRect = player is ObjectCollision
             ? (player as ObjectCollision).rectCollision
@@ -45,18 +45,18 @@ extension RotationEnemyExtensions on RotationAlly {
 
         if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
           closePlayer(player);
-          this.idle();
-          this.moveFromAngleDodgeObstacles(0, _radAngle);
+          idle();
+          moveFromAngleDodgeObstacles(0, radAngle);
           return;
         }
 
-        bool onMove = this.moveFromAngleDodgeObstacles(speed, _radAngle);
+        bool onMove = moveFromAngleDodgeObstacles(speed, radAngle);
         if (!onMove) {
-          this.idle();
+          idle();
         }
       },
       notObserved: () {
-        this.idle();
+        idle();
       },
     );
   }

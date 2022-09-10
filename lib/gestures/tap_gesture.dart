@@ -6,19 +6,20 @@ import 'package:flutter/widgets.dart';
 mixin TapGesture on GameComponent {
   bool enableTab = true;
   int _pointer = -1;
+  @override
   bool handlerPointerDown(PointerDownEvent event) {
     final pointer = event.pointer;
     final position = event.localPosition.toVector2();
 
     if (enableTab && hasGameRef) {
-      if (this.isHud) {
-        if (this.containsPoint(position)) {
+      if (isHud) {
+        if (containsPoint(position)) {
           _pointer = pointer;
           return onTapDown(pointer, position);
         }
       } else {
-        final absolutePosition = this.gameRef.screenToWorld(position);
-        if (this.containsPoint(absolutePosition)) {
+        final absolutePosition = gameRef.screenToWorld(position);
+        if (containsPoint(absolutePosition)) {
           _pointer = pointer;
           return onTapDown(pointer, position);
         }
@@ -27,21 +28,22 @@ mixin TapGesture on GameComponent {
     return super.handlerPointerDown(event);
   }
 
+  @override
   bool handlerPointerUp(PointerUpEvent event) {
     final pointer = event.pointer;
     final position = event.localPosition.toVector2();
 
     if (enableTab && pointer == _pointer && hasGameRef) {
-      if (this.isHud) {
-        if (this.containsPoint(position)) {
+      if (isHud) {
+        if (containsPoint(position)) {
           onTapUp(pointer, position);
           onTap();
         } else {
           onTapCancel();
         }
       } else {
-        final absolutePosition = this.gameRef.screenToWorld(position);
-        if (this.containsPoint(absolutePosition)) {
+        final absolutePosition = gameRef.screenToWorld(position);
+        if (containsPoint(absolutePosition)) {
           onTapUp(pointer, position);
           onTap();
         } else {

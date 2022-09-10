@@ -10,13 +10,13 @@ mixin DirectionAnimation on Movement {
   void render(Canvas canvas) {
     super.render(canvas);
     if (isVisible) {
-      animation?.render(canvas);
+      animation?.render(canvas, paint);
     }
   }
 
   @override
   void update(double dt) {
-    animation?.update(dt, position, size, opacity);
+    animation?.update(dt, position, size);
     super.update(dt);
   }
 

@@ -141,7 +141,7 @@ class ListenerGameWidget<T extends Game> extends StatefulWidget {
   ///
   /// To use overlays, the game subclass has to be mixed with HasWidgetsOverlay.
   @override
-  _ListenerGameWidgetState<T> createState() => _ListenerGameWidgetState<T>();
+  ListenerGameWidgetState<T> createState() => ListenerGameWidgetState<T>();
 
   void _initializeGame(T game) {
     if (mouseCursor != null) {
@@ -161,7 +161,7 @@ class ListenerGameWidget<T extends Game> extends StatefulWidget {
   }
 }
 
-class _ListenerGameWidgetState<T extends Game>
+class ListenerGameWidgetState<T extends Game>
     extends State<ListenerGameWidget<T>> {
   late T currentGame;
 

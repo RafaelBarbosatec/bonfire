@@ -37,10 +37,10 @@ class RectangleShape extends Shape {
       _rect.width,
       _rect.height,
     );
-    this.leftTop = _rect.topLeft.toVector2();
-    this.rightTop = _rect.topRight.toVector2();
-    this.rightBottom = _rect.bottomRight.toVector2();
-    this.leftBottom = _rect.bottomLeft.toVector2();
+    leftTop = _rect.topLeft.toVector2();
+    rightTop = _rect.topRight.toVector2();
+    rightBottom = _rect.bottomRight.toVector2();
+    leftBottom = _rect.bottomLeft.toVector2();
   }
 
   Rect get rect => _rect;

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
+// ignore: constant_identifier_names
 enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
 
 class JoystickAction {
@@ -63,7 +64,7 @@ class JoystickAction {
     _tileSize = _sizeBackgroundDirection / 2;
   }
 
-  void initialize(Vector2 _screenSize, JoystickController joystickController) {
+  void initialize(Vector2 screenSize, JoystickController joystickController) {
     _joystickController = joystickController;
     double radius = size / 2;
     double dx = 0, dy = 0;
@@ -74,15 +75,15 @@ class JoystickAction {
         break;
       case JoystickActionAlign.BOTTOM_LEFT:
         dx = margin.left + radius;
-        dy = _screenSize.y - (margin.bottom + radius);
+        dy = screenSize.y - (margin.bottom + radius);
         break;
       case JoystickActionAlign.TOP_RIGHT:
-        dx = _screenSize.x - (margin.right + radius);
+        dx = screenSize.x - (margin.right + radius);
         dy = margin.top + radius;
         break;
       case JoystickActionAlign.BOTTOM_RIGHT:
-        dx = _screenSize.x - (margin.right + radius);
-        dy = _screenSize.y - (margin.bottom + radius);
+        dx = screenSize.x - (margin.right + radius);
+        dy = screenSize.y - (margin.bottom + radius);
         break;
     }
     _rect = Rect.fromCircle(
@@ -145,7 +146,7 @@ class JoystickAction {
         _rectBackgroundDirection == null ||
         _rect == null) return;
     if (_dragging) {
-      double _radAngle = atan2(
+      double radAngle = atan2(
         _dragPosition!.dy - _rectBackgroundDirection!.center.dy,
         _dragPosition!.dx - _rectBackgroundDirection!.center.dx,
       );
@@ -161,8 +162,8 @@ class JoystickAction {
       dist = min(dist, _tileSize);
 
       // Calculation the knob position
-      double nextX = dist * cos(_radAngle);
-      double nextY = dist * sin(_radAngle);
+      double nextX = dist * cos(radAngle);
+      double nextY = dist * sin(radAngle);
       Offset nextPoint = Offset(nextX, nextY);
 
       Offset diff = Offset(
@@ -172,14 +173,14 @@ class JoystickAction {
           _rect!.center;
       _rect = _rect!.shift(diff);
 
-      double _intensity = dist / _tileSize;
+      double intensity = dist / _tileSize;
 
       _joystickController?.joystickAction(
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.MOVE,
-          intensity: _intensity,
-          radAngle: _radAngle,
+          intensity: intensity,
+          radAngle: radAngle,
         ),
       );
     } else {

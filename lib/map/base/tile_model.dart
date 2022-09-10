@@ -16,8 +16,8 @@ class TileModelSprite {
     required this.path,
     Vector2? position,
     Vector2? size,
-  })  : this.position = position ?? Vector2.zero(),
-        this.size = size ?? Vector2.zero();
+  })  : position = position ?? Vector2.zero(),
+        size = size ?? Vector2.zero();
 
   Sprite getSprite() {
     return MapAssetsManager.getSprite(
@@ -44,14 +44,13 @@ class TileModelSprite {
   }
 
   Map<String, dynamic> toMap() {
-    // ignore: unnecessary_cast
     return {
-      'path': this.path,
-      'row': this.position.y,
-      'column': this.position.x,
-      'width': this.size.x,
-      'height': this.size.y,
-    } as Map<String, dynamic>;
+      'path': path,
+      'row': position.y,
+      'column': position.x,
+      'width': size.x,
+      'height': size.y,
+    };
   }
 }
 
@@ -84,11 +83,10 @@ class TileModelAnimation {
   }
 
   Map<String, dynamic> toMap() {
-    // ignore: unnecessary_cast
     return {
-      'stepTime': this.stepTime,
-      'frames': this.frames.map((e) => e.toMap()).toList(),
-    } as Map<String, dynamic>;
+      'stepTime': stepTime,
+      'frames': frames.map((e) => e.toMap()).toList(),
+    };
   }
 }
 
@@ -110,8 +108,6 @@ class TileModel {
   final Color? color;
   String id = '';
 
-  Offset center = Offset.zero;
-
   TileModel({
     required this.x,
     required this.y,
@@ -129,10 +125,6 @@ class TileModel {
     this.isFlipVertical = false,
     this.isFlipHorizontal = false,
   }) {
-    center = Offset(
-      (x * width) + (width / 2.0),
-      (y * height) + (height / 2.0),
-    );
     id = '$x/$y:${DateTime.now().microsecondsSinceEpoch}';
   }
   double get left => (x * width);
@@ -256,17 +248,17 @@ class TileModel {
   Map<String, dynamic> toMap() {
     // ignore: unnecessary_cast
     return {
-      'x': this.x,
-      'y': this.y,
-      'offsetX': this.offsetX,
-      'offsetY': this.offsetY,
-      'width': this.width,
-      'height': this.height,
-      'type': this.type,
-      'properties': this.properties,
-      'sprite': this.sprite?.toMap(),
-      'animation': this.animation?.toMap(),
-      'collisions': this.collisions?.map((e) {
+      'x': x,
+      'y': y,
+      'offsetX': offsetX,
+      'offsetY': offsetY,
+      'width': width,
+      'height': height,
+      'type': type,
+      'properties': properties,
+      'sprite': sprite?.toMap(),
+      'animation': animation?.toMap(),
+      'collisions': collisions?.map((e) {
         return e.toMap();
       }).toList(),
     } as Map<String, dynamic>;

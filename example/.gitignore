@@ -46,3 +46,9 @@ macos/Pods/Pods.xcodeproj/xcuserdata/rafaelbarbosa.xcuserdatad/xcschemes/Pods-Ru
 macos/Pods/Pods.xcodeproj/xcuserdata/rafaelbarbosa.xcuserdatad/xcschemes/xcschememanagement.plist
 macos/Pods/Target Support Files/FlutterMacOS/FlutterMacOS.debug.xcconfig
 macos/Pods/Target Support Files/FlutterMacOS/FlutterMacOS.release.xcconfig
+
+
+macos
+linux
+web
+windows

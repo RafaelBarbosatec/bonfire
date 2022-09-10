@@ -3,10 +3,11 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
-final Color sensorColor = Color(0xFFF44336).withOpacity(0.5);
+final Color sensorColor = const Color(0xFFF44336).withOpacity(0.5);
 
 /// Mixin responsible for adding trigger to detect other objects above
-mixin Sensor on GameComponent {
+/// T is a type that Sensor will be find contact.
+mixin Sensor<T extends GameComponent> on GameComponent {
   void onContact(GameComponent component);
   void onContactExit(GameComponent component) {}
 
@@ -15,7 +16,7 @@ mixin Sensor on GameComponent {
 
   int _intervalCheckContact = 250;
   bool _checkOnlyVisible = true;
-  String _intervalCheckContactKey = 'KEY_CHECK_SENSOR_CONTACT';
+  final String _intervalCheckContactKey = 'KEY_CHECK_SENSOR_CONTACT';
 
   CollisionConfig? _collisionConfig;
 
@@ -24,7 +25,7 @@ mixin Sensor on GameComponent {
       return _collisionConfig!.collisions;
     }
 
-    if (this.isObjectCollision()) {
+    if (isObjectCollision()) {
       return (this as ObjectCollision).collisionConfig!.collisions;
     }
 
@@ -48,9 +49,7 @@ mixin Sensor on GameComponent {
   @override
   void update(double dt) {
     if (enabledSensor && (_checkOnlyVisible ? isVisible : true)) {
-      if (_collisionConfig == null) {
-        _collisionConfig = CollisionConfig(collisions: _sensorArea);
-      }
+      _collisionConfig ??= CollisionConfig(collisions: _sensorArea);
       if (checkInterval(_intervalCheckContactKey, _intervalCheckContact, dt)) {
         _collisionConfig?.updatePosition(position);
         _verifyContact();
@@ -72,8 +71,8 @@ mixin Sensor on GameComponent {
   void _verifyContact() {
     List<GameComponent> compsInContact = [];
     Iterable<GameComponent> compsToCheck = _checkOnlyVisible
-        ? gameRef.visibleComponents()
-        : gameRef.componentsByType<GameComponent>();
+        ? gameRef.visibleComponentsByType<T>()
+        : gameRef.componentsByType<T>();
 
     for (final vComp in compsToCheck) {
       if (vComp != this && !vComp.isHud) {

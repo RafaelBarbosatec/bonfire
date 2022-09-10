@@ -48,8 +48,8 @@ extension MovementExtensions on Movement {
 
     if (rectToMove.overlaps(rectPlayerCollision)) {
       closeComponent(target);
-      if (!this.isIdle) {
-        this.idle();
+      if (!isIdle) {
+        idle();
       }
       return false;
     }
@@ -81,7 +81,7 @@ extension MovementExtensions on Movement {
     }
 
     if (!moved) {
-      this.idle();
+      idle();
       return false;
     }
 
@@ -97,7 +97,7 @@ extension MovementExtensions on Movement {
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
   }) {
-    if (runOnlyVisibleInScreen && !this.isVisible) return false;
+    if (runOnlyVisibleInScreen && !isVisible) return false;
     double distance = (minDistanceFromPlayer ?? radiusVision);
 
     Rect rectTarget = target.rectConsideringCollision;
@@ -107,7 +107,7 @@ extension MovementExtensions on Movement {
     double translateX = 0;
     double translateY = 0;
 
-    double speed = this.speed * this.dtUpdate;
+    double speed = this.speed * dtUpdate;
 
     Rect rectToMove = rectConsideringCollision;
 
@@ -148,15 +148,15 @@ extension MovementExtensions on Movement {
     }
 
     if (translateX == 0 && translateY == 0) {
-      if (!this.isIdle) {
-        this.idle();
+      if (!isIdle) {
+        idle();
       }
       positioned(target);
       return false;
     }
 
-    translateX /= this.dtUpdate;
-    translateY /= this.dtUpdate;
+    translateX /= dtUpdate;
+    translateY /= dtUpdate;
 
     bool moved = false;
     if (translateX > 0 && translateY > 0) {
@@ -181,7 +181,7 @@ extension MovementExtensions on Movement {
     }
 
     if (!moved) {
-      this.idle();
+      idle();
       return false;
     }
 

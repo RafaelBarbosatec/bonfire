@@ -48,8 +48,9 @@ abstract class PointerDetectorHandler {
   bool hasGesture() {
     if (this is DragGesture && (this as DragGesture).enableDrag) return true;
     if (this is TapGesture && (this as TapGesture).enableTab) return true;
-    if (this is MouseGesture && (this as MouseGesture).enableMouseGesture)
+    if (this is MouseGesture && (this as MouseGesture).enableMouseGesture) {
       return true;
+    }
     return false;
   }
 }

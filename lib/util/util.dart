@@ -4,6 +4,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
 class BonfireUtil {
+  // ignore: constant_identifier_names
   static const PI_180 = (180 / pi);
 
   static Direction getDirectionFromAngle(double angle) {
