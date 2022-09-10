@@ -1,4 +1,4 @@
-# [next]
+# [2.10.0]
 - Improvements in `Sensor`. Now you can pass T type to find especific type to contact.
 - Update `tiledjsonreader`.
 - Fix crash in `Acceleration` mixin.
@@ -6,6 +6,7 @@
 - Use `HasPaint` mixin in `GameComponent`.
 - Improvements on Tile.
 - Improvements Collision system.
+- Improvements Performance.
 - Improvements code by lint.
 
 # [2.9.4]
