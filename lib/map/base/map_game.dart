@@ -5,7 +5,7 @@ abstract class GameMap extends GameComponent {
   List<TileModel> tiles;
   double tileSizeToUpdate;
 
-  GameMap(this.tiles, {this.tileSizeToUpdate = 0}){
+  GameMap(this.tiles, {this.tileSizeToUpdate = 0}) {
     paint.isAntiAlias = false;
   }
 

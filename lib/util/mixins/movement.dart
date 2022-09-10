@@ -361,9 +361,9 @@ mixin Movement on GameComponent {
       return (this as ObjectCollision)
           .isCollision(
             displacement: position.translate(
-                  translateX,
-                  translateY,
-                ),
+              translateX,
+              translateY,
+            ),
           )
           .isNotEmpty;
     } else {

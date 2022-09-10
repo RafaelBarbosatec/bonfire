@@ -134,7 +134,8 @@ class TalkDialogState extends State<TalkDialog> {
                           currentSay.header ?? const SizedBox.shrink(),
                           Container(
                             width: double.maxFinite,
-                            padding: currentSay.padding ?? const EdgeInsets.all(10),
+                            padding:
+                                currentSay.padding ?? const EdgeInsets.all(10),
                             margin: currentSay.margin,
                             constraints: widget.textBoxMinHeight != null
                                 ? BoxConstraints(

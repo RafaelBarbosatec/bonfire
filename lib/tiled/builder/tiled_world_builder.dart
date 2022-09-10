@@ -292,7 +292,7 @@ class TiledWorldBuilder {
           '',
         );
       }
-    // ignore: empty_catches
+      // ignore: empty_catches
     } catch (e) {}
 
     if (tileSetContain != null) {

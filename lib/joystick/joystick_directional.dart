@@ -305,8 +305,8 @@ class JoystickDirectional {
     }
 
     _paintKnob ??= Paint()
-        ..color = color.withOpacity(0.8)
-        ..style = PaintingStyle.fill;
+      ..color = color.withOpacity(0.8)
+      ..style = PaintingStyle.fill;
 
     _loader = null;
   }
