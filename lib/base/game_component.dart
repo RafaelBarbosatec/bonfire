@@ -116,14 +116,14 @@ abstract class GameComponent extends PositionComponent
 
   /// Method that checks if this component is visible on the screen
   bool _isVisibleInCamera() {
-    if (hasGameRef) {
-      return gameRef.isVisibleInCamera(this) ||
-          positionType == PositionType.viewport;
-    }
-    return false;
+    return hasGameRef ? gameRef.isVisibleInCamera(this) : false;
   }
 
-  void onGameDetach() {}
+  @override
+  void onRemove() {
+    (gameRef as BonfireGame).removeVisible(this);
+    super.onRemove();
+  }
 
   void onSetIfVisible() {
     bool nowIsVisible = _isVisibleInCamera();
@@ -135,4 +135,6 @@ abstract class GameComponent extends PositionComponent
     }
     isVisible = nowIsVisible;
   }
+
+  void onGameDetach() {}
 }

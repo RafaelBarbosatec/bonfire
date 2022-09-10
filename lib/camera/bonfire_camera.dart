@@ -248,13 +248,9 @@ class BonfireCamera extends Camera {
 
     if (shouldMove) {
       snapTo(position.copyWith(
-            x: enableSmooth
-                ? lerpDouble(position.x, newX, dt * speed)
-                : newX,
-            y: enableSmooth
-                ? lerpDouble(position.y, newY, dt * speed)
-                : newY,
-          ));
+        x: enableSmooth ? lerpDouble(position.x, newX, dt * speed) : newX,
+        y: enableSmooth ? lerpDouble(position.y, newY, dt * speed) : newY,
+      ));
     }
   }
 
@@ -340,7 +336,8 @@ class BonfireCamera extends Camera {
   }
 
   bool isComponentOnCamera(GameComponent c) {
-    return cameraRectWithSpacing.overlapComponent(c);
+    return cameraRectWithSpacing.overlapComponent(c) ||
+        c.positionType == PositionType.viewport;
   }
 
   bool contains(Offset c) {
