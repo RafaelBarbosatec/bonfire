@@ -162,13 +162,13 @@ mixin Acceleration on Movement {
   }
 
   void stopAcceleration() {
+    _onStop?.call();
     _direction = null;
     _moveAngle = null;
     _accelerationFunction = null;
     _type = _TypeAcceleration.none;
     _onStop = null;
     idle();
-    _onStop?.call();
   }
 
   void _updateSpeed() {

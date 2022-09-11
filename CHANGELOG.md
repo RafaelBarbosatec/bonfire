@@ -1,3 +1,6 @@
+# [next]
+- fix `onStop` bug in `Acceleration`
+
 # [2.10.0]
 - Improvements in `Sensor`. Now you can pass T type to find especific type to contact.
 - Update `tiledjsonreader`.
