@@ -1,5 +1,6 @@
 # [next]
 - fix `onStop` bug in `Acceleration`
+- Adds widget `TypeWriter`. It's helpful to show dialog.
 
 # [2.10.0]
 - Improvements in `Sensor`. Now you can pass T type to find especific type to contact.
