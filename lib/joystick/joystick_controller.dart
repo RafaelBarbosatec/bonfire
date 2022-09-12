@@ -2,7 +2,7 @@
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/joystick/joystick.dart';
-import 'package:bonfire/util/mixins/pointer_detector.dart';
+import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';

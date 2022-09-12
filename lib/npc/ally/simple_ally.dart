@@ -1,8 +1,8 @@
+import 'package:bonfire/mixins/attackable.dart';
+import 'package:bonfire/mixins/direction_animation.dart';
 import 'package:bonfire/npc/ally/ally.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
-import 'package:bonfire/util/mixins/attackable.dart';
-import 'package:bonfire/util/mixins/direction_animation.dart';
 import 'package:flame/components.dart';
 
 ///

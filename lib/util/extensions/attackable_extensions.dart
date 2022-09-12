@@ -1,4 +1,4 @@
-import 'package:bonfire/util/mixins/attackable.dart';
+import 'package:bonfire/mixins/attackable.dart';
 import 'package:flutter/widgets.dart';
 
 Paint _barLiveBgPaint = Paint();
