@@ -4,7 +4,7 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:bonfire/util/util.dart';
+import 'package:bonfire/util/bonfire_util.dart';
 import 'package:flame/components.dart';
 
 /// Mixin responsible for adding movements

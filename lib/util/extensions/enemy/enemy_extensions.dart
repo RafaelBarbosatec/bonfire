@@ -1,5 +1,6 @@
 import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
+import 'package:bonfire/mixins/attackable.dart';
 import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/direction.dart';
@@ -8,8 +9,6 @@ import 'package:bonfire/util/extensions/movement_extensions.dart';
 import 'package:bonfire/util/extensions/npc/npc_extensions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../mixins/attackable.dart';
 
 /// Functions util to use in your [Enemy]
 extension EnemyExtensions on Enemy {

@@ -2,10 +2,10 @@ import 'package:flame/game.dart';
 
 import '../bonfire.dart';
 
-class MapExplorer with JoystickListener {
+class JoystickMapExplorer with JoystickListener {
   final Camera camera;
 
-  MapExplorer(this.camera);
+  JoystickMapExplorer(this.camera);
 
   @override
   void joystickAction(JoystickActionEvent event) {}

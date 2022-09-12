@@ -13,7 +13,7 @@ import 'package:bonfire/map/base/map_game.dart';
 import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/game_controller.dart';
-import 'package:bonfire/util/mixins/pointer_detector.dart';
+import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/mixins/movement.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:bonfire/util/mixins/movement.dart';
 
 extension MovementExtensions on Movement {
   /// This method move this component to target

@@ -1,6 +1,6 @@
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/util/mixins/movement.dart';
-import 'package:bonfire/util/mixins/vision.dart';
+import 'package:bonfire/mixins/movement.dart';
+import 'package:bonfire/mixins/vision.dart';
 import 'package:flame/components.dart';
 
 export 'rotation_npc.dart';

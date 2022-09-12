@@ -1,11 +1,10 @@
 import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
+import 'package:bonfire/mixins/attackable.dart';
 import 'package:bonfire/player/rotation_player.dart';
 import 'package:bonfire/util/extensions/game_component_extensions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../mixins/attackable.dart';
 
 extension RotationPlayerExtensions on RotationPlayer {
   void simpleAttackRange({

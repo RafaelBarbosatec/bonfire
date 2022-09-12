@@ -1,13 +1,12 @@
 import 'package:bonfire/collision/collision_config.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
+import 'package:bonfire/mixins/attackable.dart';
 import 'package:bonfire/npc/enemy/rotation_enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../mixins/attackable.dart';
 
 extension RotationEnemyExtensions on RotationEnemy {
   /// Checks whether the player is within range. If so, move to it.

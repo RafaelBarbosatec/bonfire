@@ -1,5 +1,5 @@
 import 'package:bonfire/npc/npc.dart';
-import 'package:bonfire/util/mixins/attackable.dart';
+import 'package:bonfire/mixins/attackable.dart';
 import 'package:flame/components.dart';
 
 export 'rotation_enemy.dart';

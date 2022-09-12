@@ -1,6 +1,6 @@
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:bonfire/util/mixins/pointer_detector.dart';
+import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
