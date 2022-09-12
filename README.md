@@ -28,8 +28,7 @@ Test our online [DEMO](https://bonfire-engine.github.io/examples/bonfire/).
 
 For more information and [examples](https://bonfire-engine.github.io/#/examples) see the [Documentation](https://bonfire-engine.github.io/).
 
-Command export web: `flutter build web --web-renderer=canvaskit --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false --release
-`
+Command export web: `flutter build web --web-renderer=canvaskit`
 
 ## Credits
 
