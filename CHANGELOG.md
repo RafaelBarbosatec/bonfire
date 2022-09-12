@@ -1,4 +1,4 @@
-# [next]
+# [2.10.1]
 - fix `onStop` bug in `Acceleration`
 - Adds widget `TypeWriter`. It's helpful to show dialog.
 - Update `TalkDialog`. now using `TypeWriter`.
