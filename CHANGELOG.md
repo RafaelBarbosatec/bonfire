@@ -1,4 +1,4 @@
-# [next]
+# [2.10.2]
 - performance improvements in `LightingComponent`.
 
 # [2.10.1]
