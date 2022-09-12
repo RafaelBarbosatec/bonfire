@@ -63,11 +63,10 @@ class LightingComponent extends GameComponent with LightingInterface {
   }
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
+  void renderTree(Canvas canvas) {
     if (!_containColor) return;
     Vector2 size = gameRef.camera.canvasSize;
-    canvas.saveLayer(Offset.zero & Size(size.x, size.y), Paint());
+    canvas.saveLayer(Offset.zero & Size(size.x, size.y), paint);
     canvas.drawColor(color!, BlendMode.dstATop);
     for (var light in _visibleLight) {
       final config = light.lightingConfig;
@@ -94,9 +93,7 @@ class LightingComponent extends GameComponent with LightingInterface {
   }
 
   @override
-  // ignore: must_call_super
   void update(double dt) {
-    super.update(dt);
     _containColor = _containsColor();
     if (!_containColor) return;
     _dtUpdate = dt;
