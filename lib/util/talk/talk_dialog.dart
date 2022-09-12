@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bonfire/util/talk/say.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -16,6 +16,8 @@ class TalkDialog extends StatefulWidget {
     this.onClose,
     this.dismissible = false,
     this.talkAlignment = Alignment.bottomCenter,
+    this.style,
+    this.speed = 50,
   }) : super(key: key);
 
   static show(
@@ -30,6 +32,8 @@ class TalkDialog extends StatefulWidget {
     EdgeInsetsGeometry? padding,
     bool dismissible = false,
     Alignment talkAlignment = Alignment.bottomCenter,
+    TextStyle? style,
+    int speed = 50,
   }) {
     showDialog(
       barrierDismissible: dismissible,
@@ -37,15 +41,18 @@ class TalkDialog extends StatefulWidget {
       context: context,
       builder: (BuildContext context) {
         return TalkDialog(
-            says: sayList,
-            onFinish: onFinish,
-            onClose: onClose,
-            onChangeTalk: onChangeTalk,
-            textBoxMinHeight: boxTextHeight,
-            keyboardKeysToNext: logicalKeyboardKeysToNext,
-            padding: padding,
-            dismissible: dismissible,
-            talkAlignment: talkAlignment);
+          says: sayList,
+          onFinish: onFinish,
+          onClose: onClose,
+          onChangeTalk: onChangeTalk,
+          textBoxMinHeight: boxTextHeight,
+          keyboardKeysToNext: logicalKeyboardKeysToNext,
+          padding: padding,
+          dismissible: dismissible,
+          talkAlignment: talkAlignment,
+          style: style,
+          speed: speed,
+        );
       },
     );
   }
@@ -59,6 +66,10 @@ class TalkDialog extends StatefulWidget {
   final EdgeInsetsGeometry? padding;
   final bool dismissible;
   final Alignment talkAlignment;
+  final TextStyle? style;
+
+  /// in milliseconds
+  final int speed;
 
   @override
   TalkDialogState createState() => TalkDialogState();
@@ -70,13 +81,11 @@ class TalkDialogState extends State<TalkDialog> {
   int currentIndexTalk = 0;
   bool finishedCurrentSay = false;
 
-  final StreamController<List<TextSpan>> _textShowController =
-      StreamController<List<TextSpan>>.broadcast();
+  final GlobalKey<TypeWriterState> _writerKey = GlobalKey();
 
   @override
   void initState() {
     currentSay = widget.says[currentIndexTalk];
-    _startShowText();
     Future.delayed(Duration.zero, () {
       _focusNode.requestFocus();
     });
@@ -86,7 +95,6 @@ class TalkDialogState extends State<TalkDialog> {
   @override
   void dispose() {
     widget.onClose?.call();
-    _textShowController.close();
     _focusNode.dispose();
     super.dispose();
   }
@@ -150,22 +158,16 @@ class TalkDialogState extends State<TalkDialog> {
                                     color: Colors.white.withOpacity(0.5),
                                   ),
                                 ),
-                            child: StreamBuilder<List<TextSpan>>(
-                              stream: _textShowController.stream,
-                              builder: (context, snapshot) {
-                                return SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  physics: const BouncingScrollPhysics(),
-                                  child: RichText(
-                                    text: TextSpan(
-                                      children: snapshot.data,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                      ),
-                                    ),
+                            child: TypeWriter(
+                              key: _writerKey,
+                              text: currentSay.text,
+                              speed: widget.speed,
+                              style: widget.style ??
+                                  const TextStyle(
+                                    color: Colors.white,
                                   ),
-                                );
+                              onFinish: () {
+                                finishedCurrentSay = true;
                               },
                             ),
                           ),
@@ -185,7 +187,7 @@ class TalkDialogState extends State<TalkDialog> {
   }
 
   void _finishCurrentSay() {
-    _textShowController.add([...currentSay.text]);
+    _writerKey.currentState?.finishTyping();
     finishedCurrentSay = true;
   }
 
@@ -196,7 +198,7 @@ class TalkDialogState extends State<TalkDialog> {
         finishedCurrentSay = false;
         currentSay = widget.says[currentIndexTalk];
       });
-      _startShowText();
+      _writerKey.currentState?.start(text: currentSay.text);
       widget.onChangeTalk?.call(currentIndexTalk);
     } else {
       widget.onFinish?.call();
@@ -210,32 +212,6 @@ class TalkDialogState extends State<TalkDialog> {
     } else {
       _finishCurrentSay();
     }
-  }
-
-  void _startShowText() async {
-    // Clean the stream to prevent textStyle from changing before the text
-    _textShowController.add([const TextSpan()]);
-
-    await Future.forEach<TextSpan>(currentSay.text, (span) async {
-      if (_textShowController.isClosed) return;
-      for (int i = 0; i < (span.text?.length ?? 0); i++) {
-        if (finishedCurrentSay) {
-          _textShowController.add([...currentSay.text]);
-          break;
-        }
-        await Future.delayed(Duration(milliseconds: currentSay.speed ?? 50));
-        if (_textShowController.isClosed) return;
-        _textShowController.add([
-          ...currentSay.text.sublist(0, currentSay.text.indexOf(span)),
-          TextSpan(
-            text: span.text!.substring(0, i + 1),
-            style: span.style,
-          )
-        ]);
-      }
-    }).then((_) {
-      finishedCurrentSay = true;
-    });
   }
 
   List<Widget> _buildPerson(PersonSayDirection direction) {

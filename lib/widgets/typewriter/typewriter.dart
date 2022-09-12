@@ -89,6 +89,7 @@ class TypeWriter extends StatefulWidget {
 class TypeWriterState extends State<TypeWriter> {
   late StreamController<List<TextSpan>> _textSpanController;
   late List<TextSpan> textSpanList;
+  bool _finished = false;
 
   @override
   void initState() {
@@ -131,6 +132,7 @@ class TypeWriterState extends State<TypeWriter> {
   }
 
   void start({List<TextSpan>? text}) async {
+    _finished = false;
     if (text != null) {
       textSpanList = text;
     }
@@ -140,26 +142,25 @@ class TypeWriterState extends State<TypeWriter> {
     for (var span in textSpanList) {
       if (_textSpanController.isClosed) return;
       for (int i = 0; i < (span.text?.length ?? 0); i++) {
-        // if (finishedCurrentSay) {
-        //   _textShowController.add([...currentSay.text]);
-        //   break;
-        // }
         await Future.delayed(Duration(milliseconds: widget.speed));
-        if (_textSpanController.isClosed) return;
-        _textSpanController.add([
-          ...textSpanList.sublist(0, textSpanList.indexOf(span)),
-          TextSpan(
-            text: span.text?.substring(0, i + 1),
-            style: span.style,
-          )
-        ]);
+        if (_textSpanController.isClosed || _finished) return;
+        _textSpanController.add(
+          [
+            ...textSpanList.sublist(0, textSpanList.indexOf(span)),
+            TextSpan(
+              text: span.text?.substring(0, i + 1),
+              style: span.style,
+            ),
+          ],
+        );
       }
     }
-
+    _finished = true;
     widget.onFinish?.call();
   }
 
   void finishTyping() {
+    _finished = true;
     _textSpanController.add([...textSpanList]);
     widget.onFinish?.call();
   }
