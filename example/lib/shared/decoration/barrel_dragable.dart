@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 class BarrelDraggable extends GameDecoration
     with DragGesture, ObjectCollision, Movement, Pushable {
   late TextPaint _textConfig;
+  String text = 'Drag here';
+  double xCenter = 0;
+  double yCenter = 0;
 
   BarrelDraggable(Vector2 position)
       : super.withSprite(
@@ -34,12 +37,16 @@ class BarrelDraggable extends GameDecoration
   }
 
   @override
+  void onMount() {
+    final textsize = _textConfig.measureText(text);
+    xCenter = (width - textsize.x) / 2;
+    yCenter = (height - textsize.y) / 2;
+    super.onMount();
+  }
+
+  @override
   void render(Canvas canvas) {
     super.render(canvas);
-    String text = 'Drag here';
-    Vector2 size = _textConfig.measureText(text);
-    double xCenter = (width - size.x) / 2;
-    double yCenter = (height - size.y) / 2;
     _textConfig.render(
       canvas,
       text,

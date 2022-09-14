@@ -7,8 +7,8 @@ import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
-import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/joystick/joystick_map_explorer.dart';
+import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:flame/input.dart';
 // ignore: implementation_imports
@@ -136,11 +136,15 @@ class BonfireGame extends BaseGame
 
     _interval = IntervalTick(
       INTERVAL_UPDATE_CACHE,
-      tick: _updateTempList,
+      tick: () {
+        scheduleMicrotask(_updateTempList);
+      },
     );
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
-      tick: updateOrderPriority,
+      tick: () {
+        scheduleMicrotask(updateOrderPriority);
+      },
     );
   }
 

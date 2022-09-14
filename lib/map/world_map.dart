@@ -23,15 +23,17 @@ class WorldMap extends GameMap {
   }) : super(
           tiles,
           tileSizeToUpdate: tileSizeToUpdate,
-        );
+        ) {
+    enabledCheckIsVisible = false;
+  }
 
   @override
-  // ignore: must_call_super
   void update(double dt) {
     if (!_buildingTiles && _checkNeedUpdateTiles()) {
       _buildingTiles = true;
       scheduleMicrotask(_searchTilesToRender);
     }
+    super.update(dt);
   }
 
   void _searchTilesToRender() {
@@ -95,7 +97,7 @@ class WorldMap extends GameMap {
     if (tileSizeToUpdate == 0) {
       tileSizeToUpdate = (tileSize * 4).ceilToDouble();
     }
-    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.4);
+    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.5);
 
     if (tiles.isNotEmpty) {
       int minSize = min(sizeScreen.x, sizeScreen.y).ceil();

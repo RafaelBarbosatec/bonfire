@@ -106,7 +106,7 @@ mixin ObjectCollision on GameComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (hasGameRef && gameRef.showCollisionArea == true) {
+    if (gameRef.showCollisionArea) {
       renderCollision(
         canvas,
         gameRef.collisionAreaColor ?? Colors.lightGreen.withOpacity(0.5),
@@ -115,7 +115,7 @@ mixin ObjectCollision on GameComponent {
   }
 
   void renderCollision(Canvas canvas, Color color) {
-    if (containCollision()) {
+    if (hasGameRef && containCollision()) {
       for (final element in _collisionConfig!.collisions) {
         element.render(canvas, color);
       }
@@ -124,14 +124,13 @@ mixin ObjectCollision on GameComponent {
 
   @override
   void update(double dt) {
+    super.update(dt);
     _collisionConfig?.updatePosition(position);
     _verifyIfContainCollision();
-    super.update(dt);
   }
 
   void _verifyIfContainCollision() {
-    _containCollision = _collisionConfig?.collisions != null &&
-        _collisionConfig?.collisions.isNotEmpty == true &&
+    _containCollision = _collisionConfig?.collisions.isNotEmpty == true &&
         _collisionConfig?.enable == true;
   }
 

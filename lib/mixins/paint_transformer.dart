@@ -14,39 +14,50 @@ mixin RenderTransformer on PositionComponent {
   /// Use to do horizontal flip in de render.
   bool isFlipHorizontal = false;
 
+  bool get _needTransform => isFlipHorizontal || isFlipVertical || angle != 0;
+
   void _applyFlipAndRotation(Canvas canvas) {
-    if (isFlipHorizontal || isFlipVertical || angle != 0) {
-      canvas.translate(center.x, center.y);
-      if (angle != 0) {
-        canvas.rotate(angle);
-      }
-      if (isFlipHorizontal || isFlipVertical) {
-        canvas.scale(isFlipHorizontal ? -1 : 1, isFlipVertical ? -1 : 1);
-      }
-      canvas.translate(-center.x, -center.y);
+    canvas.translate(center.x, center.y);
+    if (angle != 0) {
+      canvas.rotate(angle);
     }
+    if (isFlipHorizontal || isFlipVertical) {
+      canvas.scale(isFlipHorizontal ? -1 : 1, isFlipVertical ? -1 : 1);
+    }
+    canvas.translate(-center.x, -center.y);
   }
 
   @override
   void renderTree(Canvas canvas) {
-    preRenderBeforeTransformation(canvas);
-    canvas.save();
-    _applyFlipAndRotation(canvas);
-    preRender(canvas);
-    render(canvas);
-    for (var c in children) {
-      c.renderTree(canvas);
-    }
+    if (_needTransform) {
+      preRenderBeforeTransformation(canvas);
+      canvas.save();
+      _applyFlipAndRotation(canvas);
+      render(canvas);
+      for (var c in children) {
+        c.renderTree(canvas);
+      }
 
-    // Any debug rendering should be rendered on top of everything
-    if (debugMode) {
-      renderDebugMode(canvas);
-    }
+      // Any debug rendering should be rendered on top of everything
+      if (debugMode) {
+        renderDebugMode(canvas);
+      }
 
-    canvas.restore();
+      canvas.restore();
+    } else {
+      preRenderBeforeTransformation(canvas);
+      render(canvas);
+      for (var c in children) {
+        c.renderTree(canvas);
+      }
+
+      // Any debug rendering should be rendered on top of everything
+      if (debugMode) {
+        renderDebugMode(canvas);
+      }
+    }
   }
 
-  void preRender(Canvas canvas) {}
   void preRenderBeforeTransformation(Canvas canvas) {}
 
   @override

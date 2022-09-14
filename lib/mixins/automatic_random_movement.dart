@@ -20,8 +20,7 @@ mixin AutomaticRandomMovement on Movement {
 
     /// milliseconds
   }) {
-    if (runOnlyVisibleInCamera &&
-        !gameRef.camera.cameraRect.overlapComponent(this)) return;
+    if (runOnlyVisibleInCamera && !isVisible) return;
     if (_targetRandomMovement == Vector2.zero()) {
       if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
         int randomX = Random().nextInt(maxDistance);
