@@ -1,6 +1,6 @@
 # [2.10.3]
 - performance improvements
-- Improvemnets in `SimpleDirectionAnimation`. Now you can use diagonal animation passing only right animation: `runUpRight`,`runDownRight`,`idleUpRight`,`idleDownRight`. Resolve issue [316](https://github.com/RafaelBarbosatec/bonfire/issues/316)
+- Improvements in `SimpleDirectionAnimation`. Now you can use diagonal animation passing only right animation: `runUpRight`,`runDownRight`,`idleUpRight`,`idleDownRight`. Resolve issue [316](https://github.com/RafaelBarbosatec/bonfire/issues/316)
 
 # [2.10.2]
 - performance improvements in `LightingComponent`.
