@@ -34,6 +34,7 @@ class LightingComponent extends GameComponent with LightingInterface {
   double _dtUpdate = 0.0;
   ColorTween? _tween;
   bool _containColor = false;
+  Size _layerSize = Size.zero;
 
   @override
   PositionType get positionType => PositionType.viewport;
@@ -65,8 +66,7 @@ class LightingComponent extends GameComponent with LightingInterface {
   @override
   void renderTree(Canvas canvas) {
     if (!_containColor) return;
-    Vector2 size = gameRef.camera.canvasSize;
-    canvas.saveLayer(Offset.zero & Size(size.x, size.y), paint);
+    canvas.saveLayer(Offset.zero & _layerSize, paint);
     canvas.drawColor(color!, BlendMode.dstATop);
     for (var light in _visibleLight) {
       final config = light.lightingConfig;
@@ -95,7 +95,6 @@ class LightingComponent extends GameComponent with LightingInterface {
   @override
   void update(double dt) {
     _containColor = _containsColor();
-    if (!_containColor) return;
     _dtUpdate = dt;
   }
 
@@ -132,7 +131,11 @@ class LightingComponent extends GameComponent with LightingInterface {
   void _drawArc(Canvas canvas, Lighting light) {
     var config = light.lightingConfig!;
     var type = config.type as ArcLightingType;
-    Offset offset = light.center.toOffset() + config.align.toOffset();
+    Offset offset = (light.center + config.align).toOffset();
+    final maskFilter = MaskFilter.blur(
+      BlurStyle.normal,
+      config.blurSigma,
+    );
     canvas.save();
 
     canvas.translate(light.center.x, light.center.y);
@@ -152,11 +155,7 @@ class LightingComponent extends GameComponent with LightingInterface {
           false,
         )
         ..close(),
-      _paintFocusArc
-        ..maskFilter = MaskFilter.blur(
-          BlurStyle.normal,
-          config.blurSigma,
-        ),
+      _paintFocusArc..maskFilter = maskFilter,
     );
 
     canvas.drawPath(
@@ -174,10 +173,7 @@ class LightingComponent extends GameComponent with LightingInterface {
         ..close(),
       _paintLightingArc
         ..color = config.color
-        ..maskFilter = MaskFilter.blur(
-          BlurStyle.normal,
-          config.blurSigma,
-        ),
+        ..maskFilter = maskFilter,
     );
 
     canvas.restore();
@@ -185,26 +181,23 @@ class LightingComponent extends GameComponent with LightingInterface {
 
   void _drawCircle(Canvas canvas, Lighting light) {
     var config = light.lightingConfig!;
-    Offset offset = light.center.toOffset() + config.align.toOffset();
+    Offset offset = (light.center + config.align).toOffset();
+    final maskFilter = MaskFilter.blur(
+      BlurStyle.normal,
+      config.blurSigma,
+    );
     canvas.drawCircle(
       offset,
       config.radius *
           (config.withPulse
               ? (1 - config.valuePulse * config.pulseVariation)
               : 1),
-      _paintFocus
-        ..maskFilter = MaskFilter.blur(
-          BlurStyle.normal,
-          config.blurSigma,
-        ),
+      _paintFocus..maskFilter = maskFilter,
     );
 
     _paintLighting
       ..color = config.color
-      ..maskFilter = MaskFilter.blur(
-        BlurStyle.normal,
-        config.blurSigma,
-      );
+      ..maskFilter = maskFilter;
     canvas.drawCircle(
       offset,
       config.radius *
@@ -213,5 +206,11 @@ class LightingComponent extends GameComponent with LightingInterface {
               : 1),
       _paintLighting,
     );
+  }
+
+  @override
+  void onGameResize(Vector2 size) {
+    _layerSize = size.toSize();
+    super.onGameResize(size);
   }
 }

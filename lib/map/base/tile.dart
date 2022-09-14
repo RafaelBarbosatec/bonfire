@@ -143,7 +143,6 @@ class Tile extends GameComponent with UseAssetsLoader {
   }
 
   @override
-  // ignore: must_call_super
   void update(double dt) {
     _animation?.update(dt);
     if (parent != null) {

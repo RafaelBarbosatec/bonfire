@@ -82,7 +82,6 @@ class GameTiledMap extends StatelessWidget {
               'wizard': (properties) => Wizard(properties.position),
             },
           ),
-          background: BackgroundColorGame(Colors.blueGrey[900]!),
           lightingColorGame: Colors.black.withOpacity(0.7),
           overlayBuilderMap: {
             'barLife': (context, game) => BarLifeWidget(),

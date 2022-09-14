@@ -22,34 +22,41 @@ mixin DirectionAnimation on Movement {
 
   @override
   bool moveUp(double speed, {bool notifyOnMove = true}) {
-    if (animation?.runUp != null) {
-      animation?.play(SimpleAnimationEnum.runUp);
-    } else {
-      if (lastDirectionHorizontal == Direction.left) {
-        animation?.play(SimpleAnimationEnum.runLeft);
+    if (notifyOnMove) {
+      if (animation?.runUp != null) {
+        animation?.play(SimpleAnimationEnum.runUp);
       } else {
-        animation?.play(SimpleAnimationEnum.runRight);
+        if (lastDirectionHorizontal == Direction.left) {
+          animation?.play(SimpleAnimationEnum.runLeft);
+        } else {
+          animation?.play(SimpleAnimationEnum.runRight);
+        }
       }
     }
+
     return super.moveUp(speed, notifyOnMove: notifyOnMove);
   }
 
   @override
   bool moveRight(double speed, {bool notifyOnMove = true}) {
-    animation?.play(SimpleAnimationEnum.runRight);
+    if (notifyOnMove) {
+      animation?.play(SimpleAnimationEnum.runRight);
+    }
     return super.moveRight(speed, notifyOnMove: notifyOnMove);
   }
 
   @override
   bool moveDown(double speed, {bool notifyOnMove = true}) {
-    if (animation?.runDown != null ||
-        (animation?.runUp != null && animation?.enabledFlipY == true)) {
-      animation?.play(SimpleAnimationEnum.runDown);
-    } else {
-      if (lastDirectionHorizontal == Direction.left) {
-        animation?.play(SimpleAnimationEnum.runLeft);
+    if (notifyOnMove) {
+      if (animation?.runDown != null ||
+          (animation?.runUp != null && animation?.enabledFlipY == true)) {
+        animation?.play(SimpleAnimationEnum.runDown);
       } else {
-        animation?.play(SimpleAnimationEnum.runRight);
+        if (lastDirectionHorizontal == Direction.left) {
+          animation?.play(SimpleAnimationEnum.runLeft);
+        } else {
+          animation?.play(SimpleAnimationEnum.runRight);
+        }
       }
     }
 
@@ -58,47 +65,33 @@ mixin DirectionAnimation on Movement {
 
   @override
   bool moveLeft(double speed, {bool notifyOnMove = true}) {
-    animation?.play(SimpleAnimationEnum.runLeft);
+    if (notifyOnMove) {
+      animation?.play(SimpleAnimationEnum.runLeft);
+    }
     return super.moveLeft(speed, notifyOnMove: notifyOnMove);
   }
 
   @override
   bool moveUpLeft(double speedX, double speedY) {
-    if (animation?.runUpLeft != null) {
-      animation?.play(SimpleAnimationEnum.runUpLeft);
-    } else {
-      animation?.play(SimpleAnimationEnum.runLeft);
-    }
+    animation?.play(SimpleAnimationEnum.runUpLeft);
     return super.moveUpLeft(speedX, speedY);
   }
 
   @override
   bool moveUpRight(double speedX, double speedY) {
-    if (animation?.runUpRight != null) {
-      animation?.play(SimpleAnimationEnum.runUpRight);
-    } else {
-      animation?.play(SimpleAnimationEnum.runRight);
-    }
+    animation?.play(SimpleAnimationEnum.runUpRight);
     return super.moveUpRight(speedX, speedY);
   }
 
   @override
   bool moveDownRight(double speedX, double speedY) {
-    if (animation?.runDownRight != null) {
-      animation?.play(SimpleAnimationEnum.runDownRight);
-    } else {
-      animation?.play(SimpleAnimationEnum.runRight);
-    }
+    animation?.play(SimpleAnimationEnum.runDownRight);
     return super.moveDownRight(speedX, speedY);
   }
 
   @override
   bool moveDownLeft(double speedX, double speedY) {
-    if (animation?.runDownLeft != null) {
-      animation?.play(SimpleAnimationEnum.runDownLeft);
-    } else {
-      animation?.play(SimpleAnimationEnum.runLeft);
-    }
+    animation?.play(SimpleAnimationEnum.runDownLeft);
     return super.moveDownLeft(speedX, speedY);
   }
 
@@ -135,32 +128,16 @@ mixin DirectionAnimation on Movement {
         }
         break;
       case Direction.upLeft:
-        if (animation?.idleUpLeft != null) {
-          animation?.play(SimpleAnimationEnum.idleUpLeft);
-        } else {
-          animation?.play(SimpleAnimationEnum.idleLeft);
-        }
+        animation?.play(SimpleAnimationEnum.idleUpLeft);
         break;
       case Direction.upRight:
-        if (animation?.idleUpRight != null) {
-          animation?.play(SimpleAnimationEnum.idleUpRight);
-        } else {
-          animation?.play(SimpleAnimationEnum.idleRight);
-        }
+        animation?.play(SimpleAnimationEnum.idleUpRight);
         break;
       case Direction.downLeft:
-        if (animation?.idleDownLeft != null) {
-          animation?.play(SimpleAnimationEnum.idleDownLeft);
-        } else {
-          animation?.play(SimpleAnimationEnum.idleLeft);
-        }
+        animation?.play(SimpleAnimationEnum.idleDownLeft);
         break;
       case Direction.downRight:
-        if (animation?.idleDownRight != null) {
-          animation?.play(SimpleAnimationEnum.idleDownRight);
-        } else {
-          animation?.play(SimpleAnimationEnum.idleRight);
-        }
+        animation?.play(SimpleAnimationEnum.idleDownRight);
         break;
     }
     super.idle();

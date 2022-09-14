@@ -49,8 +49,8 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   @override
   void update(double dt) {
     if (enabledSensor && (_checkOnlyVisible ? isVisible : true)) {
-      _collisionConfig ??= CollisionConfig(collisions: _sensorArea);
       if (checkInterval(_intervalCheckContactKey, _intervalCheckContact, dt)) {
+        _collisionConfig ??= CollisionConfig(collisions: _sensorArea);
         _collisionConfig?.updatePosition(position);
         _verifyContact();
       }
