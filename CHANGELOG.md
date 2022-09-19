@@ -1,3 +1,6 @@
+# [next]
+- Improvements in `AutomaticRandomMovement`
+
 # [2.10.4]
 - fix bug when use `DragGesture` and `TapGesture` together.
 

@@ -8,6 +8,8 @@ mixin AutomaticRandomMovement on Movement {
   // ignore: constant_identifier_names
   static const _KEY_INTERVAL_KEEP_STOPPED = 'INTERVAL_RANDOM_MOVEMENT';
 
+  late Random _random;
+
   /// Method that bo used in [update] method.
   void runRandomMovement(
     double dt, {
@@ -23,12 +25,12 @@ mixin AutomaticRandomMovement on Movement {
     if (runOnlyVisibleInCamera && !isVisible) return;
     if (_targetRandomMovement == Vector2.zero()) {
       if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
-        int randomX = Random().nextInt(maxDistance);
+        int randomX = _random.nextInt(maxDistance);
         randomX = randomX < minDistance ? minDistance : randomX;
-        int randomY = Random().nextInt(maxDistance);
+        int randomY = _random.nextInt(maxDistance);
         randomY = randomY < minDistance ? minDistance : randomY;
-        int randomNegativeX = Random().nextBool() ? -1 : 1;
-        int randomNegativeY = Random().nextBool() ? -1 : 1;
+        int randomNegativeX = _random.nextBool() ? -1 : 1;
+        int randomNegativeY = _random.nextBool() ? -1 : 1;
         final rect = rectConsideringCollision;
         double margin = max(rect.width, rect.height) / 2;
         _targetRandomMovement = rect.center.toVector2().translate(
@@ -37,8 +39,9 @@ mixin AutomaticRandomMovement on Movement {
             );
         if (useAngle) {
           angle = BonfireUtil.angleBetweenPoints(
-              rectConsideringCollision.center.toVector2(),
-              _targetRandomMovement);
+            rectConsideringCollision.center.toVector2(),
+            _targetRandomMovement,
+          );
         }
       }
     } else {
@@ -97,5 +100,11 @@ mixin AutomaticRandomMovement on Movement {
   void _cleanTargetMovementRandom() {
     _targetRandomMovement = Vector2.zero();
     idle();
+  }
+
+  @override
+  void onMount() {
+    _random = Random(Random().nextInt(1000));
+    super.onMount();
   }
 }
