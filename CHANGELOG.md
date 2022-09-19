@@ -1,4 +1,4 @@
-# [next]
+# [2.10.4]
 - fix bug when use `DragGesture` and `TapGesture` together.
 
 # [2.10.3]
