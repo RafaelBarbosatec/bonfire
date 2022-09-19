@@ -29,8 +29,8 @@ mixin AutomaticRandomMovement on Movement {
         randomX = randomX < minDistance ? minDistance : randomX;
         int randomY = _random.nextInt(maxDistance);
         randomY = randomY < minDistance ? minDistance : randomY;
-        int randomNegativeX = _random.nextBool() ? -1 : 1;
-        int randomNegativeY = _random.nextBool() ? -1 : 1;
+        int randomNegativeX = _random.nextInt(10) < 5 ? -1 : 1;
+        int randomNegativeY = _random.nextInt(10) < 5 ? -1 : 1;
         final rect = rectConsideringCollision;
         double margin = max(rect.width, rect.height) / 2;
         _targetRandomMovement = rect.center.toVector2().translate(
