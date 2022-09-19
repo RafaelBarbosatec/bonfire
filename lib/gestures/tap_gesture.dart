@@ -10,22 +10,23 @@ mixin TapGesture on GameComponent {
   bool handlerPointerDown(PointerDownEvent event) {
     final pointer = event.pointer;
     final position = event.localPosition.toVector2();
+    bool handler = false;
 
     if (enableTab && hasGameRef) {
       if (isHud) {
         if (containsPoint(position)) {
           _pointer = pointer;
-          return onTapDown(pointer, position);
+          handler = onTapDown(pointer, position);
         }
       } else {
         final absolutePosition = gameRef.screenToWorld(position);
         if (containsPoint(absolutePosition)) {
           _pointer = pointer;
-          return onTapDown(pointer, position);
+          handler = onTapDown(pointer, position);
         }
       }
     }
-    return super.handlerPointerDown(event);
+    return handler ? handler : super.handlerPointerDown(event);
   }
 
   @override
