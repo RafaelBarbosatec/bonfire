@@ -1,5 +1,4 @@
 # [next]
-- Fix bug run when not visible [`AutomaticRandomMovement`]
 
 # [2.10.6]
 - Improvements in `AutomaticRandomMovement`

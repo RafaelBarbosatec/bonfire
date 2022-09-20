@@ -23,7 +23,6 @@ mixin AutomaticRandomMovement on Movement {
     /// milliseconds
   }) {
     if (runOnlyVisibleInCamera && !isVisible) {
-      _cleanTargetMovementRandom();
       return;
     }
 
