@@ -1,3 +1,7 @@
+# [2.10.5]
+- Improvements in `AutomaticRandomMovement`
+- Improvements in `Follower`
+
 # [2.10.4]
 - fix bug when use `DragGesture` and `TapGesture` together.
 
