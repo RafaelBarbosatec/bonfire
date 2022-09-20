@@ -22,7 +22,11 @@ mixin AutomaticRandomMovement on Movement {
 
     /// milliseconds
   }) {
-    if (runOnlyVisibleInCamera && !isVisible) return;
+    if (runOnlyVisibleInCamera && !isVisible) {
+      _cleanTargetMovementRandom();
+      return;
+    }
+
     if (_targetRandomMovement == Vector2.zero()) {
       if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
         int randomX = _random.nextInt(maxDistance);
