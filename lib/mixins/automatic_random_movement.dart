@@ -33,13 +33,11 @@ mixin AutomaticRandomMovement on Movement {
         randomX = randomX < minDistance ? minDistance : randomX;
         int randomY = _random.nextInt(maxDistance);
         randomY = randomY < minDistance ? minDistance : randomY;
-        int randomNegativeX = _random.nextInt(10) < 5 ? -1 : 1;
-        int randomNegativeY = _random.nextInt(10) < 5 ? -1 : 1;
         final rect = rectConsideringCollision;
         double margin = max(rect.width, rect.height) / 2;
         _targetRandomMovement = rect.center.toVector2().translate(
-              (randomX.toDouble() + margin) * randomNegativeX,
-              (randomY.toDouble() + margin) * randomNegativeY,
+              (randomX.toDouble() + margin) * _randomNagative(),
+              (randomY.toDouble() + margin) * _randomNagative(),
             );
         if (useAngle) {
           angle = BonfireUtil.angleBetweenPoints(
@@ -110,5 +108,10 @@ mixin AutomaticRandomMovement on Movement {
   void onMount() {
     _random = Random(Random().nextInt(1000));
     super.onMount();
+  }
+
+  int _randomNagative() {
+    int radomInt = _random.nextInt(20);
+    return (radomInt % 2 == 0) ? 1 : -1;
   }
 }
