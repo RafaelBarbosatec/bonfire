@@ -1,4 +1,4 @@
-# [2.10.4]
+# [2.10.5]
 - Improvements in `AutomaticRandomMovement`
 - Improvements in `Follower`
 
