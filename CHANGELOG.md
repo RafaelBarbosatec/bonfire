@@ -1,4 +1,4 @@
-# [2.10.7]
+# [2.10.8]
 - Fix bug tendency to go to the right in `AutomaticRandomMovement`.
 
 # [2.10.6]

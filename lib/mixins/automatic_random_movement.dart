@@ -9,7 +9,6 @@ mixin AutomaticRandomMovement on Movement {
   static const _KEY_INTERVAL_KEEP_STOPPED = 'INTERVAL_RANDOM_MOVEMENT';
 
   late Random _random;
-  late Random _random2;
 
   /// Method that bo used in [update] method.
   void runRandomMovement(
@@ -29,18 +28,17 @@ mixin AutomaticRandomMovement on Movement {
 
     if (_targetRandomMovement == Vector2.zero()) {
       if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
-        int randomX = _random2.nextInt(maxDistance);
+        int randomX = _random.nextInt(maxDistance);
         randomX = randomX < minDistance ? minDistance : randomX;
         int randomY = _random.nextInt(maxDistance);
         randomY = randomY < minDistance ? minDistance : randomY;
-        final rect = rectConsideringCollision;
-        double margin = max(rect.width, rect.height) / 2;
+
         int randomNegativeX = _random.nextBool() ? -1 : 1;
-        int randomNegativeY = _random2.nextBool() ? -1 : 1;
-        _targetRandomMovement = rect.center.toVector2().translate(
-              (randomX.toDouble() + margin) * randomNegativeX,
-              (randomY.toDouble() + margin) * randomNegativeY,
-            );
+        int randomNegativeY = _random.nextBool() ? -1 : 1;
+        _targetRandomMovement = position.translate(
+          randomX.toDouble() * randomNegativeX,
+          randomY.toDouble() * randomNegativeY,
+        );
         if (useAngle) {
           angle = BonfireUtil.angleBetweenPoints(
             rectConsideringCollision.center.toVector2(),
@@ -109,7 +107,6 @@ mixin AutomaticRandomMovement on Movement {
   @override
   void onMount() {
     _random = Random(Random().nextInt(1000));
-    _random2 = Random(Random().nextInt(1000));
     super.onMount();
   }
 }
