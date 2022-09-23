@@ -139,8 +139,9 @@ class KnightInterface extends GameInterface {
   }
 
   void _startSceneExample() {
-    if (gameRef.player != null) {
-      final enemy = gameRef.visibleEnemies().first;
+    final enemiesVisible = gameRef.visibleEnemies();
+    if (gameRef.player != null && enemiesVisible.isNotEmpty) {
+      final enemy = enemiesVisible.first;
       gameRef.startScene(
         [
           CameraSceneAction.position(Vector2(800, 800)),
