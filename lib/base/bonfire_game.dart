@@ -275,8 +275,7 @@ class BonfireGame extends BaseGame
 
   void _updateTempList() {
     _visibleCollisions = _collisions.where((element) {
-      return (element.isVisible && element.containCollision()) ||
-          element is Tile;
+      return element.isVisible || element is Tile;
     }).toList();
 
     gameController?.notifyListeners();
@@ -352,9 +351,7 @@ class BonfireGame extends BaseGame
   void stopScene() {
     try {
       children
-          .firstWhere(
-            (value) => value is SceneBuilderComponent,
-          )
+          .firstWhere((value) => value is SceneBuilderComponent)
           .removeFromParent();
     } catch (e) {
       /// Not found SceneBuilderComponent
@@ -363,11 +360,11 @@ class BonfireGame extends BaseGame
 
   @override
   void onDetach() {
-    children.query<GameComponent>().forEach((element) {
-      element.onGameDetach();
-    });
+    children.query<GameComponent>().forEach(_detachComp);
     super.onDetach();
   }
+
+  void _detachComp(GameComponent c) => c.onGameDetach();
 
   void addCollision(ObjectCollision obj) {
     _collisions.add(obj);
