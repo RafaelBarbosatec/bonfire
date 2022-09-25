@@ -49,8 +49,7 @@ mixin ObjectCollision on GameComponent {
   bool containCollision() => _containCollision;
 
   Rect get rectCollision {
-    if (!containCollision()) return Rect.zero;
-    return _collisionConfig!.rect;
+    return _collisionConfig?.rect ?? Rect.zero;
   }
 
   List<ObjectCollision> _verifyWorldCollision({

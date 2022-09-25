@@ -106,7 +106,7 @@ class Tile extends GameComponent with UseAssetsLoader {
       size: size,
       overridePaint: paint,
     );
-    if (_animation == null && _sprite == null && color != null) {
+    if (color != null) {
       canvas.drawRect(toRect(), paint..color = color!);
     }
   }

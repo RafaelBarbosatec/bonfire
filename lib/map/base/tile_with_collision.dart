@@ -22,9 +22,9 @@ class TileWithCollision extends Tile with ObjectCollision {
           offsetY: offsetY,
           properties: properties,
         ) {
-    collisions?.let((c) {
-      setupCollision(CollisionConfig(collisions: c));
-    });
+    if (collisions != null) {
+      setupCollision(CollisionConfig(collisions: collisions));
+    }
   }
 
   TileWithCollision.fromSprite({
@@ -47,9 +47,9 @@ class TileWithCollision extends Tile with ObjectCollision {
           properties: properties,
           color: color,
         ) {
-    collisions?.let((c) {
-      setupCollision(CollisionConfig(collisions: c));
-    });
+    if (collisions != null) {
+      setupCollision(CollisionConfig(collisions: collisions));
+    }
   }
 
   TileWithCollision.withAnimation({
@@ -70,8 +70,8 @@ class TileWithCollision extends Tile with ObjectCollision {
           type: type,
           properties: properties,
         ) {
-    collisions?.let((c) {
-      setupCollision(CollisionConfig(collisions: c));
-    });
+    if (collisions != null) {
+      setupCollision(CollisionConfig(collisions: collisions));
+    }
   }
 }
