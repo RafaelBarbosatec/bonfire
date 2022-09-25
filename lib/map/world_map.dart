@@ -36,7 +36,7 @@ class WorldMap extends GameMap {
     }
   }
 
-  void _searchTilesToRender() async {
+  void _searchTilesToRender() {
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
 
     final visibleTileModel = quadTree?.query(

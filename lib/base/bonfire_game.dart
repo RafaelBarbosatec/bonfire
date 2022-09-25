@@ -136,16 +136,20 @@ class BonfireGame extends BaseGame
 
     _interval = IntervalTick(
       INTERVAL_UPDATE_CACHE,
-      tick: () {
-        scheduleMicrotask(_updateTempList);
-      },
+      tick: updateTemListMicrotask,
     );
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
-      tick: () {
-        scheduleMicrotask(updateOrderPriority);
-      },
+      tick: updateOrderPriorityMicrotask,
     );
+  }
+
+  void updateTemListMicrotask() {
+    scheduleMicrotask(_updateTempList);
+  }
+
+  void updateOrderPriorityMicrotask() {
+    scheduleMicrotask(updateOrderPriority);
   }
 
   @override
