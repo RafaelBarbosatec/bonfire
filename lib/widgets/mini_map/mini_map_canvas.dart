@@ -33,9 +33,9 @@ class MiniMapCanvas extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double scaleX = size.width / gameSize.x * zoom;
-    double scaleY = size.height / gameSize.y * zoom;
-    double scale = max(scaleX, scaleY);
+    double scaleX = size.width / gameSize.x;
+    double scaleY = size.height / gameSize.y;
+    double scale = max(scaleX, scaleY) * zoom;
     double restX = (gameSize.x * scale - size.width);
     double restY = (gameSize.y * scale - size.height);
 
