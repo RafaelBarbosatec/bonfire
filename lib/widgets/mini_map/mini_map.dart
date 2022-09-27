@@ -120,13 +120,18 @@ class _MiniMapState extends State<MiniMap> {
 
   void _initInterval() {
     timer = async.Timer.periodic(const Duration(milliseconds: 20), (timer) {
+      bool needSetState = false;
       if (widget.game.camera.position != cameraPosition) {
         cameraPosition = widget.game.camera.position.clone();
-        setState(() {});
+        needSetState = true;
       }
 
       if (widget.game.player?.position != playerPosition) {
         playerPosition = widget.game.player?.position.clone() ?? Vector2.zero();
+        needSetState = true;
+      }
+
+      if (needSetState) {
         setState(() {});
       }
     });
