@@ -274,20 +274,20 @@ extension GameComponentExtensions on GameComponent {
     var diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
 
     if (diffPositiveX > diffPositiveY) {
-      if (player.center.x > center.y) {
+      if (player.center.x > center.x) {
         return Direction.right;
-      } else if (player.center.x < center.y) {
+      } else if (player.center.x < center.x) {
         return Direction.left;
       }
     } else {
-      if (player.center.y > center.x) {
+      if (player.center.y > center.y) {
         return Direction.down;
-      } else if (player.center.y < position.x) {
+      } else if (player.center.y < center.y) {
         return Direction.up;
       }
     }
 
-    return Direction.left;
+    return null;
   }
 
   /// Used to generate numbers to create your animations or anythings
