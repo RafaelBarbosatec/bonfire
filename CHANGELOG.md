@@ -1,4 +1,4 @@
-# [next]
+# [2.10.9]
 - Do correction sugested by issue [#327](https://github.com/RafaelBarbosatec/bonfire/issues/327). Thanks [Fixid-Fuzz](https://github.com/Fixid-Fuzz)!
 - Camera improvements.
 - remove required `animation` in `simpleAttackMeleeByAngle`.
