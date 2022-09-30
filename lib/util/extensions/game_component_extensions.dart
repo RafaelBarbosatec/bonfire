@@ -147,7 +147,7 @@ extension GameComponentExtensions on GameComponent {
     simpleAttackMeleeByAngle(
       angle: direction.toRadians(),
       animation: animationRight,
-      attacker: attackFrom,
+      attackFrom: attackFrom,
       damage: damage,
       size: size,
       centerOffset: centerOffset,
@@ -159,14 +159,15 @@ extension GameComponentExtensions on GameComponent {
 
   ///Execute simple attack melee using animation
   void simpleAttackMeleeByAngle({
+    dynamic id,
+
     /// use animation facing right.
-    required Future<SpriteAnimation>? animation,
+    Future<SpriteAnimation>? animation,
     required double damage,
 
     /// Use radians angle
     required double angle,
-    required AttackFromEnum attacker,
-    dynamic id,
+    required AttackFromEnum attackFrom,
     required Vector2 size,
     bool withPush = true,
     double marginFromOrigin = 16,
@@ -211,7 +212,7 @@ extension GameComponentExtensions on GameComponent {
         .visibleAttackables()
         .where((a) => a.rectAttackable().overlaps(positionAttack) && a != this)
         .forEach((enemy) {
-      enemy.receiveDamage(attacker, damage, id);
+      enemy.receiveDamage(attackFrom, damage, id);
       final rectAfterPush = enemy.position.translate(diffBase.x, diffBase.y);
       if (withPush &&
           (enemy is ObjectCollision &&
@@ -274,20 +275,20 @@ extension GameComponentExtensions on GameComponent {
     var diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
 
     if (diffPositiveX > diffPositiveY) {
-      if (player.center.x > center.y) {
+      if (player.center.x > center.x) {
         return Direction.right;
-      } else if (player.center.x < center.y) {
+      } else if (player.center.x < center.x) {
         return Direction.left;
       }
     } else {
-      if (player.center.y > center.x) {
+      if (player.center.y > center.y) {
         return Direction.down;
-      } else if (player.center.y < position.x) {
+      } else if (player.center.y < center.y) {
         return Direction.up;
       }
     }
 
-    return Direction.left;
+    return null;
   }
 
   /// Used to generate numbers to create your animations or anythings

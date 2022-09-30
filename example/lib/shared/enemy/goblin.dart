@@ -100,6 +100,7 @@ class Goblin extends SimpleEnemy
 
   @override
   void removeLife(double life) {
+    print(directionThePlayerIsIn());
     this.showDamage(
       life,
       config: TextStyle(

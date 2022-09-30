@@ -106,7 +106,7 @@ class Tile extends GameComponent with UseAssetsLoader {
       size: size,
       overridePaint: paint,
     );
-    if (_animation == null && _sprite == null && color != null) {
+    if (color != null) {
       canvas.drawRect(toRect(), paint..color = color!);
     }
   }
@@ -143,7 +143,7 @@ class Tile extends GameComponent with UseAssetsLoader {
   }
 
   @override
-  void update(double dt) {
+  void updateTree(double dt) {
     _animation?.update(dt);
     if (parent != null) {
       final parentComp = parent as GameComponent;
@@ -152,7 +152,7 @@ class Tile extends GameComponent with UseAssetsLoader {
         position = _lastParentPosition + _startPosition;
       }
     }
-    super.update(dt);
+    update(dt);
   }
 
   @override

@@ -29,11 +29,11 @@ class WorldMap extends GameMap {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (!_buildingTiles && _checkNeedUpdateTiles()) {
       _buildingTiles = true;
       scheduleMicrotask(_searchTilesToRender);
     }
-    super.update(dt);
   }
 
   void _searchTilesToRender() {

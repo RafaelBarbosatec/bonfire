@@ -36,6 +36,7 @@ class MiniMap extends StatefulWidget {
   final Color? npcColor;
   final Color? allyColor;
   final Color? decorationColor;
+  final double zoom;
   MiniMap({
     Key? key,
     required this.game,
@@ -52,6 +53,7 @@ class MiniMap extends StatefulWidget {
     this.enemyColor,
     this.npcColor,
     this.allyColor,
+    this.zoom = 1.0,
     this.decorationColor,
   })  : size = size ?? Vector2(200, 200),
         super(key: key);
@@ -109,6 +111,7 @@ class _MiniMapState extends State<MiniMap> {
                   componentsRender:
                       widget.componentsRender ?? componentsRenderDefault(),
                   tileRender: widget.tileRender ?? tilesRenderDefault(),
+                  zoom: widget.zoom,
                 ),
               ),
             ),
@@ -120,13 +123,18 @@ class _MiniMapState extends State<MiniMap> {
 
   void _initInterval() {
     timer = async.Timer.periodic(const Duration(milliseconds: 20), (timer) {
+      bool needSetState = false;
       if (widget.game.camera.position != cameraPosition) {
         cameraPosition = widget.game.camera.position.clone();
-        setState(() {});
+        needSetState = true;
       }
 
       if (widget.game.player?.position != playerPosition) {
         playerPosition = widget.game.player?.position.clone() ?? Vector2.zero();
+        needSetState = true;
+      }
+
+      if (needSetState) {
         setState(() {});
       }
     });

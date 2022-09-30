@@ -20,6 +20,8 @@ class BonfireCamera extends Camera {
   double limitMaxX = 0;
   double limitMaxY = 0;
 
+  Offset screenCenter = Offset.zero;
+
   BonfireCamera(
     CameraConfig config,
   ) {
@@ -213,11 +215,6 @@ class BonfireCamera extends Camera {
     double horizontal = sizeW.x;
     double vertical = sizeW.y;
 
-    final screenCenter = Offset(
-      canvasSize.x / 2,
-      canvasSize.y / 2,
-    );
-
     final centerTarget = _getCenterTarget();
     final positionTarget = worldToScreen(centerTarget);
 
@@ -234,6 +231,9 @@ class BonfireCamera extends Camera {
         horizontalDistance,
       );
       newX = position.x + (displacementX * _zoomFactor());
+      if (moveOnlyMapArea) {
+        newX = _verifyXlimits(newX);
+      }
       shouldMove = true;
     }
 
@@ -243,14 +243,23 @@ class BonfireCamera extends Camera {
         verticalDistance,
       );
       newY = position.y + (displacementY * _zoomFactor());
+      if (moveOnlyMapArea) {
+        newY = _verifyYlimits(newY);
+      }
       shouldMove = true;
     }
 
+    if (position.x == newX && position.y == newY) {
+      shouldMove = false;
+    }
+
     if (shouldMove) {
-      snapTo(position.copyWith(
-        x: enableSmooth ? lerpDouble(position.x, newX, dt * speed) : newX,
-        y: enableSmooth ? lerpDouble(position.y, newY, dt * speed) : newY,
-      ));
+      super.snapTo(
+        position.copyWith(
+          x: enableSmooth ? lerpDouble(position.x, newX, dt * speed) : newX,
+          y: enableSmooth ? lerpDouble(position.y, newY, dt * speed) : newY,
+        ),
+      );
     }
   }
 
@@ -365,6 +374,10 @@ class BonfireCamera extends Camera {
   }
 
   void _updateLimits(Vector2 canvasSize) {
+    screenCenter = Offset(
+      canvasSize.x / 2,
+      canvasSize.y / 2,
+    );
     final sizeMap = gameRef.map.size;
 
     if (_lastZoomSize != zoom && sizeMap != Vector2.zero()) {
@@ -392,29 +405,28 @@ class BonfireCamera extends Camera {
       return position;
     }
 
-    Vector2 newPosition = position.clone();
+    position.x = _verifyXlimits(position.x);
+    position.y = _verifyYlimits(position.y);
 
-    if (position.x > limitMaxX) {
-      newPosition = newPosition.copyWith(
-        x: limitMaxX,
-      );
-    } else if (position.x < limitMinX) {
-      newPosition = newPosition.copyWith(
-        x: limitMinX,
-      );
+    return position;
+  }
+
+  double _verifyXlimits(double dx) {
+    if (dx > limitMaxX) {
+      return limitMaxX;
+    } else if (dx < limitMinX) {
+      return limitMinX;
     }
+    return dx;
+  }
 
-    if (position.y > limitMaxY) {
-      newPosition = newPosition.copyWith(
-        y: limitMaxY,
-      );
-    } else if (position.y < limitMinY) {
-      newPosition = newPosition.copyWith(
-        y: limitMinY,
-      );
+  double _verifyYlimits(double dy) {
+    if (dy > limitMaxY) {
+      return limitMaxY;
+    } else if (dy < limitMinY) {
+      return limitMinY;
     }
-
-    return newPosition;
+    return dy;
   }
 
   @override

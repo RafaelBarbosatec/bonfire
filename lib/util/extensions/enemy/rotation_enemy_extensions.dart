@@ -136,7 +136,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       size: size,
       angle: angle,
       animation: animationRight,
-      attacker: AttackFromEnum.ENEMY,
+      attackFrom: AttackFromEnum.ENEMY,
     );
 
     execute?.call();
