@@ -20,6 +20,8 @@ class BonfireCamera extends Camera {
   double limitMaxX = 0;
   double limitMaxY = 0;
 
+  Offset screenCenter = Offset.zero;
+
   BonfireCamera(
     CameraConfig config,
   ) {
@@ -213,11 +215,6 @@ class BonfireCamera extends Camera {
     double horizontal = sizeW.x;
     double vertical = sizeW.y;
 
-    final screenCenter = Offset(
-      canvasSize.x / 2,
-      canvasSize.y / 2,
-    );
-
     final centerTarget = _getCenterTarget();
     final positionTarget = worldToScreen(centerTarget);
 
@@ -365,6 +362,10 @@ class BonfireCamera extends Camera {
   }
 
   void _updateLimits(Vector2 canvasSize) {
+    screenCenter = Offset(
+      canvasSize.x / 2,
+      canvasSize.y / 2,
+    );
     final sizeMap = gameRef.map.size;
 
     if (_lastZoomSize != zoom && sizeMap != Vector2.zero()) {
