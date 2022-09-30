@@ -231,6 +231,14 @@ class BonfireCamera extends Camera {
         horizontalDistance,
       );
       newX = position.x + (displacementX * _zoomFactor());
+      if (moveOnlyMapArea) {
+        if (newX < limitMinX) {
+          newX = limitMinX;
+        }
+        if (newX > limitMaxX) {
+          newX = limitMaxX;
+        }
+      }
       shouldMove = true;
     }
 
@@ -240,14 +248,28 @@ class BonfireCamera extends Camera {
         verticalDistance,
       );
       newY = position.y + (displacementY * _zoomFactor());
+      if (moveOnlyMapArea) {
+        if (newY < limitMinY) {
+          newY = limitMinY;
+        }
+        if (newY > limitMaxY) {
+          newY = limitMaxY;
+        }
+      }
       shouldMove = true;
     }
 
+    if (position.x == newX && position.y == newY) {
+      shouldMove = false;
+    }
+
     if (shouldMove) {
-      snapTo(position.copyWith(
-        x: enableSmooth ? lerpDouble(position.x, newX, dt * speed) : newX,
-        y: enableSmooth ? lerpDouble(position.y, newY, dt * speed) : newY,
-      ));
+      super.snapTo(
+        position.copyWith(
+          x: enableSmooth ? lerpDouble(position.x, newX, dt * speed) : newX,
+          y: enableSmooth ? lerpDouble(position.y, newY, dt * speed) : newY,
+        ),
+      );
     }
   }
 
@@ -393,29 +415,33 @@ class BonfireCamera extends Camera {
       return position;
     }
 
-    Vector2 newPosition = position.clone();
+    Vector2? newPosition;
 
     if (position.x > limitMaxX) {
+      newPosition ??= position.clone();
       newPosition = newPosition.copyWith(
         x: limitMaxX,
       );
     } else if (position.x < limitMinX) {
+      newPosition ??= position.clone();
       newPosition = newPosition.copyWith(
         x: limitMinX,
       );
     }
 
     if (position.y > limitMaxY) {
+      newPosition ??= position.clone();
       newPosition = newPosition.copyWith(
         y: limitMaxY,
       );
     } else if (position.y < limitMinY) {
+      newPosition ??= position.clone();
       newPosition = newPosition.copyWith(
         y: limitMinY,
       );
     }
 
-    return newPosition;
+    return newPosition ?? position;
   }
 
   @override
