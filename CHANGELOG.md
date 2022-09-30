@@ -1,5 +1,6 @@
 # [next]
 - Do correction sugested by issue [#327](https://github.com/RafaelBarbosatec/bonfire/issues/327). Thanks [Fixid-Fuzz](https://github.com/Fixid-Fuzz)!
+- Camera improvements.
 
 # [2.10.8]
 - Fix bug tendency to go to the right in `AutomaticRandomMovement`.
