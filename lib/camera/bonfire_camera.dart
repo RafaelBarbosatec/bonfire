@@ -232,12 +232,7 @@ class BonfireCamera extends Camera {
       );
       newX = position.x + (displacementX * _zoomFactor());
       if (moveOnlyMapArea) {
-        if (newX < limitMinX) {
-          newX = limitMinX;
-        }
-        if (newX > limitMaxX) {
-          newX = limitMaxX;
-        }
+        newX = _verifyXlimits(newX);
       }
       shouldMove = true;
     }
@@ -249,12 +244,7 @@ class BonfireCamera extends Camera {
       );
       newY = position.y + (displacementY * _zoomFactor());
       if (moveOnlyMapArea) {
-        if (newY < limitMinY) {
-          newY = limitMinY;
-        }
-        if (newY > limitMaxY) {
-          newY = limitMaxY;
-        }
+        newY = _verifyYlimits(newY);
       }
       shouldMove = true;
     }
@@ -415,33 +405,28 @@ class BonfireCamera extends Camera {
       return position;
     }
 
-    Vector2? newPosition;
+    position.x = _verifyXlimits(position.x);
+    position.y = _verifyYlimits(position.y);
 
-    if (position.x > limitMaxX) {
-      newPosition ??= position.clone();
-      newPosition = newPosition.copyWith(
-        x: limitMaxX,
-      );
-    } else if (position.x < limitMinX) {
-      newPosition ??= position.clone();
-      newPosition = newPosition.copyWith(
-        x: limitMinX,
-      );
+    return position;
+  }
+
+  double _verifyXlimits(double dx) {
+    if (dx > limitMaxX) {
+      return limitMaxX;
+    } else if (dx < limitMinX) {
+      return limitMinX;
     }
+    return dx;
+  }
 
-    if (position.y > limitMaxY) {
-      newPosition ??= position.clone();
-      newPosition = newPosition.copyWith(
-        y: limitMaxY,
-      );
-    } else if (position.y < limitMinY) {
-      newPosition ??= position.clone();
-      newPosition = newPosition.copyWith(
-        y: limitMinY,
-      );
+  double _verifyYlimits(double dy) {
+    if (dy > limitMaxY) {
+      return limitMaxY;
+    } else if (dy < limitMinY) {
+      return limitMinY;
     }
-
-    return newPosition ?? position;
+    return dy;
   }
 
   @override
