@@ -331,7 +331,7 @@ class ListenerGameWidgetState<T extends Game>
                   cursor: currentGame.mouseCursor,
                   child: Directionality(
                     textDirection: textDir,
-                    child: Container(
+                    child: ColoredBox(
                       color: currentGame.backgroundColor(),
                       child: LayoutBuilder(
                         builder: (_, BoxConstraints constraints) {
@@ -339,7 +339,7 @@ class ListenerGameWidgetState<T extends Game>
                             final size = constraints.biggest.toVector2();
                             if (size.isZero()) {
                               return widget.loadingBuilder?.call(context) ??
-                                  Container();
+                                  const SizedBox.expand();
                             }
                             currentGame.onGameResize(size);
                             return FutureBuilder(
@@ -362,7 +362,7 @@ class ListenerGameWidgetState<T extends Game>
                                   return internalGameWidget;
                                 }
                                 return widget.loadingBuilder?.call(context) ??
-                                    Container();
+                                    const SizedBox.expand();
                               },
                             );
                           });
