@@ -1,5 +1,6 @@
 # [next]
 - Update Flame to `1.4.0`.
+- Improvements in `MiniMap`: Adds `zoom` param. [#325](https://github.com/RafaelBarbosatec/bonfire/issues/325)
 
 # [2.10.9]
 - Do correction suggested by issue [#327](https://github.com/RafaelBarbosatec/bonfire/issues/327). Thanks [Fixid-Fuzz](https://github.com/Fixid-Fuzz)!
