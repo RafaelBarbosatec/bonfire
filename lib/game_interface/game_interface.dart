@@ -22,10 +22,9 @@ class GameInterface extends GameComponent {
   /// Used to remove component of the interface by id
   void removeById(int id) {
     if (children.isEmpty) return;
-
-    children.removeWhere((element) {
-      return element is InterfaceComponent && element.id == id;
-    });
+    removeWhere(
+      (component) => component is InterfaceComponent && component.id == id,
+    );
   }
 
   @override
