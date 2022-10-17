@@ -5,7 +5,6 @@ import 'dart:ui' as ui;
 
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/scheduler.dart';
 
 import 'package:spine_core/spine_core.dart' as core;
 
@@ -410,7 +409,6 @@ mixin SpineAnimation on Movement {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    // await animation?.onLoad(gameRef);
     idle();
   }
 
