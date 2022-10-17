@@ -48,19 +48,4 @@ class SpinePlayer extends Player
       ),
     );
   }
-  @override
-  void onGameDetach() {
-    for (var element in skeleton.slots) {
-      final attachment = element.getAttachment();
-
-      if (attachment != null && attachment is core.RegionAttachment) {
-        final regionAttachment = attachment;
-        final region = regionAttachment.region as core.TextureAtlasRegion;
-        ui.Image image = region.texture?.image;
-        image.dispose();
-      }
-    }
-    collisionConfig?.collisions.toList().clear();
-    super.onGameDetach();
-  }
 }
