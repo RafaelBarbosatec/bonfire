@@ -2,7 +2,8 @@
 [![Flutter](https://img.shields.io/badge/Made%20with-Flutter-blue.svg)](https://flutter.dev/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![pub package](https://img.shields.io/pub/v/bonfire.svg)](https://pub.dev/packages/bonfire)
-[![pub points](https://badges.bar/bonfire/pub%20points)](https://pub.dev/packages/bonfire/score)
+![GitHub stars](https://img.shields.io/github/stars/RafaelBarbosatec/bonfire)
+[![pub points](https://img.shields.io/pub/points/bonfire?logo=dart)](https://pub.dev/packages/bonfire/score)
 
 [![bonfire](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/bonfire.gif)](https://bonfire-engine.github.io/)
 
