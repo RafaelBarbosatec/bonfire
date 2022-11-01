@@ -1,3 +1,6 @@
+# [NEXT]
+- Adds param `backgroundColor` in `BonfireWidget`.
+
 # [2.10.10]
 - Update Flame to `1.4.0`.
 - Improvements in `MiniMap`: Adds `zoom` param. [#325](https://github.com/RafaelBarbosatec/bonfire/issues/325)
