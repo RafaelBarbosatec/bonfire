@@ -1,64 +1,89 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
 
 mixin RenderTransformer on PositionComponent {
+  static final Vector2 _initialScale = Vector2.all(1);
   // /// Rotation angle (in radians) of the component. The component will be
   // /// rotated around its anchor point in the clockwise direction if the
   // /// angle is positive, or counterclockwise if the angle is negative.
   @override
   double angle = 0;
 
+  Vector2 _scale = _initialScale;
+
+  @override
+  NotifyingVector2 get scale => NotifyingVector2.copy(_scale);
+
+  @override
+  set scale(Vector2 scale) => _scale = scale;
+
   /// Use to do vertical flip in de render.
-  bool isFlipVertical = false;
+  bool isFlipVertically = false;
 
   /// Use to do horizontal flip in de render.
-  bool isFlipHorizontal = false;
+  bool isFlipHorizontally = false;
 
-  bool get _needTransform => isFlipHorizontal || isFlipVertical || angle != 0;
-
-  void _applyFlipAndRotation(Canvas canvas) {
-    canvas.translate(center.x, center.y);
-    if (angle != 0) {
-      canvas.rotate(angle);
-    }
-    if (isFlipHorizontal || isFlipVertical) {
-      canvas.scale(isFlipHorizontal ? -1 : 1, isFlipVertical ? -1 : 1);
-    }
-    canvas.translate(-center.x, -center.y);
+  @override
+  void flipHorizontally() {
+    isFlipHorizontally = !isFlipHorizontally;
+    super.flipHorizontally();
   }
 
   @override
-  void renderTree(Canvas canvas) {
-    if (_needTransform) {
-      preRenderBeforeTransformation(canvas);
-      canvas.save();
-      _applyFlipAndRotation(canvas);
-      render(canvas);
-      for (var c in children) {
-        c.renderTree(canvas);
-      }
-
-      // Any debug rendering should be rendered on top of everything
-      if (debugMode) {
-        renderDebugMode(canvas);
-      }
-
-      canvas.restore();
-    } else {
-      preRenderBeforeTransformation(canvas);
-      render(canvas);
-      for (var c in children) {
-        c.renderTree(canvas);
-      }
-
-      // Any debug rendering should be rendered on top of everything
-      if (debugMode) {
-        renderDebugMode(canvas);
-      }
-    }
+  void flipVertically() {
+    isFlipVertically = !isFlipVertically;
+    super.flipVertically();
   }
 
-  void preRenderBeforeTransformation(Canvas canvas) {}
+  @override
+  void flipHorizontallyAroundCenter() {
+    flipHorizontally();
+  }
+
+  @override
+  void flipVerticallyAroundCenter() {
+    flipVertically();
+  }
+
+  bool get _needCenterTranslate =>
+      isFlipHorizontally ||
+      isFlipVertically ||
+      angle != 0 ||
+      scale != _initialScale;
+
+  @override
+  void renderTree(Canvas canvas) {
+    _applyTransform(canvas);
+  }
+
+  void _applyTransform(Canvas canvas) {
+    renderBeforeTransformation(canvas);
+    canvas.save();
+    // canvas.translate(position.x, position.y);
+
+    if (_needCenterTranslate) {
+      canvas.translate(center.x, center.y);
+      canvas.rotate(angle);
+      canvas.scale(isFlipHorizontally ? -scale.x : scale.x,
+          isFlipVertically ? -scale.y : scale.y);
+      canvas.translate(-center.x, -center.y);
+    }
+
+    render(canvas);
+    for (var c in children) {
+      c.renderTree(canvas);
+    }
+
+    // Any debug rendering should be rendered on top of everything
+    if (debugMode) {
+      renderDebugMode(canvas);
+    }
+
+    canvas.restore();
+  }
+
+  void renderBeforeTransformation(Canvas canvas) {}
 
   @override
   void renderDebugMode(Canvas canvas) {

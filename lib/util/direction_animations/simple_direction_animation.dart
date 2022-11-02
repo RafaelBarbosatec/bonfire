@@ -31,15 +31,11 @@ class SimpleDirectionAnimation {
   SpriteAnimation? _current;
   SimpleAnimationEnum? _currentType;
   AnimatedObjectOnce? _fastAnimation;
-  Vector2 position = Vector2.zero();
-  Vector2 size = Vector2.zero();
+  GameComponent? comp;
   Vector2 _fastAnimationOffset = Vector2.zero();
   final Vector2 _zero = Vector2.zero();
 
   bool runToTheEndFastAnimation = false;
-
-  bool _flipX = false;
-  bool _flipY = false;
 
   bool enabledFlipX;
   bool enabledFlipY;
@@ -107,8 +103,8 @@ class SimpleDirectionAnimation {
   /// Method used to play specific default animation
   void play(SimpleAnimationEnum animation) {
     if (_currentType == animation) return;
-    _flipX = false;
-    _flipY = false;
+    comp?.isFlipHorizontally = false;
+    comp?.isFlipVertically = false;
 
     _currentType = animation;
     if (!runToTheEndFastAnimation) {
@@ -128,7 +124,7 @@ class SimpleDirectionAnimation {
         if (idleDown != null) {
           _current = idleDown;
         } else if (enabledFlipY && idleUp != null) {
-          _flipY = true;
+          comp?.isFlipVertically = true;
           _current = idleUp;
         }
         break;
@@ -137,7 +133,7 @@ class SimpleDirectionAnimation {
           _current = idleUpLeft;
         } else if (idleUpRight != null) {
           _current = idleUpRight;
-          _flipX = true;
+          comp?.isFlipHorizontally = true;
         } else {
           _idleLeft();
         }
@@ -154,7 +150,7 @@ class SimpleDirectionAnimation {
           _current = idleDownLeft;
         } else if (idleDownRight != null) {
           _current = idleDownRight;
-          _flipX = true;
+          comp?.isFlipHorizontally = true;
         } else {
           _idleLeft();
         }
@@ -202,7 +198,7 @@ class SimpleDirectionAnimation {
               if (runDown != null) {
                 _current = runDown;
               } else if (enabledFlipY && runUp != null) {
-                _flipY = true;
+                comp?.isFlipVertically = true;
                 _current = runUp;
               }
             }
@@ -210,7 +206,7 @@ class SimpleDirectionAnimation {
             if (runDown != null) {
               _current = runDown;
             } else if (enabledFlipY && runUp != null) {
-              _flipY = true;
+              comp?.isFlipVertically = true;
               _current = runUp;
             }
           }
@@ -219,7 +215,7 @@ class SimpleDirectionAnimation {
           if (runDown != null) {
             _current = runDown;
           } else if (enabledFlipY && runUp != null) {
-            _flipY = true;
+            comp?.isFlipVertically = true;
             _current = runUp;
           }
         }
@@ -233,7 +229,7 @@ class SimpleDirectionAnimation {
           changeLastAnimation(SimpleAnimationEnum.runUpLeft);
         } else if (runUpRight != null) {
           _current = runUpRight;
-          _flipX = true;
+          comp?.isFlipHorizontally = true;
           changeLastAnimation(SimpleAnimationEnum.runUpLeft);
         } else {
           _runLeft();
@@ -253,7 +249,7 @@ class SimpleDirectionAnimation {
           changeLastAnimation(SimpleAnimationEnum.runDownLeft);
         } else if (runDownRight != null) {
           _current = runDownRight;
-          _flipX = true;
+          comp?.isFlipHorizontally = true;
           changeLastAnimation(SimpleAnimationEnum.runDownLeft);
         } else {
           _runLeft();
@@ -278,8 +274,8 @@ class SimpleDirectionAnimation {
       if (!runToTheEndFastAnimation) {
         _fastAnimation = null;
       }
-      _flipX = flipX;
-      _flipY = flipY;
+      comp?.isFlipHorizontally = flipX;
+      comp?.isFlipVertically = flipY;
       _current = others[key];
       _currentType = SimpleAnimationEnum.custom;
     }
@@ -299,8 +295,8 @@ class SimpleDirectionAnimation {
     _fastAnimationOffset = offset ?? Vector2.zero();
     runToTheEndFastAnimation = runToTheEnd;
     final anim = AnimatedObjectOnce(
-      position: position + _fastAnimationOffset,
-      size: size ?? this.size,
+      position: comp!.position + _fastAnimationOffset,
+      size: size ?? comp!.size,
       animation: animation,
       onStart: onStart,
       onFinish: () {
@@ -308,8 +304,8 @@ class SimpleDirectionAnimation {
         _fastAnimation = null;
       },
     );
-    anim.isFlipVertical = flipY;
-    anim.isFlipHorizontal = flipX;
+    anim.isFlipVertically = flipY;
+    anim.isFlipHorizontally = flipX;
     if (gameRef != null) {
       anim.gameRef = gameRef!;
     }
@@ -326,45 +322,32 @@ class SimpleDirectionAnimation {
   }
 
   void render(Canvas canvas, Paint paint) {
+    if (comp == null) {
+      return;
+    }
     if (_fastAnimation != null) {
       _fastAnimation?.render(canvas);
     } else {
-      if (_flipX || _flipY) {
-        canvas.save();
-        Vector2 center = Vector2(
-          position.x + size.x / 2,
-          position.y + size.y / 2,
-        );
-        canvas.translate(center.x, center.y);
-        canvas.scale(_flipX ? -1 : 1, _flipY ? -1 : 1);
-        canvas.translate(-center.x, -center.y);
-      }
       _current?.getSprite().render(
             canvas,
-            position: position,
-            size: size,
+            position: comp!.position,
+            size: comp!.size,
             overridePaint: paint,
           );
-
-      if (_flipX || _flipY) {
-        canvas.restore();
-      }
     }
   }
 
   void update(
     double dt,
-    Vector2 position,
-    Vector2 size,
+    GameComponent comp,
   ) {
+    this.comp = comp;
     if (_playing) {
-      _fastAnimation?.position = position;
+      _fastAnimation?.position = comp.position;
       if (_fastAnimationOffset != _zero) {
         _fastAnimation?.position += _fastAnimationOffset;
       }
       _fastAnimation?.update(dt);
-      this.position = position;
-      this.size = size;
       _current?.update(dt);
     }
   }
@@ -398,7 +381,7 @@ class SimpleDirectionAnimation {
           if (runLeft != null) {
             _current = runLeft;
           } else if (enabledFlipX) {
-            _flipX = true;
+            comp?.isFlipHorizontally = true;
             _current = runRight;
           }
         }
@@ -406,7 +389,7 @@ class SimpleDirectionAnimation {
         if (runLeft != null) {
           _current = runLeft;
         } else if (enabledFlipX) {
-          _flipX = true;
+          comp?.isFlipHorizontally = true;
           _current = runRight;
         }
       }
@@ -415,7 +398,7 @@ class SimpleDirectionAnimation {
       if (runLeft != null) {
         _current = runLeft;
       } else if (enabledFlipX) {
-        _flipX = true;
+        comp?.isFlipHorizontally = true;
         _current = runRight;
       }
     }
@@ -445,7 +428,7 @@ class SimpleDirectionAnimation {
     if (idleLeft != null) {
       _current = idleLeft;
     } else if (enabledFlipX) {
-      _flipX = true;
+      comp?.isFlipHorizontally = true;
       _current = idleRight;
     }
   }

@@ -210,8 +210,8 @@ class TiledWorldBuilder {
           aboveComponents: above,
         )
           ..angle = data.angle
-          ..isFlipHorizontal = data.isFlipHorizontal
-          ..isFlipVertical = data.isFlipVertical
+          ..isFlipHorizontally = data.isFlipHorizontal
+          ..isFlipVertically = data.isFlipVertical
           ..properties = data.properties,
       );
     } else {
@@ -228,8 +228,8 @@ class TiledWorldBuilder {
             aboveComponents: above,
           )
             ..angle = data.angle
-            ..isFlipHorizontal = data.isFlipHorizontal
-            ..isFlipVertical = data.isFlipVertical
+            ..isFlipHorizontally = data.isFlipHorizontal
+            ..isFlipVertically = data.isFlipVertical
             ..properties = data.properties,
         );
       }

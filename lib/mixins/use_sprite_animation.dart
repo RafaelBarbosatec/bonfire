@@ -53,8 +53,8 @@ mixin UseSpriteAnimation on GameComponent {
     if (isVisible && _playing) {
       _fastAnimation?.position = position + _fastAnimOffset;
       _fastAnimation?.paint = paint;
-      _fastAnimation?.isFlipHorizontal = isFlipHorizontal;
-      _fastAnimation?.isFlipVertical = isFlipVertical;
+      _fastAnimation?.isFlipHorizontally = isFlipHorizontally;
+      _fastAnimation?.isFlipVertically = isFlipVertically;
       _fastAnimation?.update(dt);
       animation?.update(dt);
     }
