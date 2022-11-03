@@ -10,7 +10,7 @@ class KnightInterface extends GameInterface {
 
   @override
   void onMount() {
-    add(BarLifeComponent());
+    add(BarLifeInterface());
     add(InterfaceComponent(
       spriteUnselected: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
