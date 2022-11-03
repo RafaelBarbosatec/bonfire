@@ -2,9 +2,9 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
 class BarLifeComponent extends GameComponent with Follower {
-  final Paint _barLiveBgPaint = Paint();
-  final Paint _barLivePaint = Paint();
-  final Paint _barLiveBorderPaint = Paint();
+  Paint _barLiveBgPaint = Paint();
+  final Paint _barLivePaint = Paint()..style = PaintingStyle.fill;
+  Paint _barLiveBorderPaint = Paint();
 
   final bool drawInBottom;
   final double margin;
@@ -31,7 +31,17 @@ class BarLifeComponent extends GameComponent with Follower {
     this.life = 100,
     this.maxLife = 100,
   }) {
+    _barLiveBorderPaint = _barLiveBorderPaint
+      ..color = borderColor
+      ..strokeWidth = borderWidth
+      ..style = PaintingStyle.stroke;
+
+    _barLiveBgPaint = _barLiveBgPaint
+      ..color = backgroundColor
+      ..style = PaintingStyle.fill;
+
     this.size = size;
+
     setupFollower(
       target: target,
       offset: offset,
@@ -65,10 +75,7 @@ class BarLifeComponent extends GameComponent with Follower {
 
       canvas.drawRRect(
         borderRect,
-        _barLiveBorderPaint
-          ..color = borderColor
-          ..strokeWidth = borderWidth
-          ..style = PaintingStyle.stroke,
+        _barLiveBorderPaint,
       );
     }
 
@@ -81,9 +88,7 @@ class BarLifeComponent extends GameComponent with Follower {
 
     canvas.drawRRect(
       bgRect,
-      _barLiveBgPaint
-        ..color = backgroundColor
-        ..style = PaintingStyle.fill,
+      _barLiveBgPaint,
     );
 
     final RRect lifeRect = borderRadius.toRRect(Rect.fromLTWH(
@@ -105,8 +110,7 @@ class BarLifeComponent extends GameComponent with Follower {
                 const Color(0xFFFFEB3B),
                 const Color(0xFF4CAF50),
               ],
-        )
-        ..style = PaintingStyle.fill,
+        ),
     );
     super.render(canvas);
   }
