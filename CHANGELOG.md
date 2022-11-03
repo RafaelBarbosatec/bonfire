@@ -1,5 +1,6 @@
 # [NEXT]
 - Adds param `backgroundColor` in `BonfireWidget`.
+- create `BarLifeComponent`.
 
 # [2.10.10]
 - Update Flame to `1.4.0`.
