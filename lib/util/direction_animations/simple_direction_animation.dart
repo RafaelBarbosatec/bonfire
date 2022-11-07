@@ -275,7 +275,7 @@ class SimpleDirectionAnimation {
         _fastAnimation = null;
       }
       comp?.isFlipHorizontally = flipX ?? (comp?.isFlipHorizontally ?? false);
-      comp?.isFlipVertically = flipY ?? (comp?.isFlipHorizontally ?? false);
+      comp?.isFlipVertically = flipY ?? (comp?.isFlipVertically ?? false);
       _current = others[key];
       _currentType = SimpleAnimationEnum.custom;
     }
