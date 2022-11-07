@@ -1,5 +1,5 @@
 # [NEXT]
-- Improvements in render transform.
+- Render transform improvements.
 - Now the `SimpleDirectionAnimation` do flip component that use it as necessary.
 - Adds param `backgroundColor` in `BonfireWidget`.
 - create `BarLifeComponent`.
