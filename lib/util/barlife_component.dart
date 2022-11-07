@@ -180,6 +180,7 @@ class BarLifeComponent extends GameComponent with Follower {
   }
 
   String _getLifeText() {
-    return barLifetextBuilder?.call(_life,_maxLife) ?? '${_life.toInt()}/${_maxLife.toInt()}';
+    return barLifetextBuilder?.call(_life, _maxLife) ??
+        '${_life.toInt()}/${_maxLife.toInt()}';
   }
 }
