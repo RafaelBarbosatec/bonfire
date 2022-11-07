@@ -269,13 +269,13 @@ class SimpleDirectionAnimation {
   }
 
   /// Method used to play specific animation registred in `others`
-  void playOther(String key, {bool flipX = false, bool flipY = false}) {
+  void playOther(String key, {bool? flipX, bool? flipY}) {
     if (others.containsKey(key) == true) {
       if (!runToTheEndFastAnimation) {
         _fastAnimation = null;
       }
-      comp?.isFlipHorizontally = flipX;
-      comp?.isFlipVertically = flipY;
+      comp?.isFlipHorizontally = flipX ?? (comp?.isFlipHorizontally ?? false);
+      comp?.isFlipVertically = flipY ?? (comp?.isFlipHorizontally ?? false);
       _current = others[key];
       _currentType = SimpleAnimationEnum.custom;
     }
