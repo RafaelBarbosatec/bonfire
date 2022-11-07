@@ -53,7 +53,7 @@ mixin UseBarLife on Attackable {
     gameRef.add(
       barLife = BarLifeComponent(
         target: this,
-        size: _barLifeSize ?? Vector2(width, 8),
+        size: _barLifeSize ?? Vector2(width, 6),
         backgroundColor: _backgroundColor,
         borderColor: _borderColor,
         borderWidth: _borderWidth,
