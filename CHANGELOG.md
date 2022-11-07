@@ -1,7 +1,10 @@
 # [NEXT]
+- Improvements in render transform.
+- Now the `SimpleDirectionAnimation` do flip component that use it as necessary.
 - Adds param `backgroundColor` in `BonfireWidget`.
 - create `BarLifeComponent`.
 - Adds `UseBarLife` mixin.
+- method `drawDefaultLifeBar` now is deprecated. Pls use `UseBarLife` mixin.
 
 # [2.10.10]
 - Update Flame to `1.4.0`.
