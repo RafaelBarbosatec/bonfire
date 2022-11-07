@@ -289,11 +289,14 @@ class SimpleDirectionAnimation {
     bool runToTheEnd = false,
     bool flipX = false,
     bool flipY = false,
+    bool useCompFlip = false,
     Vector2? size,
     Vector2? offset,
   }) async {
     _fastAnimationOffset = offset ?? Vector2.zero();
     runToTheEndFastAnimation = runToTheEnd;
+    bool lastFlipX = comp?.isFlipHorizontally ?? false;
+    bool lastFlipY = comp?.isFlipVertically ?? false;
     final anim = AnimatedObjectOnce(
       position: comp!.position + _fastAnimationOffset,
       size: size ?? comp!.size,
@@ -302,10 +305,17 @@ class SimpleDirectionAnimation {
       onFinish: () {
         onFinish?.call();
         _fastAnimation = null;
+        if (!useCompFlip) {
+          comp?.isFlipHorizontally = lastFlipX;
+          comp?.isFlipVertically = lastFlipY;
+        }
       },
     );
-    anim.isFlipVertically = flipY;
-    anim.isFlipHorizontally = flipX;
+    if (!useCompFlip) {
+      comp?.isFlipVertically = flipY;
+      comp?.isFlipHorizontally = flipX;
+    }
+
     if (gameRef != null) {
       anim.gameRef = gameRef!;
     }
