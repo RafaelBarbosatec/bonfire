@@ -86,7 +86,7 @@ class BarLifeComponent extends GameComponent with Follower {
     double xPosition = (followerTarget!.width - width) / 2 + x;
 
     if (drawPosition == BarLifePorition.bottom) {
-      yPosition = followerTarget!.bottom + margin;
+      yPosition = followerTarget!.bottom + (followerOffset?.y ?? 0.0) + margin;
     }
 
     yPosition = yPosition;

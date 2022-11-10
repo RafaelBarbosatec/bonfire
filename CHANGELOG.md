@@ -1,3 +1,6 @@
+# [2.11.1]
+- BugFix[`BarLifeComponent`]: resolve bug offset when `drawPosition` equals `BarLifePorition.bottom`.
+
 # [2.11.0]
 - Render transform improvements.
 - BREAKING CHANGE: Now the `SimpleDirectionAnimation` do flip component that use it as necessary.
