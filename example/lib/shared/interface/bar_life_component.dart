@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 import 'bar_life_controller.dart';
 
-class BarLifeComponent extends InterfaceComponent
+class BarLifeInterface extends InterfaceComponent
     with UseStateController<BarLifeController> {
   final double padding = 20;
   final double widthBar = 90;
   final double strokeWidth = 12;
 
-  BarLifeComponent()
+  BarLifeInterface()
       : super(
           id: 1,
           position: Vector2(20, 20),

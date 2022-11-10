@@ -10,10 +10,10 @@ import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/base/map_game.dart';
+import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/game_controller.dart';
-import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {
@@ -43,6 +43,8 @@ class BonfireWidget extends StatefulWidget {
 
   /// Used to configure lighting in the game
   final Color? lightingColorGame;
+
+  final Color? backgroundColor;
 
   /// The [FocusNode] to control the games focus to receive event inputs.
   /// If omitted, defaults to an internally controlled focus node.
@@ -91,6 +93,7 @@ class BonfireWidget extends StatefulWidget {
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
+    this.backgroundColor,
     this.colorFilter,
     this.components,
     this.overlayBuilderMap,
@@ -198,6 +201,7 @@ class BonfireWidgetState extends State<BonfireWidget> {
       enemies: widget.enemies,
       components: widget.components ?? [],
       background: widget.background,
+      backgroundColor: widget.backgroundColor,
       constructionMode: widget.constructionMode,
       showCollisionArea: widget.showCollisionArea,
       gameController: widget.gameController,

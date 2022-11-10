@@ -51,4 +51,7 @@ mixin Follower on GameComponent {
       followerTarget = parent as GameComponent;
     }
   }
+
+  @override
+  int get priority => followerTarget?.priority ?? super.priority;
 }

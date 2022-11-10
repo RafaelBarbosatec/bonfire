@@ -1,3 +1,12 @@
+# [2.11.0]
+- Render transform improvements.
+- BREAKING CHANGE: Now the `SimpleDirectionAnimation` do flip component that use it as necessary.
+- Adds param `useCompFlip` in `playOnce` (default `false`). If `true` the animation is flipped equal current state of component.
+- Adds param `backgroundColor` in `BonfireWidget`.
+- create `BarLifeComponent`.
+- Adds `UseBarLife` mixin.
+- method `drawDefaultLifeBar` now is deprecated. Pls use `UseBarLife` mixin.
+
 # [2.10.10]
 - Update Flame to `1.4.0`.
 - Improvements in `MiniMap`: Adds `zoom` param. [#325](https://github.com/RafaelBarbosatec/bonfire/issues/325)

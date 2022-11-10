@@ -95,6 +95,11 @@ class BonfireGame extends BaseGame
   @override
   JoystickController? get joystick => _joystickController;
 
+  @override
+  Color backgroundColor() => _bgColor ?? super.backgroundColor();
+
+  Color? _bgColor;
+
   BonfireGame({
     required this.context,
     required this.map,
@@ -114,10 +119,12 @@ class BonfireGame extends BaseGame
     this.onReady,
     this.onTapDown,
     this.onTapUp,
+    Color? backgroundColor,
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
   })  : _joystickController = joystickController,
         super(camera: BonfireCamera(cameraConfig ?? CameraConfig())) {
+    _bgColor = backgroundColor;
     camera.setGame(this);
     camera.target ??= player;
 

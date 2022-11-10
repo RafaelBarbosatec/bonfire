@@ -129,9 +129,9 @@ class Knight extends SimplePlayer
   }
 
   @override
-  void render(Canvas c) {
-    super.render(c);
-    _drawDirectionAttack(c);
+  void renderBeforeTransformation(Canvas canvas) {
+    _drawDirectionAttack(canvas);
+    super.renderBeforeTransformation(canvas);
   }
 
   @override
