@@ -105,15 +105,17 @@ mixin UseBarLife on Attackable {
   }
 
   void _animateBar() {
-    _valueGenerator?.reset();
-    _valueGenerator?.removeFromParent();
-    _valueGenerator = generateValues(
-      const Duration(milliseconds: 300),
-      begin: barLife?.life ?? 0,
-      end: super.life,
-      onChange: (value) {
-        barLife?.updateLife(value);
-      },
-    )..start();
+    if (hasGameRef) {
+      _valueGenerator?.reset();
+      _valueGenerator?.removeFromParent();
+      _valueGenerator = generateValues(
+        const Duration(milliseconds: 300),
+        begin: barLife?.life ?? 0,
+        end: super.life,
+        onChange: (value) {
+          barLife?.updateLife(value);
+        },
+      )..start();
+    }
   }
 }
