@@ -1,3 +1,6 @@
+# [2.11.2]
+- BugFix[`BarLifeComponent`]: animate in web.
+
 # [2.11.1]
 - BugFix[`BarLifeComponent`]: resolve bug offset when `drawPosition` equals `BarLifePorition.bottom`.
 

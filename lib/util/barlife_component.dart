@@ -65,7 +65,7 @@ class BarLifeComponent extends GameComponent with Follower {
 
     _textConfig = TextPaint(
       style: textStyle?.copyWith(fontSize: size.y * 0.8) ??
-          TextStyle(fontSize: size.y * 0.8),
+          TextStyle(fontSize: size.y * 0.8, color: Colors.white),
     );
 
     _textSize = _textConfig.measureText(_getLifeText());
