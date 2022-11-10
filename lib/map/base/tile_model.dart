@@ -147,8 +147,8 @@ class TileModel {
           color: color,
         );
         tile.angle = angle;
-        tile.isFlipHorizontal = isFlipHorizontal;
-        tile.isFlipVertical = isFlipVertical;
+        tile.isFlipHorizontally = isFlipHorizontal;
+        tile.isFlipVertically = isFlipVertical;
 
         tile.gameRef = gameRef;
         tile.id = id;
@@ -166,8 +166,8 @@ class TileModel {
           color: color,
         );
         tile.angle = angle;
-        tile.isFlipHorizontal = isFlipHorizontal;
-        tile.isFlipVertical = isFlipVertical;
+        tile.isFlipHorizontally = isFlipHorizontal;
+        tile.isFlipVertically = isFlipVertical;
 
         tile.gameRef = gameRef;
         tile.id = id;
@@ -189,8 +189,8 @@ class TileModel {
           properties: properties,
         );
         tile.angle = angle;
-        tile.isFlipHorizontal = isFlipHorizontal;
-        tile.isFlipVertical = isFlipVertical;
+        tile.isFlipHorizontally = isFlipHorizontal;
+        tile.isFlipVertically = isFlipVertical;
 
         tile.gameRef = gameRef;
         tile.id = id;
@@ -210,8 +210,8 @@ class TileModel {
           properties: properties,
         );
         tile.angle = angle;
-        tile.isFlipHorizontal = isFlipHorizontal;
-        tile.isFlipVertical = isFlipVertical;
+        tile.isFlipHorizontally = isFlipHorizontal;
+        tile.isFlipVertically = isFlipVertical;
 
         tile.gameRef = gameRef;
         tile.id = id;

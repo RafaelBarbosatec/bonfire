@@ -12,6 +12,7 @@ class Goblin extends SimpleEnemy
         JoystickListener,
         MovementByJoystick,
         AutomaticRandomMovement,
+        UseBarLife,
         UseStateController<GoblinController> {
   Goblin(Vector2 position)
       : super(
@@ -37,14 +38,9 @@ class Goblin extends SimpleEnemy
         ],
       ),
     );
-  }
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    this.drawDefaultLifeBar(
-      canvas,
-      borderRadius: BorderRadius.circular(5),
+    setupBarLife(
+      borderRadius: BorderRadius.circular(2),
       borderWidth: 2,
     );
   }

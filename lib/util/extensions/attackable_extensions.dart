@@ -7,6 +7,7 @@ Paint _barLiveBorderPaint = Paint();
 
 extension AttackableExtensions on Attackable {
   /// Draw simple life bar
+  @Deprecated('Please use UseBarLife mixin')
   void drawDefaultLifeBar(
     Canvas canvas, {
     Offset align = Offset.zero,

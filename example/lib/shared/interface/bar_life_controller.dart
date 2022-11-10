@@ -13,7 +13,7 @@ import 'bar_life_component.dart';
 ///
 /// Rafaelbarbosatec
 /// on 25/02/22
-class BarLifeController extends StateController<BarLifeComponent> {
+class BarLifeController extends StateController<BarLifeInterface> {
   double _maxLife = 100;
   double _maxStamina = 100;
   get maxLife => _maxLife;
@@ -41,5 +41,5 @@ class BarLifeController extends StateController<BarLifeComponent> {
   }
 
   @override
-  void update(double dt, BarLifeComponent component) {}
+  void update(double dt, BarLifeInterface component) {}
 }

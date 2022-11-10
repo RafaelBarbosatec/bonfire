@@ -16,7 +16,11 @@ mixin DirectionAnimation on Movement {
 
   @override
   void update(double dt) {
-    animation?.update(dt, position, size);
+    if (isVisible) {
+      animation?.update(dt, position, size);
+      isFlipHorizontally = animation?.isFlipHorizontally ?? false;
+      isFlipVertically = animation?.isFlipVertically ?? false;
+    }
     super.update(dt);
   }
 
