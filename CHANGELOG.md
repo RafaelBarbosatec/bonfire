@@ -1,6 +1,6 @@
 # [2.11.0]
 - Render transform improvements.
-- Now the `SimpleDirectionAnimation` do flip component that use it as necessary.
+- BREAKING CHANGE: Now the `SimpleDirectionAnimation` do flip component that use it as necessary.
 - Adds param `useCompFlip` in `playOnce` (default `false`). If `true` the animation is flipped equal current state of component.
 - Adds param `backgroundColor` in `BonfireWidget`.
 - create `BarLifeComponent`.
