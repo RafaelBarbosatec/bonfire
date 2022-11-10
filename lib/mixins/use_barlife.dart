@@ -111,7 +111,7 @@ mixin UseBarLife on Attackable {
       _valueGenerator = generateValues(
         const Duration(milliseconds: 300),
         begin: barLife?.life ?? 0,
-        end: super.life,
+        end: life,
         onChange: (value) {
           barLife?.updateLife(value);
         },
