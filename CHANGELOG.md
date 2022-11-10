@@ -1,4 +1,4 @@
-# [NEXT]
+# [2.11.0]
 - Render transform improvements.
 - Now the `SimpleDirectionAnimation` do flip component that use it as necessary.
 - Adds param `useCompFlip` in `playOnce` (default `false`). If `true` the animation is flipped equal current state of component.
