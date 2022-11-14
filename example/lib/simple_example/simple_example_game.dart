@@ -31,6 +31,19 @@ class SimpleExampleGame extends StatelessWidget {
           'goblin': (properties) => MyEnemy(properties.position),
         },
       ),
+      initialActiveOverlays: ['test'],
+      overlayBuilderMap: {
+        'test': (context, game) {
+          return Material(
+            child: Container(
+              width: 32,
+              height: 32,
+              color: Colors.red,
+              child: TextField(),
+            ),
+          );
+        }
+      },
       player: MyPlayer(Vector2(140, 140)),
     );
   }

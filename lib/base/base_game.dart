@@ -1,6 +1,6 @@
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
@@ -17,6 +17,8 @@ abstract class BaseGame extends FlameGame with PointerDetector {
   /// Get of the _highestPriority
   int get highestPriority => _highestPriority;
 
+  bool enabledGestures = true;
+
   /// to get the components that contain gestures
   Iterable<PointerDetectorHandler> get _gesturesComponents {
     return children.where((c) => _hasGesture(c)).cast<PointerDetectorHandler>();
@@ -24,7 +26,7 @@ abstract class BaseGame extends FlameGame with PointerDetector {
 
   @override
   void onPointerCancel(PointerCancelEvent event) {
-    if (!hasLayout) return;
+    if (!hasLayout || !enabledGestures) return;
     for (final c in _gesturesComponents) {
       if (c.handlerPointerCancel(event)) {
         return;
@@ -34,7 +36,7 @@ abstract class BaseGame extends FlameGame with PointerDetector {
 
   @override
   void onPointerUp(PointerUpEvent event) {
-    if (!hasLayout) return;
+    if (!hasLayout || !enabledGestures) return;
     for (final c in _gesturesComponents) {
       if (c.handlerPointerUp(event)) {
         return;
@@ -44,7 +46,7 @@ abstract class BaseGame extends FlameGame with PointerDetector {
 
   @override
   void onPointerMove(PointerMoveEvent event) {
-    if (!hasLayout) return;
+    if (!hasLayout || !enabledGestures) return;
     for (final c in _gesturesComponents) {
       if (c.handlerPointerMove(event)) {
         return;
@@ -54,7 +56,7 @@ abstract class BaseGame extends FlameGame with PointerDetector {
 
   @override
   void onPointerDown(PointerDownEvent event) {
-    if (!hasLayout) return;
+    if (!hasLayout || !enabledGestures) return;
     for (final c in _gesturesComponents) {
       if (c.handlerPointerDown(event)) {
         return;
@@ -64,7 +66,7 @@ abstract class BaseGame extends FlameGame with PointerDetector {
 
   @override
   void onPointerHover(PointerHoverEvent event) {
-    if (!hasLayout) return;
+    if (!hasLayout || !enabledGestures) return;
     for (final c in _gesturesComponents) {
       if (c.handlerPointerHover(event)) {
         return;
@@ -74,7 +76,7 @@ abstract class BaseGame extends FlameGame with PointerDetector {
 
   @override
   void onPointerSignal(PointerSignalEvent event) {
-    if (!hasLayout) return;
+    if (!hasLayout || !enabledGestures) return;
     for (final c in _gesturesComponents) {
       if (c.handlerPointerSignal(event)) {
         return;

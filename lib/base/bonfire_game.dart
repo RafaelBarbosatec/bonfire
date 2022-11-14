@@ -72,6 +72,8 @@ class BonfireGame extends BaseGame
   /// Callback to receive the onTapUp event from the game.
   final TapInGame? onTapUp;
 
+  bool enabledKeyboard = true;
+
   @override
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
@@ -275,6 +277,9 @@ class BonfireGame extends BaseGame
     RawKeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
+    if (!enabledKeyboard) {
+      return KeyEventResult.ignored;
+    }
     return _joystickController?.onKeyboard(event) ?? KeyEventResult.handled;
   }
 
@@ -396,4 +401,14 @@ class BonfireGame extends BaseGame
   @override
   // ignore: invalid_use_of_internal_member
   OverlayManager get overlayManager => overlays;
+
+  @override
+  void enableGestures(bool enable) {
+    enabledGestures = enable;
+  }
+
+  @override
+  void enableKeyboard(bool enable) {
+    enabledKeyboard = enable;
+  }
 }
