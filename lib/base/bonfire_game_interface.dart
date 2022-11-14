@@ -137,7 +137,7 @@ abstract class BonfireGameInterface {
 
   void startScene(List<SceneAction> actions);
   void stopScene();
-  
+
   void enableGestures(bool enable);
   void enableKeyboard(bool enable);
   bool get enabledGestures;

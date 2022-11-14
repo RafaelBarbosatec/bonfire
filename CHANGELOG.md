@@ -1,5 +1,6 @@
 # [NEXT]
 - Adds methods `enableGestures` and `enableKeyboard` in `gameRef`(BonfireGameInterface)
+- Adds mixin `KeyboardEventListener`.
 
 # [2.11.2]
 - BugFix[`BarLifeComponent`]: animate in web.

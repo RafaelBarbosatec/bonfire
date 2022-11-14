@@ -10,16 +10,12 @@ import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
-import 'package:flame/input.dart';
 // ignore: implementation_imports
 import 'package:flame/src/game/overlay_manager.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
-class BonfireGame extends BaseGame
-    with KeyboardEvents
-    implements BonfireGameInterface {
+class BonfireGame extends BaseGame implements BonfireGameInterface {
   static const INTERVAL_UPDATE_CACHE = 200;
   static const INTERVAL_UPDATE_ORDER = 253;
 
@@ -71,8 +67,6 @@ class BonfireGame extends BaseGame
 
   /// Callback to receive the onTapUp event from the game.
   final TapInGame? onTapUp;
-
-  bool enabledKeyboard = true;
 
   @override
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
@@ -270,17 +264,6 @@ class BonfireGame extends BaseGame
   @override
   Iterable<T> componentsByType<T>() {
     return children.whereType<T>();
-  }
-
-  @override
-  KeyEventResult onKeyEvent(
-    RawKeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
-    if (!enabledKeyboard) {
-      return KeyEventResult.ignored;
-    }
-    return _joystickController?.onKeyboard(event) ?? KeyEventResult.handled;
   }
 
   @override

@@ -144,13 +144,13 @@ class Joystick extends JoystickController {
   }
 
   @override
-  KeyEventResult onKeyboard(RawKeyEvent event) {
-    if (!keyboardConfig.enable) return KeyEventResult.ignored;
+  bool onKeyboard(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (!keyboardConfig.enable) return false;
 
     if (keyboardConfig.acceptedKeys != null) {
       final keyAccepted = keyboardConfig.acceptedKeys;
       if (!keyAccepted!.contains(event.logicalKey)) {
-        return KeyEventResult.ignored;
+        return false;
       }
     }
 
@@ -197,7 +197,7 @@ class Joystick extends JoystickController {
       }
     }
 
-    return KeyEventResult.handled;
+    return false;
   }
 
   @override
