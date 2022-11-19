@@ -173,8 +173,8 @@ class TiledWorldBuilder {
   ) {
     _tiles.add(
       TileModel(
-        x: _getX(count, tileLayer.width?.toInt() ?? 0),
-        y: _getY(count, tileLayer.width?.toInt() ?? 0),
+        x: _getX(count, tileLayer.width?.toInt() ?? 1),
+        y: _getY(count, tileLayer.width?.toInt() ?? 1),
         offsetX: offsetX,
         offsetY: offsetY,
         collisions: data.collisions,
@@ -202,8 +202,8 @@ class TiledWorldBuilder {
         GameDecorationWithCollision.withAnimation(
           animation: data.animation!.getFutureSpriteAnimation(),
           position: Vector2(
-            _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
-            _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
+            _getX(count, (tileLayer.width?.toInt()) ?? 1) * _tileWidth,
+            _getY(count, (tileLayer.width?.toInt()) ?? 1) * _tileHeight,
           ),
           size: Vector2(_tileWidth, _tileHeight),
           collisions: data.collisions,
@@ -220,8 +220,8 @@ class TiledWorldBuilder {
           GameDecorationWithCollision.withSprite(
             sprite: data.sprite!.getFutureSprite(),
             position: Vector2(
-              _getX(count, (tileLayer.width?.toInt()) ?? 0) * _tileWidth,
-              _getY(count, (tileLayer.width?.toInt()) ?? 0) * _tileHeight,
+              _getX(count, (tileLayer.width?.toInt()) ?? 1) * _tileWidth,
+              _getY(count, (tileLayer.width?.toInt()) ?? 1) * _tileHeight,
             ),
             size: Vector2(_tileWidth, _tileHeight),
             collisions: data.collisions,
@@ -241,7 +241,7 @@ class TiledWorldBuilder {
   }
 
   double _getY(int index, int width) {
-    return (index / (width == 0 ? 1 : width)).floorToDouble();
+    return (index / width).floorToDouble();
   }
 
   TiledItemTileSet? _getDataTile(int gid) {
@@ -295,7 +295,7 @@ class TiledWorldBuilder {
       // ignore: empty_catches
     } catch (e) {}
 
-    if (tileSetContain != null) {
+    if (tileSetContain != null && tileSetContain.tileWidth != 0) {
       final int widthCount =
           (tileSetContain.imageWidth!) ~/ (tileSetContain.tileWidth!);
 

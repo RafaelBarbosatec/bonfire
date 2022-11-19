@@ -1,7 +1,9 @@
+# [2.11.4]
+- Fix exception in `TiledWorldBuilder`.
+
 # [2.11.3]
 - Adds methods `enableGestures` and `enableKeyboard` in `gameRef`(BonfireGameInterface)
 - Adds mixin `KeyboardEventListener`.
-- Fix exception in `TiledWorldBuilder`.
 
 # [2.11.2]
 - BugFix[`BarLifeComponent`]: animate in web.
