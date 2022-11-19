@@ -281,8 +281,8 @@ mixin MoveToPositionAlongThePath on Movement {
 
   Offset _getCenterPositionByTile(Vector2 center) {
     return Offset(
-      (center.x / _tileSize).floor().toDouble(),
-      (center.y / _tileSize).floor().toDouble(),
+      (center.x / _tileSize).floorToDouble(),
+      (center.y / _tileSize).floorToDouble(),
     );
   }
 
