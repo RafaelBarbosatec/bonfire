@@ -6,12 +6,12 @@ import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/map/base/map_game.dart';
+import 'package:bonfire/mixins/attackable.dart';
+import 'package:bonfire/mixins/sensor.dart';
 import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/scene_builder/scene_action.dart';
 import 'package:bonfire/scene_builder/scene_manager_component.dart';
-import 'package:bonfire/mixins/attackable.dart';
-import 'package:bonfire/mixins/sensor.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 // ignore: implementation_imports
@@ -137,4 +137,9 @@ abstract class BonfireGameInterface {
 
   void startScene(List<SceneAction> actions);
   void stopScene();
+
+  void enableGestures(bool enable);
+  void enableKeyboard(bool enable);
+  bool get enabledGestures;
+  bool get enabledKeyboard;
 }

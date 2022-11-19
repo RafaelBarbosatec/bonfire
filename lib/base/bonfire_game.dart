@@ -10,16 +10,12 @@ import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
-import 'package:flame/input.dart';
 // ignore: implementation_imports
 import 'package:flame/src/game/overlay_manager.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
-class BonfireGame extends BaseGame
-    with KeyboardEvents
-    implements BonfireGameInterface {
+class BonfireGame extends BaseGame implements BonfireGameInterface {
   static const INTERVAL_UPDATE_CACHE = 200;
   static const INTERVAL_UPDATE_ORDER = 253;
 
@@ -271,14 +267,6 @@ class BonfireGame extends BaseGame
   }
 
   @override
-  KeyEventResult onKeyEvent(
-    RawKeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
-    return _joystickController?.onKeyboard(event) ?? KeyEventResult.handled;
-  }
-
-  @override
   void onGameResize(Vector2 canvasSize) {
     super.onGameResize(canvasSize);
     _updateTempList();
@@ -396,4 +384,14 @@ class BonfireGame extends BaseGame
   @override
   // ignore: invalid_use_of_internal_member
   OverlayManager get overlayManager => overlays;
+
+  @override
+  void enableGestures(bool enable) {
+    enabledGestures = enable;
+  }
+
+  @override
+  void enableKeyboard(bool enable) {
+    enabledKeyboard = enable;
+  }
 }
