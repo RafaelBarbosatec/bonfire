@@ -241,8 +241,7 @@ class TiledWorldBuilder {
   }
 
   double _getY(int index, int width) {
-    int w = width == 0 ? 1 : width;
-    return (index / w).floorToDouble();
+    return (index / (width == 0 ? 1 : width)).floorToDouble();
   }
 
   TiledItemTileSet? _getDataTile(int gid) {
