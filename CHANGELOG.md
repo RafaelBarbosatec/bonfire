@@ -1,5 +1,6 @@
 # [2.11.5]
 - Improve Keyboard Controls.
+- Adds support to tileset with individual image
 
 # [2.11.4]
 - Fix exception in `TiledWorldBuilder`.
