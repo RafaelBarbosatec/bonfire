@@ -25,7 +25,7 @@ class SimpleExampleGame extends StatelessWidget {
         directional: JoystickDirectional(),
       ),
       map: WorldMapByTiled(
-        'test/tiled/map.json',
+        'tiled/mapa2.json',
         forceTileSize: Vector2(32, 32),
         objectsBuilder: {
           'goblin': (properties) => MyEnemy(properties.position),
