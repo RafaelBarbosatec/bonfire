@@ -313,8 +313,8 @@ class TiledWorldBuilder {
         imagePath = tile.image ?? '';
         widthCount = 1;
         spriteSize = Vector2(
-          tile.imageWidth?.toDouble() ?? 0,
-          tile.imageHeight?.toDouble() ?? 0,
+          tile.imageWidth ?? 0,
+          tile.imageHeight ?? 0,
         );
         firsTgId = index;
       }
