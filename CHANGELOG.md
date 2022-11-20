@@ -1,3 +1,6 @@
+# [2.11.5]
+- Improve Keyboard Controls.
+
 # [2.11.4]
 - Fix exception in `TiledWorldBuilder`.
 

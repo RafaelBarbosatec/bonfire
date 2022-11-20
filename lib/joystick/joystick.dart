@@ -145,35 +145,33 @@ class Joystick extends JoystickController {
 
   @override
   bool onKeyboard(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    /// If the keyboard is disabled, we do not process the event
     if (!keyboardConfig.enable) return false;
 
+    /// If the key is not accepted, we do not process the event
     if (keyboardConfig.acceptedKeys != null) {
-      final keyAccepted = keyboardConfig.acceptedKeys;
-      if (!keyAccepted!.contains(event.logicalKey)) {
+      final acceptedKeys = keyboardConfig.acceptedKeys!;
+      if (!acceptedKeys.contains(event.logicalKey)) {
         return false;
       }
     }
 
-    if (_isDirectional(event)) {
-      if (event is RawKeyDownEvent && _currentKeyboardKeys.length < 2) {
-        if (!_currentKeyboardKeys.contains(event.logicalKey)) {
-          _currentKeyboardKeys.add(event.logicalKey);
-        }
-      }
+    /// No keyboard events, keep idle
+    if (keysPressed.isEmpty && !event.repeat) {
+      resetDirectionalKeys();
+      joystickChangeDirectional(
+        JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.IDLE,
+          intensity: 0.0,
+          radAngle: 0.0,
+        ),
+      );
+    } else {
+      /// Process directional events
+      if (_isDirectional(event.logicalKey) && !event.repeat) {
+        resetDirectionalKeys();
+        _currentKeyboardKeys.addAll(keysPressed.toList());
 
-      if (event is RawKeyUpEvent && _currentKeyboardKeys.isNotEmpty) {
-        _currentKeyboardKeys.remove(event.logicalKey);
-      }
-
-      if (_currentKeyboardKeys.isEmpty) {
-        joystickChangeDirectional(
-          JoystickDirectionalEvent(
-            directional: JoystickMoveDirectional.IDLE,
-            intensity: 0.0,
-            radAngle: 0.0,
-          ),
-        );
-      } else {
         if (_currentKeyboardKeys.length == 1) {
           _sendOneDirection(_currentKeyboardKeys.first);
         } else {
@@ -182,18 +180,19 @@ class Joystick extends JoystickController {
             _currentKeyboardKeys[1],
           );
         }
-      }
-    } else {
-      if (event is RawKeyDownEvent) {
-        joystickAction(JoystickActionEvent(
-          id: event.logicalKey.keyId,
-          event: ActionEvent.DOWN,
-        ));
-      } else if (event is RawKeyUpEvent) {
-        joystickAction(JoystickActionEvent(
-          id: event.logicalKey.keyId,
-          event: ActionEvent.UP,
-        ));
+      } else {
+        /// Process action events
+        if (event is RawKeyDownEvent) {
+          joystickAction(JoystickActionEvent(
+            id: event.logicalKey.keyId,
+            event: ActionEvent.DOWN,
+          ));
+        } else if (event is RawKeyUpEvent) {
+          joystickAction(JoystickActionEvent(
+            id: event.logicalKey.keyId,
+            event: ActionEvent.UP,
+          ));
+        }
       }
     }
 
@@ -216,28 +215,29 @@ class Joystick extends JoystickController {
     );
   }
 
-  bool _isDirectional(RawKeyEvent event) {
+  /// Check if the key is for directional [arrows, wasd, or both]
+  bool _isDirectional(LogicalKeyboardKey key) {
     if (keyboardConfig.keyboardDirectionalType ==
         KeyboardDirectionalType.arrows) {
-      return event.logicalKey == LogicalKeyboardKey.arrowRight ||
-          event.logicalKey == LogicalKeyboardKey.arrowUp ||
-          event.logicalKey == LogicalKeyboardKey.arrowLeft ||
-          event.logicalKey == LogicalKeyboardKey.arrowDown;
+      return key == LogicalKeyboardKey.arrowRight ||
+          key == LogicalKeyboardKey.arrowUp ||
+          key == LogicalKeyboardKey.arrowLeft ||
+          key == LogicalKeyboardKey.arrowDown;
     } else if (keyboardConfig.keyboardDirectionalType ==
         KeyboardDirectionalType.wasd) {
-      return event.logicalKey == LogicalKeyboardKey.keyA ||
-          event.logicalKey == LogicalKeyboardKey.keyW ||
-          event.logicalKey == LogicalKeyboardKey.keyD ||
-          event.logicalKey == LogicalKeyboardKey.keyS;
+      return key == LogicalKeyboardKey.keyA ||
+          key == LogicalKeyboardKey.keyW ||
+          key == LogicalKeyboardKey.keyD ||
+          key == LogicalKeyboardKey.keyS;
     } else {
-      return event.logicalKey == LogicalKeyboardKey.keyA ||
-          event.logicalKey == LogicalKeyboardKey.keyW ||
-          event.logicalKey == LogicalKeyboardKey.keyD ||
-          event.logicalKey == LogicalKeyboardKey.keyS ||
-          event.logicalKey == LogicalKeyboardKey.arrowRight ||
-          event.logicalKey == LogicalKeyboardKey.arrowUp ||
-          event.logicalKey == LogicalKeyboardKey.arrowLeft ||
-          event.logicalKey == LogicalKeyboardKey.arrowDown;
+      return key == LogicalKeyboardKey.keyA ||
+          key == LogicalKeyboardKey.keyW ||
+          key == LogicalKeyboardKey.keyD ||
+          key == LogicalKeyboardKey.keyS ||
+          key == LogicalKeyboardKey.arrowRight ||
+          key == LogicalKeyboardKey.arrowUp ||
+          key == LogicalKeyboardKey.arrowLeft ||
+          key == LogicalKeyboardKey.arrowDown;
     }
   }
 
