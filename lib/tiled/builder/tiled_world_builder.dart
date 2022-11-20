@@ -58,8 +58,6 @@ class TiledWorldBuilder {
   final Map<String, TileModelSprite> _tileModelSpriteCache = {};
   int countTileLayer = 0;
   int countImageLayer = 0;
-  double _heightProportion = 0;
-  double _widthProportion = 0;
 
   TiledWorldBuilder(
     this.path, {
@@ -84,8 +82,6 @@ class TiledWorldBuilder {
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble() ?? 0.0;
       _tileWidth = forceTileSize?.x ?? _tileWidthOrigin;
       _tileHeight = forceTileSize?.y ?? _tileHeightOrigin;
-      _heightProportion = _tileHeight / _tileHeightOrigin;
-      _widthProportion = _tileWidth / _tileWidthOrigin;
       await _load(_tiledMap!);
     } catch (e) {
       onError?.call(e);
