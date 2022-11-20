@@ -58,6 +58,8 @@ class TiledWorldBuilder {
   final Map<String, TileModelSprite> _tileModelSpriteCache = {};
   int countTileLayer = 0;
   int countImageLayer = 0;
+  double _heightProportion = 0;
+  double _widthProportion = 0;
 
   TiledWorldBuilder(
     this.path, {
@@ -82,6 +84,8 @@ class TiledWorldBuilder {
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble() ?? 0.0;
       _tileWidth = forceTileSize?.x ?? _tileWidthOrigin;
       _tileHeight = forceTileSize?.y ?? _tileHeightOrigin;
+      _heightProportion = _tileHeight / _tileHeightOrigin;
+      _widthProportion = _tileWidth / _tileWidthOrigin;
       await _load(_tiledMap!);
     } catch (e) {
       onError?.call(e);
@@ -178,8 +182,8 @@ class TiledWorldBuilder {
         offsetX: offsetX,
         offsetY: offsetY,
         collisions: data.collisions,
-        height: _tileWidth,
-        width: _tileHeight,
+        height: _tileHeight,
+        width: _tileWidth,
         animation: data.animation,
         sprite: data.sprite,
         properties: data.properties,
@@ -237,11 +241,11 @@ class TiledWorldBuilder {
   }
 
   double _getX(int index, int width) {
-    return (index % width).toDouble();
+    return (index % (width == 0 ? 1 : width)).toDouble();
   }
 
   double _getY(int index, int width) {
-    return (index / width).floorToDouble();
+    return (index / (width == 0 ? 1 : width)).floorToDouble();
   }
 
   TiledItemTileSet? _getDataTile(int gid) {
@@ -278,7 +282,10 @@ class TiledWorldBuilder {
 
     TileSetDetail? tileSetContain;
     String pathTileset = '';
+    String imagePath = '';
     int firsTgId = 0;
+    int widthCount = 1;
+    Vector2 spriteSize = Vector2.all(0);
 
     try {
       tileSetContain = _tiledMap?.tileSets?.lastWhere((tileSet) {
@@ -286,36 +293,55 @@ class TiledWorldBuilder {
       });
 
       firsTgId = tileSetContain?.firsTgId ?? 0;
+      imagePath = tileSetContain?.image ?? '';
+      widthCount =
+          (tileSetContain?.imageWidth ?? 0) ~/ (tileSetContain?.tileWidth ?? 1);
+
+      spriteSize = Vector2(
+        tileSetContain?.tileWidth ?? 0.0,
+        tileSetContain?.tileHeight ?? 0.0,
+      );
+
       if (tileSetContain?.source != null) {
         pathTileset = tileSetContain!.source!.replaceAll(
           tileSetContain.source!.split('/').last,
           '',
         );
       }
+
+      // to cases that the tileSet contain individual image.
+      if (tileSetContain?.image == null &&
+          tileSetContain?.tiles?.isNotEmpty == true) {
+        int tilePosition = index - firsTgId;
+        final tile = tileSetContain!.tiles![tilePosition];
+        imagePath = tile.image ?? '';
+        widthCount = 1;
+        spriteSize = Vector2(
+          tile.imageWidth?.toDouble() ?? 0,
+          tile.imageHeight?.toDouble() ?? 0,
+        );
+        firsTgId = index;
+      }
       // ignore: empty_catches
     } catch (e) {}
 
-    if (tileSetContain != null && tileSetContain.tileWidth != 0) {
-      final int widthCount =
-          (tileSetContain.imageWidth!) ~/ (tileSetContain.tileWidth!);
+    if (tileSetContain != null) {
+      final spritePosition = Vector2(
+        _getX((index - firsTgId), widthCount),
+        _getY((index - firsTgId), widthCount),
+      );
 
-      double y = _getY((index - firsTgId), widthCount);
-      double x = _getX((index - firsTgId), widthCount);
-
-      final pathSprite = '$_basePath$pathTileset${tileSetContain.image}';
+      final pathSprite = '$_basePath$pathTileset$imagePath';
 
       TileModelSprite sprite;
-      String tileKey = '$pathSprite/$x/$y';
+      String tileKey = '$pathSprite/${spritePosition.x}/${spritePosition.y}';
       if (_tileModelSpriteCache.containsKey(tileKey)) {
         sprite = _tileModelSpriteCache[tileKey]!;
       } else {
         sprite = _tileModelSpriteCache[tileKey] = TileModelSprite(
           path: pathSprite,
-          size: Vector2(
-            tileSetContain.tileWidth ?? 0,
-            tileSetContain.tileHeight ?? 0,
-          ),
-          position: Vector2(x, y),
+          size: spriteSize,
+          position: spritePosition,
         );
       }
 

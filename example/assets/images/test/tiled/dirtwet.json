@@ -1,0 +1,14 @@
+{ "columns":11,
+ "image":"..\/tiles\/tdfarmtiles_dirtwet.png",
+ "imageheight":80,
+ "imagewidth":176,
+ "margin":0,
+ "name":"dirtwet",
+ "spacing":0,
+ "tilecount":55,
+ "tiledversion":"1.3.5",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":1.2
+}

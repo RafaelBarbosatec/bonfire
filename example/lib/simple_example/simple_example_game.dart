@@ -25,25 +25,12 @@ class SimpleExampleGame extends StatelessWidget {
         directional: JoystickDirectional(),
       ),
       map: WorldMapByTiled(
-        'tiled/mapa2.json',
+        'test/tiled/map.json',
         forceTileSize: Vector2(32, 32),
         objectsBuilder: {
           'goblin': (properties) => MyEnemy(properties.position),
         },
       ),
-      initialActiveOverlays: ['test'],
-      overlayBuilderMap: {
-        'test': (context, game) {
-          return Material(
-            child: Container(
-              width: 32,
-              height: 32,
-              color: Colors.red,
-              child: TextField(),
-            ),
-          );
-        }
-      },
       player: MyPlayer(Vector2(140, 140)),
     );
   }
