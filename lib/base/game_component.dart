@@ -18,11 +18,6 @@ abstract class GameComponent extends PositionComponent
   /// When true this component render above all components in game.
   bool aboveComponents = false;
 
-  /// Use to set opacity in render
-  /// Range [0.0..1.0]
-  double get opacity => getOpacity();
-  set opacity(double opacoty) => setOpacity(opacity);
-
   /// Param checks if this component is visible on the screen
   bool isVisible = false;
 

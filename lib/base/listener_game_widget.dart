@@ -405,7 +405,7 @@ class _GameRenderObjectWidget extends LeafRenderObjectWidget {
 
   @override
   RenderBox createRenderObject(BuildContext context) {
-    return GameRenderBox(context, game);
+    return GameRenderBox(game, context);
   }
 
   @override

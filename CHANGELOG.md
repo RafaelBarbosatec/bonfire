@@ -1,3 +1,6 @@
+# [2.11.6]
+- Update Flame to `1.5.0`
+
 # [2.11.5]
 - Improve Keyboard Controls.
 - Adds support to tileset with individual image
