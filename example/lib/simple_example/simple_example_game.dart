@@ -32,6 +32,7 @@ class SimpleExampleGame extends StatelessWidget {
         },
       ),
       player: MyPlayer(Vector2(140, 140)),
+      cameraConfig: CameraConfig(moveOnlyMapArea: true),
     );
   }
 }
