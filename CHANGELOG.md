@@ -1,3 +1,6 @@
+# [2.11.7]
+- Fix diagonal movement speed for enemies
+
 # [2.11.6]
 - Update Flame to `1.5.0`
 
