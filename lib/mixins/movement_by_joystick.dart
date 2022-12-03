@@ -4,9 +4,6 @@ import 'package:bonfire/bonfire.dart';
 
 /// Mixin responsible for adding movements through joystick events
 mixin MovementByJoystick on Movement, JoystickListener {
-  // ignore: constant_identifier_names
-  static const REDUCTION_SPEED_DIAGONAL = 0.7;
-
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
   double _currentDirectionalAngle = 0;
 
@@ -41,8 +38,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
     super.update(dt);
     if (_isEnabled()) {
       if (dPadAngles) {
-        final diagonalSpeed = speed * REDUCTION_SPEED_DIAGONAL;
-        _moveDirectional(_currentDirectional, speed, diagonalSpeed);
+        _moveDirectional(_currentDirectional, speed);
       } else {
         if (_currentDirectional != JoystickMoveDirectional.IDLE) {
           _isIdleJoystick = false;
@@ -55,7 +51,6 @@ mixin MovementByJoystick on Movement, JoystickListener {
   void _moveDirectional(
     JoystickMoveDirectional direction,
     double speed,
-    double diagonalSpeed,
   ) {
     switch (direction) {
       case JoystickMoveDirectional.MOVE_UP:
@@ -65,7 +60,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
       case JoystickMoveDirectional.MOVE_UP_LEFT:
         _isIdleJoystick = false;
         if (enabledDiagonalMovements) {
-          moveUpLeft(diagonalSpeed, diagonalSpeed);
+          moveUpLeft(speed, speed);
         } else {
           moveLeft(speed);
         }
@@ -73,7 +68,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
       case JoystickMoveDirectional.MOVE_UP_RIGHT:
         _isIdleJoystick = false;
         if (enabledDiagonalMovements) {
-          moveUpRight(diagonalSpeed, diagonalSpeed);
+          moveUpRight(speed, speed);
         } else {
           moveRight(speed);
         }
@@ -89,7 +84,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
       case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
         _isIdleJoystick = false;
         if (enabledDiagonalMovements) {
-          moveDownRight(diagonalSpeed, diagonalSpeed);
+          moveDownRight(speed, speed);
         } else {
           moveRight(speed);
         }
@@ -97,7 +92,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
       case JoystickMoveDirectional.MOVE_DOWN_LEFT:
         _isIdleJoystick = false;
         if (enabledDiagonalMovements) {
-          moveDownLeft(diagonalSpeed, diagonalSpeed);
+          moveDownLeft(speed, speed);
         } else {
           moveLeft(speed);
         }

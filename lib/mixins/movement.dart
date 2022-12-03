@@ -146,8 +146,14 @@ mixin Movement on GameComponent {
 
   /// Move player to Up and Right
   bool moveUpRight(double speedX, double speedY) {
-    bool successRight = moveRight(speedX, notifyOnMove: false);
-    bool successUp = moveUp(speedY, notifyOnMove: false);
+    bool successRight = moveRight(
+      speedX * REDUCTION_SPEED_DIAGONAL,
+      notifyOnMove: false,
+    );
+    bool successUp = moveUp(
+      speedY * REDUCTION_SPEED_DIAGONAL,
+      notifyOnMove: false,
+    );
     if (successRight && successUp) {
       lastDirection = Direction.upRight;
     }
@@ -173,8 +179,14 @@ mixin Movement on GameComponent {
     double speedX,
     double speedY,
   ) {
-    bool successLeft = moveLeft(speedX, notifyOnMove: false);
-    bool successUp = moveUp(speedY, notifyOnMove: false);
+    bool successLeft = moveLeft(
+      speedX * REDUCTION_SPEED_DIAGONAL,
+      notifyOnMove: false,
+    );
+    bool successUp = moveUp(
+      speedY * REDUCTION_SPEED_DIAGONAL,
+      notifyOnMove: false,
+    );
     if (successLeft && successUp) {
       lastDirection = Direction.upLeft;
     }
@@ -198,8 +210,14 @@ mixin Movement on GameComponent {
 
   /// Move player to Down and Left
   bool moveDownLeft(double speedX, double speedY) {
-    bool successLeft = moveLeft(speedX, notifyOnMove: false);
-    bool successDown = moveDown(speedY, notifyOnMove: false);
+    bool successLeft = moveLeft(
+      speedX * REDUCTION_SPEED_DIAGONAL,
+      notifyOnMove: false,
+    );
+    bool successDown = moveDown(
+      speedY * REDUCTION_SPEED_DIAGONAL,
+      notifyOnMove: false,
+    );
 
     if (successLeft && successDown) {
       lastDirection = Direction.downLeft;
@@ -224,8 +242,14 @@ mixin Movement on GameComponent {
 
   /// Move player to Down and Right
   bool moveDownRight(double speedX, double speedY) {
-    bool successRight = moveRight(speedX, notifyOnMove: false);
-    bool successDown = moveDown(speedY, notifyOnMove: false);
+    bool successRight = moveRight(
+      speedX * REDUCTION_SPEED_DIAGONAL,
+      notifyOnMove: false,
+    );
+    bool successDown = moveDown(
+      speedY * REDUCTION_SPEED_DIAGONAL,
+      notifyOnMove: false,
+    );
 
     if (successRight && successDown) {
       lastDirection = Direction.downRight;
@@ -411,32 +435,28 @@ mixin Movement on GameComponent {
         return moveDown(speedY);
       case Direction.upLeft:
         if (enabledDiagonal) {
-          return moveUpLeft(speedX * REDUCTION_SPEED_DIAGONAL,
-              speedY * REDUCTION_SPEED_DIAGONAL);
+          return moveUpLeft(speedX, speedY);
         } else {
           return moveRight(speed);
         }
 
       case Direction.upRight:
         if (enabledDiagonal) {
-          return moveUpRight(speedX * REDUCTION_SPEED_DIAGONAL,
-              speedY * REDUCTION_SPEED_DIAGONAL);
+          return moveUpRight(speedX, speedY);
         } else {
           return moveRight(speed);
         }
 
       case Direction.downLeft:
         if (enabledDiagonal) {
-          return moveDownLeft(speedX * REDUCTION_SPEED_DIAGONAL,
-              speedY * REDUCTION_SPEED_DIAGONAL);
+          return moveDownLeft(speedX, speedY);
         } else {
           return moveLeft(speed);
         }
 
       case Direction.downRight:
         if (enabledDiagonal) {
-          return moveDownRight(speedX * REDUCTION_SPEED_DIAGONAL,
-              speedY * REDUCTION_SPEED_DIAGONAL);
+          return moveDownRight(speedX, speedY);
         } else {
           return moveRight(speed);
         }
