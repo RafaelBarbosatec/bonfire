@@ -8,6 +8,7 @@ class BonfireCamera extends Camera {
   bool _isMoving = false;
   bool moveOnlyMapArea = false;
   bool smoothCameraEnabled = false;
+  bool setZoomLimitToFitMap = false;
   double _spacingMap = 32.0;
   double angle = 0;
   Vector2 sizeMovementWindow = CameraConfig.sizeWidowsDefault;
@@ -25,6 +26,7 @@ class BonfireCamera extends Camera {
   BonfireCamera(
     CameraConfig config,
   ) {
+    setZoomLimitToFitMap = config.setZoomLimitToFitMap;
     sizeMovementWindow = config.sizeMovementWindow;
     smoothCameraEnabled = config.smoothCameraEnabled;
     speed = config.smoothCameraSpeed;
@@ -360,6 +362,7 @@ class BonfireCamera extends Camera {
   @override
   void update(double dt) {
     super.update(dt);
+
     _updateLimits(canvasSize);
     if (dt != 0 && gameRef.isLoaded == true) {
       _followTarget(
@@ -378,9 +381,10 @@ class BonfireCamera extends Camera {
       canvasSize.x / 2,
       canvasSize.y / 2,
     );
-    final sizeMap = gameRef.map.size;
+    final mapSize = gameRef.map.size;
 
-    if (_lastZoomSize != zoom && sizeMap != Vector2.zero()) {
+    if (_lastZoomSize != zoom && mapSize != Vector2.zero()) {
+      _updateZoomLimits(canvasSize, mapSize);
       _lastZoomSize = zoom;
       final startPosition = gameRef.map.getStartPosition();
       limitMinX = startPosition.x;
@@ -389,14 +393,20 @@ class BonfireCamera extends Camera {
       double width = canvasSize.x;
       double height = canvasSize.y;
 
-      if (sizeMap.x < canvasSize.x) {
-        width = sizeMap.x;
+      if (mapSize.x < canvasSize.x) {
+        limitMaxX = limitMinX;
+      } else {
+        limitMaxX = mapSize.x - (width * _zoomFactor());
       }
-      if (sizeMap.y < canvasSize.y) {
-        height = sizeMap.y;
+
+      if (mapSize.y < canvasSize.y) {
+        limitMaxY = limitMinY;
+      } else {
+        limitMaxY = mapSize.y - (height * _zoomFactor());
       }
-      limitMaxX = (sizeMap.x + startPosition.x - (width * _zoomFactor()));
-      limitMaxY = (sizeMap.y + startPosition.y - (height * _zoomFactor()));
+
+      // limitMaxY = limitMaxY == 0 ? limitMinY : limitMaxY;
+      // limitMaxX = limitMaxX == 0 ? limitMinX : limitMaxX;
     }
   }
 
@@ -491,5 +501,22 @@ class BonfireCamera extends Camera {
         onChange: onChange,
       ),
     );
+  }
+
+  void _updateZoomLimits(Vector2 canvasSize, Vector2 mapSize) {
+    if (setZoomLimitToFitMap) {
+      double minZoom = 1;
+      if (mapSize.x < mapSize.y) {
+        minZoom = canvasSize.x / (mapSize.x - gameRef.map.getStartPosition().x);
+      }
+
+      if (mapSize.y < mapSize.x) {
+        minZoom = canvasSize.y / (mapSize.y - gameRef.map.getStartPosition().y);
+      }
+
+      if (zoom < minZoom) {
+        zoom = minZoom;
+      }
+    }
   }
 }

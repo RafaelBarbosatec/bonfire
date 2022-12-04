@@ -23,6 +23,8 @@ class CameraConfig {
   bool smoothCameraEnabled;
   double smoothCameraSpeed;
 
+  bool setZoomLimitToFitMap;
+
   CameraConfig({
     Vector2? sizeMovementWindow,
     this.moveOnlyMapArea = false,
@@ -31,5 +33,6 @@ class CameraConfig {
     this.target,
     this.smoothCameraEnabled = false,
     this.smoothCameraSpeed = 1.0,
+    this.setZoomLimitToFitMap = false,
   }) : sizeMovementWindow = sizeMovementWindow ?? sizeWidowsDefault;
 }

@@ -11,7 +11,6 @@ import 'package:flutter/widgets.dart';
 
 /// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
 mixin MoveToPositionAlongThePath on Movement {
-  static const REDUCTION_SPEED_DIAGONAL = 0.7;
   static const REDUCTION_TO_AVOID_ROUNDING_PROBLEMS = 4;
 
   List<Offset> _currentPath = [];
@@ -120,27 +119,25 @@ mixin MoveToPositionAlongThePath on Movement {
     } else {
       bool onMove = false;
       if (diffX.abs() > 0.01 && diffY.abs() > 0.01) {
-        final displacementXDiagonal = displacementX * REDUCTION_SPEED_DIAGONAL;
-        final displacementYDiagonal = displacementY * REDUCTION_SPEED_DIAGONAL;
         if (diffX > 0 && diffY > 0) {
           onMove = moveDownRight(
-            displacementXDiagonal,
-            displacementYDiagonal,
+            displacementX,
+            displacementY,
           );
         } else if (diffX < 0 && diffY > 0) {
           onMove = moveDownLeft(
-            displacementXDiagonal,
-            displacementYDiagonal,
+            displacementX,
+            displacementY,
           );
         } else if (diffX > 0 && diffY < 0) {
           onMove = moveUpRight(
-            displacementXDiagonal,
-            displacementYDiagonal,
+            displacementX,
+            displacementY,
           );
         } else if (diffX < 0 && diffY < 0) {
           onMove = moveUpLeft(
-            displacementXDiagonal,
-            displacementYDiagonal,
+            displacementX,
+            displacementY,
           );
         }
       } else if (diffX.abs() > 0.01) {

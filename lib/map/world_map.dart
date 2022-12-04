@@ -87,8 +87,6 @@ class WorldMap extends GameMap {
 
     tileSize = tiles.first.width;
 
-    size = _calculateMapSize();
-
     _griSize = Vector2(
       (size.x.ceil() / tileSize).ceilToDouble(),
       (size.y.ceil() / tileSize).ceilToDouble(),
@@ -121,6 +119,7 @@ class WorldMap extends GameMap {
   Future<void> updateTiles(List<TileModel> map) async {
     lastSizeScreen = null;
     tiles = map;
+    size = _calculateMapSize();
     await Future.forEach<TileModel>(tiles, _loadTile);
     _createQuadTree(gameRef.size, isUpdate: true);
   }
@@ -168,6 +167,8 @@ class WorldMap extends GameMap {
 
   @override
   Future<void>? onLoad() async {
+    _calculateStartPosition();
+    size = _calculateMapSize();
     await super.onLoad();
     await Future.forEach<TileModel>(tiles, _loadTile);
     _createQuadTree(gameRef.size);
@@ -186,8 +187,8 @@ class WorldMap extends GameMap {
       id: tileModel.id,
     );
 
-    size = _calculateMapSize();
     _calculateStartPosition();
+    size = _calculateMapSize();
   }
 
   @override
@@ -198,8 +199,8 @@ class WorldMap extends GameMap {
           .removeFromParent();
       tiles.removeWhere((element) => element.id == id);
       quadTree?.removeById(id);
-      size = _calculateMapSize();
       _calculateStartPosition();
+      size = _calculateMapSize();
     } catch (e) {
       // ignore: avoid_print
       print('Not found visible tile with $id id');

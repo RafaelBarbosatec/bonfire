@@ -19,7 +19,7 @@ void main() async {
     await Flame.device.fullScreen();
   }
 
-  BonfireInjector().put((i) => KnightController());
+  BonfireInjector().putFactory((i) => KnightController());
   BonfireInjector().putFactory((i) => GoblinController());
   BonfireInjector().putFactory((i) => CritterController());
   BonfireInjector().put((i) => BarLifeController());
