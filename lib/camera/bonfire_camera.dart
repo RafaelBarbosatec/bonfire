@@ -395,8 +395,8 @@ class BonfireCamera extends Camera {
       if (sizeMap.y < canvasSize.y) {
         height = sizeMap.y;
       }
-      limitMaxX = (sizeMap.x + startPosition.x - (width * _zoomFactor()));
-      limitMaxY = (sizeMap.y + startPosition.y - (height * _zoomFactor()));
+      limitMaxX = sizeMap.x - (width * _zoomFactor());
+      limitMaxY = sizeMap.y - (height * _zoomFactor());
     }
   }
 

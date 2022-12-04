@@ -134,7 +134,10 @@ class WorldMap extends GameMap {
         if (tile.right > width) width = tile.right;
         if (tile.bottom > height) height = tile.bottom;
       }
-      return Vector2(width, height);
+      return Vector2(
+        width - _mapStartPosition.x,
+        height - _mapStartPosition.y,
+      );
     }
     return size;
   }
@@ -172,6 +175,7 @@ class WorldMap extends GameMap {
     await Future.forEach<TileModel>(tiles, _loadTile);
     _createQuadTree(gameRef.size);
     _searchTilesToRender();
+    _calculateStartPosition();
   }
 
   @override
