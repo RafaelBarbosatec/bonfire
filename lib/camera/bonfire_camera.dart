@@ -393,20 +393,8 @@ class BonfireCamera extends Camera {
       double width = canvasSize.x;
       double height = canvasSize.y;
 
-      if (mapSize.x < canvasSize.x) {
-        limitMaxX = limitMinX;
-      } else {
-        limitMaxX = mapSize.x - (width * _zoomFactor());
-      }
-
-      if (mapSize.y < canvasSize.y) {
-        limitMaxY = limitMinY;
-      } else {
-        limitMaxY = mapSize.y - (height * _zoomFactor());
-      }
-
-      // limitMaxY = limitMaxY == 0 ? limitMinY : limitMaxY;
-      // limitMaxX = limitMaxX == 0 ? limitMinX : limitMaxX;
+      limitMaxX = mapSize.x - (width * _zoomFactor());
+      limitMaxY = mapSize.y - (height * _zoomFactor());
     }
   }
 
@@ -505,7 +493,7 @@ class BonfireCamera extends Camera {
 
   void _updateZoomLimits(Vector2 canvasSize, Vector2 mapSize) {
     if (setZoomLimitToFitMap) {
-      double minZoom = 1;
+      double minZoom = zoom;
       if (mapSize.x < mapSize.y) {
         minZoom = canvasSize.x / (mapSize.x - gameRef.map.getStartPosition().x);
       }
