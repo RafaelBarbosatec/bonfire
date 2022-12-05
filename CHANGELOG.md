@@ -1,3 +1,6 @@
+# [2.11.8]
+- Fix bug in `moveOnlyMapArea`
+
 # [2.11.7]
 - Fix diagonal movement speed for enemies
 - Improvements in `moveOnlyMapArea`
