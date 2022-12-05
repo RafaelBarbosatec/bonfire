@@ -31,8 +31,9 @@ mixin MouseGesture on GameComponent {
   void onMouseTapDown(int pointer, Vector2 position, MouseButton button) {}
   void onMouseTapUp(int pointer, Vector2 position, MouseButton button) {}
 
+  // Listen when mouse clicked in your component
   void onMouseTap(MouseButton button);
-  void onMouseCancel();
+  void onMouseCancel() {}
 
   @override
   bool handlerPointerHover(PointerHoverEvent event) {
