@@ -14,7 +14,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   bool enabledSensor = true;
   List<GameComponent> _componentsInContact = [];
 
-  int _intervalCheckContact = 250;
+  int _intervalCheck = 50;
   bool _checkOnlyVisible = true;
   final String _intervalCheckContactKey = 'KEY_CHECK_SENSOR_CONTACT';
 
@@ -36,11 +36,11 @@ mixin Sensor<T extends GameComponent> on GameComponent {
 
   void setupSensorArea({
     List<CollisionArea>? areaSensor,
-    int intervalCheck = 250,
+    int intervalCheck = 50,
     bool checkOnlyVisible = true,
   }) {
     _checkOnlyVisible = checkOnlyVisible;
-    _intervalCheckContact = intervalCheck;
+    _intervalCheck = intervalCheck;
     _collisionConfig = CollisionConfig(
       collisions: areaSensor ?? _sensorArea,
     );
@@ -49,7 +49,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   @override
   void update(double dt) {
     if (enabledSensor && (_checkOnlyVisible ? isVisible : true)) {
-      if (checkInterval(_intervalCheckContactKey, _intervalCheckContact, dt)) {
+      if (checkInterval(_intervalCheckContactKey, _intervalCheck, dt)) {
         _collisionConfig ??= CollisionConfig(collisions: _sensorArea);
         _collisionConfig?.updatePosition(position);
         _verifyContact();

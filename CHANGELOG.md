@@ -1,3 +1,6 @@
+# [2.11.9]
+- Decrease `intervalCheck` in Sensor mixin
+
 # [2.11.8]
 - Fix bug in `moveOnlyMapArea`
 
