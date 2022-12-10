@@ -13,6 +13,8 @@ import 'package:flutter/services.dart';
 class GameManualMap extends StatelessWidget implements GameListener {
   final GameController _controller = GameController();
 
+  GameManualMap({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -33,19 +35,19 @@ class GameManualMap extends StatelessWidget implements GameListener {
           ),
           actions: [
             JoystickAction(
-              actionId: PlayerAttackType.AttackMelee,
+              actionId: PlayerAttackType.attackMelee,
               sprite: Sprite.load('joystick_atack.png'),
               align: JoystickActionAlign.BOTTOM_RIGHT,
               size: 80,
-              margin: EdgeInsets.only(bottom: 50, right: 50),
+              margin: const EdgeInsets.only(bottom: 50, right: 50),
             ),
             JoystickAction(
-              actionId: PlayerAttackType.AttackRange,
+              actionId: PlayerAttackType.attackRange,
               sprite: Sprite.load('joystick_atack_range.png'),
               spriteBackgroundDirection: Sprite.load('joystick_background.png'),
               size: 50,
               enableDirection: true,
-              margin: EdgeInsets.only(bottom: 50, right: 160),
+              margin: const EdgeInsets.only(bottom: 50, right: 160),
             )
           ],
         ),

@@ -9,7 +9,10 @@ import 'package:flutter/services.dart';
 
 import 'knight_controller.dart';
 
-enum PlayerAttackType { AttackMelee, AttackRange }
+enum PlayerAttackType {
+  attackMelee,
+  attackRange,
+}
 
 class Knight extends SimplePlayer
     with Lighting, ObjectCollision, UseStateController<KnightController> {
@@ -60,7 +63,7 @@ class Knight extends SimplePlayer
     if (hasGameRef && gameRef.sceneBuilderStatus.isRunning) {
       return;
     }
-    this.speed = maxSpeed * event.intensity;
+    speed = maxSpeed * event.intensity;
     super.joystickChangeDirectional(event);
   }
 
@@ -89,7 +92,7 @@ class Knight extends SimplePlayer
   }
 
   void execMeleeAttack(double attack) {
-    this.simpleAttackMelee(
+    simpleAttackMelee(
       damage: attack,
       animationRight: CommonSpriteSheet.whiteAttackEffectRight,
       size: Vector2.all(DungeonMap.tileSize),
@@ -97,7 +100,7 @@ class Knight extends SimplePlayer
   }
 
   void execRangeAttack(double angle, double damage) {
-    this.simpleAttackRangeByAngle(
+    simpleAttackRangeByAngle(
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
       animation: CommonSpriteSheet.fireBallRight,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
@@ -167,18 +170,18 @@ class Knight extends SimplePlayer
           [
             Say(
               text: [
-                TextSpan(
+                const TextSpan(
                   text: 'Look at this! It seems that',
                 ),
-                TextSpan(
+                const TextSpan(
                   text: ' I\'m not alone ',
                   style: TextStyle(color: Colors.red),
                 ),
-                TextSpan(
+                const TextSpan(
                   text: 'here...',
                 ),
               ],
-              person: Container(
+              person: SizedBox(
                 width: 100,
                 height: 100,
                 child: PlayerSpriteSheet.idleRight.asWidget(),
@@ -186,22 +189,22 @@ class Knight extends SimplePlayer
             ),
             Say(
               text: [
-                TextSpan(
+                const TextSpan(
                   text: 'Lok Tar Ogr!',
                 ),
-                TextSpan(
+                const TextSpan(
                   text: ' Lok Tar Ogr! ',
                   style: TextStyle(color: Colors.green),
                 ),
-                TextSpan(
+                const TextSpan(
                   text: ' Lok Tar Ogr! ',
                 ),
-                TextSpan(
+                const TextSpan(
                   text: 'Lok Tar Ogr!',
                   style: TextStyle(color: Colors.green),
                 ),
               ],
-              person: Container(
+              person: SizedBox(
                 width: 100,
                 height: 100,
                 child: EnemySpriteSheet.idleLeft.asWidget(),
@@ -211,7 +214,7 @@ class Knight extends SimplePlayer
           ],
           onClose: () {
             print('close talk');
-            if (!this.isDead) {
+            if (!isDead) {
               gameRef.camera.moveToPlayerAnimated(zoom: 1);
             }
           },
@@ -267,7 +270,7 @@ class Knight extends SimplePlayer
   }
 
   void execShowDamage(double damage) {
-    this.showDamage(
+    showDamage(
       damage,
       config: TextStyle(
         fontSize: width / 3,

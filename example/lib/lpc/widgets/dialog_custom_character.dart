@@ -45,8 +45,8 @@ class _DialogCustomCharacterState extends State<DialogCustomCharacter> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Body'),
-            SizedBox(
+            const Text('Body'),
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -81,11 +81,11 @@ class _DialogCustomCharacterState extends State<DialogCustomCharacter> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Text('Hair'),
-            SizedBox(
+            const Text('Hair'),
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -126,11 +126,11 @@ class _DialogCustomCharacterState extends State<DialogCustomCharacter> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Text('Equipments'),
-            SizedBox(
+            const Text('Equipments'),
+            const SizedBox(
               height: 10,
             ),
             Row(

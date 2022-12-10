@@ -38,9 +38,9 @@ class BarrelDraggable extends GameDecoration
 
   @override
   void onMount() {
-    final textsize = _textConfig.measureText(text);
-    xCenter = (width - textsize.x) / 2;
-    yCenter = (height - textsize.y) / 2;
+    final textSize = _textConfig.measureText(text);
+    xCenter = (width - textSize.x) / 2;
+    yCenter = (height - textSize.y) / 2;
     super.onMount();
   }
 
@@ -50,7 +50,7 @@ class BarrelDraggable extends GameDecoration
     _textConfig.render(
       canvas,
       text,
-      Vector2(this.x + xCenter, this.y - yCenter),
+      Vector2(x + xCenter, y - yCenter),
     );
   }
 }

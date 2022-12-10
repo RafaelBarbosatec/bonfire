@@ -18,12 +18,14 @@ class BarLifeInterface extends InterfaceComponent
         );
 
   @override
-  void render(Canvas c) {
-    super.render(c);
+  void render(Canvas canvas) {
+    super.render(canvas);
     try {
-      _drawLife(c);
-      _drawStamina(c);
-    } catch (e) {}
+      _drawLife(canvas);
+      _drawStamina(canvas);
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _drawLife(Canvas canvas) {

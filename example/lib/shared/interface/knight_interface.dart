@@ -59,7 +59,7 @@ class KnightInterface extends GameInterface {
     ));
     add(TextInterfaceComponent(
       text: 'Start scene',
-      textConfig: TextStyle(
+      textConfig: const TextStyle(
         color: Colors.white,
       ),
       id: 5,
@@ -108,8 +108,8 @@ class KnightInterface extends GameInterface {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('AwaitCallbackSceneAction test'),
-                  SizedBox(
+                  const Text('AwaitCallbackSceneAction test'),
+                  const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
@@ -117,9 +117,9 @@ class KnightInterface extends GameInterface {
                       Navigator.pop(context);
                       completed();
                     },
-                    child: Text('CONTINUE'),
+                    child: const Text('CONTINUE'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   ElevatedButton(
@@ -127,7 +127,7 @@ class KnightInterface extends GameInterface {
                       Navigator.pop(context);
                       gameRef.stopScene();
                     },
-                    child: Text('STOP SCENE'),
+                    child: const Text('STOP SCENE'),
                   ),
                 ],
               ),
@@ -147,7 +147,7 @@ class KnightInterface extends GameInterface {
           CameraSceneAction.position(Vector2(800, 800)),
           CameraSceneAction.target(gameRef.player!),
           CameraSceneAction.target(enemy, zoom: 2),
-          DelaySceneAction(Duration(seconds: 2)),
+          DelaySceneAction(const Duration(seconds: 2)),
           MoveComponentSceneAction(
             component: enemy,
             newPosition: enemy.position.clone()..add(Vector2(-40, -10)),
@@ -195,15 +195,15 @@ class KnightInterface extends GameInterface {
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: ElevatedButton(
             onPressed: () {
               print('Tapped');
             },
-            child: Text('Tap here'),
+            child: const Text('Tap here'),
           ),
         ),
-        align: Offset(0, -55),
+        align: const Offset(0, -55),
       );
     });
   }
