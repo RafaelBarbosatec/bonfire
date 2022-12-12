@@ -213,12 +213,15 @@ class Knight extends SimplePlayer
             ),
           ],
           onClose: () {
+            // ignore: avoid_print
             print('close talk');
+
             if (!isDead) {
               gameRef.camera.moveToPlayerAnimated(zoom: 1);
             }
           },
           onFinish: () {
+            // ignore: avoid_print
             print('finish talk');
           },
           logicalKeyboardKeysToNext: [

@@ -171,6 +171,7 @@ class MapGenerator {
     try {
       baseTreeInGrass = matrix[x + 3][y + 3] == tileGrass;
     } catch (e) {
+      // ignore: avoid_print
       print(e);
     }
 

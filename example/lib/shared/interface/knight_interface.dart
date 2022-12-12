@@ -198,6 +198,7 @@ class KnightInterface extends GameInterface {
           padding: const EdgeInsets.all(10),
           child: ElevatedButton(
             onPressed: () {
+              // ignore: avoid_print
               print('Tapped');
             },
             child: const Text('Tap here'),

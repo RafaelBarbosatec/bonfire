@@ -24,6 +24,7 @@ class BarLifeInterface extends InterfaceComponent
       _drawLife(canvas);
       _drawStamina(canvas);
     } catch (e) {
+      // ignore: avoid_print
       print(e);
     }
   }
