@@ -28,20 +28,20 @@ List<List<double>> generateNoise(Map<String, dynamic> data) {
     (_) => List<double>.generate(height, (_) => .0),
   );
 
-  /// Normalises the matrix creating 3 categories: Water,Earth and Grass
+  /// Normalizes the matrix creating 3 categories: Water,Earth and Grass
   for (var x = 0; x < width; x++) {
     for (var y = 0; y < height; y++) {
       double newValue = 0;
       if (original[x][y] > -0.35) {
-        newValue = MapGenerator.TILE_WATER;
+        newValue = MapGenerator.tileWater;
       }
 
       if (original[x][y] > -0.1) {
-        newValue = MapGenerator.TILE_SAND;
+        newValue = MapGenerator.tileSand;
       }
 
       if (original[x][y] > 0.1) {
-        newValue = MapGenerator.TILE_GRASS;
+        newValue = MapGenerator.tileGrass;
       }
       newMatrix[x][y] = newValue;
     }

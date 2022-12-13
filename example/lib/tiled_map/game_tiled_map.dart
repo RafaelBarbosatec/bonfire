@@ -46,21 +46,21 @@ class GameTiledMap extends StatelessWidget {
             ),
             actions: [
               JoystickAction(
-                actionId: PlayerAttackType.AttackMelee,
+                actionId: PlayerAttackType.attackMelee,
                 sprite: Sprite.load('joystick_atack.png'),
                 align: JoystickActionAlign.BOTTOM_RIGHT,
                 size: 80,
-                margin: EdgeInsets.only(bottom: 50, right: 50),
+                margin: const EdgeInsets.only(bottom: 50, right: 50),
               ),
               JoystickAction(
-                actionId: PlayerAttackType.AttackRange,
+                actionId: PlayerAttackType.attackRange,
                 sprite: Sprite.load('joystick_atack_range.png'),
                 spriteBackgroundDirection: Sprite.load(
                   'joystick_background.png',
                 ),
                 enableDirection: true,
                 size: 50,
-                margin: EdgeInsets.only(bottom: 50, right: 160),
+                margin: const EdgeInsets.only(bottom: 50, right: 160),
               )
             ],
           ),
@@ -84,10 +84,10 @@ class GameTiledMap extends StatelessWidget {
           ),
           lightingColorGame: Colors.black.withOpacity(0.7),
           overlayBuilderMap: {
-            'barLife': (context, game) => BarLifeWidget(),
+            'barLife': (context, game) => const BarLifeWidget(),
             'miniMap': (context, game) => MiniMap(
                   game: game,
-                  margin: EdgeInsets.all(20),
+                  margin: const EdgeInsets.all(20),
                   borderRadius: BorderRadius.circular(10),
                   size: Vector2.all(
                     min(constraints.maxHeight, constraints.maxWidth) / 3,
@@ -95,7 +95,7 @@ class GameTiledMap extends StatelessWidget {
                   border: Border.all(color: Colors.white.withOpacity(0.5)),
                 ),
           },
-          initialActiveOverlays: [
+          initialActiveOverlays: const [
             'barLife',
             'miniMap',
           ],

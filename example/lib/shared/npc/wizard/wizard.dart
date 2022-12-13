@@ -41,12 +41,12 @@ class Wizard extends SimpleNpc with ObjectCollision, TapGesture {
           [
             Say(
               text: [
-                TextSpan(
+                const TextSpan(
                   text:
                       ' Would you tell me, please ...  which way I ought to go from here? ',
                 )
               ],
-              person: Container(
+              person: SizedBox(
                 width: 100,
                 height: 100,
                 child: PlayerSpriteSheet.idleRight.asWidget(),
@@ -54,11 +54,11 @@ class Wizard extends SimpleNpc with ObjectCollision, TapGesture {
             ),
             Say(
               text: [
-                TextSpan(
+                const TextSpan(
                   text: 'That depends a good deal on where you want to get to.',
                 ),
               ],
-              person: Container(
+              person: SizedBox(
                 width: 100,
                 height: 100,
                 child: WizardSpriteSheet.idle.asWidget(),
@@ -67,11 +67,11 @@ class Wizard extends SimpleNpc with ObjectCollision, TapGesture {
             ),
             Say(
               text: [
-                TextSpan(
+                const TextSpan(
                   text: ' I don\'t much care where. ',
                 ),
               ],
-              person: Container(
+              person: SizedBox(
                 width: 100,
                 height: 100,
                 child: PlayerSpriteSheet.idleRight.asWidget(),
@@ -79,11 +79,11 @@ class Wizard extends SimpleNpc with ObjectCollision, TapGesture {
             ),
             Say(
               text: [
-                TextSpan(
+                const TextSpan(
                   text: 'Then it doesn\'t much matter which way you go.',
                 ),
               ],
-              person: Container(
+              person: SizedBox(
                 width: 100,
                 height: 100,
                 child: WizardSpriteSheet.idle.asWidget(),

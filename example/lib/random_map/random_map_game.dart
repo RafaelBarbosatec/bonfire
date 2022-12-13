@@ -35,14 +35,12 @@ class _RandomMapGameState extends State<RandomMapGame> {
       builder: (context, constraints) {
         DungeonMap.tileSize = max(constraints.maxHeight, constraints.maxWidth) /
             (kIsWeb ? 25 : 22);
-        if (_mapGenerator == null) {
-          _mapGenerator = MapGenerator(widget.size, DungeonMap.tileSize);
-        }
+        _mapGenerator ??= MapGenerator(widget.size, DungeonMap.tileSize);
         return FutureBuilder<MapGenerated>(
           future: _mapGenerator!.buildMap(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Material(
+              return const Material(
                 color: Colors.black,
                 child: Center(
                   child: Text(
@@ -69,7 +67,7 @@ class _RandomMapGameState extends State<RandomMapGame> {
               ),
               map: result.map,
               components: result.components,
-              delayToHideProgress: Duration(milliseconds: 500),
+              delayToHideProgress: const Duration(milliseconds: 500),
             );
           },
         );

@@ -51,7 +51,7 @@ class KnightController extends StateController<Knight> {
   void handleJoystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN) {
       if (event.id == LogicalKeyboardKey.space.keyId ||
-          event.id == PlayerAttackType.AttackMelee) {
+          event.id == PlayerAttackType.attackMelee) {
         if (stamina > 15) {
           _decrementStamina(15);
           component?.execMeleeAttack(attack);
@@ -59,7 +59,7 @@ class KnightController extends StateController<Knight> {
       }
     }
 
-    if (event.id == PlayerAttackType.AttackRange) {
+    if (event.id == PlayerAttackType.attackRange) {
       if (event.event == ActionEvent.MOVE) {
         executingRangeAttack = true;
         radAngleRangeAttack = event.radAngle;

@@ -16,7 +16,7 @@ class Chest extends GameDecoration with TapGesture {
         ) {
     _textConfig = TextPaint(
       style: TextStyle(
-        color: Color(0xFFFFFFFF),
+        color: const Color(0xFFFFFFFF),
         fontSize: width / 2,
       ),
     );
@@ -25,7 +25,7 @@ class Chest extends GameDecoration with TapGesture {
   @override
   void update(double dt) {
     if (gameRef.player != null) {
-      this.seeComponent(
+      seeComponent(
         gameRef.player!,
         observed: (player) {
           if (!_observedPlayer) {

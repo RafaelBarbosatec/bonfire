@@ -43,7 +43,7 @@ class ZombieEnemy extends RotationEnemy
   @override
   void update(double dt) {
     super.update(dt);
-    this.seeAndMoveToPlayer(
+    seeAndMoveToPlayer(
       closePlayer: (player) {
         simpleAttackMelee(
           damage: 10,

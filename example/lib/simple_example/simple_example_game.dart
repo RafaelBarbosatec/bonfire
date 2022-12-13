@@ -35,7 +35,7 @@ class SimpleExampleGame extends StatelessWidget {
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
       ),
-      backgroundColor: Color.fromARGB(255, 10, 53, 89),
+      backgroundColor: const Color.fromARGB(255, 10, 53, 89),
     );
   }
 }

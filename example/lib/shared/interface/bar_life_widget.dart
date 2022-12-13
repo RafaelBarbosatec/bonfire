@@ -30,15 +30,15 @@ class BarLifeWidget extends StatelessWidget {
                   children: [
                     Text(
                       controller.life.toString(),
-                      style: TextStyle(color: Colors.green),
+                      style: const TextStyle(color: Colors.green),
                     ),
-                    Text(
+                    const Text(
                       ' / ',
                       style: TextStyle(color: Colors.green),
                     ),
                     Text(
                       controller.maxLife.toString(),
-                      style: TextStyle(color: Colors.green),
+                      style: const TextStyle(color: Colors.green),
                     ),
                   ],
                 ),
@@ -46,15 +46,15 @@ class BarLifeWidget extends StatelessWidget {
                   children: [
                     Text(
                       controller.stamina.toString(),
-                      style: TextStyle(color: Colors.yellowAccent),
+                      style: const TextStyle(color: Colors.yellowAccent),
                     ),
-                    Text(
+                    const Text(
                       ' / ',
                       style: TextStyle(color: Colors.yellowAccent),
                     ),
                     Text(
                       controller.maxStamina.toString(),
-                      style: TextStyle(color: Colors.yellowAccent),
+                      style: const TextStyle(color: Colors.yellowAccent),
                     ),
                   ],
                 ),
