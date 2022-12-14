@@ -78,7 +78,7 @@ mixin RenderTransformer on PositionComponent {
     if (debugMode) {
       renderDebugMode(canvas);
     }
-    
+
     if (_needCenterTranslate) {
       canvas.restore();
     }
