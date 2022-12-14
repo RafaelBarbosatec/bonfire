@@ -225,6 +225,7 @@ class BonfireCamera extends Camera {
 
     double newX = position.x;
     double newY = position.y;
+    double zoomFactor = _zoomFactor();
 
     bool shouldMove = false;
     if (horizontalDistance.abs() > horizontal) {
@@ -232,7 +233,7 @@ class BonfireCamera extends Camera {
         horizontal,
         horizontalDistance,
       );
-      newX = position.x + (displacementX * _zoomFactor());
+      newX = position.x + (displacementX * zoomFactor);
       if (moveOnlyMapArea) {
         newX = _verifyXlimits(newX);
       }
@@ -244,7 +245,7 @@ class BonfireCamera extends Camera {
         vertical,
         verticalDistance,
       );
-      newY = position.y + (displacementY * _zoomFactor());
+      newY = position.y + (displacementY * zoomFactor);
       if (moveOnlyMapArea) {
         newY = _verifyYlimits(newY);
       }
@@ -256,12 +257,12 @@ class BonfireCamera extends Camera {
     }
 
     if (shouldMove) {
-      super.snapTo(
-        position.copyWith(
-          x: enableSmooth ? lerpDouble(position.x, newX, dt * speed) : newX,
-          y: enableSmooth ? lerpDouble(position.y, newY, dt * speed) : newY,
-        ),
-      );
+      if (enableSmooth) {
+        double camSpeed = dt * speed;
+        newX = lerpDouble(position.x, newX, camSpeed) ?? newX;
+        newY = lerpDouble(position.y, newY, camSpeed) ?? newY;
+      }
+      super.snapTo(Vector2(newX, newY));
     }
   }
 
