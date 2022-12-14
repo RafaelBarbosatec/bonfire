@@ -278,7 +278,9 @@ class ListenerGameWidgetState<T extends Game>
   @override
   Widget build(BuildContext context) {
     return _protectedBuild(() {
-      Widget internalGameWidget = _GameRenderObjectWidget(currentGame);
+      Widget internalGameWidget = RenderGameWidget(
+        game: currentGame,
+      );
 
       assert(
         !(currentGame is MultiTouchDragDetector && currentGame is PanDetector),
@@ -326,6 +328,7 @@ class ListenerGameWidgetState<T extends Game>
               child: Focus(
                 focusNode: _focusNode,
                 autofocus: widget.autofocus,
+                descendantsAreFocusable: true,
                 onKey: _handleKeyEvent,
                 child: MouseRegion(
                   cursor: currentGame.mouseCursor,
@@ -395,21 +398,5 @@ class ListenerGameWidgetState<T extends Game>
       // ignore: invalid_use_of_internal_member
       currentGame.overlays.buildCurrentOverlayWidgets(context),
     );
-  }
-}
-
-class _GameRenderObjectWidget extends LeafRenderObjectWidget {
-  final Game game;
-
-  const _GameRenderObjectWidget(this.game);
-
-  @override
-  RenderBox createRenderObject(BuildContext context) {
-    return GameRenderBox(game, context);
-  }
-
-  @override
-  void updateRenderObject(BuildContext context, GameRenderBox renderObject) {
-    renderObject.game = game;
   }
 }
