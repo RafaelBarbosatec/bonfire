@@ -1,8 +1,8 @@
 # [next]
 - Improvements performance in `LightingInterface`.
 - Improvements to check visible collisions.
+- Improvements in `RenderTransformer`
 - Resolve issue [#354](https://github.com/RafaelBarbosatec/bonfire/issues/354)
-- Resolve issue [#352](https://github.com/RafaelBarbosatec/bonfire/issues/352)
 
 # [2.11.8]
 - Fix bug in `moveOnlyMapArea`
