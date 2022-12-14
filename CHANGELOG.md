@@ -1,4 +1,4 @@
-# [next]
+# [2.11.9]
 - Improvements performance in `LightingInterface`.
 - Improvements to check visible collisions.
 - Improvements in `RenderTransformer`.
