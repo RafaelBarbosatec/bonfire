@@ -303,6 +303,10 @@ extension CameraExt on Camera {
     );
   }
 
+  void onGameResize(Vector2 canvasSize) {
+    (this as BonfireCamera).onGameResize(canvasSize);
+  }
+
   void moveToPlayerAnimated({
     Duration? duration,
     VoidCallback? finish,
