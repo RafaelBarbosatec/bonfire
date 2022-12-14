@@ -139,12 +139,16 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
     _interval = IntervalTick(
       INTERVAL_UPDATE_CACHE,
-      tick: _updateVisibleCollisions,
+      tick: updateVisibleCollisionsMicrotask,
     );
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
       tick: updateOrderPriorityMicrotask,
     );
+  }
+
+  void updateVisibleCollisionsMicrotask() {
+    scheduleMicrotask(_updateVisibleCollisions);
   }
 
   void updateOrderPriorityMicrotask() {
@@ -270,11 +274,12 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   void _updateVisibleCollisions() {
-    _visibleCollisions = _collisions.where((element) {
-      return element.isVisible || element is Tile;
-    });
-
+    _visibleCollisions = _collisions.where(_isVisibleCollision);
     gameController?.notifyListeners();
+  }
+
+  bool _isVisibleCollision(element) {
+    return element.isVisible || element is Tile;
   }
 
   @override
