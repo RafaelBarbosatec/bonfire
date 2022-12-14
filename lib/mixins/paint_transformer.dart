@@ -59,9 +59,9 @@ mixin RenderTransformer on PositionComponent {
 
   void _applyTransform(Canvas canvas) {
     renderBeforeTransformation(canvas);
-    canvas.save();
 
     if (_needCenterTranslate) {
+      canvas.save();
       canvas.translate(center.x, center.y);
       canvas.rotate(angle);
       canvas.scale(isFlipHorizontally ? -scale.x : scale.x,
@@ -78,8 +78,10 @@ mixin RenderTransformer on PositionComponent {
     if (debugMode) {
       renderDebugMode(canvas);
     }
-
-    canvas.restore();
+    
+    if (_needCenterTranslate) {
+      canvas.restore();
+    }
   }
 
   void renderBeforeTransformation(Canvas canvas) {}
