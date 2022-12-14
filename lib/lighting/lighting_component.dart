@@ -34,7 +34,7 @@ class LightingComponent extends GameComponent with LightingInterface {
   double _dtUpdate = 0.0;
   ColorTween? _tween;
   bool _containColor = false;
-  Size _layerSize = Size.zero;
+  Rect? bounds;
 
   @override
   PositionType get positionType => PositionType.viewport;
@@ -66,7 +66,7 @@ class LightingComponent extends GameComponent with LightingInterface {
   @override
   void renderTree(Canvas canvas) {
     if (!_containColor) return;
-    canvas.saveLayer(Offset.zero & _layerSize, paint);
+    canvas.saveLayer(bounds, paint);
     canvas.drawColor(color!, BlendMode.dstATop);
     for (var light in _visibleLight) {
       final config = light.lightingConfig;
@@ -210,7 +210,7 @@ class LightingComponent extends GameComponent with LightingInterface {
 
   @override
   void onGameResize(Vector2 size) {
-    _layerSize = size.toSize();
+    bounds = Rect.fromLTWH(left, top, size.x, size.y);
     super.onGameResize(size);
   }
 }

@@ -1,3 +1,7 @@
+# [next]
+- Improvements performance in `LightingInterface`.
+- Improvements to check visible collisions.
+
 # [2.11.8]
 - Fix bug in `moveOnlyMapArea`
 

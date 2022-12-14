@@ -16,7 +16,7 @@ import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends BaseGame implements BonfireGameInterface {
-  static const INTERVAL_UPDATE_CACHE = 200;
+  static const INTERVAL_UPDATE_CACHE = 150;
   static const INTERVAL_UPDATE_ORDER = 253;
 
   /// Context used to access all Flutter power in your game.
@@ -72,7 +72,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
   final List<GameComponent> _visibleComponents = List.empty(growable: true);
-  List<ObjectCollision> _visibleCollisions = List.empty();
+  Iterable<ObjectCollision> _visibleCollisions = List.empty();
   final List<ObjectCollision> _collisions = List.empty(growable: true);
   final List<GameComponent> _addLater = List.empty(growable: true);
   late IntervalTick _interval;
@@ -139,16 +139,12 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
     _interval = IntervalTick(
       INTERVAL_UPDATE_CACHE,
-      tick: updateTemListMicrotask,
+      tick: _updateVisibleCollisions,
     );
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
       tick: updateOrderPriorityMicrotask,
     );
-  }
-
-  void updateTemListMicrotask() {
-    scheduleMicrotask(_updateTempList);
   }
 
   void updateOrderPriorityMicrotask() {
@@ -269,13 +265,13 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   void onGameResize(Vector2 canvasSize) {
     super.onGameResize(canvasSize);
-    _updateTempList();
+    _updateVisibleCollisions();
   }
 
-  void _updateTempList() {
+  void _updateVisibleCollisions() {
     _visibleCollisions = _collisions.where((element) {
       return element.isVisible || element is Tile;
-    }).toList();
+    });
 
     gameController?.notifyListeners();
   }

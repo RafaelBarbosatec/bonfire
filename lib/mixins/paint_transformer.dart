@@ -60,7 +60,6 @@ mixin RenderTransformer on PositionComponent {
   void _applyTransform(Canvas canvas) {
     renderBeforeTransformation(canvas);
     canvas.save();
-    // canvas.translate(position.x, position.y);
 
     if (_needCenterTranslate) {
       canvas.translate(center.x, center.y);
