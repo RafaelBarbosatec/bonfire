@@ -46,11 +46,16 @@ mixin RenderTransformer on PositionComponent {
     flipVertically();
   }
 
-  bool get _needCenterTranslate =>
-      isFlipHorizontally ||
-      isFlipVertically ||
-      angle != 0 ||
-      scale != _initialScale;
+  bool _needCenterTranslate = false;
+
+  @override
+  void update(double dt) {
+    _needCenterTranslate = isFlipHorizontally ||
+        isFlipVertically ||
+        angle != 0 ||
+        scale != _initialScale;
+    super.update(dt);
+  }
 
   @override
   void renderTree(Canvas canvas) {
@@ -59,10 +64,9 @@ mixin RenderTransformer on PositionComponent {
 
   void _applyTransform(Canvas canvas) {
     renderBeforeTransformation(canvas);
-    canvas.save();
-    // canvas.translate(position.x, position.y);
 
     if (_needCenterTranslate) {
+      canvas.save();
       canvas.translate(center.x, center.y);
       canvas.rotate(angle);
       canvas.scale(isFlipHorizontally ? -scale.x : scale.x,
@@ -80,7 +84,9 @@ mixin RenderTransformer on PositionComponent {
       renderDebugMode(canvas);
     }
 
-    canvas.restore();
+    if (_needCenterTranslate) {
+      canvas.restore();
+    }
   }
 
   void renderBeforeTransformation(Canvas canvas) {}

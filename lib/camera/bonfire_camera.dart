@@ -225,6 +225,7 @@ class BonfireCamera extends Camera {
 
     double newX = position.x;
     double newY = position.y;
+    double zoomFactor = _zoomFactor();
 
     bool shouldMove = false;
     if (horizontalDistance.abs() > horizontal) {
@@ -232,10 +233,8 @@ class BonfireCamera extends Camera {
         horizontal,
         horizontalDistance,
       );
-      newX = position.x + (displacementX * _zoomFactor());
-      if (moveOnlyMapArea) {
-        newX = _verifyXlimits(newX);
-      }
+      newX = position.x + (displacementX * zoomFactor);
+
       shouldMove = true;
     }
 
@@ -244,10 +243,8 @@ class BonfireCamera extends Camera {
         vertical,
         verticalDistance,
       );
-      newY = position.y + (displacementY * _zoomFactor());
-      if (moveOnlyMapArea) {
-        newY = _verifyYlimits(newY);
-      }
+      newY = position.y + (displacementY * zoomFactor);
+
       shouldMove = true;
     }
 
@@ -256,12 +253,12 @@ class BonfireCamera extends Camera {
     }
 
     if (shouldMove) {
-      super.snapTo(
-        position.copyWith(
-          x: enableSmooth ? lerpDouble(position.x, newX, dt * speed) : newX,
-          y: enableSmooth ? lerpDouble(position.y, newY, dt * speed) : newY,
-        ),
-      );
+      if (enableSmooth) {
+        double camSpeed = dt * speed;
+        newX = lerpDouble(position.x, newX, camSpeed) ?? newX;
+        newY = lerpDouble(position.y, newY, camSpeed) ?? newY;
+      }
+      snapTo(Vector2(newX, newY));
     }
   }
 
@@ -376,11 +373,14 @@ class BonfireCamera extends Camera {
     _spacingMap = space;
   }
 
-  void _updateLimits(Vector2 canvasSize) {
+  void onGameResize(Vector2 canvasSize) {
     screenCenter = Offset(
       canvasSize.x / 2,
       canvasSize.y / 2,
     );
+  }
+
+  void _updateLimits(Vector2 canvasSize) {
     final mapSize = gameRef.map.size;
 
     if (_lastZoomSize != zoom && mapSize != Vector2.zero()) {
@@ -392,9 +392,10 @@ class BonfireCamera extends Camera {
 
       double width = canvasSize.x;
       double height = canvasSize.y;
+      double zoomFactor = _zoomFactor();
 
-      limitMaxX = mapSize.x - (width * _zoomFactor());
-      limitMaxY = mapSize.y - (height * _zoomFactor());
+      limitMaxX = mapSize.x - (width * zoomFactor);
+      limitMaxY = mapSize.y - (height * zoomFactor);
     }
   }
 

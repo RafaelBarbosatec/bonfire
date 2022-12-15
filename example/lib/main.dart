@@ -25,13 +25,15 @@ void main() async {
   BonfireInjector().put((i) => BarLifeController());
 
   runApp(
-    MaterialApp(
+    const MaterialApp(
       home: Menu(),
     ),
   );
 }
 
 class Menu extends StatelessWidget {
+  const Menu({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +44,7 @@ class Menu extends StatelessWidget {
           children: <Widget>[
             Center(
               child: RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   text: 'Bonfire',
                   style: TextStyle(fontSize: 30, color: Colors.white),
                   children: [
@@ -54,7 +56,7 @@ class Menu extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             SingleChildScrollView(
@@ -63,15 +65,15 @@ class Menu extends StatelessWidget {
                 spacing: 20,
                 children: [
                   _buildButton(context, 'Simple example', () {
-                    _navTo(context, SimpleExampleGame());
+                    _navTo(context, const SimpleExampleGame());
                   }),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   _buildButton(context, 'Manual Map', () {
                     _navTo(context, GameManualMap());
                   }),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   _buildButton(context, 'Random Map', () {
@@ -82,24 +84,24 @@ class Menu extends StatelessWidget {
                       ),
                     );
                   }),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   _buildButton(context, 'Tiled Map', () {
-                    _navTo(context, GameTiledMap());
+                    _navTo(context, const GameTiledMap());
                   }),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   _buildButton(context, 'Top down game', () {
-                    _navTo(context, TopDownGame());
+                    _navTo(context, const TopDownGame());
                   }),
                   if (!kIsWeb) ...[
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     _buildButton(context, 'Dynamic spriteSheet', () {
-                      _navTo(context, LPCGame());
+                      _navTo(context, const LPCGame());
                     }),
                   ]
                 ],
@@ -108,7 +110,7 @@ class Menu extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: const SizedBox(
         height: 40,
         child: Center(
           child: Text(
@@ -131,8 +133,8 @@ class Menu extends StatelessWidget {
             ),
           ),
         ),
-        child: Text(label),
         onPressed: onTap,
+        child: Text(label),
       ),
     );
   }

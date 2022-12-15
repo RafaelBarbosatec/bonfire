@@ -14,15 +14,15 @@ class PotionLife extends GameDecoration with Sensor<Player> {
         );
 
   @override
-  void onContact(GameComponent collision) {
-    if (collision is Player) {
+  void onContact(GameComponent component) {
+    if (component is Player) {
       generateValues(
-        Duration(seconds: 1),
+        const Duration(seconds: 1),
         onChange: (value) {
           if (_lifeDistributed < life) {
             double newLife = life * value - _lifeDistributed;
             _lifeDistributed += newLife;
-            collision.addLife(newLife.roundToDouble());
+            component.addLife(newLife.roundToDouble());
           }
         },
       );

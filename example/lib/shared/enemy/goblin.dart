@@ -60,7 +60,7 @@ class Goblin extends SimpleEnemy
 
   void execAttackRange(double damage) {
     if (gameRef.player != null && gameRef.player?.isDead == true) return;
-    this.simpleAttackRange(
+    simpleAttackRange(
       animationRight: CommonSpriteSheet.fireBallRight,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       id: 35,
@@ -85,7 +85,7 @@ class Goblin extends SimpleEnemy
 
   void execAttack(double damage) {
     if (gameRef.player != null && gameRef.player?.isDead == true) return;
-    this.simpleAttackMelee(
+    simpleAttackMelee(
       size: Vector2.all(width),
       damage: damage / 2,
       interval: 400,
@@ -96,7 +96,7 @@ class Goblin extends SimpleEnemy
 
   @override
   void removeLife(double life) {
-    this.showDamage(
+    showDamage(
       life,
       config: TextStyle(
         fontSize: width / 3,

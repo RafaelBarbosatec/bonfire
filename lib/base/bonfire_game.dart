@@ -72,7 +72,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
   final List<GameComponent> _visibleComponents = List.empty(growable: true);
-  List<ObjectCollision> _visibleCollisions = List.empty();
+  Iterable<ObjectCollision> _visibleCollisions = List.empty();
   final List<ObjectCollision> _collisions = List.empty(growable: true);
   final List<GameComponent> _addLater = List.empty(growable: true);
   late IntervalTick _interval;
@@ -139,7 +139,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
     _interval = IntervalTick(
       INTERVAL_UPDATE_CACHE,
-      tick: updateTemListMicrotask,
+      tick: updateVisibleCollisionsMicrotask,
     );
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
@@ -147,8 +147,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
   }
 
-  void updateTemListMicrotask() {
-    scheduleMicrotask(_updateTempList);
+  void updateVisibleCollisionsMicrotask() {
+    scheduleMicrotask(_updateVisibleCollisions);
   }
 
   void updateOrderPriorityMicrotask() {
@@ -269,15 +269,17 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   void onGameResize(Vector2 canvasSize) {
     super.onGameResize(canvasSize);
-    _updateTempList();
+    _updateVisibleCollisions();
+    camera.onGameResize(canvasSize);
   }
 
-  void _updateTempList() {
-    _visibleCollisions = _collisions.where((element) {
-      return element.isVisible || element is Tile;
-    }).toList();
-
+  void _updateVisibleCollisions() {
+    _visibleCollisions = _collisions.where(_isVisibleCollision);
     gameController?.notifyListeners();
+  }
+
+  bool _isVisibleCollision(element) {
+    return element.isVisible || element is Tile;
   }
 
   @override

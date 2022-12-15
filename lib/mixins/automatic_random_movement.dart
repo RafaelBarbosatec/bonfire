@@ -10,6 +10,13 @@ mixin AutomaticRandomMovement on Movement {
 
   late Random _random;
 
+  bool get isVisibleReduction {
+    if (hasGameRef) {
+      return gameRef.camera.cameraRect.overlapComponent(this);
+    }
+    return false;
+  }
+
   /// Method that bo used in [update] method.
   void runRandomMovement(
     double dt, {
@@ -22,7 +29,7 @@ mixin AutomaticRandomMovement on Movement {
 
     /// milliseconds
   }) {
-    if (runOnlyVisibleInCamera && !isVisible) {
+    if (runOnlyVisibleInCamera && !isVisibleReduction) {
       return;
     }
 

@@ -1,3 +1,10 @@
+# [2.11.9]
+- Improvements performance in `LightingInterface`.
+- Improvements to check visible collisions.
+- Improvements in `RenderTransformer`.
+- Update `ListenerGameWidget`.
+- Resolve issue [#354](https://github.com/RafaelBarbosatec/bonfire/issues/354)
+
 # [2.11.8]
 - Fix bug in `moveOnlyMapArea`
 

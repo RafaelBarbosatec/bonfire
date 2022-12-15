@@ -32,10 +32,8 @@ class SimpleExampleGame extends StatelessWidget {
         },
       ),
       player: MyPlayer(Vector2(140, 140)),
-      cameraConfig: CameraConfig(
-        moveOnlyMapArea: true,
-      ),
-      backgroundColor: Color.fromARGB(255, 10, 53, 89),
+      cameraConfig: CameraConfig(moveOnlyMapArea: true, zoom: 1.5),
+      backgroundColor: const Color.fromARGB(255, 10, 53, 89),
     );
   }
 }
