@@ -50,12 +50,7 @@ class WorldMap extends GameMap {
 
     _visibleSet = visibleTileModel.map((e) => e.id).toSet();
 
-    for (var element in children) {
-      Tile tile = element as Tile;
-      if (!_visibleSet.contains(tile.id)) {
-        tile.removeFromParent();
-      }
-    }
+    removeWhere((tile) => !_visibleSet.contains((tile as Tile).id));
 
     addAll(_buildTiles(tilesToAdd));
 
