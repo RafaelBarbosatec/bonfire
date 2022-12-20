@@ -1,15 +1,17 @@
 import 'dart:ui';
 
 class IntervalTick {
-  final int interval; // in Milliseconds
+  late int interval; // in Milliseconds
   final VoidCallback? tick;
-  final double _timeMax = 1000.0;
   double _currentTime = 0;
-  IntervalTick(this.interval, {this.tick});
+  late double _intervalSeconds;
+  IntervalTick(this.interval, {this.tick}) {
+    _intervalSeconds = interval / 1000;
+  }
 
   bool update(double dt) {
-    _currentTime += dt * _timeMax;
-    if (_currentTime >= interval) {
+    _currentTime += dt;
+    if (_currentTime >= _intervalSeconds) {
       tick?.call();
       _currentTime = 0;
       return true;

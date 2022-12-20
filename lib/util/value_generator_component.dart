@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 /// Component used to generate numbers using the gameLoop.
 class ValueGeneratorComponent extends Component {
   bool _isFinished = false;
-  final int _maxInMilliSeconds = 1000;
 
   final Duration duration;
   final double begin;
@@ -32,15 +31,14 @@ class ValueGeneratorComponent extends Component {
   }
 
   @override
-  void update(double dt) {
-    super.update(dt);
+  void updateTree(double dt) {
     if (!_isRunning) return;
 
-    _currentValue += dt * _maxInMilliSeconds;
-    if (_currentValue >= duration.inMilliseconds) {
+    _currentValue += dt;
+    if (_currentValue >= duration.inSeconds) {
       finish();
     } else {
-      double value = curve.transform(_currentValue / duration.inMilliseconds);
+      double value = curve.transform(_currentValue / duration.inSeconds);
       double realValue = begin + (_displacement * value);
       onChange?.call(realValue);
     }
