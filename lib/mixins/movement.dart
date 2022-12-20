@@ -1,11 +1,6 @@
 import 'dart:ui';
 
-import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/collision/object_collision.dart';
-import 'package:bonfire/util/bonfire_util.dart';
-import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:flame/components.dart';
+import 'package:bonfire/bonfire.dart';
 
 /// Mixin responsible for adding movements
 mixin Movement on GameComponent {
@@ -51,6 +46,7 @@ mixin Movement on GameComponent {
         BonfireUtil.getAngleFromDirection(lastDirection),
       );
     }
+    _requestUpdatePriority();
     return true;
   }
 
@@ -80,6 +76,7 @@ mixin Movement on GameComponent {
         BonfireUtil.getAngleFromDirection(lastDirection),
       );
     }
+    _requestUpdatePriority();
     return true;
   }
 
@@ -468,6 +465,12 @@ mixin Movement on GameComponent {
 
     if (lastDirection == Direction.right || lastDirection == Direction.left) {
       lastDirectionHorizontal = lastDirection;
+    }
+  }
+
+  void _requestUpdatePriority() {
+    if (hasGameRef) {
+      (gameRef as BonfireGame).requestUpdatePriority();
     }
   }
 }

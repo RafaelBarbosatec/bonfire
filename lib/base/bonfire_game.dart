@@ -17,7 +17,7 @@ import 'package:flutter/widgets.dart';
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends BaseGame implements BonfireGameInterface {
   static const INTERVAL_UPDATE_CACHE = 200;
-  static const INTERVAL_UPDATE_ORDER = 253;
+  static const INTERVAL_UPDATE_ORDER = 403;
 
   /// Context used to access all Flutter power in your game.
   @override
@@ -96,6 +96,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   Color? _bgColor;
 
+  bool _shouldUpdatePriority = false;
+
   BonfireGame({
     required this.context,
     required this.map,
@@ -152,7 +154,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   void updateOrderPriorityMicrotask() {
-    scheduleMicrotask(updateOrderPriority);
+    if (_shouldUpdatePriority) {
+      _shouldUpdatePriority = false;
+      scheduleMicrotask(updateOrderPriority);
+    }
   }
 
   @override
@@ -395,5 +400,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   void enableKeyboard(bool enable) {
     enabledKeyboard = enable;
+  }
+
+  void requestUpdatePriority() {
+    _shouldUpdatePriority = true;
   }
 }
