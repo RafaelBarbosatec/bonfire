@@ -1,4 +1,4 @@
-import 'package:flame/components.dart';
+import 'package:bonfire/bonfire.dart';
 
 class TiledObjectProperties {
   final Vector2 position;
@@ -8,6 +8,7 @@ class TiledObjectProperties {
   final String? name;
   final int? id;
   final Map<String, dynamic> others;
+  final CollisionArea area;
 
   TiledObjectProperties(
     this.position,
@@ -17,6 +18,7 @@ class TiledObjectProperties {
     this.others,
     this.name,
     this.id,
+    this.area,
   );
 
   @override

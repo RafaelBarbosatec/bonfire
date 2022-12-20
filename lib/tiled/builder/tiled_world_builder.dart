@@ -387,6 +387,7 @@ class TiledWorldBuilder {
       double y = _getDoubleByProportion(element.y) + offsetY;
       double width = _getDoubleByProportion(element.width);
       double height = _getDoubleByProportion(element.height);
+      final collision = _getCollisionObject(x, y, width, height, element);
 
       if (element.text != null) {
         double fontSize = element.text!.pixelSize.toDouble();
@@ -414,8 +415,6 @@ class TiledWorldBuilder {
           ),
         );
       } else if (element.typeOrClass?.toLowerCase() == 'collision') {
-        final collision = _getCollisionObject(x, y, width, height, element);
-
         _components.add(
           CollisionGameComponent(
             name: element.name ?? '',
@@ -437,6 +436,7 @@ class TiledWorldBuilder {
             _extractOtherProperties(element.properties),
             element.name,
             element.id,
+            collision,
           ),
         );
 
