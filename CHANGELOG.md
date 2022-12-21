@@ -1,3 +1,9 @@
+# [2.11.10]
+- Consider Tiled layer opacity. Fix [#356](https://github.com/RafaelBarbosatec/bonfire/issues/356)
+- Little improvements performance.
+- Adds param `area` in `TiledObjectProperties`.
+- Fix multi instance of `AnimatedObjectOnce` in `SimpleDirectionAnimation`. [#359](https://github.com/RafaelBarbosatec/bonfire/issues/359)
+
 # [2.11.9]
 - Improvements performance in `LightingInterface`.
 - Improvements to check visible collisions.

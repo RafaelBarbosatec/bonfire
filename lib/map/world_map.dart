@@ -50,12 +50,7 @@ class WorldMap extends GameMap {
 
     _visibleSet = visibleTileModel.map((e) => e.id).toSet();
 
-    for (var element in children) {
-      Tile tile = element as Tile;
-      if (!_visibleSet.contains(tile.id)) {
-        tile.removeFromParent();
-      }
-    }
+    removeWhere((tile) => !_visibleSet.contains((tile as Tile).id));
 
     addAll(_buildTiles(tilesToAdd));
 
@@ -161,7 +156,7 @@ class WorldMap extends GameMap {
 
   List<Tile> _buildTiles(Iterable<TileModel> visibleTiles) {
     return visibleTiles.map((e) {
-      return e.getTile(gameRef);
+      return e.getTile();
     }).toList();
   }
 
@@ -179,8 +174,7 @@ class WorldMap extends GameMap {
   Future addTile(TileModel tileModel) async {
     await _loadTile(tileModel);
     tiles.add(tileModel);
-    final tile = tileModel.getTile(gameRef);
-    add(tile);
+    add(tileModel.getTile());
     quadTree?.insert(
       tileModel,
       Point(tileModel.x, tileModel.y),

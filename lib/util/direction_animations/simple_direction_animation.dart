@@ -301,13 +301,15 @@ class SimpleDirectionAnimation {
     runToTheEndFastAnimation = runToTheEnd;
     bool lastFlipX = isFlipHorizontally;
     bool lastFlipY = isFlipVertically;
-    final anim = AnimatedObjectOnce(
+    _fastAnimation?.onRemove();
+    _fastAnimation = AnimatedObjectOnce(
       position: position + _fastAnimationOffset,
       size: size ?? this.size,
       animation: animation,
       onStart: onStart,
       onFinish: () {
         onFinish?.call();
+        _fastAnimation?.onRemove();
         _fastAnimation = null;
         if (!useCompFlip) {
           isFlipHorizontally = lastFlipX;
@@ -321,10 +323,9 @@ class SimpleDirectionAnimation {
     }
 
     if (gameRef != null) {
-      anim.gameRef = gameRef!;
+      _fastAnimation?.gameRef = gameRef!;
     }
-    await anim.onLoad();
-    _fastAnimation = anim;
+    await _fastAnimation?.onLoad();
   }
 
   /// Method used to register new animation in others

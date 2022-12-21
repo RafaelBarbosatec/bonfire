@@ -139,6 +139,7 @@ class TiledWorldBuilder {
     int count = 0;
     double offsetX = _getDoubleByProportion(tileLayer.offsetX);
     double offsetY = _getDoubleByProportion(tileLayer.offsetY);
+    double opacity = tileLayer.opacity ?? 1.0;
     bool layerIsAbove = tileLayer.properties
             ?.where((element) =>
                 element.name == 'type' && element.value == ABOVE_TYPE)
@@ -151,12 +152,17 @@ class TiledWorldBuilder {
           bool tileIsAbove = ((data.type?.contains(ABOVE_TYPE) ?? false) ||
               (data.tileClass?.contains(ABOVE_TYPE) ?? false) ||
               layerIsAbove);
-          if (tileIsAbove) {
-            _addGameDecorationAbove(data, count, tileLayer, above: true);
-          } else if (data.type?.contains(DYNAMIC_ABOVE_TYPE) ?? false) {
-            _addGameDecorationAbove(data, count, tileLayer);
+          bool isDynamic = data.type?.contains(DYNAMIC_ABOVE_TYPE) ?? false;
+          if (tileIsAbove || isDynamic) {
+            _addGameDecorationAbove(
+              data,
+              count,
+              tileLayer,
+              opacity,
+              above: tileIsAbove,
+            );
           } else {
-            _addTile(data, count, tileLayer, offsetX, offsetY);
+            _addTile(data, count, tileLayer, offsetX, offsetY, opacity);
           }
         }
       }
@@ -170,6 +176,7 @@ class TiledWorldBuilder {
     TileLayer tileLayer,
     double offsetX,
     double offsetY,
+    double opacity,
   ) {
     _tiles.add(
       TileModel(
@@ -185,6 +192,7 @@ class TiledWorldBuilder {
         properties: data.properties,
         type: data.type,
         angle: data.angle,
+        opacity: opacity,
         isFlipVertical: data.isFlipVertical,
         isFlipHorizontal: data.isFlipHorizontal,
       ),
@@ -194,7 +202,8 @@ class TiledWorldBuilder {
   void _addGameDecorationAbove(
     TiledItemTileSet data,
     int count,
-    TileLayer tileLayer, {
+    TileLayer tileLayer,
+    double opacity, {
     bool above = false,
   }) {
     if (data.animation != null) {
@@ -210,6 +219,7 @@ class TiledWorldBuilder {
           aboveComponents: above,
         )
           ..angle = data.angle
+          ..opacity = opacity
           ..isFlipHorizontally = data.isFlipHorizontal
           ..isFlipVertically = data.isFlipVertical
           ..properties = data.properties,
@@ -377,6 +387,7 @@ class TiledWorldBuilder {
       double y = _getDoubleByProportion(element.y) + offsetY;
       double width = _getDoubleByProportion(element.width);
       double height = _getDoubleByProportion(element.height);
+      final collision = _getCollisionObject(x, y, width, height, element);
 
       if (element.text != null) {
         double fontSize = element.text!.pixelSize.toDouble();
@@ -404,8 +415,6 @@ class TiledWorldBuilder {
           ),
         );
       } else if (element.typeOrClass?.toLowerCase() == 'collision') {
-        final collision = _getCollisionObject(x, y, width, height, element);
-
         _components.add(
           CollisionGameComponent(
             name: element.name ?? '',
@@ -427,6 +436,7 @@ class TiledWorldBuilder {
             _extractOtherProperties(element.properties),
             element.name,
             element.id,
+            collision,
           ),
         );
 

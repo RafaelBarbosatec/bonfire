@@ -94,6 +94,7 @@ class Tile extends GameComponent with UseAssetsLoader {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+
     _animation?.render(
       canvas,
       position: position,
@@ -163,7 +164,9 @@ class Tile extends GameComponent with UseAssetsLoader {
 
   @override
   void onMount() {
-    paint = (parent as HasPaint?)?.paint ?? paint;
+    if (opacity == (parent as HasPaint?)?.opacity) {
+      paint = (parent as HasPaint?)?.paint ?? paint;
+    }
     super.onMount();
   }
 

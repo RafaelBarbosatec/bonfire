@@ -69,18 +69,19 @@ mixin UseSpriteAnimation on GameComponent {
     VoidCallback? onStart,
   }) async {
     _fastAnimOffset = offset ?? Vector2.zero();
-    final anim = AnimatedObjectOnce(
+    _fastAnimation?.onRemove();
+    _fastAnimation = AnimatedObjectOnce(
       position: position + _fastAnimOffset,
       size: size ?? this.size,
       animation: animation,
       onStart: onStart,
       onFinish: () {
         onFinish?.call();
+        _fastAnimation?.onRemove();
         _fastAnimation = null;
       },
     )..gameRef = gameRef;
-    await anim.onLoad();
-    _fastAnimation = anim;
+    await _fastAnimation?.onLoad();
   }
 
   void pauseAnimation() => _playing = false;
