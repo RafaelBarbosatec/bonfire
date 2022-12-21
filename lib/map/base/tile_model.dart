@@ -1,4 +1,3 @@
-import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/collision/collision_area.dart';
 import 'package:bonfire/map/base/tile.dart';
 import 'package:bonfire/map/base/tile_with_collision.dart';
@@ -97,6 +96,7 @@ class TileModel {
   final double offsetY;
   final double width;
   final double height;
+  final double opacity;
   final String? type;
   final Map<String, dynamic>? properties;
   final TileModelSprite? sprite;
@@ -122,6 +122,7 @@ class TileModel {
     this.animation,
     this.collisions,
     this.angle = 0,
+    this.opacity = 1.0,
     this.isFlipVertical = false,
     this.isFlipHorizontal = false,
   }) {
@@ -132,7 +133,7 @@ class TileModel {
   double get top => (y * height);
   double get bottom => (y * height) + height;
 
-  Tile getTile(BonfireGameInterface gameRef) {
+  Tile getTile() {
     if (animation == null) {
       if (collisions?.isNotEmpty == true) {
         final tile = TileWithCollision.fromSprite(
@@ -146,13 +147,7 @@ class TileModel {
           properties: properties,
           color: color,
         );
-        tile.angle = angle;
-        tile.isFlipHorizontally = isFlipHorizontal;
-        tile.isFlipVertically = isFlipVertical;
-
-        tile.gameRef = gameRef;
-        tile.id = id;
-
+        _setOtherParams(tile);
         return tile;
       } else {
         final tile = Tile.fromSprite(
@@ -165,12 +160,7 @@ class TileModel {
           properties: properties,
           color: color,
         );
-        tile.angle = angle;
-        tile.isFlipHorizontally = isFlipHorizontal;
-        tile.isFlipVertically = isFlipVertical;
-
-        tile.gameRef = gameRef;
-        tile.id = id;
+        _setOtherParams(tile);
 
         return tile;
       }
@@ -188,13 +178,7 @@ class TileModel {
           type: type,
           properties: properties,
         );
-        tile.angle = angle;
-        tile.isFlipHorizontally = isFlipHorizontal;
-        tile.isFlipVertically = isFlipVertical;
-
-        tile.gameRef = gameRef;
-        tile.id = id;
-        tile.onLoad();
+        _setOtherParams(tile);
 
         return tile;
       } else {
@@ -209,17 +193,19 @@ class TileModel {
           type: type,
           properties: properties,
         );
-        tile.angle = angle;
-        tile.isFlipHorizontally = isFlipHorizontal;
-        tile.isFlipVertically = isFlipVertical;
-
-        tile.gameRef = gameRef;
-        tile.id = id;
-        tile.onLoad();
+        _setOtherParams(tile);
 
         return tile;
       }
     }
+  }
+
+  void _setOtherParams(Tile tile) {
+    tile.id = id;
+    tile.angle = angle;
+    tile.opacity = opacity;
+    tile.isFlipHorizontally = isFlipHorizontal;
+    tile.isFlipVertically = isFlipVertical;
   }
 
   factory TileModel.fromMap(Map<String, dynamic> map) {
