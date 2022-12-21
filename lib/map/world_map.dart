@@ -156,7 +156,7 @@ class WorldMap extends GameMap {
 
   List<Tile> _buildTiles(Iterable<TileModel> visibleTiles) {
     return visibleTiles.map((e) {
-      return e.getTile(gameRef);
+      return e.getTile();
     }).toList();
   }
 
@@ -174,8 +174,7 @@ class WorldMap extends GameMap {
   Future addTile(TileModel tileModel) async {
     await _loadTile(tileModel);
     tiles.add(tileModel);
-    final tile = tileModel.getTile(gameRef);
-    add(tile);
+    add(tileModel.getTile());
     quadTree?.insert(
       tileModel,
       Point(tileModel.x, tileModel.y),
