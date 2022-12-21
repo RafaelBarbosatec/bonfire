@@ -25,7 +25,6 @@ import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
 
 import '../model/tiled_data_object_collision.dart';
 import '../model/tiled_item_tile_set.dart';
-import '../model/tiled_object_properties.dart';
 
 typedef ObjectBuilder = GameComponent Function(
   TiledObjectProperties properties,
