@@ -1,4 +1,4 @@
-# [NEXT]
+# [2.11.10]
 - Consider Tiled layer opacity. Fix [#356](https://github.com/RafaelBarbosatec/bonfire/issues/356)
 - Little improvements performance.
 - Adds param `area` in `TiledObjectProperties`.
