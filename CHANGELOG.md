@@ -1,3 +1,7 @@
+# [2.11.11]
+- Fix [#261](https://github.com/RafaelBarbosatec/bonfire/issues/261)
+- Fix [#364](https://github.com/RafaelBarbosatec/bonfire/issues/364)
+
 # [2.11.10]
 - Consider Tiled layer opacity. Fix [#356](https://github.com/RafaelBarbosatec/bonfire/issues/356)
 - Little improvements performance.

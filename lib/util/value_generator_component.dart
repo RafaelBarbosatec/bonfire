@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 class ValueGeneratorComponent extends Component {
   bool _isFinished = false;
 
+  final _maxInMilliSeconds = 1000;
   final Duration duration;
   final double begin;
   final double end;
@@ -34,11 +35,11 @@ class ValueGeneratorComponent extends Component {
   void updateTree(double dt) {
     if (!_isRunning) return;
 
-    _currentValue += dt;
-    if (_currentValue >= duration.inSeconds) {
+    _currentValue += dt * _maxInMilliSeconds;
+    if (_currentValue >= duration.inMilliseconds) {
       finish();
     } else {
-      double value = curve.transform(_currentValue / duration.inSeconds);
+      double value = curve.transform(_currentValue / duration.inMilliseconds);
       double realValue = begin + (_displacement * value);
       onChange?.call(realValue);
     }
