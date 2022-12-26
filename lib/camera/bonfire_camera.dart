@@ -394,6 +394,15 @@ class BonfireCamera extends Camera {
       double height = canvasSize.y;
       double zoomFactor = _zoomFactor();
 
+      final sizeMap = gameRef.map.size;
+
+      if (sizeMap.x < canvasSize.x) {
+        width = sizeMap.x;
+      }
+      if (sizeMap.y < canvasSize.y) {
+        height = sizeMap.y;
+      }
+
       limitMaxX = mapSize.x - (width * zoomFactor);
       limitMaxY = mapSize.y - (height * zoomFactor);
     }
