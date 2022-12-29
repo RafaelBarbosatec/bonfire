@@ -93,6 +93,7 @@ class LightingComponent extends GameComponent with LightingInterface {
   }
 
   @override
+  // ignore: must_call_super
   void update(double dt) {
     _containColor = _containsColor();
     _dtUpdate = dt;
