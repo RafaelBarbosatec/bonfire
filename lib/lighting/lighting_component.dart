@@ -41,7 +41,6 @@ class LightingComponent extends GameComponent with LightingInterface {
 
   LightingComponent({Color? color}) {
     this.color = color;
-    enabledCheckIsVisible = false;
   }
 
   @override
@@ -94,8 +93,8 @@ class LightingComponent extends GameComponent with LightingInterface {
   }
 
   @override
+  // ignore: must_call_super
   void update(double dt) {
-    super.update(dt);
     _containColor = _containsColor();
     _dtUpdate = dt;
   }
