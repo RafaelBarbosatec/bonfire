@@ -47,6 +47,7 @@ abstract class GameComponent extends PositionComponent
   }
 
   @override
+  @mustCallSuper
   void update(double dt) {
     super.update(dt);
     _checkIsVisible(dt);
@@ -115,6 +116,7 @@ abstract class GameComponent extends PositionComponent
   }
 
   @override
+  @mustCallSuper
   void onRemove() {
     (gameRef as BonfireGame).removeVisible(this);
     super.onRemove();
