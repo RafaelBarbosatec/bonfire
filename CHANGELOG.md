@@ -1,3 +1,6 @@
+# [Next]
+- Add mustCallSuper to GameComponent.update and GameComponent.onRemove
+
 # [2.11.11]
 - Fix [#261](https://github.com/RafaelBarbosatec/bonfire/issues/261)
 - Fix [#364](https://github.com/RafaelBarbosatec/bonfire/issues/364)
