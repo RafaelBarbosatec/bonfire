@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bonfire/bonfire.dart';
 
 /// The way you cand raw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
@@ -12,7 +14,7 @@ class GameInterface extends GameComponent {
 
   /// Used to add components in your interface like a Button.
   @override
-  Future<void>? add(Component component) {
+  FutureOr<void> add(Component component) {
     if (component is InterfaceComponent) {
       removeById(component.id);
     }
