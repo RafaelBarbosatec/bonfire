@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
@@ -75,7 +77,7 @@ abstract class BonfireGameInterface {
   void resumeEngine();
 
   /// Used to add component in the game.
-  Future<void>? add(Component component);
+  FutureOr<void> add(Component component);
 
   /// Used to add component list in the game.
   Future<void> addAll(List<Component> components);

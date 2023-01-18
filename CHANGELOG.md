@@ -1,5 +1,6 @@
-# [Next]
+# [2.12.0]
 - Add mustCallSuper to GameComponent.update and GameComponent.onRemove
+- Update Flame to 1.6.0
 
 # [2.11.11]
 - Fix [#261](https://github.com/RafaelBarbosatec/bonfire/issues/261)

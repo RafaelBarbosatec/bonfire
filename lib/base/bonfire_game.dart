@@ -161,7 +161,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  Future<void>? onLoad() async {
+  FutureOr<void> onLoad() async {
     await add(_colorFilterComponent);
 
     if (background != null) {
@@ -204,8 +204,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   void onMount() {
-    onReady?.call(this);
     super.onMount();
+    // ignore: invalid_use_of_internal_member
+    setMounted();
+    onReady?.call(this);
   }
 
   @override
