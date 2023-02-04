@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 class MapBiome1 extends StatelessWidget {
   final ShowInEnum showInEnum;
 
-  const MapBiome1({Key? key, this.showInEnum = ShowInEnum.left}) : super(key: key);
+  const MapBiome1({Key? key, this.showInEnum = ShowInEnum.left})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

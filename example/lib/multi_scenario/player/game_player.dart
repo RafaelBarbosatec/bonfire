@@ -5,17 +5,26 @@ class GamePlayer extends SimplePlayer with ObjectCollision {
   static const sizePlayer = defaultTileSize * 1.5;
   double baseSpeed = sizePlayer * 2;
 
-  GamePlayer(Vector2 position, SpriteSheet spriteSheet, {Direction initDirection = Direction.right})
+  GamePlayer(Vector2 position, SpriteSheet spriteSheet,
+      {Direction initDirection = Direction.right})
       : super(
           animation: SimpleDirectionAnimation(
-            idleUp: spriteSheet.createAnimation(row: 0, stepTime: 0.1).asFuture(),
-            idleDown: spriteSheet.createAnimation(row: 1, stepTime: 0.1).asFuture(),
-            idleLeft: spriteSheet.createAnimation(row: 2, stepTime: 0.1).asFuture(),
-            idleRight: spriteSheet.createAnimation(row: 3, stepTime: 0.1).asFuture(),
-            runUp: spriteSheet.createAnimation(row: 4, stepTime: 0.1).asFuture(),
-            runDown: spriteSheet.createAnimation(row: 5, stepTime: 0.1).asFuture(),
-            runLeft: spriteSheet.createAnimation(row: 6, stepTime: 0.1).asFuture(),
-            runRight: spriteSheet.createAnimation(row: 7, stepTime: 0.1).asFuture(),
+            idleUp:
+                spriteSheet.createAnimation(row: 0, stepTime: 0.1).asFuture(),
+            idleDown:
+                spriteSheet.createAnimation(row: 1, stepTime: 0.1).asFuture(),
+            idleLeft:
+                spriteSheet.createAnimation(row: 2, stepTime: 0.1).asFuture(),
+            idleRight:
+                spriteSheet.createAnimation(row: 3, stepTime: 0.1).asFuture(),
+            runUp:
+                spriteSheet.createAnimation(row: 4, stepTime: 0.1).asFuture(),
+            runDown:
+                spriteSheet.createAnimation(row: 5, stepTime: 0.1).asFuture(),
+            runLeft:
+                spriteSheet.createAnimation(row: 6, stepTime: 0.1).asFuture(),
+            runRight:
+                spriteSheet.createAnimation(row: 7, stepTime: 0.1).asFuture(),
           ),
           size: Vector2.all(sizePlayer),
           position: position,
