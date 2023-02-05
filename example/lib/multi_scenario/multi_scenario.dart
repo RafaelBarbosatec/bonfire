@@ -17,11 +17,7 @@ class MultiScenario extends StatefulWidget {
   @override
   State<MultiScenario> createState() => _MultiScenarioState();
 
-  static Future<void> prepare() => Future.wait([
-        SpriteSheetHero.load(),
-        // if (!kIsWeb) Flame.device.setLandscape(),
-        // if (!kIsWeb) Flame.device.fullScreen(),
-      ]);
+  static Future<void> prepare() => SpriteSheetHero.load();
 }
 
 class _MultiScenarioState extends State<MultiScenario> {
@@ -35,17 +31,10 @@ class _MultiScenarioState extends State<MultiScenario> {
   void initState() {
     selectMap = (MapBiomeId id) {
       setState(() {
-        switch (id) {
-          case MapBiomeId.biome1:
-            currentMapBiomeId = MapBiomeId.biome1;
-            break;
-          case MapBiomeId.biome2:
-            currentMapBiomeId = MapBiomeId.biome2;
-            break;
-          case MapBiomeId.none:
-          default:
-            currentMapBiomeId = MapBiomeId.biome1;
-            break;
+        if (id == MapBiomeId.none) {
+          currentMapBiomeId = MapBiomeId.biome1;
+        } else {
+          currentMapBiomeId = id;
         }
       });
     };
