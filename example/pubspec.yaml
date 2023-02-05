@@ -58,3 +58,5 @@ flutter:
     - assets/images/lpc/torco/
     - assets/images/lpc/head/
     - assets/images/lpc/gloves/
+    - assets/images/multi_scenario/hero/
+    - assets/images/multi_scenario/tile/
