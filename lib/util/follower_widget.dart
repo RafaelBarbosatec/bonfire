@@ -1,6 +1,7 @@
 import 'dart:async' as async;
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/ambiguate.dart';
 import 'package:flutter/widgets.dart';
 
 ///
@@ -47,7 +48,7 @@ class FollowerWidget extends StatefulWidget {
       },
     );
 
-    Overlay.of(context)?.let((over) {
+    ambiguate(Overlay.of(context))?.let((over) {
       over.insert(overlay);
       _mapOverlayEntry[identify] = overlay;
     });
