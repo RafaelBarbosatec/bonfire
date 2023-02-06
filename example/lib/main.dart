@@ -97,6 +97,14 @@ class Menu extends StatelessWidget {
                   _buildButton(context, 'Top down game', () {
                     _navTo(context, const TopDownGame());
                   }),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  _buildButton(context, 'Multi Scenario', () {
+                    MultiScenario.prepare().then((_) {
+                      _navTo(context, const MultiScenario());
+                    });
+                  }),
                   if (!kIsWeb) ...[
                     const SizedBox(
                       height: 10,
@@ -104,14 +112,6 @@ class Menu extends StatelessWidget {
                     _buildButton(context, 'Dynamic spriteSheet', () {
                       _navTo(context, const LPCGame());
                     }),
-                    _buildButton(context, 'Multi Scenario', () {
-                      MultiScenario.prepare().then((_) {
-                        _navTo(context, const MultiScenario());
-                      });
-                    }),
-                    const SizedBox(
-                      height: 10,
-                    ),
                   ]
                 ],
               ),
