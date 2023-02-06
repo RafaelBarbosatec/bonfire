@@ -23,7 +23,6 @@ mixin UseSprite on GameComponent {
     if (isVisible) {
       sprite?.render(
         canvas,
-        position: position,
         size: size,
         overridePaint: paint,
       );

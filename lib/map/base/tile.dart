@@ -97,13 +97,11 @@ class Tile extends GameComponent with UseAssetsLoader {
 
     _animation?.render(
       canvas,
-      position: position,
       size: size,
       overridePaint: paint,
     );
     _sprite?.render(
       canvas,
-      position: position,
       size: size,
       overridePaint: paint,
     );

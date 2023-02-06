@@ -342,7 +342,6 @@ class SimpleDirectionAnimation {
     } else {
       _current?.getSprite().render(
             canvas,
-            position: position,
             size: size,
             overridePaint: paint,
           );

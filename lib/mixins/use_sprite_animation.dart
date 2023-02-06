@@ -39,7 +39,7 @@ mixin UseSpriteAnimation on GameComponent {
       } else {
         animation?.getSprite().render(
               canvas,
-              position: position + animationOffset,
+              position: animationOffset,
               size: animationSize ?? size,
               overridePaint: paint,
             );

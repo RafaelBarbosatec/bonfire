@@ -33,7 +33,6 @@ class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
     if (isVisible) {
       animation?.getSprite().render(
             canvas,
-            position: position,
             size: size,
             overridePaint: paint,
           );
