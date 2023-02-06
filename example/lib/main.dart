@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/lpc/lpc_game.dart';
 import 'package:example/manual_map/game_manual_map.dart';
+import 'package:example/multi_scenario/multi_scenario.dart';
 import 'package:example/random_map/random_map_game.dart';
 import 'package:example/shared/enemy/goblin_controller.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
@@ -103,6 +104,14 @@ class Menu extends StatelessWidget {
                     _buildButton(context, 'Dynamic spriteSheet', () {
                       _navTo(context, const LPCGame());
                     }),
+                    _buildButton(context, 'Multi Scenario', () {
+                      MultiScenario.prepare().then((_) {
+                        _navTo(context, const MultiScenario());
+                      });
+                    }),
+                    const SizedBox(
+                      height: 10,
+                    ),
                   ]
                 ],
               ),
