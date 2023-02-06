@@ -132,9 +132,9 @@ class Knight extends SimplePlayer
   }
 
   @override
-  void renderBeforeTransformation(Canvas canvas) {
+  void renderTree(Canvas canvas) {
     _drawDirectionAttack(canvas);
-    super.renderBeforeTransformation(canvas);
+    super.renderTree(canvas);
   }
 
   @override
@@ -148,13 +148,10 @@ class Knight extends SimplePlayer
   void execShowEmote() {
     if (hasGameRef) {
       add(
-        AnimatedFollowerObject(
+        AnimatedObjectOnce(
+          position: Vector2(width / 4, 0),
           animation: CommonSpriteSheet.emote,
           size: Vector2.all(width / 2),
-          positionFromTarget: Vector2(
-            18,
-            -6,
-          ),
         ),
       );
     }

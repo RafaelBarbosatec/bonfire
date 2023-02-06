@@ -21,9 +21,9 @@ extension AttackableExtensions on Attackable {
     double borderWidth = 0,
     Color borderColor = const Color(0xFFFFFFFF),
   }) {
-    double yPosition = (y - height) - margin;
+    double yPosition = -height - margin;
 
-    double xPosition = x + align.dx;
+    double xPosition = align.dx;
 
     if (drawInBottom) {
       yPosition = toRect().bottom + margin;

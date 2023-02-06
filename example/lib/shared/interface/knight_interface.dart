@@ -63,7 +63,7 @@ class KnightInterface extends GameInterface {
         color: Colors.white,
       ),
       id: 5,
-      position: Vector2(350, 20),
+      position: Vector2(180, 10),
       onTapComponent: (selected) {
         _startSceneExample();
       },

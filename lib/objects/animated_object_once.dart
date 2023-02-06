@@ -17,7 +17,9 @@ class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
     this.onStart,
     double rotateRadAngle = 0,
     LightingConfig? lightingConfig,
+    Anchor anchor = Anchor.topLeft,
   }) {
+    this.anchor = anchor;
     loader?.add(AssetToLoad(animation, (value) {
       this.animation = value..loop = false;
     }));

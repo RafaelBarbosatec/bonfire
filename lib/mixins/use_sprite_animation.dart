@@ -51,7 +51,7 @@ mixin UseSpriteAnimation on GameComponent {
   void update(double dt) {
     super.update(dt);
     if (isVisible && _playing) {
-      _fastAnimation?.position = position + _fastAnimOffset;
+      _fastAnimation?.position = _fastAnimOffset;
       _fastAnimation?.paint = paint;
       _fastAnimation?.isFlipHorizontally = isFlipHorizontally;
       _fastAnimation?.isFlipVertically = isFlipVertically;
@@ -71,7 +71,7 @@ mixin UseSpriteAnimation on GameComponent {
     _fastAnimOffset = offset ?? Vector2.zero();
     _fastAnimation?.onRemove();
     _fastAnimation = AnimatedObjectOnce(
-      position: position + _fastAnimOffset,
+      position: _fastAnimOffset,
       size: size ?? this.size,
       animation: animation,
       onStart: onStart,

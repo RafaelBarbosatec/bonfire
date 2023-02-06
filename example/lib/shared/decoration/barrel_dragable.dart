@@ -50,7 +50,7 @@ class BarrelDraggable extends GameDecoration
     _textConfig.render(
       canvas,
       text,
-      Vector2(x + xCenter, y - yCenter),
+      Vector2(xCenter, 2.5 * yCenter),
     );
   }
 }

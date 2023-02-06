@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/widgets.dart';
 
 mixin RenderTransformer on PositionComponent {
   // static final Vector2 _initialScale = Vector2.all(1);
@@ -56,12 +55,6 @@ mixin RenderTransformer on PositionComponent {
   //   super.update(dt);
   // }
 
-  @override
-  void renderTree(Canvas canvas) {
-    renderBeforeTransformation(canvas);
-    super.renderTree(canvas);
-  }
-
   // @override
   // void renderTree(Canvas canvas) {
   //   _applyTransform(canvas);
@@ -94,7 +87,7 @@ mixin RenderTransformer on PositionComponent {
   //   }
   // }
 
-  void renderBeforeTransformation(Canvas canvas) {}
+  // void renderBeforeTransformation(Canvas canvas) {}
 
   // @override
   // void renderDebugMode(Canvas canvas) {

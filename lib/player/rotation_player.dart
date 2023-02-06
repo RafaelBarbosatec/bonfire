@@ -48,4 +48,10 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
     await super.onLoad();
     animation = animIdle;
   }
+
+  @override
+  void onMount() {
+    anchor = Anchor.center;
+    super.onMount();
+  }
 }

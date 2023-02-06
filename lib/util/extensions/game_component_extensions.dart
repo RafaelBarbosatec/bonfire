@@ -188,7 +188,6 @@ extension GameComponentExtensions on GameComponent {
     );
 
     startPosition.add(diffBase);
-    startPosition.add(Vector2(-size.x / 2, -size.y / 2));
 
     if (animation != null) {
       gameRef.add(
@@ -197,6 +196,7 @@ extension GameComponentExtensions on GameComponent {
           position: startPosition,
           size: size,
           rotateRadAngle: angle,
+          anchor: Anchor.center,
         ),
       );
     }

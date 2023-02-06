@@ -88,9 +88,9 @@ mixin MoveToPositionAlongThePath on Movement {
   }
 
   @override
-  void renderBeforeTransformation(Canvas canvas) {
+  void renderTree(Canvas canvas) {
     _drawBarrries(canvas);
-    super.renderBeforeTransformation(canvas);
+    super.renderTree(canvas);
   }
 
   void stopMoveAlongThePath() {

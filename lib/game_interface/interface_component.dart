@@ -34,7 +34,7 @@ class InterfaceComponent extends GameComponent
     loader?.add(AssetToLoad(spriteSelected, (value) {
       this.spriteSelected = value;
     }));
-    this.position = Vector2(position.x, position.y);
+    this.position = position;
     this.size = size;
   }
 
