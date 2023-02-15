@@ -31,6 +31,12 @@ For more information and [examples](https://bonfire-engine.github.io/#/examples)
 
 Command export web: `flutter build web --web-renderer=canvaskit`
 
+## Next steps
+
+### [Bonfire 3.0.0](https://github.com/users/RafaelBarbosatec/projects/3)
+
+To remove own implementation of the Collision and rendering to adds support to raycast
+
 ## Credits
 
  * The entire [FlameEngine](https://flame-engine.org/) team.
