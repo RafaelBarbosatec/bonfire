@@ -124,7 +124,7 @@ mixin ObjectCollision on GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    _collisionConfig?.updatePosition(position);
+    _collisionConfig?.updatePosition(topLeftPosition);
     _verifyIfContainCollision();
   }
 

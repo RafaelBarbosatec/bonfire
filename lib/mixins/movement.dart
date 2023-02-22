@@ -293,9 +293,7 @@ mixin Movement on GameComponent {
       angle,
     );
 
-    Offset newDiffBase = diffBase.toOffset();
-
-    Rect newPosition = rect.shift(newDiffBase);
+    Rect newPosition = rect.shift(diffBase.toOffset());
 
     _updateDirectionBuAngle(angle);
 

@@ -447,9 +447,9 @@ class BonfireCamera extends Camera {
   }
 
   Vector2 _getCenterTarget() {
-    if (target?.isObjectCollision() == true) {
-      return (target as ObjectCollision).rectCollision.center.toVector2();
-    }
+    // if (target?.isObjectCollision() == true) {
+    //   return (target as ObjectCollision).rectCollision.center.toVector2();
+    // }
     return target?.center ?? Vector2.zero();
   }
 

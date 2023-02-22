@@ -49,4 +49,10 @@ class RotationEnemy extends Enemy with UseSpriteAnimation, UseAssetsLoader {
     await super.onLoad();
     idle();
   }
+
+  @override
+  void onMount() {
+    anchor = Anchor.center;
+    super.onMount();
+  }
 }
