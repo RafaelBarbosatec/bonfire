@@ -1,3 +1,6 @@
+# [next]
+- Adds multi scenario example
+
 # [2.12.0]
 - Add mustCallSuper to GameComponent.update and GameComponent.onRemove
 - Update Flame to 1.6.0
