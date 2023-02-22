@@ -285,8 +285,8 @@ mixin Movement on GameComponent {
 
   /// Move Player to direction by radAngle
   bool moveFromAngle(double speed, double angle) {
-    final rect = toRect();
-    final center = rect.center.toVector2();
+    final rect = toAbsoluteRect();
+
     Vector2 diffBase = BonfireUtil.diffMovePointByAngle(
       center,
       speed * dtUpdate,
@@ -305,7 +305,7 @@ mixin Movement on GameComponent {
     }
 
     isIdle = false;
-    position = newPosition.positionVector2;
+    center = newPosition.center.toVector2();
     onMove(speed, lastDirection, angle);
     return true;
   }
