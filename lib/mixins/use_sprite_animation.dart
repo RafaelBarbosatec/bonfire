@@ -51,11 +51,18 @@ mixin UseSpriteAnimation on GameComponent {
   void update(double dt) {
     super.update(dt);
     if (isVisible && _playing) {
-      _fastAnimation?.position = _fastAnimOffset;
-      _fastAnimation?.paint = paint;
-      _fastAnimation?.isFlipHorizontally = isFlipHorizontally;
-      _fastAnimation?.isFlipVertically = isFlipVertically;
-      _fastAnimation?.update(dt);
+      if (_fastAnimation != null) {
+        _fastAnimation?.position = _fastAnimOffset;
+        _fastAnimation?.paint = paint;
+        if (isFlippedHorizontally != _fastAnimation!.isFlippedHorizontally) {
+          _fastAnimation!.flipHorizontallyAroundCenter();
+        }
+        if (isFlippedVertically != _fastAnimation!.isFlippedVertically) {
+          _fastAnimation!.flipVerticallyAroundCenter();
+        }
+        _fastAnimation?.update(dt);
+      }
+
       animation?.update(dt);
     }
   }

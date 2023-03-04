@@ -205,10 +205,26 @@ class TiledWorldBuilder {
     double opacity, {
     bool above = false,
   }) {
+    GameDecoration? comp;
     if (data.animation != null) {
-      _components.add(
-        GameDecorationWithCollision.withAnimation(
-          animation: data.animation!.getFutureSpriteAnimation(),
+      comp = GameDecorationWithCollision.withAnimation(
+        animation: data.animation!.getFutureSpriteAnimation(),
+        position: Vector2(
+          _getX(count, (tileLayer.width?.toInt()) ?? 1) * _tileWidth,
+          _getY(count, (tileLayer.width?.toInt()) ?? 1) * _tileHeight,
+        ),
+        size: Vector2(_tileWidth, _tileHeight),
+        collisions: data.collisions,
+        aboveComponents: above,
+      )
+        ..angle = data.angle
+        ..opacity = opacity
+        ..properties = data.properties;
+      _components.add(comp);
+    } else {
+      if (data.sprite != null) {
+        comp = GameDecorationWithCollision.withSprite(
+          sprite: data.sprite!.getFutureSprite(),
           position: Vector2(
             _getX(count, (tileLayer.width?.toInt()) ?? 1) * _tileWidth,
             _getY(count, (tileLayer.width?.toInt()) ?? 1) * _tileHeight,
@@ -218,30 +234,19 @@ class TiledWorldBuilder {
           aboveComponents: above,
         )
           ..angle = data.angle
-          ..opacity = opacity
-          ..isFlipHorizontally = data.isFlipHorizontal
-          ..isFlipVertically = data.isFlipVertical
-          ..properties = data.properties,
-      );
-    } else {
-      if (data.sprite != null) {
-        _components.add(
-          GameDecorationWithCollision.withSprite(
-            sprite: data.sprite!.getFutureSprite(),
-            position: Vector2(
-              _getX(count, (tileLayer.width?.toInt()) ?? 1) * _tileWidth,
-              _getY(count, (tileLayer.width?.toInt()) ?? 1) * _tileHeight,
-            ),
-            size: Vector2(_tileWidth, _tileHeight),
-            collisions: data.collisions,
-            aboveComponents: above,
-          )
-            ..angle = data.angle
-            ..isFlipHorizontally = data.isFlipHorizontal
-            ..isFlipVertically = data.isFlipVertical
-            ..properties = data.properties,
-        );
+          ..properties = data.properties;
       }
+    }
+
+    if (data.isFlipHorizontal) {
+      comp?.flipHorizontallyAroundCenter();
+    }
+
+    if (data.isFlipVertical) {
+      comp?.flipVerticallyAroundCenter();
+    }
+    if (comp != null) {
+      _components.add(comp);
     }
   }
 

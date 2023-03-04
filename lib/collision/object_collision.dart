@@ -48,9 +48,9 @@ mixin ObjectCollision on GameComponent {
 
   bool containCollision() => _containCollision;
 
-  Rect get rectCollision {
-    return _collisionConfig?.rect ?? Rect.zero;
-  }
+  // Rect get rectCollision {
+  //   return _collisionConfig?.rect ?? Rect.zero;
+  // }
 
   List<ObjectCollision> _verifyWorldCollision({
     Vector2? displacement,
@@ -86,9 +86,9 @@ mixin ObjectCollision on GameComponent {
   }
 
   bool _checkItemCollision(ObjectCollision i, {Vector2? displacement}) {
-    if (i != this && checkCollision(i, displacement: displacement)) {
-      return i.onCollision(this, false) && onCollision(i, true);
-    }
+    // if (i != this && checkCollision(i, displacement: displacement)) {
+    //   return i.onCollision(this, false) && onCollision(i, true);
+    // }
     return false;
   }
 
@@ -119,13 +119,6 @@ mixin ObjectCollision on GameComponent {
         element.render(canvas, color);
       }
     }
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    _collisionConfig?.updatePosition(topLeftPosition);
-    _verifyIfContainCollision();
   }
 
   void _verifyIfContainCollision() {

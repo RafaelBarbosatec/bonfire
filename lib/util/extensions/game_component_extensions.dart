@@ -71,7 +71,7 @@ extension GameComponentExtensions on GameComponent {
       angle,
     );
 
-    startPosition.add(Vector2(-size.x / 2, -size.y / 2));
+    // startPosition.add(Vector2(-size.x / 2, -size.y / 2));
     gameRef.add(
       FlyingAttackObject.byAngle(
         id: id,
@@ -151,7 +151,7 @@ extension GameComponentExtensions on GameComponent {
       damage: damage,
       size: size,
       centerOffset: centerOffset,
-      marginFromOrigin: max(rect.width + 2, rect.height + 2),
+      marginFromCenter: max(rect.width + 2, rect.height + 2) / 2,
       id: id,
       withPush: withPush,
     );
@@ -170,7 +170,7 @@ extension GameComponentExtensions on GameComponent {
     required AttackFromEnum attackFrom,
     required Vector2 size,
     bool withPush = true,
-    double marginFromOrigin = 16,
+    double marginFromCenter = 0,
     Vector2? centerOffset,
   }) {
     var initPosition = rectConsideringCollision;
@@ -178,8 +178,12 @@ extension GameComponentExtensions on GameComponent {
     Vector2 startPosition =
         initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
 
-    double displacement =
-        max(initPosition.width, initPosition.height) / 2 + marginFromOrigin;
+    double displacement = max(
+              initPosition.width,
+              initPosition.height,
+            ) /
+            2 +
+        marginFromCenter;
 
     Vector2 diffBase = BonfireUtil.diffMovePointByAngle(
       startPosition,
@@ -255,9 +259,10 @@ extension GameComponentExtensions on GameComponent {
 
   /// Gets rect used how base in calculations considering collision
   Rect get rectConsideringCollision {
-    return (isObjectCollision()
-        ? (this as ObjectCollision).rectCollision
-        : toRect());
+    return toAbsoluteRect();
+    // return (isObjectCollision()
+    //     ? (this as ObjectCollision).rectCollision
+    //     : toAbsoluteRect());
   }
 
   /// Method that checks if this component contain collisions

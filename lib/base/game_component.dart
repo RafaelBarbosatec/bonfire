@@ -1,16 +1,10 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/paint_transformer.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:flutter/widgets.dart';
 
 /// Base of the all components in the Bonfire
 abstract class GameComponent extends PositionComponent
-    with
-        BonfireHasGameRef,
-        PointerDetectorHandler,
-        InternalChecker,
-        RenderTransformer,
-        HasPaint {
+    with BonfireHasGameRef, PointerDetectorHandler, InternalChecker, HasPaint {
   final String _keyIntervalCheckIsVisible = "CHECK_VISIBLE";
   final int _intervalCheckIsVisible = 250;
   Map<String, dynamic>? properties;
@@ -40,10 +34,7 @@ abstract class GameComponent extends PositionComponent
   }
 
   int _getBottomPriority() {
-    if (isObjectCollision()) {
-      return (this as ObjectCollision).rectCollision.bottom.round();
-    }
-    return bottom.round();
+    return rectConsideringCollision.bottom.round();
   }
 
   @override

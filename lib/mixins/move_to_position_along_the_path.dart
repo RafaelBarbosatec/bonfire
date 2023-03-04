@@ -105,10 +105,8 @@ mixin MoveToPositionAlongThePath on Movement {
 
   void _move(double dt) {
     double innerSpeed = speed * dt;
-    Vector2 center = this.center;
-    if (isObjectCollision()) {
-      center = (this as ObjectCollision).rectCollision.center.toVector2();
-    }
+
+    Vector2 center = rectConsideringCollision.center.toVector2();
     double diffX = _currentPath[_currentIndex].dx - center.x;
     double diffY = _currentPath[_currentIndex].dy - center.y;
     double displacementX = diffX.abs() > innerSpeed ? speed : diffX.abs() / dt;
@@ -163,9 +161,7 @@ mixin MoveToPositionAlongThePath on Movement {
   List<Offset> _calculatePath(Vector2 finalPosition) {
     final player = this;
 
-    final positionPlayer = player is ObjectCollision
-        ? (player as ObjectCollision).rectCollision.center.toVector2()
-        : player.center;
+    final positionPlayer = player.rectConsideringCollision.center.toVector2();
 
     Offset playerPosition = _getCenterPositionByTile(positionPlayer);
 
@@ -212,8 +208,9 @@ mixin MoveToPositionAlongThePath on Movement {
     area = Rect.fromLTRB(left, top, right, bottom).inflate(inflate);
 
     for (final e in gameRef.collisions()) {
-      if (!ignoreCollisions.contains(e) && area.overlaps(e.rectCollision)) {
-        _addCollisionOffsetsPositionByTile(e.rectCollision);
+      if (!ignoreCollisions.contains(e) &&
+          area.overlaps(e.rectConsideringCollision)) {
+        _addCollisionOffsetsPositionByTile(e.rectConsideringCollision);
       }
     }
 
@@ -263,13 +260,11 @@ mixin MoveToPositionAlongThePath on Movement {
       tileSize = gameRef.map.tiles.first.width;
     }
     if (_gridSizeIsCollisionSize) {
-      if (isObjectCollision()) {
-        return max(
-          (this as ObjectCollision).rectCollision.width,
-          (this as ObjectCollision).rectCollision.height,
-        );
-      }
-      return max(height, width) + REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
+      return max(
+            rectConsideringCollision.height,
+            rectConsideringCollision.width,
+          ) +
+          REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
     }
     return tileSize;
   }

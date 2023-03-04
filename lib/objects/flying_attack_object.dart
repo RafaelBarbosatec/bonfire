@@ -287,10 +287,10 @@ class FlyingAttackObject extends GameComponent
     Vector2 innerSize = destroySize ?? size;
 
     Offset diffBase = Offset(
-          rectCollision.center.dx + nextX,
-          rectCollision.center.dy + nextY,
+          rectConsideringCollision.center.dx + nextX,
+          rectConsideringCollision.center.dy + nextY,
         ) -
-        rectCollision.center;
+        rectConsideringCollision.center;
 
     final positionDestroy = center.translate(diffBase.dx, diffBase.dy);
 
@@ -326,5 +326,11 @@ class FlyingAttackObject extends GameComponent
         element.receiveDamage(attackFrom, damage, id);
       }
     });
+  }
+
+  @override
+  void onMount() {
+    anchor = Anchor.center;
+    super.onMount();
   }
 }

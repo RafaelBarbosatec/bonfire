@@ -33,9 +33,7 @@ extension RotationEnemyExtensions on RotationAlly {
       observed: (player) {
         double radAngle = getAngleFromPlayer();
 
-        Rect playerRect = player is ObjectCollision
-            ? (player as ObjectCollision).rectCollision
-            : player.toRect();
+        Rect playerRect = player.rectConsideringCollision;
         Rect rectPlayerCollision = Rect.fromLTWH(
           playerRect.left - margin,
           playerRect.top - margin,

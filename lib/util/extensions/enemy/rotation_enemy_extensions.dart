@@ -1,5 +1,4 @@
 import 'package:bonfire/collision/collision_config.dart';
-import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/mixins/attackable.dart';
 import 'package:bonfire/npc/enemy/rotation_enemy.dart';
@@ -25,9 +24,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       observed: (player) {
         double radAngle = getAngleFromPlayer();
 
-        Rect playerRect = player is ObjectCollision
-            ? (player as ObjectCollision).rectCollision
-            : player.toRect();
+        Rect playerRect = player.rectConsideringCollision;
         Rect rectPlayerCollision = Rect.fromLTWH(
           playerRect.left - margin,
           playerRect.top - margin,
@@ -70,9 +67,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       observed: (player) {
         positioned(player);
 
-        Rect playerRect = player is ObjectCollision
-            ? (player as ObjectCollision).rectCollision
-            : player.toRect();
+        Rect playerRect = player.rectConsideringCollision;
         double distance = (minDistanceCellsFromPlayer ?? radiusVision);
         double radAngle = getAngleFromPlayer();
 
@@ -120,7 +115,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     double? radAngleDirection,
     VoidCallback? execute,
     int interval = 1000,
-    double marginFromOrigin = 16,
+    double marginFromCenter = 16,
     Vector2? centerOffset,
   }) {
     if (!checkInterval('attackMelee', interval, dtUpdate)) return;
@@ -131,7 +126,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       id: id,
       withPush: withPush,
       centerOffset: centerOffset,
-      marginFromOrigin: marginFromOrigin,
+      marginFromCenter: marginFromCenter,
       damage: damage,
       size: size,
       angle: angle,

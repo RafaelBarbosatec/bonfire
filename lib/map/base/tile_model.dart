@@ -204,8 +204,12 @@ class TileModel {
     tile.id = id;
     tile.angle = angle;
     tile.opacity = opacity;
-    tile.isFlipHorizontally = isFlipHorizontal;
-    tile.isFlipVertically = isFlipVertical;
+    if (isFlipHorizontal) {
+      tile.flipHorizontallyAroundCenter();
+    }
+    if (isFlipVertical) {
+      tile.flipVerticallyAroundCenter();
+    }
   }
 
   factory TileModel.fromMap(Map<String, dynamic> map) {

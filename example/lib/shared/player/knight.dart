@@ -116,7 +116,6 @@ class Knight extends SimplePlayer
           ),
         ],
       ),
-      marginFromOrigin: 20,
       lightingConfig: LightingConfig(
         radius: width / 2,
         blurBorder: width,
@@ -234,8 +233,8 @@ class Knight extends SimplePlayer
     if (showBgRangeAttack) {
       double radius = height;
       rectDirectionAttack = Rect.fromLTWH(
-        rectCollision.center.dx - radius,
-        rectCollision.center.dy - radius,
+        rectConsideringCollision.center.dx - radius,
+        rectConsideringCollision.center.dy - radius,
         radius * 2,
         radius * 2,
       );

@@ -348,6 +348,13 @@ class SimpleDirectionAnimation {
     }
   }
 
+  Vector2 get center {
+    return Vector2(
+      position.x + size.x / 2,
+      position.y + size.y / 2,
+    );
+  }
+
   void update(
     double dt,
     Vector2 position,

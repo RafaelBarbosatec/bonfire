@@ -18,9 +18,16 @@ mixin DirectionAnimation on Movement {
   void update(double dt) {
     if (isVisible) {
       animation?.update(dt, position, size);
-      isFlipHorizontally = animation?.isFlipHorizontally ?? false;
-      isFlipVertically = animation?.isFlipVertically ?? false;
+      var newFlipHorizontally = animation?.isFlipHorizontally ?? false;
+      if (newFlipHorizontally != isFlippedHorizontally) {
+        flipHorizontallyAroundCenter();
+      }
+      var newFlipVertically = animation?.isFlipVertically ?? false;
+      if (newFlipVertically != isFlippedVertically) {
+        flipVerticallyAroundCenter();
+      }
     }
+
     super.update(dt);
   }
 

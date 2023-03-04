@@ -53,7 +53,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     dynamic id,
     double? radAngleDirection,
     bool withPush = true,
-    double marginFromOrigin = 16,
+    double marginFromCenter = 16,
     Vector2? centerOffset,
   }) {
     double? angle = radAngleDirection ?? this.angle;
@@ -64,7 +64,7 @@ extension RotationPlayerExtensions on RotationPlayer {
       id: id,
       size: size,
       withPush: withPush,
-      marginFromOrigin: marginFromOrigin,
+      marginFromCenter: marginFromCenter,
       centerOffset: centerOffset,
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
     );
