@@ -38,4 +38,10 @@ class MyPlayer extends SimplePlayer with ObjectCollision {
     add(RectangleHitbox(size: size));
     return super.onLoad();
   }
+
+  @override
+  void onCollision(Set<Vector2> points, PositionComponent other) {
+    print('onCollision: $this -> $other');
+    super.onCollision(points, other);
+  }
 }
