@@ -21,13 +21,14 @@ class MyEnemy extends SimpleEnemy with ObjectCollision {
           life: 100,
         ) {
     /// here we configure collision of the enemy
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(size: Vector2.all(32)),
-        ],
-      ),
-    );
+     // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.rectangle(size: Vector2.all(32)),
+    //     ],
+    //   ),
+    // );
   }
 
   @override

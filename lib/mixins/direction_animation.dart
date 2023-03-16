@@ -16,17 +16,17 @@ mixin DirectionAnimation on Movement {
 
   @override
   void update(double dt) {
-    if (isVisible) {
-      animation?.update(dt, position, size);
-      var newFlipHorizontally = animation?.isFlipHorizontally ?? false;
-      if (newFlipHorizontally != isFlippedHorizontally) {
-        flipHorizontallyAroundCenter();
-      }
-      var newFlipVertically = animation?.isFlipVertically ?? false;
-      if (newFlipVertically != isFlippedVertically) {
-        flipVerticallyAroundCenter();
-      }
-    }
+    // if (isVisible) {
+    //   animation?.update(dt, position, size);
+    //   var newFlipHorizontally = animation?.isFlipHorizontally ?? false;
+    //   if (newFlipHorizontally != isFlippedHorizontally) {
+    //     flipHorizontallyAroundCenter();
+    //   }
+    //   var newFlipVertically = animation?.isFlipVertically ?? false;
+    //   if (newFlipVertically != isFlippedVertically) {
+    //     flipVerticallyAroundCenter();
+    //   }
+    // }
 
     super.update(dt);
   }

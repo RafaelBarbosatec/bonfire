@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/npc/ally/ally.dart';
 
 import '../../../player/player.dart';

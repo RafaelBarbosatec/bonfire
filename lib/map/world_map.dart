@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
-import 'package:bonfire/util/quadtree.dart';
+import 'package:bonfire/util/quadtree.dart' as tree;
 
 class WorldMap extends GameMap {
   Vector2 lastCamera = Vector2.zero();
@@ -15,7 +15,7 @@ class WorldMap extends GameMap {
   Vector2 _griSize = Vector2.zero();
   Vector2 _mapStartPosition = Vector2.zero();
 
-  QuadTree<TileModel>? quadTree;
+  tree.QuadTree<TileModel>? quadTree;
 
   WorldMap(
     List<TileModel> tiles, {
@@ -96,7 +96,7 @@ class WorldMap extends GameMap {
       int minSize = min(sizeScreen.x, sizeScreen.y).ceil();
       int maxItems = ((minSize / 2) / tileSize).ceil();
       maxItems *= maxItems;
-      quadTree = QuadTree(
+      quadTree = tree.QuadTree(
         0,
         0,
         _griSize.x,

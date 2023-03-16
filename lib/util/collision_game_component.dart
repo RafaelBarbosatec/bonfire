@@ -25,8 +25,9 @@ class CollisionGameComponent extends GameComponent with ObjectCollision {
     this.properties = properties;
     this.position = position;
     this.size = size;
-    setupCollision(
-      CollisionConfig(collisions: collisions),
-    );
+    // TODO
+    // setupCollision(
+    //   CollisionConfig(collisions: collisions),
+    // );
   }
 }

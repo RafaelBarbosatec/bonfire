@@ -23,12 +23,13 @@ class ArmchairDecoration extends GameDecoration
             srcSize: Vector2.all(64),
           ),
         ) {
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(size: Vector2.all(50), align: Vector2.all(7)),
-        ],
-      ),
-    );
+          // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.rectangle(size: Vector2.all(50), align: Vector2.all(7)),
+    //     ],
+    //   ),
+    // );
   }
 }

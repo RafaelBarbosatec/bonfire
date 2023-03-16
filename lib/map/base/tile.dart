@@ -112,7 +112,7 @@ class Tile extends GameComponent with UseAssetsLoader {
 
   @override
   void renderDebugMode(Canvas canvas) {
-    _drawGrid(canvas);
+    // _drawGrid(canvas);
   }
 
   void _drawGrid(Canvas canvas) {

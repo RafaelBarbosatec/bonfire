@@ -27,18 +27,19 @@ class Tree extends GameDecoration with ObjectCollision {
             getSizeByTileSize(48),
           ),
         ) {
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(getSizeByTileSize(32), getSizeByTileSize(16)),
-            align: Vector2(
-              getSizeByTileSize(16),
-              getSizeByTileSize(32),
-            ),
-          ),
-        ],
-      ),
-    );
+          // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.rectangle(
+    //         size: Vector2(getSizeByTileSize(32), getSizeByTileSize(16)),
+    //         align: Vector2(
+    //           getSizeByTileSize(16),
+    //           getSizeByTileSize(32),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }

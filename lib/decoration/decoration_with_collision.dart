@@ -19,9 +19,10 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
         ) {
     this.aboveComponents = aboveComponents;
     if (collisions != null) {
-      setupCollision(
-        CollisionConfig(collisions: collisions),
-      );
+      // TODO
+      // setupCollision(
+      //   CollisionConfig(collisions: collisions),
+      // );
     }
   }
 
@@ -40,9 +41,10 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
         ) {
     this.aboveComponents = aboveComponents;
     if (collisions != null) {
-      setupCollision(
-        CollisionConfig(collisions: collisions),
-      );
+      // TODO
+      // setupCollision(
+      //   CollisionConfig(collisions: collisions),
+      // );
     }
   }
 
@@ -61,9 +63,10 @@ class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
         ) {
     this.aboveComponents = aboveComponents;
     if (collisions != null) {
-      setupCollision(
-        CollisionConfig(collisions: collisions),
-      );
+      // TODO
+      // setupCollision(
+      //   CollisionConfig(collisions: collisions),
+      // );
     }
   }
 }

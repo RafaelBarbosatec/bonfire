@@ -9,21 +9,22 @@ class ColumnDecoration extends GameDecoration with ObjectCollision {
           position: position,
           size: Vector2(DungeonMap.tileSize, DungeonMap.tileSize * 3),
         ) {
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(
-              DungeonMap.tileSize * 0.8,
-              DungeonMap.tileSize / 2,
-            ),
-            align: Vector2(
-              DungeonMap.tileSize * 0.1,
-              DungeonMap.tileSize * 1.8,
-            ),
-          ),
-        ],
-      ),
-    );
+          // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.rectangle(
+    //         size: Vector2(
+    //           DungeonMap.tileSize * 0.8,
+    //           DungeonMap.tileSize / 2,
+    //         ),
+    //         align: Vector2(
+    //           DungeonMap.tileSize * 0.1,
+    //           DungeonMap.tileSize * 1.8,
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }

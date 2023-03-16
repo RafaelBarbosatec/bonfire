@@ -12,7 +12,8 @@ import 'package:flutter/widgets.dart';
 /// CustomBaseGame created to use `Listener` to capture touch screen gestures.
 /// Apply zoom in canvas.
 /// Reorder components per time frame.
-abstract class BaseGame extends FlameGame with PointerDetector, KeyboardEvents {
+abstract class BaseGame extends FlameGame
+    with PointerDetector, KeyboardEvents, HasCollisionDetection {
   BaseGame({Camera? camera}) : super(camera: camera);
 
   /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`

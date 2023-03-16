@@ -23,7 +23,8 @@ class TileWithCollision extends Tile with ObjectCollision {
           properties: properties,
         ) {
     if (collisions != null) {
-      setupCollision(CollisionConfig(collisions: collisions));
+      // TODO
+      // setupCollision(CollisionConfig(collisions: collisions));
     }
   }
 
@@ -48,7 +49,8 @@ class TileWithCollision extends Tile with ObjectCollision {
           color: color,
         ) {
     if (collisions != null) {
-      setupCollision(CollisionConfig(collisions: collisions));
+      // TODO
+      // setupCollision(CollisionConfig(collisions: collisions));
     }
   }
 
@@ -71,7 +73,8 @@ class TileWithCollision extends Tile with ObjectCollision {
           properties: properties,
         ) {
     if (collisions != null) {
-      setupCollision(CollisionConfig(collisions: collisions));
+      // TODO
+      // setupCollision(CollisionConfig(collisions: collisions));
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/player_sprite_sheet.dart';
+import 'package:flutter/material.dart';
 
 ///
 /// Created by
@@ -21,12 +22,20 @@ class MyPlayer extends SimplePlayer with ObjectCollision {
           life: 200,
         ) {
     /// here we configure collision of the player
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(size: Vector2.all(32)),
-        ],
-      ),
-    );
+    // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.rectangle(size: Vector2.all(32)),
+    //     ],
+    //   ),
+    // );
+  }
+
+  @override
+  Future<void> onLoad() {
+    debugColor = const Color(0xffffffff);
+    add(RectangleHitbox(size: size));
+    return super.onLoad();
   }
 }

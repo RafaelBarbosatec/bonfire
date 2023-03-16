@@ -53,16 +53,17 @@ class FlyingAttackObject extends GameComponent
 
     if (lightingConfig != null) setupLighting(lightingConfig);
 
-    setupCollision(
-      collision ??
-          CollisionConfig(
-            collisions: [
-              CollisionArea.rectangle(
-                size: Vector2(width, height),
-              ),
-            ],
-          ),
-    );
+// TODO
+    // setupCollision(
+    //   collision ??
+    //       CollisionConfig(
+    //         collisions: [
+    //           CollisionArea.rectangle(
+    //             size: Vector2(width, height),
+    //           ),
+    //         ],
+    //       ),
+    // );
   }
 
   FlyingAttackObject.byDirection({
@@ -92,16 +93,17 @@ class FlyingAttackObject extends GameComponent
 
     if (lightingConfig != null) setupLighting(lightingConfig);
 
-    setupCollision(
-      collision ??
-          CollisionConfig(
-            collisions: [
-              CollisionArea.rectangle(
-                size: Vector2(width, height),
-              ),
-            ],
-          ),
-    );
+// TODO
+    // setupCollision(
+    //   collision ??
+    //       CollisionConfig(
+    //         collisions: [
+    //           CollisionArea.rectangle(
+    //             size: Vector2(width, height),
+    //           ),
+    //         ],
+    //       ),
+    // );
   }
 
   FlyingAttackObject.byAngle({
@@ -134,16 +136,17 @@ class FlyingAttackObject extends GameComponent
 
     if (lightingConfig != null) setupLighting(lightingConfig);
 
-    setupCollision(
-      collision ??
-          CollisionConfig(
-            collisions: [
-              CollisionArea.rectangle(
-                size: Vector2(width, height),
-              ),
-            ],
-          ),
-    );
+// TODO
+    // setupCollision(
+    //   collision ??
+    //       CollisionConfig(
+    //         collisions: [
+    //           CollisionArea.rectangle(
+    //             size: Vector2(width, height),
+    //           ),
+    //         ],
+    //       ),
+    // );
   }
 
   @override
@@ -161,16 +164,17 @@ class FlyingAttackObject extends GameComponent
     }
   }
 
-  @override
-  bool onCollision(GameComponent component, bool active) {
-    if (component is Attackable && !component.isRemoving) {
-      component.receiveDamage(attackFrom, damage, id);
-    } else if (!withDecorationCollision) {
-      return false;
-    }
-    _destroyObject(component);
-    return true;
-  }
+// TODO
+  // @override
+  // bool onCollision(GameComponent component, bool active) {
+  //   if (component is Attackable && !component.isRemoving) {
+  //     component.receiveDamage(attackFrom, damage, id);
+  //   } else if (!withDecorationCollision) {
+  //     return false;
+  //   }
+  //   _destroyObject(component);
+  //   return true;
+  // }
 
   void _destroyObject(GameComponent component) {
     if (isRemoving) return;
@@ -182,7 +186,8 @@ class FlyingAttackObject extends GameComponent
         _destroyByAngle(component);
       }
     }
-    setupCollision(CollisionConfig(collisions: []));
+    // TODO
+    // setupCollision(CollisionConfig(collisions: []));
     onDestroy?.call();
   }
 

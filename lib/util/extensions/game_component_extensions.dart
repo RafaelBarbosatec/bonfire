@@ -218,13 +218,14 @@ extension GameComponentExtensions on GameComponent {
         .forEach((enemy) {
       enemy.receiveDamage(attackFrom, damage, id);
       final rectAfterPush = enemy.position.translate(diffBase.x, diffBase.y);
-      if (withPush &&
-          (enemy is ObjectCollision &&
-              !(enemy as ObjectCollision)
-                  .isCollision(displacement: rectAfterPush)
-                  .isNotEmpty)) {
-        enemy.translate(diffBase.x, diffBase.y);
-      }
+      // TODO
+      // if (withPush &&
+      //     (enemy is ObjectCollision &&
+      //         !(enemy as ObjectCollision)
+      //             .isCollision(displacement: rectAfterPush)
+      //             .isNotEmpty)) {
+      //   enemy.translate(diffBase.x, diffBase.y);
+      // }
     });
   }
 
@@ -267,8 +268,10 @@ extension GameComponentExtensions on GameComponent {
 
   /// Method that checks if this component contain collisions
   bool isObjectCollision() {
-    return (this is ObjectCollision &&
-        (this as ObjectCollision).containCollision());
+    // TODO
+    // return (this is ObjectCollision &&
+    //     (this as ObjectCollision).containCollision());
+    return this is ObjectCollision;
   }
 
   Direction? directionThePlayerIsIn() {

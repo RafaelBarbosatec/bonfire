@@ -32,16 +32,17 @@ class GamePlayer extends SimplePlayer with ObjectCollision {
           life: 100,
           speed: sizePlayer * 2,
         ) {
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(sizePlayer * 0.5, sizePlayer / 3),
-            align: Vector2(sizePlayer * 0.25, sizePlayer * 0.65),
-          ),
-        ],
-      ),
-    );
+          // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.rectangle(
+    //         size: Vector2(sizePlayer * 0.5, sizePlayer / 3),
+    //         align: Vector2(sizePlayer * 0.25, sizePlayer * 0.65),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   @override

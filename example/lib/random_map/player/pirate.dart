@@ -22,15 +22,16 @@ class Pirate extends SimplePlayer with ObjectCollision {
           animation: PirateSpriteSheet.getAnimation(),
         ) {
     enabledDiagonalMovements = false;
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(size.x / 3, size.y / 3),
-            align: Vector2(size.x * 1 / 3, size.y * 2 / 3),
-          ),
-        ],
-      ),
-    );
+    // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.rectangle(
+    //         size: Vector2(size.x / 3, size.y / 3),
+    //         align: Vector2(size.x * 1 / 3, size.y * 2 / 3),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }

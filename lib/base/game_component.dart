@@ -4,7 +4,12 @@ import 'package:flutter/widgets.dart';
 
 /// Base of the all components in the Bonfire
 abstract class GameComponent extends PositionComponent
-    with BonfireHasGameRef, PointerDetectorHandler, InternalChecker, HasPaint {
+    with
+        BonfireHasGameRef,
+        PointerDetectorHandler,
+        InternalChecker,
+        HasPaint,
+        CollisionCallbacks {
   final String _keyIntervalCheckIsVisible = "CHECK_VISIBLE";
   final int _intervalCheckIsVisible = 250;
   Map<String, dynamic>? properties;

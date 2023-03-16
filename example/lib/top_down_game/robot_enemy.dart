@@ -21,19 +21,20 @@ class ZombieEnemy extends RotationEnemy
           animIdle: _getAnimation(),
           animRun: _getAnimation(),
         ) {
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.circle(
-            radius: 21.5,
-            align: Vector2(
-              12.5,
-              0,
-            ),
-          ),
-        ],
-      ),
-    );
+          // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.circle(
+    //         radius: 21.5,
+    //         align: Vector2(
+    //           12.5,
+    //           0,
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   static Future<SpriteAnimation> _getAnimation() {

@@ -85,4 +85,5 @@ export 'package:flame/effects.dart';
 export 'package:flame/flame.dart';
 export 'package:flame/particles.dart';
 export 'package:flame/sprite.dart';
+export 'package:flame/collisions.dart';
 export 'package:flame/widgets.dart' hide NineTileBox;

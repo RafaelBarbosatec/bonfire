@@ -108,9 +108,9 @@ class _MiniMapState extends State<MiniMap> {
                     ),
                   cameraPosition: cameraPosition,
                   gameSize: widget.game.size,
-                  componentsRender:
-                      widget.componentsRender ?? componentsRenderDefault(),
-                  tileRender: widget.tileRender ?? tilesRenderDefault(),
+                  // componentsRender:
+                  //     widget.componentsRender ?? componentsRenderDefault(),
+                  // tileRender: widget.tileRender ?? tilesRenderDefault(),
                   zoom: widget.zoom,
                 ),
               ),
@@ -140,49 +140,50 @@ class _MiniMapState extends State<MiniMap> {
     });
   }
 
-  MiniMapCustomRender<Tile> tilesRenderDefault() => (canvas, component) {
-        if (component is ObjectCollision) {
-          (component as ObjectCollision).renderCollision(
-            canvas,
-            widget.tileCollisionColor ?? Colors.black.withOpacity(0.5),
-          );
-        } else if (widget.tileColor != null) {
-          (component as ObjectCollision).renderCollision(
-            canvas,
-            widget.tileColor!,
-          );
-        }
-      };
+// TODO
+  // MiniMapCustomRender<Tile> tilesRenderDefault() => (canvas, component) {
+  //       if (component is ObjectCollision) {
+  //         (component as ObjectCollision).renderCollision(
+  //           canvas,
+  //           widget.tileCollisionColor ?? Colors.black.withOpacity(0.5),
+  //         );
+  //       } else if (widget.tileColor != null) {
+  //         (component as ObjectCollision).renderCollision(
+  //           canvas,
+  //           widget.tileColor!,
+  //         );
+  //       }
+  //     };
 
-  MiniMapCustomRender componentsRenderDefault() => (canvas, component) {
-        if (component is ObjectCollision) {
-          if (component is GameDecoration) {
-            component.renderCollision(
-              canvas,
-              widget.decorationColor ?? Colors.black.withOpacity(0.5),
-            );
-          }
-          if (component is Player) {
-            component.renderCollision(
-              canvas,
-              widget.playerColor ?? Colors.cyan.withOpacity(0.5),
-            );
-          } else if (component is Ally) {
-            component.renderCollision(
-              canvas,
-              widget.allyColor ?? Colors.yellow.withOpacity(0.5),
-            );
-          } else if (component is Enemy) {
-            component.renderCollision(
-              canvas,
-              widget.playerColor ?? Colors.red.withOpacity(0.5),
-            );
-          } else if (component is Npc) {
-            component.renderCollision(
-              canvas,
-              widget.npcColor ?? Colors.green.withOpacity(0.5),
-            );
-          }
-        }
-      };
+  // MiniMapCustomRender componentsRenderDefault() => (canvas, component) {
+  //       if (component is ObjectCollision) {
+  //         if (component is GameDecoration) {
+  //           component.renderCollision(
+  //             canvas,
+  //             widget.decorationColor ?? Colors.black.withOpacity(0.5),
+  //           );
+  //         }
+  //         if (component is Player) {
+  //           component.renderCollision(
+  //             canvas,
+  //             widget.playerColor ?? Colors.cyan.withOpacity(0.5),
+  //           );
+  //         } else if (component is Ally) {
+  //           component.renderCollision(
+  //             canvas,
+  //             widget.allyColor ?? Colors.yellow.withOpacity(0.5),
+  //           );
+  //         } else if (component is Enemy) {
+  //           component.renderCollision(
+  //             canvas,
+  //             widget.playerColor ?? Colors.red.withOpacity(0.5),
+  //           );
+  //         } else if (component is Npc) {
+  //           component.renderCollision(
+  //             canvas,
+  //             widget.npcColor ?? Colors.green.withOpacity(0.5),
+  //           );
+  //         }
+  //       }
+  //     };
 }

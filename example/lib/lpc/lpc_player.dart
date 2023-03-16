@@ -25,16 +25,17 @@ class LPCPlayer extends SimplePlayer with ObjectCollision {
           position: position,
           size: Vector2.all(48),
         ) {
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: size / 3,
-            align: Vector2(size.x / 3, size.y / 1.6),
-          )
-        ],
-      ),
-    );
+          // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.rectangle(
+    //         size: size / 3,
+    //         align: Vector2(size.x / 3, size.y / 1.6),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 
   void showEditCharacter() {

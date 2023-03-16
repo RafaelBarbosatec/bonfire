@@ -15,22 +15,23 @@ class BarrelDraggable extends GameDecoration
             sprite: CommonSpriteSheet.barrelSprite,
             position: position,
             size: Vector2.all(DungeonMap.tileSize)) {
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(
-              DungeonMap.tileSize * 0.6,
-              DungeonMap.tileSize * 0.4,
-            ),
-            align: Vector2(
-              DungeonMap.tileSize * 0.2,
-              DungeonMap.tileSize * 0.4,
-            ),
-          ),
-        ],
-      ),
-    );
+    // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.rectangle(
+    //         size: Vector2(
+    //           DungeonMap.tileSize * 0.6,
+    //           DungeonMap.tileSize * 0.4,
+    //         ),
+    //         align: Vector2(
+    //           DungeonMap.tileSize * 0.2,
+    //           DungeonMap.tileSize * 0.4,
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
     _textConfig = TextPaint(
       style: TextStyle(color: Colors.white, fontSize: width / 4),
     );
@@ -52,5 +53,11 @@ class BarrelDraggable extends GameDecoration
       text,
       Vector2(xCenter, 2.5 * yCenter),
     );
+  }
+
+  @override
+  Future<void> onLoad() async{
+    add(RectangleHitbox(size: size));
+    return super.onLoad();
   }
 }

@@ -15,7 +15,7 @@ import 'package:flame/src/game/overlay_manager.dart';
 import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
-class BonfireGame extends BaseGame implements BonfireGameInterface {
+class BonfireGame extends BaseGame implements BonfireGameInterface  {
   static const INTERVAL_UPDATE_CACHE = 200;
   static const INTERVAL_UPDATE_ORDER = 499;
 

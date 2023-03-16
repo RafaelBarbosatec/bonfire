@@ -40,22 +40,23 @@ class Knight extends SimplePlayer
         color: Colors.transparent,
       ),
     );
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(
-              DungeonMap.tileSize / 2,
-              DungeonMap.tileSize / 2.2,
-            ),
-            align: Vector2(
-              DungeonMap.tileSize / 3.5,
-              DungeonMap.tileSize / 2,
-            ),
-          )
-        ],
-      ),
-    );
+    // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.rectangle(
+    //         size: Vector2(
+    //           DungeonMap.tileSize / 2,
+    //           DungeonMap.tileSize / 2.2,
+    //         ),
+    //         align: Vector2(
+    //           DungeonMap.tileSize / 3.5,
+    //           DungeonMap.tileSize / 2,
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 
   @override

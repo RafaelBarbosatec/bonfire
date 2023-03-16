@@ -16,21 +16,22 @@ class Critter extends SimpleNpc
           size: Vector2.all(DungeonMap.tileSize * 0.8),
           speed: DungeonMap.tileSize * 2.75,
         ) {
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(
-              DungeonMap.tileSize * 0.4,
-              DungeonMap.tileSize * 0.4,
-            ),
-            align: Vector2(
-              DungeonMap.tileSize * 0.2,
-              DungeonMap.tileSize * 0.2,
-            ),
-          ),
-        ],
-      ),
-    );
+          // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.rectangle(
+    //         size: Vector2(
+    //           DungeonMap.tileSize * 0.4,
+    //           DungeonMap.tileSize * 0.4,
+    //         ),
+    //         align: Vector2(
+    //           DungeonMap.tileSize * 0.2,
+    //           DungeonMap.tileSize * 0.2,
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }

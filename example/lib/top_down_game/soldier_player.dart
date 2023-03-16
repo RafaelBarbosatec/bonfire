@@ -23,19 +23,20 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
           animIdle: _getSoldierSprite(),
           animRun: _getSoldierSprite(),
         ) {
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.circle(
-            radius: 21.5,
-            align: Vector2(
-              12.5,
-              0,
-            ),
-          ),
-        ],
-      ),
-    );
+          // TODO
+    // setupCollision(
+    //   CollisionConfig(
+    //     collisions: [
+    //       CollisionArea.circle(
+    //         radius: 21.5,
+    //         align: Vector2(
+    //           12.5,
+    //           0,
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
     setupLighting(
       LightingConfig(
         radius: size.y * 2,
