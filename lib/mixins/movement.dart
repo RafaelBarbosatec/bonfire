@@ -411,7 +411,7 @@ mixin Movement on GameComponent {
       //       displacement: displacement,
       //     )
       //     .isNotEmpty;
-      return false;
+      return (this as ObjectCollision).isCollision(displacement: displacement);
     }
     return false;
   }

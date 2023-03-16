@@ -1,3 +1,4 @@
+import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/bonfire.dart';
 
 /// Mixin responsible for adding collision
@@ -27,6 +28,32 @@ mixin ObjectCollision on GameComponent {
     //   //...
     // }
     super.onCollisionEnd(other);
+  }
+
+  bool isCollision({Vector2? displacement}) {
+    if (displacement != null) {
+      final hit = children.whereType<ShapeHitbox>().first;
+      var dis = displacement - position;
+
+      hit.position = Vector2(
+        dis.x * (isFlippedHorizontally ? -1 : 1),
+        dis.y * (isFlippedVertically ? -1 : 1),
+      );
+      for (var element in (gameRef as BaseGame).collisionDetection.items) {
+        if (element != hit) {
+          var inter = (findGame() as BaseGame)
+              .collisionDetection
+              .intersections(element, hit);
+          if (inter.isNotEmpty) {
+            hit.position = Vector2.zero();
+            return true;
+          }
+        }
+      }
+      hit.position = Vector2.zero();
+    }
+
+    return false;
   }
 
   /// if return `false` so the object will not collide with anything or block the passage.
