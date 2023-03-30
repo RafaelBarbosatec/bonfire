@@ -208,9 +208,9 @@ mixin MoveToPositionAlongThePath on Movement {
     area = Rect.fromLTRB(left, top, right, bottom).inflate(inflate);
 
     for (final e in gameRef.collisions()) {
-      if (!ignoreCollisions.contains(e) &&
-          area.overlaps(e.rectConsideringCollision)) {
-        _addCollisionOffsetsPositionByTile(e.rectConsideringCollision);
+      var rect = e.toAbsoluteRect();
+      if (!ignoreCollisions.contains(e) && area.overlaps(rect)) {
+        _addCollisionOffsetsPositionByTile(rect);
       }
     }
 

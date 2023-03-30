@@ -12,7 +12,7 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 31/01/22
 class ArmchairDecoration extends GameDecoration
-    with ObjectCollision, Movement, Pushable {
+    with BlockMovementCollision, Movement, Pushable {
   ArmchairDecoration(Vector2 position)
       : super.withSprite(
           position: position,
@@ -23,7 +23,7 @@ class ArmchairDecoration extends GameDecoration
             srcSize: Vector2.all(64),
           ),
         ) {
-          // TODO
+    // TODO
     // setupCollision(
     //   CollisionConfig(
     //     collisions: [

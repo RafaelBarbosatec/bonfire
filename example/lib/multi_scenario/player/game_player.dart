@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/multi_scenario/utils/constants/game_consts.dart';
 
-class GamePlayer extends SimplePlayer with ObjectCollision {
+class GamePlayer extends SimplePlayer with BlockMovementCollision {
   static const sizePlayer = defaultTileSize * 1.5;
   double baseSpeed = sizePlayer * 2;
 
@@ -32,7 +32,7 @@ class GamePlayer extends SimplePlayer with ObjectCollision {
           life: 100,
           speed: sizePlayer * 2,
         ) {
-          // TODO
+    // TODO
     // setupCollision(
     //   CollisionConfig(
     //     collisions: [

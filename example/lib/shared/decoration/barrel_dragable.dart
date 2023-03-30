@@ -4,7 +4,7 @@ import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class BarrelDraggable extends GameDecoration
-    with DragGesture, ObjectCollision, Movement, Pushable {
+    with DragGesture, BlockMovementCollision, Movement, Pushable {
   late TextPaint _textConfig;
   String text = 'Drag here';
   double xCenter = 0;
@@ -56,8 +56,14 @@ class BarrelDraggable extends GameDecoration
   }
 
   @override
-  Future<void> onLoad() async{
+  Future<void> onLoad() async {
     add(RectangleHitbox(size: size));
     return super.onLoad();
+  }
+
+  @override
+  bool onMovementCollision(GameComponent component, bool active) {
+    print('OI: $component / $active');
+    return super.onMovementCollision(component, active);
   }
 }

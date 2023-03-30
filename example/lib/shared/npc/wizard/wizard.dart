@@ -5,7 +5,7 @@ import 'package:example/shared/util/wizard_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Wizard extends SimpleNpc with ObjectCollision, TapGesture {
+class Wizard extends SimpleNpc with BlockMovementCollision, TapGesture {
   Wizard(Vector2 position)
       : super(
           animation: WizardSpriteSheet.simpleDirectionAnimation,
@@ -13,7 +13,7 @@ class Wizard extends SimpleNpc with ObjectCollision, TapGesture {
           size: Vector2.all(DungeonMap.tileSize * 0.8),
           speed: DungeonMap.tileSize * 1.6,
         ) {
-          // TODO
+    // TODO
     // setupCollision(
     //   CollisionConfig(
     //     collisions: [

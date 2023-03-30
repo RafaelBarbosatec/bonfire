@@ -6,7 +6,7 @@ import 'critter_controller.dart';
 
 class Critter extends SimpleNpc
     with
-        ObjectCollision,
+        BlockMovementCollision,
         AutomaticRandomMovement,
         UseStateController<CritterController> {
   Critter(Vector2 position)
@@ -16,7 +16,7 @@ class Critter extends SimpleNpc
           size: Vector2.all(DungeonMap.tileSize * 0.8),
           speed: DungeonMap.tileSize * 2.75,
         ) {
-          // TODO
+    // TODO
     // setupCollision(
     //   CollisionConfig(
     //     collisions: [

@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 ///
 /// Rafaelbarbosatec
 /// on 19/10/21
-class MyPlayer extends SimplePlayer with ObjectCollision {
+class MyPlayer extends SimplePlayer with BlockMovementCollision {
   MyPlayer(Vector2 position)
       : super(
           animation: PlayerSpriteSheet.simpleDirectionAnimation,
@@ -37,11 +37,5 @@ class MyPlayer extends SimplePlayer with ObjectCollision {
     debugColor = const Color(0xffffffff);
     add(RectangleHitbox(size: size));
     return super.onLoad();
-  }
-
-  @override
-  void onCollision(Set<Vector2> points, PositionComponent other) {
-    print('onCollision: $this -> $other');
-    super.onCollision(points, other);
   }
 }

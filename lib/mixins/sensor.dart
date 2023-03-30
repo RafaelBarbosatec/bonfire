@@ -25,9 +25,10 @@ mixin Sensor<T extends GameComponent> on GameComponent {
       return _collisionConfig!.collisions;
     }
 
-    if (isObjectCollision()) {
-      return (this as ObjectCollision).collisionConfig!.collisions;
-    }
+    //TODO
+    // if (isObjectCollision()) {
+    //   return (this as BlockMovementCollision).collisionConfig!.collisions;
+    // }
 
     return [
       CollisionArea.rectangle(size: size),
@@ -77,10 +78,11 @@ mixin Sensor<T extends GameComponent> on GameComponent {
     for (final vComp in compsToCheck) {
       if (vComp != this && !vComp.isHud) {
         if (vComp.isObjectCollision()) {
-          final hasContact = (vComp as ObjectCollision)
-              .collisionConfig!
-              .verifyCollision(_collisionConfig);
-          if (hasContact) {
+          // final hasContact = (vComp as BlockMovementCollision)
+          //     .collisionConfig!
+          //     .verifyCollision(_collisionConfig);
+          /// TODO
+          if (true) {
             compsInContact.add(vComp);
             onContact(vComp);
           }

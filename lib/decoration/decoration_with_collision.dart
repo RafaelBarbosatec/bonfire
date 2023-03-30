@@ -1,7 +1,8 @@
 import 'package:bonfire/bonfire.dart';
 
 /// GameDecoration with collision used in construct of the map with Tiled
-class GameDecorationWithCollision extends GameDecoration with ObjectCollision {
+class GameDecorationWithCollision extends GameDecoration
+    with BlockMovementCollision {
   GameDecorationWithCollision({
     required Vector2 position,
     required Vector2 size,

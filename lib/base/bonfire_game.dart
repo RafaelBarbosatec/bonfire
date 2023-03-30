@@ -15,8 +15,8 @@ import 'package:flame/src/game/overlay_manager.dart';
 import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
-class BonfireGame extends BaseGame implements BonfireGameInterface  {
-  static const INTERVAL_UPDATE_CACHE = 200;
+class BonfireGame extends BaseGame implements BonfireGameInterface {
+  static const INTERVAL_UPDATE_CACHE = 250;
   static const INTERVAL_UPDATE_ORDER = 499;
 
   /// Context used to access all Flutter power in your game.
@@ -72,8 +72,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface  {
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
   final List<GameComponent> _visibleComponents = List.empty(growable: true);
-  Iterable<ObjectCollision> _visibleCollisions = List.empty();
-  final List<ObjectCollision> _collisions = List.empty(growable: true);
+  Iterable<ShapeHitbox> _visibleCollisions = List.empty();
   final List<GameComponent> _addLater = List.empty(growable: true);
   late IntervalTick _interval;
   late IntervalTick _intervalUpdateOder;
@@ -254,12 +253,12 @@ class BonfireGame extends BaseGame implements BonfireGameInterface  {
   }
 
   @override
-  Iterable<ObjectCollision> collisions() {
-    return _collisions;
+  Iterable<ShapeHitbox> collisions() {
+    return collisionDetection.items;
   }
 
   @override
-  Iterable<ObjectCollision> visibleCollisions() {
+  Iterable<ShapeHitbox> visibleCollisions() {
     return _visibleCollisions;
   }
 
@@ -281,12 +280,13 @@ class BonfireGame extends BaseGame implements BonfireGameInterface  {
   }
 
   void _updateVisibleCollisions() {
-    _visibleCollisions = _collisions.where(_isVisibleCollision);
-    gameController?.notifyListeners();
+    if (isLoaded) {
+      _visibleCollisions = collisionDetection.items.where(_isVisibleCollision);
+    }
   }
 
-  bool _isVisibleCollision(element) {
-    return element.isVisible || element is Tile;
+  bool _isVisibleCollision(ShapeHitbox element) {
+    return camera.isRectOnCamera(element.toAbsoluteRect());
   }
 
   @override
@@ -373,14 +373,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface  {
   }
 
   void _detachComp(GameComponent c) => c.onGameDetach();
-
-  void addCollision(ObjectCollision obj) {
-    _collisions.add(obj);
-  }
-
-  void removeCollision(ObjectCollision obj) {
-    _collisions.remove(obj);
-  }
 
   void addVisible(GameComponent obj) {
     _visibleComponents.add(obj);

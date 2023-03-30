@@ -15,7 +15,8 @@ import 'package:flutter/services.dart';
 ///
 /// Rafaelbarbosatec
 /// on 27/01/22
-class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
+class SoldierPlayer extends RotationPlayer
+    with BlockMovementCollision, Lighting {
   SoldierPlayer(Vector2 position)
       : super(
           position: position,
@@ -23,7 +24,7 @@ class SoldierPlayer extends RotationPlayer with ObjectCollision, Lighting {
           animIdle: _getSoldierSprite(),
           animRun: _getSoldierSprite(),
         ) {
-          // TODO
+    // TODO
     // setupCollision(
     //   CollisionConfig(
     //     collisions: [

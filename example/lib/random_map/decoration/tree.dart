@@ -17,7 +17,7 @@ double getSizeByTileSize(double size) {
   return size * (DungeonMap.tileSize / 16);
 }
 
-class Tree extends GameDecoration with ObjectCollision {
+class Tree extends GameDecoration with BlockMovementCollision {
   Tree(Vector2 position)
       : super.withSprite(
           sprite: Sprite.load('tile_random/tree.png'),
@@ -27,7 +27,7 @@ class Tree extends GameDecoration with ObjectCollision {
             getSizeByTileSize(48),
           ),
         ) {
-          // TODO
+    // TODO
     // setupCollision(
     //   CollisionConfig(
     //     collisions: [

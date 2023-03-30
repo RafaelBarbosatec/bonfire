@@ -8,7 +8,7 @@ import 'goblin_controller.dart';
 
 class Goblin extends SimpleEnemy
     with
-        ObjectCollision,
+        BlockMovementCollision,
         JoystickListener,
         MovementByJoystick,
         AutomaticRandomMovement,
@@ -22,7 +22,7 @@ class Goblin extends SimpleEnemy
           speed: DungeonMap.tileSize * 1.6,
           life: 100,
         ) {
-          // TODO
+    // TODO
     // setupCollision(
     //   CollisionConfig(
     //     collisions: [

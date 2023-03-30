@@ -271,7 +271,7 @@ extension GameComponentExtensions on GameComponent {
     // TODO
     // return (this is ObjectCollision &&
     //     (this as ObjectCollision).containCollision());
-    return this is ObjectCollision;
+    return this is BlockMovementCollision;
   }
 
   Direction? directionThePlayerIsIn() {

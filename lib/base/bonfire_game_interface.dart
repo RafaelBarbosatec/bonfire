@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/decoration/decoration.dart';
@@ -110,10 +111,10 @@ abstract class BonfireGameInterface {
   Iterable<Sensor> visibleSensors();
 
   /// Used to get all collisions.
-  Iterable<ObjectCollision> collisions();
+  Iterable<ShapeHitbox> collisions();
 
   /// Used to get visible collisions.
-  Iterable<ObjectCollision> visibleCollisions();
+  Iterable<ShapeHitbox> visibleCollisions();
 
   /// Used to find visible component by type.
   Iterable<T> visibleComponentsByType<T>();

@@ -32,7 +32,6 @@ class SimpleExampleGame extends StatelessWidget {
           'goblin': (properties) => MyEnemy(properties.position),
         },
       ),
-      constructionMode: true,
       components: [
         BarrelDraggable(Vector2(300, 150)),
       ],

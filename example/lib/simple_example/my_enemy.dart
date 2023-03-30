@@ -12,7 +12,7 @@ import 'package:example/shared/util/enemy_sprite_sheet.dart';
 ///
 /// Rafaelbarbosatec
 /// on 19/10/21
-class MyEnemy extends SimpleEnemy with ObjectCollision {
+class MyEnemy extends SimpleEnemy with BlockMovementCollision {
   MyEnemy(Vector2 position)
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,
@@ -21,7 +21,7 @@ class MyEnemy extends SimpleEnemy with ObjectCollision {
           life: 100,
         ) {
     /// here we configure collision of the enemy
-     // TODO
+    // TODO
     // setupCollision(
     //   CollisionConfig(
     //     collisions: [

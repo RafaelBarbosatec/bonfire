@@ -15,7 +15,10 @@ enum PlayerAttackType {
 }
 
 class Knight extends SimplePlayer
-    with Lighting, ObjectCollision, UseStateController<KnightController> {
+    with
+        Lighting,
+        BlockMovementCollision,
+        UseStateController<KnightController> {
   static final double maxSpeed = DungeonMap.tileSize * 3;
 
   double angleRadAttack = 0.0;

@@ -7,7 +7,7 @@ class FlyingAttackObject extends GameComponent
     with
         UseSpriteAnimation,
         UseAssetsLoader,
-        ObjectCollision,
+        BlockMovementCollision,
         Lighting,
         Movement {
   final dynamic id;

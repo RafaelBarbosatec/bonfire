@@ -2,14 +2,14 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 
-class ColumnDecoration extends GameDecoration with ObjectCollision {
+class ColumnDecoration extends GameDecoration with BlockMovementCollision {
   ColumnDecoration(Vector2 position)
       : super.withSprite(
           sprite: CommonSpriteSheet.columnSprite,
           position: position,
           size: Vector2(DungeonMap.tileSize, DungeonMap.tileSize * 3),
         ) {
-          // TODO
+    // TODO
     // setupCollision(
     //   CollisionConfig(
     //     collisions: [

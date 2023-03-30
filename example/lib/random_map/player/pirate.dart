@@ -13,7 +13,7 @@ import 'package:example/random_map/player/pirate_sprite_sheet.dart';
 ///
 /// Rafaelbarbosatec
 /// on 03/06/22
-class Pirate extends SimplePlayer with ObjectCollision {
+class Pirate extends SimplePlayer with BlockMovementCollision {
   Pirate({
     required Vector2 position,
   }) : super(

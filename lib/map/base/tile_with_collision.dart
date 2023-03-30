@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 
-class TileWithCollision extends Tile with ObjectCollision {
+class TileWithCollision extends Tile with BlockMovementCollision {
   TileWithCollision({
     required String spritePath,
     required Vector2 position,

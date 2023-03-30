@@ -15,7 +15,7 @@ import 'package:example/lpc/widgets/dialog_custom_character.dart';
 ///
 /// Rafaelbarbosatec
 /// on 27/06/22
-class LPCPlayer extends SimplePlayer with ObjectCollision {
+class LPCPlayer extends SimplePlayer with BlockMovementCollision {
   static String customWidgetKey = 'dialogCharacter';
   CustomStatus customStatus;
   LPCPlayer({
@@ -25,7 +25,7 @@ class LPCPlayer extends SimplePlayer with ObjectCollision {
           position: position,
           size: Vector2.all(48),
         ) {
-          // TODO
+    // TODO
     // setupCollision(
     //   CollisionConfig(
     //     collisions: [

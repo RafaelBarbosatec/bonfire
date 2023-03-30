@@ -12,7 +12,7 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 10/12/21
 
-class CollisionGameComponent extends GameComponent with ObjectCollision {
+class CollisionGameComponent extends GameComponent with BlockMovementCollision {
   final String name;
 
   CollisionGameComponent({
