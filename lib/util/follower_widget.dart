@@ -46,7 +46,7 @@ class FollowerWidget extends StatefulWidget {
         );
       },
     );
-
+    // ignore: invalid_null_aware_operator
     Overlay.of(context)?.let((over) {
       over.insert(overlay);
       _mapOverlayEntry[identify] = overlay;
