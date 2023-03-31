@@ -475,7 +475,7 @@ class TiledWorldBuilder {
         tileSetItemList.first.properties,
       );
 
-      List<ShapeComponent> collisions = [];
+      List<ShapeHitbox> collisions = [];
 
       if (tileSetObjectList.isNotEmpty) {
         for (var object in tileSetObjectList) {
@@ -581,7 +581,7 @@ class TiledWorldBuilder {
     );
   }
 
-  ShapeComponent _getCollisionObject(
+  ShapeHitbox _getCollisionObject(
     double x,
     double y,
     double width,
@@ -590,7 +590,7 @@ class TiledWorldBuilder {
     List<Polygon>? polygon,
     bool isObject = false,
   }) {
-    ShapeComponent ca = RectangleHitbox(
+    ShapeHitbox ca = RectangleHitbox(
       size: Vector2(width, height),
       position: Vector2(x, y),
     );
@@ -608,7 +608,7 @@ class TiledWorldBuilder {
     return ca;
   }
 
-  ShapeComponent _normalizePolygon(
+  ShapeHitbox _normalizePolygon(
     double x,
     double y,
     List<Polygon> polygon, {

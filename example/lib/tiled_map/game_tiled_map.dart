@@ -83,6 +83,7 @@ class GameTiledMap extends StatelessWidget {
             },
           ),
           lightingColorGame: Colors.black.withOpacity(0.7),
+          showCollisionArea: true,
           overlayBuilderMap: {
             'barLife': (context, game) => const BarLifeWidget(),
             'miniMap': (context, game) => MiniMap(

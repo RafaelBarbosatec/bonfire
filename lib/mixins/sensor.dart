@@ -13,10 +13,10 @@ mixin Sensor<T extends GameComponent> on GameComponent {
 
   void onContact(GameComponent component) {}
 
-  List<ShapeComponent>? areaSensorToAdd;
+  List<ShapeHitbox>? areaSensorToAdd;
 
   void setupSensorArea({
-    List<ShapeComponent>? areaSensor,
+    List<ShapeHitbox>? areaSensor,
     int intervalCallback = 1000,
   }) {
     _intervalCallback = intervalCallback;
@@ -51,19 +51,13 @@ mixin Sensor<T extends GameComponent> on GameComponent {
 
   @override
   Future<void> onLoad() async {
-    addAll([RectangleComponent(size: size)]);
+    addAll([RectangleHitbox(size: size)]);
     return super.onLoad();
   }
 
-  void _replaceShapeComponents(List<ShapeComponent> areaList) {
-    removeAll(children.whereType<ShapeComponent>());
+  void _replaceShapeComponents(List<ShapeHitbox> areaList) {
+    removeAll(children.whereType<ShapeHitbox>());
     areaList.let(addAll);
-  }
-
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    print(other);
-    super.onCollision(intersectionPoints, other);
   }
 
   @override

@@ -1,7 +1,7 @@
-import 'package:flame/geometry.dart';
+import 'package:flame/collisions.dart';
 
 class TiledDataObjectCollision {
-  final List<ShapeComponent>? collisions;
+  final List<ShapeHitbox>? collisions;
   final String type;
   final Map<String, dynamic>? properties;
 

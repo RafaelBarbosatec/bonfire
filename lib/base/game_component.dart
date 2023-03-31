@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:flutter/widgets.dart';
@@ -129,5 +131,31 @@ abstract class GameComponent extends PositionComponent
     isVisible = nowIsVisible;
   }
 
+  @override
+  Future<void> addAll(Iterable<Component> components) {
+    components.forEach(_confHitBoxRender);
+    return super.addAll(components);
+  }
+
+  @override
+  FutureOr<void> add(Component component) async {
+    _confHitBoxRender(component);
+    return super.add(component);
+  }
+
   void onGameDetach() {}
+
+  void _confHitBoxRender(Component component) {
+    if (component is ShapeHitbox) {
+      if (gameRef.showCollisionArea) {
+        var paintCollition = Paint()
+          ..color = gameRef.collisionAreaColor ?? const Color(0xffffffff);
+        if (component is Sensor) {
+          paintCollition.color = sensorColor;
+        }
+        component.paint = paintCollition;
+      }
+      component.renderShape = gameRef.showCollisionArea;
+    }
+  }
 }

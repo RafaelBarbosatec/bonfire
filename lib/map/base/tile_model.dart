@@ -2,6 +2,7 @@ import 'package:bonfire/map/base/tile.dart';
 import 'package:bonfire/map/base/tile_with_collision.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
@@ -100,7 +101,7 @@ class TileModel {
   final Map<String, dynamic>? properties;
   final TileModelSprite? sprite;
   final TileModelAnimation? animation;
-  final List<ShapeComponent>? collisions;
+  final List<ShapeHitbox>? collisions;
   final double angle;
   final bool isFlipVertical;
   final bool isFlipHorizontal;

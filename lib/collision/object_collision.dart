@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +25,13 @@ mixin BlockMovementCollision on GameComponent {
               if (inter.isNotEmpty) {
                 hit.position = originalPosition;
                 var comp = element.parent;
+                bool colisionComp = true;
+                bool colisionComp2 = true;
                 if (comp is GameComponent) {
-                  return onComponentTypeCheck(comp);
+                  colisionComp = comp.onComponentTypeCheck(this);
+                  colisionComp2 = onComponentTypeCheck(comp);
                 }
-                return true;
+                return colisionComp && colisionComp2;
               }
             }
           }
@@ -60,15 +61,5 @@ mixin BlockMovementCollision on GameComponent {
 
   bool containCollision() {
     return hitboxList.isNotEmpty;
-  }
-
-  @override
-  FutureOr<void> add(Component component) {
-    if (gameRef.showCollisionArea && component is ShapeHitbox) {
-      component.paint = Paint()
-        ..color = gameRef.collisionAreaColor ?? Colors.white;
-      component.renderShape = true;
-    }
-    return super.add(component);
   }
 }

@@ -29,9 +29,7 @@ class DungeonMap {
             sprite: TileModelSprite(path: wallBottom),
             x: indexColumn.toDouble(),
             y: indexRow.toDouble(),
-            collisions: [
-              RectangleComponent(size: Vector2(tileSize, tileSize))
-            ],
+            collisions: [RectangleHitbox(size: Vector2(tileSize, tileSize))],
             width: tileSize,
             height: tileSize,
           ));
@@ -42,9 +40,7 @@ class DungeonMap {
             sprite: TileModelSprite(path: wall),
             x: indexColumn.toDouble(),
             y: indexRow.toDouble(),
-            collisions: [
-              RectangleComponent(size: Vector2(tileSize, tileSize))
-            ],
+            collisions: [RectangleHitbox(size: Vector2(tileSize, tileSize))],
             width: tileSize,
             height: tileSize,
           ));
@@ -56,9 +52,7 @@ class DungeonMap {
             sprite: TileModelSprite(path: wallTop),
             x: indexColumn.toDouble(),
             y: indexRow.toDouble(),
-            collisions: [
-              RectangleComponent(size: Vector2(tileSize, tileSize))
-            ],
+            collisions: [RectangleHitbox(size: Vector2(tileSize, tileSize))],
             width: tileSize,
             height: tileSize,
           ));
@@ -86,9 +80,7 @@ class DungeonMap {
             sprite: TileModelSprite(path: wallLeft),
             x: indexColumn.toDouble(),
             y: indexRow.toDouble(),
-            collisions: [
-              RectangleComponent(size: Vector2(tileSize, tileSize))
-            ],
+            collisions: [RectangleHitbox(size: Vector2(tileSize, tileSize))],
             width: tileSize,
             height: tileSize,
           ));
@@ -98,9 +90,7 @@ class DungeonMap {
             sprite: TileModelSprite(path: wallBottomLeft),
             x: indexColumn.toDouble(),
             y: indexRow.toDouble(),
-            collisions: [
-              RectangleComponent(size: Vector2(tileSize, tileSize))
-            ],
+            collisions: [RectangleHitbox(size: Vector2(tileSize, tileSize))],
             width: tileSize,
             height: tileSize,
           ));
@@ -111,9 +101,7 @@ class DungeonMap {
             sprite: TileModelSprite(path: wallRight),
             x: indexColumn.toDouble(),
             y: indexRow.toDouble(),
-            collisions: [
-              RectangleComponent(size: Vector2(tileSize, tileSize))
-            ],
+            collisions: [RectangleHitbox(size: Vector2(tileSize, tileSize))],
             width: tileSize,
             height: tileSize,
           ));
