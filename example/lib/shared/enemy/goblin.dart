@@ -68,13 +68,9 @@ class Goblin extends SimpleEnemy
       size: Vector2.all(width * 0.9),
       damage: damage,
       speed: DungeonMap.tileSize * 3,
-      collision: CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2.all(width / 2),
-            align: Vector2(width * 0.25, width * 0.25),
-          ),
-        ],
+      collision: RectangleComponent(
+        size: Vector2.all(width / 2),
+        position: Vector2(width * 0.25, width * 0.25),
       ),
       lightingConfig: LightingConfig(
         radius: width / 2,

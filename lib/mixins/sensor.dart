@@ -1,103 +1,85 @@
-import 'dart:ui';
+import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 final Color sensorColor = const Color(0xFFF44336).withOpacity(0.5);
 
 /// Mixin responsible for adding trigger to detect other objects above
 /// T is a type that Sensor will be find contact.
 mixin Sensor<T extends GameComponent> on GameComponent {
-  void onContact(GameComponent component);
-  void onContactExit(GameComponent component) {}
+  int _intervalCallback = 1000;
+  GameComponent? componentIncontact;
 
-  bool enabledSensor = true;
-  List<GameComponent> _componentsInContact = [];
+  void onContact(GameComponent component) {}
 
-  int _intervalCheckContact = 250;
-  bool _checkOnlyVisible = true;
-  final String _intervalCheckContactKey = 'KEY_CHECK_SENSOR_CONTACT';
-
-  CollisionConfig? _collisionConfig;
-
-  Iterable<CollisionArea> get _sensorArea {
-    if (_collisionConfig != null) {
-      return _collisionConfig!.collisions;
-    }
-
-    //TODO
-    // if (isObjectCollision()) {
-    //   return (this as BlockMovementCollision).collisionConfig!.collisions;
-    // }
-
-    return [
-      CollisionArea.rectangle(size: size),
-    ];
-  }
+  List<ShapeComponent>? areaSensorToAdd;
 
   void setupSensorArea({
-    List<CollisionArea>? areaSensor,
-    int intervalCheck = 250,
-    bool checkOnlyVisible = true,
+    List<ShapeComponent>? areaSensor,
+    int intervalCallback = 1000,
   }) {
-    _checkOnlyVisible = checkOnlyVisible;
-    _intervalCheckContact = intervalCheck;
-    _collisionConfig = CollisionConfig(
-      collisions: areaSensor ?? _sensorArea,
-    );
+    _intervalCallback = intervalCallback;
+    if (areaSensor != null) {
+      if (isLoaded) {
+        _replaceShapeComponents(areaSensor);
+      } else {
+        areaSensorToAdd = areaSensor;
+      }
+    }
   }
 
   @override
   void update(double dt) {
-    if (enabledSensor && (_checkOnlyVisible ? isVisible : true)) {
-      if (checkInterval(_intervalCheckContactKey, _intervalCheckContact, dt)) {
-        _collisionConfig ??= CollisionConfig(collisions: _sensorArea);
-        _collisionConfig?.updatePosition(position);
-        _verifyContact();
+    if (areaSensorToAdd != null) {
+      _replaceShapeComponents(areaSensorToAdd!);
+      areaSensorToAdd = null;
+    }
+    if (checkInterval('Sensor.$runtimeType', _intervalCallback, dt)) {
+      if (componentIncontact != null) {
+        onContact(componentIncontact!);
       }
     }
     super.update(dt);
   }
 
   @override
-  void render(Canvas c) {
-    super.render(c);
-    if (gameRef.showCollisionArea) {
-      for (final area in _sensorArea) {
-        area.render(c, sensorColor);
-      }
-    }
+  // ignore: must_call_super
+  bool onComponentTypeCheck(PositionComponent other) {
+    return false;
   }
 
-  void _verifyContact() {
-    List<GameComponent> compsInContact = [];
-    Iterable<GameComponent> compsToCheck = _checkOnlyVisible
-        ? gameRef.visibleComponentsByType<T>()
-        : gameRef.componentsByType<T>();
+  @override
+  Future<void> onLoad() async {
+    addAll([RectangleComponent(size: size)]);
+    return super.onLoad();
+  }
 
-    for (final vComp in compsToCheck) {
-      if (vComp != this && !vComp.isHud) {
-        if (vComp.isObjectCollision()) {
-          // final hasContact = (vComp as BlockMovementCollision)
-          //     .collisionConfig!
-          //     .verifyCollision(_collisionConfig);
-          /// TODO
-          if (true) {
-            compsInContact.add(vComp);
-            onContact(vComp);
-          }
-        } else if (vComp.toRect().overlaps(_collisionConfig!.rect)) {
-          compsInContact.add(vComp);
-          onContact(vComp);
-        }
-      }
-    }
+  void _replaceShapeComponents(List<ShapeComponent> areaList) {
+    removeAll(children.whereType<ShapeComponent>());
+    areaList.let(addAll);
+  }
 
-    for (final c in _componentsInContact) {
-      if (!compsInContact.contains(c)) {
-        onContactExit(c);
-      }
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    print(other);
+    super.onCollision(intersectionPoints, other);
+  }
+
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is GameComponent) {
+      componentIncontact = other;
     }
-    _componentsInContact = compsInContact;
+    super.onCollisionStart(intersectionPoints, other);
+  }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    if (componentIncontact == other) {
+      componentIncontact = null;
+    }
+    super.onCollisionEnd(other);
   }
 }

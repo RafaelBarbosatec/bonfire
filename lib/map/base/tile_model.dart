@@ -1,4 +1,3 @@
-import 'package:bonfire/collision/collision_area.dart';
 import 'package:bonfire/map/base/tile.dart';
 import 'package:bonfire/map/base/tile_with_collision.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
@@ -211,5 +210,4 @@ class TileModel {
       tile.flipVerticallyAroundCenter();
     }
   }
-
 }

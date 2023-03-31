@@ -61,7 +61,7 @@ extension AllyExtensions on Ally {
     int interval = 1000,
     bool withCollision = true,
     bool enableDiagonal = true,
-    CollisionConfig? collision,
+    ShapeComponent? collision,
     VoidCallback? onDestroy,
     VoidCallback? execute,
     LightingConfig? lightingConfig,

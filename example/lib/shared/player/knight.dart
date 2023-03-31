@@ -43,23 +43,7 @@ class Knight extends SimplePlayer
         color: Colors.transparent,
       ),
     );
-    // TODO
-    // setupCollision(
-    //   CollisionConfig(
-    //     collisions: [
-    //       CollisionArea.rectangle(
-    //         size: Vector2(
-    //           DungeonMap.tileSize / 2,
-    //           DungeonMap.tileSize / 2.2,
-    //         ),
-    //         align: Vector2(
-    //           DungeonMap.tileSize / 3.5,
-    //           DungeonMap.tileSize / 2,
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
+    
   }
 
   @override
@@ -112,13 +96,9 @@ class Knight extends SimplePlayer
       size: Vector2.all(width * 0.7),
       damage: damage,
       speed: maxSpeed * 2,
-      collision: CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(width / 3, width / 3),
-            align: Vector2(width * 0.1, 0),
-          ),
-        ],
+      collision: RectangleComponent(
+        size: Vector2(width / 3, width / 3),
+        position: Vector2(width * 0.1, 0),
       ),
       lightingConfig: LightingConfig(
         radius: width / 2,
@@ -256,6 +236,7 @@ class Knight extends SimplePlayer
 
   @override
   Future<void> onLoad() async {
+    add(RectangleHitbox(size: size));
     spriteDirectionAttack = await Sprite.load('direction_attack.png');
     return super.onLoad();
   }

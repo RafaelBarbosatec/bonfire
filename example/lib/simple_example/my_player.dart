@@ -24,7 +24,6 @@ class MyPlayer extends SimplePlayer with BlockMovementCollision {
 
   @override
   Future<void> onLoad() {
-    debugColor = const Color(0xffffffff);
     add(RectangleHitbox(size: size));
     return super.onLoad();
   }

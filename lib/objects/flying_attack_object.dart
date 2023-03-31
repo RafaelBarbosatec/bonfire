@@ -21,6 +21,7 @@ class FlyingAttackObject extends GameComponent
   final Vector2? destroySize;
   double _cosAngle = 0;
   double _senAngle = 0;
+  ShapeComponent? collision;
 
   FlyingAttackObject({
     required Vector2 position,
@@ -38,7 +39,7 @@ class FlyingAttackObject extends GameComponent
     this.onDestroy,
     this.enabledDiagonal = true,
     LightingConfig? lightingConfig,
-    CollisionConfig? collision,
+    this.collision,
   }) {
     this.speed = speed;
     loader?.add(AssetToLoad(flyAnimation, (value) {
@@ -52,18 +53,6 @@ class FlyingAttackObject extends GameComponent
     _senAngle = sin(angle);
 
     if (lightingConfig != null) setupLighting(lightingConfig);
-
-// TODO
-    // setupCollision(
-    //   collision ??
-    //       CollisionConfig(
-    //         collisions: [
-    //           CollisionArea.rectangle(
-    //             size: Vector2(width, height),
-    //           ),
-    //         ],
-    //       ),
-    // );
   }
 
   FlyingAttackObject.byDirection({
@@ -81,7 +70,7 @@ class FlyingAttackObject extends GameComponent
     this.onDestroy,
     this.enabledDiagonal = true,
     LightingConfig? lightingConfig,
-    CollisionConfig? collision,
+    this.collision,
   }) {
     this.speed = speed;
     loader?.add(AssetToLoad(flyAnimation, (value) {
@@ -92,18 +81,6 @@ class FlyingAttackObject extends GameComponent
     this.size = size;
 
     if (lightingConfig != null) setupLighting(lightingConfig);
-
-// TODO
-    // setupCollision(
-    //   collision ??
-    //       CollisionConfig(
-    //         collisions: [
-    //           CollisionArea.rectangle(
-    //             size: Vector2(width, height),
-    //           ),
-    //         ],
-    //       ),
-    // );
   }
 
   FlyingAttackObject.byAngle({
@@ -121,7 +98,7 @@ class FlyingAttackObject extends GameComponent
     this.onDestroy,
     this.enabledDiagonal = true,
     LightingConfig? lightingConfig,
-    CollisionConfig? collision,
+    this.collision,
   }) : direction = null {
     this.speed = speed;
     loader?.add(AssetToLoad(flyAnimation, (value) {
@@ -135,18 +112,6 @@ class FlyingAttackObject extends GameComponent
     _senAngle = sin(angle);
 
     if (lightingConfig != null) setupLighting(lightingConfig);
-
-// TODO
-    // setupCollision(
-    //   collision ??
-    //       CollisionConfig(
-    //         collisions: [
-    //           CollisionArea.rectangle(
-    //             size: Vector2(width, height),
-    //           ),
-    //         ],
-    //       ),
-    // );
   }
 
   @override
@@ -164,17 +129,19 @@ class FlyingAttackObject extends GameComponent
     }
   }
 
-// TODO
-  // @override
-  // bool onCollision(GameComponent component, bool active) {
-  //   if (component is Attackable && !component.isRemoving) {
-  //     component.receiveDamage(attackFrom, damage, id);
-  //   } else if (!withDecorationCollision) {
-  //     return false;
-  //   }
-  //   _destroyObject(component);
-  //   return true;
-  // }
+  @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    if (other is Attackable && !other.isRemoving) {
+      other.receiveDamage(attackFrom, damage, id);
+    } else if (!withDecorationCollision) {
+      return false;
+    }
+    if (other is GameComponent) {
+      _destroyObject(other);
+    }
+
+    return super.onComponentTypeCheck(other);
+  }
 
   void _destroyObject(GameComponent component) {
     if (isRemoving) return;
@@ -186,8 +153,7 @@ class FlyingAttackObject extends GameComponent
         _destroyByAngle(component);
       }
     }
-    // TODO
-    // setupCollision(CollisionConfig(collisions: []));
+    removeAll(children);
     onDestroy?.call();
   }
 
@@ -337,5 +303,11 @@ class FlyingAttackObject extends GameComponent
   void onMount() {
     anchor = Anchor.center;
     super.onMount();
+  }
+
+  @override
+  Future<void> onLoad() {
+    collision?.let(add);
+    return super.onLoad();
   }
 }

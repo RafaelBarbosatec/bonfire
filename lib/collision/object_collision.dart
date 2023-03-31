@@ -28,10 +28,7 @@ mixin BlockMovementCollision on GameComponent {
                 hit.position = originalPosition;
                 var comp = element.parent;
                 if (comp is GameComponent) {
-                  if (comp is BlockMovementCollision) {
-                    comp.onMovementCollision(this, false);
-                  }
-                  return onMovementCollision(comp, true);
+                  return onComponentTypeCheck(comp);
                 }
                 return true;
               }
@@ -43,11 +40,6 @@ mixin BlockMovementCollision on GameComponent {
     }
 
     return false;
-  }
-
-  /// if return `false` so the object will not collide with anything or block the passage.
-  bool onMovementCollision(GameComponent component, bool active) {
-    return true;
   }
 
   Rect get rectCollision {

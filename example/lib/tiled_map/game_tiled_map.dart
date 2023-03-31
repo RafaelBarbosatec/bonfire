@@ -82,7 +82,6 @@ class GameTiledMap extends StatelessWidget {
               'wizard': (properties) => Wizard(properties.position),
             },
           ),
-          showCollisionArea: true,
           lightingColorGame: Colors.black.withOpacity(0.7),
           overlayBuilderMap: {
             'barLife': (context, game) => const BarLifeWidget(),

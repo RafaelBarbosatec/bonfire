@@ -1,4 +1,4 @@
-import 'package:bonfire/collision/collision_config.dart';
+
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/mixins/attackable.dart';
 import 'package:bonfire/npc/enemy/enemy.dart';
@@ -59,7 +59,7 @@ extension EnemyExtensions on Enemy {
     int interval = 1000,
     bool withCollision = true,
     bool enableDiagonal = true,
-    CollisionConfig? collision,
+    ShapeComponent? collision,
     VoidCallback? onDestroy,
     VoidCallback? execute,
     LightingConfig? lightingConfig,
