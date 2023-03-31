@@ -20,17 +20,7 @@ class MyPlayer extends SimplePlayer with BlockMovementCollision {
           size: Vector2.all(32),
           position: position,
           life: 200,
-        ) {
-    /// here we configure collision of the player
-    // TODO
-    // setupCollision(
-    //   CollisionConfig(
-    //     collisions: [
-    //       CollisionArea.rectangle(size: Vector2.all(32)),
-    //     ],
-    //   ),
-    // );
-  }
+        );
 
   @override
   Future<void> onLoad() {

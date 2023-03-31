@@ -14,20 +14,23 @@ import 'package:bonfire/bonfire.dart';
 
 class CollisionGameComponent extends GameComponent with BlockMovementCollision {
   final String name;
+  List<ShapeComponent>? collisions;
 
   CollisionGameComponent({
     this.name = '',
     Map<String, dynamic>? properties,
     required Vector2 position,
     required Vector2 size,
-    List<CollisionArea> collisions = const [],
+    this.collisions,
   }) {
     this.properties = properties;
     this.position = position;
     this.size = size;
-    // TODO
-    // setupCollision(
-    //   CollisionConfig(collisions: collisions),
-    // );
+  }
+
+  @override
+  Future<void> onLoad() async {
+    collisions?.let(addAll);
+    return super.onLoad();
   }
 }

@@ -138,7 +138,7 @@ class MapTerrain {
   final List<double> spritesProportion;
   final String? type;
   final Map<String, dynamic>? properties;
-  final List<CollisionArea>? collisions;
+  final List<ShapeComponent>? collisions;
   final bool collisionOnlyCloseCorners;
   final List<_RandomRange> _rangeProportion = [];
 
@@ -168,10 +168,10 @@ class MapTerrain {
 
   int get maxRandomValue => _rangeProportion.last.end;
 
-  List<CollisionArea>? getCollisionClone({bool checkOnlyClose = false}) {
+  List<ShapeComponent>? getCollisionClone({bool checkOnlyClose = false}) {
     return (collisionOnlyCloseCorners && checkOnlyClose)
         ? null
-        : collisions?.map((e) => e.clone()).toList();
+        : collisions?.toList();
   }
 
   TileModelSprite? getSingleSprite() {
@@ -196,7 +196,7 @@ class MapTerrainCorners extends MapTerrain {
     required this.spriteSheet,
     String? type,
     Map<String, dynamic>? properties,
-    List<CollisionArea>? collisions,
+    List<ShapeComponent>? collisions,
   }) : super(
           value: value,
           sprites: [],

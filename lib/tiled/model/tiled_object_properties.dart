@@ -8,7 +8,7 @@ class TiledObjectProperties {
   final String? name;
   final int? id;
   final Map<String, dynamic> others;
-  final CollisionArea area;
+  final ShapeComponent area;
 
   TiledObjectProperties(
     this.position,

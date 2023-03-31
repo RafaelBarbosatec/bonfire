@@ -3,12 +3,13 @@ import 'package:bonfire/bonfire.dart';
 /// GameDecoration with collision used in construct of the map with Tiled
 class GameDecorationWithCollision extends GameDecoration
     with BlockMovementCollision {
+  Iterable<ShapeComponent>? collisions;
   GameDecorationWithCollision({
     required Vector2 position,
     required Vector2 size,
     Sprite? sprite,
     SpriteAnimation? animation,
-    Iterable<CollisionArea>? collisions,
+    this.collisions,
     double offsetX = 0,
     double offsetY = 0,
     bool aboveComponents = false,
@@ -19,19 +20,13 @@ class GameDecorationWithCollision extends GameDecoration
           sprite: sprite,
         ) {
     this.aboveComponents = aboveComponents;
-    if (collisions != null) {
-      // TODO
-      // setupCollision(
-      //   CollisionConfig(collisions: collisions),
-      // );
-    }
   }
 
   GameDecorationWithCollision.withSprite({
     required Future<Sprite> sprite,
     required Vector2 position,
     required Vector2 size,
-    Iterable<CollisionArea>? collisions,
+    this.collisions,
     double offsetX = 0,
     double offsetY = 0,
     bool aboveComponents = false,
@@ -41,19 +36,13 @@ class GameDecorationWithCollision extends GameDecoration
           size: size,
         ) {
     this.aboveComponents = aboveComponents;
-    if (collisions != null) {
-      // TODO
-      // setupCollision(
-      //   CollisionConfig(collisions: collisions),
-      // );
-    }
   }
 
   GameDecorationWithCollision.withAnimation({
     required Future<SpriteAnimation> animation,
     required Vector2 position,
     required Vector2 size,
-    Iterable<CollisionArea>? collisions,
+    this.collisions,
     double offsetX = 0,
     double offsetY = 0,
     bool aboveComponents = false,
@@ -63,11 +52,11 @@ class GameDecorationWithCollision extends GameDecoration
           size: size,
         ) {
     this.aboveComponents = aboveComponents;
-    if (collisions != null) {
-      // TODO
-      // setupCollision(
-      //   CollisionConfig(collisions: collisions),
-      // );
-    }
+  }
+
+  @override
+  Future<void> onLoad() {
+    collisions?.let(addAll);
+    return super.onLoad();
   }
 }

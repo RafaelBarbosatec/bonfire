@@ -101,7 +101,7 @@ class TileModel {
   final Map<String, dynamic>? properties;
   final TileModelSprite? sprite;
   final TileModelAnimation? animation;
-  final List<CollisionArea>? collisions;
+  final List<ShapeComponent>? collisions;
   final double angle;
   final bool isFlipVertical;
   final bool isFlipHorizontal;
@@ -212,45 +212,4 @@ class TileModel {
     }
   }
 
-  factory TileModel.fromMap(Map<String, dynamic> map) {
-    return TileModel(
-      x: map['x'],
-      y: map['y'],
-      offsetX: map['offsetX'] ?? 0,
-      offsetY: map['offsetY'] ?? 0,
-      width: map['width'],
-      height: map['height'],
-      type: map['type'] as String?,
-      properties: map['properties'] as Map<String, dynamic>?,
-      sprite:
-          map['sprite'] == null ? null : TileModelSprite.fromMap(map['sprite']),
-      animation: map['animation'] == null
-          ? null
-          : TileModelAnimation.fromMap(map['animation']),
-      collisions: map['collisions'] == null
-          ? null
-          : (map['collisions'] as List).map((e) {
-              return CollisionArea.fromMap(e);
-            }).toList(),
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    // ignore: unnecessary_cast
-    return {
-      'x': x,
-      'y': y,
-      'offsetX': offsetX,
-      'offsetY': offsetY,
-      'width': width,
-      'height': height,
-      'type': type,
-      'properties': properties,
-      'sprite': sprite?.toMap(),
-      'animation': animation?.toMap(),
-      'collisions': collisions?.map((e) {
-        return e.toMap();
-      }).toList(),
-    } as Map<String, dynamic>;
-  }
 }

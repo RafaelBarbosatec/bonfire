@@ -391,7 +391,14 @@ class TiledWorldBuilder {
       double y = _getDoubleByProportion(element.y) + offsetY;
       double width = _getDoubleByProportion(element.width);
       double height = _getDoubleByProportion(element.height);
-      final collision = _getCollisionObject(x, y, width, height, element);
+      final collision = _getCollisionObject(
+        x,
+        y,
+        width,
+        height,
+        ellipse: element.ellipse ?? false,
+        polygon: element.polygon,
+      );
 
       if (element.text != null) {
         double fontSize = element.text!.pixelSize.toDouble();
@@ -422,10 +429,10 @@ class TiledWorldBuilder {
         _components.add(
           CollisionGameComponent(
             name: element.name ?? '',
-            position: Vector2(x, y) + (collision.align ?? Vector2.zero()),
-            size: Vector2(collision.rect.width, collision.rect.height),
+            position: Vector2(x, y) + (collision.position ?? Vector2.zero()),
+            size: Vector2(collision.size.x, collision.size.y),
             collisions: [
-              CollisionArea(collision.shape),
+              collision,
             ],
             properties: _extractOtherProperties(element.properties),
           ),
@@ -468,7 +475,7 @@ class TiledWorldBuilder {
         tileSetItemList.first.properties,
       );
 
-      List<CollisionArea> collisions = [];
+      List<ShapeComponent> collisions = [];
 
       if (tileSetObjectList.isNotEmpty) {
         for (var object in tileSetObjectList) {
@@ -478,23 +485,14 @@ class TiledWorldBuilder {
           double x = _getDoubleByProportion(object.x);
           double y = _getDoubleByProportion(object.y);
 
-          CollisionArea ca = CollisionArea.rectangle(
-            size: Vector2(width, height),
-            align: Vector2(x, y),
-          );
-
-          if (object.ellipse == true) {
-            ca = CollisionArea.circle(
-              radius: (width > height ? width : height) / 2,
-              align: Vector2(x, y),
-            );
-          }
-
-          if (object.polygon?.isNotEmpty == true) {
-            ca = _normalizePolygon(x, y, object.polygon!);
-          }
-
-          collisions.add(ca);
+          collisions.add(_getCollisionObject(
+            x,
+            y,
+            width,
+            height,
+            ellipse: object.ellipse ?? false,
+            polygon: object.polygon,
+          ));
         }
       }
       return TiledDataObjectCollision(
@@ -583,30 +581,34 @@ class TiledWorldBuilder {
     );
   }
 
-  CollisionArea _getCollisionObject(
+  ShapeComponent _getCollisionObject(
     double x,
     double y,
     double width,
-    double height,
-    Objects object,
-  ) {
-    CollisionArea ca = CollisionArea.rectangle(
+    double height, {
+    bool ellipse = false,
+    List<Polygon>? polygon,
+    bool isObject = false,
+  }) {
+    ShapeComponent ca = RectangleHitbox(
       size: Vector2(width, height),
+      position: Vector2(x, y),
     );
 
-    if (object.ellipse == true) {
-      ca = CollisionArea.circle(
+    if (ellipse == true) {
+      ca = CircleHitbox(
         radius: (width > height ? width : height) / 2,
+        position: Vector2(x, y),
       );
     }
 
-    if (object.polygon?.isNotEmpty == true) {
-      ca = _normalizePolygon(x, y, object.polygon!, isObject: true);
+    if (polygon?.isNotEmpty == true) {
+      ca = _normalizePolygon(x, y, polygon!, isObject: isObject);
     }
     return ca;
   }
 
-  CollisionArea _normalizePolygon(
+  ShapeComponent _normalizePolygon(
     double x,
     double y,
     List<Polygon> polygon, {
@@ -650,9 +652,9 @@ class TiledWorldBuilder {
       alignY = minorY;
     }
 
-    return CollisionArea.polygon(
-      points: points,
-      align: Vector2(alignX, alignY),
+    return PolygonHitbox(
+      points,
+      position: Vector2(alignX, alignY),
     );
   }
 }

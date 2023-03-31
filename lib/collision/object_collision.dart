@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
@@ -59,17 +61,6 @@ mixin BlockMovementCollision on GameComponent {
   }
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    if (gameRef.showCollisionArea) {
-      renderCollision(
-        canvas,
-        gameRef.collisionAreaColor ?? Colors.lightGreen.withOpacity(0.5),
-      );
-    }
-  }
-
-  @override
   void update(double dt) {
     hitboxList = children.whereType<ShapeHitbox>();
     super.update(dt);
@@ -79,11 +70,13 @@ mixin BlockMovementCollision on GameComponent {
     return hitboxList.isNotEmpty;
   }
 
-  void renderCollision(Canvas canvas, Color color) {
-    if (hasGameRef && containCollision()) {
-      for (final element in hitboxList) {
-        element.render(canvas);
-      }
+  @override
+  FutureOr<void> add(Component component) {
+    if (gameRef.showCollisionArea && component is ShapeHitbox) {
+      component.paint = Paint()
+        ..color = gameRef.collisionAreaColor ?? Colors.white;
+      component.renderShape = true;
     }
+    return super.add(component);
   }
 }
