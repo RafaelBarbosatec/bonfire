@@ -68,7 +68,7 @@ class Goblin extends SimpleEnemy
       size: Vector2.all(width * 0.9),
       damage: damage,
       speed: DungeonMap.tileSize * 3,
-      collision: RectangleComponent(
+      collision: RectangleHitbox(
         size: Vector2.all(width / 2),
         position: Vector2(width * 0.25, width * 0.25),
       ),
@@ -108,4 +108,15 @@ class Goblin extends SimpleEnemy
 
   @override
   void moveTo(Vector2 position) {}
+
+  @override
+  Future<void> onLoad() {
+    add(
+      RectangleHitbox(
+        size: size / 2,
+        position: size / 4,
+      ),
+    );
+    return super.onLoad();
+  }
 }

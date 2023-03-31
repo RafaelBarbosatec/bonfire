@@ -8,10 +8,11 @@ final Color sensorColor = const Color(0xFFF44336).withOpacity(0.5);
 /// Mixin responsible for adding trigger to detect other objects above
 /// T is a type that Sensor will be find contact.
 mixin Sensor<T extends GameComponent> on GameComponent {
-  int _intervalCallback = 1000;
+  int _intervalCallback = 100;
   GameComponent? componentIncontact;
 
   void onContact(GameComponent component) {}
+  void onContactEnd(GameComponent component) {}
 
   List<ShapeHitbox>? areaSensorToAdd;
 
@@ -22,7 +23,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
     _intervalCallback = intervalCallback;
     if (areaSensor != null) {
       if (isLoaded) {
-        _replaceShapeComponents(areaSensor);
+        _replaceShapeHitbox(areaSensor);
       } else {
         areaSensorToAdd = areaSensor;
       }
@@ -32,7 +33,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   @override
   void update(double dt) {
     if (areaSensorToAdd != null) {
-      _replaceShapeComponents(areaSensorToAdd!);
+      _replaceShapeHitbox(areaSensorToAdd!);
       areaSensorToAdd = null;
     }
     if (checkInterval('Sensor.$runtimeType', _intervalCallback, dt)) {
@@ -44,8 +45,8 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   }
 
   @override
-  // ignore: must_call_super
   bool onComponentTypeCheck(PositionComponent other) {
+    super.onComponentTypeCheck(other);
     return false;
   }
 
@@ -55,7 +56,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
     return super.onLoad();
   }
 
-  void _replaceShapeComponents(List<ShapeHitbox> areaList) {
+  void _replaceShapeHitbox(List<ShapeHitbox> areaList) {
     removeAll(children.whereType<ShapeHitbox>());
     areaList.let(addAll);
   }
@@ -73,6 +74,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   void onCollisionEnd(PositionComponent other) {
     if (componentIncontact == other) {
       componentIncontact = null;
+      onContactEnd(other as GameComponent);
     }
     super.onCollisionEnd(other);
   }

@@ -64,7 +64,7 @@ extension PlayerExtensions on Player {
     bool withCollision = true,
     bool enableDiagonal = true,
     VoidCallback? onDestroy,
-    ShapeComponent? collision,
+    ShapeHitbox? collision,
     LightingConfig? lightingConfig,
   }) {
     Direction attackDirection = direction ?? lastDirection;

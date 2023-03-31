@@ -1,9 +1,9 @@
-
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/mixins/attackable.dart';
 import 'package:bonfire/npc/enemy/rotation_enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
@@ -151,7 +151,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     int interval = 1000,
     bool withDecorationCollision = true,
     VoidCallback? onDestroy,
-    ShapeComponent? collision,
+    ShapeHitbox? collision,
     VoidCallback? onExecute,
     LightingConfig? lightingConfig,
     Vector2? centerOffset,

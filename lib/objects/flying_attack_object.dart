@@ -4,12 +4,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
 class FlyingAttackObject extends GameComponent
-    with
-        UseSpriteAnimation,
-        UseAssetsLoader,
-        BlockMovementCollision,
-        Lighting,
-        Movement {
+    with UseSpriteAnimation, UseAssetsLoader, Lighting, Movement {
   final dynamic id;
   Future<SpriteAnimation>? animationDestroy;
   final Direction? direction;
@@ -21,7 +16,7 @@ class FlyingAttackObject extends GameComponent
   final Vector2? destroySize;
   double _cosAngle = 0;
   double _senAngle = 0;
-  ShapeComponent? collision;
+  ShapeHitbox? collision;
 
   FlyingAttackObject({
     required Vector2 position,
@@ -130,17 +125,16 @@ class FlyingAttackObject extends GameComponent
   }
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
-    if (other is Attackable && !other.isRemoving) {
-      other.receiveDamage(attackFrom, damage, id);
-    } else if (!withDecorationCollision) {
-      return false;
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is! Sensor) {
+      if (other is Attackable && !other.isRemoving) {
+        other.receiveDamage(attackFrom, damage, id);
+      }
+      if (other is GameComponent) {
+        _destroyObject(other);
+      }
     }
-    if (other is GameComponent) {
-      _destroyObject(other);
-    }
-
-    return super.onComponentTypeCheck(other);
+    super.onCollision(intersectionPoints, other);
   }
 
   void _destroyObject(GameComponent component) {

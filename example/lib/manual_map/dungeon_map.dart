@@ -123,7 +123,7 @@ class DungeonMap {
         position: getRelativeTilePosition(10, 6),
         size: Vector2(tileSize, tileSize),
         collisions: [
-          RectangleComponent(size: Vector2(tileSize / 1.5, tileSize / 1.5))
+          RectangleHitbox(size: Vector2(tileSize / 1.5, tileSize / 1.5))
         ],
       ),
       Chest(getRelativeTilePosition(18, 7)),
@@ -132,7 +132,7 @@ class DungeonMap {
         position: getRelativeTilePosition(15, 7),
         size: Vector2(tileSize, tileSize),
         collisions: [
-          RectangleComponent(size: Vector2(tileSize, tileSize * 0.8)),
+          RectangleHitbox(size: Vector2(tileSize, tileSize * 0.8)),
         ],
       ),
       GameDecorationWithCollision.withSprite(
@@ -140,7 +140,7 @@ class DungeonMap {
         position: getRelativeTilePosition(27, 6),
         size: Vector2(tileSize, tileSize),
         collisions: [
-          RectangleComponent(size: Vector2(tileSize, tileSize * 0.8)),
+          RectangleHitbox(size: Vector2(tileSize, tileSize * 0.8)),
         ],
       ),
       Torch(getRelativeTilePosition(4, 4)),

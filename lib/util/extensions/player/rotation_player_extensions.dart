@@ -2,6 +2,7 @@ import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/mixins/attackable.dart';
 import 'package:bonfire/player/rotation_player.dart';
 import 'package:bonfire/util/extensions/game_component_extensions.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
@@ -18,7 +19,7 @@ extension RotationPlayerExtensions on RotationPlayer {
     double? radAngleDirection,
     bool withDecorationCollision = true,
     VoidCallback? onDestroy,
-    ShapeComponent? collision,
+    ShapeHitbox? collision,
     LightingConfig? lightingConfig,
     Vector2? centerOffset,
     double marginFromOrigin = 16,

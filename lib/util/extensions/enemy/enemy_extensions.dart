@@ -1,4 +1,3 @@
-
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/mixins/attackable.dart';
 import 'package:bonfire/npc/enemy/enemy.dart';
@@ -7,6 +6,7 @@ import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/extensions/game_component_extensions.dart';
 import 'package:bonfire/util/extensions/movement_extensions.dart';
 import 'package:bonfire/util/extensions/npc/npc_extensions.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
@@ -59,7 +59,7 @@ extension EnemyExtensions on Enemy {
     int interval = 1000,
     bool withCollision = true,
     bool enableDiagonal = true,
-    ShapeComponent? collision,
+    ShapeHitbox? collision,
     VoidCallback? onDestroy,
     VoidCallback? execute,
     LightingConfig? lightingConfig,

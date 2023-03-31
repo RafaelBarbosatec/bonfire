@@ -14,7 +14,7 @@ import 'package:bonfire/bonfire.dart';
 
 class CollisionGameComponent extends GameComponent with BlockMovementCollision {
   final String name;
-  List<ShapeComponent>? collisions;
+  List<ShapeHitbox>? collisions;
 
   CollisionGameComponent({
     this.name = '',

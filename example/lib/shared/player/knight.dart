@@ -43,7 +43,6 @@ class Knight extends SimplePlayer
         color: Colors.transparent,
       ),
     );
-    
   }
 
   @override
@@ -96,7 +95,7 @@ class Knight extends SimplePlayer
       size: Vector2.all(width * 0.7),
       damage: damage,
       speed: maxSpeed * 2,
-      collision: RectangleComponent(
+      collision: RectangleHitbox(
         size: Vector2(width / 3, width / 3),
         position: Vector2(width * 0.1, 0),
       ),
@@ -236,7 +235,12 @@ class Knight extends SimplePlayer
 
   @override
   Future<void> onLoad() async {
-    add(RectangleHitbox(size: size));
+    add(
+      RectangleHitbox(
+        size: size / 2,
+        position: size / 4,
+      ),
+    );
     spriteDirectionAttack = await Sprite.load('direction_attack.png');
     return super.onLoad();
   }
