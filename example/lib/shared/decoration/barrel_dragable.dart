@@ -60,10 +60,4 @@ class BarrelDraggable extends GameDecoration
     add(RectangleHitbox(size: size));
     return super.onLoad();
   }
-
-  @override
-  bool onMovementCollision(GameComponent component, bool active) {
-    print('OI: $component / $active');
-    return super.onMovementCollision(component, active);
-  }
 }
