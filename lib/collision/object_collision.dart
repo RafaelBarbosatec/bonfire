@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 
 /// Mixin responsible for adding collision
 mixin BlockMovementCollision on GameComponent {
-  Iterable<ShapeHitbox> hitboxList = [];
+  Iterable<ShapeHitbox> _hitboxList = [];
+
+  void onMovementCollision(GameComponent other, bool active) {}
+
   bool isCollision({Vector2? displacement}) {
     if (displacement != null) {
-      if (hitboxList.isNotEmpty) {
+      if (_hitboxList.isNotEmpty) {
         var dis = displacement - position;
-        for (var hit in hitboxList) {
+        for (var hit in _hitboxList) {
           var originalPosition = hit.position.clone();
           hit.position = originalPosition +
               Vector2(
@@ -25,13 +28,19 @@ mixin BlockMovementCollision on GameComponent {
               if (inter.isNotEmpty) {
                 hit.position = originalPosition;
                 var comp = element.parent;
-                bool colisionComp = true;
-                bool colisionComp2 = true;
+                bool collision = false;
                 if (comp is GameComponent) {
-                  colisionComp = comp.onComponentTypeCheck(this);
-                  colisionComp2 = onComponentTypeCheck(comp);
+                  bool colisionComp = comp.onComponentTypeCheck(this);
+                  bool colisionComp2 = onComponentTypeCheck(comp);
+                  collision = colisionComp && colisionComp2;
+                  if (collision) {
+                    onMovementCollision(comp, true);
+                    if (comp is BlockMovementCollision) {
+                      comp.onMovementCollision(this, false);
+                    }
+                  }
                 }
-                return colisionComp && colisionComp2;
+                return collision;
               }
             }
           }
@@ -44,8 +53,8 @@ mixin BlockMovementCollision on GameComponent {
   }
 
   Rect get rectCollision {
-    if (hitboxList.isNotEmpty) {
-      return hitboxList.fold(Rect.zero, (previousValue, element) {
+    if (_hitboxList.isNotEmpty) {
+      return _hitboxList.fold(Rect.zero, (previousValue, element) {
         return previousValue.expandToInclude(element.toAbsoluteRect());
       });
     } else {
@@ -55,11 +64,11 @@ mixin BlockMovementCollision on GameComponent {
 
   @override
   void update(double dt) {
-    hitboxList = children.whereType<ShapeHitbox>();
+    _hitboxList = children.whereType<ShapeHitbox>();
     super.update(dt);
   }
 
   bool containCollision() {
-    return hitboxList.isNotEmpty;
+    return _hitboxList.isNotEmpty;
   }
 }
