@@ -20,15 +20,7 @@ class MyEnemy extends SimpleEnemy with BlockMovementCollision {
           size: Vector2.all(32),
           life: 100,
         ) {
-    /// here we configure collision of the enemy
-    // TODO
-    // setupCollision(
-    //   CollisionConfig(
-    //     collisions: [
-    //       CollisionArea.rectangle(size: Vector2.all(32)),
-    //     ],
-    //   ),
-    // );
+    setupVision(drawVision: true);
   }
 
   @override

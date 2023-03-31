@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/geometry/shape.dart';
 
 ///
 /// Created by
@@ -20,7 +19,7 @@ extension NpcExtensions on Npc {
   /// Method that bo used in [update] method.
   /// [visionAngle] in radians
   /// [angle] in radians. is automatically picked up using the component's direction.
-  Shape? seePlayer({
+  ShapeHitbox? seePlayer({
     required Function(Player) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
@@ -45,7 +44,7 @@ extension NpcExtensions on Npc {
   /// Checks whether the player is within range. If so, move to it.
   /// [visionAngle] in radians
   /// [angle] in radians. is automatically picked up using the component's direction.
-  Shape? seeAndMoveToPlayer({
+  ShapeHitbox? seeAndMoveToPlayer({
     required Function(Player) closePlayer,
     VoidCallback? notObserved,
     VoidCallback? observed,

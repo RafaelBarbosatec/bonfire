@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/geometry/shape.dart';
 import 'package:flutter/material.dart';
 
 mixin Vision on GameComponent {
@@ -9,8 +8,8 @@ mixin Vision on GameComponent {
   static const VISION_360 = 6.28319;
   final Paint _paint = Paint()..color = Colors.red.withOpacity(0.5);
   bool _drawVision = false;
-  final Map<String, PolygonShape> _polygonCache = {};
-  PolygonShape? _currentShape;
+  final Map<String, ShapeHitbox> _polygonCache = {};
+  ShapeHitbox? _currentShape;
 
   void setupVision({Color? color, bool drawVision = false}) {
     _drawVision = drawVision;
@@ -21,7 +20,7 @@ mixin Vision on GameComponent {
   /// Method that bo used in [update] method.
   /// [visionAngle] in radians
   /// [angle] in radians.
-  Shape? seeComponent(
+  ShapeHitbox? seeComponent(
     GameComponent component, {
     required Function(GameComponent) observed,
     VoidCallback? notObserved,
@@ -35,12 +34,15 @@ mixin Vision on GameComponent {
     }
 
     String key = '$radiusVision/$visionAngle/$angle';
-    PolygonShape shape;
+    ShapeHitbox shape;
+    var center = absoluteCenter;
+    var centerVision =
+        Vector2(center.x - radiusVision, center.y - radiusVision);
     if (_polygonCache.containsKey(key)) {
       shape = _polygonCache[key]!;
-      shape.position = center;
+      shape.position = centerVision;
     } else {
-      shape = _buildShape(radiusVision, visionAngle, angle, center);
+      shape = _buildShape(radiusVision, visionAngle, angle, centerVision);
       _polygonCache[key] = shape;
     }
 
@@ -49,12 +51,12 @@ mixin Vision on GameComponent {
     }
 
     final rect = component.rectConsideringCollision;
-    final otherShape = RectangleShape(
-      rect.sizeVector2,
+    final otherShape = RectangleHitbox(
+      size: rect.sizeVector2,
       position: rect.positionVector2,
     );
 
-    if (shape.isCollision(otherShape)) {
+    if (shape.intersections(otherShape).isNotEmpty) {
       observed(component);
     } else {
       notObserved?.call();
@@ -66,7 +68,7 @@ mixin Vision on GameComponent {
   /// Method that bo used in [update] method.
   /// [visionAngle] in radians
   /// [angle] in radians.
-  Shape? seeComponentType<T extends GameComponent>({
+  ShapeHitbox? seeComponentType<T extends GameComponent>({
     required Function(List<T>) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
@@ -81,22 +83,25 @@ mixin Vision on GameComponent {
     }
 
     String key = '$radiusVision/$visionAngle/$angle';
-    PolygonShape shape;
+    ShapeHitbox shape;
+    var center = absoluteCenter;
+    var centerVision =
+        Vector2(center.x - radiusVision, center.y - radiusVision);
     if (_polygonCache.containsKey(key)) {
       shape = _polygonCache[key]!;
-      shape.position = center;
+      shape.position = centerVision;
     } else {
-      shape = _buildShape(radiusVision, visionAngle, angle, center);
+      shape = _buildShape(radiusVision, visionAngle, angle, centerVision);
       _polygonCache[key] = shape;
     }
 
     List<T> compObserved = compVisible.where((comp) {
       final rect = comp.rectConsideringCollision;
-      final otherShape = RectangleShape(
-        rect.sizeVector2,
+      final otherShape = RectangleHitbox(
+        size: rect.sizeVector2,
         position: rect.positionVector2,
       );
-      return !comp.isRemoving && shape.isCollision(otherShape);
+      return !comp.isRemoving && shape.intersections(otherShape).isNotEmpty;
     }).toList();
 
     if (compObserved.isNotEmpty) {
@@ -108,7 +113,7 @@ mixin Vision on GameComponent {
     return _currentShape = shape;
   }
 
-  PolygonShape _buildShape(
+  ShapeHitbox _buildShape(
     double radiusVision,
     double? angleVision,
     double angle,
@@ -126,7 +131,7 @@ mixin Vision on GameComponent {
     Offset point6 = point5.rotate(angleV / -8, Offset.zero);
     Offset point7 = point6.rotate(angleV / -8, Offset.zero);
     Offset point8 = point7.rotate(angleV / -8, Offset.zero);
-    return PolygonShape(
+    return PolygonHitbox(
       [
         Vector2(0, 0),
         point4.toVector2(),
@@ -157,7 +162,8 @@ mixin Vision on GameComponent {
   void render(Canvas canvas) {
     super.render(canvas);
     if (_drawVision) {
-      _currentShape?.render(canvas, _paint);
+      _currentShape?.renderShape = true;
+      _currentShape?.render(canvas);
     }
   }
 }
