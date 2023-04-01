@@ -71,7 +71,6 @@ extension GameComponentExtensions on GameComponent {
       angle,
     );
 
-    // startPosition.add(Vector2(-size.x / 2, -size.y / 2));
     gameRef.add(
       FlyingAttackObject.byAngle(
         id: id,
@@ -151,7 +150,7 @@ extension GameComponentExtensions on GameComponent {
       damage: damage,
       size: size,
       centerOffset: centerOffset,
-      marginFromCenter: max(rect.width + 2, rect.height + 2) / 2,
+      marginFromCenter: max(rect.width, rect.height) / 2,
       id: id,
       withPush: withPush,
     );

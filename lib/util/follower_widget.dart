@@ -80,7 +80,7 @@ class FollowerWidget extends StatefulWidget {
 
 class FollowerWidgetState extends State<FollowerWidget> {
   Vector2 targetPosition = Vector2.zero();
-  Offset? widgetPosition;
+  Vector2? widgetPosition;
   double lastZoom = 0.0;
   Vector2 lastCameraPosition = Vector2.zero();
 
@@ -102,8 +102,8 @@ class FollowerWidgetState extends State<FollowerWidget> {
   Widget build(BuildContext context) {
     if (widgetPosition != null) {
       return Positioned(
-        top: widgetPosition!.dy + widget.align.dy,
-        left: widgetPosition!.dx + widget.align.dx,
+        top: widgetPosition!.y + widget.align.dy,
+        left: widgetPosition!.x + widget.align.dx,
         child: widget.child,
       );
     }
@@ -124,7 +124,8 @@ class FollowerWidgetState extends State<FollowerWidget> {
             lastCameraPosition = camera.position.clone();
             if (mounted) {
               setState(() {
-                widgetPosition = widget.target.screenPosition().toOffset();
+                widgetPosition = widget.target.gameRef.camera
+                    .worldToScreen(widget.target.absoluteCenter);
               });
             }
           }

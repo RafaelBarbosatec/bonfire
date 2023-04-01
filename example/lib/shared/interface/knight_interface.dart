@@ -142,6 +142,7 @@ class KnightInterface extends GameInterface {
     final enemiesVisible = gameRef.visibleEnemies();
     if (gameRef.player != null && enemiesVisible.isNotEmpty) {
       final enemy = enemiesVisible.first;
+      double initialZoom = gameRef.camera.zoom;
       gameRef.startScene(
         [
           CameraSceneAction.position(Vector2(800, 800)),
@@ -153,7 +154,7 @@ class KnightInterface extends GameInterface {
             newPosition: enemy.position.clone()..add(Vector2(-40, -10)),
             speed: 20,
           ),
-          CameraSceneAction.target(gameRef.player!, zoom: 1),
+          CameraSceneAction.target(gameRef.player!, zoom: initialZoom),
           AwaitCallbackSceneAction(
             completedCallback: (completed) {
               _showDialogTest(completed);

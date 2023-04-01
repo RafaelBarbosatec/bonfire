@@ -35,9 +35,8 @@ extension PlayerExtensions on Player {
     double? sizePush,
     Vector2? centerOffset,
   }) {
-    Direction attackDirection = direction ?? lastDirection;
     simpleAttackMeleeByDirection(
-      direction: attackDirection,
+      direction: direction ?? lastDirection,
       animationRight: animationRight,
       damage: damage,
       id: id,

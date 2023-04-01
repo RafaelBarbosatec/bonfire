@@ -16,7 +16,7 @@ import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends BaseGame implements BonfireGameInterface {
-  static const INTERVAL_UPDATE_CACHE = 250;
+  static const INTERVAL_UPDATE_CACHE = 500;
   static const INTERVAL_UPDATE_ORDER = 499;
 
   /// Context used to access all Flutter power in your game.
