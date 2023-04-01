@@ -282,6 +282,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   void _updateVisibleCollisions() {
     if (isLoaded) {
       _visibleCollisions = collisionDetection.items.where(_isVisibleCollision);
+      
     }
   }
 

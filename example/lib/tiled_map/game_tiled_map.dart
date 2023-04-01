@@ -83,7 +83,6 @@ class GameTiledMap extends StatelessWidget {
             },
           ),
           lightingColorGame: Colors.black.withOpacity(0.7),
-          showCollisionArea: true,
           overlayBuilderMap: {
             'barLife': (context, game) => const BarLifeWidget(),
             'miniMap': (context, game) => MiniMap(
@@ -103,6 +102,7 @@ class GameTiledMap extends StatelessWidget {
           cameraConfig: CameraConfig(
             smoothCameraEnabled: true,
             smoothCameraSpeed: 2,
+            zoom: 1.5,
           ),
         );
       },

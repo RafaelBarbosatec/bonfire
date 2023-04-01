@@ -20,7 +20,7 @@ class MyEnemy extends SimpleEnemy with BlockMovementCollision {
           size: Vector2.all(32),
           life: 100,
         ) {
-    setupVision(drawVision: true);
+    // setupVision(drawVision: true);
   }
 
   @override

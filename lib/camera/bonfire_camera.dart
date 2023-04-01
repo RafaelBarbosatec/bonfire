@@ -353,7 +353,7 @@ class BonfireCamera extends Camera {
   }
 
   bool isRectOnCamera(Rect c) {
-    return cameraRectWithSpacing.overlaps(c);
+    return cameraRect.overlaps(c);
   }
 
   @override
