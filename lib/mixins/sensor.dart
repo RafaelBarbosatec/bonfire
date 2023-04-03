@@ -12,7 +12,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   GameComponent? componentIncontact;
 
   void onContact(GameComponent component) {}
-  void onContactEnd(GameComponent component) {}
+  void onContactExit(GameComponent component) {}
 
   List<ShapeHitbox>? areaSensorToAdd;
 
@@ -36,7 +36,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
       _replaceShapeHitbox(areaSensorToAdd!);
       areaSensorToAdd = null;
     }
-    if (checkInterval('Sensor.$runtimeType', _intervalCallback, dt)) {
+    if (checkInterval('SensorContact', _intervalCallback, dt)) {
       if (componentIncontact != null) {
         onContact(componentIncontact!);
       }
@@ -63,7 +63,9 @@ mixin Sensor<T extends GameComponent> on GameComponent {
 
   @override
   void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     if (other is GameComponent) {
       componentIncontact = other;
     }
@@ -74,7 +76,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   void onCollisionEnd(PositionComponent other) {
     if (componentIncontact == other) {
       componentIncontact = null;
-      onContactEnd(other as GameComponent);
+      onContactExit(other as GameComponent);
     }
     super.onCollisionEnd(other);
   }
