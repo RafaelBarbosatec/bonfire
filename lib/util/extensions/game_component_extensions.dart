@@ -217,14 +217,13 @@ extension GameComponentExtensions on GameComponent {
         .forEach((enemy) {
       enemy.receiveDamage(attackFrom, damage, id);
       final rectAfterPush = enemy.position.translate(diffBase.x, diffBase.y);
-      // TODO
-      // if (withPush &&
-      //     (enemy is ObjectCollision &&
-      //         !(enemy as ObjectCollision)
-      //             .isCollision(displacement: rectAfterPush)
-      //             .isNotEmpty)) {
-      //   enemy.translate(diffBase.x, diffBase.y);
-      // }
+
+      if (withPush &&
+          (enemy is BlockMovementCollision &&
+              !(enemy as BlockMovementCollision)
+                  .isCollision(displacement: rectAfterPush))) {
+        enemy.translate(diffBase.x, diffBase.y);
+      }
     });
   }
 
@@ -259,18 +258,15 @@ extension GameComponentExtensions on GameComponent {
 
   /// Gets rect used how base in calculations considering collision
   Rect get rectConsideringCollision {
-    return toAbsoluteRect();
-    // return (isObjectCollision()
-    //     ? (this as ObjectCollision).rectCollision
-    //     : toAbsoluteRect());
+    return (containBlockMovementCollision()
+        ? (this as BlockMovementCollision).rectCollision
+        : toAbsoluteRect());
   }
 
   /// Method that checks if this component contain collisions
-  bool isObjectCollision() {
-    // TODO
-    // return (this is ObjectCollision &&
-    //     (this as ObjectCollision).containCollision());
-    return this is BlockMovementCollision;
+  bool containBlockMovementCollision() {
+    return (this is BlockMovementCollision &&
+        (this as BlockMovementCollision).containCollision());
   }
 
   Direction? directionThePlayerIsIn() {

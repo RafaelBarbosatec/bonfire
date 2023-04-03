@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 /// Mixin responsible for adding collision
 mixin BlockMovementCollision on GameComponent {
+  // ignore: prefer_final_fields
+  Map<Vector2, Rect> _RECT_CACHE = {};
   Iterable<ShapeHitbox> _hitboxList = [];
 
   void onMovementCollision(GameComponent other, bool active) {}
@@ -53,12 +55,25 @@ mixin BlockMovementCollision on GameComponent {
   }
 
   Rect get rectCollision {
-    if (_hitboxList.isNotEmpty) {
-      return _hitboxList.fold(Rect.zero, (previousValue, element) {
-        return previousValue.expandToInclude(element.toAbsoluteRect());
-      });
+    if (!_RECT_CACHE.containsKey(position)) {
+      _RECT_CACHE.clear();
+      var rect = toAbsoluteRect();
+      if (_hitboxList.isNotEmpty) {
+        var colissionRect = _hitboxList.fold(_hitboxList.first.toRect(),
+            (previousValue, element) {
+          return previousValue.expandToInclude(element.toRect());
+        });
+        return _RECT_CACHE[position] = Rect.fromLTWH(
+          rect.left + colissionRect.left,
+          rect.top + colissionRect.top,
+          colissionRect.width,
+          colissionRect.height,
+        );
+      } else {
+        return _RECT_CACHE[position] = rect;
+      }
     } else {
-      return toAbsoluteRect();
+      return _RECT_CACHE[position]!;
     }
   }
 

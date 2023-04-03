@@ -24,7 +24,7 @@ class Chest extends GameDecoration with TapGesture {
 
   @override
   void update(double dt) {
-    if (gameRef.player != null) {
+    if (gameRef.player != null && checkInterval('SeepLayr', 500, dt)) {
       seeComponent(
         gameRef.player!,
         observed: (player) {

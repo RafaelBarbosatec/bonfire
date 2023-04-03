@@ -376,17 +376,13 @@ mixin Movement on GameComponent {
     double translateX,
     double translateY,
   ) {
-    if (isObjectCollision()) {
-      // TODO
-      // return (this as ObjectCollision)
-      //     .isCollision(
-      //       displacement: position.translate(
-      //         translateX,
-      //         translateY,
-      //       ),
-      //     )
-      //     .isNotEmpty;
-      return false;
+    if (containBlockMovementCollision()) {
+      return _isCollision(
+        position.translate(
+          translateX,
+          translateY,
+        ),
+      );
     } else {
       return false;
     }
@@ -403,14 +399,7 @@ mixin Movement on GameComponent {
   }
 
   bool _isCollision(Vector2 displacement) {
-    if (isObjectCollision()) {
-      // TODO
-      // (this as ObjectCollision).setCollisionOnlyVisibleScreen(isVisible);
-      // return (this as ObjectCollision)
-      //     .isCollision(
-      //       displacement: displacement,
-      //     )
-      //     .isNotEmpty;
+    if (containBlockMovementCollision()) {
       return (this as BlockMovementCollision)
           .isCollision(displacement: displacement);
     }
