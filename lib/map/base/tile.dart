@@ -6,11 +6,11 @@ import 'package:flutter/widgets.dart';
 
 class Tile extends GameComponent with UseAssetsLoader {
   final String? type;
-  late Vector2 _positionText;
+  // late Vector2 _positionText;
   late Vector2 _startPosition;
   Vector2 _lastParentPosition = Vector2.zero();
-  Paint? _paintText;
-  TextPaint? _textPaintConfig;
+  // Paint? _paintText;
+  // TextPaint? _textPaintConfig;
   String id = '';
   Sprite? _sprite;
   ControlledUpdateAnimation? _animation;
@@ -41,7 +41,7 @@ class Tile extends GameComponent with UseAssetsLoader {
       );
     }
 
-    _positionText = position;
+    // _positionText = position;
   }
 
   Tile.fromSprite({
@@ -65,7 +65,7 @@ class Tile extends GameComponent with UseAssetsLoader {
       calculatePosition: true,
     );
     _startPosition = this.position.clone();
-    _positionText = position;
+    // _positionText = position;
   }
 
   Tile.fromAnimation({
@@ -88,7 +88,7 @@ class Tile extends GameComponent with UseAssetsLoader {
       calculatePosition: true,
     );
     _startPosition = this.position.clone();
-    _positionText = position;
+    // _positionText = position;
   }
 
   @override
@@ -110,36 +110,37 @@ class Tile extends GameComponent with UseAssetsLoader {
     }
   }
 
-  @override
-  void renderDebugMode(Canvas canvas) {
-    // _drawGrid(canvas);
-  }
+  // TODO
+  // @override
+  // void renderDebugMode(Canvas canvas) {
+  //   _drawGrid(canvas);
+  // }
 
-  void _drawGrid(Canvas canvas) {
-    _paintText ??= Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
-    canvas.drawRect(
-      toRect(),
-      _paintText!
-        ..color = gameRef.constructionModeColor ??
-            const Color(0xFF00BCD4).withOpacity(0.5),
-    );
-    if (_positionText.x % 2 == 0) {
-      _textPaintConfig ??= TextPaint(
-        style: TextStyle(
-          fontSize: width / 3,
-          color: gameRef.constructionModeColor ??
-              const Color(0xFF00BCD4).withOpacity(0.5),
-        ),
-      );
-      _textPaintConfig?.render(
-        canvas,
-        '${_positionText.x.toInt()}:${_positionText.y.toInt()}',
-        Vector2(position.x + 2, position.y + 2),
-      );
-    }
-  }
+  // void _drawGrid(Canvas canvas) {
+  //   _paintText ??= Paint()
+  //     ..style = PaintingStyle.stroke
+  //     ..strokeWidth = 1;
+  //   canvas.drawRect(
+  //     toRect(),
+  //     _paintText!
+  //       ..color = gameRef.constructionModeColor ??
+  //           const Color(0xFF00BCD4).withOpacity(0.5),
+  //   );
+  //   if (_positionText.x % 2 == 0) {
+  //     _textPaintConfig ??= TextPaint(
+  //       style: TextStyle(
+  //         fontSize: width / 3,
+  //         color: gameRef.constructionModeColor ??
+  //             const Color(0xFF00BCD4).withOpacity(0.5),
+  //       ),
+  //     );
+  //     _textPaintConfig?.render(
+  //       canvas,
+  //       '${_positionText.x.toInt()}:${_positionText.y.toInt()}',
+  //       Vector2(position.x + 2, position.y + 2),
+  //     );
+  //   }
+  // }
 
   @override
   void updateTree(double dt) {

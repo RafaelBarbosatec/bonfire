@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 /// Mixin responsible for adding collision
 mixin BlockMovementCollision on GameComponent {
-  // ignore: prefer_final_fields
-  Map<Vector2, Rect> _RECT_CACHE = {};
+  // ignore: non_constant_identifier_names
+  final Map<Vector2, Rect> _RECT_CACHE = {};
   Iterable<ShapeHitbox> _hitboxList = [];
 
   void onMovementCollision(GameComponent other, bool active) {}
