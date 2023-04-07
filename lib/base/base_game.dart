@@ -127,7 +127,8 @@ abstract class BaseGame extends FlameGame with PointerDetector, KeyboardEvents {
   /// reorder components by priority
   void updateOrderPriority() {
     if (children.isNotEmpty) {
-      children.rebalanceAll();
+      // ignore: invalid_use_of_internal_member
+      children.reorder();
       _highestPriority = children.last.priority;
     }
   }

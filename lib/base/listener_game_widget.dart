@@ -7,7 +7,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/game/game_render_box.dart';
-import 'package:flame/src/game/game_widget/gestures.dart';
+import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -132,10 +132,15 @@ class ListenerGameWidget<T extends Game> extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     this.mouseCursor,
+    this.addRepaintBoundary = true,
   })  : gameFactory = null,
         super(key: key) {
     _initializeGame(game!);
   }
+
+  /// Whether the game should assume the behavior of a [RepaintBoundary],
+  /// defaults to `true`.
+  final bool addRepaintBoundary;
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
   ///
@@ -280,6 +285,7 @@ class ListenerGameWidgetState<T extends Game>
     return _protectedBuild(() {
       Widget internalGameWidget = RenderGameWidget(
         game: currentGame,
+        addRepaintBoundary: widget.addRepaintBoundary,
       );
 
       assert(
@@ -288,6 +294,9 @@ class ListenerGameWidgetState<T extends Game>
         'The MultiTouchDragDetector will override the PanDetector and it will '
         'not receive events',
       );
+
+      internalGameWidget =
+          currentGame.gestureDetectors.build(internalGameWidget);
 
       if (hasMouseDetectors(currentGame)) {
         internalGameWidget = applyMouseDetectors(
