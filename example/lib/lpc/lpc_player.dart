@@ -24,19 +24,7 @@ class LPCPlayer extends SimplePlayer with BlockMovementCollision {
   }) : super(
           position: position,
           size: Vector2.all(48),
-        ) {
-    // TODO
-    // setupCollision(
-    //   CollisionConfig(
-    //     collisions: [
-    //       CollisionArea.rectangle(
-    //         size: size / 3,
-    //         align: Vector2(size.x / 3, size.y / 1.6),
-    //       )
-    //     ],
-    //   ),
-    // );
-  }
+        );
 
   void showEditCharacter() {
     if (FollowerWidget.isVisible(customWidgetKey)) {
@@ -60,6 +48,12 @@ class LPCPlayer extends SimplePlayer with BlockMovementCollision {
 
   @override
   Future onLoad() async {
+    add(
+      RectangleHitbox(
+        size: size / 3,
+        position: Vector2(size.x / 3, size.y / 1.6),
+      ),
+    );
     animation = await LPCSpriteSheetLoader.geSpriteSheet(status: customStatus);
     return super.onLoad();
   }

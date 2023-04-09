@@ -20,22 +20,7 @@ class ZombieEnemy extends RotationEnemy
           size: Vector2(68, 43),
           animIdle: _getAnimation(),
           animRun: _getAnimation(),
-        ) {
-    // TODO
-    // setupCollision(
-    //   CollisionConfig(
-    //     collisions: [
-    //       CollisionArea.circle(
-    //         radius: 21.5,
-    //         align: Vector2(
-    //           12.5,
-    //           0,
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
-  }
+        );
 
   static Future<SpriteAnimation> _getAnimation() {
     return Sprite.load('zombie.png').toAnimation();
@@ -77,5 +62,19 @@ class ZombieEnemy extends RotationEnemy
     removeFromParent();
 
     super.die();
+  }
+
+  @override
+  Future<void> onLoad() {
+    // add(
+    //   CircleHitbox(
+    //     radius: size.y / 2,
+    //     position: Vector2(
+    //       12.5,
+    //       0,
+    //     ),
+    //   ),
+    // );
+    return super.onLoad();
   }
 }

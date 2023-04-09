@@ -22,14 +22,16 @@ class ArmchairDecoration extends GameDecoration
             srcPosition: Vector2(192, 0),
             srcSize: Vector2.all(64),
           ),
-        ) {
-    // TODO
-    // setupCollision(
-    //   CollisionConfig(
-    //     collisions: [
-    //       CollisionArea.rectangle(size: Vector2.all(50), align: Vector2.all(7)),
-    //     ],
-    //   ),
-    // );
+        );
+
+  @override
+  Future<void> onLoad() {
+    add(
+      RectangleHitbox(
+        size: Vector2.all(50),
+        position: Vector2.all(7),
+      ),
+    );
+    return super.onLoad();
   }
 }

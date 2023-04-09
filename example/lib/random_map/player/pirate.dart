@@ -22,16 +22,16 @@ class Pirate extends SimplePlayer with BlockMovementCollision {
           animation: PirateSpriteSheet.getAnimation(),
         ) {
     enabledDiagonalMovements = false;
-    // TODO
-    // setupCollision(
-    //   CollisionConfig(
-    //     collisions: [
-    //       CollisionArea.rectangle(
-    //         size: Vector2(size.x / 3, size.y / 3),
-    //         align: Vector2(size.x * 1 / 3, size.y * 2 / 3),
-    //       ),
-    //     ],
-    //   ),
-    // );
+  }
+
+  @override
+  Future<void> onLoad() {
+    add(
+      RectangleHitbox(
+        size: Vector2(size.x / 3, size.y / 3),
+        position: Vector2(size.x * 1 / 3, size.y * 2 / 3),
+      ),
+    );
+    return super.onLoad();
   }
 }

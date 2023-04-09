@@ -26,20 +26,19 @@ class Tree extends GameDecoration with BlockMovementCollision {
             getSizeByTileSize(64),
             getSizeByTileSize(48),
           ),
-        ) {
-    // TODO
-    // setupCollision(
-    //   CollisionConfig(
-    //     collisions: [
-    //       CollisionArea.rectangle(
-    //         size: Vector2(getSizeByTileSize(32), getSizeByTileSize(16)),
-    //         align: Vector2(
-    //           getSizeByTileSize(16),
-    //           getSizeByTileSize(32),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
+        );
+
+  @override
+  Future<void> onLoad() {
+    add(
+      RectangleHitbox(
+        size: Vector2(getSizeByTileSize(32), getSizeByTileSize(16)),
+        position: Vector2(
+          getSizeByTileSize(16),
+          getSizeByTileSize(32),
+        ),
+      ),
+    );
+    return super.onLoad();
   }
 }

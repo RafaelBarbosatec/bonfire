@@ -301,7 +301,12 @@ class FlyingAttackObject extends GameComponent
 
   @override
   Future<void> onLoad() {
-    collision?.let(add);
+    if (collision != null) {
+      add(collision!);
+    } else {
+      add(RectangleHitbox(size: size));
+    }
+
     return super.onLoad();
   }
 }

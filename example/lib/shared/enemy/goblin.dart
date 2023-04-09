@@ -22,24 +22,6 @@ class Goblin extends SimpleEnemy
           speed: DungeonMap.tileSize * 1.6,
           life: 100,
         ) {
-    // TODO
-    // setupCollision(
-    //   CollisionConfig(
-    //     collisions: [
-    //       CollisionArea.rectangle(
-    //         size: Vector2(
-    //           DungeonMap.tileSize * 0.4,
-    //           DungeonMap.tileSize * 0.4,
-    //         ),
-    //         align: Vector2(
-    //           DungeonMap.tileSize * 0.2,
-    //           DungeonMap.tileSize * 0.2,
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
-
     setupBarLife(
       borderRadius: BorderRadius.circular(2),
       borderWidth: 2,
@@ -113,8 +95,14 @@ class Goblin extends SimpleEnemy
   Future<void> onLoad() {
     add(
       RectangleHitbox(
-        size: size / 2,
-        position: size / 4,
+        size: Vector2(
+          DungeonMap.tileSize * 0.4,
+          DungeonMap.tileSize * 0.4,
+        ),
+        position: Vector2(
+          DungeonMap.tileSize * 0.2,
+          DungeonMap.tileSize * 0.2,
+        ),
       ),
     );
     return super.onLoad();

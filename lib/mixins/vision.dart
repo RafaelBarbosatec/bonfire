@@ -86,7 +86,7 @@ mixin Vision on GameComponent {
 
     String key = '$radiusVision/$visionAngle/$angle';
     PolygonShape shape;
-    var center = absoluteCenter;
+    var center = position;
     var centerVision =
         Vector2(center.x - radiusVision, center.y - radiusVision);
     if (_polygonCache.containsKey(key)) {

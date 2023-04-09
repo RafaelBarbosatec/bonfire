@@ -44,7 +44,9 @@ class MapBiome1 extends StatelessWidget {
               ),
         },
       ),
-      cameraConfig: CameraConfig(moveOnlyMapArea: true),
+      cameraConfig: CameraConfig(
+        moveOnlyMapArea: true,
+      ),
       progress: Container(
         width: double.maxFinite,
         height: double.maxFinite,

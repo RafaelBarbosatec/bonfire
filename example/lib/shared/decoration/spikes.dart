@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
@@ -23,12 +21,6 @@ class Spikes extends GameDecoration with Sensor {
         component.receiveDamage(AttackFromEnum.PLAYER_OR_ALLY, 10, 1);
       }
     }
-  }
-
-  @override
-  void render(Canvas canvas) {
-    // TODO: implement render
-    super.render(canvas);
   }
 
   @override

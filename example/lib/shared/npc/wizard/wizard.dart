@@ -12,25 +12,7 @@ class Wizard extends SimpleNpc with BlockMovementCollision, TapGesture {
           position: position,
           size: Vector2.all(DungeonMap.tileSize * 0.8),
           speed: DungeonMap.tileSize * 1.6,
-        ) {
-    // TODO
-    // setupCollision(
-    //   CollisionConfig(
-    //     collisions: [
-    //       CollisionArea.rectangle(
-    //         size: Vector2(
-    //           DungeonMap.tileSize * 0.4,
-    //           DungeonMap.tileSize * 0.4,
-    //         ),
-    //         align: Vector2(
-    //           DungeonMap.tileSize * 0.2,
-    //           DungeonMap.tileSize * 0.4,
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
-  }
+        );
 
   void execShowTalk(GameComponent first) {
     gameRef.camera.moveToTargetAnimated(
@@ -108,5 +90,22 @@ class Wizard extends SimpleNpc with BlockMovementCollision, TapGesture {
   @override
   void onTap() {
     execShowTalk(this);
+  }
+
+  @override
+  Future<void> onLoad() {
+    add(
+      RectangleHitbox(
+        size: Vector2(
+          DungeonMap.tileSize * 0.4,
+          DungeonMap.tileSize * 0.4,
+        ),
+        position: Vector2(
+          DungeonMap.tileSize * 0.2,
+          DungeonMap.tileSize * 0.4,
+        ),
+      ),
+    );
+    return super.onLoad();
   }
 }

@@ -19,9 +19,7 @@ class MyEnemy extends SimpleEnemy with BlockMovementCollision {
           position: position,
           size: Vector2.all(32),
           life: 100,
-        ) {
-    // setupVision(drawVision: true);
-  }
+        );
 
   @override
   void update(double dt) {

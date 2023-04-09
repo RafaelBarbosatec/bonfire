@@ -57,8 +57,9 @@ class _MultiScenarioState extends State<MultiScenario> {
     return AnimatedSwitcher(
       duration: const Duration(seconds: 1),
       switchInCurve: Curves.easeOutCubic,
-      transitionBuilder: (Widget child, Animation<double> animation) =>
-          FadeTransition(opacity: animation, child: child),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeTransition(opacity: animation, child: child);
+      },
       child: _renderWidget(),
     );
   }

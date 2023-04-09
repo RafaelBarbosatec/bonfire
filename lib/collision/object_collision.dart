@@ -21,12 +21,11 @@ mixin BlockMovementCollision on GameComponent {
                 dis.x * (isFlippedHorizontally ? -1 : 1),
                 dis.y * (isFlippedVertically ? -1 : 1),
               );
-
+          var collisionDetection = (findGame() as BaseGame).collisionDetection;
           for (var element in gameRef.visibleCollisions()) {
             if (element != hit) {
-              var inter = (findGame() as BaseGame)
-                  .collisionDetection
-                  .intersections(element, hit);
+              var inter = collisionDetection.intersections(element, hit);
+
               if (inter.isNotEmpty) {
                 hit.position = originalPosition;
                 var comp = element.parent;

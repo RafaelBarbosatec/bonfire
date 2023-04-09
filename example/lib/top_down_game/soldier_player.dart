@@ -24,20 +24,6 @@ class SoldierPlayer extends RotationPlayer
           animIdle: _getSoldierSprite(),
           animRun: _getSoldierSprite(),
         ) {
-    // TODO
-    // setupCollision(
-    //   CollisionConfig(
-    //     collisions: [
-    //       CollisionArea.circle(
-    //         radius: 21.5,
-    //         align: Vector2(
-    //           12.5,
-    //           0,
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
     setupLighting(
       LightingConfig(
         radius: size.y * 2,
@@ -115,5 +101,19 @@ class SoldierPlayer extends RotationPlayer
   void die() {
     removeFromParent();
     super.die();
+  }
+
+  @override
+  Future<void> onLoad() {
+    add(
+      CircleHitbox(
+        radius: size.y / 2,
+        position: Vector2(
+          12.5,
+          0,
+        ),
+      ),
+    );
+    return super.onLoad();
   }
 }

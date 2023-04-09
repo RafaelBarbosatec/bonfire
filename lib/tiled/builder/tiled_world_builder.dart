@@ -485,14 +485,16 @@ class TiledWorldBuilder {
           double x = _getDoubleByProportion(object.x);
           double y = _getDoubleByProportion(object.y);
 
-          collisions.add(_getCollisionObject(
-            x,
-            y,
-            width,
-            height,
-            ellipse: object.ellipse ?? false,
-            polygon: object.polygon,
-          ));
+          collisions.add(
+            _getCollisionObject(
+              x,
+              y,
+              width,
+              height,
+              ellipse: object.ellipse ?? false,
+              polygon: object.polygon,
+            ),
+          );
         }
       }
       return TiledDataObjectCollision(
@@ -593,12 +595,14 @@ class TiledWorldBuilder {
     ShapeHitbox ca = RectangleHitbox(
       size: Vector2(width, height),
       position: Vector2(x, y),
+      isSolid: true,
     );
 
     if (ellipse == true) {
       ca = CircleHitbox(
         radius: (width > height ? width : height) / 2,
         position: Vector2(x, y),
+        isSolid: true,
       );
     }
 
@@ -655,6 +659,7 @@ class TiledWorldBuilder {
     return PolygonHitbox(
       points,
       position: Vector2(alignX, alignY),
+      isSolid: true,
     );
   }
 }
