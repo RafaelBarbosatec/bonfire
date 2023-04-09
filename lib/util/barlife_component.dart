@@ -5,7 +5,7 @@ enum BarLifePorition { top, bottom }
 
 typedef BarLifeTextBuilder = String Function(double life, double maxLife);
 
-class BarLifeComponent extends GameComponent with Follower {
+class BarLifeComponent extends GameComponent {
   Paint _barLiveBgPaint = Paint();
   final Paint _barLivePaint = Paint()..style = PaintingStyle.fill;
   Paint _barLiveBorderPaint = Paint();
@@ -33,8 +33,7 @@ class BarLifeComponent extends GameComponent with Follower {
 
   BarLifeComponent({
     required Vector2 size,
-    Attackable? target,
-    Vector2? offset,
+    Vector2? position,
     Vector2? textOffset,
     this.drawPosition = BarLifePorition.top,
     this.margin = 4,
@@ -49,6 +48,7 @@ class BarLifeComponent extends GameComponent with Follower {
     double life = 100,
     double maxLife = 100,
   }) {
+    this.position = position ?? Vector2.zero();
     _life = life;
     _maxLife = maxLife;
     _textOffset = textOffset ?? _textOffset;
@@ -69,24 +69,16 @@ class BarLifeComponent extends GameComponent with Follower {
     );
 
     _textSize = _textConfig.measureText(_getLifeText());
-
-    setupFollower(
-      target: target,
-      offset: offset,
-    );
   }
 
   @override
   void render(Canvas canvas) {
-    if (followerTarget == null || !show) {
-      return;
-    }
     double yPosition = (y - height) - margin;
 
-    double xPosition = (followerTarget!.width - width) / 2 + x;
+    double xPosition = x;
 
     if (drawPosition == BarLifePorition.bottom) {
-      yPosition = followerTarget!.bottom + (followerOffset?.y ?? 0.0) + margin;
+      yPosition = bottom + y + margin;
     }
 
     yPosition = yPosition;
