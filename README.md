@@ -35,7 +35,7 @@ Command export web: `flutter build web --web-renderer=canvaskit`
 
 ### [Bonfire 3.0.0](https://github.com/users/RafaelBarbosatec/projects/3)
 
-To remove own implementation of the Collision and rendering to adds support to raycast
+Remove collision and rendering implementation itself to add raycast support
 
 ## Credits
 

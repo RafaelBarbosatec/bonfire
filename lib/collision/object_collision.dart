@@ -59,10 +59,12 @@ mixin BlockMovementCollision on GameComponent {
       _RECT_CACHE.clear();
       var rect = toAbsoluteRect();
       if (_hitboxList.isNotEmpty) {
-        var colissionRect = _hitboxList.fold(_hitboxList.first.toRect(),
-            (previousValue, element) {
-          return previousValue.expandToInclude(element.toRect());
-        });
+        var colissionRect = _hitboxList.fold<Rect>(
+          _hitboxList.first.toRect(),
+          (previousValue, element) {
+            return previousValue.expandToInclude(element.toRect());
+          },
+        );
         return _RECT_CACHE[position] = Rect.fromLTWH(
           rect.left + colissionRect.left,
           rect.top + colissionRect.top,
