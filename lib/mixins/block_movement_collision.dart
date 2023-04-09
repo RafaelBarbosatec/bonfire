@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 /// Mixin responsible for adding collision
 mixin BlockMovementCollision on GameComponent {
+  int _lastCountChildren = 0;
   // ignore: non_constant_identifier_names
   final Map<Vector2, Rect> _RECT_CACHE = {};
   Iterable<ShapeHitbox> _hitboxList = [];
@@ -13,7 +14,7 @@ mixin BlockMovementCollision on GameComponent {
   bool isCollision({Vector2? displacement}) {
     if (displacement != null) {
       if (_hitboxList.isNotEmpty) {
-        var dis = displacement - position;
+        var dis = displacement - absolutePosition;
         for (var hit in _hitboxList) {
           var originalPosition = hit.position.clone();
           hit.position = originalPosition +
@@ -80,7 +81,11 @@ mixin BlockMovementCollision on GameComponent {
 
   @override
   void update(double dt) {
-    _hitboxList = children.whereType<ShapeHitbox>();
+    if (_lastCountChildren != children.length) {
+      _lastCountChildren = children.length;
+      _hitboxList = children.whereType<ShapeHitbox>();
+    }
+
     super.update(dt);
   }
 

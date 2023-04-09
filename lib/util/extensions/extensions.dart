@@ -399,3 +399,42 @@ extension PositionComponentExt on PositionComponent {
     );
   }
 }
+
+extension ShapeHitbocExt on ShapeHitbox {
+  ShapeHitbox clone() {
+    if (e is RectangleHitbox) {
+      RectangleHitbox rect = e as RectangleHitbox;
+      return RectangleHitbox(
+        anchor: rect.anchor,
+        angle: rect.angle,
+        isSolid: rect.isSolid,
+        position: rect.position,
+        priority: rect.priority,
+        size: rect.size,
+      );
+    }
+
+    if (e is CircleHitbox) {
+      CircleHitbox circle = e as CircleHitbox;
+      return CircleHitbox(
+        anchor: circle.anchor,
+        angle: circle.angle,
+        isSolid: circle.isSolid,
+        position: circle.position,
+        radius: circle.radius,
+      );
+    }
+
+    if (e is PolygonHitbox) {
+      PolygonHitbox poly = e as PolygonHitbox;
+      return PolygonHitbox(
+        poly.vertices,
+        anchor: poly.anchor,
+        angle: poly.angle,
+        isSolid: poly.isSolid,
+        position: poly.position,
+      );
+    }
+    return this;
+  }
+}
