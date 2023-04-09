@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
@@ -504,13 +505,17 @@ class BonfireCamera extends Camera {
   void _updateZoomLimits(Vector2 canvasSize, Vector2 mapSize) {
     if (setZoomLimitToFitMap) {
       double minZoom = zoom;
-      if (mapSize.x < mapSize.y) {
-        minZoom = canvasSize.x / (mapSize.x - gameRef.map.getStartPosition().x);
+      double zoomX = 0;
+      double zoomY = 0;
+      if (mapSize.x < canvasSize.x) {
+        zoomX = canvasSize.x / (mapSize.x - gameRef.map.getStartPosition().x);
       }
 
-      if (mapSize.y < mapSize.x) {
-        minZoom = canvasSize.y / (mapSize.y - gameRef.map.getStartPosition().y);
+      if (mapSize.y < canvasSize.y) {
+        zoomY = canvasSize.y / (mapSize.y - gameRef.map.getStartPosition().y);
       }
+
+      minZoom = max(zoomX, zoomY);
 
       if (zoom < minZoom) {
         zoom = minZoom;
