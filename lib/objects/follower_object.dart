@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:bonfire/bonfire.dart';
 
-class FollowerObject extends GameComponent with Follower, UseSprite, UseAssetsLoader {
+class FollowerObject extends GameComponent
+    with Follower, UseSprite, UseAssetsLoader {
   final bool useTargetPriority;
   final int? objectPriority;
 
