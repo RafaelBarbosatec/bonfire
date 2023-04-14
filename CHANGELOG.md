@@ -1,3 +1,6 @@
+# [2.12.2]
+- Adds `FollowerObject`. Thanks [Matt El Mouktafi](https://github.com/mel-mouk)!
+
 # [2.12.1]
 - Adds multi scenario example
 - Update Flame version to 1.7.1
