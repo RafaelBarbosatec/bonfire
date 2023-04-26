@@ -18,12 +18,12 @@ mixin Pushable on ObjectCollision {
   bool enablePushable = true;
 
   @override
-  bool onCollision(GameComponent component, bool active) {
+  void onCollisionHappened(GameComponent component, bool active) {
     if (enablePushable) {
       if (this is Movement) {
         if (!active && component is Movement) {
           if (!onPush(component)) {
-            return super.onCollision(component, active);
+            return super.onCollisionHappened(component, active);
           }
           Vector2 displacement = center - component.center;
           if (displacement.x.abs() > displacement.y.abs()) {
@@ -46,7 +46,6 @@ mixin Pushable on ObjectCollision {
             'The mixin Pushable not working in ($this) because this component don`t have the `Movement` mixin');
       }
     }
-    return super.onCollision(component, active);
   }
 
   /// Returning true if the component is pushable, false otherwise.

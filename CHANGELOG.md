@@ -1,5 +1,6 @@
 # [2.12.3]
 - Fix issue [#379](https://github.com/RafaelBarbosatec/bonfire/issues/379)
+- Adds in `ObjectCollision` the method `onCollisionHappened`
 
 # [2.12.2]
 - Adds `FollowerObject`. Thanks [Matt El Mouktafi](https://github.com/mel-mouk)!

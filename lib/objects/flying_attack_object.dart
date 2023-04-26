@@ -168,8 +168,13 @@ class FlyingAttackObject extends GameComponent
     } else if (!withDecorationCollision) {
       return false;
     }
-    _destroyObject(component);
     return true;
+  }
+
+  @override
+  void onCollisionHappened(GameComponent component, bool active) {
+    _destroyObject(component);
+    super.onCollisionHappened(component, active);
   }
 
   void _destroyObject(GameComponent component) {
