@@ -138,10 +138,6 @@ mixin MovementByJoystick on Movement, JoystickListener {
 
   @override
   void idle() {
-    if (gameRef.joystick is Joystick) {
-      (gameRef.joystick as Joystick).resetDirectionalKeys();
-    }
-
     _currentDirectional = JoystickMoveDirectional.IDLE;
     super.idle();
   }
