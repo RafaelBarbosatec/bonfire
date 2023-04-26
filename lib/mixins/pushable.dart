@@ -23,7 +23,7 @@ mixin Pushable on ObjectCollision {
       if (this is Movement) {
         if (!active && component is Movement) {
           if (!onPush(component)) {
-            return super.onCollisionHappened(component, active);
+            super.onCollisionHappened(component, active);
           }
           Vector2 displacement = center - component.center;
           if (displacement.x.abs() > displacement.y.abs()) {
