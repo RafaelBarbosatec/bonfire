@@ -33,4 +33,12 @@ class Critter extends SimpleNpc
       ),
     );
   }
+
+  @override
+  bool onCollision(GameComponent component, bool active) {
+    if (component is FlyingAttackObject) {
+      return false;
+    }
+    return super.onCollision(component, active);
+  }
 }

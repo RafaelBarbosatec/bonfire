@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04]
+        os: [ubuntu-latest]
     steps:
     # Set up Flutter and add it to the path.
     - name: Clone Flutter repository with stable channel
