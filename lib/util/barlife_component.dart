@@ -49,7 +49,7 @@ class BarLifeComponent extends GameComponent with Follower {
     double life = 100,
     double maxLife = 100,
   }) {
-    setupFollower(target: target,offset: position);
+    setupFollower(target: target, offset: position);
     _life = life;
     _maxLife = maxLife;
     _textOffset = textOffset ?? _textOffset;

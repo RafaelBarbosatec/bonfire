@@ -13,7 +13,7 @@ class ExitMapSensor extends GameDecoration with Sensor {
         );
 
   @override
-   void onContact(GameComponent component) {
+  void onContact(GameComponent component) {
     if (!hasContact && component is Player) {
       hasContact = true;
       exitMap(id);
