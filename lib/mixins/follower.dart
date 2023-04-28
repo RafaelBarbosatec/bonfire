@@ -32,8 +32,8 @@ mixin Follower on GameComponent {
   void update(double dt) {
     super.update(dt);
     if (followerTarget != null &&
-        _lastFollowerPosition != followerTarget?.position) {
-      _lastFollowerPosition = followerTarget!.position.clone();
+        _lastFollowerPosition != followerTarget?.absolutePosition) {
+      _lastFollowerPosition = followerTarget!.absolutePosition.clone();
       position = _lastFollowerPosition! + (followerOffset ?? _zero);
     }
   }

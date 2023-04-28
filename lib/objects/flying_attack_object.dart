@@ -318,7 +318,7 @@ class FlyingAttackObject extends GameComponent
     if (collision != null) {
       add(collision!);
     } else {
-      add(RectangleHitbox(size: size));
+      add(RectangleHitbox(size: size, isSolid: true));
     }
 
     return super.onLoad();
