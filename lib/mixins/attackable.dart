@@ -71,17 +71,13 @@ mixin Attackable on GameComponent {
     double damage,
     dynamic identify,
   ) {
-    if (checkCanReceiveDamage(attacker, damage, identify)) {
+    if (checkCanReceiveDamage(attacker)) {
       removeLife(damage);
     }
   }
 
   /// This method is used to check if this component can receive damage from any attacker.
-  bool checkCanReceiveDamage(
-    AttackFromEnum attacker,
-    double damage,
-    dynamic from,
-  ) {
+  bool checkCanReceiveDamage(AttackFromEnum attacker) {
     switch (receivesAttackFrom) {
       case ReceivesAttackFromEnum.ALL:
         return true;
