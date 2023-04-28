@@ -53,7 +53,6 @@ class Joystick extends JoystickController {
   JoystickDirectional? _directional;
 
   JoystickDirectional? get directional => _directional;
-  final List<LogicalKeyboardKey> _currentKeyboardKeys = [];
 
   Joystick({
     this.actions = const [],
@@ -157,8 +156,7 @@ class Joystick extends JoystickController {
     }
 
     /// No keyboard events, keep idle
-    if (keysPressed.isEmpty && !event.repeat) {
-      resetDirectionalKeys();
+    if (!_containDirectionalPressed(keysPressed) && !event.repeat) {
       joystickChangeDirectional(
         JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.IDLE,
@@ -166,33 +164,34 @@ class Joystick extends JoystickController {
           radAngle: 0.0,
         ),
       );
-    } else {
-      /// Process directional events
-      if (_isDirectional(event.logicalKey) && !event.repeat) {
-        resetDirectionalKeys();
-        _currentKeyboardKeys.addAll(keysPressed.toList());
+    }
 
-        if (_currentKeyboardKeys.length == 1) {
-          _sendOneDirection(_currentKeyboardKeys.first);
-        } else {
+    /// Process directional events
+    if (_isDirectional(event.logicalKey)) {
+      final currentKeyboardKeys = _getDirectionlKeysPressed(keysPressed);
+
+      if (currentKeyboardKeys.isNotEmpty) {
+        if (currentKeyboardKeys.length > 1) {
           _sendTwoDirection(
-            _currentKeyboardKeys.first,
-            _currentKeyboardKeys[1],
+            currentKeyboardKeys.first,
+            currentKeyboardKeys[1],
           );
+        } else {
+          _sendOneDirection(currentKeyboardKeys.first);
         }
-      } else {
-        /// Process action events
-        if (event is RawKeyDownEvent) {
-          joystickAction(JoystickActionEvent(
-            id: event.logicalKey.keyId,
-            event: ActionEvent.DOWN,
-          ));
-        } else if (event is RawKeyUpEvent) {
-          joystickAction(JoystickActionEvent(
-            id: event.logicalKey.keyId,
-            event: ActionEvent.UP,
-          ));
-        }
+      }
+    } else {
+      /// Process action events
+      if (event is RawKeyDownEvent) {
+        joystickAction(JoystickActionEvent(
+          id: event.logicalKey.keyId,
+          event: ActionEvent.DOWN,
+        ));
+      } else if (event is RawKeyUpEvent) {
+        joystickAction(JoystickActionEvent(
+          id: event.logicalKey.keyId,
+          event: ActionEvent.UP,
+        ));
       }
     }
 
@@ -520,7 +519,18 @@ class Joystick extends JoystickController {
     }
   }
 
-  void resetDirectionalKeys() {
-    _currentKeyboardKeys.clear();
+  bool _containDirectionalPressed(Set<LogicalKeyboardKey> keysPressed) {
+    for (var element in keysPressed) {
+      if (_isDirectional(element)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  List<LogicalKeyboardKey> _getDirectionlKeysPressed(
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    return keysPressed.where(_isDirectional).toList();
   }
 }
