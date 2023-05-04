@@ -285,6 +285,51 @@ class SimpleDirectionAnimation {
     }
   }
 
+  /// Method used to play animation once time specific animation registred in `others`
+  Future playOnceOther(
+    String key, {
+    VoidCallback? onFinish,
+    VoidCallback? onStart,
+    bool runToTheEnd = false,
+    bool flipX = false,
+    bool flipY = false,
+    bool useCompFlip = false,
+    Vector2? size,
+    Vector2? offset,
+  }) async {
+    if (others.containsKey(key) == true) {
+      _fastAnimationOffset = offset ?? Vector2.zero();
+      runToTheEndFastAnimation = runToTheEnd;
+      bool lastFlipX = isFlipHorizontally;
+      bool lastFlipY = isFlipVertically;
+      _fastAnimation?.onRemove();
+      _fastAnimation = AnimatedObjectOnce(
+        position: position + _fastAnimationOffset,
+        size: size ?? this.size,
+        animation: others[key],
+        onStart: onStart,
+        onFinish: () {
+          onFinish?.call();
+          _fastAnimation?.onRemove();
+          _fastAnimation = null;
+          if (!useCompFlip) {
+            isFlipHorizontally = lastFlipX;
+            isFlipVertically = lastFlipY;
+          }
+        },
+      );
+      if (!useCompFlip) {
+        isFlipVertically = flipY;
+        isFlipHorizontally = flipX;
+      }
+
+      if (gameRef != null) {
+        _fastAnimation?.gameRef = gameRef!;
+      }
+      await _fastAnimation?.onLoad();
+    }
+  }
+
   /// Method used to play animation once time
   Future playOnce(
     FutureOr<SpriteAnimation> animation, {

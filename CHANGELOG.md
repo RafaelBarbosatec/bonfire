@@ -1,3 +1,6 @@
+# [NEXT]
+- Adds `playOnceOther` in `SimpleDirectionAnimation`
+
 # [2.12.4]
 - Fix issue [#402](https://github.com/RafaelBarbosatec/bonfire/issues/402)
 
