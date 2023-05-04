@@ -1,3 +1,7 @@
+# [2.12.5]
+- Adds `playOnceOther` in `SimpleDirectionAnimation`
+- Now the flip operation did by `SimpleDirectionAnimation` not flip the component.
+
 # [2.12.4]
 - Fix issue [#402](https://github.com/RafaelBarbosatec/bonfire/issues/402)
 

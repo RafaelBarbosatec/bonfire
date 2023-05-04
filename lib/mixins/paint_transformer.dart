@@ -69,8 +69,10 @@ mixin RenderTransformer on PositionComponent {
       canvas.save();
       canvas.translate(center.x, center.y);
       canvas.rotate(angle);
-      canvas.scale(isFlipHorizontally ? -scale.x : scale.x,
-          isFlipVertically ? -scale.y : scale.y);
+      canvas.scale(
+        isFlipHorizontally ? -scale.x : scale.x,
+        isFlipVertically ? -scale.y : scale.y,
+      );
       canvas.translate(-center.x, -center.y);
     }
 
