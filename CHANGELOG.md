@@ -1,4 +1,4 @@
-# [NEXT]
+# [2.12.5]
 - Adds `playOnceOther` in `SimpleDirectionAnimation`
 - Now the flip operation did by `SimpleDirectionAnimation` not flip the component.
 
