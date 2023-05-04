@@ -381,7 +381,16 @@ class SimpleDirectionAnimation {
     others[key] = await animation;
   }
 
+  bool get needDoFlip => isFlipHorizontally || isFlipVertically;
+
   void render(Canvas canvas, Paint paint) {
+    if (needDoFlip) {
+      Vector2 center = position + (size / 2);
+      canvas.save();
+      canvas.translate(center.x, center.y);
+      canvas.scale(isFlipHorizontally ? -1 : 1, isFlipVertically ? -1 : 1);
+      canvas.translate(-center.x, -center.y);
+    }
     if (_fastAnimation != null) {
       _fastAnimation?.render(canvas);
     } else {
@@ -391,6 +400,9 @@ class SimpleDirectionAnimation {
             size: size,
             overridePaint: paint,
           );
+    }
+    if (needDoFlip) {
+      canvas.restore();
     }
   }
 
