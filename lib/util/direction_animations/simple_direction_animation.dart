@@ -298,35 +298,16 @@ class SimpleDirectionAnimation {
     Vector2? offset,
   }) async {
     if (others.containsKey(key) == true) {
-      _fastAnimationOffset = offset ?? Vector2.zero();
-      runToTheEndFastAnimation = runToTheEnd;
-      bool lastFlipX = isFlipHorizontally;
-      bool lastFlipY = isFlipVertically;
-      _fastAnimation?.onRemove();
-      _fastAnimation = AnimatedObjectOnce(
-        position: position + _fastAnimationOffset,
-        size: size ?? this.size,
-        animation: others[key],
+      return playOnce(
+        others[key]!,
+        onFinish: onFinish,
         onStart: onStart,
-        onFinish: () {
-          onFinish?.call();
-          _fastAnimation?.onRemove();
-          _fastAnimation = null;
-          if (!useCompFlip) {
-            isFlipHorizontally = lastFlipX;
-            isFlipVertically = lastFlipY;
-          }
-        },
+        runToTheEnd: runToTheEnd,
+        flipX: flipX,
+        useCompFlip: useCompFlip,
+        size: size,
+        offset: offset,
       );
-      if (!useCompFlip) {
-        isFlipVertically = flipY;
-        isFlipHorizontally = flipX;
-      }
-
-      if (gameRef != null) {
-        _fastAnimation?.gameRef = gameRef!;
-      }
-      await _fastAnimation?.onLoad();
     }
   }
 
