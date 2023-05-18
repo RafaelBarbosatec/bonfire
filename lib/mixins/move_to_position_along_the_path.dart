@@ -5,12 +5,13 @@ import 'dart:ui';
 
 import 'package:a_star_algorithm/a_star_algorithm.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/mixins/movement_v2.dart';
 import 'package:bonfire/util/line_path_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 /// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
-mixin MoveToPositionAlongThePath on Movement {
+mixin MoveToPositionAlongThePath on MovementV2 {
   static const REDUCTION_TO_AVOID_ROUNDING_PROBLEMS = 4;
 
   List<Offset> _currentPath = [];

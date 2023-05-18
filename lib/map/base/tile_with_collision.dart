@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 
-class TileWithCollision extends Tile with BlockMovementCollision {
+class TileWithCollision extends Tile {
   Iterable<ShapeHitbox>? collisions;
   TileWithCollision({
     required String spritePath,
@@ -68,5 +68,13 @@ class TileWithCollision extends Tile with BlockMovementCollision {
   Future<void> onLoad() {
     collisions?.let(addAll);
     return super.onLoad();
+  }
+
+  @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    if (other is TileWithCollision || other is GameDecorationWithCollision) {
+      return false;
+    }
+    return super.onComponentTypeCheck(other);
   }
 }

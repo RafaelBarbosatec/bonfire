@@ -1,9 +1,10 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/mixins/movement_v2.dart';
 
 /// Mixin responsible for adding animations to movements
-mixin DirectionAnimation on Movement {
+mixin DirectionAnimation on MovementV2 {
   SimpleDirectionAnimation? animation;
 
   @override
@@ -18,16 +19,7 @@ mixin DirectionAnimation on Movement {
   void update(double dt) {
     if (isVisible) {
       animation?.update(dt, position, size);
-      var newFlipHorizontally = animation?.isFlipHorizontally ?? false;
-      if (newFlipHorizontally != isFlippedHorizontally) {
-        flipHorizontallyAroundCenter();
-      }
-      var newFlipVertically = animation?.isFlipVertically ?? false;
-      if (newFlipVertically != isFlippedVertically) {
-        flipVerticallyAroundCenter();
-      }
     }
-
     super.update(dt);
   }
 

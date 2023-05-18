@@ -64,15 +64,15 @@ extension NpcExtensions on Npc {
       angle: angle,
       observed: (player) {
         observed?.call();
-        bool move = followComponent(
-          player,
-          dtUpdate,
-          closeComponent: (comp) => closePlayer(comp as Player),
-          margin: margin,
-        );
-        if (!move) {
-          notCanMove?.call();
-        }
+        // bool move = followComponent(
+        //   player,
+        //   dtUpdate,
+        //   closeComponent: (comp) => closePlayer(comp as Player),
+        //   margin: margin,
+        // );
+        // if (!move) {
+        //   notCanMove?.call();
+        // }
       },
       notObserved: () {
         if (!isIdle) {
@@ -105,15 +105,15 @@ extension NpcExtensions on Npc {
       angle: angle ?? lastDirection.toRadians(),
       observed: (enemy) {
         observed?.call();
-        bool move = followComponent(
-          enemy.first,
-          dtUpdate,
-          closeComponent: (comp) => closeEnemy(comp as Enemy),
-          margin: margin,
-        );
-        if (!move) {
-          notCanMove?.call();
-        }
+        // bool move = followComponent(
+        //   enemy.first,
+        //   dtUpdate,
+        //   closeComponent: (comp) => closeEnemy(comp as Enemy),
+        //   margin: margin,
+        // );
+        // if (!move) {
+        //   notCanMove?.call();
+        // }
       },
       notObserved: () {
         if (!isIdle) {
@@ -146,15 +146,15 @@ extension NpcExtensions on Npc {
       angle: angle ?? lastDirection.toRadians(),
       observed: (ally) {
         observed?.call();
-        bool move = followComponent(
-          ally.first,
-          dtUpdate,
-          closeComponent: (comp) => closeAlly(comp as Ally),
-          margin: margin,
-        );
-        if (!move) {
-          notCanMove?.call();
-        }
+        // bool move = followComponent(
+        //   ally.first,
+        //   dtUpdate,
+        //   closeComponent: (comp) => closeAlly(comp as Ally),
+        //   margin: margin,
+        // );
+        // if (!move) {
+        //   notCanMove?.call();
+        // }
       },
       notObserved: () {
         if (!isIdle) {

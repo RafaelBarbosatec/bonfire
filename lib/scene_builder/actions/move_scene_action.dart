@@ -1,5 +1,6 @@
 import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/mixins/movement_v2.dart';
 
 ///
 /// Created by
@@ -14,7 +15,7 @@ import 'package:bonfire/bonfire.dart';
 /// on 04/03/22
 
 /// SceneAction that move the componente in the game.
-class MoveComponentSceneAction<T extends Movement> extends SceneAction {
+class MoveComponentSceneAction<T extends MovementV2> extends SceneAction {
   final T component;
   final Vector2 newPosition;
   final double? speed;

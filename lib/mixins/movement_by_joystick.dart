@@ -1,9 +1,10 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/mixins/movement_v2.dart';
 
 /// Mixin responsible for adding movements through joystick events
-mixin MovementByJoystick on Movement, JoystickListener {
+mixin MovementByJoystick on MovementV2, JoystickListener {
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
   double _currentDirectionalAngle = 0;
 

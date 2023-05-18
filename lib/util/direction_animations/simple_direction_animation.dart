@@ -285,6 +285,32 @@ class SimpleDirectionAnimation {
     }
   }
 
+  /// Method used to play animation once time specific animation registred in `others`
+  Future playOnceOther(
+    String key, {
+    VoidCallback? onFinish,
+    VoidCallback? onStart,
+    bool runToTheEnd = false,
+    bool flipX = false,
+    bool flipY = false,
+    bool useCompFlip = false,
+    Vector2? size,
+    Vector2? offset,
+  }) async {
+    if (others.containsKey(key) == true) {
+      return playOnce(
+        others[key]!,
+        onFinish: onFinish,
+        onStart: onStart,
+        runToTheEnd: runToTheEnd,
+        flipX: flipX,
+        useCompFlip: useCompFlip,
+        size: size,
+        offset: offset,
+      );
+    }
+  }
+
   /// Method used to play animation once time
   Future playOnce(
     FutureOr<SpriteAnimation> animation, {
@@ -336,7 +362,16 @@ class SimpleDirectionAnimation {
     others[key] = await animation;
   }
 
+  bool get needDoFlip => isFlipHorizontally || isFlipVertically;
+
   void render(Canvas canvas, Paint paint) {
+    if (needDoFlip) {
+      Vector2 center = (size / 2);
+      canvas.save();
+      canvas.translate(center.x, center.y);
+      canvas.scale(isFlipHorizontally ? -1 : 1, isFlipVertically ? -1 : 1);
+      canvas.translate(-center.x, -center.y);
+    }
     if (_fastAnimation != null) {
       _fastAnimation?.render(canvas);
     } else {
@@ -346,13 +381,9 @@ class SimpleDirectionAnimation {
             overridePaint: paint,
           );
     }
-  }
-
-  Vector2 get center {
-    return Vector2(
-      position.x + size.x / 2,
-      position.y + size.y / 2,
-    );
+    if (needDoFlip) {
+      canvas.restore();
+    }
   }
 
   void update(

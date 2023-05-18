@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/mixins/movement_v2.dart';
 
 ///
 /// Created by
@@ -14,29 +15,31 @@ import 'package:bonfire/bonfire.dart';
 
 /// This mixin give to the component the pushable behavior.
 /// To use this mixin the Component must have a `Movement` mixin.
-mixin Pushable on BlockMovementCollision {
+mixin Pushable on MovementV2 {
   bool enablePushable = true;
 
   @override
-  void onMovementCollision(GameComponent component, bool active) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
     if (enablePushable) {
-      if (this is Movement) {
-        if (!active && component is Movement) {
+      if (other is GameComponent) {
+        GameComponent component = other;
+        if (component is MovementV2) {
           if (!onPush(component)) {
-            super.onMovementCollision(component, active);
+            return;
           }
           Vector2 displacement = center - component.center;
           if (displacement.x.abs() > displacement.y.abs()) {
             if (displacement.x < 0) {
-              (this as Movement).moveLeft((this as Movement).speed);
+              moveLeftOneShot(speed);
             } else {
-              (this as Movement).moveRight((this as Movement).speed);
+              moveRightOneShot(speed);
             }
           } else {
             if (displacement.y < 0) {
-              (this as Movement).moveUp((this as Movement).speed);
+              moveUpOneShot(speed);
             } else {
-              (this as Movement).moveDown((this as Movement).speed);
+              moveDownOneShot(speed);
             }
           }
         }
@@ -46,7 +49,6 @@ mixin Pushable on BlockMovementCollision {
             'The mixin Pushable not working in ($this) because this component don`t have the `Movement` mixin');
       }
     }
-    return super.onMovementCollision(component, active);
   }
 
   /// Returning true if the component is pushable, false otherwise.

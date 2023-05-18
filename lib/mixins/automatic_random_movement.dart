@@ -1,9 +1,10 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/mixins/movement_v2.dart';
 
 /// Mixin responsible for adding random movement like enemy walking through the scene
-mixin AutomaticRandomMovement on Movement {
+mixin AutomaticRandomMovement on MovementV2 {
   Vector2 _targetRandomMovement = Vector2.zero();
   // ignore: constant_identifier_names
   static const _KEY_INTERVAL_KEEP_STOPPED = 'INTERVAL_RANDOM_MOVEMENT';

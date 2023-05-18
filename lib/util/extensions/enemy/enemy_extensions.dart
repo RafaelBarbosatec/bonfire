@@ -111,22 +111,22 @@ extension EnemyExtensions on Enemy {
       angle: angle,
       observed: (player) {
         observed?.call();
-        positionsItselfAndKeepDistance(
-          player,
-          minDistanceFromPlayer: minDistanceFromPlayer,
-          radiusVision: radiusVision,
-          runOnlyVisibleInScreen: runOnlyVisibleInScreen,
-          positioned: (player) {
-            final playerDirection = getComponentDirectionFromMe(player);
-            lastDirection = playerDirection;
-            if (lastDirection == Direction.left ||
-                lastDirection == Direction.right) {
-              lastDirectionHorizontal = lastDirection;
-            }
-            idle();
-            positioned(player as Player);
-          },
-        );
+        // positionsItselfAndKeepDistance(
+        //   player,
+        //   minDistanceFromPlayer: minDistanceFromPlayer,
+        //   radiusVision: radiusVision,
+        //   runOnlyVisibleInScreen: runOnlyVisibleInScreen,
+        //   positioned: (player) {
+        //     final playerDirection = getComponentDirectionFromMe(player);
+        //     lastDirection = playerDirection;
+        //     if (lastDirection == Direction.left ||
+        //         lastDirection == Direction.right) {
+        //       lastDirectionHorizontal = lastDirection;
+        //     }
+        //     idle();
+        //     positioned(player as Player);
+        //   },
+        // );
       },
       notObserved: () {
         if (!isIdle) {

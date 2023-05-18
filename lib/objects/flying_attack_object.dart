@@ -143,12 +143,14 @@ class FlyingAttackObject extends GameComponent
   }
 
   @override
-  void onMovementCollision(GameComponent other, bool active) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Attackable && !other.isRemoving) {
       other.receiveDamage(attackFrom, damage, id);
     }
-    _destroyObject(other);
-    super.onMovementCollision(other, active);
+    if (other is GameComponent) {
+      _destroyObject(other);
+    }
+    super.onCollision(intersectionPoints, other);
   }
 
   void _destroyObject(GameComponent component) {

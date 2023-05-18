@@ -9,9 +9,9 @@ class KnightInterface extends GameInterface {
   Goblin? enemyControlled;
 
   @override
-  void onMount() {
-    add(BarLifeInterface());
-    add(InterfaceComponent(
+  void onMount() async {
+    await add(BarLifeInterface());
+    await add(InterfaceComponent(
       spriteUnselected: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
       size: Vector2(40, 40),
@@ -24,7 +24,7 @@ class KnightInterface extends GameInterface {
         }
       },
     ));
-    add(InterfaceComponent(
+    await add(InterfaceComponent(
       spriteUnselected: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
       size: Vector2(40, 40),
@@ -35,7 +35,7 @@ class KnightInterface extends GameInterface {
         changeControllerToVisibleEnemy();
       },
     ));
-    add(InterfaceComponent(
+    await add(InterfaceComponent(
       spriteUnselected: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
       size: Vector2(40, 40),
@@ -46,7 +46,7 @@ class KnightInterface extends GameInterface {
         _addFollowerWidgetExample(selected);
       },
     ));
-    add(InterfaceComponent(
+    await add(InterfaceComponent(
       spriteUnselected: Sprite.load('blue_button1.png'),
       spriteSelected: Sprite.load('blue_button2.png'),
       size: Vector2(40, 40),
@@ -57,7 +57,7 @@ class KnightInterface extends GameInterface {
         _animateColorFilter();
       },
     ));
-    add(TextInterfaceComponent(
+    await add(TextInterfaceComponent(
       text: 'Start scene',
       textConfig: const TextStyle(
         color: Colors.white,

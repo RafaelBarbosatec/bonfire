@@ -1,10 +1,11 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/mixins/movement_v2.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class BarrelDraggable extends GameDecoration
-    with DragGesture, BlockMovementCollision, Movement, Pushable {
+    with DragGesture, BlockMovementCollision, MovementV2, Pushable {
   late TextPaint _textConfig;
   String text = 'Drag here';
   double xCenter = 0;
@@ -41,7 +42,7 @@ class BarrelDraggable extends GameDecoration
 
   @override
   Future<void> onLoad() {
-    add(RectangleHitbox(size: size / 1.5, position: size / 8.5));
+    add(RectangleHitbox(size: size / 1.5, position: size / 8.5, isSolid: true));
     return super.onLoad();
   }
 }
