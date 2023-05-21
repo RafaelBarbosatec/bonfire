@@ -4,7 +4,6 @@ import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/extensions/game_component_extensions.dart';
-import 'package:bonfire/util/extensions/movement_extensions.dart';
 import 'package:bonfire/util/extensions/npc/npc_extensions.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';

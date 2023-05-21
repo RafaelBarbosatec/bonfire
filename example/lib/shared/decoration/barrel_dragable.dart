@@ -1,11 +1,10 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/movement_v2.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class BarrelDraggable extends GameDecoration
-    with DragGesture, BlockMovementCollision, MovementV2, Pushable {
+    with DragGesture, BlockMovementCollision, Movement, Pushable {
   late TextPaint _textConfig;
   String text = 'Drag here';
   double xCenter = 0;

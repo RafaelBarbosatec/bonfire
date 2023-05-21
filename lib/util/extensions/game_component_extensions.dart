@@ -216,13 +216,8 @@ extension GameComponentExtensions on GameComponent {
         .where((a) => a.rectAttackable().overlaps(positionAttack) && a != this)
         .forEach((enemy) {
       enemy.receiveDamage(attackFrom, damage, id);
-      final rectAfterPush = enemy.position.translate(diffBase.x, diffBase.y);
-
-      if (withPush &&
-          (enemy is BlockMovementCollision &&
-              !(enemy as BlockMovementCollision)
-                  .isCollision(displacement: rectAfterPush))) {
-        enemy.translate(diffBase.x, diffBase.y);
+      if (withPush && enemy is Movement) {
+        (enemy as Movement).translate(diffBase);
       }
     });
   }
@@ -258,16 +253,14 @@ extension GameComponentExtensions on GameComponent {
 
   /// Gets rect used how base in calculations considering collision
   Rect get rectConsideringCollision {
-    return (containBlockMovementCollision()
-        ? (this as BlockMovementCollision).rectCollision
-        : toAbsoluteRect());
+    return toAbsoluteRect();
   }
 
   /// Method that checks if this component contain collisions
-  bool containBlockMovementCollision() {
-    return (this is BlockMovementCollision &&
-        (this as BlockMovementCollision).containCollision());
-  }
+  // bool containBlockMovementCollision() {
+  //   return (this is BlockMovementCollision &&
+  //       (this as BlockMovementCollision).containCollision());
+  // }
 
   Direction? directionThePlayerIsIn() {
     Player? player = gameRef.player;

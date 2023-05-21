@@ -1,10 +1,9 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/movement_v2.dart';
 
 /// Mixin responsible for adding animations to movements
-mixin DirectionAnimation on MovementV2 {
+mixin DirectionAnimation on Movement {
   SimpleDirectionAnimation? animation;
 
   @override
@@ -17,89 +16,81 @@ mixin DirectionAnimation on MovementV2 {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (isVisible) {
+      _updateAnimation();
       animation?.update(dt, position, size);
     }
-    super.update(dt);
   }
 
-  @override
-  bool moveUp(double speed, {bool notifyOnMove = true}) {
-    if (notifyOnMove) {
-      if (animation?.runUp != null) {
-        animation?.play(SimpleAnimationEnum.runUp);
-      } else {
-        if (lastDirectionHorizontal == Direction.left) {
+  void _updateAnimation() {
+    if (isIdle) {
+      return;
+    }
+    switch (lastDirection) {
+      case Direction.left:
+        animation?.play(SimpleAnimationEnum.runLeft);
+        break;
+      case Direction.right:
+        animation?.play(SimpleAnimationEnum.runRight);
+        break;
+      case Direction.up:
+        if (animation?.runUp != null) {
+          animation?.play(SimpleAnimationEnum.runUp);
+        } else {
+          if (lastDirectionHorizontal == Direction.left) {
+            animation?.play(SimpleAnimationEnum.runLeft);
+          } else {
+            animation?.play(SimpleAnimationEnum.runRight);
+          }
+        }
+        break;
+      case Direction.down:
+        if (animation?.runDown != null ||
+            (animation?.runUp != null && animation?.enabledFlipY == true)) {
+          animation?.play(SimpleAnimationEnum.runDown);
+        } else {
+          if (lastDirectionHorizontal == Direction.left) {
+            animation?.play(SimpleAnimationEnum.runLeft);
+          } else {
+            animation?.play(SimpleAnimationEnum.runRight);
+          }
+        }
+        break;
+      case Direction.upLeft:
+        if (animation?.runUpLeft != null) {
+          animation?.play(SimpleAnimationEnum.runUpLeft);
+        } else {
           animation?.play(SimpleAnimationEnum.runLeft);
+        }
+        break;
+      case Direction.upRight:
+        if (animation?.runUpRight != null) {
+          animation?.play(SimpleAnimationEnum.runUpRight);
         } else {
           animation?.play(SimpleAnimationEnum.runRight);
         }
-      }
-    }
-
-    return super.moveUp(speed, notifyOnMove: notifyOnMove);
-  }
-
-  @override
-  bool moveRight(double speed, {bool notifyOnMove = true}) {
-    if (notifyOnMove) {
-      animation?.play(SimpleAnimationEnum.runRight);
-    }
-    return super.moveRight(speed, notifyOnMove: notifyOnMove);
-  }
-
-  @override
-  bool moveDown(double speed, {bool notifyOnMove = true}) {
-    if (notifyOnMove) {
-      if (animation?.runDown != null ||
-          (animation?.runUp != null && animation?.enabledFlipY == true)) {
-        animation?.play(SimpleAnimationEnum.runDown);
-      } else {
-        if (lastDirectionHorizontal == Direction.left) {
+        break;
+      case Direction.downLeft:
+        if (animation?.runDownLeft != null) {
+          animation?.play(SimpleAnimationEnum.runDownLeft);
+        } else {
           animation?.play(SimpleAnimationEnum.runLeft);
+        }
+        break;
+      case Direction.downRight:
+        if (animation?.runDownRight != null) {
+          animation?.play(SimpleAnimationEnum.runDownRight);
         } else {
           animation?.play(SimpleAnimationEnum.runRight);
         }
-      }
+        break;
     }
-
-    return super.moveDown(speed, notifyOnMove: notifyOnMove);
-  }
-
-  @override
-  bool moveLeft(double speed, {bool notifyOnMove = true}) {
-    if (notifyOnMove) {
-      animation?.play(SimpleAnimationEnum.runLeft);
-    }
-    return super.moveLeft(speed, notifyOnMove: notifyOnMove);
-  }
-
-  @override
-  bool moveUpLeft(double speedX, double speedY) {
-    animation?.play(SimpleAnimationEnum.runUpLeft);
-    return super.moveUpLeft(speedX, speedY);
-  }
-
-  @override
-  bool moveUpRight(double speedX, double speedY) {
-    animation?.play(SimpleAnimationEnum.runUpRight);
-    return super.moveUpRight(speedX, speedY);
-  }
-
-  @override
-  bool moveDownRight(double speedX, double speedY) {
-    animation?.play(SimpleAnimationEnum.runDownRight);
-    return super.moveDownRight(speedX, speedY);
-  }
-
-  @override
-  bool moveDownLeft(double speedX, double speedY) {
-    animation?.play(SimpleAnimationEnum.runDownLeft);
-    return super.moveDownLeft(speedX, speedY);
   }
 
   @override
   void idle() {
+    super.idle();
     switch (lastDirection) {
       case Direction.left:
         animation?.play(SimpleAnimationEnum.idleLeft);
@@ -143,7 +134,6 @@ mixin DirectionAnimation on MovementV2 {
         animation?.play(SimpleAnimationEnum.idleDownRight);
         break;
     }
-    super.idle();
   }
 
   @override

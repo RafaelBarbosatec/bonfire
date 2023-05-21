@@ -27,11 +27,6 @@ abstract class GameComponent extends PositionComponent
   /// Get BuildContext
   BuildContext get context => gameRef.context;
 
-  /// Method used to translate component
-  void translate(double translateX, double translateY) {
-    position.add(Vector2(translateX, translateY));
-  }
-
   @override
   int get priority {
     if (aboveComponents && hasGameRef) {

@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/movement_v2.dart';
 
 ///
 /// Created by
@@ -15,7 +14,7 @@ import 'package:bonfire/mixins/movement_v2.dart';
 
 /// This mixin give to the component the pushable behavior.
 /// To use this mixin the Component must have a `Movement` mixin.
-mixin Pushable on MovementV2 {
+mixin Pushable on Movement {
   bool enablePushable = true;
 
   @override
@@ -24,22 +23,22 @@ mixin Pushable on MovementV2 {
     if (enablePushable) {
       if (other is GameComponent) {
         GameComponent component = other;
-        if (component is MovementV2) {
+        if (component is Movement) {
           if (!onPush(component)) {
             return;
           }
           Vector2 displacement = center - component.center;
           if (displacement.x.abs() > displacement.y.abs()) {
             if (displacement.x < 0) {
-              moveLeftOneShot(speed);
+              moveLeftOnce();
             } else {
-              moveRightOneShot(speed);
+              moveRightOnce();
             }
           } else {
             if (displacement.y < 0) {
-              moveUpOneShot(speed);
+              moveUpOnce();
             } else {
-              moveDownOneShot(speed);
+              moveDownOnce();
             }
           }
         }

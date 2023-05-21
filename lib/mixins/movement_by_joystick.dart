@@ -1,10 +1,9 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/movement_v2.dart';
 
 /// Mixin responsible for adding movements through joystick events
-mixin MovementByJoystick on MovementV2, JoystickListener {
+mixin MovementByJoystick on Movement, JoystickListener {
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
   double _currentDirectionalAngle = 0;
 
@@ -16,11 +15,14 @@ mixin MovementByJoystick on MovementV2, JoystickListener {
 
   bool _isIdleJoystick = true;
 
+  bool enabledintencity = false;
   bool enabledDiagonalMovements = true;
   bool movementByJoystickEnabled = true;
+  double _intencity = 1;
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    _intencity = event.intensity;
     _currentDirectional = event.directional;
     if (dPadAngles || event.radAngle == 0) {
       _currentDirectionalAngle = _getAngleByDirectional(_currentDirectional);
@@ -43,7 +45,12 @@ mixin MovementByJoystick on MovementV2, JoystickListener {
       } else {
         if (_currentDirectional != JoystickMoveDirectional.IDLE) {
           _isIdleJoystick = false;
-          moveFromAngle(speed, movementRadAngle);
+          moveFromAngle(movementRadAngle);
+        } else {
+          if (!_isIdleJoystick) {
+            _isIdleJoystick = true;
+            idle();
+          }
         }
       }
     }
@@ -53,54 +60,58 @@ mixin MovementByJoystick on MovementV2, JoystickListener {
     JoystickMoveDirectional direction,
     double speed,
   ) {
+    double intensity = 1;
+    if (enabledintencity) {
+      intensity = _intencity;
+    }
     switch (direction) {
       case JoystickMoveDirectional.MOVE_UP:
         _isIdleJoystick = false;
-        moveUp(speed);
+        moveUp(speed: speed * intensity);
         break;
       case JoystickMoveDirectional.MOVE_UP_LEFT:
         _isIdleJoystick = false;
         if (enabledDiagonalMovements) {
-          moveUpLeft(speed, speed);
+          moveUpLeft(speed: speed * intensity);
         } else {
-          moveLeft(speed);
+          moveLeft(speed: speed * intensity);
         }
         break;
       case JoystickMoveDirectional.MOVE_UP_RIGHT:
         _isIdleJoystick = false;
         if (enabledDiagonalMovements) {
-          moveUpRight(speed, speed);
+          moveUpRight(speed: speed * intensity);
         } else {
-          moveRight(speed);
+          moveRight(speed: speed * intensity);
         }
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
         _isIdleJoystick = false;
-        moveRight(speed);
+        moveRight(speed: speed * intensity);
         break;
       case JoystickMoveDirectional.MOVE_DOWN:
         _isIdleJoystick = false;
-        moveDown(speed);
+        moveDown(speed: speed * intensity);
         break;
       case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
         _isIdleJoystick = false;
         if (enabledDiagonalMovements) {
-          moveDownRight(speed, speed);
+          moveDownRight(speed: speed * intensity);
         } else {
-          moveRight(speed);
+          moveRight(speed: speed * intensity);
         }
         break;
       case JoystickMoveDirectional.MOVE_DOWN_LEFT:
         _isIdleJoystick = false;
         if (enabledDiagonalMovements) {
-          moveDownLeft(speed, speed);
+          moveDownLeft(speed: speed * intensity);
         } else {
-          moveLeft(speed);
+          moveLeft(speed: speed * intensity);
         }
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
         _isIdleJoystick = false;
-        moveLeft(speed);
+        moveLeft(speed: speed * intensity);
         break;
       case JoystickMoveDirectional.IDLE:
         if (!_isIdleJoystick) {

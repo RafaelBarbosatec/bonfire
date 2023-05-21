@@ -5,13 +5,12 @@ import 'dart:ui';
 
 import 'package:a_star_algorithm/a_star_algorithm.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/movement_v2.dart';
 import 'package:bonfire/util/line_path_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 /// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
-mixin MoveToPositionAlongThePath on MovementV2 {
+mixin MoveToPositionAlongThePath on Movement {
   static const REDUCTION_TO_AVOID_ROUNDING_PROBLEMS = 4;
 
   List<Offset> _currentPath = [];
@@ -84,8 +83,14 @@ mixin MoveToPositionAlongThePath on MovementV2 {
   void update(double dt) {
     super.update(dt);
     if (_currentPath.isNotEmpty) {
-      _move(dt);
+      _move();
     }
+  }
+
+  @override
+  void idle() {
+    stopMoveAlongThePath();
+    super.idle();
   }
 
   @override
@@ -99,61 +104,41 @@ mixin MoveToPositionAlongThePath on MovementV2 {
     _barriers.clear();
     _currentIndex = 0;
     _removeLinePathComponent();
-    idle();
     _onFinish?.call();
     _onFinish = null;
   }
 
-  void _move(double dt) {
-    double innerSpeed = speed * dt;
-
+  void _move() {
     Vector2 center = rectConsideringCollision.center.toVector2();
     double diffX = _currentPath[_currentIndex].dx - center.x;
     double diffY = _currentPath[_currentIndex].dy - center.y;
-    double displacementX = diffX.abs() > innerSpeed ? speed : diffX.abs() / dt;
-    double displacementY = diffY.abs() > innerSpeed ? speed : diffY.abs() / dt;
 
     if (diffX.abs() < 0.01 && diffY.abs() < 0.01) {
       _goToNextPosition();
     } else {
-      bool onMove = false;
       if (diffX.abs() > 0.01 && diffY.abs() > 0.01) {
         if (diffX > 0 && diffY > 0) {
-          onMove = moveDownRight(
-            displacementX,
-            displacementY,
-          );
+          moveDownRight();
         } else if (diffX < 0 && diffY > 0) {
-          onMove = moveDownLeft(
-            displacementX,
-            displacementY,
-          );
+          moveDownLeft();
         } else if (diffX > 0 && diffY < 0) {
-          onMove = moveUpRight(
-            displacementX,
-            displacementY,
-          );
+          moveUpRight();
         } else if (diffX < 0 && diffY < 0) {
-          onMove = moveUpLeft(
-            displacementX,
-            displacementY,
-          );
+          moveUpLeft();
         }
       } else if (diffX.abs() > 0.01) {
         if (diffX > 0) {
-          onMove = moveRight(displacementX);
+          moveRight();
         } else if (diffX < 0) {
-          onMove = moveLeft(displacementX);
+          moveLeft();
         }
       } else if (diffY.abs() > 0.01) {
         if (diffY > 0) {
-          onMove = moveDown(displacementY);
+          moveDown();
         } else if (diffY < 0) {
-          onMove = moveUp(displacementY);
+          moveUp();
         }
-      }
-
-      if (!onMove) {
+      } else {
         _goToNextPosition();
       }
     }
@@ -218,7 +203,7 @@ mixin MoveToPositionAlongThePath on MovementV2 {
     Iterable<Offset> result = [];
 
     if (_barriers.contains(targetPosition)) {
-      stopMoveAlongThePath();
+      idle();
       return [];
     }
 
@@ -337,7 +322,7 @@ mixin MoveToPositionAlongThePath on MovementV2 {
     if (_currentIndex < _currentPath.length - 1) {
       _currentIndex++;
     } else {
-      stopMoveAlongThePath();
+      idle();
     }
   }
 

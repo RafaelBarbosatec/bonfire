@@ -35,14 +35,10 @@ extension RotationEnemyExtensions on RotationEnemy {
         if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
           closePlayer(player);
           idle();
-          moveFromAngleDodgeObstacles(0, radAngle);
           return;
         }
 
-        bool onMove = moveFromAngleDodgeObstacles(speed, radAngle);
-        if (!onMove) {
-          idle();
-        }
+        moveFromAngle(radAngle);
       },
       notObserved: () {
         idle();
@@ -69,7 +65,6 @@ extension RotationEnemyExtensions on RotationEnemy {
 
         Rect playerRect = player.rectConsideringCollision;
         double distance = (minDistanceCellsFromPlayer ?? radiusVision);
-        double radAngle = getAngleFromPlayer();
 
         Vector2 myPosition = Vector2(
           center.x,
@@ -84,19 +79,13 @@ extension RotationEnemyExtensions on RotationEnemy {
         double dist = myPosition.distanceTo(playerPosition);
 
         if (dist >= distance) {
-          moveFromAngleDodgeObstacles(0, radAngle);
           idle();
           return;
         }
 
-        bool onMove = moveFromAngleDodgeObstacles(
-          speed,
+        moveFromAngle(
           getInverseAngleFromPlayer(),
         );
-
-        if (!onMove) {
-          idle();
-        }
       },
       notObserved: () {
         idle();

@@ -121,7 +121,7 @@ class FlyingAttackObject extends GameComponent
     if (direction != null) {
       moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
     } else {
-      moveFromAngle(speed, angle);
+      moveFromAngle(angle);
     }
 
     if (!_verifyExistInWorld()) {

@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/movement_v2.dart';
 
 ///
 /// Created by
@@ -13,7 +12,7 @@ import 'package:bonfire/mixins/movement_v2.dart';
 /// Rafaelbarbosatec
 /// on 31/01/22
 class ArmchairDecoration extends GameDecoration
-    with BlockMovementCollision, MovementV2, Pushable {
+    with BlockMovementCollision, Movement, Pushable {
   ArmchairDecoration(Vector2 position)
       : super.withSprite(
           position: position,

@@ -9,7 +9,7 @@ extension MovementExtensions on Movement {
   /// Need use Movement mixin.
   /// Method that bo used in [update] method.
   /// return true if moved.
-  bool followComponent(
+  void followComponent(
     GameComponent target,
     double dt, {
     required Function(GameComponent) closeComponent,
@@ -39,65 +39,38 @@ extension MovementExtensions on Movement {
       centerYPlayer,
     );
 
-    Rect rectPlayerCollision = Rect.fromLTWH(
-      comp.left - margin,
-      comp.top - margin,
-      comp.width + (margin * 2),
-      comp.height + (margin * 2),
-    );
-
-    if (rectToMove.overlaps(rectPlayerCollision)) {
-      closeComponent(target);
-      if (!isIdle) {
-        idle();
-      }
-      return false;
-    }
-
-    translateX /= dt;
-    translateY /= dt;
-
-    bool moved = false;
-
     if (translateX > 0 && translateY > 0) {
-      moved = moveDownRight(translateX, translateY);
+      moveDownRight();
     } else if (translateX < 0 && translateY < 0) {
-      moved = moveUpLeft(translateX.abs(), translateY.abs());
+       moveUpLeft();
     } else if (translateX > 0 && translateY < 0) {
-      moved = moveUpRight(translateX, translateY.abs());
+       moveUpRight();
     } else if (translateX < 0 && translateY > 0) {
-      moved = moveDownLeft(translateX.abs(), translateY);
+      moveDownLeft();
     } else {
       if (translateX > 0) {
-        moved = moveRight(translateX);
+        moveRight();
       } else if (translateX < 0) {
-        moved = moveLeft(translateX.abs());
+        moveLeft();
       }
       if (translateY > 0) {
-        moved = moveDown(translateY);
+        moveDown();
       } else if (translateY < 0) {
-        moved = moveUp(translateY.abs());
+       moveUp();
       }
     }
-
-    if (!moved) {
-      idle();
-      return false;
-    }
-
-    return true;
   }
 
   /// Checks whether the component is within range. If so, position yourself and keep your distance.
   /// Method that bo used in [update] method.
-  bool positionsItselfAndKeepDistance(
+  void positionsItselfAndKeepDistance(
     GameComponent target, {
     required Function(GameComponent) positioned,
     double radiusVision = 32,
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
   }) {
-    if (runOnlyVisibleInScreen && !isVisible) return false;
+    if (runOnlyVisibleInScreen && !isVisible) return;
     double distance = (minDistanceFromPlayer ?? radiusVision);
 
     Rect rectTarget = target.rectConsideringCollision;
@@ -152,40 +125,29 @@ extension MovementExtensions on Movement {
         idle();
       }
       positioned(target);
-      return false;
     }
 
-    translateX /= dtUpdate;
-    translateY /= dtUpdate;
-
-    bool moved = false;
+  
     if (translateX > 0 && translateY > 0) {
-      moved = moveDownRight(translateX, translateY);
+      moveDownRight();
     } else if (translateX < 0 && translateY < 0) {
-      moved = moveUpLeft(translateX.abs(), translateY.abs());
+       moveUpLeft();
     } else if (translateX > 0 && translateY < 0) {
-      moved = moveUpRight(translateX, translateY.abs());
+       moveUpRight();
     } else if (translateX < 0 && translateY > 0) {
-      moved = moveDownLeft(translateX.abs(), translateY);
+     moveDownLeft();
     } else {
       if (translateX > 0) {
-        moved = moveRight(translateX);
+        moveRight();
       } else if (translateX < 0) {
-        moved = moveLeft(translateX.abs());
+        moveLeft();
       }
       if (translateY > 0) {
-        moved = moveDown(translateY);
+        moveDown();
       } else if (translateY < 0) {
-        moved = moveUp(translateY.abs());
+        moveUp();
       }
     }
-
-    if (!moved) {
-      idle();
-      return false;
-    }
-
-    return true;
   }
 
   double _adjustTranslate(

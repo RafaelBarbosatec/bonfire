@@ -43,14 +43,10 @@ extension RotationEnemyExtensions on RotationAlly {
         if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
           closePlayer(player);
           idle();
-          moveFromAngleDodgeObstacles(0, radAngle);
           return;
         }
 
-        bool onMove = moveFromAngleDodgeObstacles(speed, radAngle);
-        if (!onMove) {
-          idle();
-        }
+        moveFromAngle(radAngle);
       },
       notObserved: () {
         idle();

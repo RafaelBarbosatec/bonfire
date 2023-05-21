@@ -1,10 +1,9 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/movement_v2.dart';
 
 /// Mixin responsible for adding random movement like enemy walking through the scene
-mixin AutomaticRandomMovement on MovementV2 {
+mixin AutomaticRandomMovement on Movement {
   Vector2 _targetRandomMovement = Vector2.zero();
   // ignore: constant_identifier_names
   static const _KEY_INTERVAL_KEEP_STOPPED = 'INTERVAL_RANDOM_MOVEMENT';
@@ -76,40 +75,40 @@ mixin AutomaticRandomMovement on MovementV2 {
           canMoveUp = true;
         }
       }
-      bool onMove = false;
       if (useAngle) {
         if (canMoveX && canMoveY) {
-          onMove = moveFromAngle(speed, angle);
+          moveFromAngle(angle);
+        } else {
+          idle();
         }
       } else {
         if (canMoveLeft && canMoveUp) {
-          onMove = moveUpLeft(speed, speed);
+          moveUpLeft();
         } else if (canMoveLeft && canMoveDown) {
-          onMove = moveDownLeft(speed, speed);
+          moveDownLeft();
         } else if (canMoveRight && canMoveUp) {
-          onMove = moveUpRight(speed, speed);
+          moveUpRight();
         } else if (canMoveRight && canMoveDown) {
-          onMove = moveDownRight(speed, speed);
+          moveDownRight();
         } else if (canMoveRight) {
-          onMove = moveRight(speed);
+          moveRight();
         } else if (canMoveLeft) {
-          onMove = moveLeft(speed);
+          moveLeft();
         } else if (canMoveUp) {
-          onMove = moveUp(speed);
+          moveUp();
         } else if (canMoveDown) {
-          onMove = moveDown(speed);
+          moveDown();
+        } else {
+          idle();
         }
-      }
-
-      if (!onMove) {
-        _cleanTargetMovementRandom();
       }
     }
   }
 
-  void _cleanTargetMovementRandom() {
+  @override
+  void idle() {
     _targetRandomMovement = Vector2.zero();
-    idle();
+    super.idle();
   }
 
   @override

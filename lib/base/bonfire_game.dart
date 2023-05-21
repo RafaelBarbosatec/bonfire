@@ -273,10 +273,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  void onGameResize(Vector2 canvasSize) {
-    super.onGameResize(canvasSize);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
     _updateVisibleCollisions();
-    camera.onGameResize(canvasSize);
+    camera.onGameResize(size);
   }
 
   void _updateVisibleCollisions() {
