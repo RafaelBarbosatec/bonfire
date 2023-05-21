@@ -42,9 +42,9 @@ extension MovementExtensions on Movement {
     if (translateX > 0 && translateY > 0) {
       moveDownRight();
     } else if (translateX < 0 && translateY < 0) {
-       moveUpLeft();
+      moveUpLeft();
     } else if (translateX > 0 && translateY < 0) {
-       moveUpRight();
+      moveUpRight();
     } else if (translateX < 0 && translateY > 0) {
       moveDownLeft();
     } else {
@@ -56,7 +56,7 @@ extension MovementExtensions on Movement {
       if (translateY > 0) {
         moveDown();
       } else if (translateY < 0) {
-       moveUp();
+        moveUp();
       }
     }
   }
@@ -120,20 +120,21 @@ extension MovementExtensions on Movement {
       positioned(target);
     }
 
-    if (translateX == 0 && translateY == 0) {
+    double dtSpeed = speed * 0.2;
+
+    if (translateX.abs() < dtSpeed && translateY.abs() < dtSpeed) {
       stopMove();
       positioned(target);
     }
 
-  
     if (translateX > 0 && translateY > 0) {
       moveDownRight();
     } else if (translateX < 0 && translateY < 0) {
-       moveUpLeft();
+      moveUpLeft();
     } else if (translateX > 0 && translateY < 0) {
-       moveUpRight();
+      moveUpRight();
     } else if (translateX < 0 && translateY > 0) {
-     moveDownLeft();
+      moveDownLeft();
     } else {
       if (translateX > 0) {
         moveRight();
