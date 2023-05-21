@@ -13,7 +13,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
   /// the angle the player should move in 360 mode
   double movementRadAngle = 0;
 
-  bool enabledintencity = false;
+  bool enabledJoystickIntencity = false;
   bool enabledDiagonalMovements = true;
   bool movementByJoystickEnabled = true;
   double _intencity = 1;
@@ -55,7 +55,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
     double speed,
   ) {
     double intensity = 1;
-    if (enabledintencity) {
+    if (enabledJoystickIntencity) {
       intensity = _intencity;
     }
     switch (direction) {

@@ -36,6 +36,7 @@ class Knight extends SimplePlayer
           life: 200,
           speed: maxSpeed,
         ) {
+    enabledJoystickIntencity = true;
     setupLighting(
       LightingConfig(
         radius: width * 1.5,
@@ -50,7 +51,6 @@ class Knight extends SimplePlayer
     if (hasGameRef && gameRef.sceneBuilderStatus.isRunning) {
       return;
     }
-    speed = maxSpeed * event.intensity;
     super.joystickChangeDirectional(event);
   }
 

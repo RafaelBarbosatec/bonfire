@@ -32,6 +32,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (areaSensorToAdd != null) {
       _replaceShapeHitbox(areaSensorToAdd!);
       areaSensorToAdd = null;
@@ -41,7 +42,6 @@ mixin Sensor<T extends GameComponent> on GameComponent {
         onContact(componentIncontact!);
       }
     }
-    super.update(dt);
   }
 
   @override
