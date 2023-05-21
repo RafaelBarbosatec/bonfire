@@ -121,9 +121,7 @@ extension MovementExtensions on Movement {
     }
 
     if (translateX == 0 && translateY == 0) {
-      if (!isIdle) {
-        idle();
-      }
+      stopMove();
       positioned(target);
     }
 

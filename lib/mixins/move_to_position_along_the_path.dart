@@ -203,7 +203,7 @@ mixin MoveToPositionAlongThePath on Movement {
     Iterable<Offset> result = [];
 
     if (_barriers.contains(targetPosition)) {
-      idle();
+      stopMove();
       return [];
     }
 
@@ -322,7 +322,7 @@ mixin MoveToPositionAlongThePath on Movement {
     if (_currentIndex < _currentPath.length - 1) {
       _currentIndex++;
     } else {
-      idle();
+      stopMove();
     }
   }
 

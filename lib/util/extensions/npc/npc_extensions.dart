@@ -75,9 +75,7 @@ extension NpcExtensions on Npc {
         // }
       },
       notObserved: () {
-        if (!isIdle) {
-          idle();
-        }
+        stopMove();
         notObserved?.call();
       },
     );
@@ -116,9 +114,7 @@ extension NpcExtensions on Npc {
         // }
       },
       notObserved: () {
-        if (!isIdle) {
-          idle();
-        }
+        stopMove();
         notObserved?.call();
       },
     );
@@ -157,9 +153,7 @@ extension NpcExtensions on Npc {
         // }
       },
       notObserved: () {
-        if (!isIdle) {
-          idle();
-        }
+        stopMove();
         notObserved?.call();
       },
     );

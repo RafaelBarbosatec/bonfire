@@ -42,14 +42,14 @@ extension RotationEnemyExtensions on RotationAlly {
 
         if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
           closePlayer(player);
-          idle();
+          stopMove();
           return;
         }
 
         moveFromAngle(radAngle);
       },
       notObserved: () {
-        idle();
+        stopMove();
       },
     );
   }

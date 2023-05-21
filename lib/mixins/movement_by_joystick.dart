@@ -13,8 +13,6 @@ mixin MovementByJoystick on Movement, JoystickListener {
   /// the angle the player should move in 360 mode
   double movementRadAngle = 0;
 
-  bool _isIdleJoystick = true;
-
   bool enabledintencity = false;
   bool enabledDiagonalMovements = true;
   bool movementByJoystickEnabled = true;
@@ -44,13 +42,9 @@ mixin MovementByJoystick on Movement, JoystickListener {
         _moveDirectional(_currentDirectional, speed);
       } else {
         if (_currentDirectional != JoystickMoveDirectional.IDLE) {
-          _isIdleJoystick = false;
           moveFromAngle(movementRadAngle);
         } else {
-          if (!_isIdleJoystick) {
-            _isIdleJoystick = true;
-            idle();
-          }
+          stopMove();
         }
       }
     }
@@ -66,11 +60,9 @@ mixin MovementByJoystick on Movement, JoystickListener {
     }
     switch (direction) {
       case JoystickMoveDirectional.MOVE_UP:
-        _isIdleJoystick = false;
         moveUp(speed: speed * intensity);
         break;
       case JoystickMoveDirectional.MOVE_UP_LEFT:
-        _isIdleJoystick = false;
         if (enabledDiagonalMovements) {
           moveUpLeft(speed: speed * intensity);
         } else {
@@ -78,7 +70,6 @@ mixin MovementByJoystick on Movement, JoystickListener {
         }
         break;
       case JoystickMoveDirectional.MOVE_UP_RIGHT:
-        _isIdleJoystick = false;
         if (enabledDiagonalMovements) {
           moveUpRight(speed: speed * intensity);
         } else {
@@ -86,15 +77,12 @@ mixin MovementByJoystick on Movement, JoystickListener {
         }
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
-        _isIdleJoystick = false;
         moveRight(speed: speed * intensity);
         break;
       case JoystickMoveDirectional.MOVE_DOWN:
-        _isIdleJoystick = false;
         moveDown(speed: speed * intensity);
         break;
       case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-        _isIdleJoystick = false;
         if (enabledDiagonalMovements) {
           moveDownRight(speed: speed * intensity);
         } else {
@@ -102,7 +90,6 @@ mixin MovementByJoystick on Movement, JoystickListener {
         }
         break;
       case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-        _isIdleJoystick = false;
         if (enabledDiagonalMovements) {
           moveDownLeft(speed: speed * intensity);
         } else {
@@ -110,14 +97,10 @@ mixin MovementByJoystick on Movement, JoystickListener {
         }
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
-        _isIdleJoystick = false;
         moveLeft(speed: speed * intensity);
         break;
       case JoystickMoveDirectional.IDLE:
-        if (!_isIdleJoystick) {
-          _isIdleJoystick = true;
-          idle();
-        }
+        stopMove();
         break;
     }
   }

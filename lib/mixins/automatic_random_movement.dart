@@ -79,7 +79,7 @@ mixin AutomaticRandomMovement on Movement {
         if (canMoveX && canMoveY) {
           moveFromAngle(angle);
         } else {
-          idle();
+          stopMove();
         }
       } else {
         if (canMoveLeft && canMoveUp) {
@@ -99,7 +99,7 @@ mixin AutomaticRandomMovement on Movement {
         } else if (canMoveDown) {
           moveDown();
         } else {
-          idle();
+          stopMove();
         }
       }
     }

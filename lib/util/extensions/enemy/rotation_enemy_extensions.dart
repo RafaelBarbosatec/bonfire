@@ -25,23 +25,19 @@ extension RotationEnemyExtensions on RotationEnemy {
         double radAngle = getAngleFromPlayer();
 
         Rect playerRect = player.rectConsideringCollision;
-        Rect rectPlayerCollision = Rect.fromLTWH(
-          playerRect.left - margin,
-          playerRect.top - margin,
-          playerRect.width + (margin * 2),
-          playerRect.height + (margin * 2),
-        );
+        Rect rectPlayerCollision = playerRect.inflate(margin);
 
         if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
           closePlayer(player);
-          idle();
+          moveFromAngle(radAngle);
+          stopMove();
           return;
         }
 
         moveFromAngle(radAngle);
       },
       notObserved: () {
-        idle();
+        stopMove();
         notObserved?.call();
       },
     );
@@ -79,7 +75,7 @@ extension RotationEnemyExtensions on RotationEnemy {
         double dist = myPosition.distanceTo(playerPosition);
 
         if (dist >= distance) {
-          idle();
+          stopMove();
           return;
         }
 
@@ -88,7 +84,7 @@ extension RotationEnemyExtensions on RotationEnemy {
         );
       },
       notObserved: () {
-        idle();
+        stopMove();
         notObserved?.call();
       },
     );

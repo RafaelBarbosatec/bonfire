@@ -128,9 +128,7 @@ extension EnemyExtensions on Enemy {
         // );
       },
       notObserved: () {
-        if (!isIdle) {
-          idle();
-        }
+        stopMove();
         notObserved?.call();
       },
     );

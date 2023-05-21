@@ -29,24 +29,28 @@ class ZombieEnemy extends RotationEnemy
   @override
   void update(double dt) {
     super.update(dt);
-    seeAndMoveToPlayer(
-      closePlayer: (player) {
-        simpleAttackMelee(
-          damage: 10,
-          size: Vector2.all(size.y),
-          animationRight: CommonSpriteSheet.blackAttackEffectRight,
-        );
-      },
-      radiusVision: 128,
-      notObserved: () {
-        runRandomMovement(
-          dt,
-          useAngle: true,
-          maxDistance: 64,
-          minDistance: 32,
-        );
-      },
-    );
+    seePlayer(
+        observed: (p) {
+          seeAndMoveToPlayer(
+            closePlayer: (player) {
+              simpleAttackMelee(
+                damage: 10,
+                size: Vector2.all(size.y),
+                animationRight: CommonSpriteSheet.blackAttackEffectRight,
+              );
+            },
+            radiusVision: 128,
+          );
+        },
+        radiusVision: 128,
+        notObserved: () {
+          runRandomMovement(
+            dt,
+            useAngle: true,
+            maxDistance: 64,
+            minDistance: 32,
+          );
+        });
   }
 
   @override
