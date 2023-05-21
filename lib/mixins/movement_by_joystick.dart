@@ -44,7 +44,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
         if (_currentDirectional != JoystickMoveDirectional.IDLE) {
           moveFromAngle(movementRadAngle);
         } else {
-          stopMove();
+          stopMove(forceIdle: true);
         }
       }
     }
@@ -100,7 +100,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
         moveLeft(speed: speed * intensity);
         break;
       case JoystickMoveDirectional.IDLE:
-        stopMove();
+        stopMove(forceIdle: true);
         break;
     }
   }

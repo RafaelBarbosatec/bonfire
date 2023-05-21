@@ -122,12 +122,16 @@ mixin Movement on GameComponent {
     _updateLastDirection(_velocity);
   }
 
-  void stopMove() {
-    if (isIdle) return;
+  void stopMove({bool forceIdle = false}) {
+    if (isIdle && !forceIdle) return;
     idle();
   }
 
   void idle() {
+    setZeroVelocity();
+  }
+
+  void setZeroVelocity() {
     _velocity.setZero();
     velocityRadAngle = 0.0;
   }

@@ -10,7 +10,7 @@ mixin BlockMovementCollision on GameComponent {
       Movement comp = this as Movement;
       position += comp.lastDisplacement * -1;
       onStopMovement(other as GameComponent);
-      comp.stopMove();
+      comp.setZeroVelocity();
     }
     super.onCollision(intersectionPoints, other);
   }
