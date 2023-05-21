@@ -14,6 +14,8 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 24/03/22
 extension AllyExtensions on Ally {
+  
+
   ///Execute simple attack melee using animation
   void simpleAttackMelee({
     required double damage,
@@ -113,22 +115,22 @@ extension AllyExtensions on Ally {
       visionAngle: visionAngle,
       observed: (enemy) {
         observed?.call();
-        // positionsItselfAndKeepDistance(
-        //   enemy.first,
-        //   minDistanceFromPlayer: minDistanceFromPlayer,
-        //   radiusVision: radiusVision,
-        //   runOnlyVisibleInScreen: runOnlyVisibleInScreen,
-        //   positioned: (enemy) {
-        //     final playerDirection = getComponentDirectionFromMe(enemy);
-        //     lastDirection = playerDirection;
-        //     if (lastDirection == Direction.left ||
-        //         lastDirection == Direction.right) {
-        //       lastDirectionHorizontal = lastDirection;
-        //     }
-        //     idle();
-        //     positioned(enemy as Enemy);
-        //   },
-        // );
+        positionsItselfAndKeepDistance(
+          enemy.first,
+          minDistanceFromPlayer: minDistanceFromPlayer,
+          radiusVision: radiusVision,
+          runOnlyVisibleInScreen: runOnlyVisibleInScreen,
+          positioned: (enemy) {
+            final playerDirection = getComponentDirectionFromMe(enemy);
+            lastDirection = playerDirection;
+            if (lastDirection == Direction.left ||
+                lastDirection == Direction.right) {
+              lastDirectionHorizontal = lastDirection;
+            }
+            idle();
+            positioned(enemy as Enemy);
+          },
+        );
       },
       notObserved: () {
         stopMove();

@@ -30,16 +30,16 @@ class ZombieEnemy extends RotationEnemy
   void update(double dt) {
     super.update(dt);
     seePlayer(
-        observed: (p) {
-          seeAndMoveToPlayer(
-            closePlayer: (player) {
+        observed: (player) {
+          moveTowardsTarget(
+            target: player,
+            close: () {
               simpleAttackMelee(
                 damage: 10,
                 size: Vector2.all(size.y),
                 animationRight: CommonSpriteSheet.blackAttackEffectRight,
               );
             },
-            radiusVision: 128,
           );
         },
         radiusVision: 128,

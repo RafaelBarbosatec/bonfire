@@ -1,12 +1,4 @@
-import 'package:bonfire/lighting/lighting_config.dart';
-import 'package:bonfire/mixins/attackable.dart';
-import 'package:bonfire/npc/enemy/enemy.dart';
-import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/extensions/game_component_extensions.dart';
-import 'package:bonfire/util/extensions/npc/npc_extensions.dart';
-import 'package:flame/collisions.dart';
-import 'package:flame/components.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
 /// Functions util to use in your [Enemy]
@@ -110,22 +102,22 @@ extension EnemyExtensions on Enemy {
       angle: angle,
       observed: (player) {
         observed?.call();
-        // positionsItselfAndKeepDistance(
-        //   player,
-        //   minDistanceFromPlayer: minDistanceFromPlayer,
-        //   radiusVision: radiusVision,
-        //   runOnlyVisibleInScreen: runOnlyVisibleInScreen,
-        //   positioned: (player) {
-        //     final playerDirection = getComponentDirectionFromMe(player);
-        //     lastDirection = playerDirection;
-        //     if (lastDirection == Direction.left ||
-        //         lastDirection == Direction.right) {
-        //       lastDirectionHorizontal = lastDirection;
-        //     }
-        //     idle();
-        //     positioned(player as Player);
-        //   },
-        // );
+        positionsItselfAndKeepDistance(
+          player,
+          minDistanceFromPlayer: minDistanceFromPlayer,
+          radiusVision: radiusVision,
+          runOnlyVisibleInScreen: runOnlyVisibleInScreen,
+          positioned: (player) {
+            final playerDirection = getComponentDirectionFromMe(player);
+            lastDirection = playerDirection;
+            if (lastDirection == Direction.left ||
+                lastDirection == Direction.right) {
+              lastDirectionHorizontal = lastDirection;
+            }
+            idle();
+            positioned(player as Player);
+          },
+        );
       },
       notObserved: () {
         stopMove();

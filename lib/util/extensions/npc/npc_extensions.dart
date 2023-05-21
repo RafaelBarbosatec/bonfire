@@ -16,6 +16,24 @@ import 'package:bonfire/geometry/shape.dart';
 /// on 22/03/22
 
 extension NpcExtensions on Npc {
+  void moveTowardsTarget<T extends GameComponent>({
+    required T target,
+    Function? close,
+    double margin = 0,
+  }) {
+    double radAngle = getAngleFromPlayer();
+
+    Rect rectPlayerCollision = target.rectConsideringCollision.inflate(margin);
+
+    if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
+      close?.call();
+      moveFromAngle(radAngle);
+      stopMove();
+      return;
+    }
+    moveFromAngle(radAngle);
+  }
+
   /// This method we notify when detect the player when enter in [radiusVision] configuration
   /// Method that bo used in [update] method.
   /// [visionAngle] in radians
@@ -64,15 +82,13 @@ extension NpcExtensions on Npc {
       angle: angle,
       observed: (player) {
         observed?.call();
-        // bool move = followComponent(
-        //   player,
-        //   dtUpdate,
-        //   closeComponent: (comp) => closePlayer(comp as Player),
-        //   margin: margin,
-        // );
-        // if (!move) {
-        //   notCanMove?.call();
-        // }
+        moveTowardsTarget(
+          target: player,
+          close: () {
+            closePlayer(player);
+          },
+          margin: margin,
+        );
       },
       notObserved: () {
         stopMove();
@@ -103,15 +119,13 @@ extension NpcExtensions on Npc {
       angle: angle ?? lastDirection.toRadians(),
       observed: (enemy) {
         observed?.call();
-        // bool move = followComponent(
-        //   enemy.first,
-        //   dtUpdate,
-        //   closeComponent: (comp) => closeEnemy(comp as Enemy),
-        //   margin: margin,
-        // );
-        // if (!move) {
-        //   notCanMove?.call();
-        // }
+        moveTowardsTarget(
+          target: enemy.first,
+          close: () {
+            closeEnemy(enemy.first);
+          },
+          margin: margin,
+        );
       },
       notObserved: () {
         stopMove();
@@ -142,15 +156,13 @@ extension NpcExtensions on Npc {
       angle: angle ?? lastDirection.toRadians(),
       observed: (ally) {
         observed?.call();
-        // bool move = followComponent(
-        //   ally.first,
-        //   dtUpdate,
-        //   closeComponent: (comp) => closeAlly(comp as Ally),
-        //   margin: margin,
-        // );
-        // if (!move) {
-        //   notCanMove?.call();
-        // }
+        moveTowardsTarget(
+          target: ally.first,
+          close: () {
+            closeAlly(ally.first);
+          },
+          margin: margin,
+        );
       },
       notObserved: () {
         stopMove();
