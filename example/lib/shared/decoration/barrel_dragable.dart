@@ -1,10 +1,11 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/forces/forces_2d.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class BarrelDraggable extends GameDecoration
-    with DragGesture, Movement, Pushable, BlockMovementCollision {
+    with DragGesture, Movement, Pushable, BlockMovementCollision, HandleForces {
   late TextPaint _textConfig;
   String text = 'Drag here';
   double xCenter = 0;
@@ -19,6 +20,8 @@ class BarrelDraggable extends GameDecoration
     _textConfig = TextPaint(
       style: TextStyle(color: Colors.white, fontSize: width / 4),
     );
+
+    addForce(Force2D('gravity', Vector2(0, 100.6)));
   }
 
   @override
@@ -27,6 +30,7 @@ class BarrelDraggable extends GameDecoration
     xCenter = (width - textSize.x) / 2;
     yCenter = (height - textSize.y) / 2;
     super.onMount();
+    moveUpRight();
   }
 
   @override

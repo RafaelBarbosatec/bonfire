@@ -16,6 +16,7 @@ mixin Movement on GameComponent {
   Direction lastDirection = Direction.right;
   Direction lastDirectionHorizontal = Direction.right;
 
+  Vector2 get velocity => _velocity;
   set velocity(Vector2 velocity) {
     _velocity = velocity;
     _updateLastDirection(_velocity);

@@ -53,6 +53,11 @@ class FlyingAttackObject extends GameComponent
     _senAngle = sin(angle);
 
     if (lightingConfig != null) setupLighting(lightingConfig);
+    if (direction != null) {
+      moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
+    } else {
+      moveFromAngle(angle);
+    }
   }
 
   FlyingAttackObject.byDirection({
@@ -81,6 +86,7 @@ class FlyingAttackObject extends GameComponent
     this.size = size;
 
     if (lightingConfig != null) setupLighting(lightingConfig);
+    moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
   }
 
   FlyingAttackObject.byAngle({
@@ -112,17 +118,13 @@ class FlyingAttackObject extends GameComponent
     _senAngle = sin(angle);
 
     if (lightingConfig != null) setupLighting(lightingConfig);
+
+    moveFromAngle(angle);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-
-    if (direction != null) {
-      moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
-    } else {
-      moveFromAngle(angle);
-    }
 
     if (!_verifyExistInWorld()) {
       removeFromParent();
