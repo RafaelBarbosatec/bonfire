@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 
 class TileWithCollision extends Tile {
@@ -72,7 +73,9 @@ class TileWithCollision extends Tile {
 
   @override
   bool onComponentTypeCheck(PositionComponent other) {
-    if (other is TileWithCollision || other is GameDecorationWithCollision) {
+    if (other is TileWithCollision ||
+        other is GameDecorationWithCollision ||
+        other is CollisionGameComponent) {
       return false;
     }
     return super.onComponentTypeCheck(other);

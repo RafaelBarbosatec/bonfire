@@ -1,21 +1,24 @@
 import 'package:bonfire/bonfire.dart';
 
 /// Mixin responsible for adding collision
-mixin BlockMovementCollision on GameComponent {
-  void onStopMovement(GameComponent other) {}
+mixin BlockMovementCollision on Movement {
+  bool onBlockMovement(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    return true;
+  }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (this is Movement) {
-      Movement comp = this as Movement;
-      position += comp.lastDisplacement * -1;
-      onStopMovement(other as GameComponent);
-      comp.setZeroVelocity();
+    bool stopOtherMovement = true;
+    bool stopMovement = onBlockMovement(intersectionPoints, other);
+    if (stopMovement && other is BlockMovementCollision) {
+      stopOtherMovement = other.onBlockMovement(intersectionPoints, this);
     }
-    super.onCollision(intersectionPoints, other);
-  }
+    if (stopMovement && stopOtherMovement && other is! Sensor) {
+      position += lastDisplacement * -1;
+      setZeroVelocity();
+    }
 
-  bool isCollision({Vector2? displacement}) {
-    return false;
+    super.onCollision(intersectionPoints, other);
   }
 }

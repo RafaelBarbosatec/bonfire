@@ -120,7 +120,11 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
   })  : _joystickController = joystickController,
-        super(camera: BonfireCamera(cameraConfig ?? CameraConfig())) {
+        super(
+          camera: BonfireCamera(
+            cameraConfig ?? CameraConfig(),
+          ),
+        ) {
     _bgColor = backgroundColor;
     camera.setGame(this);
     camera.target ??= player;
@@ -191,7 +195,15 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     if (gameController != null) {
       await add(gameController!);
     }
-    return super.onLoad();
+    await super.onLoad();
+    initializeCollisionDetection(
+      mapDimensions: Rect.fromLTWH(
+        0,
+        0,
+        map.size.x.ceilToDouble(),
+        map.size.y.ceilToDouble(),
+      ),
+    );
   }
 
   @override

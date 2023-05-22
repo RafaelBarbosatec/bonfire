@@ -26,32 +26,37 @@ class GoblinController extends StateController<Goblin> {
     if (!gameRef.sceneBuilderStatus.isRunning) {
       _seePlayerToAttackMelee = false;
 
-      component.seeAndMoveToPlayer(
-        closePlayer: (player) {
-          component.execAttack(attack);
-        },
-        observed: () {
-          _seePlayerToAttackMelee = true;
-        },
-        radiusVision: DungeonMap.tileSize * 1.5,
-      );
+      component.seePlayer(
+        radiusVision: DungeonMap.tileSize * 3,
+        observed: (p) {
+          component.seeAndMoveToPlayer(
+            closePlayer: (player) {
+              component.execAttack(attack);
+            },
+            observed: () {
+              _seePlayerToAttackMelee = true;
+            },
+            radiusVision: DungeonMap.tileSize * 1.5,
+          );
 
-      if (!_seePlayerToAttackMelee) {
-        component.seeAndMoveToAttackRange(
-          minDistanceFromPlayer: DungeonMap.tileSize * 2,
-          positioned: (p) {
-            component.execAttackRange(attack);
-          },
-          radiusVision: DungeonMap.tileSize * 3,
-          notObserved: () {
-            component.runRandomMovement(
-              dt,
-              speed: component.speed / 2,
-              maxDistance: (DungeonMap.tileSize * 3).toInt(),
+          if (!_seePlayerToAttackMelee) {
+            component.seeAndMoveToAttackRange(
+              minDistanceFromPlayer: DungeonMap.tileSize * 2,
+              positioned: (p) {
+                component.execAttackRange(attack);
+              },
+              radiusVision: DungeonMap.tileSize * 3,
             );
-          },
-        );
-      }
+          }
+        },
+        notObserved: () {
+          component.runRandomMovement(
+            dt,
+            speed: component.speed / 2,
+            maxDistance: (DungeonMap.tileSize * 3).toInt(),
+          );
+        },
+      );
     }
   }
 }

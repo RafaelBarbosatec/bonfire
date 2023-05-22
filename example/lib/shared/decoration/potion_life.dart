@@ -2,7 +2,8 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 
-class PotionLife extends GameDecoration with Sensor<Player> {
+class PotionLife extends GameDecoration
+    with Sensor<Player> {
   final double life;
   double _lifeDistributed = 0;
 

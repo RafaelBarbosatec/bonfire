@@ -24,6 +24,7 @@ mixin Movement on GameComponent {
   /// You can override this method to listen the movement of this component
   void onMove(
     double speed,
+    Vector2 displacement,
     Direction direction,
     double angle,
   ) {}
@@ -124,12 +125,11 @@ mixin Movement on GameComponent {
 
   void stopMove({bool forceIdle = false}) {
     if (isIdle && !forceIdle) return;
+    setZeroVelocity();
     idle();
   }
 
-  void idle() {
-    setZeroVelocity();
-  }
+  void idle() {}
 
   void setZeroVelocity() {
     _velocity.setZero();
@@ -145,7 +145,7 @@ mixin Movement on GameComponent {
       if (lastDirection == Direction.up || lastDirection == Direction.down) {
         _requestUpdatePriority();
       }
-      onMove(_lastSpeed, lastDirection, velocityRadAngle);
+      onMove(_lastSpeed, lastDisplacement, lastDirection, velocityRadAngle);
     }
   }
 

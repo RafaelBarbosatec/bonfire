@@ -45,12 +45,6 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   }
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
-    super.onComponentTypeCheck(other);
-    return false;
-  }
-
-  @override
   Future<void> onLoad() async {
     addAll([RectangleHitbox(size: size)]);
     return super.onLoad();
