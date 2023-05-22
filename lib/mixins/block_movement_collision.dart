@@ -16,7 +16,7 @@ mixin BlockMovementCollision on Movement {
     }
     if (stopMovement && stopOtherMovement && other is! Sensor) {
       position += lastDisplacement * -1;
-      setZeroVelocity();
+      stopFromCollision();
     }
 
     super.onCollision(intersectionPoints, other);

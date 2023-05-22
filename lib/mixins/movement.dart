@@ -29,6 +29,10 @@ mixin Movement on GameComponent {
     double angle,
   ) {}
 
+  Vector2 onApplyVelocity(Vector2 velocity, double dt) {
+    return velocity * dt;
+  }
+
   /// Method used to translate component
   void translate(Vector2 displacement) {
     lastDisplacement = displacement;
@@ -136,12 +140,16 @@ mixin Movement on GameComponent {
     velocityRadAngle = 0.0;
   }
 
+  void stopFromCollision() {
+    setZeroVelocity();
+  }
+
   @override
   void update(double dt) {
     super.update(dt);
-    position += lastDisplacement = _velocity * dt;
+    position += lastDisplacement = onApplyVelocity(_velocity, dt);
     dtUpdate = dt;
-    if (!_velocity.isZero()) {
+    if (!lastDisplacement.isZero()) {
       if (lastDirection == Direction.up || lastDirection == Direction.down) {
         _requestUpdatePriority();
       }

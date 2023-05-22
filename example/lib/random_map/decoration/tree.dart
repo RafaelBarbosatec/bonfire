@@ -41,4 +41,12 @@ class Tree extends GameDecoration {
     );
     return super.onLoad();
   }
+
+  @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    if (other is Tree) {
+      return false;
+    }
+    return super.onComponentTypeCheck(other);
+  }
 }
