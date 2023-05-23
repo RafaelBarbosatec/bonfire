@@ -68,28 +68,28 @@ mixin Movement on GameComponent {
   /// Move player to Up
   void moveUp({double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = Vector2(0, -_lastSpeed);
+    _velocity = _velocity.copyWith(y: -_lastSpeed);
     _updateLastDirection(_velocity);
   }
 
   /// Move player to Down
   void moveDown({double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = Vector2(0, _lastSpeed);
+    _velocity = _velocity.copyWith(y: _lastSpeed);
     _updateLastDirection(_velocity);
   }
 
   /// Move player to Left
   void moveLeft({double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = Vector2(-_lastSpeed, 0);
+    _velocity = _velocity.copyWith(x: -_lastSpeed);
     _updateLastDirection(_velocity);
   }
 
   /// Move player to Right
   void moveRight({double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = Vector2(_lastSpeed, 0);
+    _velocity = _velocity.copyWith(x: _lastSpeed);
     _updateLastDirection(_velocity);
   }
 
