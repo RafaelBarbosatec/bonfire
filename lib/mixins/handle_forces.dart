@@ -1,33 +1,31 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/forces/forces_2d.dart';
+
+export 'package:bonfire/forces/forces_2d.dart';
 
 mixin HandleForces on Movement {
-  final Forces2D _forces = Forces2D();
+  final List<Force2D> _forces = [];
 
   void addForce(Force2D force) {
-    _forces.addForce(force);
-  }
-
-  void addResistence(Force2D resistence) {
-    _forces.addResistence(resistence);
+    _forces.removeWhere((element) => element.id == force.id);
+    _forces.add(force);
   }
 
   void removeForce(dynamic id) {
-    _forces.removeForce(id);
-  }
-
-  void removeResistence(dynamic id) {
-    _forces.removeResistence(id);
+    _forces.removeWhere((element) => element.id == id);
   }
 
   @override
   Vector2 onApplyVelocity(Vector2 velocity, double dt) {
-    Vector2 allForces = _forces.forces.fold<Vector2>(
-      Vector2.zero(),
-      (previousValue, element) => previousValue + element.value,
-    );
     var oldVel = velocity.clone();
-    this.velocity = velocity + allForces * dt;
-    return (oldVel + this.velocity) * 0.5 * dt;
+    this.velocity =
+        _forces.where((element) => element is! LinearForce2D).fold<Vector2>(
+              velocity,
+              (previousValue, element) => element.transform(previousValue, dt),
+            );
+    var newLiVel = _forces.whereType<LinearForce2D>().fold<Vector2>(
+          this.velocity,
+          (previousValue, element) => element.transform(previousValue, dt),
+        );
+    return (oldVel + newLiVel) * 0.5 * dt;
   }
 }

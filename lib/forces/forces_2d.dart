@@ -1,41 +1,41 @@
+import 'dart:ui';
+
 import 'package:bonfire/bonfire.dart';
 
-class Force2D {
+abstract class Force2D {
   dynamic id;
   Vector2 value;
-  Force2D(this.id,this.value);
+  Force2D({required this.id, required this.value});
+
+  Vector2 transform(Vector2 velocity, double dt);
 }
 
-class Forces2D {
-  final List<Force2D> _forces;
-  final List<Force2D> _resistences;
+class AccelerationForce2D extends Force2D {
+  AccelerationForce2D({required super.id, required super.value});
 
-  List<Force2D> get forces => _forces;
-  List<Force2D> get resistences => _resistences;
-
-  Forces2D({List<Force2D>? forces, List<Force2D>? resistences})
-      : _forces = forces ?? [],
-        _resistences = resistences ?? [];
-
-  void addForce(Force2D force) {
-    _forces.where((f) => f.id == force.id).forEach((f) => _forces.remove(f));
-    _forces.add(force);
+  @override
+  Vector2 transform(Vector2 velocity, double dt) {
+    return velocity + value * dt;
   }
+}
 
-  void removeForce(dynamic id) {
-    _forces.where((f) => f.id == id).forEach((f) => _forces.remove(f));
+class ResistenceForce2D extends Force2D {
+  ResistenceForce2D({required super.id, required super.value});
+
+  @override
+  Vector2 transform(Vector2 velocity, double dt) {
+    return Vector2(
+      lerpDouble(velocity.x, 0, dt * value.x) ?? velocity.x,
+      lerpDouble(velocity.y, 0, dt * value.y) ?? velocity.y,
+    );
   }
+}
 
-  void addResistence(Force2D resistence) {
-    _resistences
-        .where((f) => f.id == resistence.id)
-        .forEach((f) => _resistences.remove(f));
-    _resistences.add(resistence);
-  }
+class LinearForce2D extends Force2D {
+  LinearForce2D({required super.id, required super.value});
 
-  void removeResistence(dynamic id) {
-    _resistences
-        .where((f) => f.id == id)
-        .forEach((f) => _resistences.remove(f));
+  @override
+  Vector2 transform(Vector2 velocity, double dt) {
+    return velocity + value;
   }
 }
