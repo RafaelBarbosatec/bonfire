@@ -43,6 +43,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/platform/
+    - assets/images/platform/fox/
     - assets/images/player/
     - assets/images/enemy/
     - assets/images/npc/

@@ -24,6 +24,8 @@ class BonfireCamera extends Camera {
 
   Offset screenCenter = Offset.zero;
 
+  bool isFirstMove = true;
+
   BonfireCamera(
     CameraConfig config,
   ) {
@@ -254,11 +256,12 @@ class BonfireCamera extends Camera {
     }
 
     if (shouldMove) {
-      if (enableSmooth) {
+      if (enableSmooth && !isFirstMove) {
         double camSpeed = dt * speed;
         newX = lerpDouble(position.x, newX, camSpeed) ?? newX;
         newY = lerpDouble(position.y, newY, camSpeed) ?? newY;
       }
+      isFirstMove = false;
       snapTo(Vector2(newX, newY));
     }
   }

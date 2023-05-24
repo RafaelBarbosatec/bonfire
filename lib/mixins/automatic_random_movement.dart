@@ -106,10 +106,10 @@ mixin AutomaticRandomMovement on Movement {
   }
 
   @override
-  void setZeroVelocity() {
+  void setZeroVelocity({bool isX = true, bool isY = true}) {
     _targetRandomMovement = Vector2.zero();
     idle();
-    super.setZeroVelocity();
+    super.setZeroVelocity(isX: isX, isY: isY);
   }
 
   @override

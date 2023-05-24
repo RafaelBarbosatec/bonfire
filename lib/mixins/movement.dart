@@ -15,6 +15,7 @@ mixin Movement on GameComponent {
   Vector2 _velocity = Vector2.zero();
   Direction lastDirection = Direction.right;
   Direction lastDirectionHorizontal = Direction.right;
+  Direction lastDirectionVertical = Direction.down;
 
   Vector2 get velocity => _velocity;
   set velocity(Vector2 velocity) {
@@ -136,13 +137,18 @@ mixin Movement on GameComponent {
 
   void idle() {}
 
-  void setZeroVelocity() {
-    _velocity.setZero();
-    velocityRadAngle = 0.0;
+  void setZeroVelocity({bool isX = true, bool isY = true}) {
+    _velocity = _velocity.copyWith(
+      x: isX ? 0.0 : _velocity.x,
+      y: isY ? 0.0 : _velocity.y,
+    );
+    if (isX && isY) {
+      velocityRadAngle = 0.0;
+    }
   }
 
-  void stopFromCollision() {
-    setZeroVelocity();
+  void stopFromCollision({bool isX = true, bool isY = true}) {
+    setZeroVelocity(isX: isX, isY: isY);
   }
 
   @override
@@ -214,6 +220,12 @@ mixin Movement on GameComponent {
       lastDirectionHorizontal = Direction.right;
     } else if (direction.x < 0) {
       lastDirectionHorizontal = Direction.left;
+    }
+
+    if (direction.y > 0) {
+      lastDirectionVertical = Direction.down;
+    } else if (direction.y < 0) {
+      lastDirectionVertical = Direction.up;
     }
 
     if (direction.y != 0 && direction.x == 0) {

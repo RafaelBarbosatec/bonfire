@@ -1,32 +1,30 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
+import 'package:example/platform/platform_spritesheet.dart';
 import 'package:flutter/services.dart';
 
 class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
+  bool jamping = true;
+
   FoxPlayer({
     required Vector2 position,
   }) : super(
-          position: position,
-          size: Vector2.all(16),
-          speed: 50,
-        ) {
+            position: position,
+            size: Vector2.all(33),
+            speed: 50,
+            animation: SimpleDirectionAnimation(
+                idleRight: PlatformSpritesheet.playerIdleRight,
+                runRight: PlatformSpritesheet.playerRunRight,
+                runDown: PlatformSpritesheet.playerIdleRight,
+                others: {
+                  'jump_up': PlatformSpritesheet.playerJumpUp,
+                  'jump_down': PlatformSpritesheet.playerJumpDown,
+                })) {
     addForce(
       AccelerationForce2D(
         id: 'gravity',
         value: Vector2(0, 300),
       ),
     );
-  }
-
-  @override
-  void render(Canvas canvas) {
-    canvas.drawCircle(
-      Offset(width / 2, height / 2),
-      width / 2,
-      Paint()..color = const Color.fromARGB(255, 255, 47, 47),
-    );
-    super.render(canvas);
   }
 
   @override
@@ -43,9 +41,39 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
   void joystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN &&
         event.id == LogicalKeyboardKey.space.keyId) {
-      moveUp(speed: 150);
+      if (!jamping) {
+        moveUp(speed: 150);
+        jamping = true;
+      }
     }
     super.joystickAction(event);
+  }
+
+  @override
+  bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
+    if (other.center.y > center.y) {
+      jamping = false;
+    }
+    return super.onBlockMovement(intersectionPoints, other);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    if (jamping) {
+      if (lastDirectionVertical == Direction.up) {
+        animation?.playOther(
+          'jump_up',
+          flipX: lastDirectionHorizontal == Direction.left,
+        );
+      } else {
+        animation?.playOther(
+          'jump_down',
+          flipX: lastDirectionHorizontal == Direction.left,
+        );
+      }
+    }
   }
 
   @override
