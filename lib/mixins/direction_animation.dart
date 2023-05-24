@@ -46,16 +46,7 @@ mixin DirectionAnimation on Movement {
         }
         break;
       case Direction.down:
-        if (animation?.runDown != null ||
-            (animation?.runUp != null && animation?.enabledFlipY == true)) {
-          animation?.play(SimpleAnimationEnum.runDown);
-        } else {
-          if (lastDirectionHorizontal == Direction.left) {
-            animation?.play(SimpleAnimationEnum.runLeft);
-          } else {
-            animation?.play(SimpleAnimationEnum.runRight);
-          }
-        }
+        executeDownAnimation();
         break;
       case Direction.upLeft:
         if (animation?.runUpLeft != null) {
@@ -151,6 +142,19 @@ mixin DirectionAnimation on Movement {
     animation = newAnimation;
     if (doIdle) {
       idle();
+    }
+  }
+
+  void executeDownAnimation() {
+    if (animation?.runDown != null ||
+        (animation?.runUp != null && animation?.enabledFlipY == true)) {
+      animation?.play(SimpleAnimationEnum.runDown);
+    } else {
+      if (lastDirectionHorizontal == Direction.left) {
+        animation?.play(SimpleAnimationEnum.runLeft);
+      } else {
+        animation?.play(SimpleAnimationEnum.runRight);
+      }
     }
   }
 }

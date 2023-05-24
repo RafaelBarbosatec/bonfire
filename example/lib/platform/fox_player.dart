@@ -3,7 +3,7 @@ import 'package:example/platform/platform_spritesheet.dart';
 import 'package:flutter/services.dart';
 
 class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
-  bool jamping = true;
+  bool jamping = false;
 
   FoxPlayer({
     required Vector2 position,
@@ -14,7 +14,6 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
             animation: SimpleDirectionAnimation(
                 idleRight: PlatformSpritesheet.playerIdleRight,
                 runRight: PlatformSpritesheet.playerRunRight,
-                runDown: PlatformSpritesheet.playerIdleRight,
                 others: {
                   'jump_up': PlatformSpritesheet.playerJumpUp,
                   'jump_down': PlatformSpritesheet.playerJumpDown,
@@ -22,7 +21,7 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
     addForce(
       AccelerationForce2D(
         id: 'gravity',
-        value: Vector2(0, 300),
+        value: Vector2(0, 400),
       ),
     );
   }
@@ -42,7 +41,7 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
     if (event.event == ActionEvent.DOWN &&
         event.id == LogicalKeyboardKey.space.keyId) {
       if (!jamping) {
-        moveUp(speed: 150);
+        moveUp(speed: 200);
         jamping = true;
       }
     }
@@ -51,7 +50,7 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
 
   @override
   bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
-    if (other.center.y > center.y) {
+    if (other.center.y > bottom) {
       jamping = false;
     }
     return super.onBlockMovement(intersectionPoints, other);
@@ -60,7 +59,9 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
   @override
   void update(double dt) {
     super.update(dt);
-
+    if (!jamping) {
+      jamping = lastDisplacement.y.abs() > speed * dt;
+    }
     if (jamping) {
       if (lastDirectionVertical == Direction.up) {
         animation?.playOther(
@@ -78,7 +79,17 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
 
   @override
   Future<void> onLoad() {
-    add(RectangleHitbox(size: size));
+    add(RectangleHitbox(
+        size: size / 2, position: size / 4 + Vector2(0, 8), isSolid: true));
     return super.onLoad();
+  }
+
+  @override
+  void executeDownAnimation() {
+    if (lastDirectionHorizontal == Direction.left) {
+      animation?.play(SimpleAnimationEnum.idleLeft);
+    } else {
+      animation?.play(SimpleAnimationEnum.idleRight);
+    }
   }
 }
