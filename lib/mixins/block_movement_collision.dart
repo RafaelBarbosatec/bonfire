@@ -25,34 +25,33 @@ mixin BlockMovementCollision on Movement {
     }
     if (stopMovement && stopOtherMovement && other is! Sensor) {
       var shapers = children.whereType<ShapeHitbox>();
-      var myDisplacement = lastDisplacement.clone();
+      var reverseDisplacement = lastDisplacement.clone();
 
       if (shapers.length == 1) {
-        var shape = shapers.first;
+        var shapeRect = shapers.first.toAbsoluteRect();
 
         midPoint = intersectionPoints.reduce(
           (value, element) => value + element,
         );
         midPoint /= intersectionPoints.length.toDouble();
-        midPoint.lerp(shape.absoluteCenter, 0.2);
+        midPoint.lerp(shapeRect.center.toVector2(), 0.3);
 
         var direction = _getDirectionCollision(
-          shape.toAbsoluteRect(),
+          shapeRect,
           midPoint,
         );
 
         if (direction != null) {
           if ((direction == Direction.down || direction == Direction.up) &&
-              myDisplacement.x.abs() > 0) {
-            myDisplacement = myDisplacement.copyWith(x: 0);
-          }
-
-          if ((direction == Direction.left || direction == Direction.right) &&
-              myDisplacement.y.abs() > 0) {
-            myDisplacement = myDisplacement.copyWith(y: 0);
+              reverseDisplacement.x.abs() > 0) {
+            reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+          } else if ((direction == Direction.left ||
+                  direction == Direction.right) &&
+              reverseDisplacement.y.abs() > 0) {
+            reverseDisplacement = reverseDisplacement.copyWith(y: 0);
           }
         } else {
-          myDisplacement.setZero();
+          reverseDisplacement.setZero();
         }
 
         // var normalized = (shape.absoluteCenter - midPoint);
@@ -68,10 +67,10 @@ mixin BlockMovementCollision on Movement {
         //   myDisplacement.setZero();
         // }
 
-        position += myDisplacement * -1;
+        position += reverseDisplacement * -1;
         stopFromCollision(
-          isX: myDisplacement.x.abs() > 0,
-          isY: myDisplacement.y.abs() > 0,
+          isX: reverseDisplacement.x.abs() > 0,
+          isY: reverseDisplacement.y.abs() > 0,
         );
       }
 
