@@ -65,14 +65,14 @@ mixin MovementByJoystick on Movement, JoystickListener {
     }
     switch (direction) {
       case JoystickMoveDirectional.MOVE_UP:
-        moveUp(speed: speed * intensity, setZeroCrossVelocity: true);
+        moveUp(speed: speed * intensity);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_UP_LEFT:
         if (enabledDiagonalMovements) {
           moveUpLeft(speed: speed * intensity);
         } else {
-          moveLeft(speed: speed * intensity, setZeroCrossVelocity: true);
+          moveLeft(speed: speed * intensity);
         }
         _isIdle = false;
         break;
@@ -80,23 +80,23 @@ mixin MovementByJoystick on Movement, JoystickListener {
         if (enabledDiagonalMovements) {
           moveUpRight(speed: speed * intensity);
         } else {
-          moveRight(speed: speed * intensity, setZeroCrossVelocity: true);
+          moveRight(speed: speed * intensity);
         }
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
-        moveRight(speed: speed * intensity, setZeroCrossVelocity: true);
+        moveRight(speed: speed * intensity);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_DOWN:
-        moveDown(speed: speed * intensity, setZeroCrossVelocity: true);
+        moveDown(speed: speed * intensity);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
         if (enabledDiagonalMovements) {
           moveDownRight(speed: speed * intensity);
         } else {
-          moveRight(speed: speed * intensity, setZeroCrossVelocity: true);
+          moveRight(speed: speed * intensity);
         }
         _isIdle = false;
         break;
@@ -104,12 +104,12 @@ mixin MovementByJoystick on Movement, JoystickListener {
         if (enabledDiagonalMovements) {
           moveDownLeft(speed: speed * intensity);
         } else {
-          moveLeft(speed: speed * intensity, setZeroCrossVelocity: true);
+          moveLeft(speed: speed * intensity);
         }
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
-        moveLeft(speed: speed * intensity, setZeroCrossVelocity: true);
+        moveLeft(speed: speed * intensity);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.IDLE:
