@@ -16,13 +16,23 @@ class _PlatformGameState extends State<PlatformGame> {
       map: WorldMapByTiled('platform/platform_map.tmj'),
       joystick: Joystick(
         keyboardConfig: KeyboardConfig(),
-        directional: JoystickDirectional(),
+        directional: JoystickDirectional(
+          color: Colors.green,
+        ),
+        actions: [
+          JoystickAction(
+            actionId: 1,
+            margin: const EdgeInsets.all(50),
+            color: Colors.green,
+          ),
+        ],
       ),
       backgroundColor: const Color(0xFF2fbdff),
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
         zoom: 3,
         smoothCameraEnabled: true,
+        smoothCameraSpeed: 3,
       ),
       player: FoxPlayer(
         position: Vector2(50 * 16, 3 * 16),

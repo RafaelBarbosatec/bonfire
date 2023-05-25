@@ -12,12 +12,13 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
             size: Vector2.all(33),
             speed: 50,
             animation: SimpleDirectionAnimation(
-                idleRight: PlatformSpritesheet.playerIdleRight,
-                runRight: PlatformSpritesheet.playerRunRight,
-                others: {
-                  'jump_up': PlatformSpritesheet.playerJumpUp,
-                  'jump_down': PlatformSpritesheet.playerJumpDown,
-                })) {
+              idleRight: PlatformSpritesheet.playerIdleRight,
+              runRight: PlatformSpritesheet.playerRunRight,
+              others: {
+                'jump_up': PlatformSpritesheet.playerJumpUp,
+                'jump_down': PlatformSpritesheet.playerJumpDown,
+              },
+            )) {
     addForce(
       AccelerationForce2D(
         id: 'gravity',
@@ -39,7 +40,7 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
   @override
   void joystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN &&
-        event.id == LogicalKeyboardKey.space.keyId) {
+        (event.id == LogicalKeyboardKey.space.keyId || event.id == 1)) {
       if (!jamping) {
         moveUp(speed: 200);
         jamping = true;
@@ -50,9 +51,12 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
 
   @override
   bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
-    if (other.center.y > bottom) {
-      jamping = false;
+    if (jamping && lastDirectionVertical != Direction.up) {
+      if (other.absoluteCenter.y > absoluteCenter.y) {
+        jamping = false;
+      }
     }
+
     return super.onBlockMovement(intersectionPoints, other);
   }
 
@@ -79,13 +83,18 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
 
   @override
   Future<void> onLoad() {
-    add(RectangleHitbox(
-        size: size / 2, position: size / 4 + Vector2(0, 8), isSolid: true));
+    add(
+      RectangleHitbox(
+        size: size / 2,
+        position: size / 4 + Vector2(0, 8),
+        isSolid: true,
+      ),
+    );
     return super.onLoad();
   }
 
   @override
-  void executeDownAnimation() {
+  void onPlayRunDownAnimation() {
     if (lastDirectionHorizontal == Direction.left) {
       animation?.play(SimpleAnimationEnum.idleLeft);
     } else {
