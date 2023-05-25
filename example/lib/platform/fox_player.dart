@@ -85,7 +85,7 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
     add(
       RectangleHitbox(
         size: size / 2,
-        position: size / 4 + Vector2(0, 8),
+        position: Vector2(size.x / 4, size.y / 2),
         isSolid: true,
       ),
     );

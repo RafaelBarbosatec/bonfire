@@ -34,9 +34,9 @@ mixin BlockMovementCollision on Movement {
             intersectionPoints.length.toDouble();
 
         var normalized = (centerShape - midPoint);
-        var yAbs = normalized.y.abs();
-        var xAbs = normalized.x.abs();
-        if ((yAbs - xAbs).abs() > 0.5) {
+        var yAbs = double.parse(normalized.y.abs().toStringAsFixed(2));
+        var xAbs = double.parse(normalized.x.abs().toStringAsFixed(2));
+        if ((yAbs - xAbs).abs() > speed * dtUpdate) {
           if (yAbs > xAbs) {
             myDisplacement = myDisplacement.copyWith(x: 0);
           } else if (yAbs < xAbs) {
