@@ -169,7 +169,6 @@ class Joystick extends JoystickController {
     /// Process directional events
     if (_isDirectional(event.logicalKey)) {
       final currentKeyboardKeys = _getDirectionlKeysPressed(keysPressed);
-
       if (currentKeyboardKeys.isNotEmpty) {
         if (currentKeyboardKeys.length > 1) {
           _sendTwoDirection(

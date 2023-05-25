@@ -67,30 +67,42 @@ mixin Movement on GameComponent {
   }
 
   /// Move player to Up
-  void moveUp({double? speed}) {
+  void moveUp({double? speed, bool setZeroCrossVelocity = false}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = _velocity.copyWith(y: -_lastSpeed);
+    _velocity = _velocity.copyWith(
+      y: -_lastSpeed,
+      x: setZeroCrossVelocity ? 0.0 : _velocity.x,
+    );
     _updateLastDirection(_velocity);
   }
 
   /// Move player to Down
-  void moveDown({double? speed}) {
+  void moveDown({double? speed, bool setZeroCrossVelocity = false}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = _velocity.copyWith(y: _lastSpeed);
+    _velocity = _velocity.copyWith(
+      y: _lastSpeed,
+      x: setZeroCrossVelocity ? 0.0 : _velocity.x,
+    );
     _updateLastDirection(_velocity);
   }
 
   /// Move player to Left
-  void moveLeft({double? speed}) {
+  void moveLeft({double? speed, bool setZeroCrossVelocity = false}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = _velocity.copyWith(x: -_lastSpeed);
+    _velocity = _velocity.copyWith(
+      x: -_lastSpeed,
+      y: setZeroCrossVelocity ? 0.0 : _velocity.y,
+    );
     _updateLastDirection(_velocity);
   }
 
   /// Move player to Right
-  void moveRight({double? speed}) {
+  void moveRight({double? speed, bool setZeroCrossVelocity = false}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = _velocity.copyWith(x: _lastSpeed);
+    _velocity = _velocity.copyWith(
+      x: _lastSpeed,
+      y: setZeroCrossVelocity ? 0.0 : _velocity.y,
+    );
     _updateLastDirection(_velocity);
   }
 
