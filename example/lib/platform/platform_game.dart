@@ -30,7 +30,7 @@ class _PlatformGameState extends State<PlatformGame> {
       backgroundColor: const Color(0xFF2fbdff),
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
-        zoom: 3,
+        zoom: 2.5,
         smoothCameraEnabled: true,
         smoothCameraSpeed: 3,
       ),

@@ -29,12 +29,11 @@ class FoxPlayer extends SimplePlayer with BlockMovementCollision, HandleForces {
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    if (event.directional == JoystickMoveDirectional.MOVE_UP ||
-        event.directional == JoystickMoveDirectional.MOVE_UP_LEFT ||
-        event.directional == JoystickMoveDirectional.MOVE_UP_RIGHT) {
-      return;
+    if (event.directional == JoystickMoveDirectional.MOVE_LEFT ||
+        event.directional == JoystickMoveDirectional.MOVE_RIGHT ||
+        event.directional == JoystickMoveDirectional.IDLE) {
+      super.joystickChangeDirectional(event);
     }
-    super.joystickChangeDirectional(event);
   }
 
   @override
