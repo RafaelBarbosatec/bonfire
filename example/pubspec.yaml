@@ -44,6 +44,7 @@ flutter:
     - assets/images/
     - assets/images/platform/
     - assets/images/platform/fox/
+    - assets/images/platform/frog/
     - assets/images/player/
     - assets/images/enemy/
     - assets/images/npc/

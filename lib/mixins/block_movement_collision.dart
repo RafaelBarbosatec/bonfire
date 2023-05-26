@@ -28,50 +28,56 @@ mixin BlockMovementCollision on Movement {
       var reverseDisplacement = lastDisplacement.clone();
 
       if (shapers.length == 1) {
-        var shapeRect = shapers.first.toAbsoluteRect();
+        var shape = shapers.first;
+        // var shapeRect = shape.toAbsoluteRect();
 
         midPoint = intersectionPoints.reduce(
           (value, element) => value + element,
         );
         midPoint /= intersectionPoints.length.toDouble();
-        midPoint.lerp(shapeRect.center.toVector2(), 0.15);
+        midPoint.lerp(shape.absoluteCenter, 0.15);
 
-        var direction = _getDirectionCollision(
-          shapeRect,
-          midPoint,
-        );
+        // var direction = _getDirectionCollision(
+        //   shapeRect,
+        //   midPoint,
+        // );
 
-        if (direction != null) {
-          if ((direction == Direction.down || direction == Direction.up) &&
-              reverseDisplacement.x.abs() > 0) {
-            if (direction == lastDirectionVertical) {
-              reverseDisplacement = reverseDisplacement.copyWith(x: 0);
-            } else {
-              reverseDisplacement.setZero();
-            }
-          } else if ((direction == Direction.left ||
-                  direction == Direction.right) &&
-              reverseDisplacement.y.abs() > 0) {
-            if (direction == lastDirectionHorizontal) {
-              reverseDisplacement = reverseDisplacement.copyWith(y: 0);
-            } else {
-              reverseDisplacement.setZero();
-            }
+        // if (direction != null) {
+        //   if ((direction == Direction.down || direction == Direction.up) &&
+        //       reverseDisplacement.x.abs() > 0) {
+        //     if (direction == lastDirectionVertical) {
+        //       reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+        //     } else {
+        //       reverseDisplacement.setZero();
+        //     }
+        //   } else if ((direction == Direction.left ||
+        //           direction == Direction.right) &&
+        //       reverseDisplacement.y.abs() > 0) {
+        //     if (direction == lastDirectionHorizontal) {
+        //       reverseDisplacement = reverseDisplacement.copyWith(y: 0);
+        //     } else {
+        //       reverseDisplacement.setZero();
+        //     }
+        //   }
+        // }
+
+        var diffCenter = (shape.absoluteCenter - midPoint);
+        var yAbs = diffCenter.y.abs();
+        var xAbs = diffCenter.x.abs();
+
+        if (yAbs > xAbs) {
+          if (_getVerticalDirection(diffCenter) == lastDirectionVertical) {
+            reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+          } else {
+            reverseDisplacement.setZero();
+          }
+        } else if (yAbs < xAbs) {
+          if (_getHorizontalDirection(diffCenter) == lastDirectionHorizontal) {
+            reverseDisplacement = reverseDisplacement.copyWith(y: 0);
+          } else {
+            reverseDisplacement.setZero();
           }
         }
-
-        // var normalized = (shape.absoluteCenter - midPoint);
-        // var yAbs = double.parse(normalized.y.abs().toStringAsFixed(2));
-        // var xAbs = double.parse(normalized.x.abs().toStringAsFixed(2));
-        // if ((yAbs - xAbs).abs() >= speed * dtUpdate) {
-        //   if (yAbs > xAbs) {
-        //     myDisplacement = myDisplacement.copyWith(x: 0);
-        //   } else if (yAbs < xAbs) {
-        //     myDisplacement = myDisplacement.copyWith(y: 0);
-        //   }
-        // } else {
-        //   myDisplacement.setZero();
-        // }
 
         position += reverseDisplacement * -1;
         stopFromCollision(
@@ -134,6 +140,14 @@ mixin BlockMovementCollision on Movement {
     }
 
     return null;
+  }
+
+  Direction _getHorizontalDirection(Vector2 diffCenter) {
+    return (diffCenter.x > 0 ? Direction.left : Direction.right);
+  }
+
+  Direction _getVerticalDirection(Vector2 diffCenter) {
+    return (diffCenter.y > 0 ? Direction.up : Direction.down);
   }
 
   // @override
