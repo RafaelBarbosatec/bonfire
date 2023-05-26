@@ -285,6 +285,8 @@ class SimpleDirectionAnimation {
     }
   }
 
+  bool containOther(String key) => others.containsKey(key);
+
   /// Method used to play animation once time specific animation registred in `others`
   Future playOnceOther(
     String key, {

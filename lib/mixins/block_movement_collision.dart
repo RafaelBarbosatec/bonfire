@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/material.dart';
 
 /// Mixin responsible for adding collision
 mixin BlockMovementCollision on Movement {
@@ -90,57 +87,57 @@ mixin BlockMovementCollision on Movement {
     }
   }
 
-  Direction? _getDirectionCollision(Rect rect, Vector2 point) {
-    if (point.y > rect.center.dy) {
-      // bottom
-      TriangleShape t3 = TriangleShape(
-        Vector2(rect.right, rect.bottom),
-        Vector2(rect.left, rect.bottom),
-        rect.center.toVector2(),
-      );
+//   Direction? _getDirectionCollision(Rect rect, Vector2 point) {
+//     if (point.y > rect.center.dy) {
+//       // bottom
+//       TriangleShape t3 = TriangleShape(
+//         Vector2(rect.right, rect.bottom),
+//         Vector2(rect.left, rect.bottom),
+//         rect.center.toVector2(),
+//       );
 
-      if (t3.containPoint(point)) {
-        return Direction.down;
-      }
-    } else {
-//top
-      TriangleShape t1 = TriangleShape(
-        Vector2(rect.left, rect.top),
-        Vector2(rect.right, rect.top),
-        rect.center.toVector2(),
-      );
+//       if (t3.containPoint(point)) {
+//         return Direction.down;
+//       }
+//     } else {
+// //top
+//       TriangleShape t1 = TriangleShape(
+//         Vector2(rect.left, rect.top),
+//         Vector2(rect.right, rect.top),
+//         rect.center.toVector2(),
+//       );
 
-      if (t1.containPoint(point)) {
-        return Direction.up;
-      }
-    }
+//       if (t1.containPoint(point)) {
+//         return Direction.up;
+//       }
+//     }
 
-    if (point.x < rect.center.dx) {
-// left
-      TriangleShape t4 = TriangleShape(
-        Vector2(rect.left, rect.bottom),
-        Vector2(rect.left, rect.top),
-        rect.center.toVector2(),
-      );
+//     if (point.x < rect.center.dx) {
+// // left
+//       TriangleShape t4 = TriangleShape(
+//         Vector2(rect.left, rect.bottom),
+//         Vector2(rect.left, rect.top),
+//         rect.center.toVector2(),
+//       );
 
-      if (t4.containPoint(point)) {
-        return Direction.left;
-      }
-    } else {
-//right
-      TriangleShape t2 = TriangleShape(
-        Vector2(rect.right, rect.top),
-        Vector2(rect.right, rect.bottom),
-        rect.center.toVector2(),
-      );
+//       if (t4.containPoint(point)) {
+//         return Direction.left;
+//       }
+//     } else {
+// //right
+//       TriangleShape t2 = TriangleShape(
+//         Vector2(rect.right, rect.top),
+//         Vector2(rect.right, rect.bottom),
+//         rect.center.toVector2(),
+//       );
 
-      if (t2.containPoint(point)) {
-        return Direction.right;
-      }
-    }
+//       if (t2.containPoint(point)) {
+//         return Direction.right;
+//       }
+//     }
 
-    return null;
-  }
+//     return null;
+//   }
 
   Direction _getHorizontalDirection(Vector2 diffCenter) {
     return (diffCenter.x > 0 ? Direction.left : Direction.right);
