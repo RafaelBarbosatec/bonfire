@@ -68,6 +68,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   /// Callback to receive the onTapUp event from the game.
   final TapInGame? onTapUp;
 
+  final List<Force2D> globalForces;
+
   @override
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
@@ -119,7 +121,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     Color? backgroundColor,
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
+    List<Force2D>? globalForces,
   })  : _joystickController = joystickController,
+        globalForces = globalForces ?? [],
         super(
           camera: BonfireCamera(
             cameraConfig ?? CameraConfig(),

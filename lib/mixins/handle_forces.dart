@@ -17,12 +17,13 @@ mixin HandleForces on Movement {
   @override
   Vector2 onApplyVelocity(Vector2 velocity, double dt) {
     var oldVel = velocity.clone();
+    List margeForces = [..._forces, ...gameRef.globalForces];
     this.velocity =
-        _forces.where((element) => element is! LinearForce2D).fold<Vector2>(
+        margeForces.where((element) => element is! LinearForce2D).fold<Vector2>(
               velocity,
               (previousValue, element) => element.transform(previousValue, dt),
             );
-    var newLiVel = _forces.whereType<LinearForce2D>().fold<Vector2>(
+    var newLiVel = margeForces.whereType<LinearForce2D>().fold<Vector2>(
           this.velocity,
           (previousValue, element) => element.transform(previousValue, dt),
         );

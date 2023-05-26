@@ -36,6 +36,12 @@ class _PlatformGameState extends State<PlatformGame> {
         ],
       ),
       backgroundColor: const Color(0xFF2fbdff),
+      globalForces: [
+        AccelerationForce2D(
+          id: 'gravity',
+          value: Vector2(0, 400),
+        ),
+      ],
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
         zoom: 2.5,

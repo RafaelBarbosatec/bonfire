@@ -36,6 +36,7 @@ abstract class BonfireGameInterface {
   Color? get constructionModeColor;
   Color? get collisionAreaColor;
   GameInterface? get interface;
+  List<Force2D> get globalForces;
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
   /// A property that stores an [ActiveOverlaysNotifier]

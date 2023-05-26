@@ -21,14 +21,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
               'action': PlatformSpritesheet.frogActionRight,
             },
           ),
-        ) {
-    addForce(
-      AccelerationForce2D(
-        id: 'gravity',
-        value: Vector2(0, 400),
-      ),
-    );
-  }
+        );
 
   @override
   void update(double dt) {

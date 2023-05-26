@@ -17,14 +17,7 @@ class FoxPlayer extends PlatformPlayer with HandleForces {
               jumpDownRight: PlatformSpritesheet.playerJumpDown,
             ),
           ),
-        ) {
-    addForce(
-      AccelerationForce2D(
-        id: 'gravity',
-        value: Vector2(0, 400),
-      ),
-    );
-  }
+        );
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {

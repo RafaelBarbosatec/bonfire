@@ -7,6 +7,7 @@ import 'package:bonfire/base/listener_game_widget.dart';
 import 'package:bonfire/camera/camera_config.dart';
 import 'package:bonfire/color_filter/game_color_filter.dart';
 import 'package:bonfire/decoration/decoration.dart';
+import 'package:bonfire/forces/forces_2d.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/base/map_game.dart';
@@ -77,6 +78,7 @@ class BonfireWidget extends StatefulWidget {
   final GameColorFilter? colorFilter;
   final VoidCallback? onDispose;
   final Duration delayToHideProgress;
+  final List<Force2D>? globalForces;
 
   const BonfireWidget({
     Key? key,
@@ -110,6 +112,7 @@ class BonfireWidget extends StatefulWidget {
     this.progressTransitionDuration = const Duration(milliseconds: 500),
     this.progressTransitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
     this.onDispose,
+    this.globalForces,
   }) : super(key: key);
 
   @override
@@ -218,6 +221,7 @@ class BonfireWidgetState extends State<BonfireWidget> {
       },
       onTapDown: widget.onTapDown,
       onTapUp: widget.onTapUp,
+      globalForces: widget.globalForces,
     );
   }
 
