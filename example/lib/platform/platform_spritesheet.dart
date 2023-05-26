@@ -33,4 +33,42 @@ class PlatformSpritesheet {
       return SpriteAnimation.spriteList([value], stepTime: 1);
     });
   }
+
+  static Future<SpriteAnimation> get frogIdleRight {
+    return Sprite.load(
+      "platform/frog/frog-jump.png",
+      srcSize: Vector2(35, 32),
+    ).then((value) {
+      return SpriteAnimation.spriteList([value], stepTime: 1);
+    });
+  }
+
+  static Future<SpriteAnimation> get frogActionRight => SpriteAnimation.load(
+        "platform/frog/frog-idle.png",
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          stepTime: 0.2,
+          textureSize: Vector2(35, 32),
+        ),
+      );
+
+  static Future<SpriteAnimation> get frogJumpUp {
+    return Sprite.load(
+      "platform/frog/frog-jump.png",
+      srcPosition: Vector2(35, 0),
+      srcSize: Vector2(35, 32),
+    ).then((value) {
+      return SpriteAnimation.spriteList([value], stepTime: 1);
+    });
+  }
+
+  static Future<SpriteAnimation> get frogJumpDown {
+    return Sprite.load(
+      "platform/fox/player-jump.png",
+      srcPosition: Vector2(70, 0),
+      srcSize: Vector2(35, 32),
+    ).then((value) {
+      return SpriteAnimation.spriteList([value], stepTime: 1);
+    });
+  }
 }
