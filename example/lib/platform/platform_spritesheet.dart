@@ -47,7 +47,7 @@ class PlatformSpritesheet {
         "platform/frog/frog-idle.png",
         SpriteAnimationData.sequenced(
           amount: 4,
-          stepTime: 0.2,
+          stepTime: 0.1,
           textureSize: Vector2(35, 32),
         ),
       );
@@ -64,7 +64,7 @@ class PlatformSpritesheet {
 
   static Future<SpriteAnimation> get frogJumpDown {
     return Sprite.load(
-      "platform/fox/player-jump.png",
+      "platform/frog/frog-jump.png",
       srcPosition: Vector2(70, 0),
       srcSize: Vector2(35, 32),
     ).then((value) {

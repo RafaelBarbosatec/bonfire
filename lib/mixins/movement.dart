@@ -141,9 +141,9 @@ mixin Movement on GameComponent {
     _updateLastDirection(_velocity);
   }
 
-  void stopMove({bool forceIdle = false}) {
+  void stopMove({bool forceIdle = false,bool isX = true, bool isY = true}) {
     if (isIdle && !forceIdle) return;
-    setZeroVelocity();
+    setZeroVelocity(isX:isX,isY :isY);
     idle();
   }
 
@@ -166,13 +166,15 @@ mixin Movement on GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    position += lastDisplacement = onApplyVelocity(_velocity, dt);
-    dtUpdate = dt;
-    if (!lastDisplacement.isZero()) {
-      if (lastDirection == Direction.up || lastDirection == Direction.down) {
-        _requestUpdatePriority();
+    if (isVisible) {
+      position += lastDisplacement = onApplyVelocity(_velocity, dt);
+      dtUpdate = dt;
+      if (!lastDisplacement.isZero()) {
+        if (lastDirection == Direction.up || lastDirection == Direction.down) {
+          _requestUpdatePriority();
+        }
+        onMove(_lastSpeed, lastDisplacement, lastDirection, velocityRadAngle);
       }
-      onMove(_lastSpeed, lastDisplacement, lastDirection, velocityRadAngle);
     }
   }
 

@@ -1,11 +1,11 @@
 import 'package:bonfire/bonfire.dart';
 
-class PlatformPlayer extends SimplePlayer with BlockMovementCollision {
+class PlatformEnemy extends SimpleEnemy with BlockMovementCollision {
   bool jumping = false;
   final int countJumps;
   int _currentJumps = 0;
 
-  PlatformPlayer({
+  PlatformEnemy({
     required super.position,
     required super.size,
     required PlatformAnimations animation,

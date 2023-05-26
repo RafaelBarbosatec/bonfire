@@ -22,6 +22,7 @@ class PlatformAnimations {
   final FutureOr<SpriteAnimation>? idleLeft;
   final FutureOr<SpriteAnimation>? runLeft;
   final PlatformJumpAnimations? jump;
+  final Map<String, FutureOr<SpriteAnimation>>? others;
 
   PlatformAnimations({
     required this.idleRight,
@@ -29,6 +30,7 @@ class PlatformAnimations {
     this.idleLeft,
     this.runLeft,
     this.jump,
+    this.others,
   });
 }
 

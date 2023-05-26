@@ -1,5 +1,9 @@
 import 'package:bonfire/bonfire.dart';
 
+export 'platform_player.dart';
+export 'rotation_player.dart';
+export 'simple_player.dart';
+
 class Player extends GameComponent
     with
         Movement,

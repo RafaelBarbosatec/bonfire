@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/platform/fox_player.dart';
+import 'package:example/platform/frog_enemy.dart';
 import 'package:flutter/material.dart';
 
 class PlatformGame extends StatefulWidget {
@@ -13,7 +14,14 @@ class _PlatformGameState extends State<PlatformGame> {
   @override
   Widget build(BuildContext context) {
     return BonfireWidget(
-      map: WorldMapByTiled('platform/platform_map.tmj'),
+      map: WorldMapByTiled(
+        'platform/platform_map.tmj',
+        objectsBuilder: {
+          'frog': (properties) => FrogEnemy(
+                position: properties.position,
+              ),
+        },
+      ),
       joystick: Joystick(
         keyboardConfig: KeyboardConfig(),
         directional: JoystickDirectional(

@@ -72,9 +72,31 @@
          "width":58,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":5,
+         "name":"enemy",
+         "objects":[
+                {
+                 "class":"",
+                 "height":35,
+                 "id":1,
+                 "name":"frog",
+                 "rotation":0,
+                 "visible":true,
+                 "width":35,
+                 "x":457,
+                 "y":56.5
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":5,
- "nextobjectid":1,
+ "nextlayerid":6,
+ "nextobjectid":2,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.0",
