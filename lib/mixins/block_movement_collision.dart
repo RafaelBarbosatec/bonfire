@@ -34,7 +34,7 @@ mixin BlockMovementCollision on Movement {
           (value, element) => value + element,
         );
         midPoint /= intersectionPoints.length.toDouble();
-        midPoint.lerp(shapeRect.center.toVector2(), 0.3);
+        midPoint.lerp(shapeRect.center.toVector2(), 0.15);
 
         var direction = _getDirectionCollision(
           shapeRect,
@@ -44,14 +44,20 @@ mixin BlockMovementCollision on Movement {
         if (direction != null) {
           if ((direction == Direction.down || direction == Direction.up) &&
               reverseDisplacement.x.abs() > 0) {
-            reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+            if (direction == lastDirectionVertical) {
+              reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+            } else {
+              reverseDisplacement.setZero();
+            }
           } else if ((direction == Direction.left ||
                   direction == Direction.right) &&
               reverseDisplacement.y.abs() > 0) {
-            reverseDisplacement = reverseDisplacement.copyWith(y: 0);
+            if (direction == lastDirectionHorizontal) {
+              reverseDisplacement = reverseDisplacement.copyWith(y: 0);
+            } else {
+              reverseDisplacement.setZero();
+            }
           }
-        } else {
-          reverseDisplacement.setZero();
         }
 
         // var normalized = (shape.absoluteCenter - midPoint);
@@ -132,16 +138,16 @@ mixin BlockMovementCollision on Movement {
 
   // @override
   // void render(Canvas canvas) {
+  //   super.render(canvas);
   //   canvas.save();
   //   canvas.translate(-x, -y);
   //   canvas.drawPoints(
   //       PointMode.points,
   //       [midPoint.toOffset()],
   //       Paint()
-  //         ..color = Colors.green
+  //         ..color = Colors.red
   //         ..strokeWidth = 2);
   //   canvas.restore();
-  //   super.render(canvas);
   // }
 }
 
