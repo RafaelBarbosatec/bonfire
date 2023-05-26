@@ -27,10 +27,13 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
 
   @override
   bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
-    if (other is FoxPlayer && !isDead) {
+    if (other is FoxPlayer && isDead) return false;
+    if (other is FoxPlayer) {
       if (other.bottom < _shapeHitbox.absolutePosition.y + 5) {
-        other.jump(speed: 150);
-        die();
+        if (!isDead) {
+          other.jump(speed: 120, force: true);
+          die();
+        }
       } else {
         other.die();
       }

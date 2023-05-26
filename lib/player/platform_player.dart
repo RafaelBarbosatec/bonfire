@@ -39,8 +39,8 @@ class PlatformPlayer extends SimplePlayer with BlockMovementCollision {
           ),
         );
 
-  void jump({double? speed}) {
-    if (!jumping || _currentJumps < countJumps) {
+  void jump({double? speed, bool force = false}) {
+    if (!jumping || _currentJumps < countJumps || force) {
       _currentJumps++;
       moveUp(speed: speed);
       jumping = true;
