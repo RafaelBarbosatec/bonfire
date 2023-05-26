@@ -35,7 +35,7 @@ mixin BlockMovementCollision on Movement {
           (value, element) => value + element,
         );
         midPoint /= intersectionPoints.length.toDouble();
-        midPoint.lerp(shape.absoluteCenter, 0.15);
+        // midPoint.lerp(shape.absoluteCenter, 0.15);
 
         // var direction = _getDirectionCollision(
         //   shapeRect,
