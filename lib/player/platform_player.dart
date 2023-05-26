@@ -1,46 +1,7 @@
-import 'dart:async';
-
 import 'package:bonfire/bonfire.dart';
 
-class PlatformJumpAnimations {
-  final FutureOr<SpriteAnimation> jumpUpRight;
-  final FutureOr<SpriteAnimation>? jumpUpLeft;
-  final FutureOr<SpriteAnimation> jumpDownRight;
-  final FutureOr<SpriteAnimation>? jumpDownLeft;
-
-  PlatformJumpAnimations({
-    required this.jumpUpRight,
-    required this.jumpDownRight,
-    this.jumpUpLeft,
-    this.jumpDownLeft,
-  });
-}
-
-class PlatformAnimations {
-  final FutureOr<SpriteAnimation> idleRight;
-  final FutureOr<SpriteAnimation> runRight;
-  final FutureOr<SpriteAnimation>? idleLeft;
-  final FutureOr<SpriteAnimation>? runLeft;
-  final PlatformJumpAnimations? jump;
-
-  PlatformAnimations({
-    required this.idleRight,
-    required this.runRight,
-    this.idleLeft,
-    this.runLeft,
-    this.jump,
-  });
-}
-
-enum JumpAnimationsEnum {
-  jumpUpRight,
-  jumpUpLeft,
-  jumpDownRight,
-  jumpDownLeft,
-}
-
 class PlatformPlayer extends SimplePlayer with BlockMovementCollision {
-  bool jamping = false;
+  bool jumping = false;
   final int countJumps;
   int _currentJumps = 0;
 
@@ -78,19 +39,19 @@ class PlatformPlayer extends SimplePlayer with BlockMovementCollision {
         );
 
   void jump({double? speed}) {
-    if (!jamping || _currentJumps < countJumps) {
+    if (!jumping || _currentJumps < countJumps) {
       _currentJumps++;
       moveUp(speed: speed);
-      jamping = true;
+      jumping = true;
     }
   }
 
   @override
   bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
-    if (jamping && lastDirectionVertical != Direction.up) {
+    if (jumping && lastDirectionVertical != Direction.up) {
       if (other.absoluteCenter.y > absoluteCenter.y) {
         _currentJumps = 0;
-        jamping = false;
+        jumping = false;
       }
     }
 
@@ -100,10 +61,10 @@ class PlatformPlayer extends SimplePlayer with BlockMovementCollision {
   @override
   void update(double dt) {
     super.update(dt);
-    if (!jamping) {
-      jamping = lastDisplacement.y.abs() > speed * dt;
+    if (!jumping) {
+      jumping = lastDisplacement.y.abs() > speed * dt;
     }
-    if (jamping) {
+    if (jumping) {
       _setJumpAnimation();
     } else {
       _currentJumps = 0;

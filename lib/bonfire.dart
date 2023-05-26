@@ -61,6 +61,7 @@ export 'package:bonfire/util/barlife_component.dart';
 export 'package:bonfire/util/bonfire_game_ref.dart';
 export 'package:bonfire/util/bonfire_util.dart';
 export 'package:bonfire/util/direction.dart';
+export 'package:bonfire/util/direction_animations/platform_animations.dart';
 export 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 export 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
 export 'package:bonfire/util/extensions/extensions.dart';
