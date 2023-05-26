@@ -32,6 +32,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
 
   @override
   void update(double dt) {
+    super.update(dt);
     if (checkInterval('jump', 5000, dt)) {
       animation?.playOnce(
         PlatformSpritesheet.frogActionRight,
@@ -43,8 +44,6 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
         },
       );
     }
-
-    super.update(dt);
     if (!jumping) {
       stopMove(isY: false);
     }
