@@ -1,6 +1,15 @@
 import 'package:bonfire/bonfire.dart';
 
 class PlatformSpritesheet {
+  static Future<SpriteAnimation> get enemyExplosion => SpriteAnimation.load(
+        "platform/enemy-deadth.png",
+        SpriteAnimationData.sequenced(
+          amount: 6,
+          stepTime: 0.1,
+          textureSize: Vector2(40, 42),
+        ),
+      );
+
   static Future<SpriteAnimation> get playerIdleRight => SpriteAnimation.load(
         "platform/fox/player-idle.png",
         SpriteAnimationData.sequenced(
