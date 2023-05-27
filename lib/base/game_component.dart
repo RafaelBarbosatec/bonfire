@@ -13,7 +13,7 @@ abstract class GameComponent extends PositionComponent
         HasPaint,
         CollisionCallbacks {
   final String _keyIntervalCheckIsVisible = "CHECK_VISIBLE";
-  final int _intervalCheckIsVisible = 250;
+  final int _intervalCheckIsVisible = 100;
   Map<String, dynamic>? properties;
 
   /// When true this component render above all components in game.

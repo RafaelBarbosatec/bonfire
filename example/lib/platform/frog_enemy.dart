@@ -19,9 +19,6 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
               jumpUpRight: PlatformSpritesheet.frogJumpUp,
               jumpDownRight: PlatformSpritesheet.frogJumpDown,
             ),
-            others: {
-              'action': PlatformSpritesheet.frogActionRight,
-            },
           ),
         );
 
@@ -60,8 +57,10 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
         flipX: lastDirectionHorizontal == Direction.left,
         onFinish: () async {
           await Future.delayed(const Duration(seconds: 2));
-          jump(speed: 200);
-          Random().nextBool() ? moveRight() : moveLeft();
+          if (!isDead) {
+            jump(speed: 200);
+            Random().nextBool() ? moveRight() : moveLeft();
+          }
         },
       );
     }

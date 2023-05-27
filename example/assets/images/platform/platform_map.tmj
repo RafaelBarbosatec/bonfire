@@ -88,6 +88,17 @@
                  "width":35,
                  "x":457,
                  "y":56.5
+                }, 
+                {
+                 "class":"",
+                 "height":35,
+                 "id":2,
+                 "name":"frog",
+                 "rotation":0,
+                 "visible":true,
+                 "width":35,
+                 "x":367.5,
+                 "y":280.5
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -96,7 +107,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":2,
+ "nextobjectid":3,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.0",

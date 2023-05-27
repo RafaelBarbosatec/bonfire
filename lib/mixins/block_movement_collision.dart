@@ -1,7 +1,14 @@
+import 'dart:ui';
+
 import 'package:bonfire/bonfire.dart';
 
 /// Mixin responsible for adding collision
 mixin BlockMovementCollision on Movement {
+  final TriangleShape _triangleShape = TriangleShape(
+    Vector2.zero(),
+    Vector2.zero(),
+    Vector2.zero(),
+  );
   bool onBlockMovement(
     Set<Vector2> intersectionPoints,
     GameComponent other,
@@ -26,55 +33,55 @@ mixin BlockMovementCollision on Movement {
 
       if (shapers.length == 1) {
         var shape = shapers.first;
-        // var shapeRect = shape.toAbsoluteRect();
+        var shapeRect = shape.toAbsoluteRect();
 
         midPoint = intersectionPoints.reduce(
           (value, element) => value + element,
         );
         midPoint /= intersectionPoints.length.toDouble();
-        // midPoint.lerp(shape.absoluteCenter, 0.15);
+        midPoint.lerp(shape.absoluteCenter, 0.2);
 
-        // var direction = _getDirectionCollision(
-        //   shapeRect,
-        //   midPoint,
-        // );
+        var direction = _getDirectionCollision(
+          shapeRect,
+          midPoint,
+        );
 
-        // if (direction != null) {
-        //   if ((direction == Direction.down || direction == Direction.up) &&
-        //       reverseDisplacement.x.abs() > 0) {
-        //     if (direction == lastDirectionVertical) {
-        //       reverseDisplacement = reverseDisplacement.copyWith(x: 0);
-        //     } else {
-        //       reverseDisplacement.setZero();
-        //     }
-        //   } else if ((direction == Direction.left ||
-        //           direction == Direction.right) &&
-        //       reverseDisplacement.y.abs() > 0) {
-        //     if (direction == lastDirectionHorizontal) {
-        //       reverseDisplacement = reverseDisplacement.copyWith(y: 0);
-        //     } else {
-        //       reverseDisplacement.setZero();
-        //     }
-        //   }
-        // }
-
-        var diffCenter = (shape.absoluteCenter - midPoint);
-        var yAbs = diffCenter.y.abs();
-        var xAbs = diffCenter.x.abs();
-
-        if (yAbs > xAbs) {
-          if (_getVerticalDirection(diffCenter) == lastDirectionVertical) {
-            reverseDisplacement = reverseDisplacement.copyWith(x: 0);
-          } else {
-            reverseDisplacement.setZero();
-          }
-        } else if (yAbs < xAbs) {
-          if (_getHorizontalDirection(diffCenter) == lastDirectionHorizontal) {
-            reverseDisplacement = reverseDisplacement.copyWith(y: 0);
-          } else {
-            reverseDisplacement.setZero();
+        if (direction != null) {
+          if ((direction == Direction.down || direction == Direction.up) &&
+              reverseDisplacement.x.abs() > 0) {
+            if (direction == lastDirectionVertical) {
+              reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+            } else {
+              reverseDisplacement.setZero();
+            }
+          } else if ((direction == Direction.left ||
+                  direction == Direction.right) &&
+              reverseDisplacement.y.abs() > 0) {
+            if (direction == lastDirectionHorizontal) {
+              reverseDisplacement = reverseDisplacement.copyWith(y: 0);
+            } else {
+              reverseDisplacement.setZero();
+            }
           }
         }
+
+        // var diffCenter = (shape.absoluteCenter - midPoint);
+        // var yAbs = diffCenter.y.abs();
+        // var xAbs = diffCenter.x.abs();
+
+        // if (yAbs > xAbs) {
+        //   if (_getVerticalDirection(diffCenter) == lastDirectionVertical) {
+        //     reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+        //   } else {
+        //     reverseDisplacement.setZero();
+        //   }
+        // } else if (yAbs < xAbs) {
+        //   if (_getHorizontalDirection(diffCenter) == lastDirectionHorizontal) {
+        //     reverseDisplacement = reverseDisplacement.copyWith(y: 0);
+        //   } else {
+        //     reverseDisplacement.setZero();
+        //   }
+        // }
 
         position += reverseDisplacement * -1;
         stopFromCollision(
@@ -87,57 +94,59 @@ mixin BlockMovementCollision on Movement {
     }
   }
 
-//   Direction? _getDirectionCollision(Rect rect, Vector2 point) {
-//     if (point.y > rect.center.dy) {
-//       // bottom
-//       TriangleShape t3 = TriangleShape(
-//         Vector2(rect.right, rect.bottom),
-//         Vector2(rect.left, rect.bottom),
-//         rect.center.toVector2(),
-//       );
+  Direction? _getDirectionCollision(Rect rect, Vector2 point) {
+    if (point.y > rect.center.dy) {
+      // bottom
 
-//       if (t3.containPoint(point)) {
-//         return Direction.down;
-//       }
-//     } else {
-// //top
-//       TriangleShape t1 = TriangleShape(
-//         Vector2(rect.left, rect.top),
-//         Vector2(rect.right, rect.top),
-//         rect.center.toVector2(),
-//       );
+      _triangleShape.updatePoints(
+        Vector2(rect.right, rect.bottom),
+        Vector2(rect.left, rect.bottom),
+        rect.center.toVector2(),
+      );
 
-//       if (t1.containPoint(point)) {
-//         return Direction.up;
-//       }
-//     }
+      if (_triangleShape.containPoint(point)) {
+        return Direction.down;
+      }
+    } else {
+//top
+      _triangleShape.updatePoints(
+        Vector2(rect.left, rect.top),
+        Vector2(rect.right, rect.top),
+        rect.center.toVector2(),
+      );
 
-//     if (point.x < rect.center.dx) {
-// // left
-//       TriangleShape t4 = TriangleShape(
-//         Vector2(rect.left, rect.bottom),
-//         Vector2(rect.left, rect.top),
-//         rect.center.toVector2(),
-//       );
+      if (_triangleShape.containPoint(point)) {
+        return Direction.up;
+      }
+    }
 
-//       if (t4.containPoint(point)) {
-//         return Direction.left;
-//       }
-//     } else {
-// //right
-//       TriangleShape t2 = TriangleShape(
-//         Vector2(rect.right, rect.top),
-//         Vector2(rect.right, rect.bottom),
-//         rect.center.toVector2(),
-//       );
+    if (point.x < rect.center.dx) {
+// left
 
-//       if (t2.containPoint(point)) {
-//         return Direction.right;
-//       }
-//     }
+      _triangleShape.updatePoints(
+        Vector2(rect.left, rect.bottom),
+        Vector2(rect.left, rect.top),
+        rect.center.toVector2(),
+      );
+      if (_triangleShape.containPoint(point)) {
+        return Direction.left;
+      }
+    } else {
+//right
 
-//     return null;
-//   }
+      _triangleShape.updatePoints(
+        Vector2(rect.right, rect.top),
+        Vector2(rect.right, rect.bottom),
+        rect.center.toVector2(),
+      );
+
+      if (_triangleShape.containPoint(point)) {
+        return Direction.right;
+      }
+    }
+
+    return null;
+  }
 
   Direction _getHorizontalDirection(Vector2 diffCenter) {
     return (diffCenter.x > 0 ? Direction.left : Direction.right);
@@ -163,11 +172,17 @@ mixin BlockMovementCollision on Movement {
 }
 
 class TriangleShape {
-  final Vector2 p1;
-  final Vector2 p2;
-  final Vector2 p3;
+  Vector2 p1;
+  Vector2 p2;
+  Vector2 p3;
 
   TriangleShape(this.p1, this.p2, this.p3);
+
+  void updatePoints(Vector2 p1, Vector2 p2, Vector2 p3) {
+    this.p1 = p1;
+    this.p2 = p2;
+    this.p3 = p3;
+  }
 
   Vector2 get center => (p1 + p2 + p3) / 3;
 

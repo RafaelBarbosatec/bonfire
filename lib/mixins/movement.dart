@@ -16,6 +16,7 @@ mixin Movement on GameComponent {
   Direction lastDirection = Direction.right;
   Direction lastDirectionHorizontal = Direction.right;
   Direction lastDirectionVertical = Direction.down;
+  bool movementOnlyVisible = true;
 
   Vector2 get velocity => _velocity;
   set velocity(Vector2 velocity) {
@@ -141,9 +142,9 @@ mixin Movement on GameComponent {
     _updateLastDirection(_velocity);
   }
 
-  void stopMove({bool forceIdle = false,bool isX = true, bool isY = true}) {
+  void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {
     if (isIdle && !forceIdle) return;
-    setZeroVelocity(isX:isX,isY :isY);
+    setZeroVelocity(isX: isX, isY: isY);
     idle();
   }
 
@@ -166,15 +167,9 @@ mixin Movement on GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (isVisible) {
-      position += lastDisplacement = onApplyVelocity(_velocity, dt);
-      dtUpdate = dt;
-      if (!lastDisplacement.isZero()) {
-        if (lastDirection == Direction.up || lastDirection == Direction.down) {
-          _requestUpdatePriority();
-        }
-        onMove(_lastSpeed, lastDisplacement, lastDirection, velocityRadAngle);
-      }
+    if (gameRef.camera.isRectOnCamera(toAbsoluteRect()) ||
+        !movementOnlyVisible) {
+      _updatePosition(dt);
     }
   }
 
@@ -273,6 +268,17 @@ mixin Movement on GameComponent {
   void _requestUpdatePriority() {
     if (hasGameRef) {
       (gameRef as BonfireGame).requestUpdatePriority();
+    }
+  }
+
+  void _updatePosition(double dt) {
+    position += lastDisplacement = onApplyVelocity(_velocity, dt);
+    dtUpdate = dt;
+    if (!lastDisplacement.isZero()) {
+      if (lastDirection == Direction.up || lastDirection == Direction.down) {
+        _requestUpdatePriority();
+      }
+      onMove(_lastSpeed, lastDisplacement, lastDirection, velocityRadAngle);
     }
   }
 }

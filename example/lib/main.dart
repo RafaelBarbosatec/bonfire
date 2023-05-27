@@ -51,7 +51,7 @@ class Menu extends StatelessWidget {
                   style: TextStyle(fontSize: 30, color: Colors.white),
                   children: [
                     TextSpan(
-                      text: '  v2.11.5',
+                      text: '  v3.0.0',
                       style: TextStyle(fontSize: 15, color: Colors.white),
                     )
                   ],

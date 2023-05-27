@@ -5,7 +5,7 @@ class PlatformSpritesheet {
         "platform/enemy-deadth.png",
         SpriteAnimationData.sequenced(
           amount: 6,
-          stepTime: 0.1,
+          stepTime: 0.08,
           textureSize: Vector2(40, 42),
         ),
       );
@@ -45,7 +45,7 @@ class PlatformSpritesheet {
 
   static Future<SpriteAnimation> get frogIdleRight {
     return Sprite.load(
-      "platform/frog/frog-jump.png",
+      "platform/frog/frog-idle.png",
       srcSize: Vector2(35, 32),
     ).then((value) {
       return SpriteAnimation.spriteList([value], stepTime: 1);
@@ -55,9 +55,10 @@ class PlatformSpritesheet {
   static Future<SpriteAnimation> get frogActionRight => SpriteAnimation.load(
         "platform/frog/frog-idle.png",
         SpriteAnimationData.sequenced(
-          amount: 4,
+          amount: 3,
           stepTime: 0.1,
           textureSize: Vector2(35, 32),
+          texturePosition: Vector2(35, 0),
         ),
       );
 

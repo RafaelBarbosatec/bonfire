@@ -68,6 +68,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   /// Callback to receive the onTapUp event from the game.
   final TapInGame? onTapUp;
 
+  @override
   final List<Force2D> globalForces;
 
   @override
