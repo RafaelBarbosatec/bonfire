@@ -7,7 +7,6 @@ class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
   final VoidCallback? onFinish;
   final VoidCallback? onStart;
   SpriteAnimation? animation;
-  bool _notifyStart = false;
 
   AnimatedObjectOnce({
     required Vector2 position,
@@ -21,7 +20,10 @@ class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
   }) {
     this.anchor = anchor;
     loader?.add(AssetToLoad(animation, (value) {
-      this.animation = value..loop = false;
+      this.animation = value;
+      this.animation?.loop = false;
+      this.animation?.onStart = onStart;
+      this.animation?.onComplete = _onFinish;
     }));
     setupLighting(lightingConfig);
     this.position = position;
@@ -32,16 +34,12 @@ class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (isVisible) {
+    if (isVisible && !isRemoving) {
       animation?.getSprite().render(
             canvas,
             size: size,
             overridePaint: paint,
           );
-    }
-    if (animation?.done() == true) {
-      onFinish?.call();
-      removeFromParent();
     }
   }
 
@@ -49,11 +47,10 @@ class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
   void update(double dt) {
     super.update(dt);
     animation?.update(dt);
-    if (animation != null && !isRemoving) {
-      if (animation?.currentIndex == 1 && !_notifyStart) {
-        _notifyStart = true;
-        onStart?.call();
-      }
-    }
+  }
+
+  void _onFinish() {
+    onFinish?.call();
+    removeFromParent();
   }
 }
