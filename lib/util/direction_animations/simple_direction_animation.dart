@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/sprite_animation_once.dart';
 
 /// Class responsible to manager animation on `SimplePlayer` and `SimpleEnemy`
 class SimpleDirectionAnimation {
@@ -30,9 +31,7 @@ class SimpleDirectionAnimation {
 
   SpriteAnimation? _current;
   SimpleAnimationEnum? _currentType;
-  AnimatedObjectOnce? _fastAnimation;
-  Vector2? _fastAnimationOffset;
-  Vector2 position = Vector2.zero();
+  SpriteAnimationOnce? _fastAnimation;
   Vector2 size = Vector2.zero();
 
   bool runToTheEndFastAnimation = false;
@@ -298,18 +297,16 @@ class SimpleDirectionAnimation {
     Vector2? size,
     Vector2? offset,
   }) async {
-    _fastAnimationOffset = offset;
     runToTheEndFastAnimation = runToTheEnd;
     bool lastFlipX = isFlipHorizontally;
     bool lastFlipY = isFlipVertically;
-    _fastAnimation = AnimatedObjectOnce(
-      position: position,
+    _fastAnimation = SpriteAnimationOnce(
       size: size ?? this.size,
-      animation: animation,
+      position: offset,
+      animation: await animation,
       onStart: onStart,
       onFinish: () {
         onFinish?.call();
-        _fastAnimation?.onRemove();
         _fastAnimation = null;
         if (!useCompFlip) {
           isFlipHorizontally = lastFlipX;
@@ -321,11 +318,6 @@ class SimpleDirectionAnimation {
       isFlipVertically = flipY;
       isFlipHorizontally = flipX;
     }
-
-    if (gameRef != null) {
-      _fastAnimation?.gameRef = gameRef!;
-    }
-    await _fastAnimation?.onLoad();
   }
 
   /// Method used to register new animation in others
@@ -347,7 +339,10 @@ class SimpleDirectionAnimation {
       canvas.translate(-center.x, -center.y);
     }
     if (_fastAnimation != null) {
-      _fastAnimation?.render(canvas);
+      _fastAnimation?.render(
+        canvas,
+        overridePaint: paint,
+      );
     } else {
       _current?.getSprite().render(
             canvas,
@@ -362,16 +357,10 @@ class SimpleDirectionAnimation {
 
   void update(
     double dt,
-    Vector2 position,
     Vector2 size,
   ) {
-    this.position = position;
     this.size = size;
     if (_playing) {
-      _fastAnimation?.position = position;
-      if (_fastAnimationOffset != null) {
-        _fastAnimation?.position += _fastAnimationOffset!;
-      }
       _fastAnimation?.update(dt);
       _current?.update(dt);
     }
