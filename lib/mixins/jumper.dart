@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 
-enum JumperDirectionEnum {
+enum JumpingStateEnum {
   up,
   down,
   idle,
@@ -10,9 +10,9 @@ mixin Jumper on Movement, BlockMovementCollision {
   bool jumping = false;
   int _maxJump = 1;
   int _currentJumps = 0;
-  JumperDirectionEnum? _lastDirectionJump = JumperDirectionEnum.idle;
+  JumpingStateEnum? _lastDirectionJump = JumpingStateEnum.idle;
 
-  void onJump(JumperDirectionEnum direction) {}
+  void onJump(JumpingStateEnum direction) {}
 
   void setupJumper({int maxJump = 1}) {
     _maxJump = maxJump;
@@ -38,7 +38,7 @@ mixin Jumper on Movement, BlockMovementCollision {
   }
 
   @override
-  void update(double dt) { 
+  void update(double dt) {
     super.update(dt);
     if (!jumping) {
       jumping = lastDisplacement.y.abs() > 1;
@@ -47,15 +47,15 @@ mixin Jumper on Movement, BlockMovementCollision {
   }
 
   void _notifyJump() {
-    JumperDirectionEnum newDirection;
+    JumpingStateEnum newDirection;
     if (jumping) {
       if (lastDisplacement.y > 0) {
-        newDirection = JumperDirectionEnum.down;
+        newDirection = JumpingStateEnum.down;
       } else {
-        newDirection = JumperDirectionEnum.up;
+        newDirection = JumpingStateEnum.up;
       }
     } else {
-      newDirection = JumperDirectionEnum.idle;
+      newDirection = JumpingStateEnum.idle;
     }
     if (newDirection != _lastDirectionJump) {
       _lastDirectionJump = newDirection;

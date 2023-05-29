@@ -55,10 +55,9 @@ class PlatformSpritesheet {
   static Future<SpriteAnimation> get frogActionRight => SpriteAnimation.load(
         "platform/frog/frog-idle.png",
         SpriteAnimationData.sequenced(
-          amount: 3,
+          amount: 4,
           stepTime: 0.1,
           textureSize: Vector2(35, 32),
-          texturePosition: Vector2(35, 0),
         ),
       );
 

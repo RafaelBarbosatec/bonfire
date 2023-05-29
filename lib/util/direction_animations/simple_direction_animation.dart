@@ -31,10 +31,9 @@ class SimpleDirectionAnimation {
   SpriteAnimation? _current;
   SimpleAnimationEnum? _currentType;
   AnimatedObjectOnce? _fastAnimation;
-  Vector2 _fastAnimationOffset = Vector2.zero();
+  Vector2? _fastAnimationOffset;
   Vector2 position = Vector2.zero();
   Vector2 size = Vector2.zero();
-  final Vector2 _zero = Vector2.zero();
 
   bool runToTheEndFastAnimation = false;
 
@@ -287,32 +286,6 @@ class SimpleDirectionAnimation {
 
   bool containOther(String key) => others.containsKey(key);
 
-  /// Method used to play animation once time specific animation registred in `others`
-  Future playOnceOther(
-    String key, {
-    VoidCallback? onFinish,
-    VoidCallback? onStart,
-    bool runToTheEnd = false,
-    bool flipX = false,
-    bool flipY = false,
-    bool useCompFlip = false,
-    Vector2? size,
-    Vector2? offset,
-  }) async {
-    if (others.containsKey(key) == true) {
-      return playOnce(
-        others[key]!,
-        onFinish: onFinish,
-        onStart: onStart,
-        runToTheEnd: runToTheEnd,
-        flipX: flipX,
-        useCompFlip: useCompFlip,
-        size: size,
-        offset: offset,
-      );
-    }
-  }
-
   /// Method used to play animation once time
   Future playOnce(
     FutureOr<SpriteAnimation> animation, {
@@ -325,13 +298,12 @@ class SimpleDirectionAnimation {
     Vector2? size,
     Vector2? offset,
   }) async {
-    _fastAnimationOffset = offset ?? Vector2.zero();
+    _fastAnimationOffset = offset;
     runToTheEndFastAnimation = runToTheEnd;
     bool lastFlipX = isFlipHorizontally;
     bool lastFlipY = isFlipVertically;
-    _fastAnimation?.onRemove();
     _fastAnimation = AnimatedObjectOnce(
-      position: position + _fastAnimationOffset,
+      position: position,
       size: size ?? this.size,
       animation: animation,
       onStart: onStart,
@@ -397,8 +369,8 @@ class SimpleDirectionAnimation {
     this.size = size;
     if (_playing) {
       _fastAnimation?.position = position;
-      if (_fastAnimationOffset != _zero) {
-        _fastAnimation?.position += _fastAnimationOffset;
+      if (_fastAnimationOffset != null) {
+        _fastAnimation?.position += _fastAnimationOffset!;
       }
       _fastAnimation?.update(dt);
       _current?.update(dt);

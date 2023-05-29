@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/mixins/jumper.dart';
 import 'package:example/platform/fox_player.dart';
 import 'package:example/platform/platform_spritesheet.dart';
 
 class FrogEnemy extends PlatformEnemy with HandleForces {
-  late ShapeHitbox _shapeHitbox;
   FrogEnemy({
     required Vector2 position,
   }) : super(
@@ -25,8 +25,13 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   @override
   bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
     if (other is FoxPlayer && isDead) return false;
+    return super.onBlockMovement(intersectionPoints, other);
+  }
+
+  @override
+  void onBlockedMovement(PositionComponent other, Direction? direction) {
     if (other is FoxPlayer) {
-      if (other.bottom < _shapeHitbox.absolutePosition.y + 5) {
+      if (direction == Direction.up) {
         if (!isDead) {
           other.jump(speed: 120, force: true);
           die();
@@ -35,7 +40,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
         other.die();
       }
     }
-    return super.onBlockMovement(intersectionPoints, other);
+    super.onBlockedMovement(other, direction);
   }
 
   @override
@@ -51,7 +56,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   @override
   void update(double dt) {
     super.update(dt);
-    if (checkInterval('jump', 5000, dt) && !isDead) {
+    if (checkInterval('jump', 5000, dt) && !isDead && isVisible) {
       animation?.playOnce(
         PlatformSpritesheet.frogActionRight,
         flipX: lastDirectionHorizontal == Direction.left,
@@ -64,15 +69,20 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
         },
       );
     }
-    if (!jumping) {
+  }
+
+  @override
+  void onJump(JumpingStateEnum direction) {
+    if (direction == JumpingStateEnum.idle) {
       stopMove(isY: false);
     }
+    super.onJump(direction);
   }
 
   @override
   Future<void> onLoad() {
     add(
-      _shapeHitbox = RectangleHitbox(
+      RectangleHitbox(
         size: size / 2,
         position: Vector2(size.x / 4, size.y / 2),
         isSolid: true,
