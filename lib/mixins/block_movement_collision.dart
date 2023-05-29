@@ -16,6 +16,11 @@ mixin BlockMovementCollision on Movement {
     return true;
   }
 
+  void onBlockedMovement(
+    PositionComponent other,
+    Direction? direction,
+  ) {}
+
   Vector2 midPoint = Vector2.zero();
 
   @override
@@ -88,6 +93,7 @@ mixin BlockMovementCollision on Movement {
           isX: reverseDisplacement.x.abs() > 0,
           isY: reverseDisplacement.y.abs() > 0,
         );
+        onBlockedMovement(other, direction);
       }
 
       super.onCollision(intersectionPoints, other);
@@ -148,13 +154,13 @@ mixin BlockMovementCollision on Movement {
     return null;
   }
 
-  Direction _getHorizontalDirection(Vector2 diffCenter) {
-    return (diffCenter.x > 0 ? Direction.left : Direction.right);
-  }
+  // Direction _getHorizontalDirection(Vector2 diffCenter) {
+  //   return (diffCenter.x > 0 ? Direction.left : Direction.right);
+  // }
 
-  Direction _getVerticalDirection(Vector2 diffCenter) {
-    return (diffCenter.y > 0 ? Direction.up : Direction.down);
-  }
+  // Direction _getVerticalDirection(Vector2 diffCenter) {
+  //   return (diffCenter.y > 0 ? Direction.up : Direction.down);
+  // }
 
   // @override
   // void render(Canvas canvas) {

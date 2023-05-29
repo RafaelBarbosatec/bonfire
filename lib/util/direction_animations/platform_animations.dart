@@ -34,9 +34,3 @@ class PlatformAnimations {
   });
 }
 
-enum JumpAnimationsEnum {
-  jumpUpRight,
-  jumpUpLeft,
-  jumpDownRight,
-  jumpDownLeft,
-}
