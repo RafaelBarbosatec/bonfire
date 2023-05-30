@@ -2,6 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/platform/fox_player.dart';
 import 'package:example/platform/frog_enemy.dart';
 import 'package:example/platform/gem_decoration.dart';
+import 'package:example/platform/platform_game_controller.dart';
 import 'package:flutter/material.dart';
 
 class PlatformGame extends StatefulWidget {
@@ -39,6 +40,7 @@ class _PlatformGameState extends State<PlatformGame> {
           ),
         ],
       ),
+      components: [PlatformGameController()],
       backgroundColor: const Color(0xFF2fbdff),
       globalForces: [
         AccelerationForce2D(

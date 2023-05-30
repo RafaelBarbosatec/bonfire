@@ -37,6 +37,29 @@ class FoxPlayer extends PlatformPlayer with HandleForces {
     super.joystickAction(event);
   }
 
+  bool isOnTrunk = false;
+
+  @override
+  bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
+    if (other is TileWithCollision && other.type == 'tree_trunk') {
+      if (lastDirectionVertical == Direction.up && !isOnTrunk) {
+        isOnTrunk = true;
+      }
+    }
+    if (isOnTrunk) {
+      return false;
+    }
+    return super.onBlockMovement(intersectionPoints, other);
+  }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    if (other is TileWithCollision && other.type == 'tree_trunk' && isOnTrunk) {
+      isOnTrunk = false;
+    }
+    super.onCollisionEnd(other);
+  }
+
   @override
   Future<void> onLoad() {
     add(

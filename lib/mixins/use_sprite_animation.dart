@@ -26,7 +26,6 @@ mixin UseSpriteAnimation on GameComponent {
   /// Size animation. if null use component size
   Vector2? animationSize;
   SpriteAnimationOnce? _fastAnimation;
-  final Vector2 _fastAnimOffset = Vector2.zero();
   bool _playing = true;
 
   @override
