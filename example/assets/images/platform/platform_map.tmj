@@ -29,7 +29,6 @@
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
          "height":24,
          "id":2,
-         "locked":true,
          "name":"layer2",
          "opacity":1,
          "type":"tilelayer",
@@ -65,6 +64,7 @@
             79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 243, 243, 243, 243, 243, 243, 243, 243, 243, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 504, 505, 529, 530, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79],
          "height":24,
          "id":1,
+         "locked":true,
          "name":"layer1",
          "opacity":1,
          "type":"tilelayer",
@@ -76,6 +76,7 @@
         {
          "draworder":"topdown",
          "id":5,
+         "locked":true,
          "name":"enemy",
          "objects":[
                 {
@@ -86,8 +87,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":35,
-                 "x":457,
-                 "y":56.5
+                 "x":453.504229881843,
+                 "y":54.4025379291058
                 }, 
                 {
                  "class":"",
@@ -99,6 +100,260 @@
                  "width":35,
                  "x":367.5,
                  "y":280.5
+                }, 
+                {
+                 "class":"",
+                 "height":35,
+                 "id":3,
+                 "name":"frog",
+                 "rotation":0,
+                 "visible":true,
+                 "width":35,
+                 "x":178,
+                 "y":87.5
+                }, 
+                {
+                 "class":"",
+                 "height":35,
+                 "id":4,
+                 "name":"frog",
+                 "rotation":0,
+                 "visible":true,
+                 "width":35,
+                 "x":189,
+                 "y":264
+                }, 
+                {
+                 "class":"",
+                 "height":35,
+                 "id":5,
+                 "name":"frog",
+                 "rotation":0,
+                 "visible":true,
+                 "width":35,
+                 "x":542,
+                 "y":281.5
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":6,
+         "locked":true,
+         "name":"gem",
+         "objects":[
+                {
+                 "class":"",
+                 "height":13,
+                 "id":6,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":593,
+                 "y":81
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":7,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":624.720478221352,
+                 "y":298.436901349367
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":8,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":495.300845976369,
+                 "y":70.0126896455289
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":9,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":534.186464378103,
+                 "y":92.8856184017339
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":10,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":696.548101796826,
+                 "y":150.110501293435
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":11,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":696.548101796826,
+                 "y":280.153149688876
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":12,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":696.548101796826,
+                 "y":213.733517443893
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":13,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":502.183283227295,
+                 "y":275.259071523457
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":14,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":418.284800391526,
+                 "y":282.250611759771
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":15,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":330.191393413969,
+                 "y":278.754841641614
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":16,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":273.559917499825,
+                 "y":273.860763476194
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":17,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":226.716597916521,
+                 "y":272.462455428931
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":18,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":80.5934069775572,
+                 "y":242.398832412781
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":19,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":105.063797804656,
+                 "y":193.458050758582
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":20,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":88.983255261134,
+                 "y":115.152800111865
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":21,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":221.12336572747,
+                 "y":96.2756414738167
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":22,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":281.250611759771,
+                 "y":96.2756414738167
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":23,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":344.873627910229,
+                 "y":85.7883311193456
+                }, 
+                {
+                 "class":"",
+                 "height":13,
+                 "id":24,
+                 "name":"gem",
+                 "rotation":0,
+                 "visible":true,
+                 "width":15,
+                 "x":429.471264769629,
+                 "y":66.9111724812976
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -106,8 +361,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":6,
- "nextobjectid":3,
+ "nextlayerid":7,
+ "nextobjectid":25,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.0",
