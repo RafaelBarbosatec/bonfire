@@ -8,11 +8,14 @@ enum JumpingStateEnum {
 
 mixin Jumper on Movement, BlockMovementCollision {
   bool jumping = false;
+  JumpingStateEnum jumpingDirection = JumpingStateEnum.idle;
   int _maxJump = 1;
   int _currentJumps = 0;
   JumpingStateEnum? _lastDirectionJump = JumpingStateEnum.idle;
 
-  void onJump(JumpingStateEnum direction) {}
+  void onJump(JumpingStateEnum direction) {
+    jumpingDirection = direction;
+  }
 
   void setupJumper({int maxJump = 1}) {
     _maxJump = maxJump;

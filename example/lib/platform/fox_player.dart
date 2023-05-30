@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/mixins/jumper.dart';
 import 'package:example/platform/platform_spritesheet.dart';
 import 'package:flutter/services.dart';
 
@@ -42,7 +43,7 @@ class FoxPlayer extends PlatformPlayer with HandleForces {
   @override
   bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
     if (other is TileWithCollision && other.type == 'tree_trunk') {
-      if (lastDirectionVertical == Direction.up && !isOnTrunk) {
+      if ((jumpingDirection == JumpingStateEnum.up) && !isOnTrunk) {
         isOnTrunk = true;
       }
     }
