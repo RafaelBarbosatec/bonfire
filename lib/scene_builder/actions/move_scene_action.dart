@@ -19,23 +19,31 @@ import 'package:bonfire/bonfire.dart';
 class MoveComponentSceneAction<T extends Movement> extends SceneAction {
   final T component;
   final Vector2 newPosition;
-  final double? speed;
+
+  Vector2 _diffPosition = Vector2.zero();
 
   MoveComponentSceneAction({
     dynamic id,
     required this.component,
     required this.newPosition,
-    this.speed,
   }) : super(id);
 
   @override
   bool runAction(double dt, BonfireGameInterface game) {
-    Vector2 diffPosition = newPosition - component.position;
-    if (diffPosition.x.abs() < component.speed &&
-        diffPosition.y.abs() < component.speed) {
+    var diffPosition = newPosition - component.position;
+
+    var dtSpeed = component.speed * dt;
+    if (diffPosition.x.abs() < dtSpeed && diffPosition.y.abs() < dtSpeed) {
+      component.stopMove();
       return true;
     }
 
+    var d = _diffPosition - diffPosition;
+    if (d.isZero()) {
+      component.stopMove();
+      return true;
+    }
+    _diffPosition = diffPosition;
     var radAngle = atan2(diffPosition.y, diffPosition.x);
     component.moveFromAngle(radAngle);
     return false;

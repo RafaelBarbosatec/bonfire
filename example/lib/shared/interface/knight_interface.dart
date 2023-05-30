@@ -152,7 +152,6 @@ class KnightInterface extends GameInterface {
           MoveComponentSceneAction(
             component: enemy,
             newPosition: enemy.position.clone()..add(Vector2(-40, -10)),
-            speed: 20,
           ),
           CameraSceneAction.target(gameRef.player!, zoom: initialZoom),
           AwaitCallbackSceneAction(
@@ -163,13 +162,11 @@ class KnightInterface extends GameInterface {
           MoveComponentSceneAction(
             component: gameRef.player!,
             newPosition: gameRef.player!.position.clone()..add(Vector2(0, -20)),
-            speed: 100,
           ),
           MoveComponentSceneAction(
             component: gameRef.player!,
             newPosition: gameRef.player!.position.clone()
               ..add(Vector2(50, -20)),
-            speed: 100,
           ),
           CameraSceneAction.target(enemy),
           CameraSceneAction.position(Vector2(200, 200)),
