@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/platform/fox_player.dart';
 import 'package:example/platform/frog_enemy.dart';
+import 'package:example/platform/gem_decoration.dart';
 import 'package:flutter/material.dart';
 
 class PlatformGame extends StatefulWidget {
@@ -18,6 +19,9 @@ class _PlatformGameState extends State<PlatformGame> {
         'platform/platform_map.tmj',
         objectsBuilder: {
           'frog': (properties) => FrogEnemy(
+                position: properties.position,
+              ),
+          'gem': (properties) => GemDecoration(
                 position: properties.position,
               ),
         },

@@ -80,4 +80,22 @@ class PlatformSpritesheet {
       return SpriteAnimation.spriteList([value], stepTime: 1);
     });
   }
+
+  static Future<SpriteAnimation> get gem => SpriteAnimation.load(
+        "platform/gem.png",
+        SpriteAnimationData.sequenced(
+          amount: 5,
+          stepTime: 0.1,
+          textureSize: Vector2(15, 13),
+        ),
+      );
+
+  static Future<SpriteAnimation> get itemFeedback => SpriteAnimation.load(
+        "platform/item-feedback.png",
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          stepTime: 0.08,
+          textureSize: Vector2(32, 32),
+        ),
+      );
 }

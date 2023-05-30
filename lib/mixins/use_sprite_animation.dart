@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/objects/animated_object_once.dart';
+import 'package:bonfire/util/sprite_animation_once.dart';
 import 'package:flame/components.dart';
 
 ///
@@ -25,17 +25,17 @@ mixin UseSpriteAnimation on GameComponent {
 
   /// Size animation. if null use component size
   Vector2? animationSize;
-  AnimatedObjectOnce? _fastAnimation;
-  Vector2 _fastAnimOffset = Vector2.zero();
+  SpriteAnimationOnce? _fastAnimation;
+  final Vector2 _fastAnimOffset = Vector2.zero();
   bool _playing = true;
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
 
-    if (isVisible) {
+    if (isVisible && !isRemoving) {
       if (_fastAnimation != null) {
-        _fastAnimation?.render(canvas);
+        _fastAnimation?.render(canvas, overridePaint: paint);
       } else {
         animation?.getSprite().render(
               canvas,
@@ -51,18 +51,7 @@ mixin UseSpriteAnimation on GameComponent {
   void update(double dt) {
     super.update(dt);
     if (isVisible && _playing) {
-      if (_fastAnimation != null) {
-        _fastAnimation?.position = _fastAnimOffset;
-        _fastAnimation?.paint = paint;
-        if (isFlippedHorizontally != _fastAnimation!.isFlippedHorizontally) {
-          _fastAnimation!.flipHorizontallyAroundCenter();
-        }
-        if (isFlippedVertically != _fastAnimation!.isFlippedVertically) {
-          _fastAnimation!.flipVerticallyAroundCenter();
-        }
-        _fastAnimation?.update(dt);
-      }
-
+      _fastAnimation?.update(dt);
       animation?.update(dt);
     }
   }
@@ -75,20 +64,16 @@ mixin UseSpriteAnimation on GameComponent {
     VoidCallback? onFinish,
     VoidCallback? onStart,
   }) async {
-    _fastAnimOffset = offset ?? Vector2.zero();
-    _fastAnimation?.onRemove();
-    _fastAnimation = AnimatedObjectOnce(
-      position: _fastAnimOffset,
+    _fastAnimation = SpriteAnimationOnce(
+      position: offset,
       size: size ?? this.size,
-      animation: animation,
+      animation: await animation,
       onStart: onStart,
       onFinish: () {
-        onFinish?.call();
-        _fastAnimation?.onRemove();
         _fastAnimation = null;
+        onFinish?.call();
       },
-    )..gameRef = gameRef;
-    await _fastAnimation?.onLoad();
+    );
   }
 
   void pauseAnimation() => _playing = false;
