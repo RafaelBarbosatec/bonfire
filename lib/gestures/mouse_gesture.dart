@@ -1,6 +1,4 @@
-import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:flame/components.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:flutter/gestures.dart';
 
 enum MouseButton { left, right, middle, unknow }

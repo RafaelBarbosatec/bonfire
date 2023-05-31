@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
 
 ///
@@ -67,70 +65,74 @@ class LPCSpriteSheetLoader {
   static Future<SimpleDirectionAnimation> geSpriteSheet({
     CustomStatus status = const CustomStatus(),
   }) async {
-    Image imagePlayerBase = await Flame.images.load(_getPathBody(status.body));
+    final composition = ImageComposition();
+    Image imageBody = await Flame.images.load(_getPathBody(status.body));
+    composition.add(imageBody, Vector2.zero());
 
     if (status.withFeet) {
       Image imageFeet = await Flame.images.load('lpc/feet/1.png');
-      imagePlayerBase = await imagePlayerBase.overlap(imageFeet);
+      composition.add(imageFeet, Vector2.zero());
     }
 
     if (status.withHelm) {
       Image imageHelm = await Flame.images.load('lpc/head/1.png');
-      imagePlayerBase = await imagePlayerBase.overlap(imageHelm);
+      composition.add(imageHelm, Vector2.zero());
     }
 
     if (status.withLeg) {
       Image imageEquip = await Flame.images.load('lpc/leg/1.png');
-      imagePlayerBase = await imagePlayerBase.overlap(imageEquip);
+      composition.add(imageEquip, Vector2.zero());
     }
 
     if (status.withChest) {
       Image imageEquip = await Flame.images.load('lpc/torco/chest.png');
-      imagePlayerBase = await imagePlayerBase.overlap(imageEquip);
+      composition.add(imageEquip, Vector2.zero());
     }
 
     if (status.withArms) {
       Image imageEquip = await Flame.images.load('lpc/torco/arms.png');
-      imagePlayerBase = await imagePlayerBase.overlap(imageEquip);
+      composition.add(imageEquip, Vector2.zero());
     }
 
     if (status.withGloves) {
       Image imageEquip = await Flame.images.load('lpc/gloves/2.png');
-      imagePlayerBase = await imagePlayerBase.overlap(imageEquip);
+      composition.add(imageEquip, Vector2.zero());
     }
 
     Image? imageHair = await _getHair(status.hair);
     if (imageHair != null && !status.withHelm) {
-      imagePlayerBase = await imagePlayerBase.overlap(imageHair);
+      composition.add(imageHair, Vector2.zero());
     }
 
+    Image image = await composition.compose();
+
     return SimpleDirectionAnimation(
-      idleRight: imagePlayerBase.getAnimation(
+      idleRight: image.getAnimation(
         size: size,
         count: 1,
         startDy: (size.y * 11).toInt(),
       ),
-      idleUp: imagePlayerBase.getAnimation(
+      idleUp: image.getAnimation(
         size: size,
         count: 1,
         startDy: (size.y * 8).toInt(),
       ),
-      idleDown: imagePlayerBase.getAnimation(
+      idleDown: image.getAnimation(
         size: size,
         count: 1,
         startDy: (size.y * 10).toInt(),
       ),
-      runRight: imagePlayerBase.getAnimation(
+      runRight: image.getAnimation(
         size: size,
         count: 9,
         startDy: (size.y * 11).toInt(),
       ),
-      runUp: imagePlayerBase.getAnimation(
+      runUp: image.getAnimation(
         size: size,
         count: 9,
         startDy: (size.y * 8).toInt(),
       ),
-      runDown: imagePlayerBase.getAnimation(
+      runDown: image.getAnimation(
         size: size,
         count: 9,
         startDy: (size.y * 10).toInt(),

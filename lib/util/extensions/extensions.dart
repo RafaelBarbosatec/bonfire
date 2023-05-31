@@ -18,7 +18,7 @@ export 'npc/npc_extensions.dart';
 export 'player/player_extensions.dart';
 export 'player/rotation_player_extensions.dart';
 
-extension ImageExtension on Image {
+extension BonfireImageExtension on Image {
   SpriteAnimation getAnimation({
     required Vector2 size,
     required double count,
@@ -57,6 +57,7 @@ extension ImageExtension on Image {
   }
 
   /// Do merge image. Overlaying the images
+  /// @deprecated Use [ImageComposition]
   Future<Image> overlap(Image other) {
     PictureRecorder recorder = PictureRecorder();
     final paint = Paint();
@@ -88,10 +89,6 @@ extension ImageExtension on Image {
 extension OffSetExt on Offset {
   Offset copyWith({double? x, double? y}) {
     return Offset(x ?? dx, y ?? dy);
-  }
-
-  Vector2 toVector2() {
-    return Vector2(dx, dy);
   }
 
   Offset rotate(double angle, Offset center) {

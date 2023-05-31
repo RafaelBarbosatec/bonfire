@@ -114,14 +114,12 @@ class Menu extends StatelessWidget {
                       _navTo(context, const PlatformGame());
                     });
                   }),
-                  if (!kIsWeb) ...[
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    _buildButton(context, 'Dynamic spriteSheet', () {
-                      _navTo(context, const LPCGame());
-                    }),
-                  ]
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  _buildButton(context, 'ImageComposition', () {
+                    _navTo(context, const LPCGame());
+                  }),
                 ],
               ),
             )
