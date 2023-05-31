@@ -63,8 +63,8 @@ class FoxPlayer extends PlatformPlayer with HandleForces {
   @override
   Future<void> onLoad() {
     add(
-      RectangleHitbox(
-        size: size / 2,
+      CircleHitbox(
+        radius: size.x / 4,
         position: Vector2(size.x / 4, size.y / 2),
         isSolid: true,
       ),
