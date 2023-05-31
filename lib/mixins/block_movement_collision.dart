@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:bonfire/bonfire.dart';
 
 /// Mixin responsible for adding collision
 mixin BlockMovementCollision on Movement {
   final Map<String, Direction> _directionsBlockedCache = {};
+
+  Rect? _shapeRectNormalized;
+  
   final TriangleShape _triangleShape = TriangleShape(
     Vector2.zero(),
     Vector2.zero(),
@@ -32,20 +37,18 @@ mixin BlockMovementCollision on Movement {
       stopOtherMovement = other.onBlockMovement(intersectionPoints, this);
     }
     if (stopMovement && stopOtherMovement && other is! Sensor) {
-      var shapers = children.whereType<ShapeHitbox>();
-
-      if (shapers.length == 1) {
+      if (_shapeRectNormalized != null) {
         var reverseDisplacement = lastDisplacement.clone();
-        var shapeRect = shapers.first.toAbsoluteRect();
 
         midPoint = intersectionPoints.reduce(
           (value, element) => value + element,
         );
         midPoint /= intersectionPoints.length.toDouble();
-        midPoint.lerp(shapeRect.center.toVector2(), 0.2);
+        midPoint = midPoint - position;
+        midPoint.lerp(_shapeRectNormalized!.center.toVector2(), 0.2);
 
         var direction = _getDirectionCollision(
-          shapeRect,
+          _shapeRectNormalized!,
           midPoint,
         );
 
@@ -68,24 +71,6 @@ mixin BlockMovementCollision on Movement {
           }
         }
 
-        // var diffCenter = (shape.absoluteCenter - midPoint);
-        // var yAbs = diffCenter.y.abs();
-        // var xAbs = diffCenter.x.abs();
-
-        // if (yAbs > xAbs) {
-        //   if (_getVerticalDirection(diffCenter) == lastDirectionVertical) {
-        //     reverseDisplacement = reverseDisplacement.copyWith(x: 0);
-        //   } else {
-        //     reverseDisplacement.setZero();
-        //   }
-        // } else if (yAbs < xAbs) {
-        //   if (_getHorizontalDirection(diffCenter) == lastDirectionHorizontal) {
-        //     reverseDisplacement = reverseDisplacement.copyWith(y: 0);
-        //   } else {
-        //     reverseDisplacement.setZero();
-        //   }
-        // }
-
         position += reverseDisplacement * -1;
         stopFromCollision(
           isX: reverseDisplacement.x.abs() > 0,
@@ -99,7 +84,7 @@ mixin BlockMovementCollision on Movement {
   }
 
   Direction? _getDirectionCollision(Rect rect, Vector2 point) {
-    String key = rect.toString() + point.toString();
+    String key = rect.toString() + point.normalized().toString();
     if (_directionsBlockedCache.containsKey(key)) {
       return _directionsBlockedCache[key];
     }
@@ -159,27 +144,13 @@ mixin BlockMovementCollision on Movement {
     return null;
   }
 
-  // Direction _getHorizontalDirection(Vector2 diffCenter) {
-  //   return (diffCenter.x > 0 ? Direction.left : Direction.right);
-  // }
-
-  // Direction _getVerticalDirection(Vector2 diffCenter) {
-  //   return (diffCenter.y > 0 ? Direction.up : Direction.down);
-  // }
-
-  // @override
-  // void render(Canvas canvas) {
-  //   super.render(canvas);
-  //   canvas.save();
-  //   canvas.translate(-x, -y);
-  //   canvas.drawPoints(
-  //       PointMode.points,
-  //       [midPoint.toOffset()],
-  //       Paint()
-  //         ..color = Colors.red
-  //         ..strokeWidth = 2);
-  //   canvas.restore();
-  // }
+  @override
+  FutureOr<void> add(Component component) {
+    if (component is ShapeHitbox) {
+      _shapeRectNormalized = component.toRect();
+    }
+    return super.add(component);
+  }
 }
 
 class TriangleShape {

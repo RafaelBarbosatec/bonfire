@@ -42,7 +42,7 @@ class FoxPlayer extends PlatformPlayer with HandleForces {
   @override
   bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
     if (other is TileWithCollision && other.type == 'tree_trunk') {
-      if ((jumpingState == JumpingStateEnum.up) && !isOnTrunk) {
+      if ((jumpingState == JumpingStateEnum.up)) {
         isOnTrunk = true;
       }
     }
