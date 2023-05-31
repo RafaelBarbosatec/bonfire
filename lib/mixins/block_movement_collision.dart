@@ -7,7 +7,7 @@ mixin BlockMovementCollision on Movement {
   final Map<String, Direction> _directionsBlockedCache = {};
 
   Rect? _shapeRectNormalized;
-  
+
   final TriangleShape _triangleShape = TriangleShape(
     Vector2.zero(),
     Vector2.zero(),
@@ -52,24 +52,10 @@ mixin BlockMovementCollision on Movement {
           midPoint,
         );
 
-        if (direction != null) {
-          if ((direction == Direction.down || direction == Direction.up) &&
-              reverseDisplacement.x.abs() > 0) {
-            if (direction == lastDirectionVertical) {
-              reverseDisplacement = reverseDisplacement.copyWith(x: 0);
-            } else {
-              reverseDisplacement.setZero();
-            }
-          } else if ((direction == Direction.left ||
-                  direction == Direction.right) &&
-              reverseDisplacement.y.abs() > 0) {
-            if (direction == lastDirectionHorizontal) {
-              reverseDisplacement = reverseDisplacement.copyWith(y: 0);
-            } else {
-              reverseDisplacement.setZero();
-            }
-          }
-        }
+        reverseDisplacement = _adjustDisplacement(
+          reverseDisplacement,
+          direction,
+        );
 
         position += reverseDisplacement * -1;
         stopFromCollision(
@@ -150,6 +136,31 @@ mixin BlockMovementCollision on Movement {
       _shapeRectNormalized = component.toRect();
     }
     return super.add(component);
+  }
+
+  Vector2 _adjustDisplacement(
+    Vector2 reverseDisplacement,
+    Direction? direction,
+  ) {
+    if (direction != null) {
+      if ((direction == Direction.down || direction == Direction.up) &&
+          reverseDisplacement.x.abs() > 0) {
+        if (direction == lastDirectionVertical) {
+          reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+        } else {
+          reverseDisplacement.setZero();
+        }
+      } else if ((direction == Direction.left ||
+              direction == Direction.right) &&
+          reverseDisplacement.y.abs() > 0) {
+        if (direction == lastDirectionHorizontal) {
+          reverseDisplacement = reverseDisplacement.copyWith(y: 0);
+        } else {
+          reverseDisplacement.setZero();
+        }
+      }
+    }
+    return reverseDisplacement;
   }
 }
 
