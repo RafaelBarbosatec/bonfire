@@ -8,13 +8,13 @@ enum JumpingStateEnum {
 
 mixin Jumper on Movement, BlockMovementCollision {
   bool jumping = false;
-  JumpingStateEnum jumpingDirection = JumpingStateEnum.idle;
+  JumpingStateEnum jumpingState = JumpingStateEnum.idle;
   int _maxJump = 1;
   int _currentJumps = 0;
   JumpingStateEnum? _lastDirectionJump = JumpingStateEnum.idle;
 
-  void onJump(JumpingStateEnum direction) {
-    jumpingDirection = direction;
+  void onJump(JumpingStateEnum state) {
+    jumpingState = state;
   }
 
   void setupJumper({int maxJump = 1}) {
@@ -32,7 +32,7 @@ mixin Jumper on Movement, BlockMovementCollision {
   @override
   void onBlockedMovement(PositionComponent other, Direction? direction) {
     if (jumping &&
-        lastDirectionVertical != Direction.up &&
+        lastDirectionVertical == Direction.down &&
         direction == Direction.down) {
       _currentJumps = 0;
       jumping = false;
@@ -43,8 +43,8 @@ mixin Jumper on Movement, BlockMovementCollision {
   @override
   void update(double dt) {
     super.update(dt);
-    if (!jumping) {
-      jumping = lastDisplacement.y.abs() > 1;
+    if (!jumping && lastDisplacement.y > 1) {
+      jumping = true;
     }
     _notifyJump();
   }

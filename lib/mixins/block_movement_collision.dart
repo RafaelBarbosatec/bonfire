@@ -4,6 +4,7 @@ import 'package:bonfire/bonfire.dart';
 
 /// Mixin responsible for adding collision
 mixin BlockMovementCollision on Movement {
+  final Map<String, Direction> _directionsBlockedCache = {};
   final TriangleShape _triangleShape = TriangleShape(
     Vector2.zero(),
     Vector2.zero(),
@@ -34,9 +35,9 @@ mixin BlockMovementCollision on Movement {
     }
     if (stopMovement && stopOtherMovement && other is! Sensor) {
       var shapers = children.whereType<ShapeHitbox>();
-      var reverseDisplacement = lastDisplacement.clone();
 
       if (shapers.length == 1) {
+        var reverseDisplacement = lastDisplacement.clone();
         var shape = shapers.first;
         var shapeRect = shape.toAbsoluteRect();
 
@@ -88,11 +89,13 @@ mixin BlockMovementCollision on Movement {
         //   }
         // }
 
-        position += reverseDisplacement * -1;
-        stopFromCollision(
-          isX: reverseDisplacement.x.abs() > 0,
-          isY: reverseDisplacement.y.abs() > 0,
-        );
+        if (!reverseDisplacement.isZero()) {
+          position += reverseDisplacement * -1;
+          stopFromCollision(
+            isX: reverseDisplacement.x.abs() > 0,
+            isY: reverseDisplacement.y.abs() > 0,
+          );
+        }
         onBlockedMovement(other, direction);
       }
 
@@ -101,9 +104,12 @@ mixin BlockMovementCollision on Movement {
   }
 
   Direction? _getDirectionCollision(Rect rect, Vector2 point) {
+    String key = rect.toString() + point.toString();
+    if (_directionsBlockedCache.containsKey(key)) {
+      return _directionsBlockedCache[key];
+    }
     if (point.y > rect.center.dy) {
       // bottom
-
       _triangleShape.updatePoints(
         Vector2(rect.right, rect.bottom),
         Vector2(rect.left, rect.bottom),
@@ -111,6 +117,7 @@ mixin BlockMovementCollision on Movement {
       );
 
       if (_triangleShape.containPoint(point)) {
+        _directionsBlockedCache[key] = Direction.down;
         return Direction.down;
       }
     } else {
@@ -122,6 +129,7 @@ mixin BlockMovementCollision on Movement {
       );
 
       if (_triangleShape.containPoint(point)) {
+        _directionsBlockedCache[key] = Direction.up;
         return Direction.up;
       }
     }
@@ -135,6 +143,7 @@ mixin BlockMovementCollision on Movement {
         rect.center.toVector2(),
       );
       if (_triangleShape.containPoint(point)) {
+        _directionsBlockedCache[key] = Direction.left;
         return Direction.left;
       }
     } else {
@@ -147,6 +156,7 @@ mixin BlockMovementCollision on Movement {
       );
 
       if (_triangleShape.containPoint(point)) {
+        _directionsBlockedCache[key] = Direction.right;
         return Direction.right;
       }
     }
