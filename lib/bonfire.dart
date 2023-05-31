@@ -8,6 +8,7 @@ export 'package:bonfire/camera/camera_config.dart';
 export 'package:bonfire/color_filter/game_color_filter.dart';
 export 'package:bonfire/decoration/decoration.dart';
 export 'package:bonfire/decoration/decoration_with_collision.dart';
+export 'package:bonfire/forces/forces_2d.dart';
 export 'package:bonfire/game_interface/game_interface.dart';
 export 'package:bonfire/game_interface/interface_component.dart';
 export 'package:bonfire/game_interface/text_interface_component.dart';
