@@ -1,6 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/jumper.dart';
-import 'package:bonfire/mixins/jumper_animation.dart';
 
 class PlatformPlayer extends SimplePlayer
     with BlockMovementCollision, Jumper, JumperAnimation {

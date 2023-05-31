@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:example/lpc/lpc_sprite_sheet_loader.dart';
 import 'package:example/lpc/widgets/dialog_custom_character.dart';

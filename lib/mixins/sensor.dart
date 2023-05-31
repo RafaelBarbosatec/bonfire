@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/material.dart';
 
 final Color sensorColor = const Color(0xFFF44336).withOpacity(0.5);
 

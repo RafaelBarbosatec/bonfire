@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/material.dart';
 
 class BonfireUtil {
   // ignore: constant_identifier_names

@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:flame/extensions.dart';
 
 abstract class GameMap extends GameComponent {
   List<TileModel> tiles;

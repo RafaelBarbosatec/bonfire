@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/jumper.dart';
 import 'package:example/platform/fox_player.dart';
 import 'package:example/platform/platform_spritesheet.dart';
 
@@ -72,11 +71,11 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   }
 
   @override
-  void onJump(JumpingStateEnum direction) {
-    if (direction == JumpingStateEnum.idle) {
+  void onJump(JumpingStateEnum state) {
+    if (state == JumpingStateEnum.idle) {
       stopMove(isY: false);
     }
-    super.onJump(direction);
+    super.onJump(state);
   }
 
   @override

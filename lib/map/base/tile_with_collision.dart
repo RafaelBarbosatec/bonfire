@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
