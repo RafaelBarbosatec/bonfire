@@ -66,28 +66,24 @@ class Chest extends GameDecoration with TapGesture {
   void onTapCancel() {}
 
   void _addPotions() {
+    var p1 = position.translated(width * 2, height * -1.5);
     gameRef.add(
       PotionLife(
-        Vector2(
-          position.translate(width * 2, 0).x,
-          position.y - height * 2,
-        ),
+        p1,
         30,
       ),
     );
 
+    var p2 = position.translated(width * 2, height * 2);
     gameRef.add(
       PotionLife(
-        Vector2(
-          position.translate(width * 2, 0).x,
-          position.y + height * 2,
-        ),
+        p2,
         30,
       ),
     );
 
-    _addSmokeExplosion(position.translate(width * 2, 0));
-    _addSmokeExplosion(position.translate(width * 2, height * 2));
+    _addSmokeExplosion(p1);
+    _addSmokeExplosion(p2);
   }
 
   void _addSmokeExplosion(Vector2 position) {
@@ -95,7 +91,7 @@ class Chest extends GameDecoration with TapGesture {
       AnimatedObjectOnce(
         animation: CommonSpriteSheet.smokeExplosion,
         position: position,
-        size: Vector2.all(DungeonMap.tileSize),
+        size: Vector2.all(DungeonMap.tileSize * 0.5),
       ),
     );
   }

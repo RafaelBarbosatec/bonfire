@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/util/sprite_animation_once.dart';
+import 'package:bonfire/util/sprite_animation_render.dart';
 import 'package:flame/components.dart';
 
 ///
@@ -17,16 +17,21 @@ import 'package:flame/components.dart';
 /// Rafaelbarbosatec
 /// on 04/02/22
 mixin UseSpriteAnimation on GameComponent {
-  /// Animation that will be drawn on the screen.
-  SpriteAnimation? animation;
+  /// set Animation that will be drawn on the screen.
+  set animation(SpriteAnimation? animation) {
+    _animationRender = SpriteAnimationRender(
+      animation: animation,
+      size: size,
+      loop: animationIsLoop,
+      onFinish: () => aniamtionIsDone = true,
+    );
+  }
 
-  /// Offset of the render animation.
-  Vector2 animationOffset = Vector2.zero();
+  SpriteAnimationRender? _fastAnimation;
+  SpriteAnimationRender? _animationRender;
 
-  /// Size animation. if null use component size
-  Vector2? animationSize;
-  SpriteAnimationOnce? _fastAnimation;
-  bool _playing = true;
+  bool aniamtionIsDone = false;
+  bool animationIsLoop = true;
 
   @override
   void render(Canvas canvas) {
@@ -36,12 +41,10 @@ mixin UseSpriteAnimation on GameComponent {
       if (_fastAnimation != null) {
         _fastAnimation?.render(canvas, overridePaint: paint);
       } else {
-        animation?.getSprite().render(
-              canvas,
-              position: animationOffset,
-              size: animationSize ?? size,
-              overridePaint: paint,
-            );
+        _animationRender?.render(
+          canvas,
+          overridePaint: paint,
+        );
       }
     }
   }
@@ -49,9 +52,9 @@ mixin UseSpriteAnimation on GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (isVisible && _playing) {
+    if (isVisible) {
       _fastAnimation?.update(dt);
-      animation?.update(dt);
+      _animationRender?.update(dt);
     }
   }
 
@@ -63,19 +66,16 @@ mixin UseSpriteAnimation on GameComponent {
     VoidCallback? onFinish,
     VoidCallback? onStart,
   }) async {
-    _fastAnimation = SpriteAnimationOnce(
+    _fastAnimation = SpriteAnimationRender(
       position: offset,
       size: size ?? this.size,
       animation: await animation,
-      onStart: onStart,
+      loop: false,
       onFinish: () {
         _fastAnimation = null;
         onFinish?.call();
       },
     );
+    onStart?.call();
   }
-
-  void pauseAnimation() => _playing = false;
-
-  void resumeAnimation() => _playing = true;
 }

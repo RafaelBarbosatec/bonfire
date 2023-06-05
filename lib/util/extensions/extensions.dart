@@ -145,10 +145,6 @@ extension NullableExt<T> on T? {
 }
 
 extension Vector2Ext on Vector2 {
-  Vector2 translate(double x, double y) {
-    return Vector2(this.x + x, this.y + y);
-  }
-
   Vector2 copyWith({double? x, double? y}) {
     return Vector2(x ?? this.x, y ?? this.y);
   }
@@ -179,6 +175,7 @@ extension FutureSpriteAnimationExt on FutureOr<SpriteAnimation> {
             ),
             child: SpriteAnimationWidget(
               animation: data.data!,
+              animationTicker: data.data!.ticker(),
               playing: playing,
               anchor: anchor,
             ),
@@ -195,6 +192,7 @@ extension FutureSpriteAnimationExt on FutureOr<SpriteAnimation> {
       ),
       child: SpriteAnimationWidget(
         animation: this as SpriteAnimation,
+        animationTicker: (this as SpriteAnimation).ticker(),
         playing: playing,
         anchor: anchor,
       ),

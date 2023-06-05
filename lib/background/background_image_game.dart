@@ -40,7 +40,7 @@ class BackgroundImageGame extends GameBackground with UseSprite {
 
   @override
   void update(double dt) {
-    position = _parallaxOffset.translate(
+    position = _parallaxOffset.translated(
       (gameRef.camera.position.x * -1 * parallaxX),
       (gameRef.camera.position.y * -1 * parallaxY),
     );

@@ -42,7 +42,7 @@ mixin AutomaticRandomMovement on Movement {
 
         int randomNegativeX = _random.nextBool() ? -1 : 1;
         int randomNegativeY = _random.nextBool() ? -1 : 1;
-        _targetRandomMovement = position.translate(
+        _targetRandomMovement = position.translated(
           randomX.toDouble() * randomNegativeX,
           randomY.toDouble() * randomNegativeY,
         );

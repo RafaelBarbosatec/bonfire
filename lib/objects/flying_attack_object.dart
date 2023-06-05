@@ -275,7 +275,7 @@ class FlyingAttackObject extends GameComponent
         ) -
         rectConsideringCollision.center;
 
-    final positionDestroy = center.translate(diffBase.dx, diffBase.dy);
+    final positionDestroy = center.translated(diffBase.dx, diffBase.dy);
 
     if (hasGameRef) {
       gameRef.add(

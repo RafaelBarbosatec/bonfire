@@ -75,9 +75,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
   final List<GameComponent> _visibleComponents = List.empty(growable: true);
-  Iterable<ShapeHitbox> _visibleCollisions = List.empty();
+  final Iterable<ShapeHitbox> _visibleCollisions = List.empty();
   final List<GameComponent> _addLater = List.empty(growable: true);
-  late IntervalTick _interval;
+  // late IntervalTick _interval;
   late IntervalTick _intervalUpdateOder;
   late ColorFilterComponent _colorFilterComponent;
   late LightingComponent _lighting;
@@ -147,18 +147,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
     debugMode = constructionMode;
 
-    _interval = IntervalTick(
-      INTERVAL_UPDATE_CACHE,
-      tick: updateVisibleCollisionsMicrotask,
-    );
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
       tick: updateOrderPriorityMicrotask,
     );
-  }
-
-  void updateVisibleCollisionsMicrotask() {
-    scheduleMicrotask(_updateVisibleCollisions);
   }
 
   void updateOrderPriorityMicrotask() {
@@ -214,7 +206,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   void update(double dt) {
     super.update(dt);
-    _interval.update(dt);
     _intervalUpdateOder.update(dt);
   }
 
@@ -292,18 +283,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    _updateVisibleCollisions();
     camera.onGameResize(size);
-  }
-
-  void _updateVisibleCollisions() {
-    if (isLoaded) {
-      _visibleCollisions = collisionDetection.items.where(_isVisibleCollision);
-    }
-  }
-
-  bool _isVisibleCollision(ShapeHitbox element) {
-    return camera.isRectOnCamera(element.toAbsoluteRect());
   }
 
   @override

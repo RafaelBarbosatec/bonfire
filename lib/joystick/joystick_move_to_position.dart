@@ -40,7 +40,7 @@ class JoystickMoveToPosition extends JoystickController {
         double px = _startPoint.x - event.position.dx;
         double py = _startPoint.y - event.position.dy;
         gameRef.camera.target = null;
-        gameRef.camera.snapTo(_startCameraPosition.translate(px, py));
+        gameRef.camera.snapTo(_startCameraPosition.translated(px, py));
       }
     }
 

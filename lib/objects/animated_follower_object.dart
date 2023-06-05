@@ -18,14 +18,20 @@ class AnimatedFollowerObject extends GameComponent
     this.objectPriority,
   }) {
     this.size = size;
+    animationIsLoop = false;
     setupFollower(target: target, offset: positionFromTarget);
-    loader?.add(AssetToLoad(animation, (value) => this.animation = value));
+    loader?.add(
+      AssetToLoad(
+        animation,
+        (value) => this.animation = value,
+      ),
+    );
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (!loopAnimation && animation?.isLastFrame == true) {
+    if (!loopAnimation && aniamtionIsDone) {
       removeFromParent();
     }
   }

@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/sprite_animation_render.dart';
 
 class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
   final VoidCallback? onFinish;
   final VoidCallback? onStart;
-  SpriteAnimation? animation;
+  SpriteAnimationRender? animation;
 
   AnimatedObjectOnce({
     required Vector2 position,
@@ -19,12 +20,18 @@ class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
     Anchor anchor = Anchor.topLeft,
   }) {
     this.anchor = anchor;
-    loader?.add(AssetToLoad(animation, (value) {
-      this.animation = value;
-      this.animation?.loop = false;
-      this.animation?.onStart = onStart;
-      this.animation?.onComplete = _onFinish;
-    }));
+    loader?.add(AssetToLoad(
+      animation,
+      (value) {
+        this.animation = SpriteAnimationRender(
+          animation: value,
+          size: size,
+          onFinish: _onFinish,
+          loop: false,
+        );
+        onStart?.call();
+      },
+    ));
     setupLighting(lightingConfig);
     this.position = position;
     this.size = size;
@@ -35,11 +42,10 @@ class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
   void render(Canvas canvas) {
     super.render(canvas);
     if (isVisible && !isRemoving) {
-      animation?.getSprite().render(
-            canvas,
-            size: size,
-            overridePaint: paint,
-          );
+      animation?.render(
+        canvas,
+        overridePaint: paint,
+      );
     }
   }
 

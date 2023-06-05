@@ -36,8 +36,6 @@ class Tile extends GameComponent with UseAssetsLoader {
         AssetToLoad(Sprite.load(spritePath), (value) => _sprite = value),
       );
     }
-
-    // _positionText = position;
   }
 
   Tile.fromSprite({
@@ -91,7 +89,6 @@ class Tile extends GameComponent with UseAssetsLoader {
 
     _animation?.render(
       canvas,
-      size: size,
       overridePaint: paint,
     );
     _sprite?.render(
@@ -106,7 +103,7 @@ class Tile extends GameComponent with UseAssetsLoader {
 
   @override
   void updateTree(double dt) {
-    _animation?.update(dt);
+    _animation?.update(dt, size);
     if (parent != null) {
       final parentComp = parent as GameComponent;
       if (_lastParentPosition != parentComp.position) {
