@@ -15,76 +15,77 @@ class Wizard extends SimpleNpc with BlockMovementCollision, TapGesture {
         );
 
   void execShowTalk(GameComponent first) {
-    gameRef.camera.moveToTargetAnimated(
-      first,
-      zoom: 2,
-      finish: () {
-        TalkDialog.show(
-          gameRef.context,
-          [
-            Say(
-              text: [
-                const TextSpan(
-                  text:
-                      ' Would you tell me, please ...  which way I ought to go from here? ',
-                )
-              ],
-              person: SizedBox(
-                width: 100,
-                height: 100,
-                child: PlayerSpriteSheet.idleRight.asWidget(),
-              ),
-            ),
-            Say(
-              text: [
-                const TextSpan(
-                  text: 'That depends a good deal on where you want to get to.',
-                ),
-              ],
-              person: SizedBox(
-                width: 100,
-                height: 100,
-                child: WizardSpriteSheet.idle.asWidget(),
-              ),
-              personSayDirection: PersonSayDirection.RIGHT,
-            ),
-            Say(
-              text: [
-                const TextSpan(
-                  text: ' I don\'t much care where. ',
-                ),
-              ],
-              person: SizedBox(
-                width: 100,
-                height: 100,
-                child: PlayerSpriteSheet.idleRight.asWidget(),
-              ),
-            ),
-            Say(
-              text: [
-                const TextSpan(
-                  text: 'Then it doesn\'t much matter which way you go.',
-                ),
-              ],
-              person: SizedBox(
-                width: 100,
-                height: 100,
-                child: WizardSpriteSheet.idle.asWidget(),
-              ),
-              personSayDirection: PersonSayDirection.RIGHT,
-            ),
-          ],
-          onClose: () {
-            gameRef.camera.moveToPlayerAnimated(zoom: 1);
-          },
-          onFinish: () {},
-          logicalKeyboardKeysToNext: [
-            LogicalKeyboardKey.space,
-            LogicalKeyboardKey.enter
-          ],
-        );
-      },
-    );
+    // gameRef.camera.moveToTargetAnimated(
+    //   first,
+    //   zoom: 2,
+    //   finish: () {
+    //     TalkDialog.show(
+    //       gameRef.context,
+    //       [
+    //         Say(
+    //           text: [
+    //             const TextSpan(
+    //               text:
+    //                   ' Would you tell me, please ...  which way I ought to go from here? ',
+    //             )
+    //           ],
+    //           person: SizedBox(
+    //             width: 100,
+    //             height: 100,
+    //             child: PlayerSpriteSheet.idleRight.asWidget(),
+    //           ),
+    //         ),
+    //         Say(
+    //           text: [
+    //             const TextSpan(
+    //               text: 'That depends a good deal on where you want to get to.',
+    //             ),
+    //           ],
+    //           person: SizedBox(
+    //             width: 100,
+    //             height: 100,
+    //             child: WizardSpriteSheet.idle.asWidget(),
+    //           ),
+    //           personSayDirection: PersonSayDirection.RIGHT,
+    //         ),
+    //         Say(
+    //           text: [
+    //             const TextSpan(
+    //               text: ' I don\'t much care where. ',
+    //             ),
+    //           ],
+    //           person: SizedBox(
+    //             width: 100,
+    //             height: 100,
+    //             child: PlayerSpriteSheet.idleRight.asWidget(),
+    //           ),
+    //         ),
+    //         Say(
+    //           text: [
+    //             const TextSpan(
+    //               text: 'Then it doesn\'t much matter which way you go.',
+    //             ),
+    //           ],
+    //           person: SizedBox(
+    //             width: 100,
+    //             height: 100,
+    //             child: WizardSpriteSheet.idle.asWidget(),
+    //           ),
+    //           personSayDirection: PersonSayDirection.RIGHT,
+    //         ),
+    //       ],
+    //       onClose: () {
+    //         gameRef.camera.moveToPlayerAnimated(zoom: 1);
+    //       },
+    //       onFinish: () {},
+    //       logicalKeyboardKeysToNext: [
+    //         LogicalKeyboardKey.space,
+    //         LogicalKeyboardKey.enter
+    //       ],
+    //     );
+    //   },
+    // );
+  
   }
 
   @override

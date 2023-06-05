@@ -11,9 +11,9 @@ mixin AutomaticRandomMovement on Movement {
   late Random _random;
 
   bool get isVisibleReduction {
-    if (hasGameRef) {
-      return gameRef.camera.cameraRect.overlapComponent(this);
-    }
+    // if (hasGameRef) {
+    //   return gameRef.camera.cameraRect.overlapComponent(this);
+    // }
     return false;
   }
 

@@ -45,7 +45,10 @@ class LightingComponent extends GameComponent with LightingInterface {
 
   @override
   int get priority {
-    return LayerPriority.getLightingPriority(gameRef.highestPriority);
+    if (hasGameRef) {
+      return LayerPriority.getLightingPriority(gameRef.highestPriority);
+    }
+    return super.priority;
   }
 
   Path getWheelPath(double wheelSize, double fromRadius, double toRadius) {

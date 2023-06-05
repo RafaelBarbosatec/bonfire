@@ -9,7 +9,10 @@ class GameInterface extends GameComponent {
 
   @override
   int get priority {
-    return LayerPriority.getInterfacePriority(gameRef.highestPriority);
+    if (hasGameRef) {
+      return LayerPriority.getInterfacePriority(gameRef.highestPriority);
+    }
+    return super.priority;
   }
 
   /// Used to add components in your interface like a Button.

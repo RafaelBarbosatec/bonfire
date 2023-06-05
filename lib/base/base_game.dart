@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/camera/bonfire_camera_v2.dart';
 import 'package:bonfire/mixins/keyboard_listener.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:flame/game.dart';
@@ -25,7 +26,11 @@ abstract class BaseGame extends FlameGame
 
   /// to get the components that contain gestures
   Iterable<PointerDetectorHandler> get _gesturesComponents {
-    return children.where((c) => _hasGesture(c)).cast<PointerDetectorHandler>();
+    var cam = children.query<BonfireCameraV2>().first;
+
+    return [...cam.world.children, ...cam.viewport.children]
+        .where((c) => _hasGesture(c))
+        .cast<PointerDetectorHandler>();
   }
 
   /// to get the components that contain gestures

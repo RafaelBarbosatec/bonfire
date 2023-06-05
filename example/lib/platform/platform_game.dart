@@ -54,6 +54,7 @@ class _PlatformGameState extends State<PlatformGame> {
         smoothCameraEnabled: true,
         smoothCameraSpeed: 3,
       ),
+      
       player: FoxPlayer(
         position: Vector2(50 * 16, 3 * 16),
       ),

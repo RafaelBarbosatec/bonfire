@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/camera/bonfire_camera_v2.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:flame/game.dart';
@@ -27,6 +28,7 @@ abstract class BonfireGameInterface {
   LightingInterface? get lighting;
   ColorFilterInterface? get colorFilter;
   Camera get camera;
+  BonfireCameraV2 get bonfireCamera;
   GameMap get map;
   ComponentSet get children;
   int get highestPriority;

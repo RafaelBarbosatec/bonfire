@@ -37,7 +37,7 @@ class WorldMap extends GameMap {
   }
 
   void _searchTilesToRender() {
-    final rectCamera = gameRef.camera.cameraRectWithSpacing;
+    final rectCamera = gameRef.bonfireCamera.cameraRectWithSpacing;
 
     final visibleTileModel = quadTree?.query(
           rectCamera.getRectangleByTileSize(tileSize),
@@ -90,7 +90,7 @@ class WorldMap extends GameMap {
     if (tileSizeToUpdate == 0) {
       tileSizeToUpdate = (tileSize * 4).ceilToDouble();
     }
-    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.5);
+    gameRef.bonfireCamera.updateSpacingVisibleMap(tileSizeToUpdate * 1.5);
 
     if (tiles.isNotEmpty) {
       int minSize = min(sizeScreen.x, sizeScreen.y).ceil();

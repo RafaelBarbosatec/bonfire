@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/camera/bonfire_camera.dart';
+import 'package:bonfire/camera/bonfire_camera_v2.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
@@ -100,6 +100,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   bool _shouldUpdatePriority = false;
 
+  @override
+  late BonfireCameraV2 bonfireCamera;
+
   BonfireGame({
     required this.context,
     required this.map,
@@ -124,19 +127,14 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     CameraConfig? cameraConfig,
     List<Force2D>? globalForces,
   })  : _joystickController = joystickController,
-        globalForces = globalForces ?? [],
-        super(
-          camera: BonfireCamera(
-            cameraConfig ?? CameraConfig(),
-          ),
-        ) {
+        globalForces = globalForces ?? [] {
     _bgColor = backgroundColor;
-    camera.setGame(this);
-    camera.target ??= player;
+    // camera.setGame(this);
+    // camera.target ??= player;
 
-    _addLater.addAll(enemies ?? []);
-    _addLater.addAll(decorations ?? []);
-    _addLater.addAll(components ?? []);
+    // _addLater.addAll(enemies ?? []);
+    // _addLater.addAll(decorations ?? []);
+    // _addLater.addAll(components ?? []);
     _lighting = LightingComponent(
       color: lightingColorGame ?? const Color(0x00000000),
     );
@@ -151,6 +149,25 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       INTERVAL_UPDATE_ORDER,
       tick: updateOrderPriorityMicrotask,
     );
+
+    bonfireCamera = BonfireCameraV2(
+      config: cameraConfig ?? CameraConfig(),
+      hudComponents: [
+        _lighting,
+        _colorFilterComponent,
+        if (_joystickController != null) _joystickController!,
+        if (interface != null) interface!,
+      ],
+      childen: [
+        map,
+        if (background != null) background!,
+        if (player != null) player!,
+        ...components ?? [],
+      ],
+    );
+    if (player != null) {
+      bonfireCamera.follow(player!);
+    }
   }
 
   void updateOrderPriorityMicrotask() {
@@ -162,36 +179,36 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   FutureOr<void> onLoad() async {
-    await add(_colorFilterComponent);
+    // await add(_colorFilterComponent);
 
-    if (background != null) {
-      await add(background!);
-    }
+    // if (background != null) {
+    //   await add(background!);
+    // }
 
-    await add(map);
+    // await add(map);
 
-    for (var compLate in _addLater) {
-      await add(compLate);
-    }
-    _addLater.clear();
+    // for (var compLate in _addLater) {
+    //   await add(compLate);
+    // }
+    // _addLater.clear();
 
-    if (player != null) {
-      await add(player!);
-    }
+    // if (player != null) {
+    //   await add(player!);
+    // }
 
-    await add(_lighting);
+    // await add(_lighting);
 
-    if (interface != null) {
-      await add(interface!);
-    }
+    // if (interface != null) {
+    //   await add(interface!);
+    // }
 
-    if (_joystickController != null) {
-      await add(_joystickController!);
-    }
+    // if (_joystickController != null) {
+    //   await add(_joystickController!);
+    // }
 
-    if (gameController != null) {
-      await add(gameController!);
-    }
+    // if (gameController != null) {
+    //   await add(gameController!);
+    // }
     await super.onLoad();
     initializeCollisionDetection(
       mapDimensions: Rect.fromLTWH(
@@ -201,6 +218,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
         map.size.y.ceilToDouble(),
       ),
     );
+    add(bonfireCamera.world);
+    add(bonfireCamera);
   }
 
   @override
@@ -280,11 +299,11 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     return children.whereType<T>();
   }
 
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    camera.onGameResize(size);
-  }
+  // @override
+  // void onGameResize(Vector2 size) {
+  //   super.onGameResize(size);
+  //   camera.onGameResize(size);
+  // }
 
   @override
   Vector2 worldToScreen(Vector2 position) {
@@ -300,7 +319,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   bool isVisibleInCamera(GameComponent c) {
     if (!hasLayout) return false;
     if (c.isRemoving) return false;
-    return camera.isComponentOnCamera(c);
+    // return camera.isComponentOnCamera(c);
+    return true;
   }
 
   @override
@@ -340,9 +360,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       _joystickController?.cleanObservers();
     }
     _joystickController?.addObserver(target);
-    if (moveCameraToTarget && target is GameComponent) {
-      camera.moveToTargetAnimated(target as GameComponent);
-    }
+    // if (moveCameraToTarget && target is GameComponent) {
+    //   camera.moveToTargetAnimated(target as GameComponent);
+    // }
   }
 
   @override

@@ -60,23 +60,23 @@ class CameraSceneAction extends SceneAction {
     if (!_running) {
       _running = true;
       if (position != null) {
-        game.camera.moveToPositionAnimated(
-          position!,
-          duration: duration,
-          finish: _actionDone,
-          curve: curve,
-          angle: angle,
-          zoom: zoom,
-        );
+        // game.camera.moveToPositionAnimated(
+        //   position!,
+        //   duration: duration,
+        //   finish: _actionDone,
+        //   curve: curve,
+        //   angle: angle,
+        //   zoom: zoom,
+        // );
       } else if (target != null) {
-        game.camera.moveToTargetAnimated(
-          target!,
-          duration: duration,
-          finish: _actionDone,
-          curve: curve,
-          angle: angle,
-          zoom: zoom,
-        );
+        // game.camera.moveToTargetAnimated(
+        //   target!,
+        //   duration: duration,
+        //   finish: _actionDone,
+        //   curve: curve,
+        //   angle: angle,
+        //   zoom: zoom,
+        // );
       } else {
         return true;
       }
