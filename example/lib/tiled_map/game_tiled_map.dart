@@ -100,9 +100,7 @@ class GameTiledMap extends StatelessWidget {
             // 'miniMap',
           ],
           cameraConfig: CameraConfig(
-            smoothCameraEnabled: true,
-            smoothCameraSpeed: 2,
-            zoom: 1.5,
+            zoom: 1.1,
           ),
         );
       },

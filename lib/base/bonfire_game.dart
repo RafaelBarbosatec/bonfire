@@ -103,6 +103,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   late BonfireCameraV2 bonfireCamera;
 
+  late World world;
+
   BonfireGame({
     required this.context,
     required this.map,
@@ -165,9 +167,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
         ...components ?? [],
       ],
     );
-    if (player != null) {
-      bonfireCamera.follow(player!);
-    }
   }
 
   void updateOrderPriorityMicrotask() {
@@ -218,8 +217,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
         map.size.y.ceilToDouble(),
       ),
     );
-    add(bonfireCamera.world);
-    add(bonfireCamera);
+    await add(world = bonfireCamera.world);
+    await add(bonfireCamera);
+    bonfireCamera.moveToPlayer();
   }
 
   @override
@@ -296,14 +296,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   Iterable<T> componentsByType<T>() {
-    return children.whereType<T>();
+    return world.children.whereType<T>();
   }
-
-  // @override
-  // void onGameResize(Vector2 size) {
-  //   super.onGameResize(size);
-  //   camera.onGameResize(size);
-  // }
 
   @override
   Vector2 worldToScreen(Vector2 position) {
@@ -319,8 +313,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   bool isVisibleInCamera(GameComponent c) {
     if (!hasLayout) return false;
     if (c.isRemoving) return false;
-    // return camera.isComponentOnCamera(c);
-    return true;
+    return bonfireCamera.canSee(c);
   }
 
   @override
@@ -375,7 +368,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   void stopScene() {
     try {
-      children
+      world.children
           .firstWhere((value) => value is SceneBuilderComponent)
           .removeFromParent();
     } catch (e) {
@@ -385,7 +378,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   void onDetach() {
-    children.query<GameComponent>().forEach(_detachComp);
+    world.children.query<GameComponent>().forEach(_detachComp);
     super.onDetach();
   }
 

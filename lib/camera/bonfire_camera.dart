@@ -30,9 +30,8 @@ class BonfireCamera extends Camera {
     CameraConfig config,
   ) {
     setZoomLimitToFitMap = config.setZoomLimitToFitMap;
-    sizeMovementWindow = config.sizeMovementWindow;
-    smoothCameraEnabled = config.smoothCameraEnabled;
-    speed = config.smoothCameraSpeed;
+    sizeMovementWindow = config.movementWindow;
+    speed = config.speed;
     zoom = config.zoom;
     angle = config.angle;
     target = config.target;
@@ -390,7 +389,7 @@ class BonfireCamera extends Camera {
     if (_lastZoomSize != zoom && mapSize != Vector2.zero()) {
       _updateZoomLimits(canvasSize, mapSize);
       _lastZoomSize = zoom;
-      final startPosition = gameRef.map.getStartPosition();
+      final startPosition = gameRef.map.getPosition();
       limitMinX = startPosition.x;
       limitMinY = startPosition.y;
 
@@ -509,11 +508,11 @@ class BonfireCamera extends Camera {
       double zoomX = 0;
       double zoomY = 0;
       if (mapSize.x < canvasSize.x) {
-        zoomX = canvasSize.x / (mapSize.x - gameRef.map.getStartPosition().x);
+        zoomX = canvasSize.x / (mapSize.x - gameRef.map.getPosition().x);
       }
 
       if (mapSize.y < canvasSize.y) {
-        zoomY = canvasSize.y / (mapSize.y - gameRef.map.getStartPosition().y);
+        zoomY = canvasSize.y / (mapSize.y - gameRef.map.getPosition().y);
       }
 
       minZoom = max(zoomX, zoomY);

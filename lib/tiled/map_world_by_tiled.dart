@@ -25,7 +25,7 @@ class WorldMapByTiled extends WorldMap {
   Future<void>? onLoad() async {
     final map = await _builder.build();
     tiles = map.map.tiles;
-    gameRef.addAll(map.components ?? []);
+    gameRef.bonfireCamera.world.addAll(map.components ?? []);
     return super.onLoad();
   }
 }

@@ -13,7 +13,8 @@ class WorldMap extends GameMap {
   bool _buildingTiles = false;
   double tileSize = 0.0;
   Vector2 _griSize = Vector2.zero();
-  Vector2 _mapStartPosition = Vector2.zero();
+  Vector2 _mapPosition = Vector2.zero();
+  Vector2 _mapSize = Vector2.zero();
 
   tree.QuadTree<TileModel>? quadTree;
 
@@ -77,7 +78,7 @@ class WorldMap extends GameMap {
     if (isUpdate) {
       lastCamera = Vector2.zero();
       lastMinorZoom = gameRef.camera.zoom;
-      _calculateStartPosition();
+      _calculatePositionAndSize();
     }
 
     tileSize = tiles.first.width;
@@ -133,25 +134,35 @@ class WorldMap extends GameMap {
     return size;
   }
 
-  void _calculateStartPosition() {
+  void _calculatePositionAndSize() {
     if (tiles.isNotEmpty) {
       double x = tiles.first.left;
       double y = tiles.first.top;
 
+      double w = tiles.first.right;
+      double h = tiles.first.bottom;
+
       for (var tile in tiles) {
         if (tile.left < x) x = tile.left;
         if (tile.top < y) y = tile.top;
+
+        if (tile.right > w) w = tile.right;
+        if (tile.bottom > h) h = tile.bottom;
       }
-      _mapStartPosition = Vector2(x, y);
+      _mapSize = Vector2(w - x, h - y);
+      _mapPosition = Vector2(x, y);
+      gameRef.bonfireCamera.updatesetBounds();
     }
   }
 
   @override
-  Vector2 getGridSize() => _griSize;
+  Vector2 getPosition() {
+    return _mapPosition;
+  }
 
   @override
-  Vector2 getStartPosition() {
-    return _mapStartPosition;
+  Vector2 getSize() {
+    return _mapSize;
   }
 
   List<Tile> _buildTiles(Iterable<TileModel> visibleTiles) {
@@ -162,7 +173,7 @@ class WorldMap extends GameMap {
 
   @override
   Future<void>? onLoad() async {
-    _calculateStartPosition();
+    _calculatePositionAndSize();
     size = _calculateMapSize();
     await super.onLoad();
     await Future.forEach<TileModel>(tiles, _loadTile);
@@ -181,7 +192,7 @@ class WorldMap extends GameMap {
       id: tileModel.id,
     );
 
-    _calculateStartPosition();
+    _calculatePositionAndSize();
     size = _calculateMapSize();
   }
 
@@ -193,7 +204,7 @@ class WorldMap extends GameMap {
           .removeFromParent();
       tiles.removeWhere((element) => element.id == id);
       quadTree?.removeById(id);
-      _calculateStartPosition();
+      _calculatePositionAndSize();
       size = _calculateMapSize();
     } catch (e) {
       // ignore: avoid_print
@@ -226,8 +237,8 @@ class WorldMap extends GameMap {
 
   Vector2 _getCameraTileUpdate() {
     return Vector2(
-      (gameRef.camera.position.x / tileSizeToUpdate).floorToDouble(),
-      (gameRef.camera.position.y / tileSizeToUpdate).floorToDouble(),
+      (gameRef.bonfireCamera.position.x / tileSizeToUpdate).floorToDouble(),
+      (gameRef.bonfireCamera.position.y / tileSizeToUpdate).floorToDouble(),
     );
   }
 }

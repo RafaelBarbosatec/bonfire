@@ -12,9 +12,20 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
   }) : super(world: World(children: childen)) {
     viewfinder.zoom = config.zoom;
     viewfinder.angle = config.angle;
+    if (config.target != null) {
+      follow(config.target!, snap: true);
+    }
   }
 
   Rect get cameraRectWithSpacing => visibleWorldRect.inflate(_spacingMap);
+
+  Vector2 get position => viewfinder.position;
+  Vector2 get topleft => Vector2(
+        position.x - visibleWorldRect.width / 2,
+        position.y - visibleWorldRect.height / 2,
+      );
+
+  double get zoom => viewfinder.zoom;
 
   void updateSpacingVisibleMap(double space) {
     _spacingMap = space;
@@ -90,8 +101,28 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
 
   void moveToPlayer() {
     gameRef.player.let((i) {
-      follow(i);
+      follow(i, snap: true);
     });
+  }
+
+  @override
+  void follow(
+    PositionProvider target, {
+    double maxSpeed = double.infinity,
+    bool horizontalOnly = false,
+    bool verticalOnly = false,
+    bool snap = false,
+  }) {
+    stop();
+    viewfinder.add(
+      MyFollowBehavior(
+        target: target,
+        movementWindow: config.movementWindow,
+        owner: viewfinder,
+        maxSpeed: config.speed,
+      ),
+    );
+    viewfinder.position = target.position;
   }
 
   void moveToPlayerAnimated({
@@ -143,10 +174,100 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
   }
 
   @override
-  void onMount() {
-    super.onMount();
-    if (config.moveOnlyMapArea) {
-      setBounds(Rectangle.fromRect(gameRef.map.toAbsoluteRect()));
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    updatesetBounds();
+  }
+
+  void updatesetBounds() {
+    if (config.moveOnlyMapArea && viewfinder.isMounted) {
+      setBounds(
+        Rectangle.fromRect(
+          gameRef.map.getRect().deflatexy(
+                visibleWorldRect.width / 2,
+                visibleWorldRect.height / 2,
+              ),
+        ),
+      );
     }
+  }
+}
+
+class MyFollowBehavior extends Component {
+  final Vector2 movementWindow;
+  MyFollowBehavior({
+    required PositionProvider target,
+    required this.movementWindow,
+    PositionProvider? owner,
+    double maxSpeed = double.infinity,
+    this.horizontalOnly = false,
+    this.verticalOnly = false,
+    super.priority,
+  })  : _target = target,
+        _owner = owner,
+        _speed = maxSpeed,
+        assert(maxSpeed > 0, 'maxSpeed must be positive: $maxSpeed'),
+        assert(
+          !(horizontalOnly && verticalOnly),
+          'The behavior cannot be both horizontalOnly and verticalOnly',
+        );
+
+  PositionProvider get target => _target;
+  final PositionProvider _target;
+
+  PositionProvider get owner => _owner!;
+  PositionProvider? _owner;
+
+  double get maxSpeed => _speed;
+  final double _speed;
+
+  final bool horizontalOnly;
+  final bool verticalOnly;
+
+  @override
+  void onMount() {
+    if (_owner == null) {
+      assert(
+        parent is PositionProvider,
+        'Can only apply this behavior to a PositionProvider',
+      );
+      _owner = parent! as PositionProvider;
+    }
+  }
+
+  @override
+  void update(double dt) {
+    var delta = target.position - owner.position;
+    if (verticalOnly) {
+      delta = delta.copyWith(x: 0);
+    }
+
+    if (horizontalOnly) {
+      delta = delta.copyWith(y: 0);
+    }
+
+    final distance = delta.length;
+    var scale = dt;
+    if (distance > _speed * dt) {
+      scale = _speed * dt / distance;
+    }
+
+    owner.position = owner.position.clone()
+      ..lerp(owner.position + delta, scale);
+
+    // final delta = target.position - owner.position;
+    // final distance = delta.length;
+    // if (horizontalOnly) {
+    //   delta.y = 0;
+    // }
+
+    // if (verticalOnly) {
+    //   delta.x = 0;
+    // }
+
+    // if (distance > _speed * dt) {
+    //   delta.scale(_speed * dt / distance);
+    // }
+    // owner.position = delta..add(owner.position);
   }
 }

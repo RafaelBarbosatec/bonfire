@@ -167,9 +167,9 @@ mixin Movement on GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    // if (gameRef.camera.isRectOnCamera(toAbsoluteRect()) ||
-    //     !movementOnlyVisible) {
-    _updatePosition(dt);
+    if (isVisible || !movementOnlyVisible) {
+      _updatePosition(dt);
+    }
   }
 
   void moveFromDirection(

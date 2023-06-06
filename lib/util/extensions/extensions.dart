@@ -126,6 +126,14 @@ extension RectExt on Rect {
     }
     return true;
   }
+
+  /// Returns a new rectangle with edges moved outwards by the given delta.
+  Rect inflatexy(double deltaX, double deltaY) {
+    return Rect.fromLTRB(left - deltaX, top - deltaY, right + deltaX, bottom + deltaY);
+  }
+
+  /// Returns a new rectangle with edges moved inwards by the given delta.
+  Rect deflatexy(double deltaX, double deltaY) => inflatexy(-deltaX,-deltaY);
 }
 
 extension SpriteFutureExt on Future<Sprite> {

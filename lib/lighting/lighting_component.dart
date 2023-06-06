@@ -77,11 +77,9 @@ class LightingComponent extends GameComponent with LightingInterface {
       config.update(_dtUpdate);
       canvas.save();
 
-      canvas.scale(gameRef.camera.zoom);
-      canvas.translate(
-        -(gameRef.camera.position.x),
-        -(gameRef.camera.position.y),
-      );
+      canvas.scale(gameRef.bonfireCamera.zoom);
+      final tl = gameRef.bonfireCamera.topleft;
+      canvas.translate(-(tl.x), -(tl.y));
 
       if (config.type is CircleLightingType) {
         _drawCircle(canvas, light);

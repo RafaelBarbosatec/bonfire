@@ -12,8 +12,12 @@ abstract class GameMap extends GameComponent {
 
   Future<void> updateTiles(List<TileModel> map);
 
-  Vector2 getStartPosition();
-  Vector2 getGridSize();
+  Vector2 getPosition();
+  Vector2 getSize();
+
+  Rect getRect(){
+    return Rect.fromLTWH(getPosition().x, getPosition().y, getSize().x, getSize().y);
+  }
 
   void removeTile(String id);
   Future addTile(TileModel tileModel);
