@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:flame/camera.dart';
 import 'package:flame/experimental.dart';
 
 class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
@@ -117,7 +118,6 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
     viewfinder.add(
       MyFollowBehavior(
         target: target,
-        movementWindow: config.movementWindow,
         owner: viewfinder,
         maxSpeed: config.speed,
       ),
@@ -201,47 +201,15 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
   }
 }
 
-class MyFollowBehavior extends Component {
-  final Vector2 movementWindow;
+class MyFollowBehavior extends FollowBehavior {
   MyFollowBehavior({
-    required PositionProvider target,
-    required this.movementWindow,
+    required super.target,
     PositionProvider? owner,
-    double maxSpeed = double.infinity,
-    this.horizontalOnly = false,
-    this.verticalOnly = false,
+    super.maxSpeed = double.infinity,
+    super.horizontalOnly = false,
+    super.verticalOnly = false,
     super.priority,
-  })  : _target = target,
-        _owner = owner,
-        _speed = maxSpeed,
-        assert(maxSpeed > 0, 'maxSpeed must be positive: $maxSpeed'),
-        assert(
-          !(horizontalOnly && verticalOnly),
-          'The behavior cannot be both horizontalOnly and verticalOnly',
-        );
-
-  PositionProvider get target => _target;
-  final PositionProvider _target;
-
-  PositionProvider get owner => _owner!;
-  PositionProvider? _owner;
-
-  double get maxSpeed => _speed;
-  final double _speed;
-
-  final bool horizontalOnly;
-  final bool verticalOnly;
-
-  @override
-  void onMount() {
-    if (_owner == null) {
-      assert(
-        parent is PositionProvider,
-        'Can only apply this behavior to a PositionProvider',
-      );
-      _owner = parent! as PositionProvider;
-    }
-  }
+  });
 
   @override
   void update(double dt) {
@@ -256,8 +224,8 @@ class MyFollowBehavior extends Component {
 
     final distance = delta.length;
     var scale = dt;
-    if (distance > _speed * dt) {
-      scale = _speed * dt / distance;
+    if (distance > maxSpeed * dt) {
+      scale = maxSpeed * dt / distance;
     }
 
     owner.position = owner.position.clone()
