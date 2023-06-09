@@ -133,7 +133,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     _colorFilterComponent = ColorFilterComponent(
       colorFilter ?? GameColorFilter(),
     );
-    _joystickController?.addObserver(player ?? JoystickMapExplorer(camera));
 
     this.debugMode = debugMode;
 
@@ -160,6 +159,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
         if (interface != null) interface!,
       ],
       world: world,
+    );
+
+    _joystickController?.addObserver(
+      player ?? JoystickMapExplorer(bonfireCamera),
     );
   }
 
