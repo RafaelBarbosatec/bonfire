@@ -5,9 +5,6 @@ import 'package:bonfire/bonfire.dart';
 /// The way you cand raw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
 class GameInterface extends GameComponent {
   @override
-  PositionType get positionType => PositionType.viewport;
-
-  @override
   int get priority {
     if (hasGameRef) {
       return LayerPriority.getInterfacePriority(gameRef.highestPriority);

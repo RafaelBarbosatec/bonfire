@@ -25,7 +25,6 @@ class TextInterfaceComponent extends InterfaceComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-
     textConfig.render(
       canvas,
       text,

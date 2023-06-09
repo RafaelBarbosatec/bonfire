@@ -76,7 +76,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   final List<GameComponent> _visibleComponents = List.empty(growable: true);
   final Iterable<ShapeHitbox> _visibleCollisions = List.empty();
-  final List<GameComponent> _addLater = List.empty(growable: true);
+  // final List<GameComponent> _addLater = List.empty(growable: true);
   // late IntervalTick _interval;
   late IntervalTick _intervalUpdateOder;
   late ColorFilterComponent _colorFilterComponent;
@@ -152,6 +152,15 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       tick: updateOrderPriorityMicrotask,
     );
 
+    world = World(
+      children: [
+        map,
+        if (background != null) background!,
+        if (player != null) player!,
+        ...components ?? [],
+      ],
+    );
+
     bonfireCamera = BonfireCameraV2(
       config: cameraConfig ?? CameraConfig(),
       hudComponents: [
@@ -160,12 +169,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
         if (_joystickController != null) _joystickController!,
         if (interface != null) interface!,
       ],
-      childen: [
-        map,
-        if (background != null) background!,
-        if (player != null) player!,
-        ...components ?? [],
-      ],
+      world: world,
     );
   }
 
@@ -178,36 +182,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   FutureOr<void> onLoad() async {
-    // await add(_colorFilterComponent);
-
-    // if (background != null) {
-    //   await add(background!);
-    // }
-
-    // await add(map);
-
-    // for (var compLate in _addLater) {
-    //   await add(compLate);
-    // }
-    // _addLater.clear();
-
-    // if (player != null) {
-    //   await add(player!);
-    // }
-
-    // await add(_lighting);
-
-    // if (interface != null) {
-    //   await add(interface!);
-    // }
-
-    // if (_joystickController != null) {
-    //   await add(_joystickController!);
-    // }
-
-    // if (gameController != null) {
-    //   await add(gameController!);
-    // }
     await super.onLoad();
     initializeCollisionDetection(
       mapDimensions: Rect.fromLTWH(
@@ -217,8 +191,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
         map.size.y.ceilToDouble(),
       ),
     );
-    await add(world = bonfireCamera.world);
-    await add(bonfireCamera);
+    await super.add(world);
+    await super.add(bonfireCamera);
     bonfireCamera.moveToPlayer();
   }
 
@@ -301,12 +275,12 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   Vector2 worldToScreen(Vector2 position) {
-    return camera.worldToScreen(position);
+    return bonfireCamera.worldToScreen(position);
   }
 
   @override
   Vector2 screenToWorld(Vector2 position) {
-    return camera.screenToWorld(position);
+    return bonfireCamera.screenToWorld(position);
   }
 
   @override
@@ -323,7 +297,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       onTapDown?.call(
         this,
         localPosition,
-        camera.screenToWorld(localPosition),
+        bonfireCamera.screenToWorld(localPosition),
       );
     }
     super.onPointerDown(event);
@@ -336,7 +310,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       onTapUp?.call(
         this,
         localPosition,
-        camera.screenToWorld(localPosition),
+        bonfireCamera.screenToWorld(localPosition),
       );
     }
     super.onPointerUp(event);
@@ -353,9 +327,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       _joystickController?.cleanObservers();
     }
     _joystickController?.addObserver(target);
-    // if (moveCameraToTarget && target is GameComponent) {
-    //   camera.moveToTargetAnimated(target as GameComponent);
-    // }
+    if (moveCameraToTarget && target is GameComponent) {
+      bonfireCamera.follow(target as GameComponent);
+    }
   }
 
   @override
@@ -408,5 +382,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   void requestUpdatePriority() {
     _shouldUpdatePriority = true;
+  }
+
+  @override
+  FutureOr<void> add(Component component) {
+    return world.add(component);
   }
 }

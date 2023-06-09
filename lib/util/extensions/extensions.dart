@@ -129,11 +129,12 @@ extension RectExt on Rect {
 
   /// Returns a new rectangle with edges moved outwards by the given delta.
   Rect inflatexy(double deltaX, double deltaY) {
-    return Rect.fromLTRB(left - deltaX, top - deltaY, right + deltaX, bottom + deltaY);
+    return Rect.fromLTRB(
+        left - deltaX, top - deltaY, right + deltaX, bottom + deltaY);
   }
 
   /// Returns a new rectangle with edges moved inwards by the given delta.
-  Rect deflatexy(double deltaX, double deltaY) => inflatexy(-deltaX,-deltaY);
+  Rect deflatexy(double deltaX, double deltaY) => inflatexy(-deltaX, -deltaY);
 }
 
 extension SpriteFutureExt on Future<Sprite> {
@@ -255,8 +256,18 @@ extension FutureSpriteExt on FutureOr<Sprite> {
   }
 }
 
-extension ComponentExt on Component {
-  bool get isHud => positionType == PositionType.viewport;
+extension ComponentExt on GameComponent {
+  bool get isHud {
+    if (hasGameRef) {
+      bool thisIs = gameRef.bonfireCamera.viewport.contains(this);
+      bool parentIs = false;
+      if (parent != null) {
+        parentIs = gameRef.bonfireCamera.viewport.contains(parent!);
+      }
+      return parentIs || thisIs;
+    }
+    return false;
+  }
 }
 
 extension CameraExt on Camera {

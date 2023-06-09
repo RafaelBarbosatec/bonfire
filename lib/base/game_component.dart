@@ -117,6 +117,10 @@ abstract class GameComponent extends PositionComponent
 
   void onSetIfVisible() {
     bool nowIsVisible = _isVisibleInCamera();
+    if (isHud) {
+      nowIsVisible = true;
+      enabledCheckIsVisible = false;
+    }
     if (nowIsVisible && !isVisible) {
       (gameRef as BonfireGame).addVisible(this);
     }

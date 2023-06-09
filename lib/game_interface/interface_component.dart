@@ -62,9 +62,6 @@ class InterfaceComponent extends GameComponent
   }
 
   @override
-  PositionType get positionType => PositionType.viewport;
-
-  @override
   bool onTapDown(int pointer, Vector2 position) {
     selected = true;
     return true;

@@ -5,11 +5,11 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
   double _spacingMap = 32.0;
   final CameraConfig config;
   BonfireCameraV2({
-    Iterable<Component>? childen,
+    required super.world,
     required this.config,
     super.hudComponents,
     super.viewport,
-  }) : super(world: World(children: childen)) {
+  }) {
     viewfinder.zoom = config.zoom;
     viewfinder.angle = config.angle;
     if (config.target != null) {
@@ -191,6 +191,14 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
       );
     }
   }
+
+  Vector2 worldToScreen(Vector2 worldPosition) {
+    return (worldPosition - topleft) * zoom;
+  }
+
+  Vector2 screenToWorld(Vector2 position) {
+    return position + (topleft / zoom);
+  }
 }
 
 class MyFollowBehavior extends Component {
@@ -254,20 +262,5 @@ class MyFollowBehavior extends Component {
 
     owner.position = owner.position.clone()
       ..lerp(owner.position + delta, scale);
-
-    // final delta = target.position - owner.position;
-    // final distance = delta.length;
-    // if (horizontalOnly) {
-    //   delta.y = 0;
-    // }
-
-    // if (verticalOnly) {
-    //   delta.x = 0;
-    // }
-
-    // if (distance > _speed * dt) {
-    //   delta.scale(_speed * dt / distance);
-    // }
-    // owner.position = delta..add(owner.position);
   }
 }

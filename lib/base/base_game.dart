@@ -13,8 +13,6 @@ import 'package:flutter/widgets.dart';
 /// Reorder components per time frame.
 abstract class BaseGame extends FlameGame
     with PointerDetector, KeyboardEvents, HasQuadTreeCollisionDetection {
- 
-
   /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
   int _highestPriority = 1000000;
 
@@ -26,18 +24,26 @@ abstract class BaseGame extends FlameGame
 
   /// to get the components that contain gestures
   Iterable<PointerDetectorHandler> get _gesturesComponents {
-    var cam = children.query<BonfireCameraV2>().first;
-
-    return [...cam.world.children, ...cam.viewport.children]
-        .where((c) => _hasGesture(c))
-        .cast<PointerDetectorHandler>();
+    var cams = children.query<BonfireCameraV2>();
+    if (cams.isNotEmpty) {
+      final cam = cams.first;
+      return [...cam.world.children, ...cam.viewport.children]
+          .where((c) => _hasGesture(c))
+          .cast<PointerDetectorHandler>();
+    }
+    return [];
   }
 
   /// to get the components that contain gestures
   Iterable<KeyboardEventListener> get _keyboardComponents {
-    return children
-        .where((c) => _hasKeyboardEventListener(c))
-        .cast<KeyboardEventListener>();
+    var cams = children.query<BonfireCameraV2>();
+    if (cams.isNotEmpty) {
+      final cam = cams.first;
+      return [...cam.world.children, ...cam.viewport.children]
+          .where((c) => _hasKeyboardEventListener(c))
+          .cast<KeyboardEventListener>();
+    }
+    return [];
   }
 
   @override
@@ -118,9 +124,7 @@ abstract class BaseGame extends FlameGame
 
   /// Verify if the Component contain gestures.
   bool _hasGesture(Component c) {
-    return ((c is GameComponent && c.isVisible) || c.isHud) &&
-        (c is PointerDetectorHandler &&
-            (c as PointerDetectorHandler).hasGesture());
+    return ((c is GameComponent && c.isVisible)) && ((c).hasGesture());
   }
 
   /// Verify if the Component contain gestures.
