@@ -157,4 +157,8 @@ abstract class GameComponent extends PositionComponent
       component.renderShape = gameRef.showCollisionArea;
     }
   }
+
+  bool get isCollision {
+    return children.query<ShapeHitbox>().isNotEmpty;
+  }
 }

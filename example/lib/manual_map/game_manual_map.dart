@@ -2,18 +2,15 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
-import 'package:example/shared/enemy/goblin.dart';
+import 'package:example/manual_map/game_manual_controller.dart';
 import 'package:example/shared/interface/knight_interface.dart';
 import 'package:example/shared/player/knight.dart';
-import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class GameManualMap extends StatelessWidget implements GameListener {
-  final GameController _controller = GameController();
-
-  GameManualMap({Key? key}) : super(key: key);
+class GameManualMap extends StatelessWidget {
+  const GameManualMap({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,43 +51,14 @@ class GameManualMap extends StatelessWidget implements GameListener {
         player: Knight(
           Vector2((4 * DungeonMap.tileSize), (6 * DungeonMap.tileSize)),
         ),
+        components: [GameManualController()],
         interface: KnightInterface(),
         map: DungeonMap.map(),
         enemies: DungeonMap.enemies(),
         decorations: DungeonMap.decorations(),
         background: BackgroundColorGame(Colors.blueGrey[900]!),
-        gameController: _controller..addListener(this),
         lightingColorGame: Colors.black.withOpacity(0.75),
       );
     });
-  }
-
-  @override
-  void updateGame() {}
-
-  @override
-  void changeCountLiveEnemies(int count) {
-    if (count < 2) {
-      _addEnemyInWorld();
-    }
-  }
-
-  void _addEnemyInWorld() {
-    double x = DungeonMap.tileSize * (4 + Random().nextInt(25));
-    double y = DungeonMap.tileSize * (5 + Random().nextInt(3));
-
-    final goblin = Goblin(Vector2(x, y));
-
-    _controller.addGameComponent(
-      AnimatedObjectOnce(
-        animation: CommonSpriteSheet.smokeExplosion,
-        size: Vector2.all(DungeonMap.tileSize),
-        position: goblin.position,
-      ),
-    );
-
-    _controller.addGameComponent(
-      goblin,
-    );
   }
 }

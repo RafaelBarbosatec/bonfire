@@ -67,7 +67,6 @@ export 'package:bonfire/util/direction_animations/simple_direction_animation.dar
 export 'package:bonfire/util/extensions/extensions.dart';
 export 'package:bonfire/util/follower_widget.dart';
 export 'package:bonfire/util/functions.dart';
-export 'package:bonfire/util/game_controller.dart';
 export 'package:bonfire/util/interval_tick.dart';
 export 'package:bonfire/util/priority_layer.dart';
 export 'package:bonfire/util/talk/say.dart';

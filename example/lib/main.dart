@@ -73,7 +73,7 @@ class Menu extends StatelessWidget {
                     height: 10,
                   ),
                   _buildButton(context, 'Manual Map', () {
-                    _navTo(context, GameManualMap());
+                    _navTo(context, const GameManualMap());
                   }),
                   const SizedBox(
                     height: 10,

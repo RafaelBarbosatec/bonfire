@@ -212,7 +212,7 @@ extension GameComponentExtensions on GameComponent {
     );
 
     gameRef
-        .visibleAttackables()
+        .attackables(onlyVisible: true)
         .where((a) => a.rectAttackable().overlaps(positionAttack) && a != this)
         .forEach((enemy) {
       enemy.receiveDamage(attackFrom, damage, id);

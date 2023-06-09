@@ -75,7 +75,7 @@ class KnightInterface extends GameInterface {
     // if (hasGameRef && !gameRef.camera.isMoving) {
     if (hasGameRef) {
       if (enemyControlled == null) {
-        final v = gameRef.visibleComponentsByType<Goblin>();
+        final v = gameRef.visibles<Goblin>();
         if (v.isNotEmpty) {
           enemyControlled = v.first;
           enemyControlled?.controller.enableBehaviors = false;
@@ -140,7 +140,7 @@ class KnightInterface extends GameInterface {
   }
 
   void _startSceneExample() {
-    final enemiesVisible = gameRef.visibleEnemies();
+    final enemiesVisible = gameRef.enemies(onlyVisible: true);
     if (gameRef.player != null && enemiesVisible.isNotEmpty) {
       final enemy = enemiesVisible.first;
       double initialZoom = gameRef.camera.zoom;

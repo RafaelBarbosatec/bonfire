@@ -1,9 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
-import 'package:example/shared/util/player_sprite_sheet.dart';
 import 'package:example/shared/util/wizard_sprite_sheet.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class Wizard extends SimpleNpc with BlockMovementCollision, TapGesture {
   Wizard(Vector2 position)
@@ -85,7 +82,6 @@ class Wizard extends SimpleNpc with BlockMovementCollision, TapGesture {
     //     );
     //   },
     // );
-  
   }
 
   @override

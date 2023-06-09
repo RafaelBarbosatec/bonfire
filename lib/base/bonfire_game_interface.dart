@@ -30,7 +30,6 @@ abstract class BonfireGameInterface {
   Camera get camera;
   BonfireCameraV2 get bonfireCamera;
   GameMap get map;
-  ComponentSet get children;
   int get highestPriority;
   Vector2 get size;
   bool get hasLayout;
@@ -74,43 +73,24 @@ abstract class BonfireGameInterface {
   Future<void> addAll(List<Component> components);
 
   /// Used to get visible "Components".
-  Iterable<GameComponent> visibleComponents();
+  Iterable<T> visibles<T extends GameComponent>();
 
   /// Used to get all "Enemies".
-  Iterable<Enemy> enemies();
-
-  /// Used to get visible "Enemies".
-  Iterable<Enemy> visibleEnemies();
+  Iterable<Enemy> enemies({bool onlyVisible = false});
 
   /// Used to get living "Enemies".
-  Iterable<Enemy> livingEnemies();
+  Iterable<Enemy> livingEnemies({bool onlyVisible = false});
 
   /// Used to get all "Decoration".
-  Iterable<GameDecoration> decorations();
-
-  /// Used to get visible "Decoration".
-  Iterable<GameDecoration> visibleDecorations();
+  Iterable<GameDecoration> decorations({bool onlyVisible = false});
 
   /// Used to get all "Attackables".
-  Iterable<Attackable> attackables();
+  Iterable<Attackable> attackables({bool onlyVisible = false});
 
-  /// Used to get visible "Attackables".
-  Iterable<Attackable> visibleAttackables();
-
-  /// Used to get visible "Sensors".
-  Iterable<Sensor> visibleSensors();
-
-  /// Used to get all collisions.
   Iterable<ShapeHitbox> collisions();
 
-  /// Used to get visible collisions.
-  Iterable<ShapeHitbox> visibleCollisions();
-
-  /// Used to find visible component by type.
-  Iterable<T> visibleComponentsByType<T>();
-
   /// Used to find component by type.
-  Iterable<T> componentsByType<T>();
+  Iterable<T> query<T extends Component>({bool onlyVisible = false});
 
   /// This  method convert word position to screen position
   Vector2 worldToScreen(Vector2 position);

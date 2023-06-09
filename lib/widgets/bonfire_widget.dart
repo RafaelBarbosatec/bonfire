@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bonfire/background/game_background.dart';
 import 'package:bonfire/base/bonfire_game.dart';
+import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/base/listener_game_widget.dart';
 import 'package:bonfire/camera/camera_config.dart';
@@ -14,7 +15,6 @@ import 'package:bonfire/map/base/map_game.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/game_controller.dart';
 import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {
@@ -31,7 +31,7 @@ class BonfireWidget extends StatefulWidget {
   final GameMap map;
 
   /// Used to show grid in the map and facilitate the construction and testing of the map
-  final bool constructionMode;
+  final bool debugMode;
 
   /// Used to draw area collision in objects.
   final bool showCollisionArea;
@@ -66,14 +66,13 @@ class BonfireWidget extends StatefulWidget {
   final TapInGame? onTapDown;
   final TapInGame? onTapUp;
 
-  final ValueChanged<BonfireGame>? onReady;
+  final ValueChanged<BonfireGameInterface>? onReady;
   final Map<String, OverlayWidgetBuilder<BonfireGame>>? overlayBuilderMap;
   final List<String>? initialActiveOverlays;
   final List<Enemy>? enemies;
   final List<GameDecoration>? decorations;
   final List<GameComponent>? components;
   final GameBackground? background;
-  final GameController? gameController;
   final CameraConfig? cameraConfig;
   final GameColorFilter? colorFilter;
   final VoidCallback? onDispose;
@@ -88,9 +87,8 @@ class BonfireWidget extends StatefulWidget {
     this.interface,
     this.enemies,
     this.decorations,
-    this.gameController,
     this.background,
-    this.constructionMode = false,
+    this.debugMode = false,
     this.showCollisionArea = false,
     this.constructionModeColor,
     this.collisionAreaColor,
@@ -128,14 +126,6 @@ class BonfireWidgetState extends State<BonfireWidget> {
     _loadingStream.close();
     widget.onDispose?.call();
     super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(BonfireWidget oldWidget) {
-    if (widget.constructionMode) {
-      _refreshGame();
-    }
-    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -182,17 +172,6 @@ class BonfireWidgetState extends State<BonfireWidget> {
         );
   }
 
-  void _refreshGame() async {
-    final map = widget.map;
-    await map.updateTiles(map.tiles);
-
-    _game.decorations().forEach((d) => d.removeFromParent());
-    widget.decorations?.forEach((d) => _game.add(d));
-
-    _game.enemies().forEach((e) => e.removeFromParent());
-    widget.enemies?.forEach((e) => _game.add(e));
-  }
-
   void _buildGame() async {
     _game = BonfireGame(
       context: context,
@@ -205,9 +184,8 @@ class BonfireWidgetState extends State<BonfireWidget> {
       components: widget.components ?? [],
       background: widget.background,
       backgroundColor: widget.backgroundColor,
-      constructionMode: widget.constructionMode,
+      debugMode: widget.debugMode,
       showCollisionArea: widget.showCollisionArea,
-      gameController: widget.gameController,
       constructionModeColor:
           widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
       collisionAreaColor:

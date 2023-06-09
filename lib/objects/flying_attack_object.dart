@@ -303,7 +303,7 @@ class FlyingAttackObject extends GameComponent
   }
 
   void _applyDestroyDamage(Rect rectPosition, GameComponent component) {
-    gameRef.visibleAttackables().forEach((element) {
+    gameRef.attackables(onlyVisible: true).forEach((element) {
       if (element.rectAttackable().overlaps(rectPosition) &&
           element != component) {
         element.receiveDamage(attackFrom, damage, id);

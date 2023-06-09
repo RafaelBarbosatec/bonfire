@@ -41,9 +41,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   /// Background of the game. This can be a color or custom component
   final GameBackground? background;
 
-  /// Used to show grid in the map and facilitate the construction and testing of the map
-  final bool constructionMode;
-
   /// Color grid when `constructionMode` is true
   @override
   final Color? constructionModeColor;
@@ -55,9 +52,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   /// Color of the collision area when `showCollisionArea` is true
   @override
   final Color? collisionAreaColor;
-
-  /// Used to extensively control game elements
-  final GameController? gameController;
 
   /// Used to configure lighting in the game
   final Color? lightingColorGame;
@@ -75,9 +69,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
   final List<GameComponent> _visibleComponents = List.empty(growable: true);
-  final Iterable<ShapeHitbox> _visibleCollisions = List.empty();
-  // final List<GameComponent> _addLater = List.empty(growable: true);
-  // late IntervalTick _interval;
   late IntervalTick _intervalUpdateOder;
   late ColorFilterComponent _colorFilterComponent;
   late LightingComponent _lighting;
@@ -115,9 +106,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     List<GameDecoration>? decorations,
     List<GameComponent>? components,
     this.background,
-    this.constructionMode = false,
+    bool debugMode = false,
     this.showCollisionArea = false,
-    this.gameController,
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
@@ -145,7 +135,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
     _joystickController?.addObserver(player ?? JoystickMapExplorer(camera));
 
-    debugMode = constructionMode;
+    this.debugMode = debugMode;
 
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
@@ -211,46 +201,28 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  Iterable<GameComponent> visibleComponents() => _visibleComponents;
+  Iterable<T> visibles<T extends GameComponent>() =>
+      _visibleComponents.whereType<T>();
 
   @override
-  Iterable<Enemy> visibleEnemies() {
-    return visibleComponentsByType<Enemy>();
+  Iterable<Enemy> livingEnemies({bool onlyVisible = false}) {
+    return enemies(onlyVisible: onlyVisible)
+        .where((element) => !element.isDead);
   }
 
   @override
-  Iterable<Enemy> livingEnemies() {
-    return enemies().where((element) => !element.isDead);
+  Iterable<Enemy> enemies({bool onlyVisible = false}) {
+    return query<Enemy>(onlyVisible: onlyVisible);
   }
 
   @override
-  Iterable<Enemy> enemies() {
-    return componentsByType<Enemy>();
+  Iterable<GameDecoration> decorations({bool onlyVisible = false}) {
+    return query<GameDecoration>(onlyVisible: onlyVisible);
   }
 
   @override
-  Iterable<GameDecoration> visibleDecorations() {
-    return visibleComponentsByType<GameDecoration>();
-  }
-
-  @override
-  Iterable<GameDecoration> decorations() {
-    return componentsByType<GameDecoration>();
-  }
-
-  @override
-  Iterable<Attackable> attackables() {
-    return componentsByType<Attackable>();
-  }
-
-  @override
-  Iterable<Attackable> visibleAttackables() {
-    return visibleComponentsByType<Attackable>();
-  }
-
-  @override
-  Iterable<Sensor> visibleSensors() {
-    return visibleComponentsByType<Sensor>();
+  Iterable<Attackable> attackables({bool onlyVisible = false}) {
+    return query<Attackable>(onlyVisible: onlyVisible);
   }
 
   @override
@@ -259,18 +231,11 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  Iterable<ShapeHitbox> visibleCollisions() {
-    return _visibleCollisions;
-  }
-
-  @override
-  Iterable<T> visibleComponentsByType<T>() {
-    return _visibleComponents.whereType<T>();
-  }
-
-  @override
-  Iterable<T> componentsByType<T>() {
-    return world.children.whereType<T>();
+  Iterable<T> query<T extends Component>({bool onlyVisible = false}) {
+    if (onlyVisible) {
+      return _visibleComponents.whereType<T>();
+    }
+    return world.children.query<T>();
   }
 
   @override
@@ -387,5 +352,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   FutureOr<void> add(Component component) {
     return world.add(component);
+  }
+
+  @override
+  Future<void> addAll(Iterable<Component> components) {
+    return world.addAll(components);
   }
 }
