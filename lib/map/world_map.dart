@@ -77,7 +77,7 @@ class WorldMap extends GameMap {
 
     if (isUpdate) {
       lastCamera = Vector2.zero();
-      lastMinorZoom = gameRef.camera.zoom;
+      lastMinorZoom = gameRef.bonfireCamera.zoom;
       _calculatePositionAndSize();
     }
 
@@ -226,9 +226,9 @@ class WorldMap extends GameMap {
 
   bool _checkNeedUpdateTiles() {
     final camera = _getCameraTileUpdate();
-    if (lastCamera != camera || lastMinorZoom != gameRef.camera.zoom) {
+    if (lastCamera != camera || lastMinorZoom != gameRef.bonfireCamera.zoom) {
       lastCamera = camera;
-      lastMinorZoom = gameRef.camera.zoom;
+      lastMinorZoom = gameRef.bonfireCamera.zoom;
 
       return true;
     }

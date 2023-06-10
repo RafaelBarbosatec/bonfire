@@ -143,7 +143,7 @@ class KnightInterface extends GameInterface {
     final enemiesVisible = gameRef.enemies(onlyVisible: true);
     if (gameRef.player != null && enemiesVisible.isNotEmpty) {
       final enemy = enemiesVisible.first;
-      double initialZoom = gameRef.camera.zoom;
+      double initialZoom = gameRef.bonfireCamera.zoom;
       gameRef.startScene(
         [
           CameraSceneAction.position(Vector2(800, 800)),

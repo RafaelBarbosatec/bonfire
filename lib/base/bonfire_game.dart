@@ -102,8 +102,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     JoystickController? joystickController,
     this.player,
     this.interface,
-    List<Enemy>? enemies,
-    List<GameDecoration>? decorations,
     List<GameComponent>? components,
     this.background,
     bool debugMode = false,
@@ -120,21 +118,14 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     List<Force2D>? globalForces,
   })  : _joystickController = joystickController,
         globalForces = globalForces ?? [] {
+    this.debugMode = debugMode;
     _bgColor = backgroundColor;
-    // camera.setGame(this);
-    // camera.target ??= player;
-
-    // _addLater.addAll(enemies ?? []);
-    // _addLater.addAll(decorations ?? []);
-    // _addLater.addAll(components ?? []);
     _lighting = LightingComponent(
       color: lightingColorGame ?? const Color(0x00000000),
     );
     _colorFilterComponent = ColorFilterComponent(
       colorFilter ?? GameColorFilter(),
     );
-
-    this.debugMode = debugMode;
 
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,

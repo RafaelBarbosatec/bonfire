@@ -47,9 +47,9 @@ mixin Follower on GameComponent {
   }
 
   void followParent() {
-    if (parent != null && parent is GameComponent) {
-      followerTarget = parent as GameComponent;
-    }
+    // if (parent != null && parent is GameComponent) {
+    //   followerTarget = parent as GameComponent;
+    // }
   }
 
   @override

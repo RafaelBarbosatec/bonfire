@@ -59,10 +59,10 @@ class ZombieEnemy extends RotationEnemy
       AnimatedObjectOnce(
         animation: CommonSpriteSheet.smokeExplosion,
         position: position,
-        size: Vector2.all(64),
+        size: size,
       ),
     );
-    gameRef.camera.shake(intensity: 4);
+    gameRef.bonfireCamera.shake(intensity: 4);
     removeFromParent();
 
     super.die();
@@ -70,15 +70,15 @@ class ZombieEnemy extends RotationEnemy
 
   @override
   Future<void> onLoad() {
-    // add(
-    //   CircleHitbox(
-    //     radius: size.y / 2,
-    //     position: Vector2(
-    //       12.5,
-    //       0,
-    //     ),
-    //   ),
-    // );
+    add(
+      CircleHitbox(
+        radius: size.y / 2,
+        position: Vector2(
+          12.5,
+          0,
+        ),
+      ),
+    );
     return super.onLoad();
   }
 }

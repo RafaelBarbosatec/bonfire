@@ -7,13 +7,11 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/base/listener_game_widget.dart';
 import 'package:bonfire/camera/camera_config.dart';
 import 'package:bonfire/color_filter/game_color_filter.dart';
-import 'package:bonfire/decoration/decoration.dart';
 import 'package:bonfire/forces/forces_2d.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/base/map_game.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
-import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:flutter/material.dart';
 
@@ -69,8 +67,6 @@ class BonfireWidget extends StatefulWidget {
   final ValueChanged<BonfireGameInterface>? onReady;
   final Map<String, OverlayWidgetBuilder<BonfireGame>>? overlayBuilderMap;
   final List<String>? initialActiveOverlays;
-  final List<Enemy>? enemies;
-  final List<GameDecoration>? decorations;
   final List<GameComponent>? components;
   final GameBackground? background;
   final CameraConfig? cameraConfig;
@@ -85,8 +81,6 @@ class BonfireWidget extends StatefulWidget {
     this.joystick,
     this.player,
     this.interface,
-    this.enemies,
-    this.decorations,
     this.background,
     this.debugMode = false,
     this.showCollisionArea = false,
@@ -179,8 +173,6 @@ class BonfireWidgetState extends State<BonfireWidget> {
       player: widget.player,
       interface: widget.interface,
       map: widget.map,
-      decorations: widget.decorations,
-      enemies: widget.enemies,
       components: widget.components ?? [],
       background: widget.background,
       backgroundColor: widget.backgroundColor,

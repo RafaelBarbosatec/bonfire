@@ -51,11 +51,13 @@ class GameManualMap extends StatelessWidget {
         player: Knight(
           Vector2((4 * DungeonMap.tileSize), (6 * DungeonMap.tileSize)),
         ),
-        components: [GameManualController()],
+        components: [
+          ...DungeonMap.enemies(),
+          ...DungeonMap.decorations(),
+          GameManualController(),
+        ],
         interface: KnightInterface(),
         map: DungeonMap.map(),
-        enemies: DungeonMap.enemies(),
-        decorations: DungeonMap.decorations(),
         background: BackgroundColorGame(Colors.blueGrey[900]!),
         lightingColorGame: Colors.black.withOpacity(0.75),
       );

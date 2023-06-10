@@ -21,41 +21,44 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
   Rect get cameraRectWithSpacing => visibleWorldRect.inflate(_spacingMap);
 
   Vector2 get position => viewfinder.position;
-  Vector2 get topleft => Vector2(
-        position.x - visibleWorldRect.width / 2,
-        position.y - visibleWorldRect.height / 2,
-      );
+  set position(Vector2 position) => viewfinder.position = position;
+  Vector2 get topleft => visibleWorldRect.positionVector2;
 
   double get zoom => viewfinder.zoom;
+
+  @override
+  bool canSee(PositionComponent component) {
+    return cameraRectWithSpacing.overlaps(component.toAbsoluteRect());
+  }
 
   void updateSpacingVisibleMap(double space) {
     _spacingMap = space;
   }
 
   void moveTop(double displacement) {
-    moveTo(viewfinder.position.translated(0, displacement * -1));
+    position = position.translated(0, displacement * -1);
   }
 
   void moveRight(double displacement) {
-    moveTo(viewfinder.position.translated(displacement, 0));
+    position = position.translated(displacement, 0);
   }
 
   void moveLeft(double displacement) {
-    moveTo(viewfinder.position.translated(displacement * -1, 0));
+    position = position.translated(displacement * -1, 0);
   }
 
   void moveDown(double displacement) {
-    moveTo(viewfinder.position.translated(0, displacement));
+    position = position.translated(0, displacement);
   }
 
   void moveUp(double displacement) {
-    moveTo(viewfinder.position.translated(displacement * -1, 0));
+    position = position.translated(displacement * -1, 0);
   }
 
   void moveToPositionAnimated({
     required Vector2 position,
     required EffectController effectController,
-    Vector2? zoom,
+    double? zoom,
     double? angle,
     Function()? onComplete,
   }) {
@@ -68,7 +71,7 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
     viewfinder.add(moveToEffect);
     if (zoom != null) {
       final zoomEffect = ScaleEffect.to(
-        zoom,
+        Vector2.all(zoom),
         effectController,
       );
       zoomEffect.removeOnFinish = true;
@@ -87,7 +90,7 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
   void moveToTargetAnimated({
     required GameComponent target,
     required EffectController effectController,
-    Vector2? zoom,
+    double? zoom,
     double? angle,
     Function()? onComplete,
   }) {
@@ -100,9 +103,11 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
     );
   }
 
-  void moveToPlayer() {
+  void moveToPlayer({
+    bool snap = true,
+  }) {
     gameRef.player.let((i) {
-      follow(i, snap: true);
+      follow(i, snap: snap);
     });
   }
 
@@ -122,7 +127,9 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
         maxSpeed: config.speed,
       ),
     );
-    viewfinder.position = target.position;
+    if (snap) {
+      viewfinder.position = target.position;
+    }
   }
 
   void moveToPlayerAnimated({
@@ -135,7 +142,7 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
       moveToTargetAnimated(
         target: i,
         effectController: effectController,
-        zoom: Vector2(zoom ?? 1, zoom ?? 1),
+        zoom: zoom,
         angle: angle,
         onComplete: () {
           onComplete?.call();
@@ -199,6 +206,8 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
   Vector2 screenToWorld(Vector2 position) {
     return position + (topleft / zoom);
   }
+
+  void shake({required double intensity}) {}
 }
 
 class MyFollowBehavior extends FollowBehavior {

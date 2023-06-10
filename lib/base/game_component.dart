@@ -60,7 +60,7 @@ abstract class GameComponent extends PositionComponent
   /// Return screen position of this component.
   Vector2 screenPosition() {
     if (hasGameRef) {
-      return gameRef.camera.worldToScreen(
+      return gameRef.worldToScreen(
         position,
       );
     }

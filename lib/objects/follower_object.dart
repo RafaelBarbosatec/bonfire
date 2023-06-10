@@ -17,7 +17,7 @@ class FollowerObject extends GameComponent
     this.size = size;
     setupFollower(target: target, offset: positionFromTarget);
     loader?.add(AssetToLoad(sprite, (value) => this.sprite = value));
-    applyBleedingPixel(position: position, size: size);
+    // applyBleedingPixel(position: position, size: size);
   }
 
   @override

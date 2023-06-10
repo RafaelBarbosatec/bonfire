@@ -21,7 +21,7 @@ class JoystickMoveToPosition extends JoystickController {
   bool handlerPointerDown(PointerDownEvent event) {
     _pointer = event.pointer;
     _startPoint = event.position.toVector2();
-    _startCameraPosition = gameRef.camera.position;
+    _startCameraPosition = gameRef.bonfireCamera.position;
     _actionMoveToPosition = _acceptFromMouse(
       event,
       mouseButtonUsedToMoveToPosition,
@@ -39,8 +39,8 @@ class JoystickMoveToPosition extends JoystickController {
           _acceptFromMouse(event, mouseButtonUsedToMoveCamera)) {
         double px = _startPoint.x - event.position.dx;
         double py = _startPoint.y - event.position.dy;
-        // gameRef.camera.target = null;
-        gameRef.camera.snapTo(_startCameraPosition.translated(px, py));
+        gameRef.bonfireCamera.stop();
+        gameRef.bonfireCamera.moveTo(_startCameraPosition.translated(px, py));
       }
     }
 

@@ -27,7 +27,6 @@ abstract class BonfireGameInterface {
   JoystickController? get joystick;
   LightingInterface? get lighting;
   ColorFilterInterface? get colorFilter;
-  Camera get camera;
   BonfireCameraV2 get bonfireCamera;
   GameMap get map;
   int get highestPriority;
@@ -75,21 +74,22 @@ abstract class BonfireGameInterface {
   /// Used to get visible "Components".
   Iterable<T> visibles<T extends GameComponent>();
 
-  /// Used to get all "Enemies".
+  /// Used to get all "Enemies" or oly visibles.
   Iterable<Enemy> enemies({bool onlyVisible = false});
 
-  /// Used to get living "Enemies".
+  /// Used to get living "Enemies" or oly visibles.
   Iterable<Enemy> livingEnemies({bool onlyVisible = false});
 
-  /// Used to get all "Decoration".
+  /// Used to get all "Decoration" or oly visibles.
   Iterable<GameDecoration> decorations({bool onlyVisible = false});
 
-  /// Used to get all "Attackables".
+  /// Used to get all "Attackables" or oly visibles.
   Iterable<Attackable> attackables({bool onlyVisible = false});
 
+  /// Used to get all "ShapeHitbox".
   Iterable<ShapeHitbox> collisions();
 
-  /// Used to find component by type.
+  /// Used to find component by type visible or not.
   Iterable<T> query<T extends Component>({bool onlyVisible = false});
 
   /// This  method convert word position to screen position
