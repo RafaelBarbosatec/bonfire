@@ -294,9 +294,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  void startScene(List<SceneAction> actions) {
+  void startScene(List<SceneAction> actions,{void Function()? onComplete}) {
     if (!sceneBuilderStatus.isRunning) {
-      add(SceneBuilderComponent(actions));
+      add(SceneBuilderComponent(actions,onComplete:onComplete));
     }
   }
 

@@ -108,7 +108,7 @@ abstract class BonfireGameInterface {
     bool moveCameraToTarget = false,
   });
 
-  void startScene(List<SceneAction> actions);
+  void startScene(List<SceneAction> actions,{void Function()? onComplete});
   void stopScene();
 
   void enableGestures(bool enable);

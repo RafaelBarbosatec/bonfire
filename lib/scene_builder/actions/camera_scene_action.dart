@@ -63,7 +63,7 @@ class CameraSceneAction extends SceneAction {
         game.bonfireCamera.moveToPositionAnimated(
           position: position!,
           effectController: EffectController(
-            duration: duration.inMilliseconds.toDouble(),
+            duration: duration.inSeconds.toDouble(),
             curve: curve,
           ),
           onComplete: _actionDone,
@@ -74,10 +74,13 @@ class CameraSceneAction extends SceneAction {
         game.bonfireCamera.moveToTargetAnimated(
           target: target!,
           effectController: EffectController(
-            duration: duration.inMilliseconds.toDouble(),
+            duration: duration.inSeconds.toDouble(),
             curve: curve,
           ),
-          onComplete: _actionDone,
+          onComplete: () {
+            _actionDone.call();
+            game.bonfireCamera.follow(target!);
+          },
           angle: angle,
           zoom: zoom,
         );
