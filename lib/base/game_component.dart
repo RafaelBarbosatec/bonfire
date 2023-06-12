@@ -104,7 +104,8 @@ abstract class GameComponent extends PositionComponent
   }
 
   /// Method that checks if this component is visible on the screen
-  bool _isVisibleInCamera() {
+  @mustCallSuper
+  bool isVisibleInCamera() {
     return hasGameRef ? gameRef.isVisibleInCamera(this) : false;
   }
 
@@ -116,7 +117,7 @@ abstract class GameComponent extends PositionComponent
   }
 
   void onSetIfVisible() {
-    bool nowIsVisible = _isVisibleInCamera();
+    bool nowIsVisible = isVisibleInCamera();
     if (isHud) {
       nowIsVisible = true;
       enabledCheckIsVisible = false;

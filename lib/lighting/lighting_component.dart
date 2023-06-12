@@ -3,8 +3,6 @@ import 'package:flutter/widgets.dart';
 
 abstract class LightingInterface {
   Color? color;
-  final List<Lighting> _visibleLight = [];
-  List<Lighting> get visibleLights => _visibleLight;
   void animateToColor(
     Color color, {
     Duration duration = const Duration(milliseconds: 500),
@@ -12,16 +10,6 @@ abstract class LightingInterface {
   });
 
   bool isEnabled();
-
-  void addVisibleLighting(Lighting lighting) {
-    if (!_visibleLight.contains(lighting)) {
-      _visibleLight.add(lighting);
-    }
-  }
-
-  void removeVisibleLighting(Lighting lighting) {
-    _visibleLight.remove(lighting);
-  }
 }
 
 /// Layer component responsible for adding lighting to the game.
@@ -64,6 +52,10 @@ class LightingComponent extends GameComponent with LightingInterface {
         false,
       )
       ..close();
+  }
+
+  Iterable<Lighting> get _visibleLight {
+    return gameRef.visibles<Lighting>();
   }
 
   @override

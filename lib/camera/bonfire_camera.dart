@@ -31,6 +31,10 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
     return visibleWorldRect.overlaps(component.toAbsoluteRect());
   }
 
+  bool canSeeWithMargin(PositionComponent component) {
+    return cameraRectWithSpacing.overlaps(component.toAbsoluteRect());
+  }
+
   void updateSpacingVisibleMap(double space) {
     _spacingMap = space;
   }

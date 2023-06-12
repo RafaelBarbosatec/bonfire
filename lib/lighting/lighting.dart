@@ -40,18 +40,8 @@ mixin Lighting on GameComponent {
   }
 
   @override
-  void onSetIfVisible() {
-    super.onSetIfVisible();
-    if (isVisible) {
-      gameRef.lighting?.addVisibleLighting(this);
-    } else {
-      gameRef.lighting?.removeVisibleLighting(this);
-    }
-  }
-
-  @override
-  void onRemove() {
-    gameRef.lighting?.removeVisibleLighting(this);
-    super.onRemove();
+  // ignore: must_call_super
+  bool isVisibleInCamera() {
+    return hasGameRef ? gameRef.bonfireCamera.canSeeWithMargin(this) : false;
   }
 }

@@ -206,7 +206,6 @@ class KnightInterface extends GameInterface {
   }
 
   void _animateColorFilter() {
-    gameRef.bonfireCamera.shake();
     if (gameRef.colorFilter?.config.color == null) {
       gameRef.colorFilter?.animateTo(
         Colors.red.withOpacity(0.5),
