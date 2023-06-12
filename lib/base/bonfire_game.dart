@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/camera/bonfire_camera_v2.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
@@ -92,7 +92,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   bool _shouldUpdatePriority = false;
 
   @override
-  late BonfireCameraV2 bonfireCamera;
+  late BonfireCamera bonfireCamera;
 
   late World world;
 
@@ -141,7 +141,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       ],
     );
 
-    bonfireCamera = BonfireCameraV2(
+    bonfireCamera = BonfireCamera(
       config: cameraConfig ?? CameraConfig(),
       hudComponents: [
         _lighting,
@@ -294,9 +294,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  void startScene(List<SceneAction> actions,{void Function()? onComplete}) {
+  void startScene(List<SceneAction> actions, {void Function()? onComplete}) {
     if (!sceneBuilderStatus.isRunning) {
-      add(SceneBuilderComponent(actions,onComplete:onComplete));
+      add(SceneBuilderComponent(actions, onComplete: onComplete));
     }
   }
 

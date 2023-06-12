@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/camera/bonfire_camera_v2.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:flame/game.dart';
@@ -27,7 +27,7 @@ abstract class BonfireGameInterface {
   JoystickController? get joystick;
   LightingInterface? get lighting;
   ColorFilterInterface? get colorFilter;
-  BonfireCameraV2 get bonfireCamera;
+  BonfireCamera get bonfireCamera;
   GameMap get map;
   int get highestPriority;
   Vector2 get size;
@@ -108,7 +108,7 @@ abstract class BonfireGameInterface {
     bool moveCameraToTarget = false,
   });
 
-  void startScene(List<SceneAction> actions,{void Function()? onComplete});
+  void startScene(List<SceneAction> actions, {void Function()? onComplete});
   void stopScene();
 
   void enableGestures(bool enable);

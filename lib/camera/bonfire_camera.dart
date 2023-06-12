@@ -1,11 +1,11 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:flame/camera.dart';
+import 'package:bonfire/camera/camera_effects.dart';
 import 'package:flame/experimental.dart';
 
-class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
+class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   double _spacingMap = 32.0;
   final CameraConfig config;
-  BonfireCameraV2({
+  BonfireCamera({
     required super.world,
     required this.config,
     super.hudComponents,
@@ -204,40 +204,15 @@ class BonfireCameraV2 extends CameraComponent with BonfireHasGameRef {
   }
 
   Vector2 screenToWorld(Vector2 position) {
-    return position + (topleft / zoom);
+    return topleft + (position / zoom);
   }
 
-  void shake({required double intensity}) {}
-}
-
-class MyFollowBehavior extends FollowBehavior {
-  MyFollowBehavior({
-    required super.target,
-    PositionProvider? owner,
-    super.maxSpeed = double.infinity,
-    super.horizontalOnly = false,
-    super.verticalOnly = false,
-    super.priority,
-  });
-
-  @override
-  void update(double dt) {
-    var delta = target.position - owner.position;
-    if (verticalOnly) {
-      delta = delta.copyWith(x: 0);
-    }
-
-    if (horizontalOnly) {
-      delta = delta.copyWith(y: 0);
-    }
-
-    final distance = delta.length;
-    var scale = dt;
-    if (distance > maxSpeed * dt) {
-      scale = maxSpeed * dt / distance;
-    }
-
-    owner.position = owner.position.clone()
-      ..lerp(owner.position + delta, scale);
+  void shake({double intensity = 10.0, Duration? duration}) {
+    viewfinder.add(
+      ShakeEffect(
+        intensity: intensity,
+        duration: duration ?? const Duration(milliseconds: 300),
+      ),
+    );
   }
 }

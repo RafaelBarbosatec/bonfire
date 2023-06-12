@@ -1,9 +1,9 @@
-import 'package:bonfire/camera/bonfire_camera_v2.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
 
 import '../bonfire.dart';
 
 class JoystickMapExplorer with JoystickListener {
-  final BonfireCameraV2 camera;
+  final BonfireCamera camera;
 
   JoystickMapExplorer(this.camera);
 

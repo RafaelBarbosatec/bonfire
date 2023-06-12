@@ -1,13 +1,7 @@
 import 'package:bonfire/base/game_component.dart';
-import 'package:flame/components.dart';
 
 /// Class use to configure camera behavior.
 class CameraConfig {
-  static final sizeWidowsDefault = Vector2(16, 16);
-
-  ///Player movement window before the camera moves
-  Vector2 movementWindow;
-
   /// When this true the camera remains within the map area
   bool moveOnlyMapArea;
 
@@ -25,12 +19,11 @@ class CameraConfig {
   bool setZoomLimitToFitMap;
 
   CameraConfig({
-    Vector2? sizeMovementWindow,
     this.moveOnlyMapArea = false,
     this.zoom = 1.0,
     this.angle = 0.0,
     this.target,
     this.speed = double.infinity,
     this.setZoomLimitToFitMap = false,
-  }) : movementWindow = sizeMovementWindow ?? sizeWidowsDefault;
+  });
 }
