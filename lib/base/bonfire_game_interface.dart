@@ -57,7 +57,7 @@ abstract class BonfireGameInterface {
   /// - GameWidget
   /// - [Game.overlayManager]
   // ignore: invalid_use_of_internal_member
-  OverlayManager get overlayManager;
+  OverlayManager get overlays;
 
   /// Used to pause the engine.
   void pauseEngine();

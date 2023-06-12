@@ -11,7 +11,6 @@ import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
 // ignore: implementation_imports
-import 'package:flame/src/game/overlay_manager.dart';
 import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
@@ -326,10 +325,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   void removeVisible(GameComponent obj) {
     _visibleComponents.remove(obj);
   }
-
-  @override
-  // ignore: invalid_use_of_internal_member
-  OverlayManager get overlayManager => overlays;
 
   @override
   void enableGestures(bool enable) {
