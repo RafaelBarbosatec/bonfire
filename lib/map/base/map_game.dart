@@ -3,6 +3,7 @@ import 'package:bonfire/bonfire.dart';
 abstract class GameMap extends GameComponent {
   List<TileModel> tiles;
   double tileSizeToUpdate;
+  double tileSize = 0.0;
 
   GameMap(this.tiles, {this.tileSizeToUpdate = 0}) {
     paint.isAntiAlias = false;
@@ -12,11 +13,16 @@ abstract class GameMap extends GameComponent {
 
   Future<void> updateTiles(List<TileModel> map);
 
-  Vector2 getPosition();
-  Vector2 getSize();
+  Vector2 getMapPosition();
+  Vector2 getMapSize();
 
-  Rect getRect(){
-    return Rect.fromLTWH(getPosition().x, getPosition().y, getSize().x, getSize().y);
+  Rect getMapRect() {
+    return Rect.fromLTWH(
+      getMapPosition().x,
+      getMapPosition().y,
+      getMapSize().x,
+      getMapSize().y,
+    );
   }
 
   void removeTile(String id);

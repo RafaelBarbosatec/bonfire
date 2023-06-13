@@ -166,6 +166,18 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
+
+    initializeCollisionDetection(
+      mapDimensions: Rect.zero,
+    );
+    await super.add(world);
+    await super.add(bonfireCamera);
+    if (player != null) {
+      bonfireCamera.moveToPlayer();
+    }
+  }
+
+  void configCollision() {
     initializeCollisionDetection(
       mapDimensions: Rect.fromLTWH(
         0,
@@ -173,12 +185,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
         map.size.x.ceilToDouble(),
         map.size.y.ceilToDouble(),
       ),
+      minimumDistance: map.tileSize * 4,
     );
-    await super.add(world);
-    await super.add(bonfireCamera);
-    if (player != null) {
-      bonfireCamera.moveToPlayer();
-    }
   }
 
   @override

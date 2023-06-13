@@ -195,7 +195,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
     if (config.moveOnlyMapArea && viewfinder.isMounted) {
       setBounds(
         Rectangle.fromRect(
-          gameRef.map.getRect().deflatexy(
+          gameRef.map.getMapRect().deflatexy(
                 visibleWorldRect.width / 2,
                 visibleWorldRect.height / 2,
               ),
