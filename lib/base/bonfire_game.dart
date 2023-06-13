@@ -11,7 +11,6 @@ import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
 // ignore: implementation_imports
-import 'package:flame/src/game/overlay_manager.dart';
 import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
@@ -41,9 +40,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   /// Background of the game. This can be a color or custom component
   final GameBackground? background;
 
-  /// Used to show grid in the map and facilitate the construction and testing of the map
-  final bool constructionMode;
-
   /// Color grid when `constructionMode` is true
   @override
   final Color? constructionModeColor;
@@ -55,9 +51,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   /// Color of the collision area when `showCollisionArea` is true
   @override
   final Color? collisionAreaColor;
-
-  /// Used to extensively control game elements
-  final GameController? gameController;
 
   /// Used to configure lighting in the game
   final Color? lightingColorGame;
@@ -75,9 +68,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
   final List<GameComponent> _visibleComponents = List.empty(growable: true);
-  final Iterable<ShapeHitbox> _visibleCollisions = List.empty();
-  final List<GameComponent> _addLater = List.empty(growable: true);
-  // late IntervalTick _interval;
   late IntervalTick _intervalUpdateOder;
   late ColorFilterComponent _colorFilterComponent;
   late LightingComponent _lighting;
@@ -100,19 +90,21 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   bool _shouldUpdatePriority = false;
 
+  @override
+  late BonfireCamera bonfireCamera;
+
+  late World world;
+
   BonfireGame({
     required this.context,
     required this.map,
     JoystickController? joystickController,
     this.player,
     this.interface,
-    List<Enemy>? enemies,
-    List<GameDecoration>? decorations,
     List<GameComponent>? components,
     this.background,
-    this.constructionMode = false,
+    bool debugMode = false,
     this.showCollisionArea = false,
-    this.gameController,
     this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
@@ -124,32 +116,43 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     CameraConfig? cameraConfig,
     List<Force2D>? globalForces,
   })  : _joystickController = joystickController,
-        globalForces = globalForces ?? [],
-        super(
-          camera: BonfireCamera(
-            cameraConfig ?? CameraConfig(),
-          ),
-        ) {
+        globalForces = globalForces ?? [] {
+    this.debugMode = debugMode;
     _bgColor = backgroundColor;
-    camera.setGame(this);
-    camera.target ??= player;
-
-    _addLater.addAll(enemies ?? []);
-    _addLater.addAll(decorations ?? []);
-    _addLater.addAll(components ?? []);
     _lighting = LightingComponent(
       color: lightingColorGame ?? const Color(0x00000000),
     );
     _colorFilterComponent = ColorFilterComponent(
       colorFilter ?? GameColorFilter(),
     );
-    _joystickController?.addObserver(player ?? JoystickMapExplorer(camera));
-
-    debugMode = constructionMode;
 
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
       tick: updateOrderPriorityMicrotask,
+    );
+
+    world = World(
+      children: [
+        map,
+        if (background != null) background!,
+        if (player != null) player!,
+        ...components ?? [],
+      ],
+    );
+
+    bonfireCamera = BonfireCamera(
+      config: cameraConfig ?? CameraConfig(),
+      hudComponents: [
+        _lighting,
+        _colorFilterComponent,
+        if (_joystickController != null) _joystickController!,
+        if (interface != null) interface!,
+      ],
+      world: world,
+    );
+
+    _joystickController?.addObserver(
+      player ?? JoystickMapExplorer(bonfireCamera),
     );
   }
 
@@ -162,37 +165,19 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   FutureOr<void> onLoad() async {
-    await add(_colorFilterComponent);
-
-    if (background != null) {
-      await add(background!);
-    }
-
-    await add(map);
-
-    for (var compLate in _addLater) {
-      await add(compLate);
-    }
-    _addLater.clear();
-
-    if (player != null) {
-      await add(player!);
-    }
-
-    await add(_lighting);
-
-    if (interface != null) {
-      await add(interface!);
-    }
-
-    if (_joystickController != null) {
-      await add(_joystickController!);
-    }
-
-    if (gameController != null) {
-      await add(gameController!);
-    }
     await super.onLoad();
+
+    initializeCollisionDetection(
+      mapDimensions: Rect.zero,
+    );
+    await super.add(world);
+    await super.add(bonfireCamera);
+    if (player != null) {
+      bonfireCamera.moveToPlayer();
+    }
+  }
+
+  void configCollision() {
     initializeCollisionDetection(
       mapDimensions: Rect.fromLTWH(
         0,
@@ -200,6 +185,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
         map.size.x.ceilToDouble(),
         map.size.y.ceilToDouble(),
       ),
+      minimumDistance: map.tileSize * 4,
     );
   }
 
@@ -218,46 +204,28 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  Iterable<GameComponent> visibleComponents() => _visibleComponents;
+  Iterable<T> visibles<T extends GameComponent>() =>
+      _visibleComponents.whereType<T>();
 
   @override
-  Iterable<Enemy> visibleEnemies() {
-    return visibleComponentsByType<Enemy>();
+  Iterable<Enemy> livingEnemies({bool onlyVisible = false}) {
+    return enemies(onlyVisible: onlyVisible)
+        .where((element) => !element.isDead);
   }
 
   @override
-  Iterable<Enemy> livingEnemies() {
-    return enemies().where((element) => !element.isDead);
+  Iterable<Enemy> enemies({bool onlyVisible = false}) {
+    return query<Enemy>(onlyVisible: onlyVisible);
   }
 
   @override
-  Iterable<Enemy> enemies() {
-    return componentsByType<Enemy>();
+  Iterable<GameDecoration> decorations({bool onlyVisible = false}) {
+    return query<GameDecoration>(onlyVisible: onlyVisible);
   }
 
   @override
-  Iterable<GameDecoration> visibleDecorations() {
-    return visibleComponentsByType<GameDecoration>();
-  }
-
-  @override
-  Iterable<GameDecoration> decorations() {
-    return componentsByType<GameDecoration>();
-  }
-
-  @override
-  Iterable<Attackable> attackables() {
-    return componentsByType<Attackable>();
-  }
-
-  @override
-  Iterable<Attackable> visibleAttackables() {
-    return visibleComponentsByType<Attackable>();
-  }
-
-  @override
-  Iterable<Sensor> visibleSensors() {
-    return visibleComponentsByType<Sensor>();
+  Iterable<Attackable> attackables({bool onlyVisible = false}) {
+    return query<Attackable>(onlyVisible: onlyVisible);
   }
 
   @override
@@ -266,41 +234,28 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  Iterable<ShapeHitbox> visibleCollisions() {
-    return _visibleCollisions;
-  }
-
-  @override
-  Iterable<T> visibleComponentsByType<T>() {
-    return _visibleComponents.whereType<T>();
-  }
-
-  @override
-  Iterable<T> componentsByType<T>() {
-    return children.whereType<T>();
-  }
-
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    camera.onGameResize(size);
+  Iterable<T> query<T extends Component>({bool onlyVisible = false}) {
+    if (onlyVisible) {
+      return _visibleComponents.whereType<T>();
+    }
+    return world.children.query<T>();
   }
 
   @override
   Vector2 worldToScreen(Vector2 position) {
-    return camera.worldToScreen(position);
+    return bonfireCamera.worldToScreen(position);
   }
 
   @override
   Vector2 screenToWorld(Vector2 position) {
-    return camera.screenToWorld(position);
+    return bonfireCamera.screenToWorld(position);
   }
 
   @override
   bool isVisibleInCamera(GameComponent c) {
     if (!hasLayout) return false;
     if (c.isRemoving) return false;
-    return camera.isComponentOnCamera(c);
+    return bonfireCamera.canSee(c);
   }
 
   @override
@@ -310,7 +265,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       onTapDown?.call(
         this,
         localPosition,
-        camera.screenToWorld(localPosition),
+        bonfireCamera.screenToWorld(localPosition),
       );
     }
     super.onPointerDown(event);
@@ -323,7 +278,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       onTapUp?.call(
         this,
         localPosition,
-        camera.screenToWorld(localPosition),
+        bonfireCamera.screenToWorld(localPosition),
       );
     }
     super.onPointerUp(event);
@@ -341,21 +296,21 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     }
     _joystickController?.addObserver(target);
     if (moveCameraToTarget && target is GameComponent) {
-      camera.moveToTargetAnimated(target as GameComponent);
+      bonfireCamera.follow(target as GameComponent);
     }
   }
 
   @override
-  void startScene(List<SceneAction> actions) {
+  void startScene(List<SceneAction> actions, {void Function()? onComplete}) {
     if (!sceneBuilderStatus.isRunning) {
-      add(SceneBuilderComponent(actions));
+      add(SceneBuilderComponent(actions, onComplete: onComplete));
     }
   }
 
   @override
   void stopScene() {
     try {
-      children
+      world.children
           .firstWhere((value) => value is SceneBuilderComponent)
           .removeFromParent();
     } catch (e) {
@@ -365,7 +320,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   void onDetach() {
-    children.query<GameComponent>().forEach(_detachComp);
+    world.children.query<GameComponent>().forEach(_detachComp);
     super.onDetach();
   }
 
@@ -380,10 +335,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  // ignore: invalid_use_of_internal_member
-  OverlayManager get overlayManager => overlays;
-
-  @override
   void enableGestures(bool enable) {
     enabledGestures = enable;
   }
@@ -395,5 +346,15 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   void requestUpdatePriority() {
     _shouldUpdatePriority = true;
+  }
+
+  @override
+  FutureOr<void> add(Component component) {
+    return world.add(component);
+  }
+
+  @override
+  Future<void> addAll(Iterable<Component> components) {
+    return world.addAll(components);
   }
 }

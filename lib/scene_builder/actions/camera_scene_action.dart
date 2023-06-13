@@ -60,20 +60,27 @@ class CameraSceneAction extends SceneAction {
     if (!_running) {
       _running = true;
       if (position != null) {
-        game.camera.moveToPositionAnimated(
-          position!,
-          duration: duration,
-          finish: _actionDone,
-          curve: curve,
+        game.bonfireCamera.moveToPositionAnimated(
+          position: position!,
+          effectController: EffectController(
+            duration: duration.inSeconds.toDouble(),
+            curve: curve,
+          ),
+          onComplete: _actionDone,
           angle: angle,
           zoom: zoom,
         );
       } else if (target != null) {
-        game.camera.moveToTargetAnimated(
-          target!,
-          duration: duration,
-          finish: _actionDone,
-          curve: curve,
+        game.bonfireCamera.moveToTargetAnimated(
+          target: target!,
+          effectController: EffectController(
+            duration: duration.inSeconds.toDouble(),
+            curve: curve,
+          ),
+          onComplete: () {
+            _actionDone.call();
+            game.bonfireCamera.follow(target!);
+          },
           angle: angle,
           zoom: zoom,
         );

@@ -11,8 +11,7 @@ import 'package:bonfire/bonfire.dart';
 ///
 /// Rafaelbarbosatec
 /// on 31/01/22
-class ArmchairDecoration extends GameDecoration
-    with Movement, Pushable {
+class ArmchairDecoration extends GameDecoration with Movement, Pushable {
   ArmchairDecoration(Vector2 position)
       : super.withSprite(
           position: position,

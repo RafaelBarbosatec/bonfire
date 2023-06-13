@@ -32,7 +32,7 @@ class ControlledUpdateAnimation {
     _alreadyUpdate = false;
   }
 
-  void update(double dt,Vector2 size) {
+  void update(double dt, Vector2 size) {
     if (!_alreadyUpdate) {
       _alreadyUpdate = true;
       animation?.update(dt);

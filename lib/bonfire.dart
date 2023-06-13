@@ -67,7 +67,6 @@ export 'package:bonfire/util/direction_animations/simple_direction_animation.dar
 export 'package:bonfire/util/extensions/extensions.dart';
 export 'package:bonfire/util/follower_widget.dart';
 export 'package:bonfire/util/functions.dart';
-export 'package:bonfire/util/game_controller.dart';
 export 'package:bonfire/util/interval_tick.dart';
 export 'package:bonfire/util/priority_layer.dart';
 export 'package:bonfire/util/talk/say.dart';
@@ -75,7 +74,6 @@ export 'package:bonfire/util/talk/talk_dialog.dart';
 export 'package:bonfire/util/text_damage_component.dart';
 export 'package:bonfire/util/value_generator_component.dart';
 export 'package:bonfire/widgets/bonfire_widget.dart';
-export 'package:bonfire/widgets/mini_map/mini_map.dart';
 export 'package:bonfire/widgets/typewriter/typewriter.dart';
 export 'package:flame/collisions.dart';
 export 'package:flame/components.dart' hide JoystickComponent, HasGameRef;

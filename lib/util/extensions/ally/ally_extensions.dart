@@ -14,8 +14,6 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 24/03/22
 extension AllyExtensions on Ally {
-  
-
   ///Execute simple attack melee using animation
   void simpleAttackMelee({
     required double damage,

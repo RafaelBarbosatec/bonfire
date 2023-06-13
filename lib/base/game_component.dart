@@ -60,7 +60,7 @@ abstract class GameComponent extends PositionComponent
   /// Return screen position of this component.
   Vector2 screenPosition() {
     if (hasGameRef) {
-      return gameRef.camera.worldToScreen(
+      return gameRef.worldToScreen(
         position,
       );
     }
@@ -104,7 +104,8 @@ abstract class GameComponent extends PositionComponent
   }
 
   /// Method that checks if this component is visible on the screen
-  bool _isVisibleInCamera() {
+  @mustCallSuper
+  bool isVisibleInCamera() {
     return hasGameRef ? gameRef.isVisibleInCamera(this) : false;
   }
 
@@ -116,7 +117,11 @@ abstract class GameComponent extends PositionComponent
   }
 
   void onSetIfVisible() {
-    bool nowIsVisible = _isVisibleInCamera();
+    bool nowIsVisible = isVisibleInCamera();
+    if (isHud) {
+      nowIsVisible = true;
+      enabledCheckIsVisible = false;
+    }
     if (nowIsVisible && !isVisible) {
       (gameRef as BonfireGame).addVisible(this);
     }
@@ -152,5 +157,9 @@ abstract class GameComponent extends PositionComponent
       }
       component.renderShape = gameRef.showCollisionArea;
     }
+  }
+
+  bool get isCollision {
+    return children.query<ShapeHitbox>().isNotEmpty;
   }
 }

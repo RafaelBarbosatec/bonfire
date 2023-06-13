@@ -75,7 +75,7 @@ mixin Vision on GameComponent {
     double? visionAngle,
     double angle = 3.14159,
   }) {
-    var compVisible = gameRef.visibleComponentsByType<T>();
+    var compVisible = gameRef.visibles<T>();
 
     if (compVisible.isEmpty) {
       notObserved?.call();

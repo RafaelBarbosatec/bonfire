@@ -58,6 +58,7 @@ class FlyingAttackObject extends GameComponent
     } else {
       moveFromAngle(angle);
     }
+    movementOnlyVisible = false;
   }
 
   FlyingAttackObject.byDirection({
@@ -87,6 +88,7 @@ class FlyingAttackObject extends GameComponent
 
     if (lightingConfig != null) setupLighting(lightingConfig);
     moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
+    movementOnlyVisible = false;
   }
 
   FlyingAttackObject.byAngle({
@@ -120,6 +122,7 @@ class FlyingAttackObject extends GameComponent
     if (lightingConfig != null) setupLighting(lightingConfig);
 
     moveFromAngle(angle);
+    movementOnlyVisible = false;
   }
 
   @override
@@ -303,7 +306,7 @@ class FlyingAttackObject extends GameComponent
   }
 
   void _applyDestroyDamage(Rect rectPosition, GameComponent component) {
-    gameRef.visibleAttackables().forEach((element) {
+    gameRef.attackables(onlyVisible: true).forEach((element) {
       if (element.rectAttackable().overlaps(rectPosition) &&
           element != component) {
         element.receiveDamage(attackFrom, damage, id);

@@ -99,7 +99,8 @@ class MapAssetsManager {
       return spriteAnimationCache[key]!;
     }
 
-    return spriteAnimationCache[key] = ControlledUpdateAnimation.fromSpriteAnimation(
+    return spriteAnimationCache[key] =
+        ControlledUpdateAnimation.fromSpriteAnimation(
       SpriteAnimation.spriteList(
         spriteList,
         stepTime: stepTime,

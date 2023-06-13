@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 
-class Spikes extends GameDecoration with  Sensor {
+class Spikes extends GameDecoration with Sensor {
   Spikes(Vector2 position)
       : super.withSprite(
           sprite: CommonSpriteSheet.spikesSprite,

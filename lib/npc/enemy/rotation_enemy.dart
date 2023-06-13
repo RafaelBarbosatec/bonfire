@@ -31,7 +31,7 @@ class RotationEnemy extends Enemy with UseSpriteAnimation, UseAssetsLoader {
     }));
   }
 
-   @override
+  @override
   void moveFromAngle(double angle, {double? speed}) {
     animation = animRun;
     this.angle = angle;

@@ -37,8 +37,9 @@ class SceneBuilderStatus {
 class SceneBuilderComponent extends Component with BonfireHasGameRef {
   final List<SceneAction> actions;
   int _indexCurrent = 0;
+  final void Function()? onComplete;
 
-  SceneBuilderComponent(this.actions);
+  SceneBuilderComponent(this.actions, {this.onComplete});
 
   @override
   void update(double dt) {
@@ -49,6 +50,7 @@ class SceneBuilderComponent extends Component with BonfireHasGameRef {
         _indexCurrent++;
         _modifyStatus(currentAction: actions[_indexCurrent]);
       } else {
+        onComplete?.call();
         removeFromParent();
       }
     }

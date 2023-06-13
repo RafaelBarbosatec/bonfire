@@ -18,7 +18,7 @@ class PlatformGameController extends GameComponent {
   }
 
   void _checkWin() {
-    var containGem = gameRef.children.whereType<GemDecoration>().isNotEmpty;
+    var containGem = gameRef.query<GemDecoration>().isNotEmpty;
     if (!containGem && !showWin) {
       showWin = true;
       showDialog(
@@ -41,7 +41,7 @@ class PlatformGameController extends GameComponent {
   }
 
   void _checkGameOver() {
-    if (gameRef.children.whereType<FoxPlayer>().isEmpty && !showGameOver) {
+    if (gameRef.query<FoxPlayer>().isEmpty && !showGameOver) {
       showGameOver = true;
       showDialog(
         context: context,

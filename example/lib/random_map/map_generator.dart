@@ -86,7 +86,8 @@ class MapGenerator {
         MapTerrain(
           value: tileWater,
           collisionOnlyCloseCorners: true,
-          collisionsBuilder: () => [RectangleHitbox(size: Vector2.all(tileSize))],
+          collisionsBuilder: () =>
+              [RectangleHitbox(size: Vector2.all(tileSize))],
           sprites: [
             TileModelSprite(
               path: 'tile_random/tile_types.png',

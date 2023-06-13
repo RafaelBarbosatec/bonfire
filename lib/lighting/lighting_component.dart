@@ -3,8 +3,6 @@ import 'package:flutter/widgets.dart';
 
 abstract class LightingInterface {
   Color? color;
-  final List<Lighting> _visibleLight = [];
-  List<Lighting> get visibleLights => _visibleLight;
   void animateToColor(
     Color color, {
     Duration duration = const Duration(milliseconds: 500),
@@ -12,16 +10,6 @@ abstract class LightingInterface {
   });
 
   bool isEnabled();
-
-  void addVisibleLighting(Lighting lighting) {
-    if (!_visibleLight.contains(lighting)) {
-      _visibleLight.add(lighting);
-    }
-  }
-
-  void removeVisibleLighting(Lighting lighting) {
-    _visibleLight.remove(lighting);
-  }
 }
 
 /// Layer component responsible for adding lighting to the game.
@@ -45,7 +33,10 @@ class LightingComponent extends GameComponent with LightingInterface {
 
   @override
   int get priority {
-    return LayerPriority.getLightingPriority(gameRef.highestPriority);
+    if (hasGameRef) {
+      return LayerPriority.getLightingPriority(gameRef.highestPriority);
+    }
+    return super.priority;
   }
 
   Path getWheelPath(double wheelSize, double fromRadius, double toRadius) {
@@ -63,6 +54,10 @@ class LightingComponent extends GameComponent with LightingInterface {
       ..close();
   }
 
+  Iterable<Lighting> get _visibleLight {
+    return gameRef.visibles<Lighting>();
+  }
+
   @override
   void renderTree(Canvas canvas) {
     if (!_containColor) return;
@@ -74,11 +69,9 @@ class LightingComponent extends GameComponent with LightingInterface {
       config.update(_dtUpdate);
       canvas.save();
 
-      canvas.scale(gameRef.camera.zoom);
-      canvas.translate(
-        -(gameRef.camera.position.x),
-        -(gameRef.camera.position.y),
-      );
+      canvas.scale(gameRef.bonfireCamera.zoom);
+      final tl = gameRef.bonfireCamera.topleft;
+      canvas.translate(-(tl.x), -(tl.y));
 
       if (config.type is CircleLightingType) {
         _drawCircle(canvas, light);

@@ -17,8 +17,8 @@ mixin TapGesture on GameComponent {
           handler = onTapDown(pointer, position);
         }
       } else {
-        final absolutePosition = gameRef.screenToWorld(position);
-        if (containsPoint(absolutePosition)) {
+        final worldPosition = gameRef.screenToWorld(position);
+        if (containsPoint(worldPosition)) {
           _pointer = pointer;
           handler = onTapDown(pointer, position);
         }

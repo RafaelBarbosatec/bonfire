@@ -3,8 +3,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/camera/bonfire_camera.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart' as widget;
 
 export 'ally/ally_extensions.dart';
@@ -127,6 +125,15 @@ extension RectExt on Rect {
     }
     return true;
   }
+
+  /// Returns a new rectangle with edges moved outwards by the given delta.
+  Rect inflatexy(double deltaX, double deltaY) {
+    return Rect.fromLTRB(
+        left - deltaX, top - deltaY, right + deltaX, bottom + deltaY);
+  }
+
+  /// Returns a new rectangle with edges moved inwards by the given delta.
+  Rect deflatexy(double deltaX, double deltaY) => inflatexy(-deltaX, -deltaY);
 }
 
 extension SpriteFutureExt on Future<Sprite> {
@@ -248,117 +255,18 @@ extension FutureSpriteExt on FutureOr<Sprite> {
   }
 }
 
-extension ComponentExt on Component {
-  bool get isHud => positionType == PositionType.viewport;
-}
-
-extension CameraExt on Camera {
-  void setGame(BonfireGame game) {
-    if (this is! BonfireCamera) {
-      return;
+extension ComponentExt on GameComponent {
+  bool get isHud {
+    if (hasGameRef) {
+      bool thisIs = gameRef.bonfireCamera.viewport.contains(this);
+      bool parentIs = false;
+      if (parent != null) {
+        parentIs = gameRef.bonfireCamera.viewport.contains(parent!);
+      }
+      return parentIs || thisIs;
     }
-    (this as BonfireCamera).gameRef = game;
+    return false;
   }
-
-  GameComponent? get target => (this as BonfireCamera).target;
-  set target(GameComponent? t) => (this as BonfireCamera).target = t;
-  bool get isMoving => (this as BonfireCamera).isMoving;
-
-  Rect get cameraRectWithSpacing =>
-      (this as BonfireCamera).cameraRectWithSpacing;
-
-  Rect get cameraRect => (this as BonfireCamera).cameraRect;
-
-  void updateSpacingVisibleMap(double space) =>
-      (this as BonfireCamera).updateSpacingVisibleMap(space);
-
-  bool isComponentOnCamera(GameComponent c) =>
-      (this as BonfireCamera).isComponentOnCamera(c);
-
-  bool contains(Offset c) => (this as BonfireCamera).contains(c);
-
-  bool isRectOnCamera(Rect c) => (this as BonfireCamera).isRectOnCamera(c);
-
-  void moveToTargetAnimated(
-    GameComponent target, {
-    double? zoom,
-    double? angle,
-    VoidCallback? finish,
-    Duration? duration,
-    widget.Curve curve = widget.Curves.decelerate,
-  }) {
-    (this as BonfireCamera).moveToTargetAnimated(
-      target,
-      zoom: zoom,
-      angle: angle,
-      finish: finish,
-      duration: duration,
-      curve: curve,
-    );
-  }
-
-  void onGameResize(Vector2 canvasSize) {
-    (this as BonfireCamera).onGameResize(canvasSize);
-  }
-
-  void moveToPlayerAnimated({
-    Duration? duration,
-    VoidCallback? finish,
-    double? zoom,
-    double? angle,
-    widget.Curve curve = widget.Curves.decelerate,
-  }) {
-    (this as BonfireCamera).moveToPlayerAnimated(
-      zoom: zoom,
-      angle: angle,
-      finish: finish,
-      duration: duration,
-      curve: curve,
-    );
-  }
-
-  void moveToPositionAnimated(
-    Vector2 position, {
-    double? zoom,
-    double? angle,
-    VoidCallback? finish,
-    Duration? duration,
-    widget.Curve curve = widget.Curves.decelerate,
-  }) {
-    (this as BonfireCamera).moveToPositionAnimated(
-      position,
-      zoom: zoom,
-      angle: angle,
-      finish: finish,
-      duration: duration,
-      curve: curve,
-    );
-  }
-
-  void animateZoom({
-    required double zoom,
-    Duration? duration,
-    VoidCallback? finish,
-    widget.Curve curve = widget.Curves.decelerate,
-  }) {
-    (this as BonfireCamera).animateZoom(
-      zoom: zoom,
-      finish: finish,
-      duration: duration,
-      curve: curve,
-    );
-  }
-
-  void moveTop(double displacement) =>
-      (this as BonfireCamera).moveTop(displacement);
-  void moveRight(double displacement) =>
-      (this as BonfireCamera).moveRight(displacement);
-  void moveLeft(double displacement) =>
-      (this as BonfireCamera).moveLeft(displacement);
-  void moveDown(double displacement) =>
-      (this as BonfireCamera).moveDown(displacement);
-  void moveUp(double displacement) =>
-      (this as BonfireCamera).moveUp(displacement);
 }
 
 extension DirectionExt on Direction {

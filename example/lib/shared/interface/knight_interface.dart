@@ -72,9 +72,10 @@ class KnightInterface extends GameInterface {
   }
 
   void changeControllerToVisibleEnemy() {
-    if (hasGameRef && !gameRef.camera.isMoving) {
+    // if (hasGameRef && !gameRef.camera.isMoving) {
+    if (hasGameRef) {
       if (enemyControlled == null) {
-        final v = gameRef.visibleComponentsByType<Goblin>();
+        final v = gameRef.visibles<Goblin>();
         if (v.isNotEmpty) {
           enemyControlled = v.first;
           enemyControlled?.controller.enableBehaviors = false;
@@ -139,41 +140,38 @@ class KnightInterface extends GameInterface {
   }
 
   void _startSceneExample() {
-    final enemiesVisible = gameRef.visibleEnemies();
+    final enemiesVisible = gameRef.enemies(onlyVisible: true);
     if (gameRef.player != null && enemiesVisible.isNotEmpty) {
       final enemy = enemiesVisible.first;
-      double initialZoom = gameRef.camera.zoom;
-      gameRef.startScene(
-        [
-          CameraSceneAction.position(Vector2(800, 800)),
-          CameraSceneAction.target(gameRef.player!),
-          CameraSceneAction.target(enemy, zoom: 2),
-          DelaySceneAction(const Duration(seconds: 2)),
-          MoveComponentSceneAction(
-            component: enemy,
-            newPosition: enemy.position.clone()..add(Vector2(-40, -10)),
-          ),
-          CameraSceneAction.target(gameRef.player!, zoom: initialZoom),
-          AwaitCallbackSceneAction(
-            completedCallback: (completed) {
-              _showDialogTest(completed);
-            },
-          ),
-          MoveComponentSceneAction(
-            component: gameRef.player!,
-            newPosition: gameRef.player!.position.clone()..add(Vector2(0, -20)),
-          ),
-          MoveComponentSceneAction(
-            component: gameRef.player!,
-            newPosition: gameRef.player!.position.clone()
-              ..add(Vector2(50, -20)),
-          ),
-          CameraSceneAction.target(enemy),
-          CameraSceneAction.position(Vector2(200, 200)),
-          CameraSceneAction.position(Vector2(0, 200)),
-          CameraSceneAction.target(gameRef.player!),
-        ],
-      );
+      double initialZoom = gameRef.bonfireCamera.zoom;
+      gameRef.startScene([
+        CameraSceneAction.position(Vector2(800, 800)),
+        CameraSceneAction.target(gameRef.player!),
+        CameraSceneAction.target(enemy, zoom: 2),
+        DelaySceneAction(const Duration(seconds: 2)),
+        MoveComponentSceneAction(
+          component: enemy,
+          newPosition: enemy.position.clone()..add(Vector2(-40, -10)),
+        ),
+        CameraSceneAction.target(gameRef.player!, zoom: initialZoom),
+        AwaitCallbackSceneAction(
+          completedCallback: (completed) {
+            _showDialogTest(completed);
+          },
+        ),
+        MoveComponentSceneAction(
+          component: gameRef.player!,
+          newPosition: gameRef.player!.position.clone()..add(Vector2(0, -20)),
+        ),
+        MoveComponentSceneAction(
+          component: gameRef.player!,
+          newPosition: gameRef.player!.position.clone()..add(Vector2(50, -20)),
+        ),
+        CameraSceneAction.target(enemy),
+        CameraSceneAction.position(Vector2(200, 200)),
+        CameraSceneAction.position(Vector2(0, 200)),
+        CameraSceneAction.target(gameRef.player!),
+      ]);
     }
   }
 
