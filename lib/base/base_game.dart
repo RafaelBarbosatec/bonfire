@@ -13,12 +13,6 @@ import 'package:flutter/widgets.dart';
 /// Reorder components per time frame.
 abstract class BaseGame extends FlameGame
     with PointerDetector, KeyboardEvents, HasQuadTreeCollisionDetection {
-  /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
-  int _highestPriority = 1000000;
-
-  /// Get of the _highestPriority
-  int get highestPriority => _highestPriority;
-
   bool enabledGestures = true;
   bool enabledKeyboard = true;
 
@@ -130,15 +124,5 @@ abstract class BaseGame extends FlameGame
   /// Verify if the Component contain gestures.
   bool _hasKeyboardEventListener(Component c) {
     return c is KeyboardEventListener;
-  }
-
-  /// reorder components by priority
-  void updateOrderPriority() {
-    var cams = children.query<BonfireCamera>();
-    if (cams.isNotEmpty) {
-      // ignore: invalid_use_of_internal_member
-      cams.first.world.children.reorder();
-      _highestPriority = cams.first.world.children.last.priority;
-    }
   }
 }

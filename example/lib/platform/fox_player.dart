@@ -3,6 +3,7 @@ import 'package:example/platform/platform_spritesheet.dart';
 import 'package:flutter/services.dart';
 
 class FoxPlayer extends PlatformPlayer with HandleForces {
+  bool inTrunk = false;
   FoxPlayer({
     required Vector2 position,
   }) : super(
@@ -37,27 +38,20 @@ class FoxPlayer extends PlatformPlayer with HandleForces {
     super.joystickAction(event);
   }
 
-  bool isOnTrunk = false;
-
   @override
   bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
     if (other is TileWithCollision && other.type == 'tree_trunk') {
-      if ((jumpingState == JumpingStateEnum.up)) {
-        isOnTrunk = true;
+      if (jumpingState == JumpingStateEnum.up) {
+        inTrunk = true;
+      } else if (other.top > center.y) {
+        inTrunk = false;
+      }
+      if (inTrunk) {
+        return false;
       }
     }
-    if (isOnTrunk) {
-      return false;
-    }
-    return super.onBlockMovement(intersectionPoints, other);
-  }
 
-  @override
-  void onCollisionEnd(PositionComponent other) {
-    if (other is TileWithCollision && other.type == 'tree_trunk' && isOnTrunk) {
-      isOnTrunk = false;
-    }
-    super.onCollisionEnd(other);
+    return super.onBlockMovement(intersectionPoints, other);
   }
 
   @override

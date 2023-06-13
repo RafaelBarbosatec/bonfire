@@ -75,10 +75,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   ValueChanged<BonfireGame>? onReady;
 
   @override
-  LightingInterface? get lighting => _lighting;
+  LightingInterface get lighting => _lighting;
 
   @override
-  ColorFilterInterface? get colorFilter => _colorFilterComponent;
+  ColorFilterInterface get colorFilter => _colorFilterComponent;
 
   @override
   JoystickController? get joystick => _joystickController;
@@ -94,6 +94,13 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   late BonfireCamera bonfireCamera;
 
   late World world;
+
+  /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
+  int _highestPriority = 1000000;
+
+  /// Get of the _highestPriority
+  @override
+  int get highestPriority => _highestPriority;
 
   BonfireGame({
     required this.context,
@@ -159,14 +166,13 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   void updateOrderPriorityMicrotask() {
     if (_shouldUpdatePriority) {
       _shouldUpdatePriority = false;
-      scheduleMicrotask(updateOrderPriority);
+      scheduleMicrotask(_updateOrderPriority);
     }
   }
 
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
-
     initializeCollisionDetection(
       mapDimensions: Rect.zero,
     );
@@ -356,5 +362,12 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   Future<void> addAll(Iterable<Component> components) {
     return world.addAll(components);
+  }
+
+  /// reorder components by priority
+  void _updateOrderPriority() {
+    // ignore: invalid_use_of_internal_member
+    world.children.reorder();
+    _highestPriority = world.children.last.priority;
   }
 }
