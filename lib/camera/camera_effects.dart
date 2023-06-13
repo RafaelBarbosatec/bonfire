@@ -38,6 +38,7 @@ class MyFollowBehavior extends FollowBehavior {
         delta.y += movementWindow.y;
       }
     }
+    if (delta.isZero()) return;
     if (delta.length <= maxSpeed * dt) {
       owner.position = owner.position.clone()..add(delta);
     } else {
