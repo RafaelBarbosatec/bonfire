@@ -1,7 +1,11 @@
-import 'package:bonfire/base/game_component.dart';
+import 'package:bonfire/bonfire.dart';
 
 /// Class use to configure camera behavior.
 class CameraConfig {
+  static final movementWindowDefault = Vector2.all(32);
+
+  Vector2 movementWindow;
+
   /// When this true the camera remains within the map area
   bool moveOnlyMapArea;
 
@@ -25,5 +29,6 @@ class CameraConfig {
     this.target,
     this.speed = double.infinity,
     this.setZoomLimitToFitMap = false,
-  });
+    Vector2? movementWindow,
+  }) : movementWindow = movementWindow ?? movementWindowDefault;
 }

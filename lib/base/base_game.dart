@@ -134,10 +134,11 @@ abstract class BaseGame extends FlameGame
 
   /// reorder components by priority
   void updateOrderPriority() {
-    if (children.isNotEmpty) {
+    var cams = children.query<BonfireCamera>();
+    if (cams.isNotEmpty) {
       // ignore: invalid_use_of_internal_member
-      children.reorder();
-      _highestPriority = children.last.priority;
+      cams.first.world.children.reorder();
+      _highestPriority = cams.first.world.children.last.priority;
     }
   }
 }

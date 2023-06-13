@@ -129,6 +129,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
         target: target,
         owner: viewfinder,
         maxSpeed: config.speed,
+        movementWindow: config.movementWindow,
       ),
     );
     if (snap) {

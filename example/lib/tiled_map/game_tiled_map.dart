@@ -100,7 +100,7 @@ class GameTiledMap extends StatelessWidget {
             // 'miniMap',
           ],
           cameraConfig: CameraConfig(
-            zoom: 1.5,
+            zoom: 1.2,
           ),
         );
       },

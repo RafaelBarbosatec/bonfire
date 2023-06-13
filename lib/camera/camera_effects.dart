@@ -4,8 +4,10 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flame/camera.dart';
 
 class MyFollowBehavior extends FollowBehavior {
+  final Vector2 movementWindow;
   MyFollowBehavior({
     required super.target,
+    required this.movementWindow,
     PositionProvider? owner,
     super.maxSpeed = double.infinity,
     super.horizontalOnly = false,
@@ -16,22 +18,32 @@ class MyFollowBehavior extends FollowBehavior {
   @override
   void update(double dt) {
     var delta = target.position - owner.position;
-    if (verticalOnly) {
-      delta = delta.copyWith(x: 0);
+
+    if (delta.x.abs() < movementWindow.x) {
+      delta.x = 0;
+    } else {
+      if (delta.x > 0) {
+        delta.x -= movementWindow.x;
+      } else {
+        delta.x += movementWindow.x;
+      }
     }
 
-    if (horizontalOnly) {
-      delta = delta.copyWith(y: 0);
+    if (delta.y.abs() < movementWindow.y) {
+      delta.y = 0;
+    } else {
+      if (delta.y > 0) {
+        delta.y -= movementWindow.y;
+      } else {
+        delta.y += movementWindow.y;
+      }
     }
-
-    final distance = delta.length;
-    var scale = dt;
-    if (distance > maxSpeed * dt) {
-      scale = maxSpeed * dt / distance;
+    if (delta.length <= maxSpeed * dt) {
+      owner.position = owner.position.clone()..add(delta);
+    } else {
+      owner.position = owner.position.clone()
+        ..lerp(owner.position + delta, dt * maxSpeed);
     }
-
-    owner.position = owner.position.clone()
-      ..lerp(owner.position + delta, scale);
   }
 }
 
