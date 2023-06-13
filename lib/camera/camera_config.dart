@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 
 /// Class use to configure camera behavior.
 class CameraConfig {
-  static final movementWindowDefault = Vector2.all(32);
+  static final movementWindowDefault = Vector2.all(16);
 
   Vector2 movementWindow;
 
