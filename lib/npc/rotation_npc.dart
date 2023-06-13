@@ -38,7 +38,7 @@ class RotationNpc extends Npc with UseSpriteAnimation, UseAssetsLoader {
     }));
   }
 
-   @override
+  @override
   void moveFromAngle(double angle, {double? speed}) {
     animation = animRun;
     this.angle = angle;
