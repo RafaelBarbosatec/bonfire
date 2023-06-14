@@ -50,7 +50,7 @@ mixin UseBarLife on Attackable {
 
   @override
   void onMount() {
-    gameRef.add(
+    add(
       barLife = BarLifeComponent(
         target: this,
         position: _offset,
