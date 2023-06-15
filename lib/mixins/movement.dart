@@ -24,6 +24,12 @@ mixin Movement on GameComponent {
     _updateLastDirection(_velocity);
   }
 
+  void setVelocityAxis({double? x, double? y}) {
+    _velocity.x = x ?? _velocity.x;
+    _velocity.y = y ?? _velocity.y;
+    _updateLastDirection(_velocity);
+  }
+
   /// You can override this method to listen the movement of this component
   void onMove(
     double speed,
@@ -68,78 +74,57 @@ mixin Movement on GameComponent {
   }
 
   /// Move player to Up
-  void moveUp({double? speed, bool setZeroCrossVelocity = false}) {
+  void moveUp({double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = _velocity.copyWith(
-      y: -_lastSpeed,
-      x: setZeroCrossVelocity ? 0.0 : _velocity.x,
-    );
-    _updateLastDirection(_velocity);
+    setVelocityAxis(y: -_lastSpeed);
   }
 
   /// Move player to Down
   void moveDown({double? speed, bool setZeroCrossVelocity = false}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = _velocity.copyWith(
-      y: _lastSpeed,
-      x: setZeroCrossVelocity ? 0.0 : _velocity.x,
-    );
-    _updateLastDirection(_velocity);
+    setVelocityAxis(y: _lastSpeed);
   }
 
   /// Move player to Left
   void moveLeft({double? speed, bool setZeroCrossVelocity = false}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = _velocity.copyWith(
-      x: -_lastSpeed,
-      y: setZeroCrossVelocity ? 0.0 : _velocity.y,
-    );
-    _updateLastDirection(_velocity);
+    setVelocityAxis(x: -_lastSpeed);
   }
 
   /// Move player to Right
   void moveRight({double? speed, bool setZeroCrossVelocity = false}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = _velocity.copyWith(
-      x: _lastSpeed,
-      y: setZeroCrossVelocity ? 0.0 : _velocity.y,
-    );
-    _updateLastDirection(_velocity);
+    setVelocityAxis(x: _lastSpeed);
   }
 
   /// Move player to Up and Right
   void moveUpRight({double? speed}) {
     _lastSpeed = speed ?? this.speed * diaginalReduction;
-    _velocity = Vector2(_lastSpeed, -_lastSpeed);
-    _updateLastDirection(_velocity);
+    velocity = Vector2(_lastSpeed, -_lastSpeed);
   }
 
   /// Move player to Up and Left
   void moveUpLeft({double? speed}) {
     _lastSpeed = speed ?? this.speed * diaginalReduction;
-    _velocity = Vector2(-_lastSpeed, -_lastSpeed);
-    _updateLastDirection(_velocity);
+    velocity = Vector2(-_lastSpeed, -_lastSpeed);
   }
 
   /// Move player to Down and Left
   void moveDownLeft({double? speed}) {
     _lastSpeed = speed ?? this.speed * diaginalReduction;
-    _velocity = Vector2(-_lastSpeed, _lastSpeed);
-    _updateLastDirection(_velocity);
+    velocity = Vector2(-_lastSpeed, _lastSpeed);
   }
 
   /// Move player to Down and Right
   void moveDownRight({double? speed}) {
     _lastSpeed = speed ?? this.speed * diaginalReduction;
-    _velocity = Vector2(_lastSpeed, _lastSpeed);
-    _updateLastDirection(_velocity);
+    velocity = Vector2(_lastSpeed, _lastSpeed);
   }
 
   /// Move Player to direction by radAngle
   void moveFromAngle(double angle, {double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    _velocity = Vector2(cos(angle) * _lastSpeed, sin(angle) * _lastSpeed);
-    _updateLastDirection(_velocity);
+    velocity = Vector2(cos(angle) * _lastSpeed, sin(angle) * _lastSpeed);
   }
 
   void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {

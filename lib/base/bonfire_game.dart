@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/base/bonfire_game_interface.dart';
@@ -191,7 +192,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
         map.size.x.ceilToDouble(),
         map.size.y.ceilToDouble(),
       ),
-      minimumDistance: map.tileSize * 4,
+      minimumDistance: max(canvasSize.x, canvasSize.y) / 4,
     );
   }
 

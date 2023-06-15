@@ -52,7 +52,7 @@ mixin Jumper on Movement, BlockMovementCollision {
   void _notifyJump() {
     JumpingStateEnum newDirection;
     if (jumping) {
-      if (lastDisplacement.y > 0) {
+      if (lastDirectionVertical == Direction.down) {
         newDirection = JumpingStateEnum.down;
       } else {
         newDirection = JumpingStateEnum.up;
