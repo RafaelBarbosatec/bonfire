@@ -92,7 +92,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   }
 
   void moveToTargetAnimated({
-    required GameComponent target,
+    required PositionComponent target,
     required EffectController effectController,
     double? zoom,
     double? angle,

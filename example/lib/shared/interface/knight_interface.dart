@@ -79,20 +79,40 @@ class KnightInterface extends GameInterface {
         if (v.isNotEmpty) {
           enemyControlled = v.first;
           enemyControlled?.controller.enableBehaviors = false;
-          gameRef.addJoystickObserver(
-            enemyControlled!,
-            cleanObservers: true,
-            moveCameraToTarget: true,
+          gameRef.bonfireCamera.moveToTargetAnimated(
+            target: enemyControlled!,
+            effectController: EffectController(
+              duration: 0.5,
+              curve: Curves.easeInOut,
+            ),
+            zoom: 2,
+            onComplete: () {
+              gameRef.addJoystickObserver(
+                enemyControlled!,
+                cleanObservers: true,
+                moveCameraToTarget: true,
+              );
+            },
           );
         }
       } else if (gameRef.player != null) {
-        gameRef.addJoystickObserver(
-          gameRef.player!,
-          cleanObservers: true,
-          moveCameraToTarget: true,
+        gameRef.bonfireCamera.moveToTargetAnimated(
+          target: gameRef.player!,
+          effectController: EffectController(
+            duration: 0.5,
+            curve: Curves.easeInOut,
+          ),
+          zoom: 1,
+          onComplete: () {
+            gameRef.addJoystickObserver(
+              gameRef.player!,
+              cleanObservers: true,
+              moveCameraToTarget: true,
+            );
+            enemyControlled?.controller.enableBehaviors = true;
+            enemyControlled = null;
+          },
         );
-        enemyControlled?.controller.enableBehaviors = true;
-        enemyControlled = null;
       }
     }
   }

@@ -9,7 +9,7 @@ class Spikes extends GameDecoration with Sensor {
           position: position,
           size: Vector2.all(DungeonMap.tileSize / 1.5),
         ) {
-    setupSensorArea(intervalCallback: 500);
+    setSensorInterval(500);
   }
 
   @override
