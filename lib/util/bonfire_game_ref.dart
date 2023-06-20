@@ -5,24 +5,14 @@ mixin BonfireHasGameRef on Component {
   BonfireGameInterface? _gameRef;
 
   BonfireGameInterface get gameRef {
-    if (_gameRef == null) {
-      var c = parent;
-      while (c != null) {
-        if (c is BonfireHasGameRef) {
-          _gameRef = c.gameRef;
-          return _gameRef!;
-        } else if (c is BonfireGameInterface) {
-          _gameRef = c as BonfireGameInterface;
-          return _gameRef!;
-        } else {
-          c = c.parent;
-        }
-      }
+    final gameR = _getGameRef();
+    if (gameR == null) {
       throw StateError(
         'Cannot find reference $BonfireGameInterface in the component tree',
       );
+    } else {
+      return gameR;
     }
-    return _gameRef!;
   }
 
   bool get hasGameRef => _getGameRef() != null;
@@ -32,11 +22,9 @@ mixin BonfireHasGameRef on Component {
       var c = parent;
       while (c != null) {
         if (c is BonfireHasGameRef) {
-          _gameRef = c.gameRef;
-          return _gameRef!;
+          return _gameRef = c.gameRef;
         } else if (c is BonfireGameInterface) {
-          _gameRef = c as BonfireGameInterface;
-          return _gameRef!;
+          return _gameRef = c as BonfireGameInterface;
         } else {
           c = c.parent;
         }
