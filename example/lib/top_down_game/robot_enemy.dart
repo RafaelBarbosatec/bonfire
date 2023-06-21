@@ -59,12 +59,12 @@ class ZombieEnemy extends RotationEnemy
       AnimatedObjectOnce(
         animation: CommonSpriteSheet.smokeExplosion,
         position: position,
-        size: size,
+        size: Vector2.all(size.x),
+        anchor: anchor,
       ),
     );
     gameRef.bonfireCamera.shake(intensity: 4);
     removeFromParent();
-
     super.die();
   }
 
