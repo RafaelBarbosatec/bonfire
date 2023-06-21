@@ -41,6 +41,8 @@ class Knight extends SimplePlayer
         color: Colors.transparent,
       ),
     );
+
+    setupVision(drawVision: true);
   }
 
   @override
@@ -137,6 +139,7 @@ class Knight extends SimplePlayer
   }
 
   void execShowTalk(GameComponent first) {
+    double lastZoom = gameRef.bonfireCamera.zoom;
     gameRef.bonfireCamera.moveToTargetAnimated(
       effectController: EffectController(duration: 1),
       target: first,
@@ -196,7 +199,7 @@ class Knight extends SimplePlayer
             if (!isDead) {
               gameRef.bonfireCamera.moveToPlayerAnimated(
                 effectController: EffectController(duration: 1),
-                zoom: 1,
+                zoom: lastZoom,
               );
             }
           },

@@ -35,19 +35,19 @@ mixin Vision on GameComponent {
       return _currentShape = null;
     }
 
-    String key = '$radiusVision/$visionAngle/$angle';
-    PolygonShape shape;
-    var center = absoluteCenter;
-    if (_polygonCache.containsKey(key)) {
-      shape = _polygonCache[key]!;
-      shape.position = center;
-    } else {
-      shape = _buildShape(radiusVision, visionAngle, angle, center);
-      _polygonCache[key] = shape;
-    }
+    PolygonShape shape = _getShapeVision(radiusVision, visionAngle, angle);
 
-    if (component.isRemoving) {
+    if (_canSee(shape, component)) {
+      observed(component);
+    } else {
       notObserved?.call();
+    }
+    return _currentShape = shape;
+  }
+
+  bool _canSee(PolygonShape shape, GameComponent component) {
+    if (component.isRemoving) {
+      return false;
     }
 
     final rect = component.rectConsideringCollision;
@@ -56,12 +56,7 @@ mixin Vision on GameComponent {
       position: rect.positionVector2,
     );
 
-    if (shape.isCollision(otherShape)) {
-      observed(component);
-    } else {
-      notObserved?.call();
-    }
-    return _currentShape = shape;
+    return shape.isCollision(otherShape);
   }
 
   /// This method we notify when detect components by type when enter in [radiusVision] configuration
@@ -82,26 +77,10 @@ mixin Vision on GameComponent {
       return _currentShape = null;
     }
 
-    String key = '$radiusVision/$visionAngle/$angle';
-    PolygonShape shape;
-    var center = absolutePosition;
-    var centerVision =
-        Vector2(center.x - radiusVision, center.y - radiusVision);
-    if (_polygonCache.containsKey(key)) {
-      shape = _polygonCache[key]!;
-      shape.position = centerVision;
-    } else {
-      shape = _buildShape(radiusVision, visionAngle, angle, centerVision);
-      _polygonCache[key] = shape;
-    }
+    PolygonShape shape = _getShapeVision(radiusVision, visionAngle, angle);
 
     List<T> compObserved = compVisible.where((comp) {
-      final rect = comp.rectConsideringCollision;
-      final otherShape = RectangleShape(
-        rect.sizeVector2,
-        position: rect.positionVector2,
-      );
-      return !comp.isRemoving && shape.isCollision(otherShape);
+      return _canSee(shape, comp);
     }).toList();
 
     if (compObserved.isNotEmpty) {
@@ -164,5 +143,23 @@ mixin Vision on GameComponent {
     if (_drawVision) {
       _currentShape?.render(canvas, _paint);
     }
+  }
+
+  PolygonShape _getShapeVision(
+    double radiusVision,
+    double? visionAngle,
+    double angle,
+  ) {
+    String key = '$radiusVision/$visionAngle/$angle';
+    PolygonShape shape;
+    var center = absoluteCenter;
+    if (_polygonCache.containsKey(key)) {
+      shape = _polygonCache[key]!;
+      shape.position = center;
+    } else {
+      shape = _buildShape(radiusVision, visionAngle, angle, center);
+      _polygonCache[key] = shape;
+    }
+    return shape;
   }
 }
