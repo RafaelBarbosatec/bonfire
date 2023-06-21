@@ -100,25 +100,25 @@ mixin Movement on GameComponent {
 
   /// Move player to Up and Right
   void moveUpRight({double? speed}) {
-    _lastSpeed = speed ?? this.speed * diaginalReduction;
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
     velocity = Vector2(_lastSpeed, -_lastSpeed);
   }
 
   /// Move player to Up and Left
   void moveUpLeft({double? speed}) {
-    _lastSpeed = speed ?? this.speed * diaginalReduction;
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
     velocity = Vector2(-_lastSpeed, -_lastSpeed);
   }
 
   /// Move player to Down and Left
   void moveDownLeft({double? speed}) {
-    _lastSpeed = speed ?? this.speed * diaginalReduction;
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
     velocity = Vector2(-_lastSpeed, _lastSpeed);
   }
 
   /// Move player to Down and Right
   void moveDownRight({double? speed}) {
-    _lastSpeed = speed ?? this.speed * diaginalReduction;
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
     velocity = Vector2(_lastSpeed, _lastSpeed);
   }
 
