@@ -12,9 +12,16 @@ mixin Vision on GameComponent {
   bool _drawVision = false;
   final Map<String, PolygonShape> _polygonCache = {};
   PolygonShape? _currentShape;
+  int _countPolygonPoints = 12;
 
-  void setupVision({Color? color, bool drawVision = false}) {
+  void setupVision({
+    Color? color,
+    bool drawVision = false,
+    int countPolygonPoints = 12,
+  }) {
+    assert(countPolygonPoints % 2 == 0, 'countPolygonPoints must be even');
     _drawVision = drawVision;
+    _countPolygonPoints = countPolygonPoints;
     _paint.color = color ?? Colors.red.withOpacity(0.5);
   }
 
@@ -88,7 +95,6 @@ mixin Vision on GameComponent {
     } else {
       notObserved?.call();
     }
-
     return _currentShape = shape;
   }
 
@@ -102,26 +108,39 @@ mixin Vision on GameComponent {
     double nextX = radiusVision * cos(angle);
     double nextY = radiusVision * sin(angle);
     Offset point = Offset(nextX, nextY);
-    Offset point1 = point.rotate(angleV / 8, Offset.zero);
-    Offset point2 = point1.rotate(angleV / 8, Offset.zero);
-    Offset point3 = point2.rotate(angleV / 8, Offset.zero);
-    Offset point4 = point3.rotate(angleV / 8, Offset.zero);
-    Offset point5 = point.rotate(angleV / -8, Offset.zero);
-    Offset point6 = point5.rotate(angleV / -8, Offset.zero);
-    Offset point7 = point6.rotate(angleV / -8, Offset.zero);
-    Offset point8 = point7.rotate(angleV / -8, Offset.zero);
+    List<Vector2> pointsP = [];
+    List.generate(_countPolygonPoints ~/ 2, (index) {
+      if (index == 0) {
+        pointsP.add(point
+            .rotate(angleV / _countPolygonPoints, Offset.zero)
+            .toVector2());
+      } else {
+        pointsP.add(pointsP.last
+            .toOffset()
+            .rotate(angleV / _countPolygonPoints, Offset.zero)
+            .toVector2());
+      }
+    });
+    List<Vector2> pointsN = [];
+    List.generate(_countPolygonPoints ~/ 2, (index) {
+      if (index == 0) {
+        pointsN.add(point
+            .rotate(angleV / -_countPolygonPoints, Offset.zero)
+            .toVector2());
+      } else {
+        pointsN.add(pointsN.last
+            .toOffset()
+            .rotate(angleV / -_countPolygonPoints, Offset.zero)
+            .toVector2());
+      }
+    });
+
     return PolygonShape(
       [
         Vector2(0, 0),
-        point4.toVector2(),
-        point3.toVector2(),
-        point2.toVector2(),
-        point1.toVector2(),
+        ...pointsP.reversed,
         point.toVector2(),
-        point5.toVector2(),
-        point6.toVector2(),
-        point7.toVector2(),
-        point8.toVector2(),
+        ...pointsN,
       ],
       position: position,
     );
@@ -141,7 +160,10 @@ mixin Vision on GameComponent {
   void render(Canvas canvas) {
     super.render(canvas);
     if (_drawVision) {
+      canvas.save();
+      canvas.translate(-position.x, -position.y);
       _currentShape?.render(canvas, _paint);
+      canvas.restore();
     }
   }
 

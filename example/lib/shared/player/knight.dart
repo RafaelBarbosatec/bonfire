@@ -41,8 +41,6 @@ class Knight extends SimplePlayer
         color: Colors.transparent,
       ),
     );
-
-    setupVision(drawVision: true);
   }
 
   @override
