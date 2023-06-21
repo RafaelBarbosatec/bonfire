@@ -2,8 +2,10 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
+import 'package:example/shared/util/enemy_sprite_sheet.dart';
 import 'package:example/shared/util/player_sprite_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'knight_controller.dart';
 
@@ -17,8 +19,6 @@ class Knight extends SimplePlayer
         Lighting,
         BlockMovementCollision,
         UseStateController<KnightController> {
-  static final double maxSpeed = DungeonMap.tileSize * 3;
-
   double angleRadAttack = 0.0;
   Rect? rectDirectionAttack;
   Sprite? spriteDirectionAttack;
@@ -32,7 +32,6 @@ class Knight extends SimplePlayer
           size: Vector2.all(DungeonMap.tileSize),
           position: position,
           life: 200,
-          speed: maxSpeed,
         ) {
     enabledJoystickIntencity = true;
     setupLighting(
@@ -92,7 +91,7 @@ class Knight extends SimplePlayer
       angle: angle,
       size: Vector2.all(width * 0.7),
       damage: damage,
-      speed: maxSpeed * 2,
+      speed: speed * 2,
       collision: RectangleHitbox(
         size: Vector2(width / 3, width / 3),
         position: Vector2(width * 0.1, 0),
@@ -138,76 +137,80 @@ class Knight extends SimplePlayer
   }
 
   void execShowTalk(GameComponent first) {
-    // gameRef.camera.moveToTargetAnimated(
-    //   first,
-    //   zoom: 2,
-    //   finish: () {
-    //     TalkDialog.show(
-    //       gameRef.context,
-    //       [
-    //         Say(
-    //           text: [
-    //             const TextSpan(
-    //               text: 'Look at this! It seems that',
-    //             ),
-    //             const TextSpan(
-    //               text: ' I\'m not alone ',
-    //               style: TextStyle(color: Colors.red),
-    //             ),
-    //             const TextSpan(
-    //               text: 'here...',
-    //             ),
-    //           ],
-    //           person: SizedBox(
-    //             width: 100,
-    //             height: 100,
-    //             child: PlayerSpriteSheet.idleRight.asWidget(),
-    //           ),
-    //         ),
-    //         Say(
-    //           text: [
-    //             const TextSpan(
-    //               text: 'Lok Tar Ogr!',
-    //             ),
-    //             const TextSpan(
-    //               text: ' Lok Tar Ogr! ',
-    //               style: TextStyle(color: Colors.green),
-    //             ),
-    //             const TextSpan(
-    //               text: ' Lok Tar Ogr! ',
-    //             ),
-    //             const TextSpan(
-    //               text: 'Lok Tar Ogr!',
-    //               style: TextStyle(color: Colors.green),
-    //             ),
-    //           ],
-    //           person: SizedBox(
-    //             width: 100,
-    //             height: 100,
-    //             child: EnemySpriteSheet.idleLeft.asWidget(),
-    //           ),
-    //           personSayDirection: PersonSayDirection.RIGHT,
-    //         ),
-    //       ],
-    //       onClose: () {
-    //         // ignore: avoid_print
-    //         print('close talk');
+    gameRef.bonfireCamera.moveToTargetAnimated(
+      effectController: EffectController(duration: 1),
+      target: first,
+      zoom: 2,
+      onComplete: () {
+        TalkDialog.show(
+          gameRef.context,
+          [
+            Say(
+              text: [
+                const TextSpan(
+                  text: 'Look at this! It seems that',
+                ),
+                const TextSpan(
+                  text: ' I\'m not alone ',
+                  style: TextStyle(color: Colors.red),
+                ),
+                const TextSpan(
+                  text: 'here...',
+                ),
+              ],
+              person: SizedBox(
+                width: 100,
+                height: 100,
+                child: PlayerSpriteSheet.idleRight.asWidget(),
+              ),
+            ),
+            Say(
+              text: [
+                const TextSpan(
+                  text: 'Lok Tar Ogr!',
+                ),
+                const TextSpan(
+                  text: ' Lok Tar Ogr! ',
+                  style: TextStyle(color: Colors.green),
+                ),
+                const TextSpan(
+                  text: ' Lok Tar Ogr! ',
+                ),
+                const TextSpan(
+                  text: 'Lok Tar Ogr!',
+                  style: TextStyle(color: Colors.green),
+                ),
+              ],
+              person: SizedBox(
+                width: 100,
+                height: 100,
+                child: EnemySpriteSheet.idleLeft.asWidget(),
+              ),
+              personSayDirection: PersonSayDirection.RIGHT,
+            ),
+          ],
+          onClose: () {
+            // ignore: avoid_print
+            print('close talk');
 
-    //         if (!isDead) {
-    //           gameRef.camera.moveToPlayerAnimated(zoom: 1);
-    //         }
-    //       },
-    //       onFinish: () {
-    //         // ignore: avoid_print
-    //         print('finish talk');
-    //       },
-    //       logicalKeyboardKeysToNext: [
-    //         LogicalKeyboardKey.space,
-    //         LogicalKeyboardKey.enter
-    //       ],
-    //     );
-    //   },
-    // );
+            if (!isDead) {
+              gameRef.bonfireCamera.moveToPlayerAnimated(
+                effectController: EffectController(duration: 1),
+                zoom: 1,
+              );
+            }
+          },
+          onFinish: () {
+            // ignore: avoid_print
+            print('finish talk');
+          },
+          logicalKeyboardKeysToNext: [
+            LogicalKeyboardKey.space,
+            LogicalKeyboardKey.enter
+          ],
+        );
+      },
+    );
   }
 
   void _drawDirectionAttack(Canvas c) {

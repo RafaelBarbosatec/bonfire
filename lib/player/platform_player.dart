@@ -7,7 +7,7 @@ class PlatformPlayer extends SimplePlayer
     required super.size,
     required PlatformAnimations animation,
     Direction initDirection = Direction.right,
-    double speed = 150,
+    double? speed,
     double life = 100,
     int countJumps = 1,
   }) : super(

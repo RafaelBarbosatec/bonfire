@@ -9,7 +9,7 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
     required Vector2 size,
     required Future<SpriteAnimation> animIdle,
     required Future<SpriteAnimation> animRun,
-    double speed = 150,
+    double? speed,
     double currentRadAngle = -1.55,
     double life = 100,
   }) : super(

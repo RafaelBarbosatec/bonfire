@@ -26,6 +26,7 @@ class Goblin extends SimpleEnemy
       borderRadius: BorderRadius.circular(2),
       borderWidth: 2,
     );
+    setupVision(drawVision: true);
   }
 
   @override

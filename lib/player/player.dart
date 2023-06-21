@@ -16,9 +16,9 @@ class Player extends GameComponent
     required Vector2 position,
     required Vector2 size,
     double life = 100,
-    double speed = 100,
+    double? speed,
   }) {
-    this.speed = speed;
+    this.speed = speed ?? this.speed;
     receivesAttackFrom = ReceivesAttackFromEnum.ENEMY;
     initialLife(life);
     this.position = position;

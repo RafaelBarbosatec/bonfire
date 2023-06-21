@@ -23,7 +23,7 @@ class RotationNpc extends Npc with UseSpriteAnimation, UseAssetsLoader {
     required Future<SpriteAnimation> animIdle,
     required Future<SpriteAnimation> animRun,
     double currentRadAngle = -1.55,
-    double speed = 100,
+    double? speed,
   }) : super(
           position: position,
           size: size,

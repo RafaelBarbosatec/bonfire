@@ -207,7 +207,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     super.onMount();
     // ignore: invalid_use_of_internal_member
     setMounted();
-    onReady?.call(this);
+    Future.delayed(Duration.zero, () => onReady?.call(this));
   }
 
   @override

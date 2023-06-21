@@ -11,9 +11,9 @@ mixin AutomaticRandomMovement on Movement {
   late Random _random;
 
   bool get isVisibleReduction {
-    // if (hasGameRef) {
-    //   return gameRef.camera.cameraRect.overlapComponent(this);
-    // }
+    if (hasGameRef) {
+      return gameRef.isVisibleInCamera(this);
+    }
     return false;
   }
 
@@ -54,8 +54,9 @@ mixin AutomaticRandomMovement on Movement {
         }
       }
     } else {
-      bool canMoveX = (_targetRandomMovement.x - x).abs() > speed;
-      bool canMoveY = (_targetRandomMovement.y - y).abs() > speed;
+      double speedDt = speed * dt;
+      bool canMoveX = (_targetRandomMovement.x - x).abs() > speedDt;
+      bool canMoveY = (_targetRandomMovement.y - y).abs() > speedDt;
 
       bool canMoveLeft = false;
       bool canMoveRight = false;
@@ -77,27 +78,27 @@ mixin AutomaticRandomMovement on Movement {
       }
       if (useAngle) {
         if (canMoveX && canMoveY) {
-          moveFromAngle(angle);
+          moveFromAngle(angle, speed: speed);
         } else {
           stopMove();
         }
       } else {
         if (canMoveLeft && canMoveUp) {
-          moveUpLeft();
+          moveUpLeft(speed: speed);
         } else if (canMoveLeft && canMoveDown) {
-          moveDownLeft();
+          moveDownLeft(speed: speed);
         } else if (canMoveRight && canMoveUp) {
-          moveUpRight();
+          moveUpRight(speed: speed);
         } else if (canMoveRight && canMoveDown) {
-          moveDownRight();
+          moveDownRight(speed: speed);
         } else if (canMoveRight) {
-          moveRight();
+          moveRight(speed: speed);
         } else if (canMoveLeft) {
-          moveLeft();
+          moveLeft(speed: speed);
         } else if (canMoveUp) {
-          moveUp();
+          moveUp(speed: speed);
         } else if (canMoveDown) {
-          moveDown();
+          moveDown(speed: speed);
         } else {
           stopMove();
         }

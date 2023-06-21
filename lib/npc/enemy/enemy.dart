@@ -12,14 +12,11 @@ class Enemy extends Npc with Attackable {
     required Vector2 position,
     required Vector2 size,
     double life = 10,
-    double speed = 100,
+    double? speed,
     ReceivesAttackFromEnum receivesAttackFrom =
         ReceivesAttackFromEnum.PLAYER_AND_ALLY,
   }) : super(position: position, size: size, speed: speed) {
-    this.speed = speed;
     this.receivesAttackFrom = receivesAttackFrom;
     initialLife(life);
-    this.position = position;
-    this.size = size;
   }
 }

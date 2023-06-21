@@ -5,11 +5,12 @@ import 'package:bonfire/bonfire.dart';
 /// Mixin responsible for adding movements
 mixin Movement on GameComponent {
   static const diaginalReduction = 0.7853981633974483;
+  static const speedDefault = 80.0;
 
   bool get isIdle => _velocity.isZero();
   double dtUpdate = 0;
-  double speed = 100;
-  double _lastSpeed = 100;
+  double speed = speedDefault;
+  double _lastSpeed = speedDefault;
   double velocityRadAngle = 0.0;
   Vector2 lastDisplacement = Vector2.zero();
   Vector2 _velocity = Vector2.zero();

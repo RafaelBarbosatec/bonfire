@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/geometry/polygon.dart';
 import 'package:flutter/widgets.dart';
 
 extension PlayerExtensions on Player {
@@ -8,15 +9,15 @@ extension PlayerExtensions on Player {
   /// Method that bo used in [update] method.
   /// [visionAngle] in radians
   /// [angle] in radians. is automatically picked up using the component's direction.
-  void seeEnemy({
+   PolygonShape? seeEnemy({
     required Function(List<Enemy>) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
     double? visionAngle,
     double? angle,
   }) {
-    if (isDead) return;
-    seeComponentType<Enemy>(
+    if (isDead) return null;
+   return seeComponentType<Enemy>(
       observed: observed,
       notObserved: notObserved,
       radiusVision: radiusVision,
