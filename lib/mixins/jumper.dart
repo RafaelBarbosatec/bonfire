@@ -43,9 +43,9 @@ mixin Jumper on Movement, BlockMovementCollision {
   @override
   void update(double dt) {
     super.update(dt);
-    if (!jumping && lastDisplacement.y > 2) {
+    if (!jumping && lastDisplacement.y > 1) {
       jumping = true;
-    }
+    } 
     _notifyJump();
   }
 
