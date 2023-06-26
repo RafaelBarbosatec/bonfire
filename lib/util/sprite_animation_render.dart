@@ -7,15 +7,18 @@ class SpriteAnimationRender {
   SpriteAnimationTicker? _animationTicker;
   SpriteAnimation? _animation;
   final VoidCallback? onFinish;
+  final VoidCallback? onStart;
   final Vector2? position;
   final bool loop;
   Vector2? size;
-  bool playing;
+  bool _playing = true;
 
   set animation(SpriteAnimation? animation) {
     _animation = animation;
     _animation?.loop = loop;
     _animationTicker = animation?.ticker();
+    _animationTicker?.onStart = onStart;
+    _animationTicker?.onComplete = onFinish;
   }
 
   SpriteAnimationRender({
@@ -23,11 +26,15 @@ class SpriteAnimationRender {
     this.size,
     this.position,
     this.onFinish,
+    this.onStart,
     this.loop = true,
-    this.playing = true,
+    bool autoPlay = true,
   }) : _animation = animation {
     _animation?.loop = loop;
+    _playing = autoPlay;
     _animationTicker = animation?.ticker();
+    _animationTicker?.onStart = onStart;
+    _animationTicker?.onComplete = onFinish;
   }
 
   void render(Canvas canvas, {Paint? overridePaint}) {
@@ -40,11 +47,16 @@ class SpriteAnimationRender {
   }
 
   void update(double dt) {
-    if (playing) {
+    if (_playing) {
       _animationTicker?.update(dt);
     }
-    if (!loop && (_animationTicker?.done() ?? false)) {
-      onFinish?.call();
-    }
+  }
+
+  void pause() {
+    _playing = false;
+  }
+
+  void play() {
+    _playing = true;
   }
 }

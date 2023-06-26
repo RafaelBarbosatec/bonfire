@@ -40,14 +40,14 @@ class RotationNpc extends Npc with UseSpriteAnimation, UseAssetsLoader {
 
   @override
   void moveFromAngle(double angle, {double? speed}) {
-    animation = animRun;
+    setAnimation(animRun);
     this.angle = angle;
     super.moveFromAngle(angle, speed: speed);
   }
 
   @override
   void idle() {
-    animation = animIdle;
+    setAnimation(animIdle);
     super.idle();
   }
 

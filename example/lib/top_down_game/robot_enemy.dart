@@ -56,11 +56,12 @@ class ZombieEnemy extends RotationEnemy
   @override
   void die() {
     gameRef.add(
-      AnimatedObjectOnce(
+      AnimatedGameObject(
         animation: CommonSpriteSheet.smokeExplosion,
         position: position,
         size: Vector2.all(size.x),
         anchor: anchor,
+        loop: false,
       ),
     );
     gameRef.bonfireCamera.shake(intensity: 4);

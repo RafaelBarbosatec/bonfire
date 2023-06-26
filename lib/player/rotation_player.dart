@@ -31,9 +31,9 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     super.joystickChangeDirectional(event);
     if (event.directional != JoystickMoveDirectional.IDLE && !isDead) {
-      animation = animRun;
+      setAnimation(animRun);
     } else {
-      animation = animIdle;
+      setAnimation(animIdle);
     }
   }
 
@@ -46,7 +46,7 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    animation = animIdle;
+    setAnimation(animIdle);
   }
 
   @override

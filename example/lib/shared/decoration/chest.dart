@@ -88,20 +88,22 @@ class Chest extends GameDecoration with TapGesture {
 
   void _addSmokeExplosion(Vector2 position) {
     gameRef.add(
-      AnimatedObjectOnce(
+      AnimatedGameObject(
         animation: CommonSpriteSheet.smokeExplosion,
         position: position,
         size: Vector2.all(DungeonMap.tileSize * 0.5),
+        loop: false,
       ),
     );
   }
 
   void _showEmote() {
     add(
-      AnimatedFollowerObject(
+      AnimatedGameObject(
         animation: CommonSpriteSheet.emote,
         size: size,
-        positionFromTarget: size / -2,
+        position: size / -2,
+        loop: false,
       ),
     );
   }

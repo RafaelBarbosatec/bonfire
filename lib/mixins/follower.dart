@@ -15,7 +15,7 @@ import 'package:flame/components.dart';
 /// Mixin that do the component follow the targe
 /// If target is null will try follow your parent
 mixin Follower on GameComponent {
-  GameComponent? followerTarget;
+  GameComponent? _followerTarget;
   Vector2? followerOffset;
   Vector2? _lastFollowerPosition;
   final Vector2 _zero = Vector2.zero();
@@ -24,34 +24,24 @@ mixin Follower on GameComponent {
     GameComponent? target,
     Vector2? offset,
   }) {
-    followerTarget = target;
-    followerOffset = offset;
+    _followerTarget = target ?? _followerTarget;
+    followerOffset = offset ?? followerOffset;
+  }
+
+  void removeFollowerTarget() {
+    _followerTarget = null;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (followerTarget != null &&
-        _lastFollowerPosition != followerTarget?.absolutePosition) {
-      _lastFollowerPosition = followerTarget!.absolutePosition.clone();
+    if (_followerTarget != null &&
+        _lastFollowerPosition != _followerTarget?.absolutePosition) {
+      _lastFollowerPosition = _followerTarget!.absolutePosition.clone();
       position = _lastFollowerPosition! + (followerOffset ?? _zero);
     }
   }
 
   @override
-  void onMount() {
-    super.onMount();
-    if (followerTarget == null) {
-      followParent();
-    }
-  }
-
-  void followParent() {
-    // if (parent != null && parent is GameComponent) {
-    //   followerTarget = parent as GameComponent;
-    // }
-  }
-
-  @override
-  int get priority => followerTarget?.priority ?? super.priority;
+  int get priority => _followerTarget?.priority ?? super.priority;
 }

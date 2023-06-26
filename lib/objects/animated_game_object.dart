@@ -4,20 +4,23 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/sprite_animation_render.dart';
 
-class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
+class AnimatedGameObject extends GameComponent with UseAssetsLoader, Lighting {
   final VoidCallback? onFinish;
   final VoidCallback? onStart;
+  final bool removeOnFinish;
   SpriteAnimationRender? animation;
 
-  AnimatedObjectOnce({
+  AnimatedGameObject({
     required Vector2 position,
     required Vector2 size,
     FutureOr<SpriteAnimation>? animation,
     this.onFinish,
     this.onStart,
-    double rotateRadAngle = 0,
+    this.removeOnFinish = true,
+    double angle = 0,
     LightingConfig? lightingConfig,
     Anchor anchor = Anchor.topLeft,
+    bool loop = true,
   }) {
     this.anchor = anchor;
     loader?.add(AssetToLoad(
@@ -27,15 +30,15 @@ class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
           animation: value,
           size: size,
           onFinish: _onFinish,
-          loop: false,
+          onStart: onStart,
+          loop: loop,
         );
-        onStart?.call();
       },
     ));
     setupLighting(lightingConfig);
     this.position = position;
     this.size = size;
-    angle = rotateRadAngle;
+    this.angle = angle;
   }
 
   @override
@@ -56,7 +59,9 @@ class AnimatedObjectOnce extends GameComponent with UseAssetsLoader, Lighting {
   }
 
   void _onFinish() {
+    if (removeOnFinish) {
+      removeFromParent();
+    }
     onFinish?.call();
-    removeFromParent();
   }
 }

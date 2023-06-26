@@ -32,10 +32,11 @@ class Goblin extends SimpleEnemy
   void die() {
     super.die();
     gameRef.add(
-      AnimatedObjectOnce(
+      AnimatedGameObject(
         animation: CommonSpriteSheet.smokeExplosion,
         position: position,
         size: Vector2.all(DungeonMap.tileSize),
+        loop: false,
       ),
     );
     removeFromParent();

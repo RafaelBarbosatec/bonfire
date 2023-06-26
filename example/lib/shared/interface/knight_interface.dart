@@ -72,7 +72,6 @@ class KnightInterface extends GameInterface {
   }
 
   void changeControllerToVisibleEnemy() {
-    // if (hasGameRef && !gameRef.camera.isMoving) {
     if (hasGameRef) {
       if (enemyControlled == null) {
         final v = gameRef.visibles<Goblin>();

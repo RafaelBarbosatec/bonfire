@@ -23,10 +23,11 @@ class GameManualController extends GameComponent {
     final goblin = Goblin(Vector2(x, y));
 
     gameRef.add(
-      AnimatedObjectOnce(
+      AnimatedGameObject(
         animation: CommonSpriteSheet.smokeExplosion,
         size: Vector2.all(DungeonMap.tileSize),
         position: goblin.position,
+        loop: false,
       ),
     );
 

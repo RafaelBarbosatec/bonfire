@@ -84,7 +84,7 @@ extension GameComponentExtensions on GameComponent {
         withDecorationCollision: withDecorationCollision,
         onDestroy: onDestroy,
         destroySize: destroySize,
-        flyAnimation: animation,
+        animation: animation,
         animationDestroy: animationDestroy,
         lightingConfig: lightingConfig,
       ),
@@ -194,12 +194,13 @@ extension GameComponentExtensions on GameComponent {
 
     if (animation != null) {
       gameRef.add(
-        AnimatedObjectOnce(
+        AnimatedGameObject(
           animation: animation,
           position: startPosition,
           size: size,
-          rotateRadAngle: angle,
+          angle: angle,
           anchor: Anchor.center,
+          loop: false,
         ),
       );
     }

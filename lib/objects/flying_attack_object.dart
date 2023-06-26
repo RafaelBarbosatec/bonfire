@@ -3,13 +3,8 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
-class FlyingAttackObject extends GameComponent
-    with
-        UseSpriteAnimation,
-        UseAssetsLoader,
-        Lighting,
-        Movement,
-        BlockMovementCollision {
+class FlyingAttackObject extends AnimatedGameObject
+    with Movement, BlockMovementCollision {
   final dynamic id;
   Future<SpriteAnimation>? animationDestroy;
   final Direction? direction;
@@ -24,11 +19,11 @@ class FlyingAttackObject extends GameComponent
   ShapeHitbox? collision;
 
   FlyingAttackObject({
-    required Vector2 position,
-    required Vector2 size,
-    required Future<SpriteAnimation> flyAnimation,
+    required super.position,
+    required super.size,
+    required super.animation,
+    super.angle = 0,
     this.direction,
-    double angle = 0,
     this.id,
     this.animationDestroy,
     this.destroySize,
@@ -38,21 +33,14 @@ class FlyingAttackObject extends GameComponent
     this.withDecorationCollision = true,
     this.onDestroy,
     this.enabledDiagonal = true,
-    LightingConfig? lightingConfig,
+    super.lightingConfig,
     this.collision,
   }) {
     this.speed = speed;
-    loader?.add(AssetToLoad(flyAnimation, (value) {
-      animation = value;
-    }));
 
-    this.position = position;
-    this.size = size;
-    this.angle = angle;
     _cosAngle = cos(angle);
     _senAngle = sin(angle);
 
-    if (lightingConfig != null) setupLighting(lightingConfig);
     if (direction != null) {
       moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
     } else {
@@ -62,9 +50,9 @@ class FlyingAttackObject extends GameComponent
   }
 
   FlyingAttackObject.byDirection({
-    required Vector2 position,
-    required Vector2 size,
-    required Future<SpriteAnimation> flyAnimation,
+    required super.position,
+    required super.size,
+    required super.animation,
     required this.direction,
     this.id,
     this.animationDestroy,
@@ -75,27 +63,19 @@ class FlyingAttackObject extends GameComponent
     this.withDecorationCollision = true,
     this.onDestroy,
     this.enabledDiagonal = true,
-    LightingConfig? lightingConfig,
+    super.lightingConfig,
     this.collision,
   }) {
     this.speed = speed;
-    loader?.add(AssetToLoad(flyAnimation, (value) {
-      return animation = value;
-    }));
-
-    this.position = position;
-    this.size = size;
-
-    if (lightingConfig != null) setupLighting(lightingConfig);
     moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
     movementOnlyVisible = false;
   }
 
   FlyingAttackObject.byAngle({
-    required Vector2 position,
-    required Vector2 size,
-    required Future<SpriteAnimation> flyAnimation,
-    required double angle,
+    required super.position,
+    required super.size,
+    required super.animation,
+    required super.angle,
     this.id,
     this.animationDestroy,
     this.destroySize,
@@ -105,21 +85,13 @@ class FlyingAttackObject extends GameComponent
     this.withDecorationCollision = true,
     this.onDestroy,
     this.enabledDiagonal = true,
-    LightingConfig? lightingConfig,
+    super.lightingConfig,
     this.collision,
   }) : direction = null {
     this.speed = speed;
-    loader?.add(AssetToLoad(flyAnimation, (value) {
-      return animation = value;
-    }));
 
-    this.position = position;
-    this.size = size;
-    this.angle = angle;
     _cosAngle = cos(angle);
     _senAngle = sin(angle);
-
-    if (lightingConfig != null) setupLighting(lightingConfig);
 
     moveFromAngle(angle);
     movementOnlyVisible = false;
@@ -247,11 +219,12 @@ class FlyingAttackObject extends GameComponent
     if (hasGameRef) {
       Vector2 innerSize = destroySize ?? size;
       gameRef.add(
-        AnimatedObjectOnce(
+        AnimatedGameObject(
           animation: animationDestroy!,
           position: positionDestroy,
           size: innerSize,
           lightingConfig: lightingConfig,
+          loop: false,
         ),
       );
       _applyDestroyDamage(
@@ -282,7 +255,7 @@ class FlyingAttackObject extends GameComponent
 
     if (hasGameRef) {
       gameRef.add(
-        AnimatedObjectOnce(
+        AnimatedGameObject(
           animation: animationDestroy!,
           position: Rect.fromCenter(
             center: positionDestroy.toOffset(),
@@ -291,6 +264,7 @@ class FlyingAttackObject extends GameComponent
           ).positionVector2,
           lightingConfig: lightingConfig,
           size: innerSize,
+          loop: false,
         ),
       );
       _applyDestroyDamage(

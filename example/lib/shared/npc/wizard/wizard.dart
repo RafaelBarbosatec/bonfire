@@ -1,8 +1,12 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
+import 'package:example/shared/util/player_sprite_sheet.dart';
 import 'package:example/shared/util/wizard_sprite_sheet.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Wizard extends SimpleNpc with BlockMovementCollision, TapGesture {
+  double lastZoom = 1.0;
   Wizard(Vector2 position)
       : super(
           animation: WizardSpriteSheet.simpleDirectionAnimation,
@@ -12,76 +16,16 @@ class Wizard extends SimpleNpc with BlockMovementCollision, TapGesture {
         );
 
   void execShowTalk(GameComponent first) {
-    // gameRef.camera.moveToTargetAnimated(
-    //   first,
-    //   zoom: 2,
-    //   finish: () {
-    //     TalkDialog.show(
-    //       gameRef.context,
-    //       [
-    //         Say(
-    //           text: [
-    //             const TextSpan(
-    //               text:
-    //                   ' Would you tell me, please ...  which way I ought to go from here? ',
-    //             )
-    //           ],
-    //           person: SizedBox(
-    //             width: 100,
-    //             height: 100,
-    //             child: PlayerSpriteSheet.idleRight.asWidget(),
-    //           ),
-    //         ),
-    //         Say(
-    //           text: [
-    //             const TextSpan(
-    //               text: 'That depends a good deal on where you want to get to.',
-    //             ),
-    //           ],
-    //           person: SizedBox(
-    //             width: 100,
-    //             height: 100,
-    //             child: WizardSpriteSheet.idle.asWidget(),
-    //           ),
-    //           personSayDirection: PersonSayDirection.RIGHT,
-    //         ),
-    //         Say(
-    //           text: [
-    //             const TextSpan(
-    //               text: ' I don\'t much care where. ',
-    //             ),
-    //           ],
-    //           person: SizedBox(
-    //             width: 100,
-    //             height: 100,
-    //             child: PlayerSpriteSheet.idleRight.asWidget(),
-    //           ),
-    //         ),
-    //         Say(
-    //           text: [
-    //             const TextSpan(
-    //               text: 'Then it doesn\'t much matter which way you go.',
-    //             ),
-    //           ],
-    //           person: SizedBox(
-    //             width: 100,
-    //             height: 100,
-    //             child: WizardSpriteSheet.idle.asWidget(),
-    //           ),
-    //           personSayDirection: PersonSayDirection.RIGHT,
-    //         ),
-    //       ],
-    //       onClose: () {
-    //         gameRef.camera.moveToPlayerAnimated(zoom: 1);
-    //       },
-    //       onFinish: () {},
-    //       logicalKeyboardKeysToNext: [
-    //         LogicalKeyboardKey.space,
-    //         LogicalKeyboardKey.enter
-    //       ],
-    //     );
-    //   },
-    // );
+    lastZoom = gameRef.bonfireCamera.zoom;
+    gameRef.bonfireCamera.moveToTargetAnimated(
+      target: first,
+      effectController: EffectController(
+        duration: 0.5,
+        curve: Curves.easeInOut,
+      ),
+      zoom: 2,
+      onComplete: _showTalk,
+    );
   }
 
   @override
@@ -104,5 +48,78 @@ class Wizard extends SimpleNpc with BlockMovementCollision, TapGesture {
       ),
     );
     return super.onLoad();
+  }
+
+  void _showTalk() {
+    TalkDialog.show(
+      gameRef.context,
+      [
+        Say(
+          text: [
+            const TextSpan(
+              text:
+                  ' Would you tell me, please ...  which way I ought to go from here? ',
+            )
+          ],
+          person: SizedBox(
+            width: 100,
+            height: 100,
+            child: PlayerSpriteSheet.idleRight.asWidget(),
+          ),
+        ),
+        Say(
+          text: [
+            const TextSpan(
+              text: 'That depends a good deal on where you want to get to.',
+            ),
+          ],
+          person: SizedBox(
+            width: 100,
+            height: 100,
+            child: WizardSpriteSheet.idle.asWidget(),
+          ),
+          personSayDirection: PersonSayDirection.RIGHT,
+        ),
+        Say(
+          text: [
+            const TextSpan(
+              text: ' I don\'t much care where. ',
+            ),
+          ],
+          person: SizedBox(
+            width: 100,
+            height: 100,
+            child: PlayerSpriteSheet.idleRight.asWidget(),
+          ),
+        ),
+        Say(
+          text: [
+            const TextSpan(
+              text: 'Then it doesn\'t much matter which way you go.',
+            ),
+          ],
+          person: SizedBox(
+            width: 100,
+            height: 100,
+            child: WizardSpriteSheet.idle.asWidget(),
+          ),
+          personSayDirection: PersonSayDirection.RIGHT,
+        ),
+      ],
+      onClose: () {
+        gameRef.bonfireCamera.moveToPlayerAnimated(
+          effectController: EffectController(
+            duration: 0.5,
+            curve: Curves.easeInOut,
+          ),
+          zoom: lastZoom,
+        );
+      },
+      onFinish: () {},
+      logicalKeyboardKeysToNext: [
+        LogicalKeyboardKey.space,
+        LogicalKeyboardKey.enter
+      ],
+    );
   }
 }

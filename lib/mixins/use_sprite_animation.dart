@@ -18,20 +18,25 @@ import 'package:flame/components.dart';
 /// on 04/02/22
 mixin UseSpriteAnimation on GameComponent {
   /// set Animation that will be drawn on the screen.
-  set animation(SpriteAnimation? animation) {
+  void setAnimation(
+    SpriteAnimation? animation, {
+    Vector2? size,
+    bool loop = true,
+    bool autoPlay = true,
+    VoidCallback? onFinish,
+    VoidCallback? onStart,
+  }) {
     _animationRender = SpriteAnimationRender(
       animation: animation,
-      size: size,
-      loop: animationIsLoop,
-      onFinish: () => aniamtionIsDone = true,
+      size: size ?? size,
+      loop: loop,
+      onFinish: onFinish,
+      onStart: onStart,
     );
   }
 
   SpriteAnimationRender? _fastAnimation;
   SpriteAnimationRender? _animationRender;
-
-  bool aniamtionIsDone = false;
-  bool animationIsLoop = true;
 
   @override
   void render(Canvas canvas) {
@@ -53,8 +58,11 @@ mixin UseSpriteAnimation on GameComponent {
   void update(double dt) {
     super.update(dt);
     if (isVisible) {
-      _fastAnimation?.update(dt);
-      _animationRender?.update(dt);
+      if (_fastAnimation != null) {
+        _fastAnimation?.update(dt);
+      } else {
+        _animationRender?.update(dt);
+      }
     }
   }
 
@@ -75,7 +83,7 @@ mixin UseSpriteAnimation on GameComponent {
         _fastAnimation = null;
         onFinish?.call();
       },
+      onStart: onStart,
     );
-    onStart?.call();
   }
 }

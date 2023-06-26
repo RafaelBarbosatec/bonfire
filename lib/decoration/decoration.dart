@@ -16,7 +16,7 @@ class GameDecoration extends GameComponent
     SpriteAnimation? animation,
   }) {
     this.sprite = sprite;
-    this.animation = animation;
+    setAnimation(animation);
     applyBleedingPixel(position: position, size: size);
   }
 
@@ -34,7 +34,7 @@ class GameDecoration extends GameComponent
     required Vector2 position,
     required Vector2 size,
   }) {
-    loader?.add(AssetToLoad(animation, (value) => this.animation = value));
+    loader?.add(AssetToLoad(animation, (value) => setAnimation(value)));
     applyBleedingPixel(position: position, size: size);
   }
 }
