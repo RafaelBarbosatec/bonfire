@@ -10,6 +10,8 @@ abstract class Force2D {
   Vector2 transform(Vector2 velocity, double dt);
 }
 
+/// Apply acceleration to velocity
+/// {value} pixel/seconds
 class AccelerationForce2D extends Force2D {
   AccelerationForce2D({required super.id, required super.value});
 
@@ -19,6 +21,8 @@ class AccelerationForce2D extends Force2D {
   }
 }
 
+/// Apply resistence to velocity
+/// {value} pixel/seconds
 class ResistenceForce2D extends Force2D {
   ResistenceForce2D({required super.id, required super.value});
 
@@ -31,6 +35,7 @@ class ResistenceForce2D extends Force2D {
   }
 }
 
+/// Apply linear force to velocity
 class LinearForce2D extends Force2D {
   LinearForce2D({required super.id, required super.value});
 

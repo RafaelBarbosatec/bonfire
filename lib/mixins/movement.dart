@@ -14,6 +14,7 @@ mixin Movement on GameComponent {
   double velocityRadAngle = 0.0;
   Vector2 lastDisplacement = Vector2.zero();
   Vector2 _velocity = Vector2.zero();
+  Vector2 acceleration = Vector2.zero();
   Direction lastDirection = Direction.right;
   Direction lastDirectionHorizontal = Direction.right;
   Direction lastDirectionVertical = Direction.down;
@@ -39,8 +40,12 @@ mixin Movement on GameComponent {
     double angle,
   ) {}
 
-  Vector2 onApplyVelocity(Vector2 velocity, double dt) {
-    return velocity * dt;
+  Vector2 onApplyAcceleration(double dt) {
+    return velocity..add(acceleration * dt);
+  }
+
+  void onApplyDisplacement(double dt) {
+    position += lastDisplacement = onApplyAcceleration(dt) * dt;
   }
 
   /// Method used to translate component
@@ -52,25 +57,29 @@ mixin Movement on GameComponent {
 
   void moveLeftOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    position += lastDisplacement = Vector2(-_lastSpeed, 0) * dtUpdate;
+    setVelocityAxis(x: -_lastSpeed);
+    onApplyDisplacement(dtUpdate);
     _updateLastDirection(lastDisplacement);
   }
 
   void moveRightOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    position += lastDisplacement = Vector2(_lastSpeed, 0) * dtUpdate;
+    setVelocityAxis(x: _lastSpeed);
+    onApplyDisplacement(dtUpdate);
     _updateLastDirection(lastDisplacement);
   }
 
   void moveUpOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    position += lastDisplacement = Vector2(0, -_lastSpeed) * dtUpdate;
+    setVelocityAxis(y: -_lastSpeed);
+    onApplyDisplacement(dtUpdate);
     _updateLastDirection(lastDisplacement);
   }
 
   void moveDownOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    position += lastDisplacement = Vector2(0, _lastSpeed) * dtUpdate;
+    setVelocityAxis(y: _lastSpeed);
+    onApplyDisplacement(dtUpdate);
     _updateLastDirection(lastDisplacement);
   }
 
@@ -207,45 +216,45 @@ mixin Movement on GameComponent {
     }
   }
 
-  void _updateLastDirection(Vector2 direction) {
-    velocityRadAngle = atan2(direction.y, direction.x);
+  void _updateLastDirection(Vector2 velocity) {
+    velocityRadAngle = atan2(velocity.y, velocity.x);
 
-    if (direction.x > 0) {
+    if (velocity.x > 0) {
       lastDirectionHorizontal = Direction.right;
-    } else if (direction.x < 0) {
+    } else if (velocity.x < 0) {
       lastDirectionHorizontal = Direction.left;
     }
 
-    if (direction.y > 0) {
+    if (velocity.y > 0) {
       lastDirectionVertical = Direction.down;
-    } else if (direction.y < 0) {
+    } else if (velocity.y < 0) {
       lastDirectionVertical = Direction.up;
     }
 
-    if (direction.y != 0 && direction.x == 0) {
-      if (direction.y > 0) {
+    if (velocity.y != 0 && velocity.x == 0) {
+      if (velocity.y > 0) {
         lastDirection = Direction.down;
-      } else if (direction.y < 0) {
+      } else if (velocity.y < 0) {
         lastDirection = Direction.up;
       }
       return;
     }
-    if (direction.x != 0 && direction.y == 0) {
-      if (direction.x > 0) {
+    if (velocity.x != 0 && velocity.y == 0) {
+      if (velocity.x > 0) {
         lastDirection = Direction.right;
-      } else if (direction.x < 0) {
+      } else if (velocity.x < 0) {
         lastDirection = Direction.left;
       }
       return;
     }
 
-    if (direction.x > 0 && direction.y > 0) {
+    if (velocity.x > 0 && velocity.y > 0) {
       lastDirection = Direction.downRight;
-    } else if (direction.x > 0 && direction.y < 0) {
+    } else if (velocity.x > 0 && velocity.y < 0) {
       lastDirection = Direction.upRight;
-    } else if (direction.x < 0 && direction.y > 0) {
+    } else if (velocity.x < 0 && velocity.y > 0) {
       lastDirection = Direction.downLeft;
-    } else if (direction.x < 0 && direction.y < 0) {
+    } else if (velocity.x < 0 && velocity.y < 0) {
       lastDirection = Direction.upLeft;
     }
   }
@@ -257,7 +266,7 @@ mixin Movement on GameComponent {
   }
 
   void _updatePosition(double dt) {
-    position += lastDisplacement = onApplyVelocity(_velocity, dt);
+    onApplyDisplacement(dt);
     dtUpdate = dt;
     if (!lastDisplacement.isZero()) {
       if (lastDirection == Direction.up || lastDirection == Direction.down) {

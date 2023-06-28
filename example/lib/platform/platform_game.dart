@@ -45,7 +45,7 @@ class _PlatformGameState extends State<PlatformGame> {
       globalForces: [
         AccelerationForce2D(
           id: 'gravity',
-          value: Vector2(0, 450),
+          value: Vector2(0, 400),
         ),
       ],
       cameraConfig: CameraConfig(
