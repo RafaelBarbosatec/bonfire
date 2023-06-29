@@ -31,7 +31,6 @@ mixin Movement on GameComponent {
   void setVelocityAxis({double? x, double? y}) {
     _velocity.x = x ?? _velocity.x;
     _velocity.y = y ?? _velocity.y;
-    _updateLastDirection(_velocity);
   }
 
   /// You can override this method to listen the movement of this component
@@ -62,24 +61,29 @@ mixin Movement on GameComponent {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(x: -_lastSpeed);
     onApplyDisplacement(dtUpdate);
+    _velocity.add(Vector2(_lastSpeed, 0));
+    setVelocityAxis(x: 0);
   }
 
   void moveRightOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(x: _lastSpeed);
     onApplyDisplacement(dtUpdate);
+    setVelocityAxis(x: 0);
   }
 
   void moveUpOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(y: -_lastSpeed);
     onApplyDisplacement(dtUpdate);
+    setVelocityAxis(y: 0);
   }
 
   void moveDownOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(y: _lastSpeed);
     onApplyDisplacement(dtUpdate);
+    setVelocityAxis(y: 0);
   }
 
   /// Move player to Up
