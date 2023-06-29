@@ -4,6 +4,7 @@ export 'package:bonfire/forces/forces_2d.dart';
 
 mixin HandleForces on Movement {
   Vector2 _accelerationOfForces = Vector2.zero();
+  double mass = 1.0;
   final List<Force2D> _forces = [];
 
   void addForce(Force2D force) {

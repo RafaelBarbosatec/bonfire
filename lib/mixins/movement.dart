@@ -12,7 +12,6 @@ mixin Movement on GameComponent {
   double speed = speedDefault;
   double _lastSpeed = speedDefault;
   double velocityRadAngle = 0.0;
-  double mass = 1;
   Vector2 lastDisplacement = Vector2.zero();
   Vector2 _velocity = Vector2.zero();
   Direction lastDirection = Direction.right;
