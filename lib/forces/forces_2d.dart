@@ -7,7 +7,7 @@ abstract class Force2D {
   Vector2 value;
   Force2D({required this.id, required this.value});
 
-  Vector2 transform(Vector2 velocity, double dt);
+  Vector2 transform(Vector2 velocity, double mass, double dt);
 }
 
 /// Apply acceleration to velocity
@@ -16,8 +16,8 @@ class AccelerationForce2D extends Force2D {
   AccelerationForce2D({required super.id, required super.value});
 
   @override
-  Vector2 transform(Vector2 velocity, double dt) {
-    return velocity + value * dt;
+  Vector2 transform(Vector2 velocity, double mass, double dt) {
+    return value / mass;
   }
 }
 
@@ -27,7 +27,7 @@ class ResistenceForce2D extends Force2D {
   ResistenceForce2D({required super.id, required super.value});
 
   @override
-  Vector2 transform(Vector2 velocity, double dt) {
+  Vector2 transform(Vector2 velocity, double mass, double dt) {
     return Vector2(
       lerpDouble(velocity.x, 0, dt * value.x) ?? velocity.x,
       lerpDouble(velocity.y, 0, dt * value.y) ?? velocity.y,
@@ -40,7 +40,19 @@ class LinearForce2D extends Force2D {
   LinearForce2D({required super.id, required super.value});
 
   @override
-  Vector2 transform(Vector2 velocity, double dt) {
+  Vector2 transform(Vector2 velocity, double mass, double dt) {
     return velocity + value;
+  }
+}
+
+/// Apply acceleration to velocity
+/// {value} pixel/seconds
+class GravityForce2D extends AccelerationForce2D {
+  GravityForce2D({Vector2? value})
+      : super(id: 'GravityForce2D', value: value ?? Vector2(0, 400));
+
+  @override
+  Vector2 transform(Vector2 velocity, double mass, double dt) {
+    return Vector2(0, value.y * mass);
   }
 }

@@ -7,19 +7,22 @@ mixin Movement on GameComponent {
   static const diaginalReduction = 0.7853981633974483;
   static const speedDefault = 80.0;
 
-  bool get isIdle => _velocity.isZero();
   double dtUpdate = 0;
   double speed = speedDefault;
   double _lastSpeed = speedDefault;
   double velocityRadAngle = 0.0;
+  double mass = 1;
   Vector2 lastDisplacement = Vector2.zero();
   Vector2 _velocity = Vector2.zero();
-  Vector2 acceleration = Vector2.zero();
+  Vector2 accelerationOfForces = Vector2.zero();
   Direction lastDirection = Direction.right;
   Direction lastDirectionHorizontal = Direction.right;
   Direction lastDirectionVertical = Direction.down;
   bool movementOnlyVisible = true;
 
+  Vector2 get acceleration => velocity / dtUpdate;
+
+  bool get isIdle => _velocity.isZero();
   Vector2 get velocity => _velocity;
   set velocity(Vector2 velocity) {
     _velocity = velocity;
@@ -41,11 +44,12 @@ mixin Movement on GameComponent {
   ) {}
 
   Vector2 onApplyAcceleration(double dt) {
-    return velocity..add(acceleration * dt);
+    return velocity..add(accelerationOfForces * dt);
   }
 
   void onApplyDisplacement(double dt) {
     position += lastDisplacement = onApplyAcceleration(dt) * dt;
+    _updateLastDirection(lastDisplacement);
   }
 
   /// Method used to translate component
@@ -59,28 +63,24 @@ mixin Movement on GameComponent {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(x: -_lastSpeed);
     onApplyDisplacement(dtUpdate);
-    _updateLastDirection(lastDisplacement);
   }
 
   void moveRightOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(x: _lastSpeed);
     onApplyDisplacement(dtUpdate);
-    _updateLastDirection(lastDisplacement);
   }
 
   void moveUpOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(y: -_lastSpeed);
     onApplyDisplacement(dtUpdate);
-    _updateLastDirection(lastDisplacement);
   }
 
   void moveDownOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(y: _lastSpeed);
     onApplyDisplacement(dtUpdate);
-    _updateLastDirection(lastDisplacement);
   }
 
   /// Move player to Up

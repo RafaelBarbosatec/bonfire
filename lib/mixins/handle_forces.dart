@@ -16,20 +16,46 @@ mixin HandleForces on Movement {
 
   @override
   Vector2 onApplyAcceleration(double dt) {
-    var oldVel = super.onApplyAcceleration(dt);
-    Vector2 newVel = Vector2.zero();
+    final oldVelocity = velocity.clone();
+    List<Force2D> mergeForces = [..._forces, ...gameRef.globalForces];
+    accelerationOfForces = _getAccelerationForces(mergeForces, dt);
 
-    List margeForces = [..._forces, ...gameRef.globalForces];
-    velocity =
-        margeForces.where((element) => element is! LinearForce2D).fold<Vector2>(
-              velocity,
-              (previousValue, element) => element.transform(previousValue,dt),
-            );
-    newVel = margeForces.whereType<LinearForce2D>().fold<Vector2>(
-          velocity,
-          (p, e) => e.transform(p,dt),
+    var currentVelocity = super.onApplyAcceleration(dt);
+
+    Vector2 newVel = _applyResistenceForces(mergeForces, currentVelocity, dt);
+    newVel = _applyLinearForces(mergeForces, newVel, dt);
+
+    return (oldVelocity + newVel) * 0.5;
+  }
+
+  Vector2 _getAccelerationForces(List<Force2D> mergeForces, double dt) {
+    return mergeForces.whereType<AccelerationForce2D>().fold<Vector2>(
+      velocity,
+      (p, e) {
+        return e.transform(p, mass, dt);
+      },
+    );
+  }
+
+  Vector2 _applyResistenceForces(
+    List<Force2D> mergeForces,
+    Vector2 currentVelocity,
+    double dt,
+  ) {
+    return mergeForces.whereType<ResistenceForce2D>().fold<Vector2>(
+          currentVelocity,
+          (p, e) => e.transform(p, mass, dt),
         );
+  }
 
-    return (oldVel + newVel) * 0.5;
+  Vector2 _applyLinearForces(
+    List<Force2D> mergeForces,
+    Vector2 newVel,
+    double dt,
+  ) {
+    return mergeForces.whereType<LinearForce2D>().fold<Vector2>(
+          newVel,
+          (p, e) => e.transform(p, mass, dt),
+        );
   }
 }
