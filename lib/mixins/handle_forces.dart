@@ -3,6 +3,7 @@ import 'package:bonfire/bonfire.dart';
 export 'package:bonfire/forces/forces_2d.dart';
 
 mixin HandleForces on Movement {
+  Vector2 _accelerationOfForces = Vector2.zero();
   final List<Force2D> _forces = [];
 
   void addForce(Force2D force) {
@@ -15,12 +16,12 @@ mixin HandleForces on Movement {
   }
 
   @override
-  Vector2 onApplyAcceleration(double dt) {
+  Vector2 onApplyAcceleration(Vector2 acceleration, double dt) {
     final oldVelocity = velocity.clone();
     List<Force2D> mergeForces = [..._forces, ...gameRef.globalForces];
-    accelerationOfForces = _getAccelerationForces(mergeForces, dt);
+    _accelerationOfForces = _getAccelerationForces(mergeForces, dt);
 
-    var currentVelocity = super.onApplyAcceleration(dt);
+    var currentVelocity = super.onApplyAcceleration(_accelerationOfForces, dt);
 
     Vector2 newVel = _applyResistenceForces(mergeForces, currentVelocity, dt);
     newVel = _applyLinearForces(mergeForces, newVel, dt);
@@ -30,11 +31,9 @@ mixin HandleForces on Movement {
 
   Vector2 _getAccelerationForces(List<Force2D> mergeForces, double dt) {
     return mergeForces.whereType<AccelerationForce2D>().fold<Vector2>(
-      velocity,
-      (p, e) {
-        return e.transform(p, mass, dt);
-      },
-    );
+          velocity,
+          (p, e) => e.transform(p, mass, dt),
+        );
   }
 
   Vector2 _applyResistenceForces(

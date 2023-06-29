@@ -6,6 +6,7 @@ import 'package:bonfire/bonfire.dart';
 mixin Movement on GameComponent {
   static const diaginalReduction = 0.7853981633974483;
   static const speedDefault = 80.0;
+  final Vector2 _acceleration = Vector2.all(1);
 
   double dtUpdate = 0;
   double speed = speedDefault;
@@ -14,7 +15,6 @@ mixin Movement on GameComponent {
   double mass = 1;
   Vector2 lastDisplacement = Vector2.zero();
   Vector2 _velocity = Vector2.zero();
-  Vector2 accelerationOfForces = Vector2.zero();
   Direction lastDirection = Direction.right;
   Direction lastDirectionHorizontal = Direction.right;
   Direction lastDirectionVertical = Direction.down;
@@ -43,12 +43,12 @@ mixin Movement on GameComponent {
     double angle,
   ) {}
 
-  Vector2 onApplyAcceleration(double dt) {
-    return velocity..add(accelerationOfForces * dt);
+  Vector2 onApplyAcceleration(Vector2 acceleration, double dt) {
+    return velocity..add(acceleration * dt);
   }
 
   void onApplyDisplacement(double dt) {
-    position += lastDisplacement = onApplyAcceleration(dt) * dt;
+    position += lastDisplacement = onApplyAcceleration(_acceleration, dt) * dt;
     _updateLastDirection(lastDisplacement);
   }
 
