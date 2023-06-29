@@ -32,7 +32,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
     if (other is FoxPlayer) {
       if (direction == Direction.up) {
         if (!isDead) {
-          other.jump(speed: 120, force: true);
+          other.jump(jumpSpeed: 120, force: true);
           die();
         }
       } else {
@@ -62,7 +62,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
         onFinish: () async {
           await Future.delayed(const Duration(seconds: 2));
           if (!isDead) {
-            jump(speed: 200);
+            jump(jumpSpeed: 170);
             Random().nextBool() ? moveRight() : moveLeft();
           }
         },

@@ -25,15 +25,16 @@ mixin HandleForces on Movement {
     var currentVelocity = super.onApplyAcceleration(_accelerationOfForces, dt);
 
     Vector2 newVel = _applyResistenceForces(mergeForces, currentVelocity, dt);
+
     newVel = _applyLinearForces(mergeForces, newVel, dt);
 
-    return (oldVelocity + newVel) * 0.5;
+    return velocity = (oldVelocity + newVel) * 0.5;
   }
 
   Vector2 _getAccelerationForces(List<Force2D> mergeForces, double dt) {
     return mergeForces.whereType<AccelerationForce2D>().fold<Vector2>(
-          velocity,
-          (p, e) => e.transform(p, mass, dt),
+          Vector2.zero(),
+          (p, e) => p + e.transform(p, mass, dt),
         );
   }
 

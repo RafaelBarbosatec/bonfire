@@ -6,7 +6,7 @@ import 'package:bonfire/bonfire.dart';
 mixin Movement on GameComponent {
   static const diaginalReduction = 0.7853981633974483;
   static const speedDefault = 80.0;
-  final Vector2 _acceleration = Vector2.all(1);
+  final Vector2 _acceleration = Vector2.all(0);
 
   double dtUpdate = 0;
   double speed = speedDefault;
@@ -216,6 +216,7 @@ mixin Movement on GameComponent {
   }
 
   void _updateLastDirection(Vector2 velocity) {
+    if (velocity.isZero()) return;
     velocityRadAngle = atan2(velocity.y, velocity.x);
 
     if (velocity.x > 0) {

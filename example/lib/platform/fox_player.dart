@@ -33,7 +33,7 @@ class FoxPlayer extends PlatformPlayer with HandleForces {
   void joystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN &&
         (event.id == LogicalKeyboardKey.space.keyId || event.id == 1)) {
-      jump(speed: 200);
+      jump();
     }
     super.joystickAction(event);
   }

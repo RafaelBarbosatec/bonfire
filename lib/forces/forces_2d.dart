@@ -29,8 +29,8 @@ class ResistenceForce2D extends Force2D {
   @override
   Vector2 transform(Vector2 velocity, double mass, double dt) {
     return Vector2(
-      lerpDouble(velocity.x, 0, dt * value.x) ?? velocity.x,
-      lerpDouble(velocity.y, 0, dt * value.y) ?? velocity.y,
+      lerpDouble(velocity.x, 0, dt * value.x) ?? 0,
+      lerpDouble(velocity.y, 0, dt * value.y) ?? 0,
     );
   }
 }
@@ -49,7 +49,7 @@ class LinearForce2D extends Force2D {
 /// {value} pixel/seconds
 class GravityForce2D extends AccelerationForce2D {
   GravityForce2D({Vector2? value})
-      : super(id: 'GravityForce2D', value: value ?? Vector2(0, 400));
+      : super(id: 'GravityForce2D', value: value ?? Vector2(0, 600));
 
   @override
   Vector2 transform(Vector2 velocity, double mass, double dt) {
