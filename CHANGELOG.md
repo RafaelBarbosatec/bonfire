@@ -1,3 +1,14 @@
+# [3.0.0]
+- BREAKING CHANGE: Changes in `BonfireWidget`:
+  - Remove `enemies` param. Use `components` param.
+  - Remove `decoration` param. Use `components` param.
+  - Remove `gameController` param. Use a Component to control your game.
+  - Remove `constructionModeColor` param. It's not necessary
+  - Remove `onTapDown` param. It's not necessary
+  - Remove `onTapUp` param. It's not necessary
+  - Rename `constructionMode` to `debugMode`.
+
+
 # [2.12.3]
 - Fix issue [#379](https://github.com/RafaelBarbosatec/bonfire/issues/379)
 - Adds in `ObjectCollision` the method `onCollisionHappened`

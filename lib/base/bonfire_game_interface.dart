@@ -33,7 +33,6 @@ abstract class BonfireGameInterface {
   Vector2 get size;
   bool get hasLayout;
   bool get showCollisionArea;
-  Color? get constructionModeColor;
   Color? get collisionAreaColor;
   GameInterface? get interface;
   List<Force2D> get globalForces;

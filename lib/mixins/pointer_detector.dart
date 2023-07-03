@@ -1,8 +1,6 @@
-import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/gestures/drag_gesture.dart';
 import 'package:bonfire/gestures/mouse_gesture.dart';
 import 'package:bonfire/gestures/tap_gesture.dart';
-import 'package:flame/components.dart';
 import 'package:flutter/gestures.dart';
 
 mixin PointerDetector {
@@ -54,9 +52,3 @@ abstract class PointerDetectorHandler {
     return false;
   }
 }
-
-typedef TapInGame = void Function(
-  BonfireGame game,
-  Vector2 screenPosition,
-  Vector2 worldPosition,
-);

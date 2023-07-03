@@ -11,7 +11,6 @@ import 'package:bonfire/forces/forces_2d.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/map/base/map_game.dart';
-import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:flutter/material.dart';
 
@@ -33,9 +32,6 @@ class BonfireWidget extends StatefulWidget {
 
   /// Used to draw area collision in objects.
   final bool showCollisionArea;
-
-  /// Color grid when `constructionMode` is true
-  final Color? constructionModeColor;
 
   /// Color of the collision area when `showCollisionArea` is true
   final Color? collisionAreaColor;
@@ -61,9 +57,6 @@ class BonfireWidget extends StatefulWidget {
   final Duration progressTransitionDuration;
   final AnimatedSwitcherTransitionBuilder progressTransitionBuilder;
 
-  final TapInGame? onTapDown;
-  final TapInGame? onTapUp;
-
   final ValueChanged<BonfireGameInterface>? onReady;
   final Map<String, OverlayWidgetBuilder<BonfireGame>>? overlayBuilderMap;
   final List<String>? initialActiveOverlays;
@@ -84,7 +77,6 @@ class BonfireWidget extends StatefulWidget {
     this.background,
     this.debugMode = false,
     this.showCollisionArea = false,
-    this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
     this.backgroundColor,
@@ -93,14 +85,12 @@ class BonfireWidget extends StatefulWidget {
     this.overlayBuilderMap,
     this.initialActiveOverlays,
     this.cameraConfig,
-    this.onTapDown,
-    this.onTapUp,
     this.onReady,
     this.focusNode,
     this.autofocus = true,
     this.mouseCursor,
     this.progress,
-    this.delayToHideProgress = Duration.zero,
+    this.delayToHideProgress = const Duration(milliseconds: 500),
     this.progressTransitionDuration = const Duration(milliseconds: 500),
     this.progressTransitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
     this.onDispose,
@@ -132,6 +122,7 @@ class BonfireWidgetState extends State<BonfireWidget> {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      fit: StackFit.expand,
       children: [
         ListenerGameWidget(
           game: _game,
@@ -148,7 +139,7 @@ class BonfireWidgetState extends State<BonfireWidget> {
             return AnimatedSwitcher(
               duration: widget.progressTransitionDuration,
               transitionBuilder: widget.progressTransitionBuilder,
-              child: loading ? _defaultProgress() : const SizedBox.shrink(),
+              child: loading ? _defaultProgress() : Container(),
             );
           },
         ),
@@ -178,8 +169,6 @@ class BonfireWidgetState extends State<BonfireWidget> {
       backgroundColor: widget.backgroundColor,
       debugMode: widget.debugMode,
       showCollisionArea: widget.showCollisionArea,
-      constructionModeColor:
-          widget.constructionModeColor ?? Colors.cyan.withOpacity(0.5),
       collisionAreaColor:
           widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
       lightingColorGame: widget.lightingColorGame,
@@ -189,8 +178,6 @@ class BonfireWidgetState extends State<BonfireWidget> {
         widget.onReady?.call(game);
         _hideProgress();
       },
-      onTapDown: widget.onTapDown,
-      onTapUp: widget.onTapUp,
       globalForces: widget.globalForces,
     );
   }

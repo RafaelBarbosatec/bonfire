@@ -84,9 +84,7 @@ extension NpcExtensions on Npc {
         observed?.call();
         moveTowardsTarget(
           target: player,
-          close: () {
-            closePlayer(player);
-          },
+          close: () => closePlayer(player),
           margin: margin,
         );
       },

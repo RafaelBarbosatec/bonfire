@@ -10,7 +10,6 @@ import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
-import 'package:bonfire/mixins/pointer_detector.dart';
 // ignore: implementation_imports
 import 'package:flutter/widgets.dart';
 
@@ -41,10 +40,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   /// Background of the game. This can be a color or custom component
   final GameBackground? background;
 
-  /// Color grid when `constructionMode` is true
-  @override
-  final Color? constructionModeColor;
-
   /// Used to draw area collision in objects.
   @override
   final bool showCollisionArea;
@@ -55,12 +50,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   /// Used to configure lighting in the game
   final Color? lightingColorGame;
-
-  /// Callback to receive the tapDown event from the game.
-  final TapInGame? onTapDown;
-
-  /// Callback to receive the onTapUp event from the game.
-  final TapInGame? onTapUp;
 
   @override
   final List<Force2D> globalForces;
@@ -113,12 +102,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     this.background,
     bool debugMode = false,
     this.showCollisionArea = false,
-    this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
     this.onReady,
-    this.onTapDown,
-    this.onTapUp,
     Color? backgroundColor,
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
@@ -207,12 +193,13 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     super.onMount();
     // ignore: invalid_use_of_internal_member
     setMounted();
-    Future.delayed(Duration.zero, () => onReady?.call(this));
+    onReady?.call(this);
   }
 
   @override
-  Iterable<T> visibles<T extends GameComponent>() =>
-      _visibleComponents.whereType<T>();
+  Iterable<T> visibles<T extends GameComponent>() {
+    return _visibleComponents.whereType<T>();
+  }
 
   @override
   Iterable<Enemy> livingEnemies({bool onlyVisible = false}) {
@@ -263,32 +250,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     if (!hasLayout) return false;
     if (c.isRemoving) return false;
     return bonfireCamera.canSee(c);
-  }
-
-  @override
-  void onPointerDown(PointerDownEvent event) {
-    if (onTapDown != null) {
-      final localPosition = event.localPosition.toVector2();
-      onTapDown?.call(
-        this,
-        localPosition,
-        bonfireCamera.screenToWorld(localPosition),
-      );
-    }
-    super.onPointerDown(event);
-  }
-
-  @override
-  void onPointerUp(PointerUpEvent event) {
-    if (onTapUp != null) {
-      final localPosition = event.localPosition.toVector2();
-      onTapUp?.call(
-        this,
-        localPosition,
-        bonfireCamera.screenToWorld(localPosition),
-      );
-    }
-    super.onPointerUp(event);
   }
 
   /// Use this method to change default observer of the Joystick events.
