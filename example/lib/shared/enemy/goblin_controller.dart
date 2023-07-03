@@ -16,7 +16,6 @@ import 'goblin.dart';
 /// on 03/03/22
 class GoblinController extends StateController<Goblin> {
   double attack = 20;
-  bool _seePlayerToAttackMelee = false;
   bool enableBehaviors = true;
 
   @override
@@ -24,22 +23,17 @@ class GoblinController extends StateController<Goblin> {
     if (!enableBehaviors) return;
 
     if (!gameRef.sceneBuilderStatus.isRunning) {
-      _seePlayerToAttackMelee = false;
-
       component.seePlayer(
         radiusVision: DungeonMap.tileSize * 3,
         observed: (p) {
-          component.seeAndMoveToPlayer(
-            closePlayer: (player) {
-              component.execAttack(attack);
-            },
-            observed: () {
-              _seePlayerToAttackMelee = true;
-            },
-            radiusVision: DungeonMap.tileSize * 1.5,
-          );
-
-          if (!_seePlayerToAttackMelee) {
+          if (component.distance(p) <= DungeonMap.tileSize * 2) {
+            component.moveTowardsTarget(
+              target: p,
+              close: () {
+                component.execAttack(attack);
+              },
+            );
+          } else {
             component.seeAndMoveToAttackRange(
               minDistanceFromPlayer: DungeonMap.tileSize * 2,
               positioned: (p) {

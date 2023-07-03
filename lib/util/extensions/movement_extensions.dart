@@ -120,9 +120,7 @@ extension MovementExtensions on Movement {
       positioned(target);
     }
 
-    double dtSpeed = speed * 0.2;
-
-    if (translateX.abs() < dtSpeed && translateY.abs() < dtSpeed) {
+    if (translateX.abs() < speed && translateY.abs() < speed) {
       stopMove();
       positioned(target);
     }
