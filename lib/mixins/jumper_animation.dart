@@ -22,12 +22,6 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
           flipX: false,
         );
       }
-    } else {
-      if (lastDirectionHorizontal == Direction.left) {
-        animation?.play(SimpleAnimationEnum.idleLeft);
-      } else {
-        animation?.play(SimpleAnimationEnum.idleRight);
-      }
     }
   }
 
@@ -99,6 +93,18 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
         JumpAnimationsEnum.jumpDownRight.name,
         flipX: true,
       );
+    }
+  }
+
+  @override
+  void onJump(JumpingStateEnum state) {
+    super.onJump(state);
+    if (state == JumpingStateEnum.idle) {
+      if (lastDirectionHorizontal == Direction.left) {
+        animation?.play(SimpleAnimationEnum.idleLeft);
+      } else {
+        animation?.play(SimpleAnimationEnum.idleRight);
+      }
     }
   }
 

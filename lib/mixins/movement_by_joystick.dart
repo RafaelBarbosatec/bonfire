@@ -22,7 +22,9 @@ mixin MovementByJoystick on Movement, JoystickListener {
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     _intencity = event.intensity;
-    // _toCorrectDirection(event.directional);
+    if (event.isKeyboard) {
+      _toCorrectDirection(event.directional);
+    }
     _currentDirectional = event.directional;
     if (dPadAngles || event.radAngle == 0) {
       _currentDirectionalAngle = _getAngleByDirectional(_currentDirectional);
@@ -162,41 +164,41 @@ mixin MovementByJoystick on Movement, JoystickListener {
   void _toCorrectDirection(JoystickMoveDirectional directional) {
     if (directional == JoystickMoveDirectional.MOVE_LEFT &&
         _currentDirectional == JoystickMoveDirectional.MOVE_UP_LEFT) {
-      velocity = velocity.copyWith(y: velocity.y + speed);
+      velocity = velocity.copyWith(y: 0);
     }
     if (directional == JoystickMoveDirectional.MOVE_RIGHT &&
         _currentDirectional == JoystickMoveDirectional.MOVE_UP_RIGHT) {
-      velocity = velocity.copyWith(y: velocity.y + speed);
+      velocity = velocity.copyWith(y: 0);
     }
 
     if (directional == JoystickMoveDirectional.MOVE_RIGHT &&
         _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
-      velocity = velocity.copyWith(y: velocity.y - speed);
+      velocity = velocity.copyWith(y: 0);
     }
 
     if (directional == JoystickMoveDirectional.MOVE_LEFT &&
         _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_LEFT) {
-      velocity = velocity.copyWith(y: velocity.y - speed);
+      velocity = velocity.copyWith(y: 0);
     }
 
     //==========================
 
     if (directional == JoystickMoveDirectional.MOVE_UP &&
         _currentDirectional == JoystickMoveDirectional.MOVE_UP_LEFT) {
-      velocity = velocity.copyWith(x: velocity.x + speed);
+      velocity = velocity.copyWith(x: 0);
     }
     if (directional == JoystickMoveDirectional.MOVE_UP &&
         _currentDirectional == JoystickMoveDirectional.MOVE_UP_RIGHT) {
-      velocity = velocity.copyWith(x: velocity.x - speed);
+      velocity = velocity.copyWith(x: 0);
     }
 
     if (directional == JoystickMoveDirectional.MOVE_DOWN &&
         _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_LEFT) {
-      velocity = velocity.copyWith(x: velocity.x + speed);
+      velocity = velocity.copyWith(x: 0);
     }
     if (directional == JoystickMoveDirectional.MOVE_DOWN &&
         _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
-      velocity = velocity.copyWith(x: velocity.x - speed);
+      velocity = velocity.copyWith(x: 0);
     }
   }
 }

@@ -7,7 +7,7 @@ enum JumpingStateEnum {
 }
 
 mixin Jumper on Movement, BlockMovementCollision {
-  final double _defaultJumpSpeed = 160;
+  final double _defaultJumpSpeed = 150;
   bool jumping = false;
   JumpingStateEnum jumpingState = JumpingStateEnum.idle;
   int _maxJump = 1;

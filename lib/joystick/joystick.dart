@@ -54,6 +54,8 @@ class Joystick extends JoystickController {
 
   JoystickDirectional? get directional => _directional;
 
+  bool _directionalIsIdle = false;
+
   Joystick({
     this.actions = const [],
     JoystickDirectional? directional,
@@ -156,7 +158,10 @@ class Joystick extends JoystickController {
     }
 
     /// No keyboard events, keep idle
-    if (!_containDirectionalPressed(keysPressed) && !event.repeat) {
+    if (!_containDirectionalPressed(keysPressed) &&
+        !event.repeat &&
+        !_directionalIsIdle) {
+      _directionalIsIdle = true;
       joystickChangeDirectional(
         JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.IDLE,
@@ -170,6 +175,7 @@ class Joystick extends JoystickController {
     if (_isDirectional(event.logicalKey)) {
       final currentKeyboardKeys = _getDirectionlKeysPressed(keysPressed);
       if (currentKeyboardKeys.isNotEmpty) {
+        _directionalIsIdle = false;
         if (currentKeyboardKeys.length > 1) {
           _sendTwoDirection(
             currentKeyboardKeys.first,
@@ -185,11 +191,13 @@ class Joystick extends JoystickController {
         joystickAction(JoystickActionEvent(
           id: event.logicalKey.keyId,
           event: ActionEvent.DOWN,
+          isKeyboard: true,
         ));
       } else if (event is RawKeyUpEvent) {
         joystickAction(JoystickActionEvent(
           id: event.logicalKey.keyId,
           event: ActionEvent.UP,
+          isKeyboard: true,
         ));
       }
     }
@@ -258,6 +266,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_RIGHT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -266,6 +275,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_UP,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -274,6 +284,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_LEFT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -282,6 +293,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_DOWN,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
   }
@@ -292,6 +304,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_RIGHT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -300,6 +313,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_UP,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -308,6 +322,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_LEFT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -316,6 +331,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_DOWN,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
   }
@@ -327,6 +343,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_RIGHT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -335,6 +352,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_UP,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -343,6 +361,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_LEFT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -351,6 +370,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_DOWN,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
   }
@@ -376,6 +396,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -385,6 +406,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -394,6 +416,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_UP_LEFT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -403,6 +426,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
   }
@@ -416,6 +440,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -427,6 +452,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -438,6 +464,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_UP_LEFT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -449,6 +476,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
   }
@@ -467,6 +495,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -482,6 +511,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -497,6 +527,7 @@ class Joystick extends JoystickController {
         directional: JoystickMoveDirectional.MOVE_UP_LEFT,
         intensity: 1.0,
         radAngle: 0.0,
+        isKeyboard: true,
       ));
     }
 
@@ -513,6 +544,7 @@ class Joystick extends JoystickController {
           directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
           intensity: 1.0,
           radAngle: 0.0,
+          isKeyboard: true,
         ),
       );
     }

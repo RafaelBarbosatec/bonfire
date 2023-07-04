@@ -27,25 +27,37 @@ mixin Pushable on Movement {
           if (!onPush(component)) {
             return;
           }
-          Vector2 displacement = center - component.center;
+          Vector2 displacement = absoluteCenter - component.absoluteCenter;
           if (displacement.x.abs() > displacement.y.abs()) {
             if (displacement.x < 0) {
-              moveLeftOnce();
+              if (this is HandleForces) {
+                moveLeft(speed: speed / (this as HandleForces).mass);
+              } else {
+                moveLeftOnce();
+              }
             } else {
-              moveRightOnce();
+              if (this is HandleForces) {
+                moveRight(speed: speed / (this as HandleForces).mass);
+              } else {
+                moveRightOnce();
+              }
             }
           } else {
             if (displacement.y < 0) {
-              moveUpOnce();
+              if (this is HandleForces) {
+                moveUp(speed: speed / (this as HandleForces).mass);
+              } else {
+                moveUpOnce();
+              }
             } else {
-              moveDownOnce();
+              if (this is HandleForces) {
+                moveDown(speed: speed / (this as HandleForces).mass);
+              } else {
+                moveDownOnce();
+              }
             }
           }
         }
-      } else {
-        // ignore: avoid_print
-        print(
-            'The mixin Pushable not working in ($this) because this component don`t have the `Movement` mixin');
       }
     }
   }
