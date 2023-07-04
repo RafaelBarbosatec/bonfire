@@ -332,4 +332,42 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     world.children.reorder();
     _highestPriority = world.children.last.priority;
   }
+
+  @override
+  List<RaycastResult<ShapeHitbox>> raycastAll(
+    Vector2 origin, {
+    required int numberOfRays,
+    double startAngle = 0,
+    double sweepAngle = tau,
+    double? maxDistance,
+    List<Ray2>? rays,
+    List<ShapeHitbox>? ignoreHitboxes,
+    List<RaycastResult<ShapeHitbox>>? out,
+  }) {
+    return collisionDetection.raycastAll(
+      origin,
+      numberOfRays: numberOfRays,
+      startAngle: startAngle,
+      sweepAngle: sweepAngle,
+      maxDistance: maxDistance,
+      rays: rays,
+      ignoreHitboxes: ignoreHitboxes,
+      out: out,
+    );
+  }
+
+  @override
+  RaycastResult<ShapeHitbox>? raycast(
+    Ray2 ray, {
+    double? maxDistance,
+    List<ShapeHitbox>? ignoreHitboxes,
+    RaycastResult<ShapeHitbox>? out,
+  }) {
+    return collisionDetection.raycast(
+      ray,
+      maxDistance: maxDistance,
+      ignoreHitboxes: ignoreHitboxes,
+      out: out,
+    );
+  }
 }

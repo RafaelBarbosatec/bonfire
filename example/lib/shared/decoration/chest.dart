@@ -4,7 +4,7 @@ import 'package:example/shared/decoration/potion_life.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/widgets.dart';
 
-class Chest extends GameDecoration with TapGesture {
+class Chest extends GameDecoration with TapGesture, Vision {
   bool _observedPlayer = false;
 
   late TextPaint _textConfig;

@@ -12,12 +12,12 @@ mixin Vision on GameComponent {
   bool _drawVision = false;
   final Map<String, PolygonShape> _polygonCache = {};
   PolygonShape? _currentShape;
-  int _countPolygonPoints = 12;
+  int _countPolygonPoints = 20;
 
   void setupVision({
     Color? color,
     bool drawVision = false,
-    int countPolygonPoints = 12,
+    int countPolygonPoints = 20,
   }) {
     assert(countPolygonPoints % 2 == 0, 'countPolygonPoints must be even');
     _drawVision = drawVision;

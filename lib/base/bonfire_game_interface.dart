@@ -107,6 +107,24 @@ abstract class BonfireGameInterface {
     bool moveCameraToTarget = false,
   });
 
+  RaycastResult<ShapeHitbox>? raycast(
+    Ray2 ray, {
+    double? maxDistance,
+    List<ShapeHitbox>? ignoreHitboxes,
+    RaycastResult<ShapeHitbox>? out,
+  });
+
+  List<RaycastResult<ShapeHitbox>> raycastAll(
+    Vector2 origin, {
+    required int numberOfRays,
+    double startAngle = 0,
+    double sweepAngle = tau,
+    double? maxDistance,
+    List<Ray2>? rays,
+    List<ShapeHitbox>? ignoreHitboxes,
+    List<RaycastResult<ShapeHitbox>>? out,
+  });
+
   void startScene(List<SceneAction> actions, {void Function()? onComplete});
   void stopScene();
 
