@@ -10,21 +10,26 @@
     - Rename `constructionMode` to `debugMode`.
 
   - Now, to access camera you cna use `gameRef.bonfireCamera` instead of `gameRef.camera`. (Now using new Flame API `CameraComponent`)
-  - `Collision`, now Bonfire use the Flame system of collision!
-    - To adds Collision in your opject just adds a ShapeHitbox. See this [doc](https://docs.flame-engine.org/latest/flame/collision_detection.html#shapehitbox)
-    - You can listen the collision callbacks doing ovveride of `onCollision`, `onCollisionEnd`, `onCollisionStart` like Flame Documantation.
+  - `Collision`, now Bonfire use the Flame collision system!
+    - To adds Collision in your opject just adds a ShapeHitbox to component. See this [doc](https://docs.flame-engine.org/latest/flame/collision_detection.html#shapehitbox)
+    - You can listen the collision callbacks doing override of `onCollision`, `onCollisionEnd`, `onCollisionStart` like Flame Documantation.
     - To block the movement of components when colliding use the mixin `BlockMovementCollision` 
     
 - FEATURES:
-  - `Force2D`. Now we can a simple support to forces. You can adds global forces setting in `BonfireWidget` by `globalForces` param, or individual force in you component. To the component handle with this forces it's need use `HandleForces` mixin.
+  - `Force2D`. Now we have a simple support to forces. You can adds global forces setting in `BonfireWidget` using `globalForces` param, or individual force in you component. To the component handle this forces it's need use `HandleForces` mixin.
     - `AccelerationForce2D`: Apply acceleration to velocity
     - `ResistenceForce2D`: Apply resistence to movement tending to stop
     - `LinearForce2D`: Apply linear force to velocity
   - `Jumper`. New mixin to adds the jumper beheavor like platform games.
   - `PlatformPlayer`. Player to used in platform games.
   - `PlatformEnemy`. Enemy to used in platform games.
+  - Adds at gameRef: `raycastAll`, `raycast`, `timeScale`
 
 - Update `Pushable` mixin to handle forces.
+- Adds `GameObject`
+- Adds `AnimatedGameObject`
+- Adds `FollowerGameObject`
+- Adds `AnimatedFollowerGameObject`
   
 
 

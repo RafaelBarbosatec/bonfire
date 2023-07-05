@@ -125,11 +125,8 @@ class LightingComponent extends GameComponent with LightingInterface {
   void _drawArc(Canvas canvas, Lighting light) {
     var config = light.lightingConfig!;
     var type = config.type as ArcLightingType;
-    Offset offset = (light.center + config.align).toOffset();
-    final maskFilter = MaskFilter.blur(
-      BlurStyle.normal,
-      config.blurSigma,
-    );
+    Offset offset = (light.absoluteCenter + config.align).toOffset();
+
     canvas.save();
 
     canvas.translate(light.center.x, light.center.y);
@@ -149,7 +146,7 @@ class LightingComponent extends GameComponent with LightingInterface {
           false,
         )
         ..close(),
-      _paintFocusArc..maskFilter = maskFilter,
+      _paintFocusArc..maskFilter = config.maskFilter,
     );
 
     canvas.drawPath(
@@ -167,7 +164,7 @@ class LightingComponent extends GameComponent with LightingInterface {
         ..close(),
       _paintLightingArc
         ..color = config.color
-        ..maskFilter = maskFilter,
+        ..maskFilter = config.maskFilter,
     );
 
     canvas.restore();
@@ -175,29 +172,21 @@ class LightingComponent extends GameComponent with LightingInterface {
 
   void _drawCircle(Canvas canvas, Lighting light) {
     var config = light.lightingConfig!;
-    Offset offset = (light.center + config.align).toOffset();
-    final maskFilter = MaskFilter.blur(
-      BlurStyle.normal,
-      config.blurSigma,
-    );
+    Offset offset = (light.absoluteCenter + config.align).toOffset();
+
     canvas.drawCircle(
       offset,
-      config.radius *
-          (config.withPulse
-              ? (1 - config.valuePulse * config.pulseVariation)
-              : 1),
-      _paintFocus..maskFilter = maskFilter,
+      config.radius * (1 - config.valuePulse),
+      _paintFocus..maskFilter = config.maskFilter,
     );
 
     _paintLighting
       ..color = config.color
-      ..maskFilter = maskFilter;
+      ..maskFilter = config.maskFilter;
+      
     canvas.drawCircle(
       offset,
-      config.radius *
-          (config.withPulse
-              ? (1 - config.valuePulse * config.pulseVariation)
-              : 1),
+      config.radius * (config.withPulse ? (1 - config.valuePulse) : 1),
       _paintLighting,
     );
   }

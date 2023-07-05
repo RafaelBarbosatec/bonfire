@@ -33,7 +33,7 @@ class LightingConfig {
 
   final Vector2 align;
 
-  double _blurSigma = 0;
+  late MaskFilter _maskFilter;
 
   PulseValue? _pulseAnimation;
 
@@ -44,21 +44,31 @@ class LightingConfig {
     this.useComponentAngle = false,
     this.pulseCurve = Curves.decelerate,
     this.pulseVariation = 0.1,
-    this.pulseSpeed = 1,
+    this.pulseSpeed = 0.1,
     this.blurBorder = 20,
     this.type = LightingType.circle,
     Vector2? align,
   }) : align = align ?? Vector2.zero() {
-    _pulseAnimation = PulseValue(speed: pulseSpeed, curve: pulseCurve);
-    _blurSigma = _convertRadiusToSigma(blurBorder);
+    _pulseAnimation = PulseValue(
+      speed: pulseSpeed,
+      curve: pulseCurve,
+      pulseVariation: pulseVariation,
+    );
+    
+     _maskFilter = MaskFilter.blur(
+      BlurStyle.normal,
+       _convertRadiusToSigma(blurBorder),
+    );
   }
 
   void update(double dt) {
-    _pulseAnimation?.update(dt);
+    if (withPulse) {
+      _pulseAnimation?.update(dt);
+    }
   }
 
   double get valuePulse => _pulseAnimation?.value ?? 0.0;
-  double get blurSigma => _blurSigma;
+  MaskFilter get maskFilter => _maskFilter;
 
   static double _convertRadiusToSigma(double radius) {
     return radius * 0.57735 + 0.5;

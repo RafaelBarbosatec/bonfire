@@ -37,6 +37,7 @@ abstract class BonfireGameInterface {
   GameInterface? get interface;
   List<Force2D> get globalForces;
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
+  double timeScale = 1.0;
 
   /// A property that stores an [ActiveOverlaysNotifier]
   ///

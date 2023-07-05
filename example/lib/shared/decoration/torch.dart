@@ -12,9 +12,11 @@ class Torch extends GameDecoration with Lighting {
         ) {
     setupLighting(
       LightingConfig(
-        radius: width * 1.5,
-        blurBorder: width * 1.5,
-        color: Colors.deepOrangeAccent.withOpacity(0.2),
+        radius: width * 2,
+        blurBorder: width,
+        color: Colors.deepOrangeAccent.withOpacity(0.3),
+        withPulse: true,
+        align: Vector2(-width * 0.25, -width * 0.3),
       ),
     );
   }
