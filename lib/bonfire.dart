@@ -49,6 +49,7 @@ export 'package:bonfire/mixins/vision.dart';
 export 'package:bonfire/npc/ally/ally.dart';
 export 'package:bonfire/npc/enemy/enemy.dart';
 export 'package:bonfire/npc/npc.dart';
+export 'package:bonfire/widgets/mini_map/mini_map.dart';
 export 'package:bonfire/objects/animated_follower_game_object.dart';
 export 'package:bonfire/objects/animated_game_object.dart';
 export 'package:bonfire/objects/flying_attack_object.dart';
