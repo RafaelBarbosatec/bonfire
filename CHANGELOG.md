@@ -14,6 +14,7 @@
     - To adds Collision in your opject just adds a ShapeHitbox to component. See this [doc](https://docs.flame-engine.org/latest/flame/collision_detection.html#shapehitbox)
     - You can listen the collision callbacks doing override of `onCollision`, `onCollisionEnd`, `onCollisionStart` like Flame Documantation.
     - To block the movement of components when colliding use the mixin `BlockMovementCollision` 
+  - `BonfireInjector().put` now is Factory.
     
 - FEATURES:
   - `Force2D`. Now we have a simple support to forces. You can adds global forces setting in `BonfireWidget` using `globalForces` param, or individual force in you component. To the component handle this forces it's need use `HandleForces` mixin.

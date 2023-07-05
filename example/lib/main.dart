@@ -21,10 +21,10 @@ void main() async {
     await Flame.device.fullScreen();
   }
 
-  BonfireInjector().putFactory((i) => KnightController());
-  BonfireInjector().putFactory((i) => GoblinController());
-  BonfireInjector().putFactory((i) => CritterController());
-  BonfireInjector().put((i) => BarLifeController());
+  BonfireInjector().put((i) => KnightController());
+  BonfireInjector().put((i) => GoblinController());
+  BonfireInjector().put((i) => CritterController());
+  BonfireInjector().putSingleton((i) => BarLifeController());
 
   runApp(
     const MaterialApp(
