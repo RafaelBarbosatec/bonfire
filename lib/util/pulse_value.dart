@@ -7,7 +7,11 @@ class PulseValue {
   double value = 0;
   bool _animIsReverse = false;
   double _controlAnim = 0;
-  PulseValue({this.speed = 1, this.curve = Curves.decelerate,this.pulseVariation = 1});
+  PulseValue({
+    this.speed = 1,
+    this.curve = Curves.decelerate,
+    this.pulseVariation = 0.1,
+  });
 
   void update(double dt) {
     if (_animIsReverse) {
