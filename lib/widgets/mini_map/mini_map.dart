@@ -175,7 +175,7 @@ class _MiniMapState extends State<MiniMap> {
           } else if (component is Enemy) {
             component.renderCollision(
               canvas,
-              widget.playerColor ?? Colors.red.withOpacity(0.5),
+              widget.enemyColor ?? Colors.red.withOpacity(0.5),
             );
           } else if (component is Npc) {
             component.renderCollision(

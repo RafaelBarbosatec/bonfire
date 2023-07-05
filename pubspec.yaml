@@ -7,13 +7,13 @@ issue_tracker: https://github.com/RafaelBarbosatec/bonfire/issues
 documentation: https://bonfire-engine.github.io
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.16.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  flame: ^1.7.1
+  flame: 1.7.1
   tiledjsonreader: ^1.2.6
   http: ^0.13.5
   a_star_algorithm: ^0.3.0
