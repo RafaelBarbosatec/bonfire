@@ -162,41 +162,41 @@ mixin MovementByJoystick on Movement, JoystickListener {
   void _toCorrectDirection(JoystickMoveDirectional directional) {
     if (directional == JoystickMoveDirectional.MOVE_LEFT &&
         _currentDirectional == JoystickMoveDirectional.MOVE_UP_LEFT) {
-      velocity = velocity.copyWith(y: 0);
+      velocity.add(Vector2(0, diagonalSpeed));
     }
     if (directional == JoystickMoveDirectional.MOVE_RIGHT &&
         _currentDirectional == JoystickMoveDirectional.MOVE_UP_RIGHT) {
-      velocity = velocity.copyWith(y: 0);
+      velocity.add(Vector2(0, diagonalSpeed));
     }
 
     if (directional == JoystickMoveDirectional.MOVE_RIGHT &&
         _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
-      velocity = velocity.copyWith(y: 0);
+      velocity.sub(Vector2(0, diagonalSpeed));
     }
 
     if (directional == JoystickMoveDirectional.MOVE_LEFT &&
         _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_LEFT) {
-      velocity = velocity.copyWith(y: 0);
+      velocity.sub(Vector2(0, diagonalSpeed));
     }
 
     //==========================
 
     if (directional == JoystickMoveDirectional.MOVE_UP &&
         _currentDirectional == JoystickMoveDirectional.MOVE_UP_LEFT) {
-      velocity = velocity.copyWith(x: 0);
+      velocity.add(Vector2(diagonalSpeed, 0));
     }
     if (directional == JoystickMoveDirectional.MOVE_UP &&
         _currentDirectional == JoystickMoveDirectional.MOVE_UP_RIGHT) {
-      velocity = velocity.copyWith(x: 0);
+      velocity.sub(Vector2(diagonalSpeed, 0));
     }
 
     if (directional == JoystickMoveDirectional.MOVE_DOWN &&
         _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_LEFT) {
-      velocity = velocity.copyWith(x: 0);
+      velocity.add(Vector2(diagonalSpeed, 0));
     }
     if (directional == JoystickMoveDirectional.MOVE_DOWN &&
         _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
-      velocity = velocity.copyWith(x: 0);
+      velocity.sub(Vector2(diagonalSpeed, 0));
     }
   }
 }

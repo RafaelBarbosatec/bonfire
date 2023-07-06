@@ -23,6 +23,7 @@ mixin Movement on GameComponent {
 
   bool get isIdle => _velocity.isZero();
   Vector2 get velocity => _velocity;
+  double get diagonalSpeed => speed * diaginalReduction;
   set velocity(Vector2 velocity) {
     _velocity = velocity;
     _updateLastDirection(_velocity);
