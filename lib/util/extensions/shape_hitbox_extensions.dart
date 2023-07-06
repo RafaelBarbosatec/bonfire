@@ -4,8 +4,8 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flame/palette.dart';
 
 extension ShapeHitboxExt on ShapeHitbox {
-  void customRender(Canvas canvas, Color color) {
-    paint = Paint()..color = color;
+  void customRender(Canvas canvas, Paint paint) {
+    this.paint = paint;
     renderShape = true;
     render(canvas);
     renderShape = false;

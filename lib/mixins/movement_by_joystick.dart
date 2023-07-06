@@ -22,9 +22,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     _intencity = event.intensity;
-    if (event.isKeyboard) {
-      _toCorrectDirection(event.directional);
-    }
+    _toCorrectDirection(event.directional);
     _currentDirectional = event.directional;
     if (dPadAngles || event.radAngle == 0) {
       _currentDirectionalAngle = _getAngleByDirectional(_currentDirectional);

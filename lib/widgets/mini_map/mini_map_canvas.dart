@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/widgets/mini_map/mini_map.dart';
 import 'package:flutter/material.dart';
 
 ///

@@ -141,21 +141,25 @@ class _MiniMapState extends State<MiniMap> {
     });
   }
 
+  Paint tilePaint = Paint();
+  Paint tileCollisionPaint = Paint();
+
   MiniMapCustomRender<Tile> tilesRenderDefault() => (canvas, component) {
-        if (component is TileWithCollision) {
-          component.children.query<ShapeHitbox>().forEach((element) {
+        var collisionList = component.children.query<ShapeHitbox>();
+        if (collisionList.isNotEmpty) {
+          for (var element in collisionList) {
             element.customRender(
               canvas,
-              widget.tileCollisionColor ?? Colors.black.withOpacity(0.5),
+              tileCollisionPaint
+                ..color =
+                    widget.tileCollisionColor ?? Colors.black.withOpacity(0.5),
             );
-          });
+          }
         } else if (widget.tileColor != null) {
-          component.children.query<ShapeHitbox>().forEach((element) {
-            element.customRender(
-              canvas,
-              widget.tileColor!,
-            );
-          });
+          canvas.drawRect(
+            component.toRect(),
+            tilePaint..color = widget.tileColor!,
+          );
         }
       };
 
