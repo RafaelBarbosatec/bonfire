@@ -1,7 +1,6 @@
 import 'dart:async' as async;
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/extensions/shape_hitbox_extensions.dart';
 import 'package:flutter/material.dart';
 
 import 'mini_map_canvas.dart';
@@ -67,6 +66,10 @@ class _MiniMapState extends State<MiniMap> {
   Vector2 cameraPosition = Vector2.zero();
   Vector2 playerPosition = Vector2.zero();
 
+  Paint tilePaint = Paint();
+  Paint tileCollisionPaint = Paint();
+  Paint paintComponent = Paint();
+
   late async.Timer timer;
   @override
   void initState() {
@@ -103,11 +106,10 @@ class _MiniMapState extends State<MiniMap> {
               borderRadius: widget.borderRadius ?? BorderRadius.zero,
               child: CustomPaint(
                 painter: MiniMapCanvas(
-                  components: widget.game.visibles().toList()
-                    ..addAll(
-                      widget.game.map.getRendered(),
-                    ),
+                  components: widget.game.visibles(),
+                  tiles: widget.game.map.getRendered(),
                   cameraPosition: cameraPosition,
+                  playerPosition: playerPosition,
                   gameSize: widget.game.size,
                   componentsRender:
                       widget.componentsRender ?? componentsRenderDefault(),
@@ -123,10 +125,13 @@ class _MiniMapState extends State<MiniMap> {
   }
 
   void _initInterval() {
-    timer = async.Timer.periodic(const Duration(milliseconds: 20), (timer) {
+    timer = async.Timer.periodic(const Duration(milliseconds: 34), (timer) {
+      if (!widget.game.bonfireCamera.isMounted) {
+        return;
+      }
       bool needSetState = false;
       if (widget.game.bonfireCamera.position != cameraPosition) {
-        cameraPosition = widget.game.bonfireCamera.position.clone();
+        cameraPosition = widget.game.bonfireCamera.topleft.clone();
         needSetState = true;
       }
 
@@ -141,57 +146,73 @@ class _MiniMapState extends State<MiniMap> {
     });
   }
 
-  Paint tilePaint = Paint();
-  Paint tileCollisionPaint = Paint();
-
   MiniMapCustomRender<Tile> tilesRenderDefault() => (canvas, component) {
         var collisionList = component.children.query<ShapeHitbox>();
-        if (collisionList.isNotEmpty) {
+        if (collisionList.isEmpty && widget.tileColor != null) {
+          canvas.drawRect(
+            component.toRect(),
+            tilePaint..color = widget.tileColor!,
+          );
+        } else {
           for (var element in collisionList) {
-            element.customRender(
-              canvas,
+            var rect = element.toRect();
+            canvas.drawRect(
+              rect.translate(component.x, component.y),
               tileCollisionPaint
                 ..color =
                     widget.tileCollisionColor ?? Colors.black.withOpacity(0.5),
             );
           }
-        } else if (widget.tileColor != null) {
-          canvas.drawRect(
-            component.toRect(),
-            tilePaint..color = widget.tileColor!,
-          );
         }
       };
 
   MiniMapCustomRender componentsRenderDefault() => (canvas, component) {
-        // if (component is ObjectCollision) {
-        //   if (component is GameDecoration) {
-        //     component.renderCollision(
-        //       canvas,
-        //       widget.decorationColor ?? Colors.black.withOpacity(0.5),
-        //     );
-        //   }
-        //   if (component is Player) {
-        //     component.renderCollision(
-        //       canvas,
-        //       widget.playerColor ?? Colors.cyan.withOpacity(0.5),
-        //     );
-        //   } else if (component is Ally) {
-        //     component.renderCollision(
-        //       canvas,
-        //       widget.allyColor ?? Colors.yellow.withOpacity(0.5),
-        //     );
-        //   } else if (component is Enemy) {
-        //     component.renderCollision(
-        //       canvas,
-        //       widget.enemyColor ?? Colors.red.withOpacity(0.5),
-        //     );
-        //   } else if (component is Npc) {
-        //     component.renderCollision(
-        //       canvas,
-        //       widget.npcColor ?? Colors.green.withOpacity(0.5),
-        //     );
-        //   }
-        // }
+        if (component is Player) {
+          canvas.drawCircle(
+            component.center.toOffset(),
+            component.width / 2,
+            paintComponent
+              ..color = widget.playerColor ?? Colors.cyan.withOpacity(0.5),
+          );
+          return;
+        }
+
+        if (component is Enemy) {
+          canvas.drawCircle(
+            component.center.toOffset(),
+            component.width / 2,
+            paintComponent
+              ..color = widget.enemyColor ?? Colors.red.withOpacity(0.5),
+          );
+          return;
+        }
+
+        if (component is Ally) {
+          canvas.drawCircle(
+            component.center.toOffset(),
+            component.width / 2,
+            paintComponent
+              ..color = widget.allyColor ?? Colors.yellow.withOpacity(0.5),
+          );
+          return;
+        }
+
+        if (component is Npc) {
+          canvas.drawCircle(
+            component.center.toOffset(),
+            component.width / 2,
+            paintComponent
+              ..color = widget.npcColor ?? Colors.green.withOpacity(0.5),
+          );
+          return;
+        }
+
+        if (component is GameDecoration) {
+          canvas.drawRect(
+            component.toRect(),
+            paintComponent
+              ..color = widget.decorationColor ?? Colors.grey.withOpacity(0.5),
+          );
+        }
       };
 }

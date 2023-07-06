@@ -32,13 +32,6 @@ class SimpleExampleGame extends StatelessWidget {
           'goblin': (properties) => MyEnemy(properties.position),
         },
       ),
-      // overlayBuilderMap: {
-      //   'map': (context, game) => MiniMap(
-      //         game: game,
-      //         tileColor: Colors.green,
-      //       )
-      // },
-      // initialActiveOverlays: const ['map'],
       components: [
         BarrelDraggable(Vector2(300, 150)),
       ],
