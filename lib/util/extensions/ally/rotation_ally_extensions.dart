@@ -32,7 +32,7 @@ extension RotationEnemyExtensions on RotationAlly {
       observed: (player) {
         double radAngle = getAngleFromPlayer();
 
-        Rect playerRect = player.rectConsideringCollision;
+        Rect playerRect = player.toAbsoluteRect();
         Rect rectPlayerCollision = Rect.fromLTWH(
           playerRect.left - margin,
           playerRect.top - margin,
@@ -40,7 +40,7 @@ extension RotationEnemyExtensions on RotationAlly {
           playerRect.height + (margin * 2),
         );
 
-        if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
+        if (toAbsoluteRect().overlaps(rectPlayerCollision)) {
           closePlayer(player);
           stopMove();
           return;

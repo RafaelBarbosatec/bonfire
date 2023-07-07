@@ -27,7 +27,7 @@ Test our online [DEMO](https://bonfire-engine.github.io/examples/bonfire/).
 
 ## Documentation
 
-For more information and [examples](https://bonfire-engine.github.io/#/examples) see the [Documentation](https://bonfire-engine.github.io/).
+New documentation in prgress
 
 Command export web: `flutter build web --web-renderer=canvaskit`
 

@@ -109,14 +109,13 @@ mixin MoveToPositionAlongThePath on Movement {
   }
 
   void _move() {
-    Vector2 center = rectConsideringCollision.center.toVector2();
-    double diffX = _currentPath[_currentIndex].dx - center.x;
-    double diffY = _currentPath[_currentIndex].dy - center.y;
+    double diffX = _currentPath[_currentIndex].dx - absoluteCenter.x;
+    double diffY = _currentPath[_currentIndex].dy - absoluteCenter.y;
 
-    if (diffX.abs() < 0.01 && diffY.abs() < 0.01) {
+    if (diffX.abs() < dtSpeed && diffY.abs() < dtSpeed) {
       _goToNextPosition();
     } else {
-      if (diffX.abs() > 0.01 && diffY.abs() > 0.01) {
+      if (diffX.abs() > dtSpeed && diffY.abs() > dtSpeed) {
         if (diffX > 0 && diffY > 0) {
           moveDownRight();
         } else if (diffX < 0 && diffY > 0) {
@@ -126,13 +125,13 @@ mixin MoveToPositionAlongThePath on Movement {
         } else if (diffX < 0 && diffY < 0) {
           moveUpLeft();
         }
-      } else if (diffX.abs() > 0.01) {
+      } else if (diffX.abs() > dtSpeed) {
         if (diffX > 0) {
           moveRight();
         } else if (diffX < 0) {
           moveLeft();
         }
-      } else if (diffY.abs() > 0.01) {
+      } else if (diffY.abs() > dtSpeed) {
         if (diffY > 0) {
           moveDown();
         } else if (diffY < 0) {
@@ -147,7 +146,7 @@ mixin MoveToPositionAlongThePath on Movement {
   List<Offset> _calculatePath(Vector2 finalPosition) {
     final player = this;
 
-    final positionPlayer = player.rectConsideringCollision.center.toVector2();
+    final positionPlayer = player.toAbsoluteRect().center.toVector2();
 
     Offset playerPosition = _getCenterPositionByTile(positionPlayer);
 
@@ -246,10 +245,8 @@ mixin MoveToPositionAlongThePath on Movement {
       tileSize = gameRef.map.tiles.first.width;
     }
     if (_gridSizeIsCollisionSize) {
-      return max(
-            rectConsideringCollision.height,
-            rectConsideringCollision.width,
-          ) +
+      final ract = toAbsoluteRect();
+      return max(ract.height, ract.width) +
           REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
     }
     return tileSize;

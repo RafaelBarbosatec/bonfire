@@ -57,7 +57,7 @@ mixin Vision on GameComponent {
       return false;
     }
 
-    final rect = component.rectConsideringCollision;
+    final rect = component.toAbsoluteRect();
     final otherShape = RectangleShape(
       rect.sizeVector2,
       position: rect.positionVector2,

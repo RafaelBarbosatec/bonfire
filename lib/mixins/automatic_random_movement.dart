@@ -48,7 +48,7 @@ mixin AutomaticRandomMovement on Movement {
         );
         if (useAngle) {
           angle = BonfireUtil.angleBetweenPoints(
-            rectConsideringCollision.center.toVector2(),
+            toAbsoluteRect().center.toVector2(),
             _targetRandomMovement,
           );
         }

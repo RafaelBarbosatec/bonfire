@@ -28,7 +28,7 @@ mixin UseSpriteAnimation on GameComponent {
   }) {
     _animationRender = SpriteAnimationRender(
       animation: animation,
-      size: size ?? size,
+      size: size ?? this.size,
       loop: loop,
       onFinish: onFinish,
       onStart: onStart,
@@ -41,7 +41,6 @@ mixin UseSpriteAnimation on GameComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-
     if (isVisible && !isRemoving) {
       if (_fastAnimation != null) {
         _fastAnimation?.render(canvas, overridePaint: paint);

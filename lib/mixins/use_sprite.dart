@@ -20,7 +20,7 @@ mixin UseSprite on GameComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (isVisible) {
+    if (isVisible && !isRemoving) {
       sprite?.render(
         canvas,
         size: size,

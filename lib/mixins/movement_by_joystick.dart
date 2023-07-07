@@ -162,41 +162,65 @@ mixin MovementByJoystick on Movement, JoystickListener {
   void _toCorrectDirection(JoystickMoveDirectional directional) {
     if (directional == JoystickMoveDirectional.MOVE_LEFT &&
         _currentDirectional == JoystickMoveDirectional.MOVE_UP_LEFT) {
-      velocity.add(Vector2(0, diagonalSpeed));
+      velocity.add(Vector2(
+        0,
+        enabledDiagonalMovements ? diagonalSpeed : speed,
+      ));
     }
     if (directional == JoystickMoveDirectional.MOVE_RIGHT &&
         _currentDirectional == JoystickMoveDirectional.MOVE_UP_RIGHT) {
-      velocity.add(Vector2(0, diagonalSpeed));
+      velocity.add(Vector2(
+        0,
+        enabledDiagonalMovements ? diagonalSpeed : speed,
+      ));
     }
 
     if (directional == JoystickMoveDirectional.MOVE_RIGHT &&
         _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
-      velocity.sub(Vector2(0, diagonalSpeed));
+      velocity.sub(Vector2(
+        0,
+        enabledDiagonalMovements ? diagonalSpeed : speed,
+      ));
     }
 
     if (directional == JoystickMoveDirectional.MOVE_LEFT &&
         _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_LEFT) {
-      velocity.sub(Vector2(0, diagonalSpeed));
+      velocity.sub(Vector2(
+        0,
+        enabledDiagonalMovements ? diagonalSpeed : speed,
+      ));
     }
 
     //==========================
 
     if (directional == JoystickMoveDirectional.MOVE_UP &&
         _currentDirectional == JoystickMoveDirectional.MOVE_UP_LEFT) {
-      velocity.add(Vector2(diagonalSpeed, 0));
+      velocity.add(Vector2(
+        enabledDiagonalMovements ? diagonalSpeed : speed,
+        0,
+      ));
     }
     if (directional == JoystickMoveDirectional.MOVE_UP &&
         _currentDirectional == JoystickMoveDirectional.MOVE_UP_RIGHT) {
-      velocity.sub(Vector2(diagonalSpeed, 0));
+      velocity.sub(Vector2(
+        enabledDiagonalMovements ? diagonalSpeed : speed,
+        0,
+      ));
     }
 
     if (directional == JoystickMoveDirectional.MOVE_DOWN &&
         _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_LEFT) {
-      velocity.add(Vector2(diagonalSpeed, 0));
+      velocity.add(Vector2(
+        enabledDiagonalMovements ? diagonalSpeed : speed,
+        0,
+      ));
     }
     if (directional == JoystickMoveDirectional.MOVE_DOWN &&
         _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
-      velocity.sub(Vector2(diagonalSpeed, 0));
+      velocity.sub(Vector2(
+        enabledDiagonalMovements ? diagonalSpeed : speed,
+        0,
+      ));
     }
   }
 }

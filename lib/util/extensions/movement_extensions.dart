@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/mixins/movement.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
 
 extension MovementExtensions on Movement {
   /// This method move this component to target
@@ -15,7 +14,7 @@ extension MovementExtensions on Movement {
     required Function(GameComponent) closeComponent,
     double margin = 10,
   }) {
-    final comp = target.rectConsideringCollision;
+    final comp = target.toAbsoluteRect();
     double centerXPlayer = comp.center.dx;
     double centerYPlayer = comp.center.dy;
 
@@ -23,7 +22,7 @@ extension MovementExtensions on Movement {
     double translateY = 0;
     double speed = this.speed * dt;
 
-    Rect rectToMove = rectConsideringCollision;
+    Rect rectToMove = toAbsoluteRect();
 
     translateX = rectToMove.center.dx > centerXPlayer ? (-1 * speed) : speed;
 
@@ -73,7 +72,7 @@ extension MovementExtensions on Movement {
     if (runOnlyVisibleInScreen && !isVisible) return;
     double distance = (minDistanceFromPlayer ?? radiusVision);
 
-    Rect rectTarget = target.rectConsideringCollision;
+    Rect rectTarget = target.toAbsoluteRect();
     double centerXTarget = rectTarget.center.dx;
     double centerYTarget = rectTarget.center.dy;
 
@@ -82,7 +81,7 @@ extension MovementExtensions on Movement {
 
     double speed = this.speed * dtUpdate;
 
-    Rect rectToMove = rectConsideringCollision;
+    Rect rectToMove = toAbsoluteRect();
 
     translateX = rectToMove.center.dx > centerXTarget ? (-1 * speed) : speed;
     translateX = _adjustTranslate(

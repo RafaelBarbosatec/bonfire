@@ -244,12 +244,12 @@ class FlyingAttackObject extends AnimatedGameObject
     double nextY = (height / 2) * _senAngle;
 
     Vector2 innerSize = destroySize ?? size;
-
+    final rect = toAbsoluteRect();
     Offset diffBase = Offset(
-          rectConsideringCollision.center.dx + nextX,
-          rectConsideringCollision.center.dy + nextY,
+          rect.center.dx + nextX,
+          rect.center.dy + nextY,
         ) -
-        rectConsideringCollision.center;
+        rect.center;
 
     final positionDestroy = center.translated(diffBase.dx, diffBase.dy);
 

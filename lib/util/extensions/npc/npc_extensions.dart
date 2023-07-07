@@ -23,9 +23,9 @@ extension NpcExtensions on Npc {
   }) {
     double radAngle = getAngleFromPlayer();
 
-    Rect rectPlayerCollision = target.rectConsideringCollision.inflate(margin);
+    Rect rectPlayerCollision = target.toAbsoluteRect().inflate(margin);
 
-    if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
+    if (toAbsoluteRect().overlaps(rectPlayerCollision)) {
       close?.call();
       moveFromAngle(radAngle);
       stopMove();
@@ -175,7 +175,7 @@ extension NpcExtensions on Npc {
     Player? player = gameRef.player;
     if (player == null) return 0.0;
     return BonfireUtil.angleBetweenPoints(
-      rectConsideringCollision.center.toVector2(),
+      toAbsoluteRect().center.toVector2(),
       playerRect.center.toVector2(),
     );
   }
@@ -187,12 +187,12 @@ extension NpcExtensions on Npc {
     if (player == null) return 0.0;
     return BonfireUtil.angleBetweenPoints(
       playerRect.center.toVector2(),
-      rectConsideringCollision.center.toVector2(),
+      toAbsoluteRect().center.toVector2(),
     );
   }
 
   /// Gets player position used how base in calculations
   Rect get playerRect {
-    return gameRef.player?.rectConsideringCollision ?? Rect.zero;
+    return gameRef.player?.toAbsoluteRect() ?? Rect.zero;
   }
 }

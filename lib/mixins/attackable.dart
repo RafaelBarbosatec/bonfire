@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
 
 // ignore: constant_identifier_names
 enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER_AND_ALLY, NONE }
@@ -108,5 +107,5 @@ mixin Attackable on GameComponent {
 
   bool get isDead => _isDead;
 
-  Rect rectAttackable() => rectConsideringCollision;
+  Rect rectAttackable() => toAbsoluteRect();
 }

@@ -24,10 +24,10 @@ extension RotationEnemyExtensions on RotationEnemy {
       observed: (player) {
         double radAngle = getAngleFromPlayer();
 
-        Rect playerRect = player.rectConsideringCollision;
+        Rect playerRect = player.toAbsoluteRect();
         Rect rectPlayerCollision = playerRect.inflate(margin);
 
-        if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
+        if (toAbsoluteRect().overlaps(rectPlayerCollision)) {
           closePlayer(player);
           moveFromAngle(radAngle);
           stopMove();
@@ -59,7 +59,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       observed: (player) {
         positioned(player);
 
-        Rect playerRect = player.rectConsideringCollision;
+        Rect playerRect = player.toAbsoluteRect();
         double distance = (minDistanceCellsFromPlayer ?? radiusVision);
 
         Vector2 myPosition = Vector2(

@@ -33,6 +33,7 @@ class Knight extends SimplePlayer
           position: position,
           life: 200,
         ) {
+    enabledDiagonalMovements = false;
     enabledJoystickIntencity = true;
     setupLighting(
       LightingConfig(
@@ -219,8 +220,8 @@ class Knight extends SimplePlayer
     if (showBgRangeAttack) {
       double radius = height;
       rectDirectionAttack = Rect.fromLTWH(
-        rectConsideringCollision.center.dx - radius,
-        rectConsideringCollision.center.dy - radius,
+        toAbsoluteRect().center.dx - radius,
+        toAbsoluteRect().center.dy - radius,
         radius * 2,
         radius * 2,
       );

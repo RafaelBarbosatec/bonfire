@@ -57,7 +57,7 @@ extension GameComponentExtensions on GameComponent {
     double marginFromOrigin = 16,
     Vector2? centerOffset,
   }) {
-    var initPosition = rectConsideringCollision;
+    var initPosition = toAbsoluteRect();
 
     Vector2 startPosition =
         initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
@@ -141,7 +141,7 @@ extension GameComponentExtensions on GameComponent {
     double? sizePush,
     Vector2? centerOffset,
   }) {
-    final rect = rectConsideringCollision;
+    final rect = toAbsoluteRect();
 
     simpleAttackMeleeByAngle(
       angle: direction.toRadians(),
@@ -172,7 +172,7 @@ extension GameComponentExtensions on GameComponent {
     double marginFromCenter = 0,
     Vector2? centerOffset,
   }) {
-    var initPosition = rectConsideringCollision;
+    var initPosition = toAbsoluteRect();
 
     Vector2 startPosition =
         initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
@@ -224,7 +224,7 @@ extension GameComponentExtensions on GameComponent {
   }
 
   Direction getComponentDirectionFromMe(GameComponent? comp) {
-    Rect rectToMove = rectConsideringCollision;
+    Rect rectToMove = toAbsoluteRect();
     double centerXPlayer = comp?.center.x ?? 0;
     double centerYPlayer = comp?.center.y ?? 0;
 
@@ -250,11 +250,6 @@ extension GameComponentExtensions on GameComponent {
     if (right <= other.left || other.right <= left) return false;
     if (bottom <= other.top || other.bottom <= top) return false;
     return true;
-  }
-
-  /// Gets rect used how base in calculations considering collision
-  Rect get rectConsideringCollision {
-    return toAbsoluteRect();
   }
 
   /// Method that checks if this component contain collisions
