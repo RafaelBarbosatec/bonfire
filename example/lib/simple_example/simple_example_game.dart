@@ -21,11 +21,10 @@ class SimpleExampleGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BonfireWidget(
-      joystick: JoystickMoveToPosition(),
-      // joystick: Joystick(
-      //   keyboardConfig: KeyboardConfig(),
-      //   directional: JoystickDirectional(),
-      // ),
+      joystick: Joystick(
+        keyboardConfig: KeyboardConfig(),
+        directional: JoystickDirectional(),
+      ),
       map: WorldMapByTiled(
         'tiled/mapa2.json',
         forceTileSize: Vector2(32, 32),
