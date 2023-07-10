@@ -27,10 +27,10 @@
   - Adds at gameRef: `raycastAll`, `raycast`, `timeScale`
 
 - Update `Pushable` mixin to handle forces.
-- Adds `GameObject`
-- Adds `AnimatedGameObject`
-- Adds `FollowerGameObject`
-- Adds `AnimatedFollowerGameObject`
+- Adds `GameObject`. (It's the GameComponent using Sprite)
+- Adds `AnimatedGameObject`. (It's the GameComponent using SpriteAnimation)
+- Adds `FollowerGameObject`. (It's the GameObject using Follower mixin)
+- Adds `AnimatedFollowerGameObject`. (It's the AnimatedGameObject using Follower mixin)
   
 
 
