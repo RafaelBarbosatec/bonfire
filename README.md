@@ -23,7 +23,7 @@ Bonfire is ideal for building games from the following perspectives:
 
 ![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/perspectiva.jpg)
 
-Test our online [DEMO](https://bonfire-engine.github.io/examples/bonfire/).
+Test our online [DEMO-v3](https://bonfire-engine.github.io/examples/bonfire-v3/).
 
 ## Documentation
 
