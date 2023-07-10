@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
 
-class GameObject extends GameComponent with UseSprite, UseAssetsLoader {
+class GameObject extends GameComponent
+    with UseSprite, Lighting, UseAssetsLoader {
   final int? objectPriority;
 
   GameObject({
@@ -10,11 +11,17 @@ class GameObject extends GameComponent with UseSprite, UseAssetsLoader {
     required Vector2 size,
     required FutureOr<Sprite> sprite,
     Vector2? positionFromTarget,
+    LightingConfig? lightingConfig,
     this.objectPriority,
+    double angle = 0,
+    Anchor anchor = Anchor.topLeft,
   }) {
+    this.anchor = anchor;
     this.position = position;
     this.size = size;
+    this.angle = angle;
     loader?.add(AssetToLoad(sprite, (value) => this.sprite = value));
+    setupLighting(lightingConfig);
   }
 
   @override
