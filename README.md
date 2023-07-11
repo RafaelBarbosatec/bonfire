@@ -7,6 +7,8 @@
 
 [![bonfire](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/bonfire.gif)](https://bonfire-engine.github.io/)
 
+[![buymeacoffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/rafaelbarbosa)
+
 
 # Bonfire
 
@@ -33,7 +35,7 @@ Command export web: `flutter build web --web-renderer=canvaskit`
 
 ## Next steps
 
-### [Bonfire 3.0.0](https://github.com/users/RafaelBarbosatec/projects/3)
+### [Bonfire 3.0.0](https://github.com/RafaelBarbosatec/bonfire/pull/393)
 
 Remove collision and rendering implementation itself to add raycast support
 
@@ -41,10 +43,6 @@ Remove collision and rendering implementation itself to add raycast support
 
  * The entire [FlameEngine](https://flame-engine.org/) team.
  * And thanks to everyone who contributes and has already contributed.
-
-## Encourage my work
-
-[![buymeacoffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/rafaelbarbosa)
 
  
 ## Contribution
