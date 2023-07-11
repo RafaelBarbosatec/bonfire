@@ -1,4 +1,6 @@
-# [3.0.0]
+## 3.0.0-beta.1
+
+- Use Flame `1.8.1`
 - BREAKING CHANGE: 
   - `BonfireWidget`:
     - Remove `enemies` param. Use `components` param.
@@ -32,49 +34,57 @@
 - Adds `FollowerGameObject`. (It's the GameObject using Follower mixin)
 - Adds `AnimatedFollowerGameObject`. (It's the AnimatedGameObject using Follower mixin)
   
+## 2.12.3
 
-
-# [2.12.3]
 - Fix issue [#379](https://github.com/RafaelBarbosatec/bonfire/issues/379)
 - Adds in `ObjectCollision` the method `onCollisionHappened`
 
-# [2.12.2]
+## 2.12.2
+
 - Adds `FollowerObject`. Thanks [Matt El Mouktafi](https://github.com/mel-mouk)!
 
-# [2.12.1]
+## 2.12.1
+
 - Adds multi scenario example
 - Update Flame version to 1.7.1
 
-# [2.12.0]
+## 2.12.0
+
 - Add mustCallSuper to GameComponent.update and GameComponent.onRemove
 - Update Flame to 1.6.0
 
-# [2.11.11]
+## 2.11.11
+
 - Fix [#261](https://github.com/RafaelBarbosatec/bonfire/issues/261)
 - Fix [#364](https://github.com/RafaelBarbosatec/bonfire/issues/364)
 
-# [2.11.10]
+## 2.11.10
+
 - Consider Tiled layer opacity. Fix [#356](https://github.com/RafaelBarbosatec/bonfire/issues/356)
 - Little improvements performance.
 - Adds param `area` in `TiledObjectProperties`.
 - Fix multi instance of `AnimatedObjectOnce` in `SimpleDirectionAnimation`. [#359](https://github.com/RafaelBarbosatec/bonfire/issues/359)
 
-# [2.11.9]
+## 2.11.9
+
 - Improvements performance in `LightingInterface`.
 - Improvements to check visible collisions.
 - Improvements in `RenderTransformer`.
 - Update `ListenerGameWidget`.
 - Resolve issue [#354](https://github.com/RafaelBarbosatec/bonfire/issues/354)
 
-# [2.11.8]
+## 2.11.8
+
 - Fix bug in `moveOnlyMapArea`
 
-# [2.11.7]
+## 2.11.7
+
 - Fix diagonal movement speed for enemies
 - Improvements in `moveOnlyMapArea`
 - Adds param `setZoomLimitToFitMap` in `CameraConfig`.
 
-# [2.11.6]
+## 2.11.6
+
 - Update Flame to `1.5.0`
 
 # [2.11.5]

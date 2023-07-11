@@ -16,7 +16,7 @@ class SpriteAnimationRender {
   set animation(SpriteAnimation? animation) {
     _animation = animation;
     _animation?.loop = loop;
-    _animationTicker = animation?.ticker();
+    _animationTicker = animation?.createTicker();
     _animationTicker?.onStart = onStart;
     _animationTicker?.onComplete = onFinish;
   }
@@ -32,7 +32,7 @@ class SpriteAnimationRender {
   }) : _animation = animation {
     _animation?.loop = loop;
     _playing = autoPlay;
-    _animationTicker = animation?.ticker();
+    _animationTicker = animation?.createTicker();
     _animationTicker?.onStart = onStart;
     _animationTicker?.onComplete = onFinish;
   }

@@ -182,7 +182,7 @@ extension FutureSpriteAnimationExt on FutureOr<SpriteAnimation> {
             ),
             child: SpriteAnimationWidget(
               animation: data.data!,
-              animationTicker: data.data!.ticker(),
+              animationTicker: data.data!.createTicker(),
               playing: playing,
               anchor: anchor,
             ),
@@ -199,7 +199,7 @@ extension FutureSpriteAnimationExt on FutureOr<SpriteAnimation> {
       ),
       child: SpriteAnimationWidget(
         animation: this as SpriteAnimation,
-        animationTicker: (this as SpriteAnimation).ticker(),
+        animationTicker: (this as SpriteAnimation).createTicker(),
         playing: playing,
         anchor: anchor,
       ),
