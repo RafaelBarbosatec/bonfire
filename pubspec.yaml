@@ -7,7 +7,7 @@ issue_tracker: https://github.com/RafaelBarbosatec/bonfire/issues
 # documentation: https://bonfire-engine.github.io
 
 environment:
-  sdk: ">=2.18.5 <3.0.0"
+  sdk: ">=2.18.5 <4.0.0"
 
 dependencies:
   flutter:
