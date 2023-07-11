@@ -7,8 +7,6 @@
 
 [![bonfire](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/bonfire.gif)](https://bonfire-engine.github.io/)
 
-[![buymeacoffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/rafaelbarbosa)
-
 
 # Bonfire
 
@@ -38,6 +36,10 @@ Command export web: `flutter build web --web-renderer=canvaskit`
 ### [Bonfire 3.0.0](https://github.com/RafaelBarbosatec/bonfire/pull/393)
 
 Remove collision and rendering implementation itself to add raycast support
+
+## Encourage my work
+
+[![buymeacoffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/rafaelbarbosa)
 
 ## Credits
 
