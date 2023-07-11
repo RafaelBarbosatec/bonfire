@@ -10,9 +10,9 @@
     - Remove `onTapUp` param. It's not necessary
     - Rename `constructionMode` to `debugMode`.
 
-  - Now, to access camera you cna use `gameRef.bonfireCamera` instead of `gameRef.camera`. (Now using new Flame API `CameraComponent`)
+  - Now, to access camera you can use `gameRef.bonfireCamera` instead of `gameRef.camera`. (Now using new Flame API `CameraComponent`)
   - `Collision`, now Bonfire use the Flame collision system!
-    - To adds Collision in your opject just adds a ShapeHitbox to component. See this [doc](https://docs.flame-engine.org/latest/flame/collision_detection.html#shapehitbox)
+    - To adds Collision in your GameComponent just adds a ShapeHitbox. See this [doc](https://docs.flame-engine.org/latest/flame/collision_detection.html#shapehitbox)
     - You can listen the collision callbacks doing override of `onCollision`, `onCollisionEnd`, `onCollisionStart` like Flame Documantation.
     - To block the movement of components when colliding use the mixin `BlockMovementCollision` 
   - `BonfireInjector().put` now is Factory.
