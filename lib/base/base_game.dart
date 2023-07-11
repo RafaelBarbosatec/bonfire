@@ -12,7 +12,11 @@ import 'package:flutter/widgets.dart';
 /// Apply zoom in canvas.
 /// Reorder components per time frame.
 abstract class BaseGame extends FlameGame
-    with PointerDetector, KeyboardEvents, HasQuadTreeCollisionDetection,HasTimeScale {
+    with
+        PointerDetector,
+        KeyboardEvents,
+        HasQuadTreeCollisionDetection,
+        HasTimeScale {
   bool enabledGestures = true;
   bool enabledKeyboard = true;
 

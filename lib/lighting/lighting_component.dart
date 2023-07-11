@@ -183,7 +183,7 @@ class LightingComponent extends GameComponent with LightingInterface {
     _paintLighting
       ..color = config.color
       ..maskFilter = config.maskFilter;
-      
+
     canvas.drawCircle(
       offset,
       config.radius * (config.withPulse ? (1 - config.valuePulse) : 1),

@@ -9,7 +9,7 @@ extension PlayerExtensions on Player {
   /// Method that bo used in [update] method.
   /// [visionAngle] in radians
   /// [angle] in radians. is automatically picked up using the component's direction.
-   PolygonShape? seeEnemy({
+  PolygonShape? seeEnemy({
     required Function(List<Enemy>) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
@@ -17,7 +17,7 @@ extension PlayerExtensions on Player {
     double? angle,
   }) {
     if (isDead) return null;
-   return seeComponentType<Enemy>(
+    return seeComponentType<Enemy>(
       observed: observed,
       notObserved: notObserved,
       radiusVision: radiusVision,

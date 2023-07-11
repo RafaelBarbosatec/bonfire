@@ -54,10 +54,10 @@ class LightingConfig {
       curve: pulseCurve,
       pulseVariation: pulseVariation,
     );
-    
-     _maskFilter = MaskFilter.blur(
+
+    _maskFilter = MaskFilter.blur(
       BlurStyle.normal,
-       _convertRadiusToSigma(blurBorder),
+      _convertRadiusToSigma(blurBorder),
     );
   }
 

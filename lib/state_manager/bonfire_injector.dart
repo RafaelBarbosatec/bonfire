@@ -29,7 +29,6 @@ class BonfireInjector {
   static final Map<Type, BuildDependency> _dependencies = {};
   static final Map<Type, dynamic> _dependenciesSingleton = {};
 
-  
   /// Used to register dependency as a Factory.
   /// Always that you call [get] this will be return a new instance.
   /// When you use this to register a [StateController] all components that use
