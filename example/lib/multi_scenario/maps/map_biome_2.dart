@@ -40,7 +40,10 @@ class MapBiome2 extends StatelessWidget {
               ),
         },
       ),
-      cameraConfig: CameraConfig(moveOnlyMapArea: true),
+      cameraConfig: CameraConfig(
+        moveOnlyMapArea: true,
+        zoom: MediaQuery.of(context).size.width / (defaultTileSize * 20),
+      ),
       progress: Container(
         width: double.maxFinite,
         height: double.maxFinite,

@@ -20,6 +20,7 @@ class Pirate extends SimplePlayer with BlockMovementCollision {
           position: position,
           size: Vector2.all(DungeonMap.tileSize * 1.5),
           animation: PirateSpriteSheet.getAnimation(),
+          speed: DungeonMap.tileSize * 3,
         ) {
     enabledDiagonalMovements = false;
   }

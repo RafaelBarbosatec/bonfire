@@ -46,7 +46,7 @@ class MapBiome1 extends StatelessWidget {
       ),
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
-        setZoomLimitToFitMap: true,
+        zoom: MediaQuery.of(context).size.width / (defaultTileSize * 20),
       ),
       progress: Container(
         width: double.maxFinite,
