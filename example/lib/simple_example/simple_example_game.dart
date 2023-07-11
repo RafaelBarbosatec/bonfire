@@ -27,7 +27,7 @@ class SimpleExampleGame extends StatelessWidget {
       ),
       map: WorldMapByTiled(
         'tiled/mapa2.json',
-        forceTileSize: Vector2(32, 32),
+        forceTileSize: Vector2.all(32),
         objectsBuilder: {
           'goblin': (properties) => MyEnemy(properties.position),
         },
@@ -36,7 +36,10 @@ class SimpleExampleGame extends StatelessWidget {
         BarrelDraggable(Vector2(300, 150)),
       ],
       player: MyPlayer(Vector2(140, 140)),
-      cameraConfig: CameraConfig(moveOnlyMapArea: true, zoom: 1.5),
+      cameraConfig: CameraConfig(
+        moveOnlyMapArea: true,
+        zoom: MediaQuery.of(context).size.width / (32 * 15),
+      ),
       backgroundColor: const Color.fromARGB(255, 10, 53, 89),
     );
   }

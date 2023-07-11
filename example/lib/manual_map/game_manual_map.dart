@@ -1,11 +1,8 @@
-import 'dart:math';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/manual_map/game_manual_controller.dart';
 import 'package:example/shared/interface/knight_interface.dart';
 import 'package:example/shared/player/knight.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,8 +12,6 @@ class GameManualMap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      DungeonMap.tileSize =
-          max(constraints.maxHeight, constraints.maxWidth) / (kIsWeb ? 25 : 22);
       return BonfireWidget(
         joystick: Joystick(
           keyboardConfig: KeyboardConfig(
@@ -56,6 +51,9 @@ class GameManualMap extends StatelessWidget {
           ...DungeonMap.decorations(),
           GameManualController(),
         ],
+        cameraConfig: CameraConfig(
+          zoom: MediaQuery.of(context).size.width / (DungeonMap.tileSize * 20),
+        ),
         interface: KnightInterface(),
         map: DungeonMap.map(),
         background: BackgroundColorGame(Colors.blueGrey[900]!),
