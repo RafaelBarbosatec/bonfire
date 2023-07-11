@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/random_map/map_generator.dart';
+import 'package:example/shared/util/functions.dart';
 import 'package:flutter/material.dart';
 
 ///
@@ -62,8 +63,7 @@ class _RandomMapGameState extends State<RandomMapGame> {
           player: result.player,
           cameraConfig: CameraConfig(
             moveOnlyMapArea: true,
-            zoom:
-                MediaQuery.of(context).size.width / (DungeonMap.tileSize * 20),
+            zoom: getZoomGame(context, DungeonMap.tileSize, 20),
           ),
           map: result.map,
           components: result.components,

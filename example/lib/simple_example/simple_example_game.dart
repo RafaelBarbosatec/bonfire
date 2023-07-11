@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/decoration/barrel_dragable.dart';
+import 'package:example/shared/util/functions.dart';
 import 'package:example/simple_example/my_enemy.dart';
 import 'package:example/simple_example/my_player.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class SimpleExampleGame extends StatelessWidget {
       player: MyPlayer(Vector2(140, 140)),
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
-        zoom: MediaQuery.of(context).size.width / (32 * 15),
+        zoom: getZoomGame(context, 32, 15),
       ),
       backgroundColor: const Color.fromARGB(255, 10, 53, 89),
     );

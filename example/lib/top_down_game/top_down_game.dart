@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/shared/util/functions.dart';
 import 'package:example/top_down_game/robot_enemy.dart';
 import 'package:example/top_down_game/soldier_player.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ class TopDownGame extends StatelessWidget {
       ),
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
-        zoom: MediaQuery.of(context).size.width / 680,
+        zoom: getZoomGame(context, 68, 10),
       ),
       player: SoldierPlayer(Vector2(64 * 17, 64 * 4)),
       lightingColorGame: Colors.black.withOpacity(0.7),
