@@ -22,8 +22,9 @@ mixin MovementByJoystick on Movement, JoystickListener {
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     _intencity = event.intensity;
-    _toCorrectDirection(event.directional);
-    _currentDirectional = event.directional;
+    final newDirectional = _getDirectional(event.directional);
+    _toCorrectDirection(newDirectional);
+    _currentDirectional = newDirectional;
     if (dPadAngles || event.radAngle == 0) {
       _currentDirectionalAngle = _getAngleByDirectional(_currentDirectional);
     } else {
@@ -70,19 +71,11 @@ mixin MovementByJoystick on Movement, JoystickListener {
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_UP_LEFT:
-        if (enabledDiagonalMovements) {
-          moveUpLeft(speed: speed * intensity);
-        } else {
-          moveLeft(speed: speed * intensity);
-        }
+        moveUpLeft(speed: speed * intensity);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_UP_RIGHT:
-        if (enabledDiagonalMovements) {
-          moveUpRight(speed: speed * intensity);
-        } else {
-          moveRight(speed: speed * intensity);
-        }
+        moveUpRight(speed: speed * intensity);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
@@ -94,19 +87,11 @@ mixin MovementByJoystick on Movement, JoystickListener {
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-        if (enabledDiagonalMovements) {
-          moveDownRight(speed: speed * intensity);
-        } else {
-          moveRight(speed: speed * intensity);
-        }
+        moveDownRight(speed: speed * intensity);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-        if (enabledDiagonalMovements) {
-          moveDownLeft(speed: speed * intensity);
-        } else {
-          moveLeft(speed: speed * intensity);
-        }
+        moveDownLeft(speed: speed * intensity);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
@@ -160,83 +145,69 @@ mixin MovementByJoystick on Movement, JoystickListener {
   }
 
   void _toCorrectDirection(JoystickMoveDirectional directional) {
-    if (directional == JoystickMoveDirectional.MOVE_LEFT &&
-        _currentDirectional == JoystickMoveDirectional.MOVE_UP_LEFT) {
-      velocity.add(
-        Vector2(
-          0,
-          enabledDiagonalMovements ? diagonalSpeed : speed,
-        ),
-      );
-    }
-    if (directional == JoystickMoveDirectional.MOVE_RIGHT &&
-        _currentDirectional == JoystickMoveDirectional.MOVE_UP_RIGHT) {
-      velocity.add(
-        Vector2(
-          0,
-          enabledDiagonalMovements ? diagonalSpeed : speed,
-        ),
-      );
-    }
+    velocity.sub(_getDirectionalVelocity(_currentDirectional));
+    velocity.add(_getDirectionalVelocity(directional));
+  }
 
-    if (directional == JoystickMoveDirectional.MOVE_RIGHT &&
-        _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
-      velocity.sub(
-        Vector2(
-          0,
-          enabledDiagonalMovements ? diagonalSpeed : speed,
-        ),
-      );
+  Vector2 _getDirectionalVelocity(JoystickMoveDirectional directional) {
+    switch (directional) {
+      case JoystickMoveDirectional.MOVE_UP:
+        return Vector2(0, -speed);
+      case JoystickMoveDirectional.MOVE_UP_LEFT:
+        return Vector2(-diagonalSpeed, -diagonalSpeed);
+      case JoystickMoveDirectional.MOVE_UP_RIGHT:
+        return Vector2(diagonalSpeed, -diagonalSpeed);
+      case JoystickMoveDirectional.MOVE_RIGHT:
+        return Vector2(speed, 0);
+      case JoystickMoveDirectional.MOVE_DOWN:
+        return Vector2(0, speed);
+      case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
+        return Vector2(diagonalSpeed, diagonalSpeed);
+      case JoystickMoveDirectional.MOVE_DOWN_LEFT:
+        return Vector2(-diagonalSpeed, diagonalSpeed);
+      case JoystickMoveDirectional.MOVE_LEFT:
+        return Vector2(-speed, 0);
+      case JoystickMoveDirectional.IDLE:
+        return Vector2.zero();
     }
+  }
 
-    if (directional == JoystickMoveDirectional.MOVE_LEFT &&
-        _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_LEFT) {
-      velocity.sub(
-        Vector2(
-          0,
-          enabledDiagonalMovements ? diagonalSpeed : speed,
-        ),
-      );
-    }
-
-    //==========================
-
-    if (directional == JoystickMoveDirectional.MOVE_UP &&
-        _currentDirectional == JoystickMoveDirectional.MOVE_UP_LEFT) {
-      velocity.add(
-        Vector2(
-          enabledDiagonalMovements ? diagonalSpeed : speed,
-          0,
-        ),
-      );
-    }
-    if (directional == JoystickMoveDirectional.MOVE_UP &&
-        _currentDirectional == JoystickMoveDirectional.MOVE_UP_RIGHT) {
-      velocity.sub(
-        Vector2(
-          enabledDiagonalMovements ? diagonalSpeed : speed,
-          0,
-        ),
-      );
-    }
-
-    if (directional == JoystickMoveDirectional.MOVE_DOWN &&
-        _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_LEFT) {
-      velocity.add(
-        Vector2(
-          enabledDiagonalMovements ? diagonalSpeed : speed,
-          0,
-        ),
-      );
-    }
-    if (directional == JoystickMoveDirectional.MOVE_DOWN &&
-        _currentDirectional == JoystickMoveDirectional.MOVE_DOWN_RIGHT) {
-      velocity.sub(
-        Vector2(
-          enabledDiagonalMovements ? diagonalSpeed : speed,
-          0,
-        ),
-      );
+  JoystickMoveDirectional _getDirectional(JoystickMoveDirectional directional) {
+    switch (directional) {
+      case JoystickMoveDirectional.MOVE_UP:
+        return directional;
+      case JoystickMoveDirectional.MOVE_UP_LEFT:
+        if (!enabledDiagonalMovements) {
+          return JoystickMoveDirectional.MOVE_LEFT;
+        } else {
+          return directional;
+        }
+      case JoystickMoveDirectional.MOVE_UP_RIGHT:
+        if (!enabledDiagonalMovements) {
+          return JoystickMoveDirectional.MOVE_RIGHT;
+        } else {
+          return directional;
+        }
+      case JoystickMoveDirectional.MOVE_RIGHT:
+        return directional;
+      case JoystickMoveDirectional.MOVE_DOWN:
+        return directional;
+      case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
+        if (!enabledDiagonalMovements) {
+          return JoystickMoveDirectional.MOVE_RIGHT;
+        } else {
+          return directional;
+        }
+      case JoystickMoveDirectional.MOVE_DOWN_LEFT:
+        if (!enabledDiagonalMovements) {
+          return JoystickMoveDirectional.MOVE_LEFT;
+        } else {
+          return directional;
+        }
+      case JoystickMoveDirectional.MOVE_LEFT:
+        return directional;
+      case JoystickMoveDirectional.IDLE:
+        return directional;
     }
   }
 }
