@@ -1,7 +1,6 @@
 ## 3.0.0-beta.1
 
-- Use Flame `1.8.1`
-- BREAKING CHANGE: 
+- ***BREAKING CHANGE*** 
   - `BonfireWidget`:
     - Remove `enemies` param. Use `components` param.
     - Remove `decoration` param. Use `components` param.
@@ -18,7 +17,7 @@
     - To block the movement of components when colliding use the mixin `BlockMovementCollision` 
   - `BonfireInjector().put` now is Factory.
     
-- FEATURES:
+- ***FEATURES***
   - `Force2D`. Now we have a simple support to forces. You can adds global forces setting in `BonfireWidget` using `globalForces` param, or individual force in you component. To the component handle this forces it's need use `HandleForces` mixin.
     - `AccelerationForce2D`: Apply acceleration to velocity
     - `ResistenceForce2D`: Apply resistence to movement tending to stop
@@ -28,6 +27,7 @@
   - `PlatformEnemy`. Enemy to used in platform games.
   - Adds at gameRef: `raycastAll`, `raycast`, `timeScale`
 
+- Use Flame `1.8.1`
 - Update `Pushable` mixin to handle forces.
 - Adds `GameObject`. (It's the GameComponent using Sprite)
 - Adds `AnimatedGameObject`. (It's the GameComponent using SpriteAnimation)
