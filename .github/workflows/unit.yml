@@ -21,6 +21,8 @@ jobs:
         fetch-depth: 0
     - name: Add Flutter to the PATH for Unix
       run: echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
+    - name: Intall dart
+      uses: dart-lang/setup-dart@v1
     - name: Run Flutter doctor
       run: flutter doctor -v
 
@@ -34,5 +36,5 @@ jobs:
       working-directory: code
     - run: flutter analyze
       working-directory: code
-    - run: flutter format --set-exit-if-changed --dry-run .
+    - run: dart format --output=none --set-exit-if-changed .
       working-directory: code
