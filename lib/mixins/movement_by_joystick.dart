@@ -1,8 +1,21 @@
-import 'dart:math';
-
 import 'package:bonfire/bonfire.dart';
 
 enum MovementByJoystickType { direction, angle }
+
+class MovementByJoystickProps {
+  /// MovementByJoystickType.direction if you only want the 8 directions movement.
+  ///  Set MovementByJoystickType.angle to have full 360 movement
+  MovementByJoystickType moveType;
+  bool intencityEnabled;
+  bool diagonalEnabled;
+  bool enabled;
+  MovementByJoystickProps({
+    this.moveType = MovementByJoystickType.direction,
+    this.intencityEnabled = false,
+    this.diagonalEnabled = true,
+    this.enabled = true,
+  });
+}
 
 /// Mixin responsible for adding movements through joystick events
 mixin MovementByJoystick on Movement, JoystickListener {
@@ -14,21 +27,21 @@ mixin MovementByJoystick on Movement, JoystickListener {
   double get _lastSpeedDiagonal => _lastSpeed * Movement.diaginalReduction;
 
   /// the angle the player should move in 360 mode
-  double movementRadAngle = 0;
+  double movementByJoystickRadAngle = 0;
 
-  /// MovementByJoystickType.direction if you only want the 8 directions movement. Set MovementByJoystickType.angle to have full 360 movement
-  MovementByJoystickType moveJoystickType = MovementByJoystickType.direction;
-  bool enabledJoystickIntencity = false;
-  bool enabledDiagonalMovements = true;
-  bool movementByJoystickEnabled = true;
+  MovementByJoystickProps movementByJoystickSettings =
+      MovementByJoystickProps();
 
   double _intencity = 1;
   double get _intencitySpeed => speed * _intencity;
   bool _isIdle = true;
 
+  bool get _isMoveByDirection =>
+      movementByJoystickSettings.moveType == MovementByJoystickType.direction;
+
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    if (enabledJoystickIntencity) {
+    if (movementByJoystickSettings.intencityEnabled) {
       _intencity = event.intensity;
     } else {
       _intencity = 1;
@@ -44,7 +57,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
     super.update(dt);
     if (_isEnabled()) {
       _handleChangeDirectional();
-      if (moveJoystickType == MovementByJoystickType.direction) {
+      if (_isMoveByDirection) {
         _moveDirectional(_currentDirectional, _intencitySpeed);
       } else {
         _moveAngle(_intencitySpeed);
@@ -53,20 +66,18 @@ mixin MovementByJoystick on Movement, JoystickListener {
   }
 
   void _handleChangeDirectional() {
-    if (_newDirectional != _currentDirectional &&
-        moveJoystickType == MovementByJoystickType.direction) {
+    if (_newDirectional != _currentDirectional && _isMoveByDirection) {
       _toCorrectDirection(_newDirectional);
     }
     _currentDirectional = _newDirectional;
-    if (moveJoystickType == MovementByJoystickType.direction ||
-        _joystickAngle == 0) {
-      _currentDirectionalAngle = _getAngleByDirectional(_currentDirectional);
+    if (_isMoveByDirection || _joystickAngle == 0) {
+      _currentDirectionalAngle = _currentDirectional.radAngle;
     } else {
       _currentDirectionalAngle = _joystickAngle;
     }
 
     if (_currentDirectional != JoystickMoveDirectional.IDLE) {
-      movementRadAngle = _currentDirectionalAngle;
+      movementByJoystickRadAngle = _currentDirectionalAngle;
     }
   }
 
@@ -120,38 +131,12 @@ mixin MovementByJoystick on Movement, JoystickListener {
   void _moveAngle(double speed) {
     if (_currentDirectional != JoystickMoveDirectional.IDLE) {
       _isIdle = false;
-      moveFromAngle(movementRadAngle, speed: speed);
+      moveFromAngle(movementByJoystickRadAngle, speed: speed);
     } else {
       if (!_isIdle) {
         _isIdle = true;
         stopMove(forceIdle: true);
       }
-    }
-  }
-
-  double _getAngleByDirectional(JoystickMoveDirectional directional) {
-    switch (directional) {
-      case JoystickMoveDirectional.MOVE_LEFT:
-        return 180 / (180 / pi);
-      case JoystickMoveDirectional.MOVE_RIGHT:
-        // we can't use 0 here because then no movement happens
-        // we're just going as close to 0.0 without being exactly 0.0
-        // if you have a better idea. Please be my guest
-        return 0.0000001 / (180 / pi);
-      case JoystickMoveDirectional.MOVE_UP:
-        return -90 / (180 / pi);
-      case JoystickMoveDirectional.MOVE_DOWN:
-        return 90 / (180 / pi);
-      case JoystickMoveDirectional.MOVE_UP_LEFT:
-        return -135 / (180 / pi);
-      case JoystickMoveDirectional.MOVE_UP_RIGHT:
-        return -45 / (180 / pi);
-      case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-        return 135 / (180 / pi);
-      case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-        return 45 / (180 / pi);
-      default:
-        return 0;
     }
   }
 
@@ -163,7 +148,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
 
   bool _isEnabled() {
     return (gameRef.joystick?.containObserver(this) ?? false) &&
-        movementByJoystickEnabled;
+        movementByJoystickSettings.enabled;
   }
 
   void _toCorrectDirection(JoystickMoveDirectional directional) {
@@ -199,13 +184,13 @@ mixin MovementByJoystick on Movement, JoystickListener {
       case JoystickMoveDirectional.MOVE_UP:
         return directional;
       case JoystickMoveDirectional.MOVE_UP_LEFT:
-        if (!enabledDiagonalMovements) {
+        if (!movementByJoystickSettings.diagonalEnabled) {
           return JoystickMoveDirectional.MOVE_LEFT;
         } else {
           return directional;
         }
       case JoystickMoveDirectional.MOVE_UP_RIGHT:
-        if (!enabledDiagonalMovements) {
+        if (!movementByJoystickSettings.diagonalEnabled) {
           return JoystickMoveDirectional.MOVE_RIGHT;
         } else {
           return directional;
@@ -215,13 +200,13 @@ mixin MovementByJoystick on Movement, JoystickListener {
       case JoystickMoveDirectional.MOVE_DOWN:
         return directional;
       case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-        if (!enabledDiagonalMovements) {
+        if (!movementByJoystickSettings.diagonalEnabled) {
           return JoystickMoveDirectional.MOVE_RIGHT;
         } else {
           return directional;
         }
       case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-        if (!enabledDiagonalMovements) {
+        if (!movementByJoystickSettings.diagonalEnabled) {
           return JoystickMoveDirectional.MOVE_LEFT;
         } else {
           return directional;

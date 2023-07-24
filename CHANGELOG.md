@@ -1,3 +1,7 @@
+## NEXT
+
+- Improvements in `MovementByJoystick`.
+
 ## 3.0.0-beta.1
 
 - ***BREAKING CHANGE*** 
