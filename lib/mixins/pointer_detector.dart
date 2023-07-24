@@ -1,6 +1,4 @@
-import 'package:bonfire/gestures/drag_gesture.dart';
-import 'package:bonfire/gestures/mouse_gesture.dart';
-import 'package:bonfire/gestures/tap_gesture.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:flutter/gestures.dart';
 
 mixin PointerDetector {
@@ -12,24 +10,52 @@ mixin PointerDetector {
   void onPointerSignal(PointerSignalEvent event) {}
 }
 
-abstract class PointerDetectorHandler {
+mixin PointerDetectorHandler on Component {
   // If return 'true' this event is not relay to others components.
   bool handlerPointerDown(PointerDownEvent event) {
+    for (var child in children) {
+      if (child is GameComponent) {
+        if (child.handlerPointerDown(event)) {
+          return true;
+        }
+      }
+    }
     return false;
   }
 
   // If return 'true' this event is not relay to others components.
   bool handlerPointerMove(PointerMoveEvent event) {
+    for (var child in children) {
+      if (child is GameComponent) {
+        if (child.handlerPointerMove(event)) {
+          return true;
+        }
+      }
+    }
     return false;
   }
 
   // If return 'true' this event is not relay to others components.
   bool handlerPointerUp(PointerUpEvent event) {
+    for (var child in children) {
+      if (child is GameComponent) {
+        if (child.handlerPointerUp(event)) {
+          return true;
+        }
+      }
+    }
     return false;
   }
 
   // If return 'true' this event is not relay to others components.
   bool handlerPointerCancel(PointerCancelEvent event) {
+    for (var child in children) {
+      if (child is GameComponent) {
+        if (child.handlerPointerCancel(event)) {
+          return true;
+        }
+      }
+    }
     return false;
   }
 

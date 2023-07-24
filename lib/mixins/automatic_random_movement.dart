@@ -4,7 +4,7 @@ import 'package:bonfire/bonfire.dart';
 
 /// Mixin responsible for adding random movement like enemy walking through the scene
 mixin AutomaticRandomMovement on Movement {
-  Vector2 _targetRandomMovement = Vector2.zero();
+  Vector2? _targetRandomMovement;
   // ignore: constant_identifier_names
   static const _KEY_INTERVAL_KEEP_STOPPED = 'INTERVAL_RANDOM_MOVEMENT';
 
@@ -33,7 +33,7 @@ mixin AutomaticRandomMovement on Movement {
       return;
     }
 
-    if (_targetRandomMovement == Vector2.zero()) {
+    if (_targetRandomMovement == null) {
       if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
         int randomX = _random.nextInt(maxDistance);
         randomX = randomX < minDistance ? minDistance : randomX;
@@ -49,28 +49,30 @@ mixin AutomaticRandomMovement on Movement {
         if (useAngle) {
           angle = BonfireUtil.angleBetweenPoints(
             toAbsoluteRect().center.toVector2(),
-            _targetRandomMovement,
+            _targetRandomMovement!,
           );
         }
       }
     } else {
-      double speedDt = speed * dt;
-      bool canMoveX = (_targetRandomMovement.x - x).abs() > speedDt;
-      bool canMoveY = (_targetRandomMovement.y - y).abs() > speedDt;
+      double diffX = (_targetRandomMovement!.x - x).abs();
+      double diffY = (_targetRandomMovement!.y - y).abs();
+
+      bool canMoveX = diffX > speed;
+      bool canMoveY = diffY > speed;
 
       bool canMoveLeft = false;
       bool canMoveRight = false;
       bool canMoveUp = false;
       bool canMoveDown = false;
       if (canMoveX) {
-        if (_targetRandomMovement.x > x) {
+        if (_targetRandomMovement!.x > x) {
           canMoveRight = true;
         } else {
           canMoveLeft = true;
         }
       }
       if (canMoveY) {
-        if (_targetRandomMovement.y > y) {
+        if (_targetRandomMovement!.y > y) {
           canMoveDown = true;
         } else {
           canMoveUp = true;
@@ -107,10 +109,16 @@ mixin AutomaticRandomMovement on Movement {
   }
 
   @override
-  void setZeroVelocity({bool isX = true, bool isY = true}) {
-    _targetRandomMovement = Vector2.zero();
+  void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {
+    super.stopMove(forceIdle: forceIdle, isX: isX, isY: isY);
+    _targetRandomMovement = null;
     idle();
+  }
+
+  @override
+  void setZeroVelocity({bool isX = true, bool isY = true}) {
     super.setZeroVelocity(isX: isX, isY: isY);
+    stopMove();
   }
 
   @override

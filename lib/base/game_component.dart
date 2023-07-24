@@ -53,7 +53,7 @@ abstract class GameComponent extends PositionComponent
       _intervalCheckIsVisible,
       dt,
     )) {
-      onSetIfVisible();
+      _onSetIfVisible();
     }
   }
 
@@ -65,42 +65,6 @@ abstract class GameComponent extends PositionComponent
       );
     }
     return Vector2.zero();
-  }
-
-  @override
-  bool handlerPointerDown(PointerDownEvent event) {
-    for (var child in children) {
-      if (child is GameComponent) {
-        if (child.handlerPointerDown(event)) {
-          return true;
-        }
-      }
-    }
-    return super.handlerPointerDown(event);
-  }
-
-  @override
-  bool handlerPointerUp(PointerUpEvent event) {
-    for (var child in children) {
-      if (child is GameComponent) {
-        if (child.handlerPointerUp(event)) {
-          return true;
-        }
-      }
-    }
-    return super.handlerPointerUp(event);
-  }
-
-  @override
-  bool handlerPointerCancel(PointerCancelEvent event) {
-    for (var child in children) {
-      if (child is GameComponent) {
-        if (child.handlerPointerCancel(event)) {
-          return true;
-        }
-      }
-    }
-    return super.handlerPointerCancel(event);
   }
 
   /// Method that checks if this component is visible on the screen
@@ -116,7 +80,7 @@ abstract class GameComponent extends PositionComponent
     super.onRemove();
   }
 
-  void onSetIfVisible() {
+  void _onSetIfVisible() {
     bool nowIsVisible = isVisibleInCamera();
     if (isHud) {
       nowIsVisible = true;
@@ -154,8 +118,8 @@ abstract class GameComponent extends PositionComponent
           paintCollition.color = sensorColor;
         }
         component.paint = paintCollition;
+        component.renderShape = true;
       }
-      component.renderShape = gameRef.showCollisionArea;
     }
   }
 
