@@ -1,3 +1,6 @@
+# [2.12.7]
+- Fix issue [417](https://github.com/RafaelBarbosatec/bonfire/issues/417). Thanks [Matt El Mouktafi](https://github.com/mel-mouk)
+
 # [2.12.6]
 - Adds fixed Flame version to `1.7.3`
 - Update Flutter sdk range `<4.0.0`
