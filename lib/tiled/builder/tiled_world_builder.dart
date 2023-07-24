@@ -294,6 +294,7 @@ class TiledWorldBuilder {
     String pathTileset = '';
     String imagePath = '';
     int firsTgId = 0;
+    int tilesetFirsTgId = 0;
     int widthCount = 1;
     Vector2 spriteSize = Vector2.all(0);
 
@@ -303,6 +304,7 @@ class TiledWorldBuilder {
       });
 
       firsTgId = tileSetContain?.firsTgId ?? 0;
+      tilesetFirsTgId = firsTgId;
       imagePath = tileSetContain?.image ?? '';
       widthCount =
           (tileSetContain?.imageWidth ?? 0) ~/ (tileSetContain?.tileWidth ?? 1);
@@ -358,13 +360,13 @@ class TiledWorldBuilder {
       final animation = _getAnimation(
         tileSetContain,
         pathTileset,
-        (index - firsTgId),
+        (index - tilesetFirsTgId),
         widthCount,
       );
 
       final object = _getCollision(
         tileSetContain,
-        (index - firsTgId),
+        (index - tilesetFirsTgId),
       );
 
       return TiledItemTileSet(
