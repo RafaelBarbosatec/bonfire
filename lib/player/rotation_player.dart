@@ -19,9 +19,9 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
           speed: speed,
         ) {
     // for full 360 degree movement
-    dPadAngles = false;
+    moveJoystickType = MovementByJoystickType.angle;
     // for the default 8 way movement
-    // dPadAngles = true;
+    // moveJoystickType = MovementByJoystickType.direction;
     movementRadAngle = currentRadAngle;
     loader?.add(AssetToLoad(animIdle, (value) => this.animIdle = value));
     loader?.add(AssetToLoad(animRun, (value) => this.animRun = value));

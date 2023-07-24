@@ -42,12 +42,6 @@ class SoldierPlayer extends RotationPlayer
   }
 
   @override
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    speed = 150 * event.intensity;
-    super.joystickChangeDirectional(event);
-  }
-
-  @override
   void joystickAction(JoystickActionEvent event) {
     if ((event.id == 1 || event.id == LogicalKeyboardKey.space.keyId) &&
         event.event == ActionEvent.DOWN) {

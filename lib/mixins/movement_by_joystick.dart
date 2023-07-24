@@ -2,13 +2,16 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 
+enum MovementByJoystickType { direction, angle }
+
 /// Mixin responsible for adding movements through joystick events
 mixin MovementByJoystick on Movement, JoystickListener {
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
+  JoystickMoveDirectional _newDirectional = JoystickMoveDirectional.IDLE;
   double _currentDirectionalAngle = 0;
-
-  /// flag to set if you only want the 8 directions movement. Set to false to have full 360 movement
-  bool dPadAngles = true;
+  double _joystickAngle = 0;
+  double _lastSpeed = 0;
+  double get _lastSpeedDiagonal => _lastSpeed * Movement.diaginalReduction;
 
   /// the angle the player should move in 360 mode
   double movementRadAngle = 0;
@@ -16,24 +19,23 @@ mixin MovementByJoystick on Movement, JoystickListener {
   bool enabledJoystickIntencity = false;
   bool enabledDiagonalMovements = true;
   bool movementByJoystickEnabled = true;
+
+  /// MovementByJoystickType.direction if you only want the 8 directions movement. Set MovementByJoystickType.angle to have full 360 movement
+  MovementByJoystickType moveJoystickType = MovementByJoystickType.direction;
   double _intencity = 1;
+  double get intencitySpeed => speed * _intencity;
   bool _isIdle = true;
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    _intencity = event.intensity;
-    final newDirectional = _getDirectional(event.directional);
-    _toCorrectDirection(newDirectional);
-    _currentDirectional = newDirectional;
-    if (dPadAngles || event.radAngle == 0) {
-      _currentDirectionalAngle = _getAngleByDirectional(_currentDirectional);
+    if (enabledJoystickIntencity) {
+      _intencity = event.intensity;
     } else {
-      _currentDirectionalAngle = event.radAngle;
+      _intencity = 1;
     }
+    _joystickAngle = event.radAngle;
+    _newDirectional = _getDirectional(event.directional);
 
-    if (_currentDirectional != JoystickMoveDirectional.IDLE) {
-      movementRadAngle = _currentDirectionalAngle;
-    }
     super.joystickChangeDirectional(event);
   }
 
@@ -41,19 +43,30 @@ mixin MovementByJoystick on Movement, JoystickListener {
   void update(double dt) {
     super.update(dt);
     if (_isEnabled()) {
-      if (dPadAngles) {
-        _moveDirectional(_currentDirectional, speed);
+      _handleChangeDirectional();
+      if (moveJoystickType == MovementByJoystickType.direction) {
+        _moveDirectional(_currentDirectional, intencitySpeed);
       } else {
-        if (_currentDirectional != JoystickMoveDirectional.IDLE) {
-          _isIdle = false;
-          moveFromAngle(movementRadAngle);
-        } else {
-          if (!_isIdle) {
-            _isIdle = true;
-            stopMove(forceIdle: true);
-          }
-        }
+        _moveAngle(intencitySpeed);
       }
+    }
+  }
+
+  void _handleChangeDirectional() {
+    if (_newDirectional != _currentDirectional &&
+        moveJoystickType == MovementByJoystickType.direction) {
+      _toCorrectDirection(_newDirectional);
+    }
+    _currentDirectional = _newDirectional;
+    if (moveJoystickType == MovementByJoystickType.direction ||
+        _joystickAngle == 0) {
+      _currentDirectionalAngle = _getAngleByDirectional(_currentDirectional);
+    } else {
+      _currentDirectionalAngle = _joystickAngle;
+    }
+
+    if (_currentDirectional != JoystickMoveDirectional.IDLE) {
+      movementRadAngle = _currentDirectionalAngle;
     }
   }
 
@@ -61,41 +74,38 @@ mixin MovementByJoystick on Movement, JoystickListener {
     JoystickMoveDirectional direction,
     double speed,
   ) {
-    double intensity = 1;
-    if (enabledJoystickIntencity) {
-      intensity = _intencity;
-    }
+    _lastSpeed = speed;
     switch (direction) {
       case JoystickMoveDirectional.MOVE_UP:
-        moveUp(speed: speed * intensity);
+        moveUp(speed: speed);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_UP_LEFT:
-        moveUpLeft(speed: speed * intensity);
+        moveUpLeft(speed: speed);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_UP_RIGHT:
-        moveUpRight(speed: speed * intensity);
+        moveUpRight(speed: speed);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_RIGHT:
-        moveRight(speed: speed * intensity);
+        moveRight(speed: speed);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_DOWN:
-        moveDown(speed: speed * intensity);
+        moveDown(speed: speed);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-        moveDownRight(speed: speed * intensity);
+        moveDownRight(speed: speed);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-        moveDownLeft(speed: speed * intensity);
+        moveDownLeft(speed: speed);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.MOVE_LEFT:
-        moveLeft(speed: speed * intensity);
+        moveLeft(speed: speed);
         _isIdle = false;
         break;
       case JoystickMoveDirectional.IDLE:
@@ -104,6 +114,18 @@ mixin MovementByJoystick on Movement, JoystickListener {
           stopMove(forceIdle: true);
         }
         break;
+    }
+  }
+
+  void _moveAngle(double speed) {
+    if (_currentDirectional != JoystickMoveDirectional.IDLE) {
+      _isIdle = false;
+      moveFromAngle(movementRadAngle, speed: speed);
+    } else {
+      if (!_isIdle) {
+        _isIdle = true;
+        stopMove(forceIdle: true);
+      }
     }
   }
 
@@ -152,21 +174,21 @@ mixin MovementByJoystick on Movement, JoystickListener {
   Vector2 _getDirectionalVelocity(JoystickMoveDirectional directional) {
     switch (directional) {
       case JoystickMoveDirectional.MOVE_UP:
-        return Vector2(0, -speed);
+        return Vector2(0, -_lastSpeed);
       case JoystickMoveDirectional.MOVE_UP_LEFT:
-        return Vector2(-diagonalSpeed, -diagonalSpeed);
+        return Vector2(-_lastSpeedDiagonal, -_lastSpeedDiagonal);
       case JoystickMoveDirectional.MOVE_UP_RIGHT:
-        return Vector2(diagonalSpeed, -diagonalSpeed);
+        return Vector2(_lastSpeedDiagonal, -_lastSpeedDiagonal);
       case JoystickMoveDirectional.MOVE_RIGHT:
-        return Vector2(speed, 0);
+        return Vector2(_lastSpeed, 0);
       case JoystickMoveDirectional.MOVE_DOWN:
-        return Vector2(0, speed);
+        return Vector2(0, _lastSpeed);
       case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-        return Vector2(diagonalSpeed, diagonalSpeed);
+        return Vector2(_lastSpeedDiagonal, _lastSpeedDiagonal);
       case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-        return Vector2(-diagonalSpeed, diagonalSpeed);
+        return Vector2(-_lastSpeedDiagonal, _lastSpeedDiagonal);
       case JoystickMoveDirectional.MOVE_LEFT:
-        return Vector2(-speed, 0);
+        return Vector2(-_lastSpeed, 0);
       case JoystickMoveDirectional.IDLE:
         return Vector2.zero();
     }
