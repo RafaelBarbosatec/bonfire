@@ -16,14 +16,14 @@ mixin MovementByJoystick on Movement, JoystickListener {
   /// the angle the player should move in 360 mode
   double movementRadAngle = 0;
 
+  /// MovementByJoystickType.direction if you only want the 8 directions movement. Set MovementByJoystickType.angle to have full 360 movement
+  MovementByJoystickType moveJoystickType = MovementByJoystickType.direction;
   bool enabledJoystickIntencity = false;
   bool enabledDiagonalMovements = true;
   bool movementByJoystickEnabled = true;
 
-  /// MovementByJoystickType.direction if you only want the 8 directions movement. Set MovementByJoystickType.angle to have full 360 movement
-  MovementByJoystickType moveJoystickType = MovementByJoystickType.direction;
   double _intencity = 1;
-  double get intencitySpeed => speed * _intencity;
+  double get _intencitySpeed => speed * _intencity;
   bool _isIdle = true;
 
   @override
@@ -45,9 +45,9 @@ mixin MovementByJoystick on Movement, JoystickListener {
     if (_isEnabled()) {
       _handleChangeDirectional();
       if (moveJoystickType == MovementByJoystickType.direction) {
-        _moveDirectional(_currentDirectional, intencitySpeed);
+        _moveDirectional(_currentDirectional, _intencitySpeed);
       } else {
-        _moveAngle(intencitySpeed);
+        _moveAngle(_intencitySpeed);
       }
     }
   }
