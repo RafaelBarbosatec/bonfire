@@ -6,10 +6,14 @@ typedef SpawnerPositionBuilder = GameComponent Function(Vector2 position);
 
 class SpawnerPosition extends GameComponent {
   final ShapeHitbox area;
+  // Interval in milliseconds
   final int interval;
-  final SpawnerPositionBuilder builder;
-  late Random _random;
+  // If true only generated if visible in screen.
   final bool onlyVisible;
+  // Builder that adds the component in the game.
+  final SpawnerPositionBuilder builder;
+
+  late Random _random;
 
   SpawnerPosition({
     required Vector2 position,
