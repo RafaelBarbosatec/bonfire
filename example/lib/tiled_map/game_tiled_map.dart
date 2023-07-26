@@ -12,7 +12,7 @@ import 'package:example/shared/interface/knight_interface.dart';
 import 'package:example/shared/npc/critter/critter.dart';
 import 'package:example/shared/npc/wizard/wizard.dart';
 import 'package:example/shared/player/knight.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:example/shared/util/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -26,8 +26,6 @@ class GameTiledMap extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        DungeonMap.tileSize = max(constraints.maxHeight, constraints.maxWidth) /
-            (kIsWeb ? 25 : 22);
         return BonfireWidget(
           joystick: Joystick(
             keyboardConfig: KeyboardConfig(
@@ -100,7 +98,7 @@ class GameTiledMap extends StatelessWidget {
             'miniMap',
           ],
           cameraConfig: CameraConfig(
-            zoom: 1.2,
+            zoom: getZoomGame(context, DungeonMap.tileSize, 20),
           ),
         );
       },
