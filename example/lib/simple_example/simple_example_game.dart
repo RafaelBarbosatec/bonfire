@@ -32,7 +32,7 @@ class SimpleExampleGame extends StatelessWidget {
         forceTileSize: Vector2.all(32),
         objectsBuilder: {
           'goblin': (properties) => MyEnemy(properties.position),
-          'spawn': (properties) => SpawnerPosition(
+          'spawn': (properties) => ComponentSpawner(
                 position: properties.position,
                 area: properties.area,
                 interval: 500,

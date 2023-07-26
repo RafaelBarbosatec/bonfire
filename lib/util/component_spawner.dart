@@ -4,7 +4,7 @@ import 'package:bonfire/bonfire.dart';
 
 typedef SpawnerPositionBuilder = GameComponent Function(Vector2 position);
 
-class SpawnerPosition extends GameComponent {
+class ComponentSpawner extends GameComponent {
   final ShapeHitbox area;
   // Interval in milliseconds
   final int interval;
@@ -15,7 +15,7 @@ class SpawnerPosition extends GameComponent {
 
   late Random _random;
 
-  SpawnerPosition({
+  ComponentSpawner({
     required Vector2 position,
     required this.area,
     required this.interval,

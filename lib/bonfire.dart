@@ -73,7 +73,7 @@ export 'package:bonfire/util/interval_tick.dart';
 export 'package:bonfire/util/priority_layer.dart';
 export 'package:bonfire/util/talk/say.dart';
 export 'package:bonfire/util/talk/talk_dialog.dart';
-export 'package:bonfire/util/spawner_position.dart';
+export 'package:bonfire/util/component_spawner.dart';
 export 'package:bonfire/util/text_damage_component.dart';
 export 'package:bonfire/util/value_generator_component.dart';
 export 'package:bonfire/widgets/bonfire_widget.dart';

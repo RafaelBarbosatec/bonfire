@@ -3,7 +3,7 @@
 - Improvements in `MovementByJoystick`.
 - Improvements in `AutomaticRandomMovement`.
 - Improvements in `MovementExtensions`.
-- Adds `SpawnerPosition`. [#414](https://github.com/RafaelBarbosatec/bonfire/issues/414) / [Example](https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/simple_example/simple_example_game.dart)
+- Adds `ComponentSpawner`. [#414](https://github.com/RafaelBarbosatec/bonfire/issues/414) / [Example](https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/simple_example/simple_example_game.dart)
 - Fix bug `MoveToPositionAlongThePath`.
 - Fix issue [417](https://github.com/RafaelBarbosatec/bonfire/issues/417). Thanks [Matt El Mouktafi](https://github.com/mel-mouk)
 
