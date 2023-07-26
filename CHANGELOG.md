@@ -1,4 +1,4 @@
-## NEXT
+## 3.0.0-beta.2
 
 - Improvements in `MovementByJoystick`.
 - Improvements in `AutomaticRandomMovement`.
