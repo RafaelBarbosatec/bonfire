@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/decoration/barrel_dragable.dart';
+import 'package:example/shared/decoration/potion_life.dart';
 import 'package:example/shared/util/functions.dart';
 import 'package:example/simple_example/my_enemy.dart';
 import 'package:example/simple_example/my_player.dart';
@@ -31,6 +32,14 @@ class SimpleExampleGame extends StatelessWidget {
         forceTileSize: Vector2.all(32),
         objectsBuilder: {
           'goblin': (properties) => MyEnemy(properties.position),
+          'spawn': (properties) => SpawnerPosition(
+                position: properties.position,
+                area: properties.area,
+                interval: 500,
+                builder: (position) {
+                  return PotionLife(position, 1, size: Vector2.all(10));
+                },
+              ),
         },
       ),
       components: [

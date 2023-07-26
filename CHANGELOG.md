@@ -3,7 +3,8 @@
 - Improvements in `MovementByJoystick`.
 - Improvements in `AutomaticRandomMovement`.
 - Improvements in `MovementExtensions`.
-- FIx bug `MoveToPositionAlongThePath`.
+- Adds `SpawnerPosition`
+- Fix bug `MoveToPositionAlongThePath`.
 - Fix issue [417](https://github.com/RafaelBarbosatec/bonfire/issues/417). Thanks [Matt El Mouktafi](https://github.com/mel-mouk)
 
 ## 3.0.0-beta.1
