@@ -25,6 +25,7 @@ mixin Movement on GameComponent {
   Vector2 get velocity => _velocity;
   double get diagonalSpeed => speed * diaginalReduction;
   double get dtSpeed => speed * dtUpdate;
+  double get dtDiagonalSpeed => diagonalSpeed * dtUpdate;
   set velocity(Vector2 velocity) {
     _velocity = velocity;
     _updateLastDirection(_velocity);
@@ -86,6 +87,34 @@ mixin Movement on GameComponent {
     setVelocityAxis(y: _lastSpeed);
     onApplyDisplacement(dtUpdate);
     setVelocityAxis(y: 0);
+  }
+
+  void moveDownRightOnce({double? speed}) {
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
+    setVelocityAxis(y: _lastSpeed, x: _lastSpeed);
+    onApplyDisplacement(dtUpdate);
+    setVelocityAxis(y: 0, x: 0);
+  }
+
+  void moveDownLeftOnce({double? speed}) {
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
+    setVelocityAxis(y: _lastSpeed, x: -_lastSpeed);
+    onApplyDisplacement(dtUpdate);
+    setVelocityAxis(y: 0, x: 0);
+  }
+
+  void moveUpRightOnce({double? speed}) {
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
+    setVelocityAxis(y: -_lastSpeed, x: _lastSpeed);
+    onApplyDisplacement(dtUpdate);
+    setVelocityAxis(y: 0, x: 0);
+  }
+
+  void moveUpLeftOnce({double? speed}) {
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
+    setVelocityAxis(y: -_lastSpeed, x: -_lastSpeed);
+    onApplyDisplacement(dtUpdate);
+    setVelocityAxis(y: 0, x: 0);
   }
 
   /// Move player to Up

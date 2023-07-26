@@ -115,15 +115,39 @@ mixin MoveToPositionAlongThePath on Movement {
     if (diffX.abs() < dtSpeed && diffY.abs() < dtSpeed) {
       _goToNextPosition();
     } else {
-      if (diffX.abs() > dtSpeed && diffY.abs() > dtSpeed) {
+      if (diffX.abs() > dtDiagonalSpeed && diffY.abs() > dtDiagonalSpeed) {
         if (diffX > 0 && diffY > 0) {
-          moveDownRight();
+          if (diffX.abs() < dtDiagonalSpeed * 2) {
+            moveRightOnce();
+          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
+            moveDownOnce();
+          } else {
+            moveDownRight();
+          }
         } else if (diffX < 0 && diffY > 0) {
-          moveDownLeft();
+          if (diffX.abs() < dtDiagonalSpeed * 2) {
+            moveLeftOnce();
+          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
+            moveDownOnce();
+          } else {
+            moveDownLeft();
+          }
         } else if (diffX > 0 && diffY < 0) {
-          moveUpRight();
+          if (diffX.abs() < dtDiagonalSpeed * 2) {
+            moveRightOnce();
+          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
+            moveUpOnce();
+          } else {
+            moveUpRight();
+          }
         } else if (diffX < 0 && diffY < 0) {
-          moveUpLeft();
+          if (diffX.abs() < dtDiagonalSpeed * 2) {
+            moveLeftOnce();
+          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
+            moveUpOnce();
+          } else {
+            moveUpLeft();
+          }
         }
       } else if (diffX.abs() > dtSpeed) {
         if (diffX > 0) {
