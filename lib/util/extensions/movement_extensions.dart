@@ -38,26 +38,7 @@ extension MovementExtensions on Movement {
       centerYPlayer,
     );
 
-    if (translateX > 0 && translateY > 0) {
-      moveDownRight();
-    } else if (translateX < 0 && translateY < 0) {
-      moveUpLeft();
-    } else if (translateX > 0 && translateY < 0) {
-      moveUpRight();
-    } else if (translateX < 0 && translateY > 0) {
-      moveDownLeft();
-    } else {
-      if (translateX > 0) {
-        moveRight();
-      } else if (translateX < 0) {
-        moveLeft();
-      }
-      if (translateY > 0) {
-        moveDown();
-      } else if (translateY < 0) {
-        moveUp();
-      }
-    }
+    _moveComp(translateX, translateY);
   }
 
   /// Checks whether the component is within range. If so, position yourself and keep your distance.
@@ -119,31 +100,12 @@ extension MovementExtensions on Movement {
       positioned(target);
     }
 
-    if (translateX.abs() < speed && translateY.abs() < speed) {
+    if (translateX.abs() < dtSpeed && translateY.abs() < dtSpeed) {
       stopMove();
       positioned(target);
     }
 
-    if (translateX > 0 && translateY > 0) {
-      moveDownRight();
-    } else if (translateX < 0 && translateY < 0) {
-      moveUpLeft();
-    } else if (translateX > 0 && translateY < 0) {
-      moveUpRight();
-    } else if (translateX < 0 && translateY > 0) {
-      moveDownLeft();
-    } else {
-      if (translateX > 0) {
-        moveRight();
-      } else if (translateX < 0) {
-        moveLeft();
-      }
-      if (translateY > 0) {
-        moveDown();
-      } else if (translateY < 0) {
-        moveUp();
-      }
-    }
+    _moveComp(translateX, translateY);
   }
 
   double _adjustTranslate(
@@ -164,5 +126,44 @@ extension MovementExtensions on Movement {
     }
 
     return newTrasnlate;
+  }
+
+  void _moveComp(double translateX, double translateY) {
+    if (translateX > 0 && translateY > 0) {
+      moveDownRight();
+    } else if (translateX < 0 && translateY < 0) {
+      moveUpLeft();
+    } else if (translateX > 0 && translateY < 0) {
+      moveUpRight();
+    } else if (translateX < 0 && translateY > 0) {
+      moveDownLeft();
+    } else {
+      if (translateX.abs() > dtSpeed) {
+        if (translateX > 0) {
+          moveRight();
+        } else if (translateX < 0) {
+          moveLeft();
+        }
+      } else if (translateX.abs() > dtSpeed / 2) {
+        if (translateX > 0) {
+          moveRight(speed: speed / 2);
+        } else if (translateX < 0) {
+          moveLeft(speed: speed / 2);
+        }
+      }
+      if (translateY.abs() > dtSpeed) {
+        if (translateY > 0) {
+          moveDown();
+        } else if (translateY < 0) {
+          moveUp();
+        }
+      } else if (translateY.abs() > dtSpeed / 2) {
+        if (translateY > 0) {
+          moveDown(speed: speed / 2);
+        } else if (translateY < 0) {
+          moveUp(speed: speed / 2);
+        }
+      }
+    }
   }
 }
