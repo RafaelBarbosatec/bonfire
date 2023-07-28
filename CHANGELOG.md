@@ -1,3 +1,9 @@
+## NEXT
+
+- Adds WORLD in `AttackFromEnum`
+- Set `receivesAttackFrom` in `SimpleAlly` and `RotationAlly` to `ReceivesAttackFromEnum.ENEMY`
+
+
 ## 3.0.0-beta.2
 
 - Improvements in `MovementByJoystick`.
