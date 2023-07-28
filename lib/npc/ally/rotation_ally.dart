@@ -26,7 +26,7 @@ class RotationAlly extends Ally with UseSpriteAnimation, UseAssetsLoader {
     double speed = 100,
     double life = 100,
     ReceivesAttackFromEnum receivesAttackFrom =
-        ReceivesAttackFromEnum.PLAYER_AND_ALLY,
+        ReceivesAttackFromEnum.ENEMY,
   }) : super(
           position: position,
           size: size,
