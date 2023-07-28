@@ -6,7 +6,7 @@ import 'package:bonfire/base/game_component.dart';
 enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER_AND_ALLY, NONE }
 
 // ignore: constant_identifier_names
-enum AttackFromEnum { ENEMY, PLAYER_OR_ALLY }
+enum AttackFromEnum { ENEMY, PLAYER_OR_ALLY, WORLD }
 
 /// Mixin responsible for adding damage-taking behavior to the component.
 mixin Attackable on GameComponent {
@@ -81,12 +81,14 @@ mixin Attackable on GameComponent {
       case ReceivesAttackFromEnum.ALL:
         return true;
       case ReceivesAttackFromEnum.ENEMY:
-        if (attacker == AttackFromEnum.ENEMY) {
+        if (attacker == AttackFromEnum.ENEMY ||
+            attacker == AttackFromEnum.WORLD) {
           return true;
         }
         break;
       case ReceivesAttackFromEnum.PLAYER_AND_ALLY:
-        if (attacker == AttackFromEnum.PLAYER_OR_ALLY) {
+        if (attacker == AttackFromEnum.PLAYER_OR_ALLY ||
+            attacker == AttackFromEnum.WORLD) {
           return true;
         }
         break;
