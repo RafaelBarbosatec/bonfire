@@ -6,7 +6,7 @@ class PotionLife extends GameDecoration with Sensor<Player> {
   final double life;
   double _lifeDistributed = 0;
 
-  PotionLife(Vector2 position, this.life,{Vector2? size})
+  PotionLife(Vector2 position, this.life, {Vector2? size})
       : super.withSprite(
           sprite: CommonSpriteSheet.potionLifeSprite,
           position: position,
