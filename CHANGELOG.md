@@ -1,14 +1,16 @@
-## NEXT
+## 3.0.0-beta.3
 
-- Adds WORLD in `AttackFromEnum`
-- Set `receivesAttackFrom` in `SimpleAlly` and `RotationAlly` to `ReceivesAttackFromEnum.ENEMY`
+- Adds WORLD in `AttackFromEnum`.
+- Set `receivesAttackFrom` in `SimpleAlly` and `RotationAlly` to `ReceivesAttackFromEnum.ENEMY`.
+- `InternalChecker` improvements.
+- `Sensor` improvements.
 
 
 ## 3.0.0-beta.2
 
-- Improvements in `MovementByJoystick`.
-- Improvements in `AutomaticRandomMovement`.
-- Improvements in `MovementExtensions`.
+- `MovementByJoystick` improvements.
+- `AutomaticRandomMovement` improvements.
+- `MovementExtensions` improvements.
 - Adds `ComponentSpawner`. [#414](https://github.com/RafaelBarbosatec/bonfire/issues/414) / [Example](https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/simple_example/simple_example_game.dart)
 - Fix bug `MoveToPositionAlongThePath`.
 - Fix issue [417](https://github.com/RafaelBarbosatec/bonfire/issues/417). Thanks [Matt El Mouktafi](https://github.com/mel-mouk)
