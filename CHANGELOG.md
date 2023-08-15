@@ -1,4 +1,8 @@
 
+## next
+
+- `BouncingObject` improvements
+
 ## 3.0.0-beta.4
 
 - Update Flame to `1.8.2`

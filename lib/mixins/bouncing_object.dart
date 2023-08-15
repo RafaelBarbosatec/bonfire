@@ -1,8 +1,15 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/collision_util.dart';
 
 // Mixin responsable to give the bounce behavior. (experimental)
 mixin BouncingObject on Movement {
-  double bouncingObjectFactor = 1.0;
+  final _collisionUtil = CollisionUtil();
+  double bouncingReflectFactor = 1.0;
+  Vector2? currentCenter;
+
+  bool onBouncingCollision(PositionComponent other) {
+    return other is! Sensor;
+  }
 
   @override
   void onCollisionStart(
@@ -10,33 +17,33 @@ mixin BouncingObject on Movement {
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
+    if (!onBouncingCollision(other)) {
+      return;
+    }
 
-    if (!velocity.isZero()) {
-      if (other is Movement) {
-        velocity -= other.velocity;
-      }
-      RaycastResult<ShapeHitbox>? resust;
-      try {
-        resust = gameRef.raycast(
-          Ray2(origin: absoluteCenter, direction: velocity.normalized()),
-        );
-        // ignore: empty_catches
-      } catch (e) {}
+    if (other is Movement) {
+      velocity -= other.velocity;
+    }
 
-      if (resust?.reflectionRay?.direction != null) {
-        final d = resust!.reflectionRay!.direction;
-        if (d.x > 0) {
-          velocity.x = velocity.x.abs();
-        } else if (d.x < 0) {
-          velocity.x = -velocity.x.abs();
-        }
+    var rect = toAbsoluteRect();
+    var midPoint = intersectionPoints.reduce(
+      (value, element) => value + element,
+    );
+    midPoint /= intersectionPoints.length.toDouble();
+    midPoint.lerp(rect.center.toVector2(), 0.2);
+    Direction? directionCollision = _collisionUtil.getDirectionCollision(
+      rect,
+      midPoint,
+    );
 
-        if (d.y > 0) {
-          velocity.y = velocity.y.abs();
-        } else if (d.y < 0) {
-          velocity.y = -velocity.y.abs();
-        }
-      }
+    if (directionCollision == Direction.left ||
+        directionCollision == Direction.right) {
+      velocity.x = velocity.x * -bouncingReflectFactor;
+    } else if (directionCollision == Direction.up ||
+        directionCollision == Direction.down) {
+      velocity.y = velocity.y * -bouncingReflectFactor;
+    } else {
+      stopMove();
     }
   }
 }
