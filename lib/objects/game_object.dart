@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
 
+// Component with `Sprite`
 class GameObject extends GameComponent
     with UseSprite, Lighting, UseAssetsLoader {
   final int? objectPriority;

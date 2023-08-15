@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 
+/// Animated component that follow othe `GameComponent`
 class AnimatedFollowerGameObject extends AnimatedGameObject with Follower {
   final int? objectPriority;
 

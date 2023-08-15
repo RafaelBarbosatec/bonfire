@@ -2,6 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera_effects.dart';
 import 'package:flame/experimental.dart';
 
+// Custom implmentation of Flame's `CameraComponent`
 class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   double _spacingMap = 32.0;
   final CameraConfig config;
@@ -25,11 +26,6 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   Vector2 get topleft => visibleWorldRect.positionVector2;
 
   double get zoom => viewfinder.zoom;
-
-  @override
-  bool canSee(PositionComponent component) {
-    return visibleWorldRect.overlaps(component.toAbsoluteRect());
-  }
 
   bool canSeeWithMargin(PositionComponent component) {
     return cameraRectWithSpacing.overlaps(component.toAbsoluteRect());

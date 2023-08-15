@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 
+// Component with `Sprite` that follow other `GameComponent`
 class FollowerGameObject extends GameObject with Follower {
   FollowerGameObject({
     required GameComponent target,

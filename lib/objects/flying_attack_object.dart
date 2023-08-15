@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
+/// Animated component used like range attack.
 class FlyingAttackObject extends AnimatedGameObject
     with Movement, BlockMovementCollision {
   final dynamic id;

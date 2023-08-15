@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 
+/// Animated component
 class AnimatedGameObject extends GameComponent
     with UseAssetsLoader, Lighting, UseSpriteAnimation {
   final VoidCallback? onFinish;

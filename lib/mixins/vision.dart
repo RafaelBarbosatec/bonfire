@@ -5,6 +5,7 @@ import 'package:bonfire/geometry/polygon.dart';
 import 'package:bonfire/geometry/rectangle.dart';
 import 'package:flutter/material.dart';
 
+/// Mixin used to adds basic Vision to the component
 mixin Vision on GameComponent {
   // ignore: constant_identifier_names
   static const VISION_360 = 6.28319;

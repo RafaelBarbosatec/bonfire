@@ -6,6 +6,13 @@ enum JumpingStateEnum {
   idle,
 }
 
+/// Mixin used to adds the jumper behavior. It's useful to platform games.
+/// OBS: It's needed adds a force to simulate gravity like. Example:
+/// BonfireWidget(
+///   globalForces: [
+///     GravityForce2D(),
+///   ],
+/// )
 mixin Jumper on Movement, BlockMovementCollision {
   final double _defaultJumpSpeed = 150;
   bool jumping = false;

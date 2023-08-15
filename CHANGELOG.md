@@ -1,3 +1,11 @@
+
+## NEXT
+
+- Update Flame to `1.8.2`
+- Solve some lint issues.
+- Adds `BouncingObject` mixin.
+
+
 ## 3.0.0-beta.3
 
 - Adds WORLD in `AttackFromEnum`.

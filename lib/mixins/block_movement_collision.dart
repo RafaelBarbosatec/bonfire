@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
 
-/// Mixin responsible for adding collision
+/// Mixin responsible for adding stop the movement when happen collision
 mixin BlockMovementCollision on Movement {
   final Map<String, Direction> _directionsBlockedCache = {};
 
@@ -87,7 +87,7 @@ mixin BlockMovementCollision on Movement {
         return Direction.down;
       }
     } else {
-//top
+      //top
       _triangleShape.updatePoints(
         Vector2(rect.left, rect.top),
         Vector2(rect.right, rect.top),
@@ -101,7 +101,7 @@ mixin BlockMovementCollision on Movement {
     }
 
     if (point.x < rect.center.dx) {
-// left
+      // left
 
       _triangleShape.updatePoints(
         Vector2(rect.left, rect.bottom),
@@ -113,7 +113,7 @@ mixin BlockMovementCollision on Movement {
         return Direction.left;
       }
     } else {
-//right
+      //right
 
       _triangleShape.updatePoints(
         Vector2(rect.right, rect.top),

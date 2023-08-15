@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
+// Mixin used to adds a BarLife to the attacable component
 mixin UseBarLife on Attackable {
   BarLifeComponent? barLife;
   Vector2? _barLifeSize;

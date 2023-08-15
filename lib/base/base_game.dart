@@ -25,7 +25,7 @@ abstract class BaseGame extends FlameGame
     var cams = children.query<BonfireCamera>();
     if (cams.isNotEmpty) {
       final cam = cams.first;
-      return [...cam.world.children, ...cam.viewport.children]
+      return [...cam.world!.children, ...cam.viewport.children]
           .where((c) => _hasGesture(c))
           .cast<PointerDetectorHandler>();
     }
@@ -37,7 +37,7 @@ abstract class BaseGame extends FlameGame
     var cams = children.query<BonfireCamera>();
     if (cams.isNotEmpty) {
       final cam = cams.first;
-      return [...cam.world.children, ...cam.viewport.children]
+      return [...cam.world!.children, ...cam.viewport.children]
           .where((c) => _hasKeyboardEventListener(c))
           .cast<KeyboardEventListener>();
     }

@@ -10,6 +10,7 @@ enum JumpAnimationsEnum {
   jumpDownLeft,
 }
 
+/// Mixin used to adds animations in a Jumper.
 mixin JumperAnimation on Jumper, DirectionAnimation {
   @override
   void onPlayRunDownAnimation() {
