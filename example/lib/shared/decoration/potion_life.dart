@@ -2,8 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 
-class PotionLife extends GameDecoration
-    with Sensor<Player>, Movement, BouncingObject {
+class PotionLife extends GameDecoration with Sensor<Player>, Movement {
   final double life;
   double _lifeDistributed = 0;
 
@@ -15,26 +14,18 @@ class PotionLife extends GameDecoration
         );
 
   @override
-  void onContact(GameComponent component) {
-    if (component is Player) {
-      generateValues(
-        const Duration(seconds: 1),
-        onChange: (value) {
-          if (_lifeDistributed < life) {
-            double newLife = life * value - _lifeDistributed;
-            _lifeDistributed += newLife;
-            component.addLife(newLife.roundToDouble());
-          }
-        },
-      );
-
-      // removeFromParent();
-    }
-  }
-
-  @override
-  void onMount() {
-    moveRight();
-    super.onMount();
+  void onContact(Player component) {
+    generateValues(
+      const Duration(seconds: 1),
+      onChange: (value) {
+        if (_lifeDistributed < life) {
+          double newLife = life * value - _lifeDistributed;
+          _lifeDistributed += newLife;
+          component.addLife(newLife.roundToDouble());
+        }
+      },
+    );
+    removeFromParent();
+    super.onContact(component);
   }
 }

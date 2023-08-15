@@ -11,8 +11,8 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   int _intervalCallback = 100;
   GameComponent? componentIncontact;
 
-  void onContact(GameComponent component) {}
-  void onContactExit(GameComponent component) {}
+  void onContact(T component) {}
+  void onContactExit(T component) {}
 
   void setSensorInterval(int intervalCallback) {
     _intervalCallback = intervalCallback;
@@ -23,7 +23,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
     super.update(dt);
     if (componentIncontact != null) {
       if (checkInterval(_sensorIntervalKey, _intervalCallback, dt)) {
-        onContact(componentIncontact!);
+        onContact(componentIncontact! as T);
       }
     }
   }
@@ -33,13 +33,13 @@ mixin Sensor<T extends GameComponent> on GameComponent {
     await super.onLoad();
     bool containsShape = children.query<ShapeHitbox>().isNotEmpty;
     if (!containsShape) {
-      add(RectangleHitbox(size: size));
+      add(RectangleHitbox(size: size, isSolid: true));
     }
   }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is GameComponent) {
+    if (other is T) {
       componentIncontact = other;
     }
     super.onCollision(intersectionPoints, other);
@@ -49,7 +49,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   void onCollisionEnd(PositionComponent other) {
     if (componentIncontact == other) {
       componentIncontact = null;
-      onContactExit(other as GameComponent);
+      onContactExit(other as T);
       resetInterval(_sensorIntervalKey);
     }
     super.onCollisionEnd(other);
