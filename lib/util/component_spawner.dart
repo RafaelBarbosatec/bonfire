@@ -4,8 +4,9 @@ import 'package:bonfire/bonfire.dart';
 
 typedef SpawnerPositionBuilder = GameComponent Function(Vector2 position);
 
-/// Componente used to spaw other component
+/// Componente used to spaw other components
 class ComponentSpawner extends GameComponent {
+  // Area that will spaw the components
   final ShapeHitbox area;
   // Interval in milliseconds
   final int interval;
