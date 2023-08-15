@@ -1,9 +1,9 @@
 
-## NEXT
+## 3.0.0-beta.4
 
 - Update Flame to `1.8.2`
 - Solve some lint issues.
-- Adds `BouncingObject` mixin.
+- Adds `BouncingObject` mixin. (experimental)
 
 
 ## 3.0.0-beta.3
