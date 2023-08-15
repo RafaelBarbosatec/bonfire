@@ -17,6 +17,11 @@ mixin BouncingObject on Movement {
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
+
+    if (velocity.isZero()) {
+      return;
+    }
+
     if (!onBouncingCollision(other)) {
       return;
     }
