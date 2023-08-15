@@ -5,7 +5,7 @@
 ![GitHub stars](https://img.shields.io/github/stars/RafaelBarbosatec/bonfire)
 [![pub points](https://img.shields.io/pub/points/bonfire?logo=dart)](https://pub.dev/packages/bonfire/score)
 
-[![bonfire](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/bonfire.gif)](https://bonfire-engine.github.io/)
+[![bonfire](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/bonfire.gif)](https://bonfire-engine.github.io/)
 
 
 # Bonfire
@@ -14,14 +14,14 @@ Build RPG games and similar with the power of [FlameEngine](https://flame-engine
 
 |   |    |
 | ------------------- | ------------------- |
-| ![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/video.gif) |  ![](https://github.com/RafaelBarbosatec/bonfire/blob/develop/media/sunnyplace.gif) |
-| ![](https://github.com/RafaelBarbosatec/bonfire/blob/develop/media/multi_biome.gif) | ![](https://github.com/RafaelBarbosatec/bonfire/blob/develop/media/defector.gif) |
+| ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/video.gif) |  ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/sunnyplace.gif) |
+| ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/multi_biome.gif) | ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/defector.gif) |
 
 
 
 Bonfire is ideal for building games from the following perspectives:
 
-![](https://github.com/RafaelBarbosatec/bonfire/blob/master/media/perspectiva.jpg)
+![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/perspectiva.jpg)
 
 Test our online [DEMO-v3](https://bonfire-engine.github.io/examples/bonfire-v3/).
 
