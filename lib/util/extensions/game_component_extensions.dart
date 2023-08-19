@@ -326,4 +326,12 @@ extension GameComponentExtensions on GameComponent {
       ),
     );
   }
+
+  /// Get angle between this comp to target
+  double getAngleFromTarget(GameComponent target) {
+    return BonfireUtil.angleBetweenPoints(
+      absoluteCenter,
+      target.absoluteCenter,
+    );
+  }
 }

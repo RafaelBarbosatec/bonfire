@@ -16,24 +16,6 @@ import 'package:bonfire/geometry/shape.dart';
 /// on 22/03/22
 
 extension NpcExtensions on Npc {
-  void moveTowardsTarget<T extends GameComponent>({
-    required T target,
-    Function? close,
-    double margin = 0,
-  }) {
-    double radAngle = getAngleFromPlayer();
-
-    Rect rectPlayerCollision = target.toAbsoluteRect().inflate(margin);
-
-    if (toAbsoluteRect().overlaps(rectPlayerCollision)) {
-      close?.call();
-      moveFromAngle(radAngle);
-      stopMove();
-      return;
-    }
-    moveFromAngle(radAngle);
-  }
-
   /// This method we notify when detect the player when enter in [radiusVision] configuration
   /// Method that bo used in [update] method.
   /// [visionAngle] in radians
@@ -174,10 +156,7 @@ extension NpcExtensions on Npc {
   double getAngleFromPlayer() {
     Player? player = gameRef.player;
     if (player == null) return 0.0;
-    return BonfireUtil.angleBetweenPoints(
-      toAbsoluteRect().center.toVector2(),
-      playerRect.center.toVector2(),
-    );
+    return getAngleFromTarget(player);
   }
 
   /// Get angle between enemy and player
@@ -193,6 +172,6 @@ extension NpcExtensions on Npc {
 
   /// Gets player position used how base in calculations
   Rect get playerRect {
-    return gameRef.player?.toAbsoluteRect() ?? Rect.zero;
+    return gameRef.player?.rectCollision ?? Rect.zero;
   }
 }

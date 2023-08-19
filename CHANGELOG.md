@@ -1,6 +1,8 @@
 ## Next
 
 - `UseBarLife` improvements
+- extension method `moveTowardsTarget` improvements
+- remove extension method `followComponent`
 
 ## 3.0.0-beta.5
 

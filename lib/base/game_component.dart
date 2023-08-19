@@ -27,6 +27,8 @@ abstract class GameComponent extends PositionComponent
   /// Get BuildContext
   BuildContext get context => gameRef.context;
 
+  Rect? _rectCollision;
+
   @override
   int get priority {
     if (aboveComponents && hasGameRef) {
@@ -125,5 +127,19 @@ abstract class GameComponent extends PositionComponent
 
   bool get isCollision {
     return children.query<ShapeHitbox>().isNotEmpty;
+  }
+
+  Rect get rectCollision {
+    _rectCollision ??= children.query<ShapeHitbox>().fold(
+      Rect.zero,
+      (previousValue, element) {
+        return previousValue!.expandToInclude(element.toRect());
+      },
+    );
+    if (_rectCollision == Rect.zero) {
+      return toAbsoluteRect();
+    }
+
+    return _rectCollision!.translate(x, y);
   }
 }

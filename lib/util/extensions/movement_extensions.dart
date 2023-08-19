@@ -2,43 +2,30 @@ import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/mixins/movement.dart';
+import 'package:bonfire/util/extensions/game_component_extensions.dart';
 
 extension MovementExtensions on Movement {
   /// This method move this component to target
   /// Need use Movement mixin.
   /// Method that bo used in [update] method.
   /// return true if moved.
-  void followComponent(
-    GameComponent target,
-    double dt, {
-    required Function(GameComponent) closeComponent,
-    double margin = 10,
+  bool moveTowardsTarget<T extends GameComponent>({
+    required T target,
+    Function? close,
+    double margin = 0,
   }) {
-    final comp = target.toAbsoluteRect();
-    double centerXPlayer = comp.center.dx;
-    double centerYPlayer = comp.center.dy;
+    double radAngle = getAngleFromTarget(target);
 
-    double translateX = 0;
-    double translateY = 0;
-    double speed = this.speed * dt;
+    Rect rectPlayerCollision = target.rectCollision.inflate(margin);
 
-    Rect rectToMove = toAbsoluteRect();
-
-    translateX = rectToMove.center.dx > centerXPlayer ? (-1 * speed) : speed;
-
-    translateX = _adjustTranslate(
-      translateX,
-      rectToMove.center.dx,
-      centerXPlayer,
-    );
-    translateY = rectToMove.center.dy > centerYPlayer ? (-1 * speed) : speed;
-    translateY = _adjustTranslate(
-      translateY,
-      rectToMove.center.dy,
-      centerYPlayer,
-    );
-
-    _moveComp(translateX, translateY);
+    if (rectCollision.overlaps(rectPlayerCollision)) {
+      close?.call();
+      moveFromAngle(radAngle);
+      stopMove();
+      return false;
+    }
+    moveFromAngle(radAngle);
+    return true;
   }
 
   /// Checks whether the component is within range. If so, position yourself and keep your distance.
@@ -53,7 +40,7 @@ extension MovementExtensions on Movement {
     if (runOnlyVisibleInScreen && !isVisible) return;
     double distance = (minDistanceFromPlayer ?? radiusVision);
 
-    Rect rectTarget = target.toAbsoluteRect();
+    Rect rectTarget = target.rectCollision;
     double centerXTarget = rectTarget.center.dx;
     double centerYTarget = rectTarget.center.dy;
 
@@ -62,7 +49,7 @@ extension MovementExtensions on Movement {
 
     double speed = this.speed * dtUpdate;
 
-    Rect rectToMove = toAbsoluteRect();
+    Rect rectToMove = rectCollision;
 
     translateX = rectToMove.center.dx > centerXTarget ? (-1 * speed) : speed;
     translateX = _adjustTranslate(
