@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
-enum BarLifePorition { top, bottom }
+enum BarLifeDrawPorition { top, bottom, left, right }
 
 typedef BarLifeTextBuilder = String Function(double life, double maxLife);
 
@@ -10,8 +10,7 @@ class BarLifeComponent extends GameComponent {
   final Paint _barLivePaint = Paint()..style = PaintingStyle.fill;
   Paint _barLiveBorderPaint = Paint();
 
-  final BarLifePorition drawPosition;
-  final double margin;
+  final BarLifeDrawPorition drawPosition;
   final List<Color>? colors;
   final Color backgroundColor;
   final BorderRadius borderRadius;
@@ -30,14 +29,14 @@ class BarLifeComponent extends GameComponent {
   Vector2 _textOffset = Vector2.zero();
 
   TextPaint _textConfig = TextPaint();
+  final GameComponent target;
 
   BarLifeComponent({
-    required GameComponent target,
+    required this.target,
     required Vector2 size,
     Vector2? position,
     Vector2? textOffset,
-    this.drawPosition = BarLifePorition.top,
-    this.margin = 4,
+    this.drawPosition = BarLifeDrawPorition.top,
     this.colors,
     this.textStyle,
     this.showLifeText = true,
@@ -60,7 +59,7 @@ class BarLifeComponent extends GameComponent {
     _barLiveBgPaint = _barLiveBgPaint
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
-
+    this.position = position ?? Vector2.zero();
     this.size = size;
 
     _textConfig = TextPaint(
@@ -73,25 +72,36 @@ class BarLifeComponent extends GameComponent {
 
   @override
   void render(Canvas canvas) {
-    double yPosition = (y - height) - margin;
+    double yPosition = (y - height);
 
     double xPosition = x;
-
-    if (drawPosition == BarLifePorition.bottom) {
-      yPosition = bottom + y + margin;
+    switch (drawPosition) {
+      case BarLifeDrawPorition.top:
+        break;
+      case BarLifeDrawPorition.bottom:
+        yPosition = target.size.y + y;
+        break;
+      case BarLifeDrawPorition.left:
+        xPosition = -width + x;
+        yPosition = (target.size.y / 2 - height / 2) + y;
+        break;
+      case BarLifeDrawPorition.right:
+        xPosition = width + x;
+        yPosition = (target.size.y / 2 - height / 2) + y;
+        break;
     }
-
-    yPosition = yPosition;
 
     double currentBarLife = (_life * width) / _maxLife;
 
     if (borderWidth > 0) {
-      final RRect borderRect = borderRadius.toRRect(Rect.fromLTWH(
-        xPosition,
-        yPosition,
-        width,
-        height,
-      ));
+      final RRect borderRect = borderRadius.toRRect(
+        Rect.fromLTWH(
+          xPosition,
+          yPosition,
+          width,
+          height,
+        ),
+      );
 
       canvas.drawRRect(
         borderRect,

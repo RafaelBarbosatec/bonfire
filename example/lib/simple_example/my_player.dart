@@ -12,7 +12,7 @@ import 'package:example/shared/util/player_sprite_sheet.dart';
 ///
 /// Rafaelbarbosatec
 /// on 19/10/21
-class MyPlayer extends SimplePlayer with BlockMovementCollision {
+class MyPlayer extends SimplePlayer with BlockMovementCollision, UseBarLife {
   MyPlayer(Vector2 position)
       : super(
           animation: PlayerSpriteSheet.simpleDirectionAnimation,
