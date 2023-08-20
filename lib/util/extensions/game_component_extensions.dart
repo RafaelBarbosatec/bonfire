@@ -159,9 +159,11 @@ extension GameComponentExtensions on GameComponent {
   ///Execute simple attack melee using animation
   void simpleAttackMeleeByAngle({
     dynamic id,
+
     /// use animation facing right.
     Future<SpriteAnimation>? animation,
     required double damage,
+
     /// Use radians angle
     required double angle,
     required AttackFromEnum attackFrom,
