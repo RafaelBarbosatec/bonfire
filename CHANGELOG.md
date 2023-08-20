@@ -1,4 +1,4 @@
-## NEXT
+## 3.0.0-beta.7
 
 - `MovementByJoystick` improvements. Adds `setupMovementByJoystick` method.
 - extension method `simpleAttackMeleeByAngle` improvements.
