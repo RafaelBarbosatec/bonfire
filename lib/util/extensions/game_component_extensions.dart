@@ -57,7 +57,7 @@ extension GameComponentExtensions on GameComponent {
     double marginFromOrigin = 16,
     Vector2? centerOffset,
   }) {
-    var initPosition = toAbsoluteRect();
+    var initPosition = rectCollision;
 
     Vector2 startPosition =
         initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
@@ -139,9 +139,10 @@ extension GameComponentExtensions on GameComponent {
     required AttackFromEnum attackFrom,
     bool withPush = true,
     double? sizePush,
+    double? marginFromCenter,
     Vector2? centerOffset,
   }) {
-    final rect = toAbsoluteRect();
+    final rect = rectCollision;
 
     simpleAttackMeleeByAngle(
       angle: direction.toRadians(),
@@ -150,7 +151,7 @@ extension GameComponentExtensions on GameComponent {
       damage: damage,
       size: size,
       centerOffset: centerOffset,
-      marginFromCenter: max(rect.width, rect.height) / 2,
+      marginFromCenter: marginFromCenter ?? max(rect.width, rect.height) / 2,
       id: id,
       withPush: withPush,
     );
@@ -224,7 +225,7 @@ extension GameComponentExtensions on GameComponent {
   }
 
   Direction getComponentDirectionFromMe(GameComponent? comp) {
-    Rect rectToMove = toAbsoluteRect();
+    Rect rectToMove = rectCollision;
     double centerXPlayer = comp?.center.x ?? 0;
     double centerYPlayer = comp?.center.y ?? 0;
 
