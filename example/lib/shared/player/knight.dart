@@ -33,7 +33,9 @@ class Knight extends SimplePlayer
           position: position,
           life: 200,
         ) {
-    movementByJoystickSettings.intencityEnabled = true;
+    setupMovementByJoystick(
+      intencityEnabled: true,
+    );
     setupLighting(
       LightingConfig(
         radius: width * 1.5,

@@ -1,3 +1,11 @@
+## NEXT
+
+- `MovementByJoystick` improvements. Adds `setupMovementByJoystick` method.
+- extension method `simpleAttackMeleeByAngle` improvements.
+- Now works `setZoomLimitToFitMap` params in `CameraConfig`.
+- `BouncingObject` improvements.
+- Adds `lastDisplacement` param in `onBlockedMovement` of `BlockMovementCollision` mixin.
+
 ## 3.0.0-beta.6
 
 - `UseBarLife` improvements

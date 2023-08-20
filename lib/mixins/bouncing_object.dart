@@ -1,9 +1,7 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/collision_util.dart';
 
 // Mixin responsable to give the bounce behavior. (experimental)
-mixin BouncingObject on Movement {
-  final _collisionUtil = CollisionUtil();
+mixin BouncingObject on BlockMovementCollision {
   double bouncingReflectFactor = 1.0;
   Vector2? currentCenter;
 
@@ -12,43 +10,19 @@ mixin BouncingObject on Movement {
   }
 
   @override
-  void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+  void onBlockedMovement(
     PositionComponent other,
+    Direction? direction,
+    Vector2 lastDisplacement,
   ) {
-    super.onCollisionStart(intersectionPoints, other);
-
-    if (velocity.isZero()) {
-      return;
-    }
-
-    if (!onBouncingCollision(other)) {
-      return;
-    }
-
-    if (other is Movement) {
-      velocity -= other.velocity;
-    }
-
-    var rect = toAbsoluteRect();
-    var midPoint = intersectionPoints.reduce(
-      (value, element) => value + element,
-    );
-    midPoint /= intersectionPoints.length.toDouble();
-    midPoint.lerp(rect.center.toVector2(), 0.2);
-    Direction? directionCollision = _collisionUtil.getDirectionCollision(
-      rect,
-      midPoint,
-    );
-
-    if (directionCollision == Direction.left ||
-        directionCollision == Direction.right) {
-      velocity.x = velocity.x * -bouncingReflectFactor;
-    } else if (directionCollision == Direction.up ||
-        directionCollision == Direction.down) {
-      velocity.y = velocity.y * -bouncingReflectFactor;
-    } else {
-      stopMove();
+    if (onBouncingCollision(other) && !velocity.isZero()) {
+      if (direction == Direction.left || direction == Direction.right) {
+        velocity.x = velocity.x * -bouncingReflectFactor;
+      } else if (direction == Direction.up || direction == Direction.down) {
+        velocity.y = velocity.y * -bouncingReflectFactor;
+      } else {
+        stopMove();
+      }
     }
   }
 }

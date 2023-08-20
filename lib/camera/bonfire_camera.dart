@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera_effects.dart';
 import 'package:flame/experimental.dart';
@@ -26,6 +28,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   Vector2 get topleft => visibleWorldRect.positionVector2;
 
   double get zoom => viewfinder.zoom;
+  set zoom(double scale) => viewfinder.zoom = scale;
 
   bool canSeeWithMargin(PositionComponent component) {
     return cameraRectWithSpacing.overlaps(component.toAbsoluteRect());
@@ -184,10 +187,10 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    updatesetBounds();
+    updatesetBounds(size);
   }
 
-  void updatesetBounds() {
+  void updatesetBounds(Vector2? size) {
     if (config.moveOnlyMapArea && viewfinder.isMounted) {
       setBounds(
         Rectangle.fromRect(
@@ -197,6 +200,15 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
               ),
         ),
       );
+    }
+    if (config.setZoomLimitToFitMap) {
+      Vector2 sizeScreen = size ?? viewport.size;
+      double minScreenDimension = min(sizeScreen.x, sizeScreen.y);
+      double minMapDimension = min(
+        gameRef.map.getMapSize().x,
+        gameRef.map.getMapSize().y,
+      );
+      zoom = minScreenDimension / minMapDimension;
     }
   }
 

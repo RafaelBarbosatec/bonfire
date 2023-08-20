@@ -23,21 +23,18 @@ mixin Pushable on Movement {
     if (enablePushable) {
       if (other is GameComponent) {
         GameComponent component = other;
-        if (component is Movement) {
-          if (!onPush(component)) {
-            return;
-          }
+        if (component is Movement && onPush(component)) {
           Vector2 displacement = absoluteCenter - component.absoluteCenter;
           if (displacement.x.abs() > displacement.y.abs()) {
             if (displacement.x < 0) {
               if (this is HandleForces) {
-                moveLeft(speed: speed / (this as HandleForces).mass);
+                moveLeft(speed: component.speed / (this as HandleForces).mass);
               } else {
                 moveLeftOnce();
               }
             } else {
               if (this is HandleForces) {
-                moveRight(speed: speed / (this as HandleForces).mass);
+                moveRight(speed: component.speed / (this as HandleForces).mass);
               } else {
                 moveRightOnce();
               }
@@ -45,13 +42,13 @@ mixin Pushable on Movement {
           } else {
             if (displacement.y < 0) {
               if (this is HandleForces) {
-                moveUp(speed: speed / (this as HandleForces).mass);
+                moveUp(speed: component.speed / (this as HandleForces).mass);
               } else {
                 moveUpOnce();
               }
             } else {
               if (this is HandleForces) {
-                moveDown(speed: speed / (this as HandleForces).mass);
+                moveDown(speed: component.speed / (this as HandleForces).mass);
               } else {
                 moveDownOnce();
               }

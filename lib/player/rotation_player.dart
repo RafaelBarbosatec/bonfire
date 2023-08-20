@@ -18,7 +18,9 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
           life: life,
           speed: speed,
         ) {
-    movementByJoystickSettings.moveType = MovementByJoystickType.angle;
+    setupMovementByJoystick(
+      moveType: MovementByJoystickType.angle,
+    );
     movementByJoystickRadAngle = currentRadAngle;
     loader?.add(AssetToLoad(animIdle, (value) => this.animIdle = value));
     loader?.add(AssetToLoad(animRun, (value) => this.animRun = value));

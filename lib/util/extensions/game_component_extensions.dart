@@ -159,11 +159,9 @@ extension GameComponentExtensions on GameComponent {
   ///Execute simple attack melee using animation
   void simpleAttackMeleeByAngle({
     dynamic id,
-
     /// use animation facing right.
     Future<SpriteAnimation>? animation,
     required double damage,
-
     /// Use radians angle
     required double angle,
     required AttackFromEnum attackFrom,
@@ -172,7 +170,7 @@ extension GameComponentExtensions on GameComponent {
     double marginFromCenter = 0,
     Vector2? centerOffset,
   }) {
-    var initPosition = toAbsoluteRect();
+    var initPosition = rectCollision;
 
     Vector2 startPosition =
         initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());

@@ -6,7 +6,6 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart' as widget;
 
 export 'ally/ally_extensions.dart';
-export 'attackable_extensions.dart';
 export 'enemy/enemy_extensions.dart';
 export 'enemy/rotation_enemy_extensions.dart';
 export 'game_component_extensions.dart';

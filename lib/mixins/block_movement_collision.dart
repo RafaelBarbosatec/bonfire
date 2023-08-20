@@ -19,7 +19,19 @@ mixin BlockMovementCollision on Movement {
   void onBlockedMovement(
     PositionComponent other,
     Direction? direction,
-  ) {}
+    Vector2 lastDisplacement,
+  ) {
+    final reverseDisplacement = _adjustDisplacement(
+      lastDisplacement,
+      direction,
+    );
+
+    position += reverseDisplacement * -1;
+    stopFromCollision(
+      isX: reverseDisplacement.x.abs() > 0,
+      isY: reverseDisplacement.y.abs() > 0,
+    );
+  }
 
   Vector2 midPoint = Vector2.zero();
 
@@ -34,8 +46,6 @@ mixin BlockMovementCollision on Movement {
     }
     if (stopMovement && stopOtherMovement && other is! Sensor) {
       if (_shapeRectNormalized != null) {
-        var reverseDisplacement = lastDisplacement.clone();
-
         midPoint = intersectionPoints.reduce(
           (value, element) => value + element,
         );
@@ -48,17 +58,7 @@ mixin BlockMovementCollision on Movement {
           midPoint,
         );
 
-        reverseDisplacement = _adjustDisplacement(
-          reverseDisplacement,
-          direction,
-        );
-
-        position += reverseDisplacement * -1;
-        stopFromCollision(
-          isX: reverseDisplacement.x.abs() > 0,
-          isY: reverseDisplacement.y.abs() > 0,
-        );
-        onBlockedMovement(other, direction);
+        onBlockedMovement(other, direction, lastDisplacement.clone());
       }
 
       super.onCollision(intersectionPoints, other);

@@ -29,19 +29,32 @@ mixin MovementByJoystick on Movement, JoystickListener {
   /// the angle the player should move in 360 mode
   double movementByJoystickRadAngle = 0;
 
-  MovementByJoystickProps movementByJoystickSettings =
-      MovementByJoystickProps();
+  MovementByJoystickProps _settings = MovementByJoystickProps();
+
+  void setupMovementByJoystick({
+    MovementByJoystickType? moveType,
+    bool? intencityEnabled,
+    bool? diagonalEnabled,
+    bool? enabled,
+  }) {
+    _settings = MovementByJoystickProps(
+      moveType: moveType ?? _settings.moveType,
+      intencityEnabled: intencityEnabled ?? _settings.intencityEnabled,
+      diagonalEnabled: diagonalEnabled ?? _settings.diagonalEnabled,
+      enabled: enabled ?? _settings.enabled,
+    );
+  }
 
   double _intencity = 1;
   double get _intencitySpeed => speed * _intencity;
   bool _isIdle = true;
 
   bool get _isMoveByDirection =>
-      movementByJoystickSettings.moveType == MovementByJoystickType.direction;
+      _settings.moveType == MovementByJoystickType.direction;
 
   @override
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    if (movementByJoystickSettings.intencityEnabled) {
+    if (_settings.intencityEnabled) {
       _intencity = event.intensity;
     } else {
       _intencity = 1;
@@ -148,7 +161,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
 
   bool _isEnabled() {
     return (gameRef.joystick?.containObserver(this) ?? false) &&
-        movementByJoystickSettings.enabled;
+        _settings.enabled;
   }
 
   void _toCorrectDirection(JoystickMoveDirectional directional) {
@@ -184,13 +197,13 @@ mixin MovementByJoystick on Movement, JoystickListener {
       case JoystickMoveDirectional.MOVE_UP:
         return directional;
       case JoystickMoveDirectional.MOVE_UP_LEFT:
-        if (!movementByJoystickSettings.diagonalEnabled) {
+        if (!_settings.diagonalEnabled) {
           return JoystickMoveDirectional.MOVE_LEFT;
         } else {
           return directional;
         }
       case JoystickMoveDirectional.MOVE_UP_RIGHT:
-        if (!movementByJoystickSettings.diagonalEnabled) {
+        if (!_settings.diagonalEnabled) {
           return JoystickMoveDirectional.MOVE_RIGHT;
         } else {
           return directional;
@@ -200,13 +213,13 @@ mixin MovementByJoystick on Movement, JoystickListener {
       case JoystickMoveDirectional.MOVE_DOWN:
         return directional;
       case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
-        if (!movementByJoystickSettings.diagonalEnabled) {
+        if (!_settings.diagonalEnabled) {
           return JoystickMoveDirectional.MOVE_RIGHT;
         } else {
           return directional;
         }
       case JoystickMoveDirectional.MOVE_DOWN_LEFT:
-        if (!movementByJoystickSettings.diagonalEnabled) {
+        if (!_settings.diagonalEnabled) {
           return JoystickMoveDirectional.MOVE_LEFT;
         } else {
           return directional;

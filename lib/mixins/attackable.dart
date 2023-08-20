@@ -109,5 +109,5 @@ mixin Attackable on GameComponent {
 
   bool get isDead => _isDead;
 
-  Rect rectAttackable() => toAbsoluteRect();
+  Rect rectAttackable() => rectCollision;
 }
