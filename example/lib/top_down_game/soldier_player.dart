@@ -56,28 +56,28 @@ class SoldierPlayer extends RotationPlayer
 
     switch (lastDirection) {
       case Direction.left:
-        centerOffset = Vector2(-25, -30);
+        centerOffset = Vector2(10, -10);
         break;
       case Direction.right:
-        centerOffset = Vector2(-40, -12);
+        centerOffset = Vector2(-10, 10);
         break;
       case Direction.up:
-        centerOffset = Vector2(-25, -10);
+        centerOffset = Vector2(-4, 20);
         break;
       case Direction.down:
-        centerOffset = Vector2(-44, -25);
+        centerOffset = Vector2(-22, 0);
         break;
       case Direction.upLeft:
-        centerOffset = Vector2(0, 0);
+        centerOffset = Vector2(20, 20);
         break;
       case Direction.upRight:
-        centerOffset = Vector2(-40, 0);
+        centerOffset = Vector2(6, 30);
         break;
       case Direction.downLeft:
-        centerOffset = Vector2(-30, -40);
+        centerOffset = Vector2(10, 0);
         break;
       case Direction.downRight:
-        centerOffset = Vector2(-45, -20);
+        centerOffset = Vector2(-16, 10);
         break;
     }
     simpleAttackRangeByAngle(

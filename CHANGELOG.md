@@ -1,6 +1,7 @@
 # next
 - Adds `getZoomFromMaxVisibleTile`
 - `moveFromAngle` improvements.
+- update example
 
 ## 3.0.0-beta.8
 - extension method `simpleAttackMeleeByDirection` improvements

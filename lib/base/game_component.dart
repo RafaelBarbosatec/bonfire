@@ -139,11 +139,12 @@ abstract class GameComponent extends PositionComponent
         },
       );
     }
+    var absoluteRect = toAbsoluteRect();
 
     if (_rectCollision == Rect.zero) {
-      return toAbsoluteRect();
+      return absoluteRect;
     }
 
-    return _rectCollision!.translate(x, y);
+    return _rectCollision!.translate(absoluteRect.left, absoluteRect.top);
   }
 }
