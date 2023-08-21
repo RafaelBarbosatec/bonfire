@@ -1,5 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
+enum InitialMapZoomFitEnum { none, fitWidth, fitHeight, cover }
+
 /// Class use to configure camera behavior.
 class CameraConfig {
   static final movementWindowDefault = Vector2.all(16);
@@ -20,7 +22,7 @@ class CameraConfig {
 
   double speed;
 
-  bool setZoomLimitToFitMap;
+  InitialMapZoomFitEnum initialMapZoomFit;
 
   CameraConfig({
     this.moveOnlyMapArea = false,
@@ -28,7 +30,7 @@ class CameraConfig {
     this.angle = 0.0,
     this.target,
     this.speed = double.infinity,
-    this.setZoomLimitToFitMap = false,
+    this.initialMapZoomFit = InitialMapZoomFitEnum.none,
     Vector2? movementWindow,
   }) : movementWindow = movementWindow ?? movementWindowDefault;
 }

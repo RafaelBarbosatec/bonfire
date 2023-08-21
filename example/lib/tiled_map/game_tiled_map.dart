@@ -98,7 +98,7 @@ class GameTiledMap extends StatelessWidget {
             'miniMap',
           ],
           cameraConfig: CameraConfig(
-            zoom: getZoomGame(context, DungeonMap.tileSize, 20),
+            zoom: getZoomFromMaxVisibleTile(context, DungeonMap.tileSize, 20),
           ),
         );
       },

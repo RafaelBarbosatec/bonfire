@@ -48,7 +48,7 @@ class SimpleExampleGame extends StatelessWidget {
       player: MyPlayer(Vector2(140, 140)),
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
-        zoom: getZoomGame(context, 32, 15),
+        zoom: getZoomFromMaxVisibleTile(context, 32, 15),
       ),
       backgroundColor: const Color.fromARGB(255, 10, 53, 89),
     );

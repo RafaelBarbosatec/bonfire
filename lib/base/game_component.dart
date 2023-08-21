@@ -130,12 +130,16 @@ abstract class GameComponent extends PositionComponent
   }
 
   Rect get rectCollision {
-    _rectCollision ??= children.query<ShapeHitbox>().fold(
-      Rect.zero,
-      (previousValue, element) {
-        return previousValue!.expandToInclude(element.toRect());
-      },
-    );
+    if (_rectCollision == null) {
+      var list = children.query<ShapeHitbox>();
+      _rectCollision = children.query<ShapeHitbox>().fold(
+        list.first.toRect(),
+        (previousValue, element) {
+          return previousValue!.expandToInclude(element.toRect());
+        },
+      );
+    }
+
     if (_rectCollision == Rect.zero) {
       return toAbsoluteRect();
     }

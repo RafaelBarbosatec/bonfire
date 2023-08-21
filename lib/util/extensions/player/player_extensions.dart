@@ -35,6 +35,7 @@ extension PlayerExtensions on Player {
     bool withPush = true,
     double? sizePush,
     Vector2? centerOffset,
+    double? marginFromCenter,
   }) {
     simpleAttackMeleeByDirection(
       direction: direction ?? lastDirection,
@@ -46,6 +47,7 @@ extension PlayerExtensions on Player {
       sizePush: sizePush,
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
       centerOffset: centerOffset,
+      marginFromCenter: marginFromCenter,
     );
   }
 

@@ -12,7 +12,7 @@ extension MovementExtensions on Movement {
   bool moveTowardsTarget<T extends GameComponent>({
     required T target,
     Function? close,
-    double margin = 0,
+    double margin = 4,
   }) {
     double radAngle = getAngleFromTarget(target);
 

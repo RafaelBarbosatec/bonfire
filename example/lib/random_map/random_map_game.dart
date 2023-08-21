@@ -63,7 +63,7 @@ class _RandomMapGameState extends State<RandomMapGame> {
           player: result.player,
           cameraConfig: CameraConfig(
             moveOnlyMapArea: true,
-            zoom: getZoomGame(context, DungeonMap.tileSize, 20),
+            zoom: getZoomFromMaxVisibleTile(context, DungeonMap.tileSize, 20),
           ),
           map: result.map,
           components: result.components,

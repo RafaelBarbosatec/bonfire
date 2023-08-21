@@ -43,7 +43,7 @@ class MapBiome2 extends StatelessWidget {
       ),
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
-        zoom: getZoomGame(context, defaultTileSize, 20),
+        zoom: getZoomFromMaxVisibleTile(context, defaultTileSize, 20),
       ),
       progress: Container(
         width: double.maxFinite,

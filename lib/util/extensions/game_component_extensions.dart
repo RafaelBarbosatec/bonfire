@@ -206,11 +206,10 @@ extension GameComponentExtensions on GameComponent {
       );
     }
 
-    Rect positionAttack = Rect.fromLTWH(
-      startPosition.x,
-      startPosition.y,
-      size.x,
-      size.y,
+    Rect positionAttack = Rect.fromCenter(
+      center: startPosition.toOffset(),
+      width: size.x,
+      height: size.y,
     );
 
     gameRef

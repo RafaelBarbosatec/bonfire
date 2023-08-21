@@ -191,6 +191,25 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   }
 
   void updatesetBounds(Vector2? size) {
+    Vector2 sizeScreen = size ?? viewport.size;
+    switch (config.initialMapZoomFit) {
+      case InitialMapZoomFitEnum.none:
+        break;
+      case InitialMapZoomFitEnum.fitWidth:
+        zoom = sizeScreen.x / gameRef.map.getMapSize().x;
+        break;
+      case InitialMapZoomFitEnum.fitHeight:
+        zoom = sizeScreen.y / gameRef.map.getMapSize().y;
+        break;
+      case InitialMapZoomFitEnum.cover:
+        double minScreenDimension = min(sizeScreen.x, sizeScreen.y);
+        double minMapDimension = min(
+          gameRef.map.getMapSize().x,
+          gameRef.map.getMapSize().y,
+        );
+        zoom = minScreenDimension / minMapDimension;
+        break;
+    }
     if (config.moveOnlyMapArea && viewfinder.isMounted) {
       setBounds(
         Rectangle.fromRect(
@@ -200,15 +219,6 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
               ),
         ),
       );
-    }
-    if (config.setZoomLimitToFitMap) {
-      Vector2 sizeScreen = size ?? viewport.size;
-      double minScreenDimension = min(sizeScreen.x, sizeScreen.y);
-      double minMapDimension = min(
-        gameRef.map.getMapSize().x,
-        gameRef.map.getMapSize().y,
-      );
-      zoom = minScreenDimension / minMapDimension;
     }
   }
 

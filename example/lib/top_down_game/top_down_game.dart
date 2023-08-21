@@ -42,7 +42,7 @@ class TopDownGame extends StatelessWidget {
       ),
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
-        zoom: getZoomGame(context, 68, 10),
+        zoom: getZoomFromMaxVisibleTile(context, 68, 10),
       ),
       player: SoldierPlayer(Vector2(64 * 17, 64 * 4)),
       lightingColorGame: Colors.black.withOpacity(0.7),

@@ -53,7 +53,7 @@ class GameManualMap extends StatelessWidget {
           GameManualController(),
         ],
         cameraConfig: CameraConfig(
-          zoom: getZoomGame(context, DungeonMap.tileSize, 20),
+          zoom: getZoomFromMaxVisibleTile(context, DungeonMap.tileSize, 20),
         ),
         interface: KnightInterface(),
         map: DungeonMap.map(),

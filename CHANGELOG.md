@@ -1,5 +1,8 @@
-## NEXT
+## 3.0.0-beta.8
 - extension method `simpleAttackMeleeByDirection` improvements
+- `BonfireCamera` improvements
+- Adds `initialMapZoomFit` in  `CameraConfig`.
+- Fix `rectCollision` bug.
 
 ## 3.0.0-beta.7
 

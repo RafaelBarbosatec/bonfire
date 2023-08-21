@@ -48,7 +48,7 @@ class _PlatformGameState extends State<PlatformGame> {
       ],
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
-        zoom: getZoomGame(context, 16, 20),
+        zoom: getZoomFromMaxVisibleTile(context, 16, 25),
         speed: 4,
       ),
       player: FoxPlayer(
