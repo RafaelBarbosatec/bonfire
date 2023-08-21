@@ -1,7 +1,8 @@
-# next
+# 3.0.0-beta.9
 - Adds `getZoomFromMaxVisibleTile`
 - `moveFromAngle` improvements.
 - update example
+- `rectCollision` improvements.
 
 ## 3.0.0-beta.8
 - extension method `simpleAttackMeleeByDirection` improvements
