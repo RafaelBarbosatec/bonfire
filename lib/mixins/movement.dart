@@ -168,7 +168,15 @@ mixin Movement on GameComponent {
   /// Move Player to direction by radAngle
   void moveFromAngle(double angle, {double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    velocity = Vector2(cos(angle) * _lastSpeed, sin(angle) * _lastSpeed);
+    var x = cos(angle) * _lastSpeed;
+    var y = sin(angle) * _lastSpeed;
+    if (x.abs() < 0.01) {
+      x = 0;
+    }
+    if (y.abs() < 0.01) {
+      y = 0;
+    }
+    velocity = Vector2(x, y);
   }
 
   void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {

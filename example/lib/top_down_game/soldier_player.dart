@@ -53,30 +53,31 @@ class SoldierPlayer extends RotationPlayer
 
   void actionAttack() {
     Vector2 centerOffset = Vector2.zero();
+
     switch (lastDirection) {
       case Direction.left:
-        centerOffset = Vector2(0, -10);
+        centerOffset = Vector2(-25, -30);
         break;
       case Direction.right:
-        centerOffset = Vector2(0, 10);
+        centerOffset = Vector2(-40, -12);
         break;
       case Direction.up:
-        centerOffset = Vector2(10, 0);
+        centerOffset = Vector2(-25, -10);
         break;
       case Direction.down:
-        centerOffset = Vector2(-10, 0);
+        centerOffset = Vector2(-44, -25);
         break;
       case Direction.upLeft:
-        centerOffset = Vector2(12, 0);
+        centerOffset = Vector2(0, 0);
         break;
       case Direction.upRight:
-        centerOffset = Vector2(12, 0);
+        centerOffset = Vector2(-40, 0);
         break;
       case Direction.downLeft:
-        centerOffset = Vector2(-12, 0);
+        centerOffset = Vector2(-30, -40);
         break;
       case Direction.downRight:
-        centerOffset = Vector2(-12, 0);
+        centerOffset = Vector2(-45, -20);
         break;
     }
     simpleAttackRangeByAngle(
@@ -84,7 +85,6 @@ class SoldierPlayer extends RotationPlayer
       angle: angle,
       size: Vector2(8, 4),
       centerOffset: centerOffset,
-      marginFromOrigin: 8,
       speed: 500,
       animation: Sprite.load('bullet.png').toAnimation(),
       damage: 30,
