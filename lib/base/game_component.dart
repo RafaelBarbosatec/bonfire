@@ -106,6 +106,9 @@ abstract class GameComponent extends PositionComponent
   @override
   FutureOr<void> add(Component component) async {
     _confHitBoxRender(component);
+    if (component is ShapeHitbox) {
+      _rectCollision = null;
+    }
     return super.add(component);
   }
 
@@ -132,16 +135,18 @@ abstract class GameComponent extends PositionComponent
   Rect get rectCollision {
     if (_rectCollision == null) {
       var list = children.query<ShapeHitbox>();
-      _rectCollision = children.query<ShapeHitbox>().fold(
-        list.first.toRect(),
-        (previousValue, element) {
-          return previousValue!.expandToInclude(element.toRect());
-        },
-      );
+      if (list.isNotEmpty) {
+        _rectCollision = children.query<ShapeHitbox>().fold(
+          list.first.toRect(),
+          (previousValue, element) {
+            return previousValue!.expandToInclude(element.toRect());
+          },
+        );
+      }
     }
     var absoluteRect = toAbsoluteRect();
 
-    if (_rectCollision == Rect.zero) {
+    if (_rectCollision == null) {
       return absoluteRect;
     }
 
