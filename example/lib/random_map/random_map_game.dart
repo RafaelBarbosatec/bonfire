@@ -1,7 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/random_map/map_generator.dart';
-import 'package:example/shared/util/functions.dart';
 import 'package:flutter/material.dart';
 
 ///

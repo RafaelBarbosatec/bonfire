@@ -3,7 +3,6 @@ import 'package:example/manual_map/dungeon_map.dart';
 import 'package:example/manual_map/game_manual_controller.dart';
 import 'package:example/shared/interface/knight_interface.dart';
 import 'package:example/shared/player/knight.dart';
-import 'package:example/shared/util/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

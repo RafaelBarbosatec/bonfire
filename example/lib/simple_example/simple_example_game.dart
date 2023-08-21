@@ -1,7 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/decoration/barrel_dragable.dart';
 import 'package:example/shared/decoration/potion_life.dart';
-import 'package:example/shared/util/functions.dart';
 import 'package:example/simple_example/my_enemy.dart';
 import 'package:example/simple_example/my_player.dart';
 import 'package:flutter/material.dart';

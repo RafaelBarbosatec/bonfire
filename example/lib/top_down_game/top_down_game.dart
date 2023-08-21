@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/shared/util/functions.dart';
 import 'package:example/top_down_game/robot_enemy.dart';
 import 'package:example/top_down_game/soldier_player.dart';
 import 'package:flutter/material.dart';

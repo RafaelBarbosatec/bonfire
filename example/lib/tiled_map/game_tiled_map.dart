@@ -12,7 +12,6 @@ import 'package:example/shared/interface/knight_interface.dart';
 import 'package:example/shared/npc/critter/critter.dart';
 import 'package:example/shared/npc/wizard/wizard.dart';
 import 'package:example/shared/player/knight.dart';
-import 'package:example/shared/util/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

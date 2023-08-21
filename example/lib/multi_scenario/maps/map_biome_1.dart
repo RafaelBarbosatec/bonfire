@@ -6,7 +6,6 @@ import 'package:example/multi_scenario/utils/constants/game_consts.dart';
 import 'package:example/multi_scenario/utils/enums/map_id_enum.dart';
 import 'package:example/multi_scenario/utils/enums/show_in_enum.dart';
 import 'package:example/multi_scenario/utils/sensors/exit_map_sensor.dart';
-import 'package:example/shared/util/functions.dart';
 import 'package:flutter/material.dart';
 
 class MapBiome1 extends StatelessWidget {

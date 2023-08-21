@@ -1,3 +1,6 @@
+# next
+- Adds `getZoomFromMaxVisibleTile`
+
 ## 3.0.0-beta.8
 - extension method `simpleAttackMeleeByDirection` improvements
 - `BonfireCamera` improvements

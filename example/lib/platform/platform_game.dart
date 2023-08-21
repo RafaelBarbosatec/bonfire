@@ -3,7 +3,6 @@ import 'package:example/platform/fox_player.dart';
 import 'package:example/platform/frog_enemy.dart';
 import 'package:example/platform/gem_decoration.dart';
 import 'package:example/platform/platform_game_controller.dart';
-import 'package:example/shared/util/functions.dart';
 import 'package:flutter/material.dart';
 
 class PlatformGame extends StatefulWidget {
