@@ -178,10 +178,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   void configCollision() {
     initializeCollisionDetection(
       mapDimensions: Rect.fromLTWH(
-        0,
-        0,
-        map.size.x.ceilToDouble(),
-        map.size.y.ceilToDouble(),
+        -32,
+        -32,
+        map.size.x.ceilToDouble() + 32,
+        map.size.y.ceilToDouble() + 32,
       ),
       minimumDistance: max(canvasSize.x, canvasSize.y) / 4,
     );
