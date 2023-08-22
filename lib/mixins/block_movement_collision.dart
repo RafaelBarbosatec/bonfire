@@ -8,6 +8,7 @@ mixin BlockMovementCollision on Movement {
   final _collisionUtil = CollisionUtil();
 
   Rect? _shapeRectNormalized;
+  Direction? lasDirectionCollision;
 
   bool onBlockMovement(
     Set<Vector2> intersectionPoints,
@@ -53,12 +54,16 @@ mixin BlockMovementCollision on Movement {
         midPoint = midPoint - position;
         midPoint.lerp(_shapeRectNormalized!.center.toVector2(), 0.2);
 
-        var direction = _collisionUtil.getDirectionCollision(
+        lasDirectionCollision = _collisionUtil.getDirectionCollision(
           _shapeRectNormalized!,
           midPoint,
         );
 
-        onBlockedMovement(other, direction, lastDisplacement.clone());
+        onBlockedMovement(
+          other,
+          lasDirectionCollision,
+          lastDisplacement.clone(),
+        );
       }
 
       super.onCollision(intersectionPoints, other);

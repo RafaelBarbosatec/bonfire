@@ -22,10 +22,13 @@ class CameraConfig {
 
   double speed;
 
+  bool startFollowPlayer;
+
   InitialMapZoomFitEnum initialMapZoomFit;
 
   CameraConfig({
     this.moveOnlyMapArea = false,
+    this.startFollowPlayer = true,
     this.zoom = 1.0,
     this.angle = 0.0,
     this.target,

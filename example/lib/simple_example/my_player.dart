@@ -25,7 +25,7 @@ class MyPlayer extends SimplePlayer with BlockMovementCollision {
   Future<void> onLoad() {
     add(
       RectangleHitbox(
-        size: size / 4,
+        size: size / 2,
         position: size / 4,
       ),
     );

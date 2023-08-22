@@ -164,7 +164,13 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
     await super.add(world);
     await super.add(bonfireCamera);
-    if (player != null && bonfireCamera.config.target == null) {
+
+    if (bonfireCamera.config.target != null) {
+      bonfireCamera.follow(
+        bonfireCamera.config.target!,
+        snap: true,
+      );
+    } else if (player != null && bonfireCamera.config.startFollowPlayer) {
       bonfireCamera.moveToPlayer();
     }
   }

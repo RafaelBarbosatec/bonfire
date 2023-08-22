@@ -45,7 +45,7 @@ mixin Vision on GameComponent {
 
     PolygonShape shape = _getShapeVision(radiusVision, visionAngle, angle);
 
-    if (_canSee(shape, component)) {
+    if (_canSee(shape, component, radiusVision)) {
       observed(component);
     } else {
       notObserved?.call();
@@ -53,7 +53,11 @@ mixin Vision on GameComponent {
     return _currentShape = shape;
   }
 
-  bool _canSee(PolygonShape shape, GameComponent component) {
+  bool _canSee(
+    PolygonShape shape,
+    GameComponent component,
+    double radiusVision,
+  ) {
     if (component.isRemoving) {
       return false;
     }
@@ -64,7 +68,22 @@ mixin Vision on GameComponent {
       position: rect.positionVector2,
     );
 
-    return shape.isCollision(otherShape);
+    bool inShape = shape.isCollision(otherShape);
+    if (inShape) {
+      Vector2 direction =
+          (component.absoluteCenter - absoluteCenter).normalized();
+      final result = gameRef.raycast(
+        Ray2(
+          origin: absoluteCenter,
+          direction: direction,
+        ),
+        maxDistance: radiusVision,
+        ignoreHitboxes: children.query<ShapeHitbox>(),
+      );
+      return result?.hitbox?.parent == component;
+    }
+
+    return false;
   }
 
   /// This method we notify when detect components by type when enter in [radiusVision] configuration
@@ -88,7 +107,7 @@ mixin Vision on GameComponent {
     PolygonShape shape = _getShapeVision(radiusVision, visionAngle, angle);
 
     List<T> compObserved = compVisible.where((comp) {
-      return _canSee(shape, comp);
+      return _canSee(shape, comp, radiusVision);
     }).toList();
 
     if (compObserved.isNotEmpty) {
