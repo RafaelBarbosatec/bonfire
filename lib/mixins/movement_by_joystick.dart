@@ -165,7 +165,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
   }
 
   void _toCorrectDirection(JoystickMoveDirectional directional) {
-    velocity.sub(_getDirectionalVelocity(_currentDirectional));
+    velocity.sub(_getRestDirectionalVelocity(_currentDirectional));
     velocity.add(_getDirectionalVelocity(directional));
   }
 
@@ -187,6 +187,57 @@ mixin MovementByJoystick on Movement, JoystickListener {
         return Vector2(-_lastSpeedDiagonal, _lastSpeedDiagonal);
       case JoystickMoveDirectional.MOVE_LEFT:
         return Vector2(-_lastSpeed, 0);
+      case JoystickMoveDirectional.IDLE:
+        return Vector2.zero();
+    }
+  }
+
+  double _getRestYVelocity(double speed) {
+    if (velocity.y.abs() >= speed) {
+      return speed;
+    } else {
+      return velocity.y.abs();
+    }
+  }
+
+  double _getRestXVelocity(double speed) {
+    if (velocity.x.abs() >= speed) {
+      return speed;
+    } else {
+      return velocity.x.abs();
+    }
+  }
+
+  Vector2 _getRestDirectionalVelocity(JoystickMoveDirectional directional) {
+    switch (directional) {
+      case JoystickMoveDirectional.MOVE_UP:
+        return Vector2(0, -_getRestYVelocity(_lastSpeed));
+      case JoystickMoveDirectional.MOVE_UP_LEFT:
+        return Vector2(
+          -_getRestXVelocity(_lastSpeedDiagonal),
+          -_getRestYVelocity(_lastSpeedDiagonal),
+        );
+      case JoystickMoveDirectional.MOVE_UP_RIGHT:
+        return Vector2(
+          _getRestXVelocity(_lastSpeedDiagonal),
+          -_getRestYVelocity(_lastSpeedDiagonal),
+        );
+      case JoystickMoveDirectional.MOVE_RIGHT:
+        return Vector2(_getRestXVelocity(_lastSpeed), 0);
+      case JoystickMoveDirectional.MOVE_DOWN:
+        return Vector2(0, _getRestYVelocity(_lastSpeed));
+      case JoystickMoveDirectional.MOVE_DOWN_RIGHT:
+        return Vector2(
+          _getRestXVelocity(_lastSpeedDiagonal),
+          _getRestYVelocity(_lastSpeedDiagonal),
+        );
+      case JoystickMoveDirectional.MOVE_DOWN_LEFT:
+        return Vector2(
+          -_getRestXVelocity(_lastSpeedDiagonal),
+          _getRestYVelocity(_lastSpeedDiagonal),
+        );
+      case JoystickMoveDirectional.MOVE_LEFT:
+        return Vector2(-_getRestXVelocity(_lastSpeed), 0);
       case JoystickMoveDirectional.IDLE:
         return Vector2.zero();
     }

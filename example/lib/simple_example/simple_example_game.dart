@@ -38,6 +38,9 @@ class SimpleExampleGame extends StatelessWidget {
                 builder: (position) {
                   return PotionLife(position, 1, size: Vector2.all(10));
                 },
+                spawCondition: (game) {
+                  return game.query<PotionLife>().length < 10;
+                },
               ),
         },
       ),

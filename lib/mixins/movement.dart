@@ -310,4 +310,8 @@ mixin Movement on GameComponent {
       onMove(_lastSpeed, lastDisplacement, lastDirection, velocityRadAngle);
     }
   }
+
+  bool isStoped() {
+    return velocity.x < 0.01 && velocity.y < 0.01;
+  }
 }

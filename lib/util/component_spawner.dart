@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
 
 typedef SpawnerPositionBuilder = GameComponent Function(Vector2 position);
@@ -15,6 +16,8 @@ class ComponentSpawner extends GameComponent {
   // Builder that adds the component in the game.
   final SpawnerPositionBuilder builder;
 
+  final bool Function(BonfireGameInterface game)? spawCondition;
+
   late Random _random;
 
   ComponentSpawner({
@@ -22,6 +25,7 @@ class ComponentSpawner extends GameComponent {
     required this.area,
     required this.interval,
     required this.builder,
+    this.spawCondition,
     this.onlyVisible = true,
   }) {
     _random = Random();
@@ -33,7 +37,9 @@ class ComponentSpawner extends GameComponent {
   void update(double dt) {
     if (checkInterval('SpawnPosition', interval, dt) &&
         !(onlyVisible && !isVisible)) {
-      _spawn();
+      if (spawCondition?.call(gameRef) ?? true) {
+        _spawn();
+      }
     }
     super.update(dt);
   }

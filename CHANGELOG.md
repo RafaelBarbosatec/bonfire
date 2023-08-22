@@ -2,6 +2,8 @@
 - `Follower` mixin improvements.
 - Adds `startFollowPlayer` param in `CameraConfig`.
 - `Vision` improvements.
+- `MovementByJoystick` improvements.
+- Adds `spawCondition` in `ComponentSpawner`
 
 # 3.0.0-beta.9
 - Adds `getZoomFromMaxVisibleTile`
