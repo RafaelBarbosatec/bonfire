@@ -27,7 +27,7 @@ extension MovementExtensions on Movement {
   /// Method that bo used in [update] method.
   void positionsItselfAndKeepDistance(
     GameComponent target, {
-    required Function(GameComponent) positioned,
+    Function(GameComponent)? positioned,
     double radiusVision = 32,
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
@@ -71,7 +71,7 @@ extension MovementExtensions on Movement {
       translateX = 0;
     } else if (translateXPositive > translateYPositive) {
       translateX = translateX * -1;
-      positioned(target);
+      positioned?.call(target);
     }
 
     if (translateYPositive >= distance &&
@@ -79,12 +79,12 @@ extension MovementExtensions on Movement {
       translateY = 0;
     } else if (translateXPositive < translateYPositive) {
       translateY = translateY * -1;
-      positioned(target);
+      positioned?.call(target);
     }
 
     if (translateX.abs() < dtSpeed && translateY.abs() < dtSpeed) {
       stopMove();
-      positioned(target);
+      positioned?.call(target);
     } else {
       _moveComp(translateX, translateY);
     }

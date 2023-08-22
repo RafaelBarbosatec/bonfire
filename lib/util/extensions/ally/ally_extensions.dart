@@ -96,9 +96,9 @@ extension AllyExtensions on Ally {
   /// [visionAngle] in radians
   /// [angle] in radians. is automatically picked up using the component's direction.
   void seeAndMoveToAttackRange({
-    required Function(Enemy) positioned,
+    Function(Enemy)? positioned,
     VoidCallback? notObserved,
-    VoidCallback? observed,
+    Function(Enemy)? observed,
     double radiusVision = 32,
     double? visionAngle,
     double? angle,
@@ -112,7 +112,7 @@ extension AllyExtensions on Ally {
       angle: angle ?? lastDirection.toRadians(),
       visionAngle: visionAngle,
       observed: (enemy) {
-        observed?.call();
+        observed?.call(enemy.first);
         positionsItselfAndKeepDistance(
           enemy.first,
           minDistanceFromPlayer: minDistanceFromPlayer,
@@ -126,7 +126,7 @@ extension AllyExtensions on Ally {
               lastDirectionHorizontal = lastDirection;
             }
             idle();
-            positioned(enemy as Enemy);
+            positioned?.call(enemy as Enemy);
           },
         );
       },

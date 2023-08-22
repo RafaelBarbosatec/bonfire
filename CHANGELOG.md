@@ -1,3 +1,7 @@
+# next
+
+- `positionsItselfAndKeepDistance` little improvements
+
 # 3.0.0-beta.10
 - `Follower` mixin improvements.
 - Adds `startFollowPlayer` param in `CameraConfig`.

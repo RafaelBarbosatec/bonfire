@@ -85,9 +85,9 @@ extension EnemyExtensions on Enemy {
   /// [visionAngle] in radians
   /// [angle] in radians. is automatically picked up using the component's direction.
   void seeAndMoveToAttackRange({
-    required Function(Player) positioned,
+    Function(Player)? positioned,
     VoidCallback? notObserved,
-    VoidCallback? observed,
+    Function(Player)? observed,
     double radiusVision = 32,
     double? visionAngle,
     double? angle,
@@ -101,7 +101,7 @@ extension EnemyExtensions on Enemy {
       visionAngle: visionAngle,
       angle: angle,
       observed: (player) {
-        observed?.call();
+        observed?.call(player);
         positionsItselfAndKeepDistance(
           player,
           minDistanceFromPlayer: minDistanceFromPlayer,
@@ -115,7 +115,7 @@ extension EnemyExtensions on Enemy {
               lastDirectionHorizontal = lastDirection;
             }
             idle();
-            positioned(player as Player);
+            positioned?.call(player as Player);
           },
         );
       },
