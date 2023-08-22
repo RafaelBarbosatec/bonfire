@@ -85,9 +85,9 @@ extension MovementExtensions on Movement {
     if (translateX.abs() < dtSpeed && translateY.abs() < dtSpeed) {
       stopMove();
       positioned(target);
+    } else {
+      _moveComp(translateX, translateY);
     }
-
-    _moveComp(translateX, translateY);
   }
 
   double _adjustTranslate(
