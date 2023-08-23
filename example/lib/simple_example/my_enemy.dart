@@ -23,12 +23,12 @@ class MyEnemy extends SimpleEnemy with BlockMovementCollision {
 
   @override
   void update(double dt) {
+    super.update(dt);
     seeAndMoveToPlayer(
       closePlayer: (player) {
         /// do anything when close to player
       },
       radiusVision: 64,
     );
-    super.update(dt);
   }
 }

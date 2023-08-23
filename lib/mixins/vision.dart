@@ -72,13 +72,20 @@ mixin Vision on GameComponent {
     if (inShape) {
       Vector2 direction =
           (component.absoluteCenter - absoluteCenter).normalized();
+      var sensorHitBox = <ShapeHitbox>[];
+      gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
+        sensorHitBox.addAll(e.children.query<ShapeHitbox>());
+      });
       final result = gameRef.raycast(
         Ray2(
           origin: absoluteCenter,
           direction: direction,
         ),
         maxDistance: radiusVision,
-        ignoreHitboxes: children.query<ShapeHitbox>(),
+        ignoreHitboxes: [
+          ...children.query<ShapeHitbox>(),
+          ...sensorHitBox,
+        ],
       );
       return result?.hitbox?.parent == component;
     }

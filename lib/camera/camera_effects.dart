@@ -54,6 +54,7 @@ class ShakeEffect extends Component {
   PositionProvider get target => parent as PositionProvider;
   final void Function()? onComplete;
   double _shakeTimer = 0.0;
+  late Vector2 initialPosition;
   ShakeEffect({
     required this.intensity,
     required this.duration,
@@ -63,14 +64,20 @@ class ShakeEffect extends Component {
   }
 
   @override
+  void onMount() {
+    initialPosition = target.position.clone();
+    super.onMount();
+  }
+
+  @override
   void update(double dt) {
-    final shake = _shakeDelta();
-    target.position = target.position.clone()..add(shake);
     if (shaking) {
+      final shake = _shakeDelta();
+      target.position = target.position.clone()..add(shake);
       _shakeTimer -= dt;
-      if (_shakeTimer < 0.0) {
-        _shakeTimer = 0.0;
+      if (_shakeTimer <= 0.0) {
         onComplete?.call();
+        target.position = initialPosition;
         removeFromParent();
       }
     }

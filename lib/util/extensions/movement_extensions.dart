@@ -71,7 +71,6 @@ extension MovementExtensions on Movement {
       translateX = 0;
     } else if (translateXPositive > translateYPositive) {
       translateX = translateX * -1;
-      positioned?.call(target);
     }
 
     if (translateYPositive >= distance &&
@@ -79,7 +78,6 @@ extension MovementExtensions on Movement {
       translateY = 0;
     } else if (translateXPositive < translateYPositive) {
       translateY = translateY * -1;
-      positioned?.call(target);
     }
 
     if (translateX.abs() < dtSpeed && translateY.abs() < dtSpeed) {
