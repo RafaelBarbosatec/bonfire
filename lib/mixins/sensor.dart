@@ -10,6 +10,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   static const _sensorIntervalKey = 'SensorContact';
   int _intervalCallback = 100;
   GameComponent? componentIncontact;
+  bool sensorEnabled = true;
 
   void onContact(T component) {}
   void onContactExit(T component) {}
@@ -21,7 +22,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (componentIncontact != null) {
+    if (componentIncontact != null && sensorEnabled) {
       if (checkInterval(_sensorIntervalKey, _intervalCallback, dt)) {
         onContact(componentIncontact! as T);
       }
