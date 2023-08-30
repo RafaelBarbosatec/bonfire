@@ -41,6 +41,7 @@ mixin AutomaticRandomMovement on Movement {
     /// milliseconds
     int timeKeepStopped = 2000,
     bool updateAngle = false,
+    bool checkPositionWithRaycast = false,
     RandomMovementDirectionEnum direction = RandomMovementDirectionEnum.all,
   }) {
     if (runOnlyVisibleInCamera && !isVisibleReduction) {
@@ -75,6 +76,19 @@ mixin AutomaticRandomMovement on Movement {
           randomX.toDouble(),
           randomY.toDouble(),
         );
+
+        if (checkPositionWithRaycast) {
+          final direct = (_targetRandomMovement! - position).normalized();
+          final result = raycast(
+            direct,
+            origin: position,
+            maxDistance: position.distanceTo(_targetRandomMovement!),
+          );
+          if (result?.hitbox != null) {
+            _targetRandomMovement = null;
+            tickInterval(_KEY_INTERVAL_KEEP_STOPPED);
+          }
+        }
       }
     } else {
       if (!moveToPosition(
