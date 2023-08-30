@@ -156,6 +156,10 @@ mixin MovementByJoystick on Movement, JoystickListener {
   @override
   void idle() {
     _currentDirectional = JoystickMoveDirectional.IDLE;
+    _newDirectional = JoystickMoveDirectional.IDLE;
+    _currentDirectionalAngle = 0;
+    _joystickAngle = 0;
+    _lastSpeed = 0;
     super.idle();
   }
 

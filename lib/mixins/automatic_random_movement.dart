@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 
+enum RandomMovementDirectionEnum { horizontally, vertically, all }
+
 /// Mixin responsible for adding random movement like enemy walking through the scene
 mixin AutomaticRandomMovement on Movement {
   Vector2? _targetRandomMovement;
@@ -24,10 +26,11 @@ mixin AutomaticRandomMovement on Movement {
     double speed = 20,
     int maxDistance = 50,
     int minDistance = 0,
-    int timeKeepStopped = 2000,
-    bool useAngle = false,
 
     /// milliseconds
+    int timeKeepStopped = 2000,
+    bool useAngle = false,
+    RandomMovementDirectionEnum direction = RandomMovementDirectionEnum.all,
   }) {
     if (runOnlyVisibleInCamera && !isVisibleReduction) {
       return;
@@ -35,9 +38,22 @@ mixin AutomaticRandomMovement on Movement {
 
     if (_targetRandomMovement == null) {
       if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
-        int randomX = _random.nextInt(maxDistance);
+        int randomX = 0, randomY = 0;
+
+        switch (direction) {
+          case RandomMovementDirectionEnum.horizontally:
+            randomX = _random.nextInt(maxDistance);
+            break;
+          case RandomMovementDirectionEnum.vertically:
+            randomY = _random.nextInt(maxDistance);
+            break;
+          case RandomMovementDirectionEnum.all:
+            randomX = _random.nextInt(maxDistance);
+            randomY = _random.nextInt(maxDistance);
+            break;
+        }
+
         randomX = randomX < minDistance ? minDistance : randomX;
-        int randomY = _random.nextInt(maxDistance);
         randomY = randomY < minDistance ? minDistance : randomY;
 
         int randomNegativeX = _random.nextBool() ? -1 : 1;

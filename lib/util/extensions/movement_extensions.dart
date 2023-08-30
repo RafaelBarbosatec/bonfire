@@ -25,14 +25,14 @@ extension MovementExtensions on Movement {
 
   /// Checks whether the component is within range. If so, position yourself and keep your distance.
   /// Method that bo used in [update] method.
-  void positionsItselfAndKeepDistance(
+  bool positionsItselfAndKeepDistance(
     GameComponent target, {
     Function(GameComponent)? positioned,
     double radiusVision = 32,
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
   }) {
-    if (runOnlyVisibleInScreen && !isVisible) return;
+    if (runOnlyVisibleInScreen && !isVisible) return false;
     double distance = (minDistanceFromPlayer ?? radiusVision);
 
     Rect rectTarget = target.rectCollision;
@@ -83,8 +83,10 @@ extension MovementExtensions on Movement {
     if (translateX.abs() < dtSpeed && translateY.abs() < dtSpeed) {
       stopMove();
       positioned?.call(target);
+      return false;
     } else {
       _moveComp(translateX, translateY);
+      return true;
     }
   }
 

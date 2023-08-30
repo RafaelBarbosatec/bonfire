@@ -1,3 +1,8 @@
+# NEXT
+- fix bug in `MovementByJoystick` when called `idle` method.
+- `positionsItselfAndKeepDistance` little improvements.
+- `AutomaticRandomMovement` improvements. Adds param `direction` to decide which direction could be the movement.
+
 # 3.0.0-beta.11
 
 - `positionsItselfAndKeepDistance` little improvements
