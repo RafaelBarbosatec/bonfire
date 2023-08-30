@@ -2,7 +2,12 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 
-enum RandomMovementDirectionEnum { horizontally, vertically, all }
+enum RandomMovementDirectionEnum {
+  horizontally,
+  vertically,
+  horizontallyOrvertically,
+  all
+}
 
 /// Mixin responsible for adding random movement like enemy walking through the scene
 mixin AutomaticRandomMovement on Movement {
@@ -17,6 +22,11 @@ mixin AutomaticRandomMovement on Movement {
       return gameRef.isVisibleInCamera(this);
     }
     return false;
+  }
+
+  int _getTargetDistance(int minDistance, int maxDistance) {
+    int randomInt = _random.nextInt(maxDistance);
+    return randomInt < minDistance ? minDistance : randomInt;
   }
 
   /// Method that bo used in [update] method.
@@ -42,19 +52,23 @@ mixin AutomaticRandomMovement on Movement {
 
         switch (direction) {
           case RandomMovementDirectionEnum.horizontally:
-            randomX = _random.nextInt(maxDistance);
+            randomX = _getTargetDistance(minDistance, maxDistance);
             break;
           case RandomMovementDirectionEnum.vertically:
-            randomY = _random.nextInt(maxDistance);
+            randomY = _getTargetDistance(minDistance, maxDistance);
+            break;
+          case RandomMovementDirectionEnum.horizontallyOrvertically:
+            if (_random.nextBool()) {
+              randomX = _getTargetDistance(minDistance, maxDistance);
+            } else {
+              randomY = _getTargetDistance(minDistance, maxDistance);
+            }
             break;
           case RandomMovementDirectionEnum.all:
-            randomX = _random.nextInt(maxDistance);
-            randomY = _random.nextInt(maxDistance);
+            randomX = _getTargetDistance(minDistance, maxDistance);
+            randomY = _getTargetDistance(minDistance, maxDistance);
             break;
         }
-
-        randomX = randomX < minDistance ? minDistance : randomX;
-        randomY = randomY < minDistance ? minDistance : randomY;
 
         int randomNegativeX = _random.nextBool() ? -1 : 1;
         int randomNegativeY = _random.nextBool() ? -1 : 1;
