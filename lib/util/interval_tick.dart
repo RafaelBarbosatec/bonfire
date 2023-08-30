@@ -2,11 +2,11 @@ import 'dart:ui';
 
 class IntervalTick {
   late int interval; // in Milliseconds
-  final VoidCallback? tick;
+  final VoidCallback? onTick;
   double _currentTime = 0;
   bool _running = true;
   late double _intervalSeconds;
-  IntervalTick(this.interval, {this.tick}) {
+  IntervalTick(this.interval, {this.onTick}) {
     _intervalSeconds = interval / 1000;
   }
 
@@ -14,7 +14,7 @@ class IntervalTick {
     if (_running) {
       _currentTime += dt;
       if (_currentTime >= _intervalSeconds) {
-        tick?.call();
+        onTick?.call();
         reset();
         return true;
       }
@@ -33,6 +33,10 @@ class IntervalTick {
 
   void play() {
     _running = true;
+  }
+
+  void tick() {
+    _currentTime = _intervalSeconds;
   }
 
   bool get running => _running;

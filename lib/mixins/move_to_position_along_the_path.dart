@@ -83,7 +83,9 @@ mixin MoveToPositionAlongThePath on Movement {
   void update(double dt) {
     super.update(dt);
     if (_currentPath.isNotEmpty) {
-      _move();
+      if (!moveToPosition(_currentPath[_currentIndex].toVector2())) {
+        _goToNextPosition();
+      }
     }
   }
 
@@ -106,65 +108,6 @@ mixin MoveToPositionAlongThePath on Movement {
     _removeLinePathComponent();
     _onFinish?.call();
     _onFinish = null;
-  }
-
-  void _move() {
-    double diffX = _currentPath[_currentIndex].dx - absoluteCenter.x;
-    double diffY = _currentPath[_currentIndex].dy - absoluteCenter.y;
-
-    if (diffX.abs() < dtSpeed && diffY.abs() < dtSpeed) {
-      _goToNextPosition();
-    } else {
-      if (diffX.abs() > dtDiagonalSpeed && diffY.abs() > dtDiagonalSpeed) {
-        if (diffX > 0 && diffY > 0) {
-          if (diffX.abs() < dtDiagonalSpeed * 2) {
-            moveRightOnce();
-          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
-            moveDownOnce();
-          } else {
-            moveDownRight();
-          }
-        } else if (diffX < 0 && diffY > 0) {
-          if (diffX.abs() < dtDiagonalSpeed * 2) {
-            moveLeftOnce();
-          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
-            moveDownOnce();
-          } else {
-            moveDownLeft();
-          }
-        } else if (diffX > 0 && diffY < 0) {
-          if (diffX.abs() < dtDiagonalSpeed * 2) {
-            moveRightOnce();
-          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
-            moveUpOnce();
-          } else {
-            moveUpRight();
-          }
-        } else if (diffX < 0 && diffY < 0) {
-          if (diffX.abs() < dtDiagonalSpeed * 2) {
-            moveLeftOnce();
-          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
-            moveUpOnce();
-          } else {
-            moveUpLeft();
-          }
-        }
-      } else if (diffX.abs() > dtSpeed) {
-        if (diffX > 0) {
-          moveRight();
-        } else if (diffX < 0) {
-          moveLeft();
-        }
-      } else if (diffY.abs() > dtSpeed) {
-        if (diffY > 0) {
-          moveDown();
-        } else if (diffY < 0) {
-          moveUp();
-        }
-      } else {
-        _goToNextPosition();
-      }
-    }
   }
 
   List<Offset> _calculatePath(Vector2 finalPosition) {

@@ -38,6 +38,10 @@ mixin InternalChecker {
     _timers?[key]?.reset();
   }
 
+    void tickInterval(String key) {
+    _timers?[key]?.tick();
+  }
+
   void pauseEffectController(String key) {
     _timers?[key]?.pause();
   }

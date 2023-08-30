@@ -87,7 +87,7 @@ abstract class BonfireGameInterface {
   Iterable<Attackable> attackables({bool onlyVisible = false});
 
   /// Used to get all "ShapeHitbox".
-  Iterable<ShapeHitbox> collisions();
+  Iterable<ShapeHitbox> collisions({bool onlyVisible = false});
 
   /// Used to find component by type visible or not.
   Iterable<T> query<T extends Component>({bool onlyVisible = false});

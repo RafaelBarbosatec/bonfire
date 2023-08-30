@@ -314,4 +314,75 @@ mixin Movement on GameComponent {
   bool isStoped() {
     return velocity.x < 0.01 && velocity.y < 0.01;
   }
+
+  // Move to position. return true whether move.
+  bool moveToPosition(
+    Vector2 position, {
+    double? speed,
+    bool useCenter = true,
+  }) {
+    double diagonalSpeed = (speed ?? this.speed) * diaginalReduction;
+    double dtSpeed = (speed ?? this.speed) * dtUpdate;
+    double dtDiagonalSpeed = diagonalSpeed * dtUpdate;
+
+    double diffX =
+        position.x - (useCenter ? absoluteCenter : absolutePosition).x;
+    double diffY =
+        position.y - (useCenter ? absoluteCenter : absolutePosition).y;
+
+    if (diffX.abs() < dtSpeed && diffY.abs() < dtSpeed) {
+      return false;
+    } else {
+      if (diffX.abs() > dtDiagonalSpeed && diffY.abs() > dtDiagonalSpeed) {
+        if (diffX > 0 && diffY > 0) {
+          if (diffX.abs() < dtDiagonalSpeed * 2) {
+            moveRightOnce(speed: speed);
+          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
+            moveDownOnce(speed: speed);
+          } else {
+            moveDownRight(speed: speed);
+          }
+        } else if (diffX < 0 && diffY > 0) {
+          if (diffX.abs() < dtDiagonalSpeed * 2) {
+            moveLeftOnce(speed: speed);
+          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
+            moveDownOnce(speed: speed);
+          } else {
+            moveDownLeft(speed: speed);
+          }
+        } else if (diffX > 0 && diffY < 0) {
+          if (diffX.abs() < dtDiagonalSpeed * 2) {
+            moveRightOnce(speed: speed);
+          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
+            moveUpOnce(speed: speed);
+          } else {
+            moveUpRight(speed: speed);
+          }
+        } else if (diffX < 0 && diffY < 0) {
+          if (diffX.abs() < dtDiagonalSpeed * 2) {
+            moveLeftOnce(speed: speed);
+          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
+            moveUpOnce(speed: speed);
+          } else {
+            moveUpLeft(speed: speed);
+          }
+        }
+      } else if (diffX.abs() > dtSpeed) {
+        if (diffX > 0) {
+          moveRight(speed: speed);
+        } else if (diffX < 0) {
+          moveLeft(speed: speed);
+        }
+      } else if (diffY.abs() > dtSpeed) {
+        if (diffY > 0) {
+          moveDown(speed: speed);
+        } else if (diffY < 0) {
+          moveUp(speed: speed);
+        }
+      } else {
+        return false;
+      }
+      return true;
+    }
+  }
 }

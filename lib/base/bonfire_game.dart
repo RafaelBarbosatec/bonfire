@@ -57,6 +57,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
   final List<GameComponent> _visibleComponents = List.empty(growable: true);
+  final List<ShapeHitbox> _visibleCollisions = List.empty(growable: true);
   late IntervalTick _intervalUpdateOder;
   late ColorFilterComponent _colorFilterComponent;
   late LightingComponent _lighting;
@@ -121,7 +122,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
-      tick: updateOrderPriorityMicrotask,
+      onTick: updateOrderPriorityMicrotask,
     );
 
     world = World(
@@ -228,7 +229,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  Iterable<ShapeHitbox> collisions() {
+  Iterable<ShapeHitbox> collisions({bool onlyVisible = false}) {
+    if (onlyVisible) {
+      return _visibleCollisions;
+    }
     return collisionDetection.items;
   }
 
@@ -301,10 +305,18 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   void addVisible(GameComponent obj) {
     _visibleComponents.add(obj);
+    if (obj.isCollision) {
+      _visibleCollisions.addAll(obj.children.query<ShapeHitbox>());
+    }
   }
 
   void removeVisible(GameComponent obj) {
     _visibleComponents.remove(obj);
+    if (obj.isCollision) {
+      obj.children.query<ShapeHitbox>().forEach((element) {
+        _visibleCollisions.remove(element);
+      });
+    }
   }
 
   @override

@@ -152,4 +152,25 @@ abstract class GameComponent extends PositionComponent
 
     return _rectCollision!.translate(absoluteRect.left, absoluteRect.top);
   }
+
+  RaycastResult<ShapeHitbox>? raycast(
+    Vector2 direction, {
+    Vector2? origin,
+    double? maxDistance,
+    List<ShapeHitbox> ignoreHitboxes = const [],
+  }) {
+    var sensorHitBox = <ShapeHitbox>[];
+    gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
+      sensorHitBox.addAll(e.children.query<ShapeHitbox>());
+    });
+    return gameRef.raycast(
+      Ray2(origin: origin ?? absoluteCenter, direction: direction),
+      maxDistance: maxDistance,
+      ignoreHitboxes: [
+        ...children.query<ShapeHitbox>(),
+        ...sensorHitBox,
+        ...ignoreHitboxes,
+      ],
+    );
+  }
 }

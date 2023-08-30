@@ -26,20 +26,21 @@ mixin AutomaticRandomMovement on Movement {
 
   int _getTargetDistance(int minDistance, int maxDistance) {
     int randomInt = _random.nextInt(maxDistance);
-    return randomInt < minDistance ? minDistance : randomInt;
+    randomInt = randomInt < minDistance ? minDistance : randomInt;
+    return randomInt * (_random.nextBool() ? -1 : 1);
   }
 
   /// Method that bo used in [update] method.
   void runRandomMovement(
     double dt, {
     bool runOnlyVisibleInCamera = true,
-    double speed = 20,
+    double? speed,
     int maxDistance = 50,
-    int minDistance = 0,
+    int minDistance = 25,
 
     /// milliseconds
     int timeKeepStopped = 2000,
-    bool useAngle = false,
+    bool updateAngle = false,
     RandomMovementDirectionEnum direction = RandomMovementDirectionEnum.all,
   }) {
     if (runOnlyVisibleInCamera && !isVisibleReduction) {
@@ -70,70 +71,21 @@ mixin AutomaticRandomMovement on Movement {
             break;
         }
 
-        int randomNegativeX = _random.nextBool() ? -1 : 1;
-        int randomNegativeY = _random.nextBool() ? -1 : 1;
         _targetRandomMovement = position.translated(
-          randomX.toDouble() * randomNegativeX,
-          randomY.toDouble() * randomNegativeY,
+          randomX.toDouble(),
+          randomY.toDouble(),
         );
-        if (useAngle) {
-          angle = BonfireUtil.angleBetweenPoints(
-            toAbsoluteRect().center.toVector2(),
-            _targetRandomMovement!,
-          );
-        }
       }
     } else {
-      double diffX = (_targetRandomMovement!.x - x).abs();
-      double diffY = (_targetRandomMovement!.y - y).abs();
-
-      bool canMoveX = diffX > speed;
-      bool canMoveY = diffY > speed;
-
-      bool canMoveLeft = false;
-      bool canMoveRight = false;
-      bool canMoveUp = false;
-      bool canMoveDown = false;
-      if (canMoveX) {
-        if (_targetRandomMovement!.x > x) {
-          canMoveRight = true;
-        } else {
-          canMoveLeft = true;
-        }
+      if (!moveToPosition(
+        _targetRandomMovement!,
+        speed: speed,
+        useCenter: false,
+      )) {
+        stopMove();
       }
-      if (canMoveY) {
-        if (_targetRandomMovement!.y > y) {
-          canMoveDown = true;
-        } else {
-          canMoveUp = true;
-        }
-      }
-      if (useAngle) {
-        if (canMoveX && canMoveY) {
-          moveFromAngle(angle, speed: speed);
-        } else {
-          stopMove();
-        }
-      } else {
-        if (canMoveLeft && canMoveUp) {
-          moveUpLeft(speed: speed);
-        } else if (canMoveLeft && canMoveDown) {
-          moveDownLeft(speed: speed);
-        } else if (canMoveRight && canMoveUp) {
-          moveUpRight(speed: speed);
-        } else if (canMoveRight && canMoveDown) {
-          moveDownRight(speed: speed);
-        } else if (canMoveRight) {
-          moveRight(speed: speed);
-        } else if (canMoveLeft) {
-          moveLeft(speed: speed);
-        } else if (canMoveUp) {
-          moveUp(speed: speed);
-        } else if (canMoveDown) {
-          moveDown(speed: speed);
-        } else {
-          stopMove();
-        }
+      if (updateAngle) {
+        angle = lastDirection.toRadians();
       }
     }
   }
