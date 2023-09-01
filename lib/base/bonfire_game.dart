@@ -179,8 +179,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   void configCollision() {
     initializeCollisionDetection(
       mapDimensions: Rect.fromLTWH(
-        -32,
-        -32,
+        -16,
+        -16,
         map.size.x.ceilToDouble() + 32,
         map.size.y.ceilToDouble() + 32,
       ),
