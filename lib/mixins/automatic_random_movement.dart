@@ -15,6 +15,9 @@ mixin AutomaticRandomMovement on Movement {
   // ignore: constant_identifier_names
   static const _KEY_INTERVAL_KEEP_STOPPED = 'INTERVAL_RANDOM_MOVEMENT';
 
+  Function(Vector2 target)? _startMoveCallback;
+  Function()? _arrivedTargetCallback;
+
   late Random _random;
 
   bool get isVisibleReduction {
@@ -43,10 +46,14 @@ mixin AutomaticRandomMovement on Movement {
     bool updateAngle = false,
     bool checkPositionWithRaycast = false,
     RandomMovementDirectionEnum direction = RandomMovementDirectionEnum.all,
+    Function(Vector2 target)? onStartMove,
+    Function()? onArrivedTarget,
   }) {
     if (runOnlyVisibleInCamera && !isVisibleReduction) {
       return;
     }
+    _startMoveCallback = onStartMove;
+    _arrivedTargetCallback = onArrivedTarget;
 
     if (_targetRandomMovement == null) {
       if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
@@ -89,6 +96,10 @@ mixin AutomaticRandomMovement on Movement {
             tickInterval(_KEY_INTERVAL_KEEP_STOPPED);
           }
         }
+
+        if (_targetRandomMovement != null) {
+          _startMoveCallback?.call(_targetRandomMovement!);
+        }
       }
     } else {
       if (!moveToPosition(
@@ -96,6 +107,7 @@ mixin AutomaticRandomMovement on Movement {
         speed: speed,
         useCenter: false,
       )) {
+        _arrivedTargetCallback?.call();
         stopMove();
       }
       if (updateAngle) {
