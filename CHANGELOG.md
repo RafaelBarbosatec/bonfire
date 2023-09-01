@@ -1,6 +1,7 @@
 # NEXT
 
 - fix but collision by tiled.
+- camera improvements
 
 # 3.0.0-beta.12
 
