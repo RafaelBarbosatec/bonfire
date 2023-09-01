@@ -50,9 +50,8 @@ class JoystickActionEvent {
 }
 
 mixin JoystickListener {
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {}
-  void joystickAction(JoystickActionEvent event) {}
-  void joystickClickWorldPosition(Vector2 position) {}
+  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {}
+  void onJoystickAction(JoystickActionEvent event) {}
 }
 
 abstract class JoystickController extends GameComponent
@@ -63,19 +62,13 @@ abstract class JoystickController extends GameComponent
 
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     for (var o in _observers) {
-      o.joystickChangeDirectional(event);
+      o.onJoystickChangeDirectional(event);
     }
   }
 
   void joystickAction(JoystickActionEvent event) {
     for (var o in _observers) {
-      o.joystickAction(event);
-    }
-  }
-
-  void joystickClickWorldPosition(Vector2 event) {
-    for (var o in _observers) {
-      o.joystickClickWorldPosition(event);
+      o.onJoystickAction(event);
     }
   }
 

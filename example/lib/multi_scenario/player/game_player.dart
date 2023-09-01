@@ -34,11 +34,11 @@ class GamePlayer extends SimplePlayer with BlockMovementCollision {
         );
 
   @override
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
     if (event.directional != JoystickMoveDirectional.IDLE) {
       speed = baseSpeed * event.intensity;
     }
-    super.joystickChangeDirectional(event);
+    super.onJoystickChangeDirectional(event);
   }
 
   @override

@@ -5,6 +5,7 @@
 - Adds `moveToPosition` in `Movement` mixin.
 - Adds `MoveCameraUsingGesture` mixin.
 - remove `JoystickMoveToPosition`
+- rename `JoystickListener`
 
 # 3.0.0-beta.11
 

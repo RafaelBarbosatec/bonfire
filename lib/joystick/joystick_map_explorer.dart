@@ -8,10 +8,10 @@ class JoystickMapExplorer with JoystickListener {
   JoystickMapExplorer(this.camera);
 
   @override
-  void joystickAction(JoystickActionEvent event) {}
+  void onJoystickAction(JoystickActionEvent event) {}
 
   @override
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
     double speed = 10 * event.intensity;
 
     switch (event.directional) {

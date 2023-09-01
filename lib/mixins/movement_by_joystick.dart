@@ -53,7 +53,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
       _settings.moveType == MovementByJoystickType.direction;
 
   @override
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
     if (_settings.intencityEnabled) {
       _intencity = event.intensity;
     } else {
@@ -62,7 +62,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
     _joystickAngle = event.radAngle;
     _newDirectional = _getDirectional(event.directional);
 
-    super.joystickChangeDirectional(event);
+    super.onJoystickChangeDirectional(event);
   }
 
   @override
