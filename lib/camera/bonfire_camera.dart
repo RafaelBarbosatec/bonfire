@@ -60,22 +60,23 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
 
   void moveToPositionAnimated({
     required Vector2 position,
-    required EffectController effectController,
+    EffectController? effectController,
     double? zoom,
     double? angle,
     Function()? onComplete,
   }) {
     stop();
+    var controller = effectController ?? EffectController(duration: 1);
     final moveToEffect = MoveToEffect(
       position,
-      effectController,
+      controller,
       onComplete: onComplete,
     );
     viewfinder.add(moveToEffect);
     if (zoom != null) {
       final zoomEffect = ScaleEffect.to(
         Vector2.all(zoom),
-        effectController,
+        controller,
       );
       zoomEffect.removeOnFinish = true;
       viewfinder.add(zoomEffect);
@@ -83,7 +84,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
     if (angle != null) {
       final rotateEffect = RotateEffect.to(
         angle,
-        effectController,
+        controller,
       );
       rotateEffect.removeOnFinish = true;
       viewfinder.add(rotateEffect);
@@ -92,17 +93,23 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
 
   void moveToTargetAnimated({
     required PositionComponent target,
-    required EffectController effectController,
+    EffectController? effectController,
     double? zoom,
     double? angle,
     Function()? onComplete,
+    bool followTarget = true,
   }) {
     moveToPositionAnimated(
-      position: target.absolutePosition,
+      position: target.position,
       effectController: effectController,
       zoom: zoom,
       angle: angle,
-      onComplete: onComplete,
+      onComplete: () {
+        if (followTarget) {
+          follow(target);
+        }
+        onComplete?.call();
+      },
     );
   }
 

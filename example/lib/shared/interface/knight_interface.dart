@@ -54,7 +54,11 @@ class KnightInterface extends GameInterface {
       position: Vector2(300, 20),
       selectable: false,
       onTapComponent: (selected) {
-        _animateColorFilter();
+        // _animateColorFilter();
+        try {
+          var enemy = gameRef.query<Enemy>().first;
+          gameRef.bonfireCamera.moveToTargetAnimated(target: enemy);
+        } catch (e) {}
       },
     ));
     await add(TextInterfaceComponent(
