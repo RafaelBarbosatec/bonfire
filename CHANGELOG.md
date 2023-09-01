@@ -3,6 +3,8 @@
 - `positionsItselfAndKeepDistance` little improvements.
 - `AutomaticRandomMovement` improvements. Adds param `direction` to decide which direction could be the movement.
 - Adds `moveToPosition` in `Movement` mixin.
+- Adds `MoveCameraUsingGesture` mixin.
+- remove `JoystickMoveToPosition`
 
 # 3.0.0-beta.11
 

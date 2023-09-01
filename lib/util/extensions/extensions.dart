@@ -340,3 +340,18 @@ extension ShapeHitbocExt on ShapeHitbox {
     return this;
   }
 }
+
+extension MouseButtonExt on MouseButton {
+  int get id {
+    switch (this) {
+      case MouseButton.left:
+        return 1;
+      case MouseButton.right:
+        return 2;
+      case MouseButton.middle:
+        return 4;
+      case MouseButton.unknow:
+        return 0;
+    }
+  }
+}

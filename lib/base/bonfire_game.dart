@@ -179,12 +179,12 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   void configCollision() {
     initializeCollisionDetection(
       mapDimensions: Rect.fromLTWH(
-        -16,
-        -16,
-        map.size.x.ceilToDouble() + 32,
-        map.size.y.ceilToDouble() + 32,
+        -map.tileSize,
+        -map.tileSize,
+        map.size.x.ceilToDouble() + map.tileSize * 2,
+        map.size.y.ceilToDouble() + map.tileSize * 2,
       ),
-      minimumDistance: max(canvasSize.x, canvasSize.y) / 4,
+      minimumDistance: max(canvasSize.x, canvasSize.y) / 6,
     );
   }
 
@@ -231,7 +231,14 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   Iterable<ShapeHitbox> collisions({bool onlyVisible = false}) {
     if (onlyVisible) {
-      return _visibleCollisions;
+      List<ShapeHitbox> tilesCollision = [];
+      map.getRendered().where((element) => element.isCollision).forEach((e) {
+        tilesCollision.addAll(e.children.query<ShapeHitbox>());
+      });
+      return [
+        ..._visibleCollisions,
+        ...tilesCollision,
+      ];
     }
     return collisionDetection.items;
   }

@@ -40,13 +40,11 @@ class JoystickActionEvent {
   final double intensity;
   final double radAngle;
   final ActionEvent event;
-  final bool isKeyboard;
 
   JoystickActionEvent({
     this.id,
     this.intensity = 0.0,
     this.radAngle = 0.0,
-    this.isKeyboard = false,
     required this.event,
   });
 }

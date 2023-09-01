@@ -13,6 +13,9 @@ mixin MouseGesture on GameComponent {
   /// Listen to the mouse cursor across the screen
   void onMouseHoverScreen(int pointer, Vector2 position) {}
 
+  /// Listen to the mouse move with some button clicked across the screen
+  void onMouseMoveScreen(int pointer, Vector2 position, MouseButton button) {}
+
   /// Listen when the mouse cursor hover in this component
   void onMouseHoverEnter(int pointer, Vector2 position) {}
 
@@ -26,12 +29,25 @@ mixin MouseGesture on GameComponent {
   /// Listen when use scroll of the mouse in your component
   void onMouseScroll(int pointer, Vector2 position, Vector2 scrollDelta) {}
 
+  /// Listen when mouse is clicked down in your component
   void onMouseTapDown(int pointer, Vector2 position, MouseButton button) {}
+
+  /// Listen when mouse is clicked up in your component
   void onMouseTapUp(int pointer, Vector2 position, MouseButton button) {}
 
   // Listen when mouse clicked in your component
   void onMouseTap(MouseButton button);
   void onMouseCancel() {}
+
+  @override
+  bool handlerPointerMove(PointerMoveEvent event) {
+    if (event.kind == PointerDeviceKind.mouse) {
+      int pointer = event.pointer;
+      Vector2 position = event.localPosition.toVector2();
+      onMouseMoveScreen(pointer, position, _getMouseButtonByInt(event.buttons));
+    }
+    return super.handlerPointerMove(event);
+  }
 
   @override
   bool handlerPointerHover(PointerHoverEvent event) {
@@ -107,6 +123,7 @@ mixin MouseGesture on GameComponent {
     return super.handlerPointerUp(event);
   }
 
+  // Listen when mouse is clicked down in screen
   void onMouseScreenTapDown(int pointer, Vector2 position, MouseButton button) {
     Vector2 realPosition = position;
     if (!isHud) {
@@ -119,6 +136,7 @@ mixin MouseGesture on GameComponent {
     }
   }
 
+  // Listen when mouse is clicked up in screen
   void onMouseScreenTapUp(int pointer, Vector2 position) {
     Vector2 realPosition = position;
     if (!isHud) {

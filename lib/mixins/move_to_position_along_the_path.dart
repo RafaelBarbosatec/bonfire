@@ -17,6 +17,7 @@ mixin MoveToPositionAlongThePath on Movement {
   int _currentIndex = 0;
   bool _showBarriers = false;
   bool _gridSizeIsCollisionSize = false;
+  bool _useOnlyVisibleBarriers = true;
   double _factorInflateFindArea = 2;
   VoidCallback? _onFinish;
 
@@ -39,11 +40,13 @@ mixin MoveToPositionAlongThePath on Movement {
 
     /// Use to debug and show area collision calculated
     bool showBarriersCalculated = false,
+    bool useOnlyVisibleBarriers = true,
 
     /// If `false` the algorithm use map tile size with base of the grid. if true this use collision size of the component.
     bool gridSizeIsCollisionSize = false,
     double factorInflateFindArea = 2,
   }) {
+    _useOnlyVisibleBarriers = useOnlyVisibleBarriers;
     _factorInflateFindArea = factorInflateFindArea;
     _paintShowBarriers.color =
         barriersCalculatedColor ?? const Color(0xFF2196F3).withOpacity(0.5);
@@ -159,7 +162,7 @@ mixin MoveToPositionAlongThePath on Movement {
 
     area = Rect.fromLTRB(left, top, right, bottom).inflate(inflate);
 
-    for (final e in gameRef.collisions()) {
+    for (final e in gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
       var rect = e.toAbsoluteRect();
       if (!ignoreCollisions.contains(e) && area.overlaps(rect)) {
         _addCollisionOffsetsPositionByTile(rect);
@@ -184,10 +187,7 @@ mixin MoveToPositionAlongThePath on Movement {
 
       if (result.isNotEmpty || _isNeighbor(playerPosition, targetPosition)) {
         result = AStar.resumePath(result);
-        _currentPath = result.map((e) {
-          return Offset(e.dx * _tileSize, e.dy * _tileSize)
-              .translate(_tileSize / 2, _tileSize / 2);
-        }).toList();
+        _currentPath = _mapToWorldPositions(result);
 
         _currentIndex = 0;
       }
@@ -315,5 +315,12 @@ mixin MoveToPositionAlongThePath on Movement {
   void _removeLinePathComponent() {
     _linePathComponent?.removeFromParent();
     _linePathComponent = null;
+  }
+
+  List<Offset> _mapToWorldPositions(Iterable<Offset> result) {
+    return result.map((e) {
+      return Offset(e.dx * _tileSize, e.dy * _tileSize)
+          .translate(_tileSize / 2, _tileSize / 2);
+    }).toList();
   }
 }

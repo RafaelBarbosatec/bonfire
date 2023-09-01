@@ -387,6 +387,9 @@ mixin Movement on GameComponent {
           moveUp(speed: speed);
           return true;
         }
+      } else {
+        translate(Vector2(diffX, diffY));
+        return true;
       }
     }
     return false;
