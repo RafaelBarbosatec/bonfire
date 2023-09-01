@@ -342,6 +342,7 @@ mixin Movement on GameComponent {
           } else {
             moveDownRight(speed: speed);
           }
+          return true;
         } else if (diffX < 0 && diffY > 0) {
           if (diffX.abs() < dtDiagonalSpeed * 2) {
             moveLeftOnce(speed: speed);
@@ -350,6 +351,7 @@ mixin Movement on GameComponent {
           } else {
             moveDownLeft(speed: speed);
           }
+          return true;
         } else if (diffX > 0 && diffY < 0) {
           if (diffX.abs() < dtDiagonalSpeed * 2) {
             moveRightOnce(speed: speed);
@@ -358,6 +360,7 @@ mixin Movement on GameComponent {
           } else {
             moveUpRight(speed: speed);
           }
+          return true;
         } else if (diffX < 0 && diffY < 0) {
           if (diffX.abs() < dtDiagonalSpeed * 2) {
             moveLeftOnce(speed: speed);
@@ -366,23 +369,26 @@ mixin Movement on GameComponent {
           } else {
             moveUpLeft(speed: speed);
           }
+          return true;
         }
       } else if (diffX.abs() > dtSpeed) {
         if (diffX > 0) {
           moveRight(speed: speed);
+          return true;
         } else if (diffX < 0) {
           moveLeft(speed: speed);
+          return true;
         }
       } else if (diffY.abs() > dtSpeed) {
         if (diffY > 0) {
           moveDown(speed: speed);
+          return true;
         } else if (diffY < 0) {
           moveUp(speed: speed);
+          return true;
         }
-      } else {
-        return false;
       }
-      return true;
     }
+    return false;
   }
 }
