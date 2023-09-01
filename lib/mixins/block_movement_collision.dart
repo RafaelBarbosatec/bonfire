@@ -38,6 +38,7 @@ mixin BlockMovementCollision on Movement {
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
     bool stopOtherMovement = true;
     bool stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
@@ -65,8 +66,6 @@ mixin BlockMovementCollision on Movement {
           lastDisplacement.clone(),
         );
       }
-
-      super.onCollision(intersectionPoints, other);
     }
   }
 
