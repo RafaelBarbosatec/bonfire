@@ -431,10 +431,10 @@ class TiledWorldBuilder {
         _components.add(
           CollisionGameComponent(
             name: element.name ?? '',
-            position: Vector2(x, y) + collision.position,
+            position: Vector2(x, y),
             size: Vector2(collision.size.x, collision.size.y),
             collisions: [
-              collision,
+              collision..position = Vector2.zero(),
             ],
             properties: _extractOtherProperties(element.properties),
           ),

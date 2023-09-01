@@ -1,3 +1,7 @@
+# NEXT
+
+- fix but collision by tiled.
+
 # 3.0.0-beta.12
 
 - fix bug in `MovementByJoystick` when called `idle` method.
