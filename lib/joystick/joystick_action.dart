@@ -181,7 +181,6 @@ class JoystickAction {
           event: ActionEvent.MOVE,
           intensity: intensity,
           radAngle: radAngle,
-          
         ),
       );
     } else {

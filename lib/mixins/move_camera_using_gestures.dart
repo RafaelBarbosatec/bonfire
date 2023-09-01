@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/gestures.dart';
 
+/// Mixin used to move camera with gestures (touch or mouse)
 mixin MoveCameraUsingGesture on GameComponent {
   Vector2 _startPoint = Vector2.zero();
   Vector2 _startCameraPosition = Vector2.zero();
