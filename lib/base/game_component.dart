@@ -159,18 +159,22 @@ abstract class GameComponent extends PositionComponent
     double? maxDistance,
     List<ShapeHitbox> ignoreHitboxes = const [],
   }) {
-    var sensorHitBox = <ShapeHitbox>[];
-    gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
-      sensorHitBox.addAll(e.children.query<ShapeHitbox>());
-    });
-    return gameRef.raycast(
-      Ray2(origin: origin ?? absoluteCenter, direction: direction),
-      maxDistance: maxDistance,
-      ignoreHitboxes: [
-        ...children.query<ShapeHitbox>(),
-        ...sensorHitBox,
-        ...ignoreHitboxes,
-      ],
-    );
+    try {
+      var sensorHitBox = <ShapeHitbox>[];
+      gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
+        sensorHitBox.addAll(e.children.query<ShapeHitbox>());
+      });
+      return gameRef.raycast(
+        Ray2(origin: origin ?? absoluteCenter, direction: direction),
+        maxDistance: maxDistance,
+        ignoreHitboxes: [
+          ...children.query<ShapeHitbox>(),
+          ...sensorHitBox,
+          ...ignoreHitboxes,
+        ],
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

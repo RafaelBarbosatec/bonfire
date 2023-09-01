@@ -87,12 +87,6 @@ class Goblin extends SimpleEnemy
   }
 
   @override
-  void joystickAction(JoystickActionEvent event) {}
-
-  @override
-  void moveTo(Vector2 position) {}
-
-  @override
   Future<void> onLoad() {
     add(
       RectangleHitbox(

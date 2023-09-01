@@ -38,7 +38,7 @@ mixin InternalChecker {
     _timers?[key]?.reset();
   }
 
-    void tickInterval(String key) {
+  void tickInterval(String key) {
     _timers?[key]?.tick();
   }
 

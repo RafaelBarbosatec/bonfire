@@ -53,7 +53,7 @@ class JoystickMoveToPosition extends JoystickController {
       final absolutePosition = gameRef.screenToWorld(
         event.position.toVector2(),
       );
-      moveTo(absolutePosition);
+      joystickClickWorldPosition(absolutePosition);
     }
     _initMove = false;
     return super.handlerPointerUp(event);

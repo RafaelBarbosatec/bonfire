@@ -5,13 +5,7 @@ export 'rotation_player.dart';
 export 'simple_player.dart';
 
 class Player extends GameComponent
-    with
-        Movement,
-        Attackable,
-        Vision,
-        MoveToPositionAlongThePath,
-        JoystickListener,
-        MovementByJoystick {
+    with Movement, Attackable, Vision, JoystickListener, MovementByJoystick {
   Player({
     required Vector2 position,
     required Vector2 size,
@@ -23,10 +17,5 @@ class Player extends GameComponent
     initialLife(life);
     this.position = position;
     this.size = size;
-  }
-
-  @override
-  void moveTo(Vector2 position) {
-    moveToPositionAlongThePath(position);
   }
 }

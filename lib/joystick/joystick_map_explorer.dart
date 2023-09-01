@@ -47,7 +47,4 @@ class JoystickMapExplorer with JoystickListener {
         break;
     }
   }
-
-  @override
-  void moveTo(Vector2 position) {}
 }
