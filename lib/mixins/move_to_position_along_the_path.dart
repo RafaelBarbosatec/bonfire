@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 /// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
-mixin MoveToPositionAlongThePath on Movement, JoystickListener {
+mixin MoveToPositionAlongThePath on Movement {
   static const REDUCTION_TO_AVOID_ROUNDING_PROBLEMS = 4;
 
   List<Offset> _currentPath = [];
@@ -315,11 +315,5 @@ mixin MoveToPositionAlongThePath on Movement, JoystickListener {
   void _removeLinePathComponent() {
     _linePathComponent?.removeFromParent();
     _linePathComponent = null;
-  }
-
-  @override
-  void joystickClickWorldPosition(Vector2 position) {
-    super.joystickClickWorldPosition(position);
-    moveToPositionAlongThePath(position);
   }
 }
