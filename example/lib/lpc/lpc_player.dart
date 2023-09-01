@@ -35,7 +35,7 @@ class LPCPlayer extends SimplePlayer with BlockMovementCollision {
         align: Offset(size.x * 1.8, -100),
         child: DialogCustomCharacter(
           customStatus: customStatus,
-          simpleAnimationChanged: (newAnimation, status) async {
+          simpleAnimationChanged: (newAnimation, status)  {
             customStatus = status;
             replaceAnimation(newAnimation);
           },
