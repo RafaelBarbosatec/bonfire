@@ -1,0 +1,52 @@
+name: 🪳 Bug report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Provide a thorough description of whats going on.
+      placeholder: e.g. The latest version of the package causes my screen to go blank when I tap on the screen three times.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to reproduce?
+      description: Provide as much detail as posible to reproduce the issue.
+      placeholder: |
+        1. Install vX.Y.Z of dependency
+        2. Launch the app on iOS device
+        3. Tap the screen three times
+        4. Note that the app crashes
+      render: Markdown
+    validations:
+      required: true
+  - type: textarea
+    id: what-are-expectations
+    attributes:
+      label: What did you expect to happen?
+      description: Also tell us, what did you expect to happen?
+      placeholder: I expected the app to continue running no matter how many times I tap the screen.
+    validations:
+      required: true
+  - type: input
+    id: flutter-sdk-version
+    attributes:
+      label: Bonfire version
+      description: What version of the Bonfire package are you using?
+      placeholder: Release 3.4.1
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: Shell

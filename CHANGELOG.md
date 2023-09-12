@@ -1,3 +1,6 @@
+# [2.12.7+1]
+- Update README.
+
 # [2.12.7]
 - Fix issue [417](https://github.com/RafaelBarbosatec/bonfire/issues/417). Thanks [Matt El Mouktafi](https://github.com/mel-mouk)
 
