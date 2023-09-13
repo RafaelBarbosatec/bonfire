@@ -102,7 +102,6 @@ extension GameComponentExtensions on GameComponent {
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
-    bool enableDiagonal = true,
     VoidCallback? onDestroy,
     ShapeHitbox? collision,
     LightingConfig? lightingConfig,
@@ -293,13 +292,15 @@ extension GameComponentExtensions on GameComponent {
     VoidCallback? onFinish,
     ValueChanged<double>? onChange,
   }) {
-    final valueGenerator = ValueGeneratorComponent(duration,
-        end: end,
-        begin: begin,
-        curve: curve,
-        onFinish: onFinish,
-        onChange: onChange,
-        autoStart: autoStart);
+    final valueGenerator = ValueGeneratorComponent(
+      duration,
+      end: end,
+      begin: begin,
+      curve: curve,
+      onFinish: onFinish,
+      onChange: onChange,
+      autoStart: autoStart,
+    );
     gameRef.add(valueGenerator);
     return valueGenerator;
   }

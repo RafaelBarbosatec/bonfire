@@ -52,6 +52,9 @@ class SpriteAnimationRender {
     }
   }
 
+  bool get isLastFrame => _animationTicker?.isLastFrame ?? false;
+  int get currentIndex => _animationTicker?.currentIndex ?? 0;
+
   void pause() {
     _playing = false;
   }

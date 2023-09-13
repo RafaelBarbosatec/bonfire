@@ -60,7 +60,6 @@ extension AllyExtensions on Ally {
     Direction? direction,
     int interval = 1000,
     bool withCollision = true,
-    bool enableDiagonal = true,
     ShapeHitbox? collision,
     VoidCallback? onDestroy,
     VoidCallback? execute,
@@ -85,7 +84,6 @@ extension AllyExtensions on Ally {
       onDestroy: onDestroy,
       destroySize: destroySize,
       lightingConfig: lightingConfig,
-      enableDiagonal: enableDiagonal,
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
     );
 

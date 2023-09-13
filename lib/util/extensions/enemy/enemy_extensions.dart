@@ -49,7 +49,6 @@ extension EnemyExtensions on Enemy {
     Direction? direction,
     int interval = 1000,
     bool withCollision = true,
-    bool enableDiagonal = true,
     ShapeHitbox? collision,
     VoidCallback? onDestroy,
     VoidCallback? execute,
@@ -74,7 +73,6 @@ extension EnemyExtensions on Enemy {
       onDestroy: onDestroy,
       destroySize: destroySize,
       lightingConfig: lightingConfig,
-      enableDiagonal: enableDiagonal,
       attackFrom: AttackFromEnum.ENEMY,
     );
 

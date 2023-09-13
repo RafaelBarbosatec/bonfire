@@ -1,3 +1,8 @@
+# NEXT
+
+- `PlayerExtensions` improvements
+- adds `isAnimationLastFrame` and `animationCurrentIndex` in `UseSpriteAnimation` mixin.
+
 # 3.0.0-beta.13
 
 - fix but collision by tiled.

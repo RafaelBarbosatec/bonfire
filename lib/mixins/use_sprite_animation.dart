@@ -85,4 +85,7 @@ mixin UseSpriteAnimation on GameComponent {
       onStart: onStart,
     );
   }
+
+  bool get isAnimationLastFrame => _animationRender?.isLastFrame ?? false;
+  int get animationCurrentIndex => _animationRender?.currentIndex ?? 0;
 }

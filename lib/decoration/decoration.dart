@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 
@@ -36,5 +37,29 @@ class GameDecoration extends GameComponent
   }) {
     loader?.add(AssetToLoad(animation, (value) => setAnimation(value)));
     applyBleedingPixel(position: position, size: size);
+  }
+
+  @override
+  Future playSpriteAnimationOnce(
+    FutureOr<SpriteAnimation> animation, {
+    Vector2? size,
+    Vector2? offset,
+    VoidCallback? onFinish,
+    VoidCallback? onStart,
+  }) {
+    final spriteBackup = sprite;
+    return super.playSpriteAnimationOnce(
+      animation,
+      size: size,
+      offset: offset,
+      onFinish: () {
+        sprite = spriteBackup;
+        onFinish?.call();
+      },
+      onStart: () {
+        sprite = null;
+        onStart?.call();
+      },
+    );
   }
 }

@@ -36,9 +36,10 @@ extension PlayerExtensions on Player {
     double? sizePush,
     Vector2? centerOffset,
     double? marginFromCenter,
+    bool diagonalEnabled = true,
   }) {
     simpleAttackMeleeByDirection(
-      direction: direction ?? lastDirection,
+      direction: direction ?? _getLastDirection(diagonalEnabled),
       animationRight: animationRight,
       damage: damage,
       id: id,
@@ -64,12 +65,12 @@ extension PlayerExtensions on Player {
     double damage = 1,
     Direction? direction,
     bool withCollision = true,
-    bool enableDiagonal = true,
+    bool diagonalEnabled = true,
     VoidCallback? onDestroy,
     ShapeHitbox? collision,
     LightingConfig? lightingConfig,
   }) {
-    Direction attackDirection = direction ?? lastDirection;
+    Direction attackDirection = direction ?? _getLastDirection(diagonalEnabled);
     simpleAttackRangeByDirection(
       direction: attackDirection,
       animationRight: animationRight,
@@ -82,9 +83,27 @@ extension PlayerExtensions on Player {
       onDestroy: onDestroy,
       destroySize: destroySize,
       collision: collision,
-      enableDiagonal: enableDiagonal,
       lightingConfig: lightingConfig,
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
     );
+  }
+
+  Direction _getLastDirection(bool diagonalEnabled) {
+    if (diagonalEnabled) {
+      return lastDirection;
+    }
+
+    switch (lastDirection) {
+      case Direction.left:
+      case Direction.right:
+      case Direction.up:
+      case Direction.down:
+        return lastDirection;
+      case Direction.upLeft:
+      case Direction.upRight:
+      case Direction.downLeft:
+      case Direction.downRight:
+        return lastDirectionHorizontal;
+    }
   }
 }
