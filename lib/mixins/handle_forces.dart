@@ -8,7 +8,14 @@ mixin HandleForces on Movement {
   Vector2 _accelerationOfForces = Vector2.zero();
 
   /// Mass of the Component
-  double mass = 1.0;
+  double _mass = 1.0;
+
+  set mass(double mass) {
+    assert(mass >= 1);
+    _mass = mass;
+  }
+
+  double get mass => _mass;
 
   final List<Force2D> _forces = [];
 
