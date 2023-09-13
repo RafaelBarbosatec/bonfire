@@ -1,4 +1,5 @@
-# NEXT
+
+# 3.0.0-beta.14
 
 - `PlayerExtensions` improvements
 - adds `isAnimationLastFrame` and `animationCurrentIndex` in `UseSpriteAnimation` mixin.
