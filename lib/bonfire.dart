@@ -52,7 +52,7 @@ export 'package:bonfire/npc/enemy/enemy.dart';
 export 'package:bonfire/npc/npc.dart';
 export 'package:bonfire/objects/animated_follower_game_object.dart';
 export 'package:bonfire/objects/animated_game_object.dart';
-export 'package:bonfire/objects/flying_attack_object.dart';
+export 'package:bonfire/objects/flying_attack_game_object.dart';
 export 'package:bonfire/objects/game_object.dart';
 export 'package:bonfire/player/player.dart';
 export 'package:bonfire/scene_builder/scene_builder.dart';

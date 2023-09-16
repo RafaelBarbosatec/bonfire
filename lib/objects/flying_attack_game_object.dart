@@ -4,7 +4,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
 /// Animated component used like range attack.
-class FlyingAttackObject extends AnimatedGameObject
+class FlyingAttackGameObject extends AnimatedGameObject
     with Movement, BlockMovementCollision {
   final dynamic id;
   Future<SpriteAnimation>? animationDestroy;
@@ -19,7 +19,7 @@ class FlyingAttackObject extends AnimatedGameObject
   double _senAngle = 0;
   ShapeHitbox? collision;
 
-  FlyingAttackObject({
+  FlyingAttackGameObject({
     required super.position,
     required super.size,
     required super.animation,
@@ -50,7 +50,7 @@ class FlyingAttackObject extends AnimatedGameObject
     movementOnlyVisible = false;
   }
 
-  FlyingAttackObject.byDirection({
+  FlyingAttackGameObject.byDirection({
     required super.position,
     required super.size,
     required super.animation,
@@ -72,7 +72,7 @@ class FlyingAttackObject extends AnimatedGameObject
     movementOnlyVisible = false;
   }
 
-  FlyingAttackObject.byAngle({
+  FlyingAttackGameObject.byAngle({
     required super.position,
     required super.size,
     required super.animation,

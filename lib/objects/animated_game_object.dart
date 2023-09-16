@@ -4,25 +4,24 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 
 /// Animated component
-class AnimatedGameObject extends GameComponent
-    with UseAssetsLoader, Lighting, UseSpriteAnimation {
+class AnimatedGameObject extends GameObject with UseSpriteAnimation {
   final VoidCallback? onFinish;
   final VoidCallback? onStart;
   final bool removeOnFinish;
 
   AnimatedGameObject({
-    required Vector2 position,
-    required Vector2 size,
+    required super.position,
+    required super.size,
     FutureOr<SpriteAnimation>? animation,
     this.onFinish,
     this.onStart,
     this.removeOnFinish = true,
-    double angle = 0,
-    LightingConfig? lightingConfig,
-    Anchor anchor = Anchor.topLeft,
+    super.angle = 0,
+    super.lightingConfig,
+    super.anchor = Anchor.topLeft,
     bool loop = true,
-  }) {
-    this.anchor = anchor;
+    super.objectPriority,
+  }) : super(sprite: null) {
     loader?.add(AssetToLoad(
       animation,
       (value) {
@@ -35,10 +34,6 @@ class AnimatedGameObject extends GameComponent
         );
       },
     ));
-    setupLighting(lightingConfig);
-    this.position = position;
-    this.size = size;
-    this.angle = angle;
   }
 
   void _onFinish() {

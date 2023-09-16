@@ -72,7 +72,7 @@ extension GameComponentExtensions on GameComponent {
     );
 
     gameRef.add(
-      FlyingAttackObject.byAngle(
+      FlyingAttackGameObject.byAngle(
         id: id,
         position: startPosition,
         size: size,

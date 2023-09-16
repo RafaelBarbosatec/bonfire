@@ -10,7 +10,7 @@ class GameObject extends GameComponent
   GameObject({
     required Vector2 position,
     required Vector2 size,
-    required FutureOr<Sprite> sprite,
+    required FutureOr<Sprite>? sprite,
     Vector2? positionFromTarget,
     LightingConfig? lightingConfig,
     this.objectPriority,
