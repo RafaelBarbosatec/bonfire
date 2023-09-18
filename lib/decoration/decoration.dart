@@ -8,13 +8,15 @@ import 'package:bonfire/bonfire.dart';
 /// player.
 ///
 /// You can use ImageSprite or Animation[FlameAnimation.Animation]
-class GameDecoration extends GameComponent
-    with UseSpriteAnimation, UseSprite, UseAssetsLoader {
+class GameDecoration extends AnimatedGameObject {
   GameDecoration({
-    required Vector2 position,
-    required Vector2 size,
+    required super.position,
+    required super.size,
     Sprite? sprite,
     SpriteAnimation? animation,
+    super.anchor,
+    super.angle,
+    super.lightingConfig,
   }) {
     this.sprite = sprite;
     setAnimation(animation);
@@ -23,8 +25,11 @@ class GameDecoration extends GameComponent
 
   GameDecoration.withSprite({
     required FutureOr<Sprite> sprite,
-    required Vector2 position,
-    required Vector2 size,
+    required super.position,
+    required super.size,
+    super.anchor,
+    super.angle,
+    super.lightingConfig,
   }) {
     loader?.add(AssetToLoad(sprite, (value) => this.sprite = value));
     applyBleedingPixel(position: position, size: size);
@@ -32,8 +37,11 @@ class GameDecoration extends GameComponent
 
   GameDecoration.withAnimation({
     required FutureOr<SpriteAnimation> animation,
-    required Vector2 position,
-    required Vector2 size,
+    required super.position,
+    required super.size,
+    super.anchor,
+    super.angle,
+    super.lightingConfig,
   }) {
     loader?.add(AssetToLoad(animation, (value) => setAnimation(value)));
     applyBleedingPixel(position: position, size: size);
