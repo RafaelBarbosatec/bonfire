@@ -1,0 +1,17 @@
+name: 🙋‍♂️ Ask a question
+description: Tell us what's on your mind
+title: "[question]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Having issues using this package?
+  - type: textarea
+    id: question
+    attributes:
+      label: How can we help?
+      description: Specific question regarding using this package.
+      placeholder: How do I...?
+    validations:
+      required: true
