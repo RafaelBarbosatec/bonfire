@@ -1,4 +1,6 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/core/app_routes.dart';
+import 'package:example/core/theme/app_colors.dart';
 import 'package:example/lpc/lpc_game.dart';
 import 'package:example/manual_map/game_manual_map.dart';
 import 'package:example/multi_scenario/multi_scenario.dart';
@@ -26,11 +28,25 @@ void main() async {
   BonfireInjector().put((i) => CritterController());
   BonfireInjector().putSingleton((i) => BarLifeController());
 
-  runApp(
-    const MaterialApp(
-      home: Menu(),
-    ),
-  );
+  runApp(const BonfireExamplesApp());
+}
+
+class BonfireExamplesApp extends StatelessWidget {
+  const BonfireExamplesApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primaryColor: AppColors.primary,
+        colorScheme: const ColorScheme.dark().copyWith(
+          primary: AppColors.primary,
+        ),
+        scaffoldBackgroundColor: AppColors.background,
+      ),
+      routes: AppRoutes.routes,
+    );
+  }
 }
 
 class Menu extends StatelessWidget {

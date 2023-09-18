@@ -24,6 +24,7 @@ dependencies:
   bonfire:
     path: ".."
   fast_noise: ^1.0.1
+  gif_view: ^0.4.0
 
 dev_dependencies:
   test: any
@@ -41,6 +42,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/
     - assets/images/
     - assets/images/platform/
     - assets/images/platform/fox/
