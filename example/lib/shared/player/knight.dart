@@ -80,6 +80,7 @@ class Knight extends SimplePlayer
 
   @override
   void die() {
+    barLifeController?.life = 0.0;
     removeFromParent();
     gameRef.add(
       GameDecoration.withSprite(
