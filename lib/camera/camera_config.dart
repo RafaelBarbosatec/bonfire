@@ -26,6 +26,8 @@ class CameraConfig {
 
   InitialMapZoomFitEnum initialMapZoomFit;
 
+  final Vector2? initPosition;
+
   CameraConfig({
     this.moveOnlyMapArea = false,
     this.startFollowPlayer = true,
@@ -34,6 +36,7 @@ class CameraConfig {
     this.target,
     this.speed = double.infinity,
     this.initialMapZoomFit = InitialMapZoomFitEnum.none,
+    this.initPosition,
     Vector2? movementWindow,
   }) : movementWindow = movementWindow ?? movementWindowDefault;
 }

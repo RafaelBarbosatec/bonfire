@@ -14,6 +14,9 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
     super.hudComponents,
     super.viewport,
   }) {
+    if (config.initPosition != null) {
+      position = config.initPosition!;
+    }
     viewfinder.zoom = config.zoom;
     viewfinder.angle = config.angle;
     if (config.target != null) {

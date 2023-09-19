@@ -2,6 +2,7 @@
 
 - `GameObject` improvements
 - `GameDecoration` improvements
+- Adds `initPosition` param in `CameraConfig`
 
 # 3.0.0-beta.14
 
