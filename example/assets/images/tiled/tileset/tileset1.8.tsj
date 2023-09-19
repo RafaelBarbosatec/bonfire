@@ -6,16 +6,100 @@
  "name":"0x72_DungeonTilesetII_v1.3",
  "spacing":0,
  "tilecount":1024,
- "tiledversion":"1.8.6",
+ "tiledversion":"1.9.0",
  "tileheight":16,
  "tiles":[
         {
-         "id":165,
-         "type":"above"
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":36
+                }, 
+                {
+                 "duration":100,
+                 "tileid":37
+                }, 
+                {
+                 "duration":100,
+                 "tileid":38
+                }],
+         "id":36
         }, 
         {
-         "id":197,
-         "type":"above"
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":68
+                }, 
+                {
+                 "duration":100,
+                 "tileid":69
+                }, 
+                {
+                 "duration":100,
+                 "tileid":70
+                }],
+         "id":68
+        }, 
+        {
+         "class":"above",
+         "id":165
+        }, 
+        {
+         "class":"above",
+         "id":197
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":353
+                }, 
+                {
+                 "duration":100,
+                 "tileid":354
+                }, 
+                {
+                 "duration":100,
+                 "tileid":355
+                }, 
+                {
+                 "duration":100,
+                 "tileid":356
+                }],
+         "id":353
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":595
+                }, 
+                {
+                 "duration":100,
+                 "tileid":596
+                }, 
+                {
+                 "duration":100,
+                 "tileid":597
+                }],
+         "id":595
+        }, 
+        {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":627
+                }, 
+                {
+                 "duration":100,
+                 "tileid":628
+                }, 
+                {
+                 "duration":100,
+                 "tileid":629
+                }],
+         "id":627
         }],
  "tilewidth":16,
  "type":"tileset",

@@ -2,6 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/home/widgets/home_content.dart';
 import 'package:example/pages/home/widgets/home_drawer.dart';
 import 'package:example/pages/map/terrain_builder/terrain_builder_page.dart';
+import 'package:example/pages/map/tiled/tiled_page.dart';
 import 'package:example/pages/mini_games/manual_map/game_manual_map.dart';
 import 'package:example/pages/mini_games/multi_scenario/multi_scenario.dart';
 import 'package:example/pages/mini_games/platform/platform_game.dart';
@@ -94,10 +95,15 @@ class _HomePageState extends State<HomePage> {
         name: 'Map',
         itens: [
           ItemDrawer(
-            name: 'TerrainBuilder',
+            name: 'Using tiled',
+            builder: (_) => const TiledPage(),
+            codeUrl: 'https://www.google.com.br',
+          ),
+          ItemDrawer(
+            name: 'Using matrix',
             builder: (_) => const TerrainBuilderPage(),
             codeUrl: 'https://www.google.com.br',
-          )
+          ),
         ],
       ),
       SectionDrawer(
