@@ -1,6 +1,13 @@
+import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/home/widgets/home_content.dart';
 import 'package:example/pages/home/widgets/home_drawer.dart';
 import 'package:example/pages/map/terrain_builder/terrain_builder_page.dart';
+import 'package:example/pages/mini_games/manual_map/game_manual_map.dart';
+import 'package:example/pages/mini_games/multi_scenario/multi_scenario.dart';
+import 'package:example/pages/mini_games/platform/platform_game.dart';
+import 'package:example/pages/mini_games/random_map/random_map_game.dart';
+import 'package:example/pages/mini_games/tiled_map/game_tiled_map.dart';
+import 'package:example/pages/mini_games/top_down_game/top_down_game.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -45,9 +52,16 @@ class _HomePageState extends State<HomePage> {
             Align(
               alignment: Alignment.topRight,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () => _launch(itemSelected!.codeUrl),
+                  style: const ButtonStyle(
+                    shape: MaterialStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                    ),
+                  ),
                   child: const Text(
                     'Source code',
                     style: TextStyle(
@@ -84,6 +98,43 @@ class _HomePageState extends State<HomePage> {
             builder: (_) => const TerrainBuilderPage(),
             codeUrl: 'https://www.google.com.br',
           )
+        ],
+      ),
+      SectionDrawer(
+        name: 'Mini games',
+        itens: [
+          ItemDrawer(
+            name: 'Map by Tiled',
+            builder: (_) => const GameTiledMap(),
+            codeUrl: 'https://www.google.com.br',
+          ),
+          ItemDrawer(
+            name: 'Topdown game',
+            builder: (_) => const TopDownGame(),
+            codeUrl: 'https://www.google.com.br',
+          ),
+          ItemDrawer(
+            name: 'Platform game',
+            builder: (_) => const PlatformGame(),
+            codeUrl: 'https://www.google.com.br',
+          ),
+          ItemDrawer(
+            name: 'Multi scenario game',
+            builder: (_) => const MultiScenario(),
+            codeUrl: 'https://www.google.com.br',
+          ),
+          ItemDrawer(
+            name: 'Random Map',
+            builder: (_) => RandomMapGame(
+              size: Vector2(100, 100),
+            ),
+            codeUrl: 'https://www.google.com.br',
+          ),
+          ItemDrawer(
+            name: 'Manual map game',
+            builder: (_) => const GameManualMap(),
+            codeUrl: 'https://www.google.com.br',
+          ),
         ],
       ),
     ];

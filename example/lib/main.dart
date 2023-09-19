@@ -1,18 +1,18 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/core/app_routes.dart';
 import 'package:example/core/theme/app_colors.dart';
-import 'package:example/lpc/lpc_game.dart';
-import 'package:example/manual_map/game_manual_map.dart';
-import 'package:example/multi_scenario/multi_scenario.dart';
-import 'package:example/platform/platform_game.dart';
-import 'package:example/random_map/random_map_game.dart';
+import 'package:example/pages/mini_games/lpc/lpc_game.dart';
+import 'package:example/pages/mini_games/manual_map/game_manual_map.dart';
+import 'package:example/pages/mini_games/multi_scenario/multi_scenario.dart';
+import 'package:example/pages/mini_games/platform/platform_game.dart';
+import 'package:example/pages/mini_games/random_map/random_map_game.dart';
 import 'package:example/shared/enemy/goblin_controller.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
 import 'package:example/shared/npc/critter/critter_controller.dart';
 import 'package:example/shared/player/knight_controller.dart';
-import 'package:example/simple_example/simple_example_game.dart';
-import 'package:example/tiled_map/game_tiled_map.dart';
-import 'package:example/top_down_game/top_down_game.dart';
+import 'package:example/pages/mini_games/simple_example/simple_example_game.dart';
+import 'package:example/pages/mini_games/tiled_map/game_tiled_map.dart';
+import 'package:example/pages/mini_games/top_down_game/top_down_game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

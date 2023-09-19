@@ -16,9 +16,10 @@ class HomeContent extends StatelessWidget {
               children: [
                 GifView.asset(
                   'assets/bonfire.gif',
-                  height: 200,
-                  width: 200,
+                  height: 100,
+                  width: 100,
                 ),
+                const SizedBox(height: 10),
                 Text(
                   'Whats is Bonfire?',
                   style: Theme.of(context).textTheme.headlineSmall,
@@ -31,6 +32,7 @@ class HomeContent extends StatelessWidget {
                       ),
                   textAlign: TextAlign.center,
                 ),
+                const SizedBox(height: kToolbarHeight),
               ],
             ),
           ),
