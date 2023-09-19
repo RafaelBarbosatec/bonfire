@@ -1,3 +1,4 @@
+import 'package:example/core/widgets/bonfire_version.dart';
 import 'package:flutter/material.dart';
 import 'package:gif_view/gif_view.dart';
 
@@ -37,27 +38,11 @@ class HomeContent extends StatelessWidget {
             ),
           ),
         ),
-        Align(
+        const Align(
           alignment: Alignment.bottomRight,
           child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  'Bonfire',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(width: 2),
-                Text(
-                  'v3',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.white.withOpacity(0.5),
-                      ),
-                ),
-              ],
-            ),
+            padding: EdgeInsets.all(16),
+            child: BonfireVersion(),
           ),
         ),
       ],

@@ -23,8 +23,7 @@ class ItemDrawerWidget extends StatelessWidget {
           onChange?.call(item);
         },
         child: Container(
-          color:
-              selected ? Theme.of(context).primaryColor.withOpacity(0.4) : null,
+          color: selected ? Theme.of(context).primaryColor : null,
           padding: padding ?? const EdgeInsets.all(16),
           child: Text(item.name),
         ),

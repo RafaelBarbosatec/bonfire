@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:example/core/theme/app_colors.dart';
-import 'package:example/pages/home/widgets/item_drawer_widget.dart';
+import 'package:example/core/widgets/bonfire_version.dart';
+import 'package:example/pages/home/widgets/section_drawer_widget.dart';
 import 'package:flutter/material.dart';
 
 class SectionDrawer {
@@ -44,53 +45,30 @@ class HomeDrawer extends StatelessWidget {
       color: AppColors.background,
       width: 220,
       child: ListView.builder(
-        itemCount: itens.length,
+        itemCount: itens.length + 1,
         itemBuilder: (context, index) {
-          var section = itens[index];
-          bool containTitle = section.name.isNotEmpty;
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (containTitle)
-                Container(
-                  color: Colors.black.withOpacity(0.2),
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    section.name,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+          if (index == 0) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(32),
+                    child: BonfireVersion(),
                   ),
                 ),
-              ...section.itens.map((e) {
-                return ItemDrawerWidget(
-                  padding: containTitle
-                      ? const EdgeInsets.only(
-                          top: 16,
-                          bottom: 16,
-                          right: 16,
-                          left: 32,
-                        )
-                      : null,
-                  onChange: (value) {
-                    if (Navigator.canPop(context)) {
-                      Navigator.pop(context);
-                    }
-                    onChange?.call(value);
-                  },
-                  item: e,
-                  selected: e.id == itemSelected?.id,
-                );
-              }).toList(),
-              if (containTitle)
                 Container(
-                  width: double.maxFinite,
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  height: 1,
                   color: Colors.white.withOpacity(0.2),
+                  height: 1,
                 )
-            ],
+              ],
+            );
+          }
+
+          return SectionDrawerWidget(
+            section: itens[index - 1],
+            itemSelected: itemSelected,
+            onChange: onChange,
           );
         },
       ),
