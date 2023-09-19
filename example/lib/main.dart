@@ -39,84 +39,86 @@ class Menu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.cyan[900],
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Center(
-              child: RichText(
-                text: const TextSpan(
-                  text: 'Bonfire',
-                  style: TextStyle(fontSize: 30, color: Colors.white),
-                  children: [
-                    TextSpan(
-                      text: '  v2.11.5',
-                      style: TextStyle(fontSize: 15, color: Colors.white),
-                    )
-                  ],
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Center(
+                child: RichText(
+                  text: const TextSpan(
+                    text: 'Bonfire',
+                    style: TextStyle(fontSize: 30, color: Colors.white),
+                    children: [
+                      TextSpan(
+                        text: '  v2.11.5',
+                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            SingleChildScrollView(
-              child: Wrap(
-                runSpacing: 20,
-                spacing: 20,
-                children: [
-                  _buildButton(context, 'Simple example', () {
-                    _navTo(context, const SimpleExampleGame());
-                  }),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _buildButton(context, 'Manual Map', () {
-                    _navTo(context, GameManualMap());
-                  }),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _buildButton(context, 'Random Map', () {
-                    _navTo(
-                      context,
-                      RandomMapGame(
-                        size: Vector2(150, 150),
-                      ),
-                    );
-                  }),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _buildButton(context, 'Tiled Map', () {
-                    _navTo(context, const GameTiledMap());
-                  }),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _buildButton(context, 'Top down game', () {
-                    _navTo(context, const TopDownGame());
-                  }),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  _buildButton(context, 'Multi Scenario', () {
-                    MultiScenario.prepare().then((_) {
-                      _navTo(context, const MultiScenario());
-                    });
-                  }),
-                  if (!kIsWeb) ...[
+              const SizedBox(
+                height: 40,
+              ),
+              SingleChildScrollView(
+                child: Wrap(
+                  runSpacing: 20,
+                  spacing: 20,
+                  children: [
+                    _buildButton(context, 'Simple example', () {
+                      _navTo(context, const SimpleExampleGame());
+                    }),
                     const SizedBox(
                       height: 10,
                     ),
-                    _buildButton(context, 'Dynamic spriteSheet', () {
-                      _navTo(context, const LPCGame());
+                    _buildButton(context, 'Manual Map', () {
+                      _navTo(context, GameManualMap());
                     }),
-                  ]
-                ],
-              ),
-            )
-          ],
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _buildButton(context, 'Random Map', () {
+                      _navTo(
+                        context,
+                        RandomMapGame(
+                          size: Vector2(150, 150),
+                        ),
+                      );
+                    }),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _buildButton(context, 'Tiled Map', () {
+                      _navTo(context, const GameTiledMap());
+                    }),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _buildButton(context, 'Top down game', () {
+                      _navTo(context, const TopDownGame());
+                    }),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _buildButton(context, 'Multi Scenario', () {
+                      MultiScenario.prepare().then((_) {
+                        _navTo(context, const MultiScenario());
+                      });
+                    }),
+                    if (!kIsWeb) ...[
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      _buildButton(context, 'Dynamic spriteSheet', () {
+                        _navTo(context, const LPCGame());
+                      }),
+                    ]
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: const SizedBox(
