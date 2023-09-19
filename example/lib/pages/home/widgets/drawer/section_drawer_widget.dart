@@ -1,5 +1,5 @@
-import 'package:example/pages/home/widgets/home_drawer.dart';
-import 'package:example/pages/home/widgets/item_drawer_widget.dart';
+import 'package:example/pages/home/widgets/drawer/home_drawer.dart';
+import 'package:example/pages/home/widgets/drawer/item_drawer_widget.dart';
 import 'package:flutter/material.dart';
 
 class SectionDrawerWidget extends StatefulWidget {

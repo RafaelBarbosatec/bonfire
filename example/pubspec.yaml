@@ -25,6 +25,7 @@ dependencies:
     path: ".."
   fast_noise: ^1.0.1
   gif_view: ^0.4.0
+  url_launcher: ^6.1.14
 
 dev_dependencies:
   test: any

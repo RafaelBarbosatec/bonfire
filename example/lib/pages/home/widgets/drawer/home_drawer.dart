@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:example/core/theme/app_colors.dart';
 import 'package:example/core/widgets/bonfire_version.dart';
-import 'package:example/pages/home/widgets/section_drawer_widget.dart';
+import 'package:example/pages/home/widgets/drawer/section_drawer_widget.dart';
 import 'package:flutter/material.dart';
 
 class SectionDrawer {

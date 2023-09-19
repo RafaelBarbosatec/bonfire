@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/pages/home/widgets/drawer/home_drawer.dart';
 import 'package:example/pages/home/widgets/home_content.dart';
-import 'package:example/pages/home/widgets/home_drawer.dart';
 import 'package:example/pages/map/terrain_builder/terrain_builder_page.dart';
 import 'package:example/pages/map/tiled/tiled_page.dart';
 import 'package:example/pages/mini_games/manual_map/game_manual_map.dart';
@@ -10,6 +10,7 @@ import 'package:example/pages/mini_games/random_map/random_map_game.dart';
 import 'package:example/pages/mini_games/tiled_map/game_tiled_map.dart';
 import 'package:example/pages/mini_games/top_down_game/top_down_game.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: const Text('Bonfire examples'),
+        title: const Text('Bonfire examples (Under construction)'),
       ),
       drawer: HomeDrawer(
         itemSelected: itemSelected,
@@ -97,12 +98,14 @@ class _HomePageState extends State<HomePage> {
           ItemDrawer(
             name: 'Using tiled',
             builder: (_) => const TiledPage(),
-            codeUrl: 'https://www.google.com.br',
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/map/tiled',
           ),
           ItemDrawer(
             name: 'Using matrix',
             builder: (_) => const TerrainBuilderPage(),
-            codeUrl: 'https://www.google.com.br',
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/map/terrain_builder',
           ),
         ],
       ),
@@ -112,39 +115,47 @@ class _HomePageState extends State<HomePage> {
           ItemDrawer(
             name: 'Map by Tiled',
             builder: (_) => const GameTiledMap(),
-            codeUrl: 'https://www.google.com.br',
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/tree/v3.0.0/example/lib/pages/mini_games',
           ),
           ItemDrawer(
             name: 'Topdown game',
             builder: (_) => const TopDownGame(),
-            codeUrl: 'https://www.google.com.br',
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/tree/v3.0.0/example/lib/pages/mini_games',
           ),
           ItemDrawer(
             name: 'Platform game',
             builder: (_) => const PlatformGame(),
-            codeUrl: 'https://www.google.com.br',
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/tree/v3.0.0/example/lib/pages/mini_games',
           ),
           ItemDrawer(
             name: 'Multi scenario game',
             builder: (_) => const MultiScenario(),
-            codeUrl: 'https://www.google.com.br',
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/tree/v3.0.0/example/lib/pages/mini_games',
           ),
           ItemDrawer(
             name: 'Random Map',
             builder: (_) => RandomMapGame(
               size: Vector2(100, 100),
             ),
-            codeUrl: 'https://www.google.com.br',
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/tree/v3.0.0/example/lib/pages/mini_games',
           ),
           ItemDrawer(
             name: 'Manual map game',
             builder: (_) => const GameManualMap(),
-            codeUrl: 'https://www.google.com.br',
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/tree/v3.0.0/example/lib/pages/mini_games',
           ),
         ],
       ),
     ];
   }
 
-  _launch(String codeUrl) {}
+  _launch(String codeUrl) {
+    launchUrl(Uri.parse(codeUrl));
+  }
 }
