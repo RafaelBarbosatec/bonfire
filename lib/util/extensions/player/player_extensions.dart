@@ -54,9 +54,6 @@ extension PlayerExtensions on Player {
 
   void simpleAttackRange({
     required Future<SpriteAnimation> animationRight,
-    required Future<SpriteAnimation> animationLeft,
-    required Future<SpriteAnimation> animationUp,
-    required Future<SpriteAnimation> animationDown,
     Future<SpriteAnimation>? animationDestroy,
     required Vector2 size,
     Vector2? destroySize,
