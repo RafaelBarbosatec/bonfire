@@ -43,34 +43,38 @@ class HomeDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.background,
-      width: 220,
-      child: ListView.builder(
-        itemCount: itens.length + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(32),
-                    child: BonfireVersion(),
-                  ),
-                ),
-                Container(
-                  color: Colors.white.withOpacity(0.2),
-                  height: 1,
-                )
-              ],
-            );
-          }
+      child: SafeArea(
+        child: SizedBox(
+          width: 220,
+          child: ListView.builder(
+            itemCount: itens.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(32),
+                        child: BonfireVersion(),
+                      ),
+                    ),
+                    Container(
+                      color: Colors.white.withOpacity(0.2),
+                      height: 1,
+                    )
+                  ],
+                );
+              }
 
-          return SectionDrawerWidget(
-            section: itens[index - 1],
-            itemSelected: itemSelected,
-            onChange: onChange,
-          );
-        },
+              return SectionDrawerWidget(
+                section: itens[index - 1],
+                itemSelected: itemSelected,
+                onChange: onChange,
+              );
+            },
+          ),
+        ),
       ),
     );
   }
