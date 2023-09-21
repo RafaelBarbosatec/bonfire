@@ -109,33 +109,33 @@ class LPCSpriteSheetLoader {
     return SimpleDirectionAnimation(
       idleRight: image.getAnimation(
         size: size,
-        count: 1,
-        startDy: (size.y * 11).toInt(),
+        amount: 1,
+        position: Vector2(0, size.y * 11),
       ),
       idleUp: image.getAnimation(
         size: size,
-        count: 1,
-        startDy: (size.y * 8).toInt(),
+        amount: 1,
+        position: Vector2(0, size.y * 8),
       ),
       idleDown: image.getAnimation(
         size: size,
-        count: 1,
-        startDy: (size.y * 10).toInt(),
+        amount: 1,
+        position: Vector2(0, size.y * 10),
       ),
       runRight: image.getAnimation(
         size: size,
-        count: 9,
-        startDy: (size.y * 11).toInt(),
+        amount: 9,
+        position: Vector2(0, size.y * 11),
       ),
       runUp: image.getAnimation(
         size: size,
-        count: 9,
-        startDy: (size.y * 8).toInt(),
+        amount: 9,
+        position: Vector2(0, size.y * 8),
       ),
       runDown: image.getAnimation(
         size: size,
-        count: 9,
-        startDy: (size.y * 10).toInt(),
+        amount: 9,
+        position: Vector2(0, size.y * 10),
       ),
     );
   }

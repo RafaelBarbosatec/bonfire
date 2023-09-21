@@ -91,13 +91,17 @@ mixin DragGesture on GameComponent {
     return super.handlerPointerCancel(event);
   }
 
-  // If return 'true' this event is not relay to others components.
+  // Called when star drag gesture in the component
+  // If return 'true' this event is not relay to others components.(default = false)
   bool onStartDrag(int pointer, Vector2 position) {
     return false;
   }
 
+  // Called when component is moved
   void onMoveDrag(int pointer, Vector2 position) {}
+  // Called when component finish drag
   void onEndDrag(int pointer) {}
+  // Called when drag is canceled
   void onCancelDrag(int pointer) {}
 
   bool get receiveInteraction => _pointer != -1;

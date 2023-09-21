@@ -18,27 +18,20 @@ export 'player/rotation_player_extensions.dart';
 extension BonfireImageExtension on Image {
   SpriteAnimation getAnimation({
     required Vector2 size,
-    required double count,
-    int startDx = 0,
-    int startDy = 0,
+    required int amount,
+    Vector2? position,
     double stepTime = 0.1,
     bool loop = true,
   }) {
-    List<Sprite> spriteList = [];
-    for (int i = 0; i < count; i++) {
-      spriteList.add(Sprite(
-        this,
-        srcPosition: Vector2(
-          (startDx + (i * size.x)).toDouble(),
-          startDy.toDouble(),
-        ),
-        srcSize: size,
-      ));
-    }
-    return SpriteAnimation.spriteList(
-      spriteList,
-      loop: loop,
-      stepTime: stepTime,
+    return SpriteAnimation.fromFrameData(
+      this,
+      SpriteAnimationData.sequenced(
+        amount: amount,
+        stepTime: stepTime,
+        textureSize: size,
+        loop: loop,
+        texturePosition: position,
+      ),
     );
   }
 
