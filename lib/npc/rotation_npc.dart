@@ -56,4 +56,10 @@ class RotationNpc extends Npc with UseSpriteAnimation, UseAssetsLoader {
     await super.onLoad();
     idle();
   }
+
+  @override
+  void onMount() {
+    anchor = Anchor.center;
+    super.onMount();
+  }
 }
