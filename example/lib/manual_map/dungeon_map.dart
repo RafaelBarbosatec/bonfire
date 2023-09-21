@@ -20,48 +20,56 @@ class DungeonMap {
   static const String floor_3 = 'tile/floor_3.png';
   static const String floor_4 = 'tile/floor_4.png';
 
+  static void generateMap(
+    List<TileModel> tileList,
+    int indexRow,
+    int indexColumn,
+    String pngImage,
+  ) {
+    tileList.add(
+      TileModel(
+        sprite: TileModelSprite(path: pngImage),
+        x: indexColumn.toDouble(),
+        y: indexRow.toDouble(),
+        collisions: [
+          CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
+        ],
+        width: tileSize,
+        height: tileSize,
+      ),
+    );
+  }
+
   static WorldMap map() {
     List<TileModel> tileList = [];
     List.generate(35, (indexRow) {
       List.generate(70, (indexColumn) {
         if (indexRow == 3 && indexColumn > 2 && indexColumn < 30) {
-          tileList.add(TileModel(
-            sprite: TileModelSprite(path: wallBottom),
-            x: indexColumn.toDouble(),
-            y: indexRow.toDouble(),
-            collisions: [
-              CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
-            ],
-            width: tileSize,
-            height: tileSize,
-          ));
+          generateMap(
+            tileList,
+            indexRow,
+            indexColumn,
+            wallBottom,
+          );
           return;
         }
         if (indexRow == 4 && indexColumn > 2 && indexColumn < 30) {
-          tileList.add(TileModel(
-            sprite: TileModelSprite(path: wall),
-            x: indexColumn.toDouble(),
-            y: indexRow.toDouble(),
-            collisions: [
-              CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
-            ],
-            width: tileSize,
-            height: tileSize,
-          ));
+          generateMap(
+            tileList,
+            indexRow,
+            indexColumn,
+            wall,
+          );
           return;
         }
 
         if (indexRow == 9 && indexColumn > 2 && indexColumn < 30) {
-          tileList.add(TileModel(
-            sprite: TileModelSprite(path: wallTop),
-            x: indexColumn.toDouble(),
-            y: indexRow.toDouble(),
-            collisions: [
-              CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
-            ],
-            width: tileSize,
-            height: tileSize,
-          ));
+          generateMap(
+            tileList,
+            indexRow,
+            indexColumn,
+            wallTop,
+          );
           return;
         }
 
@@ -82,41 +90,29 @@ class DungeonMap {
         }
 
         if (indexRow > 3 && indexRow < 9 && indexColumn == 2) {
-          tileList.add(TileModel(
-            sprite: TileModelSprite(path: wallLeft),
-            x: indexColumn.toDouble(),
-            y: indexRow.toDouble(),
-            collisions: [
-              CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
-            ],
-            width: tileSize,
-            height: tileSize,
-          ));
+          generateMap(
+            tileList,
+            indexRow,
+            indexColumn,
+            wallLeft,
+          );
         }
         if (indexRow == 9 && indexColumn == 2) {
-          tileList.add(TileModel(
-            sprite: TileModelSprite(path: wallBottomLeft),
-            x: indexColumn.toDouble(),
-            y: indexRow.toDouble(),
-            collisions: [
-              CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
-            ],
-            width: tileSize,
-            height: tileSize,
-          ));
+          generateMap(
+            tileList,
+            indexRow,
+            indexColumn,
+            wallBottomLeft,
+          );
         }
 
         if (indexRow > 3 && indexRow < 9 && indexColumn == 30) {
-          tileList.add(TileModel(
-            sprite: TileModelSprite(path: wallRight),
-            x: indexColumn.toDouble(),
-            y: indexRow.toDouble(),
-            collisions: [
-              CollisionArea.rectangle(size: Vector2(tileSize, tileSize))
-            ],
-            width: tileSize,
-            height: tileSize,
-          ));
+          generateMap(
+            tileList,
+            indexRow,
+            indexColumn,
+            wallRight,
+          );
         }
       });
     });

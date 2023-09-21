@@ -1,6 +1,7 @@
 # [2.12.8]
 - Update README.
 - Add an option for using to enable diagonal input events on `KeyboardConfig`.
+- Fix `manual_map`'s redundant code.
 
 # [2.12.7]
 - Fix issue [417](https://github.com/RafaelBarbosatec/bonfire/issues/417). Thanks [Matt El Mouktafi](https://github.com/mel-mouk)
