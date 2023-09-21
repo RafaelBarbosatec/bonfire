@@ -1,5 +1,5 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/pages/mini_games/platform/fox_player.dart';
+import 'package:example/pages/player/platform/simple_fox_player.dart';
 import 'package:flutter/widgets.dart';
 
 class PlatformPlayerPage extends StatelessWidget {
@@ -22,7 +22,7 @@ class PlatformPlayerPage extends StatelessWidget {
           ),
         ],
       ),
-      player: FoxPlayer(
+      player: SimpleFoxPlayer(
         position: Vector2(tileSize * 7, tileSize * 3),
       ),
       cameraConfig: CameraConfig(
