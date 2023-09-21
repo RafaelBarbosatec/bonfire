@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/shared/decoration/spikes.dart';
 import 'package:flutter/widgets.dart';
 
 class TiledPage extends StatelessWidget {
@@ -9,10 +10,18 @@ class TiledPage extends StatelessWidget {
     const tileSize = 16.0;
     return BonfireWidget(
       joystick: Joystick(directional: JoystickDirectional()),
-      map: WorldMapByTiled('tiled/tiled_example.tmj'),
+      map: WorldMapByTiled(
+        'tiled/tiled_example.tmj',
+        objectsBuilder: {
+          'spikes': (props) => Spikes(
+                props.position,
+                size: props.size,
+              ),
+        },
+      ),
       cameraConfig: CameraConfig(
         zoom: getZoomFromMaxVisibleTile(context, tileSize, 30),
-        initPosition: Vector2(tileSize * 10, tileSize * 5),
+        initPosition: Vector2(tileSize * 5, tileSize * 5),
       ),
     );
   }

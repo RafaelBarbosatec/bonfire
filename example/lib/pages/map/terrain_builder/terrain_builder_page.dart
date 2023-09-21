@@ -7,6 +7,7 @@ class TerrainBuilderPage extends StatelessWidget {
   final double TILE_WATER = 0;
   final double TILE_SAND = 1;
   final double TILE_GRASS = 2;
+  final tileSize = 16.0;
   const TerrainBuilderPage({Key? key}) : super(key: key);
 
   @override
@@ -29,12 +30,16 @@ class TerrainBuilderPage extends StatelessWidget {
         ],
         builder: _builder,
       ),
+      cameraConfig: CameraConfig(
+        zoom: getZoomFromMaxVisibleTile(context, tileSize, 30),
+        initPosition: Vector2(tileSize * 5, tileSize * 5),
+      ),
     );
   }
 
   TileModel _builder(ItemMatrixProperties props) {
     return TerrainBuilder(
-      tileSize: 32,
+      tileSize: tileSize,
       terrainList: [
         MapTerrain(
           value: TILE_WATER,

@@ -9,6 +9,8 @@ import 'package:example/pages/mini_games/platform/platform_game.dart';
 import 'package:example/pages/mini_games/random_map/random_map_game.dart';
 import 'package:example/pages/mini_games/tiled_map/game_tiled_map.dart';
 import 'package:example/pages/mini_games/top_down_game/top_down_game.dart';
+import 'package:example/pages/player/platform/platform_player_page.dart';
+import 'package:example/pages/player/simple/simple_player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -96,7 +98,7 @@ class _HomePageState extends State<HomePage> {
         name: 'Map',
         itens: [
           ItemDrawer(
-            name: 'Using tiled',
+            name: 'Using Tiled',
             builder: (_) => const TiledPage(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/map/tiled',
@@ -107,6 +109,29 @@ class _HomePageState extends State<HomePage> {
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/map/terrain_builder',
           ),
+        ],
+      ),
+      SectionDrawer(
+        name: 'Player',
+        itens: [
+          ItemDrawer(
+            name: 'SimplePlayer',
+            builder: (_) => const SimplePlayerPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/player/simple',
+          ),
+          ItemDrawer(
+            name: 'RotationPlayer',
+            builder: (_) => const SimplePlayerPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/player/rotation',
+          ),
+          ItemDrawer(
+            name: 'PlatformPlayer',
+            builder: (_) => const PlatformPlayerPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/player/platform',
+          )
         ],
       ),
       SectionDrawer(

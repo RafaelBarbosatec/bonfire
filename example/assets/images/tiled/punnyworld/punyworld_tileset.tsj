@@ -1,0 +1,14 @@
+{ "columns":27,
+ "image":"punyworld_tileset.png",
+ "imageheight":1040,
+ "imagewidth":432,
+ "margin":0,
+ "name":"punyworld_tileset",
+ "spacing":0,
+ "tilecount":1755,
+ "tiledversion":"1.9.0",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.8"
+}

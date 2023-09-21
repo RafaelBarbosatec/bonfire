@@ -55,4 +55,7 @@ mixin Sensor<T extends GameComponent> on GameComponent {
     }
     super.onCollisionEnd(other);
   }
+
+  @override
+  int get priority => LayerPriority.MAP + 1;
 }

@@ -55,6 +55,7 @@ flutter:
     - assets/images/tile_random/
     - assets/images/tiled/
     - assets/images/tiled/top_down/
+    - assets/images/tiled/punnyworld/
     - assets/images/tiled/tileset/
     - assets/images/itens/
     - assets/images/lpc/body/
