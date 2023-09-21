@@ -20,7 +20,7 @@ mixin Pushable on Movement {
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if (enablePushable) {
+    if (enablePushable && other is! Sensor) {
       if (other is GameComponent) {
         GameComponent component = other;
         if (component is Movement && onPush(component)) {
