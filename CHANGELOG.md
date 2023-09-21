@@ -1,4 +1,4 @@
-# NEXT
+# 3.0.0-beta.15
 
 - `GameObject` improvements
 - `GameDecoration` improvements

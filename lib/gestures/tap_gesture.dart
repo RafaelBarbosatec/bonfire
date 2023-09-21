@@ -71,7 +71,7 @@ mixin TapGesture on GameComponent {
   // It's called when happen tap in the component
   void onTap();
 
-   // It's called when happen tap down in the screen
+  // It's called when happen tap down in the screen
   void onTapDownScreen(int pointer, Vector2 position) {}
   // It's called when happen tap up in the screen
   void onTapUpScreen(int pointer, Vector2 position) {}
