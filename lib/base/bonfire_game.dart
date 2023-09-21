@@ -1,7 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
 import 'dart:async';
-import 'dart:math';
 
 import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/base/bonfire_game_interface.dart';
@@ -16,6 +15,7 @@ import 'package:flutter/widgets.dart';
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends BaseGame implements BonfireGameInterface {
   static const INTERVAL_UPDATE_ORDER = 500;
+  static const INTERVAL_OPTIMIZE_TREE = 5001;
 
   /// Context used to access all Flutter power in your game.
   @override
@@ -59,6 +59,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   final List<GameComponent> _visibleComponents = List.empty(growable: true);
   final List<ShapeHitbox> _visibleCollisions = List.empty(growable: true);
   late IntervalTick _intervalUpdateOder;
+  late IntervalTick _intervalOprimizeTree;
   late ColorFilterComponent _colorFilterComponent;
   late LightingComponent _lighting;
 
@@ -122,7 +123,11 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
-      onTick: updateOrderPriorityMicrotask,
+      onTick: _updateOrderPriorityMicrotask,
+    );
+    _intervalOprimizeTree = IntervalTick(
+      INTERVAL_OPTIMIZE_TREE,
+      onTick: _optimizeColisionTree,
     );
 
     world = World(
@@ -148,13 +153,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     _joystickController?.addObserver(
       player ?? JoystickMapExplorer(bonfireCamera),
     );
-  }
-
-  void updateOrderPriorityMicrotask() {
-    if (_shouldUpdatePriority) {
-      _shouldUpdatePriority = false;
-      scheduleMicrotask(_updateOrderPriority);
-    }
   }
 
   @override
@@ -184,7 +182,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
         map.size.x.ceilToDouble() + map.tileSize * 2,
         map.size.y.ceilToDouble() + map.tileSize * 2,
       ),
-      minimumDistance: max(canvasSize.x, canvasSize.y) / 6,
     );
   }
 
@@ -192,6 +189,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   void update(double dt) {
     super.update(dt);
     _intervalUpdateOder.update(dt);
+    _intervalOprimizeTree.update(dt);
   }
 
   @override
@@ -393,5 +391,18 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       ignoreHitboxes: ignoreHitboxes,
       out: out,
     );
+  }
+
+  void _optimizeColisionTree() {
+    scheduleMicrotask(
+      () => collisionDetection.broadphase.tree.optimize(),
+    );
+  }
+
+  void _updateOrderPriorityMicrotask() {
+    if (_shouldUpdatePriority) {
+      _shouldUpdatePriority = false;
+      scheduleMicrotask(_updateOrderPriority);
+    }
   }
 }

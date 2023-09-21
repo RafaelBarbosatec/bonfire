@@ -4,6 +4,7 @@
 - `GameDecoration` improvements
 - Adds `initPosition` param in `CameraConfig`
 - Adds `replacePlatformAnimation` method in `PlatformPlayer`
+- Collision system improvements.
 
 # 3.0.0-beta.14
 
