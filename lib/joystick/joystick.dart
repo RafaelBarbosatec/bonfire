@@ -14,10 +14,14 @@ class KeyboardConfig {
   /// You can pass specific Keys accepted. If null accept all keys
   final List<LogicalKeyboardKey>? acceptedKeys;
 
+  /// Use to enable diagonal input events
+  final bool enableDiagonalInput;
+
   KeyboardConfig({
     this.enable = true,
     this.keyboardDirectionalType = KeyboardDirectionalType.arrows,
     this.acceptedKeys,
+    this.enableDiagonalInput = true,
   }) {
     if (acceptedKeys != null) {
       switch (keyboardDirectionalType) {
@@ -176,7 +180,7 @@ class Joystick extends JoystickController {
       final currentKeyboardKeys = _getDirectionlKeysPressed(keysPressed);
       if (currentKeyboardKeys.isNotEmpty) {
         _directionalIsIdle = false;
-        if (currentKeyboardKeys.length > 1) {
+        if (keyboardConfig.enableDiagonalInput && currentKeyboardKeys.length > 1) {
           _sendTwoDirection(
             currentKeyboardKeys.first,
             currentKeyboardKeys[1],
