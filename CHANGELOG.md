@@ -3,6 +3,7 @@
 - Add an option for using to enable diagonal input events on `KeyboardConfig` and `JoystickDirectional`.
 - `BonfireCamera` Improvements
 - reorganized the input classes
+- `TileModel` improvements
 
 
 # 3.0.0-beta.15

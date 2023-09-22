@@ -97,7 +97,7 @@ class TileModel {
   final double width;
   final double height;
   final double opacity;
-  final String? type;
+  final String? tileClass;
   final Map<String, dynamic>? properties;
   final TileModelSprite? sprite;
   final TileModelAnimation? animation;
@@ -115,7 +115,7 @@ class TileModel {
     this.offsetY = 0.0,
     required this.width,
     required this.height,
-    this.type,
+    this.tileClass,
     this.properties,
     this.sprite,
     this.color,
@@ -143,7 +143,7 @@ class TileModel {
           offsetX: offsetX,
           offsetY: offsetY,
           collisions: collisions,
-          type: type,
+          tileClass: tileClass,
           properties: properties,
           color: color,
         );
@@ -156,7 +156,7 @@ class TileModel {
           size: Vector2(width, height),
           offsetX: offsetX,
           offsetY: offsetY,
-          type: type,
+          tileClass: tileClass,
           properties: properties,
           color: color,
         );
@@ -175,7 +175,7 @@ class TileModel {
           offsetX: offsetX,
           offsetY: offsetY,
           collisions: collisions,
-          type: type,
+          tileClass: tileClass,
           properties: properties,
         );
         _setOtherParams(tile);
@@ -190,7 +190,7 @@ class TileModel {
           size: Vector2(width, height),
           offsetX: offsetX,
           offsetY: offsetY,
-          type: type,
+          tileClass: tileClass,
           properties: properties,
         );
         _setOtherParams(tile);

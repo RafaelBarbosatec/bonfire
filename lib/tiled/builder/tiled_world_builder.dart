@@ -189,7 +189,7 @@ class TiledWorldBuilder {
         animation: data.animation,
         sprite: data.sprite,
         properties: data.properties,
-        type: data.type,
+        tileClass: data.type ?? data.tileClass,
         angle: data.angle,
         opacity: opacity,
         isFlipVertical: data.isFlipVertical,

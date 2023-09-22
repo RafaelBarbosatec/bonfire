@@ -4,7 +4,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 
 class Tile extends GameComponent with UseAssetsLoader {
-  final String? type;
+  final String? tileClass;
   late Vector2 _startPosition;
   Vector2 _lastParentPosition = Vector2.zero();
   String id = '';
@@ -16,7 +16,7 @@ class Tile extends GameComponent with UseAssetsLoader {
     required String spritePath,
     required Vector2 position,
     required Vector2 size,
-    this.type,
+    this.tileClass,
     this.color,
     Map<String, dynamic>? properties,
     double offsetX = 0,
@@ -42,7 +42,7 @@ class Tile extends GameComponent with UseAssetsLoader {
     required Sprite? sprite,
     required Vector2 position,
     required Vector2 size,
-    this.type,
+    this.tileClass,
     Map<String, dynamic>? properties,
     double offsetX = 0,
     double offsetY = 0,
@@ -65,7 +65,7 @@ class Tile extends GameComponent with UseAssetsLoader {
     required ControlledUpdateAnimation animation,
     required Vector2 position,
     required Vector2 size,
-    this.type,
+    this.tileClass,
     Map<String, dynamic>? properties,
     double offsetX = 0,
     double offsetY = 0,

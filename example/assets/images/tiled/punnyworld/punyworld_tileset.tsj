@@ -8,6 +8,11 @@
  "tilecount":1755,
  "tiledversion":"1.9.0",
  "tileheight":16,
+ "tiles":[
+        {
+         "class":"grass",
+         "id":0
+        }],
  "tilewidth":16,
  "type":"tileset",
  "version":"1.8"

@@ -29,7 +29,7 @@ mixin TileRecognizer on GameComponent {
     if (!hasGameRef) return [];
     final map = gameRef.map;
     if (map.getRendered().isNotEmpty) {
-      return tileListBelow().map<String>((e) => e.type!).toList();
+      return tileListBelow().map<String>((e) => e.tileClass!).toList();
     }
     return [];
   }
