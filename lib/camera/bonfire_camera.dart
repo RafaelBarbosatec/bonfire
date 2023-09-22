@@ -139,6 +139,8 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
         owner: viewfinder,
         maxSpeed: config.speed,
         movementWindow: config.movementWindow,
+        horizontalOnly: horizontalOnly,
+        verticalOnly: verticalOnly,
       ),
     );
     if (snap) {
@@ -211,7 +213,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
       case InitialMapZoomFitEnum.fitHeight:
         zoom = sizeScreen.y / gameRef.map.getMapSize().y;
         break;
-      case InitialMapZoomFitEnum.cover:
+      case InitialMapZoomFitEnum.fit:
         double minScreenDimension = min(sizeScreen.x, sizeScreen.y);
         double minMapDimension = min(
           gameRef.map.getMapSize().x,

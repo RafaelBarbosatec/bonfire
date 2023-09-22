@@ -1,8 +1,6 @@
 // ignore_for_file: unnecessary_this
 
-import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/lighting/lighting_config.dart';
-import 'package:bonfire/lighting/lighting_type.dart';
+import 'package:bonfire/bonfire.dart';
 
 /// Mixin used to configure lighting in your component
 mixin Lighting on GameComponent {

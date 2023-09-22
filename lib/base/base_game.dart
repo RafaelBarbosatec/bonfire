@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/bonfire_camera.dart';
-import 'package:bonfire/mixins/keyboard_listener.dart';
+import 'package:bonfire/input/keyboard_listener.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';

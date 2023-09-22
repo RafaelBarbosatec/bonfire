@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 
-enum InitialMapZoomFitEnum { none, fitWidth, fitHeight, cover }
+enum InitialMapZoomFitEnum { none, fitWidth, fitHeight, fit }
 
 /// Class use to configure camera behavior.
 class CameraConfig {

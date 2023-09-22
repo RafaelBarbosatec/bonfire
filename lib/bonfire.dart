@@ -12,7 +12,7 @@ export 'package:bonfire/forces/forces_2d.dart';
 export 'package:bonfire/game_interface/game_interface.dart';
 export 'package:bonfire/game_interface/interface_component.dart';
 export 'package:bonfire/game_interface/text_interface_component.dart';
-export 'package:bonfire/gestures/gestures.dart';
+export 'package:bonfire/input/input.dart';
 export 'package:bonfire/joystick/joystick.dart';
 export 'package:bonfire/joystick/joystick_action.dart';
 export 'package:bonfire/joystick/joystick_controller.dart';

@@ -19,16 +19,25 @@ class MyFollowBehavior extends FollowBehavior {
   void update(double dt) {
     var delta = target.position - owner.position;
 
-    if (delta.x.abs() < movementWindow.x) {
-      delta.x = 0;
+    if (horizontalOnly && !verticalOnly) {
+      delta = _moveHorizontal(delta);
+    } else if (!horizontalOnly && verticalOnly) {
+      delta = _moveVertical(delta);
     } else {
-      if (delta.x > 0) {
-        delta.x -= movementWindow.x;
-      } else {
-        delta.x += movementWindow.x;
-      }
+      delta = _moveHorizontal(delta);
+      delta = _moveVertical(delta);
     }
 
+    if (delta.isZero()) return;
+    if (delta.length <= maxSpeed * dt) {
+      owner.position = owner.position.clone()..add(delta);
+    } else {
+      owner.position = owner.position.clone()
+        ..lerp(owner.position + delta, dt * maxSpeed);
+    }
+  }
+
+  Vector2 _moveVertical(Vector2 delta) {
     if (delta.y.abs() < movementWindow.y) {
       delta.y = 0;
     } else {
@@ -38,13 +47,20 @@ class MyFollowBehavior extends FollowBehavior {
         delta.y += movementWindow.y;
       }
     }
-    if (delta.isZero()) return;
-    if (delta.length <= maxSpeed * dt) {
-      owner.position = owner.position.clone()..add(delta);
+    return delta;
+  }
+
+  Vector2 _moveHorizontal(Vector2 delta) {
+    if (delta.x.abs() < movementWindow.x) {
+      delta.x = 0;
     } else {
-      owner.position = owner.position.clone()
-        ..lerp(owner.position + delta, dt * maxSpeed);
+      if (delta.x > 0) {
+        delta.x -= movementWindow.x;
+      } else {
+        delta.x += movementWindow.x;
+      }
     }
+    return delta;
   }
 }
 

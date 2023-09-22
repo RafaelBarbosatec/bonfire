@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 enum MouseButton { left, right, middle, unknow }
 
 /// Mixin responsible to listen mouse gestures
-mixin MouseGesture on GameComponent {
+mixin MouseListener on GameComponent {
   bool enableMouseGesture = true;
   int _pointer = -1;
   bool _hoverEnter = false;
