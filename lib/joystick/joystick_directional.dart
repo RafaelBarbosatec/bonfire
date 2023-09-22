@@ -32,6 +32,9 @@ class JoystickDirectional {
 
   AssetsLoader? _loader = AssetsLoader();
 
+  /// Use to enable diagonal input events
+  final bool enableDiagonalInput;
+
   JoystickDirectional({
     Future<Sprite>? spriteBackgroundDirectional,
     Future<Sprite>? spriteKnobDirectional,
@@ -39,6 +42,7 @@ class JoystickDirectional {
     this.margin = const EdgeInsets.only(left: 100, bottom: 100),
     this.size = 80,
     this.color = Colors.blueGrey,
+    this.enableDiagonalInput = true,
   }) {
     _loader?.add(AssetToLoad(spriteBackgroundDirectional, (value) {
       _backgroundSprite = value;
@@ -169,7 +173,7 @@ class JoystickDirectional {
         ));
       }
 
-      if (degrees > 22.5 && degrees <= 67.5) {
+      if (enableDiagonalInput && degrees > 22.5 && degrees <= 67.5) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
           intensity: intensity,
@@ -185,7 +189,7 @@ class JoystickDirectional {
         ));
       }
 
-      if (degrees > 112.5 && degrees <= 157.5) {
+      if (enableDiagonalInput && degrees > 112.5 && degrees <= 157.5) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
           intensity: intensity,
@@ -202,7 +206,7 @@ class JoystickDirectional {
         ));
       }
 
-      if (degrees > -157.5 && degrees <= -112.5) {
+      if (enableDiagonalInput && degrees > -157.5 && degrees <= -112.5) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_UP_LEFT,
           intensity: intensity,
@@ -218,7 +222,7 @@ class JoystickDirectional {
         ));
       }
 
-      if (degrees > -67.5 && degrees <= -22.5) {
+      if (enableDiagonalInput && degrees > -67.5 && degrees <= -22.5) {
         _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
           intensity: intensity,
