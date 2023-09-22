@@ -180,7 +180,8 @@ class Joystick extends JoystickController {
       final currentKeyboardKeys = _getDirectionlKeysPressed(keysPressed);
       if (currentKeyboardKeys.isNotEmpty) {
         _directionalIsIdle = false;
-        if (keyboardConfig.enableDiagonalInput && currentKeyboardKeys.length > 1) {
+        if (keyboardConfig.enableDiagonalInput &&
+            currentKeyboardKeys.length > 1) {
           _sendTwoDirection(
             currentKeyboardKeys.first,
             currentKeyboardKeys[1],
