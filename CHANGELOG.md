@@ -5,7 +5,7 @@
 - Adds `initPosition` param in `CameraConfig`
 - Adds `replacePlatformAnimation` method in `PlatformPlayer`
 - Collision system improvements.
-- Add an option for using to enable diagonal input events on `KeyboardConfig`.
+- Add an option for using to enable diagonal input events on `KeyboardConfig` and `JoystickDirectional`.
 
 # 3.0.0-beta.14
 
