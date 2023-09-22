@@ -1,3 +1,5 @@
+import 'package:bonfire/bonfire.dart';
+import 'package:example/pages/player/rotation/human_topdown_player.dart';
 import 'package:flutter/widgets.dart';
 
 class RotationPlayerPage extends StatelessWidget {
@@ -5,8 +7,21 @@ class RotationPlayerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Under construction'),
+    const tileSize = 16.0;
+    return BonfireWidget(
+      map: WorldMapByTiled(
+        'tiled/simple_topdown/simple.tmj',
+      ),
+      joystick: Joystick(
+        keyboardConfig: KeyboardConfig(),
+        directional: JoystickDirectional(),
+      ),
+      player: HumanTopdownPlayer(
+        position: Vector2(5 * tileSize, 5 * tileSize),
+      ),
+      cameraConfig: CameraConfig(
+        zoom: getZoomFromMaxVisibleTile(context, tileSize, 20),
+      ),
     );
   }
 }

@@ -4,6 +4,8 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
   SpriteAnimation? animIdle;
   SpriteAnimation? animRun;
 
+  bool _isRunning = false;
+
   RotationPlayer({
     required Vector2 position,
     required Vector2 size,
@@ -29,10 +31,12 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
   @override
   void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
     super.onJoystickChangeDirectional(event);
-    if (event.directional != JoystickMoveDirectional.IDLE && !isDead) {
-      setAnimation(animRun);
-    } else {
+    if (event.directional == JoystickMoveDirectional.IDLE) {
+      _isRunning = false;
       setAnimation(animIdle);
+    } else if (!isDead && !_isRunning) {
+      _isRunning = true;
+      setAnimation(animRun);
     }
   }
 
