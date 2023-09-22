@@ -1,4 +1,5 @@
-# Next
+# 3.0.0-beta.16
+
 - Fix `RotationPlayer` animation bug.
 - Add an option for using to enable diagonal input events on `KeyboardConfig` and `JoystickDirectional`.
 - `BonfireCamera` Improvements
