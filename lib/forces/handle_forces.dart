@@ -55,7 +55,7 @@ mixin HandleForces on Movement {
     Vector2 currentVelocity,
     double dt,
   ) {
-    return mergeForces.whereType<ResistenceForce2D>().fold<Vector2>(
+    return mergeForces.whereType<ResistanceForce2D>().fold<Vector2>(
           currentVelocity,
           (p, e) => e.transform(p, mass, dt),
         );

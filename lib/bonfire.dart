@@ -31,7 +31,7 @@ export 'package:bonfire/mixins/automatic_random_movement.dart';
 export 'package:bonfire/mixins/block_movement_collision.dart';
 export 'package:bonfire/mixins/bouncing_object.dart';
 export 'package:bonfire/mixins/follower.dart';
-export 'package:bonfire/mixins/handle_forces.dart';
+export 'package:bonfire/forces/handle_forces.dart';
 export 'package:bonfire/mixins/interval_checker.dart';
 export 'package:bonfire/mixins/jumper.dart';
 export 'package:bonfire/mixins/jumper_animation.dart';

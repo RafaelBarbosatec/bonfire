@@ -19,7 +19,7 @@ class BarrelDraggable extends GameDecoration
     _textConfig = TextPaint(
       style: TextStyle(color: Colors.white, fontSize: width / 4),
     );
-    addForce(ResistenceForce2D(id: 'attr', value: Vector2.all(5)));
+    addForce(ResistanceForce2D(id: 'attr', value: Vector2.all(5)));
   }
 
   @override

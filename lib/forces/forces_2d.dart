@@ -23,8 +23,8 @@ class AccelerationForce2D extends Force2D {
 
 /// Apply resistence to velocity
 /// {value} pixel/seconds
-class ResistenceForce2D extends Force2D {
-  ResistenceForce2D({required super.id, required super.value});
+class ResistanceForce2D extends Force2D {
+  ResistanceForce2D({required super.id, required super.value});
 
   @override
   Vector2 transform(Vector2 velocity, double mass, double dt) {
