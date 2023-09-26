@@ -17,7 +17,7 @@ class AccelerationForce2D extends Force2D {
 
   @override
   Vector2 transform(Vector2 velocity, double mass, double dt) {
-    return value / mass;
+    return (value * mass * dt);
   }
 }
 
@@ -41,7 +41,10 @@ class LinearForce2D extends Force2D {
 
   @override
   Vector2 transform(Vector2 velocity, double mass, double dt) {
-    return velocity + value;
+    return Vector2(
+      velocity.x < value.x ? value.x : velocity.x,
+      velocity.y < value.y ? value.y : velocity.y,
+    );
   }
 }
 
@@ -50,9 +53,4 @@ class LinearForce2D extends Force2D {
 class GravityForce2D extends AccelerationForce2D {
   GravityForce2D({Vector2? value})
       : super(id: 'GravityForce2D', value: value ?? Vector2(0, 600));
-
-  @override
-  Vector2 transform(Vector2 velocity, double mass, double dt) {
-    return Vector2(0, value.y * mass);
-  }
 }

@@ -1,0 +1,97 @@
+{ "compressionlevel":-1,
+ "height":10,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29,
+            252, 253, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 255, 256,
+            277, 278, 129, 129, 129, 129, 129, 129, 129, 129, 129, 129, 129, 280, 281,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":10,
+         "id":1,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":15,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "class":"collision",
+         "draworder":"topdown",
+         "id":2,
+         "name":"objects",
+         "objects":[
+                {
+                 "class":"",
+                 "height":16,
+                 "id":3,
+                 "name":"gem_acceleration",
+                 "rotation":0,
+                 "visible":true,
+                 "width":16,
+                 "x":47.1705579738821,
+                 "y":15.8290462999604
+                }, 
+                {
+                 "class":"",
+                 "height":16,
+                 "id":4,
+                 "name":"gem_linear",
+                 "rotation":0,
+                 "visible":true,
+                 "width":16,
+                 "x":96.7882865057378,
+                 "y":16.0601503759398
+                }, 
+                {
+                 "class":"",
+                 "height":16,
+                 "id":5,
+                 "name":"gem_resistence",
+                 "rotation":0,
+                 "visible":true,
+                 "width":16,
+                 "x":144.275425405619,
+                 "y":15.1104075979422
+                }, 
+                {
+                 "class":"",
+                 "height":16,
+                 "id":8,
+                 "name":"gem_bouncing",
+                 "rotation":0,
+                 "visible":true,
+                 "width":16,
+                 "x":192.0791452315,
+                 "y":16.0601503759399
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":3,
+ "nextobjectid":9,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.9.0",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"tileset.tsj"
+        }],
+ "tilewidth":16,
+ "type":"map",
+ "version":"1.9",
+ "width":15
+}

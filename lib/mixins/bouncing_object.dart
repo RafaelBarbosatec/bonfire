@@ -2,8 +2,10 @@ import 'package:bonfire/bonfire.dart';
 
 // Mixin responsable to give the bounce behavior. (experimental)
 mixin BouncingObject on BlockMovementCollision {
-  double _bouncingReflectFactor = 1.0;
+  final _countFrameCOllisionDiabledAfterBounce = 4;
+  double _bouncingReflectFactor = 1.01;
   bool _bouncingObjectEnabled = true;
+  int? _countFrameCollisionStoped;
 
   void setupBouncingObject({
     bool enabled = true,
@@ -14,7 +16,7 @@ mixin BouncingObject on BlockMovementCollision {
   }
 
   bool onBouncingCollision(PositionComponent other) {
-    return other is! Sensor;
+    return true;
   }
 
   @override
@@ -23,9 +25,7 @@ mixin BouncingObject on BlockMovementCollision {
     Direction? direction,
     Vector2 lastDisplacement,
   ) {
-    if (onBouncingCollision(other) &&
-        !velocity.isZero() &&
-        _bouncingObjectEnabled) {
+    if (onBouncingCollision(other) && !isStoped() && _bouncingObjectEnabled) {
       if (direction == Direction.left || direction == Direction.right) {
         velocity.x = velocity.x * -_bouncingReflectFactor;
       } else if (direction == Direction.up || direction == Direction.down) {
@@ -33,8 +33,28 @@ mixin BouncingObject on BlockMovementCollision {
       } else {
         stopMove();
       }
+      _countFrameCollisionStoped = 0;
     } else {
       super.onBlockedMovement(other, direction, lastDisplacement);
     }
+  }
+
+  @override
+  bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
+    if (_countFrameCollisionStoped != null) {
+      return false;
+    }
+    return super.onBlockMovement(intersectionPoints, other);
+  }
+
+  @override
+  void update(double dt) {
+    if (_countFrameCollisionStoped != null &&
+        _countFrameCollisionStoped! <= _countFrameCOllisionDiabledAfterBounce) {
+      _countFrameCollisionStoped = _countFrameCollisionStoped! + 1;
+    } else {
+      _countFrameCollisionStoped = null;
+    }
+    super.update(dt);
   }
 }

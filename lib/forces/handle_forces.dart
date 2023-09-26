@@ -29,12 +29,12 @@ mixin HandleForces on Movement {
   }
 
   @override
-  Vector2 onApplyAcceleration(Vector2 acceleration, double dt) {
+  Vector2 onTransformVelocity(double dt) {
     final oldVelocity = velocity.clone();
     List<Force2D> mergeForces = [..._forces, ...gameRef.globalForces];
     _accelerationOfForces = _getAccelerationForces(mergeForces, dt);
 
-    var currentVelocity = super.onApplyAcceleration(_accelerationOfForces, dt);
+    var currentVelocity = velocity + _accelerationOfForces;
 
     Vector2 newVel = _applyResistenceForces(mergeForces, currentVelocity, dt);
 

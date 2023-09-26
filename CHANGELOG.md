@@ -1,3 +1,7 @@
+# next
+
+- `Movement` improvements.
+
 # 3.0.0-beta.16
 
 - Fix `RotationPlayer` animation bug.
