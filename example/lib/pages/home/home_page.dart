@@ -2,6 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/forces/forces_page.dart';
 import 'package:example/pages/home/widgets/drawer/home_drawer.dart';
 import 'package:example/pages/home/widgets/home_content.dart';
+import 'package:example/pages/lighting/lighting_page.dart';
 import 'package:example/pages/map/terrain_builder/terrain_builder_page.dart';
 import 'package:example/pages/map/tiled/tiled_page.dart';
 import 'package:example/pages/mini_games/manual_map/game_manual_map.dart';
@@ -143,6 +144,16 @@ class _HomePageState extends State<HomePage> {
             builder: (_) => const ForcesPage(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/forces',
+          ),
+        ],
+      ),
+      SectionDrawer(
+        itens: [
+          ItemDrawer(
+            name: 'Lighting',
+            builder: (_) => const LightingPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/lighting',
           ),
         ],
       ),

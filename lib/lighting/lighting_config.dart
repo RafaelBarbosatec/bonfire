@@ -45,10 +45,11 @@ class LightingConfig {
     this.pulseCurve = Curves.decelerate,
     this.pulseVariation = 0.1,
     this.pulseSpeed = 0.1,
-    this.blurBorder = 20,
+    double? blurBorder,
     this.type = LightingType.circle,
     Vector2? align,
-  }) : align = align ?? Vector2.zero() {
+  })  : align = align ?? Vector2.zero(),
+        blurBorder = blurBorder ?? radius {
     _pulseAnimation = PulseValue(
       speed: pulseSpeed,
       curve: pulseCurve,
@@ -57,7 +58,7 @@ class LightingConfig {
 
     _maskFilter = MaskFilter.blur(
       BlurStyle.normal,
-      _convertRadiusToSigma(blurBorder),
+      _convertRadiusToSigma(this.blurBorder),
     );
   }
 
