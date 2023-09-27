@@ -146,6 +146,8 @@ class Knight extends SimplePlayer
       target: first,
       zoom: 2,
       onComplete: () {
+        gameRef.pauseEngine();
+
         TalkDialog.show(
           gameRef.context,
           [
@@ -194,6 +196,8 @@ class Knight extends SimplePlayer
             ),
           ],
           onClose: () {
+            gameRef.resumeEngine();
+
             // ignore: avoid_print
             print('close talk');
 

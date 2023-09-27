@@ -9,7 +9,7 @@
 - `BonfireCamera` Improvements
 - reorganized the input classes
 - `TileModel` improvements
-
+- Fix not the goblin attacks while in conversation.
 
 # 3.0.0-beta.15
 
@@ -18,7 +18,7 @@
 - Adds `initPosition` param in `CameraConfig`
 - Adds `replacePlatformAnimation` method in `PlatformPlayer`
 - Collision system improvements.
-
+- Add an option for using to enable diagonal input events on `KeyboardConfig` and `JoystickDirectional`.
 
 # 3.0.0-beta.14
 
