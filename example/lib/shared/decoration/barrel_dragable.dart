@@ -23,26 +23,18 @@ class BarrelDraggable extends GameDecoration
   }
 
   @override
-  void onMount() {
+  Future<void> onLoad() {
+    add(RectangleHitbox(size: size / 1.5, position: size / 8.5, isSolid: true));
     final textSize = _textConfig.measureText(text);
     xCenter = (width - textSize.x) / 2;
     yCenter = (height - textSize.y) / 2;
-    super.onMount();
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    _textConfig.render(
-      canvas,
-      text,
-      Vector2(xCenter, 2.5 * yCenter),
+    add(
+      TextComponent(
+        text: text,
+        position: Vector2(xCenter, 2.5 * yCenter),
+        textRenderer: _textConfig,
+      ),
     );
-  }
-
-  @override
-  Future<void> onLoad() {
-    add(RectangleHitbox(size: size / 1.5, position: size / 8.5, isSolid: true));
     return super.onLoad();
   }
 }

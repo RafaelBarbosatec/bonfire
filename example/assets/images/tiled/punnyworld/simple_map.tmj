@@ -29,6 +29,39 @@
          "y":0
         }, 
         {
+         "draworder":"topdown",
+         "id":3,
+         "name":"enemies",
+         "objects":[
+                {
+                 "class":"",
+                 "height":16,
+                 "id":1,
+                 "name":"melee",
+                 "rotation":0,
+                 "visible":true,
+                 "width":16,
+                 "x":176,
+                 "y":63.6666666666667
+                }, 
+                {
+                 "class":"",
+                 "height":16,
+                 "id":2,
+                 "name":"range",
+                 "rotation":0,
+                 "visible":true,
+                 "width":16,
+                 "x":48,
+                 "y":63.3333333333333
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
          "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 705, 0, 0, 758, 847, 704, 0, 0, 705, 0, 0, 0,
@@ -55,8 +88,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":3,
- "nextobjectid":1,
+ "nextlayerid":4,
+ "nextobjectid":3,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.0",

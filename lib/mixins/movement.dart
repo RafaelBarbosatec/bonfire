@@ -281,14 +281,41 @@ mixin Movement on GameComponent {
       return;
     }
 
+    var normal = velocity.normalized()..absolute();
+    double baseDiagonal = 0.2;
+
     if (velocity.x > 0 && velocity.y > 0) {
-      lastDirection = Direction.downRight;
+      if (normal.x > baseDiagonal && normal.y > baseDiagonal) {
+        lastDirection = Direction.downRight;
+      } else if (normal.x > normal.y) {
+        lastDirection = Direction.right;
+      } else {
+        lastDirection = Direction.down;
+      }
     } else if (velocity.x > 0 && velocity.y < 0) {
-      lastDirection = Direction.upRight;
+      if (normal.x > baseDiagonal && normal.y > baseDiagonal) {
+        lastDirection = Direction.upRight;
+      } else if (normal.x > normal.y) {
+        lastDirection = Direction.right;
+      } else {
+        lastDirection = Direction.up;
+      }
     } else if (velocity.x < 0 && velocity.y > 0) {
-      lastDirection = Direction.downLeft;
+      if (normal.x > baseDiagonal && normal.y > baseDiagonal) {
+        lastDirection = Direction.downLeft;
+      } else if (normal.x > normal.y) {
+        lastDirection = Direction.left;
+      } else {
+        lastDirection = Direction.down;
+      }
     } else if (velocity.x < 0 && velocity.y < 0) {
-      lastDirection = Direction.upLeft;
+      if (normal.x > baseDiagonal && normal.y > baseDiagonal) {
+        lastDirection = Direction.upLeft;
+      } else if (normal.x > normal.y) {
+        lastDirection = Direction.left;
+      } else {
+        lastDirection = Direction.up;
+      }
     }
   }
 

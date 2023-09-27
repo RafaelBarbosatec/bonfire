@@ -46,12 +46,12 @@ extension NpcExtensions on Npc {
   /// [visionAngle] in radians
   /// [angle] in radians. is automatically picked up using the component's direction.
   Shape? seeAndMoveToPlayer({
-    required Function(Player) closePlayer,
+    Function(Player)? closePlayer,
     VoidCallback? notObserved,
     VoidCallback? observed,
     VoidCallback? notCanMove,
     double radiusVision = 32,
-    double margin = 10,
+    double margin = 2,
     double? visionAngle,
     double? angle,
     bool runOnlyVisibleInScreen = true,
@@ -66,7 +66,7 @@ extension NpcExtensions on Npc {
         observed?.call();
         moveTowardsTarget(
           target: player,
-          close: () => closePlayer(player),
+          close: () => closePlayer?.call(player),
           margin: margin,
         );
       },

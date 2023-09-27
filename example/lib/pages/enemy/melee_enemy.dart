@@ -1,15 +1,20 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/person_sprite_sheet.dart';
 
-class HumanPlayer extends SimplePlayer {
-  HumanPlayer({
-    required Vector2 position,
-  }) : super(
-          animation: PersionSpritesheet().simpleAnimarion(),
+class MeleeEnemy extends SimpleEnemy {
+  MeleeEnemy({required Vector2 position})
+      : super(
           position: position,
+          animation: PersionSpritesheet(path: 'orc.png').simpleAnimarion(),
           size: Vector2.all(24),
-          speed: 32,
+          speed: 25,
         );
+
+  @override
+  void update(double dt) {
+    seeAndMoveToPlayer();
+    super.update(dt);
+  }
 
   @override
   Future<void> onLoad() {

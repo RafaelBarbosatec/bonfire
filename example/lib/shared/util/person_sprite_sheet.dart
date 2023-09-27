@@ -1,9 +1,9 @@
 import 'package:bonfire/bonfire.dart';
 
-class HumanSpritesheet {
+class PersionSpritesheet {
   final String path;
 
-  HumanSpritesheet({this.path = 'human.png'});
+  PersionSpritesheet({this.path = 'human.png'});
 
   SimpleDirectionAnimation simpleAnimarion() {
     return SimpleDirectionAnimation(

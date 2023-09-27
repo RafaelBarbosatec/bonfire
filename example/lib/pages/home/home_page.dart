@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/pages/enemy/enemy_page.dart';
 import 'package:example/pages/forces/forces_page.dart';
 import 'package:example/pages/home/widgets/drawer/home_drawer.dart';
 import 'package:example/pages/home/widgets/home_content.dart';
@@ -135,6 +136,16 @@ class _HomePageState extends State<HomePage> {
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/player/platform',
           )
+        ],
+      ),
+      SectionDrawer(
+        itens: [
+          ItemDrawer(
+            name: 'Enemy',
+            builder: (_) => const EnemyPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/enemy',
+          ),
         ],
       ),
       SectionDrawer(
