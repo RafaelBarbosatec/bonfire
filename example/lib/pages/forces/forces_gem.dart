@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/platform/platform_spritesheet.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class ForcesGem extends GameDecoration
     with Movement, HandleForces, BlockMovementCollision {
@@ -26,6 +26,7 @@ class ForcesGem extends GameDecoration
     _textPaint = TextPaint(
       style: TextStyle(
         fontSize: size.x / 4,
+        color: Colors.white,
       ),
     );
   }

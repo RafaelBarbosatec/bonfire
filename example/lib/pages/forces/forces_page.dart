@@ -51,7 +51,7 @@ class ForcesPage extends StatelessWidget {
         'resetButton',
       ],
       cameraConfig: CameraConfig(
-        zoom: getZoomFromMaxVisibleTile(context, tileSize, 22),
+        zoom: getZoomFromMaxVisibleTile(context, tileSize, 28),
         initPosition: Vector2(tileSize * 7, tileSize * 5),
       ),
     );
