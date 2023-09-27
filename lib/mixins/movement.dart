@@ -123,19 +123,19 @@ mixin Movement on GameComponent {
   }
 
   /// Move player to Down
-  void moveDown({double? speed, bool setZeroCrossVelocity = false}) {
+  void moveDown({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(y: _lastSpeed);
   }
 
   /// Move player to Left
-  void moveLeft({double? speed, bool setZeroCrossVelocity = false}) {
+  void moveLeft({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(x: -_lastSpeed);
   }
 
   /// Move player to Right
-  void moveRight({double? speed, bool setZeroCrossVelocity = false}) {
+  void moveRight({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(x: _lastSpeed);
   }
@@ -202,7 +202,6 @@ mixin Movement on GameComponent {
 
   void moveFromDirection(
     Direction direction, {
-    Vector2? speedVector,
     bool enabledDiagonal = true,
   }) {
     switch (direction) {
