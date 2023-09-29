@@ -20,7 +20,10 @@ extension EnemyExtensions on Enemy {
 
     if (isDead) return;
 
-    Direction direct = direction ?? getComponentDirectionFromMe(gameRef.player);
+    Direction direct = direction ??
+        (gameRef.player != null
+            ? getComponentDirectionFromMe(gameRef.player!)
+            : lastDirection);
 
     simpleAttackMeleeByDirection(
       damage: damage,
@@ -58,7 +61,10 @@ extension EnemyExtensions on Enemy {
 
     if (isDead) return;
 
-    Direction direct = direction ?? getComponentDirectionFromMe(gameRef.player);
+    Direction direct = direction ??
+        (gameRef.player != null
+            ? getComponentDirectionFromMe(gameRef.player!)
+            : lastDirection);
 
     simpleAttackRangeByDirection(
       animationRight: animationRight,
@@ -75,8 +81,7 @@ extension EnemyExtensions on Enemy {
       lightingConfig: lightingConfig,
       attackFrom: AttackFromEnum.ENEMY,
     );
-
-    if (execute != null) execute();
+    execute?.call();
   }
 
   /// Checks whether the player is within range. If so, move to it.
@@ -90,8 +95,11 @@ extension EnemyExtensions on Enemy {
     double? visionAngle,
     double? angle,
     double? minDistanceFromPlayer,
-    bool runOnlyVisibleInScreen = true,
   }) {
+    if (minDistanceFromPlayer != null) {
+      assert(minDistanceFromPlayer < radiusVision);
+    }
+
     if (isDead) return;
 
     seePlayer(
@@ -100,22 +108,23 @@ extension EnemyExtensions on Enemy {
       angle: angle,
       observed: (player) {
         observed?.call(player);
-        positionsItselfAndKeepDistance(
+        bool inDistance = keepDistance(
           player,
-          minDistanceFromPlayer: minDistanceFromPlayer,
-          radiusVision: radiusVision,
-          runOnlyVisibleInScreen: runOnlyVisibleInScreen,
-          positioned: (player) {
-            final playerDirection = getComponentDirectionFromMe(player);
-            lastDirection = playerDirection;
-            if (lastDirection == Direction.left ||
-                lastDirection == Direction.right) {
-              lastDirectionHorizontal = lastDirection;
-            }
-            idle();
-            positioned?.call(player as Player);
-          },
+          (minDistanceFromPlayer ?? (radiusVision - 5)),
         );
+        if (inDistance) {
+          final playerDirection = getComponentDirectionFromMe(player);
+          lastDirection = playerDirection;
+          if (lastDirection == Direction.left ||
+              lastDirection == Direction.right) {
+            lastDirectionHorizontal = lastDirection;
+          }
+
+          if (checkInterval('seeAndMoveToAttackRange', 500, dtUpdate)) {
+            stopMove();
+          }
+          positioned?.call(player);
+        }
       },
       notObserved: () {
         stopMove();

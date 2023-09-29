@@ -1,6 +1,7 @@
 # next
 
 - `Movement` improvements.
+- Adds `keepDistance`
 
 # 3.0.0-beta.16
 

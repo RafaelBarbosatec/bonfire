@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bonfire/bonfire.dart';
 
 extension MovementExtensions on Movement {
@@ -20,6 +22,18 @@ extension MovementExtensions on Movement {
       return false;
     }
     moveFromAngle(radAngle);
+    return true;
+  }
+
+  bool keepDistance(GameComponent target, double minDistance) {
+    if (!isVisible) return true;
+    double distance = absoluteCenter.distanceTo(target.absoluteCenter);
+
+    if (distance < minDistance) {
+      var angle = getAngleFromTarget(target);
+      moveFromAngle(angle + pi);
+      return false;
+    }
     return true;
   }
 

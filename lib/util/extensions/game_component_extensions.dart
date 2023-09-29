@@ -222,22 +222,10 @@ extension GameComponentExtensions on GameComponent {
     });
   }
 
-  Direction getComponentDirectionFromMe(GameComponent? comp) {
-    Rect rectToMove = rectCollision;
-    double centerXPlayer = comp?.center.x ?? 0;
-    double centerYPlayer = comp?.center.y ?? 0;
-
-    double centerYEnemy = rectToMove.center.dy;
-    double centerXEnemy = rectToMove.center.dx;
-
-    double diffX = centerXEnemy - centerXPlayer;
-    double diffY = centerYEnemy - centerYPlayer;
-
-    if (diffX.abs() > diffY.abs()) {
-      return diffX > 0 ? Direction.left : Direction.right;
-    } else {
-      return diffY > 0 ? Direction.up : Direction.down;
-    }
+  Direction getComponentDirectionFromMe(GameComponent comp) {
+    return BonfireUtil.getDirectionFromAngle(
+      getAngleFromTarget(comp),
+    );
   }
 
   double get top => position.y;
@@ -250,12 +238,6 @@ extension GameComponentExtensions on GameComponent {
     if (bottom <= other.top || other.bottom <= top) return false;
     return true;
   }
-
-  /// Method that checks if this component contain collisions
-  // bool containBlockMovementCollision() {
-  //   return (this is BlockMovementCollision &&
-  //       (this as BlockMovementCollision).containCollision());
-  // }
 
   Direction? directionThePlayerIsIn() {
     Player? player = gameRef.player;
