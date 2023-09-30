@@ -10,6 +10,10 @@ class PersionSpritesheet {
       idleRight: getIdleRight,
       idleDown: getIdleDown,
       idleUp: getIdleUp,
+      idleDownRight: getIdleDownRight,
+      idleDownLeft: getIdleDownLeft,
+      idleUpLeft: getIdleUpLeft,
+      idleUpRight: getIdleUpRight,
       runRight: getRunRight,
       runDown: getRunDown,
       runUp: getRunUp,
@@ -51,6 +55,54 @@ class PersionSpritesheet {
         stepTime: 0.2,
         textureSize: Vector2.all(32),
         texturePosition: Vector2(0, 32 * 4),
+      ),
+    );
+  }
+
+  Future<SpriteAnimation> get getIdleDownRight {
+    return SpriteAnimation.load(
+      path,
+      SpriteAnimationData.sequenced(
+        amount: 2,
+        stepTime: 0.2,
+        textureSize: Vector2.all(32),
+        texturePosition: Vector2(0, 32 * 1),
+      ),
+    );
+  }
+
+  Future<SpriteAnimation> get getIdleUpRight {
+    return SpriteAnimation.load(
+      path,
+      SpriteAnimationData.sequenced(
+        amount: 2,
+        stepTime: 0.2,
+        textureSize: Vector2.all(32),
+        texturePosition: Vector2(0, 32 * 3),
+      ),
+    );
+  }
+
+  Future<SpriteAnimation> get getIdleUpLeft {
+    return SpriteAnimation.load(
+      path,
+      SpriteAnimationData.sequenced(
+        amount: 2,
+        stepTime: 0.2,
+        textureSize: Vector2.all(32),
+        texturePosition: Vector2(0, 32 * 5),
+      ),
+    );
+  }
+
+  Future<SpriteAnimation> get getIdleDownLeft {
+    return SpriteAnimation.load(
+      path,
+      SpriteAnimationData.sequenced(
+        amount: 2,
+        stepTime: 0.2,
+        textureSize: Vector2.all(32),
+        texturePosition: Vector2(0, 32 * 7),
       ),
     );
   }
