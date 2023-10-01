@@ -22,7 +22,7 @@ class HomeContent extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Whats is Bonfire?',
+                  'What is Bonfire?',
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 8),
