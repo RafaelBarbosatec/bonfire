@@ -72,7 +72,8 @@ mixin PointerDetectorHandler on Component {
   bool hasGesture() {
     if (this is DragGesture && (this as DragGesture).enableDrag) return true;
     if (this is TapGesture && (this as TapGesture).enableTab) return true;
-    if (this is MouseListener && (this as MouseListener).enableMouseGesture) {
+    if (this is MouseEventListener &&
+        (this as MouseEventListener).enableMouseGesture) {
       return true;
     }
     return false;

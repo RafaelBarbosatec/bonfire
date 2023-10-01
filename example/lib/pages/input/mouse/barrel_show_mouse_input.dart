@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
-class BarrelShowMouseInput extends GameDecoration with MouseListener {
+class BarrelShowMouseInput extends GameDecoration with MouseEventListener {
   late TextPaint _textPaint;
   final String base =
       'Mouse screen position: {screenPosition} \nMouse click in screen: {buttonScreenClicked} \nMouse click in barrel: {buttonCompClicked} \nMouse scroll middle in screen: {mouseScrollDelta}';
