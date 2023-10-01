@@ -11,18 +11,18 @@ class MeleeEnemy extends SimpleEnemy {
           animation: PersionSpritesheet(path: 'orc2.png').simpleAnimarion(),
           size: Vector2.all(24),
           speed: 25,
-        ) {
-    _textPaint = TextPaint(
-      style: TextStyle(
-        fontSize: size.x / 5,
-        color: Colors.white,
-      ),
-    );
-  }
+          initDirection: Direction.down,
+        );
 
   @override
   void update(double dt) {
-    seeAndMoveToPlayer();
+    seeAndMoveToPlayer(
+      closePlayer: (p) {
+        if (checkInterval('attack', 500, dt)) {
+          _playAttackAnimation();
+        }
+      },
+    );
     super.update(dt);
   }
 
@@ -30,6 +30,46 @@ class MeleeEnemy extends SimpleEnemy {
   Future<void> onLoad() {
     /// Adds rectangle collision
     add(RectangleHitbox(size: size / 2, position: size / 4));
+    _addsText();
+    return super.onLoad();
+  }
+
+  void _playAttackAnimation() {
+    switch (lastDirection) {
+      case Direction.left:
+        animation?.playOnceOther(PersonAttackEnum.meeleLeft);
+        break;
+      case Direction.right:
+        animation?.playOnceOther(PersonAttackEnum.meeleRight);
+        break;
+      case Direction.up:
+        animation?.playOnceOther(PersonAttackEnum.meeleUp);
+        break;
+      case Direction.down:
+        animation?.playOnceOther(PersonAttackEnum.meeleDown);
+        break;
+      case Direction.upLeft:
+        animation?.playOnceOther(PersonAttackEnum.meeleUpLeft);
+        break;
+      case Direction.upRight:
+        animation?.playOnceOther(PersonAttackEnum.meeleUpRight);
+        break;
+      case Direction.downLeft:
+        animation?.playOnceOther(PersonAttackEnum.meeleDownLeft);
+        break;
+      case Direction.downRight:
+        animation?.playOnceOther(PersonAttackEnum.meeleDownRight);
+        break;
+    }
+  }
+
+  void _addsText() {
+    _textPaint = TextPaint(
+      style: TextStyle(
+        fontSize: size.x / 5,
+        color: Colors.white,
+      ),
+    );
     var textSize = _textPaint.measureText(text);
     add(
       TextComponent(
@@ -38,6 +78,5 @@ class MeleeEnemy extends SimpleEnemy {
         textRenderer: _textPaint,
       ),
     );
-    return super.onLoad();
   }
 }

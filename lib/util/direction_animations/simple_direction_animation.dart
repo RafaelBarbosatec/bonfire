@@ -25,7 +25,7 @@ class SimpleDirectionAnimation {
   SpriteAnimation? runDownLeft;
   SpriteAnimation? runDownRight;
 
-  Map<String, SpriteAnimation> others = {};
+  Map<dynamic, SpriteAnimation> others = {};
 
   AssetsLoader? _loader = AssetsLoader();
 
@@ -67,7 +67,7 @@ class SimpleDirectionAnimation {
     FutureOr<SpriteAnimation>? runUpRight,
     FutureOr<SpriteAnimation>? runDownLeft,
     FutureOr<SpriteAnimation>? runDownRight,
-    Map<String, FutureOr<SpriteAnimation>>? others,
+    Map<dynamic, FutureOr<SpriteAnimation>>? others,
     this.enabledFlipX = true,
     this.enabledFlipY = false,
     this.eightDirection = false,
@@ -271,7 +271,7 @@ class SimpleDirectionAnimation {
   }
 
   /// Method used to play specific animation registred in `others`
-  void playOther(String key, {bool? flipX, bool? flipY}) {
+  void playOther(dynamic key, {bool? flipX, bool? flipY}) {
     if (others.containsKey(key) == true) {
       if (!runToTheEndFastAnimation) {
         _fastAnimation = null;
@@ -321,9 +321,48 @@ class SimpleDirectionAnimation {
     onStart?.call();
   }
 
+  /// Method used to play animation once time
+  Future playOnceOther(
+    dynamic key, {
+    VoidCallback? onFinish,
+    VoidCallback? onStart,
+    bool runToTheEnd = false,
+    bool flipX = false,
+    bool flipY = false,
+    bool useCompFlip = false,
+    Vector2? size,
+    Vector2? offset,
+  }) async {
+    if (others.containsKey(key) != true) {
+      return Future.value();
+    }
+    runToTheEndFastAnimation = runToTheEnd;
+    bool lastFlipX = isFlipHorizontally;
+    bool lastFlipY = isFlipVertically;
+    _fastAnimation = SpriteAnimationRender(
+      size: size ?? this.size,
+      position: offset,
+      animation: others[key],
+      loop: false,
+      onFinish: () {
+        onFinish?.call();
+        _fastAnimation = null;
+        if (!useCompFlip) {
+          isFlipHorizontally = lastFlipX;
+          isFlipVertically = lastFlipY;
+        }
+      },
+    );
+    if (!useCompFlip) {
+      isFlipVertically = flipY;
+      isFlipHorizontally = flipX;
+    }
+    onStart?.call();
+  }
+
   /// Method used to register new animation in others
   Future<void> addOtherAnimation(
-    String key,
+    dynamic key,
     FutureOr<SpriteAnimation> animation,
   ) async {
     others[key] = await animation;

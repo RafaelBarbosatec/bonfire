@@ -12,18 +12,16 @@ class RageEnemy extends SimpleEnemy {
           animation: PersionSpritesheet(path: 'orc.png').simpleAnimarion(),
           size: Vector2.all(24),
           speed: 20,
-        ) {
-    _textPaint = TextPaint(
-      style: TextStyle(
-        fontSize: size.x / 5,
-        color: Colors.white,
-      ),
-    );
-  }
+          initDirection: Direction.down,
+        );
 
   @override
   void update(double dt) {
-    seeAndMoveToAttackRange();
+    seeAndMoveToAttackRange(positioned: (p) {
+      if (checkInterval('attack', 500, dt)) {
+        _playAttackAnimation();
+      }
+    });
     super.update(dt);
   }
 
@@ -31,6 +29,18 @@ class RageEnemy extends SimpleEnemy {
   Future<void> onLoad() {
     /// Adds rectangle collision
     add(RectangleHitbox(size: size / 2, position: size / 4));
+    _addsText();
+
+    return super.onLoad();
+  }
+
+  void _addsText() {
+    _textPaint = TextPaint(
+      style: TextStyle(
+        fontSize: size.x / 5,
+        color: Colors.white,
+      ),
+    );
     var textSize = _textPaint.measureText(text);
     add(
       TextComponent(
@@ -39,6 +49,34 @@ class RageEnemy extends SimpleEnemy {
         textRenderer: _textPaint,
       ),
     );
-    return super.onLoad();
+  }
+
+  void _playAttackAnimation() {
+    switch (lastDirection) {
+      case Direction.left:
+        animation?.playOnceOther(PersonAttackEnum.rangeLeft);
+        break;
+      case Direction.right:
+        animation?.playOnceOther(PersonAttackEnum.rangeRight);
+        break;
+      case Direction.up:
+        animation?.playOnceOther(PersonAttackEnum.rangeUp);
+        break;
+      case Direction.down:
+        animation?.playOnceOther(PersonAttackEnum.rangeDown);
+        break;
+      case Direction.upLeft:
+        animation?.playOnceOther(PersonAttackEnum.rangeUpLeft);
+        break;
+      case Direction.upRight:
+        animation?.playOnceOther(PersonAttackEnum.rangeUpRight);
+        break;
+      case Direction.downLeft:
+        animation?.playOnceOther(PersonAttackEnum.rangeDownLeft);
+        break;
+      case Direction.downRight:
+        animation?.playOnceOther(PersonAttackEnum.rangeDownRight);
+        break;
+    }
   }
 }
