@@ -3,6 +3,11 @@ import 'package:example/pages/enemy/enemy_page.dart';
 import 'package:example/pages/forces/forces_page.dart';
 import 'package:example/pages/home/widgets/drawer/home_drawer.dart';
 import 'package:example/pages/home/widgets/home_content.dart';
+import 'package:example/pages/input/drag/drag_gesture_page.dart';
+import 'package:example/pages/input/keyboard/keyboard_page.dart';
+import 'package:example/pages/input/mouse/mouse_input_page.dart';
+import 'package:example/pages/input/move_camera_mouse/move_camera_page.dart';
+import 'package:example/pages/input/tap/tap_gesture_page.dart';
 import 'package:example/pages/lighting/lighting_page.dart';
 import 'package:example/pages/map/terrain_builder/terrain_builder_page.dart';
 import 'package:example/pages/map/tiled/tiled_page.dart';
@@ -112,6 +117,41 @@ class _HomePageState extends State<HomePage> {
             builder: (_) => const TerrainBuilderPage(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/map/terrain_builder',
+          ),
+        ],
+      ),
+      SectionDrawer(
+        name: 'Input',
+        itens: [
+          ItemDrawer(
+            name: 'TapGesture',
+            builder: (_) => const TapGesturePage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/input/tap',
+          ),
+          ItemDrawer(
+            name: 'DragGesture',
+            builder: (_) => const DragGesturePage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/input/drag',
+          ),
+          ItemDrawer(
+            name: 'MoveCamera',
+            builder: (_) => const MoveCameraPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/input/move_camera_mouse',
+          ),
+          ItemDrawer(
+            name: 'Mouse',
+            builder: (_) => const MouseInputPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/input/mouse',
+          ),
+          ItemDrawer(
+            name: 'Keyboard',
+            builder: (_) => const KeyboardPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/input/keyboard',
           ),
         ],
       ),

@@ -10,9 +10,9 @@ mixin MoveCameraUsingGesture on GameComponent {
 
   void setupMoveCameraUsingGesture({
     bool onlyMouse = false,
-    MouseButton moudeButton = MouseButton.left,
+    MouseButton mouseButton = MouseButton.left,
   }) {
-    _mouseButton = moudeButton;
+    _mouseButton = mouseButton;
     _onlyMouse = onlyMouse;
   }
 
@@ -28,10 +28,16 @@ mixin MoveCameraUsingGesture on GameComponent {
     double distance = _startPoint.distanceTo(event.position.toVector2());
     if (distance > 1) {
       if (_acceptGesture(event, _mouseButton)) {
+        double zoom = gameRef.bonfireCamera.zoom;
         double px = _startPoint.x - event.position.dx;
         double py = _startPoint.y - event.position.dy;
         gameRef.bonfireCamera.stop();
-        gameRef.bonfireCamera.moveTo(_startCameraPosition.translated(px, py));
+        gameRef.bonfireCamera.moveTo(
+          _startCameraPosition.translated(
+            px / zoom,
+            py / zoom,
+          ),
+        );
       }
     }
 
@@ -44,6 +50,9 @@ mixin MoveCameraUsingGesture on GameComponent {
     if (_onlyMouse) {
       return event.buttons == button.id && isMouse;
     } else {
+      if (isMouse) {
+        return event.buttons == button.id;
+      }
       return true;
     }
   }

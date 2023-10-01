@@ -1,7 +1,8 @@
 # next
 
 - `Movement` improvements.
-- Adds `keepDistance`
+- Adds `keepDistance`.
+- `MoveCameraUsingGesture` improvements
 
 # 3.0.0-beta.16
 
