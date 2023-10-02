@@ -18,7 +18,7 @@ class MeleeEnemy extends SimpleEnemy {
   void update(double dt) {
     seeAndMoveToPlayer(
       closePlayer: (p) {
-        if (checkInterval('attack', 500, dt)) {
+        if (checkInterval('attack', 600, dt)) {
           _playAttackAnimation();
         }
       },

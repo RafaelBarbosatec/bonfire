@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/person_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
-class RageEnemy extends SimpleEnemy {
+class RageEnemy extends SimpleEnemy with BlockMovementCollision {
   late TextPaint _textPaint;
   final String text = 'RangeEnemy';
   RageEnemy({
@@ -17,11 +17,13 @@ class RageEnemy extends SimpleEnemy {
 
   @override
   void update(double dt) {
-    seeAndMoveToAttackRange(positioned: (p) {
-      if (checkInterval('attack', 500, dt)) {
-        _playAttackAnimation();
-      }
-    });
+    seeAndMoveToAttackRange(
+      positioned: (p) {
+        if (checkInterval('attack', 600, dt)) {
+          _playAttackAnimation();
+        }
+      },
+    );
     super.update(dt);
   }
 

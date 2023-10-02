@@ -154,7 +154,7 @@ extension EnemyExtensions on Enemy {
         if (notObserved != null) {
           notObserved();
         } else {
-          stopMove();
+          stopMove(forceIdle: true);
         }
       },
     );

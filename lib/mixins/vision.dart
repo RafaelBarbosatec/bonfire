@@ -70,10 +70,15 @@ mixin Vision on GameComponent {
 
     bool inShape = shape.isCollision(otherShape);
     if (inShape) {
-      Vector2 direction =
-          (component.absoluteCenter - absoluteCenter).normalized();
+      Vector2 myCenter = rectCollision.center.toVector2();
+      Vector2 compCenter = component.rectCollision.center.toVector2();
+      Vector2 direction = (compCenter - myCenter).normalized();
 
-      final result = raycast(direction, maxDistance: radiusVision);
+      final result = raycast(
+        direction,
+        maxDistance: radiusVision,
+        origin: compCenter,
+      );
       return result?.hitbox?.parent == component;
     }
 
