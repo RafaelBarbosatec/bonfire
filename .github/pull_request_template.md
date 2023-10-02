@@ -8,7 +8,7 @@ Before you create this PR confirm that it meets all requirements listed below by
 
 - [ ] I open this PR to the `develop` branch.
 - [ ] I have added a description of the change under `[next]` in `CHANGELOG.md`.
-- [ ] I ran `dart format --set-exit-if-changed .` and has success.
+- [ ] I ran `dart format --output=none --set-exit-if-changed .` and has success.
 
 ## Breaking Change
 

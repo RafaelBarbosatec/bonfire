@@ -1,12 +1,12 @@
-import 'package:bonfire/base/game_component.dart';
-import 'package:flame/components.dart';
+import 'package:bonfire/bonfire.dart';
+
+enum InitialMapZoomFitEnum { none, fitWidth, fitHeight, fit }
 
 /// Class use to configure camera behavior.
 class CameraConfig {
-  static final sizeWidowsDefault = Vector2(50, 50);
+  static final movementWindowDefault = Vector2.all(16);
 
-  ///Player movement window before the camera moves
-  Vector2 sizeMovementWindow;
+  Vector2 movementWindow;
 
   /// When this true the camera remains within the map area
   bool moveOnlyMapArea;
@@ -20,19 +20,23 @@ class CameraConfig {
   /// Component that the camera will focus on / follow
   GameComponent? target;
 
-  bool smoothCameraEnabled;
-  double smoothCameraSpeed;
+  double speed;
 
-  bool setZoomLimitToFitMap;
+  bool startFollowPlayer;
+
+  InitialMapZoomFitEnum initialMapZoomFit;
+
+  final Vector2? initPosition;
 
   CameraConfig({
-    Vector2? sizeMovementWindow,
     this.moveOnlyMapArea = false,
+    this.startFollowPlayer = true,
     this.zoom = 1.0,
     this.angle = 0.0,
     this.target,
-    this.smoothCameraEnabled = false,
-    this.smoothCameraSpeed = 1.0,
-    this.setZoomLimitToFitMap = false,
-  }) : sizeMovementWindow = sizeMovementWindow ?? sizeWidowsDefault;
+    this.speed = double.infinity,
+    this.initialMapZoomFit = InitialMapZoomFitEnum.none,
+    this.initPosition,
+    Vector2? movementWindow,
+  }) : movementWindow = movementWindow ?? movementWindowDefault;
 }

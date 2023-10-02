@@ -1,10 +1,9 @@
-import 'package:bonfire/collision/collision_config.dart';
-import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/lighting/lighting_config.dart';
 import 'package:bonfire/mixins/attackable.dart';
 import 'package:bonfire/npc/enemy/rotation_enemy.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:bonfire/util/extensions/extensions.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
@@ -25,30 +24,20 @@ extension RotationEnemyExtensions on RotationEnemy {
       observed: (player) {
         double radAngle = getAngleFromPlayer();
 
-        Rect playerRect = player is ObjectCollision
-            ? (player as ObjectCollision).rectCollision
-            : player.toRect();
-        Rect rectPlayerCollision = Rect.fromLTWH(
-          playerRect.left - margin,
-          playerRect.top - margin,
-          playerRect.width + (margin * 2),
-          playerRect.height + (margin * 2),
-        );
+        Rect playerRect = player.toAbsoluteRect();
+        Rect rectPlayerCollision = playerRect.inflate(margin);
 
-        if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
+        if (toAbsoluteRect().overlaps(rectPlayerCollision)) {
           closePlayer(player);
-          idle();
-          moveFromAngleDodgeObstacles(0, radAngle);
+          moveFromAngle(radAngle);
+          stopMove();
           return;
         }
 
-        bool onMove = moveFromAngleDodgeObstacles(speed, radAngle);
-        if (!onMove) {
-          idle();
-        }
+        moveFromAngle(radAngle);
       },
       notObserved: () {
-        idle();
+        stopMove();
         notObserved?.call();
       },
     );
@@ -70,11 +59,8 @@ extension RotationEnemyExtensions on RotationEnemy {
       observed: (player) {
         positioned(player);
 
-        Rect playerRect = player is ObjectCollision
-            ? (player as ObjectCollision).rectCollision
-            : player.toRect();
+        Rect playerRect = player.toAbsoluteRect();
         double distance = (minDistanceCellsFromPlayer ?? radiusVision);
-        double radAngle = getAngleFromPlayer();
 
         Vector2 myPosition = Vector2(
           center.x,
@@ -89,22 +75,16 @@ extension RotationEnemyExtensions on RotationEnemy {
         double dist = myPosition.distanceTo(playerPosition);
 
         if (dist >= distance) {
-          moveFromAngleDodgeObstacles(0, radAngle);
-          idle();
+          stopMove();
           return;
         }
 
-        bool onMove = moveFromAngleDodgeObstacles(
-          speed,
+        moveFromAngle(
           getInverseAngleFromPlayer(),
         );
-
-        if (!onMove) {
-          idle();
-        }
       },
       notObserved: () {
-        idle();
+        stopMove();
         notObserved?.call();
       },
     );
@@ -120,7 +100,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     double? radAngleDirection,
     VoidCallback? execute,
     int interval = 1000,
-    double marginFromOrigin = 16,
+    double marginFromCenter = 16,
     Vector2? centerOffset,
   }) {
     if (!checkInterval('attackMelee', interval, dtUpdate)) return;
@@ -131,7 +111,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       id: id,
       withPush: withPush,
       centerOffset: centerOffset,
-      marginFromOrigin: marginFromOrigin,
+      marginFromCenter: marginFromCenter,
       damage: damage,
       size: size,
       angle: angle,
@@ -156,7 +136,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     int interval = 1000,
     bool withDecorationCollision = true,
     VoidCallback? onDestroy,
-    CollisionConfig? collision,
+    ShapeHitbox? collision,
     VoidCallback? onExecute,
     LightingConfig? lightingConfig,
     Vector2? centerOffset,

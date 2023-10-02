@@ -1,3 +1,149 @@
+# 3.0.0-beta.17
+
+- `Movement` improvements.
+- Adds `keepDistance`.
+- `MoveCameraUsingGesture` improvements
+
+# 3.0.0-beta.16
+
+- Fix `RotationPlayer` animation bug.
+- Add an option for using to enable diagonal input events on `KeyboardConfig` and `JoystickDirectional`.
+- `BonfireCamera` Improvements
+- reorganized the input classes
+- `TileModel` improvements
+- Fix not the goblin attacks while in conversation.
+
+# 3.0.0-beta.15
+
+- `GameObject` improvements
+- `GameDecoration` improvements
+- Adds `initPosition` param in `CameraConfig`
+- Adds `replacePlatformAnimation` method in `PlatformPlayer`
+- Collision system improvements.
+- Add an option for using to enable diagonal input events on `KeyboardConfig` and `JoystickDirectional`.
+
+# 3.0.0-beta.14
+
+- `PlayerExtensions` improvements
+- adds `isAnimationLastFrame` and `animationCurrentIndex` in `UseSpriteAnimation` mixin.
+
+# 3.0.0-beta.13
+
+- fix but collision by tiled.
+- camera improvements
+
+# 3.0.0-beta.12
+
+- fix bug in `MovementByJoystick` when called `idle` method.
+- `positionsItselfAndKeepDistance` little improvements.
+- `AutomaticRandomMovement` improvements. Adds param `direction` to decide which direction could be the movement.
+- Adds `moveToPosition` in `Movement` mixin.
+- Adds `MoveCameraUsingGesture` mixin.
+- remove `JoystickMoveToPosition`
+- rename `JoystickListener`
+
+# 3.0.0-beta.11
+
+- `positionsItselfAndKeepDistance` little improvements
+- `bonfireCamera.shake` improvements
+
+# 3.0.0-beta.10
+- `Follower` mixin improvements.
+- Adds `startFollowPlayer` param in `CameraConfig`.
+- `Vision` improvements.
+- `MovementByJoystick` improvements.
+- Adds `spawCondition` in `ComponentSpawner`
+
+# 3.0.0-beta.9
+- Adds `getZoomFromMaxVisibleTile`
+- `moveFromAngle` improvements.
+- update example
+- `rectCollision` improvements.
+
+## 3.0.0-beta.8
+- extension method `simpleAttackMeleeByDirection` improvements
+- `BonfireCamera` improvements
+- Adds `initialMapZoomFit` in  `CameraConfig`.
+- Fix `rectCollision` bug.
+
+## 3.0.0-beta.7
+
+- `MovementByJoystick` improvements. Adds `setupMovementByJoystick` method.
+- extension method `simpleAttackMeleeByAngle` improvements.
+- Now works `setZoomLimitToFitMap` params in `CameraConfig`.
+- `BouncingObject` improvements.
+- Adds `lastDisplacement` param in `onBlockedMovement` of `BlockMovementCollision` mixin.
+
+## 3.0.0-beta.6
+
+- `UseBarLife` improvements
+- extension method `moveTowardsTarget` improvements
+- remove extension method `followComponent`
+
+## 3.0.0-beta.5
+
+- `BouncingObject` improvements
+
+## 3.0.0-beta.4
+
+- Update Flame to `1.8.2`
+- Solve some lint issues.
+- Adds `BouncingObject` mixin. (experimental)
+
+
+## 3.0.0-beta.3
+
+- Adds WORLD in `AttackFromEnum`.
+- Set `receivesAttackFrom` in `SimpleAlly` and `RotationAlly` to `ReceivesAttackFromEnum.ENEMY`.
+- `InternalChecker` improvements.
+- `Sensor` improvements.
+
+
+## 3.0.0-beta.2
+
+- `MovementByJoystick` improvements.
+- `AutomaticRandomMovement` improvements.
+- `MovementExtensions` improvements.
+- Adds `ComponentSpawner`. [#414](https://github.com/RafaelBarbosatec/bonfire/issues/414) / [Example](https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/simple_example/simple_example_game.dart)
+- Fix bug `MoveToPositionAlongThePath`.
+- Fix issue [417](https://github.com/RafaelBarbosatec/bonfire/issues/417). Thanks [Matt El Mouktafi](https://github.com/mel-mouk)
+
+## 3.0.0-beta.1
+
+- ***BREAKING CHANGE*** 
+  - `BonfireWidget`:
+    - Remove `enemies` param. Use `components` param.
+    - Remove `decoration` param. Use `components` param.
+    - Remove `gameController` param. Use a Component to control your game.
+    - Remove `constructionModeColor` param. It's not necessary
+    - Remove `onTapDown` param. It's not necessary
+    - Remove `onTapUp` param. It's not necessary
+    - Rename `constructionMode` to `debugMode`.
+
+  - Now, to access camera you can use `gameRef.bonfireCamera` instead of `gameRef.camera`. (Now using new Flame API `CameraComponent`)
+  - `Collision`, now Bonfire use the Flame collision system!
+    - To adds Collision in your GameComponent just adds a ShapeHitbox. See this [doc](https://docs.flame-engine.org/latest/flame/collision_detection.html#shapehitbox)
+    - You can listen the collision callbacks doing override of `onCollision`, `onCollisionEnd`, `onCollisionStart` like Flame Documantation.
+    - To block the movement of components when colliding use the mixin `BlockMovementCollision` 
+  - `BonfireInjector().put` now is Factory.
+    
+- ***FEATURES***
+  - `Force2D`. Now we have a simple support to forces. You can adds global forces setting in `BonfireWidget` using `globalForces` param, or individual force in you component. To the component handle this forces it's need use `HandleForces` mixin.
+    - `AccelerationForce2D`: Apply acceleration to velocity
+    - `ResistenceForce2D`: Apply resistence to movement tending to stop
+    - `LinearForce2D`: Apply linear force to velocity
+  - `Jumper`. New mixin to adds the jumper beheavor like platform games.
+  - `PlatformPlayer`. Player to used in platform games.
+  - `PlatformEnemy`. Enemy to used in platform games.
+  - Adds at gameRef: `raycastAll`, `raycast`, `timeScale`
+
+- Use Flame `1.8.1`
+- Update `Pushable` mixin to handle forces.
+- Adds `GameObject`. (It's the GameComponent using Sprite)
+- Adds `AnimatedGameObject`. (It's the GameComponent using SpriteAnimation)
+- Adds `FollowerGameObject`. (It's the GameObject using Follower mixin)
+- Adds `AnimatedFollowerGameObject`. (It's the AnimatedGameObject using Follower mixin)
+
 # [2.12.8]
 - Update README.
 - Fix `manual_map`'s redundant code.
@@ -18,66 +164,79 @@
 - Fix issue [#402](https://github.com/RafaelBarbosatec/bonfire/issues/402)
 
 # [2.12.3]
+  
+## 2.12.3
+
+>>>>>>> v3.0.0
 - Fix issue [#379](https://github.com/RafaelBarbosatec/bonfire/issues/379)
 - Adds in `ObjectCollision` the method `onCollisionHappened`
 
-# [2.12.2]
+## 2.12.2
+
 - Adds `FollowerObject`. Thanks [Matt El Mouktafi](https://github.com/mel-mouk)!
 
-# [2.12.1]
+## 2.12.1
+
 - Adds multi scenario example
 - Update Flame version to 1.7.1
 
-# [2.12.0]
+## 2.12.0
+
 - Add mustCallSuper to GameComponent.update and GameComponent.onRemove
 - Update Flame to 1.6.0
 
-# [2.11.11]
+## 2.11.11
+
 - Fix [#261](https://github.com/RafaelBarbosatec/bonfire/issues/261)
 - Fix [#364](https://github.com/RafaelBarbosatec/bonfire/issues/364)
 
-# [2.11.10]
+## 2.11.10
+
 - Consider Tiled layer opacity. Fix [#356](https://github.com/RafaelBarbosatec/bonfire/issues/356)
 - Little improvements performance.
 - Adds param `area` in `TiledObjectProperties`.
 - Fix multi instance of `AnimatedObjectOnce` in `SimpleDirectionAnimation`. [#359](https://github.com/RafaelBarbosatec/bonfire/issues/359)
 
-# [2.11.9]
+## 2.11.9
+
 - Improvements performance in `LightingInterface`.
 - Improvements to check visible collisions.
 - Improvements in `RenderTransformer`.
 - Update `ListenerGameWidget`.
 - Resolve issue [#354](https://github.com/RafaelBarbosatec/bonfire/issues/354)
 
-# [2.11.8]
+## 2.11.8
+
 - Fix bug in `moveOnlyMapArea`
 
-# [2.11.7]
+## 2.11.7
+
 - Fix diagonal movement speed for enemies
 - Improvements in `moveOnlyMapArea`
 - Adds param `setZoomLimitToFitMap` in `CameraConfig`.
 
-# [2.11.6]
+## 2.11.6
+
 - Update Flame to `1.5.0`
 
-# [2.11.5]
+# 2.11.5
 - Improve Keyboard Controls.
 - Adds support to tileset with individual image
 
-# [2.11.4]
+# 2.11.4
 - Fix exception in `TiledWorldBuilder`.
 
-# [2.11.3]
+# 2.11.3
 - Adds methods `enableGestures` and `enableKeyboard` in `gameRef`(BonfireGameInterface)
 - Adds mixin `KeyboardEventListener`.
 
-# [2.11.2]
+# 2.11.2
 - BugFix[`BarLifeComponent`]: animate in web.
 
-# [2.11.1]
+# 2.11.1
 - BugFix[`BarLifeComponent`]: resolve bug offset when `drawPosition` equals `BarLifePorition.bottom`.
 
-# [2.11.0]
+# 2.11.0
 - Render transform improvements.
 - BREAKING CHANGE: Now the `SimpleDirectionAnimation` do flip component that use it as necessary.
 - Adds param `useCompFlip` in `playOnce` (default `false`). If `true` the animation is flipped equal current state of component.
@@ -86,16 +245,16 @@
 - Adds `UseBarLife` mixin.
 - method `drawDefaultLifeBar` now is deprecated. Pls use `UseBarLife` mixin.
 
-# [2.10.10]
+# 2.10.10
 - Update Flame to `1.4.0`.
 - Improvements in `MiniMap`: Adds `zoom` param. [#325](https://github.com/RafaelBarbosatec/bonfire/issues/325)
 
-# [2.10.9]
+# 2.10.9
 - Do correction suggested by issue [#327](https://github.com/RafaelBarbosatec/bonfire/issues/327). Thanks [Fixid-Fuzz](https://github.com/Fixid-Fuzz)!
 - Camera improvements.
 - remove required `animation` in `simpleAttackMeleeByAngle`.
 
-# [2.10.8]
+# 2.10.8
 - Fix bug tendency to go to the right in `AutomaticRandomMovement`.
 
 # [2.10.6]

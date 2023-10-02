@@ -1,0 +1,75 @@
+{ "compressionlevel":-1,
+ "height":10,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            77, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27,
+            77, 77, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 77,
+            29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29, 29,
+            252, 253, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 79, 255, 256,
+            277, 278, 129, 129, 129, 129, 129, 129, 129, 129, 129, 129, 129, 280, 281,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":10,
+         "id":1,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":15,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "class":"collision",
+         "draworder":"topdown",
+         "id":2,
+         "name":"",
+         "objects":[
+                {
+                 "class":"collision",
+                 "height":47.5,
+                 "id":1,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":16,
+                 "x":-16.0625,
+                 "y":0.4375
+                }, 
+                {
+                 "class":"collision",
+                 "height":63.5,
+                 "id":2,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":16,
+                 "x":240.333333333333,
+                 "y":0.416666666666671
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":3,
+ "nextobjectid":3,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.9.0",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"tileset.tsj"
+        }],
+ "tilewidth":16,
+ "type":"map",
+ "version":"1.9",
+ "width":15
+}

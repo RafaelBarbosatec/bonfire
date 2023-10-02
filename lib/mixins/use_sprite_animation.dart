@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/objects/animated_object_once.dart';
+import 'package:bonfire/util/sprite_animation_render.dart';
 import 'package:flame/components.dart';
 
 ///
@@ -17,32 +17,38 @@ import 'package:flame/components.dart';
 /// Rafaelbarbosatec
 /// on 04/02/22
 mixin UseSpriteAnimation on GameComponent {
-  /// Animation that will be drawn on the screen.
-  SpriteAnimation? animation;
+  /// set Animation that will be drawn on the screen.
+  void setAnimation(
+    SpriteAnimation? animation, {
+    Vector2? size,
+    bool loop = true,
+    bool autoPlay = true,
+    VoidCallback? onFinish,
+    VoidCallback? onStart,
+  }) {
+    _animationRender = SpriteAnimationRender(
+      animation: animation,
+      size: size ?? this.size,
+      loop: loop,
+      onFinish: onFinish,
+      onStart: onStart,
+    );
+  }
 
-  /// Offset of the render animation.
-  Vector2 animationOffset = Vector2.zero();
-
-  /// Size animation. if null use component size
-  Vector2? animationSize;
-  AnimatedObjectOnce? _fastAnimation;
-  Vector2 _fastAnimOffset = Vector2.zero();
-  bool _playing = true;
+  SpriteAnimationRender? _fastAnimation;
+  SpriteAnimationRender? _animationRender;
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-
-    if (isVisible) {
+    if (isVisible && !isRemoving) {
       if (_fastAnimation != null) {
-        _fastAnimation?.render(canvas);
+        _fastAnimation?.render(canvas, overridePaint: paint);
       } else {
-        animation?.getSprite().render(
-              canvas,
-              position: position + animationOffset,
-              size: animationSize ?? size,
-              overridePaint: paint,
-            );
+        _animationRender?.render(
+          canvas,
+          overridePaint: paint,
+        );
       }
     }
   }
@@ -50,13 +56,12 @@ mixin UseSpriteAnimation on GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (isVisible && _playing) {
-      _fastAnimation?.position = position + _fastAnimOffset;
-      _fastAnimation?.paint = paint;
-      _fastAnimation?.isFlipHorizontally = isFlipHorizontally;
-      _fastAnimation?.isFlipVertically = isFlipVertically;
-      _fastAnimation?.update(dt);
-      animation?.update(dt);
+    if (isVisible) {
+      if (_fastAnimation != null) {
+        _fastAnimation?.update(dt);
+      } else {
+        _animationRender?.update(dt);
+      }
     }
   }
 
@@ -68,23 +73,19 @@ mixin UseSpriteAnimation on GameComponent {
     VoidCallback? onFinish,
     VoidCallback? onStart,
   }) async {
-    _fastAnimOffset = offset ?? Vector2.zero();
-    _fastAnimation?.onRemove();
-    _fastAnimation = AnimatedObjectOnce(
-      position: position + _fastAnimOffset,
+    _fastAnimation = SpriteAnimationRender(
+      position: offset,
       size: size ?? this.size,
-      animation: animation,
-      onStart: onStart,
+      animation: await animation,
+      loop: false,
       onFinish: () {
-        onFinish?.call();
-        _fastAnimation?.onRemove();
         _fastAnimation = null;
+        onFinish?.call();
       },
-    )..gameRef = gameRef;
-    await _fastAnimation?.onLoad();
+      onStart: onStart,
+    );
   }
 
-  void pauseAnimation() => _playing = false;
-
-  void resumeAnimation() => _playing = true;
+  bool get isAnimationLastFrame => _animationRender?.isLastFrame ?? false;
+  int get animationCurrentIndex => _animationRender?.currentIndex ?? 0;
 }

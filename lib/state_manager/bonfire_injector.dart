@@ -29,21 +29,21 @@ class BonfireInjector {
   static final Map<Type, BuildDependency> _dependencies = {};
   static final Map<Type, dynamic> _dependenciesSingleton = {};
 
-  /// Used to register dependency as a Singleton.
-  /// Always that you call [get] this will be return the same instance.
-  /// When you use this to register a [StateController] all components that use
-  /// he will be use the same instance.
-  void put<T>(BuildDependency<T> build) {
-    _dependencies[T] = build;
-    _dependenciesSingleton[T] = null;
-  }
-
   /// Used to register dependency as a Factory.
   /// Always that you call [get] this will be return a new instance.
   /// When you use this to register a [StateController] all components that use
   /// he will be using different instances.
-  void putFactory<T>(BuildDependency<T> build) {
+  void put<T>(BuildDependency<T> build) {
     _dependencies[T] = build;
+  }
+
+  /// Used to register dependency as a Singleton.
+  /// Always that you call [get] this will be return the same instance.
+  /// When you use this to register a [StateController] all components that use
+  /// he will be use the same instance.
+  void putSingleton<T>(BuildDependency<T> build) {
+    _dependencies[T] = build;
+    _dependenciesSingleton[T] = null;
   }
 
   /// Used to get dependency registered

@@ -22,7 +22,7 @@ class SimpleNpc extends Npc with DirectionAnimation {
     required Vector2 position,
     required Vector2 size,
     SimpleDirectionAnimation? animation,
-    double speed = 100,
+    double? speed,
     Direction initDirection = Direction.right,
   }) : super(
           position: position,

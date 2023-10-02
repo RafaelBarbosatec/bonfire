@@ -25,8 +25,7 @@ class RotationAlly extends Ally with UseSpriteAnimation, UseAssetsLoader {
     double currentRadAngle = -1.55,
     double speed = 100,
     double life = 100,
-    ReceivesAttackFromEnum receivesAttackFrom =
-        ReceivesAttackFromEnum.PLAYER_AND_ALLY,
+    ReceivesAttackFromEnum receivesAttackFrom = ReceivesAttackFromEnum.ENEMY,
   }) : super(
           position: position,
           size: size,
@@ -44,15 +43,15 @@ class RotationAlly extends Ally with UseSpriteAnimation, UseAssetsLoader {
   }
 
   @override
-  bool moveFromAngleDodgeObstacles(double speed, double angle) {
-    animation = animRun;
+  void moveFromAngle(double angle, {double? speed}) {
+    setAnimation(animRun);
     this.angle = angle;
-    return super.moveFromAngleDodgeObstacles(speed, angle);
+    super.moveFromAngle(angle, speed: speed);
   }
 
   @override
   void idle() {
-    animation = animIdle;
+    setAnimation(animIdle);
     super.idle();
   }
 

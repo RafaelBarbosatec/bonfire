@@ -1,8 +1,6 @@
-import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/mixins/keyboard_listener.dart';
+import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/gestures.dart';
@@ -12,28 +10,37 @@ import 'package:flutter/widgets.dart';
 /// CustomBaseGame created to use `Listener` to capture touch screen gestures.
 /// Apply zoom in canvas.
 /// Reorder components per time frame.
-abstract class BaseGame extends FlameGame with PointerDetector, KeyboardEvents {
-  BaseGame({Camera? camera}) : super(camera: camera);
-
-  /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
-  int _highestPriority = 1000000;
-
-  /// Get of the _highestPriority
-  int get highestPriority => _highestPriority;
-
+abstract class BaseGame extends FlameGame
+    with
+        PointerDetector,
+        KeyboardEvents,
+        HasQuadTreeCollisionDetection,
+        HasTimeScale {
   bool enabledGestures = true;
   bool enabledKeyboard = true;
 
   /// to get the components that contain gestures
   Iterable<PointerDetectorHandler> get _gesturesComponents {
-    return children.where((c) => _hasGesture(c)).cast<PointerDetectorHandler>();
+    var cams = children.query<BonfireCamera>();
+    if (cams.isNotEmpty) {
+      final cam = cams.first;
+      return [...cam.world!.children, ...cam.viewport.children]
+          .where((c) => _hasGesture(c))
+          .cast<PointerDetectorHandler>();
+    }
+    return [];
   }
 
   /// to get the components that contain gestures
   Iterable<KeyboardEventListener> get _keyboardComponents {
-    return children
-        .where((c) => _hasKeyboardEventListener(c))
-        .cast<KeyboardEventListener>();
+    var cams = children.query<BonfireCamera>();
+    if (cams.isNotEmpty) {
+      final cam = cams.first;
+      return [...cam.world!.children, ...cam.viewport.children]
+          .where((c) => _hasKeyboardEventListener(c))
+          .cast<KeyboardEventListener>();
+    }
+    return [];
   }
 
   @override
@@ -114,22 +121,11 @@ abstract class BaseGame extends FlameGame with PointerDetector, KeyboardEvents {
 
   /// Verify if the Component contain gestures.
   bool _hasGesture(Component c) {
-    return ((c is GameComponent && c.isVisible) || c.isHud) &&
-        (c is PointerDetectorHandler &&
-            (c as PointerDetectorHandler).hasGesture());
+    return ((c is GameComponent && c.isVisible)) && ((c).hasGesture());
   }
 
   /// Verify if the Component contain gestures.
   bool _hasKeyboardEventListener(Component c) {
     return c is KeyboardEventListener;
-  }
-
-  /// reorder components by priority
-  void updateOrderPriority() {
-    if (children.isNotEmpty) {
-      // ignore: invalid_use_of_internal_member
-      children.reorder();
-      _highestPriority = children.last.priority;
-    }
   }
 }

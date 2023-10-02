@@ -1,18 +1,18 @@
-import 'package:flame/game.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
 
 import '../bonfire.dart';
 
 class JoystickMapExplorer with JoystickListener {
-  final Camera camera;
+  final BonfireCamera camera;
 
   JoystickMapExplorer(this.camera);
 
   @override
-  void joystickAction(JoystickActionEvent event) {}
+  void onJoystickAction(JoystickActionEvent event) {}
 
   @override
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
-    double speed = 20 * event.intensity;
+  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
+    double speed = 10 * event.intensity;
 
     switch (event.directional) {
       case JoystickMoveDirectional.MOVE_UP:
@@ -47,7 +47,4 @@ class JoystickMapExplorer with JoystickListener {
         break;
     }
   }
-
-  @override
-  void moveTo(Vector2 position) {}
 }

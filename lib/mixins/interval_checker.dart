@@ -1,3 +1,4 @@
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/interval_tick.dart';
 
 ///
@@ -31,5 +32,25 @@ mixin InternalChecker {
     } else {
       return _timers![key]?.update(dt) ?? false;
     }
+  }
+
+  void resetInterval(String key) {
+    _timers?[key]?.reset();
+  }
+
+  void tickInterval(String key) {
+    _timers?[key]?.tick();
+  }
+
+  void pauseEffectController(String key) {
+    _timers?[key]?.pause();
+  }
+
+  void playInterval(String key) {
+    _timers?[key]?.play();
+  }
+
+  bool invervalIsRunning(String key) {
+    return _timers?[key]?.running ?? false;
   }
 }

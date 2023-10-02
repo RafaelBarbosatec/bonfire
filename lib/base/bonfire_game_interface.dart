@@ -1,20 +1,9 @@
 import 'dart:async';
 
-import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/collision/object_collision.dart';
+import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
-import 'package:bonfire/decoration/decoration.dart';
-import 'package:bonfire/game_interface/game_interface.dart';
-import 'package:bonfire/joystick/joystick_controller.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
-import 'package:bonfire/map/base/map_game.dart';
-import 'package:bonfire/mixins/attackable.dart';
-import 'package:bonfire/mixins/sensor.dart';
-import 'package:bonfire/npc/enemy/enemy.dart';
-import 'package:bonfire/player/player.dart';
-import 'package:bonfire/scene_builder/scene_action.dart';
-import 'package:bonfire/scene_builder/scene_manager_component.dart';
-import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 // ignore: implementation_imports
 import 'package:flame/src/game/overlay_manager.dart';
@@ -38,17 +27,17 @@ abstract class BonfireGameInterface {
   JoystickController? get joystick;
   LightingInterface? get lighting;
   ColorFilterInterface? get colorFilter;
-  Camera get camera;
+  BonfireCamera get bonfireCamera;
   GameMap get map;
-  ComponentSet get children;
   int get highestPriority;
   Vector2 get size;
   bool get hasLayout;
   bool get showCollisionArea;
-  Color? get constructionModeColor;
   Color? get collisionAreaColor;
   GameInterface? get interface;
+  List<Force2D> get globalForces;
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
+  double timeScale = 1.0;
 
   /// A property that stores an [ActiveOverlaysNotifier]
   ///
@@ -68,7 +57,7 @@ abstract class BonfireGameInterface {
   /// - GameWidget
   /// - [Game.overlayManager]
   // ignore: invalid_use_of_internal_member
-  OverlayManager get overlayManager;
+  OverlayManager get overlays;
 
   /// Used to pause the engine.
   void pauseEngine();
@@ -83,43 +72,25 @@ abstract class BonfireGameInterface {
   Future<void> addAll(List<Component> components);
 
   /// Used to get visible "Components".
-  Iterable<GameComponent> visibleComponents();
+  Iterable<T> visibles<T extends GameComponent>();
 
-  /// Used to get all "Enemies".
-  Iterable<Enemy> enemies();
+  /// Used to get all "Enemies" or oly visibles.
+  Iterable<Enemy> enemies({bool onlyVisible = false});
 
-  /// Used to get visible "Enemies".
-  Iterable<Enemy> visibleEnemies();
+  /// Used to get living "Enemies" or oly visibles.
+  Iterable<Enemy> livingEnemies({bool onlyVisible = false});
 
-  /// Used to get living "Enemies".
-  Iterable<Enemy> livingEnemies();
+  /// Used to get all "Decoration" or oly visibles.
+  Iterable<GameDecoration> decorations({bool onlyVisible = false});
 
-  /// Used to get all "Decoration".
-  Iterable<GameDecoration> decorations();
+  /// Used to get all "Attackables" or oly visibles.
+  Iterable<Attackable> attackables({bool onlyVisible = false});
 
-  /// Used to get visible "Decoration".
-  Iterable<GameDecoration> visibleDecorations();
+  /// Used to get all "ShapeHitbox".
+  Iterable<ShapeHitbox> collisions({bool onlyVisible = false});
 
-  /// Used to get all "Attackables".
-  Iterable<Attackable> attackables();
-
-  /// Used to get visible "Attackables".
-  Iterable<Attackable> visibleAttackables();
-
-  /// Used to get visible "Sensors".
-  Iterable<Sensor> visibleSensors();
-
-  /// Used to get all collisions.
-  Iterable<ObjectCollision> collisions();
-
-  /// Used to get visible collisions.
-  Iterable<ObjectCollision> visibleCollisions();
-
-  /// Used to find visible component by type.
-  Iterable<T> visibleComponentsByType<T>();
-
-  /// Used to find component by type.
-  Iterable<T> componentsByType<T>();
+  /// Used to find component by type visible or not.
+  Iterable<T> query<T extends Component>({bool onlyVisible = false});
 
   /// This  method convert word position to screen position
   Vector2 worldToScreen(Vector2 position);
@@ -137,7 +108,25 @@ abstract class BonfireGameInterface {
     bool moveCameraToTarget = false,
   });
 
-  void startScene(List<SceneAction> actions);
+  RaycastResult<ShapeHitbox>? raycast(
+    Ray2 ray, {
+    double? maxDistance,
+    List<ShapeHitbox>? ignoreHitboxes,
+    RaycastResult<ShapeHitbox>? out,
+  });
+
+  List<RaycastResult<ShapeHitbox>> raycastAll(
+    Vector2 origin, {
+    required int numberOfRays,
+    double startAngle = 0,
+    double sweepAngle = tau,
+    double? maxDistance,
+    List<Ray2>? rays,
+    List<ShapeHitbox>? ignoreHitboxes,
+    List<RaycastResult<ShapeHitbox>>? out,
+  });
+
+  void startScene(List<SceneAction> actions, {void Function()? onComplete});
   void stopScene();
 
   void enableGestures(bool enable);

@@ -1,15 +1,18 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/lpc/lpc_game.dart';
-import 'package:example/manual_map/game_manual_map.dart';
-import 'package:example/multi_scenario/multi_scenario.dart';
-import 'package:example/random_map/random_map_game.dart';
+import 'package:example/core/app_routes.dart';
+import 'package:example/core/theme/app_colors.dart';
+import 'package:example/pages/mini_games/lpc/lpc_game.dart';
+import 'package:example/pages/mini_games/manual_map/game_manual_map.dart';
+import 'package:example/pages/mini_games/multi_scenario/multi_scenario.dart';
+import 'package:example/pages/mini_games/platform/platform_game.dart';
+import 'package:example/pages/mini_games/random_map/random_map_game.dart';
 import 'package:example/shared/enemy/goblin_controller.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
 import 'package:example/shared/npc/critter/critter_controller.dart';
 import 'package:example/shared/player/knight_controller.dart';
-import 'package:example/simple_example/simple_example_game.dart';
-import 'package:example/tiled_map/game_tiled_map.dart';
-import 'package:example/top_down_game/top_down_game.dart';
+import 'package:example/pages/mini_games/simple_example/simple_example_game.dart';
+import 'package:example/pages/mini_games/tiled_map/game_tiled_map.dart';
+import 'package:example/pages/mini_games/top_down_game/top_down_game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -20,16 +23,30 @@ void main() async {
     await Flame.device.fullScreen();
   }
 
-  BonfireInjector().putFactory((i) => KnightController());
-  BonfireInjector().putFactory((i) => GoblinController());
-  BonfireInjector().putFactory((i) => CritterController());
-  BonfireInjector().put((i) => BarLifeController());
+  BonfireInjector().put((i) => KnightController());
+  BonfireInjector().put((i) => GoblinController());
+  BonfireInjector().put((i) => CritterController());
+  BonfireInjector().putSingleton((i) => BarLifeController());
 
-  runApp(
-    const MaterialApp(
-      home: Menu(),
-    ),
-  );
+  runApp(const BonfireExamplesApp());
+}
+
+class BonfireExamplesApp extends StatelessWidget {
+  const BonfireExamplesApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        primaryColor: AppColors.primary,
+        colorScheme: const ColorScheme.dark().copyWith(
+          primary: AppColors.primary,
+        ),
+        scaffoldBackgroundColor: AppColors.background,
+      ),
+      routes: AppRoutes.routes,
+    );
+  }
 }
 
 class Menu extends StatelessWidget {
@@ -50,7 +67,7 @@ class Menu extends StatelessWidget {
                   style: TextStyle(fontSize: 30, color: Colors.white),
                   children: [
                     TextSpan(
-                      text: '  v2.11.5',
+                      text: '  v3.0.0-beta.10',
                       style: TextStyle(fontSize: 15, color: Colors.white),
                     )
                   ],
@@ -72,7 +89,7 @@ class Menu extends StatelessWidget {
                     height: 10,
                   ),
                   _buildButton(context, 'Manual Map', () {
-                    _navTo(context, GameManualMap());
+                    _navTo(context, const GameManualMap());
                   }),
                   const SizedBox(
                     height: 10,
@@ -105,14 +122,20 @@ class Menu extends StatelessWidget {
                       _navTo(context, const MultiScenario());
                     });
                   }),
-                  if (!kIsWeb) ...[
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    _buildButton(context, 'Dynamic spriteSheet', () {
-                      _navTo(context, const LPCGame());
-                    }),
-                  ]
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  _buildButton(context, 'Platform', () {
+                    MultiScenario.prepare().then((_) {
+                      _navTo(context, const PlatformGame());
+                    });
+                  }),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  _buildButton(context, 'ImageComposition', () {
+                    _navTo(context, const LPCGame());
+                  }),
                 ],
               ),
             )

@@ -14,36 +14,49 @@ import 'package:bonfire/bonfire.dart';
 
 /// This mixin give to the component the pushable behavior.
 /// To use this mixin the Component must have a `Movement` mixin.
-mixin Pushable on ObjectCollision {
+mixin Pushable on Movement {
   bool enablePushable = true;
 
   @override
-  void onCollisionHappened(GameComponent component, bool active) {
-    if (enablePushable) {
-      if (this is Movement) {
-        if (!active && component is Movement && onPush(component)) {
-          Vector2 displacement = center - component.center;
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
+    if (enablePushable && other is! Sensor) {
+      if (other is GameComponent) {
+        GameComponent component = other;
+        if (component is Movement && onPush(component)) {
+          Vector2 displacement = absoluteCenter - component.absoluteCenter;
           if (displacement.x.abs() > displacement.y.abs()) {
             if (displacement.x < 0) {
-              (this as Movement).moveLeft((this as Movement).speed);
+              if (this is HandleForces) {
+                moveLeft(speed: component.speed / (this as HandleForces).mass);
+              } else {
+                moveLeftOnce();
+              }
             } else {
-              (this as Movement).moveRight((this as Movement).speed);
+              if (this is HandleForces) {
+                moveRight(speed: component.speed / (this as HandleForces).mass);
+              } else {
+                moveRightOnce();
+              }
             }
           } else {
             if (displacement.y < 0) {
-              (this as Movement).moveUp((this as Movement).speed);
+              if (this is HandleForces) {
+                moveUp(speed: component.speed / (this as HandleForces).mass);
+              } else {
+                moveUpOnce();
+              }
             } else {
-              (this as Movement).moveDown((this as Movement).speed);
+              if (this is HandleForces) {
+                moveDown(speed: component.speed / (this as HandleForces).mass);
+              } else {
+                moveDownOnce();
+              }
             }
           }
         }
-      } else {
-        // ignore: avoid_print
-        print(
-            'The mixin Pushable not working in ($this) because this component don`t have the `Movement` mixin');
       }
     }
-    super.onCollisionHappened(component, isVisible);
   }
 
   /// Returning true if the component is pushable, false otherwise.

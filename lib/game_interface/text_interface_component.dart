@@ -25,16 +25,20 @@ class TextInterfaceComponent extends InterfaceComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (_measuredWidth == null) {
+    textConfig.render(
+      canvas,
+      text,
+      Vector2.zero(),
+    );
+  }
+
+  @override
+  void update(double dt) {
+    if (size == Vector2.zero()) {
       _measuredWidth = textConfig.measureTextWidth(text);
       _measuredHeight = textConfig.measureTextHeight(text);
       size = Vector2(_measuredWidth!, _measuredHeight!);
     }
-
-    textConfig.render(
-      canvas,
-      text,
-      Vector2(x, y),
-    );
+    super.update(dt);
   }
 }

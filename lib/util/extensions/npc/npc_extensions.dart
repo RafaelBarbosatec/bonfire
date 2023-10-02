@@ -46,12 +46,12 @@ extension NpcExtensions on Npc {
   /// [visionAngle] in radians
   /// [angle] in radians. is automatically picked up using the component's direction.
   Shape? seeAndMoveToPlayer({
-    required Function(Player) closePlayer,
+    Function(Player)? closePlayer,
     VoidCallback? notObserved,
     VoidCallback? observed,
     VoidCallback? notCanMove,
     double radiusVision = 32,
-    double margin = 10,
+    double margin = 2,
     double? visionAngle,
     double? angle,
     bool runOnlyVisibleInScreen = true,
@@ -64,20 +64,14 @@ extension NpcExtensions on Npc {
       angle: angle,
       observed: (player) {
         observed?.call();
-        bool move = followComponent(
-          player,
-          dtUpdate,
-          closeComponent: (comp) => closePlayer(comp as Player),
+        moveTowardsTarget(
+          target: player,
+          close: () => closePlayer?.call(player),
           margin: margin,
         );
-        if (!move) {
-          notCanMove?.call();
-        }
       },
       notObserved: () {
-        if (!isIdle) {
-          idle();
-        }
+        stopMove();
         notObserved?.call();
       },
     );
@@ -105,20 +99,16 @@ extension NpcExtensions on Npc {
       angle: angle ?? lastDirection.toRadians(),
       observed: (enemy) {
         observed?.call();
-        bool move = followComponent(
-          enemy.first,
-          dtUpdate,
-          closeComponent: (comp) => closeEnemy(comp as Enemy),
+        moveTowardsTarget(
+          target: enemy.first,
+          close: () {
+            closeEnemy(enemy.first);
+          },
           margin: margin,
         );
-        if (!move) {
-          notCanMove?.call();
-        }
       },
       notObserved: () {
-        if (!isIdle) {
-          idle();
-        }
+        stopMove();
         notObserved?.call();
       },
     );
@@ -146,23 +136,24 @@ extension NpcExtensions on Npc {
       angle: angle ?? lastDirection.toRadians(),
       observed: (ally) {
         observed?.call();
-        bool move = followComponent(
-          ally.first,
-          dtUpdate,
-          closeComponent: (comp) => closeAlly(comp as Ally),
+        moveTowardsTarget(
+          target: ally.first,
+          close: () {
+            closeAlly(ally.first);
+          },
           margin: margin,
         );
-        if (!move) {
-          notCanMove?.call();
-        }
       },
       notObserved: () {
-        if (!isIdle) {
-          idle();
-        }
+        stopMove();
         notObserved?.call();
       },
     );
+  }
+
+  /// Gives the direction of the player in relation to this component
+  Direction directionThatPlayerIs() {
+    return BonfireUtil.getDirectionFromAngle(getAngleFromPlayer());
   }
 
   /// Get angle between enemy and player
@@ -170,10 +161,7 @@ extension NpcExtensions on Npc {
   double getAngleFromPlayer() {
     Player? player = gameRef.player;
     if (player == null) return 0.0;
-    return BonfireUtil.angleBetweenPoints(
-      rectConsideringCollision.center.toVector2(),
-      playerRect.center.toVector2(),
-    );
+    return getAngleFromTarget(player);
   }
 
   /// Get angle between enemy and player
@@ -183,12 +171,12 @@ extension NpcExtensions on Npc {
     if (player == null) return 0.0;
     return BonfireUtil.angleBetweenPoints(
       playerRect.center.toVector2(),
-      rectConsideringCollision.center.toVector2(),
+      toAbsoluteRect().center.toVector2(),
     );
   }
 
   /// Gets player position used how base in calculations
   Rect get playerRect {
-    return gameRef.player?.rectConsideringCollision ?? Rect.zero;
+    return gameRef.player?.rectCollision ?? Rect.zero;
   }
 }

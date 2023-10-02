@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/extensions.dart';
 
 import 'rectangle.dart';
@@ -13,9 +12,11 @@ class CircleShape extends Shape {
   Offset offsetToDraw;
 
   CircleShape(this.radius, {Vector2? position})
-      : center = (position ?? Vector2.zero()).translate(radius, radius),
-        offsetToDraw = Offset((position ?? Vector2.zero()).x + radius,
-            (position ?? Vector2.zero()).y + radius),
+      : center = (position ?? Vector2.zero()).translated(radius, radius),
+        offsetToDraw = Offset(
+          (position ?? Vector2.zero()).x + radius,
+          (position ?? Vector2.zero()).y + radius,
+        ),
         rect = RectangleShape(
           Vector2(2 * radius, 2 * radius),
           position: position,
@@ -27,7 +28,7 @@ class CircleShape extends Shape {
     if (value != super.position) {
       super.position = value;
       rect.position = value;
-      center = value.translate(radius, radius);
+      center = value.translated(radius, radius);
       offsetToDraw = Offset(position.x + radius, position.y + radius);
     }
   }

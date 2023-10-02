@@ -52,12 +52,12 @@ extension GameComponentExtensions on GameComponent {
     double speed = 150,
     bool withDecorationCollision = true,
     VoidCallback? onDestroy,
-    CollisionConfig? collision,
+    ShapeHitbox? collision,
     LightingConfig? lightingConfig,
     double marginFromOrigin = 16,
     Vector2? centerOffset,
   }) {
-    var initPosition = rectConsideringCollision;
+    var initPosition = rectCollision;
 
     Vector2 startPosition =
         initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
@@ -71,9 +71,8 @@ extension GameComponentExtensions on GameComponent {
       angle,
     );
 
-    startPosition.add(Vector2(-size.x / 2, -size.y / 2));
     gameRef.add(
-      FlyingAttackObject.byAngle(
+      FlyingAttackGameObject.byAngle(
         id: id,
         position: startPosition,
         size: size,
@@ -85,7 +84,7 @@ extension GameComponentExtensions on GameComponent {
         withDecorationCollision: withDecorationCollision,
         onDestroy: onDestroy,
         destroySize: destroySize,
-        flyAnimation: animation,
+        animation: animation,
         animationDestroy: animationDestroy,
         lightingConfig: lightingConfig,
       ),
@@ -103,9 +102,8 @@ extension GameComponentExtensions on GameComponent {
     double speed = 150,
     double damage = 1,
     bool withCollision = true,
-    bool enableDiagonal = true,
     VoidCallback? onDestroy,
-    CollisionConfig? collision,
+    ShapeHitbox? collision,
     LightingConfig? lightingConfig,
     Future<SpriteAnimation>? animationDestroy,
     double marginFromOrigin = 16,
@@ -140,9 +138,10 @@ extension GameComponentExtensions on GameComponent {
     required AttackFromEnum attackFrom,
     bool withPush = true,
     double? sizePush,
+    double? marginFromCenter,
     Vector2? centerOffset,
   }) {
-    final rect = rectConsideringCollision;
+    final rect = rectCollision;
 
     simpleAttackMeleeByAngle(
       angle: direction.toRadians(),
@@ -151,7 +150,7 @@ extension GameComponentExtensions on GameComponent {
       damage: damage,
       size: size,
       centerOffset: centerOffset,
-      marginFromOrigin: max(rect.width + 2, rect.height + 2),
+      marginFromCenter: marginFromCenter ?? max(rect.width, rect.height) / 2,
       id: id,
       withPush: withPush,
     );
@@ -170,16 +169,20 @@ extension GameComponentExtensions on GameComponent {
     required AttackFromEnum attackFrom,
     required Vector2 size,
     bool withPush = true,
-    double marginFromOrigin = 16,
+    double marginFromCenter = 0,
     Vector2? centerOffset,
   }) {
-    var initPosition = rectConsideringCollision;
+    var initPosition = rectCollision;
 
     Vector2 startPosition =
         initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
 
-    double displacement =
-        max(initPosition.width, initPosition.height) / 2 + marginFromOrigin;
+    double displacement = max(
+              initPosition.width,
+              initPosition.height,
+            ) /
+            2 +
+        marginFromCenter;
 
     Vector2 diffBase = BonfireUtil.diffMovePointByAngle(
       startPosition,
@@ -188,58 +191,41 @@ extension GameComponentExtensions on GameComponent {
     );
 
     startPosition.add(diffBase);
-    startPosition.add(Vector2(-size.x / 2, -size.y / 2));
 
     if (animation != null) {
       gameRef.add(
-        AnimatedObjectOnce(
+        AnimatedGameObject(
           animation: animation,
           position: startPosition,
           size: size,
-          rotateRadAngle: angle,
+          angle: angle,
+          anchor: Anchor.center,
+          loop: false,
         ),
       );
     }
 
-    Rect positionAttack = Rect.fromLTWH(
-      startPosition.x,
-      startPosition.y,
-      size.x,
-      size.y,
+    Rect positionAttack = Rect.fromCenter(
+      center: startPosition.toOffset(),
+      width: size.x,
+      height: size.y,
     );
 
     gameRef
-        .visibleAttackables()
+        .attackables(onlyVisible: true)
         .where((a) => a.rectAttackable().overlaps(positionAttack) && a != this)
         .forEach((enemy) {
       enemy.receiveDamage(attackFrom, damage, id);
-      final rectAfterPush = enemy.position.translate(diffBase.x, diffBase.y);
-      if (withPush &&
-          (enemy is ObjectCollision &&
-              !(enemy as ObjectCollision)
-                  .isCollision(displacement: rectAfterPush)
-                  .isNotEmpty)) {
-        enemy.translate(diffBase.x, diffBase.y);
+      if (withPush && enemy is Movement) {
+        (enemy as Movement).translate(diffBase);
       }
     });
   }
 
-  Direction getComponentDirectionFromMe(GameComponent? comp) {
-    Rect rectToMove = rectConsideringCollision;
-    double centerXPlayer = comp?.center.x ?? 0;
-    double centerYPlayer = comp?.center.y ?? 0;
-
-    double centerYEnemy = rectToMove.center.dy;
-    double centerXEnemy = rectToMove.center.dx;
-
-    double diffX = centerXEnemy - centerXPlayer;
-    double diffY = centerYEnemy - centerYPlayer;
-
-    if (diffX.abs() > diffY.abs()) {
-      return diffX > 0 ? Direction.left : Direction.right;
-    } else {
-      return diffY > 0 ? Direction.up : Direction.down;
-    }
+  Direction getComponentDirectionFromMe(GameComponent comp) {
+    return BonfireUtil.getDirectionFromAngle(
+      getAngleFromTarget(comp),
+    );
   }
 
   double get top => position.y;
@@ -251,19 +237,6 @@ extension GameComponentExtensions on GameComponent {
     if (right <= other.left || other.right <= left) return false;
     if (bottom <= other.top || other.bottom <= top) return false;
     return true;
-  }
-
-  /// Gets rect used how base in calculations considering collision
-  Rect get rectConsideringCollision {
-    return (isObjectCollision()
-        ? (this as ObjectCollision).rectCollision
-        : toRect());
-  }
-
-  /// Method that checks if this component contain collisions
-  bool isObjectCollision() {
-    return (this is ObjectCollision &&
-        (this as ObjectCollision).containCollision());
   }
 
   Direction? directionThePlayerIsIn() {
@@ -301,13 +274,15 @@ extension GameComponentExtensions on GameComponent {
     VoidCallback? onFinish,
     ValueChanged<double>? onChange,
   }) {
-    final valueGenerator = ValueGeneratorComponent(duration,
-        end: end,
-        begin: begin,
-        curve: curve,
-        onFinish: onFinish,
-        onChange: onChange,
-        autoStart: autoStart);
+    final valueGenerator = ValueGeneratorComponent(
+      duration,
+      end: end,
+      begin: begin,
+      curve: curve,
+      onFinish: onFinish,
+      onChange: onChange,
+      autoStart: autoStart,
+    );
     gameRef.add(valueGenerator);
     return valueGenerator;
   }
@@ -332,6 +307,14 @@ extension GameComponentExtensions on GameComponent {
         anchor: anchor,
         priority: priority,
       ),
+    );
+  }
+
+  /// Get angle between this comp to target
+  double getAngleFromTarget(GameComponent target) {
+    return BonfireUtil.angleBetweenPoints(
+      absoluteCenter,
+      target.absoluteCenter,
     );
   }
 }

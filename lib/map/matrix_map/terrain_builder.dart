@@ -130,7 +130,7 @@ class TerrainBuilder {
       sprite: sprite,
       properties: terrain?.properties,
       collisions: terrain?.getCollisionClone(),
-      type: terrain?.type,
+      tileClass: terrain?.type,
     );
   }
 
@@ -143,7 +143,7 @@ class TerrainBuilder {
       sprite: terrain.getSingleSprite(),
       properties: terrain.properties,
       collisions: terrain.getCollisionClone(checkOnlyClose: true),
-      type: terrain.type,
+      tileClass: terrain.type,
     );
   }
 

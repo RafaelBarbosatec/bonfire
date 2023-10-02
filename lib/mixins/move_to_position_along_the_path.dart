@@ -17,6 +17,7 @@ mixin MoveToPositionAlongThePath on Movement {
   int _currentIndex = 0;
   bool _showBarriers = false;
   bool _gridSizeIsCollisionSize = false;
+  bool _useOnlyVisibleBarriers = true;
   double _factorInflateFindArea = 2;
   VoidCallback? _onFinish;
 
@@ -39,11 +40,13 @@ mixin MoveToPositionAlongThePath on Movement {
 
     /// Use to debug and show area collision calculated
     bool showBarriersCalculated = false,
+    bool useOnlyVisibleBarriers = true,
 
     /// If `false` the algorithm use map tile size with base of the grid. if true this use collision size of the component.
     bool gridSizeIsCollisionSize = false,
     double factorInflateFindArea = 2,
   }) {
+    _useOnlyVisibleBarriers = useOnlyVisibleBarriers;
     _factorInflateFindArea = factorInflateFindArea;
     _paintShowBarriers.color =
         barriersCalculatedColor ?? const Color(0xFF2196F3).withOpacity(0.5);
@@ -83,14 +86,22 @@ mixin MoveToPositionAlongThePath on Movement {
   void update(double dt) {
     super.update(dt);
     if (_currentPath.isNotEmpty) {
-      _move(dt);
+      if (!moveToPosition(_currentPath[_currentIndex].toVector2())) {
+        _goToNextPosition();
+      }
     }
   }
 
   @override
-  void renderBeforeTransformation(Canvas canvas) {
+  void idle() {
+    stopMoveAlongThePath();
+    super.idle();
+  }
+
+  @override
+  void renderTree(Canvas canvas) {
     _drawBarrries(canvas);
-    super.renderBeforeTransformation(canvas);
+    super.renderTree(canvas);
   }
 
   void stopMoveAlongThePath() {
@@ -98,74 +109,14 @@ mixin MoveToPositionAlongThePath on Movement {
     _barriers.clear();
     _currentIndex = 0;
     _removeLinePathComponent();
-    idle();
     _onFinish?.call();
     _onFinish = null;
-  }
-
-  void _move(double dt) {
-    double innerSpeed = speed * dt;
-    Vector2 center = this.center;
-    if (isObjectCollision()) {
-      center = (this as ObjectCollision).rectCollision.center.toVector2();
-    }
-    double diffX = _currentPath[_currentIndex].dx - center.x;
-    double diffY = _currentPath[_currentIndex].dy - center.y;
-    double displacementX = diffX.abs() > innerSpeed ? speed : diffX.abs() / dt;
-    double displacementY = diffY.abs() > innerSpeed ? speed : diffY.abs() / dt;
-
-    if (diffX.abs() < 0.01 && diffY.abs() < 0.01) {
-      _goToNextPosition();
-    } else {
-      bool onMove = false;
-      if (diffX.abs() > 0.01 && diffY.abs() > 0.01) {
-        if (diffX > 0 && diffY > 0) {
-          onMove = moveDownRight(
-            displacementX,
-            displacementY,
-          );
-        } else if (diffX < 0 && diffY > 0) {
-          onMove = moveDownLeft(
-            displacementX,
-            displacementY,
-          );
-        } else if (diffX > 0 && diffY < 0) {
-          onMove = moveUpRight(
-            displacementX,
-            displacementY,
-          );
-        } else if (diffX < 0 && diffY < 0) {
-          onMove = moveUpLeft(
-            displacementX,
-            displacementY,
-          );
-        }
-      } else if (diffX.abs() > 0.01) {
-        if (diffX > 0) {
-          onMove = moveRight(displacementX);
-        } else if (diffX < 0) {
-          onMove = moveLeft(displacementX);
-        }
-      } else if (diffY.abs() > 0.01) {
-        if (diffY > 0) {
-          onMove = moveDown(displacementY);
-        } else if (diffY < 0) {
-          onMove = moveUp(displacementY);
-        }
-      }
-
-      if (!onMove) {
-        _goToNextPosition();
-      }
-    }
   }
 
   List<Offset> _calculatePath(Vector2 finalPosition) {
     final player = this;
 
-    final positionPlayer = player is ObjectCollision
-        ? (player as ObjectCollision).rectCollision.center.toVector2()
-        : player.center;
+    final positionPlayer = player.toAbsoluteRect().center.toVector2();
 
     Offset playerPosition = _getCenterPositionByTile(positionPlayer);
 
@@ -211,16 +162,17 @@ mixin MoveToPositionAlongThePath on Movement {
 
     area = Rect.fromLTRB(left, top, right, bottom).inflate(inflate);
 
-    for (final e in gameRef.collisions()) {
-      if (!ignoreCollisions.contains(e) && area.overlaps(e.rectCollision)) {
-        _addCollisionOffsetsPositionByTile(e.rectCollision);
+    for (final e in gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
+      var rect = e.toAbsoluteRect();
+      if (!ignoreCollisions.contains(e) && area.overlaps(rect)) {
+        _addCollisionOffsetsPositionByTile(rect);
       }
     }
 
     Iterable<Offset> result = [];
 
     if (_barriers.contains(targetPosition)) {
-      stopMoveAlongThePath();
+      stopMove();
       return [];
     }
 
@@ -235,10 +187,7 @@ mixin MoveToPositionAlongThePath on Movement {
 
       if (result.isNotEmpty || _isNeighbor(playerPosition, targetPosition)) {
         result = AStar.resumePath(result);
-        _currentPath = result.map((e) {
-          return Offset(e.dx * _tileSize, e.dy * _tileSize)
-              .translate(_tileSize / 2, _tileSize / 2);
-        }).toList();
+        _currentPath = _mapToWorldPositions(result);
 
         _currentIndex = 0;
       }
@@ -263,13 +212,9 @@ mixin MoveToPositionAlongThePath on Movement {
       tileSize = gameRef.map.tiles.first.width;
     }
     if (_gridSizeIsCollisionSize) {
-      if (isObjectCollision()) {
-        return max(
-          (this as ObjectCollision).rectCollision.width,
-          (this as ObjectCollision).rectCollision.height,
-        );
-      }
-      return max(height, width) + REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
+      final ract = toAbsoluteRect();
+      return max(ract.height, ract.width) +
+          REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
     }
     return tileSize;
   }
@@ -341,7 +286,7 @@ mixin MoveToPositionAlongThePath on Movement {
     if (_currentIndex < _currentPath.length - 1) {
       _currentIndex++;
     } else {
-      stopMoveAlongThePath();
+      stopMove();
     }
   }
 
@@ -370,5 +315,12 @@ mixin MoveToPositionAlongThePath on Movement {
   void _removeLinePathComponent() {
     _linePathComponent?.removeFromParent();
     _linePathComponent = null;
+  }
+
+  List<Offset> _mapToWorldPositions(Iterable<Offset> result) {
+    return result.map((e) {
+      return Offset(e.dx * _tileSize, e.dy * _tileSize)
+          .translate(_tileSize / 2, _tileSize / 2);
+    }).toList();
   }
 }

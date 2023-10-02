@@ -1,10 +1,10 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/manual_map/dungeon_map.dart';
+import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class BarrelDraggable extends GameDecoration
-    with DragGesture, ObjectCollision, Movement, Pushable {
+    with DragGesture, Movement, Pushable, BlockMovementCollision, HandleForces {
   late TextPaint _textConfig;
   String text = 'Drag here';
   double xCenter = 0;
@@ -12,45 +12,29 @@ class BarrelDraggable extends GameDecoration
 
   BarrelDraggable(Vector2 position)
       : super.withSprite(
-            sprite: CommonSpriteSheet.barrelSprite,
-            position: position,
-            size: Vector2.all(DungeonMap.tileSize)) {
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(
-              DungeonMap.tileSize * 0.6,
-              DungeonMap.tileSize * 0.4,
-            ),
-            align: Vector2(
-              DungeonMap.tileSize * 0.2,
-              DungeonMap.tileSize * 0.4,
-            ),
-          ),
-        ],
-      ),
-    );
+          sprite: CommonSpriteSheet.barrelSprite,
+          position: position,
+          size: Vector2.all(DungeonMap.tileSize),
+        ) {
     _textConfig = TextPaint(
       style: TextStyle(color: Colors.white, fontSize: width / 4),
     );
+    addForce(ResistanceForce2D(id: 'attr', value: Vector2.all(5)));
   }
 
   @override
-  void onMount() {
+  Future<void> onLoad() {
+    add(RectangleHitbox(size: size / 1.5, position: size / 8.5, isSolid: true));
     final textSize = _textConfig.measureText(text);
     xCenter = (width - textSize.x) / 2;
     yCenter = (height - textSize.y) / 2;
-    super.onMount();
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    _textConfig.render(
-      canvas,
-      text,
-      Vector2(x + xCenter, y - yCenter),
+    add(
+      TextComponent(
+        text: text,
+        position: Vector2(xCenter, 2.5 * yCenter),
+        textRenderer: _textConfig,
+      ),
     );
+    return super.onLoad();
   }
 }

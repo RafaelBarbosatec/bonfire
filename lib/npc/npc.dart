@@ -23,9 +23,9 @@ class Npc extends GameComponent with Movement, Vision {
   Npc({
     required Vector2 position,
     required Vector2 size,
-    double speed = 100,
+    double? speed,
   }) {
-    this.speed = speed;
+    this.speed = speed ?? this.speed;
     this.position = position;
     this.size = size;
   }

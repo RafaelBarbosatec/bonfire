@@ -1,10 +1,10 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/manual_map/dungeon_map.dart';
+import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/decoration/potion_life.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/widgets.dart';
 
-class Chest extends GameDecoration with TapGesture {
+class Chest extends GameDecoration with TapGesture, Vision {
   bool _observedPlayer = false;
 
   late TextPaint _textConfig;
@@ -24,7 +24,7 @@ class Chest extends GameDecoration with TapGesture {
 
   @override
   void update(double dt) {
-    if (gameRef.player != null) {
+    if (gameRef.player != null && checkInterval('SeepLayr', 500, dt)) {
       seeComponent(
         gameRef.player!,
         observed: (player) {
@@ -49,7 +49,7 @@ class Chest extends GameDecoration with TapGesture {
       _textConfig.render(
         canvas,
         'Touch me !!',
-        Vector2(x - width / 1.5, center.y - (height + 5)),
+        Vector2(width / -1.5, -height),
       );
     }
   }
@@ -66,46 +66,44 @@ class Chest extends GameDecoration with TapGesture {
   void onTapCancel() {}
 
   void _addPotions() {
+    var p1 = position.translated(width * 2, height * -1.5);
     gameRef.add(
       PotionLife(
-        Vector2(
-          position.translate(width * 2, 0).x,
-          position.y - height * 2,
-        ),
+        p1,
         30,
       ),
     );
 
+    var p2 = position.translated(width * 2, height * 2);
     gameRef.add(
       PotionLife(
-        Vector2(
-          position.translate(width * 2, 0).x,
-          position.y + height * 2,
-        ),
+        p2,
         30,
       ),
     );
 
-    _addSmokeExplosion(position.translate(width * 2, 0));
-    _addSmokeExplosion(position.translate(width * 2, height * 2));
+    _addSmokeExplosion(p1);
+    _addSmokeExplosion(p2);
   }
 
   void _addSmokeExplosion(Vector2 position) {
     gameRef.add(
-      AnimatedObjectOnce(
+      AnimatedGameObject(
         animation: CommonSpriteSheet.smokeExplosion,
         position: position,
-        size: Vector2.all(DungeonMap.tileSize),
+        size: Vector2.all(DungeonMap.tileSize * 0.5),
+        loop: false,
       ),
     );
   }
 
   void _showEmote() {
     add(
-      AnimatedFollowerObject(
+      AnimatedGameObject(
         animation: CommonSpriteSheet.emote,
         size: size,
-        positionFromTarget: size / -2,
+        position: size / -2,
+        loop: false,
       ),
     );
   }

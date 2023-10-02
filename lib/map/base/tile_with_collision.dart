@@ -1,15 +1,15 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 
-class TileWithCollision extends Tile with ObjectCollision {
+class TileWithCollision extends Tile {
+  Iterable<ShapeHitbox>? collisions;
   TileWithCollision({
     required String spritePath,
     required Vector2 position,
     required Vector2 size,
-    String? type,
-    Iterable<CollisionArea>? collisions,
+    String? tileClass,
+    this.collisions,
     double offsetX = 0,
     double offsetY = 0,
     Map<String, dynamic>? properties,
@@ -17,22 +17,18 @@ class TileWithCollision extends Tile with ObjectCollision {
           spritePath: spritePath,
           position: position,
           size: size,
-          type: type,
+          tileClass: tileClass,
           offsetX: offsetX,
           offsetY: offsetY,
           properties: properties,
-        ) {
-    if (collisions != null) {
-      setupCollision(CollisionConfig(collisions: collisions));
-    }
-  }
+        );
 
   TileWithCollision.fromSprite({
     required Sprite? sprite,
     required Vector2 position,
     required Vector2 size,
-    String? type,
-    Iterable<CollisionArea>? collisions,
+    String? tileClass,
+    this.collisions,
     double offsetX = 0,
     double offsetY = 0,
     Color? color,
@@ -41,23 +37,19 @@ class TileWithCollision extends Tile with ObjectCollision {
           sprite: sprite,
           position: position,
           size: size,
-          type: type,
+          tileClass: tileClass,
           offsetX: offsetX,
           offsetY: offsetY,
           properties: properties,
           color: color,
-        ) {
-    if (collisions != null) {
-      setupCollision(CollisionConfig(collisions: collisions));
-    }
-  }
+        );
 
   TileWithCollision.withAnimation({
     required ControlledUpdateAnimation animation,
     required Vector2 position,
     required Vector2 size,
-    String? type,
-    Iterable<CollisionArea>? collisions,
+    String? tileClass,
+    this.collisions,
     double offsetX = 0,
     double offsetY = 0,
     Map<String, dynamic>? properties,
@@ -67,11 +59,23 @@ class TileWithCollision extends Tile with ObjectCollision {
           size: size,
           offsetX: offsetX,
           offsetY: offsetY,
-          type: type,
+          tileClass: tileClass,
           properties: properties,
-        ) {
-    if (collisions != null) {
-      setupCollision(CollisionConfig(collisions: collisions));
+        );
+
+  @override
+  Future<void> onLoad() {
+    collisions?.let(addAll);
+    return super.onLoad();
+  }
+
+  @override
+  bool onComponentTypeCheck(PositionComponent other) {
+    if (other is TileWithCollision ||
+        other is GameDecorationWithCollision ||
+        other is CollisionGameComponent) {
+      return false;
     }
+    return super.onComponentTypeCheck(other);
   }
 }

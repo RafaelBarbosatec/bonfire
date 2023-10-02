@@ -1,17 +1,16 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
-enum BarLifePorition { top, bottom }
+enum BarLifeDrawPorition { top, bottom, left, right }
 
 typedef BarLifeTextBuilder = String Function(double life, double maxLife);
 
-class BarLifeComponent extends GameComponent with Follower {
+class BarLifeComponent extends GameComponent {
   Paint _barLiveBgPaint = Paint();
   final Paint _barLivePaint = Paint()..style = PaintingStyle.fill;
   Paint _barLiveBorderPaint = Paint();
 
-  final BarLifePorition drawPosition;
-  final double margin;
+  final BarLifeDrawPorition drawPosition;
   final List<Color>? colors;
   final Color backgroundColor;
   final BorderRadius borderRadius;
@@ -30,14 +29,14 @@ class BarLifeComponent extends GameComponent with Follower {
   Vector2 _textOffset = Vector2.zero();
 
   TextPaint _textConfig = TextPaint();
+  final GameComponent target;
 
   BarLifeComponent({
+    required this.target,
     required Vector2 size,
-    Attackable? target,
-    Vector2? offset,
+    Vector2? position,
     Vector2? textOffset,
-    this.drawPosition = BarLifePorition.top,
-    this.margin = 4,
+    this.drawPosition = BarLifeDrawPorition.top,
     this.colors,
     this.textStyle,
     this.showLifeText = true,
@@ -60,7 +59,7 @@ class BarLifeComponent extends GameComponent with Follower {
     _barLiveBgPaint = _barLiveBgPaint
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
-
+    this.position = position ?? Vector2.zero();
     this.size = size;
 
     _textConfig = TextPaint(
@@ -69,37 +68,40 @@ class BarLifeComponent extends GameComponent with Follower {
     );
 
     _textSize = _textConfig.measureText(_getLifeText());
-
-    setupFollower(
-      target: target,
-      offset: offset,
-    );
   }
 
   @override
   void render(Canvas canvas) {
-    if (followerTarget == null || !show) {
-      return;
+    double yPosition = (y - height);
+
+    double xPosition = x;
+    switch (drawPosition) {
+      case BarLifeDrawPorition.top:
+        break;
+      case BarLifeDrawPorition.bottom:
+        yPosition = target.size.y + y;
+        break;
+      case BarLifeDrawPorition.left:
+        xPosition = -width + x;
+        yPosition = (target.size.y / 2 - height / 2) + y;
+        break;
+      case BarLifeDrawPorition.right:
+        xPosition = width + x;
+        yPosition = (target.size.y / 2 - height / 2) + y;
+        break;
     }
-    double yPosition = (y - height) - margin;
-
-    double xPosition = (followerTarget!.width - width) / 2 + x;
-
-    if (drawPosition == BarLifePorition.bottom) {
-      yPosition = followerTarget!.bottom + (followerOffset?.y ?? 0.0) + margin;
-    }
-
-    yPosition = yPosition;
 
     double currentBarLife = (_life * width) / _maxLife;
 
     if (borderWidth > 0) {
-      final RRect borderRect = borderRadius.toRRect(Rect.fromLTWH(
-        xPosition,
-        yPosition,
-        width,
-        height,
-      ));
+      final RRect borderRect = borderRadius.toRRect(
+        Rect.fromLTWH(
+          xPosition,
+          yPosition,
+          width,
+          height,
+        ),
+      );
 
       canvas.drawRRect(
         borderRect,

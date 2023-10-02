@@ -33,6 +33,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+<<<<<<< HEAD
   charcode:
     dependency: transitive
     description:
@@ -41,6 +42,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+=======
+>>>>>>> v3.0.0
   clock:
     dependency: transitive
     description:
@@ -69,10 +72,17 @@ packages:
     dependency: "direct main"
     description:
       name: flame
+<<<<<<< HEAD
       sha256: c38e1be5827aa839c166c6ed08a2733bb4523bf153d8c670739c20c842fa1844
       url: "https://pub.dev"
     source: hosted
     version: "1.7.3"
+=======
+      sha256: bd2b45f9fc0ec4939031b85c0b0a97cf09357c12ecd072d44389a4c577a2c0f0
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.8.2"
+>>>>>>> v3.0.0
   flutter:
     dependency: "direct main"
     description: flutter
@@ -95,26 +105,30 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "6aa2946395183537c8b880962d935877325d6a09a2867c3970c05c0fed6ac482"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.5"
+    version: "1.1.0"
   http_parser:
     dependency: transitive
     description:
       name: http_parser
-      sha256: e362d639ba3bc07d5a71faebb98cde68c05bfbcfbbb444b60b6f60bb67719185
+      sha256: "2aa08ce0341cc9b354a498388e30986515406668dbcc4f7c950c3e715496693b"
       url: "https://pub.dev"
     source: hosted
+<<<<<<< HEAD
     version: "4.0.0"
+=======
+    version: "4.0.2"
+>>>>>>> v3.0.0
   lints:
     dependency: transitive
     description:
       name: lints
-      sha256: "5cfd6509652ff5e7fe149b6df4859e687fca9048437857cb2e65c8d780f396e3"
+      sha256: "5e4a9cd06d447758280a8ac2405101e0e2094d2a1dbdd3756aec3fe7775ba593"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   matcher:
     dependency: transitive
     description:
@@ -212,18 +226,18 @@ packages:
     dependency: "direct main"
     description:
       name: tiledjsonreader
-      sha256: b9ce57567eed3b8efbe1ef2ec5ff8ba6f5aedb3a27f33d577e49de1aa5a95e13
+      sha256: be0c4659cddccd1076a0b89b9933a6ef559806dbf396ab3395c5de012e1f96c9
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.6"
+    version: "1.2.7"
   typed_data:
     dependency: transitive
     description:
       name: typed_data
-      sha256: "53bdf7e979cfbf3e28987552fd72f637e63f3c8724c9e56d9246942dc2fa36ee"
+      sha256: "26f87ade979c47a150c9eaab93ccd2bebe70a27dc0b4b29517f2904f04eb11a5"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.3.1"
   vector_math:
     dependency: transitive
     description:

@@ -7,7 +7,7 @@ class SimplePlayer extends Player with DirectionAnimation {
     required Vector2 size,
     SimpleDirectionAnimation? animation,
     Direction initDirection = Direction.right,
-    double speed = 150,
+    double? speed,
     double life = 100,
   }) : super(
           position: position,

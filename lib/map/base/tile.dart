@@ -2,15 +2,11 @@ import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
-import 'package:flutter/widgets.dart';
 
 class Tile extends GameComponent with UseAssetsLoader {
-  final String? type;
-  late Vector2 _positionText;
+  final String? tileClass;
   late Vector2 _startPosition;
   Vector2 _lastParentPosition = Vector2.zero();
-  Paint? _paintText;
-  TextPaint? _textPaintConfig;
   String id = '';
   Sprite? _sprite;
   ControlledUpdateAnimation? _animation;
@@ -20,7 +16,7 @@ class Tile extends GameComponent with UseAssetsLoader {
     required String spritePath,
     required Vector2 position,
     required Vector2 size,
-    this.type,
+    this.tileClass,
     this.color,
     Map<String, dynamic>? properties,
     double offsetX = 0,
@@ -40,15 +36,13 @@ class Tile extends GameComponent with UseAssetsLoader {
         AssetToLoad(Sprite.load(spritePath), (value) => _sprite = value),
       );
     }
-
-    _positionText = position;
   }
 
   Tile.fromSprite({
     required Sprite? sprite,
     required Vector2 position,
     required Vector2 size,
-    this.type,
+    this.tileClass,
     Map<String, dynamic>? properties,
     double offsetX = 0,
     double offsetY = 0,
@@ -65,14 +59,13 @@ class Tile extends GameComponent with UseAssetsLoader {
       calculatePosition: true,
     );
     _startPosition = this.position.clone();
-    _positionText = position;
   }
 
   Tile.fromAnimation({
     required ControlledUpdateAnimation animation,
     required Vector2 position,
     required Vector2 size,
-    this.type,
+    this.tileClass,
     Map<String, dynamic>? properties,
     double offsetX = 0,
     double offsetY = 0,
@@ -88,7 +81,6 @@ class Tile extends GameComponent with UseAssetsLoader {
       calculatePosition: true,
     );
     _startPosition = this.position.clone();
-    _positionText = position;
   }
 
   @override
@@ -97,13 +89,10 @@ class Tile extends GameComponent with UseAssetsLoader {
 
     _animation?.render(
       canvas,
-      position: position,
-      size: size,
       overridePaint: paint,
     );
     _sprite?.render(
       canvas,
-      position: position,
       size: size,
       overridePaint: paint,
     );
@@ -113,39 +102,8 @@ class Tile extends GameComponent with UseAssetsLoader {
   }
 
   @override
-  void renderDebugMode(Canvas canvas) {
-    _drawGrid(canvas);
-  }
-
-  void _drawGrid(Canvas canvas) {
-    _paintText ??= Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
-    canvas.drawRect(
-      toRect(),
-      _paintText!
-        ..color = gameRef.constructionModeColor ??
-            const Color(0xFF00BCD4).withOpacity(0.5),
-    );
-    if (_positionText.x % 2 == 0) {
-      _textPaintConfig ??= TextPaint(
-        style: TextStyle(
-          fontSize: width / 3,
-          color: gameRef.constructionModeColor ??
-              const Color(0xFF00BCD4).withOpacity(0.5),
-        ),
-      );
-      _textPaintConfig?.render(
-        canvas,
-        '${_positionText.x.toInt()}:${_positionText.y.toInt()}',
-        Vector2(position.x + 2, position.y + 2),
-      );
-    }
-  }
-
-  @override
   void updateTree(double dt) {
-    _animation?.update(dt);
+    _animation?.update(dt, size);
     if (parent != null) {
       final parentComp = parent as GameComponent;
       if (_lastParentPosition != parentComp.position) {

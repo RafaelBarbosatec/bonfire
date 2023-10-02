@@ -24,31 +24,21 @@ mixin Follower on GameComponent {
     GameComponent? target,
     Vector2? offset,
   }) {
-    followerTarget = target;
-    followerOffset = offset;
+    followerTarget = target ?? followerTarget;
+    followerOffset = offset ?? followerOffset;
+  }
+
+  void removeFollowerTarget() {
+    followerTarget = null;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
     if (followerTarget != null &&
-        _lastFollowerPosition != followerTarget?.position) {
-      _lastFollowerPosition = followerTarget!.position.clone();
+        _lastFollowerPosition != followerTarget?.absolutePosition) {
+      _lastFollowerPosition = followerTarget!.absolutePosition.clone();
       position = _lastFollowerPosition! + (followerOffset ?? _zero);
-    }
-  }
-
-  @override
-  void onMount() {
-    super.onMount();
-    if (followerTarget == null) {
-      followParent();
-    }
-  }
-
-  void followParent() {
-    if (parent != null && parent is GameComponent) {
-      followerTarget = parent as GameComponent;
     }
   }
 

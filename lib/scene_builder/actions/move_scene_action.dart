@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
 
@@ -17,54 +19,33 @@ import 'package:bonfire/bonfire.dart';
 class MoveComponentSceneAction<T extends Movement> extends SceneAction {
   final T component;
   final Vector2 newPosition;
-  final double? speed;
+
+  Vector2 _diffPosition = Vector2.zero();
 
   MoveComponentSceneAction({
     dynamic id,
     required this.component,
     required this.newPosition,
-    this.speed,
   }) : super(id);
 
   @override
   bool runAction(double dt, BonfireGameInterface game) {
-    double diffX = (component.position.x - newPosition.x).abs();
-    double speedDt = (speed ?? component.speed) * dt;
-    double speedX = speedDt > diffX ? diffX : (speed ?? component.speed);
+    var diffPosition = newPosition - component.position;
 
-    double diffY = (component.position.y - newPosition.y).abs();
-    double speedY = speedDt > diffY ? diffY : (speed ?? component.speed);
-
-    bool canMoveX = false;
-    bool canMoveY = false;
-    if (component.position.x > newPosition.x) {
-      canMoveX = component.moveLeft(speedX);
-    }
-    if (component.position.x < newPosition.x) {
-      canMoveX = component.moveRight(speedX);
-    }
-
-    if (component.position.y > newPosition.y) {
-      canMoveY = component.moveUp(speedY);
-    }
-
-    if (component.position.y < newPosition.y) {
-      canMoveY = component.moveDown(speedY);
-    }
-
-    if (diffX <= speedDt) {
-      canMoveX = false;
-    }
-
-    if (diffY <= speedDt) {
-      canMoveY = false;
-    }
-
-    if (!canMoveY && !canMoveX) {
-      component.idle();
+    var dtSpeed = component.speed * dt;
+    if (diffPosition.x.abs() < dtSpeed && diffPosition.y.abs() < dtSpeed) {
+      component.stopMove();
       return true;
     }
 
+    var d = _diffPosition - diffPosition;
+    if (d.isZero()) {
+      component.stopMove();
+      return true;
+    }
+    _diffPosition = diffPosition;
+    var radAngle = atan2(diffPosition.y, diffPosition.x);
+    component.moveFromAngle(radAngle);
     return false;
   }
 }

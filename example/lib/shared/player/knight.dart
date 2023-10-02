@@ -1,5 +1,5 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/manual_map/dungeon_map.dart';
+import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:example/shared/util/enemy_sprite_sheet.dart';
@@ -15,9 +15,10 @@ enum PlayerAttackType {
 }
 
 class Knight extends SimplePlayer
-    with Lighting, ObjectCollision, UseStateController<KnightController> {
-  static final double maxSpeed = DungeonMap.tileSize * 3;
-
+    with
+        Lighting,
+        BlockMovementCollision,
+        UseStateController<KnightController> {
   double angleRadAttack = 0.0;
   Rect? rectDirectionAttack;
   Sprite? spriteDirectionAttack;
@@ -31,8 +32,10 @@ class Knight extends SimplePlayer
           size: Vector2.all(DungeonMap.tileSize),
           position: position,
           life: 200,
-          speed: maxSpeed,
         ) {
+    setupMovementByJoystick(
+      intencityEnabled: true,
+    );
     setupLighting(
       LightingConfig(
         radius: width * 1.5,
@@ -40,42 +43,25 @@ class Knight extends SimplePlayer
         color: Colors.transparent,
       ),
     );
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(
-              DungeonMap.tileSize / 2,
-              DungeonMap.tileSize / 2.2,
-            ),
-            align: Vector2(
-              DungeonMap.tileSize / 3.5,
-              DungeonMap.tileSize / 2,
-            ),
-          )
-        ],
-      ),
-    );
   }
 
   @override
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
     if (hasGameRef && gameRef.sceneBuilderStatus.isRunning) {
       return;
     }
-    speed = maxSpeed * event.intensity;
-    super.joystickChangeDirectional(event);
+    super.onJoystickChangeDirectional(event);
   }
 
   @override
-  void joystickAction(JoystickActionEvent event) {
+  void onJoystickAction(JoystickActionEvent event) {
     if (hasGameRef && gameRef.sceneBuilderStatus.isRunning) {
       return;
     }
     if (hasController) {
       controller.handleJoystickAction(event);
     }
-    super.joystickAction(event);
+    super.onJoystickAction(event);
   }
 
   @override
@@ -107,16 +93,11 @@ class Knight extends SimplePlayer
       angle: angle,
       size: Vector2.all(width * 0.7),
       damage: damage,
-      speed: maxSpeed * 2,
-      collision: CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(width / 3, width / 3),
-            align: Vector2(width * 0.1, 0),
-          ),
-        ],
+      speed: speed * 2,
+      collision: RectangleHitbox(
+        size: Vector2(width / 3, width / 3),
+        position: Vector2(width * 0.1, 0),
       ),
-      marginFromOrigin: 20,
       lightingConfig: LightingConfig(
         radius: width / 2,
         blurBorder: width,
@@ -132,9 +113,9 @@ class Knight extends SimplePlayer
   }
 
   @override
-  void renderBeforeTransformation(Canvas canvas) {
+  void renderTree(Canvas canvas) {
     _drawDirectionAttack(canvas);
-    super.renderBeforeTransformation(canvas);
+    super.renderTree(canvas);
   }
 
   @override
@@ -148,23 +129,25 @@ class Knight extends SimplePlayer
   void execShowEmote() {
     if (hasGameRef) {
       add(
-        AnimatedFollowerObject(
+        AnimatedGameObject(
+          position: Vector2(width / 4, 0),
           animation: CommonSpriteSheet.emote,
           size: Vector2.all(width / 2),
-          positionFromTarget: Vector2(
-            18,
-            -6,
-          ),
+          loop: false,
         ),
       );
     }
   }
 
   void execShowTalk(GameComponent first) {
-    gameRef.camera.moveToTargetAnimated(
-      first,
+    double lastZoom = gameRef.bonfireCamera.zoom;
+    gameRef.bonfireCamera.moveToTargetAnimated(
+      effectController: EffectController(duration: 1),
+      target: first,
       zoom: 2,
-      finish: () {
+      onComplete: () {
+        gameRef.pauseEngine();
+
         TalkDialog.show(
           gameRef.context,
           [
@@ -213,11 +196,16 @@ class Knight extends SimplePlayer
             ),
           ],
           onClose: () {
+            gameRef.resumeEngine();
+
             // ignore: avoid_print
             print('close talk');
 
             if (!isDead) {
-              gameRef.camera.moveToPlayerAnimated(zoom: 1);
+              gameRef.bonfireCamera.moveToPlayerAnimated(
+                effectController: EffectController(duration: 1),
+                zoom: lastZoom,
+              );
             }
           },
           onFinish: () {
@@ -237,8 +225,8 @@ class Knight extends SimplePlayer
     if (showBgRangeAttack) {
       double radius = height;
       rectDirectionAttack = Rect.fromLTWH(
-        rectCollision.center.dx - radius,
-        rectCollision.center.dy - radius,
+        toAbsoluteRect().center.dx - radius,
+        toAbsoluteRect().center.dy - radius,
         radius * 2,
         radius * 2,
       );
@@ -256,6 +244,12 @@ class Knight extends SimplePlayer
 
   @override
   Future<void> onLoad() async {
+    add(
+      RectangleHitbox(
+        size: size / 2,
+        position: size / 4,
+      ),
+    );
     spriteDirectionAttack = await Sprite.load('direction_attack.png');
     return super.onLoad();
   }

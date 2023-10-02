@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/material.dart';
 
 class BonfireUtil {
   // ignore: constant_identifier_names
@@ -104,5 +103,17 @@ class BonfireUtil {
     double angle,
   ) {
     return movePointByAngle(point, speed, angle) - point;
+  }
+
+  static Vector2 vector2ByAngle(double angle, {double intencity = 1}) {
+    var x = cos(angle) * intencity;
+    var y = sin(angle) * intencity;
+    if (x.abs() < 0.01) {
+      x = 0;
+    }
+    if (y.abs() < 0.01) {
+      y = 0;
+    }
+    return Vector2(x, y);
   }
 }

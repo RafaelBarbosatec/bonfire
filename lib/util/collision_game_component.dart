@@ -12,21 +12,25 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 10/12/21
 
-class CollisionGameComponent extends GameComponent with ObjectCollision {
+class CollisionGameComponent extends GameComponent {
   final String name;
+  List<ShapeHitbox>? collisions;
 
   CollisionGameComponent({
     this.name = '',
     Map<String, dynamic>? properties,
     required Vector2 position,
     required Vector2 size,
-    List<CollisionArea> collisions = const [],
+    this.collisions,
   }) {
     this.properties = properties;
     this.position = position;
     this.size = size;
-    setupCollision(
-      CollisionConfig(collisions: collisions),
-    );
+  }
+
+  @override
+  Future<void> onLoad() async {
+    collisions?.let(addAll);
+    return super.onLoad();
   }
 }

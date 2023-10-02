@@ -1,101 +1,61 @@
-import 'dart:ui';
+import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/widgets.dart';
 
 final Color sensorColor = const Color(0xFFF44336).withOpacity(0.5);
 
 /// Mixin responsible for adding trigger to detect other objects above
 /// T is a type that Sensor will be find contact.
 mixin Sensor<T extends GameComponent> on GameComponent {
-  void onContact(GameComponent component);
-  void onContactExit(GameComponent component) {}
+  static const _sensorIntervalKey = 'SensorContact';
+  int _intervalCallback = 100;
+  GameComponent? componentIncontact;
+  bool sensorEnabled = true;
 
-  bool enabledSensor = true;
-  List<GameComponent> _componentsInContact = [];
+  void onContact(T component) {}
+  void onContactExit(T component) {}
 
-  int _intervalCheckContact = 250;
-  bool _checkOnlyVisible = true;
-  final String _intervalCheckContactKey = 'KEY_CHECK_SENSOR_CONTACT';
-
-  CollisionConfig? _collisionConfig;
-
-  Iterable<CollisionArea> get _sensorArea {
-    if (_collisionConfig != null) {
-      return _collisionConfig!.collisions;
-    }
-
-    if (isObjectCollision()) {
-      return (this as ObjectCollision).collisionConfig!.collisions;
-    }
-
-    return [
-      CollisionArea.rectangle(size: size),
-    ];
-  }
-
-  void setupSensorArea({
-    List<CollisionArea>? areaSensor,
-    int intervalCheck = 250,
-    bool checkOnlyVisible = true,
-  }) {
-    _checkOnlyVisible = checkOnlyVisible;
-    _intervalCheckContact = intervalCheck;
-    _collisionConfig = CollisionConfig(
-      collisions: areaSensor ?? _sensorArea,
-    );
+  void setSensorInterval(int intervalCallback) {
+    _intervalCallback = intervalCallback;
   }
 
   @override
   void update(double dt) {
-    if (enabledSensor && (_checkOnlyVisible ? isVisible : true)) {
-      if (checkInterval(_intervalCheckContactKey, _intervalCheckContact, dt)) {
-        _collisionConfig ??= CollisionConfig(collisions: _sensorArea);
-        _collisionConfig?.updatePosition(position);
-        _verifyContact();
+    super.update(dt);
+    if (componentIncontact != null && sensorEnabled) {
+      if (checkInterval(_sensorIntervalKey, _intervalCallback, dt)) {
+        onContact(componentIncontact! as T);
       }
     }
-    super.update(dt);
   }
 
   @override
-  void render(Canvas c) {
-    super.render(c);
-    if (gameRef.showCollisionArea) {
-      for (final area in _sensorArea) {
-        area.render(c, sensorColor);
-      }
+  Future<void> onLoad() async {
+    await super.onLoad();
+    bool containsShape = children.query<ShapeHitbox>().isNotEmpty;
+    if (!containsShape) {
+      add(RectangleHitbox(size: size, isSolid: true));
     }
   }
 
-  void _verifyContact() {
-    List<GameComponent> compsInContact = [];
-    Iterable<GameComponent> compsToCheck = _checkOnlyVisible
-        ? gameRef.visibleComponentsByType<T>()
-        : gameRef.componentsByType<T>();
-
-    for (final vComp in compsToCheck) {
-      if (vComp != this && !vComp.isHud) {
-        if (vComp.isObjectCollision()) {
-          final hasContact = (vComp as ObjectCollision)
-              .collisionConfig!
-              .verifyCollision(_collisionConfig);
-          if (hasContact) {
-            compsInContact.add(vComp);
-            onContact(vComp);
-          }
-        } else if (vComp.toRect().overlaps(_collisionConfig!.rect)) {
-          compsInContact.add(vComp);
-          onContact(vComp);
-        }
-      }
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is T) {
+      componentIncontact = other;
     }
-
-    for (final c in _componentsInContact) {
-      if (!compsInContact.contains(c)) {
-        onContactExit(c);
-      }
-    }
-    _componentsInContact = compsInContact;
+    super.onCollision(intersectionPoints, other);
   }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    if (componentIncontact == other) {
+      componentIncontact = null;
+      onContactExit(other as T);
+      resetInterval(_sensorIntervalKey);
+    }
+    super.onCollisionEnd(other);
+  }
+
+  @override
+  int get priority => LayerPriority.MAP + 1;
 }

@@ -3,8 +3,6 @@ import 'package:flutter/widgets.dart';
 
 abstract class LightingInterface {
   Color? color;
-  final List<Lighting> _visibleLight = [];
-  List<Lighting> get visibleLights => _visibleLight;
   void animateToColor(
     Color color, {
     Duration duration = const Duration(milliseconds: 500),
@@ -12,16 +10,6 @@ abstract class LightingInterface {
   });
 
   bool isEnabled();
-
-  void addVisibleLighting(Lighting lighting) {
-    if (!_visibleLight.contains(lighting)) {
-      _visibleLight.add(lighting);
-    }
-  }
-
-  void removeVisibleLighting(Lighting lighting) {
-    _visibleLight.remove(lighting);
-  }
 }
 
 /// Layer component responsible for adding lighting to the game.
@@ -45,7 +33,10 @@ class LightingComponent extends GameComponent with LightingInterface {
 
   @override
   int get priority {
-    return LayerPriority.getLightingPriority(gameRef.highestPriority);
+    if (hasGameRef) {
+      return LayerPriority.getLightingPriority(gameRef.highestPriority);
+    }
+    return super.priority;
   }
 
   Path getWheelPath(double wheelSize, double fromRadius, double toRadius) {
@@ -63,6 +54,10 @@ class LightingComponent extends GameComponent with LightingInterface {
       ..close();
   }
 
+  Iterable<Lighting> get _visibleLight {
+    return gameRef.visibles<Lighting>();
+  }
+
   @override
   void renderTree(Canvas canvas) {
     if (!_containColor) return;
@@ -74,11 +69,9 @@ class LightingComponent extends GameComponent with LightingInterface {
       config.update(_dtUpdate);
       canvas.save();
 
-      canvas.scale(gameRef.camera.zoom);
-      canvas.translate(
-        -(gameRef.camera.position.x),
-        -(gameRef.camera.position.y),
-      );
+      canvas.scale(gameRef.bonfireCamera.zoom);
+      final tl = gameRef.bonfireCamera.topleft;
+      canvas.translate(-(tl.x), -(tl.y));
 
       if (config.type is CircleLightingType) {
         _drawCircle(canvas, light);
@@ -132,11 +125,8 @@ class LightingComponent extends GameComponent with LightingInterface {
   void _drawArc(Canvas canvas, Lighting light) {
     var config = light.lightingConfig!;
     var type = config.type as ArcLightingType;
-    Offset offset = (light.center + config.align).toOffset();
-    final maskFilter = MaskFilter.blur(
-      BlurStyle.normal,
-      config.blurSigma,
-    );
+    Offset offset = (light.absoluteCenter + config.align).toOffset();
+
     canvas.save();
 
     canvas.translate(light.center.x, light.center.y);
@@ -156,7 +146,7 @@ class LightingComponent extends GameComponent with LightingInterface {
           false,
         )
         ..close(),
-      _paintFocusArc..maskFilter = maskFilter,
+      _paintFocusArc..maskFilter = config.maskFilter,
     );
 
     canvas.drawPath(
@@ -174,7 +164,7 @@ class LightingComponent extends GameComponent with LightingInterface {
         ..close(),
       _paintLightingArc
         ..color = config.color
-        ..maskFilter = maskFilter,
+        ..maskFilter = config.maskFilter,
     );
 
     canvas.restore();
@@ -182,29 +172,21 @@ class LightingComponent extends GameComponent with LightingInterface {
 
   void _drawCircle(Canvas canvas, Lighting light) {
     var config = light.lightingConfig!;
-    Offset offset = (light.center + config.align).toOffset();
-    final maskFilter = MaskFilter.blur(
-      BlurStyle.normal,
-      config.blurSigma,
-    );
+    Offset offset = (light.absoluteCenter + config.align).toOffset();
+
     canvas.drawCircle(
       offset,
-      config.radius *
-          (config.withPulse
-              ? (1 - config.valuePulse * config.pulseVariation)
-              : 1),
-      _paintFocus..maskFilter = maskFilter,
+      config.radius * (1 - config.valuePulse),
+      _paintFocus..maskFilter = config.maskFilter,
     );
 
     _paintLighting
       ..color = config.color
-      ..maskFilter = maskFilter;
+      ..maskFilter = config.maskFilter;
+
     canvas.drawCircle(
       offset,
-      config.radius *
-          (config.withPulse
-              ? (1 - config.valuePulse * config.pulseVariation)
-              : 1),
+      config.radius * (config.withPulse ? (1 - config.valuePulse) : 1),
       _paintLighting,
     );
   }

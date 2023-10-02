@@ -1,13 +1,4 @@
-import 'package:bonfire/collision/collision_config.dart';
-import 'package:bonfire/lighting/lighting_config.dart';
-import 'package:bonfire/mixins/attackable.dart';
-import 'package:bonfire/npc/enemy/enemy.dart';
-import 'package:bonfire/player/player.dart';
-import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/extensions/game_component_extensions.dart';
-import 'package:bonfire/util/extensions/movement_extensions.dart';
-import 'package:bonfire/util/extensions/npc/npc_extensions.dart';
-import 'package:flame/components.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
 /// Functions util to use in your [Enemy]
@@ -29,7 +20,10 @@ extension EnemyExtensions on Enemy {
 
     if (isDead) return;
 
-    Direction direct = direction ?? getComponentDirectionFromMe(gameRef.player);
+    Direction direct = direction ??
+        (gameRef.player != null
+            ? getComponentDirectionFromMe(gameRef.player!)
+            : lastDirection);
 
     simpleAttackMeleeByDirection(
       damage: damage,
@@ -58,8 +52,7 @@ extension EnemyExtensions on Enemy {
     Direction? direction,
     int interval = 1000,
     bool withCollision = true,
-    bool enableDiagonal = true,
-    CollisionConfig? collision,
+    ShapeHitbox? collision,
     VoidCallback? onDestroy,
     VoidCallback? execute,
     LightingConfig? lightingConfig,
@@ -68,7 +61,10 @@ extension EnemyExtensions on Enemy {
 
     if (isDead) return;
 
-    Direction direct = direction ?? getComponentDirectionFromMe(gameRef.player);
+    Direction direct = direction ??
+        (gameRef.player != null
+            ? getComponentDirectionFromMe(gameRef.player!)
+            : lastDirection);
 
     simpleAttackRangeByDirection(
       animationRight: animationRight,
@@ -83,26 +79,27 @@ extension EnemyExtensions on Enemy {
       onDestroy: onDestroy,
       destroySize: destroySize,
       lightingConfig: lightingConfig,
-      enableDiagonal: enableDiagonal,
       attackFrom: AttackFromEnum.ENEMY,
     );
-
-    if (execute != null) execute();
+    execute?.call();
   }
 
   /// Checks whether the player is within range. If so, move to it.
   /// [visionAngle] in radians
   /// [angle] in radians. is automatically picked up using the component's direction.
   void seeAndMoveToAttackRange({
-    required Function(Player) positioned,
+    Function(Player)? positioned,
     VoidCallback? notObserved,
-    VoidCallback? observed,
+    Function(Player)? observed,
     double radiusVision = 32,
     double? visionAngle,
     double? angle,
     double? minDistanceFromPlayer,
-    bool runOnlyVisibleInScreen = true,
   }) {
+    if (minDistanceFromPlayer != null) {
+      assert(minDistanceFromPlayer < radiusVision);
+    }
+
     if (isDead) return;
 
     seePlayer(
@@ -110,28 +107,27 @@ extension EnemyExtensions on Enemy {
       visionAngle: visionAngle,
       angle: angle,
       observed: (player) {
-        observed?.call();
-        positionsItselfAndKeepDistance(
+        observed?.call(player);
+        bool inDistance = keepDistance(
           player,
-          minDistanceFromPlayer: minDistanceFromPlayer,
-          radiusVision: radiusVision,
-          runOnlyVisibleInScreen: runOnlyVisibleInScreen,
-          positioned: (player) {
-            final playerDirection = getComponentDirectionFromMe(player);
-            lastDirection = playerDirection;
-            if (lastDirection == Direction.left ||
-                lastDirection == Direction.right) {
-              lastDirectionHorizontal = lastDirection;
-            }
-            idle();
-            positioned(player as Player);
-          },
+          (minDistanceFromPlayer ?? (radiusVision - 5)),
         );
+        if (inDistance) {
+          final playerDirection = getComponentDirectionFromMe(player);
+          lastDirection = playerDirection;
+          if (lastDirection == Direction.left ||
+              lastDirection == Direction.right) {
+            lastDirectionHorizontal = lastDirection;
+          }
+
+          if (checkInterval('seeAndMoveToAttackRange', 500, dtUpdate)) {
+            stopMove();
+          }
+          positioned?.call(player);
+        }
       },
       notObserved: () {
-        if (!isIdle) {
-          idle();
-        }
+        stopMove();
         notObserved?.call();
       },
     );
