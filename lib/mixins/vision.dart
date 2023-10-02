@@ -11,6 +11,7 @@ mixin Vision on GameComponent {
   static const VISION_360 = 6.28319;
   final Paint _paint = Paint()..color = Colors.red.withOpacity(0.5);
   bool _drawVision = false;
+  bool _checkWithRaycast = true;
   final Map<String, PolygonShape> _polygonCache = {};
   PolygonShape? _currentShape;
   int _countPolygonPoints = 20;
@@ -18,10 +19,12 @@ mixin Vision on GameComponent {
   void setupVision({
     Color? color,
     bool drawVision = false,
+    bool checkWithRaycast = true,
     int countPolygonPoints = 20,
   }) {
     assert(countPolygonPoints % 2 == 0, 'countPolygonPoints must be even');
     _drawVision = drawVision;
+    _checkWithRaycast = checkWithRaycast;
     _countPolygonPoints = countPolygonPoints;
     _paint.color = color ?? Colors.red.withOpacity(0.5);
   }
@@ -70,16 +73,19 @@ mixin Vision on GameComponent {
 
     bool inShape = shape.isCollision(otherShape);
     if (inShape) {
-      Vector2 myCenter = rectCollision.center.toVector2();
-      Vector2 compCenter = component.rectCollision.center.toVector2();
-      Vector2 direction = (compCenter - myCenter).normalized();
+      if (_checkWithRaycast) {
+        Vector2 myCenter = rectCollision.center.toVector2();
+        Vector2 compCenter = component.rectCollision.center.toVector2();
+        Vector2 direction = (compCenter - myCenter).normalized();
 
-      final result = raycast(
-        direction,
-        maxDistance: radiusVision,
-        origin: compCenter,
-      );
-      return result?.hitbox?.parent == component;
+        final result = raycast(
+          direction,
+          maxDistance: radiusVision,
+          origin: compCenter,
+        );
+        return result?.hitbox?.parent == component;
+      }
+      return true;
     }
 
     return false;
