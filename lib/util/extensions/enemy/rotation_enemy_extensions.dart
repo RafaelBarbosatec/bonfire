@@ -37,7 +37,7 @@ extension RotationEnemyExtensions on RotationEnemy {
         moveFromAngle(radAngle);
       },
       notObserved: () {
-         if (notObserved != null) {
+        if (notObserved != null) {
           notObserved();
         } else {
           stopMove();

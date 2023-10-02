@@ -31,9 +31,7 @@ class DungeonMap {
         sprite: TileModelSprite(path: pngImage),
         x: indexColumn.toDouble(),
         y: indexRow.toDouble(),
-        collisions: [
-          RectangleHitbox(size: Vector2(tileSize, tileSize))
-        ],
+        collisions: [RectangleHitbox(size: Vector2(tileSize, tileSize))],
         width: tileSize,
         height: tileSize,
       ),

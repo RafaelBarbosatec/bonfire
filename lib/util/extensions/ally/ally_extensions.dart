@@ -131,7 +131,7 @@ extension AllyExtensions on Ally {
         }
       },
       notObserved: () {
-         if (notObserved != null) {
+        if (notObserved != null) {
           notObserved();
         } else {
           stopMove();

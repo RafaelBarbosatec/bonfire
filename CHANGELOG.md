@@ -1,8 +1,8 @@
-# NEXT
+# 3.0.0-beta.18
 - Updade Flame to `1.9.1`
 - rename `bonfireCamera`to `camera`
-- enemy movements improvements
-- Mixin `Vision` improvements
+- enemy movements improvements.
+- Mixin `Vision` improvements.
 
 # 3.0.0-beta.17
 

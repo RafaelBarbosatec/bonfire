@@ -71,7 +71,7 @@ extension NpcExtensions on Npc {
         );
       },
       notObserved: () {
-       if (notObserved != null) {
+        if (notObserved != null) {
           notObserved();
         } else {
           stopMove();
