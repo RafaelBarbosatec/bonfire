@@ -17,6 +17,7 @@ import 'package:example/pages/mini_games/platform/platform_game.dart';
 import 'package:example/pages/mini_games/random_map/random_map_game.dart';
 import 'package:example/pages/mini_games/tiled_map/game_tiled_map.dart';
 import 'package:example/pages/mini_games/top_down_game/top_down_game.dart';
+import 'package:example/pages/path_finding/path_finding_page.dart';
 import 'package:example/pages/player/platform/platform_player_page.dart';
 import 'package:example/pages/player/rotation/rotation_player_page.dart';
 import 'package:example/pages/player/simple/simple_player_page.dart';
@@ -205,6 +206,16 @@ class _HomePageState extends State<HomePage> {
             builder: (_) => const LightingPage(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/lighting',
+          ),
+        ],
+      ),
+      SectionDrawer(
+        itens: [
+          ItemDrawer(
+            name: 'PathFinding',
+            builder: (_) => const PathFindingPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/path_finding',
           ),
         ],
       ),

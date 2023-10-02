@@ -62,7 +62,7 @@ class InterfaceComponent extends GameComponent
   }
 
   @override
-  bool onTapDown(int pointer, Vector2 position) {
+  bool onTapDown(TapGestureEvent event) {
     selected = true;
     return true;
   }

@@ -1,27 +1,50 @@
+import 'dart:ui';
+
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
+
+class TapGestureEvent {
+  final int pointer;
+  final Vector2 screenPosition;
+  Vector2 worldPosition;
+  final PointerDeviceKind kind;
+
+  TapGestureEvent({
+    required this.pointer,
+    required this.screenPosition,
+    Vector2? worldPosition,
+    required this.kind,
+  }) : worldPosition = worldPosition ?? Vector2.zero();
+
+  factory TapGestureEvent.fromPointerEvent(PointerEvent event) {
+    return TapGestureEvent(
+      pointer: event.pointer,
+      kind: event.kind,
+      screenPosition: event.localPosition.toVector2(),
+    );
+  }
+}
 
 mixin TapGesture on GameComponent {
   bool enableTab = true;
   int _pointer = -1;
   @override
   bool handlerPointerDown(PointerDownEvent event) {
-    final pointer = event.pointer;
-    final position = event.localPosition.toVector2();
+    final tapEvent = TapGestureEvent.fromPointerEvent(event);
+    tapEvent.worldPosition = gameRef.screenToWorld(tapEvent.screenPosition);
     bool handler = false;
 
     if (enableTab && hasGameRef) {
-      onTapDownScreen(pointer, position);
+      onTapDownScreen(tapEvent);
       if (isHud) {
-        if (containsPoint(position)) {
-          _pointer = pointer;
-          handler = onTapDown(pointer, position);
+        if (containsPoint(tapEvent.screenPosition)) {
+          _pointer = tapEvent.pointer;
+          handler = onTapDown(tapEvent);
         }
       } else {
-        final worldPosition = gameRef.screenToWorld(position);
-        if (containsPoint(worldPosition)) {
-          _pointer = pointer;
-          handler = onTapDown(pointer, worldPosition);
+        if (containsPoint(tapEvent.worldPosition)) {
+          _pointer = tapEvent.pointer;
+          handler = onTapDown(tapEvent);
         }
       }
     }
@@ -30,22 +53,21 @@ mixin TapGesture on GameComponent {
 
   @override
   bool handlerPointerUp(PointerUpEvent event) {
-    final pointer = event.pointer;
-    final position = event.localPosition.toVector2();
+    final tapEvent = TapGestureEvent.fromPointerEvent(event);
+    tapEvent.worldPosition = gameRef.screenToWorld(tapEvent.screenPosition);
 
-    if (enableTab && pointer == _pointer && hasGameRef) {
-      onTapUpScreen(pointer, position);
+    if (enableTab && tapEvent.pointer == _pointer && hasGameRef) {
+      onTapUpScreen(tapEvent);
       if (isHud) {
-        if (containsPoint(position)) {
-          onTapUp(pointer, position);
+        if (containsPoint(tapEvent.screenPosition)) {
+          onTapUp(tapEvent);
           onTap();
         } else {
           onTapCancel();
         }
       } else {
-        final absolutePosition = gameRef.screenToWorld(position);
-        if (containsPoint(absolutePosition)) {
-          onTapUp(pointer, position);
+        if (containsPoint(tapEvent.worldPosition)) {
+          onTapUp(tapEvent);
           onTap();
         } else {
           onTapCancel();
@@ -59,12 +81,12 @@ mixin TapGesture on GameComponent {
 
   // It's called when happen tap down in the component
   // If return 'true' this event is not relay to others components.(default = false)
-  bool onTapDown(int pointer, Vector2 position) {
+  bool onTapDown(TapGestureEvent event) {
     return false;
   }
 
   // It's called when happen tap up in the component
-  void onTapUp(int pointer, Vector2 position) {}
+  void onTapUp(TapGestureEvent event) {}
   // It's called when happen canceled tap in the component
   void onTapCancel() {}
 
@@ -72,7 +94,7 @@ mixin TapGesture on GameComponent {
   void onTap();
 
   // It's called when happen tap down in the screen
-  void onTapDownScreen(int pointer, Vector2 position) {}
+  void onTapDownScreen(TapGestureEvent event) {}
   // It's called when happen tap up in the screen
-  void onTapUpScreen(int pointer, Vector2 position) {}
+  void onTapUpScreen(TapGestureEvent event) {}
 }

@@ -4,6 +4,9 @@
 - enemy movements improvements.
 - Mixin `Vision` improvements.
 
+# NEXT
+- `TapGesture` improvements
+
 # 3.0.0-beta.17
 
 - `Movement` improvements.
