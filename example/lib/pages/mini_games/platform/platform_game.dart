@@ -13,9 +13,11 @@ class PlatformGame extends StatefulWidget {
 }
 
 class _PlatformGameState extends State<PlatformGame> {
+  Key _gameKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return BonfireWidget(
+      key: _gameKey,
       map: WorldMapByTiled(
         'platform/platform_map.tmj',
         objectsBuilder: {
@@ -40,7 +42,7 @@ class _PlatformGameState extends State<PlatformGame> {
           ),
         ],
       ),
-      components: [PlatformGameController()],
+      components: [PlatformGameController(reset: reset)],
       backgroundColor: const Color(0xFF2fbdff),
       globalForces: [
         GravityForce2D(),
@@ -54,5 +56,11 @@ class _PlatformGameState extends State<PlatformGame> {
         position: Vector2(50 * 16, 3 * 16),
       ),
     );
+  }
+
+  void reset() {
+    setState(() {
+      _gameKey = UniqueKey();
+    });
   }
 }

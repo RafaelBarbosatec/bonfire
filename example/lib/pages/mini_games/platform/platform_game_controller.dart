@@ -1,13 +1,14 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/main.dart';
 import 'package:example/pages/mini_games/platform/fox_player.dart';
 import 'package:example/pages/mini_games/platform/gem_decoration.dart';
-import 'package:example/pages/mini_games/platform/platform_game.dart';
 import 'package:flutter/material.dart';
 
 class PlatformGameController extends GameComponent {
   bool showGameOver = false;
   bool showWin = false;
+  final VoidCallback reset;
+
+  PlatformGameController({required this.reset});
   @override
   void update(double dt) {
     if (checkInterval('check win', 500, dt)) {
@@ -51,25 +52,14 @@ class PlatformGameController extends GameComponent {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Menu(),
-                    ),
-                    (route) => false,
-                  );
+                  Navigator.pop(context);
                 },
                 child: const Text('OK'),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PlatformGame(),
-                    ),
-                    (route) => false,
-                  );
+                  Navigator.pop(context);
+                  reset();
                 },
                 child: const Text('TRY AGAIN'),
               ),
