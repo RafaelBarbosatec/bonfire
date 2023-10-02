@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 /// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
-mixin MoveToPositionAlongThePath on Movement {
+mixin PathFinding on Movement {
   static const REDUCTION_TO_AVOID_ROUNDING_PROBLEMS = 4;
 
   List<Offset> _currentPath = [];
@@ -58,7 +58,7 @@ mixin MoveToPositionAlongThePath on Movement {
     _gridSizeIsCollisionSize = gridSizeIsCollisionSize;
   }
 
-  Future<List<Offset>> moveToPositionAlongThePath(
+  Future<List<Offset>> moveToPositionWithPathFinding(
     Vector2 position, {
     List? ignoreCollisions,
     VoidCallback? onFinish,

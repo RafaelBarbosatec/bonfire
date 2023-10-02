@@ -5,7 +5,8 @@
 - Mixin `Vision` improvements.
 
 # NEXT
-- `TapGesture` improvements
+- `TapGesture` improvements. Now your recieve `TapGestureEvent` in callbacks.
+-  mixin `MoveToPositionAlongThePath` renamed to `PathFinding`.
 
 # 3.0.0-beta.17
 

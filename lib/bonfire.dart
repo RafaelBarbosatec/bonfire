@@ -36,7 +36,7 @@ export 'package:bonfire/mixins/interval_checker.dart';
 export 'package:bonfire/mixins/jumper.dart';
 export 'package:bonfire/mixins/jumper_animation.dart';
 export 'package:bonfire/input/gestures/move_camera_using_gestures.dart';
-export 'package:bonfire/mixins/move_to_position_along_the_path.dart';
+export 'package:bonfire/mixins/path_finding.dart';
 export 'package:bonfire/mixins/movement.dart';
 export 'package:bonfire/mixins/movement_by_joystick.dart';
 export 'package:bonfire/mixins/pushable.dart';
