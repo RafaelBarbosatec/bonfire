@@ -111,13 +111,13 @@ class _HomePageState extends State<HomePage> {
             name: 'Using Tiled',
             builder: (_) => const TiledPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/map/tiled',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/map/tiled',
           ),
           ItemDrawer(
             name: 'Using matrix',
             builder: (_) => const TerrainBuilderPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/map/terrain_builder',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/map/terrain_builder',
           ),
         ],
       ),
@@ -128,31 +128,31 @@ class _HomePageState extends State<HomePage> {
             name: 'TapGesture',
             builder: (_) => const TapGesturePage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/input/tap',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/input/tap',
           ),
           ItemDrawer(
             name: 'DragGesture',
             builder: (_) => const DragGesturePage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/input/drag',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/input/drag',
           ),
           ItemDrawer(
             name: 'MoveCamera',
             builder: (_) => const MoveCameraPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/input/move_camera_mouse',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/input/move_camera_mouse',
           ),
           ItemDrawer(
             name: 'Mouse',
             builder: (_) => const MouseInputPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/input/mouse',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/input/mouse',
           ),
           ItemDrawer(
             name: 'Keyboard',
             builder: (_) => const KeyboardPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/input/keyboard',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/input/keyboard',
           ),
         ],
       ),
@@ -163,19 +163,19 @@ class _HomePageState extends State<HomePage> {
             name: 'SimplePlayer',
             builder: (_) => const SimplePlayerPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/player/simple',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/player/simple',
           ),
           ItemDrawer(
             name: 'RotationPlayer',
             builder: (_) => const RotationPlayerPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/player/rotation',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/player/rotation',
           ),
           ItemDrawer(
             name: 'PlatformPlayer',
             builder: (_) => const PlatformPlayerPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/player/platform',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/player/platform',
           )
         ],
       ),
@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
             name: 'Enemy',
             builder: (_) => const EnemyPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/enemy',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/enemy',
           ),
         ],
       ),
@@ -195,7 +195,7 @@ class _HomePageState extends State<HomePage> {
             name: 'Forces',
             builder: (_) => const ForcesPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/forces',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/forces',
           ),
         ],
       ),
@@ -205,7 +205,7 @@ class _HomePageState extends State<HomePage> {
             name: 'Lighting',
             builder: (_) => const LightingPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/lighting',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/lighting',
           ),
         ],
       ),
@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> {
             name: 'PathFinding',
             builder: (_) => const PathFindingPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/pages/path_finding',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/path_finding',
           ),
         ],
       ),
@@ -226,25 +226,25 @@ class _HomePageState extends State<HomePage> {
             name: 'Map by Tiled',
             builder: (_) => const GameTiledMap(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/tree/v3.0.0/example/lib/pages/mini_games',
+                'https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/mini_games',
           ),
           ItemDrawer(
             name: 'Topdown game',
             builder: (_) => const TopDownGame(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/tree/v3.0.0/example/lib/pages/mini_games',
+                'https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/mini_games',
           ),
           ItemDrawer(
             name: 'Platform game',
             builder: (_) => const PlatformGame(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/tree/v3.0.0/example/lib/pages/mini_games',
+                'https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/mini_games',
           ),
           ItemDrawer(
             name: 'Multi scenario game',
             builder: (_) => const MultiScenario(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/tree/v3.0.0/example/lib/pages/mini_games',
+                'https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/mini_games',
           ),
           ItemDrawer(
             name: 'Random Map',
@@ -252,13 +252,13 @@ class _HomePageState extends State<HomePage> {
               size: Vector2(100, 100),
             ),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/tree/v3.0.0/example/lib/pages/mini_games',
+                'https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/mini_games',
           ),
           ItemDrawer(
             name: 'Manual map game',
             builder: (_) => const GameManualMap(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/tree/v3.0.0/example/lib/pages/mini_games',
+                'https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/mini_games',
           ),
         ],
       ),
