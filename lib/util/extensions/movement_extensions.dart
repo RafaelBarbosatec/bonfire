@@ -39,9 +39,9 @@ extension MovementExtensions on Movement {
 
   /// Checks whether the component is within range. If so, position yourself and keep your distance.
   /// Method that bo used in [update] method.
-  bool positionsItselfAndKeepDistance(
-    GameComponent target, {
-    Function(GameComponent)? positioned,
+  bool positionsItselfAndKeepDistance<T extends GameComponent>(
+    T target, {
+    Function(T)? positioned,
     double radiusVision = 32,
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,

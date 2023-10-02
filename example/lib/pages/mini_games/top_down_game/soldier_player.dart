@@ -27,6 +27,7 @@ class SoldierPlayer extends RotationPlayer
     setupLighting(
       LightingConfig(
         radius: size.y * 2,
+        blurBorder: size.y / 2,
         color: Colors.yellow.withOpacity(0.3),
         type: LightingType.arc(
           endRadAngle: (2 * pi) / 6,

@@ -19,7 +19,7 @@ class Goblin extends SimpleEnemy
           animation: EnemySpriteSheet.simpleDirectionAnimation,
           position: position,
           size: Vector2.all(DungeonMap.tileSize * 0.8),
-          speed: DungeonMap.tileSize * 1.6,
+          speed: DungeonMap.tileSize,
           life: 100,
         ) {
     setupBarLife(

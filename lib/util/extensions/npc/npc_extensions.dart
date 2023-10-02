@@ -71,8 +71,11 @@ extension NpcExtensions on Npc {
         );
       },
       notObserved: () {
-        stopMove();
-        notObserved?.call();
+       if (notObserved != null) {
+          notObserved();
+        } else {
+          stopMove();
+        }
       },
     );
   }
@@ -108,8 +111,11 @@ extension NpcExtensions on Npc {
         );
       },
       notObserved: () {
-        stopMove();
-        notObserved?.call();
+        if (notObserved != null) {
+          notObserved();
+        } else {
+          stopMove();
+        }
       },
     );
   }
@@ -145,8 +151,11 @@ extension NpcExtensions on Npc {
         );
       },
       notObserved: () {
-        stopMove();
-        notObserved?.call();
+        if (notObserved != null) {
+          notObserved();
+        } else {
+          stopMove();
+        }
       },
     );
   }

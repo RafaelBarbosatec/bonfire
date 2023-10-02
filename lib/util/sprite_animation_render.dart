@@ -11,7 +11,6 @@ class SpriteAnimationRender {
   final Vector2? position;
   final bool loop;
   Vector2? size;
-  bool _playing = true;
 
   set animation(SpriteAnimation? animation) {
     _animation = animation;
@@ -31,10 +30,10 @@ class SpriteAnimationRender {
     bool autoPlay = true,
   }) : _animation = animation {
     _animation?.loop = loop;
-    _playing = autoPlay;
     _animationTicker = animation?.createTicker();
     _animationTicker?.onStart = onStart;
     _animationTicker?.onComplete = onFinish;
+    _animationTicker?.paused = !autoPlay;
   }
 
   void render(Canvas canvas, {Paint? overridePaint}) {
@@ -47,19 +46,18 @@ class SpriteAnimationRender {
   }
 
   void update(double dt) {
-    if (_playing) {
-      _animationTicker?.update(dt);
-    }
+    _animationTicker?.update(dt);
   }
 
   bool get isLastFrame => _animationTicker?.isLastFrame ?? false;
   int get currentIndex => _animationTicker?.currentIndex ?? 0;
+  bool get isPaused => _animationTicker?.isPaused ?? false;
 
   void pause() {
-    _playing = false;
+    _animationTicker?.paused = true;
   }
 
   void play() {
-    _playing = true;
+    _animationTicker?.paused = false;
   }
 }

@@ -95,6 +95,8 @@ extension EnemyExtensions on Enemy {
     double? visionAngle,
     double? angle,
     double? minDistanceFromPlayer,
+    bool useDiagonal = true,
+    // bool useDiagonal = true,
   }) {
     if (minDistanceFromPlayer != null) {
       assert(minDistanceFromPlayer < radiusVision);
@@ -108,27 +110,52 @@ extension EnemyExtensions on Enemy {
       angle: angle,
       observed: (player) {
         observed?.call(player);
-        bool inDistance = keepDistance(
-          player,
-          (minDistanceFromPlayer ?? (radiusVision - 5)),
-        );
-        if (inDistance) {
-          final playerDirection = getComponentDirectionFromMe(player);
-          lastDirection = playerDirection;
-          if (lastDirection == Direction.left ||
-              lastDirection == Direction.right) {
-            lastDirectionHorizontal = lastDirection;
-          }
+        double minD = (minDistanceFromPlayer ?? (radiusVision - 5));
+        if (useDiagonal) {
+          bool inDistance = keepDistance(
+            player,
+            minD,
+          );
+          if (inDistance) {
+            final playerDirection = getComponentDirectionFromMe(player);
+            lastDirection = playerDirection;
+            if (lastDirection == Direction.left ||
+                lastDirection == Direction.right) {
+              lastDirectionHorizontal = lastDirection;
+            }
 
-          if (checkInterval('seeAndMoveToAttackRange', 500, dtUpdate)) {
-            stopMove();
+            if (checkInterval('seeAndMoveToAttackRange', 500, dtUpdate)) {
+              stopMove();
+            }
+            positioned?.call(player);
           }
-          positioned?.call(player);
+        } else {
+          positionsItselfAndKeepDistance(
+            player,
+            minDistanceFromPlayer: minD,
+            radiusVision: radiusVision,
+            positioned: (player) {
+              final playerDirection = getComponentDirectionFromMe(player);
+              lastDirection = playerDirection;
+              if (lastDirection == Direction.left ||
+                  lastDirection == Direction.right) {
+                lastDirectionHorizontal = lastDirection;
+              }
+
+              if (checkInterval('seeAndMoveToAttackRange', 500, dtUpdate)) {
+                stopMove();
+              }
+              positioned?.call(player);
+            },
+          );
         }
       },
       notObserved: () {
-        stopMove();
-        notObserved?.call();
+        if (notObserved != null) {
+          notObserved();
+        } else {
+          stopMove();
+        }
       },
     );
   }

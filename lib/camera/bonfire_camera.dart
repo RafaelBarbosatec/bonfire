@@ -160,10 +160,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
         effectController: effectController,
         zoom: zoom,
         angle: angle,
-        onComplete: () {
-          onComplete?.call();
-          follow(i);
-        },
+        onComplete: onComplete,
       );
     });
   }

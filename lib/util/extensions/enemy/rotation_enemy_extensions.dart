@@ -37,8 +37,11 @@ extension RotationEnemyExtensions on RotationEnemy {
         moveFromAngle(radAngle);
       },
       notObserved: () {
-        stopMove();
-        notObserved?.call();
+         if (notObserved != null) {
+          notObserved();
+        } else {
+          stopMove();
+        }
       },
     );
   }
@@ -84,8 +87,11 @@ extension RotationEnemyExtensions on RotationEnemy {
         );
       },
       notObserved: () {
-        stopMove();
-        notObserved?.call();
+        if (notObserved != null) {
+          notObserved();
+        } else {
+          stopMove();
+        }
       },
     );
   }

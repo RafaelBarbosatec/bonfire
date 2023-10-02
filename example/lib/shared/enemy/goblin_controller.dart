@@ -24,33 +24,52 @@ class GoblinController extends StateController<Goblin> {
 
     if (!gameRef.sceneBuilderStatus.isRunning) {
       component.seePlayer(
-        radiusVision: DungeonMap.tileSize * 3,
+        radiusVision: DungeonMap.tileSize,
         observed: (p) {
-          if (component.distance(p) <= DungeonMap.tileSize * 2) {
-            component.moveTowardsTarget(
-              target: p,
-              close: () {
-                component.execAttack(attack);
-              },
-            );
-          } else {
-            component.seeAndMoveToAttackRange(
-              minDistanceFromPlayer: DungeonMap.tileSize * 2,
-              positioned: (p) {
-                component.execAttackRange(attack);
-              },
-              radiusVision: DungeonMap.tileSize * 3,
-            );
-          }
+          component.moveTowardsTarget(
+            target: p,
+            close: () {
+              component.execAttack(attack);
+            },
+          );
         },
         notObserved: () {
-          component.runRandomMovement(
-            dt,
-            speed: component.speed / 2,
-            maxDistance: (DungeonMap.tileSize * 3).toInt(),
+          component.seeAndMoveToAttackRange(
+            minDistanceFromPlayer: DungeonMap.tileSize * 2,
+            useDiagonal: false,
+            positioned: (p) {
+              component.execAttackRange(attack);
+            },
+            radiusVision: DungeonMap.tileSize * 3,
+            notObserved: () {
+              component.runRandomMovement(
+                dt,
+                speed: component.speed / 2,
+                maxDistance: (DungeonMap.tileSize * 3).toInt(),
+              );
+            },
           );
         },
       );
+
+      // component.seePlayer(
+      //   radiusVision: DungeonMap.tileSize * 3,
+      //   observed: (p) {
+      //     if (component.distance(p) <= DungeonMap.tileSize * 2) {
+      //       component.moveTowardsTarget(
+      //         target: p,
+      //         close: () {
+      //           component.execAttack(attack);
+      //         },
+      //       );
+      //     } else {
+
+      //     }
+      //   },
+      //   notObserved: () {
+
+      //   },
+      // );
     }
   }
 }
