@@ -27,7 +27,7 @@ abstract class BonfireGameInterface {
   JoystickController? get joystick;
   LightingInterface? get lighting;
   ColorFilterInterface? get colorFilter;
-  BonfireCamera get bonfireCamera;
+  BonfireCamera get camera;
   GameMap get map;
   int get highestPriority;
   Vector2 get size;

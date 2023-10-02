@@ -34,7 +34,7 @@ class ForcesGem extends GameDecoration
   @override
   Future<void> onLoad() {
     add(RectangleHitbox(size: size));
-    var textSize = _textPaint.measureText(text);
+    var textSize = _textPaint.getLineMetrics(text).size;
     add(
       TextComponent(
         text: text,

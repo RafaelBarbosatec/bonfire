@@ -34,7 +34,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   final GameMap map;
 
   /// The player-controlling component.
-  final JoystickController? _joystickController;
+  final JoystickController? joystickController;
 
   /// Background of the game. This can be a color or custom component
   final GameBackground? background;
@@ -60,19 +60,19 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   final List<ShapeHitbox> _visibleCollisions = List.empty(growable: true);
   late IntervalTick _intervalUpdateOder;
   late IntervalTick _intervalOprimizeTree;
-  late ColorFilterComponent _colorFilterComponent;
-  late LightingComponent _lighting;
 
   ValueChanged<BonfireGame>? onReady;
 
   @override
-  LightingInterface get lighting => _lighting;
+  LightingInterface get lighting =>
+      camera.viewport.children.whereType<LightingInterface>().first;
 
   @override
-  ColorFilterInterface get colorFilter => _colorFilterComponent;
+  ColorFilterInterface get colorFilter =>
+      camera.viewport.children.whereType<ColorFilterInterface>().first;
 
   @override
-  JoystickController? get joystick => _joystickController;
+  JoystickController? get joystick => joystickController;
 
   @override
   Color backgroundColor() => _bgColor ?? super.backgroundColor();
@@ -82,9 +82,12 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   bool _shouldUpdatePriority = false;
 
   @override
-  late BonfireCamera bonfireCamera;
+  BonfireCamera get camera => super.camera as BonfireCamera;
 
-  late World world;
+  @override
+  set camera(CameraComponent newCameraComponent) {
+    throw Exception('Is forbiden updade camera');
+  }
 
   /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
   int _highestPriority = 1000000;
@@ -96,7 +99,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   BonfireGame({
     required this.context,
     required this.map,
-    JoystickController? joystickController,
+    this.joystickController,
     this.player,
     this.interface,
     List<GameComponent>? components,
@@ -110,16 +113,32 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
     List<Force2D>? globalForces,
-  })  : _joystickController = joystickController,
-        globalForces = globalForces ?? [] {
+  })  : globalForces = globalForces ?? [],
+        super(
+          camera: BonfireCamera(
+            config: cameraConfig ?? CameraConfig(),
+            hudComponents: [
+              LightingComponent(
+                color: lightingColorGame ?? const Color(0x00000000),
+              ),
+              ColorFilterComponent(
+                colorFilter ?? GameColorFilter(),
+              ),
+              if (joystickController != null) joystickController,
+              if (interface != null) interface,
+            ],
+          ),
+          world: World(
+            children: [
+              map,
+              if (background != null) background,
+              if (player != null) player,
+              ...components ?? [],
+            ],
+          ),
+        ) {
     this.debugMode = debugMode;
     _bgColor = backgroundColor;
-    _lighting = LightingComponent(
-      color: lightingColorGame ?? const Color(0x00000000),
-    );
-    _colorFilterComponent = ColorFilterComponent(
-      colorFilter ?? GameColorFilter(),
-    );
 
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
@@ -130,29 +149,23 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       onTick: _optimizeColisionTree,
     );
 
-    world = World(
-      children: [
-        map,
-        if (background != null) background!,
-        if (player != null) player!,
-        ...components ?? [],
-      ],
-    );
-
-    bonfireCamera = BonfireCamera(
-      config: cameraConfig ?? CameraConfig(),
-      hudComponents: [
-        _lighting,
-        _colorFilterComponent,
-        if (_joystickController != null) _joystickController!,
-        if (interface != null) interface!,
-      ],
-      world: world,
-    );
-
-    _joystickController?.addObserver(
-      player ?? JoystickMapExplorer(bonfireCamera),
-    );
+    // camera = bonfireCamera = BonfireCamera(
+    //   config: cameraConfig ?? CameraConfig(),
+    //   hudComponents: [
+    //     _lighting,
+    //     _colorFilterComponent,
+    //     if (_joystickController != null) _joystickController!,
+    //     if (interface != null) interface!,
+    //   ],
+    //   world: World(
+    //     children: [
+    //       map,
+    //       if (background != null) background!,
+    //       if (player != null) player!,
+    //       ...components ?? [],
+    //     ],
+    //   ),
+    // );
   }
 
   @override
@@ -161,16 +174,18 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     initializeCollisionDetection(
       mapDimensions: Rect.zero,
     );
-    await super.add(world);
-    await super.add(bonfireCamera);
 
-    if (bonfireCamera.config.target != null) {
-      bonfireCamera.follow(
-        bonfireCamera.config.target!,
+    joystickController?.addObserver(
+      player ?? JoystickMapExplorer(camera),
+    );
+
+    if (camera.config.target != null) {
+      camera.follow(
+        camera.config.target!,
         snap: true,
       );
-    } else if (player != null && bonfireCamera.config.startFollowPlayer) {
-      bonfireCamera.moveToPlayer();
+    } else if (player != null && camera.config.startFollowPlayer) {
+      camera.moveToPlayer();
     }
   }
 
@@ -251,19 +266,19 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   Vector2 worldToScreen(Vector2 position) {
-    return bonfireCamera.worldToScreen(position);
+    return camera.worldToScreen(position);
   }
 
   @override
   Vector2 screenToWorld(Vector2 position) {
-    return bonfireCamera.screenToWorld(position);
+    return camera.screenToWorld(position);
   }
 
   @override
   bool isVisibleInCamera(GameComponent c) {
     if (!hasLayout) return false;
     if (c.isRemoving) return false;
-    return bonfireCamera.canSee(c);
+    return camera.canSee(c);
   }
 
   /// Use this method to change default observer of the Joystick events.
@@ -274,11 +289,11 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     bool moveCameraToTarget = false,
   }) {
     if (cleanObservers) {
-      _joystickController?.cleanObservers();
+      joystickController?.cleanObservers();
     }
-    _joystickController?.addObserver(target);
+    joystickController?.addObserver(target);
     if (moveCameraToTarget && target is GameComponent) {
-      bonfireCamera.follow(target as GameComponent);
+      camera.follow(target as GameComponent);
     }
   }
 
@@ -340,7 +355,11 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   FutureOr<void> add(Component component) {
-    return world.add(component);
+    if (component is CameraComponent || component is World) {
+      super.add(component);
+    } else {
+      return world.add(component);
+    }
   }
 
   @override

@@ -25,7 +25,7 @@ class BarrelDrag extends GameDecoration with DragGesture, Movement {
         color: Colors.white,
       ),
     );
-    var textSize = _textPaint.measureText(text);
+    var textSize = _textPaint.getLineMetrics(text).size;
     add(
       TextComponent(
         text: text,

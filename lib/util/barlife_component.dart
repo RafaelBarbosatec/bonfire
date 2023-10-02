@@ -67,7 +67,7 @@ class BarLifeComponent extends GameComponent {
           TextStyle(fontSize: size.y * 0.8, color: Colors.white),
     );
 
-    _textSize = _textConfig.measureText(_getLifeText());
+    _textSize = _textConfig.getLineMetrics(_getLifeText()).size;
   }
 
   @override
@@ -174,7 +174,7 @@ class BarLifeComponent extends GameComponent {
 
   void updateLife(double life) {
     _life = life;
-    _textSize = _textConfig.measureText(_getLifeText());
+    _textSize = _textConfig.getLineMetrics(_getLifeText()).size;
   }
 
   void updatemaxLife(double life) {

@@ -140,8 +140,8 @@ class Knight extends SimplePlayer
   }
 
   void execShowTalk(GameComponent first) {
-    double lastZoom = gameRef.bonfireCamera.zoom;
-    gameRef.bonfireCamera.moveToTargetAnimated(
+    double lastZoom = gameRef.camera.zoom;
+    gameRef.camera.moveToTargetAnimated(
       effectController: EffectController(duration: 1),
       target: first,
       zoom: 2,
@@ -202,7 +202,7 @@ class Knight extends SimplePlayer
             print('close talk');
 
             if (!isDead) {
-              gameRef.bonfireCamera.moveToPlayerAnimated(
+              gameRef.camera.moveToPlayerAnimated(
                 effectController: EffectController(duration: 1),
                 zoom: lastZoom,
               );

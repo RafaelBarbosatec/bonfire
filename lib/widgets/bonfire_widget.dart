@@ -157,7 +157,7 @@ class BonfireWidgetState extends State<BonfireWidget> {
         );
   }
 
-  void _buildGame() async {
+  void _buildGame() {
     _game = BonfireGame(
       context: context,
       joystickController: widget.joystick,

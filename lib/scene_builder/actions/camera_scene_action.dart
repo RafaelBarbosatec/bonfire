@@ -60,7 +60,7 @@ class CameraSceneAction extends SceneAction {
     if (!_running) {
       _running = true;
       if (position != null) {
-        game.bonfireCamera.moveToPositionAnimated(
+        game.camera.moveToPositionAnimated(
           position: position!,
           effectController: EffectController(
             duration: duration.inSeconds.toDouble(),
@@ -71,7 +71,7 @@ class CameraSceneAction extends SceneAction {
           zoom: zoom,
         );
       } else if (target != null) {
-        game.bonfireCamera.moveToTargetAnimated(
+        game.camera.moveToTargetAnimated(
           target: target!,
           effectController: EffectController(
             duration: duration.inSeconds.toDouble(),
@@ -79,7 +79,7 @@ class CameraSceneAction extends SceneAction {
           ),
           onComplete: () {
             _actionDone.call();
-            game.bonfireCamera.follow(target!);
+            game.camera.follow(target!);
           },
           angle: angle,
           zoom: zoom,

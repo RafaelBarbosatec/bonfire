@@ -35,8 +35,8 @@ class TextInterfaceComponent extends InterfaceComponent {
   @override
   void update(double dt) {
     if (size == Vector2.zero()) {
-      _measuredWidth = textConfig.measureTextWidth(text);
-      _measuredHeight = textConfig.measureTextHeight(text);
+      _measuredWidth = textConfig.getLineMetrics(text).width;
+      _measuredHeight = textConfig.getLineMetrics(text).height;
       size = Vector2(_measuredWidth!, _measuredHeight!);
     }
     super.update(dt);

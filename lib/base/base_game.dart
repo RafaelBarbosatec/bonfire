@@ -16,6 +16,7 @@ abstract class BaseGame extends FlameGame
         KeyboardEvents,
         HasQuadTreeCollisionDetection,
         HasTimeScale {
+  BaseGame({super.world, super.camera});
   bool enabledGestures = true;
   bool enabledKeyboard = true;
 

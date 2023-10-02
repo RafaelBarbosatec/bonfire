@@ -40,6 +40,6 @@ mixin Lighting on GameComponent {
   @override
   // ignore: must_call_super
   bool isVisibleInCamera() {
-    return hasGameRef ? gameRef.bonfireCamera.canSeeWithMargin(this) : false;
+    return hasGameRef ? gameRef.camera.canSeeWithMargin(this) : false;
   }
 }

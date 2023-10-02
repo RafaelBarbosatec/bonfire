@@ -25,7 +25,7 @@ class BarrelDraggable extends GameDecoration
   @override
   Future<void> onLoad() {
     add(RectangleHitbox(size: size / 1.5, position: size / 8.5, isSolid: true));
-    final textSize = _textConfig.measureText(text);
+    final textSize = _textConfig.getLineMetrics(text).size;
     xCenter = (width - textSize.x) / 2;
     yCenter = (height - textSize.y) / 2;
     add(

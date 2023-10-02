@@ -9,8 +9,8 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   double _spacingMap = 32.0;
   final CameraConfig config;
   BonfireCamera({
-    required super.world,
     required this.config,
+    super.world,
     super.hudComponents,
     super.viewport,
   }) {
@@ -126,7 +126,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
 
   @override
   void follow(
-    PositionProvider target, {
+    ReadOnlyPositionProvider target, {
     double maxSpeed = double.infinity,
     bool horizontalOnly = false,
     bool verticalOnly = false,

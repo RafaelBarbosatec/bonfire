@@ -250,10 +250,10 @@ extension FutureSpriteExt on FutureOr<Sprite> {
 extension ComponentExt on GameComponent {
   bool get isHud {
     if (hasGameRef) {
-      bool thisIs = gameRef.bonfireCamera.viewport.contains(this);
+      bool thisIs = gameRef.camera.viewport.contains(this);
       bool parentIs = false;
       if (parent != null) {
-        parentIs = gameRef.bonfireCamera.viewport.contains(parent!);
+        parentIs = gameRef.camera.viewport.contains(parent!);
       }
       return parentIs || thisIs;
     }

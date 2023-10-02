@@ -392,9 +392,6 @@ class SimpleDirectionAnimation {
     if (needDoFlip) {
       canvas.restore();
     }
-    if (needDoFlip) {
-      canvas.restore();
-    }
   }
 
   void update(

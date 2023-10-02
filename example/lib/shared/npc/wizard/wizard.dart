@@ -16,8 +16,8 @@ class Wizard extends SimpleNpc with BlockMovementCollision, TapGesture {
         );
 
   void execShowTalk(GameComponent first) {
-    lastZoom = gameRef.bonfireCamera.zoom;
-    gameRef.bonfireCamera.moveToTargetAnimated(
+    lastZoom = gameRef.camera.zoom;
+    gameRef.camera.moveToTargetAnimated(
       target: first,
       effectController: EffectController(
         duration: 0.5,
@@ -107,7 +107,7 @@ class Wizard extends SimpleNpc with BlockMovementCollision, TapGesture {
         ),
       ],
       onClose: () {
-        gameRef.bonfireCamera.moveToPlayerAnimated(
+        gameRef.camera.moveToPlayerAnimated(
           effectController: EffectController(
             duration: 0.5,
             curve: Curves.easeInOut,

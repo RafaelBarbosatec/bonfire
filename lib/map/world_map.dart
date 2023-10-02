@@ -37,7 +37,7 @@ class WorldMap extends GameMap {
   }
 
   void _searchTilesToRender() {
-    final rectCamera = gameRef.bonfireCamera.cameraRectWithSpacing;
+    final rectCamera = gameRef.camera.cameraRectWithSpacing;
 
     final visibleTileModel = quadTree?.query(
           rectCamera.getRectangleByTileSize(tileSize),
@@ -76,7 +76,7 @@ class WorldMap extends GameMap {
 
     if (isUpdate) {
       lastCamera = Vector2.zero();
-      lastMinorZoom = gameRef.bonfireCamera.zoom;
+      lastMinorZoom = gameRef.camera.zoom;
       _calculatePositionAndSize();
     }
 
@@ -88,7 +88,7 @@ class WorldMap extends GameMap {
     if (tileSizeToUpdate == 0) {
       tileSizeToUpdate = (tileSize * 4).ceilToDouble();
     }
-    gameRef.bonfireCamera.updateSpacingVisibleMap(tileSizeToUpdate * 1.5);
+    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.5);
 
     if (tiles.isNotEmpty) {
       int minSize = min(sizeScreen.x, sizeScreen.y).ceil();
@@ -136,7 +136,7 @@ class WorldMap extends GameMap {
       _mapSize = Vector2(w - x, h - y);
       size = Vector2(w, h);
       _mapPosition = Vector2(x, y);
-      gameRef.bonfireCamera.updatesetBounds(null);
+      gameRef.camera.updatesetBounds(null);
       (gameRef as BonfireGame).configCollision();
     }
   }
@@ -209,9 +209,9 @@ class WorldMap extends GameMap {
 
   bool _checkNeedUpdateTiles() {
     final camera = _getCameraTileUpdate();
-    if (lastCamera != camera || lastMinorZoom != gameRef.bonfireCamera.zoom) {
+    if (lastCamera != camera || lastMinorZoom != gameRef.camera.zoom) {
       lastCamera = camera;
-      lastMinorZoom = gameRef.bonfireCamera.zoom;
+      lastMinorZoom = gameRef.camera.zoom;
 
       return true;
     }
@@ -220,8 +220,8 @@ class WorldMap extends GameMap {
 
   Vector2 _getCameraTileUpdate() {
     return Vector2(
-      (gameRef.bonfireCamera.position.x / tileSizeToUpdate).floorToDouble(),
-      (gameRef.bonfireCamera.position.y / tileSizeToUpdate).floorToDouble(),
+      (gameRef.camera.position.x / tileSizeToUpdate).floorToDouble(),
+      (gameRef.camera.position.y / tileSizeToUpdate).floorToDouble(),
     );
   }
 }

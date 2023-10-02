@@ -27,7 +27,7 @@ class BarrelEnableMoveCamera extends GameDecoration
         color: Colors.white,
       ),
     );
-    var textSize = _textPaint.measureText(text);
+    var textSize = _textPaint.getLineMetrics(text).size;
     add(
       TextComponent(
         text: text,

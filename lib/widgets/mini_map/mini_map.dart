@@ -126,12 +126,12 @@ class _MiniMapState extends State<MiniMap> {
 
   void _initInterval() {
     timer = async.Timer.periodic(const Duration(milliseconds: 34), (timer) {
-      if (!widget.game.bonfireCamera.isMounted) {
+      if (!widget.game.camera.isMounted) {
         return;
       }
       bool needSetState = false;
-      if (widget.game.bonfireCamera.position != cameraPosition) {
-        cameraPosition = widget.game.bonfireCamera.topleft.clone();
+      if (widget.game.camera.position != cameraPosition) {
+        cameraPosition = widget.game.camera.topleft.clone();
         needSetState = true;
       }
 

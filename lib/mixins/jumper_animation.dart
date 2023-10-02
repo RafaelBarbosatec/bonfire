@@ -54,6 +54,24 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
   }
 
   @override
+  void onPlayRunLeftAnimation() {
+    if (jumping) {
+      _playJumpUpLeft();
+    } else {
+      super.onPlayRunLeftAnimation();
+    }
+  }
+
+  @override
+  void onPlayRunRightAnimation() {
+    if (jumping) {
+      animation?.playOther(JumpAnimationsEnum.jumpUpRight.name, flipX: false);
+    } else {
+      super.onPlayRunRightAnimation();
+    }
+  }
+
+  @override
   void onPlayRunUpRightAnimation() {
     if (jumping) {
       animation?.playOther(JumpAnimationsEnum.jumpUpRight.name, flipX: false);

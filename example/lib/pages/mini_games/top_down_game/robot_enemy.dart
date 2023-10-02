@@ -66,7 +66,7 @@ class ZombieEnemy extends RotationEnemy
         loop: false,
       ),
     );
-    gameRef.bonfireCamera.shake(intensity: 4);
+    gameRef.camera.shake(intensity: 4);
     removeFromParent();
     super.die();
   }

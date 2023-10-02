@@ -112,7 +112,7 @@ class FollowerWidgetState extends State<FollowerWidget> {
 
   void _startFollow() {
     if (widget.target.hasGameRef) {
-      final camera = widget.target.gameRef.bonfireCamera;
+      final camera = widget.target.gameRef.camera;
       _timerUpdate = async.Timer.periodic(
         const Duration(milliseconds: 16),
         (timer) {

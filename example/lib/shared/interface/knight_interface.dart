@@ -79,7 +79,7 @@ class KnightInterface extends GameInterface {
         if (v.isNotEmpty) {
           enemyControlled = v.first;
           enemyControlled?.controller.enableBehaviors = false;
-          gameRef.bonfireCamera.moveToTargetAnimated(
+          gameRef.camera.moveToTargetAnimated(
             target: enemyControlled!,
             effectController: EffectController(
               duration: 0.5,
@@ -96,7 +96,7 @@ class KnightInterface extends GameInterface {
           );
         }
       } else if (gameRef.player != null) {
-        gameRef.bonfireCamera.moveToTargetAnimated(
+        gameRef.camera.moveToTargetAnimated(
           target: gameRef.player!,
           effectController: EffectController(
             duration: 0.5,
@@ -163,7 +163,7 @@ class KnightInterface extends GameInterface {
     final enemiesVisible = gameRef.enemies(onlyVisible: true);
     if (gameRef.player != null && enemiesVisible.isNotEmpty) {
       final enemy = enemiesVisible.first;
-      double initialZoom = gameRef.bonfireCamera.zoom;
+      double initialZoom = gameRef.camera.zoom;
       gameRef.startScene([
         CameraSceneAction.position(Vector2(800, 800)),
         CameraSceneAction.target(gameRef.player!),
