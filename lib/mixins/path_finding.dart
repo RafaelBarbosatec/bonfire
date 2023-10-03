@@ -30,7 +30,7 @@ mixin PathFinding on Movement {
   final Paint _paintShowBarriers = Paint()
     ..color = const Color(0xFF2196F3).withOpacity(0.5);
 
-  void setupMoveToPositionAlongThePath({
+  void setupPathFinding({
     /// Use to set line path color
     Color? pathLineColor,
     Color? barriersCalculatedColor,

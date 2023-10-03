@@ -3,7 +3,7 @@ import 'package:example/pages/enemy/human_with_collision.dart';
 
 class HumanPathFinding extends HumanWithCollision with PathFinding, TapGesture {
   HumanPathFinding({required Vector2 position}) : super(position: position) {
-    setupMoveToPositionAlongThePath(
+    setupPathFinding(
       pathLineStrokeWidth: 2,
     );
   }

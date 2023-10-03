@@ -7,7 +7,7 @@ class BonfireUtil {
   static const PI_180 = (180 / pi);
 
   static Direction getDirectionFromAngle(double angle) {
-    double degrees = angle * 180 / pi;
+    double degrees = angle * PI_180;
 
     if (degrees > -22.5 && degrees <= 22.5) {
       return Direction.right;

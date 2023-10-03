@@ -6,7 +6,7 @@
 
 # NEXT
 - `TapGesture` improvements. Now your recieve `TapGestureEvent` in callbacks.
--  mixin `MoveToPositionAlongThePath` renamed to `PathFinding`.
+-  mixin `MoveToPositionAlongThePath` renamed to `PathFinding`. and `setupMoveToPositionAlongThePath` to `setupPathFinding`
 - `DragGesture` improvements.
 
 # 3.0.0-beta.17
