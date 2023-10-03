@@ -62,7 +62,7 @@ class InterfaceComponent extends GameComponent
   }
 
   @override
-  bool onTapDown(TapGestureEvent event) {
+  bool onTapDown(GestureEvent event) {
     selected = true;
     return true;
   }

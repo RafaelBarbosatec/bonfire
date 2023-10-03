@@ -10,25 +10,26 @@ mixin DragGesture on GameComponent {
 
   @override
   bool handlerPointerDown(PointerDownEvent event) {
-    final pointer = event.pointer;
-    final position = event.localPosition.toVector2();
+    final gEvent = GestureEvent.fromPointerEvent(
+      event,
+      screenToWorld: gameRef.screenToWorld,
+    );
     bool handler = false;
 
     if (enableDrag && hasGameRef) {
       if (isHud) {
-        if (containsPoint(position)) {
-          _pointer = pointer;
-          _startDragOffset = position;
-          _startDragPosition = this.position.clone();
-          handler = onStartDrag(pointer, position);
+        if (containsPoint(gEvent.screenPosition)) {
+          _pointer = gEvent.pointer;
+          _startDragOffset = gEvent.screenPosition;
+          _startDragPosition = position.clone();
+          handler = onStartDrag(gEvent);
         }
       } else {
-        final absolutePosition = gameRef.screenToWorld(position);
-        if (containsPoint(absolutePosition)) {
-          _pointer = pointer;
-          _startDragOffset = absolutePosition;
-          _startDragPosition = this.position.clone();
-          handler = onStartDrag(pointer, position);
+        if (containsPoint(gEvent.worldPosition)) {
+          _pointer = gEvent.pointer;
+          _startDragOffset = gEvent.worldPosition;
+          _startDragPosition = position.clone();
+          handler = onStartDrag(gEvent);
         }
       }
     }
@@ -38,41 +39,49 @@ mixin DragGesture on GameComponent {
 
   @override
   bool handlerPointerMove(PointerMoveEvent event) {
-    final pointer = event.pointer;
-    final position = event.localPosition.toVector2();
+    final gEvent = GestureEvent.fromPointerEvent(
+      event,
+      screenToWorld: gameRef.screenToWorld,
+    );
     bool canMove = hasGameRef &&
         _startDragPosition != null &&
         enableDrag &&
-        pointer == _pointer;
+        gEvent.pointer == _pointer;
 
     if (canMove) {
       if (isHud) {
-        this.position = Vector2(
-          _startDragPosition!.x + (position.x - _startDragOffset!.x),
-          _startDragPosition!.y + (position.y - _startDragOffset!.y),
+        position = Vector2(
+          _startDragPosition!.x +
+              (gEvent.screenPosition.x - _startDragOffset!.x),
+          _startDragPosition!.y +
+              (gEvent.screenPosition.y - _startDragOffset!.y),
         );
       } else {
-        final absolutePosition = gameRef.screenToWorld(position);
-        this.position = Vector2(
-          _startDragPosition!.x + (absolutePosition.x - _startDragOffset!.x),
-          _startDragPosition!.y + (absolutePosition.y - _startDragOffset!.y),
+        position = Vector2(
+          _startDragPosition!.x +
+              (gEvent.worldPosition.x - _startDragOffset!.x),
+          _startDragPosition!.y +
+              (gEvent.worldPosition.y - _startDragOffset!.y),
         );
       }
       inMoving = true;
-      onMoveDrag(pointer, position);
+      onMoveDrag(gEvent);
     }
     return super.handlerPointerMove(event);
   }
 
   @override
   bool handlerPointerUp(PointerUpEvent event) {
-    final pointer = event.pointer;
-    if (pointer == _pointer && inMoving) {
+    final gEvent = GestureEvent.fromPointerEvent(
+      event,
+      screenToWorld: gameRef.screenToWorld,
+    );
+    if (gEvent.pointer == _pointer && inMoving) {
       _startDragPosition = null;
       _startDragOffset = null;
       _pointer = -1;
       inMoving = false;
-      onEndDrag(pointer);
+      onEndDrag(gEvent);
     }
 
     return super.handlerPointerUp(event);
@@ -80,29 +89,32 @@ mixin DragGesture on GameComponent {
 
   @override
   bool handlerPointerCancel(PointerCancelEvent event) {
-    final pointer = event.pointer;
-    if (pointer == _pointer && inMoving) {
+    final gEvent = GestureEvent.fromPointerEvent(
+      event,
+      screenToWorld: gameRef.screenToWorld,
+    );
+    if (gEvent.pointer == _pointer && inMoving) {
       _startDragPosition = null;
       _startDragOffset = null;
       _pointer = -1;
       inMoving = false;
-      onCancelDrag(pointer);
+      onCancelDrag(gEvent);
     }
     return super.handlerPointerCancel(event);
   }
 
   // Called when star drag gesture in the component
   // If return 'true' this event is not relay to others components.(default = false)
-  bool onStartDrag(int pointer, Vector2 position) {
+  bool onStartDrag(GestureEvent event) {
     return false;
   }
 
   // Called when component is moved
-  void onMoveDrag(int pointer, Vector2 position) {}
+  void onMoveDrag(GestureEvent event) {}
   // Called when component finish drag
-  void onEndDrag(int pointer) {}
+  void onEndDrag(GestureEvent event) {}
   // Called when drag is canceled
-  void onCancelDrag(int pointer) {}
+  void onCancelDrag(GestureEvent event) {}
 
   bool get receiveInteraction => _pointer != -1;
 }

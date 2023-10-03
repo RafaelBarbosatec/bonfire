@@ -12,7 +12,7 @@ class HumanPathFinding extends HumanWithCollision with PathFinding, TapGesture {
   void onTap() {}
 
   @override
-  void onTapDownScreen(TapGestureEvent event) {
+  void onTapDownScreen(GestureEvent event) {
     moveToPositionWithPathFinding(event.worldPosition);
     super.onTapDownScreen(event);
   }

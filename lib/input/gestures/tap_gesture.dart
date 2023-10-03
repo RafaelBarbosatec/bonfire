@@ -1,37 +1,15 @@
-import 'dart:ui';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
-
-class TapGestureEvent {
-  final int pointer;
-  final Vector2 screenPosition;
-  Vector2 worldPosition;
-  final PointerDeviceKind kind;
-
-  TapGestureEvent({
-    required this.pointer,
-    required this.screenPosition,
-    Vector2? worldPosition,
-    required this.kind,
-  }) : worldPosition = worldPosition ?? Vector2.zero();
-
-  factory TapGestureEvent.fromPointerEvent(PointerEvent event) {
-    return TapGestureEvent(
-      pointer: event.pointer,
-      kind: event.kind,
-      screenPosition: event.localPosition.toVector2(),
-    );
-  }
-}
 
 mixin TapGesture on GameComponent {
   bool enableTab = true;
   int _pointer = -1;
   @override
   bool handlerPointerDown(PointerDownEvent event) {
-    final tapEvent = TapGestureEvent.fromPointerEvent(event);
-    tapEvent.worldPosition = gameRef.screenToWorld(tapEvent.screenPosition);
+    final tapEvent = GestureEvent.fromPointerEvent(
+      event,
+      screenToWorld: gameRef.screenToWorld,
+    );
     bool handler = false;
 
     if (enableTab && hasGameRef) {
@@ -53,8 +31,10 @@ mixin TapGesture on GameComponent {
 
   @override
   bool handlerPointerUp(PointerUpEvent event) {
-    final tapEvent = TapGestureEvent.fromPointerEvent(event);
-    tapEvent.worldPosition = gameRef.screenToWorld(tapEvent.screenPosition);
+    final tapEvent = GestureEvent.fromPointerEvent(
+      event,
+      screenToWorld: gameRef.screenToWorld,
+    );
 
     if (enableTab && tapEvent.pointer == _pointer && hasGameRef) {
       onTapUpScreen(tapEvent);
@@ -81,12 +61,12 @@ mixin TapGesture on GameComponent {
 
   // It's called when happen tap down in the component
   // If return 'true' this event is not relay to others components.(default = false)
-  bool onTapDown(TapGestureEvent event) {
+  bool onTapDown(GestureEvent event) {
     return false;
   }
 
   // It's called when happen tap up in the component
-  void onTapUp(TapGestureEvent event) {}
+  void onTapUp(GestureEvent event) {}
   // It's called when happen canceled tap in the component
   void onTapCancel() {}
 
@@ -94,7 +74,7 @@ mixin TapGesture on GameComponent {
   void onTap();
 
   // It's called when happen tap down in the screen
-  void onTapDownScreen(TapGestureEvent event) {}
+  void onTapDownScreen(GestureEvent event) {}
   // It's called when happen tap up in the screen
-  void onTapUpScreen(TapGestureEvent event) {}
+  void onTapUpScreen(GestureEvent event) {}
 }
