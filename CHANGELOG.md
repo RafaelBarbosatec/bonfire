@@ -1,3 +1,7 @@
+# NEXT
+
+- update `tiledjsonreader` to `1.3.0`. Now support maps with enconding and compression.
+
 # 3.0.0-beta.19
 - `TapGesture` improvements. Now your recieve `GestureEvent` in callbacks.
 -  mixin `MoveToPositionAlongThePath` renamed to `PathFinding`. and `setupMoveToPositionAlongThePath` to `setupPathFinding`
