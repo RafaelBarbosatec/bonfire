@@ -1,129 +1,6 @@
-# NEXT
+## 3.0.0
 
-- update `tiledjsonreader` to `1.3.2`. Now support maps with enconding and compression.
-
-# 3.0.0-beta.19
-- `TapGesture` improvements. Now your recieve `GestureEvent` in callbacks.
--  mixin `MoveToPositionAlongThePath` renamed to `PathFinding`. and `setupMoveToPositionAlongThePath` to `setupPathFinding`
-- `DragGesture` improvements. Now your recieve `GestureEvent` in callbacks.
-
-# 3.0.0-beta.18
-- Updade Flame to `1.9.1`
-- rename `bonfireCamera`to `camera`
-- enemy movements improvements.
-- Mixin `Vision` improvements.
-
-# 3.0.0-beta.17
-
-- `Movement` improvements.
-- Adds `keepDistance`.
-- `MoveCameraUsingGesture` improvements
-
-# 3.0.0-beta.16
-
-- Fix `RotationPlayer` animation bug.
-- Add an option for using to enable diagonal input events on `KeyboardConfig` and `JoystickDirectional`.
-- `BonfireCamera` Improvements
-- reorganized the input classes
-- `TileModel` improvements
-- Fix not the goblin attacks while in conversation.
-
-# 3.0.0-beta.15
-
-- `GameObject` improvements
-- `GameDecoration` improvements
-- Adds `initPosition` param in `CameraConfig`
-- Adds `replacePlatformAnimation` method in `PlatformPlayer`
-- Collision system improvements.
-- Add an option for using to enable diagonal input events on `KeyboardConfig` and `JoystickDirectional`.
-
-# 3.0.0-beta.14
-
-- `PlayerExtensions` improvements
-- adds `isAnimationLastFrame` and `animationCurrentIndex` in `UseSpriteAnimation` mixin.
-
-# 3.0.0-beta.13
-
-- fix but collision by tiled.
-- camera improvements
-
-# 3.0.0-beta.12
-
-- fix bug in `MovementByJoystick` when called `idle` method.
-- `positionsItselfAndKeepDistance` little improvements.
-- `AutomaticRandomMovement` improvements. Adds param `direction` to decide which direction could be the movement.
-- Adds `moveToPosition` in `Movement` mixin.
-- Adds `MoveCameraUsingGesture` mixin.
-- remove `JoystickMoveToPosition`
-- rename `JoystickListener`
-
-# 3.0.0-beta.11
-
-- `positionsItselfAndKeepDistance` little improvements
-- `bonfireCamera.shake` improvements
-
-# 3.0.0-beta.10
-- `Follower` mixin improvements.
-- Adds `startFollowPlayer` param in `CameraConfig`.
-- `Vision` improvements.
-- `MovementByJoystick` improvements.
-- Adds `spawCondition` in `ComponentSpawner`
-
-# 3.0.0-beta.9
-- Adds `getZoomFromMaxVisibleTile`
-- `moveFromAngle` improvements.
-- update example
-- `rectCollision` improvements.
-
-## 3.0.0-beta.8
-- extension method `simpleAttackMeleeByDirection` improvements
-- `BonfireCamera` improvements
-- Adds `initialMapZoomFit` in  `CameraConfig`.
-- Fix `rectCollision` bug.
-
-## 3.0.0-beta.7
-
-- `MovementByJoystick` improvements. Adds `setupMovementByJoystick` method.
-- extension method `simpleAttackMeleeByAngle` improvements.
-- Now works `setZoomLimitToFitMap` params in `CameraConfig`.
-- `BouncingObject` improvements.
-- Adds `lastDisplacement` param in `onBlockedMovement` of `BlockMovementCollision` mixin.
-
-## 3.0.0-beta.6
-
-- `UseBarLife` improvements
-- extension method `moveTowardsTarget` improvements
-- remove extension method `followComponent`
-
-## 3.0.0-beta.5
-
-- `BouncingObject` improvements
-
-## 3.0.0-beta.4
-
-- Update Flame to `1.8.2`
-- Solve some lint issues.
-- Adds `BouncingObject` mixin. (experimental)
-
-
-## 3.0.0-beta.3
-
-- Adds WORLD in `AttackFromEnum`.
-- Set `receivesAttackFrom` in `SimpleAlly` and `RotationAlly` to `ReceivesAttackFromEnum.ENEMY`.
-- `InternalChecker` improvements.
-- `Sensor` improvements.
-
-
-## 3.0.0-beta.2
-
-- `MovementByJoystick` improvements.
-- `AutomaticRandomMovement` improvements.
-- `MovementExtensions` improvements.
-- Adds `ComponentSpawner`. [#414](https://github.com/RafaelBarbosatec/bonfire/issues/414) / [Example](https://github.com/RafaelBarbosatec/bonfire/blob/v3.0.0/example/lib/simple_example/simple_example_game.dart)
-- Fix bug `MoveToPositionAlongThePath`.
-- Fix issue [417](https://github.com/RafaelBarbosatec/bonfire/issues/417). Thanks [Matt El Mouktafi](https://github.com/mel-mouk)
-
-## 3.0.0-beta.1
+- Use Flame  `1.9.1`
 
 - ***BREAKING CHANGE*** 
   - `BonfireWidget`:
@@ -135,12 +12,15 @@
     - Remove `onTapUp` param. It's not necessary
     - Rename `constructionMode` to `debugMode`.
 
-  - Now, to access camera you can use `gameRef.bonfireCamera` instead of `gameRef.camera`. (Now using new Flame API `CameraComponent`)
+  - `Camera` improvements. Now using new Flame API `CameraComponent`
   - `Collision`, now Bonfire use the Flame collision system!
     - To adds Collision in your GameComponent just adds a ShapeHitbox. See this [doc](https://docs.flame-engine.org/latest/flame/collision_detection.html#shapehitbox)
     - You can listen the collision callbacks doing override of `onCollision`, `onCollisionEnd`, `onCollisionStart` like Flame Documantation.
     - To block the movement of components when colliding use the mixin `BlockMovementCollision` 
   - `BonfireInjector().put` now is Factory.
+  -   remove extension method `followComponent`
+  - remove `JoystickMoveToPosition`. now use `MoveCameraUsingGesture` with `TapGesture`.
+  - mixin `MoveToPositionAlongThePath` was renamed to `PathFinding`. and `setupMoveToPositionAlongThePath` to `setupPathFinding`
     
 - ***FEATURES***
   - `Force2D`. Now we have a simple support to forces. You can adds global forces setting in `BonfireWidget` using `globalForces` param, or individual force in you component. To the component handle this forces it's need use `HandleForces` mixin.
@@ -151,13 +31,34 @@
   - `PlatformPlayer`. Player to used in platform games.
   - `PlatformEnemy`. Enemy to used in platform games.
   - Adds at gameRef: `raycastAll`, `raycast`, `timeScale`
-
-- Use Flame `1.8.1`
-- Update `Pushable` mixin to handle forces.
-- Adds `GameObject`. (It's the GameComponent using Sprite)
-- Adds `AnimatedGameObject`. (It's the GameComponent using SpriteAnimation)
-- Adds `FollowerGameObject`. (It's the GameObject using Follower mixin)
-- Adds `AnimatedFollowerGameObject`. (It's the AnimatedGameObject using Follower mixin)
+  - Update `Pushable` mixin to handleForces.
+  - Adds `GameObject`. (It's the GameComponent using Sprite)
+  - Adds `AnimatedGameObject`. (It's the GameComponent using SpriteAnimation)
+  - Adds `FollowerGameObject`. (It's the GameObject using Follower mixin)
+  - Adds `AnimatedFollowerGameObject`. (It's the AnimatedGameObject using Follower mixin)
+  - Adds `ComponentSpawner`. [#414](https://github.com/RafaelBarbosatec/bonfire/issues/414)
+   - Adds WORLD in `AttackFromEnum`.
+   - Adds `BouncingObject` mixin. (experimental)
+   - Adds `initialMapZoomFit` in  `CameraConfig`.
+   - Adds `getZoomFromMaxVisibleTile` method
+   - Adds `startFollowPlayer` param in `CameraConfig`.
+   - Adds `moveToPosition` in `Movement` mixin.
+   - Adds `MoveCameraUsingGesture` mixin.
+   - Adds `isAnimationLastFrame`, `isPaused`, `pauseAnimation()`, `playAnimation()` and `animationCurrentIndex` in `UseSpriteAnimation` mixin.
+  - Adds `initPosition` param in `CameraConfig`
+   - Fix issue [417](https://github.com/RafaelBarbosatec/bonfire/issues/417). Thanks [Matt El Mouktafi](https://github.com/mel-mouk)
+  - `Sensor` improvements.
+  - `UseBarLife` improvements
+  - `MovementByJoystick` improvements. Adds `setupMovementByJoystick` method.
+  - `Follower` mixin improvements.
+  - `Vision` improvements.
+  - `AutomaticRandomMovement` improvements. Adds param `direction` to decide which direction could be the movement.
+  - Add an option for using to enable diagonal input events on `KeyboardConfig` and `JoystickDirectional`.
+  - Adds `keepDistance`.
+  -  Adds`MoveCameraUsingGesture` mixin
+  - `TapGesture` improvements. Now your receive `GestureEvent` in callbacks.
+  - `DragGesture` improvements. Now your receive `GestureEvent` in callbacks.
+  - update `tiledjsonreader` to `1.3.2`. Now support maps with encoding and compression.
 
 # [2.12.8]
 - Update README.
