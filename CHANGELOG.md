@@ -1,13 +1,13 @@
+# 3.0.0-beta.19
+- `TapGesture` improvements. Now your recieve `GestureEvent` in callbacks.
+-  mixin `MoveToPositionAlongThePath` renamed to `PathFinding`. and `setupMoveToPositionAlongThePath` to `setupPathFinding`
+- `DragGesture` improvements. Now your recieve `GestureEvent` in callbacks.
+
 # 3.0.0-beta.18
 - Updade Flame to `1.9.1`
 - rename `bonfireCamera`to `camera`
 - enemy movements improvements.
 - Mixin `Vision` improvements.
-
-# NEXT
-- `TapGesture` improvements. Now your recieve `TapGestureEvent` in callbacks.
--  mixin `MoveToPositionAlongThePath` renamed to `PathFinding`. and `setupMoveToPositionAlongThePath` to `setupPathFinding`
-- `DragGesture` improvements.
 
 # 3.0.0-beta.17
 
