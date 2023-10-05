@@ -47,7 +47,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.0.0-beta.17"
+    version: "3.0.0-beta.19"
   boolean_selector:
     dependency: transitive
     description:
@@ -435,10 +435,10 @@ packages:
     dependency: transitive
     description:
       name: tiledjsonreader
-      sha256: be0c4659cddccd1076a0b89b9933a6ef559806dbf396ab3395c5de012e1f96c9
+      sha256: "752c81fb93932fbd891369b955ab8bd90568fbd2e00cf3a1863b4a8829f82674"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.7"
+    version: "1.3.2"
   typed_data:
     dependency: transitive
     description:

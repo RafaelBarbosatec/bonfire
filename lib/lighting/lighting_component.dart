@@ -13,7 +13,7 @@ abstract class LightingInterface {
 }
 
 /// Layer component responsible for adding lighting to the game.
-class LightingComponent extends GameComponent with LightingInterface {
+class LightingComponent extends GameComponent implements LightingInterface {
   final Paint _paintFocus = Paint()..blendMode = BlendMode.clear;
   final Paint _paintLighting = Paint();
   final Paint _paintFocusArc = Paint()..blendMode = BlendMode.clear;
@@ -23,13 +23,13 @@ class LightingComponent extends GameComponent with LightingInterface {
   ColorTween? _tween;
   bool _containColor = false;
   Rect? bounds;
+  @override
+  Color? color;
 
   @override
   PositionType get positionType => PositionType.viewport;
 
-  LightingComponent({Color? color}) {
-    this.color = color;
-  }
+  LightingComponent({this.color});
 
   @override
   int get priority {
