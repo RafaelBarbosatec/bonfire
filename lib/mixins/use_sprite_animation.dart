@@ -32,6 +32,7 @@ mixin UseSpriteAnimation on GameComponent {
       loop: loop,
       onFinish: onFinish,
       onStart: onStart,
+      autoPlay: autoPlay,
     );
   }
 
@@ -86,6 +87,15 @@ mixin UseSpriteAnimation on GameComponent {
     );
   }
 
+  void pauseAnimation() {
+    _animationRender?.pause();
+  }
+
+  void playAnimation() {
+    _animationRender?.play();
+  }
+
   bool get isAnimationLastFrame => _animationRender?.isLastFrame ?? false;
   int get animationCurrentIndex => _animationRender?.currentIndex ?? 0;
+  bool get isPaused => _animationRender?.isPaused ?? false;
 }
