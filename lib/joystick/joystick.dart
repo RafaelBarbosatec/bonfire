@@ -106,8 +106,10 @@ class Joystick extends JoystickController {
     if (!keyboardConfig.enable) return false;
 
     /// If the key is not accepted, we do not process the event
-    if (!keyboardConfig.acceptedKeys.contains(event.logicalKey)) {
-      return false;
+    if (keyboardConfig.acceptedKeys != null) {
+      if (!keyboardConfig.acceptedKeys!.contains(event.logicalKey)) {
+        return false;
+      }
     }
 
     /// No keyboard events, keep idle

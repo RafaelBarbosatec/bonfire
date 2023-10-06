@@ -44,7 +44,7 @@ class KeyboardConfig {
   final KeyboardDirectionalKeys directionalKeys;
 
   /// You can pass specific Keys accepted. If null accept all keys
-  final List<LogicalKeyboardKey> acceptedKeys;
+  final List<LogicalKeyboardKey>? acceptedKeys;
 
   /// Use to enable diagonal input events
   final bool enableDiagonalInput;
@@ -52,10 +52,9 @@ class KeyboardConfig {
   KeyboardConfig({
     this.enable = true,
     KeyboardDirectionalKeys? directionalKeys,
-    List<LogicalKeyboardKey>? acceptedKeys,
+    this.acceptedKeys,
     this.enableDiagonalInput = true,
-  })  : directionalKeys = directionalKeys ?? KeyboardDirectionalKeys.arrows(),
-        acceptedKeys = acceptedKeys ?? [] {
-    this.acceptedKeys.addAll(this.directionalKeys.keys);
+  }) : directionalKeys = directionalKeys ?? KeyboardDirectionalKeys.arrows() {
+    acceptedKeys?.addAll(this.directionalKeys.keys);
   }
 }
