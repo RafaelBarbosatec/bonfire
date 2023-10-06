@@ -171,10 +171,9 @@ class Joystick extends JoystickController {
   Future<void> onLoad() async {
     await super.onLoad();
     await directional?.onLoad();
-    await Future.forEach<JoystickAction>(
-      actions,
-      (element) => element.onLoad(),
-    );
+    for (var ac in actions) {
+      await ac.onLoad();
+    }
   }
 
   /// Check if the key is for directional [arrows, wasd, or both]
