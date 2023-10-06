@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
 class HumanTopdownPlayerSpritesheet {
-  static Future<SpriteAnimation> getIdle() {
+  static Future<SpriteAnimation> idle() {
     return SpriteAnimation.load(
       'topdown/idle.png',
       SpriteAnimationData.sequenced(
@@ -12,7 +12,7 @@ class HumanTopdownPlayerSpritesheet {
     );
   }
 
-  static Future<SpriteAnimation> getRun() {
+  static Future<SpriteAnimation> run() {
     return SpriteAnimation.load(
       'topdown/running.png',
       SpriteAnimationData.sequenced(
