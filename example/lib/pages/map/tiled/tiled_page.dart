@@ -20,7 +20,7 @@ class TiledPage extends StatelessWidget {
         },
       ),
       cameraConfig: CameraConfig(
-        zoom: getZoomFromMaxVisibleTile(context, tileSize, 30),
+        zoom: getZoomFromMaxVisibleTile(context, tileSize, 20),
         initPosition: Vector2(tileSize * 5, tileSize * 5),
       ),
     );

@@ -5,8 +5,6 @@ import 'package:bonfire/util/controlled_update_animation.dart';
 
 class Tile extends GameComponent with UseAssetsLoader {
   final String? tileClass;
-  late Vector2 _startPosition;
-  Vector2 _lastParentPosition = Vector2.zero();
   String id = '';
   Sprite? _sprite;
   ControlledUpdateAnimation? _animation;
@@ -30,7 +28,6 @@ class Tile extends GameComponent with UseAssetsLoader {
       offsetY: offsetY,
       calculatePosition: true,
     );
-    _startPosition = this.position.clone();
     if (spritePath.isNotEmpty) {
       loader?.add(
         AssetToLoad(Sprite.load(spritePath), (value) => _sprite = value),
@@ -58,7 +55,6 @@ class Tile extends GameComponent with UseAssetsLoader {
       offsetY: offsetY,
       calculatePosition: true,
     );
-    _startPosition = this.position.clone();
   }
 
   Tile.fromAnimation({
@@ -80,7 +76,6 @@ class Tile extends GameComponent with UseAssetsLoader {
       offsetY: offsetY,
       calculatePosition: true,
     );
-    _startPosition = this.position.clone();
   }
 
   @override
@@ -102,16 +97,9 @@ class Tile extends GameComponent with UseAssetsLoader {
   }
 
   @override
-  void updateTree(double dt) {
+  void update(double dt) {
+    super.update(dt);
     _animation?.update(dt, size);
-    if (parent != null) {
-      final parentComp = parent as GameComponent;
-      if (_lastParentPosition != parentComp.position) {
-        _lastParentPosition = parentComp.position.clone();
-        position = _lastParentPosition + _startPosition;
-      }
-    }
-    update(dt);
   }
 
   @override
