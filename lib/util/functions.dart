@@ -4,21 +4,22 @@ import 'package:bonfire/util/extensions/extensions.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/cupertino.dart';
 
+// Could be helpful to render some sprite rotanting using angle.
 void renderSpriteByRadAngle(
   Canvas canvas,
   double radAngle,
-  Rect position,
+  Rect rect,
   Sprite sprite, {
   Paint? overridePaint,
 }) {
   canvas.save();
-  canvas.translate(position.center.dx, position.center.dy);
+  canvas.translate(rect.center.dx, rect.center.dy);
   canvas.rotate(radAngle == 0.0 ? 0.0 : radAngle + (pi / 2));
-  canvas.translate(-position.center.dx, -position.center.dy);
+  canvas.translate(-rect.center.dx, -rect.center.dy);
   sprite.render(
     canvas,
-    position: position.positionVector2,
-    size: position.sizeVector2,
+    position: rect.positionVector2,
+    size: rect.sizeVector2,
     overridePaint: overridePaint,
   );
   canvas.restore();
@@ -34,6 +35,7 @@ E? firstWhere<E>(
   return null;
 }
 
+// Help you to calculate zoom by max tiles can be visible
 double getZoomFromMaxVisibleTile(
   BuildContext context,
   double tileSize,

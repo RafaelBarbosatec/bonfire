@@ -148,24 +148,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       INTERVAL_OPTIMIZE_TREE,
       onTick: _optimizeColisionTree,
     );
-
-    // camera = bonfireCamera = BonfireCamera(
-    //   config: cameraConfig ?? CameraConfig(),
-    //   hudComponents: [
-    //     _lighting,
-    //     _colorFilterComponent,
-    //     if (_joystickController != null) _joystickController!,
-    //     if (interface != null) interface!,
-    //   ],
-    //   world: World(
-    //     children: [
-    //       map,
-    //       if (background != null) background!,
-    //       if (player != null) player!,
-    //       ...components ?? [],
-    //     ],
-    //   ),
-    // );
   }
 
   @override

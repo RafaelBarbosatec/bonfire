@@ -95,7 +95,7 @@ class Knight extends SimplePlayer
       angle: angle,
       size: Vector2.all(width * 0.7),
       damage: damage,
-      speed: speed * 2,
+      speed: speed * 3,
       collision: RectangleHitbox(
         size: Vector2(width / 3, width / 3),
         position: Vector2(width * 0.1, 0),
@@ -115,9 +115,9 @@ class Knight extends SimplePlayer
   }
 
   @override
-  void renderTree(Canvas canvas) {
+  void render(Canvas canvas) {
     _drawDirectionAttack(canvas);
-    super.renderTree(canvas);
+    super.render(canvas);
   }
 
   @override
@@ -223,8 +223,8 @@ class Knight extends SimplePlayer
     if (showBgRangeAttack) {
       double radius = height;
       rectDirectionAttack = Rect.fromLTWH(
-        toAbsoluteRect().center.dx - radius,
-        toAbsoluteRect().center.dy - radius,
+        -radius / 2,
+        -radius / 2,
         radius * 2,
         radius * 2,
       );
