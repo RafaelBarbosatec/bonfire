@@ -28,7 +28,7 @@ class GameTiledMap extends StatelessWidget {
         return BonfireWidget(
           joystick: Joystick(
             keyboardConfig: KeyboardConfig(
-              keyboardDirectionalType: KeyboardDirectionalType.wasdAndArrows,
+              directionalKeys: KeyboardDirectionalKeys.arrows(),
               acceptedKeys: [
                 LogicalKeyboardKey.space,
               ],
