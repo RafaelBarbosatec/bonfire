@@ -115,6 +115,8 @@ abstract class BaseGame extends FlameGame
     for (final c in _keyboardComponents) {
       if (c.onKeyboard(event, keysPressed)) {
         return super.onKeyEvent(event, keysPressed);
+      } else {
+        return KeyEventResult.ignored;
       }
     }
     return super.onKeyEvent(event, keysPressed);
