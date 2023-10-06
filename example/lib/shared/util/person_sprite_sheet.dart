@@ -20,12 +20,12 @@ enum PersonAttackEnum {
   rangeDownLeft,
 }
 
-class PersionSpritesheet {
+class PersonSpritesheet {
   final String path;
 
-  PersionSpritesheet({this.path = 'human.png'});
+  PersonSpritesheet({this.path = 'human.png'});
 
-  SimpleDirectionAnimation simpleAnimarion() {
+  SimpleDirectionAnimation simpleAnimation() {
     return SimpleDirectionAnimation(
       idleRight: getIdleRight,
       idleDown: getIdleDown,

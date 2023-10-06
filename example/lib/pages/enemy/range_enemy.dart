@@ -9,7 +9,7 @@ class RageEnemy extends SimpleEnemy with BlockMovementCollision {
     required Vector2 position,
   }) : super(
           position: position,
-          animation: PersionSpritesheet(path: 'orc.png').simpleAnimarion(),
+          animation: PersonSpritesheet(path: 'orc.png').simpleAnimation(),
           size: Vector2.all(24),
           speed: 20,
           initDirection: Direction.down,

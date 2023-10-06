@@ -7,8 +7,8 @@ class HumanTopdownPlayer extends RotationPlayer {
   }) : super(
           position: position,
           size: Vector2(24, 16),
-          animIdle: HumanTopdownPlayerSpritesheet.getIdle(),
-          animRun: HumanTopdownPlayerSpritesheet.getRun(),
+          animIdle: HumanTopdownPlayerSpritesheet.idle(),
+          animRun: HumanTopdownPlayerSpritesheet.run(),
           speed: 32,
         );
 }

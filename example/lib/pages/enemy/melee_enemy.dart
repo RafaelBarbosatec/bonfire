@@ -8,7 +8,7 @@ class MeleeEnemy extends SimpleEnemy {
   MeleeEnemy({required Vector2 position})
       : super(
           position: position,
-          animation: PersionSpritesheet(path: 'orc2.png').simpleAnimarion(),
+          animation: PersonSpritesheet(path: 'orc2.png').simpleAnimation(),
           size: Vector2.all(24),
           speed: 25,
           initDirection: Direction.down,
