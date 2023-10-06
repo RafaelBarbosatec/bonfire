@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/person_sprite_sheet.dart';
 
-class HumanPlayer extends SimplePlayer {
+class HumanPlayer extends SimplePlayer with BlockMovementCollision {
   HumanPlayer({
     required Vector2 position,
   }) : super(
@@ -10,4 +10,11 @@ class HumanPlayer extends SimplePlayer {
           size: Vector2.all(24),
           speed: 32,
         );
+
+  @override
+  Future<void> onLoad() {
+    /// Adds rectangle collision
+    add(RectangleHitbox(size: size / 2, position: size / 4));
+    return super.onLoad();
+  }
 }

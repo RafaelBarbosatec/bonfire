@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
-class ExitMapSensor extends GameDecoration with Sensor {
+class ExitMapSensor extends GameDecoration with Sensor<Player> {
   final String id;
   bool hasContact = false;
   final ValueChanged<String> exitMap;
@@ -13,8 +13,8 @@ class ExitMapSensor extends GameDecoration with Sensor {
         );
 
   @override
-  void onContact(GameComponent component) {
-    if (!hasContact && component is Player) {
+  void onContact(Player component) {
+    if (!hasContact) {
       hasContact = true;
       exitMap(id);
     }

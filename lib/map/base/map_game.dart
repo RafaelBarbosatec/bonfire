@@ -32,13 +32,5 @@ abstract class GameMap extends GameComponent {
   int get priority => LayerPriority.MAP;
 
   @override
-  void renderDebugMode(Canvas canvas) {
-    super.renderDebugMode(canvas);
-    for (Tile t in getRendered()) {
-      t.renderDebugMode(canvas);
-    }
-  }
-
-  @override
   bool get isVisible => true;
 }

@@ -14,7 +14,7 @@ class Critter extends SimpleNpc
           animation: CritterSpriteSheet.simpleDirectionAnimation,
           position: position,
           size: Vector2.all(DungeonMap.tileSize * 0.8),
-          speed: DungeonMap.tileSize * 2.75,
+          speed: DungeonMap.tileSize,
         );
 
   @override

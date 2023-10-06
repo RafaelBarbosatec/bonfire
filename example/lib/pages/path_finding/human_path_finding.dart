@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/pages/enemy/human_with_collision.dart';
+import 'package:example/pages/player/simple/human.dart';
 
-class HumanPathFinding extends HumanWithCollision with PathFinding, TapGesture {
+class HumanPathFinding extends HumanPlayer with PathFinding, TapGesture {
   HumanPathFinding({required Vector2 position}) : super(position: position) {
     setupPathFinding(
       pathLineStrokeWidth: 2,

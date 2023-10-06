@@ -31,6 +31,7 @@ class Knight extends SimplePlayer
           animation: PlayerSpriteSheet.simpleDirectionAnimation,
           size: Vector2.all(DungeonMap.tileSize),
           position: position,
+          speed: DungeonMap.tileSize * 1.5,
           life: 200,
         ) {
     setupMovementByJoystick(

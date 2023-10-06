@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/pages/enemy/human_with_collision.dart';
 import 'package:example/pages/enemy/melee_enemy.dart';
 import 'package:example/pages/enemy/range_enemy.dart';
+import 'package:example/pages/player/simple/human.dart';
 import 'package:flutter/widgets.dart';
 
 class EnemyPage extends StatelessWidget {
@@ -22,7 +22,7 @@ class EnemyPage extends StatelessWidget {
         directional: JoystickDirectional(),
         keyboardConfig: KeyboardConfig(),
       ),
-      player: HumanWithCollision(
+      player: HumanPlayer(
         position: Vector2(tileSize * 7, tileSize * 8),
       ),
       cameraConfig: CameraConfig(
