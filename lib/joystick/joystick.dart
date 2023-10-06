@@ -146,21 +146,21 @@ class Joystick extends JoystickController {
       if (event is RawKeyDownEvent) {
         joystickAction(
           JoystickActionEvent(
-            id: event.logicalKey.keyId,
+            id: event.logicalKey,
             event: ActionEvent.DOWN,
           ),
         );
       } else if (event is RawKeyUpEvent) {
         joystickAction(
           JoystickActionEvent(
-            id: event.logicalKey.keyId,
+            id: event.logicalKey,
             event: ActionEvent.UP,
           ),
         );
       }
     }
 
-    return false;
+    return true;
   }
 
   @override
