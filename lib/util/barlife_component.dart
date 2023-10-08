@@ -182,6 +182,7 @@ class BarLifeComponent extends GameComponent {
   }
 
   String _getLifeText() {
-    return barLifeTextBuilder?.call(_life, _maxLife) ?? '${_life.toInt()}/${_maxLife.toInt()}';
+    return barLifeTextBuilder?.call(_life, _maxLife) ??
+        '${_life.toInt()}/${_maxLife.toInt()}';
   }
 }
