@@ -64,7 +64,7 @@ mixin UseBarLife on Attackable {
         textStyle: _textStyle,
         showLifeText: _showLifeText,
         textOffset: _textOffset,
-        barLifetextBuilder: _barLifetextBuilder,
+        barLifeTextBuilder: _barLifetextBuilder,
       ),
     );
     super.onMount();

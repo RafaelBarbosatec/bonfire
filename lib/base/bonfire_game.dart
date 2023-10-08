@@ -64,8 +64,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   ValueChanged<BonfireGame>? onReady;
 
   @override
-  LightingInterface get lighting =>
-      camera.viewport.children.whereType<LightingInterface>().first;
+  LightingInterface get lighting => camera.viewport.children.whereType<LightingInterface>().first;
 
   @override
   ColorFilterInterface get colorFilter =>
@@ -146,7 +145,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
     _intervalOprimizeTree = IntervalTick(
       INTERVAL_OPTIMIZE_TREE,
-      onTick: _optimizeColisionTree,
+      onTick: _optimizeCollisionTree,
     );
   }
 
@@ -204,8 +203,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   Iterable<Enemy> livingEnemies({bool onlyVisible = false}) {
-    return enemies(onlyVisible: onlyVisible)
-        .where((element) => !element.isDead);
+    return enemies(onlyVisible: onlyVisible).where((element) => !element.isDead);
   }
 
   @override
@@ -289,9 +287,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   void stopScene() {
     try {
-      world.children
-          .firstWhere((value) => value is SceneBuilderComponent)
-          .removeFromParent();
+      world.children.firstWhere((value) => value is SceneBuilderComponent).removeFromParent();
     } catch (e) {
       /// Not found SceneBuilderComponent
     }
@@ -394,7 +390,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
   }
 
-  void _optimizeColisionTree() {
+  void _optimizeCollisionTree() {
     scheduleMicrotask(
       () => collisionDetection.broadphase.tree.optimize(),
     );
