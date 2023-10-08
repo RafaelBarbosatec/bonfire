@@ -27,7 +27,7 @@ class HomeContent extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Bonfire was created with purpose that create Flutter games on easy, objective and fast way!',
+                  'Bonfire is a game development framework that enables the creation of\nFlutter/Flame games in a more easy, objective and fast way!',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.white.withOpacity(0.7),
                       ),

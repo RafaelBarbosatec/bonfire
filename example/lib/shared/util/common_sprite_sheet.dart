@@ -19,7 +19,7 @@ class CommonSpriteSheet {
         ),
       );
   static Future<SpriteAnimation> get smokeExplosion => SpriteAnimation.load(
-        "smoke_explosin.png",
+        "smoke_explosion.png",
         SpriteAnimationData.sequenced(
           amount: 6,
           stepTime: 0.1,
@@ -27,9 +27,8 @@ class CommonSpriteSheet {
         ),
       );
 
-  static Future<SpriteAnimation> get whiteAttackEffectBottom =>
-      SpriteAnimation.load(
-        "player/atack_effect_bottom.png",
+  static Future<SpriteAnimation> get whiteAttackEffectBottom => SpriteAnimation.load(
+        "player/attack_effect_bottom.png",
         SpriteAnimationData.sequenced(
           amount: 6,
           stepTime: 0.1,
@@ -37,9 +36,8 @@ class CommonSpriteSheet {
         ),
       );
 
-  static Future<SpriteAnimation> get whiteAttackEffectLeft =>
-      SpriteAnimation.load(
-        "player/atack_effect_left.png",
+  static Future<SpriteAnimation> get whiteAttackEffectLeft => SpriteAnimation.load(
+        "player/attack_effect_left.png",
         SpriteAnimationData.sequenced(
           amount: 6,
           stepTime: 0.1,
@@ -47,9 +45,8 @@ class CommonSpriteSheet {
         ),
       );
 
-  static Future<SpriteAnimation> get whiteAttackEffectRight =>
-      SpriteAnimation.load(
-        "player/atack_effect_right.png",
+  static Future<SpriteAnimation> get whiteAttackEffectRight => SpriteAnimation.load(
+        "player/attack_effect_right.png",
         SpriteAnimationData.sequenced(
           amount: 6,
           stepTime: 0.1,
@@ -57,9 +54,8 @@ class CommonSpriteSheet {
         ),
       );
 
-  static Future<SpriteAnimation> get whiteAttackEffectTop =>
-      SpriteAnimation.load(
-        "player/atack_effect_top.png",
+  static Future<SpriteAnimation> get whiteAttackEffectTop => SpriteAnimation.load(
+        "player/attack_effect_top.png",
         SpriteAnimationData.sequenced(
           amount: 6,
           stepTime: 0.1,
@@ -67,9 +63,8 @@ class CommonSpriteSheet {
         ),
       );
 
-  static Future<SpriteAnimation> get blackAttackEffectBottom =>
-      SpriteAnimation.load(
-        "enemy/atack_effect_bottom.png",
+  static Future<SpriteAnimation> get blackAttackEffectBottom => SpriteAnimation.load(
+        "enemy/attack_effect_bottom.png",
         SpriteAnimationData.sequenced(
           amount: 6,
           stepTime: 0.1,
@@ -77,9 +72,8 @@ class CommonSpriteSheet {
         ),
       );
 
-  static Future<SpriteAnimation> get blackAttackEffectLeft =>
-      SpriteAnimation.load(
-        "enemy/atack_effect_left.png",
+  static Future<SpriteAnimation> get blackAttackEffectLeft => SpriteAnimation.load(
+        "enemy/attack_effect_left.png",
         SpriteAnimationData.sequenced(
           amount: 6,
           stepTime: 0.1,
@@ -87,9 +81,8 @@ class CommonSpriteSheet {
         ),
       );
 
-  static Future<SpriteAnimation> get blackAttackEffectRight =>
-      SpriteAnimation.load(
-        "enemy/atack_effect_right.png",
+  static Future<SpriteAnimation> get blackAttackEffectRight => SpriteAnimation.load(
+        "enemy/attack_effect_right.png",
         SpriteAnimationData.sequenced(
           amount: 6,
           stepTime: 0.1,
@@ -97,9 +90,8 @@ class CommonSpriteSheet {
         ),
       );
 
-  static Future<SpriteAnimation> get blackAttackEffectTop =>
-      SpriteAnimation.load(
-        "enemy/atack_effect_top.png",
+  static Future<SpriteAnimation> get blackAttackEffectTop => SpriteAnimation.load(
+        "enemy/attack_effect_top.png",
         SpriteAnimationData.sequenced(
           amount: 6,
           stepTime: 0.1,
@@ -164,6 +156,5 @@ class CommonSpriteSheet {
   static Future<Sprite> get barrelSprite => Sprite.load('itens/barrel.png');
   static Future<Sprite> get columnSprite => Sprite.load('itens/column.png');
   static Future<Sprite> get spikesSprite => Sprite.load('itens/spikes.png');
-  static Future<Sprite> get potionLifeSprite =>
-      Sprite.load('itens/potion_life.png');
+  static Future<Sprite> get potionLifeSprite => Sprite.load('itens/potion_life.png');
 }
