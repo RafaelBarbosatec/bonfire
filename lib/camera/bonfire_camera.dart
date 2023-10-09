@@ -24,7 +24,8 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
     }
   }
 
-  Rect get cameraRectWithSpacing => visibleWorldRect.inflate(_spacingMap);
+  Rect get cameraRectWithSpacing =>
+      visibleWorldRect.inflate(_spacingMap / zoom);
 
   Vector2 get position => viewfinder.position;
   set position(Vector2 position) => viewfinder.position = position;

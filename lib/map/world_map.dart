@@ -219,9 +219,10 @@ class WorldMap extends GameMap {
   }
 
   Vector2 _getCameraTileUpdate() {
+    final camera = gameRef.camera;
     return Vector2(
-      (gameRef.camera.position.x / tileSizeToUpdate).floorToDouble(),
-      (gameRef.camera.position.y / tileSizeToUpdate).floorToDouble(),
+      (camera.position.x / (tileSizeToUpdate / camera.zoom)).floorToDouble(),
+      (camera.position.y / (tileSizeToUpdate / camera.zoom)).floorToDouble(),
     );
   }
 }
