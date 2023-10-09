@@ -14,6 +14,7 @@ class AnimatedFollowerGameObject extends AnimatedGameObject with Follower {
     super.removeOnFinish = true,
     Vector2? offset,
     super.objectPriority,
+    super.renderAboveComponents,
   }) : super(
           position: target.position + (offset ?? Vector2.zero()),
         ) {

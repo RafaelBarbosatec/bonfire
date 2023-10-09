@@ -226,6 +226,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
           size: innerSize,
           lightingConfig: lightingConfig,
           loop: false,
+          renderAboveComponents: true,
         ),
       );
       _applyDestroyDamage(
@@ -266,6 +267,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
           lightingConfig: lightingConfig,
           size: innerSize,
           loop: false,
+          renderAboveComponents: true,
         ),
       );
       _applyDestroyDamage(

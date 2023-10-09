@@ -25,34 +25,16 @@ class KnightController extends StateController<Knight> {
 
   @override
   void update(double dt, Knight component) {
-    bool seeEnemyInterval = component.checkInterval('seeEnemy', 250, dt);
-    if (seeEnemyInterval) {
-      component.seeEnemy(
-        radiusVision: component.width * 4,
-        notObserved: _handleNotObserveEnemy,
-        observed: (enemies) => _handleObserveEnemy(enemies.first),
-      );
-    }
-
-    bool execRangeAttackInterval = component.checkInterval(
-      'ATTACK_RANGE',
-      150,
-      dt,
-    );
-    if (executingRangeAttack && execRangeAttackInterval) {
-      if (stamina > 10) {
-        _decrementStamina(10);
-        component.execRangeAttack(radAngleRangeAttack, attack / 2);
-      }
-    }
-    _verifyStamina(dt);
+    _checkViewEnemy(dt, component);
+    _executeRangeAttack(dt, component);
+    _verifyStamina(dt, component);
   }
 
   void handleJoystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN) {
       if (event.id == LogicalKeyboardKey.space ||
           event.id == PlayerAttackType.attackMelee) {
-        if (stamina > 15) {
+        if (stamina >= 15) {
           _decrementStamina(15);
           component?.execMeleeAttack(attack);
         }
@@ -71,30 +53,17 @@ class KnightController extends StateController<Knight> {
     }
   }
 
-  void _handleObserveEnemy(Enemy enemy) {
-    if (canShowEmote) {
-      canShowEmote = false;
-      component?.execShowEmote();
+  void _verifyStamina(double dt, Knight component) {
+    if (stamina >= 100) {
+      return;
     }
-    if (!showedDialog) {
-      showedDialog = true;
-      component?.execShowTalk(enemy);
-    }
-  }
-
-  void _handleNotObserveEnemy() {
-    canShowEmote = true;
-  }
-
-  void _verifyStamina(double dt) {
-    if (stamina < 100 &&
-        component?.checkInterval('INCREMENT_STAMINA', 100, dt) == true) {
+    if (component.checkInterval('INCREMENT_STAMINA', 100, dt) == true) {
       stamina += 2;
       if (stamina > 100) {
         stamina = 100;
       }
+      component.updateStamina(stamina);
     }
-    component?.updateStamina(stamina);
   }
 
   void _decrementStamina(int i) {
@@ -107,5 +76,42 @@ class KnightController extends StateController<Knight> {
 
   void onReceiveDamage(double damage) {
     component?.execShowDamage(damage);
+  }
+
+  void _checkViewEnemy(double dt, Knight component) {
+    bool seeEnemyInterval = component.checkInterval('seeEnemy', 250, dt);
+    if (seeEnemyInterval) {
+      component.seeEnemy(
+        radiusVision: component.width * 4,
+        notObserved: () => canShowEmote = true,
+        observed: (enemies) => _handleObserveEnemy(enemies.first),
+      );
+    }
+  }
+
+  void _handleObserveEnemy(Enemy enemy) {
+    if (canShowEmote) {
+      canShowEmote = false;
+      component?.execShowEmote();
+    }
+    if (!showedDialog) {
+      showedDialog = true;
+      component?.execShowTalk(enemy);
+    }
+  }
+
+  void _executeRangeAttack(double dt, Knight component) {
+    if (!executingRangeAttack || stamina < 10) {
+      return;
+    }
+    bool execRangeAttackInterval = component.checkInterval(
+      'ATTACK_RANGE',
+      150,
+      dt,
+    );
+    if (execRangeAttackInterval) {
+      _decrementStamina(10);
+      component.execRangeAttack(radAngleRangeAttack, attack / 2);
+    }
   }
 }

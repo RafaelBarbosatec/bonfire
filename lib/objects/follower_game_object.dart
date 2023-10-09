@@ -9,6 +9,7 @@ class FollowerGameObject extends GameObject with Follower {
     Vector2? offset,
     super.objectPriority,
     super.lightingConfig,
+    super.renderAboveComponents,
   }) : super(position: target.position + (offset ?? Vector2.zero())) {
     setupFollower(target: target, offset: offset);
   }

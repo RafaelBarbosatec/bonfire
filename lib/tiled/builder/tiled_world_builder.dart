@@ -215,7 +215,7 @@ class TiledWorldBuilder {
         ),
         size: Vector2(_tileWidth, _tileHeight),
         collisions: data.collisions,
-        aboveComponents: above,
+        renderAboveComponents: above,
       )
         ..angle = data.angle
         ..opacity = opacity
@@ -231,7 +231,7 @@ class TiledWorldBuilder {
           ),
           size: Vector2(_tileWidth, _tileHeight),
           collisions: data.collisions,
-          aboveComponents: above,
+          renderAboveComponents: above,
         )
           ..angle = data.angle
           ..properties = data.properties;

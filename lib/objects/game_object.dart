@@ -16,7 +16,9 @@ class GameObject extends GameComponent
     this.objectPriority,
     double angle = 0,
     Anchor anchor = Anchor.topLeft,
+    bool renderAboveComponents = false,
   }) {
+    this.renderAboveComponents = renderAboveComponents;
     this.anchor = anchor;
     this.position = position;
     this.size = size;

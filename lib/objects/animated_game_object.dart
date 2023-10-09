@@ -21,6 +21,7 @@ class AnimatedGameObject extends GameObject with UseSpriteAnimation {
     super.anchor = Anchor.topLeft,
     bool loop = true,
     super.objectPriority,
+    super.renderAboveComponents,
   }) : super(sprite: null) {
     loader?.add(AssetToLoad(
       animation,

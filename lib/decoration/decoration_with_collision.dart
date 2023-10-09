@@ -11,15 +11,13 @@ class GameDecorationWithCollision extends GameDecoration {
     this.collisions,
     double offsetX = 0,
     double offsetY = 0,
-    bool aboveComponents = false,
+    super.renderAboveComponents,
   }) : super(
           position: position,
           size: size,
           animation: animation,
           sprite: sprite,
-        ) {
-    this.aboveComponents = aboveComponents;
-  }
+        );
 
   GameDecorationWithCollision.withSprite({
     required Future<Sprite> sprite,
@@ -28,14 +26,12 @@ class GameDecorationWithCollision extends GameDecoration {
     this.collisions,
     double offsetX = 0,
     double offsetY = 0,
-    bool aboveComponents = false,
+    super.renderAboveComponents,
   }) : super.withSprite(
           sprite: sprite,
           position: position,
           size: size,
-        ) {
-    this.aboveComponents = aboveComponents;
-  }
+        );
 
   GameDecorationWithCollision.withAnimation({
     required Future<SpriteAnimation> animation,
@@ -44,14 +40,12 @@ class GameDecorationWithCollision extends GameDecoration {
     this.collisions,
     double offsetX = 0,
     double offsetY = 0,
-    bool aboveComponents = false,
+    super.renderAboveComponents,
   }) : super.withAnimation(
           animation: animation,
           position: position,
           size: size,
-        ) {
-    this.aboveComponents = aboveComponents;
-  }
+        );
 
   @override
   Future<void> onLoad() {

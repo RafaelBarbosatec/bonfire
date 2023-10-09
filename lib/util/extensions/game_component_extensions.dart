@@ -8,7 +8,7 @@ extension GameComponentExtensions on GameComponent {
   void showDamage(
     double damage, {
     TextStyle? config,
-    double initVelocityTop = -5,
+    double initVelocityUp = -5,
     double gravity = 0.5,
     double maxDownSize = 20,
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
@@ -18,16 +18,13 @@ extension GameComponentExtensions on GameComponent {
     gameRef.add(
       TextDamageComponent(
         damage.toInt().toString(),
-        Vector2(
-          center.x,
-          y,
-        ),
+        Vector2(absoluteCenter.x, absolutePosition.y),
         config: config ??
             const TextStyle(
               fontSize: 14,
               color: Color(0xFFFFFFFF),
             ),
-        initVelocityTop: initVelocityTop,
+        initVelocityUp: initVelocityUp,
         gravity: gravity,
         direction: direction,
         onlyUp: onlyUp,
@@ -201,6 +198,7 @@ extension GameComponentExtensions on GameComponent {
           angle: angle,
           anchor: Anchor.center,
           loop: false,
+          renderAboveComponents: true,
         ),
       );
     }

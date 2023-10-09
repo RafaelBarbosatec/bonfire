@@ -17,6 +17,7 @@ class GameDecoration extends AnimatedGameObject {
     super.anchor,
     super.angle,
     super.lightingConfig,
+    super.renderAboveComponents,
   }) {
     this.sprite = sprite;
     setAnimation(animation);
@@ -30,6 +31,7 @@ class GameDecoration extends AnimatedGameObject {
     super.anchor,
     super.angle,
     super.lightingConfig,
+    super.renderAboveComponents,
   }) {
     loader?.add(AssetToLoad(sprite, (value) => this.sprite = value));
     applyBleedingPixel(position: position, size: size);
@@ -42,6 +44,7 @@ class GameDecoration extends AnimatedGameObject {
     super.anchor,
     super.angle,
     super.lightingConfig,
+    super.renderAboveComponents,
   }) {
     loader?.add(AssetToLoad(animation, (value) => setAnimation(value)));
     applyBleedingPixel(position: position, size: size);

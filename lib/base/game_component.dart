@@ -17,7 +17,7 @@ abstract class GameComponent extends PositionComponent
   Map<String, dynamic>? properties;
 
   /// When true this component render above all components in game.
-  bool aboveComponents = false;
+  bool renderAboveComponents = false;
 
   /// Param checks if this component is visible on the screen
   bool isVisible = false;
@@ -39,7 +39,7 @@ abstract class GameComponent extends PositionComponent
 
   @override
   int get priority {
-    if (aboveComponents && hasGameRef) {
+    if (renderAboveComponents && hasGameRef) {
       return LayerPriority.getAbovePriority(gameRef.highestPriority);
     }
     return LayerPriority.getComponentPriority(_getBottomPriority());
