@@ -23,7 +23,8 @@ mixin CustomHasQuadTreeCollisionDetection<W extends World> on FlameGame<W>
   late CustomQuadTreeCollisionDetection _collisionDetection;
 
   @override
-  CustomQuadTreeCollisionDetection get collisionDetection => _collisionDetection;
+  CustomQuadTreeCollisionDetection get collisionDetection =>
+      _collisionDetection;
 
   @override
   set collisionDetection(
