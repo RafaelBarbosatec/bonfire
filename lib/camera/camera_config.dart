@@ -34,7 +34,7 @@ class CameraConfig {
     this.zoom = 1.0,
     this.angle = 0.0,
     this.target,
-    this.speed = double.infinity,
+    this.speed = 5, // no smoth speed sets double.infinity
     this.initialMapZoomFit = InitialMapZoomFitEnum.none,
     this.initPosition,
     Vector2? movementWindow,

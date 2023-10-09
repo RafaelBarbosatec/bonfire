@@ -32,7 +32,7 @@ class CustomQuadTreeBroadphase extends Broadphase<ShapeHitbox> {
 
   final _potentials = <int, CollisionProspect<ShapeHitbox>>{};
   final _potentialsTmp = <ShapeHitbox>[];
-  final _prospectPool = ProspectPool<ShapeHitbox>();
+  final _prospectPool = ProspectPool<ShapeHitbox>(incrementSize: 200);
 
   @override
   List<ShapeHitbox> get items => tree.hitboxes;
