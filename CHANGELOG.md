@@ -48,7 +48,7 @@
   - Add `isAnimationLastFrame`, `isPaused`, `pauseAnimation()`, `playAnimation()` and `animationCurrentIndex` in `UseSpriteAnimation` mixin.
   - Add `initPosition` param in `CameraConfig`.
   - `Sensor` improvements.
-  - `UseBarLife` improvements.
+  - `UseBarLife` improvements. Renamed to `UseLifeBar`
   - `MovementByJoystick` improvements: Add `setupMovementByJoystick` method.
   - `Follower` mixin improvements.
   - `Vision` improvements.

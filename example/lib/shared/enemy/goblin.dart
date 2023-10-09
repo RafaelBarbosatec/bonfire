@@ -12,7 +12,7 @@ class Goblin extends SimpleEnemy
         JoystickListener,
         MovementByJoystick,
         AutomaticRandomMovement,
-        UseBarLife,
+        UseLifeBar,
         UseStateController<GoblinController> {
   Goblin(Vector2 position)
       : super(
@@ -22,7 +22,7 @@ class Goblin extends SimpleEnemy
           speed: DungeonMap.tileSize,
           life: 100,
         ) {
-    setupBarLife(
+    setupLifeBar(
       borderRadius: BorderRadius.circular(2),
       borderWidth: 2,
     );
