@@ -5,6 +5,7 @@ import 'package:example/pages/mini_games/platform/fox_player.dart';
 import 'package:example/pages/mini_games/platform/platform_spritesheet.dart';
 
 class FrogEnemy extends PlatformEnemy with HandleForces {
+  int _timeToWaitBeforeJump = 4000;
   FrogEnemy({
     required Vector2 position,
   }) : super(
@@ -59,7 +60,9 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   @override
   void update(double dt) {
     super.update(dt);
-    if (checkInterval('jump', 5000, dt) && !isDead && isVisible) {
+    if (checkInterval('jump', _timeToWaitBeforeJump, dt) &&
+        !isDead &&
+        isVisible) {
       animation?.playOnce(
         PlatformSpritesheet.frogActionRight,
         flipX: lastDirectionHorizontal == Direction.left,
@@ -91,6 +94,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
         isSolid: true,
       ),
     );
+    _timeToWaitBeforeJump += Random().nextInt(1000);
     return super.onLoad();
   }
 }
