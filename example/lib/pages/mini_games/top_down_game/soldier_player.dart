@@ -44,7 +44,7 @@ class SoldierPlayer extends RotationPlayer
 
   @override
   void onJoystickAction(JoystickActionEvent event) {
-    if ((event.id == 1 || event.id == LogicalKeyboardKey.space.keyId) &&
+    if ((event.id == 1 || event.id == LogicalKeyboardKey.space) &&
         event.event == ActionEvent.DOWN) {
       actionAttack();
     }

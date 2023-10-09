@@ -50,7 +50,7 @@ class KnightController extends StateController<Knight> {
 
   void handleJoystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN) {
-      if (event.id == LogicalKeyboardKey.space.keyId ||
+      if (event.id == LogicalKeyboardKey.space ||
           event.id == PlayerAttackType.attackMelee) {
         if (stamina > 15) {
           _decrementStamina(15);

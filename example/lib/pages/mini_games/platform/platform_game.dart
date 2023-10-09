@@ -4,6 +4,7 @@ import 'package:example/pages/mini_games/platform/frog_enemy.dart';
 import 'package:example/pages/mini_games/platform/gem_decoration.dart';
 import 'package:example/pages/mini_games/platform/platform_game_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PlatformGame extends StatefulWidget {
   const PlatformGame({Key? key}) : super(key: key);
@@ -30,7 +31,9 @@ class _PlatformGameState extends State<PlatformGame> {
         },
       ),
       joystick: Joystick(
-        keyboardConfig: KeyboardConfig(),
+        keyboardConfig: KeyboardConfig(acceptedKeys: [
+          LogicalKeyboardKey.space,
+        ]),
         directional: JoystickDirectional(
           color: Colors.green,
         ),
