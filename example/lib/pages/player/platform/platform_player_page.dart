@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/player/platform/simple_fox_player.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class PlatformPlayerPage extends StatelessWidget {
@@ -13,7 +14,11 @@ class PlatformPlayerPage extends StatelessWidget {
         'platform/simple_map.tmj',
       ),
       joystick: Joystick(
-        keyboardConfig: KeyboardConfig(),
+        keyboardConfig: KeyboardConfig(
+          acceptedKeys: [
+            LogicalKeyboardKey.space,
+          ]
+        ),
         directional: JoystickDirectional(),
         actions: [
           JoystickAction(

@@ -31,7 +31,7 @@ class SimpleFoxPlayer extends PlatformPlayer with HandleForces {
   @override
   void onJoystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN &&
-        (event.id == LogicalKeyboardKey.space.keyId || event.id == 1)) {
+        (event.id == LogicalKeyboardKey.space || event.id == 1)) {
       jump();
     }
     super.onJoystickAction(event);
