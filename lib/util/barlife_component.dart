@@ -6,9 +6,9 @@ enum BarLifeDrawPorition { top, bottom, left, right }
 typedef BarLifeTextBuilder = String Function(double life, double maxLife);
 
 class BarLifeComponent extends GameComponent {
-  Paint _barLiveBgPaint = Paint();
-  final Paint _barLivePaint = Paint()..style = PaintingStyle.fill;
-  Paint _barLiveBorderPaint = Paint();
+  Paint _barLifeBgPaint = Paint();
+  final Paint _barLifePaint = Paint()..style = PaintingStyle.fill;
+  Paint _barLifeBorderPaint = Paint();
 
   final BarLifeDrawPorition drawPosition;
   final List<Color>? colors;
@@ -18,7 +18,7 @@ class BarLifeComponent extends GameComponent {
   final Color borderColor;
   final bool showLifeText;
   final TextStyle? textStyle;
-  final BarLifeTextBuilder? barLifetextBuilder;
+  final BarLifeTextBuilder? barLifeTextBuilder;
   double _life = 100;
   double _maxLife = 100;
 
@@ -44,19 +44,19 @@ class BarLifeComponent extends GameComponent {
     this.borderRadius = BorderRadius.zero,
     this.borderWidth = 2,
     this.borderColor = const Color(0xFFFFFFFF),
-    this.barLifetextBuilder,
+    this.barLifeTextBuilder,
     double life = 100,
     double maxLife = 100,
   }) {
     _life = life;
     _maxLife = maxLife;
     _textOffset = textOffset ?? _textOffset;
-    _barLiveBorderPaint = _barLiveBorderPaint
+    _barLifeBorderPaint = _barLifeBorderPaint
       ..color = borderColor
       ..strokeWidth = borderWidth
       ..style = PaintingStyle.stroke;
 
-    _barLiveBgPaint = _barLiveBgPaint
+    _barLifeBgPaint = _barLifeBgPaint
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
     this.position = position ?? Vector2.zero();
@@ -105,7 +105,7 @@ class BarLifeComponent extends GameComponent {
 
       canvas.drawRRect(
         borderRect,
-        _barLiveBorderPaint,
+        _barLifeBorderPaint,
       );
     }
 
@@ -118,7 +118,7 @@ class BarLifeComponent extends GameComponent {
 
     canvas.drawRRect(
       bgRect,
-      _barLiveBgPaint,
+      _barLifeBgPaint,
     );
 
     final RRect lifeRect = borderRadius.toRRect(Rect.fromLTWH(
@@ -130,7 +130,7 @@ class BarLifeComponent extends GameComponent {
 
     canvas.drawRRect(
       lifeRect,
-      _barLivePaint
+      _barLifePaint
         ..color = _getColorLife(
           currentBarLife,
           width,
@@ -182,7 +182,7 @@ class BarLifeComponent extends GameComponent {
   }
 
   String _getLifeText() {
-    return barLifetextBuilder?.call(_life, _maxLife) ??
+    return barLifeTextBuilder?.call(_life, _maxLife) ??
         '${_life.toInt()}/${_maxLife.toInt()}';
   }
 }

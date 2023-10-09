@@ -28,14 +28,14 @@ class GameManualMap extends StatelessWidget {
           actions: [
             JoystickAction(
               actionId: PlayerAttackType.attackMelee,
-              sprite: Sprite.load('joystick_atack.png'),
+              sprite: Sprite.load('joystick_attack.png'),
               align: JoystickActionAlign.BOTTOM_RIGHT,
               size: 80,
               margin: const EdgeInsets.only(bottom: 50, right: 50),
             ),
             JoystickAction(
               actionId: PlayerAttackType.attackRange,
-              sprite: Sprite.load('joystick_atack_range.png'),
+              sprite: Sprite.load('joystick_attack_range.png'),
               spriteBackgroundDirection: Sprite.load('joystick_background.png'),
               size: 50,
               enableDirection: true,

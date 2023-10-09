@@ -16,7 +16,7 @@ class ComponentSpawner extends GameComponent {
   // Builder that adds the component in the game.
   final SpawnerPositionBuilder builder;
 
-  final bool Function(BonfireGameInterface game)? spawCondition;
+  final bool Function(BonfireGameInterface game)? spawnCondition;
 
   late Random _random;
 
@@ -25,7 +25,7 @@ class ComponentSpawner extends GameComponent {
     required this.area,
     required this.interval,
     required this.builder,
-    this.spawCondition,
+    this.spawnCondition,
     this.onlyVisible = true,
   }) {
     _random = Random();
@@ -37,7 +37,7 @@ class ComponentSpawner extends GameComponent {
   void update(double dt) {
     if (checkInterval('SpawnPosition', interval, dt) &&
         !(onlyVisible && !isVisible)) {
-      if (spawCondition?.call(gameRef) ?? true) {
+      if (spawnCondition?.call(gameRef) ?? true) {
         _spawn();
       }
     }

@@ -146,7 +146,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
     _intervalOprimizeTree = IntervalTick(
       INTERVAL_OPTIMIZE_TREE,
-      onTick: _optimizeColisionTree,
+      onTick: _optimizeCollisionTree,
     );
   }
 
@@ -394,7 +394,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
   }
 
-  void _optimizeColisionTree() {
+  void _optimizeCollisionTree() {
     scheduleMicrotask(
       () => collisionDetection.broadphase.tree.optimize(),
     );
