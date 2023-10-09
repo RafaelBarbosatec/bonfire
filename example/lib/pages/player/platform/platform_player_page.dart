@@ -17,7 +17,7 @@ class PlatformPlayerPage extends StatelessWidget {
         keyboardConfig: KeyboardConfig(
           acceptedKeys: [
             LogicalKeyboardKey.space,
-          ]
+          ],
         ),
         directional: JoystickDirectional(),
         actions: [
