@@ -42,6 +42,9 @@ double getZoomFromMaxVisibleTile(
   int maxTile,
 ) {
   final screenSize = MediaQuery.of(context).size;
+  if (screenSize == Size.zero || screenSize == Size.infinite) {
+    return 1;
+  }
   final maxSize = max(screenSize.width, screenSize.height);
   return maxSize / (tileSize * maxTile);
 }
