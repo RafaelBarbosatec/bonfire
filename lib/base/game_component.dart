@@ -27,6 +27,14 @@ abstract class GameComponent extends PositionComponent
   /// Get BuildContext
   BuildContext get context => gameRef.context;
 
+  double lastAngle = 0;
+
+  @override
+  set angle(double a) {
+    lastAngle = super.angle;
+    super.angle = a;
+  }
+
   Rect? _rectCollision;
 
   @override

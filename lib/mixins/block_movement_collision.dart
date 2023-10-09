@@ -28,6 +28,7 @@ mixin BlockMovementCollision on Movement {
     );
 
     position += reverseDisplacement * -1;
+    angle = lastAngle;
     stopFromCollision(
       isX: reverseDisplacement.x.abs() > 0,
       isY: reverseDisplacement.y.abs() > 0,
