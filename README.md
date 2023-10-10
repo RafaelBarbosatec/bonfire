@@ -34,12 +34,6 @@ Test our online [DEMO-v3](https://bonfire-engine.github.io/examples/bonfire-v3/)
 
 Use this command: `flutter build web --web-renderer=canvaskit`
 
-## Next steps
-
-### [Bonfire 3.0.0](https://github.com/RafaelBarbosatec/bonfire/pull/393)
-
-Remove collision and rendering implementation itself to add raycast support
-
 ## Encourage my work
 
 [![buymeacoffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/rafaelbarbosa)
