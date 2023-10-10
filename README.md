@@ -4,6 +4,8 @@
 [![pub package](https://img.shields.io/pub/v/bonfire.svg)](https://pub.dev/packages/bonfire)
 ![GitHub stars](https://img.shields.io/github/stars/RafaelBarbosatec/bonfire)
 [![pub points](https://img.shields.io/pub/points/bonfire?logo=dart)](https://pub.dev/packages/bonfire/score)
+[![Telegram](https://img.shields.io/endpoint?style=flat-square&url=https%3A%2F%2Frunkit.io%2Fdamiankrawczyk%2Ftelegram-badge%2Fbranches%2Fmaster%3Furl%3Dhttps%3A%2F%2Ft.me%2Fbonfire_engine)](https://t.me/bonfire_engine)
+
 
 [![bonfire](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/bonfire.gif)](https://bonfire-engine.github.io/)
 
