@@ -38,7 +38,6 @@ class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
     setupLighting(
       LightingConfig(
         radius: width * 1.5,
-        blurBorder: width * 1.5,
         color: Colors.transparent,
       ),
     );
@@ -125,11 +124,10 @@ class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
 
   @override
   void update(double dt) {
+    super.update(dt);
     _checkViewEnemy(dt);
     _executeRangeAttack(dt);
     _updateLifeAndStamina(dt);
-
-    super.update(dt);
   }
 
   @override
@@ -151,16 +149,14 @@ class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
   }
 
   void execShowEmote() {
-    if (hasGameRef) {
-      add(
-        AnimatedGameObject(
-          position: Vector2(width / 4, 0),
-          animation: CommonSpriteSheet.emote,
-          size: Vector2.all(width / 2),
-          loop: false,
-        ),
-      );
-    }
+    add(
+      AnimatedGameObject(
+        position: Vector2(width / 4, 0),
+        animation: CommonSpriteSheet.emote,
+        size: Vector2.all(width / 2),
+        loop: false,
+      ),
+    );
   }
 
   void _drawDirectionAttack(Canvas c) {
@@ -186,12 +182,7 @@ class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
 
   @override
   Future<void> onLoad() async {
-    add(
-      RectangleHitbox(
-        size: size / 2,
-        position: size / 4,
-      ),
-    );
+    add(RectangleHitbox(size: size / 2, position: size / 4));
     spriteDirectionAttack = await Sprite.load('direction_attack.png');
     return super.onLoad();
   }
@@ -209,10 +200,7 @@ class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
   }
 
   void _decrementStamina(int i) {
-    barLifeController.stamina -= i;
-    if (barLifeController.stamina < 0) {
-      barLifeController.stamina = 0;
-    }
+    barLifeController.decrementStamina(i);
   }
 
   void _updateLifeAndStamina(double dt) {
@@ -220,14 +208,13 @@ class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
     if (barLifeController.stamina >= 100) {
       return;
     }
-    if (checkInterval('INCREMENT_STAMINA', 100, dt) == true) {
+    if (checkInterval('INCREMENT_STAMINA', 100, dt)) {
       barLifeController.increaseStamina(2);
     }
   }
 
   void _checkViewEnemy(double dt) {
-    bool seeEnemyInterval = checkInterval('seeEnemy', 250, dt);
-    if (seeEnemyInterval) {
+    if (checkInterval('seeEnemy', 250, dt)) {
       seeEnemy(
         radiusVision: width * 4,
         notObserved: () => canShowEmote = true,
@@ -263,12 +250,7 @@ class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
     if (!executingRangeAttack || barLifeController.stamina < 10) {
       return;
     }
-    bool execRangeAttackInterval = checkInterval(
-      'ATTACK_RANGE',
-      150,
-      dt,
-    );
-    if (execRangeAttackInterval) {
+    if (checkInterval('ATTACK_RANGE', 150, dt)) {
       _decrementStamina(10);
       execRangeAttack(radAngleRangeAttack, attack / 2);
     }

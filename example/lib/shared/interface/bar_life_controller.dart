@@ -54,6 +54,13 @@ class BarLifeController extends ChangeNotifier {
     }
   }
 
+  void decrementStamina(int value) {
+    stamina -= value;
+    if (stamina < 0) {
+      stamina = 0;
+    }
+  }
+
   void updateLife(double life) {
     if (this.life != life) {
       this.life = life;

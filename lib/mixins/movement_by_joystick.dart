@@ -32,16 +32,16 @@ mixin MovementByJoystick on Movement, JoystickListener {
   MovementByJoystickProps _settings = MovementByJoystickProps();
 
   void setupMovementByJoystick({
-    MovementByJoystickType? moveType,
-    bool? intencityEnabled,
-    bool? diagonalEnabled,
-    bool? enabled,
+    MovementByJoystickType moveType = MovementByJoystickType.direction,
+    bool intencityEnabled = false,
+    bool diagonalEnabled = true,
+    bool enabled = true,
   }) {
     _settings = MovementByJoystickProps(
-      moveType: moveType ?? _settings.moveType,
-      intencityEnabled: intencityEnabled ?? _settings.intencityEnabled,
-      diagonalEnabled: diagonalEnabled ?? _settings.diagonalEnabled,
-      enabled: enabled ?? _settings.enabled,
+      moveType: moveType,
+      intencityEnabled: intencityEnabled,
+      diagonalEnabled: diagonalEnabled,
+      enabled: enabled,
     );
   }
 
