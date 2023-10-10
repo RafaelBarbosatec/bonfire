@@ -1,6 +1,5 @@
-import 'dart:async' as async;
-
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:flutter/widgets.dart';
 
 ///
@@ -83,18 +82,16 @@ class FollowerWidgetState extends State<FollowerWidget> {
   Vector2? widgetPosition;
   double lastZoom = 0.0;
   Vector2 lastCameraPosition = Vector2.zero();
-
-  async.Timer? _timerUpdate;
+  late BonfireCamera camera;
   @override
   void initState() {
-    Future.delayed(Duration.zero, _startFollow);
+    widget.target.position.addListener(_positionListener);
     super.initState();
   }
 
   @override
   void dispose() {
-    _timerUpdate?.cancel();
-    _timerUpdate = null;
+    widget.target.position.removeListener(_positionListener);
     super.dispose();
   }
 
@@ -110,27 +107,22 @@ class FollowerWidgetState extends State<FollowerWidget> {
     return const SizedBox.shrink();
   }
 
-  void _startFollow() {
-    if (widget.target.hasGameRef) {
-      final camera = widget.target.gameRef.camera;
-      _timerUpdate = async.Timer.periodic(
-        const Duration(milliseconds: 16),
-        (timer) {
-          if (targetPosition != widget.target.position ||
-              camera.zoom != lastZoom ||
-              camera.position != lastCameraPosition) {
-            lastZoom = camera.zoom;
-            targetPosition = widget.target.position.clone();
-            lastCameraPosition = camera.position.clone();
-            if (mounted) {
-              setState(() {
-                widgetPosition = widget.target.gameRef
-                    .worldToScreen(widget.target.absoluteCenter);
-              });
-            }
-          }
-        },
-      );
+  void _positionListener() {
+    camera = widget.target.gameRef.camera;
+    final absolutePosition = widget.target.absolutePosition;
+    if (targetPosition != absolutePosition ||
+        camera.zoom != lastZoom ||
+        camera.position != lastCameraPosition) {
+      lastZoom = camera.zoom;
+      targetPosition = absolutePosition.clone();
+      lastCameraPosition = camera.position.clone();
+      if (mounted) {
+        setState(() {
+          widgetPosition = widget.target.gameRef.worldToScreen(
+            targetPosition,
+          );
+        });
+      }
     }
   }
 }

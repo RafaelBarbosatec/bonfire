@@ -300,6 +300,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   void onDetach() {
     world.children.query<GameComponent>().forEach(_detachComp);
+    camera.viewport.children.query<GameComponent>().forEach(_detachComp);
+    FollowerWidget.removeAll();
     super.onDetach();
   }
 

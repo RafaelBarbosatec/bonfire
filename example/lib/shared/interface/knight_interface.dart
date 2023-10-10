@@ -206,7 +206,6 @@ class KnightInterface extends GameInterface {
         context: context,
         target: player,
         child: Container(
-          height: 50,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
@@ -220,7 +219,6 @@ class KnightInterface extends GameInterface {
             child: const Text('Tap here'),
           ),
         ),
-        align: const Offset(0, -55),
       );
     });
   }
