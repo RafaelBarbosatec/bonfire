@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
+import 'package:example/shared/player/fireball_attack.dart';
 import 'package:example/shared/player/player_dialog.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:example/shared/util/player_sprite_sheet.dart';
@@ -12,17 +13,11 @@ enum PlayerAttackType {
   attackRange,
 }
 
-class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
+class Knight extends SimplePlayer
+    with Lighting, BlockMovementCollision, FireballAttack {
   double attack = 20;
   bool canShowEmote = true;
   bool showedDialog = false;
-  bool executingRangeAttack = false;
-  double radAngleRangeAttack = 0;
-
-  double angleRadAttack = 0.0;
-  Rect? rectDirectionAttack;
-  Sprite? spriteDirectionAttack;
-  bool showBgRangeAttack = false;
 
   late BarLifeController barLifeController;
 
@@ -60,22 +55,12 @@ class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
       if (event.id == LogicalKeyboardKey.space ||
           event.id == PlayerAttackType.attackMelee) {
         if (barLifeController.stamina >= 15) {
-          _decrementStamina(15);
+          decrementStamina(15);
           execMeleeAttack(attack);
         }
       }
     }
 
-    if (event.id == PlayerAttackType.attackRange) {
-      if (event.event == ActionEvent.MOVE) {
-        executingRangeAttack = true;
-        radAngleRangeAttack = event.radAngle;
-      }
-      if (event.event == ActionEvent.UP) {
-        executingRangeAttack = false;
-      }
-      execEnableBGRangeAttack(executingRangeAttack, event.radAngle);
-    }
     super.onJoystickAction(event);
   }
 
@@ -93,47 +78,11 @@ class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
     super.die();
   }
 
-  void execMeleeAttack(double attack) {
-    simpleAttackMelee(
-      damage: attack,
-      animationRight: CommonSpriteSheet.whiteAttackEffectRight,
-      size: Vector2.all(DungeonMap.tileSize),
-    );
-  }
-
-  void execRangeAttack(double angle, double damage) {
-    simpleAttackRangeByAngle(
-      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
-      animation: CommonSpriteSheet.fireBallRight,
-      animationDestroy: CommonSpriteSheet.explosionAnimation,
-      angle: angle,
-      size: Vector2.all(width * 0.7),
-      damage: damage,
-      speed: speed * 3,
-      collision: RectangleHitbox(
-        size: Vector2(width / 3, width / 3),
-        position: Vector2(width * 0.1, 0),
-      ),
-      lightingConfig: LightingConfig(
-        radius: width / 2,
-        blurBorder: width,
-        color: Colors.orange.withOpacity(0.3),
-      ),
-    );
-  }
-
   @override
   void update(double dt) {
     super.update(dt);
     _checkViewEnemy(dt);
-    _executeRangeAttack(dt);
     _updateLifeAndStamina(dt);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    _drawDirectionAttack(canvas);
-    super.render(canvas);
   }
 
   @override
@@ -159,31 +108,9 @@ class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
     );
   }
 
-  void _drawDirectionAttack(Canvas c) {
-    if (showBgRangeAttack) {
-      double radius = height;
-      rectDirectionAttack = Rect.fromLTWH(
-        -radius / 2,
-        -radius / 2,
-        radius * 2,
-        radius * 2,
-      );
-
-      if (rectDirectionAttack != null && spriteDirectionAttack != null) {
-        renderSpriteByRadAngle(
-          c,
-          angleRadAttack,
-          rectDirectionAttack!,
-          spriteDirectionAttack!,
-        );
-      }
-    }
-  }
-
   @override
   Future<void> onLoad() async {
     add(RectangleHitbox(size: size / 2, position: size / 4));
-    spriteDirectionAttack = await Sprite.load('direction_attack.png');
     return super.onLoad();
   }
 
@@ -194,12 +121,7 @@ class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
     super.onMount();
   }
 
-  void execEnableBGRangeAttack(bool enabled, double angle) {
-    showBgRangeAttack = enabled;
-    angleRadAttack = angle;
-  }
-
-  void _decrementStamina(int i) {
+  void decrementStamina(int i) {
     barLifeController.decrementStamina(i);
   }
 
@@ -246,13 +168,11 @@ class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
     }
   }
 
-  void _executeRangeAttack(double dt) {
-    if (!executingRangeAttack || barLifeController.stamina < 10) {
-      return;
-    }
-    if (checkInterval('ATTACK_RANGE', 150, dt)) {
-      _decrementStamina(10);
-      execRangeAttack(radAngleRangeAttack, attack / 2);
-    }
+  void execMeleeAttack(double attack) {
+    simpleAttackMelee(
+      damage: attack,
+      animationRight: CommonSpriteSheet.whiteAttackEffectRight,
+      size: Vector2.all(DungeonMap.tileSize),
+    );
   }
 }
