@@ -81,7 +81,7 @@ mixin Vision on GameComponent {
         final result = raycast(
           direction,
           maxDistance: radiusVision,
-          origin: compCenter,
+          origin: myCenter,
         );
         return result?.hitbox?.parent == component;
       }
