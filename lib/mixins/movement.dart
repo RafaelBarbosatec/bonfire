@@ -348,7 +348,7 @@ mixin Movement on GameComponent {
   }) {
     double diagonalSpeed = (speed ?? this.speed) * diaginalReduction;
     double dtSpeed = (speed ?? this.speed) * dtUpdate * 1.1;
-    double dtDiagonalSpeed = diagonalSpeed * dtUpdate;
+    double dtDiagonalSpeed = diagonalSpeed * dtUpdate * 1.1;
 
     double diffX =
         position.x - (useCenter ? absoluteCenter : absolutePosition).x;
