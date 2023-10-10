@@ -1,13 +1,12 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/shared/interface/bar_life_controller.dart';
 import 'package:flutter/material.dart';
 
-import 'bar_life_controller.dart';
-
-class BarLifeInterface extends InterfaceComponent
-    with UseStateController<BarLifeController> {
+class BarLifeInterface extends InterfaceComponent {
   final double padding = 20;
   final double widthBar = 90;
   final double strokeWidth = 12;
+  late BarLifeController controller;
 
   BarLifeInterface()
       : super(
@@ -27,6 +26,12 @@ class BarLifeInterface extends InterfaceComponent
       // ignore: avoid_print
       print(e);
     }
+  }
+
+  @override
+  void onMount() {
+    controller = BarLifeController();
+    super.onMount();
   }
 
   void _drawLife(Canvas canvas) {

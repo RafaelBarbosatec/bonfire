@@ -55,7 +55,6 @@ export 'package:bonfire/objects/flying_attack_game_object.dart';
 export 'package:bonfire/objects/game_object.dart';
 export 'package:bonfire/player/player.dart';
 export 'package:bonfire/scene_builder/scene_builder.dart';
-export 'package:bonfire/state_manager/state_manager.dart';
 export 'package:bonfire/tiled/map_world_by_tiled.dart';
 export 'package:bonfire/tiled/model/tiled_object_properties.dart';
 export 'package:bonfire/util/barlife_component.dart';

@@ -78,7 +78,7 @@ class KnightInterface extends GameInterface {
         final v = gameRef.visibles<Goblin>();
         if (v.isNotEmpty) {
           enemyControlled = v.first;
-          enemyControlled?.controller.enableBehaviors = false;
+          enemyControlled?.enableBehaviors = false;
           gameRef.camera.moveToTargetAnimated(
             target: enemyControlled!,
             effectController: EffectController(
@@ -109,7 +109,7 @@ class KnightInterface extends GameInterface {
               cleanObservers: true,
               moveCameraToTarget: true,
             );
-            enemyControlled?.controller.enableBehaviors = true;
+            enemyControlled?.enableBehaviors = true;
             enemyControlled = null;
           },
         );

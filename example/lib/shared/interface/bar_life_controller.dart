@@ -1,6 +1,4 @@
-import 'package:bonfire/bonfire.dart';
-
-import 'bar_life_component.dart';
+import 'package:flutter/material.dart';
 
 ///
 /// Created by
@@ -13,7 +11,15 @@ import 'bar_life_component.dart';
 ///
 /// Rafaelbarbosatec
 /// on 25/02/22
-class BarLifeController extends StateController<BarLifeInterface> {
+class BarLifeController extends ChangeNotifier {
+  static final BarLifeController _singleton = BarLifeController._internal();
+
+  factory BarLifeController() {
+    return _singleton;
+  }
+
+  BarLifeController._internal();
+
   double _maxLife = 100;
   double _maxStamina = 100;
   get maxLife => _maxLife;
@@ -36,10 +42,21 @@ class BarLifeController extends StateController<BarLifeInterface> {
   }
 
   void configure({required double maxLife, required double maxStamina}) {
-    _maxLife = maxLife;
-    _maxStamina = maxStamina;
+    _life = _maxLife = maxLife;
+    _stamina = _maxStamina = maxStamina;
+    notifyListeners();
   }
 
-  @override
-  void update(double dt, BarLifeInterface component) {}
+  void increaseStamina(int value) {
+    stamina += value;
+    if (stamina > 100) {
+      stamina = 100;
+    }
+  }
+
+  void updateLife(double life) {
+    if (this.life != life) {
+      this.life = life;
+    }
+  }
 }

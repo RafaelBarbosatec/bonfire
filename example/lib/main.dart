@@ -6,10 +6,6 @@ import 'package:example/pages/mini_games/manual_map/game_manual_map.dart';
 import 'package:example/pages/mini_games/multi_scenario/multi_scenario.dart';
 import 'package:example/pages/mini_games/platform/platform_game.dart';
 import 'package:example/pages/mini_games/random_map/random_map_game.dart';
-import 'package:example/shared/enemy/goblin_controller.dart';
-import 'package:example/shared/interface/bar_life_controller.dart';
-import 'package:example/shared/npc/critter/critter_controller.dart';
-import 'package:example/shared/player/knight_controller.dart';
 import 'package:example/pages/mini_games/simple_example/simple_example_game.dart';
 import 'package:example/pages/mini_games/tiled_map/game_tiled_map.dart';
 import 'package:example/pages/mini_games/top_down_game/top_down_game.dart';
@@ -22,11 +18,6 @@ void main() async {
     await Flame.device.setLandscape();
     await Flame.device.fullScreen();
   }
-
-  BonfireInjector().put((i) => KnightController());
-  BonfireInjector().put((i) => GoblinController());
-  BonfireInjector().put((i) => CritterController());
-  BonfireInjector().putSingleton((i) => BarLifeController());
 
   runApp(const BonfireExamplesApp());
 }

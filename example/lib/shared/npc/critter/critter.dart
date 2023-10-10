@@ -2,13 +2,9 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/critter_sprite_sheet.dart';
 
-import 'critter_controller.dart';
-
 class Critter extends SimpleNpc
-    with
-        BlockMovementCollision,
-        AutomaticRandomMovement,
-        UseStateController<CritterController> {
+    with BlockMovementCollision, AutomaticRandomMovement {
+  bool enableBehaviors = true;
   Critter(Vector2 position)
       : super(
           animation: CritterSpriteSheet.simpleDirectionAnimation,
@@ -16,6 +12,25 @@ class Critter extends SimpleNpc
           size: Vector2.all(DungeonMap.tileSize * 0.8),
           speed: DungeonMap.tileSize,
         );
+
+  @override
+  void update(double dt) {
+    if (!enableBehaviors) return;
+
+    seeAndMoveToPlayer(
+      closePlayer: (player) {},
+      observed: () {},
+      radiusVision: DungeonMap.tileSize * 1.5,
+      notObserved: () {
+        runRandomMovement(
+          dt,
+          speed: speed / 10,
+          maxDistance: (DungeonMap.tileSize).toInt(),
+        );
+      },
+    );
+    super.update(dt);
+  }
 
   @override
   Future<void> onLoad() {

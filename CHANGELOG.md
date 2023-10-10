@@ -22,6 +22,10 @@
   - Remove `JoystickMoveToPosition`. Use `MoveCameraUsingGesture` with `TapGesture` instead.
   - Mixin `MoveToPositionAlongThePath` was renamed to `PathFinding`, and `setupMoveToPositionAlongThePath` to `setupPathFinding`.
   - Rename `keyboardDirectionalType` to `directionalKeys` in `KeyboardConfig`. Now it is expected a `KeyboardDirectionalKeys`.
+  - Remove `UseStateController`.
+  - Remove `StateControllerConsumer`.
+  - Remove `BonfireInjector`. Is recomented use [get_it](get_it: ^7.6.4).
+
     
 - ***FEATURES***
   - `Force2D`: Now we have a simple support to forces. You can add a global forces setting in `BonfireWidget` using `globalForces` param, or an individual force in you component. For the component to handle these forces, you need to use `HandleForces` mixin.

@@ -1,30 +1,30 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
+import 'package:example/shared/player/player_dialog.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
-import 'package:example/shared/util/enemy_sprite_sheet.dart';
 import 'package:example/shared/util/player_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'knight_controller.dart';
 
 enum PlayerAttackType {
   attackMelee,
   attackRange,
 }
 
-class Knight extends SimplePlayer
-    with
-        Lighting,
-        BlockMovementCollision,
-        UseStateController<KnightController> {
+class Knight extends SimplePlayer with Lighting, BlockMovementCollision {
+  double attack = 20;
+  bool canShowEmote = true;
+  bool showedDialog = false;
+  bool executingRangeAttack = false;
+  double radAngleRangeAttack = 0;
+
   double angleRadAttack = 0.0;
   Rect? rectDirectionAttack;
   Sprite? spriteDirectionAttack;
   bool showBgRangeAttack = false;
 
-  BarLifeController? barLifeController;
+  late BarLifeController barLifeController;
 
   Knight(Vector2 position)
       : super(
@@ -34,9 +34,7 @@ class Knight extends SimplePlayer
           speed: DungeonMap.tileSize * 1.5,
           life: 200,
         ) {
-    setupMovementByJoystick(
-      intencityEnabled: true,
-    );
+    setupMovementByJoystick(intencityEnabled: true);
     setupLighting(
       LightingConfig(
         radius: width * 1.5,
@@ -59,15 +57,32 @@ class Knight extends SimplePlayer
     if (hasGameRef && gameRef.sceneBuilderStatus.isRunning || isDead) {
       return;
     }
-    if (hasController) {
-      controller.handleJoystickAction(event);
+    if (event.event == ActionEvent.DOWN) {
+      if (event.id == LogicalKeyboardKey.space ||
+          event.id == PlayerAttackType.attackMelee) {
+        if (barLifeController.stamina >= 15) {
+          _decrementStamina(15);
+          execMeleeAttack(attack);
+        }
+      }
+    }
+
+    if (event.id == PlayerAttackType.attackRange) {
+      if (event.event == ActionEvent.MOVE) {
+        executingRangeAttack = true;
+        radAngleRangeAttack = event.radAngle;
+      }
+      if (event.event == ActionEvent.UP) {
+        executingRangeAttack = false;
+      }
+      execEnableBGRangeAttack(executingRangeAttack, event.radAngle);
     }
     super.onJoystickAction(event);
   }
 
   @override
   void die() {
-    barLifeController?.life = 0.0;
+    barLifeController.life = 0.0;
     removeFromParent();
     gameRef.add(
       GameDecoration.withSprite(
@@ -110,7 +125,10 @@ class Knight extends SimplePlayer
 
   @override
   void update(double dt) {
-    barLifeController?.life = life;
+    _checkViewEnemy(dt);
+    _executeRangeAttack(dt);
+    _updateLifeAndStamina(dt);
+
     super.update(dt);
   }
 
@@ -122,9 +140,13 @@ class Knight extends SimplePlayer
 
   @override
   void receiveDamage(AttackFromEnum attacker, double damage, identify) {
-    if (hasController) {
-      controller.onReceiveDamage(damage);
-    }
+    showDamage(
+      damage,
+      config: TextStyle(
+        fontSize: width / 3,
+        color: Colors.red,
+      ),
+    );
     super.receiveDamage(attacker, damage, identify);
   }
 
@@ -139,84 +161,6 @@ class Knight extends SimplePlayer
         ),
       );
     }
-  }
-
-  void execShowTalk(GameComponent first) {
-    double lastZoom = gameRef.camera.zoom;
-    gameRef.camera.moveToTargetAnimated(
-      effectController: EffectController(duration: 1),
-      target: first,
-      zoom: 2,
-      onComplete: () {
-        TalkDialog.show(
-          gameRef.context,
-          [
-            Say(
-              text: [
-                const TextSpan(
-                  text: 'Look at this! It seems that',
-                ),
-                const TextSpan(
-                  text: ' I\'m not alone ',
-                  style: TextStyle(color: Colors.red),
-                ),
-                const TextSpan(
-                  text: 'here...',
-                ),
-              ],
-              person: SizedBox(
-                width: 100,
-                height: 100,
-                child: PlayerSpriteSheet.idleRight.asWidget(),
-              ),
-            ),
-            Say(
-              text: [
-                const TextSpan(
-                  text: 'Lok Tar Ogr!',
-                ),
-                const TextSpan(
-                  text: ' Lok Tar Ogr! ',
-                  style: TextStyle(color: Colors.green),
-                ),
-                const TextSpan(
-                  text: ' Lok Tar Ogr! ',
-                ),
-                const TextSpan(
-                  text: 'Lok Tar Ogr!',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ],
-              person: SizedBox(
-                width: 100,
-                height: 100,
-                child: EnemySpriteSheet.idleLeft.asWidget(),
-              ),
-              personSayDirection: PersonSayDirection.RIGHT,
-            ),
-          ],
-          onClose: () {
-            // ignore: avoid_print
-            print('close talk');
-
-            if (!isDead) {
-              gameRef.camera.moveToPlayerAnimated(
-                effectController: EffectController(duration: 1),
-                zoom: lastZoom,
-              );
-            }
-          },
-          onFinish: () {
-            // ignore: avoid_print
-            print('finish talk');
-          },
-          logicalKeyboardKeysToNext: [
-            LogicalKeyboardKey.space,
-            LogicalKeyboardKey.enter
-          ],
-        );
-      },
-    );
   }
 
   void _drawDirectionAttack(Canvas c) {
@@ -254,8 +198,8 @@ class Knight extends SimplePlayer
 
   @override
   void onMount() {
-    barLifeController = BonfireInjector().get<BarLifeController>();
-    barLifeController?.configure(maxLife: maxLife, maxStamina: 100);
+    barLifeController = BarLifeController();
+    barLifeController.configure(maxLife: maxLife, maxStamina: 100);
     super.onMount();
   }
 
@@ -264,17 +208,69 @@ class Knight extends SimplePlayer
     angleRadAttack = angle;
   }
 
-  void execShowDamage(double damage) {
-    showDamage(
-      damage,
-      config: TextStyle(
-        fontSize: width / 3,
-        color: Colors.red,
-      ),
-    );
+  void _decrementStamina(int i) {
+    barLifeController.stamina -= i;
+    if (barLifeController.stamina < 0) {
+      barLifeController.stamina = 0;
+    }
   }
 
-  void updateStamina(double stamina) {
-    barLifeController?.stamina = stamina;
+  void _updateLifeAndStamina(double dt) {
+    barLifeController.updateLife(life);
+    if (barLifeController.stamina >= 100) {
+      return;
+    }
+    if (checkInterval('INCREMENT_STAMINA', 100, dt) == true) {
+      barLifeController.increaseStamina(2);
+    }
+  }
+
+  void _checkViewEnemy(double dt) {
+    bool seeEnemyInterval = checkInterval('seeEnemy', 250, dt);
+    if (seeEnemyInterval) {
+      seeEnemy(
+        radiusVision: width * 4,
+        notObserved: () => canShowEmote = true,
+        observed: (enemies) => _handleObserveEnemy(enemies.first),
+      );
+    }
+  }
+
+  void _handleObserveEnemy(Enemy enemy) {
+    if (canShowEmote) {
+      canShowEmote = false;
+      execShowEmote();
+    }
+    if (!showedDialog) {
+      showedDialog = true;
+      double lastZoom = gameRef.camera.zoom;
+      PlayerDialog.execShowTalk(
+        gameRef,
+        enemy,
+        () {
+          if (!isDead) {
+            gameRef.camera.moveToPlayerAnimated(
+              effectController: EffectController(duration: 1),
+              zoom: lastZoom,
+            );
+          }
+        },
+      );
+    }
+  }
+
+  void _executeRangeAttack(double dt) {
+    if (!executingRangeAttack || barLifeController.stamina < 10) {
+      return;
+    }
+    bool execRangeAttackInterval = checkInterval(
+      'ATTACK_RANGE',
+      150,
+      dt,
+    );
+    if (execRangeAttackInterval) {
+      _decrementStamina(10);
+      execRangeAttack(radAngleRangeAttack, attack / 2);
+    }
   }
 }

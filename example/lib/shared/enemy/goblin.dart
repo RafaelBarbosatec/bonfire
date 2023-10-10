@@ -4,16 +4,15 @@ import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:example/shared/util/enemy_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
-import 'goblin_controller.dart';
-
 class Goblin extends SimpleEnemy
     with
         BlockMovementCollision,
         JoystickListener,
         MovementByJoystick,
         AutomaticRandomMovement,
-        UseLifeBar,
-        UseStateController<GoblinController> {
+        UseLifeBar {
+  double attack = 20;
+  bool enableBehaviors = true;
   Goblin(Vector2 position)
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,
@@ -26,6 +25,43 @@ class Goblin extends SimpleEnemy
       borderRadius: BorderRadius.circular(2),
       borderWidth: 2,
     );
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (!enableBehaviors) return;
+
+    if (!gameRef.sceneBuilderStatus.isRunning) {
+      seePlayer(
+        radiusVision: DungeonMap.tileSize,
+        observed: (p) {
+          moveTowardsTarget(
+            target: p,
+            close: () {
+              execAttack(attack);
+            },
+          );
+        },
+        notObserved: () {
+          seeAndMoveToAttackRange(
+            minDistanceFromPlayer: DungeonMap.tileSize * 2,
+            useDiagonal: false,
+            positioned: (p) {
+              execAttackRange(attack);
+            },
+            radiusVision: DungeonMap.tileSize * 3,
+            notObserved: () {
+              runRandomMovement(
+                dt,
+                speed: speed / 2,
+                maxDistance: (DungeonMap.tileSize * 3).toInt(),
+              );
+            },
+          );
+        },
+      );
+    }
   }
 
   @override

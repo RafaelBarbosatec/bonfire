@@ -1,4 +1,3 @@
-import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -18,10 +17,12 @@ class BarLifeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = BarLifeController();
     return Material(
       type: MaterialType.transparency,
-      child: StateControllerConsumer<BarLifeController>(
-        builder: (context, controller) {
+      child: ListenableBuilder(
+        listenable: controller,
+        builder: (context, _) {
           return Padding(
             padding: const EdgeInsets.only(left: 45, top: 60),
             child: Column(
