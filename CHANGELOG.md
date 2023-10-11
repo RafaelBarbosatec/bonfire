@@ -6,7 +6,7 @@
   - `BonfireWidget`:
     - Remove `enemies` param. Use `components` instead.
     - Remove `decoration` param. Use `components` instead.
-    - Remove `gameController` param. Use a Component to control your game.
+    - Remove `gameController` param. Use a `GameComponent` to control your game.
     - Remove unnecessary `constructionModeColor` param.
     - Remove unnecessary `onTapDown` param.
     - Remove unnecessary `onTapUp` param.
