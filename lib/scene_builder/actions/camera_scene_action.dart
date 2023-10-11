@@ -61,19 +61,26 @@ class CameraSceneAction extends SceneAction {
       _running = true;
       if (position != null) {
         game.camera.moveToPositionAnimated(
-          position!,
-          duration: duration,
-          finish: _actionDone,
-          curve: curve,
+          position: position!,
+          effectController: EffectController(
+            duration: duration.inSeconds.toDouble(),
+            curve: curve,
+          ),
+          onComplete: _actionDone,
           angle: angle,
           zoom: zoom,
         );
       } else if (target != null) {
         game.camera.moveToTargetAnimated(
-          target!,
-          duration: duration,
-          finish: _actionDone,
-          curve: curve,
+          target: target!,
+          effectController: EffectController(
+            duration: duration.inSeconds.toDouble(),
+            curve: curve,
+          ),
+          onComplete: () {
+            _actionDone.call();
+            game.camera.follow(target!);
+          },
           angle: angle,
           zoom: zoom,
         );

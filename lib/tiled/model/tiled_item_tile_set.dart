@@ -3,7 +3,7 @@ import 'package:bonfire/bonfire.dart';
 class TiledItemTileSet {
   final TileModelAnimation? animation;
   final TileModelSprite? sprite;
-  final List<CollisionArea>? collisions;
+  final List<ShapeHitbox>? collisions;
   final String? type;
   final String? tileClass;
   final Map<String, dynamic>? properties;

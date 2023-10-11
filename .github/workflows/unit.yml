@@ -4,37 +4,29 @@ on:
     branches:
       - master
   pull_request:
+    types: [opened,ready_for_review,synchronize]
+
+env:
+  flutter_version: "3.10.2"
+    
 jobs:
-  test:
+  test-analyze:
+    name: Lint and Tests
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [macOS-12]
+    if: github.event.pull_request.draft == false
     steps:
-    # Set up Flutter and add it to the path.
-    - name: Clone Flutter repository with stable channel
-      uses: actions/checkout@v2
-      with:
-        repository: 'flutter/flutter'
-        ref: 'stable'
-        path: 'flutter'
-        fetch-depth: 0
-    - name: Add Flutter to the PATH for Unix
-      run: echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
+    - name: Checkout code
+      uses: actions/checkout@v3
     - name: Intall dart
       uses: dart-lang/setup-dart@v1
-    - name: Run Flutter doctor
-      run: flutter doctor -v
-
-    # Clone the Gallery repository under `code`, to avoid conflicts with `flutter`.
-    - uses: actions/checkout@v2
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
       with:
-        path: 'code'
-
-    # Run the tests for the repository.
+        flutter-version: ${{ env.flutter_version }}
+        cache: true
     - run: flutter pub get
-      working-directory: code
     - run: flutter analyze
-      working-directory: code
     - run: dart format --output=none --set-exit-if-changed .
-      working-directory: code

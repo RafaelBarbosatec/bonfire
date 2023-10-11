@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 
@@ -7,23 +8,30 @@ import 'package:bonfire/bonfire.dart';
 /// player.
 ///
 /// You can use ImageSprite or Animation[FlameAnimation.Animation]
-class GameDecoration extends GameComponent
-    with UseSpriteAnimation, Vision, UseSprite, UseAssetsLoader {
+class GameDecoration extends AnimatedGameObject {
   GameDecoration({
-    required Vector2 position,
-    required Vector2 size,
+    required super.position,
+    required super.size,
     Sprite? sprite,
     SpriteAnimation? animation,
+    super.anchor,
+    super.angle,
+    super.lightingConfig,
+    super.renderAboveComponents,
   }) {
     this.sprite = sprite;
-    this.animation = animation;
+    setAnimation(animation);
     applyBleedingPixel(position: position, size: size);
   }
 
   GameDecoration.withSprite({
     required FutureOr<Sprite> sprite,
-    required Vector2 position,
-    required Vector2 size,
+    required super.position,
+    required super.size,
+    super.anchor,
+    super.angle,
+    super.lightingConfig,
+    super.renderAboveComponents,
   }) {
     loader?.add(AssetToLoad(sprite, (value) => this.sprite = value));
     applyBleedingPixel(position: position, size: size);
@@ -31,10 +39,38 @@ class GameDecoration extends GameComponent
 
   GameDecoration.withAnimation({
     required FutureOr<SpriteAnimation> animation,
-    required Vector2 position,
-    required Vector2 size,
+    required super.position,
+    required super.size,
+    super.anchor,
+    super.angle,
+    super.lightingConfig,
+    super.renderAboveComponents,
   }) {
-    loader?.add(AssetToLoad(animation, (value) => this.animation = value));
+    loader?.add(AssetToLoad(animation, (value) => setAnimation(value)));
     applyBleedingPixel(position: position, size: size);
+  }
+
+  @override
+  Future playSpriteAnimationOnce(
+    FutureOr<SpriteAnimation> animation, {
+    Vector2? size,
+    Vector2? offset,
+    VoidCallback? onFinish,
+    VoidCallback? onStart,
+  }) {
+    final spriteBackup = sprite;
+    return super.playSpriteAnimationOnce(
+      animation,
+      size: size,
+      offset: offset,
+      onFinish: () {
+        sprite = spriteBackup;
+        onFinish?.call();
+      },
+      onStart: () {
+        sprite = null;
+        onStart?.call();
+      },
+    );
   }
 }

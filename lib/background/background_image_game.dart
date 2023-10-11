@@ -10,6 +10,7 @@
 /// Rafaelbarbosatec
 /// on 30/11/21
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
 
 /// Used to define parallax image as background
@@ -23,6 +24,9 @@ class BackgroundImageGame extends GameBackground with UseSprite {
   final bool isBackground;
   final int priorityImage;
   Vector2 _parallaxOffset = Vector2.zero();
+  Vector2 _lastPosition = Vector2.zero();
+
+  late BonfireCamera camera;
 
   BackgroundImageGame({
     required this.offset,
@@ -40,15 +44,19 @@ class BackgroundImageGame extends GameBackground with UseSprite {
 
   @override
   void update(double dt) {
-    position = _parallaxOffset.translate(
-      (gameRef.camera.position.x * -1 * parallaxX),
-      (gameRef.camera.position.y * -1 * parallaxY),
-    );
     super.update(dt);
+    if (camera.position != _lastPosition) {
+      _lastPosition = camera.position.clone();
+      position = _parallaxOffset.translated(
+        (camera.position.x * -(parallaxX / camera.zoom)),
+        (camera.position.y * -(parallaxY / camera.zoom)),
+      );
+    }
   }
 
   @override
   Future<void>? onLoad() async {
+    camera = gameRef.camera;
     sprite = await MapAssetsManager.getFutureSprite(imagePath);
     _parallaxOffset = Vector2(offset.x * factor, offset.y * factor);
     position = _parallaxOffset.clone();

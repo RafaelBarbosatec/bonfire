@@ -1,8 +1,8 @@
-import 'package:bonfire/collision/collision_area.dart';
 import 'package:bonfire/map/base/tile.dart';
 import 'package:bonfire/map/base/tile_with_collision.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
@@ -97,11 +97,11 @@ class TileModel {
   final double width;
   final double height;
   final double opacity;
-  final String? type;
+  final String? tileClass;
   final Map<String, dynamic>? properties;
   final TileModelSprite? sprite;
   final TileModelAnimation? animation;
-  final List<CollisionArea>? collisions;
+  final List<ShapeHitbox>? collisions;
   final double angle;
   final bool isFlipVertical;
   final bool isFlipHorizontal;
@@ -115,7 +115,7 @@ class TileModel {
     this.offsetY = 0.0,
     required this.width,
     required this.height,
-    this.type,
+    this.tileClass,
     this.properties,
     this.sprite,
     this.color,
@@ -143,7 +143,7 @@ class TileModel {
           offsetX: offsetX,
           offsetY: offsetY,
           collisions: collisions,
-          type: type,
+          tileClass: tileClass,
           properties: properties,
           color: color,
         );
@@ -156,7 +156,7 @@ class TileModel {
           size: Vector2(width, height),
           offsetX: offsetX,
           offsetY: offsetY,
-          type: type,
+          tileClass: tileClass,
           properties: properties,
           color: color,
         );
@@ -175,7 +175,7 @@ class TileModel {
           offsetX: offsetX,
           offsetY: offsetY,
           collisions: collisions,
-          type: type,
+          tileClass: tileClass,
           properties: properties,
         );
         _setOtherParams(tile);
@@ -190,7 +190,7 @@ class TileModel {
           size: Vector2(width, height),
           offsetX: offsetX,
           offsetY: offsetY,
-          type: type,
+          tileClass: tileClass,
           properties: properties,
         );
         _setOtherParams(tile);
@@ -204,49 +204,11 @@ class TileModel {
     tile.id = id;
     tile.angle = angle;
     tile.opacity = opacity;
-    tile.isFlipHorizontally = isFlipHorizontal;
-    tile.isFlipVertically = isFlipVertical;
-  }
-
-  factory TileModel.fromMap(Map<String, dynamic> map) {
-    return TileModel(
-      x: map['x'],
-      y: map['y'],
-      offsetX: map['offsetX'] ?? 0,
-      offsetY: map['offsetY'] ?? 0,
-      width: map['width'],
-      height: map['height'],
-      type: map['type'] as String?,
-      properties: map['properties'] as Map<String, dynamic>?,
-      sprite:
-          map['sprite'] == null ? null : TileModelSprite.fromMap(map['sprite']),
-      animation: map['animation'] == null
-          ? null
-          : TileModelAnimation.fromMap(map['animation']),
-      collisions: map['collisions'] == null
-          ? null
-          : (map['collisions'] as List).map((e) {
-              return CollisionArea.fromMap(e);
-            }).toList(),
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    // ignore: unnecessary_cast
-    return {
-      'x': x,
-      'y': y,
-      'offsetX': offsetX,
-      'offsetY': offsetY,
-      'width': width,
-      'height': height,
-      'type': type,
-      'properties': properties,
-      'sprite': sprite?.toMap(),
-      'animation': animation?.toMap(),
-      'collisions': collisions?.map((e) {
-        return e.toMap();
-      }).toList(),
-    } as Map<String, dynamic>;
+    if (isFlipHorizontal) {
+      tile.flipHorizontallyAroundCenter();
+    }
+    if (isFlipVertical) {
+      tile.flipVerticallyAroundCenter();
+    }
   }
 }

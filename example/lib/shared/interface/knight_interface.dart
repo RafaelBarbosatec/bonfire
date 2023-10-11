@@ -55,6 +55,7 @@ class KnightInterface extends GameInterface {
       selectable: false,
       onTapComponent: (selected) {
         _animateColorFilter();
+        {}
       },
     ));
     await add(TextInterfaceComponent(
@@ -72,26 +73,46 @@ class KnightInterface extends GameInterface {
   }
 
   void changeControllerToVisibleEnemy() {
-    if (hasGameRef && !gameRef.camera.isMoving) {
+    if (hasGameRef) {
       if (enemyControlled == null) {
-        final v = gameRef.visibleComponentsByType<Goblin>();
+        final v = gameRef.visibles<Goblin>();
         if (v.isNotEmpty) {
           enemyControlled = v.first;
-          enemyControlled?.controller.enableBehaviors = false;
-          gameRef.addJoystickObserver(
-            enemyControlled!,
-            cleanObservers: true,
-            moveCameraToTarget: true,
+          enemyControlled?.enableBehaviors = false;
+          gameRef.camera.moveToTargetAnimated(
+            target: enemyControlled!,
+            effectController: EffectController(
+              duration: 0.5,
+              curve: Curves.easeInOut,
+            ),
+            zoom: 2,
+            onComplete: () {
+              gameRef.addJoystickObserver(
+                enemyControlled!,
+                cleanObservers: true,
+                moveCameraToTarget: true,
+              );
+            },
           );
         }
       } else if (gameRef.player != null) {
-        gameRef.addJoystickObserver(
-          gameRef.player!,
-          cleanObservers: true,
-          moveCameraToTarget: true,
+        gameRef.camera.moveToTargetAnimated(
+          target: gameRef.player!,
+          effectController: EffectController(
+            duration: 0.5,
+            curve: Curves.easeInOut,
+          ),
+          zoom: 1,
+          onComplete: () {
+            gameRef.addJoystickObserver(
+              gameRef.player!,
+              cleanObservers: true,
+              moveCameraToTarget: true,
+            );
+            enemyControlled?.enableBehaviors = true;
+            enemyControlled = null;
+          },
         );
-        enemyControlled?.controller.enableBehaviors = true;
-        enemyControlled = null;
       }
     }
   }
@@ -139,43 +160,38 @@ class KnightInterface extends GameInterface {
   }
 
   void _startSceneExample() {
-    final enemiesVisible = gameRef.visibleEnemies();
+    final enemiesVisible = gameRef.enemies(onlyVisible: true);
     if (gameRef.player != null && enemiesVisible.isNotEmpty) {
       final enemy = enemiesVisible.first;
-      gameRef.startScene(
-        [
-          CameraSceneAction.position(Vector2(800, 800)),
-          CameraSceneAction.target(gameRef.player!),
-          CameraSceneAction.target(enemy, zoom: 2),
-          DelaySceneAction(const Duration(seconds: 2)),
-          MoveComponentSceneAction(
-            component: enemy,
-            newPosition: enemy.position.clone()..add(Vector2(-40, -10)),
-            speed: 20,
-          ),
-          CameraSceneAction.target(gameRef.player!, zoom: 1),
-          AwaitCallbackSceneAction(
-            completedCallback: (completed) {
-              _showDialogTest(completed);
-            },
-          ),
-          MoveComponentSceneAction(
-            component: gameRef.player!,
-            newPosition: gameRef.player!.position.clone()..add(Vector2(0, -20)),
-            speed: 100,
-          ),
-          MoveComponentSceneAction(
-            component: gameRef.player!,
-            newPosition: gameRef.player!.position.clone()
-              ..add(Vector2(50, -20)),
-            speed: 100,
-          ),
-          CameraSceneAction.target(enemy),
-          CameraSceneAction.position(Vector2(200, 200)),
-          CameraSceneAction.position(Vector2(0, 200)),
-          CameraSceneAction.target(gameRef.player!),
-        ],
-      );
+      double initialZoom = gameRef.camera.zoom;
+      gameRef.startScene([
+        CameraSceneAction.position(Vector2(800, 800)),
+        CameraSceneAction.target(gameRef.player!),
+        CameraSceneAction.target(enemy, zoom: 2),
+        DelaySceneAction(const Duration(seconds: 2)),
+        MoveComponentSceneAction(
+          component: enemy,
+          newPosition: enemy.position.clone()..add(Vector2(-40, -10)),
+        ),
+        CameraSceneAction.target(gameRef.player!, zoom: initialZoom),
+        AwaitCallbackSceneAction(
+          completedCallback: (completed) {
+            _showDialogTest(completed);
+          },
+        ),
+        MoveComponentSceneAction(
+          component: gameRef.player!,
+          newPosition: gameRef.player!.position.clone()..add(Vector2(0, -20)),
+        ),
+        MoveComponentSceneAction(
+          component: gameRef.player!,
+          newPosition: gameRef.player!.position.clone()..add(Vector2(50, -20)),
+        ),
+        CameraSceneAction.target(enemy),
+        CameraSceneAction.position(Vector2(200, 200)),
+        CameraSceneAction.position(Vector2(0, 200)),
+        CameraSceneAction.target(gameRef.player!),
+      ]);
     }
   }
 
@@ -190,7 +206,6 @@ class KnightInterface extends GameInterface {
         context: context,
         target: player,
         child: Container(
-          height: 50,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
@@ -204,7 +219,6 @@ class KnightInterface extends GameInterface {
             child: const Text('Tap here'),
           ),
         ),
-        align: const Offset(0, -55),
       );
     });
   }

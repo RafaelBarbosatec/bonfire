@@ -31,7 +31,7 @@ extension AllyExtensions on Ally {
 
     if (isDead) return;
 
-    Direction direct = direction ?? getComponentDirectionFromMe(gameRef.player);
+    Direction direct = direction ?? lastDirection;
 
     simpleAttackMeleeByDirection(
       damage: damage,
@@ -60,8 +60,7 @@ extension AllyExtensions on Ally {
     Direction? direction,
     int interval = 1000,
     bool withCollision = true,
-    bool enableDiagonal = true,
-    CollisionConfig? collision,
+    ShapeHitbox? collision,
     VoidCallback? onDestroy,
     VoidCallback? execute,
     LightingConfig? lightingConfig,
@@ -70,7 +69,7 @@ extension AllyExtensions on Ally {
 
     if (isDead) return;
 
-    Direction direct = direction ?? getComponentDirectionFromMe(gameRef.player);
+    Direction direct = direction ?? lastDirection;
 
     simpleAttackRangeByDirection(
       animationRight: animationRight,
@@ -85,7 +84,6 @@ extension AllyExtensions on Ally {
       onDestroy: onDestroy,
       destroySize: destroySize,
       lightingConfig: lightingConfig,
-      enableDiagonal: enableDiagonal,
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
     );
 
@@ -96,9 +94,9 @@ extension AllyExtensions on Ally {
   /// [visionAngle] in radians
   /// [angle] in radians. is automatically picked up using the component's direction.
   void seeAndMoveToAttackRange({
-    required Function(Enemy) positioned,
+    Function(Enemy)? positioned,
     VoidCallback? notObserved,
-    VoidCallback? observed,
+    Function(Enemy)? observed,
     double radiusVision = 32,
     double? visionAngle,
     double? angle,
@@ -112,29 +110,32 @@ extension AllyExtensions on Ally {
       angle: angle ?? lastDirection.toRadians(),
       visionAngle: visionAngle,
       observed: (enemy) {
-        observed?.call();
-        positionsItselfAndKeepDistance(
-          enemy.first,
-          minDistanceFromPlayer: minDistanceFromPlayer,
-          radiusVision: radiusVision,
-          runOnlyVisibleInScreen: runOnlyVisibleInScreen,
-          positioned: (enemy) {
-            final playerDirection = getComponentDirectionFromMe(enemy);
-            lastDirection = playerDirection;
-            if (lastDirection == Direction.left ||
-                lastDirection == Direction.right) {
-              lastDirectionHorizontal = lastDirection;
-            }
-            idle();
-            positioned(enemy as Enemy);
-          },
+        var e = enemy.first;
+        observed?.call(e);
+        bool inDistance = keepDistance(
+          e,
+          (minDistanceFromPlayer ?? (radiusVision - 5)),
         );
+        if (inDistance) {
+          final playerDirection = getComponentDirectionFromMe(e);
+          lastDirection = playerDirection;
+          if (lastDirection == Direction.left ||
+              lastDirection == Direction.right) {
+            lastDirectionHorizontal = lastDirection;
+          }
+
+          if (checkInterval('seeAndMoveToAttackRange', 500, dtUpdate)) {
+            stopMove();
+          }
+          positioned?.call(e);
+        }
       },
       notObserved: () {
-        if (!isIdle) {
-          idle();
+        if (notObserved != null) {
+          notObserved();
+        } else {
+          stopMove();
         }
-        notObserved?.call();
       },
     );
   }

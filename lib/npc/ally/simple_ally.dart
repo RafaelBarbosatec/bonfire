@@ -26,8 +26,7 @@ class SimpleAlly extends Ally with DirectionAnimation {
     double life = 100,
     double speed = 100,
     Direction initDirection = Direction.right,
-    ReceivesAttackFromEnum receivesAttackFrom =
-        ReceivesAttackFromEnum.PLAYER_AND_ALLY,
+    ReceivesAttackFromEnum receivesAttackFrom = ReceivesAttackFromEnum.ENEMY,
   }) : super(
           position: position,
           size: size,

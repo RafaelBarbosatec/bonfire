@@ -24,6 +24,8 @@ dependencies:
   bonfire:
     path: ".."
   fast_noise: ^1.0.1
+  gif_view: ^0.4.0
+  url_launcher: ^6.1.14
 
 dev_dependencies:
   test: any
@@ -41,7 +43,12 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/
     - assets/images/
+    - assets/images/topdown/
+    - assets/images/platform/
+    - assets/images/platform/fox/
+    - assets/images/platform/frog/
     - assets/images/player/
     - assets/images/enemy/
     - assets/images/npc/
@@ -49,6 +56,8 @@ flutter:
     - assets/images/tile_random/
     - assets/images/tiled/
     - assets/images/tiled/top_down/
+    - assets/images/tiled/punnyworld/
+    - assets/images/tiled/simple_topdown/
     - assets/images/tiled/tileset/
     - assets/images/itens/
     - assets/images/lpc/body/

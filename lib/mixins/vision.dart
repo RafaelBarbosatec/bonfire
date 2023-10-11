@@ -1,19 +1,31 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/geometry/shape.dart';
+import 'package:bonfire/geometry/polygon.dart';
+import 'package:bonfire/geometry/rectangle.dart';
 import 'package:flutter/material.dart';
 
+/// Mixin used to adds basic Vision to the component
 mixin Vision on GameComponent {
   // ignore: constant_identifier_names
   static const VISION_360 = 6.28319;
   final Paint _paint = Paint()..color = Colors.red.withOpacity(0.5);
   bool _drawVision = false;
+  bool _checkWithRaycast = true;
   final Map<String, PolygonShape> _polygonCache = {};
   PolygonShape? _currentShape;
+  int _countPolygonPoints = 20;
 
-  void setupVision({Color? color, bool drawVision = false}) {
+  void setupVision({
+    Color? color,
+    bool drawVision = false,
+    bool checkWithRaycast = true,
+    int countPolygonPoints = 20,
+  }) {
+    assert(countPolygonPoints % 2 == 0, 'countPolygonPoints must be even');
     _drawVision = drawVision;
+    _checkWithRaycast = checkWithRaycast;
+    _countPolygonPoints = countPolygonPoints;
     _paint.color = color ?? Colors.red.withOpacity(0.5);
   }
 
@@ -21,7 +33,7 @@ mixin Vision on GameComponent {
   /// Method that bo used in [update] method.
   /// [visionAngle] in radians
   /// [angle] in radians.
-  Shape? seeComponent(
+  PolygonShape? seeComponent(
     GameComponent component, {
     required Function(GameComponent) observed,
     VoidCallback? notObserved,
@@ -34,27 +46,9 @@ mixin Vision on GameComponent {
       return _currentShape = null;
     }
 
-    String key = '$radiusVision/$visionAngle/$angle';
-    PolygonShape shape;
-    if (_polygonCache.containsKey(key)) {
-      shape = _polygonCache[key]!;
-      shape.position = center;
-    } else {
-      shape = _buildShape(radiusVision, visionAngle, angle, center);
-      _polygonCache[key] = shape;
-    }
+    PolygonShape shape = _getShapeVision(radiusVision, visionAngle, angle);
 
-    if (component.isRemoving) {
-      notObserved?.call();
-    }
-
-    final rect = component.rectConsideringCollision;
-    final otherShape = RectangleShape(
-      rect.sizeVector2,
-      position: rect.positionVector2,
-    );
-
-    if (shape.isCollision(otherShape)) {
+    if (_canSee(shape, component, radiusVision)) {
       observed(component);
     } else {
       notObserved?.call();
@@ -62,41 +56,63 @@ mixin Vision on GameComponent {
     return _currentShape = shape;
   }
 
+  bool _canSee(
+    PolygonShape shape,
+    GameComponent component,
+    double radiusVision,
+  ) {
+    if (component.isRemoving) {
+      return false;
+    }
+
+    final rect = component.toAbsoluteRect();
+    final otherShape = RectangleShape(
+      rect.sizeVector2,
+      position: rect.positionVector2,
+    );
+
+    bool inShape = shape.isCollision(otherShape);
+    if (inShape) {
+      if (_checkWithRaycast) {
+        Vector2 myCenter = rectCollision.center.toVector2();
+        Vector2 compCenter = component.rectCollision.center.toVector2();
+        Vector2 direction = (compCenter - myCenter).normalized();
+
+        final result = raycast(
+          direction,
+          maxDistance: radiusVision,
+          origin: myCenter,
+        );
+        return result?.hitbox?.parent == component;
+      }
+      return true;
+    }
+
+    return false;
+  }
+
   /// This method we notify when detect components by type when enter in [radiusVision] configuration
   /// Method that bo used in [update] method.
   /// [visionAngle] in radians
   /// [angle] in radians.
-  Shape? seeComponentType<T extends GameComponent>({
+  PolygonShape? seeComponentType<T extends GameComponent>({
     required Function(List<T>) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
     double? visionAngle,
     double angle = 3.14159,
   }) {
-    var compVisible = gameRef.visibleComponentsByType<T>();
+    var compVisible = gameRef.visibles<T>();
 
     if (compVisible.isEmpty) {
       notObserved?.call();
       return _currentShape = null;
     }
 
-    String key = '$radiusVision/$visionAngle/$angle';
-    PolygonShape shape;
-    if (_polygonCache.containsKey(key)) {
-      shape = _polygonCache[key]!;
-      shape.position = center;
-    } else {
-      shape = _buildShape(radiusVision, visionAngle, angle, center);
-      _polygonCache[key] = shape;
-    }
+    PolygonShape shape = _getShapeVision(radiusVision, visionAngle, angle);
 
     List<T> compObserved = compVisible.where((comp) {
-      final rect = comp.rectConsideringCollision;
-      final otherShape = RectangleShape(
-        rect.sizeVector2,
-        position: rect.positionVector2,
-      );
-      return !comp.isRemoving && shape.isCollision(otherShape);
+      return _canSee(shape, comp, radiusVision);
     }).toList();
 
     if (compObserved.isNotEmpty) {
@@ -104,7 +120,6 @@ mixin Vision on GameComponent {
     } else {
       notObserved?.call();
     }
-
     return _currentShape = shape;
   }
 
@@ -118,26 +133,39 @@ mixin Vision on GameComponent {
     double nextX = radiusVision * cos(angle);
     double nextY = radiusVision * sin(angle);
     Offset point = Offset(nextX, nextY);
-    Offset point1 = point.rotate(angleV / 8, Offset.zero);
-    Offset point2 = point1.rotate(angleV / 8, Offset.zero);
-    Offset point3 = point2.rotate(angleV / 8, Offset.zero);
-    Offset point4 = point3.rotate(angleV / 8, Offset.zero);
-    Offset point5 = point.rotate(angleV / -8, Offset.zero);
-    Offset point6 = point5.rotate(angleV / -8, Offset.zero);
-    Offset point7 = point6.rotate(angleV / -8, Offset.zero);
-    Offset point8 = point7.rotate(angleV / -8, Offset.zero);
+    List<Vector2> pointsP = [];
+    List.generate(_countPolygonPoints ~/ 2, (index) {
+      if (index == 0) {
+        pointsP.add(point
+            .rotate(angleV / _countPolygonPoints, Offset.zero)
+            .toVector2());
+      } else {
+        pointsP.add(pointsP.last
+            .toOffset()
+            .rotate(angleV / _countPolygonPoints, Offset.zero)
+            .toVector2());
+      }
+    });
+    List<Vector2> pointsN = [];
+    List.generate(_countPolygonPoints ~/ 2, (index) {
+      if (index == 0) {
+        pointsN.add(point
+            .rotate(angleV / -_countPolygonPoints, Offset.zero)
+            .toVector2());
+      } else {
+        pointsN.add(pointsN.last
+            .toOffset()
+            .rotate(angleV / -_countPolygonPoints, Offset.zero)
+            .toVector2());
+      }
+    });
+
     return PolygonShape(
       [
         Vector2(0, 0),
-        point4.toVector2(),
-        point3.toVector2(),
-        point2.toVector2(),
-        point1.toVector2(),
+        ...pointsP.reversed,
         point.toVector2(),
-        point5.toVector2(),
-        point6.toVector2(),
-        point7.toVector2(),
-        point8.toVector2(),
+        ...pointsN,
       ],
       position: position,
     );
@@ -157,7 +185,28 @@ mixin Vision on GameComponent {
   void render(Canvas canvas) {
     super.render(canvas);
     if (_drawVision) {
+      canvas.save();
+      canvas.translate(-position.x, -position.y);
       _currentShape?.render(canvas, _paint);
+      canvas.restore();
     }
+  }
+
+  PolygonShape _getShapeVision(
+    double radiusVision,
+    double? visionAngle,
+    double angle,
+  ) {
+    String key = '$radiusVision/$visionAngle/$angle';
+    PolygonShape shape;
+    var center = absoluteCenter;
+    if (_polygonCache.containsKey(key)) {
+      shape = _polygonCache[key]!;
+      shape.position = center;
+    } else {
+      shape = _buildShape(radiusVision, visionAngle, angle, center);
+      _polygonCache[key] = shape;
+    }
+    return shape;
   }
 }

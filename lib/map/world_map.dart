@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
-import 'package:bonfire/util/quadtree.dart';
+import 'package:bonfire/util/quadtree.dart' as tree;
 
 class WorldMap extends GameMap {
   Vector2 lastCamera = Vector2.zero();
@@ -11,11 +11,11 @@ class WorldMap extends GameMap {
   Vector2? lastSizeScreen;
   Set<String> _visibleSet = {};
   bool _buildingTiles = false;
-  double tileSize = 0.0;
   Vector2 _griSize = Vector2.zero();
-  Vector2 _mapStartPosition = Vector2.zero();
+  Vector2 _mapPosition = Vector2.zero();
+  Vector2 _mapSize = Vector2.zero();
 
-  QuadTree<TileModel>? quadTree;
+  tree.QuadTree<TileModel>? quadTree;
 
   WorldMap(
     List<TileModel> tiles, {
@@ -77,10 +77,8 @@ class WorldMap extends GameMap {
     if (isUpdate) {
       lastCamera = Vector2.zero();
       lastMinorZoom = gameRef.camera.zoom;
-      _calculateStartPosition();
+      _calculatePositionAndSize();
     }
-
-    tileSize = tiles.first.width;
 
     _griSize = Vector2(
       (size.x.ceil() / tileSize).ceilToDouble(),
@@ -96,7 +94,7 @@ class WorldMap extends GameMap {
       int minSize = min(sizeScreen.x, sizeScreen.y).ceil();
       int maxItems = ((minSize / 2) / tileSize).ceil();
       maxItems *= maxItems;
-      quadTree = QuadTree(
+      quadTree = tree.QuadTree(
         0,
         0,
         _griSize.x,
@@ -114,44 +112,43 @@ class WorldMap extends GameMap {
   Future<void> updateTiles(List<TileModel> map) async {
     lastSizeScreen = null;
     tiles = map;
-    size = _calculateMapSize();
+    _calculatePositionAndSize();
     await Future.forEach<TileModel>(tiles, _loadTile);
     _createQuadTree(gameRef.size, isUpdate: true);
   }
 
-  Vector2 _calculateMapSize() {
+  void _calculatePositionAndSize() {
     if (tiles.isNotEmpty) {
-      double height = 0;
-      double width = 0;
-
-      for (var tile in tiles) {
-        if (tile.right > width) width = tile.right;
-        if (tile.bottom > height) height = tile.bottom;
-      }
-      return Vector2(width, height);
-    }
-    return size;
-  }
-
-  void _calculateStartPosition() {
-    if (tiles.isNotEmpty) {
+      tileSize = tiles.first.width;
       double x = tiles.first.left;
       double y = tiles.first.top;
+
+      double w = tiles.first.right;
+      double h = tiles.first.bottom;
 
       for (var tile in tiles) {
         if (tile.left < x) x = tile.left;
         if (tile.top < y) y = tile.top;
+
+        if (tile.right > w) w = tile.right;
+        if (tile.bottom > h) h = tile.bottom;
       }
-      _mapStartPosition = Vector2(x, y);
+      _mapSize = Vector2(w - x, h - y);
+      size = Vector2(w, h);
+      _mapPosition = Vector2(x, y);
+      gameRef.camera.updatesetBounds(null);
+      (gameRef as BonfireGame).configCollision();
     }
   }
 
   @override
-  Vector2 getGridSize() => _griSize;
+  Vector2 getMapSize() {
+    return _mapSize;
+  }
 
   @override
-  Vector2 getStartPosition() {
-    return _mapStartPosition;
+  Vector2 getMapPosition() {
+    return _mapPosition;
   }
 
   List<Tile> _buildTiles(Iterable<TileModel> visibleTiles) {
@@ -162,8 +159,7 @@ class WorldMap extends GameMap {
 
   @override
   Future<void>? onLoad() async {
-    _calculateStartPosition();
-    size = _calculateMapSize();
+    _calculatePositionAndSize();
     await super.onLoad();
     await Future.forEach<TileModel>(tiles, _loadTile);
     _createQuadTree(gameRef.size);
@@ -181,8 +177,7 @@ class WorldMap extends GameMap {
       id: tileModel.id,
     );
 
-    _calculateStartPosition();
-    size = _calculateMapSize();
+    _calculatePositionAndSize();
   }
 
   @override
@@ -193,8 +188,7 @@ class WorldMap extends GameMap {
           .removeFromParent();
       tiles.removeWhere((element) => element.id == id);
       quadTree?.removeById(id);
-      _calculateStartPosition();
-      size = _calculateMapSize();
+      _calculatePositionAndSize();
     } catch (e) {
       // ignore: avoid_print
       print('Not found visible tile with $id id');
@@ -225,9 +219,10 @@ class WorldMap extends GameMap {
   }
 
   Vector2 _getCameraTileUpdate() {
+    final camera = gameRef.camera;
     return Vector2(
-      (gameRef.camera.position.x / tileSizeToUpdate).floorToDouble(),
-      (gameRef.camera.position.y / tileSizeToUpdate).floorToDouble(),
+      (camera.position.x / (tileSizeToUpdate / camera.zoom)).floorToDouble(),
+      (camera.position.y / (tileSizeToUpdate / camera.zoom)).floorToDouble(),
     );
   }
 }

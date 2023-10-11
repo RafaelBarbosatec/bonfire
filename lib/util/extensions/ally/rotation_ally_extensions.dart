@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:bonfire/collision/object_collision.dart';
 import 'package:bonfire/npc/ally/ally.dart';
 
 import '../../../player/player.dart';
@@ -21,6 +20,7 @@ extension RotationEnemyExtensions on RotationAlly {
   /// Checks whether the player is within range. If so, move to it.
   void seeAndMoveToPlayer({
     required Function(Player) closePlayer,
+    VoidCallback? notObserved,
     double radiusVision = 32,
     double margin = 10,
     bool runOnlyVisibleInScreen = true,
@@ -33,9 +33,7 @@ extension RotationEnemyExtensions on RotationAlly {
       observed: (player) {
         double radAngle = getAngleFromPlayer();
 
-        Rect playerRect = player is ObjectCollision
-            ? (player as ObjectCollision).rectCollision
-            : player.toRect();
+        Rect playerRect = player.toAbsoluteRect();
         Rect rectPlayerCollision = Rect.fromLTWH(
           playerRect.left - margin,
           playerRect.top - margin,
@@ -43,20 +41,20 @@ extension RotationEnemyExtensions on RotationAlly {
           playerRect.height + (margin * 2),
         );
 
-        if (rectConsideringCollision.overlaps(rectPlayerCollision)) {
+        if (toAbsoluteRect().overlaps(rectPlayerCollision)) {
           closePlayer(player);
-          idle();
-          moveFromAngleDodgeObstacles(0, radAngle);
+          stopMove();
           return;
         }
 
-        bool onMove = moveFromAngleDodgeObstacles(speed, radAngle);
-        if (!onMove) {
-          idle();
-        }
+        moveFromAngle(radAngle);
       },
       notObserved: () {
-        idle();
+        if (notObserved != null) {
+          notObserved();
+        } else {
+          stopMove();
+        }
       },
     );
   }

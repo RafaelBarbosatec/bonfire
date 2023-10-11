@@ -34,7 +34,7 @@ class InterfaceComponent extends GameComponent
     loader?.add(AssetToLoad(spriteSelected, (value) {
       this.spriteSelected = value;
     }));
-    this.position = Vector2(position.x, position.y);
+    this.position = position;
     this.size = size;
   }
 
@@ -62,10 +62,7 @@ class InterfaceComponent extends GameComponent
   }
 
   @override
-  PositionType get positionType => PositionType.viewport;
-
-  @override
-  bool onTapDown(int pointer, Vector2 position) {
+  bool onTapDown(GestureEvent event) {
     selected = true;
     return true;
   }

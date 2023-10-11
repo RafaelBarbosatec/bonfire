@@ -2,7 +2,7 @@
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/joystick/joystick.dart';
-import 'package:bonfire/mixins/keyboard_listener.dart';
+import 'package:bonfire/input/keyboard_listener.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
@@ -23,11 +23,13 @@ class JoystickDirectionalEvent {
   final JoystickMoveDirectional directional;
   final double intensity;
   final double radAngle;
+  final bool isKeyboard;
 
   JoystickDirectionalEvent({
     required this.directional,
     this.intensity = 0.0,
     this.radAngle = 0.0,
+    this.isKeyboard = false,
   });
 }
 
@@ -48,9 +50,8 @@ class JoystickActionEvent {
 }
 
 mixin JoystickListener {
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {}
-  void joystickAction(JoystickActionEvent event) {}
-  void moveTo(Vector2 position) {}
+  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {}
+  void onJoystickAction(JoystickActionEvent event) {}
 }
 
 abstract class JoystickController extends GameComponent
@@ -61,19 +62,13 @@ abstract class JoystickController extends GameComponent
 
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     for (var o in _observers) {
-      o.joystickChangeDirectional(event);
+      o.onJoystickChangeDirectional(event);
     }
   }
 
   void joystickAction(JoystickActionEvent event) {
     for (var o in _observers) {
-      o.joystickAction(event);
-    }
-  }
-
-  void moveTo(Vector2 event) {
-    for (var o in _observers) {
-      o.moveTo(event);
+      o.onJoystickAction(event);
     }
   }
 
@@ -95,7 +90,10 @@ abstract class JoystickController extends GameComponent
 
   @override
   int get priority {
-    return LayerPriority.getJoystickPriority(gameRef.highestPriority);
+    if (hasGameRef) {
+      return LayerPriority.getJoystickPriority(gameRef.highestPriority);
+    }
+    return super.priority;
   }
 
   @override

@@ -1,8 +1,6 @@
 // ignore_for_file: unnecessary_this
 
-import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/lighting/lighting_config.dart';
-import 'package:bonfire/lighting/lighting_type.dart';
+import 'package:bonfire/bonfire.dart';
 
 /// Mixin used to configure lighting in your component
 mixin Lighting on GameComponent {
@@ -40,18 +38,8 @@ mixin Lighting on GameComponent {
   }
 
   @override
-  void onSetIfVisible() {
-    super.onSetIfVisible();
-    if (isVisible) {
-      gameRef.lighting?.addVisibleLighting(this);
-    } else {
-      gameRef.lighting?.removeVisibleLighting(this);
-    }
-  }
-
-  @override
-  void onRemove() {
-    gameRef.lighting?.removeVisibleLighting(this);
-    super.onRemove();
+  // ignore: must_call_super
+  bool isVisibleInCamera() {
+    return hasGameRef ? gameRef.camera.canSeeWithMargin(this) : false;
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
@@ -100,7 +99,8 @@ class MapAssetsManager {
       return spriteAnimationCache[key]!;
     }
 
-    return spriteAnimationCache[key] = ControlledUpdateAnimation.fromInstance(
+    return spriteAnimationCache[key] =
+        ControlledUpdateAnimation.fromSpriteAnimation(
       SpriteAnimation.spriteList(
         spriteList,
         stepTime: stepTime,

@@ -1,13 +1,12 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/manual_map/dungeon_map.dart';
+import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/interface/bar_life_controller.dart';
+import 'package:example/shared/player/fireball_attack.dart';
+import 'package:example/shared/player/player_dialog.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
-import 'package:example/shared/util/enemy_sprite_sheet.dart';
 import 'package:example/shared/util/player_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'knight_controller.dart';
 
 enum PlayerAttackType {
   attackMelee,
@@ -15,71 +14,59 @@ enum PlayerAttackType {
 }
 
 class Knight extends SimplePlayer
-    with Lighting, ObjectCollision, UseStateController<KnightController> {
-  static final double maxSpeed = DungeonMap.tileSize * 3;
+    with Lighting, BlockMovementCollision, FireballAttack {
+  double attack = 20;
+  bool canShowEmote = true;
+  bool showedDialog = false;
 
-  double angleRadAttack = 0.0;
-  Rect? rectDirectionAttack;
-  Sprite? spriteDirectionAttack;
-  bool showBgRangeAttack = false;
-
-  BarLifeController? barLifeController;
+  late BarLifeController barLifeController;
 
   Knight(Vector2 position)
       : super(
           animation: PlayerSpriteSheet.simpleDirectionAnimation,
           size: Vector2.all(DungeonMap.tileSize),
           position: position,
+          speed: DungeonMap.tileSize * 1.5,
           life: 200,
-          speed: maxSpeed,
         ) {
+    setupMovementByJoystick(intencityEnabled: true);
     setupLighting(
       LightingConfig(
         radius: width * 1.5,
-        blurBorder: width * 1.5,
         color: Colors.transparent,
       ),
     );
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(
-              DungeonMap.tileSize / 2,
-              DungeonMap.tileSize / 2.2,
-            ),
-            align: Vector2(
-              DungeonMap.tileSize / 3.5,
-              DungeonMap.tileSize / 2,
-            ),
-          )
-        ],
-      ),
-    );
   }
 
   @override
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
     if (hasGameRef && gameRef.sceneBuilderStatus.isRunning) {
       return;
     }
-    speed = maxSpeed * event.intensity;
-    super.joystickChangeDirectional(event);
+    super.onJoystickChangeDirectional(event);
   }
 
   @override
-  void joystickAction(JoystickActionEvent event) {
-    if (hasGameRef && gameRef.sceneBuilderStatus.isRunning) {
+  void onJoystickAction(JoystickActionEvent event) {
+    if (hasGameRef && gameRef.sceneBuilderStatus.isRunning || isDead) {
       return;
     }
-    if (hasController) {
-      controller.handleJoystickAction(event);
+    if (event.event == ActionEvent.DOWN) {
+      if (event.id == LogicalKeyboardKey.space ||
+          event.id == PlayerAttackType.attackMelee) {
+        if (barLifeController.stamina >= 15) {
+          decrementStamina(15);
+          execMeleeAttack(attack);
+        }
+      }
     }
-    super.joystickAction(event);
+
+    super.onJoystickAction(event);
   }
 
   @override
   void die() {
+    barLifeController.life = 0.0;
     removeFromParent();
     gameRef.add(
       GameDecoration.withSprite(
@@ -91,188 +78,15 @@ class Knight extends SimplePlayer
     super.die();
   }
 
-  void execMeleeAttack(double attack) {
-    simpleAttackMelee(
-      damage: attack,
-      animationRight: CommonSpriteSheet.whiteAttackEffectRight,
-      size: Vector2.all(DungeonMap.tileSize),
-    );
-  }
-
-  void execRangeAttack(double angle, double damage) {
-    simpleAttackRangeByAngle(
-      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
-      animation: CommonSpriteSheet.fireBallRight,
-      animationDestroy: CommonSpriteSheet.explosionAnimation,
-      angle: angle,
-      size: Vector2.all(width * 0.7),
-      damage: damage,
-      speed: maxSpeed * 2,
-      collision: CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(width / 3, width / 3),
-            align: Vector2(width * 0.1, 0),
-          ),
-        ],
-      ),
-      marginFromOrigin: 20,
-      lightingConfig: LightingConfig(
-        radius: width / 2,
-        blurBorder: width,
-        color: Colors.orange.withOpacity(0.3),
-      ),
-    );
-  }
-
   @override
   void update(double dt) {
-    barLifeController?.life = life;
     super.update(dt);
-  }
-
-  @override
-  void renderBeforeTransformation(Canvas canvas) {
-    _drawDirectionAttack(canvas);
-    super.renderBeforeTransformation(canvas);
+    _checkViewEnemy(dt);
+    _updateLifeAndStamina(dt);
   }
 
   @override
   void receiveDamage(AttackFromEnum attacker, double damage, identify) {
-    if (hasController) {
-      controller.onReceiveDamage(damage);
-    }
-    super.receiveDamage(attacker, damage, identify);
-  }
-
-  void execShowEmote() {
-    if (hasGameRef) {
-      add(
-        AnimatedFollowerObject(
-          animation: CommonSpriteSheet.emote,
-          size: Vector2.all(width / 2),
-          positionFromTarget: Vector2(
-            18,
-            -6,
-          ),
-        ),
-      );
-    }
-  }
-
-  void execShowTalk(GameComponent first) {
-    gameRef.camera.moveToTargetAnimated(
-      first,
-      zoom: 2,
-      finish: () {
-        TalkDialog.show(
-          gameRef.context,
-          [
-            Say(
-              text: [
-                const TextSpan(
-                  text: 'Look at this! It seems that',
-                ),
-                const TextSpan(
-                  text: ' I\'m not alone ',
-                  style: TextStyle(color: Colors.red),
-                ),
-                const TextSpan(
-                  text: 'here...',
-                ),
-              ],
-              person: SizedBox(
-                width: 100,
-                height: 100,
-                child: PlayerSpriteSheet.idleRight.asWidget(),
-              ),
-            ),
-            Say(
-              text: [
-                const TextSpan(
-                  text: 'Lok Tar Ogr!',
-                ),
-                const TextSpan(
-                  text: ' Lok Tar Ogr! ',
-                  style: TextStyle(color: Colors.green),
-                ),
-                const TextSpan(
-                  text: ' Lok Tar Ogr! ',
-                ),
-                const TextSpan(
-                  text: 'Lok Tar Ogr!',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ],
-              person: SizedBox(
-                width: 100,
-                height: 100,
-                child: EnemySpriteSheet.idleLeft.asWidget(),
-              ),
-              personSayDirection: PersonSayDirection.RIGHT,
-            ),
-          ],
-          onClose: () {
-            // ignore: avoid_print
-            print('close talk');
-
-            if (!isDead) {
-              gameRef.camera.moveToPlayerAnimated(zoom: 1);
-            }
-          },
-          onFinish: () {
-            // ignore: avoid_print
-            print('finish talk');
-          },
-          logicalKeyboardKeysToNext: [
-            LogicalKeyboardKey.space,
-            LogicalKeyboardKey.enter
-          ],
-        );
-      },
-    );
-  }
-
-  void _drawDirectionAttack(Canvas c) {
-    if (showBgRangeAttack) {
-      double radius = height;
-      rectDirectionAttack = Rect.fromLTWH(
-        rectCollision.center.dx - radius,
-        rectCollision.center.dy - radius,
-        radius * 2,
-        radius * 2,
-      );
-
-      if (rectDirectionAttack != null && spriteDirectionAttack != null) {
-        renderSpriteByRadAngle(
-          c,
-          angleRadAttack,
-          rectDirectionAttack!,
-          spriteDirectionAttack!,
-        );
-      }
-    }
-  }
-
-  @override
-  Future<void> onLoad() async {
-    spriteDirectionAttack = await Sprite.load('direction_attack.png');
-    return super.onLoad();
-  }
-
-  @override
-  void onMount() {
-    barLifeController = BonfireInjector().get<BarLifeController>();
-    barLifeController?.configure(maxLife: maxLife, maxStamina: 100);
-    super.onMount();
-  }
-
-  void execEnableBGRangeAttack(bool enabled, double angle) {
-    showBgRangeAttack = enabled;
-    angleRadAttack = angle;
-  }
-
-  void execShowDamage(double damage) {
     showDamage(
       damage,
       config: TextStyle(
@@ -280,9 +94,85 @@ class Knight extends SimplePlayer
         color: Colors.red,
       ),
     );
+    super.receiveDamage(attacker, damage, identify);
   }
 
-  void updateStamina(double stamina) {
-    barLifeController?.stamina = stamina;
+  void execShowEmote() {
+    add(
+      AnimatedGameObject(
+        position: Vector2(width / 4, 0),
+        animation: CommonSpriteSheet.emote,
+        size: Vector2.all(width / 2),
+        loop: false,
+      ),
+    );
+  }
+
+  @override
+  Future<void> onLoad() async {
+    add(RectangleHitbox(size: size / 2, position: size / 4));
+    return super.onLoad();
+  }
+
+  @override
+  void onMount() {
+    barLifeController = BarLifeController();
+    barLifeController.configure(maxLife: maxLife, maxStamina: 100);
+    super.onMount();
+  }
+
+  void decrementStamina(int i) {
+    barLifeController.decrementStamina(i);
+  }
+
+  void _updateLifeAndStamina(double dt) {
+    barLifeController.updateLife(life);
+    if (barLifeController.stamina >= 100) {
+      return;
+    }
+    if (checkInterval('INCREMENT_STAMINA', 100, dt)) {
+      barLifeController.increaseStamina(2);
+    }
+  }
+
+  void _checkViewEnemy(double dt) {
+    if (checkInterval('seeEnemy', 250, dt)) {
+      seeEnemy(
+        radiusVision: width * 4,
+        notObserved: () => canShowEmote = true,
+        observed: (enemies) => _handleObserveEnemy(enemies.first),
+      );
+    }
+  }
+
+  void _handleObserveEnemy(Enemy enemy) {
+    if (canShowEmote) {
+      canShowEmote = false;
+      execShowEmote();
+    }
+    if (!showedDialog) {
+      showedDialog = true;
+      double lastZoom = gameRef.camera.zoom;
+      PlayerDialog.execShowTalk(
+        gameRef,
+        enemy,
+        () {
+          if (!isDead) {
+            gameRef.camera.moveToPlayerAnimated(
+              effectController: EffectController(duration: 1),
+              zoom: lastZoom,
+            );
+          }
+        },
+      );
+    }
+  }
+
+  void execMeleeAttack(double attack) {
+    simpleAttackMelee(
+      damage: attack,
+      animationRight: CommonSpriteSheet.whiteAttackEffectRight,
+      size: Vector2.all(DungeonMap.tileSize),
+    );
   }
 }

@@ -29,7 +29,7 @@ mixin TileRecognizer on GameComponent {
     if (!hasGameRef) return [];
     final map = gameRef.map;
     if (map.getRendered().isNotEmpty) {
-      return tileListBelow().map<String>((e) => e.type!).toList();
+      return tileListBelow().map<String>((e) => e.tileClass!).toList();
     }
     return [];
   }
@@ -62,7 +62,7 @@ mixin TileRecognizer on GameComponent {
     final map = gameRef.map;
     if (map.tiles.isNotEmpty) {
       return map.getRendered().where((element) {
-        return (element.overlaps(rectConsideringCollision) &&
+        return (element.overlaps(toAbsoluteRect()) &&
             (element.properties != null));
       });
     }

@@ -1,14 +1,13 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/material.dart';
 
 class BonfireUtil {
   // ignore: constant_identifier_names
   static const PI_180 = (180 / pi);
 
   static Direction getDirectionFromAngle(double angle) {
-    double degrees = angle * 180 / pi;
+    double degrees = angle * PI_180;
 
     if (degrees > -22.5 && degrees <= 22.5) {
       return Direction.right;
@@ -104,5 +103,17 @@ class BonfireUtil {
     double angle,
   ) {
     return movePointByAngle(point, speed, angle) - point;
+  }
+
+  static Vector2 vector2ByAngle(double angle, {double intencity = 1}) {
+    var x = cos(angle) * intencity;
+    var y = sin(angle) * intencity;
+    if (x.abs() < 0.01) {
+      x = 0;
+    }
+    if (y.abs() < 0.01) {
+      y = 0;
+    }
+    return Vector2(x, y);
   }
 }

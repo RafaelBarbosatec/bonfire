@@ -25,7 +25,7 @@ class TextDamageComponent extends TextComponent with BonfireHasGameRef {
     Vector2 position, {
     this.onlyUp = false,
     TextStyle? config,
-    double initVelocityTop = -4,
+    double initVelocityUp = -4,
     this.maxDownSize = 20,
     this.gravity = 0.5,
     this.direction = DirectionTextDamage.RANDOM,
@@ -37,7 +37,7 @@ class TextDamageComponent extends TextComponent with BonfireHasGameRef {
           position: position,
         ) {
     _initialY = position.y;
-    _velocity = initVelocityTop;
+    _velocity = initVelocityUp;
     switch (direction) {
       case DirectionTextDamage.LEFT:
         _moveAxisX = 1;

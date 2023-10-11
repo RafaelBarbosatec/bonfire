@@ -1,8 +1,4 @@
-import 'package:bonfire/base/bonfire_game.dart';
-import 'package:bonfire/gestures/drag_gesture.dart';
-import 'package:bonfire/gestures/mouse_gesture.dart';
-import 'package:bonfire/gestures/tap_gesture.dart';
-import 'package:flame/components.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:flutter/gestures.dart';
 
 mixin PointerDetector {
@@ -14,24 +10,52 @@ mixin PointerDetector {
   void onPointerSignal(PointerSignalEvent event) {}
 }
 
-abstract class PointerDetectorHandler {
+mixin PointerDetectorHandler on Component {
   // If return 'true' this event is not relay to others components.
   bool handlerPointerDown(PointerDownEvent event) {
+    for (var child in children) {
+      if (child is GameComponent) {
+        if (child.handlerPointerDown(event)) {
+          return true;
+        }
+      }
+    }
     return false;
   }
 
   // If return 'true' this event is not relay to others components.
   bool handlerPointerMove(PointerMoveEvent event) {
+    for (var child in children) {
+      if (child is GameComponent) {
+        if (child.handlerPointerMove(event)) {
+          return true;
+        }
+      }
+    }
     return false;
   }
 
   // If return 'true' this event is not relay to others components.
   bool handlerPointerUp(PointerUpEvent event) {
+    for (var child in children) {
+      if (child is GameComponent) {
+        if (child.handlerPointerUp(event)) {
+          return true;
+        }
+      }
+    }
     return false;
   }
 
   // If return 'true' this event is not relay to others components.
   bool handlerPointerCancel(PointerCancelEvent event) {
+    for (var child in children) {
+      if (child is GameComponent) {
+        if (child.handlerPointerCancel(event)) {
+          return true;
+        }
+      }
+    }
     return false;
   }
 
@@ -48,15 +72,10 @@ abstract class PointerDetectorHandler {
   bool hasGesture() {
     if (this is DragGesture && (this as DragGesture).enableDrag) return true;
     if (this is TapGesture && (this as TapGesture).enableTab) return true;
-    if (this is MouseGesture && (this as MouseGesture).enableMouseGesture) {
+    if (this is MouseEventListener &&
+        (this as MouseEventListener).enableMouseGesture) {
       return true;
     }
     return false;
   }
 }
-
-typedef TapInGame = void Function(
-  BonfireGame game,
-  Vector2 screenPosition,
-  Vector2 worldPosition,
-);

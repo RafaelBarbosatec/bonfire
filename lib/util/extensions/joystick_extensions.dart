@@ -1,9 +1,16 @@
 import 'dart:math';
+
 import 'package:bonfire/joystick/joystick_controller.dart';
 
 extension JoystickDirectionalEventExtention on JoystickDirectionalEvent {
   double get directionalRadAngle {
-    switch (directional) {
+    return directional.radAngle;
+  }
+}
+
+extension JoystickMoveDirectionalExt on JoystickMoveDirectional {
+  double get radAngle {
+    switch (this) {
       case JoystickMoveDirectional.MOVE_LEFT:
         return 180 / (180 / pi);
       case JoystickMoveDirectional.MOVE_RIGHT:

@@ -1,8 +1,7 @@
 import 'dart:ui';
 
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/geometry/shape.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
-import 'package:flame/components.dart';
 
 class RectangleShape extends Shape {
   Rect _rect;

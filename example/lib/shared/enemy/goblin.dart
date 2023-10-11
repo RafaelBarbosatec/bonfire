@@ -1,58 +1,78 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/manual_map/dungeon_map.dart';
+import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:example/shared/util/enemy_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
-import 'goblin_controller.dart';
-
 class Goblin extends SimpleEnemy
     with
-        ObjectCollision,
+        BlockMovementCollision,
         JoystickListener,
         MovementByJoystick,
         AutomaticRandomMovement,
-        UseBarLife,
-        UseStateController<GoblinController> {
+        UseLifeBar {
+  double attack = 20;
+  bool enableBehaviors = true;
   Goblin(Vector2 position)
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,
           position: position,
           size: Vector2.all(DungeonMap.tileSize * 0.8),
-          speed: DungeonMap.tileSize * 1.6,
+          speed: DungeonMap.tileSize,
           life: 100,
         ) {
-    setupCollision(
-      CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2(
-              DungeonMap.tileSize * 0.4,
-              DungeonMap.tileSize * 0.4,
-            ),
-            align: Vector2(
-              DungeonMap.tileSize * 0.2,
-              DungeonMap.tileSize * 0.2,
-            ),
-          ),
-        ],
-      ),
-    );
-
-    setupBarLife(
+    setupLifeBar(
       borderRadius: BorderRadius.circular(2),
       borderWidth: 2,
     );
   }
 
   @override
+  void update(double dt) {
+    super.update(dt);
+    if (!enableBehaviors) return;
+
+    if (!gameRef.sceneBuilderStatus.isRunning) {
+      seePlayer(
+        radiusVision: DungeonMap.tileSize,
+        observed: (p) {
+          moveTowardsTarget(
+            target: p,
+            close: () {
+              execAttack(attack);
+            },
+          );
+        },
+        notObserved: () {
+          seeAndMoveToAttackRange(
+            minDistanceFromPlayer: DungeonMap.tileSize * 2,
+            useDiagonal: false,
+            positioned: (p) {
+              execAttackRange(attack);
+            },
+            radiusVision: DungeonMap.tileSize * 3,
+            notObserved: () {
+              runRandomMovement(
+                dt,
+                speed: speed / 2,
+                maxDistance: (DungeonMap.tileSize * 3).toInt(),
+              );
+            },
+          );
+        },
+      );
+    }
+  }
+
+  @override
   void die() {
     super.die();
     gameRef.add(
-      AnimatedObjectOnce(
+      AnimatedGameObject(
         animation: CommonSpriteSheet.smokeExplosion,
         position: position,
         size: Vector2.all(DungeonMap.tileSize),
+        loop: false,
       ),
     );
     removeFromParent();
@@ -67,13 +87,9 @@ class Goblin extends SimpleEnemy
       size: Vector2.all(width * 0.9),
       damage: damage,
       speed: DungeonMap.tileSize * 3,
-      collision: CollisionConfig(
-        collisions: [
-          CollisionArea.rectangle(
-            size: Vector2.all(width / 2),
-            align: Vector2(width * 0.25, width * 0.25),
-          ),
-        ],
+      collision: RectangleHitbox(
+        size: Vector2.all(width / 2),
+        position: Vector2(width * 0.25, width * 0.25),
       ),
       lightingConfig: LightingConfig(
         radius: width / 2,
@@ -107,8 +123,19 @@ class Goblin extends SimpleEnemy
   }
 
   @override
-  void joystickAction(JoystickActionEvent event) {}
-
-  @override
-  void moveTo(Vector2 position) {}
+  Future<void> onLoad() {
+    add(
+      RectangleHitbox(
+        size: Vector2(
+          DungeonMap.tileSize * 0.4,
+          DungeonMap.tileSize * 0.4,
+        ),
+        position: Vector2(
+          DungeonMap.tileSize * 0.2,
+          DungeonMap.tileSize * 0.2,
+        ),
+      ),
+    );
+    return super.onLoad();
+  }
 }

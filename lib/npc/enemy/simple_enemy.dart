@@ -13,7 +13,7 @@ class SimpleEnemy extends Enemy with DirectionAnimation {
     required Vector2 size,
     SimpleDirectionAnimation? animation,
     double life = 100,
-    double speed = 100,
+    double? speed,
     Direction initDirection = Direction.right,
     ReceivesAttackFromEnum receivesAttackFrom =
         ReceivesAttackFromEnum.PLAYER_AND_ALLY,

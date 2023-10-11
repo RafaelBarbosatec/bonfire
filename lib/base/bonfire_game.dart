@@ -9,15 +9,13 @@ import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
-import 'package:bonfire/mixins/pointer_detector.dart';
 // ignore: implementation_imports
-import 'package:flame/src/game/overlay_manager.dart';
 import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends BaseGame implements BonfireGameInterface {
-  static const INTERVAL_UPDATE_CACHE = 200;
-  static const INTERVAL_UPDATE_ORDER = 499;
+  static const INTERVAL_UPDATE_ORDER = 500;
+  static const INTERVAL_OPTIMIZE_TREE = 5001;
 
   /// Context used to access all Flutter power in your game.
   @override
@@ -36,17 +34,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   final GameMap map;
 
   /// The player-controlling component.
-  final JoystickController? _joystickController;
+  final JoystickController? joystickController;
 
   /// Background of the game. This can be a color or custom component
   final GameBackground? background;
-
-  /// Used to show grid in the map and facilitate the construction and testing of the map
-  final bool constructionMode;
-
-  /// Color grid when `constructionMode` is true
-  @override
-  final Color? constructionModeColor;
 
   /// Used to draw area collision in objects.
   @override
@@ -56,40 +47,32 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   final Color? collisionAreaColor;
 
-  /// Used to extensively control game elements
-  final GameController? gameController;
-
   /// Used to configure lighting in the game
   final Color? lightingColorGame;
 
-  /// Callback to receive the tapDown event from the game.
-  final TapInGame? onTapDown;
-
-  /// Callback to receive the onTapUp event from the game.
-  final TapInGame? onTapUp;
+  @override
+  final List<Force2D> globalForces;
 
   @override
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
   final List<GameComponent> _visibleComponents = List.empty(growable: true);
-  Iterable<ObjectCollision> _visibleCollisions = List.empty();
-  final List<ObjectCollision> _collisions = List.empty(growable: true);
-  final List<GameComponent> _addLater = List.empty(growable: true);
-  late IntervalTick _interval;
+  final List<ShapeHitbox> _visibleCollisions = List.empty(growable: true);
   late IntervalTick _intervalUpdateOder;
-  late ColorFilterComponent _colorFilterComponent;
-  late LightingComponent _lighting;
+  late IntervalTick _intervalOprimizeTree;
 
   ValueChanged<BonfireGame>? onReady;
 
   @override
-  LightingInterface? get lighting => _lighting;
+  LightingInterface get lighting =>
+      camera.viewport.children.whereType<LightingInterface>().first;
 
   @override
-  ColorFilterInterface? get colorFilter => _colorFilterComponent;
+  ColorFilterInterface get colorFilter =>
+      camera.viewport.children.whereType<ColorFilterInterface>().first;
 
   @override
-  JoystickController? get joystick => _joystickController;
+  JoystickController? get joystick => joystickController;
 
   @override
   Color backgroundColor() => _bgColor ?? super.backgroundColor();
@@ -98,108 +81,112 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   bool _shouldUpdatePriority = false;
 
+  @override
+  BonfireCamera get camera => super.camera as BonfireCamera;
+
+  @override
+  set camera(CameraComponent newCameraComponent) {
+    throw Exception('Is forbiden updade camera');
+  }
+
+  /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
+  int _highestPriority = 1000000;
+
+  /// Get of the _highestPriority
+  @override
+  int get highestPriority => _highestPriority;
+
   BonfireGame({
     required this.context,
     required this.map,
-    JoystickController? joystickController,
+    this.joystickController,
     this.player,
     this.interface,
-    List<Enemy>? enemies,
-    List<GameDecoration>? decorations,
     List<GameComponent>? components,
     this.background,
-    this.constructionMode = false,
+    bool debugMode = false,
     this.showCollisionArea = false,
-    this.gameController,
-    this.constructionModeColor,
     this.collisionAreaColor,
     this.lightingColorGame,
     this.onReady,
-    this.onTapDown,
-    this.onTapUp,
     Color? backgroundColor,
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
-  })  : _joystickController = joystickController,
-        super(camera: BonfireCamera(cameraConfig ?? CameraConfig())) {
+    List<Force2D>? globalForces,
+  })  : globalForces = globalForces ?? [],
+        super(
+          camera: BonfireCamera(
+            config: cameraConfig ?? CameraConfig(),
+            hudComponents: [
+              LightingComponent(
+                color: lightingColorGame ?? const Color(0x00000000),
+              ),
+              ColorFilterComponent(
+                colorFilter ?? GameColorFilter(),
+              ),
+              if (joystickController != null) joystickController,
+              if (interface != null) interface,
+            ],
+          ),
+          world: World(
+            children: [
+              map,
+              if (background != null) background,
+              if (player != null) player,
+              ...components ?? [],
+            ],
+          ),
+        ) {
+    this.debugMode = debugMode;
     _bgColor = backgroundColor;
-    camera.setGame(this);
-    camera.target ??= player;
 
-    _addLater.addAll(enemies ?? []);
-    _addLater.addAll(decorations ?? []);
-    _addLater.addAll(components ?? []);
-    _lighting = LightingComponent(
-      color: lightingColorGame ?? const Color(0x00000000),
-    );
-    _colorFilterComponent = ColorFilterComponent(
-      colorFilter ?? GameColorFilter(),
-    );
-    _joystickController?.addObserver(player ?? JoystickMapExplorer(camera));
-
-    debugMode = constructionMode;
-
-    _interval = IntervalTick(
-      INTERVAL_UPDATE_CACHE,
-      tick: updateVisibleCollisionsMicrotask,
-    );
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
-      tick: updateOrderPriorityMicrotask,
+      onTick: _updateOrderPriorityMicrotask,
     );
-  }
-
-  void updateVisibleCollisionsMicrotask() {
-    scheduleMicrotask(_updateVisibleCollisions);
-  }
-
-  void updateOrderPriorityMicrotask() {
-    if (_shouldUpdatePriority) {
-      _shouldUpdatePriority = false;
-      scheduleMicrotask(updateOrderPriority);
-    }
+    _intervalOprimizeTree = IntervalTick(
+      INTERVAL_OPTIMIZE_TREE,
+      onTick: _optimizeCollisionTree,
+    );
   }
 
   @override
   FutureOr<void> onLoad() async {
-    await add(_colorFilterComponent);
+    await super.onLoad();
+    initializeCollisionDetection(
+      mapDimensions: Rect.zero,
+    );
 
-    if (background != null) {
-      await add(background!);
+    joystickController?.addObserver(
+      player ?? JoystickMapExplorer(camera),
+    );
+
+    if (camera.config.target != null) {
+      camera.follow(
+        camera.config.target!,
+        snap: true,
+      );
+    } else if (player != null && camera.config.startFollowPlayer) {
+      camera.moveToPlayer();
     }
+  }
 
-    await add(map);
-
-    for (var compLate in _addLater) {
-      await add(compLate);
-    }
-    _addLater.clear();
-
-    if (player != null) {
-      await add(player!);
-    }
-
-    await add(_lighting);
-
-    if (interface != null) {
-      await add(interface!);
-    }
-
-    if (_joystickController != null) {
-      await add(_joystickController!);
-    }
-
-    if (gameController != null) {
-      await add(gameController!);
-    }
-    return super.onLoad();
+  void configCollision() {
+    initializeCollisionDetection(
+      mapDimensions: Rect.fromLTWH(
+        -map.tileSize,
+        -map.tileSize,
+        map.size.x.ceilToDouble() + map.tileSize * 2,
+        map.size.y.ceilToDouble() + map.tileSize * 2,
+      ),
+    );
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    _interval.update(dt);
     _intervalUpdateOder.update(dt);
+    _intervalOprimizeTree.update(dt);
   }
 
   @override
@@ -211,82 +198,52 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  Iterable<GameComponent> visibleComponents() => _visibleComponents;
-
-  @override
-  Iterable<Enemy> visibleEnemies() {
-    return visibleComponentsByType<Enemy>();
-  }
-
-  @override
-  Iterable<Enemy> livingEnemies() {
-    return enemies().where((element) => !element.isDead);
-  }
-
-  @override
-  Iterable<Enemy> enemies() {
-    return componentsByType<Enemy>();
-  }
-
-  @override
-  Iterable<GameDecoration> visibleDecorations() {
-    return visibleComponentsByType<GameDecoration>();
-  }
-
-  @override
-  Iterable<GameDecoration> decorations() {
-    return componentsByType<GameDecoration>();
-  }
-
-  @override
-  Iterable<Attackable> attackables() {
-    return componentsByType<Attackable>();
-  }
-
-  @override
-  Iterable<Attackable> visibleAttackables() {
-    return visibleComponentsByType<Attackable>();
-  }
-
-  @override
-  Iterable<Sensor> visibleSensors() {
-    return visibleComponentsByType<Sensor>();
-  }
-
-  @override
-  Iterable<ObjectCollision> collisions() {
-    return _collisions;
-  }
-
-  @override
-  Iterable<ObjectCollision> visibleCollisions() {
-    return _visibleCollisions;
-  }
-
-  @override
-  Iterable<T> visibleComponentsByType<T>() {
+  Iterable<T> visibles<T extends GameComponent>() {
     return _visibleComponents.whereType<T>();
   }
 
   @override
-  Iterable<T> componentsByType<T>() {
-    return children.whereType<T>();
+  Iterable<Enemy> livingEnemies({bool onlyVisible = false}) {
+    return enemies(onlyVisible: onlyVisible)
+        .where((element) => !element.isDead);
   }
 
   @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    _updateVisibleCollisions();
-    camera.onGameResize(size);
+  Iterable<Enemy> enemies({bool onlyVisible = false}) {
+    return query<Enemy>(onlyVisible: onlyVisible);
   }
 
-  void _updateVisibleCollisions() {
-    _visibleCollisions = _collisions.where(_isVisibleCollision);
-    gameController?.notifyListeners();
+  @override
+  Iterable<GameDecoration> decorations({bool onlyVisible = false}) {
+    return query<GameDecoration>(onlyVisible: onlyVisible);
   }
 
-  bool _isVisibleCollision(element) {
-    return element.isVisible || element is Tile;
+  @override
+  Iterable<Attackable> attackables({bool onlyVisible = false}) {
+    return query<Attackable>(onlyVisible: onlyVisible);
+  }
+
+  @override
+  Iterable<ShapeHitbox> collisions({bool onlyVisible = false}) {
+    if (onlyVisible) {
+      List<ShapeHitbox> tilesCollision = [];
+      map.getRendered().where((element) => element.isCollision).forEach((e) {
+        tilesCollision.addAll(e.children.query<ShapeHitbox>());
+      });
+      return [
+        ..._visibleCollisions,
+        ...tilesCollision,
+      ];
+    }
+    return collisionDetection.items;
+  }
+
+  @override
+  Iterable<T> query<T extends Component>({bool onlyVisible = false}) {
+    if (onlyVisible) {
+      return _visibleComponents.whereType<T>();
+    }
+    return world.children.query<T>();
   }
 
   @override
@@ -303,33 +260,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   bool isVisibleInCamera(GameComponent c) {
     if (!hasLayout) return false;
     if (c.isRemoving) return false;
-    return camera.isComponentOnCamera(c);
-  }
-
-  @override
-  void onPointerDown(PointerDownEvent event) {
-    if (onTapDown != null) {
-      final localPosition = event.localPosition.toVector2();
-      onTapDown?.call(
-        this,
-        localPosition,
-        camera.screenToWorld(localPosition),
-      );
-    }
-    super.onPointerDown(event);
-  }
-
-  @override
-  void onPointerUp(PointerUpEvent event) {
-    if (onTapUp != null) {
-      final localPosition = event.localPosition.toVector2();
-      onTapUp?.call(
-        this,
-        localPosition,
-        camera.screenToWorld(localPosition),
-      );
-    }
-    super.onPointerUp(event);
+    return camera.canSee(c);
   }
 
   /// Use this method to change default observer of the Joystick events.
@@ -340,25 +271,25 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     bool moveCameraToTarget = false,
   }) {
     if (cleanObservers) {
-      _joystickController?.cleanObservers();
+      joystickController?.cleanObservers();
     }
-    _joystickController?.addObserver(target);
+    joystickController?.addObserver(target);
     if (moveCameraToTarget && target is GameComponent) {
-      camera.moveToTargetAnimated(target as GameComponent);
+      camera.follow(target as GameComponent);
     }
   }
 
   @override
-  void startScene(List<SceneAction> actions) {
+  void startScene(List<SceneAction> actions, {void Function()? onComplete}) {
     if (!sceneBuilderStatus.isRunning) {
-      add(SceneBuilderComponent(actions));
+      add(SceneBuilderComponent(actions, onComplete: onComplete));
     }
   }
 
   @override
   void stopScene() {
     try {
-      children
+      world.children
           .firstWhere((value) => value is SceneBuilderComponent)
           .removeFromParent();
     } catch (e) {
@@ -368,31 +299,29 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   void onDetach() {
-    children.query<GameComponent>().forEach(_detachComp);
+    world.children.query<GameComponent>().forEach(_detachComp);
+    camera.viewport.children.query<GameComponent>().forEach(_detachComp);
+    FollowerWidget.removeAll();
     super.onDetach();
   }
 
   void _detachComp(GameComponent c) => c.onGameDetach();
 
-  void addCollision(ObjectCollision obj) {
-    _collisions.add(obj);
-  }
-
-  void removeCollision(ObjectCollision obj) {
-    _collisions.remove(obj);
-  }
-
   void addVisible(GameComponent obj) {
     _visibleComponents.add(obj);
+    if (obj.isCollision) {
+      _visibleCollisions.addAll(obj.children.query<ShapeHitbox>());
+    }
   }
 
   void removeVisible(GameComponent obj) {
     _visibleComponents.remove(obj);
+    if (obj.isCollision) {
+      obj.children.query<ShapeHitbox>().forEach((element) {
+        _visibleCollisions.remove(element);
+      });
+    }
   }
-
-  @override
-  // ignore: invalid_use_of_internal_member
-  OverlayManager get overlayManager => overlays;
 
   @override
   void enableGestures(bool enable) {
@@ -406,5 +335,92 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   void requestUpdatePriority() {
     _shouldUpdatePriority = true;
+  }
+
+  @override
+  FutureOr<void> add(Component component) {
+    if (component is CameraComponent || component is World) {
+      super.add(component);
+    } else {
+      return world.add(component);
+    }
+  }
+
+  @override
+  Future<void> addAll(Iterable<Component> components) {
+    return world.addAll(components);
+  }
+
+  /// reorder components by priority
+  void _updateOrderPriority() {
+    // ignore: invalid_use_of_internal_member
+    world.children.reorder();
+    _highestPriority = world.children.last.priority;
+  }
+
+  @override
+  List<RaycastResult<ShapeHitbox>> raycastAll(
+    Vector2 origin, {
+    required int numberOfRays,
+    double startAngle = 0,
+    double sweepAngle = tau,
+    double? maxDistance,
+    List<Ray2>? rays,
+    List<ShapeHitbox>? ignoreHitboxes,
+    List<RaycastResult<ShapeHitbox>>? out,
+  }) {
+    return collisionDetection.raycastAll(
+      origin,
+      numberOfRays: numberOfRays,
+      startAngle: startAngle,
+      sweepAngle: sweepAngle,
+      maxDistance: maxDistance,
+      rays: rays,
+      ignoreHitboxes: ignoreHitboxes,
+      out: out,
+    );
+  }
+
+  @override
+  RaycastResult<ShapeHitbox>? raycast(
+    Ray2 ray, {
+    double? maxDistance,
+    List<ShapeHitbox>? ignoreHitboxes,
+    RaycastResult<ShapeHitbox>? out,
+  }) {
+    return collisionDetection.raycast(
+      ray,
+      maxDistance: maxDistance,
+      ignoreHitboxes: ignoreHitboxes,
+      out: out,
+    );
+  }
+
+  @override
+  Iterable<RaycastResult<ShapeHitbox>> raytrace(
+    Ray2 ray, {
+    int maxDepth = 10,
+    List<ShapeHitbox>? ignoreHitboxes,
+    List<RaycastResult<ShapeHitbox>>? out,
+  }) {
+    return collisionDetection.raytrace(
+      ray,
+      maxDepth: maxDepth,
+      ignoreHitboxes: ignoreHitboxes,
+      out: out,
+    );
+  }
+
+  void _optimizeCollisionTree() {
+    scheduleMicrotask(
+      () => collisionDetection.broadphase.tree.optimize(),
+    );
+  }
+
+  void _updateOrderPriorityMicrotask() {
+    if (_shouldUpdatePriority) {
+      _shouldUpdatePriority = false;
+      scheduleMicrotask(_updateOrderPriority);
+    }
   }
 }

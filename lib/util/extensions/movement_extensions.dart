@@ -1,98 +1,47 @@
-import 'dart:ui';
+import 'dart:math';
 
-import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/mixins/movement.dart';
-import 'package:bonfire/util/extensions/extensions.dart';
+import 'package:bonfire/bonfire.dart';
 
 extension MovementExtensions on Movement {
   /// This method move this component to target
   /// Need use Movement mixin.
   /// Method that bo used in [update] method.
   /// return true if moved.
-  bool followComponent(
-    GameComponent target,
-    double dt, {
-    required Function(GameComponent) closeComponent,
-    double margin = 10,
+  bool moveTowardsTarget<T extends GameComponent>({
+    required T target,
+    Function? close,
+    double margin = 4,
   }) {
-    final comp = target.rectConsideringCollision;
-    double centerXPlayer = comp.center.dx;
-    double centerYPlayer = comp.center.dy;
+    double radAngle = getAngleFromTarget(target);
 
-    double translateX = 0;
-    double translateY = 0;
-    double speed = this.speed * dt;
+    Rect rectPlayerCollision = target.rectCollision.inflate(margin);
 
-    Rect rectToMove = rectConsideringCollision;
-
-    translateX = rectToMove.center.dx > centerXPlayer ? (-1 * speed) : speed;
-
-    translateX = _adjustTranslate(
-      translateX,
-      rectToMove.center.dx,
-      centerXPlayer,
-    );
-    translateY = rectToMove.center.dy > centerYPlayer ? (-1 * speed) : speed;
-    translateY = _adjustTranslate(
-      translateY,
-      rectToMove.center.dy,
-      centerYPlayer,
-    );
-
-    Rect rectPlayerCollision = Rect.fromLTWH(
-      comp.left - margin,
-      comp.top - margin,
-      comp.width + (margin * 2),
-      comp.height + (margin * 2),
-    );
-
-    if (rectToMove.overlaps(rectPlayerCollision)) {
-      closeComponent(target);
-      if (!isIdle) {
-        idle();
-      }
+    if (rectCollision.overlaps(rectPlayerCollision)) {
+      close?.call();
+      stopMove();
       return false;
     }
+    moveFromAngle(radAngle);
+    return true;
+  }
 
-    translateX /= dt;
-    translateY /= dt;
+  bool keepDistance(GameComponent target, double minDistance) {
+    if (!isVisible) return true;
+    double distance = absoluteCenter.distanceTo(target.absoluteCenter);
 
-    bool moved = false;
-
-    if (translateX > 0 && translateY > 0) {
-      moved = moveDownRight(translateX, translateY);
-    } else if (translateX < 0 && translateY < 0) {
-      moved = moveUpLeft(translateX.abs(), translateY.abs());
-    } else if (translateX > 0 && translateY < 0) {
-      moved = moveUpRight(translateX, translateY.abs());
-    } else if (translateX < 0 && translateY > 0) {
-      moved = moveDownLeft(translateX.abs(), translateY);
-    } else {
-      if (translateX > 0) {
-        moved = moveRight(translateX);
-      } else if (translateX < 0) {
-        moved = moveLeft(translateX.abs());
-      }
-      if (translateY > 0) {
-        moved = moveDown(translateY);
-      } else if (translateY < 0) {
-        moved = moveUp(translateY.abs());
-      }
-    }
-
-    if (!moved) {
-      idle();
+    if (distance < minDistance) {
+      var angle = getAngleFromTarget(target);
+      moveFromAngle(angle + pi);
       return false;
     }
-
     return true;
   }
 
   /// Checks whether the component is within range. If so, position yourself and keep your distance.
   /// Method that bo used in [update] method.
-  bool positionsItselfAndKeepDistance(
-    GameComponent target, {
-    required Function(GameComponent) positioned,
+  bool positionsItselfAndKeepDistance<T extends GameComponent>(
+    T target, {
+    Function(T)? positioned,
     double radiusVision = 32,
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
@@ -100,7 +49,7 @@ extension MovementExtensions on Movement {
     if (runOnlyVisibleInScreen && !isVisible) return false;
     double distance = (minDistanceFromPlayer ?? radiusVision);
 
-    Rect rectTarget = target.rectConsideringCollision;
+    Rect rectTarget = target.rectCollision;
     double centerXTarget = rectTarget.center.dx;
     double centerYTarget = rectTarget.center.dy;
 
@@ -109,7 +58,7 @@ extension MovementExtensions on Movement {
 
     double speed = this.speed * dtUpdate;
 
-    Rect rectToMove = rectConsideringCollision;
+    Rect rectToMove = rectCollision;
 
     translateX = rectToMove.center.dx > centerXTarget ? (-1 * speed) : speed;
     translateX = _adjustTranslate(
@@ -136,7 +85,6 @@ extension MovementExtensions on Movement {
       translateX = 0;
     } else if (translateXPositive > translateYPositive) {
       translateX = translateX * -1;
-      positioned(target);
     }
 
     if (translateYPositive >= distance &&
@@ -144,48 +92,16 @@ extension MovementExtensions on Movement {
       translateY = 0;
     } else if (translateXPositive < translateYPositive) {
       translateY = translateY * -1;
-      positioned(target);
     }
 
-    if (translateX == 0 && translateY == 0) {
-      if (!isIdle) {
-        idle();
-      }
-      positioned(target);
+    if (translateX.abs() < dtSpeed && translateY.abs() < dtSpeed) {
+      stopMove();
+      positioned?.call(target);
       return false;
-    }
-
-    translateX /= dtUpdate;
-    translateY /= dtUpdate;
-
-    bool moved = false;
-    if (translateX > 0 && translateY > 0) {
-      moved = moveDownRight(translateX, translateY);
-    } else if (translateX < 0 && translateY < 0) {
-      moved = moveUpLeft(translateX.abs(), translateY.abs());
-    } else if (translateX > 0 && translateY < 0) {
-      moved = moveUpRight(translateX, translateY.abs());
-    } else if (translateX < 0 && translateY > 0) {
-      moved = moveDownLeft(translateX.abs(), translateY);
     } else {
-      if (translateX > 0) {
-        moved = moveRight(translateX);
-      } else if (translateX < 0) {
-        moved = moveLeft(translateX.abs());
-      }
-      if (translateY > 0) {
-        moved = moveDown(translateY);
-      } else if (translateY < 0) {
-        moved = moveUp(translateY.abs());
-      }
+      _moveComp(translateX, translateY);
+      return true;
     }
-
-    if (!moved) {
-      idle();
-      return false;
-    }
-
-    return true;
   }
 
   double _adjustTranslate(
@@ -206,5 +122,44 @@ extension MovementExtensions on Movement {
     }
 
     return newTrasnlate;
+  }
+
+  void _moveComp(double translateX, double translateY) {
+    if (translateX > 0 && translateY > 0) {
+      moveDownRight();
+    } else if (translateX < 0 && translateY < 0) {
+      moveUpLeft();
+    } else if (translateX > 0 && translateY < 0) {
+      moveUpRight();
+    } else if (translateX < 0 && translateY > 0) {
+      moveDownLeft();
+    } else {
+      if (translateX.abs() > dtSpeed) {
+        if (translateX > 0) {
+          moveRight();
+        } else if (translateX < 0) {
+          moveLeft();
+        }
+      } else if (translateX.abs() > dtSpeed / 2) {
+        if (translateX > 0) {
+          moveRight(speed: speed / 2);
+        } else if (translateX < 0) {
+          moveLeft(speed: speed / 2);
+        }
+      }
+      if (translateY.abs() > dtSpeed) {
+        if (translateY > 0) {
+          moveDown();
+        } else if (translateY < 0) {
+          moveUp();
+        }
+      } else if (translateY.abs() > dtSpeed / 2) {
+        if (translateY > 0) {
+          moveDown(speed: speed / 2);
+        } else if (translateY < 0) {
+          moveUp(speed: speed / 2);
+        }
+      }
+    }
   }
 }

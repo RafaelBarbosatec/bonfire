@@ -11,7 +11,7 @@ class RotationEnemy extends Enemy with UseSpriteAnimation, UseAssetsLoader {
     required Future<SpriteAnimation> animIdle,
     required Future<SpriteAnimation> animRun,
     double currentRadAngle = -1.55,
-    double speed = 100,
+    double? speed,
     double life = 100,
     ReceivesAttackFromEnum receivesAttackFrom =
         ReceivesAttackFromEnum.PLAYER_AND_ALLY,
@@ -32,15 +32,15 @@ class RotationEnemy extends Enemy with UseSpriteAnimation, UseAssetsLoader {
   }
 
   @override
-  bool moveFromAngleDodgeObstacles(double speed, double angle) {
-    animation = animRun;
+  void moveFromAngle(double angle, {double? speed}) {
+    setAnimation(animRun);
     this.angle = angle;
-    return super.moveFromAngleDodgeObstacles(speed, angle);
+    super.moveFromAngle(angle, speed: speed);
   }
 
   @override
   void idle() {
-    animation = animIdle;
+    setAnimation(animIdle);
     super.idle();
   }
 
@@ -48,5 +48,11 @@ class RotationEnemy extends Enemy with UseSpriteAnimation, UseAssetsLoader {
   Future<void> onLoad() async {
     await super.onLoad();
     idle();
+  }
+
+  @override
+  void onMount() {
+    anchor = Anchor.center;
+    super.onMount();
   }
 }

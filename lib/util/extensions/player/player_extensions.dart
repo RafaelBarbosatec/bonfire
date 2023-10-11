@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/geometry/polygon.dart';
 import 'package:flutter/widgets.dart';
 
 extension PlayerExtensions on Player {
@@ -8,15 +9,15 @@ extension PlayerExtensions on Player {
   /// Method that bo used in [update] method.
   /// [visionAngle] in radians
   /// [angle] in radians. is automatically picked up using the component's direction.
-  void seeEnemy({
+  PolygonShape? seeEnemy({
     required Function(List<Enemy>) observed,
     VoidCallback? notObserved,
     double radiusVision = 32,
     double? visionAngle,
     double? angle,
   }) {
-    if (isDead) return;
-    seeComponentType<Enemy>(
+    if (isDead) return null;
+    return seeComponentType<Enemy>(
       observed: observed,
       notObserved: notObserved,
       radiusVision: radiusVision,
@@ -34,10 +35,11 @@ extension PlayerExtensions on Player {
     bool withPush = true,
     double? sizePush,
     Vector2? centerOffset,
+    double? marginFromCenter,
+    bool diagonalEnabled = true,
   }) {
-    Direction attackDirection = direction ?? lastDirection;
     simpleAttackMeleeByDirection(
-      direction: attackDirection,
+      direction: direction ?? _getLastDirection(diagonalEnabled),
       animationRight: animationRight,
       damage: damage,
       id: id,
@@ -46,14 +48,12 @@ extension PlayerExtensions on Player {
       sizePush: sizePush,
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
       centerOffset: centerOffset,
+      marginFromCenter: marginFromCenter,
     );
   }
 
   void simpleAttackRange({
     required Future<SpriteAnimation> animationRight,
-    required Future<SpriteAnimation> animationLeft,
-    required Future<SpriteAnimation> animationUp,
-    required Future<SpriteAnimation> animationDown,
     Future<SpriteAnimation>? animationDestroy,
     required Vector2 size,
     Vector2? destroySize,
@@ -62,12 +62,12 @@ extension PlayerExtensions on Player {
     double damage = 1,
     Direction? direction,
     bool withCollision = true,
-    bool enableDiagonal = true,
+    bool diagonalEnabled = true,
     VoidCallback? onDestroy,
-    CollisionConfig? collision,
+    ShapeHitbox? collision,
     LightingConfig? lightingConfig,
   }) {
-    Direction attackDirection = direction ?? lastDirection;
+    Direction attackDirection = direction ?? _getLastDirection(diagonalEnabled);
     simpleAttackRangeByDirection(
       direction: attackDirection,
       animationRight: animationRight,
@@ -80,9 +80,27 @@ extension PlayerExtensions on Player {
       onDestroy: onDestroy,
       destroySize: destroySize,
       collision: collision,
-      enableDiagonal: enableDiagonal,
       lightingConfig: lightingConfig,
       attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
     );
+  }
+
+  Direction _getLastDirection(bool diagonalEnabled) {
+    if (diagonalEnabled) {
+      return lastDirection;
+    }
+
+    switch (lastDirection) {
+      case Direction.left:
+      case Direction.right:
+      case Direction.up:
+      case Direction.down:
+        return lastDirection;
+      case Direction.upLeft:
+      case Direction.upRight:
+      case Direction.downLeft:
+      case Direction.downRight:
+        return lastDirectionHorizontal;
+    }
   }
 }

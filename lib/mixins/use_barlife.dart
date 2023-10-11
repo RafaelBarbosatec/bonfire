@@ -1,33 +1,32 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
-mixin UseBarLife on Attackable {
+// Mixin used to adds a BarLife to the attacable component
+mixin UseLifeBar on Attackable {
   BarLifeComponent? barLife;
   Vector2? _barLifeSize;
   Color _backgroundColor = const Color(0xFF000000);
   Color _borderColor = const Color(0xFFFFFFFF);
   double _borderWidth = 2;
-  double _margin = 4;
   List<Color>? _colors;
-  Vector2? _offset;
+  Vector2? _barPosition;
   Vector2? _textOffset;
   BorderRadius _borderRadius = BorderRadius.zero;
-  BarLifePorition _barLifePosition = BarLifePorition.bottom;
+  BarLifeDrawPorition _barLifeDrawPosition = BarLifeDrawPorition.bottom;
   TextStyle? _textStyle;
   bool _showLifeText = true;
   ValueGeneratorComponent? _valueGenerator;
   BarLifeTextBuilder? _barLifetextBuilder;
 
-  void setupBarLife({
+  void setupLifeBar({
     Vector2? size,
     Color? backgroundColor,
     Color? borderColor,
     double borderWidth = 2,
-    double margin = 4,
     List<Color>? colors,
     BorderRadius? borderRadius,
-    BarLifePorition barLifePosition = BarLifePorition.top,
-    Vector2? offset,
+    BarLifeDrawPorition barLifeDrawPosition = BarLifeDrawPorition.top,
+    Vector2? position,
     Vector2? textOffset,
     TextStyle? textStyle,
     bool showLifeText = true,
@@ -39,9 +38,8 @@ mixin UseBarLife on Attackable {
     _borderWidth = borderWidth;
     _colors = colors;
     _borderRadius = borderRadius ?? _borderRadius;
-    _barLifePosition = barLifePosition;
-    _margin = margin;
-    _offset = offset;
+    _barLifeDrawPosition = barLifeDrawPosition;
+    _barPosition = position;
     _textStyle = textStyle;
     _showLifeText = showLifeText;
     _textOffset = textOffset;
@@ -50,9 +48,10 @@ mixin UseBarLife on Attackable {
 
   @override
   void onMount() {
-    gameRef.add(
+    add(
       barLife = BarLifeComponent(
         target: this,
+        position: _barPosition,
         size: _barLifeSize ?? Vector2(width, 6),
         backgroundColor: _backgroundColor,
         borderColor: _borderColor,
@@ -61,13 +60,11 @@ mixin UseBarLife on Attackable {
         life: life,
         maxLife: maxLife,
         borderRadius: _borderRadius,
-        drawPosition: _barLifePosition,
-        margin: _margin,
-        offset: _offset,
+        drawPosition: _barLifeDrawPosition,
         textStyle: _textStyle,
         showLifeText: _showLifeText,
         textOffset: _textOffset,
-        barLifetextBuilder: _barLifetextBuilder,
+        barLifeTextBuilder: _barLifetextBuilder,
       ),
     );
     super.onMount();

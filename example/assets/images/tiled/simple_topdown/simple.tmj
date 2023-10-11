@@ -1,0 +1,41 @@
+{ "compressionlevel":-1,
+ "height":10,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[1, 2, 2, 2, 2, 2, 2, 2, 2, 3,
+            10, 37, 37, 37, 37, 37, 37, 37, 37, 10,
+            10, 37, 37, 37, 37, 37, 37, 37, 37, 10,
+            10, 37, 37, 37, 37, 37, 37, 37, 37, 10,
+            10, 37, 37, 37, 37, 37, 37, 37, 37, 10,
+            10, 37, 37, 37, 37, 37, 37, 37, 37, 10,
+            10, 37, 37, 37, 37, 37, 37, 37, 37, 10,
+            10, 37, 37, 37, 37, 37, 37, 37, 37, 10,
+            10, 37, 37, 37, 37, 37, 37, 37, 37, 10,
+            19, 20, 20, 20, 20, 20, 20, 20, 20, 21],
+         "height":10,
+         "id":1,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":10,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":2,
+ "nextobjectid":1,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.9.0",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"HouseTemplate_Tileset.tsj"
+        }],
+ "tilewidth":16,
+ "type":"map",
+ "version":"1.9",
+ "width":10
+}

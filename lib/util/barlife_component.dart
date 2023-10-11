@@ -1,17 +1,16 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
-enum BarLifePorition { top, bottom }
+enum BarLifeDrawPorition { top, bottom, left, right }
 
 typedef BarLifeTextBuilder = String Function(double life, double maxLife);
 
-class BarLifeComponent extends GameComponent with Follower {
-  Paint _barLiveBgPaint = Paint();
-  final Paint _barLivePaint = Paint()..style = PaintingStyle.fill;
-  Paint _barLiveBorderPaint = Paint();
+class BarLifeComponent extends GameComponent {
+  Paint _barLifeBgPaint = Paint();
+  final Paint _barLifePaint = Paint()..style = PaintingStyle.fill;
+  Paint _barLifeBorderPaint = Paint();
 
-  final BarLifePorition drawPosition;
-  final double margin;
+  final BarLifeDrawPorition drawPosition;
   final List<Color>? colors;
   final Color backgroundColor;
   final BorderRadius borderRadius;
@@ -19,7 +18,7 @@ class BarLifeComponent extends GameComponent with Follower {
   final Color borderColor;
   final bool showLifeText;
   final TextStyle? textStyle;
-  final BarLifeTextBuilder? barLifetextBuilder;
+  final BarLifeTextBuilder? barLifeTextBuilder;
   double _life = 100;
   double _maxLife = 100;
 
@@ -30,14 +29,14 @@ class BarLifeComponent extends GameComponent with Follower {
   Vector2 _textOffset = Vector2.zero();
 
   TextPaint _textConfig = TextPaint();
+  final GameComponent target;
 
   BarLifeComponent({
+    required this.target,
     required Vector2 size,
-    Attackable? target,
-    Vector2? offset,
+    Vector2? position,
     Vector2? textOffset,
-    this.drawPosition = BarLifePorition.top,
-    this.margin = 4,
+    this.drawPosition = BarLifeDrawPorition.top,
     this.colors,
     this.textStyle,
     this.showLifeText = true,
@@ -45,22 +44,22 @@ class BarLifeComponent extends GameComponent with Follower {
     this.borderRadius = BorderRadius.zero,
     this.borderWidth = 2,
     this.borderColor = const Color(0xFFFFFFFF),
-    this.barLifetextBuilder,
+    this.barLifeTextBuilder,
     double life = 100,
     double maxLife = 100,
   }) {
     _life = life;
     _maxLife = maxLife;
     _textOffset = textOffset ?? _textOffset;
-    _barLiveBorderPaint = _barLiveBorderPaint
+    _barLifeBorderPaint = _barLifeBorderPaint
       ..color = borderColor
       ..strokeWidth = borderWidth
       ..style = PaintingStyle.stroke;
 
-    _barLiveBgPaint = _barLiveBgPaint
+    _barLifeBgPaint = _barLifeBgPaint
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
-
+    this.position = position ?? Vector2.zero();
     this.size = size;
 
     _textConfig = TextPaint(
@@ -68,42 +67,45 @@ class BarLifeComponent extends GameComponent with Follower {
           TextStyle(fontSize: size.y * 0.8, color: Colors.white),
     );
 
-    _textSize = _textConfig.measureText(_getLifeText());
-
-    setupFollower(
-      target: target,
-      offset: offset,
-    );
+    _textSize = _textConfig.getLineMetrics(_getLifeText()).size;
   }
 
   @override
   void render(Canvas canvas) {
-    if (followerTarget == null || !show) {
-      return;
+    double yPosition = (y - height);
+
+    double xPosition = x;
+    switch (drawPosition) {
+      case BarLifeDrawPorition.top:
+        break;
+      case BarLifeDrawPorition.bottom:
+        yPosition = target.size.y + y;
+        break;
+      case BarLifeDrawPorition.left:
+        xPosition = -width + x;
+        yPosition = (target.size.y / 2 - height / 2) + y;
+        break;
+      case BarLifeDrawPorition.right:
+        xPosition = width + x;
+        yPosition = (target.size.y / 2 - height / 2) + y;
+        break;
     }
-    double yPosition = (y - height) - margin;
-
-    double xPosition = (followerTarget!.width - width) / 2 + x;
-
-    if (drawPosition == BarLifePorition.bottom) {
-      yPosition = followerTarget!.bottom + (followerOffset?.y ?? 0.0) + margin;
-    }
-
-    yPosition = yPosition;
 
     double currentBarLife = (_life * width) / _maxLife;
 
     if (borderWidth > 0) {
-      final RRect borderRect = borderRadius.toRRect(Rect.fromLTWH(
-        xPosition,
-        yPosition,
-        width,
-        height,
-      ));
+      final RRect borderRect = borderRadius.toRRect(
+        Rect.fromLTWH(
+          xPosition,
+          yPosition,
+          width,
+          height,
+        ),
+      );
 
       canvas.drawRRect(
         borderRect,
-        _barLiveBorderPaint,
+        _barLifeBorderPaint,
       );
     }
 
@@ -116,7 +118,7 @@ class BarLifeComponent extends GameComponent with Follower {
 
     canvas.drawRRect(
       bgRect,
-      _barLiveBgPaint,
+      _barLifeBgPaint,
     );
 
     final RRect lifeRect = borderRadius.toRRect(Rect.fromLTWH(
@@ -128,7 +130,7 @@ class BarLifeComponent extends GameComponent with Follower {
 
     canvas.drawRRect(
       lifeRect,
-      _barLivePaint
+      _barLifePaint
         ..color = _getColorLife(
           currentBarLife,
           width,
@@ -172,7 +174,7 @@ class BarLifeComponent extends GameComponent with Follower {
 
   void updateLife(double life) {
     _life = life;
-    _textSize = _textConfig.measureText(_getLifeText());
+    _textSize = _textConfig.getLineMetrics(_getLifeText()).size;
   }
 
   void updatemaxLife(double life) {
@@ -180,7 +182,7 @@ class BarLifeComponent extends GameComponent with Follower {
   }
 
   String _getLifeText() {
-    return barLifetextBuilder?.call(_life, _maxLife) ??
+    return barLifeTextBuilder?.call(_life, _maxLife) ??
         '${_life.toInt()}/${_maxLife.toInt()}';
   }
 }
