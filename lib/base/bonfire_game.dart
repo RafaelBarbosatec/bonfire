@@ -396,6 +396,21 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
   }
 
+  @override
+  Iterable<RaycastResult<ShapeHitbox>> raytrace(
+    Ray2 ray, {
+    int maxDepth = 10,
+    List<ShapeHitbox>? ignoreHitboxes,
+    List<RaycastResult<ShapeHitbox>>? out,
+  }) {
+    return collisionDetection.raytrace(
+      ray,
+      maxDepth: maxDepth,
+      ignoreHitboxes: ignoreHitboxes,
+      out: out,
+    );
+  }
+
   void _optimizeCollisionTree() {
     scheduleMicrotask(
       () => collisionDetection.broadphase.tree.optimize(),

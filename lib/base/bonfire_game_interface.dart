@@ -126,6 +126,13 @@ abstract class BonfireGameInterface {
     List<RaycastResult<ShapeHitbox>>? out,
   });
 
+  Iterable<RaycastResult<ShapeHitbox>> raytrace(
+    Ray2 ray, {
+    int maxDepth = 10,
+    List<ShapeHitbox>? ignoreHitboxes,
+    List<RaycastResult<ShapeHitbox>>? out,
+  });
+
   void startScene(List<SceneAction> actions, {void Function()? onComplete});
   void stopScene();
 

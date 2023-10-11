@@ -294,6 +294,7 @@ extension GameComponentExtensions on GameComponent {
     double? angle,
     Anchor? anchor,
     int? priority,
+    ComponentKey? key,
   }) {
     add(
       ParticleSystemComponent(
@@ -304,6 +305,7 @@ extension GameComponentExtensions on GameComponent {
         angle: angle,
         anchor: anchor,
         priority: priority,
+        key: key,
       ),
     );
   }

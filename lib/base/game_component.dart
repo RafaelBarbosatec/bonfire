@@ -165,7 +165,7 @@ abstract class GameComponent extends PositionComponent
     Vector2 direction, {
     Vector2? origin,
     double? maxDistance,
-    List<ShapeHitbox> ignoreHitboxes = const [],
+    List<ShapeHitbox>? ignoreHitboxes,
   }) {
     try {
       var sensorHitBox = <ShapeHitbox>[];
@@ -178,11 +178,67 @@ abstract class GameComponent extends PositionComponent
         ignoreHitboxes: [
           ...children.query<ShapeHitbox>(),
           ...sensorHitBox,
-          ...ignoreHitboxes,
+          ...ignoreHitboxes ?? [],
         ],
       );
     } catch (e) {
       return null;
+    }
+  }
+
+  List<RaycastResult<ShapeHitbox>> raycastAll(
+    int numberOfRays, {
+    Vector2? origin,
+    double? maxDistance,
+    double startAngle = 0,
+    double sweepAngle = tau,
+    List<Ray2>? rays,
+    List<ShapeHitbox>? ignoreHitboxes,
+  }) {
+    try {
+      var sensorHitBox = <ShapeHitbox>[];
+      gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
+        sensorHitBox.addAll(e.children.query<ShapeHitbox>());
+      });
+      return gameRef.raycastAll(
+        origin ?? absoluteCenter,
+        numberOfRays: numberOfRays,
+        maxDistance: maxDistance,
+        startAngle: startAngle,
+        sweepAngle: sweepAngle,
+        rays: rays,
+        ignoreHitboxes: [
+          ...children.query<ShapeHitbox>(),
+          ...sensorHitBox,
+          ...ignoreHitboxes ?? [],
+        ],
+      );
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Iterable<RaycastResult<ShapeHitbox>> raytrace(
+    Ray2 ray, {
+    int maxDepth = 10,
+    List<ShapeHitbox>? ignoreHitboxes,
+  }) {
+    try {
+      var sensorHitBox = <ShapeHitbox>[];
+      gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
+        sensorHitBox.addAll(e.children.query<ShapeHitbox>());
+      });
+      return gameRef.raytrace(
+        ray,
+        maxDepth: maxDepth,
+        ignoreHitboxes: [
+          ...children.query<ShapeHitbox>(),
+          ...sensorHitBox,
+          ...ignoreHitboxes ?? [],
+        ],
+      );
+    } catch (e) {
+      return [];
     }
   }
 }
