@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: const Text('Bonfire examples (Under construction)'),
+        title: const Text('Bonfire examples'),
       ),
       drawer: HomeDrawer(
         itemSelected: itemSelected,
