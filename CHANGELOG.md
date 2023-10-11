@@ -17,14 +17,13 @@
     - To add collisions on your GameComponent, use a `ShapeHitbox`. See the [docs](https://docs.flame-engine.org/latest/flame/collision_detection.html#shapehitbox) for more info.
     - You can listen the collision callbacks by overriding `onCollision`, `onCollisionEnd` and `onCollisionStart`.
     - To block the movement of components when colliding, use the mixin `BlockMovementCollision`.
-  - `BonfireInjector().put` now is a Factory.
   - Remove extension method `followComponent`.
   - Remove `JoystickMoveToPosition`. Use `MoveCameraUsingGesture` with `TapGesture` instead.
   - Mixin `MoveToPositionAlongThePath` was renamed to `PathFinding`, and `setupMoveToPositionAlongThePath` to `setupPathFinding`.
   - Rename `keyboardDirectionalType` to `directionalKeys` in `KeyboardConfig`. Now it is expected a `KeyboardDirectionalKeys`.
   - Remove `UseStateController`.
   - Remove `StateControllerConsumer`.
-  - Remove `BonfireInjector`. Is recomented use [get_it](get_it: ^7.6.4).
+  - Remove `BonfireInjector`. Is recomented use [get_it](https://pub.dev/packages/get_it).
 
     
 - ***FEATURES***
