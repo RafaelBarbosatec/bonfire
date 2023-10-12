@@ -16,6 +16,8 @@ class PlayerDialog {
       target: first,
       zoom: 2,
       onComplete: () {
+        gameRef.pauseEngine();
+
         TalkDialog.show(
           gameRef.context,
           [
@@ -63,7 +65,10 @@ class PlayerDialog {
               personSayDirection: PersonSayDirection.RIGHT,
             ),
           ],
-          onClose: onClose,
+          onClose: () {
+            gameRef.resumeEngine();
+            onClose();
+          },
           onFinish: () {
             // ignore: avoid_print
             print('finish talk');
