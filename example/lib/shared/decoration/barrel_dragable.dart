@@ -4,51 +4,35 @@ import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class BarrelDraggable extends GameDecoration
-    with Movement, BlockMovementCollision {
+    with DragGesture, Movement, Pushable, BlockMovementCollision, HandleForces {
+  late TextPaint _textConfig;
+  String text = 'Drag here';
+  double xCenter = 0;
+  double yCenter = 0;
+
   BarrelDraggable(Vector2 position)
       : super.withSprite(
           sprite: CommonSpriteSheet.barrelSprite,
           position: position,
           size: Vector2.all(DungeonMap.tileSize),
-        );
-
-  @override
-  void onBlockedMovement(
-      PositionComponent other, Direction? direction, Vector2 lastDisplacement) {
-    Vector2? positionToMove;
-    switch (direction) {
-      case Direction.left:
-        positionToMove = position.translated(DungeonMap.tileSize, 0);
-        break;
-      case Direction.right:
-        positionToMove = position.translated(-DungeonMap.tileSize, 0);
-        break;
-      case Direction.up:
-        positionToMove = position.translated(0, DungeonMap.tileSize);
-        break;
-      case Direction.down:
-        positionToMove = position.translated(0, -DungeonMap.tileSize);
-        break;
-      default:
-    }
-    if (positionToMove != null) {
-      add(
-        MoveToEffect(
-          positionToMove,
-          EffectController(duration: 0.5, curve: Curves.decelerate),
-        ),
-      );
-    }
-    super.onBlockedMovement(other, direction, lastDisplacement);
+        ) {
+    _textConfig = TextPaint(
+      style: TextStyle(color: Colors.white, fontSize: width / 4),
+    );
+    addForce(ResistanceForce2D(id: 'attr', value: Vector2.all(5)));
   }
 
   @override
   Future<void> onLoad() {
+    add(RectangleHitbox(size: size / 1.5, position: size / 8.5, isSolid: true));
+    final textSize = _textConfig.getLineMetrics(text).size;
+    xCenter = (width - textSize.x) / 2;
+    yCenter = (height - textSize.y) / 2;
     add(
-      RectangleHitbox(
-        size: size / 1.5,
-        position: size / 8.5,
-        isSolid: true,
+      TextComponent(
+        text: text,
+        position: Vector2(xCenter, 2.5 * yCenter),
+        textRenderer: _textConfig,
       ),
     );
     return super.onLoad();
