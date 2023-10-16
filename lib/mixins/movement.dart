@@ -43,13 +43,16 @@ mixin Movement on GameComponent {
     double angle,
   ) {}
 
-  Vector2 onTransformVelocity(double dt) {
+  Vector2 onVelocityTransform(double dt) {
     return velocity;
   }
 
   void onApplyDisplacement(double dt) {
-    position += lastDisplacement = onTransformVelocity(dt) * dt;
-    _updateLastDirection(lastDisplacement);
+    final transformedVelocity = onVelocityTransform(dt);
+    if (!transformedVelocity.isZero()) {
+      position += lastDisplacement = transformedVelocity * dt;
+      _updateLastDirection(lastDisplacement);
+    }
   }
 
   /// Method used to translate component
@@ -204,6 +207,7 @@ mixin Movement on GameComponent {
     Direction direction, {
     bool enabledDiagonal = true,
   }) {
+    setZeroVelocity();
     switch (direction) {
       case Direction.left:
         moveLeft();
@@ -249,7 +253,6 @@ mixin Movement on GameComponent {
   }
 
   void _updateLastDirection(Vector2 velocity) {
-    if (velocity.isZero()) return;
     velocityRadAngle = atan2(velocity.y, velocity.x);
 
     if (velocity.x > 0) {
@@ -359,38 +362,39 @@ mixin Movement on GameComponent {
       return false;
     } else {
       if (diffX.abs() > dtDiagonalSpeed && diffY.abs() > dtDiagonalSpeed) {
+        final speedOnce = dtDiagonalSpeed / dtUpdate;
         if (diffX > 0 && diffY > 0) {
           if (diffX.abs() < dtDiagonalSpeed * 2) {
-            moveRightOnce(speed: speed);
+            moveRightOnce(speed: speedOnce);
           } else if (diffY.abs() < dtDiagonalSpeed * 2) {
-            moveDownOnce(speed: speed);
+            moveDownOnce(speed: speedOnce);
           } else {
             moveDownRight(speed: speed);
           }
           return true;
         } else if (diffX < 0 && diffY > 0) {
           if (diffX.abs() < dtDiagonalSpeed * 2) {
-            moveLeftOnce(speed: speed);
+            moveLeftOnce(speed: speedOnce);
           } else if (diffY.abs() < dtDiagonalSpeed * 2) {
-            moveDownOnce(speed: speed);
+            moveDownOnce(speed: speedOnce);
           } else {
             moveDownLeft(speed: speed);
           }
           return true;
         } else if (diffX > 0 && diffY < 0) {
           if (diffX.abs() < dtDiagonalSpeed * 2) {
-            moveRightOnce(speed: speed);
+            moveRightOnce(speed: speedOnce);
           } else if (diffY.abs() < dtDiagonalSpeed * 2) {
-            moveUpOnce(speed: speed);
+            moveUpOnce(speed: speedOnce);
           } else {
             moveUpRight(speed: speed);
           }
           return true;
         } else if (diffX < 0 && diffY < 0) {
           if (diffX.abs() < dtDiagonalSpeed * 2) {
-            moveLeftOnce(speed: speed);
+            moveLeftOnce(speed: speedOnce);
           } else if (diffY.abs() < dtDiagonalSpeed * 2) {
-            moveUpOnce(speed: speed);
+            moveUpOnce(speed: speedOnce);
           } else {
             moveUpLeft(speed: speed);
           }
