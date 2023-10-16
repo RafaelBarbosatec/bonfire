@@ -48,8 +48,11 @@ mixin Movement on GameComponent {
   }
 
   void onApplyDisplacement(double dt) {
-    position += lastDisplacement = onTransformVelocity(dt) * dt;
-    _updateLastDirection(lastDisplacement);
+    final veloDt = onTransformVelocity(dt) * dt;
+    if (!veloDt.isZero()) {
+      position += lastDisplacement = veloDt;
+      _updateLastDirection(lastDisplacement);
+    }
   }
 
   /// Method used to translate component
@@ -249,7 +252,6 @@ mixin Movement on GameComponent {
   }
 
   void _updateLastDirection(Vector2 velocity) {
-    if (velocity.isZero()) return;
     velocityRadAngle = atan2(velocity.y, velocity.x);
 
     if (velocity.x > 0) {

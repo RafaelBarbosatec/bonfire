@@ -1,3 +1,6 @@
+# next
+- `Movement` improvements.
+
 ## 3.0.0
 
 - Update Flame to `1.9.1`.
