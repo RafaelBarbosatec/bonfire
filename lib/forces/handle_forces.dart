@@ -29,7 +29,7 @@ mixin HandleForces on Movement {
   }
 
   @override
-  Vector2 onTransformVelocity(double dt) {
+  Vector2 onVelocityTransform(double dt) {
     final oldVelocity = velocity.clone();
     List<Force2D> mergeForces = [..._forces, ...gameRef.globalForces];
     _accelerationOfForces = _getAccelerationForces(mergeForces, dt);

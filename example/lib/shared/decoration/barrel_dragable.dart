@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 class BarrelDraggable extends GameDecoration
     with Movement, BlockMovementCollision {
-  bool enableBlock = true;
   BarrelDraggable(Vector2 position)
       : super.withSprite(
           sprite: CommonSpriteSheet.barrelSprite,
@@ -14,63 +13,33 @@ class BarrelDraggable extends GameDecoration
         );
 
   @override
-  bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
-    if (enableBlock) {
-      return super.onBlockMovement(intersectionPoints, other);
-    }
-    return false;
-  }
-
-  @override
   void onBlockedMovement(
       PositionComponent other, Direction? direction, Vector2 lastDisplacement) {
+    Vector2? positionToMove;
     switch (direction) {
       case Direction.left:
-        translate(Vector2(DungeonMap.tileSize, 0));
+        positionToMove = position.translated(DungeonMap.tileSize, 0);
         break;
       case Direction.right:
-        translate(Vector2(-DungeonMap.tileSize, 0));
+        positionToMove = position.translated(-DungeonMap.tileSize, 0);
         break;
       case Direction.up:
-        translate(Vector2(0, DungeonMap.tileSize));
+        positionToMove = position.translated(0, DungeonMap.tileSize);
         break;
       case Direction.down:
-        translate(Vector2(0, -DungeonMap.tileSize));
+        positionToMove = position.translated(0, -DungeonMap.tileSize);
         break;
       default:
     }
-    _correctPosition();
+    if (positionToMove != null) {
+      add(
+        MoveToEffect(
+          positionToMove,
+          EffectController(duration: 0.5, curve: Curves.decelerate),
+        ),
+      );
+    }
     super.onBlockedMovement(other, direction, lastDisplacement);
-  }
-
-  void _correctPosition() {
-    double restX = x % DungeonMap.tileSize;
-    double restY = y % DungeonMap.tileSize;
-    if (restX < DungeonMap.tileSize / 2) {
-      restX = -restX;
-    } else {
-      restX = DungeonMap.tileSize - restX;
-    }
-
-    if (restY < DungeonMap.tileSize / 2) {
-      restY = -restY;
-    } else {
-      restY = DungeonMap.tileSize - restY;
-    }
-
-    enableBlock = false;
-    add(MoveToEffect(
-      position.translated(restX, restY),
-      EffectController(duration: 0.5, curve: Curves.decelerate),
-      onComplete: () {
-        enableBlock = true;
-      },
-    ));
-
-    // position += Vector2(
-    //   restX,
-    //   restY,
-    // );
   }
 
   @override
