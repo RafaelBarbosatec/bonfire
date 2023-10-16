@@ -1,5 +1,5 @@
 ## 3.0.1
-- `Movement` improvements. Fix bug when use this mixin and the `MoveEffect` the `MoveEffect`` not work very well.
+- `Movement` improvements. Fix bug when use this mixin and the `MoveEffect`.
 
 ## 3.0.0
 
