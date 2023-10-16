@@ -7,7 +7,7 @@ on:
     types: [opened,ready_for_review,synchronize]
 
 env:
-  flutter_version: "3.10.2"
+  flutter_version: "3.13.0"
     
 jobs:
   test-analyze:
