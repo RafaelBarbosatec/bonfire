@@ -26,9 +26,6 @@ class LightingComponent extends GameComponent implements LightingInterface {
   @override
   Color? color;
 
-  @override
-  PositionType get positionType => PositionType.viewport;
-
   LightingComponent({this.color});
 
   @override

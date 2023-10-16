@@ -1,6 +1,7 @@
 ## 3.0.1
+- Update Flame to `1.10.0`.
 - `Movement` improvements.
--  Fix bug when use `Movement` mixin and the `MoveEffect`.
+- Fix bug when use `Movement` mixin and the `MoveEffect`.
 
 ## 3.0.0
 

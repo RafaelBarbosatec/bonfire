@@ -1,11 +1,10 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/joystick/joystick.dart';
 import 'package:bonfire/input/keyboard_listener.dart';
+import 'package:bonfire/joystick/joystick.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flame/components.dart';
 
 enum JoystickMoveDirectional {
   MOVE_UP,
@@ -95,9 +94,6 @@ abstract class JoystickController extends GameComponent
     }
     return super.priority;
   }
-
-  @override
-  PositionType get positionType => PositionType.viewport;
 
   @override
   bool hasGesture() => true;
