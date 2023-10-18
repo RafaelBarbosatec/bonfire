@@ -277,20 +277,22 @@ extension PositionComponentExt on PositionComponent {
     bool calculatePosition = false,
   }) {
     double bleedingPixel = max(size.x, size.y) * factor;
-    if (bleedingPixel > 2) {
-      bleedingPixel = 2;
-    }
+
+    bleedingPixel = bleedingPixel > 2 ? 2 : bleedingPixel;
+    bleedingPixel = bleedingPixel < 0.6 ? 0.6 : bleedingPixel;
+    bool xIsEven = position.x % 2 == 0;
+    bool yIsEven = position.y % 2 == 0;
     Vector2 baseP = position;
     if (calculatePosition) {
       baseP = Vector2(position.x * size.x, position.y * size.y);
     }
     this.position = Vector2(
-      baseP.x - (baseP.x % 2 == 0 ? (bleedingPixel / 2) : 0) + offsetX,
-      baseP.y - (baseP.y % 2 == 0 ? (bleedingPixel / 2) : 0) + offsetY,
+      baseP.x - (xIsEven ? (bleedingPixel / 2) : 0) + offsetX,
+      baseP.y - (yIsEven ? (bleedingPixel / 2) : 0) + offsetY,
     );
     this.size = Vector2(
-      size.x + (baseP.x % 2 == 0 ? bleedingPixel : 0),
-      size.y + (baseP.y % 2 == 0 ? bleedingPixel : 0),
+      size.x + (xIsEven ? bleedingPixel : 0),
+      size.y + (yIsEven ? bleedingPixel : 0),
     );
   }
 }

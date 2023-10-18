@@ -1,3 +1,6 @@
+## NEXT
+- `BleedingPixel` improvements.
+
 ## 3.0.1
 - Update Flame to `1.10.0`.
 - `Movement` improvements.
