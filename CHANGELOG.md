@@ -1,5 +1,6 @@
 ## NEXT
 - `BleedingPixel` improvements.
+- Adds `orientation` param in `getZoomFromMaxVisibleTile`.
 
 ## 3.0.1
 - Update Flame to `1.10.0`.
