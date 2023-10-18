@@ -55,13 +55,6 @@ mixin Movement on GameComponent {
     }
   }
 
-  @override
-  set position(Vector2 position) {
-    lastDisplacement = position - this.position;
-    _updateLastDirection(lastDisplacement);
-    super.position = position;
-  }
-
   /// Method used to translate component
   void translate(Vector2 displacement) {
     lastDisplacement = displacement;
