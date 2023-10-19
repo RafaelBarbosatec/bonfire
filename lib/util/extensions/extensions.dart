@@ -15,6 +15,8 @@ export 'npc/npc_extensions.dart';
 export 'player/player_extensions.dart';
 export 'player/rotation_player_extensions.dart';
 
+typedef BoolCallback = bool Function();
+
 extension BonfireImageExtension on Image {
   SpriteAnimation getAnimation({
     required Vector2 size,

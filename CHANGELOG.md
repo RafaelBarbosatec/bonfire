@@ -1,7 +1,11 @@
 ## NEXT
 - `BleedingPixel` improvements.
-- `BlockMovementCollision` improvements. Remove `lastDisplacement` from `onBlockedMovement` method.
 - Adds `orientation` param in `getZoomFromMaxVisibleTile`.
+- Adds methods `showStroke` and `hideStroke` in `SimpleDirectionAnimation`
+- Adds methods `showSpriteStroke` and `hideSpriteStroke` in mixin `UseSprite`
+- Adds methods `showAnimationStroke` and `hideAnimationStroke` in mixin `UseSpriteAnimation`
+- BREAK: `BlockMovementCollision` improvements. Remove `lastDisplacement` from `onBlockedMovement` method.
+- BREAK: methos `seeAndMoveTo...` improvements. `notObserved` now return a bool (true to stop move).
 
 ## 3.0.1
 - Update Flame to `1.10.0`.

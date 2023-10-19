@@ -57,6 +57,7 @@ class Goblin extends SimpleEnemy
                 speed: speed / 2,
                 maxDistance: (DungeonMap.tileSize * 3).toInt(),
               );
+              return false;
             },
           );
         },

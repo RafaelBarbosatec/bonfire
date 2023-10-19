@@ -17,6 +17,11 @@ import 'package:flame/components.dart';
 /// Rafaelbarbosatec
 /// on 04/02/22
 mixin UseSpriteAnimation on GameComponent {
+  Paint? _strockePaint;
+  double _strokeWidth = 0;
+  Vector2 _strokeSize = Vector2.zero();
+  Vector2 _strokePosition = Vector2.zero();
+
   /// set Animation that will be drawn on the screen.
   void setAnimation(
     SpriteAnimation? animation, {
@@ -44,12 +49,25 @@ mixin UseSpriteAnimation on GameComponent {
     super.render(canvas);
     if (isVisible && !isRemoving) {
       if (_fastAnimation != null) {
+        if (_strockePaint != null) {
+          _fastAnimation?.render(
+            canvas,
+            position: _strokePosition,
+            size: _strokeSize,
+            overridePaint: _strockePaint,
+          );
+        }
         _fastAnimation?.render(canvas, overridePaint: paint);
       } else {
-        _animationRender?.render(
-          canvas,
-          overridePaint: paint,
-        );
+        if (_strockePaint != null) {
+          _animationRender?.render(
+            canvas,
+            position: _strokePosition,
+            size: _strokeSize,
+            overridePaint: _strockePaint,
+          );
+        }
+        _animationRender?.render(canvas, overridePaint: paint);
       }
     }
   }
@@ -63,6 +81,12 @@ mixin UseSpriteAnimation on GameComponent {
       } else {
         _animationRender?.update(dt);
       }
+    }
+    if (_strokeSize.isZero()) {
+      _strokeSize = Vector2(
+        size.x + _strokeWidth * 2,
+        size.y + _strokeWidth * 2,
+      );
     }
   }
 
@@ -98,4 +122,25 @@ mixin UseSpriteAnimation on GameComponent {
   bool get isAnimationLastFrame => _animationRender?.isLastFrame ?? false;
   int get animationCurrentIndex => _animationRender?.currentIndex ?? 0;
   bool get isPaused => _animationRender?.isPaused ?? false;
+
+  void showAnimationStroke(Color color, double width) {
+    if (_strockePaint != null &&
+        _strokeWidth == width &&
+        _strockePaint?.color == color) {
+      return;
+    }
+    _strokeWidth = width;
+    _strokePosition = Vector2.all(-_strokeWidth);
+    _strokeSize = Vector2.zero();
+    _strockePaint = Paint()
+      ..color = color
+      ..colorFilter = ColorFilter.mode(
+        color,
+        BlendMode.srcATop,
+      );
+  }
+
+  void hideAnimationStroke() {
+    _strockePaint = null;
+  }
 }

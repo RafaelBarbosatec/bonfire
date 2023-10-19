@@ -47,7 +47,8 @@ extension NpcExtensions on Npc {
   /// [angle] in radians. is automatically picked up using the component's direction.
   Shape? seeAndMoveToPlayer({
     Function(Player)? closePlayer,
-    VoidCallback? notObserved,
+    // return true to stop move.
+    BoolCallback? notObserved,
     VoidCallback? observed,
     VoidCallback? notCanMove,
     double radiusVision = 32,
@@ -71,9 +72,8 @@ extension NpcExtensions on Npc {
         );
       },
       notObserved: () {
-        if (notObserved != null) {
-          notObserved();
-        } else {
+        bool stop = notObserved?.call() ?? true;
+        if (stop) {
           stopMove();
         }
       },
@@ -85,7 +85,8 @@ extension NpcExtensions on Npc {
   /// [angle] in radians. is automatically picked up using the component's direction.
   void seeAndMoveToEnemy({
     required Function(Enemy) closeEnemy,
-    VoidCallback? notObserved,
+    // return true to stop move.
+    BoolCallback? notObserved,
     VoidCallback? observed,
     VoidCallback? notCanMove,
     double radiusVision = 32,
@@ -111,9 +112,8 @@ extension NpcExtensions on Npc {
         );
       },
       notObserved: () {
-        if (notObserved != null) {
-          notObserved();
-        } else {
+        bool stop = notObserved?.call() ?? true;
+        if (stop) {
           stopMove();
         }
       },
@@ -125,7 +125,8 @@ extension NpcExtensions on Npc {
   /// [angle] in radians. is automatically picked up using the component's direction.
   void seeAndMoveToAlly({
     required Function(Ally) closeAlly,
-    VoidCallback? notObserved,
+    // return true to stop move.
+    BoolCallback? notObserved,
     VoidCallback? observed,
     VoidCallback? notCanMove,
     double radiusVision = 32,
@@ -151,9 +152,8 @@ extension NpcExtensions on Npc {
         );
       },
       notObserved: () {
-        if (notObserved != null) {
-          notObserved();
-        } else {
+        bool stop = notObserved?.call() ?? true;
+        if (stop) {
           stopMove();
         }
       },

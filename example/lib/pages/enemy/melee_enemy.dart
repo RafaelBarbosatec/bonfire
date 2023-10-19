@@ -16,13 +16,15 @@ class MeleeEnemy extends SimpleEnemy {
 
   @override
   void update(double dt) {
-    seeAndMoveToPlayer(
-      closePlayer: (p) {
-        if (checkInterval('attack', 600, dt)) {
-          _playAttackAnimation();
-        }
-      },
-    );
+    seeAndMoveToPlayer(closePlayer: (p) {
+      animation?.showStroke(Colors.white, 1);
+      if (checkInterval('attack', 600, dt)) {
+        _playAttackAnimation();
+      }
+    }, notObserved: () {
+      animation?.hideStroke();
+      return true;
+    });
     super.update(dt);
   }
 
@@ -30,6 +32,7 @@ class MeleeEnemy extends SimpleEnemy {
   Future<void> onLoad() {
     /// Adds rectangle collision
     add(RectangleHitbox(size: size / 2, position: size / 4));
+    animation?.showStroke(Colors.white, 1);
     _addsText();
     return super.onLoad();
   }

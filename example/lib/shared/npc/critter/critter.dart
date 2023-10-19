@@ -27,6 +27,7 @@ class Critter extends SimpleNpc
           speed: speed / 10,
           maxDistance: (DungeonMap.tileSize).toInt(),
         );
+        return false;
       },
     );
     super.update(dt);

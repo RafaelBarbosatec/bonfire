@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bonfire/bonfire.dart';
 
 /// Mixin responsible for adding animations to movements
@@ -86,9 +88,9 @@ mixin DirectionAnimation on Movement {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
     await animation?.onLoad(gameRef);
     idle();
+    return super.onLoad();
   }
 
   Future<void> replaceAnimation(
