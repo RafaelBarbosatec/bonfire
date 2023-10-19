@@ -8,7 +8,7 @@ mixin BlockMovementCollision on Movement {
   final _collisionUtil = CollisionUtil();
 
   Rect? _shapeRectNormalized;
-  Direction? lasDirectionCollision;
+  Direction? _lasDirectionCollision;
   Vector2 _lastDisplacementCollision = Vector2.zero();
   Vector2 midPoint = Vector2.zero();
 
@@ -21,18 +21,19 @@ mixin BlockMovementCollision on Movement {
 
   void onBlockedMovement(
     PositionComponent other,
-    Direction? collisionDirection,
+    Direction? direction,
   ) {
     final reverseDisplacement = _adjustDisplacement(
       _lastDisplacementCollision,
-      collisionDirection,
+      direction,
     );
 
-    position += reverseDisplacement * -1;
+    superPosition = position - reverseDisplacement;
     angle = lastAngle;
+
     stopFromCollision(
-      isX: reverseDisplacement.x.abs() > 0,
-      isY: reverseDisplacement.y.abs() > 0,
+      isX: direction?.isSameXDirection(_lastDisplacementCollision.x) == true,
+      isY: direction?.isSameYDirection(_lastDisplacementCollision.y) == true,
     );
   }
 
@@ -58,14 +59,14 @@ mixin BlockMovementCollision on Movement {
       midPoint = midPoint - position;
       midPoint.lerp(_shapeRectNormalized!.center.toVector2(), 0.2);
 
-      lasDirectionCollision = _collisionUtil.getDirectionCollision(
+      _lasDirectionCollision = _collisionUtil.getDirectionCollision(
         _shapeRectNormalized!,
         midPoint,
       );
 
       onBlockedMovement(
         other,
-        lasDirectionCollision,
+        _lasDirectionCollision,
       );
     }
   }

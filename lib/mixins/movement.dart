@@ -50,9 +50,20 @@ mixin Movement on GameComponent {
   void onApplyDisplacement(double dt) {
     final transformedVelocity = onVelocityTransform(dt);
     if (!transformedVelocity.isZero()) {
-      position += lastDisplacement = transformedVelocity * dt;
+      super.position += lastDisplacement = transformedVelocity * dt;
       _updateLastDirection(lastDisplacement);
+    } else {
+      lastDisplacement = Vector2.zero();
     }
+  }
+
+  set superPosition(Vector2 position) {
+    super.position = position;
+  }
+
+  @override
+  set position(Vector2 newP) {
+    translate(newP - this.position);
   }
 
   /// Method used to translate component
