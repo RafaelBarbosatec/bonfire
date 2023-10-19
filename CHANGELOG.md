@@ -1,6 +1,6 @@
 ## NEXT
 - `BleedingPixel` improvements.
-- `BlockMovementCollision` improvements.
+- `BlockMovementCollision` improvements. Remove `lastDisplacement` from `onBlockedMovement` method.
 - Adds `orientation` param in `getZoomFromMaxVisibleTile`.
 
 ## 3.0.1
