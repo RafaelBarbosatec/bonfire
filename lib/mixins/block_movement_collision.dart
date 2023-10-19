@@ -9,6 +9,8 @@ mixin BlockMovementCollision on Movement {
 
   Rect? _shapeRectNormalized;
   Direction? lasDirectionCollision;
+  Vector2 _lastDisplacementCollision = Vector2.zero();
+  Vector2 midPoint = Vector2.zero();
 
   bool onBlockMovement(
     Set<Vector2> intersectionPoints,
@@ -19,12 +21,11 @@ mixin BlockMovementCollision on Movement {
 
   void onBlockedMovement(
     PositionComponent other,
-    Direction? direction,
-    Vector2 lastDisplacement,
+    Direction? collisionDirection,
   ) {
     final reverseDisplacement = _adjustDisplacement(
-      lastDisplacement,
-      direction,
+      _lastDisplacementCollision,
+      collisionDirection,
     );
 
     position += reverseDisplacement * -1;
@@ -35,38 +36,37 @@ mixin BlockMovementCollision on Movement {
     );
   }
 
-  Vector2 midPoint = Vector2.zero();
-
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    bool stopOtherMovement = true;
+    if (other is Sensor) return;
     bool stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
         : true;
-    if (stopMovement && other is BlockMovementCollision) {
-      stopOtherMovement = other.onBlockMovement(intersectionPoints, this);
+    bool stopOtherMovement = other is BlockMovementCollision
+        ? other.onBlockMovement(intersectionPoints, this)
+        : true;
+    if (!stopMovement || !stopOtherMovement) {
+      return;
     }
-    if (stopMovement && stopOtherMovement && other is! Sensor) {
-      if (_shapeRectNormalized != null) {
-        midPoint = intersectionPoints.reduce(
-          (value, element) => value + element,
-        );
-        midPoint /= intersectionPoints.length.toDouble();
-        midPoint = midPoint - position;
-        midPoint.lerp(_shapeRectNormalized!.center.toVector2(), 0.2);
+    _lastDisplacementCollision = lastDisplacement.clone();
+    if (_shapeRectNormalized != null) {
+      midPoint = intersectionPoints.reduce(
+        (value, element) => value + element,
+      );
+      midPoint /= intersectionPoints.length.toDouble();
+      midPoint = midPoint - position;
+      midPoint.lerp(_shapeRectNormalized!.center.toVector2(), 0.2);
 
-        lasDirectionCollision = _collisionUtil.getDirectionCollision(
-          _shapeRectNormalized!,
-          midPoint,
-        );
+      lasDirectionCollision = _collisionUtil.getDirectionCollision(
+        _shapeRectNormalized!,
+        midPoint,
+      );
 
-        onBlockedMovement(
-          other,
-          lasDirectionCollision,
-          lastDisplacement.clone(),
-        );
-      }
+      onBlockedMovement(
+        other,
+        lasDirectionCollision,
+      );
     }
   }
 

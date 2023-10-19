@@ -1,5 +1,6 @@
 ## NEXT
 - `BleedingPixel` improvements.
+- `BlockMovementCollision` improvements.
 - Adds `orientation` param in `getZoomFromMaxVisibleTile`.
 
 ## 3.0.1

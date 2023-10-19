@@ -23,7 +23,6 @@ mixin BouncingObject on BlockMovementCollision {
   void onBlockedMovement(
     PositionComponent other,
     Direction? direction,
-    Vector2 lastDisplacement,
   ) {
     if (onBouncingCollision(other) && !isStoped() && _bouncingObjectEnabled) {
       if (direction == Direction.left || direction == Direction.right) {
@@ -35,7 +34,7 @@ mixin BouncingObject on BlockMovementCollision {
       }
       _countFrameCollisionStoped = 0;
     } else {
-      super.onBlockedMovement(other, direction, lastDisplacement);
+      super.onBlockedMovement(other, direction);
     }
   }
 

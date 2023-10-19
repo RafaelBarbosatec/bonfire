@@ -41,9 +41,8 @@ mixin Jumper on Movement, BlockMovementCollision {
   void onBlockedMovement(
     PositionComponent other,
     Direction? direction,
-    Vector2 lastDisplacement,
   ) {
-    super.onBlockedMovement(other, direction, lastDisplacement);
+    super.onBlockedMovement(other, direction);
     if (jumping &&
         lastDirectionVertical == Direction.down &&
         direction == Direction.down) {
