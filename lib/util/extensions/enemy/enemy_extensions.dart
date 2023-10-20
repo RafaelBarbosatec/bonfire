@@ -89,7 +89,8 @@ extension EnemyExtensions on Enemy {
   /// [angle] in radians. is automatically picked up using the component's direction.
   void seeAndMoveToAttackRange({
     Function(Player)? positioned,
-    VoidCallback? notObserved,
+    // return true to stop move.
+    BoolCallback? notObserved,
     Function(Player)? observed,
     double radiusVision = 32,
     double? visionAngle,
@@ -151,9 +152,8 @@ extension EnemyExtensions on Enemy {
         }
       },
       notObserved: () {
-        if (notObserved != null) {
-          notObserved();
-        } else {
+        bool stop = notObserved?.call() ?? true;
+        if (stop) {
           stopMove(forceIdle: true);
         }
       },

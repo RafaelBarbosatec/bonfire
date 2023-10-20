@@ -39,12 +39,23 @@ E? firstWhere<E>(
 double getZoomFromMaxVisibleTile(
   BuildContext context,
   double tileSize,
-  int maxTile,
-) {
+  int maxTile, {
+  Orientation? orientation,
+}) {
   final screenSize = MediaQuery.of(context).size;
   if (screenSize == Size.zero || screenSize == Size.infinite) {
     return 1;
   }
-  final maxSize = max(screenSize.width, screenSize.height);
+  double maxSize = 0;
+  switch (orientation) {
+    case Orientation.portrait:
+      maxSize = screenSize.height;
+      break;
+    case Orientation.landscape:
+      maxSize = screenSize.width;
+      break;
+    default:
+      maxSize = max(screenSize.width, screenSize.height);
+  }
   return maxSize / (tileSize * maxTile);
 }

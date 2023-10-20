@@ -36,12 +36,17 @@ class SpriteAnimationRender {
     _animationTicker?.paused = !autoPlay;
   }
 
-  void render(Canvas canvas, {Paint? overridePaint}) {
+  void render(
+    Canvas canvas, {
+    Paint? overridePaint,
+    Vector2? size,
+    Vector2? position,
+  }) {
     _animationTicker?.getSprite().render(
           canvas,
-          size: size,
+          size: size ?? this.size,
           overridePaint: overridePaint,
-          position: position,
+          position: position ?? this.position,
         );
   }
 

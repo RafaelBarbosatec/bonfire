@@ -50,6 +50,11 @@ class SimpleDirectionAnimation {
 
   bool _playing = true;
 
+  Paint? _strockePaint;
+  double _strokeWidth = 0;
+  Vector2 _strokeSize = Vector2.zero();
+  Vector2 _strokePosition = Vector2.zero();
+
   SimpleDirectionAnimation({
     required FutureOr<SpriteAnimation> idleRight,
     required FutureOr<SpriteAnimation> runRight,
@@ -378,12 +383,29 @@ class SimpleDirectionAnimation {
       canvas.scale(isFlipHorizontally ? -1 : 1, isFlipVertically ? -1 : 1);
       canvas.translate(-center.x, -center.y);
     }
+
     if (_fastAnimation != null) {
+      if (_strockePaint != null) {
+        _fastAnimation?.render(
+          canvas,
+          overridePaint: _strockePaint!,
+          size: _strokeSize,
+          position: _strokePosition,
+        );
+      }
       _fastAnimation?.render(
         canvas,
         overridePaint: paint,
       );
     } else {
+      if (_strockePaint != null) {
+        _current.render(
+          canvas,
+          overridePaint: _strockePaint,
+          size: _strokeSize,
+          position: _strokePosition,
+        );
+      }
       _current.render(
         canvas,
         overridePaint: paint,
@@ -403,6 +425,12 @@ class SimpleDirectionAnimation {
       _fastAnimation?.update(dt);
       _current.size = size;
       _current.update(dt);
+    }
+    if (_strokeSize.isZero()) {
+      _strokeSize = Vector2(
+        size.x + _strokeWidth * 2,
+        size.y + _strokeWidth * 2,
+      );
     }
   }
 
@@ -485,5 +513,26 @@ class SimpleDirectionAnimation {
       isFlipHorizontally = true;
       _current.animation = idleRight;
     }
+  }
+
+  void showStroke(Color color, double width) {
+    if (_strockePaint != null &&
+        _strokeWidth == width &&
+        _strockePaint?.color == color) {
+      return;
+    }
+    _strokeWidth = width;
+    _strokePosition = Vector2.all(-_strokeWidth);
+    _strokeSize = Vector2.zero();
+    _strockePaint = Paint()
+      ..color = color
+      ..colorFilter = ColorFilter.mode(
+        color,
+        BlendMode.srcATop,
+      );
+  }
+
+  void hideStroke() {
+    _strockePaint = null;
   }
 }

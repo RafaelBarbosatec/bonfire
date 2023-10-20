@@ -20,7 +20,8 @@ extension RotationEnemyExtensions on RotationAlly {
   /// Checks whether the player is within range. If so, move to it.
   void seeAndMoveToPlayer({
     required Function(Player) closePlayer,
-    VoidCallback? notObserved,
+    // return true to stop move.
+    BoolCallback? notObserved,
     double radiusVision = 32,
     double margin = 10,
     bool runOnlyVisibleInScreen = true,
@@ -50,9 +51,8 @@ extension RotationEnemyExtensions on RotationAlly {
         moveFromAngle(radAngle);
       },
       notObserved: () {
-        if (notObserved != null) {
-          notObserved();
-        } else {
+        bool stop = notObserved?.call() ?? true;
+        if (stop) {
           stopMove();
         }
       },

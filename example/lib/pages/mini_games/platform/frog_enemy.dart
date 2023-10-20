@@ -32,9 +32,8 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   void onBlockedMovement(
     PositionComponent other,
     Direction? direction,
-    Vector2 lastDisplacement,
   ) {
-    super.onBlockedMovement(other, direction, lastDisplacement);
+    super.onBlockedMovement(other, direction);
     if (other is FoxPlayer) {
       if (direction == Direction.up) {
         if (!isDead) {
