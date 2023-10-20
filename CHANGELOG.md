@@ -1,4 +1,4 @@
-## NEXT
+## 3.0.2
 - `BleedingPixel` improvements.
 - Adds `orientation` param in `getZoomFromMaxVisibleTile`.
 - Adds methods `showStroke` and `hideStroke` in `SimpleDirectionAnimation`
