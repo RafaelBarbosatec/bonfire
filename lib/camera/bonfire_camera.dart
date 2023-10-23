@@ -9,18 +9,18 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   double _spacingMap = 32.0;
   final CameraConfig config;
   BonfireCamera({
-    required this.config,
+    CameraConfig? config,
     super.world,
     super.hudComponents,
     super.viewport,
-  }) {
-    if (config.initPosition != null) {
-      position = config.initPosition!;
+  }) : config = config ?? CameraConfig() {
+    if (this.config.initPosition != null) {
+      position = this.config.initPosition!;
     }
-    viewfinder.zoom = config.zoom;
-    viewfinder.angle = config.angle;
-    if (config.target != null) {
-      follow(config.target!, snap: true);
+    viewfinder.zoom = this.config.zoom;
+    viewfinder.angle = this.config.angle;
+    if (this.config.target != null) {
+      follow(this.config.target!, snap: true);
     }
   }
 
@@ -137,7 +137,6 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
     viewfinder.add(
       MyFollowBehavior(
         target: target,
-        owner: viewfinder,
         maxSpeed: config.speed,
         movementWindow: config.movementWindow,
         horizontalOnly: horizontalOnly,

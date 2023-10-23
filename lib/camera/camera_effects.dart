@@ -8,7 +8,6 @@ class MyFollowBehavior extends FollowBehavior {
   MyFollowBehavior({
     required super.target,
     required this.movementWindow,
-    PositionProvider? owner,
     super.maxSpeed = double.infinity,
     super.horizontalOnly = false,
     super.verticalOnly = false,
@@ -30,7 +29,7 @@ class MyFollowBehavior extends FollowBehavior {
 
     if (delta.isZero()) return;
     if (delta.length <= maxSpeed * dt) {
-      owner.position = owner.position.clone()..add(delta);
+      owner.position = delta..add(owner.position);
     } else {
       owner.position = owner.position.clone()
         ..lerp(owner.position + delta, dt * maxSpeed);

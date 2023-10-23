@@ -19,7 +19,6 @@ class SimplePlayerPage extends StatelessWidget {
       ),
       cameraConfig: CameraConfig(
         zoom: getZoomFromMaxVisibleTile(context, tileSize, 20),
-        speed: 5,
       ),
       backgroundColor: const Color(0xff20a0b4),
     );
