@@ -350,8 +350,8 @@ mixin Movement on GameComponent {
     }
   }
 
-  bool isStoped() {
-    return velocity.x < 0.01 && velocity.y < 0.01;
+  bool isStopped() {
+    return velocity.x.abs() < 0.01 && velocity.y.abs() < 0.01;
   }
 
   // Move to position. return true whether move.
