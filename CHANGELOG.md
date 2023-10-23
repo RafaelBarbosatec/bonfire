@@ -1,3 +1,6 @@
+## NEXT
+- Now all Tile  in the map have you own Paint.
+
 ## 3.0.2
 - `BleedingPixel` improvements.
 - Adds `orientation` param in `getZoomFromMaxVisibleTile`.
