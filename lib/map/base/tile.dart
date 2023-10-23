@@ -108,14 +108,6 @@ class Tile extends GameComponent with UseAssetsLoader {
     await _animation?.onLoad();
   }
 
-  @override
-  void onMount() {
-    if (opacity == (parent as HasPaint?)?.opacity) {
-      paint = (parent as HasPaint?)?.paint ?? paint;
-    }
-    super.onMount();
-  }
-
   bool get containAnimation => _animation != null;
 
   @override

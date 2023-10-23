@@ -5,9 +5,7 @@ abstract class GameMap extends GameComponent {
   double tileSizeToUpdate;
   double tileSize = 0.0;
 
-  GameMap(this.tiles, {this.tileSizeToUpdate = 0}) {
-    paint.isAntiAlias = false;
-  }
+  GameMap(this.tiles, {this.tileSizeToUpdate = 0});
 
   Iterable<Tile> getRendered();
 

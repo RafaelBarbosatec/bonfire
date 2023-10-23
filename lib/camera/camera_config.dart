@@ -28,6 +28,8 @@ class CameraConfig {
 
   final Vector2? initPosition;
 
+  final Vector2? resolution;
+
   CameraConfig({
     this.moveOnlyMapArea = false,
     this.startFollowPlayer = true,
@@ -38,5 +40,6 @@ class CameraConfig {
     this.initialMapZoomFit = InitialMapZoomFitEnum.none,
     this.initPosition,
     Vector2? movementWindow,
+    this.resolution,
   }) : movementWindow = movementWindow ?? movementWindowDefault;
 }

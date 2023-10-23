@@ -32,7 +32,6 @@ class MeleeEnemy extends SimpleEnemy {
   Future<void> onLoad() {
     /// Adds rectangle collision
     add(RectangleHitbox(size: size / 2, position: size / 4));
-    animation?.showStroke(Colors.white, 1);
     _addsText();
     return super.onLoad();
   }

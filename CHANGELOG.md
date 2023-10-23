@@ -1,3 +1,9 @@
+## 3.0.3
+- Now all Tile in the map have you own Paint.
+- Update `tiledjsonreader` to `1.3.3`.
+- Tiled improvements : Now if you set the class of objectlayer to `collision`, all object of this layer will be collision.
+- Adds param `resolution` in `CameraConfig`.
+
 ## 3.0.2
 - `BleedingPixel` improvements.
 - Adds `orientation` param in `getZoomFromMaxVisibleTile`.

@@ -3,7 +3,7 @@ import 'package:bonfire/bonfire.dart';
 // Mixin responsable to give the bounce behavior. (experimental)
 mixin BouncingObject on BlockMovementCollision {
   final _countFrameCOllisionDiabledAfterBounce = 4;
-  double _bouncingReflectFactor = 1.01;
+  double _bouncingReflectFactor = 1.0;
   bool _bouncingObjectEnabled = true;
   int? _countFrameCollisionStoped;
 
@@ -24,7 +24,7 @@ mixin BouncingObject on BlockMovementCollision {
     PositionComponent other,
     Direction? direction,
   ) {
-    if (onBouncingCollision(other) && !isStoped() && _bouncingObjectEnabled) {
+    if (onBouncingCollision(other) && !isStopped() && _bouncingObjectEnabled) {
       if (direction == Direction.left || direction == Direction.right) {
         velocity.x = velocity.x * -_bouncingReflectFactor;
       } else if (direction == Direction.up || direction == Direction.down) {

@@ -10,6 +10,8 @@ import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 // ignore: implementation_imports
+import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
+// ignore: implementation_imports
 import 'package:flutter/widgets.dart';
 
 /// Is a customGame where all magic of the Bonfire happen.
@@ -116,7 +118,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   })  : globalForces = globalForces ?? [],
         super(
           camera: BonfireCamera(
-            config: cameraConfig ?? CameraConfig(),
+            config: cameraConfig,
+            viewport: cameraConfig?.resolution != null
+                ? FixedResolutionViewport(resolution: cameraConfig!.resolution!)
+                : null,
             hudComponents: [
               LightingComponent(
                 color: lightingColorGame ?? const Color(0x00000000),
