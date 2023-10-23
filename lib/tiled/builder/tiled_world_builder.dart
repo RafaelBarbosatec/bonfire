@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/background/background_image_game.dart';
@@ -386,6 +387,7 @@ class TiledWorldBuilder {
 
   void _addObjects(ObjectLayer layer) {
     if (layer.visible != true) return;
+    bool isCollisionLayer = layer.layerClass?.toLowerCase() == 'collision';
     double offsetX = _getDoubleByProportion(layer.offsetX);
     double offsetY = _getDoubleByProportion(layer.offsetY);
     for (var element in layer.objects ?? const <Objects>[]) {
@@ -393,6 +395,7 @@ class TiledWorldBuilder {
       double y = _getDoubleByProportion(element.y) + offsetY;
       double width = _getDoubleByProportion(element.width);
       double height = _getDoubleByProportion(element.height);
+      double rotation = (element.rotation ?? 0) * pi / 180;
       final collision = _getCollisionObject(
         x,
         y,
@@ -425,9 +428,10 @@ class TiledWorldBuilder {
                 int.parse('0xFF${element.text!.color.replaceAll('#', '')}'),
               ),
             ),
-          ),
+          )..angle = rotation,
         );
-      } else if (element.typeOrClass?.toLowerCase() == 'collision') {
+      } else if (element.typeOrClass?.toLowerCase() == 'collision' ||
+          isCollisionLayer) {
         _components.add(
           CollisionGameComponent(
             name: element.name ?? '',
@@ -437,7 +441,7 @@ class TiledWorldBuilder {
               collision..position = Vector2.zero(),
             ],
             properties: _extractOtherProperties(element.properties),
-          ),
+          )..angle = rotation,
         );
       } else if (_objectsBuilder[element.name] != null) {
         final object = _objectsBuilder[element.name]?.call(
@@ -445,7 +449,7 @@ class TiledWorldBuilder {
             Vector2(x, y),
             Vector2(width, height),
             element.typeOrClass,
-            element.rotation,
+            rotation,
             _extractOtherProperties(element.properties),
             element.name,
             element.id,
