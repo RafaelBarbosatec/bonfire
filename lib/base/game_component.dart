@@ -241,4 +241,10 @@ abstract class GameComponent extends PositionComponent
       return [];
     }
   }
+
+  @override
+  void onMount() {
+    paint.isAntiAlias = false;
+    super.onMount();
+  }
 }
