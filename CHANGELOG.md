@@ -1,4 +1,4 @@
-## next
+## 3.0.4
 - Fix blending pixel bug in tile with animation.
 
 ## 3.0.3
