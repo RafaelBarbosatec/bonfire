@@ -1,3 +1,6 @@
+## 3.0.4
+- Fix blending pixel bug in tile with animation.
+
 ## 3.0.3
 - Now all Tile in the map have you own Paint.
 - Update `tiledjsonreader` to `1.3.3`.

@@ -27,8 +27,8 @@ class ControlledUpdateAnimation {
     );
   }
 
-  void render(Canvas canvas, {Paint? overridePaint}) {
-    animation?.render(canvas, overridePaint: overridePaint);
+  void render(Canvas canvas, {Vector2? size, Paint? overridePaint}) {
+    animation?.render(canvas, size: size, overridePaint: overridePaint);
     _alreadyUpdate = false;
   }
 

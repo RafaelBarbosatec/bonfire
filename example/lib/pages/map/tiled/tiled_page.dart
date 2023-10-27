@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/decoration/spikes.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class TiledPage extends StatelessWidget {
   const TiledPage({Key? key}) : super(key: key);
