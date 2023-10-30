@@ -1,3 +1,6 @@
+## next
+- Update `a_star_algorithm`
+
 ## 3.0.4
 - Fix blending pixel bug in tile with animation.
 
