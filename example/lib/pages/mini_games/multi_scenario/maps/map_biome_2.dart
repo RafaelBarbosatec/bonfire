@@ -1,11 +1,11 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/multi_scenario/multi_scenario.dart';
 import 'package:example/pages/mini_games/multi_scenario/player/game_player.dart';
-import 'package:example/pages/mini_games/multi_scenario/player/sprite_sheet_hero.dart';
 import 'package:example/pages/mini_games/multi_scenario/utils/constants/game_consts.dart';
 import 'package:example/pages/mini_games/multi_scenario/utils/enums/map_id_enum.dart';
 import 'package:example/pages/mini_games/multi_scenario/utils/enums/show_in_enum.dart';
 import 'package:example/pages/mini_games/multi_scenario/utils/sensors/exit_map_sensor.dart';
+import 'package:example/pages/mini_games/random_map/player/pirate_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class MapBiome2 extends StatelessWidget {
@@ -25,7 +25,7 @@ class MapBiome2 extends StatelessWidget {
       ),
       player: GamePlayer(
         _getInitPosition(),
-        SpriteSheetHero.hero1,
+       PirateSpriteSheet.getAnimation(),
         initDirection: showInEnum.direction,
       ),
       map: WorldMapByTiled(
