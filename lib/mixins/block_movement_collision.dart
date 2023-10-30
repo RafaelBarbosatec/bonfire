@@ -29,7 +29,9 @@ mixin BlockMovementCollision on Movement {
     );
 
     superPosition = position - reverseDisplacement;
-    angle = lastAngle;
+    if (lastAngle > 0) {
+      angle = lastAngle;
+    }
 
     stopFromCollision(
       isX: direction?.isSameXDirection(_lastDisplacementCollision.x) == true,
