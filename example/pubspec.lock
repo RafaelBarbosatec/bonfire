@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: a_star_algorithm
-      sha256: a40f853fb1ec328b8bb3069a5e697b9fc6d5106c109d5feee3028c2ed9b985ab
+      sha256: "7129494d8a494dafd43fb473c412bc8ab6c9ae130be100211c9102a70f30f848"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "0.3.1"
   analyzer:
     dependency: transitive
     description:
@@ -47,7 +47,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.0.2"
+    version: "3.0.5"
   boolean_selector:
     dependency: transitive
     description:

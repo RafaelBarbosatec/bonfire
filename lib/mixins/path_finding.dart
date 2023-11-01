@@ -21,7 +21,7 @@ mixin PathFinding on Movement {
   double _factorInflateFindArea = 2;
   VoidCallback? _onFinish;
 
-  final List<Offset> _barriers = [];
+  final List<Point<int>> _barriers = [];
   List ignoreCollisions = [];
 
   LinePathComponent? _linePathComponent;
@@ -118,20 +118,20 @@ mixin PathFinding on Movement {
 
     final positionPlayer = player.toAbsoluteRect().center.toVector2();
 
-    Offset playerPosition = _getCenterPositionByTile(positionPlayer);
+    Point<int> playerPosition = _getCenterPositionByTile(positionPlayer);
 
-    Offset targetPosition = _getCenterPositionByTile(finalPosition);
+    Point<int> targetPosition = _getCenterPositionByTile(finalPosition);
 
     double inflate = _tileSize * _factorInflateFindArea;
 
-    double maxY = max(
-      playerPosition.dy,
-      targetPosition.dy,
+    int maxY = max(
+      playerPosition.y,
+      targetPosition.y,
     );
 
-    double maxX = max(
-      playerPosition.dx,
-      targetPosition.dx,
+    int maxX = max(
+      playerPosition.x,
+      targetPosition.x,
     );
 
     int rows = maxY.toInt() + inflate.toInt();
@@ -169,7 +169,7 @@ mixin PathFinding on Movement {
       }
     }
 
-    Iterable<Offset> result = [];
+    Iterable<Point<int>> result = [];
 
     if (_barriers.contains(targetPosition)) {
       stopMove();
@@ -221,10 +221,10 @@ mixin PathFinding on Movement {
 
   bool get isMovingAlongThePath => _currentPath.isNotEmpty;
 
-  Offset _getCenterPositionByTile(Vector2 center) {
-    return Offset(
-      (center.x / _tileSize).floorToDouble(),
-      (center.y / _tileSize).floorToDouble(),
+  Point<int> _getCenterPositionByTile(Vector2 center) {
+    return Point(
+      (center.x / _tileSize).floor(),
+      (center.y / _tileSize).floor(),
     );
   }
 
@@ -259,9 +259,9 @@ mixin PathFinding on Movement {
     }).toList();
 
     final result = listRect.map((e) {
-      return Offset(
-        (e.center.dx / _tileSize).floorToDouble(),
-        (e.center.dy / _tileSize).floorToDouble(),
+      return Point<int>(
+        (e.center.dx / _tileSize).floor(),
+        (e.center.dy / _tileSize).floor(),
       );
     }).toList();
 
@@ -272,11 +272,11 @@ mixin PathFinding on Movement {
     }
   }
 
-  bool _isNeighbor(Offset playerPosition, Offset targetPosition) {
-    if ((playerPosition.dx - targetPosition.dx).abs() == 1) {
+  bool _isNeighbor(Point<int> playerPosition, Point<int> targetPosition) {
+    if ((playerPosition.x - targetPosition.x).abs() == 1) {
       return true;
     }
-    if ((playerPosition.dy - targetPosition.dy).abs() == 1) {
+    if ((playerPosition.y - targetPosition.y).abs() == 1) {
       return true;
     }
     return false;
@@ -295,8 +295,8 @@ mixin PathFinding on Movement {
       for (var element in _barriers) {
         canvas.drawRect(
           Rect.fromLTWH(
-            element.dx * _tileSize,
-            element.dy * _tileSize,
+            element.x * _tileSize,
+            element.y * _tileSize,
             _tileSize,
             _tileSize,
           ),
@@ -317,9 +317,9 @@ mixin PathFinding on Movement {
     _linePathComponent = null;
   }
 
-  List<Offset> _mapToWorldPositions(Iterable<Offset> result) {
+  List<Offset> _mapToWorldPositions(Iterable<Point<int>> result) {
     return result.map((e) {
-      return Offset(e.dx * _tileSize, e.dy * _tileSize)
+      return Offset(e.x * _tileSize, e.y * _tileSize)
           .translate(_tileSize / 2, _tileSize / 2);
     }).toList();
   }

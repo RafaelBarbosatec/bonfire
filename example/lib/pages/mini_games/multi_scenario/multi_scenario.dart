@@ -1,6 +1,5 @@
 import 'package:example/pages/mini_games/multi_scenario/maps/map_biome_1.dart';
 import 'package:example/pages/mini_games/multi_scenario/maps/map_biome_2.dart';
-import 'package:example/pages/mini_games/multi_scenario/player/sprite_sheet_hero.dart';
 import 'package:example/pages/mini_games/multi_scenario/utils/enums/map_id_enum.dart';
 import 'package:example/pages/mini_games/multi_scenario/utils/enums/show_in_enum.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +15,6 @@ class MultiScenario extends StatefulWidget {
 
   @override
   State<MultiScenario> createState() => _MultiScenarioState();
-
-  static Future<void> prepare() => SpriteSheetHero.load();
 }
 
 class _MultiScenarioState extends State<MultiScenario> {
