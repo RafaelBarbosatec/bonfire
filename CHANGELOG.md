@@ -1,4 +1,4 @@
-## next
+## 3.0.5
 - Update `a_star_algorithm`
 
 ## 3.0.4

@@ -25,7 +25,7 @@ class MapBiome2 extends StatelessWidget {
       ),
       player: GamePlayer(
         _getInitPosition(),
-       PirateSpriteSheet.getAnimation(),
+        PirateSpriteSheet.getAnimation(),
         initDirection: showInEnum.direction,
       ),
       map: WorldMapByTiled(
