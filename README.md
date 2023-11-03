@@ -34,6 +34,13 @@ Test our online [DEMO](https://bonfire-engine.github.io/examples/bonfire-v3/) or
 
 Use this command: `flutter build web --web-renderer=canvaskit`
 
+## Useful packages
+
+| Name |  Link  | 
+|:-----|:--------:|
+| bonfire_bloc   | https://pub.dev/packages/bonfire_bloc| 
+| bonfire_spine   | https://pub.dev/packages/bonfire_spine| 
+
 ## Encourage my work
 
 [![buymeacoffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/rafaelbarbosa)
