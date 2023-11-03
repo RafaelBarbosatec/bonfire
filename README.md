@@ -38,8 +38,8 @@ Use this command: `flutter build web --web-renderer=canvaskit`
 
 | Name |  Link  | 
 |:-----|:--------:|
-| bonfire_bloc   | https://pub.dev/packages/bonfire_bloc| 
-| bonfire_spine   | https://pub.dev/packages/bonfire_spine| 
+| bonfire_bloc   | [![pub package](https://img.shields.io/pub/v/bonfire_bloc.svg)](https://pub.dev/packages/bonfire_bloc) | 
+| bonfire_spine  | [![pub package](https://img.shields.io/pub/v/bonfire_spine.svg)](https://pub.dev/packages/bonfire_spine) | 
 
 ## Encourage my work
 
