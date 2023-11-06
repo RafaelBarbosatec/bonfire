@@ -49,6 +49,7 @@ class SimpleDirectionAnimation {
   SimpleAnimationEnum? beforeLastPlayedAnimation = SimpleAnimationEnum.idleDown;
 
   bool _playing = true;
+  dynamic _currentKeyCustom;
 
   Paint? _strockePaint;
   double _strokeWidth = 0;
@@ -114,6 +115,7 @@ class SimpleDirectionAnimation {
     isFlipVertically = false;
 
     _currentType = animation;
+    _currentKeyCustom = null;
     if (!runToTheEndFastAnimation) {
       _fastAnimation = null;
     }
@@ -277,13 +279,14 @@ class SimpleDirectionAnimation {
 
   /// Method used to play specific animation registred in `others`
   void playOther(dynamic key, {bool? flipX, bool? flipY}) {
-    if (others.containsKey(key) == true) {
+    if (others.containsKey(key) == true && _currentKeyCustom != key) {
       if (!runToTheEndFastAnimation) {
         _fastAnimation = null;
       }
       isFlipHorizontally = flipX ?? (isFlipHorizontally);
       isFlipVertically = flipY ?? (isFlipVertically);
       _current.animation = others[key];
+      _currentKeyCustom = key;
       _currentType = SimpleAnimationEnum.custom;
     }
   }

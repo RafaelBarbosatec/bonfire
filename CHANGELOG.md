@@ -1,5 +1,6 @@
 ## NEXT
 - Adds bool `paused` in `BonfireGameInterface`.
+- `SimpleDirectionAnimation.playOther` improvements.
 
 ## 3.0.5
 - Update `a_star_algorithm`
