@@ -1,3 +1,6 @@
+## NEXT
+- Adds bool `paused` in `BonfireGameInterface`.
+
 ## 3.0.5
 - Update `a_star_algorithm`
 
