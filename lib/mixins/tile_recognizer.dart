@@ -62,7 +62,7 @@ mixin TileRecognizer on GameComponent {
     final map = gameRef.map;
     if (map.tiles.isNotEmpty) {
       return map.getRendered().where((element) {
-        return (element.overlaps(toAbsoluteRect()) &&
+        return (element.overlaps(rectCollision) &&
             (element.properties != null));
       });
     }
