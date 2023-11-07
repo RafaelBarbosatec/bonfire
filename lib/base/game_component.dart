@@ -46,7 +46,7 @@ abstract class GameComponent extends PositionComponent
   }
 
   int _getBottomPriority() {
-    return rectCollision.bottom.round();
+    return rectCollision.bottom.floor();
   }
 
   @override
