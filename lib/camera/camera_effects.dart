@@ -5,18 +5,20 @@ import 'package:flame/camera.dart';
 
 class MyFollowBehavior extends FollowBehavior {
   final Vector2 movementWindow;
+  final Vector2 targetSize;
   MyFollowBehavior({
     required super.target,
     required this.movementWindow,
     super.maxSpeed = double.infinity,
     super.horizontalOnly = false,
     super.verticalOnly = false,
+    Vector2? targetSize,
     super.priority,
-  });
+  }) : targetSize = targetSize ?? Vector2.zero();
 
   @override
   void update(double dt) {
-    var delta = target.position - owner.position;
+    var delta = (target.position + (targetSize / 2)) - owner.position;
 
     if (horizontalOnly && !verticalOnly) {
       delta = _moveHorizontal(delta);
