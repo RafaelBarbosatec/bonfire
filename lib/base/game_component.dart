@@ -136,7 +136,7 @@ abstract class GameComponent extends PositionComponent
     }
   }
 
-  bool get isCollision {
+  bool get containsShapeHitbox {
     return children.query<ShapeHitbox>().isNotEmpty;
   }
 
@@ -154,11 +154,11 @@ abstract class GameComponent extends PositionComponent
     }
     var absoluteRect = toAbsoluteRect();
 
-    if (_rectCollision == null) {
+    if (_rectCollision != null) {
+      return _rectCollision!.translate(absoluteRect.left, absoluteRect.top);
+    } else {
       return absoluteRect;
     }
-
-    return _rectCollision!.translate(absoluteRect.left, absoluteRect.top);
   }
 
   RaycastResult<ShapeHitbox>? raycast(

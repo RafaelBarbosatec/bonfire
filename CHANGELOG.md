@@ -1,8 +1,8 @@
 ## NEXT
 - Adds bool `paused` in `BonfireGameInterface`.
 - `SimpleDirectionAnimation.playOther` improvements.
-- `TileRecognizer` improvements.
-- Render priority improvements.
+- `TileRecognizer` improvements. Now consider rectCollision
+- Render priority improvements. Now consider rectCollision
 
 ## 3.0.5
 - Update `a_star_algorithm`
