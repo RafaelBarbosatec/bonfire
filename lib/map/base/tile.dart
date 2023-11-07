@@ -105,6 +105,7 @@ class Tile extends GameComponent with UseAssetsLoader {
 
   @override
   Future<void> onLoad() async {
+    paint.isAntiAlias = false;
     await super.onLoad();
     await _animation?.onLoad();
   }
