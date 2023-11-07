@@ -168,16 +168,12 @@ abstract class GameComponent extends PositionComponent
     List<ShapeHitbox>? ignoreHitboxes,
   }) {
     try {
-      var sensorHitBox = <ShapeHitbox>[];
-      gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
-        sensorHitBox.addAll(e.children.query<ShapeHitbox>());
-      });
       return gameRef.raycast(
         Ray2(origin: origin ?? absoluteCenter, direction: direction),
         maxDistance: maxDistance,
         ignoreHitboxes: [
           ...children.query<ShapeHitbox>(),
-          ...sensorHitBox,
+          ..._getSensorsHitbox(),
           ...ignoreHitboxes ?? [],
         ],
       );
@@ -196,10 +192,6 @@ abstract class GameComponent extends PositionComponent
     List<ShapeHitbox>? ignoreHitboxes,
   }) {
     try {
-      var sensorHitBox = <ShapeHitbox>[];
-      gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
-        sensorHitBox.addAll(e.children.query<ShapeHitbox>());
-      });
       return gameRef.raycastAll(
         origin ?? absoluteCenter,
         numberOfRays: numberOfRays,
@@ -209,7 +201,7 @@ abstract class GameComponent extends PositionComponent
         rays: rays,
         ignoreHitboxes: [
           ...children.query<ShapeHitbox>(),
-          ...sensorHitBox,
+          ..._getSensorsHitbox(),
           ...ignoreHitboxes ?? [],
         ],
       );
@@ -224,22 +216,26 @@ abstract class GameComponent extends PositionComponent
     List<ShapeHitbox>? ignoreHitboxes,
   }) {
     try {
-      var sensorHitBox = <ShapeHitbox>[];
-      gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
-        sensorHitBox.addAll(e.children.query<ShapeHitbox>());
-      });
       return gameRef.raytrace(
         ray,
         maxDepth: maxDepth,
         ignoreHitboxes: [
           ...children.query<ShapeHitbox>(),
-          ...sensorHitBox,
+          ..._getSensorsHitbox(),
           ...ignoreHitboxes ?? [],
         ],
       );
     } catch (e) {
       return [];
     }
+  }
+
+  List<ShapeHitbox> _getSensorsHitbox() {
+    var sensorHitBox = <ShapeHitbox>[];
+    gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
+      sensorHitBox.addAll(e.children.query<ShapeHitbox>());
+    });
+    return sensorHitBox;
   }
 
   @override
