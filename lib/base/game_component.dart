@@ -42,11 +42,7 @@ abstract class GameComponent extends PositionComponent
     if (renderAboveComponents && hasGameRef) {
       return LayerPriority.getAbovePriority(gameRef.highestPriority);
     }
-    return LayerPriority.getComponentPriority(_getBottomPriority());
-  }
-
-  int _getBottomPriority() {
-    return rectCollision.bottom.floor();
+    return LayerPriority.getComponentPriority(rectCollision.bottom.floor());
   }
 
   @override
