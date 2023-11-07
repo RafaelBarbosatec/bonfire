@@ -233,4 +233,10 @@ abstract class GameComponent extends PositionComponent
     });
     return sensorHitBox;
   }
+
+  @override
+  void onMount() {
+    paint.isAntiAlias = false;
+    super.onMount();
+  }
 }
