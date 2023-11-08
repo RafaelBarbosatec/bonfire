@@ -65,11 +65,14 @@ extension NpcExtensions on Npc {
       angle: angle,
       observed: (player) {
         observed?.call();
-        moveTowardsTarget(
+        bool move = moveTowardsTarget(
           target: player,
           close: () => closePlayer?.call(player),
           margin: margin,
         );
+        if (!move) {
+          notCanMove?.call();
+        }
       },
       notObserved: () {
         bool stop = notObserved?.call() ?? true;
@@ -103,13 +106,16 @@ extension NpcExtensions on Npc {
       angle: angle ?? lastDirection.toRadians(),
       observed: (enemy) {
         observed?.call();
-        moveTowardsTarget(
+        bool move = moveTowardsTarget(
           target: enemy.first,
           close: () {
             closeEnemy(enemy.first);
           },
           margin: margin,
         );
+        if (!move) {
+          notCanMove?.call();
+        }
       },
       notObserved: () {
         bool stop = notObserved?.call() ?? true;

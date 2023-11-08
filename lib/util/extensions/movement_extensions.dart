@@ -12,7 +12,6 @@ extension MovementExtensions on Movement {
     required T target,
     Function? close,
     double margin = 4,
-    VoidCallback? canNotMove,
   }) {
     double radAngle = getAngleFromTarget(target);
     Rect rectPlayerCollision = target.rectCollision.inflate(margin);
@@ -71,7 +70,6 @@ extension MovementExtensions on Movement {
           }
           break;
       }
-      canNotMove?.call();
       return false;
     }
   }
