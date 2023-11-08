@@ -18,7 +18,7 @@ extension GameComponentExtensions on GameComponent {
     gameRef.add(
       TextDamageComponent(
         damage.toInt().toString(),
-        Vector2(absoluteCenter.x, absolutePosition.y),
+        Vector2(rectCollision.center.dx, rectCollision.top),
         config: config ??
             const TextStyle(
               fontSize: 14,
@@ -312,9 +312,9 @@ extension GameComponentExtensions on GameComponent {
 
   /// Get angle between this comp to target
   double getAngleFromTarget(GameComponent target) {
-    return BonfireUtil.angleBetweenPoints(
-      absoluteCenter,
-      target.absoluteCenter,
+    return BonfireUtil.angleBetweenPointsOffset(
+      rectCollision.center,
+      target.rectCollision.center,
     );
   }
 }

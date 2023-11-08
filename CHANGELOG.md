@@ -3,6 +3,7 @@
 - `SimpleDirectionAnimation.playOther` improvements.
 - `TileRecognizer` improvements. Now consider rectCollision
 - Render priority improvements. Now consider rectCollision
+- Movements improvements.
 
 ## 3.0.5
 - Update `a_star_algorithm`

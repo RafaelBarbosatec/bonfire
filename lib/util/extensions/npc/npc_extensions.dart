@@ -180,7 +180,7 @@ extension NpcExtensions on Npc {
     if (player == null) return 0.0;
     return BonfireUtil.angleBetweenPoints(
       playerRect.center.toVector2(),
-      toAbsoluteRect().center.toVector2(),
+      rectCollision.centerVector2,
     );
   }
 

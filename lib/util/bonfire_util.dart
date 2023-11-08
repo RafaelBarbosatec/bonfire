@@ -74,6 +74,10 @@ class BonfireUtil {
     return atan2(p2.y - p1.y, p2.x - p1.x);
   }
 
+  static double angleBetweenPointsOffset(Offset p1, Offset p2) {
+    return atan2(p2.dy - p1.dy, p2.dx - p1.dx);
+  }
+
   static Offset rotatePoint(Offset point, double angle, Offset center) {
     final s = sin(angle);
     final c = cos(angle);

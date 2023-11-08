@@ -165,7 +165,10 @@ abstract class GameComponent extends PositionComponent
   }) {
     try {
       return gameRef.raycast(
-        Ray2(origin: origin ?? absoluteCenter, direction: direction),
+        Ray2(
+          origin: origin ?? rectCollision.center.toVector2(),
+          direction: direction,
+        ),
         maxDistance: maxDistance,
         ignoreHitboxes: [
           ...children.query<ShapeHitbox>(),
@@ -189,7 +192,7 @@ abstract class GameComponent extends PositionComponent
   }) {
     try {
       return gameRef.raycastAll(
-        origin ?? absoluteCenter,
+        origin ?? rectCollision.center.toVector2(),
         numberOfRays: numberOfRays,
         maxDistance: maxDistance,
         startAngle: startAngle,

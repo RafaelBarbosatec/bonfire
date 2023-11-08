@@ -363,11 +363,10 @@ mixin Movement on GameComponent {
     double diagonalSpeed = (speed ?? this.speed) * diaginalReduction;
     double dtSpeed = (speed ?? this.speed) * dtUpdate * 1.1;
     double dtDiagonalSpeed = diagonalSpeed * dtUpdate * 1.1;
+    final compCenter = rectCollision.centerVector2;
 
-    double diffX =
-        position.x - (useCenter ? absoluteCenter : absolutePosition).x;
-    double diffY =
-        position.y - (useCenter ? absoluteCenter : absolutePosition).y;
+    double diffX = position.x - (useCenter ? compCenter : absolutePosition).x;
+    double diffY = position.y - (useCenter ? compCenter : absolutePosition).y;
 
     if (diffX.abs() < dtSpeed && diffY.abs() < dtSpeed) {
       return false;

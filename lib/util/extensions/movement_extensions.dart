@@ -27,7 +27,9 @@ extension MovementExtensions on Movement {
 
   bool keepDistance(GameComponent target, double minDistance) {
     if (!isVisible) return true;
-    double distance = absoluteCenter.distanceTo(target.absoluteCenter);
+    double distance = rectCollision.centerVector2.distanceTo(
+      target.rectCollision.centerVector2,
+    );
 
     if (distance < minDistance) {
       var angle = getAngleFromTarget(target);

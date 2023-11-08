@@ -24,7 +24,8 @@ mixin Pushable on Movement {
       if (other is GameComponent) {
         GameComponent component = other;
         if (component is Movement && onPush(component)) {
-          Vector2 displacement = absoluteCenter - component.absoluteCenter;
+          Vector2 displacement = (rectCollision.centerVector2 -
+              component.rectCollision.centerVector2);
           if (displacement.x.abs() > displacement.y.abs()) {
             if (displacement.x < 0) {
               if (this is HandleForces) {

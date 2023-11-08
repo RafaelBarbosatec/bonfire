@@ -104,6 +104,8 @@ extension RectExt on Rect {
       width,
       height,
     );
+
+    
   }
 
   bool overlapComponent(PositionComponent c) {
@@ -128,6 +130,8 @@ extension RectExt on Rect {
 
   /// Returns a new rectangle with edges moved inwards by the given delta.
   Rect deflatexy(double deltaX, double deltaY) => inflatexy(-deltaX, -deltaY);
+
+  Vector2 get centerVector2 => Vector2(left + width / 2.0, top + height / 2.0);
 }
 
 extension SpriteFutureExt on Future<Sprite> {
