@@ -218,7 +218,9 @@ mixin Movement on GameComponent {
     Direction direction, {
     bool enabledDiagonal = true,
   }) {
-    setZeroVelocity();
+    if (direction != lastDirection) {
+      setZeroVelocity();
+    }
     switch (direction) {
       case Direction.left:
         moveLeft();
@@ -437,21 +439,68 @@ mixin Movement on GameComponent {
   }
 
   bool canMove(Direction direction, {double? displacement}) {
-    double maxDistance = displacement ?? (speed * (dtUpdate * 4));
-    final size = rectCollision.sizeVector2;
+    double maxDistance = displacement ?? (speed * (dtUpdate * 2));
+
+    int countColli = 0;
     switch (direction) {
       case Direction.right:
       case Direction.left:
       case Direction.up:
       case Direction.down:
-        maxDistance += size.y / 2;
+        if (_checkRaycastDirection(direction, maxDistance)) {
+          countColli++;
+        }
+        break;
+      case Direction.upLeft:
+        if (_checkRaycastDirection(Direction.left, maxDistance)) {
+          countColli++;
+        } else if (_checkRaycastDirection(Direction.up, maxDistance)) {
+          countColli++;
+        }
+        break;
+      case Direction.upRight:
+        if (_checkRaycastDirection(Direction.right, maxDistance)) {
+          countColli++;
+        } else if (_checkRaycastDirection(Direction.up, maxDistance)) {
+          countColli++;
+        }
+        break;
+      case Direction.downLeft:
+        if (_checkRaycastDirection(Direction.left, maxDistance)) {
+          countColli++;
+        } else if (_checkRaycastDirection(Direction.down, maxDistance)) {
+          countColli++;
+        }
+        break;
+      case Direction.downRight:
+        if (_checkRaycastDirection(Direction.right, maxDistance)) {
+          countColli++;
+        } else if (_checkRaycastDirection(Direction.down, maxDistance)) {
+          countColli++;
+        }
+        break;
+    }
+
+    return countColli == 0;
+  }
+
+  bool _checkRaycastDirection(Direction direction, double maxDistance) {
+    double distance = maxDistance;
+    final size = rectCollision.sizeVector2;
+    switch (direction) {
+      case Direction.right:
+      case Direction.left:
+        distance += size.x / 2;
+        break;
+      case Direction.up:
+      case Direction.down:
+        distance += size.y / 2;
+        break;
       case Direction.upLeft:
       case Direction.upRight:
       case Direction.downLeft:
       case Direction.downRight:
-        maxDistance += sqrt(pow(size.x, 2) + pow(size.y, 2));
     }
-    final result = raycast(direction.toVector2(), maxDistance: maxDistance);
-    return result?.hitbox == null;
+    return raycast(direction.toVector2(), maxDistance: distance) != null;
   }
 }

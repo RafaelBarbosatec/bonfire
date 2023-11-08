@@ -279,7 +279,8 @@ class SimpleDirectionAnimation {
 
   /// Method used to play specific animation registred in `others`
   void playOther(dynamic key, {bool? flipX, bool? flipY}) {
-    if (others.containsKey(key) == true && _currentKeyCustom != key) {
+    if (containOther(key) &&
+        (_currentKeyCustom != key || _checkFlipIsDiffrent(flipX, flipY))) {
       if (!runToTheEndFastAnimation) {
         _fastAnimation = null;
       }
@@ -291,7 +292,12 @@ class SimpleDirectionAnimation {
     }
   }
 
-  bool containOther(String key) => others.containsKey(key);
+  bool _checkFlipIsDiffrent(bool? flipX, bool? flipY) {
+    return (flipX != null && flipX != isFlipHorizontally) ||
+        (flipY != null && flipY != isFlipVertically);
+  }
+
+  bool containOther(dynamic key) => others.containsKey(key);
 
   /// Method used to play animation once time
   Future playOnce(

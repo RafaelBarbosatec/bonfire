@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 
@@ -11,9 +12,9 @@ extension MovementExtensions on Movement {
     required T target,
     Function? close,
     double margin = 4,
+    VoidCallback? canNotMove,
   }) {
     double radAngle = getAngleFromTarget(target);
-
     Rect rectPlayerCollision = target.rectCollision.inflate(margin);
 
     if (rectCollision.overlaps(rectPlayerCollision)) {
@@ -21,8 +22,70 @@ extension MovementExtensions on Movement {
       stopMove();
       return false;
     }
-    moveFromAngle(radAngle);
-    return true;
+
+    final direct = BonfireUtil.getDirectionFromAngle(radAngle);
+    if (canMove(direct)) {
+      moveFromDirection(direct);
+      return true;
+    } else {
+      switch (direct) {
+        case Direction.right:
+        case Direction.left:
+        case Direction.up:
+        case Direction.down:
+          break;
+        case Direction.upLeft:
+          if (canMove(Direction.left)) {
+            setZeroVelocity();
+            moveLeft();
+            return true;
+          } else if (canMove(Direction.up)) {
+            setZeroVelocity();
+            moveUp();
+            return true;
+          }
+          break;
+        case Direction.upRight:
+          if (canMove(Direction.right)) {
+            setZeroVelocity();
+            moveRight();
+            return true;
+          } else if (canMove(Direction.up)) {
+            setZeroVelocity();
+            moveUp();
+            return true;
+          }
+          break;
+        case Direction.downLeft:
+          if (canMove(Direction.left)) {
+            setZeroVelocity();
+            moveLeft();
+            return true;
+          } else if (canMove(Direction.down)) {
+            setZeroVelocity();
+            moveDown();
+            return true;
+          }
+          break;
+        case Direction.downRight:
+          if (canMove(Direction.right)) {
+            // setZeroVelocity();
+            moveRight();
+            return true;
+          } else if (canMove(Direction.down)) {
+            // setZeroVelocity();
+            moveDown();
+            return true;
+          }
+          break;
+      }
+      if (canNotMove != null) {
+        canNotMove();
+      } else {
+        stopMove();
+      }
+      return false;
+    }
   }
 
   bool keepDistance(GameComponent target, double minDistance) {

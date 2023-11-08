@@ -33,15 +33,10 @@ class Goblin extends SimpleEnemy
     if (!enableBehaviors) return;
 
     if (!gameRef.sceneBuilderStatus.isRunning) {
-      seePlayer(
+      seeAndMoveToPlayer(
         radiusVision: DungeonMap.tileSize,
-        observed: (p) {
-          moveTowardsTarget(
-            target: p,
-            close: () {
-              execAttack(attack);
-            },
-          );
+        closePlayer: (p) {
+          execAttack(attack);
         },
         notObserved: () {
           seeAndMoveToAttackRange(
@@ -60,6 +55,7 @@ class Goblin extends SimpleEnemy
               return false;
             },
           );
+          return false;
         },
       );
     }
