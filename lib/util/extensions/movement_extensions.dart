@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 
@@ -23,7 +22,7 @@ extension MovementExtensions on Movement {
     }
 
     final direct = BonfireUtil.getDirectionFromAngle(radAngle);
-    if (canMove(direct)) {
+    if (canMove(direct, ignoreHitboxes: target.shapeHitboxes)) {
       moveFromDirection(direct);
       return true;
     } else {
@@ -70,6 +69,7 @@ extension MovementExtensions on Movement {
           }
           break;
       }
+      stopMove();
       return false;
     }
   }

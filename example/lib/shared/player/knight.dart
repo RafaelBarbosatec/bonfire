@@ -153,6 +153,7 @@ class Knight extends SimplePlayer
     if (!showedDialog) {
       showedDialog = true;
       double lastZoom = gameRef.camera.zoom;
+      stopMove();
       PlayerDialog.execShowTalk(
         gameRef,
         enemy,
