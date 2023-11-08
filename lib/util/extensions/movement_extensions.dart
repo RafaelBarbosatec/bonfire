@@ -69,21 +69,15 @@ extension MovementExtensions on Movement {
           break;
         case Direction.downRight:
           if (canMove(Direction.right)) {
-            // setZeroVelocity();
             moveRight();
             return true;
           } else if (canMove(Direction.down)) {
-            // setZeroVelocity();
             moveDown();
             return true;
           }
           break;
       }
-      if (canNotMove != null) {
-        canNotMove();
-      } else {
-        stopMove();
-      }
+      canNotMove?.call();
       return false;
     }
   }

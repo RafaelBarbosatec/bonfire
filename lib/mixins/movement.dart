@@ -438,7 +438,8 @@ mixin Movement on GameComponent {
     return false;
   }
 
-  bool canMove(Direction direction, {double? displacement}) {
+  bool canMove(Direction direction,
+      {double? displacement, List<ShapeHitbox>? ignoreHitboxes}) {
     double maxDistance = displacement ?? (speed * (dtUpdate * 2));
 
     int countColli = 0;
@@ -447,35 +448,44 @@ mixin Movement on GameComponent {
       case Direction.left:
       case Direction.up:
       case Direction.down:
-        if (_checkRaycastDirection(direction, maxDistance)) {
+        if (_checkRaycastDirection(direction, maxDistance,
+            ignoreHitboxes: ignoreHitboxes)) {
           countColli++;
         }
         break;
       case Direction.upLeft:
-        if (_checkRaycastDirection(Direction.left, maxDistance)) {
+        if (_checkRaycastDirection(Direction.left, maxDistance,
+            ignoreHitboxes: ignoreHitboxes)) {
           countColli++;
-        } else if (_checkRaycastDirection(Direction.up, maxDistance)) {
+        } else if (_checkRaycastDirection(Direction.up, maxDistance,
+            ignoreHitboxes: ignoreHitboxes)) {
           countColli++;
         }
         break;
       case Direction.upRight:
-        if (_checkRaycastDirection(Direction.right, maxDistance)) {
+        if (_checkRaycastDirection(Direction.right, maxDistance,
+            ignoreHitboxes: ignoreHitboxes)) {
           countColli++;
-        } else if (_checkRaycastDirection(Direction.up, maxDistance)) {
+        } else if (_checkRaycastDirection(Direction.up, maxDistance,
+            ignoreHitboxes: ignoreHitboxes)) {
           countColli++;
         }
         break;
       case Direction.downLeft:
-        if (_checkRaycastDirection(Direction.left, maxDistance)) {
+        if (_checkRaycastDirection(Direction.left, maxDistance,
+            ignoreHitboxes: ignoreHitboxes)) {
           countColli++;
-        } else if (_checkRaycastDirection(Direction.down, maxDistance)) {
+        } else if (_checkRaycastDirection(Direction.down, maxDistance,
+            ignoreHitboxes: ignoreHitboxes)) {
           countColli++;
         }
         break;
       case Direction.downRight:
-        if (_checkRaycastDirection(Direction.right, maxDistance)) {
+        if (_checkRaycastDirection(Direction.right, maxDistance,
+            ignoreHitboxes: ignoreHitboxes)) {
           countColli++;
-        } else if (_checkRaycastDirection(Direction.down, maxDistance)) {
+        } else if (_checkRaycastDirection(Direction.down, maxDistance,
+            ignoreHitboxes: ignoreHitboxes)) {
           countColli++;
         }
         break;
@@ -484,23 +494,54 @@ mixin Movement on GameComponent {
     return countColli == 0;
   }
 
-  bool _checkRaycastDirection(Direction direction, double maxDistance) {
+  bool _checkRaycastDirection(Direction direction, double maxDistance,
+      {List<ShapeHitbox>? ignoreHitboxes}) {
     double distance = maxDistance;
+    final centerComp = rectCollision.center.toVector2();
+    final origin1 = centerComp;
+    final origin3 = centerComp;
     final size = rectCollision.sizeVector2;
+
     switch (direction) {
       case Direction.right:
       case Direction.left:
-        distance += size.x / 2;
+        double halfX = size.x / 2;
+        origin1.translate(0, -halfX);
+        origin3.translate(0, halfX);
+        distance += halfX;
         break;
       case Direction.up:
       case Direction.down:
-        distance += size.y / 2;
+        double halfY = size.y / 2;
+        origin1.translate(-halfY, 0);
+        origin3.translate(halfY, 0);
+        distance += halfY;
         break;
       case Direction.upLeft:
       case Direction.upRight:
       case Direction.downLeft:
       case Direction.downRight:
     }
-    return raycast(direction.toVector2(), maxDistance: distance) != null;
+    bool check1 = raycast(
+          direction.toVector2(),
+          maxDistance: distance,
+          origin: origin1,
+          ignoreHitboxes: ignoreHitboxes,
+        ) !=
+        null;
+    bool check2 = raycast(
+          direction.toVector2(),
+          maxDistance: distance,
+          ignoreHitboxes: ignoreHitboxes,
+        ) !=
+        null;
+    bool check3 = raycast(
+          direction.toVector2(),
+          maxDistance: distance,
+          origin: origin3,
+          ignoreHitboxes: ignoreHitboxes,
+        ) !=
+        null;
+    return check1 || check2 || check3;
   }
 }
