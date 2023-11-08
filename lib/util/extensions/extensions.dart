@@ -104,8 +104,6 @@ extension RectExt on Rect {
       width,
       height,
     );
-
-    
   }
 
   bool overlapComponent(PositionComponent c) {
@@ -152,6 +150,10 @@ extension NullableExt<T> on T? {
 extension Vector2Ext on Vector2 {
   Vector2 copyWith({double? x, double? y}) {
     return Vector2(x ?? this.x, y ?? this.y);
+  }
+
+  double maxValue() {
+    return max(x, y);
   }
 }
 
@@ -270,6 +272,27 @@ extension ComponentExt on GameComponent {
 extension DirectionExt on Direction {
   double toRadians() {
     return BonfireUtil.getAngleFromDirection(this);
+  }
+
+  Vector2 toVector2() {
+    switch (this) {
+      case Direction.left:
+        return Vector2(-1, 0);
+      case Direction.right:
+        return Vector2(1, 0);
+      case Direction.up:
+        return Vector2(0, -1);
+      case Direction.down:
+        return Vector2(0, 1);
+      case Direction.upLeft:
+        return Vector2(-1, -1);
+      case Direction.upRight:
+        return Vector2(1, -1);
+      case Direction.downLeft:
+        return Vector2(-1, 1);
+      case Direction.downRight:
+        return Vector2(1, 1);
+    }
   }
 }
 

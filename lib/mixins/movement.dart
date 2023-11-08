@@ -363,10 +363,12 @@ mixin Movement on GameComponent {
     double diagonalSpeed = (speed ?? this.speed) * diaginalReduction;
     double dtSpeed = (speed ?? this.speed) * dtUpdate * 1.1;
     double dtDiagonalSpeed = diagonalSpeed * dtUpdate * 1.1;
-    final compCenter = rectCollision.centerVector2;
+    final rect = rectCollision;
+    final compCenter = rect.centerVector2;
+    final compPosition = rect.positionVector2;
 
-    double diffX = position.x - (useCenter ? compCenter : absolutePosition).x;
-    double diffY = position.y - (useCenter ? compCenter : absolutePosition).y;
+    double diffX = position.x - (useCenter ? compCenter : compPosition).x;
+    double diffY = position.y - (useCenter ? compCenter : compPosition).y;
 
     if (diffX.abs() < dtSpeed && diffY.abs() < dtSpeed) {
       return false;
@@ -432,5 +434,24 @@ mixin Movement on GameComponent {
       }
     }
     return false;
+  }
+
+  bool canMove(Direction direction, {double? displacement}) {
+    double maxDistance = displacement ?? (speed * (dtUpdate * 4));
+    final size = rectCollision.sizeVector2;
+    switch (direction) {
+      case Direction.right:
+      case Direction.left:
+      case Direction.up:
+      case Direction.down:
+        maxDistance += size.y / 2;
+      case Direction.upLeft:
+      case Direction.upRight:
+      case Direction.downLeft:
+      case Direction.downRight:
+        maxDistance += sqrt(pow(size.x, 2) + pow(size.y, 2));
+    }
+    final result = raycast(direction.toVector2(), maxDistance: maxDistance);
+    return result?.hitbox == null;
   }
 }
