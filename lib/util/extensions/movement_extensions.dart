@@ -36,33 +36,27 @@ extension MovementExtensions on Movement {
           break;
         case Direction.upLeft:
           if (canMove(Direction.left)) {
-            setZeroVelocity();
             moveLeft();
             return true;
           } else if (canMove(Direction.up)) {
-            setZeroVelocity();
             moveUp();
             return true;
           }
           break;
         case Direction.upRight:
           if (canMove(Direction.right)) {
-            setZeroVelocity();
             moveRight();
             return true;
           } else if (canMove(Direction.up)) {
-            setZeroVelocity();
             moveUp();
             return true;
           }
           break;
         case Direction.downLeft:
           if (canMove(Direction.left)) {
-            setZeroVelocity();
             moveLeft();
             return true;
           } else if (canMove(Direction.down)) {
-            setZeroVelocity();
             moveDown();
             return true;
           }
