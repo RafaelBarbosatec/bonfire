@@ -12,7 +12,6 @@ extension MovementExtensions on Movement {
     Function? close,
     double margin = 4,
   }) {
-    double radAngle = getAngleFromTarget(target);
     Rect rectPlayerCollision = target.rectCollision.inflate(margin);
 
     if (rectCollision.overlaps(rectPlayerCollision)) {
@@ -21,6 +20,7 @@ extension MovementExtensions on Movement {
       return false;
     }
 
+    double radAngle = getAngleFromTarget(target);
     final direct = BonfireUtil.getDirectionFromAngle(radAngle);
     if (canMove(direct, ignoreHitboxes: target.shapeHitboxes)) {
       moveFromDirection(direct);
