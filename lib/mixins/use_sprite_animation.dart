@@ -123,7 +123,7 @@ mixin UseSpriteAnimation on GameComponent {
   int get animationCurrentIndex => _animationRender?.currentIndex ?? 0;
   bool get isPaused => _animationRender?.isPaused ?? false;
 
-  void showAnimationStroke(Color color, double width,{Vector2? offset}) {
+  void showAnimationStroke(Color color, double width, {Vector2? offset}) {
     if (_strockePaint != null &&
         _strokeWidth == width &&
         _strockePaint?.color == color) {

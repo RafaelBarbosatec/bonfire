@@ -135,6 +135,7 @@ abstract class GameComponent extends PositionComponent
   bool get containsShapeHitbox {
     return shapeHitboxes.isNotEmpty;
   }
+
   List<ShapeHitbox> get shapeHitboxes => children.query<ShapeHitbox>();
 
   Rect get rectCollision {

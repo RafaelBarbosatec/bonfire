@@ -105,7 +105,6 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
   }
 
   void _jumpDownLeft() {
-    
     if (animation?.containOther(JumpAnimationsEnum.jumpDownLeft) == true) {
       animation?.playOther(JumpAnimationsEnum.jumpDownLeft);
     } else {
