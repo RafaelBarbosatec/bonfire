@@ -1,3 +1,7 @@
+## next
+- adds set `mapZoomFit` in `BonfireCamera`.
+- adds set `moveOnlyMapArea` in `BonfireCamera`.
+
 ## 3.0.6
 - Adds bool `paused` in `BonfireGameInterface`.
 - `SimpleDirectionAnimation.playOther` improvements.

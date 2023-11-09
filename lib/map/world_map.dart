@@ -136,7 +136,7 @@ class WorldMap extends GameMap {
       _mapSize = Vector2(w - x, h - y);
       size = Vector2(w, h);
       _mapPosition = Vector2(x, y);
-      gameRef.camera.updatesetBounds(null);
+      gameRef.camera.updateBoundsAndZoomFit();
       (gameRef as BonfireGame).configCollision();
     }
   }
