@@ -25,6 +25,7 @@ class MyEnemy extends SimpleEnemy with BlockMovementCollision {
   void update(double dt) {
     super.update(dt);
     seeAndMoveToPlayer(
+      margin: -5,
       closePlayer: (player) {
         /// do anything when close to player
       },

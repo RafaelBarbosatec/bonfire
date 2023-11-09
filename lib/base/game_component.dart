@@ -42,11 +42,7 @@ abstract class GameComponent extends PositionComponent
     if (renderAboveComponents && hasGameRef) {
       return LayerPriority.getAbovePriority(gameRef.highestPriority);
     }
-    return LayerPriority.getComponentPriority(_getBottomPriority());
-  }
-
-  int _getBottomPriority() {
-    return toAbsoluteRect().bottom.round();
+    return LayerPriority.getComponentPriority(rectCollision.bottom.floor());
   }
 
   @override
@@ -136,9 +132,11 @@ abstract class GameComponent extends PositionComponent
     }
   }
 
-  bool get isCollision {
-    return children.query<ShapeHitbox>().isNotEmpty;
+  bool get containsShapeHitbox {
+    return shapeHitboxes.isNotEmpty;
   }
+
+  List<ShapeHitbox> get shapeHitboxes => children.query<ShapeHitbox>();
 
   Rect get rectCollision {
     if (_rectCollision == null) {
@@ -154,11 +152,11 @@ abstract class GameComponent extends PositionComponent
     }
     var absoluteRect = toAbsoluteRect();
 
-    if (_rectCollision == null) {
+    if (_rectCollision != null) {
+      return _rectCollision!.translate(absoluteRect.left, absoluteRect.top);
+    } else {
       return absoluteRect;
     }
-
-    return _rectCollision!.translate(absoluteRect.left, absoluteRect.top);
   }
 
   RaycastResult<ShapeHitbox>? raycast(
@@ -168,16 +166,15 @@ abstract class GameComponent extends PositionComponent
     List<ShapeHitbox>? ignoreHitboxes,
   }) {
     try {
-      var sensorHitBox = <ShapeHitbox>[];
-      gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
-        sensorHitBox.addAll(e.children.query<ShapeHitbox>());
-      });
       return gameRef.raycast(
-        Ray2(origin: origin ?? absoluteCenter, direction: direction),
+        Ray2(
+          origin: origin ?? rectCollision.center.toVector2(),
+          direction: direction,
+        ),
         maxDistance: maxDistance,
         ignoreHitboxes: [
           ...children.query<ShapeHitbox>(),
-          ...sensorHitBox,
+          ..._getSensorsHitbox(),
           ...ignoreHitboxes ?? [],
         ],
       );
@@ -196,12 +193,8 @@ abstract class GameComponent extends PositionComponent
     List<ShapeHitbox>? ignoreHitboxes,
   }) {
     try {
-      var sensorHitBox = <ShapeHitbox>[];
-      gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
-        sensorHitBox.addAll(e.children.query<ShapeHitbox>());
-      });
       return gameRef.raycastAll(
-        origin ?? absoluteCenter,
+        origin ?? rectCollision.center.toVector2(),
         numberOfRays: numberOfRays,
         maxDistance: maxDistance,
         startAngle: startAngle,
@@ -209,7 +202,7 @@ abstract class GameComponent extends PositionComponent
         rays: rays,
         ignoreHitboxes: [
           ...children.query<ShapeHitbox>(),
-          ...sensorHitBox,
+          ..._getSensorsHitbox(),
           ...ignoreHitboxes ?? [],
         ],
       );
@@ -224,22 +217,26 @@ abstract class GameComponent extends PositionComponent
     List<ShapeHitbox>? ignoreHitboxes,
   }) {
     try {
-      var sensorHitBox = <ShapeHitbox>[];
-      gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
-        sensorHitBox.addAll(e.children.query<ShapeHitbox>());
-      });
       return gameRef.raytrace(
         ray,
         maxDepth: maxDepth,
         ignoreHitboxes: [
           ...children.query<ShapeHitbox>(),
-          ...sensorHitBox,
+          ..._getSensorsHitbox(),
           ...ignoreHitboxes ?? [],
         ],
       );
     } catch (e) {
       return [];
     }
+  }
+
+  List<ShapeHitbox> _getSensorsHitbox() {
+    var sensorHitBox = <ShapeHitbox>[];
+    gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
+      sensorHitBox.addAll(e.children.query<ShapeHitbox>());
+    });
+    return sensorHitBox;
   }
 
   @override

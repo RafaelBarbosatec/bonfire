@@ -56,6 +56,7 @@ extension NpcExtensions on Npc {
     double? visionAngle,
     double? angle,
     bool runOnlyVisibleInScreen = true,
+    MovementAxis movementAxis = MovementAxis.all,
   }) {
     if (runOnlyVisibleInScreen && !isVisible) return null;
 
@@ -65,11 +66,15 @@ extension NpcExtensions on Npc {
       angle: angle,
       observed: (player) {
         observed?.call();
-        moveTowardsTarget(
+        bool move = moveTowardsTarget(
           target: player,
           close: () => closePlayer?.call(player),
           margin: margin,
+          movementAxis: movementAxis,
         );
+        if (!move) {
+          notCanMove?.call();
+        }
       },
       notObserved: () {
         bool stop = notObserved?.call() ?? true;
@@ -94,6 +99,7 @@ extension NpcExtensions on Npc {
     double? angle,
     double margin = 10,
     bool runOnlyVisibleInScreen = true,
+    MovementAxis movementAxis = MovementAxis.all,
   }) {
     if (runOnlyVisibleInScreen && !isVisible) return;
 
@@ -103,13 +109,17 @@ extension NpcExtensions on Npc {
       angle: angle ?? lastDirection.toRadians(),
       observed: (enemy) {
         observed?.call();
-        moveTowardsTarget(
+        bool move = moveTowardsTarget(
           target: enemy.first,
           close: () {
             closeEnemy(enemy.first);
           },
           margin: margin,
+          movementAxis: movementAxis,
         );
+        if (!move) {
+          notCanMove?.call();
+        }
       },
       notObserved: () {
         bool stop = notObserved?.call() ?? true;
@@ -134,6 +144,7 @@ extension NpcExtensions on Npc {
     double? angle,
     double margin = 10,
     bool runOnlyVisibleInScreen = true,
+    MovementAxis movementAxis = MovementAxis.all,
   }) {
     if (runOnlyVisibleInScreen && !isVisible) return;
 
@@ -143,13 +154,17 @@ extension NpcExtensions on Npc {
       angle: angle ?? lastDirection.toRadians(),
       observed: (ally) {
         observed?.call();
-        moveTowardsTarget(
+        bool move = moveTowardsTarget(
           target: ally.first,
           close: () {
             closeAlly(ally.first);
           },
+          movementAxis: movementAxis,
           margin: margin,
         );
+        if (!move) {
+          notCanMove?.call();
+        }
       },
       notObserved: () {
         bool stop = notObserved?.call() ?? true;
@@ -180,7 +195,7 @@ extension NpcExtensions on Npc {
     if (player == null) return 0.0;
     return BonfireUtil.angleBetweenPoints(
       playerRect.center.toVector2(),
-      toAbsoluteRect().center.toVector2(),
+      rectCollision.centerVector2,
     );
   }
 

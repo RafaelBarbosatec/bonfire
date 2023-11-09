@@ -115,5 +115,8 @@ class Tile extends GameComponent with UseAssetsLoader {
   bool get enabledCheckIsVisible => false;
 
   @override
+  int get priority => 0;
+
+  @override
   void renderDebugMode(Canvas canvas) {}
 }

@@ -232,7 +232,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   Iterable<ShapeHitbox> collisions({bool onlyVisible = false}) {
     if (onlyVisible) {
       List<ShapeHitbox> tilesCollision = [];
-      map.getRendered().where((element) => element.isCollision).forEach((e) {
+      map
+          .getRendered()
+          .where((element) => element.containsShapeHitbox)
+          .forEach((e) {
         tilesCollision.addAll(e.children.query<ShapeHitbox>());
       });
       return [
@@ -314,14 +317,14 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   void addVisible(GameComponent obj) {
     _visibleComponents.add(obj);
-    if (obj.isCollision) {
+    if (obj.containsShapeHitbox) {
       _visibleCollisions.addAll(obj.children.query<ShapeHitbox>());
     }
   }
 
   void removeVisible(GameComponent obj) {
     _visibleComponents.remove(obj);
-    if (obj.isCollision) {
+    if (obj.containsShapeHitbox) {
       obj.children.query<ShapeHitbox>().forEach((element) {
         _visibleCollisions.remove(element);
       });

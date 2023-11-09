@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 
+enum MovementAxis { horizontal, vertical, withoutDiagonal, all }
+
 extension MovementExtensions on Movement {
   /// This method move this component to target
   /// Need use Movement mixin.
@@ -11,9 +13,8 @@ extension MovementExtensions on Movement {
     required T target,
     Function? close,
     double margin = 4,
+    MovementAxis movementAxis = MovementAxis.all,
   }) {
-    double radAngle = getAngleFromTarget(target);
-
     Rect rectPlayerCollision = target.rectCollision.inflate(margin);
 
     if (rectCollision.overlaps(rectPlayerCollision)) {
@@ -21,13 +22,77 @@ extension MovementExtensions on Movement {
       stopMove();
       return false;
     }
-    moveFromAngle(radAngle);
-    return true;
+
+    double radAngle = getAngleFromTarget(target);
+    Direction directionToMove = BonfireUtil.getDirectionFromAngle(radAngle);
+    final newDirectionToMove = _checkRestrictAxis(
+      directionToMove,
+      movementAxis,
+    );
+    if (newDirectionToMove != null) {
+      directionToMove = newDirectionToMove;
+    } else {
+      stopMove();
+      return false;
+    }
+
+    if (canMove(directionToMove, ignoreHitboxes: target.shapeHitboxes)) {
+      moveFromDirection(directionToMove);
+      return true;
+    } else {
+      switch (directionToMove) {
+        case Direction.right:
+        case Direction.left:
+        case Direction.up:
+        case Direction.down:
+          break;
+        case Direction.upLeft:
+          if (canMove(Direction.left)) {
+            moveLeft();
+            return true;
+          } else if (canMove(Direction.up)) {
+            moveUp();
+            return true;
+          }
+          break;
+        case Direction.upRight:
+          if (canMove(Direction.right)) {
+            moveRight();
+            return true;
+          } else if (canMove(Direction.up)) {
+            moveUp();
+            return true;
+          }
+          break;
+        case Direction.downLeft:
+          if (canMove(Direction.left)) {
+            moveLeft();
+            return true;
+          } else if (canMove(Direction.down)) {
+            moveDown();
+            return true;
+          }
+          break;
+        case Direction.downRight:
+          if (canMove(Direction.right)) {
+            moveRight();
+            return true;
+          } else if (canMove(Direction.down)) {
+            moveDown();
+            return true;
+          }
+          break;
+      }
+      stopMove();
+      return false;
+    }
   }
 
   bool keepDistance(GameComponent target, double minDistance) {
     if (!isVisible) return true;
-    double distance = absoluteCenter.distanceTo(target.absoluteCenter);
+    double distance = rectCollision.centerVector2.distanceTo(
+      target.rectCollision.centerVector2,
+    );
 
     if (distance < minDistance) {
       var angle = getAngleFromTarget(target);
@@ -161,5 +226,80 @@ extension MovementExtensions on Movement {
         }
       }
     }
+  }
+
+  Direction? _checkRestrictAxis(
+    Direction directionToMove,
+    MovementAxis moveAxis,
+  ) {
+    if (moveAxis == MovementAxis.all) {
+      return directionToMove;
+    }
+    switch (directionToMove) {
+      case Direction.upLeft:
+        switch (moveAxis) {
+          case MovementAxis.horizontal:
+          case MovementAxis.withoutDiagonal:
+            return Direction.left;
+          case MovementAxis.vertical:
+            return Direction.up;
+
+          default:
+        }
+      case Direction.upRight:
+        switch (moveAxis) {
+          case MovementAxis.horizontal:
+          case MovementAxis.withoutDiagonal:
+            return Direction.right;
+          case MovementAxis.vertical:
+            return Direction.up;
+
+          default:
+        }
+      case Direction.downLeft:
+        switch (moveAxis) {
+          case MovementAxis.horizontal:
+          case MovementAxis.withoutDiagonal:
+            return Direction.left;
+          case MovementAxis.vertical:
+            return Direction.down;
+
+          default:
+        }
+      case Direction.downRight:
+        switch (moveAxis) {
+          case MovementAxis.horizontal:
+          case MovementAxis.withoutDiagonal:
+            return Direction.right;
+          case MovementAxis.vertical:
+            return Direction.down;
+          default:
+        }
+      case Direction.left:
+        if (moveAxis == MovementAxis.vertical) {
+          return null;
+        } else {
+          return directionToMove;
+        }
+      case Direction.right:
+        if (moveAxis == MovementAxis.vertical) {
+          return null;
+        } else {
+          return directionToMove;
+        }
+      case Direction.up:
+        if (moveAxis == MovementAxis.horizontal) {
+          return null;
+        } else {
+          return directionToMove;
+        }
+      case Direction.down:
+        if (moveAxis == MovementAxis.horizontal) {
+          return null;
+        } else {
+          return directionToMove;
+        }
+    }
+    return null;
   }
 }

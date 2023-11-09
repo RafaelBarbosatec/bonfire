@@ -19,10 +19,19 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
         _jumpDownLeft();
       } else {
         animation?.playOther(
-          JumpAnimationsEnum.jumpDownRight.name,
+          JumpAnimationsEnum.jumpDownRight,
           flipX: false,
         );
       }
+    }
+  }
+
+  @override
+  void onPlayRunDownRightAnimation() {
+    if (jumping) {
+      animation?.playOther(JumpAnimationsEnum.jumpDownRight, flipX: false);
+    } else {
+      super.onPlayRunDownRightAnimation();
     }
   }
 
@@ -32,15 +41,6 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
       _jumpDownLeft();
     } else {
       super.onPlayRunDownLeftAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunDownRightAnimation() {
-    if (jumping) {
-      animation?.playOther(JumpAnimationsEnum.jumpDownRight.name, flipX: false);
-    } else {
-      super.onPlayRunDownRightAnimation();
     }
   }
 
@@ -65,7 +65,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
   @override
   void onPlayRunRightAnimation() {
     if (jumping) {
-      animation?.playOther(JumpAnimationsEnum.jumpUpRight.name, flipX: false);
+      animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
     } else {
       super.onPlayRunRightAnimation();
     }
@@ -74,7 +74,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
   @override
   void onPlayRunUpRightAnimation() {
     if (jumping) {
-      animation?.playOther(JumpAnimationsEnum.jumpUpRight.name, flipX: false);
+      animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
     } else {
       super.onPlayRunUpRightAnimation();
     }
@@ -86,7 +86,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
       if (lastDirectionHorizontal == Direction.left) {
         _playJumpUpLeft();
       } else {
-        animation?.playOther(JumpAnimationsEnum.jumpUpRight.name, flipX: false);
+        animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
       }
     } else {
       super.onPlayRunUpAnimation();
@@ -94,22 +94,22 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
   }
 
   void _playJumpUpLeft() {
-    if (animation?.containOther(JumpAnimationsEnum.jumpUpLeft.name) == true) {
-      animation?.playOther(JumpAnimationsEnum.jumpUpLeft.name);
+    if (animation?.containOther(JumpAnimationsEnum.jumpUpLeft) == true) {
+      animation?.playOther(JumpAnimationsEnum.jumpUpLeft);
     } else {
       animation?.playOther(
-        JumpAnimationsEnum.jumpUpRight.name,
+        JumpAnimationsEnum.jumpUpRight,
         flipX: true,
       );
     }
   }
 
   void _jumpDownLeft() {
-    if (animation?.containOther(JumpAnimationsEnum.jumpDownLeft.name) == true) {
-      animation?.playOther(JumpAnimationsEnum.jumpDownLeft.name);
+    if (animation?.containOther(JumpAnimationsEnum.jumpDownLeft) == true) {
+      animation?.playOther(JumpAnimationsEnum.jumpDownLeft);
     } else {
       animation?.playOther(
-        JumpAnimationsEnum.jumpDownRight.name,
+        JumpAnimationsEnum.jumpDownRight,
         flipX: true,
       );
     }

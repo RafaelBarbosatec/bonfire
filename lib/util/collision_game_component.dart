@@ -12,11 +12,11 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 10/12/21
 
-class CollisionGameComponent extends GameComponent {
+class CollisionMapComponent extends GameComponent {
   final String name;
   List<ShapeHitbox>? collisions;
 
-  CollisionGameComponent({
+  CollisionMapComponent({
     this.name = '',
     Map<String, dynamic>? properties,
     required Vector2 position,

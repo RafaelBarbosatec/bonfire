@@ -65,7 +65,7 @@ mixin Vision on GameComponent {
       return false;
     }
 
-    final rect = component.toAbsoluteRect();
+    final rect = component.rectCollision;
     final otherShape = RectangleShape(
       rect.sizeVector2,
       position: rect.positionVector2,
@@ -199,7 +199,7 @@ mixin Vision on GameComponent {
   ) {
     String key = '$radiusVision/$visionAngle/$angle';
     PolygonShape shape;
-    var center = absoluteCenter;
+    var center = rectCollision.centerVector2;
     if (_polygonCache.containsKey(key)) {
       shape = _polygonCache[key]!;
       shape.position = center;

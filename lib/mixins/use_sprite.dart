@@ -52,7 +52,7 @@ mixin UseSprite on GameComponent {
     }
   }
 
-  void showSpriteStroke(Color color, double width) {
+  void showSpriteStroke(Color color, double width, {Vector2? offset}) {
     if (_strockePaint != null &&
         _strokeWidth == width &&
         _strockePaint?.color == color) {
@@ -60,6 +60,9 @@ mixin UseSprite on GameComponent {
     }
     _strokeWidth = width;
     _strokePosition = Vector2.all(-_strokeWidth);
+    if (offset != null) {
+      _strokePosition += offset;
+    }
     _strokeSize = Vector2.zero();
     _strockePaint = Paint()
       ..color = color

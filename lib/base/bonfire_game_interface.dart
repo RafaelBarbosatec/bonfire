@@ -62,6 +62,9 @@ abstract class BonfireGameInterface {
   /// Used to pause the engine.
   void pauseEngine();
 
+  /// Returns is the engine if currently paused or running
+  bool get paused;
+
   /// Used to resume the engine.
   void resumeEngine();
 

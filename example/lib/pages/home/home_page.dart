@@ -15,6 +15,7 @@ import 'package:example/pages/mini_games/manual_map/game_manual_map.dart';
 import 'package:example/pages/mini_games/multi_scenario/multi_scenario.dart';
 import 'package:example/pages/mini_games/platform/platform_game.dart';
 import 'package:example/pages/mini_games/random_map/random_map_game.dart';
+import 'package:example/pages/mini_games/simple_example/simple_example_game.dart';
 import 'package:example/pages/mini_games/tiled_map/game_tiled_map.dart';
 import 'package:example/pages/mini_games/top_down_game/top_down_game.dart';
 import 'package:example/pages/path_finding/path_finding_page.dart';
@@ -257,6 +258,12 @@ class _HomePageState extends State<HomePage> {
           ItemDrawer(
             name: 'Manual map game',
             builder: (_) => const GameManualMap(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/mini_games',
+          ),
+          ItemDrawer(
+            name: 'Simple',
+            builder: (_) => const SimpleExampleGame(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/mini_games',
           ),

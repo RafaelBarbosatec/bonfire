@@ -433,7 +433,7 @@ class TiledWorldBuilder {
       } else if (element.typeOrClass?.toLowerCase() == 'collision' ||
           isCollisionLayer) {
         _components.add(
-          CollisionGameComponent(
+          CollisionMapComponent(
             name: element.name ?? '',
             position: Vector2(x, y),
             size: Vector2(collision.size.x, collision.size.y),

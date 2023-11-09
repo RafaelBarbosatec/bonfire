@@ -137,6 +137,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
     viewfinder.add(
       MyFollowBehavior(
         target: target,
+        targetSize: _getTargetSize(target),
         maxSpeed: config.speed,
         movementWindow: config.movementWindow,
         horizontalOnly: horizontalOnly,
@@ -246,5 +247,17 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
         duration: duration ?? const Duration(milliseconds: 300),
       ),
     );
+  }
+
+  Vector2? _getTargetSize(ReadOnlyPositionProvider target) {
+    if (target is PositionComponent) {
+      if (target.anchor == Anchor.topLeft) {
+        return target.size;
+      }
+      if (target.anchor == Anchor.bottomRight) {
+        return -target.size;
+      }
+    }
+    return null;
   }
 }

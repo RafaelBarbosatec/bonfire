@@ -73,7 +73,7 @@ class TileWithCollision extends Tile {
   bool onComponentTypeCheck(PositionComponent other) {
     if (other is TileWithCollision ||
         other is GameDecorationWithCollision ||
-        other is CollisionGameComponent) {
+        other is CollisionMapComponent) {
       return false;
     }
     return super.onComponentTypeCheck(other);

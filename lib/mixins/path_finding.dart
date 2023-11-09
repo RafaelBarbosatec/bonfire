@@ -116,7 +116,7 @@ mixin PathFinding on Movement {
   List<Offset> _calculatePath(Vector2 finalPosition) {
     final player = this;
 
-    final positionPlayer = player.toAbsoluteRect().center.toVector2();
+    final positionPlayer = player.rectCollision.centerVector2;
 
     Point<int> playerPosition = _getCenterPositionByTile(positionPlayer);
 
@@ -212,8 +212,8 @@ mixin PathFinding on Movement {
       tileSize = gameRef.map.tiles.first.width;
     }
     if (_gridSizeIsCollisionSize) {
-      final ract = toAbsoluteRect();
-      return max(ract.height, ract.width) +
+      final rect = rectCollision;
+      return max(rect.height, rect.width) +
           REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
     }
     return tileSize;

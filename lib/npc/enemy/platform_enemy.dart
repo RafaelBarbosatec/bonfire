@@ -21,16 +21,13 @@ class PlatformEnemy extends SimpleEnemy
             runLeft: animation.runLeft,
             others: {
               if (animation.jump?.jumpUpRight != null)
-                JumpAnimationsEnum.jumpUpRight.name:
-                    animation.jump!.jumpUpRight,
+                JumpAnimationsEnum.jumpUpRight: animation.jump!.jumpUpRight,
               if (animation.jump?.jumpUpLeft != null)
-                JumpAnimationsEnum.jumpUpLeft.name: animation.jump!.jumpUpLeft!,
+                JumpAnimationsEnum.jumpUpLeft: animation.jump!.jumpUpLeft!,
               if (animation.jump?.jumpDownRight != null)
-                JumpAnimationsEnum.jumpDownRight.name:
-                    animation.jump!.jumpDownRight,
+                JumpAnimationsEnum.jumpDownRight: animation.jump!.jumpDownRight,
               if (animation.jump?.jumpDownLeft != null)
-                JumpAnimationsEnum.jumpDownLeft.name:
-                    animation.jump!.jumpDownLeft!,
+                JumpAnimationsEnum.jumpDownLeft: animation.jump!.jumpDownLeft!,
               ...animation.others ?? {},
             },
           ),

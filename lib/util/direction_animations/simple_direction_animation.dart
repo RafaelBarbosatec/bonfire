@@ -49,6 +49,7 @@ class SimpleDirectionAnimation {
   SimpleAnimationEnum? beforeLastPlayedAnimation = SimpleAnimationEnum.idleDown;
 
   bool _playing = true;
+  dynamic _currentKeyCustom;
 
   Paint? _strockePaint;
   double _strokeWidth = 0;
@@ -114,6 +115,7 @@ class SimpleDirectionAnimation {
     isFlipVertically = false;
 
     _currentType = animation;
+    _currentKeyCustom = null;
     if (!runToTheEndFastAnimation) {
       _fastAnimation = null;
     }
@@ -277,18 +279,25 @@ class SimpleDirectionAnimation {
 
   /// Method used to play specific animation registred in `others`
   void playOther(dynamic key, {bool? flipX, bool? flipY}) {
-    if (others.containsKey(key) == true) {
+    if (containOther(key) &&
+        (_currentKeyCustom != key || _checkFlipIsDiffrent(flipX, flipY))) {
       if (!runToTheEndFastAnimation) {
         _fastAnimation = null;
       }
       isFlipHorizontally = flipX ?? (isFlipHorizontally);
       isFlipVertically = flipY ?? (isFlipVertically);
       _current.animation = others[key];
+      _currentKeyCustom = key;
       _currentType = SimpleAnimationEnum.custom;
     }
   }
 
-  bool containOther(String key) => others.containsKey(key);
+  bool _checkFlipIsDiffrent(bool? flipX, bool? flipY) {
+    return (flipX != null && flipX != isFlipHorizontally) ||
+        (flipY != null && flipY != isFlipVertically);
+  }
+
+  bool containOther(dynamic key) => others.containsKey(key);
 
   /// Method used to play animation once time
   Future playOnce(
@@ -515,7 +524,7 @@ class SimpleDirectionAnimation {
     }
   }
 
-  void showStroke(Color color, double width) {
+  void showStroke(Color color, double width, {Vector2? offset}) {
     if (_strockePaint != null &&
         _strokeWidth == width &&
         _strockePaint?.color == color) {
@@ -523,6 +532,9 @@ class SimpleDirectionAnimation {
     }
     _strokeWidth = width;
     _strokePosition = Vector2.all(-_strokeWidth);
+    if (offset != null) {
+      _strokePosition += offset;
+    }
     _strokeSize = Vector2.zero();
     _strockePaint = Paint()
       ..color = color

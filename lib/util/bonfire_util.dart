@@ -6,39 +6,42 @@ class BonfireUtil {
   // ignore: constant_identifier_names
   static const PI_180 = (180 / pi);
 
-  static Direction getDirectionFromAngle(double angle) {
+  static Direction getDirectionFromAngle(
+    double angle, {
+    double directionSpace = 2.5,
+  }) {
     double degrees = angle * PI_180;
-
-    if (degrees > -22.5 && degrees <= 22.5) {
+    if (degrees > -directionSpace && degrees <= directionSpace) {
       return Direction.right;
     }
 
-    if (degrees > 22.5 && degrees <= 67.5) {
+    if (degrees > directionSpace && degrees <= (90 - directionSpace)) {
       return Direction.downRight;
     }
 
-    if (degrees > 67.5 && degrees <= 112.5) {
+    if (degrees > (90 - directionSpace) && degrees <= (90 + directionSpace)) {
       return Direction.down;
     }
 
-    if (degrees > 112.5 && degrees <= 157.5) {
+    if (degrees > (90 + directionSpace) && degrees <= (180 - directionSpace)) {
       return Direction.downLeft;
     }
 
-    if ((degrees > 157.5 && degrees <= 180) ||
-        (degrees >= -180 && degrees <= -157.5)) {
+    if ((degrees > (180 - directionSpace) && degrees <= 180) ||
+        (degrees >= -180 && degrees <= -(180 - directionSpace))) {
       return Direction.left;
     }
 
-    if (degrees > -157.5 && degrees <= -112.5) {
+    if (degrees > -(180 - directionSpace) &&
+        degrees <= -(90 + directionSpace)) {
       return Direction.upLeft;
     }
 
-    if (degrees > -112.5 && degrees <= -67.5) {
+    if (degrees > -(90 + directionSpace) && degrees <= -(90 - directionSpace)) {
       return Direction.up;
     }
 
-    if (degrees > -67.5 && degrees <= -22.5) {
+    if (degrees > -(90 - directionSpace) && degrees <= -directionSpace) {
       return Direction.upRight;
     }
     return Direction.left;
@@ -72,6 +75,10 @@ class BonfireUtil {
 
   static double angleBetweenPoints(Vector2 p1, Vector2 p2) {
     return atan2(p2.y - p1.y, p2.x - p1.x);
+  }
+
+  static double angleBetweenPointsOffset(Offset p1, Offset p2) {
+    return atan2(p2.dy - p1.dy, p2.dx - p1.dx);
   }
 
   static Offset rotatePoint(Offset point, double angle, Offset center) {

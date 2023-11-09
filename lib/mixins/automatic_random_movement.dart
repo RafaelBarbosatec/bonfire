@@ -79,17 +79,20 @@ mixin AutomaticRandomMovement on Movement {
             break;
         }
 
-        _targetRandomMovement = position.translated(
+        final centerPosition = rectCollision.centerVector2;
+
+        _targetRandomMovement = centerPosition.translated(
           randomX.toDouble(),
           randomY.toDouble(),
         );
 
         if (checkPositionWithRaycast) {
-          final direct = (_targetRandomMovement! - position).normalized();
+          final direct = (_targetRandomMovement! - centerPosition).normalized();
           final result = raycast(
             direct,
-            origin: position,
-            maxDistance: position.distanceTo(_targetRandomMovement!),
+            maxDistance: rectCollision.centerVector2.distanceTo(
+              _targetRandomMovement!,
+            ),
           );
           if (result?.hitbox != null) {
             _targetRandomMovement = null;
@@ -102,11 +105,11 @@ mixin AutomaticRandomMovement on Movement {
         }
       }
     } else {
-      if (!moveToPosition(
+      bool moved = moveToPosition(
         _targetRandomMovement!,
         speed: speed,
-        useCenter: false,
-      )) {
+      );
+      if (!moved) {
         _arrivedTargetCallback?.call();
         stopMove();
       }

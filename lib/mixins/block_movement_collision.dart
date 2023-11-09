@@ -86,23 +86,38 @@ mixin BlockMovementCollision on Movement {
     Direction? direction,
   ) {
     if (direction != null) {
-      if ((direction == Direction.down || direction == Direction.up) &&
-          reverseDisplacement.x.abs() > 0) {
+      if (direction.isVertical && reverseDisplacement.x.abs() > 0) {
         if (direction == lastDirectionVertical) {
           reverseDisplacement = reverseDisplacement.copyWith(x: 0);
         } else {
           reverseDisplacement.setZero();
         }
-      } else if ((direction == Direction.left ||
-              direction == Direction.right) &&
-          reverseDisplacement.y.abs() > 0) {
+      } else if (direction.isHorizontal && reverseDisplacement.y.abs() > 0) {
         if (direction == lastDirectionHorizontal) {
           reverseDisplacement = reverseDisplacement.copyWith(y: 0);
         } else {
           reverseDisplacement.setZero();
         }
       }
+      if (reverseDisplacement.isZero()) {
+        switch (direction) {
+          case Direction.right:
+            reverseDisplacement = Vector2(1, 0);
+            break;
+          case Direction.left:
+            reverseDisplacement = Vector2(-1, 0);
+            break;
+          case Direction.up:
+            reverseDisplacement = Vector2(0, -1);
+            break;
+          case Direction.down:
+            reverseDisplacement = Vector2(0, 1);
+            break;
+          default:
+        }
+      }
     }
+
     return reverseDisplacement;
   }
 }
