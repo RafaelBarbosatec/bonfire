@@ -8,7 +8,7 @@ import 'package:flame/experimental.dart';
 class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   double _spacingMap = 32.0;
   final CameraConfig config;
-  late Vector2 _canvasSize;
+  Vector2? _canvasSize;
   BonfireCamera({
     CameraConfig? config,
     super.world,
@@ -212,7 +212,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
 
   set mapZoomFit(InitialMapZoomFitEnum value) {
     config.initialMapZoomFit = value;
-    Vector2 sizeScreen = _canvasSize;
+    Vector2 sizeScreen = canvasSize;
     switch (value) {
       case InitialMapZoomFitEnum.none:
         break;
@@ -232,6 +232,8 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
         break;
     }
   }
+
+  Vector2 get canvasSize => _canvasSize ?? viewport.size;
 
   set moveOnlyMapArea(bool enabled) {
     if (!viewfinder.isMounted) {
