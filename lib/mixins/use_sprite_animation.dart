@@ -21,6 +21,7 @@ mixin UseSpriteAnimation on GameComponent {
   double _strokeWidth = 0;
   Vector2 _strokeSize = Vector2.zero();
   Vector2 _strokePosition = Vector2.zero();
+  Vector2? spriteAnimationOffset;
 
   /// set Animation that will be drawn on the screen.
   void setAnimation(
@@ -52,7 +53,8 @@ mixin UseSpriteAnimation on GameComponent {
         if (_strockePaint != null) {
           _fastAnimation?.render(
             canvas,
-            position: _strokePosition,
+            position:
+                _strokePosition + (spriteAnimationOffset ?? Vector2.zero()),
             size: _strokeSize,
             overridePaint: _strockePaint,
           );
@@ -62,12 +64,18 @@ mixin UseSpriteAnimation on GameComponent {
         if (_strockePaint != null) {
           _animationRender?.render(
             canvas,
-            position: _strokePosition,
+            position:
+                _strokePosition + (spriteAnimationOffset ?? Vector2.zero()),
             size: _strokeSize,
             overridePaint: _strockePaint,
           );
         }
-        _animationRender?.render(canvas, overridePaint: paint);
+        _animationRender?.render(
+          canvas,
+          position: spriteAnimationOffset,
+          overridePaint: paint,
+          size: size,
+        );
       }
     }
   }

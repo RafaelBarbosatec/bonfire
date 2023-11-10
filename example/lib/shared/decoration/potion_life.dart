@@ -28,4 +28,16 @@ class PotionLife extends GameDecoration with Sensor<Player>, Movement {
     removeFromParent();
     super.onContact(component);
   }
+
+  @override
+  void onMount() {
+    generateValues(
+      const Duration(seconds: 1),
+      onChange: (value) {
+        spriteOffset = Vector2(0, 5 * -value);
+      },
+      infinite: true,
+    );
+    super.onMount();
+  }
 }

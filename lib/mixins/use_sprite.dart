@@ -15,6 +15,7 @@ import 'package:bonfire/bonfire.dart';
 /// on 04/02/22
 mixin UseSprite on GameComponent {
   Sprite? sprite;
+  Vector2? spriteOffset;
 
   Paint? _strockePaint;
   double _strokeWidth = 0;
@@ -29,25 +30,15 @@ mixin UseSprite on GameComponent {
         sprite?.render(
           canvas,
           size: _strokeSize,
-          position: _strokePosition,
+          position: _strokePosition + (spriteOffset ?? Vector2.zero()),
           overridePaint: _strockePaint,
         );
       }
       sprite?.render(
         canvas,
+        position: spriteOffset,
         size: size,
         overridePaint: paint,
-      );
-    }
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    if (_strokeSize.isZero()) {
-      _strokeSize = Vector2(
-        size.x + _strokeWidth * 2,
-        size.y + _strokeWidth * 2,
       );
     }
   }
@@ -63,7 +54,10 @@ mixin UseSprite on GameComponent {
     if (offset != null) {
       _strokePosition += offset;
     }
-    _strokeSize = Vector2.zero();
+    _strokeSize = Vector2(
+      size.x + _strokeWidth * 2,
+      size.y + _strokeWidth * 2,
+    );
     _strockePaint = Paint()
       ..color = color
       ..colorFilter = ColorFilter.mode(

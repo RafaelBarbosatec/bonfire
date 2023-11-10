@@ -1,6 +1,10 @@
 ## next
 - adds set `mapZoomFit` in `BonfireCamera`.
 - adds set `moveOnlyMapArea` in `BonfireCamera`.
+- adds param `infinite` in `generateValues`. (ValueGeneratorComponent)
+- adds `spriteOffeset` in `UseSprite`.
+- adds `spriteAnimationOffset` in `UseSpriteAnimation`.
+- adds `spriteAnimationOffset` in `SimpleDirectionAnimation`.
 
 ## 3.0.6
 - Adds bool `paused` in `BonfireGameInterface`.
