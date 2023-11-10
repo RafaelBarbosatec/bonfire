@@ -1,7 +1,7 @@
 ## next
 - adds set `mapZoomFit` in `BonfireCamera`.
 - adds set `moveOnlyMapArea` in `BonfireCamera`.
-- adds param `infinite` in `generateValues`. (ValueGeneratorComponent)
+- adds param `infinite` and `reverseCurve` in `generateValues`. (ValueGeneratorComponent)
 - adds `spriteOffeset` in `UseSprite`.
 - adds `spriteAnimationOffset` in `UseSpriteAnimation`.
 - adds `spriteAnimationOffset` in `SimpleDirectionAnimation`.
