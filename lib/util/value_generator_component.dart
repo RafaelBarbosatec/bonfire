@@ -10,6 +10,7 @@ class ValueGeneratorComponent extends Component {
   final double begin;
   final double end;
   final Curve curve;
+  final Curve? reverseCurve;
   final VoidCallback? onFinish;
   final ValueChanged<double>? onChange;
   final bool autoStart;
@@ -25,6 +26,7 @@ class ValueGeneratorComponent extends Component {
     this.begin = 0,
     this.end = 1,
     this.curve = Curves.decelerate,
+    this.reverseCurve,
     this.onFinish,
     this.onChange,
     this.autoStart = true,
@@ -54,8 +56,16 @@ class ValueGeneratorComponent extends Component {
       _currentValue = 0;
       _reversing = false;
     } else {
-      double value = curve.transform(_currentValue / duration.inMilliseconds);
-      double realValue = begin + (_displacement * value);
+      double realValue;
+      if (_reversing) {
+        double value = (reverseCurve ?? curve)
+            .transform(1 - (_currentValue / duration.inMilliseconds));
+        realValue = begin + (_displacement * (1 - value));
+      } else {
+        double value = curve.transform(_currentValue / duration.inMilliseconds);
+        realValue = begin + (_displacement * value);
+      }
+
       onChange?.call(realValue);
     }
   }
