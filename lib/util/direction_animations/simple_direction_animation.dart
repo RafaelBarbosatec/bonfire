@@ -55,6 +55,7 @@ class SimpleDirectionAnimation {
   double _strokeWidth = 0;
   Vector2 _strokeSize = Vector2.zero();
   Vector2 _strokePosition = Vector2.zero();
+  Vector2? spriteAnimationOffset;
 
   SimpleDirectionAnimation({
     required FutureOr<SpriteAnimation> idleRight,
@@ -399,12 +400,13 @@ class SimpleDirectionAnimation {
           canvas,
           overridePaint: _strockePaint!,
           size: _strokeSize,
-          position: _strokePosition,
+          position: _strokePosition + (spriteAnimationOffset ?? Vector2.zero()),
         );
       }
       _fastAnimation?.render(
         canvas,
         overridePaint: paint,
+        position: spriteAnimationOffset,
       );
     } else {
       if (_strockePaint != null) {
@@ -412,12 +414,13 @@ class SimpleDirectionAnimation {
           canvas,
           overridePaint: _strockePaint,
           size: _strokeSize,
-          position: _strokePosition,
+          position: _strokePosition + (spriteAnimationOffset ?? Vector2.zero()),
         );
       }
       _current.render(
         canvas,
         overridePaint: paint,
+        position: spriteAnimationOffset,
       );
     }
     if (needDoFlip) {

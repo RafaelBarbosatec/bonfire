@@ -1,3 +1,15 @@
+## 3.0.7
+- adds set `mapZoomFit` in `BonfireCamera`.
+- adds set `moveOnlyMapArea` in `BonfireCamera`.
+- adds param `infinite` and `reverseCurve` in `generateValues`. (ValueGeneratorComponent)
+- adds `spriteOffset` in `UseSprite`.
+- adds `spriteAnimationOffset` in `UseSpriteAnimation`.
+- adds `spriteAnimationOffset` in `SimpleDirectionAnimation`.
+- `BlockMovementCollision` improvements. BREAKING CHANGE: Method `onBlockedMovement` now return not null `Direction`.
+- Fix bug when setting `isVisible` to `false`.
+- Fix in polygon collision added by Tiled.
+
+
 ## 3.0.6
 - Adds bool `paused` in `BonfireGameInterface`.
 - `SimpleDirectionAnimation.playOther` improvements.

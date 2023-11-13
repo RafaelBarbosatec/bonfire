@@ -396,6 +396,8 @@ class TiledWorldBuilder {
       double width = _getDoubleByProportion(element.width);
       double height = _getDoubleByProportion(element.height);
       double rotation = (element.rotation ?? 0) * pi / 180;
+      bool isObjectCollision =
+          element.typeOrClass?.toLowerCase() == 'collision' || isCollisionLayer;
       final collision = _getCollisionObject(
         x,
         y,
@@ -403,6 +405,7 @@ class TiledWorldBuilder {
         height,
         ellipse: element.ellipse ?? false,
         polygon: element.polygon,
+        isObjectCollision: isObjectCollision,
       );
 
       if (element.text != null) {
@@ -430,16 +433,13 @@ class TiledWorldBuilder {
             ),
           )..angle = rotation,
         );
-      } else if (element.typeOrClass?.toLowerCase() == 'collision' ||
-          isCollisionLayer) {
+      } else if (isObjectCollision) {
         _components.add(
           CollisionMapComponent(
             name: element.name ?? '',
             position: Vector2(x, y),
             size: Vector2(collision.size.x, collision.size.y),
-            collisions: [
-              collision..position = Vector2.zero(),
-            ],
+            collisions: [collision],
             properties: _extractOtherProperties(element.properties),
           )..angle = rotation,
         );
@@ -596,24 +596,24 @@ class TiledWorldBuilder {
     double height, {
     bool ellipse = false,
     List<Polygon>? polygon,
-    bool isObject = false,
+    bool isObjectCollision = false,
   }) {
     ShapeHitbox ca = RectangleHitbox(
       size: Vector2(width, height),
-      position: Vector2(x, y),
+      position: isObjectCollision ? null : Vector2(x, y),
       isSolid: true,
     );
 
     if (ellipse == true) {
       ca = CircleHitbox(
         radius: (width > height ? width : height) / 2,
-        position: Vector2(x, y),
+        position: isObjectCollision ? null : Vector2(x, y),
         isSolid: true,
       );
     }
 
     if (polygon?.isNotEmpty == true) {
-      ca = _normalizePolygon(x, y, polygon!, isObject: isObject);
+      ca = _normalizePolygon(x, y, polygon!, isObjectCollision);
     }
     return ca;
   }
@@ -621,9 +621,9 @@ class TiledWorldBuilder {
   ShapeHitbox _normalizePolygon(
     double x,
     double y,
-    List<Polygon> polygon, {
-    bool isObject = false,
-  }) {
+    List<Polygon> polygon,
+    bool isObjectCollision,
+  ) {
     double minorX = _getDoubleByProportion(polygon.first.x);
     double minorY = _getDoubleByProportion(polygon.first.y);
     List<Vector2> points = polygon.map((e) {
@@ -657,7 +657,7 @@ class TiledWorldBuilder {
     double alignX = x - points.first.x;
     double alignY = y - points.first.y;
 
-    if (isObject) {
+    if (isObjectCollision) {
       alignX = minorX;
       alignY = minorY;
     }

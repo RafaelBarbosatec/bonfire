@@ -268,7 +268,9 @@ extension GameComponentExtensions on GameComponent {
     double begin = 0.0,
     double end = 1.0,
     Curve curve = Curves.linear,
+    Curve? reverseCurve,
     bool autoStart = true,
+    bool infinite = false,
     VoidCallback? onFinish,
     ValueChanged<double>? onChange,
   }) {
@@ -277,11 +279,13 @@ extension GameComponentExtensions on GameComponent {
       end: end,
       begin: begin,
       curve: curve,
+      reverseCurve: reverseCurve,
       onFinish: onFinish,
       onChange: onChange,
       autoStart: autoStart,
+      infinite: infinite,
     );
-    gameRef.add(valueGenerator);
+    add(valueGenerator);
     return valueGenerator;
   }
 

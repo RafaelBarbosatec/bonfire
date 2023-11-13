@@ -20,7 +20,15 @@ abstract class GameComponent extends PositionComponent
   bool renderAboveComponents = false;
 
   /// Param checks if this component is visible on the screen
-  bool isVisible = false;
+  bool _isVisibleInScreen = false;
+
+  bool get isVisible => _visible ? _isVisibleInScreen : false;
+  set isVisible(bool visible) {
+    _visible = visible;
+  }
+
+  /// Param used to enable or disable the render.
+  bool _visible = true;
 
   bool enabledCheckIsVisible = true;
 
@@ -87,6 +95,7 @@ abstract class GameComponent extends PositionComponent
   }
 
   void _onSetIfVisible() {
+    if (!_visible) return;
     bool nowIsVisible = isVisibleInCamera();
     if (isHud) {
       nowIsVisible = true;
@@ -98,7 +107,7 @@ abstract class GameComponent extends PositionComponent
     if (!nowIsVisible && isVisible) {
       (gameRef as BonfireGame).removeVisible(this);
     }
-    isVisible = nowIsVisible;
+    _isVisibleInScreen = nowIsVisible;
   }
 
   @override

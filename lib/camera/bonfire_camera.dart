@@ -8,6 +8,7 @@ import 'package:flame/experimental.dart';
 class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   double _spacingMap = 32.0;
   final CameraConfig config;
+  Vector2? _canvasSize;
   BonfireCamera({
     CameraConfig? config,
     super.world,
@@ -197,12 +198,22 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    updatesetBounds(size);
+    _canvasSize = size;
+    updateBoundsAndZoomFit();
   }
 
-  void updatesetBounds(Vector2? size) {
-    Vector2 sizeScreen = size ?? viewport.size;
-    switch (config.initialMapZoomFit) {
+  void updateBoundsAndZoomFit({
+    bool? moveOnlyMapArea,
+    InitialMapZoomFitEnum? mapZoomFit,
+  }) {
+    this.mapZoomFit = mapZoomFit ?? config.initialMapZoomFit;
+    this.moveOnlyMapArea = moveOnlyMapArea ?? config.moveOnlyMapArea;
+  }
+
+  set mapZoomFit(InitialMapZoomFitEnum value) {
+    config.initialMapZoomFit = value;
+    Vector2 sizeScreen = canvasSize;
+    switch (value) {
       case InitialMapZoomFitEnum.none:
         break;
       case InitialMapZoomFitEnum.fitWidth:
@@ -220,7 +231,16 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
         zoom = minScreenDimension / minMapDimension;
         break;
     }
-    if (config.moveOnlyMapArea && viewfinder.isMounted) {
+  }
+
+  Vector2 get canvasSize => _canvasSize ?? viewport.size;
+
+  set moveOnlyMapArea(bool enabled) {
+    if (!viewfinder.isMounted) {
+      return;
+    }
+    config.moveOnlyMapArea = enabled;
+    if (enabled) {
       setBounds(
         Rectangle.fromRect(
           gameRef.map.getMapRect().deflatexy(
@@ -229,6 +249,8 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
               ),
         ),
       );
+    } else {
+      setBounds(null);
     }
   }
 

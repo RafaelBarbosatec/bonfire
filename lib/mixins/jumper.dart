@@ -40,12 +40,10 @@ mixin Jumper on Movement, BlockMovementCollision {
   @override
   void onBlockedMovement(
     PositionComponent other,
-    Direction? direction,
+    Direction direction,
   ) {
     super.onBlockedMovement(other, direction);
-    if (jumping &&
-        lastDirectionVertical == Direction.down &&
-        direction == Direction.down) {
+    if (jumping && lastDirectionVertical.isDownSide && direction.isDownSide) {
       _currentJumps = 0;
       jumping = false;
     }

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:bonfire/bonfire.dart';
 
 enum InitialMapZoomFitEnum { none, fitWidth, fitHeight, fit }
@@ -42,4 +43,30 @@ class CameraConfig {
     Vector2? movementWindow,
     this.resolution,
   }) : movementWindow = movementWindow ?? movementWindowDefault;
+
+  CameraConfig copyWith({
+    Vector2? movementWindow,
+    bool? moveOnlyMapArea,
+    double? zoom,
+    double? angle,
+    GameComponent? target,
+    double? speed,
+    bool? startFollowPlayer,
+    InitialMapZoomFitEnum? initialMapZoomFit,
+    Vector2? initPosition,
+    Vector2? resolution,
+  }) {
+    return CameraConfig(
+      movementWindow: movementWindow ?? this.movementWindow,
+      moveOnlyMapArea: moveOnlyMapArea ?? this.moveOnlyMapArea,
+      zoom: zoom ?? this.zoom,
+      angle: angle ?? this.angle,
+      target: target ?? this.target,
+      speed: speed ?? this.speed,
+      startFollowPlayer: startFollowPlayer ?? this.startFollowPlayer,
+      initialMapZoomFit: initialMapZoomFit ?? this.initialMapZoomFit,
+      initPosition: initPosition ?? this.initPosition,
+      resolution: resolution ?? this.resolution,
+    );
+  }
 }

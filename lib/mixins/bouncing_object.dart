@@ -22,7 +22,7 @@ mixin BouncingObject on BlockMovementCollision {
   @override
   void onBlockedMovement(
     PositionComponent other,
-    Direction? direction,
+    Direction direction,
   ) {
     if (onBouncingCollision(other) && !isStopped() && _bouncingObjectEnabled) {
       if (direction == Direction.left || direction == Direction.right) {
