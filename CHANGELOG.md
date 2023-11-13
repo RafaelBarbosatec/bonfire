@@ -2,7 +2,7 @@
 - adds set `mapZoomFit` in `BonfireCamera`.
 - adds set `moveOnlyMapArea` in `BonfireCamera`.
 - adds param `infinite` and `reverseCurve` in `generateValues`. (ValueGeneratorComponent)
-- adds `spriteOffeset` in `UseSprite`.
+- adds `spriteOffset` in `UseSprite`.
 - adds `spriteAnimationOffset` in `UseSpriteAnimation`.
 - adds `spriteAnimationOffset` in `SimpleDirectionAnimation`.
 - `BlockMovementCollision` improvements. BREAKING CHANGE: Method `onBlockedMovement` now return not null `Direction`.
