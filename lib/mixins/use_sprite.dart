@@ -25,7 +25,7 @@ mixin UseSprite on GameComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (isVisible && !isRemoving) {
+    if (isVisibleInScreen && !isRemoving) {
       if (_strockePaint != null) {
         sprite?.render(
           canvas,

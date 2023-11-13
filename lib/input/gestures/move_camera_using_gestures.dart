@@ -63,5 +63,5 @@ mixin MoveCameraUsingGesture on GameComponent {
   }
 
   @override
-  bool get isVisible => true;
+  bool get isVisibleInScreen => true;
 }

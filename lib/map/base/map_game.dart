@@ -30,5 +30,5 @@ abstract class GameMap extends GameComponent {
   int get priority => LayerPriority.MAP;
 
   @override
-  bool get isVisible => true;
+  bool get isVisibleInScreen => true;
 }

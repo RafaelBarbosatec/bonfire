@@ -9,12 +9,60 @@ class CollisionUtil {
     Vector2.zero(),
   );
 
-  Direction? getDirectionCollision(Rect rect, Vector2 point) {
-    String key = rect.toString() + point.normalized().toString();
+  Direction getDirectionCollision(
+    Rect rect,
+    Vector2 point,
+    Direction moveDirection,
+    bool isCircle,
+  ) {
+    Vector2 c = rect.centerVector2;
+    String key = c.normalized().toString() + point.normalized().toString();
     if (_directionsBlockedCache.containsKey(key)) {
-      return _directionsBlockedCache[key];
+      return _directionsBlockedCache[key]!;
     }
+    if (isCircle) {
+      double angle = BonfireUtil.angleBetweenPoints(c, point);
+      return _directionsBlockedCache[key] = BonfireUtil.getDirectionFromAngle(
+        angle,
+        directionSpace: 22.5,
+      );
+    }
+
     if (point.y > rect.center.dy) {
+      // bottom right
+      _triangleShape.updatePoints(
+        Vector2(rect.right, rect.bottom - rect.height * 0.1),
+        Vector2(rect.right - rect.width * 0.1, rect.bottom),
+        rect.center.toVector2(),
+      );
+
+      if (_triangleShape.containPoint(point)) {
+        if (moveDirection == Direction.down) {
+          return _directionsBlockedCache[key] = Direction.down;
+        }
+        if (moveDirection == Direction.right) {
+          return _directionsBlockedCache[key] = Direction.right;
+        }
+        return _directionsBlockedCache[key] = Direction.downRight;
+      }
+
+      // bottom left
+      _triangleShape.updatePoints(
+        Vector2(rect.left, rect.bottom - rect.height * 0.1),
+        Vector2(rect.left + rect.width * 0.1, rect.bottom),
+        rect.center.toVector2(),
+      );
+
+      if (_triangleShape.containPoint(point)) {
+        if (moveDirection == Direction.down) {
+          return _directionsBlockedCache[key] = Direction.down;
+        }
+        if (moveDirection == Direction.left) {
+          return _directionsBlockedCache[key] = Direction.left;
+        }
+        return _directionsBlockedCache[key] = Direction.downLeft;
+      }
+
       // bottom
       _triangleShape.updatePoints(
         Vector2(rect.right, rect.bottom),
@@ -23,10 +71,43 @@ class CollisionUtil {
       );
 
       if (_triangleShape.containPoint(point)) {
-        _directionsBlockedCache[key] = Direction.down;
-        return Direction.down;
+        return _directionsBlockedCache[key] = Direction.down;
       }
     } else {
+      // top right
+      _triangleShape.updatePoints(
+        Vector2(rect.right, rect.top + rect.height * 0.1),
+        Vector2(rect.right - rect.width * 0.1, rect.top),
+        rect.center.toVector2(),
+      );
+
+      if (_triangleShape.containPoint(point)) {
+        if (moveDirection == Direction.up) {
+          return _directionsBlockedCache[key] = Direction.up;
+        }
+        if (moveDirection == Direction.right) {
+          return _directionsBlockedCache[key] = Direction.right;
+        }
+        return _directionsBlockedCache[key] = Direction.upRight;
+      }
+
+      // top left
+      _triangleShape.updatePoints(
+        Vector2(rect.left, rect.top + rect.height * 0.1),
+        Vector2(rect.left + rect.width * 0.1, rect.top),
+        rect.center.toVector2(),
+      );
+
+      if (_triangleShape.containPoint(point)) {
+        if (moveDirection == Direction.up) {
+          return _directionsBlockedCache[key] = Direction.up;
+        }
+        if (moveDirection == Direction.left) {
+          return _directionsBlockedCache[key] = Direction.left;
+        }
+        return _directionsBlockedCache[key] = Direction.upLeft;
+      }
+
       //top
       _triangleShape.updatePoints(
         Vector2(rect.left, rect.top),
@@ -35,8 +116,7 @@ class CollisionUtil {
       );
 
       if (_triangleShape.containPoint(point)) {
-        _directionsBlockedCache[key] = Direction.up;
-        return Direction.up;
+        return _directionsBlockedCache[key] = Direction.up;
       }
     }
 
@@ -67,7 +147,7 @@ class CollisionUtil {
       }
     }
 
-    return null;
+    return moveDirection;
   }
 }
 

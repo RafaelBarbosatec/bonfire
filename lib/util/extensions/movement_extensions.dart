@@ -89,7 +89,7 @@ extension MovementExtensions on Movement {
   }
 
   bool keepDistance(GameComponent target, double minDistance) {
-    if (!isVisible) return true;
+    if (!isVisibleInScreen) return true;
     double distance = rectCollision.centerVector2.distanceTo(
       target.rectCollision.centerVector2,
     );
@@ -111,7 +111,7 @@ extension MovementExtensions on Movement {
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
   }) {
-    if (runOnlyVisibleInScreen && !isVisible) return false;
+    if (runOnlyVisibleInScreen && !isVisibleInScreen) return false;
     double distance = (minDistanceFromPlayer ?? radiusVision);
 
     Rect rectTarget = target.rectCollision;

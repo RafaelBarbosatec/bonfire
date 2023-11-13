@@ -209,7 +209,7 @@ mixin Movement on GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (isVisible || !movementOnlyVisible) {
+    if (isVisibleInScreen || !movementOnlyVisible) {
       _updatePosition(dt);
     }
   }

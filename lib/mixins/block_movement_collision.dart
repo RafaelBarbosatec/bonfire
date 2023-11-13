@@ -10,7 +10,8 @@ mixin BlockMovementCollision on Movement {
   Rect? _shapeRectNormalized;
   Direction? _lasDirectionCollision;
   Vector2 _lastDisplacementCollision = Vector2.zero();
-  Vector2 midPoint = Vector2.zero();
+  Vector2 _midPoint = Vector2.zero();
+  bool _isCicleHitbox = false;
 
   bool onBlockMovement(
     Set<Vector2> intersectionPoints,
@@ -21,7 +22,7 @@ mixin BlockMovementCollision on Movement {
 
   void onBlockedMovement(
     PositionComponent other,
-    Direction? direction,
+    Direction direction,
   ) {
     final reverseDisplacement = _adjustDisplacement(
       _lastDisplacementCollision,
@@ -34,8 +35,8 @@ mixin BlockMovementCollision on Movement {
     }
 
     stopFromCollision(
-      isX: direction?.isSameXDirection(_lastDisplacementCollision.x) == true,
-      isY: direction?.isSameYDirection(_lastDisplacementCollision.y) == true,
+      isX: direction.isSameXDirection(_lastDisplacementCollision.x) == true,
+      isY: direction.isSameYDirection(_lastDisplacementCollision.y) == true,
     );
   }
 
@@ -54,21 +55,23 @@ mixin BlockMovementCollision on Movement {
     }
     _lastDisplacementCollision = lastDisplacement.clone();
     if (_shapeRectNormalized != null) {
-      midPoint = intersectionPoints.reduce(
+      _midPoint = intersectionPoints.reduce(
         (value, element) => value + element,
       );
-      midPoint /= intersectionPoints.length.toDouble();
-      midPoint = midPoint - position;
-      midPoint.lerp(_shapeRectNormalized!.center.toVector2(), 0.2);
+      _midPoint /= intersectionPoints.length.toDouble();
+      _midPoint = _midPoint - position;
+      _midPoint.lerp(_shapeRectNormalized!.center.toVector2(), 0.2);
 
       _lasDirectionCollision = _collisionUtil.getDirectionCollision(
         _shapeRectNormalized!,
-        midPoint,
+        _midPoint,
+        lastDirection,
+        _isCicleHitbox,
       );
 
       onBlockedMovement(
         other,
-        _lasDirectionCollision,
+        _lasDirectionCollision!,
       );
     }
   }
@@ -78,43 +81,123 @@ mixin BlockMovementCollision on Movement {
     if (component is ShapeHitbox) {
       _shapeRectNormalized = component.toRect();
     }
+    _isCicleHitbox = component is CircleHitbox;
     return super.add(component);
   }
 
   Vector2 _adjustDisplacement(
     Vector2 reverseDisplacement,
-    Direction? direction,
+    Direction direction,
   ) {
-    if (direction != null) {
-      if (direction.isVertical && reverseDisplacement.x.abs() > 0) {
-        if (direction == lastDirectionVertical) {
-          reverseDisplacement = reverseDisplacement.copyWith(x: 0);
-        } else {
-          reverseDisplacement.setZero();
+    switch (direction) {
+      case Direction.right:
+        if (lastDirection.isVertical ||
+            lastDirection == Direction.upRight ||
+            lastDirection == Direction.downRight) {
+          reverseDisplacement = reverseDisplacement.copyWith(y: 0);
         }
-      } else if (direction.isHorizontal && reverseDisplacement.y.abs() > 0) {
-        if (direction == lastDirectionHorizontal) {
+        break;
+      case Direction.left:
+        if (lastDirection.isVertical ||
+            lastDirection == Direction.upLeft ||
+            lastDirection == Direction.downLeft) {
+          reverseDisplacement = reverseDisplacement.copyWith(y: 0);
+        }
+        break;
+      case Direction.up:
+        if (lastDirection.isHorizontal ||
+            lastDirection == Direction.upLeft ||
+            lastDirection == Direction.upRight) {
+          reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+        }
+        break;
+      case Direction.down:
+        if (lastDirection.isHorizontal ||
+            lastDirection == Direction.downLeft ||
+            lastDirection == Direction.downRight) {
+          reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+        }
+        break;
+
+      case Direction.upLeft:
+        if (lastDirection.isRightSide) {
+          reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+        } else if (lastDirection.isDownSide) {
           reverseDisplacement = reverseDisplacement.copyWith(y: 0);
         } else {
-          reverseDisplacement.setZero();
+          if (lastDirection == Direction.up) {
+            reverseDisplacement.add(Vector2(-dtSpeed, 0));
+          } else if (lastDirection == Direction.left) {
+            reverseDisplacement.add(Vector2(0, -dtSpeed));
+          }
         }
-      }
-      if (reverseDisplacement.isZero()) {
-        switch (direction) {
-          case Direction.right:
-            reverseDisplacement = Vector2(1, 0);
-            break;
-          case Direction.left:
-            reverseDisplacement = Vector2(-1, 0);
-            break;
-          case Direction.up:
-            reverseDisplacement = Vector2(0, -1);
-            break;
-          case Direction.down:
-            reverseDisplacement = Vector2(0, 1);
-            break;
-          default:
+        break;
+      case Direction.upRight:
+        if (lastDirection.isLeftSide) {
+          reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+        } else if (lastDirection.isDownSide) {
+          reverseDisplacement = reverseDisplacement.copyWith(y: 0);
+        } else {
+          if (lastDirection == Direction.up) {
+            reverseDisplacement.add(Vector2(dtSpeed, 0));
+          } else if (lastDirection == Direction.right) {
+            reverseDisplacement.add(Vector2(0, -dtSpeed));
+          }
         }
+        break;
+      case Direction.downLeft:
+        if (lastDirection.isRightSide) {
+          reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+        } else if (lastDirection.isUpSide) {
+          reverseDisplacement = reverseDisplacement.copyWith(y: 0);
+        } else {
+          if (lastDirection == Direction.down) {
+            reverseDisplacement.add(Vector2(-dtSpeed, 0));
+          } else if (lastDirection == Direction.left) {
+            reverseDisplacement.add(Vector2(0, dtSpeed));
+          }
+        }
+        break;
+      case Direction.downRight:
+        if (lastDirection.isLeftSide) {
+          reverseDisplacement = reverseDisplacement.copyWith(x: 0);
+        } else if (lastDirection.isUpSide) {
+          reverseDisplacement = reverseDisplacement.copyWith(y: 0);
+        } else {
+          if (lastDirection == Direction.down) {
+            reverseDisplacement.add(Vector2(dtSpeed, 0));
+          } else if (lastDirection == Direction.right) {
+            reverseDisplacement.add(Vector2(0, dtSpeed));
+          }
+        }
+        break;
+    }
+    if (reverseDisplacement.isZero()) {
+      switch (direction) {
+        case Direction.right:
+          reverseDisplacement = Vector2(1, 0);
+          break;
+        case Direction.left:
+          reverseDisplacement = Vector2(-1, 0);
+          break;
+        case Direction.up:
+          reverseDisplacement = Vector2(0, -1);
+          break;
+        case Direction.down:
+          reverseDisplacement = Vector2(0, 1);
+          break;
+        case Direction.downRight:
+          reverseDisplacement = Vector2(1, 1);
+          break;
+        case Direction.downLeft:
+          reverseDisplacement = Vector2(-1, 1);
+          break;
+        case Direction.upLeft:
+          reverseDisplacement = Vector2(-1, -1);
+          break;
+        case Direction.upRight:
+          reverseDisplacement = Vector2(1, -1);
+          break;
       }
     }
 

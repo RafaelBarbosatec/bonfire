@@ -125,7 +125,7 @@ abstract class BaseGame extends FlameGame
 
   /// Verify if the Component contain gestures.
   bool _hasGesture(Component c) {
-    return ((c is GameComponent && c.isVisible)) && ((c).hasGesture());
+    return ((c is GameComponent && c.isVisibleInScreen)) && ((c).hasGesture());
   }
 
   /// Verify if the Component contain gestures.

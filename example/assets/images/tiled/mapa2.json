@@ -258,9 +258,45 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "class":"collision",
+         "draworder":"topdown",
+         "id":11,
+         "name":"Object Layer 2",
+         "objects":[
+                {
+                 "class":"",
+                 "height":0,
+                 "id":98,
+                 "name":"",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":0.663481953290869,
+                         "y":57.7229299363057
+                        }, 
+                        {
+                         "x":66.0164543524416,
+                         "y":58.3864118895966
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":0,
+                 "x":83.5987261146497,
+                 "y":113.455414012739
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":11,
- "nextobjectid":95,
+ "nextlayerid":12,
+ "nextobjectid":99,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.0",

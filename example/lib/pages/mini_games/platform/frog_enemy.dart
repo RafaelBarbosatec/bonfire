@@ -31,7 +31,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   @override
   void onBlockedMovement(
     PositionComponent other,
-    Direction? direction,
+    Direction direction,
   ) {
     super.onBlockedMovement(other, direction);
     if (other is FoxPlayer) {
@@ -61,7 +61,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
     super.update(dt);
     if (checkInterval('jump', _timeToWaitBeforeJump, dt) &&
         !isDead &&
-        isVisible) {
+        isVisibleInScreen) {
       animation?.playOnce(
         PlatformSpritesheet.frogActionRight,
         flipX: lastDirectionHorizontal == Direction.left,
