@@ -2,6 +2,7 @@ import 'package:bonfire/bonfire.dart';
 
 class CollisionUtil {
   final Map<String, Direction> _directionsBlockedCache = {};
+  static const _diagonalPercent = 0.2;
 
   final TriangleShape _triangleShape = TriangleShape(
     Vector2.zero(),
@@ -31,8 +32,8 @@ class CollisionUtil {
     if (point.y > rect.center.dy) {
       // bottom right
       _triangleShape.updatePoints(
-        Vector2(rect.right, rect.bottom - rect.height * 0.1),
-        Vector2(rect.right - rect.width * 0.1, rect.bottom),
+        Vector2(rect.right, rect.bottom - rect.height * _diagonalPercent),
+        Vector2(rect.right - rect.width * _diagonalPercent, rect.bottom),
         rect.center.toVector2(),
       );
 
@@ -48,8 +49,8 @@ class CollisionUtil {
 
       // bottom left
       _triangleShape.updatePoints(
-        Vector2(rect.left, rect.bottom - rect.height * 0.1),
-        Vector2(rect.left + rect.width * 0.1, rect.bottom),
+        Vector2(rect.left, rect.bottom - rect.height * _diagonalPercent),
+        Vector2(rect.left + rect.width * _diagonalPercent, rect.bottom),
         rect.center.toVector2(),
       );
 
@@ -76,8 +77,8 @@ class CollisionUtil {
     } else {
       // top right
       _triangleShape.updatePoints(
-        Vector2(rect.right, rect.top + rect.height * 0.1),
-        Vector2(rect.right - rect.width * 0.1, rect.top),
+        Vector2(rect.right, rect.top + rect.height * _diagonalPercent),
+        Vector2(rect.right - rect.width * _diagonalPercent, rect.top),
         rect.center.toVector2(),
       );
 
@@ -93,8 +94,8 @@ class CollisionUtil {
 
       // top left
       _triangleShape.updatePoints(
-        Vector2(rect.left, rect.top + rect.height * 0.1),
-        Vector2(rect.left + rect.width * 0.1, rect.top),
+        Vector2(rect.left, rect.top + rect.height * _diagonalPercent),
+        Vector2(rect.left + rect.width * _diagonalPercent, rect.top),
         rect.center.toVector2(),
       );
 

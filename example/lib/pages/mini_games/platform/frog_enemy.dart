@@ -35,7 +35,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   ) {
     super.onBlockedMovement(other, direction);
     if (other is FoxPlayer) {
-      if (direction == Direction.up) {
+      if (direction.isUpSide) {
         if (!isDead) {
           other.jump(jumpSpeed: 100, force: true);
           die();
