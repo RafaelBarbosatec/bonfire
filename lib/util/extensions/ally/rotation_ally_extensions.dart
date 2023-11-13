@@ -27,7 +27,7 @@ extension RotationEnemyExtensions on RotationAlly {
     bool runOnlyVisibleInScreen = true,
   }) {
     if (isDead) return;
-    if (runOnlyVisibleInScreen && !isVisibleInScreen) return;
+    if (runOnlyVisibleInScreen && !isVisible) return;
 
     seePlayer(
       radiusVision: radiusVision,

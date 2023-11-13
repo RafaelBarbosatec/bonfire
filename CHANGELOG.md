@@ -6,8 +6,7 @@
 - adds `spriteAnimationOffset` in `UseSpriteAnimation`.
 - adds `spriteAnimationOffset` in `SimpleDirectionAnimation`.
 - `BlockMovementCollision` improvements. BREAKING CHANGE: Method `onBlockedMovement` now return not null `Direction`.
-- BREAKING CHANGE: the param `isVisible` was renamed to `isVisibleInScreen`.
-- Adds param `visible` in `GameComponent`.
+- Fix bug when setting `isVisible` to `false`.
 
 
 ## 3.0.6

@@ -58,7 +58,7 @@ extension NpcExtensions on Npc {
     bool runOnlyVisibleInScreen = true,
     MovementAxis movementAxis = MovementAxis.all,
   }) {
-    if (runOnlyVisibleInScreen && !isVisibleInScreen) return null;
+    if (runOnlyVisibleInScreen && !isVisible) return null;
 
     return seePlayer(
       radiusVision: radiusVision,
@@ -101,7 +101,7 @@ extension NpcExtensions on Npc {
     bool runOnlyVisibleInScreen = true,
     MovementAxis movementAxis = MovementAxis.all,
   }) {
-    if (runOnlyVisibleInScreen && !isVisibleInScreen) return;
+    if (runOnlyVisibleInScreen && !isVisible) return;
 
     seeComponentType<Enemy>(
       radiusVision: radiusVision,
@@ -146,7 +146,7 @@ extension NpcExtensions on Npc {
     bool runOnlyVisibleInScreen = true,
     MovementAxis movementAxis = MovementAxis.all,
   }) {
-    if (runOnlyVisibleInScreen && !isVisibleInScreen) return;
+    if (runOnlyVisibleInScreen && !isVisible) return;
 
     seeComponentType<Ally>(
       radiusVision: radiusVision,

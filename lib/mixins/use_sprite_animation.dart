@@ -48,7 +48,7 @@ mixin UseSpriteAnimation on GameComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (isVisibleInScreen && !isRemoving) {
+    if (isVisible && !isRemoving) {
       if (_fastAnimation != null) {
         if (_strockePaint != null) {
           _fastAnimation?.render(
@@ -83,7 +83,7 @@ mixin UseSpriteAnimation on GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (isVisibleInScreen) {
+    if (isVisible) {
       if (_fastAnimation != null) {
         _fastAnimation?.update(dt);
       } else {

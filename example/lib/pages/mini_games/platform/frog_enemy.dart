@@ -61,7 +61,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
     super.update(dt);
     if (checkInterval('jump', _timeToWaitBeforeJump, dt) &&
         !isDead &&
-        isVisibleInScreen) {
+        isVisible) {
       animation?.playOnce(
         PlatformSpritesheet.frogActionRight,
         flipX: lastDirectionHorizontal == Direction.left,
