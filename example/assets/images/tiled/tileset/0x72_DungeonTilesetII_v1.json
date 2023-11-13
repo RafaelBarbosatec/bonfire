@@ -933,14 +933,14 @@
              "objects":[
                     {
                      "class":"",
-                     "height":7.375,
+                     "height":16,
                      "id":6,
                      "name":"",
                      "rotation":0,
                      "visible":true,
-                     "width":7,
-                     "x":4.875,
-                     "y":5.5
+                     "width":16,
+                     "x":0,
+                     "y":0
                     }],
              "opacity":1,
              "type":"objectgroup",
