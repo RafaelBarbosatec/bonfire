@@ -172,35 +172,6 @@ mixin BlockMovementCollision on Movement {
         }
         break;
     }
-    if (reverseDisplacement.isZero()) {
-      switch (direction) {
-        case Direction.right:
-          reverseDisplacement = Vector2(1, 0);
-          break;
-        case Direction.left:
-          reverseDisplacement = Vector2(-1, 0);
-          break;
-        case Direction.up:
-          reverseDisplacement = Vector2(0, -1);
-          break;
-        case Direction.down:
-          reverseDisplacement = Vector2(0, 1);
-          break;
-        case Direction.downRight:
-          reverseDisplacement = Vector2(1, 1);
-          break;
-        case Direction.downLeft:
-          reverseDisplacement = Vector2(-1, 1);
-          break;
-        case Direction.upLeft:
-          reverseDisplacement = Vector2(-1, -1);
-          break;
-        case Direction.upRight:
-          reverseDisplacement = Vector2(1, -1);
-          break;
-      }
-    }
-
     return reverseDisplacement;
   }
 }
