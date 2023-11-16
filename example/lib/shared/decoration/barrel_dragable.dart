@@ -20,9 +20,6 @@ class BarrelDraggable extends GameDecoration
       style: TextStyle(color: Colors.white, fontSize: width / 4),
     );
     addForce(ResistanceForce2D(id: 'attr', value: Vector2.all(5)));
-    setupPushable(
-      pushPerCellEnabled: true,
-    );
   }
 
   @override
