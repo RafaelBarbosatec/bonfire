@@ -1,3 +1,6 @@
+## NEXT
+- adds new Pushable configurations. (`pushableFrom`,`pushPerCellEnabled`,`cellSize`,`pushPerCellDuration`,`pushPerCellCurve`)
+
 ## 3.0.8
 - Fix bug unwanted push when component have BlockMovementCollision.
 
