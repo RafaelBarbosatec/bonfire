@@ -1,4 +1,3 @@
-import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/forces/forces_gem.dart';
 import 'package:example/pages/forces/forces_gem_bouncing.dart';

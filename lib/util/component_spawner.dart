@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
 
 typedef SpawnerPositionBuilder = GameComponent Function(Vector2 position);

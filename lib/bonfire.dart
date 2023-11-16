@@ -59,6 +59,7 @@ export 'package:bonfire/tiled/map_world_by_tiled.dart';
 export 'package:bonfire/tiled/model/tiled_object_properties.dart';
 export 'package:bonfire/util/barlife_component.dart';
 export 'package:bonfire/util/bonfire_game_ref.dart';
+export 'package:bonfire/base/bonfire_game_interface.dart';
 export 'package:bonfire/util/bonfire_util.dart';
 export 'package:bonfire/util/component_spawner.dart';
 export 'package:bonfire/util/direction.dart';
