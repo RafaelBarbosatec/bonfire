@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
 class LinePathComponent extends GameComponent {
-  final List<Offset> path;
+  final List<Vector2> path;
   final Color color;
   final double strokeWidth;
   late Paint _paintPath;
@@ -17,9 +17,9 @@ class LinePathComponent extends GameComponent {
   @override
   void render(Canvas canvas) {
     if (path.isNotEmpty) {
-      final p = Path()..moveTo(path.first.dx, path.first.dy);
+      final p = Path()..moveTo(path.first.x, path.first.y);
       for (var i = 1; i < path.length; i++) {
-        p.lineTo(path[i].dx, path[i].dy);
+        p.lineTo(path[i].x, path[i].y);
       }
       canvas.drawPath(p, _paintPath);
     }

@@ -1,5 +1,6 @@
 ## NEXT
 - adds new Pushable configurations. (`pushableFrom`,`pushPerCellEnabled`,`cellSize`,`pushPerCellDuration`,`pushPerCellCurve`)
+- adds method `List<Vector2> getPathToPosition` in mixin `PathFinding`
 
 ## 3.0.8
 - Fix bug unwanted push when component have BlockMovementCollision.
