@@ -1,4 +1,3 @@
-import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/enemy_sprite_sheet.dart';
 import 'package:example/shared/util/player_sprite_sheet.dart';

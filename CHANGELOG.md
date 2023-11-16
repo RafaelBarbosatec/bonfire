@@ -1,5 +1,5 @@
-# NEXT
-- Fix bug unwanted push when to component have BlockMovementCollision.
+## 3.0.8
+- Fix bug unwanted push when component have BlockMovementCollision.
 
 ## 3.0.7
 - adds set `mapZoomFit` in `BonfireCamera`.
