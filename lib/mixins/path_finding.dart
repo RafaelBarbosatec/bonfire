@@ -13,8 +13,9 @@ import 'package:flutter/widgets.dart';
 mixin PathFinding on Movement {
   static const REDUCTION_TO_AVOID_ROUNDING_PROBLEMS = 4;
 
-  List<Offset> _currentPath = [];
+  List<Vector2> _currentPath = [];
   int _currentIndex = 0;
+  bool _linePathEnabled = true;
   bool _showBarriers = false;
   bool _gridSizeIsCollisionSize = false;
   bool _useOnlyVisibleBarriers = true;
@@ -22,7 +23,7 @@ mixin PathFinding on Movement {
   VoidCallback? _onFinish;
 
   final List<Point<int>> _barriers = [];
-  List ignoreCollisions = [];
+  final List _ignoreCollisions = [];
 
   LinePathComponent? _linePathComponent;
   Color _pathLineColor = const Color(0xFF40C4FF).withOpacity(0.5);
@@ -31,6 +32,8 @@ mixin PathFinding on Movement {
     ..color = const Color(0xFF2196F3).withOpacity(0.5);
 
   void setupPathFinding({
+    bool? linePathEnabled,
+
     /// Use to set line path color
     Color? pathLineColor,
     Color? barriersCalculatedColor,
@@ -46,6 +49,7 @@ mixin PathFinding on Movement {
     bool gridSizeIsCollisionSize = false,
     double factorInflateFindArea = 2,
   }) {
+    _linePathEnabled = linePathEnabled ?? _linePathEnabled;
     _useOnlyVisibleBarriers = useOnlyVisibleBarriers;
     _factorInflateFindArea = factorInflateFindArea;
     _paintShowBarriers.color =
@@ -58,35 +62,48 @@ mixin PathFinding on Movement {
     _gridSizeIsCollisionSize = gridSizeIsCollisionSize;
   }
 
-  Future<List<Offset>> moveToPositionWithPathFinding(
+  Future<List<Vector2>> moveToPositionWithPathFinding(
     Vector2 position, {
     List? ignoreCollisions,
     VoidCallback? onFinish,
-  }) {
+  }) async {
     if (!hasGameRef) {
       return Future.value([]);
     }
 
     _onFinish = onFinish;
-    this.ignoreCollisions.clear();
-    this.ignoreCollisions.add(this);
-    if (ignoreCollisions != null) {
-      this.ignoreCollisions.addAll(ignoreCollisions);
-    }
-
     _currentIndex = 0;
     _removeLinePathComponent();
 
-    return Future.microtask(() {
-      return _calculatePath(position);
-    });
+    _currentPath = await Future.microtask(
+      () => getPathToPosition(
+        position,
+        ignoreCollisions: ignoreCollisions,
+      ),
+    );
+
+    _addLinePathComponent();
+
+    return _currentPath;
+  }
+
+  List<Vector2> getPathToPosition(
+    Vector2 position, {
+    List? ignoreCollisions,
+  }) {
+    _ignoreCollisions.clear();
+    _ignoreCollisions.add(this);
+    if (ignoreCollisions != null) {
+      _ignoreCollisions.addAll(ignoreCollisions);
+    }
+    return _calculatePath(position);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
     if (_currentPath.isNotEmpty) {
-      if (!moveToPosition(_currentPath[_currentIndex].toVector2())) {
+      if (!moveToPosition(_currentPath[_currentIndex])) {
         _goToNextPosition();
       }
     }
@@ -113,7 +130,7 @@ mixin PathFinding on Movement {
     _onFinish = null;
   }
 
-  List<Offset> _calculatePath(Vector2 finalPosition) {
+  List<Vector2> _calculatePath(Vector2 finalPosition) {
     final player = this;
 
     final positionPlayer = player.rectCollision.centerVector2;
@@ -164,7 +181,7 @@ mixin PathFinding on Movement {
 
     for (final e in gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
       var rect = e.toAbsoluteRect();
-      if (!ignoreCollisions.contains(e) && area.overlaps(rect)) {
+      if (!_ignoreCollisions.contains(e) && area.overlaps(rect)) {
         _addCollisionOffsetsPositionByTile(rect);
       }
     }
@@ -187,22 +204,13 @@ mixin PathFinding on Movement {
 
       if (result.isNotEmpty || _isNeighbor(playerPosition, targetPosition)) {
         result = AStar.resumePath(result);
-        _currentPath = _mapToWorldPositions(result);
-
-        _currentIndex = 0;
+        return _mapToWorldPositions(result);
       }
     } catch (e) {
       // ignore: avoid_print
       print('ERROR(AStar):$e');
     }
-    gameRef.add(
-      _linePathComponent = LinePathComponent(
-        _currentPath,
-        _pathLineColor,
-        _pathLineStrokeWidth,
-      ),
-    );
-    return _currentPath;
+    return [];
   }
 
   /// Get size of the grid used on algorithm to calculate path
@@ -317,10 +325,22 @@ mixin PathFinding on Movement {
     _linePathComponent = null;
   }
 
-  List<Offset> _mapToWorldPositions(Iterable<Point<int>> result) {
+  void _addLinePathComponent() {
+    if (_linePathEnabled) {
+      gameRef.add(
+        _linePathComponent = LinePathComponent(
+          _currentPath,
+          _pathLineColor,
+          _pathLineStrokeWidth,
+        ),
+      );
+    }
+  }
+
+  List<Vector2> _mapToWorldPositions(Iterable<Point<int>> result) {
     return result.map((e) {
-      return Offset(e.x * _tileSize, e.y * _tileSize)
-          .translate(_tileSize / 2, _tileSize / 2);
+      return Vector2(e.x * _tileSize, e.y * _tileSize)
+          .translated(_tileSize / 2, _tileSize / 2);
     }).toList();
   }
 }

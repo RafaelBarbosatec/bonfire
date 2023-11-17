@@ -7,25 +7,28 @@ enum InitialMapZoomFitEnum { none, fitWidth, fitHeight, fit }
 class CameraConfig {
   static final movementWindowDefault = Vector2.all(16);
 
+  /// window in the center screen able to move without move camera
   Vector2 movementWindow;
 
   /// When this true the camera remains within the map area
   bool moveOnlyMapArea;
 
-  /// camera zoom configurarion. default: 1
-  double zoom;
-
-  /// Camera angle to rotate the camera. default: 0
-  double angle;
-
-  /// Component that the camera will focus on / follow
-  GameComponent? target;
-
+  /// Camera's speed
   double speed;
 
-  bool startFollowPlayer;
-
+  /// Automatic zoom with base some configurations.
   InitialMapZoomFitEnum initialMapZoomFit;
+
+  /// camera zoom configurarion. default: 1
+  final double zoom;
+
+  /// Camera angle to rotate the camera. default: 0
+  final double angle;
+
+  /// Component that the camera will focus on / follow
+  final GameComponent? target;
+
+  final bool startFollowPlayer;
 
   final Vector2? initPosition;
 
