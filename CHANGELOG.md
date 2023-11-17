@@ -1,3 +1,6 @@
+## Next
+- Create mixin `MovePerCell`.
+
 ## 3.0.9
 - adds new Pushable configurations. (`pushableFrom`,`pushPerCellEnabled`,`cellSize`,`pushPerCellDuration`,`pushPerCellCurve`)
 - adds method `List<Vector2> getPathToPosition` in mixin `PathFinding`
