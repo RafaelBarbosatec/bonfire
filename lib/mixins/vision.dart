@@ -220,4 +220,5 @@ mixin Vision on GameComponent {
   }
 }
 
+// Use it to turn your component not detectable from `Vision` mixin.
 mixin CanNotSeen on GameComponent {}
