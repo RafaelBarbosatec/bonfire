@@ -8,7 +8,8 @@ extension GameComponentExtensions on GameComponent {
   void showDamage(
     double damage, {
     TextStyle? config,
-    double initVelocityUp = -5,
+    double initVelocityVertical = -5,
+    double initVelocityHorizontal = 1,
     double gravity = 0.5,
     double maxDownSize = 20,
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
@@ -24,7 +25,8 @@ extension GameComponentExtensions on GameComponent {
               fontSize: 14,
               color: Color(0xFFFFFFFF),
             ),
-        initVelocityUp: initVelocityUp,
+        initVelocityVertical: initVelocityVertical,
+        initVelocityHorizontal: initVelocityHorizontal,
         gravity: gravity,
         direction: direction,
         onlyUp: onlyUp,

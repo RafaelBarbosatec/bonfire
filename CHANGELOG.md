@@ -1,5 +1,9 @@
-## Next
+## 3.0.10
 - Create mixin `MovePerCell`.
+- Create mixin `CanNotSeen`. Use it to turn your component not detectable from `Vision` mixin.
+- Update `showDamage` method.`initVelocityUp` renamed to `initVelocityVertical` and adds param `initVelocityHorizontal`.
+- Fix issue [#455](https://github.com/RafaelBarbosatec/bonfire/issues/455)
+- Fix bug [#474](https://github.com/RafaelBarbosatec/bonfire/issues/474)
 
 ## 3.0.9
 - adds new Pushable configurations. (`pushableFrom`,`pushPerCellEnabled`,`cellSize`,`pushPerCellDuration`,`pushPerCellCurve`)

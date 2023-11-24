@@ -25,7 +25,8 @@ class TextDamageComponent extends TextComponent with BonfireHasGameRef {
     Vector2 position, {
     this.onlyUp = false,
     TextStyle? config,
-    double initVelocityUp = -4,
+    double initVelocityVertical = -4,
+    double initVelocityHorizontal = 1,
     this.maxDownSize = 20,
     this.gravity = 0.5,
     this.direction = DirectionTextDamage.RANDOM,
@@ -37,16 +38,17 @@ class TextDamageComponent extends TextComponent with BonfireHasGameRef {
           position: position,
         ) {
     _initialY = position.y;
-    _velocity = initVelocityUp;
+    _velocity = initVelocityVertical;
     switch (direction) {
       case DirectionTextDamage.LEFT:
-        _moveAxisX = 1;
+        _moveAxisX = initVelocityHorizontal;
         break;
       case DirectionTextDamage.RIGHT:
-        _moveAxisX = -1;
+        _moveAxisX = initVelocityHorizontal * -1;
         break;
       case DirectionTextDamage.RANDOM:
-        _moveAxisX = Random().nextInt(100) % 2 == 0 ? -1 : 1;
+        _moveAxisX =
+            initVelocityHorizontal * Random().nextInt(100) % 2 == 0 ? -1 : 1;
         break;
       case DirectionTextDamage.NONE:
         break;
@@ -70,8 +72,15 @@ class TextDamageComponent extends TextComponent with BonfireHasGameRef {
     if (onlyUp && _velocity >= 0) {
       removeFromParent();
     }
-    if (position.y > _initialY + maxDownSize) {
-      removeFromParent();
+
+    if (gravity > 0) {
+      if (position.y > _initialY + maxDownSize) {
+        removeFromParent();
+      }
+    } else if (gravity < 0) {
+      if (position.y < _initialY - maxDownSize) {
+        removeFromParent();
+      }
     }
   }
 

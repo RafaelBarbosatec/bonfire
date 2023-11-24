@@ -136,6 +136,19 @@ abstract class BonfireGameInterface {
     List<RaycastResult<ShapeHitbox>>? out,
   });
 
+  /// Used to generate numbers to create your animations or anythings
+  ValueGeneratorComponent generateValues(
+    Duration duration, {
+    double begin = 0.0,
+    double end = 1.0,
+    Curve curve = Curves.linear,
+    Curve? reverseCurve,
+    bool autoStart = true,
+    bool infinite = false,
+    VoidCallback? onFinish,
+    ValueChanged<double>? onChange,
+  });
+
   void startScene(List<SceneAction> actions, {void Function()? onComplete});
   void stopScene();
 

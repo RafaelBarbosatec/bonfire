@@ -418,6 +418,34 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
   }
 
+  /// Used to generate numbers to create your animations or anythings
+  @override
+  ValueGeneratorComponent generateValues(
+    Duration duration, {
+    double begin = 0.0,
+    double end = 1.0,
+    Curve curve = Curves.linear,
+    Curve? reverseCurve,
+    bool autoStart = true,
+    bool infinite = false,
+    VoidCallback? onFinish,
+    ValueChanged<double>? onChange,
+  }) {
+    final valueGenerator = ValueGeneratorComponent(
+      duration,
+      end: end,
+      begin: begin,
+      curve: curve,
+      reverseCurve: reverseCurve,
+      onFinish: onFinish,
+      onChange: onChange,
+      autoStart: autoStart,
+      infinite: infinite,
+    );
+    add(valueGenerator);
+    return valueGenerator;
+  }
+
   void _optimizeCollisionTree() {
     scheduleMicrotask(
       () => collisionDetection.broadphase.tree.optimize(),
