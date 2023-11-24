@@ -31,7 +31,7 @@ class PotionLife extends GameDecoration with Sensor<Player>, Movement {
 
   @override
   void onMount() {
-    generateValues(
+    gameRef.generateValues(
       const Duration(seconds: 1),
       onChange: (value) {
         spriteOffset = Vector2(0, 5 * -value);

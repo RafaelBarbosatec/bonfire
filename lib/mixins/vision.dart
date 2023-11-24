@@ -61,7 +61,7 @@ mixin Vision on GameComponent {
     GameComponent component,
     double radiusVision,
   ) {
-    if (component.isRemoving) {
+    if (component.isRemoving || component is CanNotSeen) {
       return false;
     }
 
@@ -82,6 +82,7 @@ mixin Vision on GameComponent {
           direction,
           maxDistance: radiusVision,
           origin: myCenter,
+          ignoreHitboxes: _getCanNotSeenHitbox(),
         );
         return result?.hitbox?.parent == component;
       }
@@ -209,4 +210,15 @@ mixin Vision on GameComponent {
     }
     return shape;
   }
+
+  List<ShapeHitbox> _getCanNotSeenHitbox() {
+    var sensorHitBox = <ShapeHitbox>[];
+    gameRef.query<CanNotSeen>(onlyVisible: true).forEach((e) {
+      sensorHitBox.addAll(e.children.query<ShapeHitbox>());
+    });
+    return sensorHitBox;
+  }
 }
+
+// Use it to turn your component not detectable from `Vision` mixin.
+mixin CanNotSeen on GameComponent {}
