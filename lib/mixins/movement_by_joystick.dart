@@ -49,7 +49,8 @@ mixin MovementByJoystick on Movement, JoystickListener {
   double get _intensitySpeed => speed * _intensity;
   bool _isIdle = true;
 
-  bool get _isMoveByDirection => _settings.moveType == MovementByJoystickType.direction;
+  bool get _isMoveByDirection =>
+      _settings.moveType == MovementByJoystickType.direction;
 
   @override
   void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
@@ -163,7 +164,8 @@ mixin MovementByJoystick on Movement, JoystickListener {
   }
 
   bool _isEnabled() {
-    return (gameRef.joystick?.containObserver(this) ?? false) && _settings.enabled;
+    return (gameRef.joystick?.containObserver(this) ?? false) &&
+        _settings.enabled;
   }
 
   void _toCorrectDirection(JoystickMoveDirectional directional) {

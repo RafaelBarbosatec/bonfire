@@ -32,7 +32,8 @@ class BonfireUtil {
       return Direction.left;
     }
 
-    if (degrees > -(180 - directionSpace) && degrees <= -(90 + directionSpace)) {
+    if (degrees > -(180 - directionSpace) &&
+        degrees <= -(90 + directionSpace)) {
       return Direction.upLeft;
     }
 
