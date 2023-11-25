@@ -32,8 +32,7 @@ class BonfireUtil {
       return Direction.left;
     }
 
-    if (degrees > -(180 - directionSpace) &&
-        degrees <= -(90 + directionSpace)) {
+    if (degrees > -(180 - directionSpace) && degrees <= -(90 + directionSpace)) {
       return Direction.upLeft;
     }
 
@@ -112,9 +111,9 @@ class BonfireUtil {
     return movePointByAngle(point, speed, angle) - point;
   }
 
-  static Vector2 vector2ByAngle(double angle, {double intencity = 1}) {
-    var x = cos(angle) * intencity;
-    var y = sin(angle) * intencity;
+  static Vector2 vector2ByAngle(double angle, {double intensity = 1}) {
+    var x = cos(angle) * intensity;
+    var y = sin(angle) * intensity;
     if (x.abs() < 0.01) {
       x = 0;
     }

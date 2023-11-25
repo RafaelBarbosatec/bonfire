@@ -1,3 +1,6 @@
+## Next
+- Fix typo in params that contained `intencity` renaming it to `intensity`.
+
 ## 3.0.10
 - Create mixin `MovePerCell`.
 - Create mixin `CanNotSeen`. Use it to turn your component not detectable from `Vision` mixin.

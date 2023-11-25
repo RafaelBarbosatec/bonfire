@@ -13,8 +13,7 @@ enum PlayerAttackType {
   attackRange,
 }
 
-class Knight extends SimplePlayer
-    with Lighting, BlockMovementCollision, FireballAttack {
+class Knight extends SimplePlayer with Lighting, BlockMovementCollision, FireballAttack {
   double attack = 20;
   bool canShowEmote = true;
   bool showedDialog = false;
@@ -29,7 +28,7 @@ class Knight extends SimplePlayer
           speed: DungeonMap.tileSize * 1.5,
           life: 200,
         ) {
-    setupMovementByJoystick(intencityEnabled: true);
+    setupMovementByJoystick(intensityEnabled: true);
     setupLighting(
       LightingConfig(
         radius: width * 1.5,
@@ -52,8 +51,7 @@ class Knight extends SimplePlayer
       return;
     }
     if (event.event == ActionEvent.DOWN) {
-      if (event.id == LogicalKeyboardKey.space ||
-          event.id == PlayerAttackType.attackMelee) {
+      if (event.id == LogicalKeyboardKey.space || event.id == PlayerAttackType.attackMelee) {
         if (barLifeController.stamina >= 15) {
           decrementStamina(15);
           execMeleeAttack(attack);

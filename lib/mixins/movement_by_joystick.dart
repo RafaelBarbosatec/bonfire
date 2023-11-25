@@ -6,12 +6,12 @@ class MovementByJoystickProps {
   /// MovementByJoystickType.direction if you only want the 8 directions movement.
   ///  Set MovementByJoystickType.angle to have full 360 movement
   MovementByJoystickType moveType;
-  bool intencityEnabled;
+  bool intensityEnabled;
   bool diagonalEnabled;
   bool enabled;
   MovementByJoystickProps({
     this.moveType = MovementByJoystickType.direction,
-    this.intencityEnabled = false,
+    this.intensityEnabled = false,
     this.diagonalEnabled = true,
     this.enabled = true,
   });
@@ -33,31 +33,30 @@ mixin MovementByJoystick on Movement, JoystickListener {
 
   void setupMovementByJoystick({
     MovementByJoystickType moveType = MovementByJoystickType.direction,
-    bool intencityEnabled = false,
+    bool intensityEnabled = false,
     bool diagonalEnabled = true,
     bool enabled = true,
   }) {
     _settings = MovementByJoystickProps(
       moveType: moveType,
-      intencityEnabled: intencityEnabled,
+      intensityEnabled: intensityEnabled,
       diagonalEnabled: diagonalEnabled,
       enabled: enabled,
     );
   }
 
-  double _intencity = 1;
-  double get _intencitySpeed => speed * _intencity;
+  double _intensity = 1;
+  double get _intensitySpeed => speed * _intensity;
   bool _isIdle = true;
 
-  bool get _isMoveByDirection =>
-      _settings.moveType == MovementByJoystickType.direction;
+  bool get _isMoveByDirection => _settings.moveType == MovementByJoystickType.direction;
 
   @override
   void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
-    if (_settings.intencityEnabled) {
-      _intencity = event.intensity;
+    if (_settings.intensityEnabled) {
+      _intensity = event.intensity;
     } else {
-      _intencity = 1;
+      _intensity = 1;
     }
     _joystickAngle = event.radAngle;
     _newDirectional = _getDirectional(event.directional);
@@ -71,9 +70,9 @@ mixin MovementByJoystick on Movement, JoystickListener {
     if (_isEnabled()) {
       _handleChangeDirectional();
       if (_isMoveByDirection) {
-        _moveDirectional(_currentDirectional, _intencitySpeed);
+        _moveDirectional(_currentDirectional, _intensitySpeed);
       } else {
-        _moveAngle(_intencitySpeed);
+        _moveAngle(_intensitySpeed);
       }
     }
   }
@@ -164,8 +163,7 @@ mixin MovementByJoystick on Movement, JoystickListener {
   }
 
   bool _isEnabled() {
-    return (gameRef.joystick?.containObserver(this) ?? false) &&
-        _settings.enabled;
+    return (gameRef.joystick?.containObserver(this) ?? false) && _settings.enabled;
   }
 
   void _toCorrectDirection(JoystickMoveDirectional directional) {

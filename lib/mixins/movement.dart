@@ -181,7 +181,7 @@ mixin Movement on GameComponent {
   /// Move Player to direction by radAngle
   void moveFromAngle(double angle, {double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    velocity = BonfireUtil.vector2ByAngle(angle, intencity: _lastSpeed);
+    velocity = BonfireUtil.vector2ByAngle(angle, intensity: _lastSpeed);
   }
 
   void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {
