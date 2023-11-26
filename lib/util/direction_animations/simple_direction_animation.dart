@@ -55,6 +55,8 @@ class SimpleDirectionAnimation {
   Vector2 _strokeSize = Vector2.zero();
   Vector2 _strokePosition = Vector2.zero();
   Vector2? spriteAnimationOffset;
+  bool _lastFlipX = false;
+  bool _lastFlipY = false;
 
   SimpleDirectionAnimation({
     required FutureOr<SpriteAnimation> idleRight,
@@ -311,9 +313,16 @@ class SimpleDirectionAnimation {
     Vector2? size,
     Vector2? offset,
   }) async {
+    if (_fastAnimation != null) {
+      if (runToTheEndFastAnimation) {
+        return;
+      }
+      isFlipHorizontally = _lastFlipX;
+      isFlipHorizontally = _lastFlipY;
+    }
     runToTheEndFastAnimation = runToTheEnd;
-    bool lastFlipX = isFlipHorizontally;
-    bool lastFlipY = isFlipVertically;
+    _lastFlipX = isFlipHorizontally;
+    _lastFlipY = isFlipVertically;
     _fastAnimation = SpriteAnimationRender(
       size: size ?? this.size,
       position: offset,
@@ -323,8 +332,8 @@ class SimpleDirectionAnimation {
         onFinish?.call();
         _fastAnimation = null;
         if (!useCompFlip) {
-          isFlipHorizontally = lastFlipX;
-          isFlipVertically = lastFlipY;
+          isFlipHorizontally = _lastFlipX;
+          isFlipVertically = _lastFlipY;
         }
       },
     );
@@ -350,9 +359,16 @@ class SimpleDirectionAnimation {
     if (others.containsKey(key) != true) {
       return Future.value();
     }
+    if (_fastAnimation != null) {
+      if (runToTheEndFastAnimation) {
+        return;
+      }
+      isFlipHorizontally = _lastFlipX;
+      isFlipHorizontally = _lastFlipY;
+    }
     runToTheEndFastAnimation = runToTheEnd;
-    bool lastFlipX = isFlipHorizontally;
-    bool lastFlipY = isFlipVertically;
+    _lastFlipX = isFlipHorizontally;
+    _lastFlipY = isFlipVertically;
     _fastAnimation = SpriteAnimationRender(
       size: size ?? this.size,
       position: offset,
@@ -362,8 +378,8 @@ class SimpleDirectionAnimation {
         onFinish?.call();
         _fastAnimation = null;
         if (!useCompFlip) {
-          isFlipHorizontally = lastFlipX;
-          isFlipVertically = lastFlipY;
+          isFlipHorizontally = _lastFlipX;
+          isFlipVertically = _lastFlipY;
         }
       },
     );
