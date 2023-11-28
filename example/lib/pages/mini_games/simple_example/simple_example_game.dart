@@ -47,6 +47,7 @@ class SimpleExampleGame extends StatelessWidget {
       components: [
         BarrelDraggable(Vector2(300, 150)),
       ],
+      showCollisionArea: true,
       player: MyPlayer(Vector2(140, 140)),
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,

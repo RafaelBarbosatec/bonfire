@@ -208,6 +208,7 @@ mixin Movement on GameComponent {
 
   @override
   void update(double dt) {
+    dtUpdate = dt;
     super.update(dt);
     if (isVisible || !movementOnlyVisible) {
       _updatePosition(dt);
@@ -343,7 +344,6 @@ mixin Movement on GameComponent {
 
   void _updatePosition(double dt) {
     onApplyDisplacement(dt);
-    dtUpdate = dt;
     if (!lastDisplacement.isZero()) {
       if (lastDirection == Direction.up || lastDirection == Direction.down) {
         _requestUpdatePriority();

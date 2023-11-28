@@ -30,6 +30,7 @@ export 'package:bonfire/map/world_map.dart';
 export 'package:bonfire/mixins/attackable.dart';
 export 'package:bonfire/mixins/automatic_random_movement.dart';
 export 'package:bonfire/mixins/block_movement_collision.dart';
+export 'package:bonfire/mixins/block_movement_collisionv2.dart';
 export 'package:bonfire/mixins/bouncing_object.dart';
 export 'package:bonfire/mixins/follower.dart';
 export 'package:bonfire/mixins/interval_checker.dart';
