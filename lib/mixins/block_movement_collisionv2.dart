@@ -226,6 +226,9 @@ mixin BlockMovementCollisionV2 on Movement {
     }
 
     superPosition = position + (-normal * depth / 2);
+    if (depth.abs() > 0.1 && !velocity.isZero()) {
+      stopFromCollision(isX: normal.x.abs() > 0.1, isY: normal.y.abs() > 0.1);
+    }
   }
 
   int findClosesPointOnPolygon(Vector2 circleCenter, List<Vector2> vertices) {

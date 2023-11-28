@@ -24,7 +24,10 @@ class MyPlayer extends SimplePlayer with BlockMovementCollisionV2 {
   @override
   Future<void> onLoad() {
     add(
-      CircleHitbox(radius: width / 2),
+      RectangleHitbox(
+        size: size / 2,
+        position: size / 4,
+      ),
     );
     return super.onLoad();
   }
