@@ -22,19 +22,19 @@ mixin BouncingObject on BlockMovementCollision {
   @override
   void onBlockedMovement(
     PositionComponent other,
-    Direction direction,
+    CollisionData collisionData,
   ) {
     if (onBouncingCollision(other) && !isStopped() && _bouncingObjectEnabled) {
-      if (direction == Direction.left || direction == Direction.right) {
+      if (collisionData.direction == Direction.left || collisionData.direction == Direction.right) {
         velocity.x = velocity.x * -_bouncingReflectFactor;
-      } else if (direction == Direction.up || direction == Direction.down) {
+      } else if (collisionData.direction == Direction.up || collisionData.direction == Direction.down) {
         velocity.y = velocity.y * -_bouncingReflectFactor;
       } else {
         stopMove();
       }
       _countFrameCollisionStoped = 0;
     } else {
-      super.onBlockedMovement(other, direction);
+      super.onBlockedMovement(other, collisionData);
     }
   }
 

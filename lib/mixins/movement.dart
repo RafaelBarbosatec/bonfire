@@ -11,7 +11,7 @@ mixin Movement on GameComponent {
   double speed = speedDefault;
   double _lastSpeed = speedDefault;
   double velocityRadAngle = 0.0;
-  Vector2 lastDisplacement = Vector2.zero();
+  Vector2 displacement = Vector2.zero();
   Vector2 _velocity = Vector2.zero();
   Direction lastDirection = Direction.right;
   Direction lastDirectionHorizontal = Direction.right;
@@ -50,10 +50,11 @@ mixin Movement on GameComponent {
   void onApplyDisplacement(double dt) {
     final transformedVelocity = onVelocityTransform(dt);
     if (!transformedVelocity.isZero()) {
-      super.position += lastDisplacement = transformedVelocity * dt;
-      _updateLastDirection(lastDisplacement);
+      displacement = transformedVelocity * dt;
+      super.position += displacement;
+      _updateLastDirection(displacement);
     } else {
-      lastDisplacement = Vector2.zero();
+      displacement.setZero();
     }
   }
 
@@ -68,8 +69,8 @@ mixin Movement on GameComponent {
 
   /// Method used to translate component
   void translate(Vector2 displacement) {
-    lastDisplacement = displacement;
-    _updateLastDirection(lastDisplacement);
+    this.displacement = displacement;
+    _updateLastDirection(displacement);
     position.add(displacement);
   }
 
@@ -344,11 +345,11 @@ mixin Movement on GameComponent {
 
   void _updatePosition(double dt) {
     onApplyDisplacement(dt);
-    if (!lastDisplacement.isZero()) {
+    if (!displacement.isZero()) {
       if (lastDirection == Direction.up || lastDirection == Direction.down) {
         _requestUpdatePriority();
       }
-      onMove(_lastSpeed, lastDisplacement, lastDirection, velocityRadAngle);
+      onMove(_lastSpeed, displacement, lastDirection, velocityRadAngle);
     }
   }
 

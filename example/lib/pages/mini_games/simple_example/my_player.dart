@@ -12,7 +12,7 @@ import 'package:example/shared/util/player_sprite_sheet.dart';
 ///
 /// Rafaelbarbosatec
 /// on 19/10/21
-class MyPlayer extends SimplePlayer with BlockMovementCollisionV2 {
+class MyPlayer extends SimplePlayer with BlockMovementCollision {
   MyPlayer(Vector2 position)
       : super(
           animation: PlayerSpriteSheet.simpleDirectionAnimation,
@@ -20,7 +20,6 @@ class MyPlayer extends SimplePlayer with BlockMovementCollisionV2 {
           position: position,
           life: 200,
         );
-
   @override
   Future<void> onLoad() {
     add(

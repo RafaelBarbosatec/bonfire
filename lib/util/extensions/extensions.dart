@@ -155,6 +155,38 @@ extension Vector2Ext on Vector2 {
   double maxValue() {
     return max(x, y);
   }
+
+  Direction toDirection() {
+    if (x > 0.5 && y < -0.5) {
+      return Direction.upRight;
+    }
+
+    if (x < -0.5 && y < -0.5) {
+      return Direction.upLeft;
+    }
+
+    if (x < -0.5 && y > 0.5) {
+      return Direction.downLeft;
+    }
+
+    if (x > 0.5 && y > 0.5) {
+      return Direction.downRight;
+    }
+
+    if (x > 0 && y.abs() < 0.5) {
+      return Direction.right;
+    } else if (x < 0 && y.abs() < 0.5) {
+      return Direction.left;
+    }
+
+    if (y > 0) {
+      return Direction.down;
+    } else if (y < 0) {
+      return Direction.up;
+    }
+
+    return Direction.left;
+  }
 }
 
 extension ObjectExt<T> on T {
