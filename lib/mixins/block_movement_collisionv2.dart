@@ -1,12 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/collision_util.dart';
 
 /// Mixin responsible for adding stop the movement when happen collision
 mixin BlockMovementCollisionV2 on Movement {
-  final _collisionUtil = CollisionUtil();
-
   bool onBlockMovement(
     Set<Vector2> intersectionPoints,
     GameComponent other,
@@ -16,8 +14,16 @@ mixin BlockMovementCollisionV2 on Movement {
 
   void onBlockedMovement(
     PositionComponent other,
-    Direction direction,
-  ) {}
+    CollisionData collisionData,
+  ) {
+    superPosition = position + (-collisionData.normal * collisionData.depth);
+    if (collisionData.depth.abs() > 0.1 && !velocity.isZero()) {
+      stopFromCollision(
+        isX: collisionData.normal.x.abs() > 0.1,
+        isY: collisionData.normal.y.abs() > 0.1,
+      );
+    }
+  }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
@@ -36,18 +42,24 @@ mixin BlockMovementCollisionV2 on Movement {
     ShapeHitbox shape1 = shapeHitboxes.first;
     ShapeHitbox shape2 = other.children.query<ShapeHitbox>().first;
 
+    CollisionData? collisionData;
+
     if (_isPolygon(shape1)) {
       if (_isPolygon(shape2)) {
-        _intersectPolygons(shape1, shape2, other);
+        collisionData = _intersectPolygons(shape1, shape2, other);
       } else if (shape2 is CircleHitbox) {
-        _intersectCirclePolygon(shape1, shape2, other);
+        collisionData = _intersectCirclePolygon(shape1, shape2, other);
       }
     } else if (shape1 is CircleHitbox) {
       if (_isPolygon(shape2)) {
-        _intersectCirclePolygon(shape2, shape1, other);
+        collisionData = _intersectCirclePolygon(shape2, shape1, other);
       } else if (shape2 is CircleHitbox) {
-        _intersectCircles(shape1, shape2);
+        collisionData = _intersectCircles(shape1, shape2);
       }
+    }
+
+    if (collisionData != null) {
+      onBlockedMovement(other, collisionData);
     }
   }
 
@@ -55,7 +67,7 @@ mixin BlockMovementCollisionV2 on Movement {
     return shape is RectangleHitbox || shape is PolygonHitbox;
   }
 
-  void _intersectPolygons(
+  CollisionData _intersectPolygons(
     ShapeHitbox shapeA,
     ShapeHitbox shapeB,
     PositionComponent other,
@@ -95,9 +107,6 @@ mixin BlockMovementCollisionV2 on Movement {
 
       Vector2 pA = _projectVertices(verticesA, axis);
       Vector2 pB = _projectVertices(verticesB, axis);
-      if (pA.x >= pB.y || pB.x >= pA.y) {
-        return;
-      }
 
       double axisDepth = min(pB.y - pA.x, pA.y - pB.x);
 
@@ -113,13 +122,7 @@ mixin BlockMovementCollisionV2 on Movement {
       normal = -normal;
     }
 
-    superPosition = position + (-normal * depth / 2);
-
-    // if (depth.abs() > 0.1 && !velocity.isZero()) {
-    //   stopFromCollision(isX: normal.x.abs() > 0, isY: normal.y.abs() > 0);
-    // }
-
-    // other.position += (normal * depth / 2);
+    return CollisionData(normal: normal, depth: depth);
   }
 
   List<Vector2> _getPolygonVertices(ShapeHitbox shape) {
@@ -171,12 +174,11 @@ mixin BlockMovementCollisionV2 on Movement {
     return Vector2(min, max);
   }
 
-  void _intersectCirclePolygon(
+  CollisionData _intersectCirclePolygon(
     ShapeHitbox shapeA,
     CircleHitbox shapeB,
     PositionComponent other,
   ) {
-    print('intersectCirclePolygon');
     Vector2 normal = Vector2.zero();
     double depth = double.maxFinite;
     Vector2 axis = Vector2.zero();
@@ -225,10 +227,7 @@ mixin BlockMovementCollisionV2 on Movement {
       normal = -normal;
     }
 
-    superPosition = position + (-normal * depth / 2);
-    if (depth.abs() > 0.1 && !velocity.isZero()) {
-      stopFromCollision(isX: normal.x.abs() > 0.1, isY: normal.y.abs() > 0.1);
-    }
+    return CollisionData(normal: normal, depth: depth);
   }
 
   int findClosesPointOnPolygon(Vector2 circleCenter, List<Vector2> vertices) {
@@ -248,7 +247,7 @@ mixin BlockMovementCollisionV2 on Movement {
     return result;
   }
 
-  void _intersectCircles(CircleHitbox shapeA, CircleHitbox shapeB) {
+  CollisionData _intersectCircles(CircleHitbox shapeA, CircleHitbox shapeB) {
     Vector2 normal = Vector2.zero();
     double depth = double.maxFinite;
 
@@ -257,7 +256,30 @@ mixin BlockMovementCollisionV2 on Movement {
 
     normal = (shapeB.absoluteCenter - shapeA.absoluteCenter).normalized();
     depth = radii - distance;
+    return CollisionData(normal: normal, depth: depth);
+  }
+}
 
-    superPosition = position + (-normal * depth / 2);
+class CollisionData {
+  final Vector2 normal;
+  final double depth;
+  final List<Vector2> intersectionPoints;
+
+  CollisionData({
+    required this.normal,
+    required this.depth,
+    this.intersectionPoints = const [],
+  });
+
+  CollisionData copyWith({
+    Vector2? normal,
+    double? depth,
+    List<Vector2>? intersectionPoints,
+  }) {
+    return CollisionData(
+      normal: normal ?? this.normal,
+      depth: depth ?? this.depth,
+      intersectionPoints: intersectionPoints ?? this.intersectionPoints,
+    );
   }
 }
