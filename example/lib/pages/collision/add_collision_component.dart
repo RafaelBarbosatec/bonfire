@@ -11,8 +11,15 @@ class AddCollisionComponent extends GameComponent with TapGesture {
 
   @override
   void onTapDownScreen(GestureEvent event) {
-    gameRef.add(CollisionComponent(
-        position: event.worldPosition, isCircle: Random().nextBool()));
+    gameRef.add(
+      CollisionComponent(
+        position: event.worldPosition,
+        isCircle: Random().nextBool(),
+      ),
+    );
     super.onTapDownScreen(event);
   }
+
+  @override
+  bool get isVisible => true;
 }
