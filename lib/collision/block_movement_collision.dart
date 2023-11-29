@@ -31,6 +31,7 @@ mixin BlockMovementCollision on Movement {
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
     if (other is Sensor) return;
+    if (isStopped()) return;
     bool stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
         : true;
@@ -54,7 +55,12 @@ mixin BlockMovementCollision on Movement {
       }
     } else if (shape1 is CircleHitbox) {
       if (_isPolygon(shape2)) {
-        collisionData = _intersectCirclePolygon(shape2, shape1, other);
+        collisionData = _intersectCirclePolygon(
+          shape2,
+          shape1,
+          other,
+          inverted: true,
+        );
       } else if (shape2 is CircleHitbox) {
         collisionData = _intersectCircles(shape1, shape2);
       }
@@ -121,8 +127,9 @@ mixin BlockMovementCollision on Movement {
   CollisionData _intersectCirclePolygon(
     ShapeHitbox shapeA,
     CircleHitbox shapeB,
-    PositionComponent other,
-  ) {
+    PositionComponent other, {
+    bool inverted = false,
+  }) {
     Vector2 normal = Vector2.zero();
     double depth = double.maxFinite;
     Vector2 axis = Vector2.zero();
@@ -176,7 +183,9 @@ mixin BlockMovementCollision on Movement {
       normal = axis;
     }
 
-    Vector2 direction = shapeA.absoluteCenter - shapeB.absoluteCenter;
+    Vector2 direction = inverted
+        ? shapeA.absoluteCenter - shapeB.absoluteCenter
+        : shapeB.absoluteCenter - shapeA.absoluteCenter;
 
     if (direction.dot(normal) < 0) {
       normal = -normal;
