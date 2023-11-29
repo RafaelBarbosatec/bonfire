@@ -73,8 +73,7 @@ class BarLifeComponent extends GameComponent {
   @override
   void render(Canvas canvas) {
     double yPosition = (y - height);
-
-    double xPosition = x;
+    double xPosition = (target.size.x - width) / 2;
     switch (drawPosition) {
       case BarLifeDrawPorition.top:
         break;
