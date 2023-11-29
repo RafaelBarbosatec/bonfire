@@ -25,19 +25,27 @@ mixin BlockMovementCollision on Movement {
         isY: collisionData.normal.y.abs() > 0.1,
       );
     }
+    // velocity = velocity -
+    //     Vector2(
+    //       velocity.x * collisionData.normal.x,
+    //       velocity.y * collisionData.normal.y,
+    //     );
   }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
     if (other is Sensor) return;
-    if (isStopped()) return;
+    bool stopOtherMovement = true;
+    bool isStatic = false;
     bool stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
         : true;
-    bool stopOtherMovement = other is BlockMovementCollision
-        ? other.onBlockMovement(intersectionPoints, this)
-        : true;
+    if (other is BlockMovementCollision) {
+      stopOtherMovement = other.onBlockMovement(intersectionPoints, this);
+      isStatic = other.velocity.length > velocity.length;
+    }
+
     if (!stopMovement || !stopOtherMovement) {
       return;
     }
@@ -72,6 +80,7 @@ mixin BlockMovementCollision on Movement {
         collisionData.copyWith(
           intersectionPoints: intersectionPoints.toList(),
           direction: collisionData.normal.toDirection(),
+          depth: isStatic ? 0 : null,
         ),
       );
     }
