@@ -203,10 +203,6 @@ mixin Movement on GameComponent {
     }
   }
 
-  void stopFromCollision({bool isX = true, bool isY = true}) {
-    setZeroVelocity(isX: isX, isY: isY);
-  }
-
   @override
   void update(double dt) {
     dtUpdate = dt;
