@@ -6,6 +6,16 @@ import 'package:bonfire/collision/collision_util.dart';
 
 /// Mixin responsible for adding stop the movement when happen collision
 mixin BlockMovementCollision on Movement {
+  bool _reflectionEnabled = false;
+  bool _blockMovementCollisionEnabled = true;
+  bool get blockMovementCollisionEnabled => _blockMovementCollisionEnabled;
+  bool get blockMovementCollisionReflectionEnabled => _reflectionEnabled;
+
+  void setupBlockMovementCollision({bool? enabled, bool? reflectionEnabled}) {
+    _reflectionEnabled = reflectionEnabled ?? _reflectionEnabled;
+    _blockMovementCollisionEnabled = enabled ?? _blockMovementCollisionEnabled;
+  }
+
   bool onBlockMovement(
     Set<Vector2> intersectionPoints,
     GameComponent other,
@@ -27,7 +37,14 @@ mixin BlockMovementCollision on Movement {
     PositionComponent other,
     CollisionData collisionData,
   ) {
-    velocity -= getCollisionVelocityReflection(other, collisionData);
+    if (_reflectionEnabled) {
+      velocity -= getCollisionVelocityReflection(other, collisionData);
+    } else {
+      velocity -= Vector2(
+        velocity.x * collisionData.normal.x.abs(),
+        velocity.y * collisionData.normal.y.abs(),
+      );
+    }
   }
 
   Vector2 getCollisionVelocityReflection(
@@ -40,7 +57,7 @@ mixin BlockMovementCollision on Movement {
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if (other is Sensor) return;
+    if (other is Sensor || !_blockMovementCollisionEnabled) return;
     bool stopOtherMovement = true;
     bool isStatic = false;
     bool stopMovement = other is GameComponent

@@ -28,4 +28,10 @@ mixin BouncingObject on BlockMovementCollision {
     }
     return super.getCollisionVelocityReflection(other, data);
   }
+
+  @override
+  void onMount() {
+    setupBlockMovementCollision(reflectionEnabled: true);
+    super.onMount();
+  }
 }
