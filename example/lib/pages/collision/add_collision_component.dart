@@ -1,0 +1,18 @@
+import 'dart:math';
+
+import 'package:bonfire/bonfire.dart';
+import 'package:example/pages/collision/collision_component.dart';
+
+class AddCollisionComponent extends GameComponent with TapGesture {
+  @override
+  void onTap() {
+    // TODO: implement onTap
+  }
+
+  @override
+  void onTapDownScreen(GestureEvent event) {
+    gameRef.add(CollisionComponent(
+        position: event.worldPosition, isCircle: Random().nextBool()));
+    super.onTapDownScreen(event);
+  }
+}

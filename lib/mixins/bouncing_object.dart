@@ -18,19 +18,14 @@ mixin BouncingObject on BlockMovementCollision {
   }
 
   @override
-  void onBlockMovementUpdateVelocity(
+  Vector2 getCollisionVelocityReflection(
     PositionComponent other,
-    CollisionData collisionData,
+    CollisionData data,
   ) {
-    if (onBouncingCollision(other) && !isStopped() && _bouncingObjectEnabled) {
-      velocity = velocity -
-          Vector2(
-                velocity.x * collisionData.normal.x.abs(),
-                velocity.y * collisionData.normal.y.abs(),
-              ) *
-              _bouncingReflectFactor;
-    } else {
-      super.onBlockMovementUpdateVelocity(other, collisionData);
+    if (_bouncingObjectEnabled && onBouncingCollision(other)) {
+      return super.getCollisionVelocityReflection(other, data) *
+          _bouncingReflectFactor;
     }
+    return super.getCollisionVelocityReflection(other, data);
   }
 }

@@ -20,15 +20,21 @@ mixin BlockMovementCollision on Movement {
     superPosition =
         position + (-collisionData.normal * (collisionData.depth + 0.05));
 
-    onBlockMovementUpdateVelocity(other,collisionData);
+    onBlockMovementUpdateVelocity(other, collisionData);
   }
 
-  void onBlockMovementUpdateVelocity(PositionComponent other,CollisionData collisionData) {
-    velocity = velocity -
-        Vector2(
-          velocity.x * collisionData.normal.x.abs(),
-          velocity.y * collisionData.normal.y.abs(),
-        );
+  onBlockMovementUpdateVelocity(
+    PositionComponent other,
+    CollisionData collisionData,
+  ) {
+    velocity -= getCollisionVelocityReflection(other, collisionData);
+  }
+
+  Vector2 getCollisionVelocityReflection(
+    PositionComponent other,
+    CollisionData data,
+  ) {
+    return data.normal * velocity.dot(data.normal);
   }
 
   @override
