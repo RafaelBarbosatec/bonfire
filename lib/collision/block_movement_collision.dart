@@ -19,17 +19,16 @@ mixin BlockMovementCollision on Movement {
   ) {
     superPosition =
         position + (-collisionData.normal * (collisionData.depth + 0.05));
-    if (collisionData.depth.abs() > 0.1 && !velocity.isZero()) {
-      stopFromCollision(
-        isX: collisionData.normal.x.abs() > 0.1,
-        isY: collisionData.normal.y.abs() > 0.1,
-      );
-    }
-    // velocity = velocity -
-    //     Vector2(
-    //       velocity.x * collisionData.normal.x,
-    //       velocity.y * collisionData.normal.y,
-    //     );
+
+    onBlockMovementUpdateVelocity(other,collisionData);
+  }
+
+  void onBlockMovementUpdateVelocity(PositionComponent other,CollisionData collisionData) {
+    velocity = velocity -
+        Vector2(
+          velocity.x * collisionData.normal.x.abs(),
+          velocity.y * collisionData.normal.y.abs(),
+        );
   }
 
   @override
