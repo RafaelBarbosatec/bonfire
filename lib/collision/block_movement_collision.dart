@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/collision_util.dart';
 
+export 'collision_data.dart';
+
 /// Mixin responsible for adding stop the movement when happen collision
 mixin BlockMovementCollision on Movement {
   bool _reflectionEnabled = false;
@@ -28,17 +30,17 @@ mixin BlockMovementCollision on Movement {
     CollisionData collisionData,
   ) {
     Vector2 correction;
-    if (_reflectionEnabled && other is BlockMovementCollision) {
-      correction = (-collisionData.normal * (collisionData.depth / 2 + 0.05));
-    } else {
-      correction = (-collisionData.normal * (collisionData.depth + 0.05));
+    double depth = 0;
+    if (collisionData.depth > 0) {
+      depth = collisionData.depth + 0.05;
     }
+    correction = (-collisionData.normal * depth);
     superPosition = position + correction;
 
     onBlockMovementUpdateVelocity(other, collisionData);
   }
 
-  onBlockMovementUpdateVelocity(
+  void onBlockMovementUpdateVelocity(
     PositionComponent other,
     CollisionData collisionData,
   ) {
@@ -241,33 +243,5 @@ mixin BlockMovementCollision on Movement {
     depth = radii - distance;
 
     return (normal, depth);
-  }
-}
-
-class CollisionData {
-  final Vector2 normal;
-  final double depth;
-  final List<Vector2> intersectionPoints;
-  final Direction direction;
-
-  CollisionData({
-    required this.normal,
-    required this.depth,
-    required this.direction,
-    required this.intersectionPoints,
-  });
-
-  CollisionData copyWith({
-    Vector2? normal,
-    double? depth,
-    Direction? direction,
-    List<Vector2>? intersectionPoints,
-  }) {
-    return CollisionData(
-      normal: normal ?? this.normal,
-      depth: depth ?? this.depth,
-      direction: direction ?? this.direction,
-      intersectionPoints: intersectionPoints ?? this.intersectionPoints,
-    );
   }
 }
