@@ -27,8 +27,13 @@ mixin BlockMovementCollision on Movement {
     PositionComponent other,
     CollisionData collisionData,
   ) {
-    superPosition =
-        position + (-collisionData.normal * (collisionData.depth + 0.05));
+    Vector2 correction;
+    if (_reflectionEnabled && other is BlockMovementCollision) {
+      correction = (-collisionData.normal * (collisionData.depth / 2 + 0.05));
+    } else {
+      correction = (-collisionData.normal * (collisionData.depth + 0.05));
+    }
+    superPosition = position + correction;
 
     onBlockMovementUpdateVelocity(other, collisionData);
   }
@@ -65,7 +70,8 @@ mixin BlockMovementCollision on Movement {
         : true;
     if (other is BlockMovementCollision) {
       stopOtherMovement = other.onBlockMovement(intersectionPoints, this);
-      isStatic = other.velocity.length > velocity.length;
+      isStatic =
+          _reflectionEnabled ? false : other.velocity.length > velocity.length;
     }
 
     if (!stopMovement || !stopOtherMovement) {
@@ -75,34 +81,35 @@ mixin BlockMovementCollision on Movement {
     ShapeHitbox shape1 = shapeHitboxes.first;
     ShapeHitbox shape2 = other.children.query<ShapeHitbox>().first;
 
-    CollisionData? collisionData;
+    (Vector2 normal, double depth)? colisionResult;
 
     if (_isPolygon(shape1)) {
       if (_isPolygon(shape2)) {
-        collisionData = _intersectPolygons(shape1, shape2, other);
+        colisionResult = _intersectPolygons(shape1, shape2, other);
       } else if (shape2 is CircleHitbox) {
-        collisionData = _intersectCirclePolygon(shape1, shape2, other);
+        colisionResult = _intersectCirclePolygon(shape1, shape2, other);
       }
     } else if (shape1 is CircleHitbox) {
       if (_isPolygon(shape2)) {
-        collisionData = _intersectCirclePolygon(
+        colisionResult = _intersectCirclePolygon(
           shape2,
           shape1,
           other,
           inverted: true,
         );
       } else if (shape2 is CircleHitbox) {
-        collisionData = _intersectCircles(shape1, shape2);
+        colisionResult = _intersectCircles(shape1, shape2);
       }
     }
 
-    if (collisionData != null) {
+    if (colisionResult != null) {
       onBlockedMovement(
         other,
-        collisionData.copyWith(
+        CollisionData(
+          normal: colisionResult.$1,
+          depth: isStatic ? 0 : colisionResult.$2,
           intersectionPoints: intersectionPoints.toList(),
-          direction: collisionData.normal.toDirection(),
-          depth: isStatic ? 0 : null,
+          direction: colisionResult.$1.toDirection(),
         ),
       );
     }
@@ -112,7 +119,7 @@ mixin BlockMovementCollision on Movement {
     return shape is RectangleHitbox || shape is PolygonHitbox;
   }
 
-  CollisionData _intersectPolygons(
+  (Vector2 normal, double depth) _intersectPolygons(
     ShapeHitbox shapeA,
     ShapeHitbox shapeB,
     PositionComponent other,
@@ -149,13 +156,10 @@ mixin BlockMovementCollision on Movement {
       normal = -normal;
     }
 
-    return CollisionData(
-      normal: normal,
-      depth: depth,
-    );
+    return (normal, depth);
   }
 
-  CollisionData _intersectCirclePolygon(
+  (Vector2 normal, double depth) _intersectCirclePolygon(
     ShapeHitbox shapeA,
     CircleHitbox shapeB,
     PositionComponent other, {
@@ -222,13 +226,11 @@ mixin BlockMovementCollision on Movement {
       normal = -normal;
     }
 
-    return CollisionData(
-      normal: normal,
-      depth: depth,
-    );
+    return (normal, depth);
   }
 
-  CollisionData _intersectCircles(CircleHitbox shapeA, CircleHitbox shapeB) {
+  (Vector2 normal, double depth) _intersectCircles(
+      CircleHitbox shapeA, CircleHitbox shapeB) {
     Vector2 normal = Vector2.zero();
     double depth = double.maxFinite;
 
@@ -238,10 +240,7 @@ mixin BlockMovementCollision on Movement {
     normal = (shapeB.absoluteCenter - shapeA.absoluteCenter).normalized();
     depth = radii - distance;
 
-    return CollisionData(
-      normal: normal,
-      depth: depth,
-    );
+    return (normal, depth);
   }
 }
 
@@ -254,8 +253,8 @@ class CollisionData {
   CollisionData({
     required this.normal,
     required this.depth,
-    this.direction = Direction.left,
-    this.intersectionPoints = const [],
+    required this.direction,
+    required this.intersectionPoints,
   });
 
   CollisionData copyWith({

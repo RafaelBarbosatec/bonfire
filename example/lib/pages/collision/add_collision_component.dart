@@ -5,9 +5,7 @@ import 'package:example/pages/collision/collision_component.dart';
 
 class AddCollisionComponent extends GameComponent with TapGesture {
   @override
-  void onTap() {
-    // TODO: implement onTap
-  }
+  void onTap() {}
 
   @override
   void onTapDownScreen(GestureEvent event) {
