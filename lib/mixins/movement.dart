@@ -48,7 +48,7 @@ mixin Movement on GameComponent {
   }
 
   void onApplyDisplacement(double dt) {
-    velocity = onVelocityUpdate(dt,velocity);
+    velocity = onVelocityUpdate(dt, velocity);
     if (!velocity.isZero()) {
       super.position += displacement = velocity * dt;
       _updateLastDirection(velocity);
