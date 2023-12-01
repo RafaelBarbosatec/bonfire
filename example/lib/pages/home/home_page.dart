@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/pages/collision/collision_page.dart';
 import 'package:example/pages/enemy/enemy_page.dart';
 import 'package:example/pages/forces/forces_page.dart';
 import 'package:example/pages/home/widgets/drawer/home_drawer.dart';
@@ -195,6 +196,16 @@ class _HomePageState extends State<HomePage> {
           ItemDrawer(
             name: 'Forces',
             builder: (_) => const ForcesPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/forces',
+          ),
+        ],
+      ),
+      SectionDrawer(
+        itens: [
+          ItemDrawer(
+            name: 'BlockMovementCollision',
+            builder: (_) => const CollisionPage(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/forces',
           ),

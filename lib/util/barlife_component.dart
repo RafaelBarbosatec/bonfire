@@ -34,7 +34,7 @@ class BarLifeComponent extends GameComponent {
   BarLifeComponent({
     required this.target,
     required Vector2 size,
-    Vector2? position,
+    Vector2? offset,
     Vector2? textOffset,
     this.drawPosition = BarLifeDrawPorition.top,
     this.colors,
@@ -59,7 +59,7 @@ class BarLifeComponent extends GameComponent {
     _barLifeBgPaint = _barLifeBgPaint
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
-    this.position = position ?? Vector2.zero();
+    position = offset ?? Vector2.zero();
     this.size = size;
 
     _textConfig = TextPaint(
@@ -73,8 +73,7 @@ class BarLifeComponent extends GameComponent {
   @override
   void render(Canvas canvas) {
     double yPosition = (y - height);
-
-    double xPosition = x;
+    double xPosition = (target.size.x - width) / 2;
     switch (drawPosition) {
       case BarLifeDrawPorition.top:
         break;

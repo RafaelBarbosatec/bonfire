@@ -20,7 +20,6 @@ class MyPlayer extends SimplePlayer with BlockMovementCollision {
           position: position,
           life: 200,
         );
-
   @override
   Future<void> onLoad() {
     add(

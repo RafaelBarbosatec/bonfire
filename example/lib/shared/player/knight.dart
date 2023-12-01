@@ -29,7 +29,7 @@ class Knight extends SimplePlayer
           speed: DungeonMap.tileSize * 1.5,
           life: 200,
         ) {
-    setupMovementByJoystick(intencityEnabled: true);
+    setupMovementByJoystick(intensityEnabled: true);
     setupLighting(
       LightingConfig(
         radius: width * 1.5,

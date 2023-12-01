@@ -11,7 +11,7 @@ mixin Movement on GameComponent {
   double speed = speedDefault;
   double _lastSpeed = speedDefault;
   double velocityRadAngle = 0.0;
-  Vector2 lastDisplacement = Vector2.zero();
+  Vector2 displacement = Vector2.zero();
   Vector2 _velocity = Vector2.zero();
   Direction lastDirection = Direction.right;
   Direction lastDirectionHorizontal = Direction.right;
@@ -43,17 +43,17 @@ mixin Movement on GameComponent {
     double angle,
   ) {}
 
-  Vector2 onVelocityTransform(double dt) {
+  Vector2 onVelocityUpdate(double dt, Vector2 velocity) {
     return velocity;
   }
 
   void onApplyDisplacement(double dt) {
-    final transformedVelocity = onVelocityTransform(dt);
-    if (!transformedVelocity.isZero()) {
-      super.position += lastDisplacement = transformedVelocity * dt;
-      _updateLastDirection(lastDisplacement);
+    velocity = onVelocityUpdate(dt, velocity);
+    if (!velocity.isZero()) {
+      super.position += displacement = velocity * dt;
+      _updateLastDirection(velocity);
     } else {
-      lastDisplacement = Vector2.zero();
+      displacement.setZero();
     }
   }
 
@@ -68,8 +68,8 @@ mixin Movement on GameComponent {
 
   /// Method used to translate component
   void translate(Vector2 displacement) {
-    lastDisplacement = displacement;
-    _updateLastDirection(lastDisplacement);
+    this.displacement = displacement;
+    _updateLastDirection(displacement);
     position.add(displacement);
   }
 
@@ -181,7 +181,7 @@ mixin Movement on GameComponent {
   /// Move Player to direction by radAngle
   void moveFromAngle(double angle, {double? speed}) {
     _lastSpeed = speed ?? this.speed;
-    velocity = BonfireUtil.vector2ByAngle(angle, intencity: _lastSpeed);
+    velocity = BonfireUtil.vector2ByAngle(angle, intensity: _lastSpeed);
   }
 
   void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {
@@ -202,12 +202,9 @@ mixin Movement on GameComponent {
     }
   }
 
-  void stopFromCollision({bool isX = true, bool isY = true}) {
-    setZeroVelocity(isX: isX, isY: isY);
-  }
-
   @override
   void update(double dt) {
+    dtUpdate = dt;
     super.update(dt);
     if (isVisible || !movementOnlyVisible) {
       _updatePosition(dt);
@@ -343,12 +340,11 @@ mixin Movement on GameComponent {
 
   void _updatePosition(double dt) {
     onApplyDisplacement(dt);
-    dtUpdate = dt;
-    if (!lastDisplacement.isZero()) {
-      if (lastDirection == Direction.up || lastDirection == Direction.down) {
+    if (!displacement.isZero()) {
+      if (lastDirection.isDownSide || lastDirection.isUpSide) {
         _requestUpdatePriority();
       }
-      onMove(_lastSpeed, lastDisplacement, lastDirection, velocityRadAngle);
+      onMove(_lastSpeed, displacement, lastDirection, velocityRadAngle);
     }
   }
 
