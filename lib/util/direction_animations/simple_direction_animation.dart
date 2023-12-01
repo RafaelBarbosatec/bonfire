@@ -317,6 +317,7 @@ class SimpleDirectionAnimation {
       if (runToTheEndFastAnimation) {
         return;
       }
+      _fastAnimation?.onFinish?.call();
       isFlipHorizontally = _lastFlipX;
       isFlipHorizontally = _lastFlipY;
     }
@@ -363,6 +364,7 @@ class SimpleDirectionAnimation {
       if (runToTheEndFastAnimation) {
         return;
       }
+      _fastAnimation?.onFinish?.call();
       isFlipHorizontally = _lastFlipX;
       isFlipHorizontally = _lastFlipY;
     }
