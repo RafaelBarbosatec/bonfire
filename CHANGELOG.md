@@ -1,4 +1,4 @@
-## Next
+## 3.1.0
 - [BREAKING CHANGE] `BlockMovementCollision` big improvements.
   Update `onBlockedMovement` method, adds `CollisionData(normal,depth,direction,intersectionPoints)`
   Adds `onBlockMovementUpdateVelocity` method to do override if necessary.
