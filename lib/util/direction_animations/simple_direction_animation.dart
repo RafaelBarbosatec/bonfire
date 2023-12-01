@@ -119,6 +119,7 @@ class SimpleDirectionAnimation {
     _currentType = animation;
     _currentKeyCustom = null;
     if (!runToTheEndFastAnimation) {
+      _fastAnimation?.onFinish?.call();
       _fastAnimation = null;
     }
     switch (animation) {
