@@ -6,11 +6,11 @@ mixin BouncingObject on BlockMovementCollision {
   bool _bouncingObjectEnabled = true;
 
   void setupBouncingObject({
-    bool enabled = true,
-    double reflectFactor = 1.0,
+    bool? enabled,
+    double? reflectFactor,
   }) {
-    _bouncingObjectEnabled = enabled;
-    _bouncingReflectFactor = reflectFactor;
+    _bouncingObjectEnabled = enabled ?? _bouncingObjectEnabled;
+    _bouncingReflectFactor = reflectFactor ?? _bouncingReflectFactor;
   }
 
   bool onBouncingCollision(PositionComponent other) {
