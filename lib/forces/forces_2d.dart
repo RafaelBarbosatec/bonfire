@@ -17,7 +17,7 @@ class AccelerationForce2D extends Force2D {
 
   @override
   Vector2 transform(Vector2 velocity, double mass, double dt) {
-    return (value * mass * dt);
+    return velocity + (value * mass * dt);
   }
 }
 
