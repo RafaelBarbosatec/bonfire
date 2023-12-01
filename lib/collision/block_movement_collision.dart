@@ -69,6 +69,10 @@ mixin BlockMovementCollision on Movement {
     return data.normal * velocity.dot(data.normal);
   }
 
+  bool onCheckStaticCollision(BlockMovementCollision other) {
+    return _isRigid ? other.velocity.length > velocity.length : false;
+  }
+
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
@@ -80,7 +84,7 @@ mixin BlockMovementCollision on Movement {
         : true;
     if (other is BlockMovementCollision) {
       stopOtherMovement = other.onBlockMovement(intersectionPoints, this);
-      isStatic = _isRigid ? other.velocity.length > velocity.length : false;
+      isStatic = onCheckStaticCollision(other);
     }
 
     if (!stopMovement || !stopOtherMovement) {
