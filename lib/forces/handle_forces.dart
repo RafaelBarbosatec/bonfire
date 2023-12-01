@@ -46,11 +46,10 @@ mixin HandleForces on Movement {
     Vector2 velocity,
     double dt,
   ) {
-    final accelerations = forces.fold<Vector2>(
-      Vector2.zero(),
-      (p, e) => p + e.transform(p, mass, dt),
+    return forces.fold<Vector2>(
+      velocity,
+      (p, e) => e.transform(p, mass, dt),
     );
-    return velocity + accelerations;
   }
 
   Vector2 onApplyResistenceForces(

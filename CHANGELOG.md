@@ -2,6 +2,7 @@
 - [BREAKING CHANGE] `BlockMovementCollision` big improvements.
   Update `onBlockedMovement` method, adds `CollisionData(normal,depth,direction,intersectionPoints)`
   Adds `onBlockMovementUpdateVelocity` method to do override if necessary.
+- `HandleForces` improvements.
 - Fix typo in params that contained `intencity` renaming it to `intensity`.
 - Fix bug `playOnce` and `playOnceOther` when call again without finish the last.
 - `BarLifeComponent` improvements.
