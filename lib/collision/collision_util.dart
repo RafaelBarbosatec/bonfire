@@ -1,10 +1,8 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/pair.dart';
 
 class CollisionUtil {
-
   static List<Vector2> getPolygonVertices(ShapeHitbox shape) {
     if (shape is PolygonComponent) {
       return (shape as PolygonComponent).absoluteVertices;
@@ -12,7 +10,7 @@ class CollisionUtil {
     return [];
   }
 
-  static Pair<Vector2, double> getNormalAndDepth(
+  static ({Vector2 normal, double depth}) getNormalAndDepth(
     List<Vector2> verticesA,
     List<Vector2> verticesB, {
     bool insverted = false,
@@ -27,21 +25,24 @@ class CollisionUtil {
       Vector2 axis = Vector2(-edge.y, edge.x);
       axis = axis.normalized();
 
-      Vector2 pA = projectVertices(insverted ? verticesB : verticesA, axis);
-      Vector2 pB = projectVertices(insverted ? verticesA : verticesB, axis);
+      final pA = projectVertices(insverted ? verticesB : verticesA, axis);
+      final pB = projectVertices(insverted ? verticesA : verticesB, axis);
 
-      double axisDepth = min(pB.y - pA.x, pA.y - pB.x);
+      double axisDepth = min(pB.max - pA.min, pA.max - pB.min);
       if (axisDepth < depth) {
         depth = axisDepth;
         normal = axis;
       }
     }
-    return Pair(normal, depth);
+    return (normal: normal, depth: depth);
   }
 
-  static Vector2 projectVertices(List<Vector2> vertices, Vector2 axis) {
+  static ({double min, double max}) projectVertices(
+    List<Vector2> vertices,
+    Vector2 axis,
+  ) {
     double min = double.maxFinite;
-    double max = double.minPositive;
+    double max = -double.maxFinite;
     for (var v in vertices) {
       double proj = v.dot(axis);
 
@@ -52,10 +53,11 @@ class CollisionUtil {
         max = proj;
       }
     }
-    return Vector2(min, max);
+    return (min: min, max: max);
   }
 
-  static Vector2 projectCircle(Vector2 center, double radius, Vector2 axis) {
+  static ({double min, double max}) projectCircle(
+      Vector2 center, double radius, Vector2 axis) {
     Vector2 direction = axis.normalized();
     Vector2 directionAndRadius = direction * radius;
 
@@ -71,10 +73,13 @@ class CollisionUtil {
       min = max;
       max = t;
     }
-    return Vector2(min, max);
+    return (min: min, max: max);
   }
 
-  static int findClosesPointOnPolygon(Vector2 circleCenter, List<Vector2> vertices) {
+  static int findClosesPointOnPolygon(
+    Vector2 circleCenter,
+    List<Vector2> vertices,
+  ) {
     int result = -1;
     double minDistance = double.maxFinite;
 

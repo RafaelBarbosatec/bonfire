@@ -26,4 +26,13 @@ class CollisionData {
       intersectionPoints: intersectionPoints ?? this.intersectionPoints,
     );
   }
+
+  CollisionData inverted() {
+    return CollisionData(
+      normal: -normal,
+      depth: depth,
+      direction: (-normal).toDirection(),
+      intersectionPoints: intersectionPoints,
+    );
+  }
 }

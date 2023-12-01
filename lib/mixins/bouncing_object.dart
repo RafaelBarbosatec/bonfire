@@ -31,7 +31,7 @@ mixin BouncingObject on BlockMovementCollision {
 
   @override
   void onMount() {
-    setupBlockMovementCollision(reflectionEnabled: true);
+    setupBlockMovementCollision(isRigid: false);
     super.onMount();
   }
 }

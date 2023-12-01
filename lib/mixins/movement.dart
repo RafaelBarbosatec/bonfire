@@ -43,16 +43,15 @@ mixin Movement on GameComponent {
     double angle,
   ) {}
 
-  Vector2 onVelocityTransform(double dt) {
+  Vector2 onVelocityUpdate(double dt, Vector2 velocity) {
     return velocity;
   }
 
   void onApplyDisplacement(double dt) {
-    final transformedVelocity = onVelocityTransform(dt);
-    if (!transformedVelocity.isZero()) {
-      displacement = transformedVelocity * dt;
-      super.position += displacement;
-      _updateLastDirection(displacement);
+    velocity = onVelocityUpdate(dt,velocity);
+    if (!velocity.isZero()) {
+      super.position += displacement = velocity * dt;
+      _updateLastDirection(velocity);
     } else {
       displacement.setZero();
     }
