@@ -54,7 +54,7 @@ mixin Jumper on Movement, BlockMovementCollision {
   @override
   void update(double dt) {
     super.update(dt);
-    if (!jumping && displacement.y > 1) {
+    if (!jumping && displacement.y.abs() > 0.5) {
       jumping = true;
     }
     _notifyJump();
@@ -74,6 +74,13 @@ mixin Jumper on Movement, BlockMovementCollision {
     if (newDirection != _lastDirectionJump) {
       _lastDirectionJump = newDirection;
       onJump(newDirection);
+    }
+  }
+
+  @override
+  void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {
+    if (!jumping) {
+      super.stopMove(forceIdle: forceIdle, isX: isX, isY: isY);
     }
   }
 }
