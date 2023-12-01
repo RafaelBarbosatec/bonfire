@@ -315,11 +315,6 @@ class SimpleDirectionAnimation {
     Vector2? offset,
   }) async {
     if (_fastAnimation != null) {
-      if (runToTheEndFastAnimation) {
-        // ignore: avoid_print
-        print('Error: Can not possible run playOnce. There is other running.');
-        return;
-      }
       _fastAnimation?.onFinish?.call();
       isFlipHorizontally = _lastFlipX;
       isFlipHorizontally = _lastFlipY;
@@ -364,12 +359,6 @@ class SimpleDirectionAnimation {
       return Future.value();
     }
     if (_fastAnimation != null) {
-      if (runToTheEndFastAnimation) {
-        // ignore: avoid_print
-        print(
-            'Error: Can not possible run playOnce($key). There is other running.');
-        return;
-      }
       _fastAnimation?.onFinish?.call();
       isFlipHorizontally = _lastFlipX;
       isFlipHorizontally = _lastFlipY;
