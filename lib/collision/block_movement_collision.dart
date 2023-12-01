@@ -14,16 +14,16 @@ mixin BlockMovementCollision on Movement {
   bool get blockMovementCollisionReflectionEnabled => _isRigid;
   final Map<BlockMovementCollision, CollisionData> _collisionsResolution = {};
 
+  void setupBlockMovementCollision({bool? enabled, bool? isRigid}) {
+    _isRigid = isRigid ?? _isRigid;
+    _blockMovementCollisionEnabled = enabled ?? _blockMovementCollisionEnabled;
+  }
+
   void setCollisionResolution(
     BlockMovementCollision other,
     CollisionData data,
   ) {
     _collisionsResolution[other] = data;
-  }
-
-  void setupBlockMovementCollision({bool? enabled, bool? isRigid}) {
-    _isRigid = isRigid ?? _isRigid;
-    _blockMovementCollisionEnabled = enabled ?? _blockMovementCollisionEnabled;
   }
 
   bool onBlockMovement(
