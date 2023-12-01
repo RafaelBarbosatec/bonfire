@@ -5,7 +5,7 @@
 - `HandleForces` improvements.
 - Fix typo in params that contained `intencity` renaming it to `intensity`.
 - Fix bug `playOnce` and `playOnceOther` when call again without finish the last.
-- `BarLifeComponent` improvements.
+- `BarLifeComponent` improvements. Now it center horizontally automatic
 
 ## 3.0.10
 - Create mixin `MovePerCell`.
