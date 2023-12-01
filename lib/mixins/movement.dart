@@ -341,7 +341,7 @@ mixin Movement on GameComponent {
   void _updatePosition(double dt) {
     onApplyDisplacement(dt);
     if (!displacement.isZero()) {
-      if (lastDirection == Direction.up || lastDirection == Direction.down) {
+      if (lastDirection.isDownSide || lastDirection.isUpSide) {
         _requestUpdatePriority();
       }
       onMove(_lastSpeed, displacement, lastDirection, velocityRadAngle);
