@@ -316,6 +316,8 @@ class SimpleDirectionAnimation {
   }) async {
     if (_fastAnimation != null) {
       if (runToTheEndFastAnimation) {
+        // ignore: avoid_print
+        print('Error: Can not possible run playOnce. There is other running.');
         return;
       }
       _fastAnimation?.onFinish?.call();
@@ -363,6 +365,9 @@ class SimpleDirectionAnimation {
     }
     if (_fastAnimation != null) {
       if (runToTheEndFastAnimation) {
+        // ignore: avoid_print
+        print(
+            'Error: Can not possible run playOnce($key). There is other running.');
         return;
       }
       _fastAnimation?.onFinish?.call();
