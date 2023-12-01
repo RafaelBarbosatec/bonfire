@@ -314,9 +314,7 @@ class SimpleDirectionAnimation {
     Vector2? size,
     Vector2? offset,
   }) async {
-    if (_fastAnimation != null) {
-      _fastAnimation?.onFinish?.call();
-    }
+    _fastAnimation?.onFinish?.call();
     runToTheEndFastAnimation = runToTheEnd;
     _lastFlipX = isFlipHorizontally;
     _lastFlipY = isFlipVertically;
@@ -356,9 +354,7 @@ class SimpleDirectionAnimation {
     if (others.containsKey(key) != true) {
       return Future.value();
     }
-    if (_fastAnimation != null) {
-      _fastAnimation?.onFinish?.call();
-    }
+    _fastAnimation?.onFinish?.call();
     runToTheEndFastAnimation = runToTheEnd;
     _lastFlipX = isFlipHorizontally;
     _lastFlipY = isFlipVertically;
