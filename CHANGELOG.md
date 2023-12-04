@@ -1,4 +1,4 @@
-# next
+## 3.1.1
 - Fix flip render problem in `SimpleDirectionAnimation`.
 
 ## 3.1.0
