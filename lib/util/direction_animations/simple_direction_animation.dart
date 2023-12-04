@@ -55,8 +55,13 @@ class SimpleDirectionAnimation {
   Vector2 _strokeSize = Vector2.zero();
   Vector2 _strokePosition = Vector2.zero();
   Vector2? spriteAnimationOffset;
-  bool _lastFlipX = false;
-  bool _lastFlipY = false;
+
+  bool _isFlipHorizontallyFastAnimation = false;
+  bool _isFlipVerticallyFastAnimation = false;
+
+  bool get _needDoFlip => isFlipHorizontally || isFlipVertically;
+  bool get _needDoFlipFastAnimation =>
+      _isFlipHorizontallyFastAnimation || _isFlipVerticallyFastAnimation;
 
   SimpleDirectionAnimation({
     required FutureOr<SpriteAnimation> idleRight,
@@ -316,8 +321,13 @@ class SimpleDirectionAnimation {
   }) async {
     _fastAnimation?.onFinish?.call();
     runToTheEndFastAnimation = runToTheEnd;
-    _lastFlipX = isFlipHorizontally;
-    _lastFlipY = isFlipVertically;
+    if (useCompFlip) {
+      _isFlipHorizontallyFastAnimation = isFlipHorizontally;
+      _isFlipVerticallyFastAnimation = isFlipVertically;
+    } else {
+      _isFlipHorizontallyFastAnimation = flipX;
+      _isFlipVerticallyFastAnimation = flipY;
+    }
     _fastAnimation = SpriteAnimationRender(
       size: size ?? this.size,
       position: offset,
@@ -326,16 +336,8 @@ class SimpleDirectionAnimation {
       onFinish: () {
         onFinish?.call();
         _fastAnimation = null;
-        if (!useCompFlip) {
-          isFlipHorizontally = _lastFlipX;
-          isFlipVertically = _lastFlipY;
-        }
       },
     );
-    if (!useCompFlip) {
-      isFlipVertically = flipY;
-      isFlipHorizontally = flipX;
-    }
     onStart?.call();
   }
 
@@ -356,8 +358,14 @@ class SimpleDirectionAnimation {
     }
     _fastAnimation?.onFinish?.call();
     runToTheEndFastAnimation = runToTheEnd;
-    _lastFlipX = isFlipHorizontally;
-    _lastFlipY = isFlipVertically;
+    if (useCompFlip) {
+      _isFlipHorizontallyFastAnimation = isFlipHorizontally;
+      _isFlipVerticallyFastAnimation = isFlipVertically;
+    } else {
+      _isFlipHorizontallyFastAnimation = flipX;
+      _isFlipVerticallyFastAnimation = flipY;
+    }
+
     _fastAnimation = SpriteAnimationRender(
       size: size ?? this.size,
       position: offset,
@@ -366,16 +374,8 @@ class SimpleDirectionAnimation {
       onFinish: () {
         onFinish?.call();
         _fastAnimation = null;
-        if (!useCompFlip) {
-          isFlipHorizontally = _lastFlipX;
-          isFlipVertically = _lastFlipY;
-        }
       },
     );
-    if (!useCompFlip) {
-      isFlipVertically = flipY;
-      isFlipHorizontally = flipX;
-    }
     onStart?.call();
   }
 
@@ -387,48 +387,11 @@ class SimpleDirectionAnimation {
     others[key] = await animation;
   }
 
-  bool get needDoFlip => isFlipHorizontally || isFlipVertically;
-
   void render(Canvas canvas, Paint paint) {
-    if (needDoFlip) {
-      Vector2 center = (size / 2);
-      canvas.save();
-      canvas.translate(center.x, center.y);
-      canvas.scale(isFlipHorizontally ? -1 : 1, isFlipVertically ? -1 : 1);
-      canvas.translate(-center.x, -center.y);
-    }
-
     if (_fastAnimation != null) {
-      if (_strockePaint != null) {
-        _fastAnimation?.render(
-          canvas,
-          overridePaint: _strockePaint!,
-          size: _strokeSize,
-          position: _strokePosition + (spriteAnimationOffset ?? Vector2.zero()),
-        );
-      }
-      _fastAnimation?.render(
-        canvas,
-        overridePaint: paint,
-        position: spriteAnimationOffset,
-      );
+      _renderFastAnimation(canvas, paint);
     } else {
-      if (_strockePaint != null) {
-        _current.render(
-          canvas,
-          overridePaint: _strockePaint,
-          size: _strokeSize,
-          position: _strokePosition + (spriteAnimationOffset ?? Vector2.zero()),
-        );
-      }
-      _current.render(
-        canvas,
-        overridePaint: paint,
-        position: spriteAnimationOffset,
-      );
-    }
-    if (needDoFlip) {
-      canvas.restore();
+      _renderCurrentAnimation(canvas, paint);
     }
   }
 
@@ -553,5 +516,71 @@ class SimpleDirectionAnimation {
 
   void hideStroke() {
     _strockePaint = null;
+  }
+
+  void _renderCurrentAnimation(Canvas canvas, Paint paint) {
+    if (_needDoFlip) {
+      _applyFlip(
+        canvas,
+        isFlipHorizontally,
+        isFlipVertically,
+      );
+    }
+
+    if (_strockePaint != null) {
+      _current.render(
+        canvas,
+        overridePaint: _strockePaint,
+        size: _strokeSize,
+        position: _strokePosition + (spriteAnimationOffset ?? Vector2.zero()),
+      );
+    }
+    _current.render(
+      canvas,
+      overridePaint: paint,
+      position: spriteAnimationOffset,
+    );
+    if (_needDoFlip) {
+      canvas.restore();
+    }
+  }
+
+  void _renderFastAnimation(Canvas canvas, Paint paint) {
+    if (_needDoFlipFastAnimation) {
+      _applyFlip(
+        canvas,
+        _isFlipHorizontallyFastAnimation,
+        _isFlipVerticallyFastAnimation,
+      );
+    }
+
+    if (_strockePaint != null) {
+      _fastAnimation?.render(
+        canvas,
+        overridePaint: _strockePaint!,
+        size: _strokeSize,
+        position: _strokePosition + (spriteAnimationOffset ?? Vector2.zero()),
+      );
+    }
+    _fastAnimation?.render(
+      canvas,
+      overridePaint: paint,
+      position: spriteAnimationOffset,
+    );
+
+    if (_needDoFlipFastAnimation) {
+      canvas.restore();
+    }
+  }
+
+  void _applyFlip(Canvas canvas, bool horizontal, bool vertical) {
+    Vector2 center = (size / 2);
+    canvas.save();
+    canvas.translate(center.x, center.y);
+    canvas.scale(
+      horizontal ? -1 : 1,
+      vertical ? -1 : 1,
+    );
+    canvas.translate(-center.x, -center.y);
   }
 }
