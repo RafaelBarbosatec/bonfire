@@ -1,3 +1,6 @@
+# next
+- Fix flip render problem in `SimpleDirectionAnimation`.
+
 ## 3.1.0
 - [BREAKING CHANGE] `BlockMovementCollision` big improvements.
   - Update `onBlockedMovement` method, adds `CollisionData(normal,depth,direction,intersectionPoints)`
