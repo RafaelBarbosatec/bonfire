@@ -1,3 +1,8 @@
+# 3.1.2
+- fix bug `AutomaticRandomMovement`. (not stop movement in collision)
+- fix bug `BlockMovementCollision`.(pushing other)
+- fix bug `simpleAttackMeleeByDirection`.(pushing enemy to inside other collision)
+
 ## 3.1.1
 - Fix flip render problem in `SimpleDirectionAnimation`.
 

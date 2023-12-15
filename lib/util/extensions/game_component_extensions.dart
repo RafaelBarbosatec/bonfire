@@ -217,7 +217,10 @@ extension GameComponentExtensions on GameComponent {
         .forEach((enemy) {
       enemy.receiveDamage(attackFrom, damage, id);
       if (withPush && enemy is Movement) {
-        (enemy as Movement).translate(diffBase);
+        if ((enemy as Movement).canMove(diffBase.toDirection(),
+            displacement: diffBase.maxValue())) {
+          (enemy as Movement).translate(diffBase);
+        }
       }
     });
   }
