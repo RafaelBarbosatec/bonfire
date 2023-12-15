@@ -9,6 +9,7 @@ export 'collision_data.dart';
 /// Mixin responsible for adding stop the movement when happen collision
 mixin BlockMovementCollision on Movement {
   bool _isRigid = true;
+  bool _isStatic = false;
   bool _blockMovementCollisionEnabled = true;
   bool get blockMovementCollisionEnabled => _blockMovementCollisionEnabled;
   bool get blockMovementCollisionReflectionEnabled => _isRigid;
@@ -43,8 +44,9 @@ mixin BlockMovementCollision on Movement {
       depth = collisionData.depth + 0.05;
     }
     correction = (-collisionData.normal * depth);
-    updatePositionFromCollision(position + correction);
-
+    if (!correction.isZero()) {
+      positionCorrectionFromCollision(position + correction);
+    }
     onBlockMovementUpdateVelocity(other, collisionData);
   }
 
@@ -52,7 +54,7 @@ mixin BlockMovementCollision on Movement {
     PositionComponent other,
     CollisionData collisionData,
   ) {
-    if (_isRigid) {
+    if (_isStatic) {
       velocity -= Vector2(
         velocity.x * collisionData.normal.x.abs(),
         velocity.y * collisionData.normal.y.abs(),
@@ -70,7 +72,7 @@ mixin BlockMovementCollision on Movement {
   }
 
   bool onCheckStaticCollision(BlockMovementCollision other) {
-    return _isRigid ? other.velocity.length > velocity.length : false;
+    return _isRigid ? velocity.isZero() : false;
   }
 
   @override
@@ -78,13 +80,13 @@ mixin BlockMovementCollision on Movement {
     super.onCollision(intersectionPoints, other);
     if (other is Sensor || !_blockMovementCollisionEnabled) return;
     bool stopOtherMovement = true;
-    bool isStatic = false;
+    _isStatic = false;
     bool stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
         : true;
     if (other is BlockMovementCollision) {
       stopOtherMovement = other.onBlockMovement(intersectionPoints, this);
-      isStatic = onCheckStaticCollision(other);
+      _isStatic = onCheckStaticCollision(other);
     }
 
     if (!stopMovement || !stopOtherMovement) {
@@ -92,7 +94,12 @@ mixin BlockMovementCollision on Movement {
     }
 
     if (_collisionsResolution.containsKey(other)) {
-      onBlockedMovement(other, _collisionsResolution[other]!);
+      onBlockedMovement(
+        other,
+        _collisionsResolution[other]!.copyWith(
+          depth: _isStatic ? 0 : null,
+        ),
+      );
       _collisionsResolution.remove(other);
       return;
     }
@@ -124,11 +131,16 @@ mixin BlockMovementCollision on Movement {
     if (colisionResult != null) {
       final data = CollisionData(
         normal: colisionResult.normal,
-        depth: isStatic ? 0 : colisionResult.depth,
+        depth: colisionResult.depth,
         intersectionPoints: intersectionPoints.toList(),
         direction: colisionResult.normal.toDirection(),
       );
-      onBlockedMovement(other, data);
+      onBlockedMovement(
+        other,
+        data.copyWith(
+          depth: _isStatic ? 0 : null,
+        ),
+      );
       if (other is BlockMovementCollision) {
         other.setCollisionResolution(this, data.inverted());
       }

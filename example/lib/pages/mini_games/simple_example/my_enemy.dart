@@ -23,7 +23,7 @@ class MyEnemy extends SimpleNpc
 
   @override
   Future<void> onLoad() {
-    add(RectangleHitbox(size: size));
+    add(RectangleHitbox(size: size, isSolid: true));
     return super.onLoad();
   }
 

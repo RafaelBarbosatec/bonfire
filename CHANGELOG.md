@@ -1,5 +1,6 @@
 # next
-- fix bug in `AutomaticRandomMovement`
+- fix bug in `AutomaticRandomMovement`. (not stop movement in collision)
+- fix bug in `BlockMovementCollision`.(pushing other)
 
 ## 3.1.1
 - Fix flip render problem in `SimpleDirectionAnimation`.

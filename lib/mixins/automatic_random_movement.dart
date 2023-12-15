@@ -120,8 +120,8 @@ mixin AutomaticRandomMovement on Movement {
   }
 
   @override
-  void updatePositionFromCollision(Vector2 position) {
-    super.updatePositionFromCollision(position);
+  void positionCorrectionFromCollision(Vector2 position) {
+    super.positionCorrectionFromCollision(position);
     stopMove();
   }
 
