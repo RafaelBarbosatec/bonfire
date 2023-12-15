@@ -43,7 +43,7 @@ mixin BlockMovementCollision on Movement {
       depth = collisionData.depth + 0.05;
     }
     correction = (-collisionData.normal * depth);
-    superPosition = position + correction;
+    updatePositionFromCollision(position + correction);
 
     onBlockMovementUpdateVelocity(other, collisionData);
   }

@@ -1,3 +1,6 @@
+# next
+- fix bug in `AutomaticRandomMovement`
+
 ## 3.1.1
 - Fix flip render problem in `SimpleDirectionAnimation`.
 

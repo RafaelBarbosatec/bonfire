@@ -57,7 +57,8 @@ mixin Movement on GameComponent {
     }
   }
 
-  set superPosition(Vector2 position) {
+  
+  void updatePositionFromCollision(Vector2 position){
     super.position = position;
   }
 

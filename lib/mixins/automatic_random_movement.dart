@@ -120,6 +120,12 @@ mixin AutomaticRandomMovement on Movement {
   }
 
   @override
+  void updatePositionFromCollision(Vector2 position) {
+    super.updatePositionFromCollision(position);
+    stopMove();
+  }
+
+  @override
   void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {
     super.stopMove(forceIdle: forceIdle, isX: isX, isY: isY);
     _targetRandomMovement = null;
