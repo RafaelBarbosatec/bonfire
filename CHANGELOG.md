@@ -1,3 +1,6 @@
+# next
+- remove `progress`,`delayToHideProgress`,`progressTransactionBuilder`,`progressTransactionDuration` from `BonfireWidget`.
+
 # 3.1.2
 - fix bug `AutomaticRandomMovement`. (not stop movement in collision)
 - fix bug `BlockMovementCollision`.(pushing other)

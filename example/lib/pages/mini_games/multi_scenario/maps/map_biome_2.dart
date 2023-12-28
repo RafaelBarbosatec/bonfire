@@ -44,11 +44,7 @@ class MapBiome2 extends StatelessWidget {
         moveOnlyMapArea: true,
         zoom: getZoomFromMaxVisibleTile(context, defaultTileSize, 20),
       ),
-      progress: Container(
-        width: double.maxFinite,
-        height: double.maxFinite,
-        color: Colors.black,
-      ),
+      
     );
   }
 

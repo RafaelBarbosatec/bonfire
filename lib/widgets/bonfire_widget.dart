@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bonfire/background/game_background.dart';
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/bonfire_game_interface.dart';
@@ -53,10 +51,6 @@ class BonfireWidget extends StatefulWidget {
   /// mouse cursor can be changed in runtime using [Game.mouseCursor]
   final MouseCursor? mouseCursor;
 
-  final Widget? progress;
-  final Duration progressTransitionDuration;
-  final AnimatedSwitcherTransitionBuilder progressTransitionBuilder;
-
   final ValueChanged<BonfireGameInterface>? onReady;
   final Map<String, OverlayWidgetBuilder<BonfireGame>>? overlayBuilderMap;
   final List<String>? initialActiveOverlays;
@@ -65,7 +59,6 @@ class BonfireWidget extends StatefulWidget {
   final CameraConfig? cameraConfig;
   final GameColorFilter? colorFilter;
   final VoidCallback? onDispose;
-  final Duration delayToHideProgress;
   final List<Force2D>? globalForces;
 
   const BonfireWidget({
@@ -89,10 +82,6 @@ class BonfireWidget extends StatefulWidget {
     this.focusNode,
     this.autofocus = true,
     this.mouseCursor,
-    this.progress,
-    this.delayToHideProgress = const Duration(milliseconds: 500),
-    this.progressTransitionDuration = const Duration(milliseconds: 500),
-    this.progressTransitionBuilder = AnimatedSwitcher.defaultTransitionBuilder,
     this.onDispose,
     this.globalForces,
   }) : super(key: key);
@@ -103,58 +92,29 @@ class BonfireWidget extends StatefulWidget {
 
 class BonfireWidgetState extends State<BonfireWidget> {
   late BonfireGame _game;
-  late StreamController<bool> _loadingStream;
 
   @override
   void dispose() {
-    _loadingStream.close();
     widget.onDispose?.call();
     super.dispose();
   }
 
   @override
   void initState() {
-    _loadingStream = StreamController<bool>();
     _buildGame();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        ListenerGameWidget(
-          game: _game,
-          overlayBuilderMap: widget.overlayBuilderMap,
-          initialActiveOverlays: widget.initialActiveOverlays,
-          focusNode: widget.focusNode,
-          autofocus: widget.autofocus,
-          mouseCursor: widget.mouseCursor,
-        ),
-        StreamBuilder<bool>(
-          stream: _loadingStream.stream,
-          builder: (context, snapshot) {
-            bool loading = !snapshot.hasData || snapshot.data == true;
-            return AnimatedSwitcher(
-              duration: widget.progressTransitionDuration,
-              transitionBuilder: widget.progressTransitionBuilder,
-              child: loading ? _defaultProgress() : Container(),
-            );
-          },
-        ),
-      ],
+    return ListenerGameWidget(
+      game: _game,
+      overlayBuilderMap: widget.overlayBuilderMap,
+      initialActiveOverlays: widget.initialActiveOverlays,
+      focusNode: widget.focusNode,
+      autofocus: widget.autofocus,
+      mouseCursor: widget.mouseCursor,
     );
-  }
-
-  Widget _defaultProgress() {
-    return widget.progress ??
-        Container(
-          color: Colors.black,
-          child: const Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
   }
 
   void _buildGame() {
@@ -174,16 +134,8 @@ class BonfireWidgetState extends State<BonfireWidget> {
       lightingColorGame: widget.lightingColorGame,
       cameraConfig: widget.cameraConfig,
       colorFilter: widget.colorFilter,
-      onReady: (game) {
-        widget.onReady?.call(game);
-        _hideProgress();
-      },
+      onReady: widget.onReady,
       globalForces: widget.globalForces,
     );
-  }
-
-  void _hideProgress() async {
-    await Future.delayed(widget.delayToHideProgress);
-    _loadingStream.add(false);
   }
 }

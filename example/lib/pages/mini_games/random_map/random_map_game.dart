@@ -66,7 +66,6 @@ class _RandomMapGameState extends State<RandomMapGame> {
           ),
           map: result.map,
           components: result.components,
-          delayToHideProgress: const Duration(milliseconds: 500),
         );
       },
     );
