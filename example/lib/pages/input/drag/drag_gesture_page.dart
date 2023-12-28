@@ -10,7 +10,7 @@ class DragGesturePage extends StatelessWidget {
     const tileSize = 16.0;
     return BonfireWidget(
       map: WorldMapByTiled(
-        'tiled/tiled_example.tmj',
+        TiledReader.asset('tiled/tiled_example.tmj'),
       ),
       cameraConfig: CameraConfig(
         zoom: getZoomFromMaxVisibleTile(context, tileSize, 30),

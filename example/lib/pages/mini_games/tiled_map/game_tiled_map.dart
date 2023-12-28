@@ -66,7 +66,7 @@ class GameTiledMap extends StatelessWidget {
           ),
           interface: KnightInterface(),
           map: WorldMapByTiled(
-            'tiled/mapa$map.json',
+            TiledReader.asset('tiled/mapa$map.json'),
             forceTileSize: Vector2(DungeonMap.tileSize, DungeonMap.tileSize),
             objectsBuilder: {
               'goblin': (properties) => Goblin(properties.position),

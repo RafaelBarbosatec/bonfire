@@ -5,7 +5,6 @@ import 'dart:ui';
 
 import 'package:bonfire/background/background_image_game.dart';
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/tiled/builder/tiled_reader.dart';
 import 'package:bonfire/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/text_game_component.dart';
@@ -41,10 +40,10 @@ class TiledWorldBuilder {
   static const GIT_FLIP_VERTICAL = 1073741824;
   static const GIT_FLIP_HORIZONTAL_270 = 536870912;
   static const GIT_FLIP_HORIZONTAL_90 = 3758096384;
-  final String path;
+
   final Vector2? forceTileSize;
   final ValueChanged<Object>? onError;
-  late TiledReader _reader;
+  late TiledReader reader;
   final double tileSizeToUpdate;
   final List<TileModel> _tiles = [];
   final List<GameComponent> _components = [];
@@ -60,15 +59,14 @@ class TiledWorldBuilder {
   int countImageLayer = 0;
 
   TiledWorldBuilder(
-    this.path, {
+    this.reader, {
     this.forceTileSize,
     this.onError,
     this.tileSizeToUpdate = 0,
     Map<String, ObjectBuilder>? objectsBuilder,
   }) {
     _objectsBuilder = objectsBuilder ?? {};
-    _basePath = path.replaceAll(path.split('/').last, '');
-    _reader = TiledReader(path);
+    _basePath = reader.basePath;
   }
 
   void registerObject(String name, ObjectBuilder builder) {
@@ -77,7 +75,7 @@ class TiledWorldBuilder {
 
   Future<TiledWorldData> build() async {
     try {
-      _tiledMap = await _reader.readMap();
+      _tiledMap = await reader.readMap();
       _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble() ?? 0.0;
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble() ?? 0.0;
       _tileWidth = forceTileSize?.x ?? _tileWidthOrigin;

@@ -27,7 +27,7 @@ class MapBiome1 extends StatelessWidget {
         initDirection: showInEnum.direction,
       ),
       map: WorldMapByTiled(
-        MultiScenarioAssets.mapBiome1,
+        TiledReader.asset(MultiScenarioAssets.mapBiome1),
         forceTileSize: Vector2.all(defaultTileSize),
         objectsBuilder: {
           'sensorLeft': (p) => ExitMapSensor(
@@ -48,7 +48,6 @@ class MapBiome1 extends StatelessWidget {
         moveOnlyMapArea: true,
         zoom: getZoomFromMaxVisibleTile(context, defaultTileSize, 20),
       ),
-      
     );
   }
 

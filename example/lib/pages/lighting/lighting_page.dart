@@ -10,7 +10,7 @@ class LightingPage extends StatelessWidget {
     const tileSize = 16.0;
     return BonfireWidget(
       map: WorldMapByTiled(
-        'tiled/tiled_example.tmj',
+        TiledReader.asset('tiled/tiled_example.tmj'),
         objectsBuilder: {
           'torch': (prop) => SimpleTorch(prop.position),
         },

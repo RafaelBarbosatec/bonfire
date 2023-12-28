@@ -9,7 +9,9 @@ class SimplePlayerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const tileSize = 16.0;
     return BonfireWidget(
-      map: WorldMapByTiled('tiled/punnyworld/simple_map.tmj'),
+      map: WorldMapByTiled(
+        TiledReader.asset('tiled/punnyworld/simple_map.tmj'),
+      ),
       joystick: Joystick(
         keyboardConfig: KeyboardConfig(),
         directional: JoystickDirectional(),

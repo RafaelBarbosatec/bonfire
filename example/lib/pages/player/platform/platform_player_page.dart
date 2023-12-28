@@ -11,7 +11,7 @@ class PlatformPlayerPage extends StatelessWidget {
     const tileSize = 16.0;
     return BonfireWidget(
       map: WorldMapByTiled(
-        'platform/simple_map.tmj',
+        TiledReader.asset('platform/simple_map.tmj'),
       ),
       joystick: Joystick(
         keyboardConfig: KeyboardConfig(
