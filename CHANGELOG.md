@@ -2,6 +2,8 @@
 BREAKING GANGES:
 - remove `progress`,`delayToHideProgress`,`progressTransactionBuilder`,`progressTransactionDuration` from `BonfireWidget`.
 - `WorldMapByTiled` now expect `TiledReader` instand of `String`. You can use `TiledReader.asset` or `TiledReader.network`.
+- Adds `TiledCacheProvider` in `TiledNetworkReader`
+- Update `tiledjsonreader`.
 
 # 3.1.2
 - fix bug `AutomaticRandomMovement`. (not stop movement in collision)
