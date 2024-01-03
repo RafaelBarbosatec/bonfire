@@ -1,7 +1,7 @@
 # 3.2.0
 BREAKING GANGES:
 - remove `progress`,`delayToHideProgress`,`progressTransactionBuilder`,`progressTransactionDuration` from `BonfireWidget`.
-- `WorldMapByTiled` now expect `TiledReader` instand of `String`. You can use `TiledReader.asset` or `TiledReader.network`.
+- `WorldMapByTiled` now expect `TiledReader` instead of `String`. You can use `TiledReader.asset` or `TiledReader.network`.
 - Adds `TiledCacheProvider` in `TiledNetworkReader`
 - Update `tiledjsonreader`.
 
