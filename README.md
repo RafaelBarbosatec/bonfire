@@ -2,9 +2,10 @@
 [![Flutter](https://img.shields.io/badge/Made%20with-Flutter-blue.svg)](https://flutter.dev/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![pub package](https://img.shields.io/pub/v/bonfire.svg)](https://pub.dev/packages/bonfire)
-![GitHub stars](https://img.shields.io/github/stars/RafaelBarbosatec/bonfire)
+![GitHub stars](https://img.shields.io/github/stars/RafaelBarbosatec/bonfire?style=flat)
 [![pub points](https://img.shields.io/pub/points/bonfire?logo=dart)](https://pub.dev/packages/bonfire/score)
 [![Telegram](https://img.shields.io/endpoint?style=flat-square&url=https%3A%2F%2Frunkit.io%2Fdamiankrawczyk%2Ftelegram-badge%2Fbranches%2Fmaster%3Furl%3Dhttps%3A%2F%2Ft.me%2Fbonfire_engine)](https://t.me/bonfire_engine)
+[![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/rafaelbarbosatec)
 
 
 [![bonfire](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/bonfire.gif)](https://bonfire-engine.github.io/)
@@ -43,7 +44,7 @@ Use this command: `flutter build web --web-renderer=canvaskit`
 
 ## Encourage my work
 
-[![buymeacoffee](https://user-images.githubusercontent.com/835641/60540201-fcd7fa00-9ce4-11e9-87ec-1e98568e9f58.png)](https://www.buymeacoffee.com/rafaelbarbosa)
+[![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86&style=for-the-badge)](https://github.com/sponsors/rafaelbarbosatec)
 
 ## Credits
 
