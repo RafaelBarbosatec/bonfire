@@ -23,7 +23,7 @@ class TopDownGame extends StatelessWidget {
   Widget build(BuildContext context) {
     return BonfireWidget(
       map: WorldMapByTiled(
-        'tiled/top_down/map.json',
+        TiledReader.asset('tiled/top_down/map.json'),
         objectsBuilder: {
           'enemy': (prop) => ZombieEnemy(prop.position),
           'armchair': (prop) => ArmchairDecoration(prop.position),

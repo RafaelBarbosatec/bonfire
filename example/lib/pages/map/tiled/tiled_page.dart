@@ -11,7 +11,7 @@ class TiledPage extends StatelessWidget {
     return BonfireWidget(
       joystick: Joystick(directional: JoystickDirectional()),
       map: WorldMapByTiled(
-        'tiled/tiled_example.tmj',
+        TiledReader.asset('tiled/tiled_example.tmj'),
         objectsBuilder: {
           'spikes': (props) => Spikes(
                 props.position,

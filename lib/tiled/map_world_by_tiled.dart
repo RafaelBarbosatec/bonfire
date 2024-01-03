@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 class WorldMapByTiled extends WorldMap {
   late TiledWorldBuilder _builder;
   WorldMapByTiled(
-    String path, {
+    TiledReader reader, {
     Vector2? forceTileSize,
     ValueChanged<Object>? onError,
     double tileSizeToUpdate = 0,
@@ -13,7 +13,7 @@ class WorldMapByTiled extends WorldMap {
   }) : super(const []) {
     this.tileSizeToUpdate = tileSizeToUpdate;
     _builder = TiledWorldBuilder(
-      path,
+      reader,
       forceTileSize: forceTileSize,
       onError: onError,
       tileSizeToUpdate: tileSizeToUpdate,

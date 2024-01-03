@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
-import 'package:http/http.dart' as http;
 
 class MapAssetsManager {
   static final Map<String, Sprite> spriteCache = {};
-  static final Map<String, Image> _imageCache = {};
   static final Map<String, ControlledUpdateAnimation> spriteAnimationCache = {};
 
   static Sprite getSprite(
@@ -72,10 +68,10 @@ class MapAssetsManager {
       spriteList.add(sprite);
     }
 
-    return Future.value(SpriteAnimation.spriteList(
+    return SpriteAnimation.spriteList(
       spriteList,
       stepTime: stepTime,
-    ));
+    );
   }
 
   static ControlledUpdateAnimation getSpriteAnimation(
@@ -110,23 +106,13 @@ class MapAssetsManager {
 
   static Future<Image> loadImage(
     String image,
-  ) async {
-    final fromServer = image.contains('http');
-    if (_imageCache.containsKey(image)) {
-      return Future.value(_imageCache[image]);
-    }
-    if (fromServer) {
-      final response = await http.get(Uri.parse(image));
-      String img64 = base64Encode(response.bodyBytes);
-      return _imageCache[image] = await Flame.images.fromBase64(image, img64);
-    } else {
-      return _imageCache[image] = await Flame.images.load(image);
-    }
+  ) {
+    return Flame.images.load(image);
   }
 
   static Image? getImageCache(String image) {
     try {
-      return _imageCache[image];
+      return Flame.images.fromCache(image);
     } catch (e) {
       return null;
     }

@@ -10,7 +10,7 @@ class RotationPlayerPage extends StatelessWidget {
     const tileSize = 16.0;
     return BonfireWidget(
       map: WorldMapByTiled(
-        'tiled/simple_topdown/simple.tmj',
+        TiledReader.asset('tiled/simple_topdown/simple.tmj'),
       ),
       joystick: Joystick(
         keyboardConfig: KeyboardConfig(),
