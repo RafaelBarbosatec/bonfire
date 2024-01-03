@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/tiled/cache_provider/tiled_cache_provider.dart';
 import 'package:bonfire/tiled/cache_provider/tiled_memory_cache_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiledjsonreader/map/layer/image_layer.dart';
@@ -76,7 +75,7 @@ class TiledNetworkReader extends TiledReader {
 
   Future<TiledMap> _fetchMap() async {
     final uriKey = uri.toString();
-    bool containCache = await cache.contain(uriKey);
+    bool containCache = await cache.containsKey(uriKey);
     if (containCache) {
       final map = await cache.get(uriKey);
       return TiledMap.fromJson(map);
@@ -92,7 +91,7 @@ class TiledNetworkReader extends TiledReader {
     final uri = Uri.parse('$basePath$source');
     final uriKey = uri.toString();
 
-    bool containCache = await cache.contain(uriKey);
+    bool containCache = await cache.containsKey(uriKey);
 
     if (containCache) {
       return cache.get(uriKey);

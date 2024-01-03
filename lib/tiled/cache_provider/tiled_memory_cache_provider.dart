@@ -26,7 +26,7 @@ class TiledMemoryCacheProvider extends TiledCacheProvider {
   }
 
   @override
-  Future<bool> contain(String key) {
+  Future<bool> containsKey(String key) {
     return Future.value(_cache.containsKey(key));
   }
 }
