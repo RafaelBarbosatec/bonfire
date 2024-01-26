@@ -1,5 +1,5 @@
 # 3.3.0
-- `TiledNetworkReader` improvements. Adds support to embeded tileset.
+- `TiledNetworkReader` improvements. Adds support to embedded tileset.
 - Update Flame to `1.14.0`
 
 # 3.2.0
