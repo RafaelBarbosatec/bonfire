@@ -55,8 +55,8 @@ class TiledNetworkReader extends TiledReader {
   Future<void> _loadTileset(TileSetDetail tileSet) async {
     String sourceBasePath = '';
     if (tileSet.source != null) {
-      if (!_isSuppotedFileType(tileSet.source!)) {
-        throw Exception('Invalid TileSet source: only supports json files');
+      if (!_isSuppotedTilesetFileType(tileSet.source!)) {
+        throw Exception('Invalid TileSet source: only supports json|tsj files');
       }
       sourceBasePath = tileSet.source!.replaceAll(
         tileSet.source!.split('/').last,
@@ -74,8 +74,12 @@ class TiledNetworkReader extends TiledReader {
     }
   }
 
-  bool _isSuppotedFileType(String source) {
+  bool _isSuppotedTilesetFileType(String source) {
     return (source.contains('.json') || source.contains('.tsj'));
+  }
+
+  bool _isSuppotedMapFileType(String source) {
+    return (source.contains('.json') || source.contains('.tmj'));
   }
 
   Future<TiledMap> _fetchMap() async {
@@ -85,6 +89,9 @@ class TiledNetworkReader extends TiledReader {
       final map = await cache.get(uriKey);
       return TiledMap.fromJson(map);
     } else {
+      if (!_isSuppotedMapFileType(uriKey)) {
+        throw Exception('Invalid TileMap source: only supports json|tmj files');
+      }
       final mapResponse = await http.get(uri);
       final map = jsonDecode(mapResponse.body);
       cache.put(uriKey, map);

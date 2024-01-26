@@ -1,3 +1,6 @@
+# NEXT
+- `TiledNetworkReader` improvements. Adds support to embeded tileset.
+
 # 3.2.0
 BREAKING GANGES:
 - removes `progress`,`delayToHideProgress`,`progressTransactionBuilder`,`progressTransactionDuration` from `BonfireWidget`. Now create your own progress with base of `onReady` callback.
