@@ -35,7 +35,7 @@ class TiledNetworkReader extends TiledReader {
       );
       await Future.forEach<TileSetDetail>(
         tiledMap.tileSets ?? [],
-        _fillTileset,
+        _loadTileset,
       );
       if (tiledMap.orientation != ORIENTATION_SUPPORTED) {
         throw Exception(
@@ -52,21 +52,26 @@ class TiledNetworkReader extends TiledReader {
 
   Future<void> preload() => readMap();
 
-  Future _fillTileset(TileSetDetail tileSet) async {
+  Future<void> _loadTileset(TileSetDetail tileSet) async {
+    String sourceBasePath = '';
     if (tileSet.source != null) {
       if (!_isSuppotedFileType(tileSet.source!)) {
         throw Exception('Invalid TileSet source: only supports json files');
       }
+      sourceBasePath = tileSet.source!.replaceAll(
+        tileSet.source!.split('/').last,
+        '',
+      );
       final map = await _fetchTileset(tileSet.source!);
       tileSet.updateFromMap(map);
-      await _fetchTilesetImage(tileSet.source!, tileSet.image!);
-      for (final tile in tileSet.tiles ?? <TileSetItem>[]) {
-        if (tile.image?.isNotEmpty == true) {
-          await _fetchTilesetImage(tileSet.source!, tile.image!);
-        }
+    }
+
+    await _fetchTilesetImage(sourceBasePath, tileSet.image!);
+    for (final tile in tileSet.tiles ?? <TileSetItem>[]) {
+      if (tile.image?.isNotEmpty == true) {
+        await _fetchTilesetImage(sourceBasePath, tile.image!);
       }
     }
-    return null;
   }
 
   bool _isSuppotedFileType(String source) {
@@ -105,13 +110,8 @@ class TiledNetworkReader extends TiledReader {
     }
   }
 
-  Future<void> _fetchTilesetImage(String source, String image) async {
-    var tilesetPath = source.replaceAll(
-      source.split('/').last,
-      '',
-    );
-
-    final url = '$basePath$tilesetPath$image';
+  Future<void> _fetchTilesetImage(String sourceBasePath, String image) async {
+    final url = '$basePath$sourceBasePath$image';
     if (!Flame.images.containsKey(url)) {
       final response = await http.get(Uri.parse(url));
       String img64 = base64Encode(response.bodyBytes);
