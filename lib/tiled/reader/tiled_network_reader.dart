@@ -13,6 +13,7 @@ import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 class TiledNetworkReader extends TiledReader {
 // ignore: constant_identifier_names
   static const ORIENTATION_SUPPORTED = 'orthogonal';
+  static const _keyImgBase64 = 'base64';
   final Uri uri;
   final TiledCacheProvider cache;
   @override
@@ -119,19 +120,26 @@ class TiledNetworkReader extends TiledReader {
 
   Future<void> _fetchTilesetImage(String sourceBasePath, String image) async {
     final url = '$basePath$sourceBasePath$image';
-    if (!Flame.images.containsKey(url)) {
-      final response = await http.get(Uri.parse(url));
-      String img64 = base64Encode(response.bodyBytes);
-      await Flame.images.fromBase64(url, img64);
-    }
+    return _loadImage(url);
   }
 
   Future<void> _fetchLayerImage(MapLayer layer) async {
     if (layer is ImageLayer) {
       final url = '$basePath${layer.image}';
-      if (!Flame.images.containsKey(url)) {
+      return _loadImage(url);
+    }
+  }
+
+  Future<void> _loadImage(String url) async {
+    if (!Flame.images.containsKey(url)) {
+      bool containCache = await cache.containsKey(url);
+      if (containCache) {
+        String base64 = (await cache.get(url))[_keyImgBase64];
+        await Flame.images.fromBase64(url, base64);
+      } else {
         final response = await http.get(Uri.parse(url));
         String img64 = base64Encode(response.bodyBytes);
+        cache.put(url, {_keyImgBase64: img64});
         await Flame.images.fromBase64(url, img64);
       }
     }
