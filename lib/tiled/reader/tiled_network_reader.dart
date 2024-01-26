@@ -13,6 +13,7 @@ import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 class TiledNetworkReader extends TiledReader {
 // ignore: constant_identifier_names
   static const ORIENTATION_SUPPORTED = 'orthogonal';
+  static const _keyImgBase64 = 'base64';
   final Uri uri;
   final TiledCacheProvider cache;
   @override
@@ -35,7 +36,7 @@ class TiledNetworkReader extends TiledReader {
       );
       await Future.forEach<TileSetDetail>(
         tiledMap.tileSets ?? [],
-        _fillTileset,
+        _loadTileset,
       );
       if (tiledMap.orientation != ORIENTATION_SUPPORTED) {
         throw Exception(
@@ -52,25 +53,34 @@ class TiledNetworkReader extends TiledReader {
 
   Future<void> preload() => readMap();
 
-  Future _fillTileset(TileSetDetail tileSet) async {
+  Future<void> _loadTileset(TileSetDetail tileSet) async {
+    String sourceBasePath = '';
     if (tileSet.source != null) {
-      if (!_isSuppotedFileType(tileSet.source!)) {
-        throw Exception('Invalid TileSet source: only supports json files');
+      if (!_isSuppotedTilesetFileType(tileSet.source!)) {
+        throw Exception('Invalid TileSet source: only supports json|tsj files');
       }
+      sourceBasePath = tileSet.source!.replaceAll(
+        tileSet.source!.split('/').last,
+        '',
+      );
       final map = await _fetchTileset(tileSet.source!);
       tileSet.updateFromMap(map);
-      await _fetchTilesetImage(tileSet.source!, tileSet.image!);
-      for (final tile in tileSet.tiles ?? <TileSetItem>[]) {
-        if (tile.image?.isNotEmpty == true) {
-          await _fetchTilesetImage(tileSet.source!, tile.image!);
-        }
+    }
+
+    await _fetchTilesetImage(sourceBasePath, tileSet.image!);
+    for (final tile in tileSet.tiles ?? <TileSetItem>[]) {
+      if (tile.image?.isNotEmpty == true) {
+        await _fetchTilesetImage(sourceBasePath, tile.image!);
       }
     }
-    return null;
   }
 
-  bool _isSuppotedFileType(String source) {
+  bool _isSuppotedTilesetFileType(String source) {
     return (source.contains('.json') || source.contains('.tsj'));
+  }
+
+  bool _isSuppotedMapFileType(String source) {
+    return (source.contains('.json') || source.contains('.tmj'));
   }
 
   Future<TiledMap> _fetchMap() async {
@@ -80,6 +90,9 @@ class TiledNetworkReader extends TiledReader {
       final map = await cache.get(uriKey);
       return TiledMap.fromJson(map);
     } else {
+      if (!_isSuppotedMapFileType(uriKey)) {
+        throw Exception('Invalid TileMap source: only supports json|tmj files');
+      }
       final mapResponse = await http.get(uri);
       final map = jsonDecode(mapResponse.body);
       cache.put(uriKey, map);
@@ -105,26 +118,28 @@ class TiledNetworkReader extends TiledReader {
     }
   }
 
-  Future<void> _fetchTilesetImage(String source, String image) async {
-    var tilesetPath = source.replaceAll(
-      source.split('/').last,
-      '',
-    );
-
-    final url = '$basePath$tilesetPath$image';
-    if (!Flame.images.containsKey(url)) {
-      final response = await http.get(Uri.parse(url));
-      String img64 = base64Encode(response.bodyBytes);
-      await Flame.images.fromBase64(url, img64);
-    }
+  Future<void> _fetchTilesetImage(String sourceBasePath, String image) async {
+    final url = '$basePath$sourceBasePath$image';
+    return _loadImage(url);
   }
 
   Future<void> _fetchLayerImage(MapLayer layer) async {
     if (layer is ImageLayer) {
       final url = '$basePath${layer.image}';
-      if (!Flame.images.containsKey(url)) {
+      return _loadImage(url);
+    }
+  }
+
+  Future<void> _loadImage(String url) async {
+    if (!Flame.images.containsKey(url)) {
+      bool containCache = await cache.containsKey(url);
+      if (containCache) {
+        String base64 = (await cache.get(url))[_keyImgBase64];
+        await Flame.images.fromBase64(url, base64);
+      } else {
         final response = await http.get(Uri.parse(url));
         String img64 = base64Encode(response.bodyBytes);
+        cache.put(url, {_keyImgBase64: img64});
         await Flame.images.fromBase64(url, img64);
       }
     }

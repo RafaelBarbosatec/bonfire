@@ -1,3 +1,7 @@
+# 3.3.0
+- `TiledNetworkReader` improvements. Adds support to embedded tileset.
+- Update Flame to `1.14.0`
+
 # 3.2.0
 BREAKING GANGES:
 - removes `progress`,`delayToHideProgress`,`progressTransactionBuilder`,`progressTransactionDuration` from `BonfireWidget`. Now create your own progress with base of `onReady` callback.
