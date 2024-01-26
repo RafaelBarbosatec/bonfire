@@ -1,5 +1,6 @@
 # NEXT
 - `TiledNetworkReader` improvements. Adds support to embeded tileset.
+- Update Flame to `1.14.0`
 
 # 3.2.0
 BREAKING GANGES:
