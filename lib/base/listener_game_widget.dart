@@ -173,8 +173,7 @@ class ListenerGameWidgetState<T extends Game>
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
         assert(currentGame.hasLayout);
         // ignore: invalid_use_of_internal_member
-        final onLoad = currentGame.load;
-        await onLoad.call();
+        await currentGame.load.call();
         currentGame.onMount();
       })();
 
