@@ -1,4 +1,4 @@
-// ignore_for_file: implementation_imports
+// ignore_for_file: implementation_imports, invalid_use_of_internal_member
 
 import 'dart:async';
 
@@ -171,13 +171,13 @@ class ListenerGameWidgetState<T extends Game>
   late T currentGame;
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
-        assert(currentGame.hasLayout);
-        // ignore: invalid_use_of_internal_member
-        final onLoad = currentGame.onLoadFuture;
-        if (onLoad != null) {
-          await onLoad;
+        final game = currentGame;
+        assert(game.hasLayout);
+        await game.load();
+        game.mount();
+        if (!game.paused) {
+          game.update(0);
         }
-        currentGame.onMount();
       })();
 
   Future<void>? _loaderFuture;
@@ -236,9 +236,31 @@ class ListenerGameWidgetState<T extends Game>
     _loaderFuture = null;
   }
 
-  void disposeCurrentGame() {
+  /// Visible for testing for
+  /// https://github.com/flame-engine/flame/issues/2771.
+  @visibleForTesting
+  static void initGameStateListener(
+    Game currentGame,
+    void Function() onGameStateChange,
+  ) {
+    currentGame.addGameStateListener(onGameStateChange);
+
+    // See https://github.com/flame-engine/flame/issues/2771
+    // for why we aren't using [WidgetsBinding.instance.lifecycleState].
+    currentGame.lifecycleStateChange(AppLifecycleState.resumed);
+  }
+
+  /// [disposeCurrentGame] is called by two flutter events - `didUpdateWidget`
+  /// and `dispose`.  When the parameter [callGameOnDispose] is true, the
+  /// `currentGame`'s `onDispose` method will be called; otherwise, it will not.
+  void disposeCurrentGame({bool callGameOnDispose = false}) {
     currentGame.removeGameStateListener(_onGameStateChange);
-    currentGame.onRemove();
+    currentGame.lifecycleStateChange(AppLifecycleState.paused);
+
+    currentGame.finalizeRemoval();
+    if (callGameOnDispose) {
+      currentGame.onDispose();
+    }
   }
 
   @override
@@ -274,6 +296,11 @@ class ListenerGameWidgetState<T extends Game>
 
   KeyEventResult _handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
     final game = currentGame;
+
+    if (!_focusNode.hasPrimaryFocus) {
+      return KeyEventResult.ignored;
+    }
+
     if (game is KeyboardEvents) {
       return game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
     }
@@ -305,7 +332,7 @@ class ListenerGameWidgetState<T extends Game>
         );
       }
 
-      final stackedWidgets = <Widget>[];
+      final stackedWidgets = <Widget>[internalGameWidget];
       _addBackground(context, stackedWidgets);
       _addOverlays(context, stackedWidgets);
 
@@ -313,80 +340,84 @@ class ListenerGameWidgetState<T extends Game>
       final textDir = widget.textDirection ?? TextDirection.ltr;
 
       return ClipRect(
-        child: Stack(
-          children: [
-            Listener(
-              onPointerDown: currentGame is PointerDetector
-                  ? (currentGame as PointerDetector).onPointerDown
-                  : null,
-              onPointerMove: currentGame is PointerDetector
-                  ? (currentGame as PointerDetector).onPointerMove
-                  : null,
-              onPointerUp: currentGame is PointerDetector
-                  ? (currentGame as PointerDetector).onPointerUp
-                  : null,
-              onPointerCancel: currentGame is PointerDetector
-                  ? (currentGame as PointerDetector).onPointerCancel
-                  : null,
-              onPointerHover: currentGame is PointerDetector
-                  ? (currentGame as PointerDetector).onPointerHover
-                  : null,
-              onPointerSignal: currentGame is PointerDetector
-                  ? (currentGame as PointerDetector).onPointerSignal
-                  : null,
-              child: Focus(
-                focusNode: _focusNode,
-                autofocus: widget.autofocus,
-                descendantsAreFocusable: true,
-                onKey: _handleKeyEvent,
-                child: MouseRegion(
-                  cursor: currentGame.mouseCursor,
-                  child: Directionality(
-                    textDirection: textDir,
-                    child: ColoredBox(
-                      color: currentGame.backgroundColor(),
-                      child: LayoutBuilder(
-                        builder: (_, BoxConstraints constraints) {
-                          return _protectedBuild(() {
-                            final size = constraints.biggest.toVector2();
-                            if (size.isZero()) {
+        child: Listener(
+          onPointerDown: currentGame is PointerDetector
+              ? (currentGame as PointerDetector).onPointerDown
+              : null,
+          onPointerMove: currentGame is PointerDetector
+              ? (currentGame as PointerDetector).onPointerMove
+              : null,
+          onPointerUp: currentGame is PointerDetector
+              ? (currentGame as PointerDetector).onPointerUp
+              : null,
+          onPointerCancel: currentGame is PointerDetector
+              ? (currentGame as PointerDetector).onPointerCancel
+              : null,
+          onPointerHover: currentGame is PointerDetector
+              ? (currentGame as PointerDetector).onPointerHover
+              : null,
+          onPointerSignal: currentGame is PointerDetector
+              ? (currentGame as PointerDetector).onPointerSignal
+              : null,
+          child: FocusScope(
+            child: Focus(
+              focusNode: _focusNode,
+              autofocus: widget.autofocus,
+              descendantsAreFocusable: true,
+              onKey: _handleKeyEvent,
+              child: MouseRegion(
+                cursor: currentGame.mouseCursor,
+                child: Directionality(
+                  textDirection: textDir,
+                  child: ColoredBox(
+                    color: currentGame.backgroundColor(),
+                    child: LayoutBuilder(
+                      builder: (_, BoxConstraints constraints) {
+                        return _protectedBuild(() {
+                          final size = constraints.biggest.toVector2();
+                          if (size.isZero()) {
+                            return widget.loadingBuilder?.call(context) ??
+                                Container();
+                          }
+                          currentGame.onGameResize(size);
+                          // This should only be called if the game has already been
+                          // loaded (in the case of resizing for example), since
+                          // update otherwise should be called after onMount.
+                          if (!currentGame.paused && currentGame.isAttached) {
+                            currentGame.update(0);
+                          }
+                          return FutureBuilder(
+                            future: loaderFuture,
+                            builder: (_, snapshot) {
+                              if (snapshot.hasError) {
+                                final errorBuilder = widget.errorBuilder;
+                                if (errorBuilder == null) {
+                                  throw Error.throwWithStackTrace(
+                                    snapshot.error!,
+                                    snapshot.stackTrace!,
+                                  );
+                                } else {
+                                  return errorBuilder(context, snapshot.error!);
+                                }
+                              }
+
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return Stack(children: stackedWidgets);
+                              }
+
                               return widget.loadingBuilder?.call(context) ??
                                   const SizedBox.expand();
-                            }
-                            currentGame.onGameResize(size);
-                            return FutureBuilder(
-                              future: loaderFuture,
-                              builder: (_, snapshot) {
-                                if (snapshot.hasError) {
-                                  final errorBuilder = widget.errorBuilder;
-                                  if (errorBuilder == null) {
-                                    throw Error.throwWithStackTrace(
-                                      snapshot.error!,
-                                      snapshot.stackTrace!,
-                                    );
-                                  } else {
-                                    return errorBuilder(
-                                        context, snapshot.error!);
-                                  }
-                                }
-                                if (snapshot.connectionState ==
-                                    ConnectionState.done) {
-                                  return internalGameWidget;
-                                }
-                                return widget.loadingBuilder?.call(context) ??
-                                    const SizedBox.expand();
-                              },
-                            );
-                          });
-                        },
-                      ),
+                            },
+                          );
+                        });
+                      },
                     ),
                   ),
                 ),
               ),
             ),
-            ...stackedWidgets
-          ],
+          ),
         ),
       );
     });
@@ -404,7 +435,6 @@ class ListenerGameWidgetState<T extends Game>
 
   void _addOverlays(BuildContext context, List<Widget> stackWidgets) {
     stackWidgets.addAll(
-      // ignore: invalid_use_of_internal_member
       currentGame.overlays.buildCurrentOverlayWidgets(context),
     );
   }

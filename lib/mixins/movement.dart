@@ -372,39 +372,41 @@ mixin Movement on GameComponent {
       return false;
     } else {
       if (diffX.abs() > dtDiagonalSpeed && diffY.abs() > dtDiagonalSpeed) {
-        final speedOnce = dtDiagonalSpeed / dtUpdate;
+        final minToMOve = dtDiagonalSpeed * 2;
+        final xOnce = diffX.abs() / dtUpdate;
+        final yOnce = diffY.abs() / dtUpdate;
         if (diffX > 0 && diffY > 0) {
-          if (diffX.abs() < dtDiagonalSpeed * 2) {
-            moveRightOnce(speed: speedOnce);
-          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
-            moveDownOnce(speed: speedOnce);
+          if (diffX.abs() < minToMOve) {
+            moveRightOnce(speed: xOnce);
+          } else if (diffY.abs() < minToMOve) {
+            moveDownOnce(speed: yOnce);
           } else {
             moveDownRight(speed: speed);
           }
           return true;
         } else if (diffX < 0 && diffY > 0) {
-          if (diffX.abs() < dtDiagonalSpeed * 2) {
-            moveLeftOnce(speed: speedOnce);
-          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
-            moveDownOnce(speed: speedOnce);
+          if (diffX.abs() < minToMOve) {
+            moveLeftOnce(speed: xOnce);
+          } else if (diffY.abs() < minToMOve) {
+            moveDownOnce(speed: yOnce);
           } else {
             moveDownLeft(speed: speed);
           }
           return true;
         } else if (diffX > 0 && diffY < 0) {
-          if (diffX.abs() < dtDiagonalSpeed * 2) {
-            moveRightOnce(speed: speedOnce);
-          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
-            moveUpOnce(speed: speedOnce);
+          if (diffX.abs() < minToMOve) {
+            moveRightOnce(speed: xOnce);
+          } else if (diffY.abs() < minToMOve) {
+            moveUpOnce(speed: yOnce);
           } else {
             moveUpRight(speed: speed);
           }
           return true;
         } else if (diffX < 0 && diffY < 0) {
-          if (diffX.abs() < dtDiagonalSpeed * 2) {
-            moveLeftOnce(speed: speedOnce);
-          } else if (diffY.abs() < dtDiagonalSpeed * 2) {
-            moveUpOnce(speed: speedOnce);
+          if (diffX.abs() < dtSpeed) {
+            moveLeftOnce(speed: xOnce);
+          } else if (diffY.abs() < dtSpeed) {
+            moveUpOnce(speed: yOnce);
           } else {
             moveUpLeft(speed: speed);
           }
