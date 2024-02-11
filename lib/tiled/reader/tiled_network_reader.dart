@@ -16,11 +16,15 @@ class TiledNetworkReader extends TiledReader {
   static const _keyImgBase64 = 'base64';
   final Uri uri;
   final TiledCacheProvider cache;
+  final Map<String, String>? headers;
   @override
   late String basePath;
 
-  TiledNetworkReader({required this.uri, TiledCacheProvider? cacheProvider})
-      : cache = cacheProvider ?? TiledMemoryCacheProvider() {
+  TiledNetworkReader({
+    required this.uri,
+    TiledCacheProvider? cacheProvider,
+    this.headers,
+  }) : cache = cacheProvider ?? TiledMemoryCacheProvider() {
     String url = uri.toString();
     basePath = url.replaceAll(url.split('/').last, '');
   }
@@ -93,7 +97,7 @@ class TiledNetworkReader extends TiledReader {
       if (!_isSuppotedMapFileType(uriKey)) {
         throw Exception('Invalid TileMap source: only supports json|tmj files');
       }
-      final mapResponse = await http.get(uri);
+      final mapResponse = await http.get(uri, headers: headers);
       final map = jsonDecode(mapResponse.body);
       cache.put(uriKey, map);
       return TiledMap.fromJson(map);
@@ -111,6 +115,7 @@ class TiledNetworkReader extends TiledReader {
     } else {
       final tileSetResponse = await http.get(
         Uri.parse('$basePath$source'),
+        headers: headers,
       );
       final map = jsonDecode(tileSetResponse.body);
       cache.put(uriKey, map);
@@ -119,13 +124,20 @@ class TiledNetworkReader extends TiledReader {
   }
 
   Future<void> _fetchTilesetImage(String sourceBasePath, String image) async {
-    final url = '$basePath$sourceBasePath$image';
+    String url = '$basePath$sourceBasePath$image';
+    if (image.contains('http')) {
+      url = image;
+    }
+
     return _loadImage(url);
   }
 
   Future<void> _fetchLayerImage(MapLayer layer) async {
     if (layer is ImageLayer) {
-      final url = '$basePath${layer.image}';
+      String url = '$basePath${layer.image}';
+      if (layer.image.contains('http')) {
+        url = layer.image;
+      }
       return _loadImage(url);
     }
   }
@@ -137,7 +149,7 @@ class TiledNetworkReader extends TiledReader {
         String base64 = (await cache.get(url))[_keyImgBase64];
         await Flame.images.fromBase64(url, base64);
       } else {
-        final response = await http.get(Uri.parse(url));
+        final response = await http.get(Uri.parse(url), headers: headers);
         String img64 = base64Encode(response.bodyBytes);
         cache.put(url, {_keyImgBase64: img64});
         await Flame.images.fromBase64(url, img64);

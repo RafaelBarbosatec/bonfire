@@ -1,3 +1,7 @@
+# 3.4.0
+- Adds `header` param in `TiledNetworkReader`
+- Update Flame to '1.15.0'
+
 # 3.3.0
 - `TiledNetworkReader` improvements. Adds support to embedded tileset.
 - Update Flame to `1.14.0`

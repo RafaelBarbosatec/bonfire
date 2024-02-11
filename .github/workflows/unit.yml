@@ -5,9 +5,6 @@ on:
       - master
   pull_request:
     types: [opened,ready_for_review,synchronize]
-
-env:
-  flutter_version: "3.13.0"
     
 jobs:
   test-analyze:
@@ -25,7 +22,7 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: ${{ env.flutter_version }}
+        channel: 'stable'
         cache: true
     - run: flutter pub get
     - run: flutter analyze
