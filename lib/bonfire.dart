@@ -84,6 +84,7 @@ export 'package:bonfire/widgets/typewriter/typewriter.dart';
 export 'package:flame/collisions.dart';
 export 'package:flame/components.dart' hide JoystickComponent, HasGameRef;
 export 'package:flame/effects.dart';
+export 'package:flame/parallax.dart';
 export 'package:flame/flame.dart';
 export 'package:flame/geometry.dart';
 export 'package:flame/image_composition.dart';
