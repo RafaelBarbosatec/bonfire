@@ -121,6 +121,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
             viewport: cameraConfig?.resolution != null
                 ? FixedResolutionViewport(resolution: cameraConfig!.resolution!)
                 : null,
+            backdrop: background,
             hudComponents: [
               LightingComponent(
                 color: lightingColorGame ?? const Color(0x00000000),
@@ -135,7 +136,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
           world: World(
             children: [
               map,
-              if (background != null) background,
               if (player != null) player,
               ...components ?? [],
             ],
@@ -198,6 +198,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     super.onMount();
     // ignore: invalid_use_of_internal_member
     setMounted();
+    _notifyGameMounted();
     onReady?.call(this);
   }
 
@@ -306,13 +307,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   void onDetach() {
-    world.children.query<GameComponent>().forEach(_detachComp);
-    camera.viewport.children.query<GameComponent>().forEach(_detachComp);
+    _notifyGameDetach();
     FollowerWidget.removeAll();
     super.onDetach();
   }
-
-  void _detachComp(GameComponent c) => c.onGameDetach();
 
   void addVisible(GameComponent obj) {
     _visibleComponents.add(obj);
@@ -456,6 +454,28 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     if (_shouldUpdatePriority) {
       _shouldUpdatePriority = false;
       scheduleMicrotask(_updateOrderPriority);
+    }
+  }
+
+  void _notifyGameMounted() {
+    void gameMontedComp(GameComponent c) => c.onGameMounted();
+    query<GameComponent>().forEach(gameMontedComp);
+    for (var child in camera.children) {
+      if (child is GameComponent) {
+        child.onGameMounted();
+      }
+      child.children.query<GameComponent>().forEach(gameMontedComp);
+    }
+  }
+
+  void _notifyGameDetach() {
+    void gameDetachComp(GameComponent c) => c.onGameDetach();
+    query<GameComponent>().forEach(gameDetachComp);
+    for (var child in camera.children) {
+      if (child is GameComponent) {
+        child.onGameDetach();
+      }
+      child.children.query<GameComponent>().forEach(gameDetachComp);
     }
   }
 }

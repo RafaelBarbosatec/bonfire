@@ -1,5 +1,6 @@
 # next
 - Export `package:flame/parallax.dart`
+- background improvements.
 
 # 3.4.0
 - Adds `header` param in `TiledNetworkReader`

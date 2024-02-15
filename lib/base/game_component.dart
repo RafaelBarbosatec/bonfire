@@ -125,8 +125,6 @@ abstract class GameComponent extends PositionComponent
     return super.add(component);
   }
 
-  void onGameDetach() {}
-
   void _confHitBoxRender(Component component) {
     if (component is ShapeHitbox) {
       if (gameRef.showCollisionArea) {
@@ -253,4 +251,7 @@ abstract class GameComponent extends PositionComponent
     paint.isAntiAlias = false;
     super.onMount();
   }
+
+  void onGameDetach() {}
+  void onGameMounted() {}
 }

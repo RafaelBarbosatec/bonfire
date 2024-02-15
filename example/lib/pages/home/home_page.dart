@@ -20,6 +20,7 @@ import 'package:example/pages/mini_games/random_map/random_map_game.dart';
 import 'package:example/pages/mini_games/simple_example/simple_example_game.dart';
 import 'package:example/pages/mini_games/tiled_map/game_tiled_map.dart';
 import 'package:example/pages/mini_games/top_down_game/top_down_game.dart';
+import 'package:example/pages/parallax/flame/parallax_page.dart';
 import 'package:example/pages/path_finding/path_finding_page.dart';
 import 'package:example/pages/player/platform/platform_player_page.dart';
 import 'package:example/pages/player/rotation/rotation_player_page.dart';
@@ -235,6 +236,23 @@ class _HomePageState extends State<HomePage> {
             builder: (_) => const PathFindingPage(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/path_finding',
+          ),
+        ],
+      ),
+      SectionDrawer(
+        name: 'Parallax',
+        itens: [
+          ItemDrawer(
+            name: 'Flame Parallax',
+            builder: (_) => const ParallaxPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/parallax/flame',
+          ),
+          ItemDrawer(
+            name: 'Bonfire Parallax',
+            builder: (_) => const ParallaxPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/parallax/flame',
           ),
         ],
       ),

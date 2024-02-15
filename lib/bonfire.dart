@@ -90,4 +90,6 @@ export 'package:flame/geometry.dart';
 export 'package:flame/image_composition.dart';
 export 'package:flame/particles.dart';
 export 'package:flame/sprite.dart';
+export 'package:flame/cache.dart';
+export 'package:flame/text.dart';
 export 'package:flame/widgets.dart' hide NineTileBox;
