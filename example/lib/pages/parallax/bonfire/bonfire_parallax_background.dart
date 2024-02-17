@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 
-class ParallaxBackground extends GameBackground {
+class BonfireParallaxBackground extends GameBackground {
   @override
   void onGameMounted() {
     _addParallax();
@@ -8,7 +8,7 @@ class ParallaxBackground extends GameBackground {
   }
 
   void _addParallax() async {
-    final p = await loadParallaxComponent(
+    final p = await loadCameraParallaxComponent(
       [
         ParallaxImageData('platform/back.png'),
         ParallaxImageData('platform/middle.png'),
