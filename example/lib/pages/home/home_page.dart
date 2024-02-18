@@ -244,13 +244,13 @@ class _HomePageState extends State<HomePage> {
         name: 'Parallax',
         itens: [
           ItemDrawer(
-            name: 'Flame Parallax',
+            name: 'Parallax',
             builder: (_) => const ParallaxPage(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/parallax/flame',
           ),
           ItemDrawer(
-            name: 'Bonfire Parallax',
+            name: 'CameraParallax',
             builder: (_) => const BonfireParallaxPage(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/parallax/bonfire',

@@ -24,13 +24,14 @@ import 'package:flutter/widgets.dart';
 abstract class BonfireGameInterface {
   BuildContext get context;
   Player? get player;
-  JoystickController? get joystick;
+  PlayerController? get joystick;
   LightingInterface? get lighting;
   ColorFilterInterface? get colorFilter;
   BonfireCamera get camera;
   GameMap get map;
   int get highestPriority;
   Vector2 get size;
+  Vector2 get worldsize;
   bool get hasLayout;
   bool get showCollisionArea;
   Color? get collisionAreaColor;
@@ -106,7 +107,7 @@ abstract class BonfireGameInterface {
 
   /// Used to change Joystick listener. And move camera to new target.
   void addJoystickObserver(
-    JoystickListener target, {
+    PlayerControllerListener target, {
     bool cleanObservers = false,
     bool moveCameraToTarget = false,
   });

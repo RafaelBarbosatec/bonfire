@@ -6,6 +6,7 @@ import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
+import 'package:bonfire/input/keyboard/control_by_keyboard.dart';
 import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 // ignore: implementation_imports
@@ -35,7 +36,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   final GameMap map;
 
   /// The player-controlling component.
-  final JoystickController? joystickController;
+  final PlayerController? joystickController;
 
   /// Background of the game. This can be a color or custom component
   final GameBackground? background;
@@ -53,6 +54,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   final List<Force2D> globalForces;
+
+  final KeyboardConfig? keyboardConfig;
 
   @override
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
@@ -73,7 +76,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       camera.viewport.children.whereType<ColorFilterInterface>().first;
 
   @override
-  JoystickController? get joystick => joystickController;
+  PlayerController? get joystick => joystickController;
 
   @override
   Color backgroundColor() => _bgColor ?? super.backgroundColor();
@@ -101,6 +104,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     required this.context,
     required this.map,
     this.joystickController,
+    this.keyboardConfig,
     this.player,
     this.interface,
     List<GameComponent>? components,
@@ -130,6 +134,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
                 colorFilter ?? GameColorFilter(),
               ),
               if (joystickController != null) joystickController,
+              ControlByKeyboard(
+                keyboardConfig: keyboardConfig,
+              ),
               if (interface != null) interface,
             ],
           ),
@@ -161,9 +168,11 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       mapDimensions: Rect.zero,
     );
 
-    joystickController?.addObserver(
-      player ?? JoystickMapExplorer(camera),
-    );
+    camera.viewport.children.query<PlayerController>().forEach((element) {
+      element.addObserver(
+        player ?? JoystickMapExplorer(camera),
+      );
+    });
 
     if (camera.config.target != null) {
       camera.follow(
@@ -196,8 +205,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   void onMount() {
     super.onMount();
-    // ignore: invalid_use_of_internal_member
-    setMounted();
     _notifyGameMounted();
     onReady?.call(this);
   }
@@ -232,12 +239,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   Iterable<ShapeHitbox> collisions({bool onlyVisible = false}) {
     if (onlyVisible) {
       List<ShapeHitbox> tilesCollision = [];
-      map
-          .getRendered()
-          .where((element) => element.containsShapeHitbox)
-          .forEach((e) {
-        tilesCollision.addAll(e.children.query<ShapeHitbox>());
-      });
+      map.getRendered().where((element) => element.containsShapeHitbox).forEach(
+            (e) => tilesCollision.addAll(e.children.query<ShapeHitbox>()),
+          );
       return [
         ..._visibleCollisions,
         ...tilesCollision,
@@ -274,7 +278,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   /// Use this method to change default observer of the Joystick events.
   @override
   void addJoystickObserver(
-    JoystickListener target, {
+    PlayerControllerListener target, {
     bool cleanObservers = false,
     bool moveCameraToTarget = false,
   }) {
@@ -478,4 +482,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       child.children.query<GameComponent>().forEach(gameDetachComp);
     }
   }
+
+  @override
+  Vector2 get worldsize => map.size;
 }

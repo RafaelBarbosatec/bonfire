@@ -13,7 +13,6 @@ class RotationPlayerPage extends StatelessWidget {
         TiledReader.asset('tiled/simple_topdown/simple.tmj'),
       ),
       joystick: Joystick(
-        keyboardConfig: KeyboardConfig(),
         directional: JoystickDirectional(),
       ),
       player: HumanTopdownPlayer(

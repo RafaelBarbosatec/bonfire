@@ -125,8 +125,8 @@ class WorldMap extends GameMap {
   void _calculatePositionAndSize() {
     if (tiles.isNotEmpty) {
       tileSize = tiles.first.width;
-      double x = tiles.first.left;
-      double y = tiles.first.top;
+      double x = 0;
+      double y = 0;
 
       double w = tiles.first.right;
       double h = tiles.first.bottom;

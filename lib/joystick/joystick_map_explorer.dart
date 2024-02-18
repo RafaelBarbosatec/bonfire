@@ -2,7 +2,7 @@ import 'package:bonfire/camera/bonfire_camera.dart';
 
 import '../bonfire.dart';
 
-class JoystickMapExplorer with JoystickListener {
+class JoystickMapExplorer with PlayerControllerListener {
   final BonfireCamera camera;
 
   JoystickMapExplorer(this.camera);

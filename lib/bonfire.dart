@@ -18,7 +18,7 @@ export 'package:bonfire/input/gestures/move_camera_using_gestures.dart';
 export 'package:bonfire/input/input.dart';
 export 'package:bonfire/joystick/joystick.dart';
 export 'package:bonfire/joystick/joystick_action.dart';
-export 'package:bonfire/joystick/joystick_controller.dart';
+export 'package:bonfire/input/player_controller.dart';
 export 'package:bonfire/joystick/joystick_directional.dart';
 export 'package:bonfire/lighting/lighting.dart';
 export 'package:bonfire/lighting/lighting_config.dart';

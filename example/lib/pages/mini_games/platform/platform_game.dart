@@ -30,10 +30,12 @@ class _PlatformGameState extends State<PlatformGame> {
               ),
         },
       ),
-      joystick: Joystick(
-        keyboardConfig: KeyboardConfig(acceptedKeys: [
+      keyboardConfig: KeyboardConfig(
+        acceptedKeys: [
           LogicalKeyboardKey.space,
-        ]),
+        ],
+      ),
+      joystick: Joystick(
         directional: JoystickDirectional(
           color: Colors.green,
         ),

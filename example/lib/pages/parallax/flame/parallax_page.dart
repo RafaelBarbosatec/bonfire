@@ -11,7 +11,12 @@ class ParallaxPage extends StatelessWidget {
     return BonfireWidget(
       joystick: Joystick(
         directional: JoystickDirectional(),
-        keyboardConfig: KeyboardConfig(),
+        actions: [
+          JoystickAction(
+            actionId: 1,
+            margin: const EdgeInsets.all(50),
+          ),
+        ],
       ),
       map: WorldMapByTiled(
         TiledReader.asset('platform/parallax_map.tmj'),

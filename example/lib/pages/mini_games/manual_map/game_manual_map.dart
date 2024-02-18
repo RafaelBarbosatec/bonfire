@@ -14,11 +14,6 @@ class GameManualMap extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       return BonfireWidget(
         joystick: Joystick(
-          keyboardConfig: KeyboardConfig(
-            acceptedKeys: [
-              LogicalKeyboardKey.space,
-            ],
-          ),
           directional: JoystickDirectional(
             spriteBackgroundDirectional: Sprite.load('joystick_background.png'),
             spriteKnobDirectional: Sprite.load('joystick_knob.png'),
@@ -41,6 +36,11 @@ class GameManualMap extends StatelessWidget {
               enableDirection: true,
               margin: const EdgeInsets.only(bottom: 50, right: 160),
             )
+          ],
+        ),
+        keyboardConfig: KeyboardConfig(
+          acceptedKeys: [
+            LogicalKeyboardKey.space,
           ],
         ),
         player: Knight(

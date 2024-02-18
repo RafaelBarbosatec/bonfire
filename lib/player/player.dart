@@ -5,7 +5,12 @@ export 'rotation_player.dart';
 export 'simple_player.dart';
 
 class Player extends GameComponent
-    with Movement, Attackable, Vision, JoystickListener, MovementByJoystick {
+    with
+        Movement,
+        Attackable,
+        Vision,
+        PlayerControllerListener,
+        MovementByJoystick {
   Player({
     required Vector2 position,
     required Vector2 size,
