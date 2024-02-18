@@ -26,7 +26,7 @@ class JoystickDirectional {
 
   int _pointerDragging = 0;
 
-  JoystickController? _joystickController;
+  PlayerController? _joystickController;
 
   Vector2? _screenSize;
 
@@ -55,7 +55,7 @@ class JoystickDirectional {
     _tileSize = size / 2;
   }
 
-  void initialize(Vector2 screenSize, JoystickController joystickController) {
+  void initialize(Vector2 screenSize, PlayerController joystickController) {
     _screenSize = screenSize;
     _joystickController = joystickController;
     Offset osBackground = Offset(

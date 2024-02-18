@@ -18,7 +18,7 @@ class MovementByJoystickProps {
 }
 
 /// Mixin responsible for adding movements through joystick events
-mixin MovementByJoystick on Movement, JoystickListener {
+mixin MovementByJoystick on Movement, PlayerControllerListener {
   JoystickMoveDirectional _currentDirectional = JoystickMoveDirectional.IDLE;
   JoystickMoveDirectional _newDirectional = JoystickMoveDirectional.IDLE;
   double _currentDirectionalAngle = 0;

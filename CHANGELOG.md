@@ -1,3 +1,9 @@
+# 3.5.0
+- Adds Parallax support
+- Background improvements.
+- [BREAKING CHANGE] `keyboardConfig` param moved to outside the `Joystick`. now in `BonfireWidget`.
+- [BREAKING CHANGE] `JoystickController` renamed to `PlayerController`.
+
 # 3.4.0
 - Adds `header` param in `TiledNetworkReader`
 - Update Flame to '1.15.0'

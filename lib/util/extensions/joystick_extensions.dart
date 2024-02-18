@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:bonfire/joystick/joystick_controller.dart';
+import 'package:bonfire/input/player_controller.dart';
 
 extension JoystickDirectionalEventExtention on JoystickDirectionalEvent {
   double get directionalRadAngle {

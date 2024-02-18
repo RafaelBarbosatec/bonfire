@@ -2,7 +2,6 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/decoration/potion_life.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
-import 'package:flutter/material.dart';
 
 class Chest extends GameDecoration with TapGesture, Vision {
   bool _observedPlayer = false;

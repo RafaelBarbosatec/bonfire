@@ -32,7 +32,7 @@ class JoystickAction {
   Paint? _paintBackground;
   Paint? _paintAction;
   Paint? _paintActionPressed;
-  JoystickController? _joystickController;
+  PlayerController? _joystickController;
   bool isPressed = false;
 
   AssetsLoader? _loader = AssetsLoader();
@@ -64,7 +64,7 @@ class JoystickAction {
     _tileSize = _sizeBackgroundDirection / 2;
   }
 
-  void initialize(Vector2 screenSize, JoystickController joystickController) {
+  void initialize(Vector2 screenSize, PlayerController joystickController) {
     _joystickController = joystickController;
     double radius = size / 2;
     double dx = 0, dy = 0;

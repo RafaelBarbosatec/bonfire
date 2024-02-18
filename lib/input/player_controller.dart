@@ -1,9 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/input/keyboard_listener.dart';
-import 'package:bonfire/joystick/joystick.dart';
-import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:bonfire/util/priority_layer.dart';
 
 enum JoystickMoveDirectional {
@@ -48,16 +45,13 @@ class JoystickActionEvent {
   });
 }
 
-mixin JoystickListener {
+mixin PlayerControllerListener {
   void onJoystickChangeDirectional(JoystickDirectionalEvent event) {}
   void onJoystickAction(JoystickActionEvent event) {}
 }
 
-abstract class JoystickController extends GameComponent
-    with PointerDetectorHandler, KeyboardEventListener {
-  final List<JoystickListener> _observers = [];
-
-  KeyboardConfig keyboardConfig = KeyboardConfig(enable: false);
+abstract class PlayerController extends GameComponent {
+  final List<PlayerControllerListener> _observers = [];
 
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     for (var o in _observers) {
@@ -71,11 +65,11 @@ abstract class JoystickController extends GameComponent
     }
   }
 
-  void addObserver(JoystickListener listener) {
+  void addObserver(PlayerControllerListener listener) {
     _observers.add(listener);
   }
 
-  void removeObserver(JoystickListener listener) {
+  void removeObserver(PlayerControllerListener listener) {
     _observers.remove(listener);
   }
 
@@ -83,7 +77,7 @@ abstract class JoystickController extends GameComponent
     _observers.clear();
   }
 
-  bool containObserver(JoystickListener listener) {
+  bool containObserver(PlayerControllerListener listener) {
     return _observers.contains(listener);
   }
 
@@ -94,6 +88,12 @@ abstract class JoystickController extends GameComponent
     }
     return super.priority;
   }
+
+  @override
+  bool get enabledCheckIsVisible => false;
+
+  @override
+  bool get isVisible => true;
 
   @override
   bool hasGesture() => true;

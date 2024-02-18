@@ -20,7 +20,6 @@ class EnemyPage extends StatelessWidget {
       ),
       joystick: Joystick(
         directional: JoystickDirectional(),
-        keyboardConfig: KeyboardConfig(),
       ),
       player: HumanPlayer(
         position: Vector2(tileSize * 7, tileSize * 8),

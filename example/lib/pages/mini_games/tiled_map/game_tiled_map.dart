@@ -26,13 +26,13 @@ class GameTiledMap extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return BonfireWidget(
+          keyboardConfig: KeyboardConfig(
+            directionalKeys: KeyboardDirectionalKeys.arrows(),
+            acceptedKeys: [
+              LogicalKeyboardKey.space,
+            ],
+          ),
           joystick: Joystick(
-            keyboardConfig: KeyboardConfig(
-              directionalKeys: KeyboardDirectionalKeys.arrows(),
-              acceptedKeys: [
-                LogicalKeyboardKey.space,
-              ],
-            ),
             directional: JoystickDirectional(
               spriteBackgroundDirectional: Sprite.load(
                 'joystick_background.png',

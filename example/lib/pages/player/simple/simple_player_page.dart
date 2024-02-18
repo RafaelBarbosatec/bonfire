@@ -13,7 +13,6 @@ class SimplePlayerPage extends StatelessWidget {
         TiledReader.asset('tiled/punnyworld/simple_map.tmj'),
       ),
       joystick: Joystick(
-        keyboardConfig: KeyboardConfig(),
         directional: JoystickDirectional(),
       ),
       player: HumanPlayer(

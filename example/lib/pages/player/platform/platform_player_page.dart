@@ -13,12 +13,12 @@ class PlatformPlayerPage extends StatelessWidget {
       map: WorldMapByTiled(
         TiledReader.asset('platform/simple_map.tmj'),
       ),
+      keyboardConfig: KeyboardConfig(
+        acceptedKeys: [
+          LogicalKeyboardKey.space,
+        ],
+      ),
       joystick: Joystick(
-        keyboardConfig: KeyboardConfig(
-          acceptedKeys: [
-            LogicalKeyboardKey.space,
-          ],
-        ),
         directional: JoystickDirectional(),
         actions: [
           JoystickAction(

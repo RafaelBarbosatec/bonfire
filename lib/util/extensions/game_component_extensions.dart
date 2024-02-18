@@ -326,4 +326,76 @@ extension GameComponentExtensions on GameComponent {
       target.rectCollision.center,
     );
   }
+
+  Future<ParallaxComponent> loadParallaxComponent(
+    Iterable<ParallaxData> dataList, {
+    Vector2? baseVelocity,
+    Vector2? velocityMultiplierDelta,
+    ImageRepeat repeat = ImageRepeat.repeatX,
+    Alignment alignment = Alignment.bottomLeft,
+    LayerFill fill = LayerFill.height,
+    Images? images,
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
+    FilterQuality? filterQuality,
+    ComponentKey? key,
+  }) {
+    return ParallaxComponent.load(
+      dataList,
+      baseVelocity: baseVelocity,
+      velocityMultiplierDelta: velocityMultiplierDelta,
+      repeat: repeat,
+      alignment: alignment,
+      fill: fill,
+      images: images,
+      position: position,
+      size: size ?? gameRef.camera.canvasSize,
+      scale: scale,
+      angle: angle,
+      anchor: anchor,
+      priority: priority,
+      filterQuality: filterQuality,
+      key: key,
+    );
+  }
+
+  Future<ParallaxComponent> loadCameraParallaxComponent(
+    Iterable<ParallaxData> dataList, {
+    Vector2? baseVelocity,
+    Vector2? velocityMultiplierDelta,
+    ImageRepeat repeat = ImageRepeat.repeatX,
+    Alignment alignment = Alignment.bottomLeft,
+    LayerFill fill = LayerFill.height,
+    Images? images,
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
+    FilterQuality? filterQuality,
+    ComponentKey? key,
+  }) {
+    return CameraParallaxComponent.load(
+      dataList,
+      baseVelocity: baseVelocity,
+      velocityMultiplierDelta: velocityMultiplierDelta,
+      repeat: repeat,
+      alignment: alignment,
+      fill: fill,
+      images: images,
+      position: position,
+      size: size ?? gameRef.camera.canvasSize,
+      scale: scale,
+      angle: angle,
+      anchor: anchor,
+      priority: priority,
+      filterQuality: filterQuality,
+      key: key,
+    );
+  }
 }

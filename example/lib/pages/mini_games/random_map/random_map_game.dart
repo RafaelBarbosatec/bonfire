@@ -53,7 +53,6 @@ class _RandomMapGameState extends State<RandomMapGame> {
         MapGenerated result = snapshot.data!;
         return BonfireWidget(
           joystick: Joystick(
-            keyboardConfig: KeyboardConfig(),
             directional: JoystickDirectional(
               size: 100,
               isFixed: false,

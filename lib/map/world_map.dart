@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/map/empty_map.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
 import 'package:bonfire/util/quadtree.dart' as tree;
 
@@ -16,6 +17,10 @@ class WorldMap extends GameMap {
   Vector2 _mapSize = Vector2.zero();
 
   tree.QuadTree<TileModel>? quadTree;
+
+  factory WorldMap.empty() {
+    return EmptyWorldMap();
+  }
 
   WorldMap(
     List<TileModel> tiles, {
@@ -120,8 +125,8 @@ class WorldMap extends GameMap {
   void _calculatePositionAndSize() {
     if (tiles.isNotEmpty) {
       tileSize = tiles.first.width;
-      double x = tiles.first.left;
-      double y = tiles.first.top;
+      double x = 0;
+      double y = 0;
 
       double w = tiles.first.right;
       double h = tiles.first.bottom;
