@@ -2,9 +2,9 @@ import 'package:bonfire/bonfire.dart';
 
 class BonfireParallaxBackground extends GameBackground {
   @override
-  void onGameMounted() {
+  void onMount() {
     _addParallax();
-    super.onGameMounted();
+    super.onMount();
   }
 
   void _addParallax() async {

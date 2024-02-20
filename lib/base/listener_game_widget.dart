@@ -294,7 +294,7 @@ class ListenerGameWidgetState<T extends Game>
     }
   }
 
-  KeyEventResult _handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
+  KeyEventResult _handleKeyEvent(FocusNode focusNode, KeyEvent event) {
     final game = currentGame;
 
     if (!_focusNode.hasPrimaryFocus) {
@@ -302,7 +302,10 @@ class ListenerGameWidgetState<T extends Game>
     }
 
     if (game is KeyboardEvents) {
-      return game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
+      return game.onKeyEvent(
+        event,
+        HardwareKeyboard.instance.logicalKeysPressed,
+      );
     }
     return KeyEventResult.handled;
   }
@@ -364,7 +367,7 @@ class ListenerGameWidgetState<T extends Game>
               focusNode: _focusNode,
               autofocus: widget.autofocus,
               descendantsAreFocusable: true,
-              onKey: _handleKeyEvent,
+              onKeyEvent: _handleKeyEvent,
               child: MouseRegion(
                 cursor: currentGame.mouseCursor,
                 child: Directionality(

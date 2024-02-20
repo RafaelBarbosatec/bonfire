@@ -36,7 +36,7 @@ class BarrelShowKeyboardInput extends GameDecoration
   }
 
   @override
-  bool onKeyboard(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  bool onKeyboard(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     input += event.character ?? '';
     return true;
   }

@@ -6,10 +6,7 @@ import 'package:bonfire/bonfire.dart';
 class GameInterface extends GameComponent {
   @override
   int get priority {
-    if (hasGameRef) {
-      return LayerPriority.getInterfacePriority(gameRef.highestPriority);
-    }
-    return super.priority;
+    return LayerPriority.getHudInterfacePriority();
   }
 
   /// Used to add components in your interface like a Button.

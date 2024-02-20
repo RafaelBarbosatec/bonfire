@@ -36,10 +36,7 @@ class ColorFilterComponent extends GameComponent
 
   @override
   int get priority {
-    if (hasGameRef) {
-      return LayerPriority.getColorFilterPriority(gameRef.highestPriority);
-    }
-    return super.priority;
+    return LayerPriority.getHudColorFilterPriority();
   }
 
   @override
