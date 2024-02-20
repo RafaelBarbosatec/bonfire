@@ -1,8 +1,8 @@
 # 3.6.0
-- Adds param `hudComponents` in `BonfireWidget`.
-- Adds `queryHud` method in `BonfireGameInterface`
-- Adds `addHud` method in `BonfireGameInterface`
-- UPdate FLame to `1.16.0`
+- Adds param `hudComponents` in `BonfireWidget`;
+- Adds `queryHud` method in `BonfireGameInterface`;
+- Adds `addHud` method in `BonfireGameInterface`;
+- Update Flame to `1.16.0`.
 
 # 3.5.0
 - Adds Parallax support
