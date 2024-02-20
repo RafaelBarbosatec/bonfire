@@ -487,4 +487,14 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   Vector2 get worldsize => map.size;
+
+  @override
+  Iterable<T> queryHud<T extends Component>() {
+    return camera.viewport.children.query<T>();
+  }
+
+  @override
+  FutureOr<void> addHud(Component component) {
+    return camera.viewport.add(component);
+  }
 }
