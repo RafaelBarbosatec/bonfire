@@ -15,7 +15,7 @@ class ControlByKeyboard extends PlayerController with KeyboardEventListener {
   }
 
   @override
-  bool onKeyboard(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  bool onKeyboard(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     /// If the keyboard is disabled, we do not process the event
     if (!keyboardConfig.enable) return false;
 
@@ -28,7 +28,7 @@ class ControlByKeyboard extends PlayerController with KeyboardEventListener {
 
     /// No keyboard events, keep idle
     if (!_containDirectionalPressed(keysPressed) &&
-        !event.repeat &&
+        !event.synthesized &&
         !_directionalIsIdle) {
       _directionalIsIdle = true;
       joystickChangeDirectional(
@@ -57,14 +57,14 @@ class ControlByKeyboard extends PlayerController with KeyboardEventListener {
       }
     } else {
       /// Process action events
-      if (event is RawKeyDownEvent) {
+      if (event is KeyDownEvent) {
         joystickAction(
           JoystickActionEvent(
             id: event.logicalKey,
             event: ActionEvent.DOWN,
           ),
         );
-      } else if (event is RawKeyUpEvent) {
+      } else if (event is KeyUpEvent) {
         joystickAction(
           JoystickActionEvent(
             id: event.logicalKey,

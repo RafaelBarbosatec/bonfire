@@ -108,6 +108,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     this.player,
     this.interface,
     List<GameComponent>? components,
+    List<GameComponent>? hudComponents,
     this.background,
     bool debugMode = false,
     this.showCollisionArea = false,
@@ -138,6 +139,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
                 keyboardConfig: keyboardConfig,
               ),
               if (interface != null) interface,
+              ...hudComponents ?? []
             ],
           ),
           world: World(
@@ -312,7 +314,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   void onDetach() {
     _notifyGameDetach();
-    FollowerWidget.removeAll();
     super.onDetach();
   }
 
@@ -473,6 +474,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   void _notifyGameDetach() {
+    FollowerWidget.removeAll();
     void gameDetachComp(GameComponent c) => c.onGameDetach();
     query<GameComponent>().forEach(gameDetachComp);
     for (var child in camera.children) {
@@ -485,4 +487,14 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   Vector2 get worldsize => map.size;
+
+  @override
+  Iterable<T> queryHud<T extends Component>() {
+    return camera.viewport.children.query<T>();
+  }
+
+  @override
+  FutureOr<void> addHud(Component component) {
+    return camera.viewport.add(component);
+  }
 }

@@ -103,17 +103,17 @@ class TalkDialogState extends State<TalkDialog> {
   Widget build(BuildContext context) {
     return Material(
       type: MaterialType.transparency,
-      child: RawKeyboardListener(
+      child: KeyboardListener(
         focusNode: _focusNode,
-        onKey: (raw) {
-          if (widget.keyboardKeysToNext.isEmpty && raw is RawKeyDownEvent) {
+        onKeyEvent: (raw) {
+          if (widget.keyboardKeysToNext.isEmpty && raw is KeyDownEvent) {
             // Prevent volume buttons from triggering the next dialog
             if (raw.logicalKey != LogicalKeyboardKey.audioVolumeUp &&
                 raw.logicalKey != LogicalKeyboardKey.audioVolumeDown) {
               _nextOrFinish();
             }
           } else if (widget.keyboardKeysToNext.contains(raw.logicalKey) &&
-              raw is RawKeyDownEvent) {
+              raw is KeyDownEvent) {
             _nextOrFinish();
           }
         },

@@ -97,10 +97,10 @@ abstract class BonfireGameInterface {
   Iterable<T> query<T extends Component>({bool onlyVisible = false});
 
   /// This  method convert word position to screen position
-  Vector2 worldToScreen(Vector2 position);
+  Vector2 worldToScreen(Vector2 worldPosition);
 
   /// This  method convert screen position to word position
-  Vector2 screenToWorld(Vector2 position);
+  Vector2 screenToWorld(Vector2 screenPosition);
 
   /// Used to check if a component is visible in the camera.
   bool isVisibleInCamera(GameComponent c);
@@ -111,6 +111,12 @@ abstract class BonfireGameInterface {
     bool cleanObservers = false,
     bool moveCameraToTarget = false,
   });
+
+  /// Used to get hud components.
+  Iterable<T> queryHud<T extends Component>();
+
+  /// Used to add hud component in the game.
+  FutureOr<void> addHud(Component component);
 
   RaycastResult<ShapeHitbox>? raycast(
     Ray2 ray, {

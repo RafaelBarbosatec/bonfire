@@ -10,22 +10,22 @@ class LayerPriority {
   }
 
   static int getAbovePriority(int highestPriority) {
-    return highestPriority + 5;
-  }
-
-  static int getLightingPriority(int highestPriority) {
     return highestPriority + 10;
   }
 
-  static int getColorFilterPriority(int highestPriority) {
-    return highestPriority + 20;
+  static int getHudLightingPriority() {
+    return 10;
   }
 
-  static int getInterfacePriority(int highestPriority) {
-    return highestPriority + 30;
+  static int getHudColorFilterPriority() {
+    return 20;
   }
 
-  static int getJoystickPriority(int highestPriority) {
-    return highestPriority + 40;
+  static int getHudInterfacePriority() {
+    return 30;
+  }
+
+  static int getHudJoystickPriority() {
+    return 40;
   }
 }

@@ -51,7 +51,14 @@ mixin PlayerControllerListener {
 }
 
 abstract class PlayerController extends GameComponent {
+  final dynamic id;
   final List<PlayerControllerListener> _observers = [];
+
+  PlayerController({this.id, PlayerControllerListener? observer}) {
+    if (observer != null) {
+      _observers.add(observer);
+    }
+  }
 
   void joystickChangeDirectional(JoystickDirectionalEvent event) {
     for (var o in _observers) {
@@ -83,10 +90,7 @@ abstract class PlayerController extends GameComponent {
 
   @override
   int get priority {
-    if (hasGameRef) {
-      return LayerPriority.getJoystickPriority(gameRef.highestPriority);
-    }
-    return super.priority;
+    return LayerPriority.getHudJoystickPriority();
   }
 
   @override

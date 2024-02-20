@@ -56,6 +56,7 @@ class BonfireWidget extends StatefulWidget {
   final Map<String, OverlayWidgetBuilder<BonfireGame>>? overlayBuilderMap;
   final List<String>? initialActiveOverlays;
   final List<GameComponent>? components;
+  final List<GameComponent>? hudComponents;
   final GameBackground? background;
   final CameraConfig? cameraConfig;
   final GameColorFilter? colorFilter;
@@ -77,6 +78,7 @@ class BonfireWidget extends StatefulWidget {
     this.lightingColorGame,
     this.backgroundColor,
     this.colorFilter,
+    this.hudComponents,
     this.components,
     this.overlayBuilderMap,
     this.initialActiveOverlays,
@@ -127,7 +129,8 @@ class BonfireWidgetState extends State<BonfireWidget> {
       player: widget.player,
       interface: widget.interface,
       map: widget.map,
-      components: widget.components ?? [],
+      components: widget.components,
+      hudComponents: widget.hudComponents,
       background: widget.background,
       backgroundColor: widget.backgroundColor,
       debugMode: widget.debugMode,
