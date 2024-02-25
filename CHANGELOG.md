@@ -1,3 +1,6 @@
+# NEXT
+- Adds `moveAlongThePath` method in `PathFinding` mixin.
+
 # 3.6.0
 - Adds param `hudComponents` in `BonfireWidget`;
 - Adds `queryHud` method in `BonfireGameInterface`;

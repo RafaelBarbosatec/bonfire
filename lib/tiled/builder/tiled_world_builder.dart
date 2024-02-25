@@ -33,6 +33,7 @@ typedef ObjectBuilder = GameComponent Function(
 class TiledWorldBuilder {
   static const ABOVE_TYPE = 'above';
   static const DYNAMIC_ABOVE_TYPE = 'dynamicAbove';
+  static const _mapOrientationSupported = 'orthogonal';
 
   final Vector2? forceTileSize;
   final ValueChanged<Object>? onError;
@@ -69,6 +70,11 @@ class TiledWorldBuilder {
   Future<TiledWorldData> build() async {
     try {
       _tiledMap = await reader.readMap();
+      if (_tiledMap?.orientation != _mapOrientationSupported) {
+        throw Exception(
+          'Bonfire have only suport to $_mapOrientationSupported orientation.',
+        );
+      }
       _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble() ?? 0.0;
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble() ?? 0.0;
       _tileWidth = forceTileSize?.x ?? _tileWidthOrigin;

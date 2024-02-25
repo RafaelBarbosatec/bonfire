@@ -66,6 +66,7 @@ mixin PathFinding on Movement {
     Vector2 position, {
     List? ignoreCollisions,
     VoidCallback? onFinish,
+    bool pathLineEnabled = true,
   }) async {
     if (!hasGameRef) {
       return Future.value([]);
@@ -81,10 +82,30 @@ mixin PathFinding on Movement {
         ignoreCollisions: ignoreCollisions,
       ),
     );
-
-    _addLinePathComponent();
+    if (pathLineEnabled) {
+      _addLinePathComponent();
+    }
 
     return _currentPath;
+  }
+
+  void moveAlongThePath(
+    List<Vector2> path, {
+    VoidCallback? onFinish,
+    bool pathLineEnabled = true,
+  }) {
+    if (!hasGameRef) {
+      return;
+    }
+
+    _onFinish = onFinish;
+    _currentIndex = 0;
+    _removeLinePathComponent();
+
+    _currentPath = path;
+    if (pathLineEnabled) {
+      _addLinePathComponent();
+    }
   }
 
   List<Vector2> getPathToPosition(
