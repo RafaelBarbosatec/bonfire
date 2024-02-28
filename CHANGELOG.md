@@ -1,4 +1,4 @@
-# NEXT
+# 3.6.1
 - Adds `moveAlongThePath` method in `PathFinding` mixin.
 - Bugfix in `Vision` mixin.
 
