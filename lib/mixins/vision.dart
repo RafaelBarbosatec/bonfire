@@ -84,7 +84,8 @@ mixin Vision on GameComponent {
           origin: myCenter,
           ignoreHitboxes: _getCanNotSeenHitbox(),
         );
-        return result?.hitbox?.parent == component;
+        var vParent = result?.hitbox?.parent;
+        return vParent == component || vParent == null;
       }
       return true;
     }

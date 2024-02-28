@@ -5,8 +5,12 @@ mixin DragGesture on GameComponent {
   Vector2? _startDragOffset;
   Vector2? _startDragPosition;
   int _pointer = -1;
+
+  // You can use to disable and anable this mixin
   bool enableDrag = true;
-  bool inMoving = false;
+  bool _inMoving = false;
+
+  bool get inMoving => _inMoving;
 
   @override
   bool handlerPointerDown(PointerDownEvent event) {
@@ -64,7 +68,7 @@ mixin DragGesture on GameComponent {
               (gEvent.worldPosition.y - _startDragOffset!.y),
         );
       }
-      inMoving = true;
+      _inMoving = true;
       onMoveDrag(gEvent);
     }
     return super.handlerPointerMove(event);
@@ -76,11 +80,11 @@ mixin DragGesture on GameComponent {
       event,
       screenToWorld: gameRef.screenToWorld,
     );
-    if (gEvent.pointer == _pointer && inMoving) {
+    if (gEvent.pointer == _pointer && _inMoving) {
       _startDragPosition = null;
       _startDragOffset = null;
       _pointer = -1;
-      inMoving = false;
+      _inMoving = false;
       onEndDrag(gEvent);
     }
 
@@ -93,11 +97,11 @@ mixin DragGesture on GameComponent {
       event,
       screenToWorld: gameRef.screenToWorld,
     );
-    if (gEvent.pointer == _pointer && inMoving) {
+    if (gEvent.pointer == _pointer && _inMoving) {
       _startDragPosition = null;
       _startDragOffset = null;
       _pointer = -1;
-      inMoving = false;
+      _inMoving = false;
       onCancelDrag(gEvent);
     }
     return super.handlerPointerCancel(event);

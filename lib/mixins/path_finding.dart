@@ -81,10 +81,25 @@ mixin PathFinding on Movement {
         ignoreCollisions: ignoreCollisions,
       ),
     );
-
     _addLinePathComponent();
 
     return _currentPath;
+  }
+
+  void moveAlongThePath(
+    List<Vector2> path, {
+    VoidCallback? onFinish,
+  }) {
+    if (!hasGameRef) {
+      return;
+    }
+
+    _onFinish = onFinish;
+    _currentIndex = 0;
+    _removeLinePathComponent();
+
+    _currentPath = path;
+    _addLinePathComponent();
   }
 
   List<Vector2> getPathToPosition(

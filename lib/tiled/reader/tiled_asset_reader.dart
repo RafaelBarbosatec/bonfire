@@ -4,7 +4,7 @@ import 'package:tiledjsonreader/tiledjsonreader.dart';
 
 class TiledAssetReader extends TiledReader {
 // ignore: constant_identifier_names
-  static const ORIENTATION_SUPPORTED = 'orthogonal';
+  static const _ASSET_KEY_PREFIX = 'assets/images/';
   final String asset;
   late TiledJsonReader _reader;
   @override
@@ -13,8 +13,11 @@ class TiledAssetReader extends TiledReader {
   TiledAssetReader({
     required this.asset,
   }) {
-    basePath = asset.replaceAll(asset.split('/').last, '');
-    _reader = TiledJsonReader('assets/images/$asset');
+    var assetKey = asset.startsWith(_ASSET_KEY_PREFIX)
+        ? asset.substring(_ASSET_KEY_PREFIX.length)
+        : asset;
+    basePath = assetKey.replaceAll(assetKey.split('/').last, '');
+    _reader = TiledJsonReader('assets/images/$assetKey');
   }
 
   @override

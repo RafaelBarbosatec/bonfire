@@ -1,3 +1,7 @@
+# 3.6.1
+- Adds `moveAlongThePath` method in `PathFinding` mixin.
+- Bugfix in `Vision` mixin.
+
 # 3.6.0
 - Adds param `hudComponents` in `BonfireWidget`;
 - Adds `queryHud` method in `BonfireGameInterface`;
