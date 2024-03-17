@@ -163,9 +163,9 @@ class WorldMap extends GameMap {
   }
 
   @override
-  Future<void>? onLoad() async {
-    _calculatePositionAndSize();
+  Future<void> onLoad() async {
     await super.onLoad();
+    _calculatePositionAndSize();
     await Future.forEach<TileModel>(tiles, _loadTile);
     _createQuadTree(gameRef.size);
     _searchTilesToRender();

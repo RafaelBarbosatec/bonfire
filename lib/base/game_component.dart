@@ -252,6 +252,9 @@ abstract class GameComponent extends PositionComponent
     super.onMount();
   }
 
+  @override
+  Future<void> onLoad() async => super.onLoad();
+
   void onGameDetach() {}
   void onGameMounted() {}
 }
