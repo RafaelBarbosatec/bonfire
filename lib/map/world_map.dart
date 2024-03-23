@@ -18,8 +18,8 @@ class WorldMap extends GameMap {
 
   tree.QuadTree<TileModel>? quadTree;
 
-  factory WorldMap.empty() {
-    return EmptyWorldMap();
+  factory WorldMap.empty({Vector2? size}) {
+    return EmptyWorldMap(size: size);
   }
 
   WorldMap(
