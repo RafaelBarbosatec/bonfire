@@ -55,7 +55,8 @@ class BackgroundImageGame extends GameBackground with UseSprite {
   }
 
   @override
-  Future<void>? onLoad() async {
+  Future<void> onLoad() async {
+    await super.onLoad();
     camera = gameRef.camera;
     sprite = await MapAssetsManager.getFutureSprite(imagePath);
     _parallaxOffset = Vector2(offset.x * factor, offset.y * factor);
@@ -64,8 +65,6 @@ class BackgroundImageGame extends GameBackground with UseSprite {
       sprite!.image.width * factor,
       sprite!.image.height * factor,
     );
-
-    return super.onLoad();
   }
 
   @override

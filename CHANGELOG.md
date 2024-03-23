@@ -1,3 +1,8 @@
+# 3.6.2
+- standardizes 'onLoad' method.
+- adds 'size' in 'EmptyWorldMap'.
+- adds mixin 'FlipRender'.
+
 # 3.6.1
 - Adds `moveAlongThePath` method in `PathFinding` mixin.
 - Bugfix in `Vision` mixin.

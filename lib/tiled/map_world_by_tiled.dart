@@ -22,7 +22,7 @@ class WorldMapByTiled extends WorldMap {
   }
 
   @override
-  Future<void>? onLoad() async {
+  Future<void> onLoad() async {
     final map = await _builder.build();
     tiles = map.map.tiles;
     gameRef.addAll(map.components ?? []);

@@ -18,8 +18,8 @@ class WorldMap extends GameMap {
 
   tree.QuadTree<TileModel>? quadTree;
 
-  factory WorldMap.empty() {
-    return EmptyWorldMap();
+  factory WorldMap.empty({Vector2? size}) {
+    return EmptyWorldMap(size: size);
   }
 
   WorldMap(
@@ -163,9 +163,9 @@ class WorldMap extends GameMap {
   }
 
   @override
-  Future<void>? onLoad() async {
-    _calculatePositionAndSize();
+  Future<void> onLoad() async {
     await super.onLoad();
+    _calculatePositionAndSize();
     await Future.forEach<TileModel>(tiles, _loadTile);
     _createQuadTree(gameRef.size);
     _searchTilesToRender();
