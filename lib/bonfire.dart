@@ -48,6 +48,7 @@ export 'package:bonfire/mixins/use_barlife.dart';
 export 'package:bonfire/mixins/use_sprite.dart';
 export 'package:bonfire/mixins/use_sprite_animation.dart';
 export 'package:bonfire/mixins/vision.dart';
+export 'package:bonfire/mixins/flip_render.dart';
 export 'package:bonfire/npc/ally/ally.dart';
 export 'package:bonfire/npc/enemy/enemy.dart';
 export 'package:bonfire/npc/npc.dart';
