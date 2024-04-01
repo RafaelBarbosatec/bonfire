@@ -244,8 +244,6 @@ extension FutureSpriteExt on FutureOr<Sprite> {
     widget.Key? key,
     Anchor anchor = Anchor.topLeft,
     double angle = 0,
-    Vector2? srcPosition,
-    Vector2? srcSize,
   }) {
     if (this is Future) {
       return widget.FutureBuilder<Sprite>(
@@ -262,8 +260,6 @@ extension FutureSpriteExt on FutureOr<Sprite> {
               sprite: data.data!,
               anchor: anchor,
               angle: angle,
-              srcPosition: srcPosition,
-              srcSize: srcSize,
             ),
           );
         },
@@ -280,8 +276,6 @@ extension FutureSpriteExt on FutureOr<Sprite> {
         sprite: this as Sprite,
         anchor: anchor,
         angle: angle,
-        srcPosition: srcPosition,
-        srcSize: srcSize,
       ),
     );
   }
