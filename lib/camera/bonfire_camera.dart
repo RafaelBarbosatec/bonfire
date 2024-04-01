@@ -225,7 +225,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
         break;
       case InitialMapZoomFitEnum.fit:
         double minScreenDimension = min(sizeScreen.x, sizeScreen.y);
-        double minMapDimension = min(
+        double minMapDimension = max(
           gameRef.map.getMapSize().x,
           gameRef.map.getMapSize().y,
         );
