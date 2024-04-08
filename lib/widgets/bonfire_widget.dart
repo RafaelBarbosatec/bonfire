@@ -124,6 +124,7 @@ class BonfireWidgetState extends State<BonfireWidget> {
 
   void _buildGame() {
     _game = BonfireGame(
+      keyboardConfig: widget.keyboardConfig,
       context: context,
       joystickController: widget.joystick,
       player: widget.player,
