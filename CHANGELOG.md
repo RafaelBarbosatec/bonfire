@@ -1,3 +1,7 @@
+# 3.7.1
+- Fix keyboard param. [#500](https://github.com/RafaelBarbosatec/bonfire/pull/500). Thanks [jakobodman123](https://github.com/jakobodman123)
+
+
 # 3.7.0
 - Update `Flame` to 1.17.0
 
