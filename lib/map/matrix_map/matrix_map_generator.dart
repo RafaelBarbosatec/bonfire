@@ -78,7 +78,8 @@ class MatrixMapGenerator {
       tiles = _buildNormal(matrix, builder);
     }
 
-    return WorldMap(tiles);
+    // TODO UPDATE
+    return WorldMap([ ]);
   }
 
   static double? _tryGetValue(double Function() getValue) {

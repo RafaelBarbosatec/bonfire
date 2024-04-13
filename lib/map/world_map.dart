@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/empty_map.dart';
-import 'package:bonfire/map/util/map_assets_manager.dart';
 import 'package:bonfire/util/quadtree.dart' as tree;
 
 class WorldMap extends GameMap {
@@ -12,7 +10,6 @@ class WorldMap extends GameMap {
   Vector2? lastSizeScreen;
   Set<String> _visibleSet = {};
   bool _buildingTiles = false;
-  Vector2 _griSize = Vector2.zero();
   Vector2 _mapPosition = Vector2.zero();
   Vector2 _mapSize = Vector2.zero();
 
@@ -23,11 +20,11 @@ class WorldMap extends GameMap {
   }
 
   WorldMap(
-    List<TileModel> tiles, {
+    List<TileLayer> tiles, {
     double tileSizeToUpdate = 0,
   }) : super(
           tiles,
-          tileSizeToUpdate: tileSizeToUpdate,
+          sizeToUpdate: tileSizeToUpdate,
         ) {
     enabledCheckIsVisible = false;
   }
@@ -37,17 +34,20 @@ class WorldMap extends GameMap {
     super.update(dt);
     if (!_buildingTiles && _checkNeedUpdateTiles()) {
       _buildingTiles = true;
-      scheduleMicrotask(_searchTilesToRender);
+      _searchTilesToRender();
     }
   }
 
   void _searchTilesToRender() {
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
 
-    final visibleTileModel = quadTree?.query(
-          rectCamera.getRectangleByTileSize(tileSize),
-        ) ??
-        [];
+    List<TileModel> visibleTileModel = [];
+
+    for (var layer in layers) {
+      if (layer.isVisible) {
+        visibleTileModel.addAll(layer.getTilesInRect(rectCamera));
+      }
+    }
 
     final tilesToAdd = visibleTileModel.where((element) {
       return !_visibleSet.contains(element.id);
@@ -70,77 +70,59 @@ class WorldMap extends GameMap {
   @override
   void onGameResize(Vector2 size) {
     if (isLoaded) {
-      _createQuadTree(size);
+      _confMap(size);
     }
     super.onGameResize(size);
   }
 
-  void _createQuadTree(Vector2 sizeScreen, {bool isUpdate = false}) {
-    if (lastSizeScreen == sizeScreen) return;
-    lastSizeScreen = size.clone();
+  void refreshMap() {
+    _searchTilesToRender();
+  }
 
-    if (isUpdate) {
+  void _confMap(Vector2 sizeScreen, {bool calculateSize = false}) {
+    lastSizeScreen = sizeScreen;
+    if (calculateSize) {
       lastCamera = Vector2.zero();
       lastMinorZoom = gameRef.camera.zoom;
       _calculatePositionAndSize();
+      for (var layer in layers) {
+      layer.onGameResize(size);
+    }
     }
 
-    _griSize = Vector2(
-      (size.x.ceil() / tileSize).ceilToDouble(),
-      (size.y.ceil() / tileSize).ceilToDouble(),
-    );
-
-    if (tileSizeToUpdate == 0) {
-      tileSizeToUpdate = (tileSize * 4).ceilToDouble();
+    if (sizeToUpdate == 0) {
+      sizeToUpdate = (tileSize * 4).ceilToDouble();
     }
-    gameRef.camera.updateSpacingVisibleMap(tileSizeToUpdate * 1.5);
-
-    if (tiles.isNotEmpty) {
-      int minSize = min(sizeScreen.x, sizeScreen.y).ceil();
-      int maxItems = ((minSize / 2) / tileSize).ceil();
-      maxItems *= maxItems;
-      quadTree = tree.QuadTree(
-        0,
-        0,
-        _griSize.x,
-        _griSize.y,
-        maxItems: maxItems,
-      );
-
-      for (var tile in tiles) {
-        quadTree?.insert(tile, Point(tile.x, tile.y), id: tile.id);
-      }
-    }
+    gameRef.camera.updateSpacingVisibleMap(sizeToUpdate * 1.5);
   }
 
   @override
-  Future<void> updateTiles(List<TileModel> map) async {
-    lastSizeScreen = null;
-    tiles = map;
-    _calculatePositionAndSize();
-    await Future.forEach<TileModel>(tiles, _loadTile);
-    _createQuadTree(gameRef.size, isUpdate: true);
+  Future<void> updateLayers(List<TileLayer> layers) {
+    this.layers = layers;
+    _confMap(gameRef.size, calculateSize: true);
+    return _loadAssets();
   }
 
   void _calculatePositionAndSize() {
-    if (tiles.isNotEmpty) {
-      tileSize = tiles.first.width;
+    if (layers.isNotEmpty) {
+      tileSize = layers.first.tileSize;
       double x = 0;
       double y = 0;
 
-      double w = tiles.first.right;
-      double h = tiles.first.bottom;
+      double w = layers.first.size.x;
+      double h = layers.first.size.y;
 
-      for (var tile in tiles) {
-        if (tile.left < x) x = tile.left;
-        if (tile.top < y) y = tile.top;
+      for (var layer in layers) {
+        if (layer.left < x) x = layer.left;
+        if (layer.top < y) y = layer.top;
 
-        if (tile.right > w) w = tile.right;
-        if (tile.bottom > h) h = tile.bottom;
+        if (layer.right > w) w = layer.right;
+        if (layer.bottom > h) h = layer.bottom;
       }
       _mapSize = Vector2(w - x, h - y);
       size = Vector2(w, h);
       _mapPosition = Vector2(x, y);
+
       gameRef.camera.updateBoundsAndZoomFit();
       (gameRef as BonfireGame).configCollision();
     }
@@ -165,69 +147,49 @@ class WorldMap extends GameMap {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    _calculatePositionAndSize();
-    await Future.forEach<TileModel>(tiles, _loadTile);
-    _createQuadTree(gameRef.size);
+    _confMap(gameRef.size, calculateSize: true);
+    await _loadAssets();
     _searchTilesToRender();
+    updateLastCamera(null);
   }
 
-  @override
-  Future addTile(TileModel tileModel) async {
-    await _loadTile(tileModel);
-    tiles.add(tileModel);
-    add(tileModel.getTile());
-    quadTree?.insert(
-      tileModel,
-      Point(tileModel.x, tileModel.y),
-      id: tileModel.id,
-    );
-
-    _calculatePositionAndSize();
-  }
-
-  @override
-  void removeTile(String id) {
-    try {
-      children
-          .firstWhere((element) => (element as Tile).id == id)
-          .removeFromParent();
-      tiles.removeWhere((element) => element.id == id);
-      quadTree?.removeById(id);
-      _calculatePositionAndSize();
-    } catch (e) {
-      // ignore: avoid_print
-      print('Not found visible tile with $id id');
-    }
-  }
-
-  Future<void> _loadTile(TileModel element) async {
-    if (element.sprite != null) {
-      await MapAssetsManager.loadImage((element.sprite?.path ?? ''));
-    }
-    if (element.animation != null) {
-      for (var frame in (element.animation?.frames ?? [])) {
-        await MapAssetsManager.loadImage(frame.path);
-      }
-    }
-    return Future.value();
+  Future<void> _loadAssets() async {
+    return Future.forEach(layers, (element) => element.loadAssets());
   }
 
   bool _checkNeedUpdateTiles() {
     final camera = _getCameraTileUpdate();
     if (lastCamera != camera || lastMinorZoom != gameRef.camera.zoom) {
-      lastCamera = camera;
-      lastMinorZoom = gameRef.camera.zoom;
+      updateLastCamera(camera);
 
       return true;
     }
     return false;
   }
 
+  void updateLastCamera(Vector2? camera) {
+    lastCamera = camera ?? _getCameraTileUpdate();
+    lastMinorZoom = gameRef.camera.zoom;
+  }
+
   Vector2 _getCameraTileUpdate() {
     final camera = gameRef.camera;
     return Vector2(
-      (camera.position.x / (tileSizeToUpdate / camera.zoom)).floorToDouble(),
-      (camera.position.y / (tileSizeToUpdate / camera.zoom)).floorToDouble(),
+      (camera.position.x / (sizeToUpdate / camera.zoom)).floorToDouble(),
+      (camera.position.y / (sizeToUpdate / camera.zoom)).floorToDouble(),
     );
+  }
+
+  @override
+  Future addLayer(TileLayer layer) async {
+    await layer.loadAssets();
+    layers.add(layer);
+    _confMap(lastSizeScreen!, calculateSize: true);
+  }
+
+  @override
+  void removeLayer(String id) {
+    layers.removeWhere((l) => l.id == id);
+    _confMap(lastSizeScreen!, calculateSize: true);
   }
 }

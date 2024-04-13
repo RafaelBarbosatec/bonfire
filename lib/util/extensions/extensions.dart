@@ -93,10 +93,11 @@ extension RectExt on Rect {
   Vector2 get sizeVector2 => Vector2(width, height);
 
   Rectangle getRectangleByTileSize(double tileSize) {
+    final maxSize = max(this.width, this.height);
     final left = (this.left / tileSize).floorToDouble();
     final top = (this.top / tileSize).floorToDouble();
-    final width = (this.width / tileSize).ceilToDouble();
-    final height = (this.height / tileSize).ceilToDouble();
+    final width = (maxSize / tileSize).ceilToDouble();
+    final height = (maxSize / tileSize).ceilToDouble();
 
     return Rectangle(
       left,

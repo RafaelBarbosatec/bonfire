@@ -48,7 +48,7 @@ mixin TileRecognizer on GameComponent {
   List<Map<String, dynamic>>? tilePropertiesListBelow() {
     if (!hasGameRef) return null;
     final map = gameRef.map;
-    if (map.tiles.isNotEmpty) {
+    if (map.layers.isNotEmpty) {
       return tileListBelow()
           .map<Map<String, dynamic>>((e) => e.properties!)
           .toList();
@@ -60,7 +60,7 @@ mixin TileRecognizer on GameComponent {
   Iterable<Tile> tileListBelow() {
     if (!hasGameRef) return [];
     final map = gameRef.map;
-    if (map.tiles.isNotEmpty) {
+    if (map.layers.isNotEmpty) {
       return map.getRendered().where((element) {
         return (element.overlaps(rectCollision) &&
             (element.properties != null));
