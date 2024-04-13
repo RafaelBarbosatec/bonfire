@@ -75,6 +75,7 @@ class WorldMap extends GameMap {
     super.onGameResize(size);
   }
 
+  @override
   void refreshMap() {
     _searchTilesToRender();
   }
@@ -86,8 +87,8 @@ class WorldMap extends GameMap {
       lastMinorZoom = gameRef.camera.zoom;
       _calculatePositionAndSize();
       for (var layer in layers) {
-      layer.onGameResize(size);
-    }
+        layer.initLayer(size, sizeScreen, this);
+      }
     }
 
     if (sizeToUpdate == 0) {
@@ -97,10 +98,11 @@ class WorldMap extends GameMap {
   }
 
   @override
-  Future<void> updateLayers(List<TileLayer> layers) {
+  Future<void> updateLayers(List<TileLayer> layers) async {
     this.layers = layers;
     _confMap(gameRef.size, calculateSize: true);
-    return _loadAssets();
+    await _loadAssets();
+    refreshMap();
   }
 
   void _calculatePositionAndSize() {
@@ -185,11 +187,13 @@ class WorldMap extends GameMap {
     await layer.loadAssets();
     layers.add(layer);
     _confMap(lastSizeScreen!, calculateSize: true);
+    refreshMap();
   }
 
   @override
   void removeLayer(String id) {
     layers.removeWhere((l) => l.id == id);
     _confMap(lastSizeScreen!, calculateSize: true);
+    refreshMap();
   }
 }

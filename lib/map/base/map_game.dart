@@ -15,6 +15,7 @@ abstract class GameMap extends GameComponent {
 
   Vector2 getMapPosition();
   Vector2 getMapSize();
+  void refreshMap();
 
   Rect getMapRect() {
     return Rect.fromLTWH(

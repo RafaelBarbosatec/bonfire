@@ -39,7 +39,7 @@ class TiledWorldBuilder {
   final ValueChanged<Object>? onError;
   late TiledReader reader;
   final double sizeToUpdate;
-  final List<List<TileModel>> _tiles = [];
+  final List<LayerModel> _layers = [];
   final List<GameComponent> _components = [];
   String? _basePath;
   TiledMap? _tiledMap;
@@ -89,11 +89,7 @@ class TiledWorldBuilder {
     return Future.value(
       TiledWorldData(
         map: WorldMap(
-          _tiles
-              .where((element) => element.isNotEmpty)
-              .indexed
-              .map((e) => TileLayer(id: '${e.$1}', tiles: e.$2))
-              .toList(),
+          _layers.map((e) => TileLayer.fromTileModel(e)).toList(),
           tileSizeToUpdate: sizeToUpdate,
         ),
         components: _components,
@@ -102,7 +98,6 @@ class TiledWorldBuilder {
   }
 
   Future<void> _load(TiledMap tiledMap) async {
-    _tiles.add([]);
     for (var layer in tiledMap.layers ?? const <MapLayer>[]) {
       await _loadLayer(layer);
     }
@@ -112,8 +107,8 @@ class TiledWorldBuilder {
     if (layer.visible != true) return;
 
     if (layer is tiled.TileLayer) {
+      _layers.add(LayerModel.fromMapLayer(layer));
       await _addTileLayer(layer);
-      _tiles.add([]);
       countTileLayer++;
     }
 
@@ -181,7 +176,7 @@ class TiledWorldBuilder {
     double offsetY,
     double opacity,
   ) {
-    _tiles[countTileLayer].add(
+    _layers.last.tiles.add(
       TileModel(
         x: _getX(count, tileLayer.width?.toInt() ?? 1),
         y: _getY(count, tileLayer.width?.toInt() ?? 1),
@@ -533,17 +528,6 @@ class TiledWorldBuilder {
     }
   }
 
-  Map<String, dynamic> _extractOtherProperties(List<Property>? properties) {
-    final map = <String, dynamic>{};
-
-    for (var element in properties ?? const <Property>[]) {
-      if (element.value != null && element.name != null) {
-        map[element.name!] = element.value;
-      }
-    }
-    return map;
-  }
-
   void _addImageLayer(ImageLayer layer) {
     if (!(layer.visible ?? false)) return;
     _components.add(
@@ -643,4 +627,57 @@ class TiledWorldBuilder {
       isSolid: true,
     );
   }
+}
+
+class LayerModel {
+  final int? id;
+  final String? name;
+  final String? layerClass;
+  final bool visible;
+  final Vector2 position;
+  final Vector2 offset;
+  final double opacity;
+  final Map<String, dynamic>? properties;
+  List<TileModel> tiles = [];
+
+  LayerModel({
+    required this.id,
+    required this.name,
+    required this.layerClass,
+    required this.visible,
+    required this.position,
+    required this.offset,
+    required this.opacity,
+    required this.properties,
+  });
+
+  factory LayerModel.fromMapLayer(MapLayer layer) {
+    return LayerModel(
+      id: layer.id,
+      layerClass: layer.layerClass,
+      name: layer.name,
+      opacity: layer.opacity ?? 1,
+      visible: layer.visible ?? true,
+      position: Vector2(
+        layer.x ?? 0,
+        layer.y ?? 0,
+      ),
+      offset: Vector2(
+        layer.offsetX ?? 0,
+        layer.offsetY ?? 0,
+      ),
+      properties: _extractOtherProperties(layer.properties),
+    );
+  }
+}
+
+Map<String, dynamic> _extractOtherProperties(List<Property>? properties) {
+  final map = <String, dynamic>{};
+
+  for (var element in properties ?? const <Property>[]) {
+    if (element.value != null && element.name != null) {
+      map[element.name!] = element.value;
+    }
+  }
+  return map;
 }
