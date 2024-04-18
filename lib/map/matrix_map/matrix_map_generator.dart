@@ -59,7 +59,7 @@ class ItemMatrixProperties {
   }
 }
 
-typedef TileModelBuilder = TileModel Function(ItemMatrixProperties properties);
+typedef TileModelBuilder = Tile Function(ItemMatrixProperties properties);
 
 /// Class useful to create radom map.
 /// * [matrix], Matrix used to create the map.
@@ -70,19 +70,19 @@ class MatrixMapGenerator {
     required List<MatrixLayer> layers,
     required TileModelBuilder builder,
   }) {
-    List<TileLayer> tileLayers = [];
+    List<TileLayerComponent> tileLayers = [];
     int index = 0;
     for (var layer in layers) {
       if (layer.axisInverted) {
         tileLayers.add(
-          TileLayer(
+          TileLayerComponent(
             id: index,
             tiles: _buildInverted(layer.matrix, builder),
           ),
         );
       } else {
         tileLayers.add(
-          TileLayer(
+          TileLayerComponent(
             id: index,
             tiles: _buildNormal(layer.matrix, builder),
           ),
@@ -102,11 +102,11 @@ class MatrixMapGenerator {
     }
   }
 
-  static List<TileModel> _buildNormal(
+  static List<Tile> _buildNormal(
     List<List<double>> matrix,
     TileModelBuilder builder,
   ) {
-    List<TileModel> tiles = [];
+    List<Tile> tiles = [];
     final h = matrix.first.length;
     final w = matrix.length;
     for (var x = 0; x < w; x++) {
@@ -132,11 +132,11 @@ class MatrixMapGenerator {
     return tiles;
   }
 
-  static List<TileModel> _buildInverted(
+  static List<Tile> _buildInverted(
     List<List<double>> matrix,
     TileModelBuilder builder,
   ) {
-    List<TileModel> tiles = [];
+    List<Tile> tiles = [];
     final w = matrix.first.length;
     final h = matrix.length;
     for (var y = 0; y < h; y++) {

@@ -1,5 +1,5 @@
 import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/map/base/tile.dart';
+import 'package:bonfire/map/base/tile_component.dart';
 import 'package:bonfire/util/extensions/game_component_extensions.dart';
 
 ///
@@ -28,7 +28,7 @@ mixin TileRecognizer on GameComponent {
   List<String> tileTypeListBelow() {
     if (!hasGameRef) return [];
     final map = gameRef.map;
-    if (map.getRendered().isNotEmpty) {
+    if (map.getRenderedTiles().isNotEmpty) {
       return tileListBelow().map<String>((e) => e.tileClass!).toList();
     }
     return [];
@@ -57,11 +57,11 @@ mixin TileRecognizer on GameComponent {
   }
 
   /// Method that checks what map tiles is below
-  Iterable<Tile> tileListBelow() {
+  Iterable<TileComponent> tileListBelow() {
     if (!hasGameRef) return [];
     final map = gameRef.map;
     if (map.layers.isNotEmpty) {
-      return map.getRendered().where((element) {
+      return map.getRenderedTiles().where((element) {
         return (element.overlaps(rectCollision) &&
             (element.properties != null));
       });

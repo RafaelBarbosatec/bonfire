@@ -41,14 +41,14 @@ class TerrainBuilderPage extends StatelessWidget {
     );
   }
 
-  TileModel _builder(ItemMatrixProperties props) {
+  Tile _builder(ItemMatrixProperties props) {
     return TerrainBuilder(
       tileSize: tileSize,
       terrainList: [
         MapTerrain(
           value: TILE_WATER,
           sprites: [
-            TileModelSprite(
+            TileSprite(
               path: 'tile_random/tile_types.png',
               size: Vector2.all(16),
               position: Vector2(0, 1),
@@ -58,7 +58,7 @@ class TerrainBuilderPage extends StatelessWidget {
         MapTerrain(
           value: TILE_SAND,
           sprites: [
-            TileModelSprite(
+            TileSprite(
               path: 'tile_random/tile_types.png',
               size: Vector2.all(16),
               position: Vector2(0, 2),
@@ -69,11 +69,11 @@ class TerrainBuilderPage extends StatelessWidget {
           value: TILE_GRASS,
           spritesProportion: [0.5, 0.5],
           sprites: [
-            TileModelSprite(
+            TileSprite(
               path: 'tile_random/tile_types.png',
               size: Vector2.all(16),
             ),
-            TileModelSprite(
+            TileSprite(
               path: 'tile_random/tile_types.png',
               size: Vector2.all(16),
               position: Vector2(1, 0),

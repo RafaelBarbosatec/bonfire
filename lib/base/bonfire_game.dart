@@ -241,7 +241,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   Iterable<ShapeHitbox> collisions({bool onlyVisible = false}) {
     if (onlyVisible) {
       List<ShapeHitbox> tilesCollision = [];
-      map.getRendered().where((element) => element.containsShapeHitbox).forEach(
+      map
+          .getRenderedTiles()
+          .where((element) => element.containsShapeHitbox)
+          .forEach(
             (e) => tilesCollision.addAll(e.children.query<ShapeHitbox>()),
           );
       return [

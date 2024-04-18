@@ -8,22 +8,21 @@ class WorldMap extends GameMap {
   Vector2 lastCamera = Vector2.zero();
   double lastMinorZoom = 1.0;
   Vector2? lastSizeScreen;
-  Set<String> _visibleSet = {};
   bool _buildingTiles = false;
   Vector2 _mapPosition = Vector2.zero();
   Vector2 _mapSize = Vector2.zero();
 
-  tree.QuadTree<TileModel>? quadTree;
+  tree.QuadTree<Tile>? quadTree;
 
   factory WorldMap.empty({Vector2? size}) {
     return EmptyWorldMap(size: size);
   }
 
   WorldMap(
-    List<TileLayer> tiles, {
+    List<TileLayerComponent> layers, {
     double tileSizeToUpdate = 0,
   }) : super(
-          tiles,
+          layers,
           sizeToUpdate: tileSizeToUpdate,
         ) {
     enabledCheckIsVisible = false;
@@ -38,33 +37,26 @@ class WorldMap extends GameMap {
     }
   }
 
-  void _searchTilesToRender() {
+  void _searchTilesToRender() async {
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
 
-    List<TileModel> visibleTileModel = [];
-
     for (var layer in layers) {
-      if (layer.isVisible) {
-        visibleTileModel.addAll(layer.getTilesInRect(rectCamera));
-      }
+      await layer.onMoveCamera(rectCamera);
     }
-
-    final tilesToAdd = visibleTileModel.where((element) {
-      return !_visibleSet.contains(element.id);
-    }).toList();
-
-    _visibleSet = visibleTileModel.map((e) => e.id).toSet();
-
-    removeWhere((tile) => !_visibleSet.contains((tile as Tile).id));
-
-    addAll(_buildTiles(tilesToAdd));
 
     _buildingTiles = false;
   }
 
   @override
-  Iterable<Tile> getRendered() {
-    return children.cast();
+  List<TileComponent> getRenderedTiles() {
+    // TODO need
+    return children.fold(
+      <TileComponent>[],
+      (previousValue, element) => previousValue
+        ..addAll(
+          (element as TileLayerComponent).getRendered(),
+        ),
+    );
   }
 
   @override
@@ -87,7 +79,7 @@ class WorldMap extends GameMap {
       lastMinorZoom = gameRef.camera.zoom;
       _calculatePositionAndSize();
       for (var layer in layers) {
-        layer.initLayer(size, sizeScreen, this);
+        layer.initLayer(size, sizeScreen);
       }
     }
 
@@ -98,7 +90,7 @@ class WorldMap extends GameMap {
   }
 
   @override
-  Future<void> updateLayers(List<TileLayer> layers) async {
+  Future<void> updateLayers(List<TileLayerComponent> layers) async {
     this.layers = layers;
     _confMap(gameRef.size, calculateSize: true);
     await _loadAssets();
@@ -140,17 +132,12 @@ class WorldMap extends GameMap {
     return _mapPosition;
   }
 
-  List<Tile> _buildTiles(Iterable<TileModel> visibleTiles) {
-    return visibleTiles.map((e) {
-      return e.getTile();
-    }).toList();
-  }
-
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     _confMap(gameRef.size, calculateSize: true);
     await _loadAssets();
+    await addAll(layers);
     _searchTilesToRender();
     updateLastCamera(null);
   }
@@ -183,7 +170,7 @@ class WorldMap extends GameMap {
   }
 
   @override
-  Future addLayer(TileLayer layer) async {
+  Future addLayer(TileLayerComponent layer) async {
     await layer.loadAssets();
     layers.add(layer);
     _confMap(lastSizeScreen!, calculateSize: true);

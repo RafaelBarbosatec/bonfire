@@ -5,56 +5,48 @@ import 'package:bonfire/map/util/map_assets_manager.dart';
 import 'package:bonfire/tiled/builder/tiled_world_builder.dart';
 import 'package:bonfire/util/quadtree.dart' as tree;
 
-class TileLayer {
+class TileLayerComponent extends PositionComponent with HasPaint {
   final int id;
-  final List<TileModel> _tiles;
+  final List<Tile> _tiles;
   final String? name;
   final String? layerClass;
-  double _opacity;
   final Map<String, dynamic>? properties;
-  final Vector2 position;
-  GameMap? _gameMap;
   bool _isVisible = true;
   double _tileSize = 0.0;
-  Vector2 _size = Vector2.zero();
 
   Vector2? _lastGameSize;
   Vector2? _lastScreenSize;
 
-  Vector2 get size => _size;
   double get tileSize => _tileSize;
-  tree.QuadTree<TileModel>? _quadTree;
+  tree.QuadTree<Tile>? _quadTree;
 
   double get left => (position.x * size.x);
   double get right => (position.x * size.x) + size.x;
   double get top => (position.y * size.y);
   double get bottom => (position.y * size.y) + size.y;
 
-  bool get isVisible => _isVisible;
+  bool get visible => _isVisible;
 
-  set isVisible(bool value) {
+  set visible(bool value) {
     _isVisible = value;
-    _gameMap?.refreshMap();
+    refresh();
   }
 
-  set opacity(double value) {
-    _opacity = value;
-    _gameMap?.refreshMap();
-  }
+  Set<String> _visibleSet = {};
 
-  TileLayer({
+  TileLayerComponent({
     required this.id,
-    required List<TileModel> tiles,
-    Vector2? position,
+    required List<Tile> tiles,
+    super.position,
     bool visible = true,
     this.name,
     this.layerClass,
     double opacity = 1,
     this.properties,
+    super.priority,
   })  : _tiles = tiles,
-        position = position ?? Vector2.zero(),
-        _isVisible = visible,
-        _opacity = opacity {
+        _isVisible = visible {
+    this.opacity = opacity;
     _updateSizeAndPosition();
   }
 
@@ -69,12 +61,11 @@ class TileLayer {
         if (tile.right > w) w = tile.right;
         if (tile.bottom > h) h = tile.bottom;
       }
-      _size = Vector2(w, h);
+      size = Vector2(w, h);
     }
   }
 
-  void initLayer(Vector2 gameSize, Vector2 screenSize, GameMap map) {
-    _gameMap = map;
+  void initLayer(Vector2 gameSize, Vector2 screenSize) {
     _createQuadTree(gameSize, screenSize);
   }
 
@@ -110,16 +101,16 @@ class TileLayer {
     }
   }
 
-  void updateTiles(List<TileModel> tiles) {
+  void updateTiles(List<Tile> tiles) {
     _tiles;
     _updateSizeAndPosition();
     if (_lastGameSize != null) {
       _createQuadTree(_lastGameSize!, _lastScreenSize!, force: true);
     }
-    _gameMap?.refreshMap();
+    refresh();
   }
 
-  void addTile(TileModel tile) {
+  void addTile(Tile tile) {
     _tiles.add(tile);
     _updateSizeAndPosition();
     _quadTree?.insert(
@@ -127,7 +118,7 @@ class TileLayer {
       Point(tile.x, tile.y),
       id: tile.id,
     );
-    _gameMap?.refreshMap();
+    refresh();
   }
 
   void removeTile(String id) {
@@ -135,28 +126,53 @@ class TileLayer {
       _tiles.removeWhere((element) => element.id == id);
       _quadTree?.removeById(id);
       _updateSizeAndPosition();
-      _gameMap?.refreshMap();
+      refresh();
     } catch (e) {
       // ignore: avoid_print
       print('Not found visible tile with $id id');
     }
   }
 
-  List<TileModel> getTilesInRect(Rect rect) {
-    if (!_isVisible || _quadTree == null) {
-      return [];
-    }
+  void refresh() {
+    _visibleSet.clear();
+    removeAll(children);
+    onMoveCamera(_lastRectCamera);
+  }
 
-    return _quadTree!.query(
-      rect.getRectangleByTileSize(_tileSize),
+  Rect _lastRectCamera = Rect.zero;
+
+  Future<void> onMoveCamera(Rect rectCamera) {
+    if (!_isVisible || _quadTree == null) {
+      return Future.value();
+    }
+    _lastRectCamera = rectCamera;
+
+    List<Tile> visibleTiles = _quadTree!.query(
+      rectCamera.getRectangleByTileSize(_tileSize),
     );
+
+    final tilesToAdd = visibleTiles.where((element) {
+      return !_visibleSet.contains(element.id);
+    }).toList();
+
+    _visibleSet = visibleTiles.map((e) => e.id).toSet();
+
+    removeWhere((tile) => !_visibleSet.contains((tile as TileComponent).id));
+
+    return addAll(_buildTiles(tilesToAdd));
+  }
+
+  Iterable<TileComponent> _buildTiles(Iterable<Tile> visibleTiles) {
+    return visibleTiles.map((e) {
+      return e.getTile();
+    });
   }
 
   Future<void> loadAssets() {
     return Future.forEach(_tiles, _loadTile);
   }
 
-  Future<void> _loadTile(TileModel element) async {
+  Future<void> _loadTile(Tile element) async {
     if (element.sprite != null) {
       await MapAssetsManager.loadImage((element.sprite?.path ?? ''));
     }
@@ -168,8 +184,12 @@ class TileLayer {
     return Future.value();
   }
 
-  factory TileLayer.fromTileModel(LayerModel e) {
-    return TileLayer(
+  Iterable<TileComponent> getRendered() {
+    return children.cast();
+  }
+
+  factory TileLayerComponent.fromTileModel(LayerModel e) {
+    return TileLayerComponent(
       id: e.id ?? 0,
       visible: e.visible,
       tiles: e.tiles,
@@ -178,6 +198,7 @@ class TileLayer {
       name: e.name,
       opacity: e.opacity,
       properties: e.properties,
+      priority: e.priority,
     );
   }
 }

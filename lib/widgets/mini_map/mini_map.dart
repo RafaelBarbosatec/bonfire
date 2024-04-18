@@ -22,7 +22,7 @@ typedef MiniMapCustomRender<T extends GameComponent> = void Function(
 
 class MiniMap extends StatefulWidget {
   final BonfireGame game;
-  final MiniMapCustomRender<Tile>? tileRender;
+  final MiniMapCustomRender<TileComponent>? tileRender;
   final MiniMapCustomRender? componentsRender;
   final Vector2 size;
   final EdgeInsetsGeometry? margin;
@@ -107,7 +107,7 @@ class _MiniMapState extends State<MiniMap> {
               child: CustomPaint(
                 painter: MiniMapCanvas(
                   components: widget.game.visibles(),
-                  tiles: widget.game.map.getRendered(),
+                  tiles: widget.game.map.getRenderedTiles(),
                   cameraPosition: cameraPosition,
                   playerPosition: playerPosition,
                   gameSize: widget.game.size,
@@ -146,7 +146,8 @@ class _MiniMapState extends State<MiniMap> {
     });
   }
 
-  MiniMapCustomRender<Tile> tilesRenderDefault() => (canvas, component) {
+  MiniMapCustomRender<TileComponent> tilesRenderDefault() =>
+      (canvas, component) {
         var collisionList = component.children.query<ShapeHitbox>();
         if (collisionList.isEmpty && widget.tileColor != null) {
           canvas.drawRect(

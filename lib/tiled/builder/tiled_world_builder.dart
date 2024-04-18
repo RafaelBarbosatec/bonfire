@@ -4,7 +4,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/background/background_image_game.dart';
-import 'package:bonfire/bonfire.dart' hide Tile;
+import 'package:bonfire/bonfire.dart' hide TileComponent;
 import 'package:bonfire/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/text_game_component.dart';
@@ -48,7 +48,7 @@ class TiledWorldBuilder {
   double _tileWidthOrigin = 0;
   double _tileHeightOrigin = 0;
   Map<String, ObjectBuilder> _objectsBuilder = {};
-  final Map<String, TileModelSprite> _tileModelSpriteCache = {};
+  final Map<String, TileSprite> _tileModelSpriteCache = {};
   int countTileLayer = 0;
   int countImageLayer = 0;
 
@@ -89,7 +89,7 @@ class TiledWorldBuilder {
     return Future.value(
       TiledWorldData(
         map: WorldMap(
-          _layers.map((e) => TileLayer.fromTileModel(e)).toList(),
+          _layers.map((e) => TileLayerComponent.fromTileModel(e)).toList(),
           tileSizeToUpdate: sizeToUpdate,
         ),
         components: _components,
@@ -107,7 +107,7 @@ class TiledWorldBuilder {
     if (layer.visible != true) return;
 
     if (layer is tiled.TileLayer) {
-      _layers.add(LayerModel.fromMapLayer(layer));
+      _layers.add(LayerModel.fromMapLayer(layer, countTileLayer));
       await _addTileLayer(layer);
       countTileLayer++;
     }
@@ -177,7 +177,7 @@ class TiledWorldBuilder {
     double opacity,
   ) {
     _layers.last.tiles.add(
-      TileModel(
+      Tile(
         x: _getX(count, tileLayer.width?.toInt() ?? 1),
         y: _getY(count, tileLayer.width?.toInt() ?? 1),
         offsetX: offsetX,
@@ -316,12 +316,12 @@ class TiledWorldBuilder {
 
       final pathSprite = '$_basePath$pathTileset$imagePath';
 
-      TileModelSprite sprite;
+      TileSprite sprite;
       String tileKey = '$pathSprite/${spritePosition.x}/${spritePosition.y}';
       if (_tileModelSpriteCache.containsKey(tileKey)) {
         sprite = _tileModelSpriteCache[tileKey]!;
       } else {
-        sprite = _tileModelSpriteCache[tileKey] = TileModelSprite(
+        sprite = _tileModelSpriteCache[tileKey] = TileSprite(
           path: pathSprite,
           size: spriteSize,
           position: spritePosition,
@@ -482,7 +482,7 @@ class TiledWorldBuilder {
     return TiledDataObjectCollision();
   }
 
-  TileModelAnimation? _getAnimation(
+  TilelAnimation? _getAnimation(
     TileSetDetail tileSetContain,
     String pathTileset,
     int index,
@@ -495,7 +495,7 @@ class TiledWorldBuilder {
 
       List<FrameAnimation> animationFrames = tileSetItemList.animation ?? [];
 
-      List<TileModelSprite> frames = [];
+      List<TileSprite> frames = [];
       if ((animationFrames.isNotEmpty)) {
         double stepTime = (animationFrames[0].duration ?? 100) / 1000;
 
@@ -505,7 +505,7 @@ class TiledWorldBuilder {
 
           final spritePath = '$_basePath$pathTileset${tileSetContain.image}';
 
-          TileModelSprite sprite = TileModelSprite(
+          TileSprite sprite = TileSprite(
             path: spritePath,
             size: Vector2(
               tileSetContain.tileWidth ?? 0,
@@ -516,7 +516,7 @@ class TiledWorldBuilder {
           frames.add(sprite);
         }
 
-        return TileModelAnimation(
+        return TilelAnimation(
           stepTime: stepTime,
           frames: frames,
         );
@@ -638,7 +638,8 @@ class LayerModel {
   final Vector2 offset;
   final double opacity;
   final Map<String, dynamic>? properties;
-  List<TileModel> tiles = [];
+  final int priority;
+  List<Tile> tiles = [];
 
   LayerModel({
     required this.id,
@@ -649,15 +650,17 @@ class LayerModel {
     required this.offset,
     required this.opacity,
     required this.properties,
+    required this.priority,
   });
 
-  factory LayerModel.fromMapLayer(MapLayer layer) {
+  factory LayerModel.fromMapLayer(MapLayer layer, int priority) {
     return LayerModel(
       id: layer.id,
       layerClass: layer.layerClass,
       name: layer.name,
       opacity: layer.opacity ?? 1,
       visible: layer.visible ?? true,
+      priority: priority,
       position: Vector2(
         layer.x ?? 0,
         layer.y ?? 0,

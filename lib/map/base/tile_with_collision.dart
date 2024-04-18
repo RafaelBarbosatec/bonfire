@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 
-class TileWithCollision extends Tile {
+class TileWithCollision extends TileComponent {
   Iterable<ShapeHitbox>? collisions;
   TileWithCollision({
     required String spritePath,

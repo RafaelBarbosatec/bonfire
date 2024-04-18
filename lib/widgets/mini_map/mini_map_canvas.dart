@@ -16,11 +16,11 @@ import 'package:flutter/material.dart';
 /// on 12/04/22
 class MiniMapCanvas extends CustomPainter {
   final Iterable<GameComponent> components;
-  final Iterable<Tile> tiles;
+  final Iterable<TileComponent> tiles;
   final Vector2 cameraPosition;
   final Vector2 playerPosition;
   final Vector2 gameSize;
-  final MiniMapCustomRender<Tile>? tileRender;
+  final MiniMapCustomRender<TileComponent>? tileRender;
   final MiniMapCustomRender? componentsRender;
   final double zoom;
 
