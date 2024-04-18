@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
 export 'map_terrain.dart';
+export 'matrix_layer.dart';
 export 'terrain_builder.dart';
 
 ///
@@ -66,20 +67,31 @@ typedef TileModelBuilder = TileModel Function(ItemMatrixProperties properties);
 /// * [axisInverted], used to invert axis of the matrix. Example: matrix[x,y] turn matrix[y,x]. It's useful to use an easier-to-see array in code.
 class MatrixMapGenerator {
   static WorldMap generate({
-    required List<List<double>> matrix,
+    required List<MatrixLayer> layers,
     required TileModelBuilder builder,
-    bool axisInverted = false,
   }) {
-    List<TileModel> tiles = [];
-
-    if (axisInverted) {
-      tiles = _buildInverted(matrix, builder);
-    } else {
-      tiles = _buildNormal(matrix, builder);
+    List<TileLayer> tileLayers = [];
+    int index = 0;
+    for (var layer in layers) {
+      if (layer.axisInverted) {
+        tileLayers.add(
+          TileLayer(
+            id: index.toString(),
+            tiles: _buildInverted(layer.matrix, builder),
+          ),
+        );
+      } else {
+        tileLayers.add(
+          TileLayer(
+            id: index.toString(),
+            tiles: _buildNormal(layer.matrix, builder),
+          ),
+        );
+      }
+      index++;
     }
 
-    // TODO UPDATE
-    return WorldMap([ ]);
+    return WorldMap(tileLayers);
   }
 
   static double? _tryGetValue(double Function() getValue) {

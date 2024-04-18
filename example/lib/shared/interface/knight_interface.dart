@@ -54,8 +54,8 @@ class KnightInterface extends GameInterface {
       position: Vector2(300, 20),
       selectable: false,
       onTapComponent: (selected) {
-        _animateColorFilter();
-        {}
+        // _animateColorFilter();
+        gameRef.map.layers[0].isVisible = !gameRef.map.layers[0].isVisible;
       },
     ));
     await add(TextInterfaceComponent(

@@ -38,24 +38,37 @@ class WorldMap extends GameMap {
     }
   }
 
+  final Map<String, bool> _mapLayerVisible = {};
+
   void _searchTilesToRender() {
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
 
     List<TileModel> visibleTileModel = [];
+    bool removeAll = false;
 
     for (var layer in layers) {
       if (layer.isVisible) {
         visibleTileModel.addAll(layer.getTilesInRect(rectCamera));
       }
+      if (_mapLayerVisible[layer.id] != null) {
+        if (!_mapLayerVisible[layer.id]! && layer.isVisible) {
+          removeAll = true;
+        }
+      }
+      _mapLayerVisible[layer.id] = layer.isVisible;
     }
 
     final tilesToAdd = visibleTileModel.where((element) {
       return !_visibleSet.contains(element.id);
     }).toList();
 
-    _visibleSet = visibleTileModel.map((e) => e.id).toSet();
+    if (removeAll) {
+      children.removeWhere((element) => true);
+    } else {
+      _visibleSet = visibleTileModel.map((e) => e.id).toSet();
 
-    removeWhere((tile) => !_visibleSet.contains((tile as Tile).id));
+      removeWhere((tile) => !_visibleSet.contains((tile as Tile).id));
+    }
 
     addAll(_buildTiles(tilesToAdd));
 
