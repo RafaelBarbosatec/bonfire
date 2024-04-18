@@ -76,14 +76,14 @@ class MatrixMapGenerator {
       if (layer.axisInverted) {
         tileLayers.add(
           TileLayer(
-            id: index.toString(),
+            id: index,
             tiles: _buildInverted(layer.matrix, builder),
           ),
         );
       } else {
         tileLayers.add(
           TileLayer(
-            id: index.toString(),
+            id: index,
             tiles: _buildNormal(layer.matrix, builder),
           ),
         );

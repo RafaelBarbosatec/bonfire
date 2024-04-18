@@ -6,7 +6,7 @@ import 'package:bonfire/tiled/builder/tiled_world_builder.dart';
 import 'package:bonfire/util/quadtree.dart' as tree;
 
 class TileLayer {
-  final String id;
+  final int id;
   final List<TileModel> _tiles;
   final String? name;
   final String? layerClass;
@@ -170,7 +170,7 @@ class TileLayer {
 
   factory TileLayer.fromTileModel(LayerModel e) {
     return TileLayer(
-      id: e.id.toString(),
+      id: e.id ?? 0,
       visible: e.visible,
       tiles: e.tiles,
       position: e.position,
