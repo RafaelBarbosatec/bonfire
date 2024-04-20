@@ -69,7 +69,9 @@ class WorldMap extends GameMap {
 
   @override
   void refreshMap() {
-    _searchTilesToRender();
+    for (var element in layers) {
+      element.refresh();
+    }
   }
 
   void _confMap(Vector2 sizeScreen, {bool calculateSize = false}) {
@@ -92,9 +94,9 @@ class WorldMap extends GameMap {
   @override
   Future<void> updateLayers(List<TileLayerComponent> layers) async {
     this.layers = layers;
+    removeAll(children);
+    await addAll(this.layers);
     _confMap(gameRef.size, calculateSize: true);
-    await _loadAssets();
-    refreshMap();
   }
 
   void _calculatePositionAndSize() {
@@ -136,14 +138,9 @@ class WorldMap extends GameMap {
   Future<void> onLoad() async {
     await super.onLoad();
     _confMap(gameRef.size, calculateSize: true);
-    await _loadAssets();
     await addAll(layers);
     _searchTilesToRender();
     updateLastCamera(null);
-  }
-
-  Future<void> _loadAssets() async {
-    return Future.forEach(layers, (element) => element.loadAssets());
   }
 
   bool _checkNeedUpdateTiles() {

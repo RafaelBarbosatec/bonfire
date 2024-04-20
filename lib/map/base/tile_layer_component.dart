@@ -184,6 +184,12 @@ class TileLayerComponent extends PositionComponent with HasPaint {
     return Future.value();
   }
 
+  @override
+  Future onLoad() async {
+    await loadAssets();
+    return super.onLoad();
+  }
+
   Iterable<TileComponent> getRendered() {
     return children.cast();
   }
