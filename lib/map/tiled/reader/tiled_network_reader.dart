@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/tiled/cache_provider/tiled_memory_cache_provider.dart';
+import 'package:bonfire/map/tiled/cache_provider/tiled_memory_cache_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiledjsonreader/map/layer/image_layer.dart';
 import 'package:tiledjsonreader/map/layer/map_layer.dart';
@@ -10,7 +10,7 @@ import 'package:tiledjsonreader/map/tile_set_detail.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
 import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 
-class TiledNetworkReader extends TiledReader {
+class TiledNetworkReader extends WorldMapReader<TiledMap> {
 // ignore: constant_identifier_names
   static const ORIENTATION_SUPPORTED = 'orthogonal';
   static const _keyImgBase64 = 'base64';

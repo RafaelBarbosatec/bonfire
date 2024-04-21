@@ -1,8 +1,9 @@
-import 'package:bonfire/tiled/reader/tiled_reader.dart';
+
+import 'package:bonfire/map/util/world_map_reader.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
 
-class TiledAssetReader extends TiledReader {
+class TiledAssetReader extends WorldMapReader<TiledMap> {
 // ignore: constant_identifier_names
   static const _ASSET_KEY_PREFIX = 'assets/images/';
   final String asset;

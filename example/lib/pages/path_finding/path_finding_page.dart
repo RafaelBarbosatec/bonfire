@@ -10,7 +10,7 @@ class PathFindingPage extends StatelessWidget {
     const tileSize = 16.0;
     return BonfireWidget(
       map: WorldMapByTiled(
-        TiledReader.asset('tiled/punnyworld/pathfinding_map.tmj'),
+        WorldMapReader.fromAsset('tiled/punnyworld/pathfinding_map.tmj'),
       ),
       player: HumanPathFinding(
         position: Vector2(tileSize * 3, tileSize * 3),

@@ -44,7 +44,7 @@ class _TiledNetworkPageState extends State<TiledNetworkPage>
             child: BonfireWidget(
               joystick: Joystick(directional: JoystickDirectional()),
               map: WorldMapByTiled(
-                TiledReader.network(
+                WorldMapReader.fromNetwork(
                   Uri.parse(
                     'http://rafaelbarbosatec.github.io/tiled/my_map.json',
                   ),

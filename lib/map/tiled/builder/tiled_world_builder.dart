@@ -5,7 +5,7 @@ import 'dart:ui';
 
 import 'package:bonfire/background/background_image_game.dart';
 import 'package:bonfire/bonfire.dart' hide TileComponent;
-import 'package:bonfire/tiled/model/tiled_world_data.dart';
+import 'package:bonfire/map/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/text_game_component.dart';
 import 'package:flutter/foundation.dart';
@@ -37,7 +37,7 @@ class TiledWorldBuilder {
 
   final Vector2? forceTileSize;
   final ValueChanged<Object>? onError;
-  late TiledReader reader;
+  final WorldMapReader<TiledMap> reader;
   final double sizeToUpdate;
   final List<LayerModel> _layers = [];
   final List<GameComponent> _components = [];
@@ -83,7 +83,7 @@ class TiledWorldBuilder {
     } catch (e) {
       onError?.call(e);
       // ignore: avoid_print
-      print('(TiledWorldMap) Error: $e');
+      print('(TiledWorldBuilder) Error: $e');
     }
 
     return Future.value(
