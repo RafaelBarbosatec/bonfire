@@ -143,7 +143,7 @@ extension SpriteFutureExt on Future<Sprite> {
 extension NullableExt<T> on T? {
   FutureOr<void> let(FutureOr<void> Function(T i) call) {
     if (this != null) {
-      call(this as T);
+      return call(this as T);
     }
   }
 }

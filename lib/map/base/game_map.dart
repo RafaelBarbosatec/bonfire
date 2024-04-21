@@ -11,8 +11,6 @@ abstract class GameMap extends GameComponent {
 
   Iterable<TileComponent> getRenderedTiles();
 
-  Future<void> updateLayers(List<TileLayerComponent> layers);
-
   Vector2 getMapPosition();
   Vector2 getMapSize();
   void refreshMap();
@@ -26,8 +24,9 @@ abstract class GameMap extends GameComponent {
     );
   }
 
-  void removeLayer(String id);
+  void removeLayer(int id);
   Future addLayer(TileLayerComponent layer);
+  Future<void> updateLayers(List<TileLayerComponent> layers);
 
   @override
   int get priority => LayerPriority.MAP;

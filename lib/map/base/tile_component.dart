@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
@@ -95,6 +96,14 @@ class TileComponent extends GameComponent with UseAssetsLoader {
     if (color != null) {
       canvas.drawRect(toRect(), paint..color = color!);
     }
+  }
+
+  @override
+  Paint get paint {
+    if (parent is HasPaint) {
+      return (parent as HasPaint).paint;
+    }
+    return super.paint;
   }
 
   @override

@@ -23,7 +23,7 @@ export 'package:bonfire/joystick/joystick_directional.dart';
 export 'package:bonfire/lighting/lighting.dart';
 export 'package:bonfire/lighting/lighting_config.dart';
 export 'package:bonfire/lighting/lighting_type.dart';
-export 'package:bonfire/map/base/map_game.dart';
+export 'package:bonfire/map/base/game_map.dart';
 export 'package:bonfire/map/base/tile_component.dart';
 export 'package:bonfire/map/base/tile.dart';
 export 'package:bonfire/map/base/tile_with_collision.dart';

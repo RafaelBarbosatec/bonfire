@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/empty_map.dart';
+import 'package:bonfire/util/extensions/position_component_ext.dart';
 import 'package:bonfire/util/quadtree.dart' as tree;
 
 class WorldMap extends GameMap {
-  Vector2 lastCamera = Vector2.zero();
+  Vector2 lastCameraWindow = Vector2.zero();
   double lastMinorZoom = 1.0;
   Vector2? lastSizeScreen;
   bool _buildingTiles = false;
@@ -24,9 +25,7 @@ class WorldMap extends GameMap {
   }) : super(
           layers,
           sizeToUpdate: tileSizeToUpdate,
-        ) {
-    enabledCheckIsVisible = false;
-  }
+        );
 
   @override
   void update(double dt) {
@@ -39,11 +38,9 @@ class WorldMap extends GameMap {
 
   void _searchTilesToRender() async {
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
-
     for (var layer in layers) {
       await layer.onMoveCamera(rectCamera);
     }
-
     _buildingTiles = false;
   }
 
@@ -77,7 +74,7 @@ class WorldMap extends GameMap {
   void _confMap(Vector2 sizeScreen, {bool calculateSize = false}) {
     lastSizeScreen = sizeScreen;
     if (calculateSize) {
-      lastCamera = Vector2.zero();
+      lastCameraWindow = Vector2.zero();
       lastMinorZoom = gameRef.camera.zoom;
       _calculatePositionAndSize();
       for (var layer in layers) {
@@ -89,14 +86,6 @@ class WorldMap extends GameMap {
       sizeToUpdate = (tileSize * 4).ceilToDouble();
     }
     gameRef.camera.updateSpacingVisibleMap(sizeToUpdate * 1.5);
-  }
-
-  @override
-  Future<void> updateLayers(List<TileLayerComponent> layers) async {
-    this.layers = layers;
-    removeAll(children);
-    await addAll(this.layers);
-    _confMap(gameRef.size, calculateSize: true);
   }
 
   void _calculatePositionAndSize() {
@@ -140,30 +129,36 @@ class WorldMap extends GameMap {
     _confMap(gameRef.size, calculateSize: true);
     await addAll(layers);
     _searchTilesToRender();
-    updateLastCamera(null);
   }
 
   bool _checkNeedUpdateTiles() {
-    final camera = _getCameraTileUpdate();
-    if (lastCamera != camera || lastMinorZoom != gameRef.camera.zoom) {
-      updateLastCamera(camera);
-
+    final window = _getCameraWindowUpdate();
+    if (lastCameraWindow != window || lastMinorZoom != gameRef.camera.zoom) {
+      updateLastCamera(window);
       return true;
     }
     return false;
   }
 
   void updateLastCamera(Vector2? camera) {
-    lastCamera = camera ?? _getCameraTileUpdate();
+    lastCameraWindow = camera ?? _getCameraWindowUpdate();
     lastMinorZoom = gameRef.camera.zoom;
   }
 
-  Vector2 _getCameraTileUpdate() {
+  Vector2 _getCameraWindowUpdate() {
     final camera = gameRef.camera;
     return Vector2(
       (camera.position.x / (sizeToUpdate / camera.zoom)).floorToDouble(),
       (camera.position.y / (sizeToUpdate / camera.zoom)).floorToDouble(),
     );
+  }
+
+   @override
+  Future<void> updateLayers(List<TileLayerComponent> layers) async {
+    this.layers = layers;
+    removeAll(children);
+    await addAll(this.layers);
+    _confMap(gameRef.size, calculateSize: true);
   }
 
   @override
@@ -175,9 +170,15 @@ class WorldMap extends GameMap {
   }
 
   @override
-  void removeLayer(String id) {
+  void removeLayer(int id) {
     layers.removeWhere((l) => l.id == id);
+    removeWhere(
+      (component) => component is TileLayerComponent && component.id == id,
+    );
     _confMap(lastSizeScreen!, calculateSize: true);
     refreshMap();
   }
+
+  @override
+  bool get enabledCheckIsVisible => false;
 }

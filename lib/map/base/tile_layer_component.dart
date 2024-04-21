@@ -7,23 +7,17 @@ import 'package:bonfire/util/quadtree.dart' as tree;
 
 class TileLayerComponent extends PositionComponent with HasPaint {
   final int id;
-  final List<Tile> _tiles;
   final String? name;
   final String? layerClass;
   final Map<String, dynamic>? properties;
+  List<Tile> _tiles;
   bool _isVisible = true;
   double _tileSize = 0.0;
 
-  Vector2? _lastGameSize;
   Vector2? _lastScreenSize;
 
   double get tileSize => _tileSize;
   tree.QuadTree<Tile>? _quadTree;
-
-  double get left => (position.x * size.x);
-  double get right => (position.x * size.x) + size.x;
-  double get top => (position.y * size.y);
-  double get bottom => (position.y * size.y) + size.y;
 
   bool get visible => _isVisible;
 
@@ -74,8 +68,7 @@ class TileLayerComponent extends PositionComponent with HasPaint {
     Vector2 screenSize, {
     bool force = false,
   }) {
-    if (_lastGameSize == mapSize && !force) return;
-    _lastGameSize = mapSize.clone();
+    if (_lastScreenSize == screenSize && !force) return;
     _lastScreenSize = screenSize.clone();
     Vector2 treeSize = Vector2(
       mapSize.x / tileSize,
@@ -102,10 +95,17 @@ class TileLayerComponent extends PositionComponent with HasPaint {
   }
 
   void updateTiles(List<Tile> tiles) {
-    _tiles;
+    _tiles = tiles;
+    removeAll(children);
+    _quadTree?.clear();
     _updateSizeAndPosition();
-    if (_lastGameSize != null) {
-      _createQuadTree(_lastGameSize!, _lastScreenSize!, force: true);
+
+    for (var tile in _tiles) {
+      _quadTree?.insert(
+        tile,
+        Point(tile.x, tile.y),
+        id: tile.id,
+      );
     }
     refresh();
   }
@@ -191,7 +191,7 @@ class TileLayerComponent extends PositionComponent with HasPaint {
   }
 
   Iterable<TileComponent> getRendered() {
-    return children.cast();
+    return children.query<TileComponent>();
   }
 
   factory TileLayerComponent.fromTileModel(LayerModel e) {

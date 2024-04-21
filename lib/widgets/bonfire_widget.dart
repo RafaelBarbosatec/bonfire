@@ -9,7 +9,7 @@ import 'package:bonfire/forces/forces_2d.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/input/keyboard/keyboard_config.dart';
 import 'package:bonfire/input/player_controller.dart';
-import 'package:bonfire/map/base/map_game.dart';
+import 'package:bonfire/map/base/game_map.dart';
 import 'package:bonfire/player/player.dart';
 import 'package:flutter/material.dart';
 

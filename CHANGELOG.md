@@ -1,3 +1,6 @@
+# NEXT
+- `GameMap` Improvements. Now you can access the layers
+
 # 3.7.1
 - Fix keyboard param. [#500](https://github.com/RafaelBarbosatec/bonfire/pull/500). Thanks [jakobodman123](https://github.com/jakobodman123)
 
