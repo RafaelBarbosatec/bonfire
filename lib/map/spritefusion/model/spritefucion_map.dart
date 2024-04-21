@@ -86,6 +86,8 @@ class SpritefusionMapLayerTile {
     required this.y,
   });
 
+  int get idInt => int.parse(id);
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
