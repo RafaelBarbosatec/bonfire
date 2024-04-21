@@ -17,19 +17,19 @@ import 'package:bonfire/bonfire.dart';
 final Random _random = Random();
 
 class TerrainSpriteSheet {
-  final TileModelSprite left;
-  final TileModelSprite right;
-  final TileModelSprite top;
-  final TileModelSprite topLeft;
-  final TileModelSprite topRight;
-  final TileModelSprite bottom;
-  final TileModelSprite bottomLeft;
-  final TileModelSprite bottomRight;
+  final TileSprite left;
+  final TileSprite right;
+  final TileSprite top;
+  final TileSprite topLeft;
+  final TileSprite topRight;
+  final TileSprite bottom;
+  final TileSprite bottomLeft;
+  final TileSprite bottomRight;
 
-  final TileModelSprite invertedTopLeft;
-  final TileModelSprite invertedTopRight;
-  final TileModelSprite invertedBottomLeft;
-  final TileModelSprite invertedBottomRight;
+  final TileSprite invertedTopLeft;
+  final TileSprite invertedTopRight;
+  final TileSprite invertedBottomLeft;
+  final TileSprite invertedBottomRight;
 
   TerrainSpriteSheet({
     required this.left,
@@ -52,62 +52,62 @@ class TerrainSpriteSheet {
     Vector2? position,
   }) {
     return TerrainSpriteSheet(
-      left: TileModelSprite(
+      left: TileSprite(
         path: path,
         size: tileSize,
         position: Vector2(0, 1) + (position ?? Vector2.zero()),
       ),
-      topLeft: TileModelSprite(
+      topLeft: TileSprite(
         path: path,
         size: tileSize,
         position: Vector2(0, 0) + (position ?? Vector2.zero()),
       ),
-      bottomLeft: TileModelSprite(
+      bottomLeft: TileSprite(
         path: path,
         size: tileSize,
         position: Vector2(0, 2) + (position ?? Vector2.zero()),
       ),
-      right: TileModelSprite(
+      right: TileSprite(
         path: path,
         size: tileSize,
         position: Vector2(2, 1) + (position ?? Vector2.zero()),
       ),
-      topRight: TileModelSprite(
+      topRight: TileSprite(
         path: path,
         size: tileSize,
         position: Vector2(2, 0) + (position ?? Vector2.zero()),
       ),
-      bottomRight: TileModelSprite(
+      bottomRight: TileSprite(
         path: path,
         size: tileSize,
         position: Vector2(2, 2) + (position ?? Vector2.zero()),
       ),
-      top: TileModelSprite(
+      top: TileSprite(
         path: path,
         size: tileSize,
         position: Vector2(1, 0) + (position ?? Vector2.zero()),
       ),
-      bottom: TileModelSprite(
+      bottom: TileSprite(
         path: path,
         size: tileSize,
         position: Vector2(1, 2) + (position ?? Vector2.zero()),
       ),
-      invertedTopLeft: TileModelSprite(
+      invertedTopLeft: TileSprite(
         path: path,
         size: tileSize,
         position: Vector2(3, 0) + (position ?? Vector2.zero()),
       ),
-      invertedTopRight: TileModelSprite(
+      invertedTopRight: TileSprite(
         path: path,
         size: tileSize,
         position: Vector2(4, 0) + (position ?? Vector2.zero()),
       ),
-      invertedBottomRight: TileModelSprite(
+      invertedBottomRight: TileSprite(
         path: path,
         size: tileSize,
         position: Vector2(4, 1) + (position ?? Vector2.zero()),
       ),
-      invertedBottomLeft: TileModelSprite(
+      invertedBottomLeft: TileSprite(
         path: path,
         size: tileSize,
         position: Vector2(3, 1) + (position ?? Vector2.zero()),
@@ -134,7 +134,7 @@ class _RandomRange {
 
 class MapTerrain {
   final double value;
-  final List<TileModelSprite> sprites;
+  final List<TileSprite> sprites;
   final List<double> spritesProportion;
   final String? type;
   final Map<String, dynamic>? properties;
@@ -174,7 +174,7 @@ class MapTerrain {
         : collisionsBuilder?.call();
   }
 
-  TileModelSprite? getSingleSprite() {
+  TileSprite? getSingleSprite() {
     if (sprites.length > 1 && sprites.length == spritesProportion.length) {
       int randomValue = _random.nextInt(maxRandomValue);
       int index = inRange(randomValue);

@@ -79,6 +79,14 @@ class QuadTree<T> extends Rectangle<num> {
     }
   }
 
+  void clear() {
+    _items.clear();
+    for (var element in _children) {
+      element.clear();
+    }
+    _children.clear();
+  }
+
   void remove(T item) {
     if (_children.isEmpty) {
       _items.removeWhere((i) => i.item == item);

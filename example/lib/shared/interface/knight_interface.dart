@@ -55,7 +55,6 @@ class KnightInterface extends GameInterface {
       selectable: false,
       onTapComponent: (selected) {
         _animateColorFilter();
-        {}
       },
     ));
     await add(TextInterfaceComponent(

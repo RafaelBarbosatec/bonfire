@@ -8,15 +8,15 @@ class WorldMapByTiled extends WorldMap {
     TiledReader reader, {
     Vector2? forceTileSize,
     ValueChanged<Object>? onError,
-    double tileSizeToUpdate = 0,
+    double sizeToUpdate = 0,
     Map<String, ObjectBuilder>? objectsBuilder,
   }) : super(const []) {
-    this.tileSizeToUpdate = tileSizeToUpdate;
+    this.sizeToUpdate = sizeToUpdate;
     _builder = TiledWorldBuilder(
       reader,
       forceTileSize: forceTileSize,
       onError: onError,
-      tileSizeToUpdate: tileSizeToUpdate,
+      sizeToUpdate: sizeToUpdate,
       objectsBuilder: objectsBuilder,
     );
   }
@@ -24,7 +24,7 @@ class WorldMapByTiled extends WorldMap {
   @override
   Future<void> onLoad() async {
     final map = await _builder.build();
-    tiles = map.map.tiles;
+    layers = map.map.layers;
     gameRef.addAll(map.components ?? []);
     return super.onLoad();
   }

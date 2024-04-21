@@ -1,18 +1,19 @@
 import 'package:bonfire/bonfire.dart';
 
+export 'package:bonfire/map/base/tile_layer_component.dart';
+
 abstract class GameMap extends GameComponent {
-  List<TileModel> tiles;
-  double tileSizeToUpdate;
+  List<TileLayerComponent> layers;
+  double sizeToUpdate;
   double tileSize = 0.0;
 
-  GameMap(this.tiles, {this.tileSizeToUpdate = 0});
+  GameMap(this.layers, {this.sizeToUpdate = 0});
 
-  Iterable<Tile> getRendered();
-
-  Future<void> updateTiles(List<TileModel> map);
+  Iterable<TileComponent> getRenderedTiles();
 
   Vector2 getMapPosition();
   Vector2 getMapSize();
+  void refreshMap();
 
   Rect getMapRect() {
     return Rect.fromLTWH(
@@ -23,8 +24,9 @@ abstract class GameMap extends GameComponent {
     );
   }
 
-  void removeTile(String id);
-  Future addTile(TileModel tileModel);
+  void removeLayer(int id);
+  Future addLayer(TileLayerComponent layer);
+  Future<void> updateLayers(List<TileLayerComponent> layers);
 
   @override
   int get priority => LayerPriority.MAP;

@@ -4,7 +4,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:bonfire/background/background_image_game.dart';
-import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/bonfire.dart' hide TileComponent;
 import 'package:bonfire/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/text_game_component.dart';
@@ -15,7 +15,7 @@ import 'package:tiledjsonreader/map/layer/image_layer.dart';
 import 'package:tiledjsonreader/map/layer/map_layer.dart';
 import 'package:tiledjsonreader/map/layer/object_layer.dart';
 import 'package:tiledjsonreader/map/layer/objects.dart';
-import 'package:tiledjsonreader/map/layer/tile_layer.dart';
+import 'package:tiledjsonreader/map/layer/tile_layer.dart' as tiled;
 import 'package:tiledjsonreader/map/tile_set_detail.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
 import 'package:tiledjsonreader/tile_set/frame_animation.dart';
@@ -38,8 +38,8 @@ class TiledWorldBuilder {
   final Vector2? forceTileSize;
   final ValueChanged<Object>? onError;
   late TiledReader reader;
-  final double tileSizeToUpdate;
-  final List<TileModel> _tiles = [];
+  final double sizeToUpdate;
+  final List<LayerModel> _layers = [];
   final List<GameComponent> _components = [];
   String? _basePath;
   TiledMap? _tiledMap;
@@ -48,7 +48,7 @@ class TiledWorldBuilder {
   double _tileWidthOrigin = 0;
   double _tileHeightOrigin = 0;
   Map<String, ObjectBuilder> _objectsBuilder = {};
-  final Map<String, TileModelSprite> _tileModelSpriteCache = {};
+  final Map<String, TileSprite> _tileModelSpriteCache = {};
   int countTileLayer = 0;
   int countImageLayer = 0;
 
@@ -56,7 +56,7 @@ class TiledWorldBuilder {
     this.reader, {
     this.forceTileSize,
     this.onError,
-    this.tileSizeToUpdate = 0,
+    this.sizeToUpdate = 0,
     Map<String, ObjectBuilder>? objectsBuilder,
   }) {
     _objectsBuilder = objectsBuilder ?? {};
@@ -89,8 +89,8 @@ class TiledWorldBuilder {
     return Future.value(
       TiledWorldData(
         map: WorldMap(
-          _tiles,
-          tileSizeToUpdate: tileSizeToUpdate,
+          _layers.map((e) => TileLayerComponent.fromTileModel(e)).toList(),
+          tileSizeToUpdate: sizeToUpdate,
         ),
         components: _components,
       ),
@@ -106,7 +106,8 @@ class TiledWorldBuilder {
   Future<void> _loadLayer(MapLayer layer) async {
     if (layer.visible != true) return;
 
-    if (layer is TileLayer) {
+    if (layer is tiled.TileLayer) {
+      _layers.add(LayerModel.fromMapLayer(layer, countTileLayer));
       await _addTileLayer(layer);
       countTileLayer++;
     }
@@ -131,7 +132,7 @@ class TiledWorldBuilder {
     return ((value ?? 0.0) * _tileWidth) / _tileWidthOrigin;
   }
 
-  Future<void> _addTileLayer(TileLayer tileLayer) async {
+  Future<void> _addTileLayer(tiled.TileLayer tileLayer) async {
     if (tileLayer.visible != true) return;
     int count = 0;
     double offsetX = _getDoubleByProportion(tileLayer.offsetX);
@@ -170,13 +171,13 @@ class TiledWorldBuilder {
   void _addTile(
     TiledItemTileSet data,
     int count,
-    TileLayer tileLayer,
+    tiled.TileLayer tileLayer,
     double offsetX,
     double offsetY,
     double opacity,
   ) {
-    _tiles.add(
-      TileModel(
+    _layers.last.tiles.add(
+      Tile(
         x: _getX(count, tileLayer.width?.toInt() ?? 1),
         y: _getY(count, tileLayer.width?.toInt() ?? 1),
         offsetX: offsetX,
@@ -199,7 +200,7 @@ class TiledWorldBuilder {
   void _addGameDecorationAbove(
     TiledItemTileSet data,
     int count,
-    TileLayer tileLayer,
+    tiled.TileLayer tileLayer,
     double opacity, {
     bool above = false,
   }) {
@@ -257,7 +258,7 @@ class TiledWorldBuilder {
   }
 
   TiledItemTileSet? _getDataTile(int gid) {
-    final gidInfo = TileLayer.getGidInfo(gid);
+    final gidInfo = tiled.TileLayer.getGidInfo(gid);
     int index = gidInfo.index;
 
     TileSetDetail? tileSetContain;
@@ -315,12 +316,12 @@ class TiledWorldBuilder {
 
       final pathSprite = '$_basePath$pathTileset$imagePath';
 
-      TileModelSprite sprite;
+      TileSprite sprite;
       String tileKey = '$pathSprite/${spritePosition.x}/${spritePosition.y}';
       if (_tileModelSpriteCache.containsKey(tileKey)) {
         sprite = _tileModelSpriteCache[tileKey]!;
       } else {
-        sprite = _tileModelSpriteCache[tileKey] = TileModelSprite(
+        sprite = _tileModelSpriteCache[tileKey] = TileSprite(
           path: pathSprite,
           size: spriteSize,
           position: spritePosition,
@@ -481,7 +482,7 @@ class TiledWorldBuilder {
     return TiledDataObjectCollision();
   }
 
-  TileModelAnimation? _getAnimation(
+  TilelAnimation? _getAnimation(
     TileSetDetail tileSetContain,
     String pathTileset,
     int index,
@@ -494,7 +495,7 @@ class TiledWorldBuilder {
 
       List<FrameAnimation> animationFrames = tileSetItemList.animation ?? [];
 
-      List<TileModelSprite> frames = [];
+      List<TileSprite> frames = [];
       if ((animationFrames.isNotEmpty)) {
         double stepTime = (animationFrames[0].duration ?? 100) / 1000;
 
@@ -504,7 +505,7 @@ class TiledWorldBuilder {
 
           final spritePath = '$_basePath$pathTileset${tileSetContain.image}';
 
-          TileModelSprite sprite = TileModelSprite(
+          TileSprite sprite = TileSprite(
             path: spritePath,
             size: Vector2(
               tileSetContain.tileWidth ?? 0,
@@ -515,7 +516,7 @@ class TiledWorldBuilder {
           frames.add(sprite);
         }
 
-        return TileModelAnimation(
+        return TilelAnimation(
           stepTime: stepTime,
           frames: frames,
         );
@@ -525,17 +526,6 @@ class TiledWorldBuilder {
     } catch (e) {
       return null;
     }
-  }
-
-  Map<String, dynamic> _extractOtherProperties(List<Property>? properties) {
-    final map = <String, dynamic>{};
-
-    for (var element in properties ?? const <Property>[]) {
-      if (element.value != null && element.name != null) {
-        map[element.name!] = element.value;
-      }
-    }
-    return map;
   }
 
   void _addImageLayer(ImageLayer layer) {
@@ -637,4 +627,60 @@ class TiledWorldBuilder {
       isSolid: true,
     );
   }
+}
+
+class LayerModel {
+  final int? id;
+  final String? name;
+  final String? layerClass;
+  final bool visible;
+  final Vector2 position;
+  final Vector2 offset;
+  final double opacity;
+  final Map<String, dynamic>? properties;
+  final int priority;
+  List<Tile> tiles = [];
+
+  LayerModel({
+    required this.id,
+    required this.name,
+    required this.layerClass,
+    required this.visible,
+    required this.position,
+    required this.offset,
+    required this.opacity,
+    required this.properties,
+    required this.priority,
+  });
+
+  factory LayerModel.fromMapLayer(MapLayer layer, int priority) {
+    return LayerModel(
+      id: layer.id,
+      layerClass: layer.layerClass,
+      name: layer.name,
+      opacity: layer.opacity ?? 1,
+      visible: layer.visible ?? true,
+      priority: priority,
+      position: Vector2(
+        layer.x ?? 0,
+        layer.y ?? 0,
+      ),
+      offset: Vector2(
+        layer.offsetX ?? 0,
+        layer.offsetY ?? 0,
+      ),
+      properties: _extractOtherProperties(layer.properties),
+    );
+  }
+}
+
+Map<String, dynamic> _extractOtherProperties(List<Property>? properties) {
+  final map = <String, dynamic>{};
+
+  for (var element in properties ?? const <Property>[]) {
+    if (element.value != null && element.name != null) {
+      map[element.name!] = element.value;
+    }
+  }
+  return map;
 }

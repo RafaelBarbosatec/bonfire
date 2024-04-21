@@ -1,8 +1,8 @@
 import 'package:bonfire/bonfire.dart';
 
 class TiledItemTileSet {
-  final TileModelAnimation? animation;
-  final TileModelSprite? sprite;
+  final TilelAnimation? animation;
+  final TileSprite? sprite;
   final List<ShapeHitbox>? collisions;
   final String? type;
   final String? tileClass;

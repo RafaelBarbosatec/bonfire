@@ -54,21 +54,9 @@ class MapGenerator {
     _createTreesAndPlayerPosition(matrix);
 
     final map = MatrixMapGenerator.generate(
-      matrix: matrix,
-      // axisInverted: true,
-      // matrix: [
-      //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      //   [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0],
-      //   [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
-      //   [0, 0, 0, 0, 1, 1, 1, 2, 1, 1, 0, 0, 0, 0],
-      //   [0, 0, 0, 0, 1, 1, 2, 2, 1, 1, 0, 0, 0, 0],
-      //   [0, 0, 0, 0, 1, 1, 2, 2, 1, 1, 0, 0, 0, 0],
-      //   [0, 0, 0, 0, 1, 1, 2, 1, 1, 1, 0, 0, 0, 0],
-      //   [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
-      //   [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
-      //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      //   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      // ],
+      layers: [
+        MatrixLayer(matrix: matrix),
+      ],
       builder: _buildTerrainBuilder().build,
     );
 
@@ -89,7 +77,7 @@ class MapGenerator {
           collisionsBuilder: () =>
               [RectangleHitbox(size: Vector2.all(tileSize))],
           sprites: [
-            TileModelSprite(
+            TileSprite(
               path: 'tile_random/tile_types.png',
               size: Vector2.all(16),
               position: Vector2(0, 1),
@@ -99,7 +87,7 @@ class MapGenerator {
         MapTerrain(
           value: tileSand,
           sprites: [
-            TileModelSprite(
+            TileSprite(
               path: 'tile_random/tile_types.png',
               size: Vector2.all(16),
               position: Vector2(0, 2),
@@ -110,16 +98,16 @@ class MapGenerator {
           value: tileGrass,
           spritesProportion: [0.93, 0.05, 0.02],
           sprites: [
-            TileModelSprite(
+            TileSprite(
               path: 'tile_random/tile_types.png',
               size: Vector2.all(16),
             ),
-            TileModelSprite(
+            TileSprite(
               path: 'tile_random/tile_types.png',
               size: Vector2.all(16),
               position: Vector2(1, 0),
             ),
-            TileModelSprite(
+            TileSprite(
               path: 'tile_random/tile_types.png',
               size: Vector2.all(16),
               position: Vector2(2, 0),

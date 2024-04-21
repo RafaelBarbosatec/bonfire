@@ -54,7 +54,7 @@ class MapAssetsManager {
   }
 
   static Future<SpriteAnimation> getFutureSpriteAnimation(
-    List<TileModelSprite> frames,
+    List<TileSprite> frames,
     double stepTime,
   ) async {
     List<Sprite> spriteList = [];
@@ -75,7 +75,7 @@ class MapAssetsManager {
   }
 
   static ControlledUpdateAnimation getSpriteAnimation(
-    List<TileModelSprite> frames,
+    List<TileSprite> frames,
     double stepTime,
   ) {
     String key = '';
