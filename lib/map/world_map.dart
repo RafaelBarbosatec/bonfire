@@ -10,6 +10,7 @@ class WorldMap extends GameMap {
   double lastMinorZoom = 1.0;
   Vector2? lastSizeScreen;
   bool _buildingTiles = false;
+  bool _needUpdateRenderedTiles = false;
   Vector2 _mapPosition = Vector2.zero();
   Vector2 _mapSize = Vector2.zero();
 
@@ -42,18 +43,24 @@ class WorldMap extends GameMap {
       await layer.onMoveCamera(rectCamera);
     }
     _buildingTiles = false;
+    _needUpdateRenderedTiles = true;
   }
+
+  List<TileComponent> _renderedTiles = [];
 
   @override
   List<TileComponent> getRenderedTiles() {
-    // TODO need
-    return children.fold(
-      <TileComponent>[],
-      (previousValue, element) => previousValue
-        ..addAll(
-          (element as TileLayerComponent).getRendered(),
-        ),
-    );
+    if (_needUpdateRenderedTiles) {
+      _needUpdateRenderedTiles = false;
+      _renderedTiles = children.fold(
+        <TileComponent>[],
+        (previousValue, element) => previousValue
+          ..addAll(
+            (element as TileLayerComponent).getRendered(),
+          ),
+      );
+    }
+    return _renderedTiles;
   }
 
   @override
@@ -153,7 +160,7 @@ class WorldMap extends GameMap {
     );
   }
 
-   @override
+  @override
   Future<void> updateLayers(List<TileLayerComponent> layers) async {
     this.layers = layers;
     removeAll(children);

@@ -1,5 +1,10 @@
 # NEXT
 - `GameMap` Improvements. Now you can access the layers
+  Breaking Changes:
+    - `WorldMap` expect `List<TileLayerComponent>` instead of `List<TileModel>`;
+    - `MatrixMapGenerator.generate` now expect `List<MatrixLayer> layers` instead og `List<List<double>> matrix`;
+    - `TileModel` renamed to `Tile`;
+    - `TileModelSprite` renamed to `TileSprite`.
 
 # 3.7.1
 - Fix keyboard param. [#500](https://github.com/RafaelBarbosatec/bonfire/pull/500). Thanks [jakobodman123](https://github.com/jakobodman123)
