@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/map/base/layer.dart';
 import 'package:example/shared/decoration/barrel_dragable.dart';
 import 'package:example/shared/decoration/chest.dart';
 import 'package:example/shared/decoration/spikes.dart';
@@ -115,7 +116,7 @@ class DungeonMap {
       });
     });
 
-    return WorldMap([TileLayerComponent(id: 0, tiles: tileList)]);
+    return WorldMap([Layer(id: 0, tiles: tileList)]);
   }
 
   static List<GameDecoration> decorations() {

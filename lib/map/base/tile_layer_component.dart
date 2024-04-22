@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
-import 'package:bonfire/tiled/builder/tiled_world_builder.dart';
 import 'package:bonfire/util/quadtree.dart' as tree;
 
 class TileLayerComponent extends PositionComponent with HasPaint {
@@ -192,19 +191,5 @@ class TileLayerComponent extends PositionComponent with HasPaint {
 
   Iterable<TileComponent> getRendered() {
     return children.query<TileComponent>();
-  }
-
-  factory TileLayerComponent.fromTileModel(LayerModel e) {
-    return TileLayerComponent(
-      id: e.id ?? 0,
-      visible: e.visible,
-      tiles: e.tiles,
-      position: e.position,
-      layerClass: e.layerClass,
-      name: e.name,
-      opacity: e.opacity,
-      properties: e.properties,
-      priority: e.priority,
-    );
   }
 }

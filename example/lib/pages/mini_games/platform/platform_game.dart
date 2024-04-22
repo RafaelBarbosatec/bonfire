@@ -20,7 +20,7 @@ class _PlatformGameState extends State<PlatformGame> {
     return BonfireWidget(
       key: _gameKey,
       map: WorldMapByTiled(
-        TiledReader.asset('platform/platform_map.tmj'),
+        WorldMapReader.fromAsset('platform/platform_map.tmj'),
         objectsBuilder: {
           'frog': (properties) => FrogEnemy(
                 position: properties.position,

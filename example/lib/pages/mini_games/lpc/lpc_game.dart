@@ -29,7 +29,7 @@ class LPCGame extends StatelessWidget {
         directional: JoystickDirectional(),
       ),
       map: WorldMapByTiled(
-        TiledReader.asset('tiled/mapa2.json'),
+        WorldMapReader.fromAsset('tiled/mapa2.json'),
         forceTileSize: Vector2(32, 32),
       ),
       cameraConfig: CameraConfig(zoom: 2),

@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/map/base/layer.dart';
 import 'package:bonfire/map/empty_map.dart';
+import 'package:bonfire/map/util/layer_mapper.dart';
 import 'package:bonfire/util/extensions/position_component_ext.dart';
 import 'package:bonfire/util/quadtree.dart' as tree;
 
@@ -21,7 +23,7 @@ class WorldMap extends GameMap {
   }
 
   WorldMap(
-    List<TileLayerComponent> layers, {
+    List<Layer> layers, {
     double tileSizeToUpdate = 0,
   }) : super(
           layers,
@@ -39,7 +41,7 @@ class WorldMap extends GameMap {
 
   void _searchTilesToRender() async {
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
-    for (var layer in layers) {
+    for (var layer in layersComponent) {
       await layer.onMoveCamera(rectCamera);
     }
     _buildingTiles = false;
@@ -47,6 +49,9 @@ class WorldMap extends GameMap {
   }
 
   List<TileComponent> _renderedTiles = [];
+
+  Iterable<TileLayerComponent> get layersComponent =>
+      children.whereType<TileLayerComponent>();
 
   @override
   List<TileComponent> getRenderedTiles() {
@@ -73,7 +78,7 @@ class WorldMap extends GameMap {
 
   @override
   void refreshMap() {
-    for (var element in layers) {
+    for (var element in layersComponent) {
       element.refresh();
     }
   }
@@ -84,11 +89,10 @@ class WorldMap extends GameMap {
       lastCameraWindow = Vector2.zero();
       lastMinorZoom = gameRef.camera.zoom;
       _calculatePositionAndSize();
-      for (var layer in layers) {
+      for (var layer in layersComponent) {
         layer.initLayer(size, sizeScreen);
       }
     }
-
     if (sizeToUpdate == 0) {
       sizeToUpdate = (tileSize * 4).ceilToDouble();
     }
@@ -96,15 +100,15 @@ class WorldMap extends GameMap {
   }
 
   void _calculatePositionAndSize() {
-    if (layers.isNotEmpty) {
-      tileSize = layers.first.tileSize;
+    if (layersComponent.isNotEmpty) {
+      tileSize = layersComponent.first.tileSize;
       double x = 0;
       double y = 0;
 
-      double w = layers.first.size.x;
-      double h = layers.first.size.y;
+      double w = layersComponent.first.size.x;
+      double h = layersComponent.first.size.y;
 
-      for (var layer in layers) {
+      for (var layer in layersComponent) {
         if (layer.left < x) x = layer.left;
         if (layer.top < y) y = layer.top;
 
@@ -133,8 +137,8 @@ class WorldMap extends GameMap {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    await addAll(layers.map(LayerMapper.toLayerComponent));
     _confMap(gameRef.size, calculateSize: true);
-    await addAll(layers);
     _searchTilesToRender();
   }
 
@@ -161,17 +165,17 @@ class WorldMap extends GameMap {
   }
 
   @override
-  Future<void> updateLayers(List<TileLayerComponent> layers) async {
+  Future<void> updateLayers(List<Layer> layers) async {
     this.layers = layers;
     removeAll(children);
-    await addAll(this.layers);
+    await addAll(layers.map(LayerMapper.toLayerComponent));
     _confMap(gameRef.size, calculateSize: true);
   }
 
   @override
-  Future addLayer(TileLayerComponent layer) async {
-    await layer.loadAssets();
+  Future addLayer(Layer layer) async {
     layers.add(layer);
+    add(LayerMapper.toLayerComponent(layer));
     _confMap(lastSizeScreen!, calculateSize: true);
     refreshMap();
   }

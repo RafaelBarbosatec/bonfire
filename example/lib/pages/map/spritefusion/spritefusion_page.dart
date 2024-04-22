@@ -1,23 +1,16 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/shared/decoration/spikes.dart';
 import 'package:flutter/material.dart';
 
-class TiledPage extends StatelessWidget {
-  const TiledPage({Key? key}) : super(key: key);
+class SpritefusionPage extends StatelessWidget {
+  const SpritefusionPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     const tileSize = 16.0;
     return BonfireWidget(
       joystick: Joystick(directional: JoystickDirectional()),
-      map: WorldMapByTiled(
-        WorldMapReader.fromAsset('tiled/tiled_example.tmj'),
-        objectsBuilder: {
-          'spikes': (props) => Spikes(
-                props.position,
-                size: props.size,
-              ),
-        },
+      map: WorldMapBySpritefusion(
+        WorldMapReader.fromAsset('spritefusion/map.json'),
       ),
       cameraConfig: CameraConfig(
         zoom: getZoomFromMaxVisibleTile(context, tileSize, 20),

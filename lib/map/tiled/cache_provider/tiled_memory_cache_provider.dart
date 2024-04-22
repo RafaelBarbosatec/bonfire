@@ -1,4 +1,4 @@
-import 'package:bonfire/tiled/cache_provider/tiled_cache_provider.dart';
+import 'package:bonfire/map/tiled/cache_provider/tiled_cache_provider.dart';
 
 class TiledMemoryCacheProvider extends TiledCacheProvider {
   static final TiledMemoryCacheProvider _singleton =

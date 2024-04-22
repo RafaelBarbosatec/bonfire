@@ -5,7 +5,9 @@ import 'dart:ui';
 
 import 'package:bonfire/background/background_image_game.dart';
 import 'package:bonfire/bonfire.dart' hide TileComponent;
-import 'package:bonfire/tiled/model/tiled_world_data.dart';
+import 'package:bonfire/map/base/layer.dart';
+import 'package:bonfire/map/tiled/model/tiled_world_data.dart';
+import 'package:bonfire/map/util/map_layer_mapper.dart';
 import 'package:bonfire/util/collision_game_component.dart';
 import 'package:bonfire/util/text_game_component.dart';
 import 'package:flutter/foundation.dart';
@@ -37,9 +39,9 @@ class TiledWorldBuilder {
 
   final Vector2? forceTileSize;
   final ValueChanged<Object>? onError;
-  late TiledReader reader;
+  final WorldMapReader<TiledMap> reader;
   final double sizeToUpdate;
-  final List<LayerModel> _layers = [];
+  final List<Layer> _layers = [];
   final List<GameComponent> _components = [];
   String? _basePath;
   TiledMap? _tiledMap;
@@ -83,13 +85,13 @@ class TiledWorldBuilder {
     } catch (e) {
       onError?.call(e);
       // ignore: avoid_print
-      print('(TiledWorldMap) Error: $e');
+      print('(TiledWorldBuilder) Error: $e');
     }
 
     return Future.value(
       TiledWorldData(
         map: WorldMap(
-          _layers.map((e) => TileLayerComponent.fromTileModel(e)).toList(),
+          _layers,
           tileSizeToUpdate: sizeToUpdate,
         ),
         components: _components,
@@ -107,7 +109,7 @@ class TiledWorldBuilder {
     if (layer.visible != true) return;
 
     if (layer is tiled.TileLayer) {
-      _layers.add(LayerModel.fromMapLayer(layer, countTileLayer));
+      _layers.add(MapLayerMapper.toLayer(layer, countTileLayer));
       await _addTileLayer(layer);
       countTileLayer++;
     }
@@ -410,7 +412,8 @@ class TiledWorldBuilder {
             position: Vector2(x, y),
             size: Vector2(collision.size.x, collision.size.y),
             collisions: [collision],
-            properties: _extractOtherProperties(element.properties),
+            properties:
+                MapLayerMapper.extractOtherProperties(element.properties),
           )..angle = rotation,
         );
       } else if (_objectsBuilder[element.name] != null) {
@@ -420,7 +423,7 @@ class TiledWorldBuilder {
             Vector2(width, height),
             element.typeOrClass,
             rotation,
-            _extractOtherProperties(element.properties),
+            MapLayerMapper.extractOtherProperties(element.properties),
             element.name,
             element.id,
             collision,
@@ -447,7 +450,7 @@ class TiledWorldBuilder {
       List<TileSetObject> tileSetObjectList =
           tileSetItemList.first.objectGroup?.objects ?? [];
 
-      Map<String, dynamic> properties = _extractOtherProperties(
+      Map<String, dynamic> properties = MapLayerMapper.extractOtherProperties(
         tileSetItemList.first.properties,
       );
 
@@ -627,60 +630,4 @@ class TiledWorldBuilder {
       isSolid: true,
     );
   }
-}
-
-class LayerModel {
-  final int? id;
-  final String? name;
-  final String? layerClass;
-  final bool visible;
-  final Vector2 position;
-  final Vector2 offset;
-  final double opacity;
-  final Map<String, dynamic>? properties;
-  final int priority;
-  List<Tile> tiles = [];
-
-  LayerModel({
-    required this.id,
-    required this.name,
-    required this.layerClass,
-    required this.visible,
-    required this.position,
-    required this.offset,
-    required this.opacity,
-    required this.properties,
-    required this.priority,
-  });
-
-  factory LayerModel.fromMapLayer(MapLayer layer, int priority) {
-    return LayerModel(
-      id: layer.id,
-      layerClass: layer.layerClass,
-      name: layer.name,
-      opacity: layer.opacity ?? 1,
-      visible: layer.visible ?? true,
-      priority: priority,
-      position: Vector2(
-        layer.x ?? 0,
-        layer.y ?? 0,
-      ),
-      offset: Vector2(
-        layer.offsetX ?? 0,
-        layer.offsetY ?? 0,
-      ),
-      properties: _extractOtherProperties(layer.properties),
-    );
-  }
-}
-
-Map<String, dynamic> _extractOtherProperties(List<Property>? properties) {
-  final map = <String, dynamic>{};
-
-  for (var element in properties ?? const <Property>[]) {
-    if (element.value != null && element.name != null) {
-      map[element.name!] = element.value;
-    }
-  }
-  return map;
 }

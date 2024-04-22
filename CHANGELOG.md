@@ -1,10 +1,15 @@
 # NEXT
 - `GameMap` Improvements. Now you can access the layers
   Breaking Changes:
-    - `WorldMap` expect `List<TileLayerComponent>` instead of `List<TileModel>`;
+    - `WorldMap` expect `List<Layer>` instead of `List<TileModel>`;
     - `MatrixMapGenerator.generate` now expect `List<MatrixLayer> layers` instead og `List<List<double>> matrix`;
     - `TileModel` renamed to `Tile`;
     - `TileModelSprite` renamed to `TileSprite`.
+- Adds support to load map built by [SpriteFusion](https://www.spritefusion.com/). Use `WorldMapBySpritefusion`.
+  Breaking Changes:
+    - Renamed `TiledReader` to `WorldMapReader`.
+    - Renamed `TiledReader.asset` to `WorldMapReader.fromAsset`.
+    - Renamed `TiledReader.network` to `WorldMapReader.fromNetwork`.
 
 # 3.7.1
 - Fix keyboard param. [#500](https://github.com/RafaelBarbosatec/bonfire/pull/500). Thanks [jakobodman123](https://github.com/jakobodman123)

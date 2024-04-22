@@ -1,9 +1,10 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/map/base/layer.dart';
 
 export 'package:bonfire/map/base/tile_layer_component.dart';
 
 abstract class GameMap extends GameComponent {
-  List<TileLayerComponent> layers;
+  List<Layer> layers;
   double sizeToUpdate;
   double tileSize = 0.0;
 
@@ -25,8 +26,8 @@ abstract class GameMap extends GameComponent {
   }
 
   void removeLayer(int id);
-  Future addLayer(TileLayerComponent layer);
-  Future<void> updateLayers(List<TileLayerComponent> layers);
+  Future addLayer(Layer layer);
+  Future<void> updateLayers(List<Layer> layers);
 
   @override
   int get priority => LayerPriority.MAP;

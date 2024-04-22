@@ -19,7 +19,7 @@ class ParallaxPage extends StatelessWidget {
         ],
       ),
       map: WorldMapByTiled(
-        TiledReader.asset('platform/parallax_map.tmj'),
+        WorldMapReader.fromAsset('platform/parallax_map.tmj'),
       ),
       background: ParallaxBackground(),
       globalForces: [GravityForce2D()],
