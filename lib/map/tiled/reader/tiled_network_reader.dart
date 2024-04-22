@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tiled/cache_provider/tiled_memory_cache_provider.dart';
+import 'package:bonfire/map/util/server_image_loader.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiledjsonreader/map/layer/image_layer.dart';
 import 'package:tiledjsonreader/map/layer/map_layer.dart';
@@ -13,18 +14,19 @@ import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
 class TiledNetworkReader extends WorldMapReader<TiledMap> {
 // ignore: constant_identifier_names
   static const ORIENTATION_SUPPORTED = 'orthogonal';
-  static const _keyImgBase64 = 'base64';
   final Uri uri;
   final TiledCacheProvider cache;
   final Map<String, String>? headers;
   @override
   late String basePath;
+  late ServerImageLoader _imageLoader;
 
   TiledNetworkReader({
     required this.uri,
     TiledCacheProvider? cacheProvider,
     this.headers,
   }) : cache = cacheProvider ?? TiledMemoryCacheProvider() {
+    _imageLoader = ServerImageLoader(cache: cache);
     String url = uri.toString();
     basePath = url.replaceAll(url.split('/').last, '');
   }
@@ -143,17 +145,6 @@ class TiledNetworkReader extends WorldMapReader<TiledMap> {
   }
 
   Future<void> _loadImage(String url) async {
-    if (!Flame.images.containsKey(url)) {
-      bool containCache = await cache.containsKey(url);
-      if (containCache) {
-        String base64 = (await cache.get(url))[_keyImgBase64];
-        await Flame.images.fromBase64(url, base64);
-      } else {
-        final response = await http.get(Uri.parse(url), headers: headers);
-        String img64 = base64Encode(response.bodyBytes);
-        cache.put(url, {_keyImgBase64: img64});
-        await Flame.images.fromBase64(url, img64);
-      }
-    }
+    await _imageLoader.load(url);
   }
 }
