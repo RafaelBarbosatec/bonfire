@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/spritefusion/model/spritefucion_map.dart';
 import 'package:bonfire/map/spritefusion/reader/spritefusion_asset_reader.dart';
+import 'package:bonfire/map/spritefusion/reader/spritefusion_network_reader.dart';
 import 'package:bonfire/map/tiled/reader/tiled_asset_reader.dart';
 import 'package:bonfire/map/tiled/reader/tiled_network_reader.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
@@ -31,6 +32,12 @@ abstract class WorldMapReader<T> {
     switch (T) {
       case TiledMap:
         return TiledNetworkReader(
+          uri: uri,
+          cacheProvider: cacheProvider,
+          headers: headers,
+        ) as WorldMapReader<T>;
+      case SpritefusionMap:
+        return SpritefusionNetworkReader(
           uri: uri,
           cacheProvider: cacheProvider,
           headers: headers,
