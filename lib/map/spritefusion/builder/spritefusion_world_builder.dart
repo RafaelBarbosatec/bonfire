@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/base/layer.dart';
 import 'package:bonfire/map/spritefusion/model/spritefucion_map.dart';
+import 'package:bonfire/map/util/map_assets_manager.dart';
 import 'package:flutter/material.dart';
 
 class SpritefusionWorldBuilder {
@@ -33,5 +34,54 @@ class SpritefusionWorldBuilder {
     );
   }
 
-  Future<void> _load(SpritefusionMap map) async {}
+  Future<void> _load(SpritefusionMap map) async {
+    int index = 0;
+    final spritesheet = await MapAssetsManager.loadImage(map.imgPath);
+    final maxRow = spritesheet.width / map.tileSize;
+    for (var layer in map.layers.reversed) {
+      List<Tile> tiles = _loadTiles(
+        layer.tiles,
+        map.tileSize,
+        map.imgPath,
+        maxRow,
+        layer.collider,
+      );
+      _layers.add(
+        Layer(
+          id: index,
+          tiles: tiles,
+          priority: index,
+        ),
+      );
+      index++;
+    }
+  }
+
+  List<Tile> _loadTiles(
+    List<SpritefusionMapLayerTile> tiles,
+    double tileSize,
+    String imgPath,
+    double maxRow,
+    bool collider,
+  ) {
+    final size = Vector2.all(tileSize);
+    return tiles.map(
+      (tile) {
+        int row = tile.idInt ~/ maxRow;
+        int col = (tile.idInt % maxRow).toInt();
+        return Tile(
+          x: tile.x.toDouble(),
+          y: tile.y.toDouble(),
+          width: tileSize,
+          height: tileSize,
+          sprite: TileSprite(
+            path: imgPath,
+            position: Vector2(col.toDouble(), row.toDouble()),
+            size: size,
+          ),
+          collisions: collider ? [RectangleHitbox(size: size)] : null,
+        );
+      },
+    ).toList();
+  }
 }

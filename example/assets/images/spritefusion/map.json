@@ -213,7 +213,7 @@
                     "y": 6
                 }
             ],
-            "collider": false
+            "collider": true
         },
         {
             "name": "GOUND",
