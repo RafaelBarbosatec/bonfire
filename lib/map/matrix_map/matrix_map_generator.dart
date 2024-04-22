@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/map/base/layer.dart';
 
 export 'map_terrain.dart';
 export 'matrix_layer.dart';
@@ -70,19 +71,19 @@ class MatrixMapGenerator {
     required List<MatrixLayer> layers,
     required TileModelBuilder builder,
   }) {
-    List<TileLayerComponent> tileLayers = [];
+    List<LayerModel> tileLayers = [];
     int index = 0;
     for (var layer in layers) {
       if (layer.axisInverted) {
         tileLayers.add(
-          TileLayerComponent(
+          LayerModel(
             id: index,
             tiles: _buildInverted(layer.matrix, builder),
           ),
         );
       } else {
         tileLayers.add(
-          TileLayerComponent(
+          LayerModel(
             id: index,
             tiles: _buildNormal(layer.matrix, builder),
           ),

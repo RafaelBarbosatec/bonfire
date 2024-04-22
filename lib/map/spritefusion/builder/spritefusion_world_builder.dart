@@ -1,13 +1,13 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/map/base/layer.dart';
 import 'package:bonfire/map/spritefusion/model/spritefucion_map.dart';
-import 'package:bonfire/map/spritefusion/model/spritefusion_layer.dart';
 import 'package:flutter/material.dart';
 
 class SpritefusionWorldBuilder {
   final ValueChanged<Object>? onError;
   final WorldMapReader<SpritefusionMap> reader;
   final double sizeToUpdate;
-  final List<SpritefusionLayer> _layers = [];
+  final List<LayerModel> _layers = [];
 
   SpritefusionWorldBuilder(
     this.reader, {
@@ -17,9 +17,8 @@ class SpritefusionWorldBuilder {
 
   Future<WorldMap> build() async {
     try {
-      final tiledMap = await reader.readMap();
-      print(tiledMap.layers.length);
-      // await _load(_tiledMap!);
+      final map = await reader.readMap();
+      await _load(map);
     } catch (e) {
       onError?.call(e);
       // ignore: avoid_print
@@ -28,11 +27,13 @@ class SpritefusionWorldBuilder {
 
     return Future.value(
       WorldMap(
-        _layers
-            .map((e) => TileLayerComponent.fromSpritefusionLayer(e))
-            .toList(),
+        _layers,
         tileSizeToUpdate: sizeToUpdate,
       ),
     );
+  }
+  
+  Future<void> _load(SpritefusionMap map) async{
+
   }
 }

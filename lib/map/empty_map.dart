@@ -1,10 +1,11 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/map/base/layer.dart';
 
 class EmptyWorldMap extends WorldMap {
   EmptyWorldMap({double tileSizeToUpdate = 0, Vector2? size})
       : super(
           [
-            TileLayerComponent(
+            LayerModel(
               id: 0,
               tiles: [
                 if (size != null)
