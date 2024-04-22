@@ -23,7 +23,7 @@ class WorldMap extends GameMap {
   }
 
   WorldMap(
-    List<LayerModel> layers, {
+    List<Layer> layers, {
     double tileSizeToUpdate = 0,
   }) : super(
           layers,
@@ -165,7 +165,7 @@ class WorldMap extends GameMap {
   }
 
   @override
-  Future<void> updateLayers(List<LayerModel> layers) async {
+  Future<void> updateLayers(List<Layer> layers) async {
     this.layers = layers;
     removeAll(children);
     await addAll(layers.map(LayerMapper.toLayerComponent));
@@ -173,7 +173,7 @@ class WorldMap extends GameMap {
   }
 
   @override
-  Future addLayer(LayerModel layer) async {
+  Future addLayer(Layer layer) async {
     layers.add(layer);
     add(LayerMapper.toLayerComponent(layer));
     _confMap(lastSizeScreen!, calculateSize: true);

@@ -41,7 +41,7 @@ class TiledWorldBuilder {
   final ValueChanged<Object>? onError;
   final WorldMapReader<TiledMap> reader;
   final double sizeToUpdate;
-  final List<LayerModel> _layers = [];
+  final List<Layer> _layers = [];
   final List<GameComponent> _components = [];
   String? _basePath;
   TiledMap? _tiledMap;

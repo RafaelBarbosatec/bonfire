@@ -5,7 +5,7 @@ import 'package:tiledjsonreader/map/layer/objects.dart';
 
 abstract class MapLayerMapper {
   static toLayer(MapLayer layer, int priority) {
-    return LayerModel(
+    return Layer(
       id: layer.id,
       layerClass: layer.layerClass,
       name: layer.name,

@@ -5,7 +5,7 @@ class EmptyWorldMap extends WorldMap {
   EmptyWorldMap({double tileSizeToUpdate = 0, Vector2? size})
       : super(
           [
-            LayerModel(
+            Layer(
               id: 0,
               tiles: [
                 if (size != null)

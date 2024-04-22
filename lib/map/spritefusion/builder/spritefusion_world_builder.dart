@@ -7,7 +7,7 @@ class SpritefusionWorldBuilder {
   final ValueChanged<Object>? onError;
   final WorldMapReader<SpritefusionMap> reader;
   final double sizeToUpdate;
-  final List<LayerModel> _layers = [];
+  final List<Layer> _layers = [];
 
   SpritefusionWorldBuilder(
     this.reader, {
@@ -32,8 +32,6 @@ class SpritefusionWorldBuilder {
       ),
     );
   }
-  
-  Future<void> _load(SpritefusionMap map) async{
 
-  }
+  Future<void> _load(SpritefusionMap map) async {}
 }

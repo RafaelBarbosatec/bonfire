@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 
-class LayerModel {
+class Layer {
   final int? id;
   final String? name;
   final String? layerClass;
@@ -12,8 +12,7 @@ class LayerModel {
   final int priority;
   List<Tile> tiles = [];
 
-
-  LayerModel({
+  Layer({
     required this.id,
     required this.tiles,
     this.name,
@@ -26,5 +25,4 @@ class LayerModel {
     this.priority = 0,
   })  : position = position ?? Vector2.zero(),
         offset = offset ?? Vector2.zero();
-
 }

@@ -71,19 +71,19 @@ class MatrixMapGenerator {
     required List<MatrixLayer> layers,
     required TileModelBuilder builder,
   }) {
-    List<LayerModel> tileLayers = [];
+    List<Layer> tileLayers = [];
     int index = 0;
     for (var layer in layers) {
       if (layer.axisInverted) {
         tileLayers.add(
-          LayerModel(
+          Layer(
             id: index,
             tiles: _buildInverted(layer.matrix, builder),
           ),
         );
       } else {
         tileLayers.add(
-          LayerModel(
+          Layer(
             id: index,
             tiles: _buildNormal(layer.matrix, builder),
           ),

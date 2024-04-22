@@ -116,7 +116,7 @@ class DungeonMap {
       });
     });
 
-    return WorldMap([LayerModel(id: 0, tiles: tileList)]);
+    return WorldMap([Layer(id: 0, tiles: tileList)]);
   }
 
   static List<GameDecoration> decorations() {
