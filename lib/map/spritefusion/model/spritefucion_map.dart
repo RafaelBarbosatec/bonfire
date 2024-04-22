@@ -6,7 +6,7 @@ class SpritefusionMap {
   final double mapWidth;
   final double mapHeight;
   final List<SpritefusionMapLayer> layers;
-   String imgPath;
+  String imgPath;
 
   SpritefusionMap({
     required this.tileSize,
@@ -21,7 +21,7 @@ class SpritefusionMap {
       'tileSize': tileSize,
       'mapWidth': mapWidth,
       'mapHeight': mapHeight,
-      'imgPath':imgPath,
+      'imgPath': imgPath,
       'layers': layers.map((x) => x.toMap()).toList(),
     };
   }

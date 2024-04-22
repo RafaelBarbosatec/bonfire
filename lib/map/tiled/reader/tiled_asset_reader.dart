@@ -1,4 +1,3 @@
-
 import 'package:bonfire/map/util/world_map_reader.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
 import 'package:tiledjsonreader/tiledjsonreader.dart';
