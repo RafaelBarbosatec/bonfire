@@ -1,22 +1,23 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/tiled/builder/tiled_world_builder.dart';
+import 'package:bonfire/map/tiled/builder/tiled_world_builder.dart';
 import 'package:flutter/widgets.dart';
+import 'package:tiledjsonreader/map/tiled_map.dart';
 
 class WorldMapByTiled extends WorldMap {
   late TiledWorldBuilder _builder;
   WorldMapByTiled(
-    TiledReader reader, {
+    WorldMapReader<TiledMap> reader, {
     Vector2? forceTileSize,
     ValueChanged<Object>? onError,
-    double tileSizeToUpdate = 0,
+    double sizeToUpdate = 0,
     Map<String, ObjectBuilder>? objectsBuilder,
   }) : super(const []) {
-    this.tileSizeToUpdate = tileSizeToUpdate;
+    this.sizeToUpdate = sizeToUpdate;
     _builder = TiledWorldBuilder(
       reader,
       forceTileSize: forceTileSize,
       onError: onError,
-      tileSizeToUpdate: tileSizeToUpdate,
+      sizeToUpdate: sizeToUpdate,
       objectsBuilder: objectsBuilder,
     );
   }
@@ -24,7 +25,7 @@ class WorldMapByTiled extends WorldMap {
   @override
   Future<void> onLoad() async {
     final map = await _builder.build();
-    tiles = map.map.tiles;
+    layers = map.map.layers;
     gameRef.addAll(map.components ?? []);
     return super.onLoad();
   }

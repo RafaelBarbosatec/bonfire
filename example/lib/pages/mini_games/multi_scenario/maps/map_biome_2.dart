@@ -28,7 +28,7 @@ class MapBiome2 extends StatelessWidget {
         initDirection: showInEnum.direction,
       ),
       map: WorldMapByTiled(
-        TiledReader.asset(MultiScenarioAssets.mapBiome2),
+        WorldMapReader.fromAsset(MultiScenarioAssets.mapBiome2),
         forceTileSize: Vector2.all(defaultTileSize),
         objectsBuilder: {
           'sensorLeft': (p) => ExitMapSensor(

@@ -23,7 +23,12 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   void update(double dt) {
     super.update(dt);
     if (componentIncontact != null && sensorEnabled) {
-      if (checkInterval(_sensorIntervalKey, _intervalCallback, dt)) {
+      if (checkInterval(
+        _sensorIntervalKey,
+        _intervalCallback,
+        dt,
+        firstCheckIsTrue: true,
+      )) {
         onContact(componentIncontact! as T);
       }
     }

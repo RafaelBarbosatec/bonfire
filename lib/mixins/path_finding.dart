@@ -230,10 +230,7 @@ mixin PathFinding on Movement {
 
   /// Get size of the grid used on algorithm to calculate path
   double get _tileSize {
-    double tileSize = 0.0;
-    if (gameRef.map.tiles.isNotEmpty) {
-      tileSize = gameRef.map.tiles.first.width;
-    }
+    double tileSize = gameRef.map.tileSize;
     if (_gridSizeIsCollisionSize) {
       final rect = rectCollision;
       return max(rect.height, rect.width) +

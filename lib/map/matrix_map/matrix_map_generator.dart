@@ -1,6 +1,8 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/map/base/layer.dart';
 
 export 'map_terrain.dart';
+export 'matrix_layer.dart';
 export 'terrain_builder.dart';
 
 ///
@@ -58,7 +60,7 @@ class ItemMatrixProperties {
   }
 }
 
-typedef TileModelBuilder = TileModel Function(ItemMatrixProperties properties);
+typedef TileModelBuilder = Tile Function(ItemMatrixProperties properties);
 
 /// Class useful to create radom map.
 /// * [matrix], Matrix used to create the map.
@@ -66,19 +68,31 @@ typedef TileModelBuilder = TileModel Function(ItemMatrixProperties properties);
 /// * [axisInverted], used to invert axis of the matrix. Example: matrix[x,y] turn matrix[y,x]. It's useful to use an easier-to-see array in code.
 class MatrixMapGenerator {
   static WorldMap generate({
-    required List<List<double>> matrix,
+    required List<MatrixLayer> layers,
     required TileModelBuilder builder,
-    bool axisInverted = false,
   }) {
-    List<TileModel> tiles = [];
-
-    if (axisInverted) {
-      tiles = _buildInverted(matrix, builder);
-    } else {
-      tiles = _buildNormal(matrix, builder);
+    List<Layer> tileLayers = [];
+    int index = 0;
+    for (var layer in layers) {
+      if (layer.axisInverted) {
+        tileLayers.add(
+          Layer(
+            id: index,
+            tiles: _buildInverted(layer.matrix, builder),
+          ),
+        );
+      } else {
+        tileLayers.add(
+          Layer(
+            id: index,
+            tiles: _buildNormal(layer.matrix, builder),
+          ),
+        );
+      }
+      index++;
     }
 
-    return WorldMap(tiles);
+    return WorldMap(tileLayers);
   }
 
   static double? _tryGetValue(double Function() getValue) {
@@ -89,11 +103,11 @@ class MatrixMapGenerator {
     }
   }
 
-  static List<TileModel> _buildNormal(
+  static List<Tile> _buildNormal(
     List<List<double>> matrix,
     TileModelBuilder builder,
   ) {
-    List<TileModel> tiles = [];
+    List<Tile> tiles = [];
     final h = matrix.first.length;
     final w = matrix.length;
     for (var x = 0; x < w; x++) {
@@ -119,11 +133,11 @@ class MatrixMapGenerator {
     return tiles;
   }
 
-  static List<TileModel> _buildInverted(
+  static List<Tile> _buildInverted(
     List<List<double>> matrix,
     TileModelBuilder builder,
   ) {
-    List<TileModel> tiles = [];
+    List<Tile> tiles = [];
     final w = matrix.first.length;
     final h = matrix.length;
     for (var y = 0; y < h; y++) {

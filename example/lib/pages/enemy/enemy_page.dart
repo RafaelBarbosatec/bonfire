@@ -12,7 +12,7 @@ class EnemyPage extends StatelessWidget {
     const tileSize = 16.0;
     return BonfireWidget(
       map: WorldMapByTiled(
-        TiledReader.asset('tiled/punnyworld/simple_map.tmj'),
+        WorldMapReader.fromAsset('tiled/punnyworld/simple_map.tmj'),
         objectsBuilder: {
           'range': (properties) => RageEnemy(position: properties.position),
           'melee': (properties) => MeleeEnemy(position: properties.position),
