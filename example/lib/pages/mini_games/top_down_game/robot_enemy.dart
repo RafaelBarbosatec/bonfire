@@ -52,7 +52,7 @@ class ZombieEnemy extends RotationEnemy
   }
 
   @override
-  void die() {
+  void onDie() {
     gameRef.add(
       AnimatedGameObject(
         animation: CommonSpriteSheet.smokeExplosion,
@@ -64,7 +64,7 @@ class ZombieEnemy extends RotationEnemy
     );
     gameRef.camera.shake(intensity: 4);
     removeFromParent();
-    super.die();
+    super.onDie();
   }
 
   @override

@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/interval_tick.dart';
 
 ///
 /// Created by
@@ -12,7 +11,7 @@ import 'package:bonfire/util/interval_tick.dart';
 ///
 /// Rafaelbarbosatec
 /// on 17/05/22
-mixin InternalChecker {
+mixin InternalChecker on Component {
   /// Map available to store times that can be used to control the frequency of any action.
   Map<String, IntervalTick>? _timers;
 
@@ -52,5 +51,11 @@ mixin InternalChecker {
 
   bool invervalIsRunning(String key) {
     return _timers?[key]?.running ?? false;
+  }
+
+  @override
+  void onRemove() {
+    super.onRemove();
+    _timers?.clear();
   }
 }

@@ -45,6 +45,8 @@ abstract class GameComponent extends PositionComponent
 
   Rect? _rectCollision;
 
+  double lastDt = 0;
+
   @override
   int get priority {
     if (renderAboveComponents && hasGameRef) {
@@ -56,6 +58,7 @@ abstract class GameComponent extends PositionComponent
   @override
   @mustCallSuper
   void update(double dt) {
+    lastDt = dt;
     super.update(dt);
     _checkIsVisible(dt);
   }
@@ -130,7 +133,7 @@ abstract class GameComponent extends PositionComponent
       if (gameRef.showCollisionArea) {
         var paintCollition = Paint()
           ..color = gameRef.collisionAreaColor ?? const Color(0xffffffff);
-        if (component is Sensor) {
+        if (this is Sensor) {
           paintCollition.color = sensorColor;
         }
         component.paint = paintCollition;

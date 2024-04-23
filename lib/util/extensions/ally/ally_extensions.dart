@@ -41,7 +41,7 @@ extension AllyExtensions on Ally {
       withPush: withPush,
       sizePush: sizePush,
       animationRight: animationRight,
-      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
+      attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
       centerOffset: centerOffset,
     );
 
@@ -84,7 +84,7 @@ extension AllyExtensions on Ally {
       onDestroy: onDestroy,
       destroySize: destroySize,
       lightingConfig: lightingConfig,
-      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
+      attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
     );
 
     if (execute != null) execute();

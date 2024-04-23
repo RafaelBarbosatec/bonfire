@@ -65,7 +65,7 @@ class Knight extends SimplePlayer
   }
 
   @override
-  void die() {
+  void onDie() {
     barLifeController.life = 0.0;
     removeFromParent();
     gameRef.add(
@@ -75,7 +75,7 @@ class Knight extends SimplePlayer
         size: Vector2.all(DungeonMap.tileSize),
       ),
     );
-    super.die();
+    super.onDie();
   }
 
   @override
@@ -86,15 +86,15 @@ class Knight extends SimplePlayer
   }
 
   @override
-  void receiveDamage(AttackFromEnum attacker, double damage, identify) {
+  void onRemoveLife(double life) {
     showDamage(
-      damage,
+      life,
       config: TextStyle(
         fontSize: width / 3,
         color: Colors.red,
       ),
     );
-    super.receiveDamage(attacker, damage, identify);
+    super.onRemoveLife(life);
   }
 
   void execShowEmote() {

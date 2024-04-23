@@ -66,6 +66,7 @@ export 'package:bonfire/player/player.dart';
 export 'package:bonfire/scene_builder/scene_builder.dart';
 export 'package:bonfire/util/barlife_component.dart';
 export 'package:bonfire/util/bonfire_game_ref.dart';
+export 'package:bonfire/util/damage_hitbox.dart';
 export 'package:bonfire/util/bonfire_util.dart';
 export 'package:bonfire/util/component_spawner.dart';
 export 'package:bonfire/util/direction.dart';

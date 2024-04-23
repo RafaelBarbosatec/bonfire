@@ -44,7 +44,7 @@ extension GameComponentExtensions on GameComponent {
     /// Use radians angle
     required double angle,
     required double damage,
-    required AttackFromEnum attackFrom,
+    required AttackOriginEnum attackFrom,
     Vector2? destroySize,
     Future<SpriteAnimation>? animationDestroy,
     dynamic id,
@@ -95,7 +95,7 @@ extension GameComponentExtensions on GameComponent {
     required Future<SpriteAnimation> animationRight,
     required Vector2 size,
     required Direction direction,
-    required AttackFromEnum attackFrom,
+    required AttackOriginEnum attackFrom,
     Vector2? destroySize,
     dynamic id,
     double speed = 150,
@@ -134,7 +134,7 @@ extension GameComponentExtensions on GameComponent {
     required double damage,
     required Direction direction,
     required Vector2 size,
-    required AttackFromEnum attackFrom,
+    required AttackOriginEnum attackFrom,
     bool withPush = true,
     double? sizePush,
     double? marginFromCenter,
@@ -165,7 +165,7 @@ extension GameComponentExtensions on GameComponent {
 
     /// Use radians angle
     required double angle,
-    required AttackFromEnum attackFrom,
+    required AttackOriginEnum attackFrom,
     required Vector2 size,
     bool withPush = true,
     double marginFromCenter = 0,
@@ -205,24 +205,24 @@ extension GameComponentExtensions on GameComponent {
       );
     }
 
-    Rect positionAttack = Rect.fromCenter(
-      center: startPosition.toOffset(),
-      width: size.x,
-      height: size.y,
+    gameRef.add(
+      DamageHitbox(
+        position: startPosition,
+        damage: damage,
+        origin: attackFrom,
+        size: size,
+        angle: angle,
+        id: id,
+        onDamage: (attackable) {
+          if (withPush && attackable is Movement) {
+            if ((attackable as Movement).canMove(diffBase.toDirection(),
+                displacement: diffBase.maxValue())) {
+              (attackable as Movement).translate(diffBase);
+            }
+          }
+        },
+      ),
     );
-
-    gameRef
-        .attackables(onlyVisible: true)
-        .where((a) => a.rectAttackable().overlaps(positionAttack) && a != this)
-        .forEach((enemy) {
-      enemy.receiveDamage(attackFrom, damage, id);
-      if (withPush && enemy is Movement) {
-        if ((enemy as Movement).canMove(diffBase.toDirection(),
-            displacement: diffBase.maxValue())) {
-          (enemy as Movement).translate(diffBase);
-        }
-      }
-    });
   }
 
   Direction getComponentDirectionFromMe(GameComponent comp) {

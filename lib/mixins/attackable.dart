@@ -6,7 +6,7 @@ import 'package:bonfire/base/game_component.dart';
 enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER_AND_ALLY, NONE }
 
 // ignore: constant_identifier_names
-enum AttackFromEnum { ENEMY, PLAYER_OR_ALLY, WORLD }
+enum AttackOriginEnum { ENEMY, PLAYER_OR_ALLY, WORLD }
 
 /// Mixin responsible for adding damage-taking behavior to the component.
 mixin Attackable on GameComponent {
@@ -31,7 +31,14 @@ mixin Attackable on GameComponent {
 
   /// increase life
   void addLife(double life) {
-    _life += life;
+    double newLife = _life + life;
+
+    if (newLife > maxLife) {
+      newLife = maxLife;
+    }
+    onRestoreLife(newLife - _life);
+    _life = newLife;
+
     _verifyLimitsLife();
   }
 
@@ -44,29 +51,31 @@ mixin Attackable on GameComponent {
 
   /// reduce life
   void removeLife(double life) {
-    if (_life > 0) {
-      _life -= life;
+    double newLife = _life - life;
+    if (newLife < 0) {
+      newLife = 0;
     }
-    if (_life <= 0 && !_isDead) {
-      die();
-    }
+    onRemoveLife(_life - newLife);
+    _life = newLife;
+
+    _verifyLimitsLife();
   }
 
+  void onRemoveLife(double life) {}
+  void onRestoreLife(double life) {}
+
   void _verifyLimitsLife() {
-    if (_life > maxLife) {
-      _life = maxLife;
-    }
     if (_life > 0 && isDead) {
-      revive();
-    } else if (_life <= 0 && !_isDead) {
-      die();
+      onRevive();
+    } else if (_life == 0 && !_isDead) {
+      onDie();
     }
   }
 
   /// This method is called to give damage a this component.
   /// Only receive damage if the method [checkCanReceiveDamage] return `true`.
   void receiveDamage(
-    AttackFromEnum attacker,
+    AttackOriginEnum attacker,
     double damage,
     dynamic identify,
   ) {
@@ -76,19 +85,19 @@ mixin Attackable on GameComponent {
   }
 
   /// This method is used to check if this component can receive damage from any attacker.
-  bool checkCanReceiveDamage(AttackFromEnum attacker) {
+  bool checkCanReceiveDamage(AttackOriginEnum attacker) {
     switch (receivesAttackFrom) {
       case ReceivesAttackFromEnum.ALL:
         return true;
       case ReceivesAttackFromEnum.ENEMY:
-        if (attacker == AttackFromEnum.ENEMY ||
-            attacker == AttackFromEnum.WORLD) {
+        if (attacker == AttackOriginEnum.ENEMY ||
+            attacker == AttackOriginEnum.WORLD) {
           return true;
         }
         break;
       case ReceivesAttackFromEnum.PLAYER_AND_ALLY:
-        if (attacker == AttackFromEnum.PLAYER_OR_ALLY ||
-            attacker == AttackFromEnum.WORLD) {
+        if (attacker == AttackOriginEnum.PLAYER_OR_ALLY ||
+            attacker == AttackOriginEnum.WORLD) {
           return true;
         }
         break;
@@ -99,11 +108,11 @@ mixin Attackable on GameComponent {
     return false;
   }
 
-  void die() {
+  void onDie() {
     _isDead = true;
   }
 
-  void revive() {
+  void onRevive() {
     _isDead = false;
   }
 

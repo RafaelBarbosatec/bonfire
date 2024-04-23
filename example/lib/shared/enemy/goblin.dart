@@ -62,8 +62,8 @@ class Goblin extends SimpleEnemy
   }
 
   @override
-  void die() {
-    super.die();
+  void onDie() {
+    super.onDie();
     gameRef.add(
       AnimatedGameObject(
         animation: CommonSpriteSheet.smokeExplosion,

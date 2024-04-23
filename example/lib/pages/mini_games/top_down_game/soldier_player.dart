@@ -82,7 +82,7 @@ class SoldierPlayer extends RotationPlayer
         break;
     }
     simpleAttackRangeByAngle(
-      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
+      attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
       angle: angle,
       size: Vector2(8, 4),
       centerOffset: centerOffset,
@@ -93,9 +93,9 @@ class SoldierPlayer extends RotationPlayer
   }
 
   @override
-  void die() {
+  void onDie() {
     removeFromParent();
-    super.die();
+    super.onDie();
   }
 
   @override

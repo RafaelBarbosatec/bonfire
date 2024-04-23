@@ -10,6 +10,7 @@
     - Renamed `TiledReader` to `WorldMapReader`.
     - Renamed `TiledReader.asset` to `WorldMapReader.fromAsset`.
     - Renamed `TiledReader.network` to `WorldMapReader.fromNetwork`.
+- Adds `DamageHitbox`. Use it to do damage.
 
 # 3.7.1
 - Fix keyboard param. [#500](https://github.com/RafaelBarbosatec/bonfire/pull/500). Thanks [jakobodman123](https://github.com/jakobodman123)
