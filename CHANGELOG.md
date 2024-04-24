@@ -17,6 +17,8 @@
 Breaking Changes:
 - Renamed `AttackFromEnum` to `AttackOriginEnum`.
 - Renamed `ReceivesAttackFromEnum` to `AcceptableAttackOriginEnum`.
+- Renamed `die` to `onDie` in `Attackable`.
+- Renamed `revive` to `onRevive` in `Attackable`.
 
 # 3.7.1
 - Fix keyboard param. [#500](https://github.com/RafaelBarbosatec/bonfire/pull/500). Thanks [jakobodman123](https://github.com/jakobodman123)

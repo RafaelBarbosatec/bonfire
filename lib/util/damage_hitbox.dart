@@ -52,8 +52,10 @@ class DamageHitbox extends GameComponent {
           .attackables(onlyVisible: true)
           .where((a) => a.rectAttackable().overlaps(toAbsoluteRect()))
           .forEach((attackable) {
-        onDamage?.call(attackable);
-        attackable.receiveDamage(origin, damage, id);
+        final receiveDamage = attackable.receiveDamage(origin, damage, id);
+        if (receiveDamage) {
+          onDamage?.call(attackable);
+        }
       });
     }
 

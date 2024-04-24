@@ -75,18 +75,21 @@ mixin Attackable on GameComponent {
 
   /// This method is called to give damage a this component.
   /// Only receive damage if the method [checkCanReceiveDamage] return `true`.
-  void receiveDamage(
+  bool receiveDamage(
     AttackOriginEnum attacker,
     double damage,
     dynamic identify,
   ) {
     if (checkCanReceiveDamage(attacker)) {
       removeLife(damage);
+      return true;
     }
+    return false;
   }
 
   /// This method is used to check if this component can receive damage from any attacker.
   bool checkCanReceiveDamage(AttackOriginEnum attacker) {
+    if (isDead) return false;
     switch (receivesAttackFrom) {
       case AcceptableAttackOriginEnum.ALL:
         return true;
