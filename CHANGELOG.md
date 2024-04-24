@@ -1,16 +1,19 @@
 # 3.8.0
 - Adds `DamageHitbox`. Use it to do damage.
 - `GameMap` Improvements. Now you can access the layers
+
   Breaking Changes:
     - `WorldMap` expect `List<Layer>` instead of `List<TileModel>`;
     - `MatrixMapGenerator.generate` now expect `List<MatrixLayer> layers` instead og `List<List<double>> matrix`;
     - `TileModel` renamed to `Tile`;
     - `TileModelSprite` renamed to `TileSprite`.
 - Adds support to load map built by [SpriteFusion](https://www.spritefusion.com/). Use `WorldMapBySpritefusion`.
+
   Breaking Changes:
     - Renamed `TiledReader` to `WorldMapReader`.
     - Renamed `TiledReader.asset` to `WorldMapReader.fromAsset`.
     - Renamed `TiledReader.network` to `WorldMapReader.fromNetwork`.
+
 Breaking Changes:
 - Renamed `AttackFromEnum` to `AttackOriginEnum`.
 - Renamed `ReceivesAttackFromEnum` to `AcceptableAttackOriginEnum`.
