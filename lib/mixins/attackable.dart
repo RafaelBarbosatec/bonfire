@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:bonfire/base/game_component.dart';
 
 // ignore: constant_identifier_names
-enum ReceivesAttackFromEnum { ALL, ENEMY, PLAYER_AND_ALLY, NONE }
+enum AcceptableAttackOriginEnum { ALL, ENEMY, PLAYER_AND_ALLY, NONE }
 
 // ignore: constant_identifier_names
 enum AttackOriginEnum { ENEMY, PLAYER_OR_ALLY, WORLD }
@@ -11,7 +11,8 @@ enum AttackOriginEnum { ENEMY, PLAYER_OR_ALLY, WORLD }
 /// Mixin responsible for adding damage-taking behavior to the component.
 mixin Attackable on GameComponent {
   /// Used to define which type of component can be damaged
-  ReceivesAttackFromEnum receivesAttackFrom = ReceivesAttackFromEnum.ALL;
+  AcceptableAttackOriginEnum receivesAttackFrom =
+      AcceptableAttackOriginEnum.ALL;
 
   /// Life of the Enemy.
   double _life = 100;
@@ -87,21 +88,21 @@ mixin Attackable on GameComponent {
   /// This method is used to check if this component can receive damage from any attacker.
   bool checkCanReceiveDamage(AttackOriginEnum attacker) {
     switch (receivesAttackFrom) {
-      case ReceivesAttackFromEnum.ALL:
+      case AcceptableAttackOriginEnum.ALL:
         return true;
-      case ReceivesAttackFromEnum.ENEMY:
+      case AcceptableAttackOriginEnum.ENEMY:
         if (attacker == AttackOriginEnum.ENEMY ||
             attacker == AttackOriginEnum.WORLD) {
           return true;
         }
         break;
-      case ReceivesAttackFromEnum.PLAYER_AND_ALLY:
+      case AcceptableAttackOriginEnum.PLAYER_AND_ALLY:
         if (attacker == AttackOriginEnum.PLAYER_OR_ALLY ||
             attacker == AttackOriginEnum.WORLD) {
           return true;
         }
         break;
-      case ReceivesAttackFromEnum.NONE:
+      case AcceptableAttackOriginEnum.NONE:
         return false;
     }
 

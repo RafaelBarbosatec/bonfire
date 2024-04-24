@@ -134,7 +134,7 @@ abstract class GameComponent extends PositionComponent
         var paintCollition = Paint()
           ..color = gameRef.collisionAreaColor ?? const Color(0xffffffff);
         if (this is Sensor) {
-          paintCollition.color = sensorColor;
+          paintCollition.color = Sensor.color;
         }
         component.paint = paintCollition;
         component.renderShape = true;

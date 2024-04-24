@@ -1,4 +1,5 @@
 # NEXT
+- Adds `DamageHitbox`. Use it to do damage.
 - `GameMap` Improvements. Now you can access the layers
   Breaking Changes:
     - `WorldMap` expect `List<Layer>` instead of `List<TileModel>`;
@@ -10,7 +11,9 @@
     - Renamed `TiledReader` to `WorldMapReader`.
     - Renamed `TiledReader.asset` to `WorldMapReader.fromAsset`.
     - Renamed `TiledReader.network` to `WorldMapReader.fromNetwork`.
-- Adds `DamageHitbox`. Use it to do damage.
+Breaking Changes:
+- Renamed `AttackFromEnum` to `AttackOriginEnum`.
+- Renamed `ReceivesAttackFromEnum` to `AcceptableAttackOriginEnum`.
 
 # 3.7.1
 - Fix keyboard param. [#500](https://github.com/RafaelBarbosatec/bonfire/pull/500). Thanks [jakobodman123](https://github.com/jakobodman123)

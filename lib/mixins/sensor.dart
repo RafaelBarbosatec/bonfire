@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
 
-final Color sensorColor = const Color(0xFFF44336).withOpacity(0.5);
+
 
 /// Mixin responsible for adding trigger to detect other objects above
 /// T is a type that Sensor will be find contact.
 mixin Sensor<T extends GameComponent> on GameComponent {
+  static Color color = const Color(0xFFF44336).withOpacity(0.5);
   static const _sensorIntervalKey = 'SensorContact';
   int _intervalCallback = 100;
   bool sensorEnabled = true;
@@ -31,7 +32,6 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is T) {
       if (sensorEnabled) {
-        print(other.runtimeType);
         if (checkInterval(
           _sensorIntervalKey,
           _intervalCallback,
