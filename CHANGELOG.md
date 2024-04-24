@@ -1,4 +1,4 @@
-# NEXT
+# 3.8.0
 - Adds `DamageHitbox`. Use it to do damage.
 - `GameMap` Improvements. Now you can access the layers
   Breaking Changes:
