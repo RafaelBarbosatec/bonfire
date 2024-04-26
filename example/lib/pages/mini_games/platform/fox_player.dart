@@ -67,8 +67,8 @@ class FoxPlayer extends PlatformPlayer with HandleForces {
   }
 
   @override
-  void die() {
+  void onDie() {
     removeFromParent();
-    super.die();
+    super.onDie();
   }
 }

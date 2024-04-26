@@ -1,4 +1,4 @@
-import 'package:bonfire/map/base/tile_model.dart';
+import 'package:bonfire/map/base/tile.dart';
 import 'package:bonfire/map/matrix_map/matrix_map_generator.dart';
 import 'package:bonfire/util/functions.dart';
 import 'package:bonfire/util/pair.dart';
@@ -22,7 +22,7 @@ class TerrainBuilder {
 
   TerrainBuilder({required this.tileSize, required this.terrainList});
 
-  TileModel build(ItemMatrixProperties prop) {
+  Tile build(ItemMatrixProperties prop) {
     Iterable<MapTerrain> findList = terrainList.where(
       (element) => element.value == prop.value,
     );
@@ -45,11 +45,11 @@ class TerrainBuilder {
     }
   }
 
-  TileModel _buildTileCorner(
+  Tile _buildTileCorner(
     Iterable<MapTerrain> terrains,
     ItemMatrixProperties prop,
   ) {
-    TileModelSprite? sprite;
+    TileSprite? sprite;
     Iterable<MapTerrainCorners> corners =
         terrains.whereType<MapTerrainCorners>();
 
@@ -122,7 +122,7 @@ class TerrainBuilder {
       }
     }
 
-    return TileModel(
+    return Tile(
       x: prop.position.x,
       y: prop.position.y,
       width: tileSize,
@@ -134,8 +134,8 @@ class TerrainBuilder {
     );
   }
 
-  TileModel _buildTile(MapTerrain terrain, ItemMatrixProperties prop) {
-    return TileModel(
+  Tile _buildTile(MapTerrain terrain, ItemMatrixProperties prop) {
+    return Tile(
       x: prop.position.x,
       y: prop.position.y,
       width: tileSize,
@@ -147,8 +147,8 @@ class TerrainBuilder {
     );
   }
 
-  TileModel _buildDefault(ItemMatrixProperties prop) {
-    return TileModel(
+  Tile _buildDefault(ItemMatrixProperties prop) {
+    return Tile(
       x: prop.position.x,
       y: prop.position.y,
       width: tileSize,
@@ -156,11 +156,11 @@ class TerrainBuilder {
     );
   }
 
-  Pair<TileModelSprite?, MapTerrain?> _handleBottomCorners(
+  Pair<TileSprite?, MapTerrain?> _handleBottomCorners(
     Iterable<MapTerrainCorners> corners,
     ItemMatrixProperties prop,
   ) {
-    TileModelSprite? sprite;
+    TileSprite? sprite;
     MapTerrain? terrain;
     if (prop.valueBottom != prop.value &&
         prop.valueBottom == prop.valueBottomLeft &&
@@ -214,14 +214,14 @@ class TerrainBuilder {
       }
     }
 
-    return Pair<TileModelSprite?, MapTerrain?>(sprite, terrain);
+    return Pair<TileSprite?, MapTerrain?>(sprite, terrain);
   }
 
-  Pair<TileModelSprite?, MapTerrain?> _handleTopCorners(
+  Pair<TileSprite?, MapTerrain?> _handleTopCorners(
     Iterable<MapTerrainCorners> corners,
     ItemMatrixProperties prop,
   ) {
-    TileModelSprite? sprite;
+    TileSprite? sprite;
     MapTerrain? terrain;
     if (prop.valueTop != prop.value &&
         prop.valueTop == prop.valueTopLeft &&
@@ -275,6 +275,6 @@ class TerrainBuilder {
       }
     }
 
-    return Pair<TileModelSprite?, MapTerrain?>(sprite, terrain);
+    return Pair<TileSprite?, MapTerrain?>(sprite, terrain);
   }
 }

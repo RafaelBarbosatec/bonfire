@@ -86,3 +86,5 @@ example/macos/Pods/Pods.xcodeproj/xcuserdata/rafaelbarbosa.xcuserdatad/xcschemes
 example/macos/Pods/Pods.xcodeproj/xcuserdata/rafaelbarbosa.xcuserdatad/xcschemes/xcschememanagement.plist
 example/macos/Pods/Target Support Files/FlutterMacOS/FlutterMacOS.debug.xcconfig
 example/macos/Pods/Target Support Files/FlutterMacOS/FlutterMacOS.release.xcconfig
+
+.fvm

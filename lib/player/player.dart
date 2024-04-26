@@ -18,7 +18,7 @@ class Player extends GameComponent
     double? speed,
   }) {
     this.speed = speed ?? this.speed;
-    receivesAttackFrom = ReceivesAttackFromEnum.ENEMY;
+    receivesAttackFrom = AcceptableAttackOriginEnum.ENEMY;
     initialLife(life);
     this.position = position;
     this.size = size;

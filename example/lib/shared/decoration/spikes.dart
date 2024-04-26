@@ -15,9 +15,9 @@ class Spikes extends GameDecoration with Sensor<Attackable> {
   @override
   void onContact(Attackable component) {
     if (component is Player) {
-      component.receiveDamage(AttackFromEnum.ENEMY, 10, 1);
+      component.receiveDamage(AttackOriginEnum.ENEMY, 10, 1);
     } else {
-      component.receiveDamage(AttackFromEnum.PLAYER_OR_ALLY, 10, 1);
+      component.receiveDamage(AttackOriginEnum.PLAYER_OR_ALLY, 10, 1);
     }
   }
 }

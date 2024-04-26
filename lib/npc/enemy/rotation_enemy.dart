@@ -13,8 +13,8 @@ class RotationEnemy extends Enemy with UseSpriteAnimation, UseAssetsLoader {
     double currentRadAngle = -1.55,
     double? speed,
     double life = 100,
-    ReceivesAttackFromEnum receivesAttackFrom =
-        ReceivesAttackFromEnum.PLAYER_AND_ALLY,
+    AcceptableAttackOriginEnum receivesAttackFrom =
+        AcceptableAttackOriginEnum.PLAYER_AND_ALLY,
   }) : super(
           position: position,
           size: size,

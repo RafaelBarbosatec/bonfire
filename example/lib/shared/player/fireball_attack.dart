@@ -77,7 +77,7 @@ mixin FireballAttack on SimplePlayer {
 
   void execRangeAttack(double angle, double damage) {
     simpleAttackRangeByAngle(
-      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
+      attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
       animation: CommonSpriteSheet.fireBallRight,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       angle: angle,

@@ -41,7 +41,7 @@ extension RotationPlayerExtensions on RotationPlayer {
       lightingConfig: lightingConfig,
       centerOffset: centerOffset,
       marginFromOrigin: marginFromOrigin,
-      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
+      attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
     );
   }
 
@@ -66,7 +66,7 @@ extension RotationPlayerExtensions on RotationPlayer {
       withPush: withPush,
       marginFromCenter: marginFromCenter,
       centerOffset: centerOffset,
-      attackFrom: AttackFromEnum.PLAYER_OR_ALLY,
+      attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
     );
   }
 }

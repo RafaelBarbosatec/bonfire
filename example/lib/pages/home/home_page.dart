@@ -10,6 +10,7 @@ import 'package:example/pages/input/mouse/mouse_input_page.dart';
 import 'package:example/pages/input/move_camera_mouse/move_camera_page.dart';
 import 'package:example/pages/input/tap/tap_gesture_page.dart';
 import 'package:example/pages/lighting/lighting_page.dart';
+import 'package:example/pages/map/spritefusion/spritefusion_page.dart';
 import 'package:example/pages/map/terrain_builder/terrain_builder_page.dart';
 import 'package:example/pages/map/tiled/tiled_network_page.dart';
 import 'package:example/pages/map/tiled/tiled_page.dart';
@@ -123,6 +124,12 @@ class _HomePageState extends State<HomePage> {
             builder: (_) => const TiledNetworkPage(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/map/tiled',
+          ),
+          ItemDrawer(
+            name: 'Using Spritefusion',
+            builder: (_) => const SpritefusionPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/map/spritefusion',
           ),
           ItemDrawer(
             name: 'Using matrix',

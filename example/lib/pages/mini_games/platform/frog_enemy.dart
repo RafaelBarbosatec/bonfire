@@ -38,17 +38,17 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
       if (collisionData.direction.isUpSide) {
         if (!isDead) {
           other.jump(jumpSpeed: 100, force: true);
-          die();
+          onDie();
         }
       } else {
-        other.die();
+        other.onDie();
       }
     }
   }
 
   @override
-  void die() {
-    super.die();
+  void onDie() {
+    super.onDie();
     animation?.playOnce(
       PlatformSpritesheet.enemyExplosion,
       runToTheEnd: true,

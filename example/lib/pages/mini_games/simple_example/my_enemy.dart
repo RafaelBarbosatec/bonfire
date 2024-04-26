@@ -12,7 +12,7 @@ import 'package:example/shared/util/enemy_sprite_sheet.dart';
 ///
 /// Rafaelbarbosatec
 /// on 19/10/21
-class MyEnemy extends SimpleNpc
+class MyEnemy extends SimpleEnemy
     with BlockMovementCollision, AutomaticRandomMovement {
   MyEnemy(Vector2 position)
       : super(
@@ -30,13 +30,6 @@ class MyEnemy extends SimpleNpc
   @override
   void update(double dt) {
     super.update(dt);
-    // seeAndMoveToPlayer(
-    //   margin: -5,
-    //   closePlayer: (player) {
-    //     /// do anything when close to player
-    //   },
-    //   radiusVision: 64,
-    // );
     runRandomMovement(dt);
   }
 }

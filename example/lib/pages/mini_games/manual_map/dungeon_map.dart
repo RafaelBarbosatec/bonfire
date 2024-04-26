@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/map/base/layer.dart';
 import 'package:example/shared/decoration/barrel_dragable.dart';
 import 'package:example/shared/decoration/chest.dart';
 import 'package:example/shared/decoration/spikes.dart';
@@ -21,14 +22,14 @@ class DungeonMap {
   static const String floor_4 = 'tile/floor_4.png';
 
   static void generateMap(
-    List<TileModel> tileList,
+    List<Tile> tileList,
     int indexRow,
     int indexColumn,
     String pngImage,
   ) {
     tileList.add(
-      TileModel(
-        sprite: TileModelSprite(path: pngImage),
+      Tile(
+        sprite: TileSprite(path: pngImage),
         x: indexColumn.toDouble(),
         y: indexRow.toDouble(),
         collisions: [RectangleHitbox(size: Vector2(tileSize, tileSize))],
@@ -39,7 +40,7 @@ class DungeonMap {
   }
 
   static WorldMap map() {
-    List<TileModel> tileList = [];
+    List<Tile> tileList = [];
     List.generate(35, (indexRow) {
       List.generate(70, (indexColumn) {
         if (indexRow == 3 && indexColumn > 2 && indexColumn < 30) {
@@ -76,8 +77,8 @@ class DungeonMap {
             indexColumn > 2 &&
             indexColumn < 30) {
           tileList.add(
-            TileModel(
-              sprite: TileModelSprite(path: randomFloor()),
+            Tile(
+              sprite: TileSprite(path: randomFloor()),
               x: indexColumn.toDouble(),
               y: indexRow.toDouble(),
               width: tileSize,
@@ -115,7 +116,7 @@ class DungeonMap {
       });
     });
 
-    return WorldMap(tileList);
+    return WorldMap([Layer(id: 0, tiles: tileList)]);
   }
 
   static List<GameDecoration> decorations() {

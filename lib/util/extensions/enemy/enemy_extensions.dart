@@ -33,7 +33,7 @@ extension EnemyExtensions on Enemy {
       withPush: withPush,
       sizePush: sizePush,
       animationRight: animationRight,
-      attackFrom: AttackFromEnum.ENEMY,
+      attackFrom: AttackOriginEnum.ENEMY,
       centerOffset: centerOffset,
     );
 
@@ -79,7 +79,7 @@ extension EnemyExtensions on Enemy {
       onDestroy: onDestroy,
       destroySize: destroySize,
       lightingConfig: lightingConfig,
-      attackFrom: AttackFromEnum.ENEMY,
+      attackFrom: AttackOriginEnum.ENEMY,
     );
     execute?.call();
   }

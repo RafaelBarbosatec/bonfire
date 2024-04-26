@@ -20,7 +20,8 @@ class Ally extends Npc with Attackable {
     required Vector2 size,
     double life = 10,
     double speed = 100,
-    ReceivesAttackFromEnum receivesAttackFrom = ReceivesAttackFromEnum.ENEMY,
+    AcceptableAttackOriginEnum receivesAttackFrom =
+        AcceptableAttackOriginEnum.ENEMY,
   }) : super(position: position, size: size, speed: speed) {
     this.speed = speed;
     this.receivesAttackFrom = receivesAttackFrom;

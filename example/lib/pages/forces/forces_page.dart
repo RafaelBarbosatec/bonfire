@@ -11,7 +11,7 @@ class ForcesPage extends StatelessWidget {
     const tileSize = 16.0;
     return BonfireWidget(
       map: WorldMapByTiled(
-        TiledReader.asset('platform/simple_map_gem.tmj'),
+        WorldMapReader.fromAsset('platform/simple_map_gem.tmj'),
         objectsBuilder: {
           'gem_acceleration': (prop) => ForcesGem(
                 position: prop.position,

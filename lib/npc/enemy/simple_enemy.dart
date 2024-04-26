@@ -15,8 +15,8 @@ class SimpleEnemy extends Enemy with DirectionAnimation {
     double life = 100,
     double? speed,
     Direction initDirection = Direction.right,
-    ReceivesAttackFromEnum receivesAttackFrom =
-        ReceivesAttackFromEnum.PLAYER_AND_ALLY,
+    AcceptableAttackOriginEnum receivesAttackFrom =
+        AcceptableAttackOriginEnum.PLAYER_AND_ALLY,
   }) : super(
           position: position,
           size: size,

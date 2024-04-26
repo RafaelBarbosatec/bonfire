@@ -122,7 +122,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       size: size,
       angle: angle,
       animation: animationRight,
-      attackFrom: AttackFromEnum.ENEMY,
+      attackFrom: AttackOriginEnum.ENEMY,
     );
 
     execute?.call();
@@ -167,7 +167,7 @@ extension RotationEnemyExtensions on RotationEnemy {
       lightingConfig: lightingConfig,
       centerOffset: centerOffset,
       marginFromOrigin: marginFromOrigin,
-      attackFrom: AttackFromEnum.ENEMY,
+      attackFrom: AttackOriginEnum.ENEMY,
     );
 
     onExecute?.call();

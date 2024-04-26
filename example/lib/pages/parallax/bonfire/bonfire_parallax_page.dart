@@ -19,7 +19,7 @@ class BonfireParallaxPage extends StatelessWidget {
         ],
       ),
       map: WorldMapByTiled(
-        TiledReader.asset('platform/parallax_map.tmj'),
+        WorldMapReader.fromAsset('platform/parallax_map.tmj'),
       ),
       background: BonfireParallaxBackground(),
       globalForces: [GravityForce2D()],

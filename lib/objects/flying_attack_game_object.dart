@@ -10,7 +10,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
   Future<SpriteAnimation>? animationDestroy;
   final Direction? direction;
   final double damage;
-  final AttackFromEnum attackFrom;
+  final AttackOriginEnum attackFrom;
   final bool withDecorationCollision;
   final VoidCallback? onDestroy;
   final bool enabledDiagonal;
@@ -30,7 +30,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     this.destroySize,
     double speed = 150,
     this.damage = 1,
-    this.attackFrom = AttackFromEnum.ENEMY,
+    this.attackFrom = AttackOriginEnum.ENEMY,
     this.withDecorationCollision = true,
     this.onDestroy,
     this.enabledDiagonal = true,
@@ -60,7 +60,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     this.destroySize,
     double speed = 150,
     this.damage = 1,
-    this.attackFrom = AttackFromEnum.ENEMY,
+    this.attackFrom = AttackOriginEnum.ENEMY,
     this.withDecorationCollision = true,
     this.onDestroy,
     this.enabledDiagonal = true,
@@ -82,7 +82,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     this.destroySize,
     double speed = 150,
     this.damage = 1,
-    this.attackFrom = AttackFromEnum.ENEMY,
+    this.attackFrom = AttackOriginEnum.ENEMY,
     this.withDecorationCollision = true,
     this.onDestroy,
     this.enabledDiagonal = true,

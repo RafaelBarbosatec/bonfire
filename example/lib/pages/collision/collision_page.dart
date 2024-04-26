@@ -10,7 +10,7 @@ class CollisionPage extends StatelessWidget {
     const tileSize = 16.0;
     return BonfireWidget(
       map: WorldMapByTiled(
-        TiledReader.asset('tiled/collision.json'),
+        WorldMapReader.fromAsset('tiled/collision.json'),
       ),
       components: [AddCollisionComponent()],
       cameraConfig: CameraConfig(
