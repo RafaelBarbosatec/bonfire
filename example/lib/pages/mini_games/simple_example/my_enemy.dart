@@ -32,6 +32,4 @@ class MyEnemy extends SimpleEnemy
     super.update(dt);
     runRandomMovement(dt);
   }
-
-  
 }

@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
 
-
-
 /// Mixin responsible for adding trigger to detect other objects above
 /// T is a type that Sensor will be find contact.
 mixin Sensor<T extends GameComponent> on GameComponent {
