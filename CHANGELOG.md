@@ -1,3 +1,6 @@
+# 3.8.1
+- Adds param `centerAnchor` in `SimpleDirectionAnimation` and `PlatformAnimations`. It's useful to correct spritesheet not centered.
+
 # 3.8.0
 - Adds `DamageHitbox`. Use it to do damage.
 - `GameMap` Improvements. Now you can access the layers

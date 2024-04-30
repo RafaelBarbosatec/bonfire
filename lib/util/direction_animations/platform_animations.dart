@@ -23,6 +23,7 @@ class PlatformAnimations {
   final FutureOr<SpriteAnimation>? runLeft;
   final PlatformJumpAnimations? jump;
   final Map<String, FutureOr<SpriteAnimation>>? others;
+  final Vector2? centerAnchor;
 
   PlatformAnimations({
     required this.idleRight,
@@ -31,5 +32,6 @@ class PlatformAnimations {
     this.runLeft,
     this.jump,
     this.others,
+    this.centerAnchor,
   });
 }

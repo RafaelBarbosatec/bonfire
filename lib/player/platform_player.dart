@@ -5,7 +5,7 @@ class PlatformPlayer extends SimplePlayer
   PlatformPlayer({
     required super.position,
     required super.size,
-    required PlatformAnimations animation,
+    PlatformAnimations? animation,
     Direction initDirection = Direction.right,
     double? speed,
     double life = 100,
@@ -14,23 +14,30 @@ class PlatformPlayer extends SimplePlayer
           initDirection: initDirection,
           speed: speed,
           life: life,
-          animation: SimpleDirectionAnimation(
-            idleRight: animation.idleRight,
-            runRight: animation.runRight,
-            idleLeft: animation.idleLeft,
-            runLeft: animation.runLeft,
-            others: {
-              if (animation.jump?.jumpUpRight != null)
-                JumpAnimationsEnum.jumpUpRight: animation.jump!.jumpUpRight,
-              if (animation.jump?.jumpUpLeft != null)
-                JumpAnimationsEnum.jumpUpLeft: animation.jump!.jumpUpLeft!,
-              if (animation.jump?.jumpDownRight != null)
-                JumpAnimationsEnum.jumpDownRight: animation.jump!.jumpDownRight,
-              if (animation.jump?.jumpDownLeft != null)
-                JumpAnimationsEnum.jumpDownLeft: animation.jump!.jumpDownLeft!,
-              ...animation.others ?? {},
-            },
-          ),
+          animation: animation != null
+              ? SimpleDirectionAnimation(
+                  idleRight: animation.idleRight,
+                  runRight: animation.runRight,
+                  idleLeft: animation.idleLeft,
+                  runLeft: animation.runLeft,
+                  centerAnchor: animation.centerAnchor,
+                  others: {
+                    if (animation.jump?.jumpUpRight != null)
+                      JumpAnimationsEnum.jumpUpRight:
+                          animation.jump!.jumpUpRight,
+                    if (animation.jump?.jumpUpLeft != null)
+                      JumpAnimationsEnum.jumpUpLeft:
+                          animation.jump!.jumpUpLeft!,
+                    if (animation.jump?.jumpDownRight != null)
+                      JumpAnimationsEnum.jumpDownRight:
+                          animation.jump!.jumpDownRight,
+                    if (animation.jump?.jumpDownLeft != null)
+                      JumpAnimationsEnum.jumpDownLeft:
+                          animation.jump!.jumpDownLeft!,
+                    ...animation.others ?? {},
+                  },
+                )
+              : null,
         ) {
     setupJumper(maxJump: countJumps);
   }
