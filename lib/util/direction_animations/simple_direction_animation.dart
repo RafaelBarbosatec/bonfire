@@ -76,6 +76,8 @@ class SimpleDirectionAnimation {
   bool get canRunDownRight => _runDownRightAnim != null;
   bool get canIdleUp => _idleUpAnim != null;
 
+  late RenderTransformWrapper _renderWrapper;
+
   SimpleDirectionAnimation({
     required FutureOr<SpriteAnimation> idleRight,
     required FutureOr<SpriteAnimation> runRight,
@@ -168,8 +170,6 @@ class SimpleDirectionAnimation {
     }
     return null;
   }
-
-  late RenderTransformWrapper _renderWrapper;
 
   /// Method used to play specific default animation
   void play(SimpleAnimationEnum animation) {
