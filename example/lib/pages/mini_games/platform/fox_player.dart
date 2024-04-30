@@ -21,15 +21,6 @@ class FoxPlayer extends PlatformPlayer with HandleForces {
         );
 
   @override
-  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
-    if (event.directional == JoystickMoveDirectional.MOVE_LEFT ||
-        event.directional == JoystickMoveDirectional.MOVE_RIGHT ||
-        event.directional == JoystickMoveDirectional.IDLE) {
-      super.onJoystickChangeDirectional(event);
-    }
-  }
-
-  @override
   void onJoystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN &&
         (event.id == LogicalKeyboardKey.space || event.id == 1)) {

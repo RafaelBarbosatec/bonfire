@@ -43,6 +43,15 @@ class PlatformPlayer extends SimplePlayer
   }
 
   @override
+  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
+    if (event.directional == JoystickMoveDirectional.MOVE_LEFT ||
+        event.directional == JoystickMoveDirectional.MOVE_RIGHT ||
+        event.directional == JoystickMoveDirectional.IDLE) {
+      super.onJoystickChangeDirectional(event);
+    }
+  }
+
+  @override
   Future<void> replaceAnimation(
     SimpleDirectionAnimation newAnimation, {
     bool doIdle = false,
