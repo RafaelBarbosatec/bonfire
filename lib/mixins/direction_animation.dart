@@ -105,8 +105,7 @@ mixin DirectionAnimation on Movement {
   }
 
   void onPlayRunDownAnimation() {
-    if (animation?.runDown != null ||
-        (animation?.runUp != null && animation?.enabledFlipY == true)) {
+    if (animation?.canRunDown == true) {
       animation?.play(SimpleAnimationEnum.runDown);
     } else {
       if (lastDirectionHorizontal == Direction.left) {
@@ -118,7 +117,7 @@ mixin DirectionAnimation on Movement {
   }
 
   void onPlayRunUpAnimation() {
-    if (animation?.runUp != null) {
+    if (animation?.canRunUp == true) {
       animation?.play(SimpleAnimationEnum.runUp);
     } else {
       if (lastDirectionHorizontal == Direction.left) {
@@ -130,7 +129,7 @@ mixin DirectionAnimation on Movement {
   }
 
   void onPlayRunUpLeftAnimation() {
-    if (animation?.runUpLeft != null) {
+    if (animation?.canRunUpLeft == true) {
       animation?.play(SimpleAnimationEnum.runUpLeft);
     } else {
       animation?.play(SimpleAnimationEnum.runLeft);
@@ -138,7 +137,7 @@ mixin DirectionAnimation on Movement {
   }
 
   void onPlayRunUpRightAnimation() {
-    if (animation?.runUpRight != null) {
+    if (animation?.canRunUpRight == true) {
       animation?.play(SimpleAnimationEnum.runUpRight);
     } else {
       animation?.play(SimpleAnimationEnum.runRight);
@@ -146,7 +145,7 @@ mixin DirectionAnimation on Movement {
   }
 
   void onPlayRunDownLeftAnimation() {
-    if (animation?.runDownLeft != null) {
+    if (animation?.canRunDownLeft == true) {
       animation?.play(SimpleAnimationEnum.runDownLeft);
     } else {
       animation?.play(SimpleAnimationEnum.runLeft);
@@ -154,7 +153,7 @@ mixin DirectionAnimation on Movement {
   }
 
   void onPlayRunDownRightAnimation() {
-    if (animation?.runDownRight != null) {
+    if (animation?.canRunDownRight == true) {
       animation?.play(SimpleAnimationEnum.runDownRight);
     } else {
       animation?.play(SimpleAnimationEnum.runRight);
@@ -170,7 +169,7 @@ mixin DirectionAnimation on Movement {
   }
 
   void onPlayIdleUpAnimation() {
-    if (animation?.idleUp != null) {
+    if (animation?.canIdleUp == true) {
       animation?.play(SimpleAnimationEnum.idleUp);
     } else {
       if (lastDirectionHorizontal == Direction.left) {
@@ -182,8 +181,7 @@ mixin DirectionAnimation on Movement {
   }
 
   void onPlayIdleDownAnimation() {
-    if (animation?.idleDown != null ||
-        (animation?.idleUp != null && animation?.enabledFlipY == true)) {
+    if (animation?.canIdleDown == true) {
       animation?.play(SimpleAnimationEnum.idleDown);
     } else {
       if (lastDirectionHorizontal == Direction.left) {
