@@ -1,5 +1,5 @@
 # 3.8.5
--Fix bug in `JumperAnimation`
+- Fix bug in `JumperAnimation`
 
 # 3.8.4
 - `KeyboardConfig` improvements. Now `directionalKeys` expect list of `KeyboardDirectionalKeys`. Fix [#507](https://github.com/RafaelBarbosatec/bonfire/issues/507)
