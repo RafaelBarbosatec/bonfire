@@ -27,7 +27,10 @@ class GameTiledMap extends StatelessWidget {
       builder: (context, constraints) {
         return BonfireWidget(
           keyboardConfig: KeyboardConfig(
-            directionalKeys: KeyboardDirectionalKeys.arrows(),
+            directionalKeys: [
+              KeyboardDirectionalKeys.arrows(),
+              KeyboardDirectionalKeys.wasd(),
+            ],
             acceptedKeys: [
               LogicalKeyboardKey.space,
             ],

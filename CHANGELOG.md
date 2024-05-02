@@ -1,3 +1,8 @@
+# 3.8.4
+- `KeyboardConfig` improvements. Now `directionalKeys` expect list of `KeyboardDirectionalKeys`. Fix [#507](https://github.com/RafaelBarbosatec/bonfire/issues/507)
+- `PlatformEnemy` improvements.
+- Adds `flipAnimation` method in `ui.Image`.
+
 # 3.8.3
 - Fix bug in the `PlatformPlayer` movements.
 - Adds `objectsBuilder` in `WorldMapBySpritefusion`. You can select a layer to adds objects in the tile position.

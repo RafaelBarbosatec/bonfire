@@ -34,4 +34,11 @@ class PlatformEnemy extends SimpleEnemy
         ) {
     setupJumper(maxJump: countJumps);
   }
+
+  @override
+  void idle() {
+    if (lastDirection.isHorizontal) {
+      super.idle();
+    }
+  }
 }
