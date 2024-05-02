@@ -1,5 +1,7 @@
 # NEXT
 - `KeyboardConfig` improvements. Now `directionalKeys` expect list of `KeyboardDirectionalKeys`
+- `PlatformEnemy` improvements.
+- Adds `flipAnimation` method in `ui.Image`.
 
 # 3.8.3
 - Fix bug in the `PlatformPlayer` movements.
