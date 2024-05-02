@@ -122,7 +122,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Attackable && !other.isRemoving && animationDestroy == null) {
+    if (other is Attackable && animationDestroy == null) {
       other.receiveDamage(attackFrom, damage, id);
     }
     if (other is GameComponent) {

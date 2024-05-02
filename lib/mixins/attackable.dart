@@ -89,7 +89,7 @@ mixin Attackable on GameComponent {
 
   /// This method is used to check if this component can receive damage from any attacker.
   bool checkCanReceiveDamage(AttackOriginEnum attacker) {
-    if (isDead) return false;
+    if (isDead || isRemoving) return false;
     switch (receivesAttackFrom) {
       case AcceptableAttackOriginEnum.ALL:
         return true;

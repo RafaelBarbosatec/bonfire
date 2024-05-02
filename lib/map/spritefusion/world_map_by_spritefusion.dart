@@ -9,14 +9,14 @@ class WorldMapBySpritefusion extends WorldMap {
     WorldMapReader<SpritefusionMap> reader, {
     ValueChanged<Object>? onError,
     double sizeToUpdate = 0,
-    Map<String, SpritefusionObjectBuilder>? objectsBuilder
+    Map<String, SpritefusionObjectBuilder>? objectsBuilder,
   }) : super(const []) {
     this.sizeToUpdate = sizeToUpdate;
     _builder = SpritefusionWorldBuilder(
       reader,
       onError: onError,
       sizeToUpdate: sizeToUpdate,
-      objectsBuilder:objectsBuilder,
+      objectsBuilder: objectsBuilder,
     );
   }
 
@@ -28,5 +28,3 @@ class WorldMapBySpritefusion extends WorldMap {
     return super.onLoad();
   }
 }
-
-

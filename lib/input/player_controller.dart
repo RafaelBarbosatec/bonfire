@@ -15,8 +15,10 @@ enum JoystickMoveDirectional {
   MOVE_LEFT,
   IDLE;
 
-  bool get isLeft => this == MOVE_LEFT || this == MOVE_DOWN_LEFT || this == MOVE_UP_LEFT;
-  bool get isRight => this == MOVE_RIGHT || this == MOVE_DOWN_RIGHT || this == MOVE_UP_RIGHT;
+  bool get isLeft =>
+      this == MOVE_LEFT || this == MOVE_DOWN_LEFT || this == MOVE_UP_LEFT;
+  bool get isRight =>
+      this == MOVE_RIGHT || this == MOVE_DOWN_RIGHT || this == MOVE_UP_RIGHT;
 }
 
 class JoystickDirectionalEvent {
