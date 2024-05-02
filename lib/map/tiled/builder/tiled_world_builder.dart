@@ -69,7 +69,7 @@ class TiledWorldBuilder {
     _objectsBuilder[name] = builder;
   }
 
-  Future<TiledWorldData> build() async {
+  Future<WorldBuildData> build() async {
     try {
       _tiledMap = await reader.readMap();
       if (_tiledMap?.orientation != _mapOrientationSupported) {
@@ -89,7 +89,7 @@ class TiledWorldBuilder {
     }
 
     return Future.value(
-      TiledWorldData(
+      WorldBuildData(
         map: WorldMap(
           _layers,
           tileSizeToUpdate: sizeToUpdate,

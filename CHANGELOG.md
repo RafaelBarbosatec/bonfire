@@ -1,5 +1,6 @@
-# Next
-- FIx bug in `PlatformPlayer`
+# 3.8.3
+- Fix bug in the `PlatformPlayer` movements.
+- Adds `objectsBuilder` in `WorldMapBySpritefusion`. You can select a layer to adds objects in the tile position.
 
 # 3.8.2
 - Adds param `centerAnchor` in `SimpleDirectionAnimation` and `PlatformAnimations`. It's useful to correct spritesheet not centered.

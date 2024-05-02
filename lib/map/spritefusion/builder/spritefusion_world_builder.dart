@@ -1,22 +1,30 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/base/layer.dart';
 import 'package:bonfire/map/spritefusion/model/spritefucion_map.dart';
+import 'package:bonfire/map/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
 import 'package:flutter/material.dart';
+
+typedef SpritefusionObjectBuilder = GameComponent Function(
+  Vector2 position,
+);
 
 class SpritefusionWorldBuilder {
   final ValueChanged<Object>? onError;
   final WorldMapReader<SpritefusionMap> reader;
   final double sizeToUpdate;
   final List<Layer> _layers = [];
+  final List<GameComponent> components = [];
+  final Map<String, SpritefusionObjectBuilder>? objectsBuilder;
 
   SpritefusionWorldBuilder(
     this.reader, {
     required this.onError,
     this.sizeToUpdate = 0,
+    this.objectsBuilder,
   });
 
-  Future<WorldMap> build() async {
+  Future<WorldBuildData> build() async {
     try {
       final map = await reader.readMap();
       await _load(map);
@@ -24,12 +32,16 @@ class SpritefusionWorldBuilder {
       onError?.call(e);
       // ignore: avoid_print
       print('(SpritefusionWorldBuilder) Error: $e');
+      rethrow;
     }
 
     return Future.value(
-      WorldMap(
-        _layers,
-        tileSizeToUpdate: sizeToUpdate,
+      WorldBuildData(
+        map: WorldMap(
+          _layers,
+          tileSizeToUpdate: sizeToUpdate,
+        ),
+        components: components,
       ),
     );
   }
@@ -39,22 +51,32 @@ class SpritefusionWorldBuilder {
     final spritesheet = await MapAssetsManager.loadImage(map.imgPath);
     final maxRow = spritesheet.width / map.tileSize;
     for (var layer in map.layers.reversed) {
-      List<Tile> tiles = _loadTiles(
-        layer.tiles,
-        map.tileSize,
-        map.imgPath,
-        maxRow,
-        layer.collider,
-      );
-      _layers.add(
-        Layer(
-          id: index,
-          tiles: tiles,
-          priority: index,
-        ),
-      );
+      final objectBuilder = objectsBuilder?[layer.name];
+      if (objectBuilder != null) {
+        _addObjects(layer, objectBuilder, map.tileSize);
+      } else {
+        _addTile(layer, map, maxRow, index);
+      }
       index++;
     }
+  }
+
+  void _addTile(SpritefusionMapLayer layer, SpritefusionMap map, double maxRow,
+      int index) {
+    List<Tile> tiles = _loadTiles(
+      layer.tiles,
+      map.tileSize,
+      map.imgPath,
+      maxRow,
+      layer.collider,
+    );
+    _layers.add(
+      Layer(
+        id: index,
+        tiles: tiles,
+        priority: index,
+      ),
+    );
   }
 
   List<Tile> _loadTiles(
@@ -83,5 +105,17 @@ class SpritefusionWorldBuilder {
         );
       },
     ).toList();
+  }
+
+  void _addObjects(SpritefusionMapLayer layer,
+      SpritefusionObjectBuilder objectBuilder, double tileSize) {
+    for (var tile in layer.tiles) {
+      final position = Vector2(
+            tile.x.toDouble(),
+            tile.y.toDouble(),
+          ) *
+          tileSize;
+      components.add(objectBuilder(position));
+    }
   }
 }

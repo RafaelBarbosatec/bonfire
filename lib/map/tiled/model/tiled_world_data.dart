@@ -1,8 +1,8 @@
 import 'package:bonfire/bonfire.dart';
 
-class TiledWorldData {
+class WorldBuildData {
   final WorldMap map;
   final List<GameComponent>? components;
 
-  TiledWorldData({required this.map, this.components});
+  WorldBuildData({required this.map, this.components});
 }

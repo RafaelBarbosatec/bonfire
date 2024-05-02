@@ -122,7 +122,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Attackable && !other.isRemoving) {
+    if (other is Attackable && !other.isRemoving && animationDestroy == null) {
       other.receiveDamage(attackFrom, damage, id);
     }
     if (other is GameComponent) {
@@ -283,12 +283,15 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }
 
   void _applyDestroyDamage(Rect rectPosition, GameComponent component) {
-    gameRef.attackables(onlyVisible: true).forEach((element) {
-      if (element.rectAttackable().overlaps(rectPosition) &&
-          element != component) {
-        element.receiveDamage(attackFrom, damage, id);
-      }
-    });
+    gameRef.add(
+      DamageHitbox(
+        id: id,
+        position: rectPosition.positionVector2,
+        damage: damage,
+        origin: attackFrom,
+        size: rectPosition.size.toVector2(),
+      ),
+    );
   }
 
   @override
