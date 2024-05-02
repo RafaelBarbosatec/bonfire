@@ -79,11 +79,30 @@ class ControlByKeyboard extends PlayerController with KeyboardEventListener {
 
   /// Check if the key is for directional [arrows, wasd, or both]
   bool _isDirectional(LogicalKeyboardKey key) {
-    return keyboardConfig.directionalKeys.contain(key);
+    return keyboardConfig.directionalKeys.any(
+      (element) => element.contain(key),
+    );
+  }
+
+  bool isUpPressed(LogicalKeyboardKey key) {
+    return keyboardConfig.directionalKeys.any((element) => element.up == key);
+  }
+
+  bool isDownPressed(LogicalKeyboardKey key) {
+    return keyboardConfig.directionalKeys.any((element) => element.down == key);
+  }
+
+  bool isLeftPressed(LogicalKeyboardKey key) {
+    return keyboardConfig.directionalKeys.any((element) => element.left == key);
+  }
+
+  bool isRightPressed(LogicalKeyboardKey key) {
+    return keyboardConfig.directionalKeys
+        .any((element) => element.right == key);
   }
 
   void _sendOneDirection(LogicalKeyboardKey key) {
-    if (keyboardConfig.directionalKeys.up == key) {
+    if (isUpPressed(key)) {
       joystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_UP,
         intensity: 1.0,
@@ -91,7 +110,7 @@ class ControlByKeyboard extends PlayerController with KeyboardEventListener {
         isKeyboard: true,
       ));
     }
-    if (keyboardConfig.directionalKeys.down == key) {
+    if (isDownPressed(key)) {
       joystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_DOWN,
         intensity: 1.0,
@@ -100,7 +119,7 @@ class ControlByKeyboard extends PlayerController with KeyboardEventListener {
       ));
     }
 
-    if (keyboardConfig.directionalKeys.left == key) {
+    if (isLeftPressed(key)) {
       joystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_LEFT,
         intensity: 1.0,
@@ -109,7 +128,7 @@ class ControlByKeyboard extends PlayerController with KeyboardEventListener {
       ));
     }
 
-    if (keyboardConfig.directionalKeys.right == key) {
+    if (isRightPressed(key)) {
       joystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_RIGHT,
         intensity: 1.0,
@@ -120,10 +139,8 @@ class ControlByKeyboard extends PlayerController with KeyboardEventListener {
   }
 
   void _sendTwoDirection(LogicalKeyboardKey key1, LogicalKeyboardKey key2) {
-    if (key1 == keyboardConfig.directionalKeys.right &&
-            key2 == keyboardConfig.directionalKeys.down ||
-        key1 == keyboardConfig.directionalKeys.down &&
-            key2 == keyboardConfig.directionalKeys.right) {
+    if (isRightPressed(key1) && isDownPressed(key2) ||
+        isDownPressed(key1) && isRightPressed(key2)) {
       joystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
         intensity: 1.0,
@@ -132,10 +149,8 @@ class ControlByKeyboard extends PlayerController with KeyboardEventListener {
       ));
     }
 
-    if (key1 == keyboardConfig.directionalKeys.left &&
-            key2 == keyboardConfig.directionalKeys.down ||
-        key1 == keyboardConfig.directionalKeys.down &&
-            key2 == keyboardConfig.directionalKeys.left) {
+    if (isLeftPressed(key1) && isDownPressed(key2) ||
+        isDownPressed(key1) && isLeftPressed(key2)) {
       joystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
         intensity: 1.0,
@@ -144,10 +159,8 @@ class ControlByKeyboard extends PlayerController with KeyboardEventListener {
       ));
     }
 
-    if (key1 == keyboardConfig.directionalKeys.left &&
-            key2 == keyboardConfig.directionalKeys.up ||
-        key1 == keyboardConfig.directionalKeys.up &&
-            key2 == keyboardConfig.directionalKeys.left) {
+    if (isLeftPressed(key1) && isUpPressed(key2) ||
+        isUpPressed(key1) && isLeftPressed(key2)) {
       joystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_UP_LEFT,
         intensity: 1.0,
@@ -156,10 +169,8 @@ class ControlByKeyboard extends PlayerController with KeyboardEventListener {
       ));
     }
 
-    if (key1 == keyboardConfig.directionalKeys.right &&
-            key2 == keyboardConfig.directionalKeys.up ||
-        key1 == keyboardConfig.directionalKeys.up &&
-            key2 == keyboardConfig.directionalKeys.right) {
+    if (isRightPressed(key1) && isUpPressed(key2) ||
+        isUpPressed(key1) && isRightPressed(key2)) {
       joystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
         intensity: 1.0,

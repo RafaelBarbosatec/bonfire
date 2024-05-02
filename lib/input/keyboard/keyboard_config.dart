@@ -41,7 +41,7 @@ class KeyboardConfig {
   final bool enable;
 
   /// Type of the directional (arrows, wasd or wasdAndArrows)
-  final KeyboardDirectionalKeys directionalKeys;
+  final List<KeyboardDirectionalKeys> directionalKeys;
 
   /// You can pass specific Keys accepted. If null accept all keys
   final List<LogicalKeyboardKey>? acceptedKeys;
@@ -51,10 +51,10 @@ class KeyboardConfig {
 
   KeyboardConfig({
     this.enable = true,
-    KeyboardDirectionalKeys? directionalKeys,
+    List<KeyboardDirectionalKeys>? directionalKeys,
     this.acceptedKeys,
     this.enableDiagonalInput = true,
-  }) : directionalKeys = directionalKeys ?? KeyboardDirectionalKeys.arrows() {
-    acceptedKeys?.addAll(this.directionalKeys.keys);
+  }) : directionalKeys = directionalKeys ?? [KeyboardDirectionalKeys.arrows()] {
+    acceptedKeys?.addAll(this.directionalKeys.map((e) => e.keys).expand((e) => e));
   }
 }
