@@ -34,7 +34,7 @@ mixin InternalChecker on Component {
   }
 
   void resetInterval(String key) {
-    _timers?[key]?.reset();
+    _timers?.remove(key);
   }
 
   void tickInterval(String key) {

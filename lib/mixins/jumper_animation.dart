@@ -1,7 +1,5 @@
+import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/mixins/direction_animation.dart';
-import 'package:bonfire/mixins/jumper.dart';
-import 'package:bonfire/util/direction.dart';
-import 'package:bonfire/util/direction_animations/simple_animation_enum.dart';
 
 enum JumpAnimationsEnum {
   jumpUpRight,
