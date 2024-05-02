@@ -1,5 +1,5 @@
 # NEXT
-- `KeyboardConfig` improvements. Now `directionalKeys` expect list of `KeyboardDirectionalKeys`
+- `KeyboardConfig` improvements. Now `directionalKeys` expect list of `KeyboardDirectionalKeys`. Fix [#507](https://github.com/RafaelBarbosatec/bonfire/issues/507)
 - `PlatformEnemy` improvements.
 - Adds `flipAnimation` method in `ui.Image`.
 
