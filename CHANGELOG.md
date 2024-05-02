@@ -1,3 +1,8 @@
+# 3.8.3
+- Fix bug in the `PlatformPlayer` movements.
+- Adds `objectsBuilder` in `WorldMapBySpritefusion`. You can select a layer to adds objects in the tile position.
+- Now we use `DamageHitbox` in `FlyingAttackGameObject`.
+
 # 3.8.2
 - Adds param `centerAnchor` in `SimpleDirectionAnimation` and `PlatformAnimations`. It's useful to correct spritesheet not centered.
 - Now only handle move left or right by joystick in `SimplePlayer`.

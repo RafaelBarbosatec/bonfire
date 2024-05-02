@@ -44,11 +44,19 @@ class PlatformPlayer extends SimplePlayer
 
   @override
   void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
-    if (event.directional == JoystickMoveDirectional.MOVE_LEFT ||
-        event.directional == JoystickMoveDirectional.MOVE_RIGHT ||
-        event.directional == JoystickMoveDirectional.IDLE) {
-      super.onJoystickChangeDirectional(event);
+    JoystickMoveDirectional newDirectional = JoystickMoveDirectional.IDLE;
+
+    if (event.directional.isRight) {
+      newDirectional = JoystickMoveDirectional.MOVE_RIGHT;
+    } else if (event.directional.isLeft) {
+      newDirectional = JoystickMoveDirectional.MOVE_LEFT;
     }
+
+    super.onJoystickChangeDirectional(
+      event.copyWith(
+        directional: newDirectional,
+      ),
+    );
   }
 
   @override
