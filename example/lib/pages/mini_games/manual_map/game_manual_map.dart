@@ -54,7 +54,6 @@ class GameManualMap extends StatelessWidget {
         cameraConfig: CameraConfig(
           zoom: getZoomFromMaxVisibleTile(context, DungeonMap.tileSize, 20),
         ),
-        showCollisionArea: true,
         interface: KnightInterface(),
         map: DungeonMap.map(),
         backgroundColor: Colors.blueGrey[900]!,
