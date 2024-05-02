@@ -55,6 +55,8 @@ class KeyboardConfig {
     this.acceptedKeys,
     this.enableDiagonalInput = true,
   }) : directionalKeys = directionalKeys ?? [KeyboardDirectionalKeys.arrows()] {
-    acceptedKeys?.addAll(this.directionalKeys.map((e) => e.keys).expand((e) => e));
+    acceptedKeys?.addAll(
+      this.directionalKeys.map((e) => e.keys).expand((e) => e),
+    );
   }
 }
