@@ -1,3 +1,6 @@
+# Next
+- FIx bug in `PlatformPlayer`
+
 # 3.8.2
 - Adds param `centerAnchor` in `SimpleDirectionAnimation` and `PlatformAnimations`. It's useful to correct spritesheet not centered.
 - Now only handle move left or right by joystick in `SimplePlayer`.

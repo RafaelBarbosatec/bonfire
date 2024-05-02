@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: constant_identifier_names
 
 import 'package:bonfire/base/game_component.dart';
@@ -12,7 +13,10 @@ enum JoystickMoveDirectional {
   MOVE_DOWN_RIGHT,
   MOVE_DOWN_LEFT,
   MOVE_LEFT,
-  IDLE
+  IDLE;
+
+  bool get isLeft => this == MOVE_LEFT || this == MOVE_DOWN_LEFT || this == MOVE_UP_LEFT;
+  bool get isRight => this == MOVE_RIGHT || this == MOVE_DOWN_RIGHT || this == MOVE_UP_RIGHT;
 }
 
 class JoystickDirectionalEvent {
@@ -27,6 +31,20 @@ class JoystickDirectionalEvent {
     this.radAngle = 0.0,
     this.isKeyboard = false,
   });
+
+  JoystickDirectionalEvent copyWith({
+    JoystickMoveDirectional? directional,
+    double? intensity,
+    double? radAngle,
+    bool? isKeyboard,
+  }) {
+    return JoystickDirectionalEvent(
+      directional: directional ?? this.directional,
+      intensity: intensity ?? this.intensity,
+      radAngle: radAngle ?? this.radAngle,
+      isKeyboard: isKeyboard ?? this.isKeyboard,
+    );
+  }
 }
 
 enum ActionEvent { DOWN, UP, MOVE }
