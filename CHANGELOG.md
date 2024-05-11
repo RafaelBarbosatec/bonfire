@@ -1,3 +1,6 @@
+# next
+- Fix bug collision. [#511](https://github.com/RafaelBarbosatec/bonfire/issues/511)
+
 # 3.8.5
 - Fix bug in `JumperAnimation`
 
