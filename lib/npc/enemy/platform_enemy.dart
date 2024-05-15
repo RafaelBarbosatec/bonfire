@@ -44,12 +44,13 @@ class PlatformEnemy extends SimpleEnemy
     Direction direction,
     double angle,
   ) {
-    _canIdle = direction.isVertical;
+    _canIdle = direction.isHorizontal;
     super.onMove(speed, displacement, direction, angle);
   }
 
   @override
   void idle() {
+    print(_canIdle);
     if (_canIdle) {
       super.idle();
     }
