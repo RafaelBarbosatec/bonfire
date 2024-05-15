@@ -2,8 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/critter_sprite_sheet.dart';
 
-class Critter extends SimpleNpc
-    with BlockMovementCollision, AutomaticRandomMovement {
+class Critter extends SimpleNpc with BlockMovementCollision, RandomMovement {
   bool enableBehaviors = true;
   Critter(Vector2 position)
       : super(
@@ -25,7 +24,7 @@ class Critter extends SimpleNpc
         runRandomMovement(
           dt,
           speed: speed / 10,
-          maxDistance: (DungeonMap.tileSize).toInt(),
+          maxDistance: (DungeonMap.tileSize),
         );
         return false;
       },

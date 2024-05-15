@@ -9,7 +9,7 @@ class Goblin extends SimpleEnemy
         BlockMovementCollision,
         PlayerControllerListener,
         MovementByJoystick,
-        AutomaticRandomMovement,
+        RandomMovement,
         UseLifeBar {
   double attack = 20;
   bool enableBehaviors = true;
@@ -50,7 +50,7 @@ class Goblin extends SimpleEnemy
               runRandomMovement(
                 dt,
                 speed: speed / 2,
-                maxDistance: (DungeonMap.tileSize * 3).toInt(),
+                maxDistance: (DungeonMap.tileSize * 3),
               );
               return false;
             },

@@ -12,8 +12,7 @@ import 'package:example/shared/util/enemy_sprite_sheet.dart';
 ///
 /// Rafaelbarbosatec
 /// on 19/10/21
-class MyEnemy extends SimpleEnemy
-    with BlockMovementCollision, AutomaticRandomMovement {
+class MyEnemy extends SimpleEnemy with BlockMovementCollision, RandomMovement {
   MyEnemy(Vector2 position)
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,

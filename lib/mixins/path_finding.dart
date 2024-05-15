@@ -172,8 +172,10 @@ mixin PathFinding on Movement {
 
     _barriers.clear();
 
-    Rect area =
-        Rect.fromPoints(positionPlayer.toOffset(), finalPosition.toOffset());
+    Rect area = Rect.fromPoints(
+      positionPlayer.toOffset(),
+      finalPosition.toOffset(),
+    );
 
     double left = area.left;
     double right = area.right;
@@ -221,9 +223,9 @@ mixin PathFinding on Movement {
         result = AStar.resumePath(result);
         return _mapToWorldPositions(result);
       }
-    } catch (e) {
+    } catch (e, stacktrace) {
       // ignore: avoid_print
-      print('ERROR(AStar):$e');
+      print('ERROR(AStar):$e | $stacktrace');
     }
     return [];
   }

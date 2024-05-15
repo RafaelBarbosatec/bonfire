@@ -14,6 +14,8 @@ mixin BlockMovementCollision on Movement {
   bool get blockMovementCollisionEnabled => _blockMovementCollisionEnabled;
   bool get blockMovementCollisionReflectionEnabled => _isRigid;
   final Map<BlockMovementCollision, CollisionData> _collisionsResolution = {};
+  CollisionData? _lastCollisionData;
+  CollisionData? get lastCollisionData => _lastCollisionData!;
 
   void setupBlockMovementCollision({bool? enabled, bool? isRigid}) {
     _isRigid = isRigid ?? _isRigid;
@@ -38,6 +40,7 @@ mixin BlockMovementCollision on Movement {
     PositionComponent other,
     CollisionData collisionData,
   ) {
+    _lastCollisionData = collisionData;
     Vector2 correction;
     double depth = 0;
     if (collisionData.depth > 0) {
@@ -104,8 +107,14 @@ mixin BlockMovementCollision on Movement {
       return;
     }
 
-    ShapeHitbox shape1 = shapeHitboxes.first;
-    ShapeHitbox shape2 = other.children.query<ShapeHitbox>().first;
+    ShapeHitbox shape1 = _getCollisionShapeHitbox(
+      shapeHitboxes,
+      intersectionPoints,
+    );
+    ShapeHitbox shape2 = _getCollisionShapeHitbox(
+      other.children.query<ShapeHitbox>(),
+      intersectionPoints,
+    );
 
     ({Vector2 normal, double depth})? colisionResult;
 
@@ -273,5 +282,25 @@ mixin BlockMovementCollision on Movement {
     depth = radii - distance;
 
     return (normal: normal, depth: depth);
+  }
+
+  ShapeHitbox _getCollisionShapeHitbox(
+    List<ShapeHitbox> shapeHitboxes,
+    Set<Vector2> intersectionPoints,
+  ) {
+    if (shapeHitboxes.length == 1) {
+      return shapeHitboxes.first;
+    }
+    Map<ShapeHitbox, double> distances = {};
+    for (var hitbox in shapeHitboxes) {
+      for (var element in intersectionPoints) {
+        distances[hitbox] = hitbox.absoluteCenter.distanceTo(element);
+        if (hitbox.containsPoint(element)) {
+          return hitbox;
+        }
+      }
+    }
+
+    return distances.entries.reduce((a, b) => a.value < b.value ? a : b).key;
   }
 }
