@@ -50,7 +50,6 @@ class PlatformEnemy extends SimpleEnemy
 
   @override
   void idle() {
-    print(_canIdle);
     if (_canIdle) {
       super.idle();
     }
