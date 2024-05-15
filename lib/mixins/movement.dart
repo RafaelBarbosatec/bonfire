@@ -214,49 +214,50 @@ mixin Movement on GameComponent {
   void moveFromDirection(
     Direction direction, {
     bool enabledDiagonal = true,
+    double? speed,
   }) {
     if (direction != lastDirection) {
       setZeroVelocity();
     }
     switch (direction) {
       case Direction.left:
-        moveLeft();
+        moveLeft(speed: speed);
         break;
       case Direction.right:
-        moveRight();
+        moveRight(speed: speed);
         break;
       case Direction.up:
-        moveUp();
+        moveUp(speed: speed);
         break;
       case Direction.down:
-        moveDown();
+        moveDown(speed: speed);
         break;
       case Direction.upLeft:
         if (enabledDiagonal) {
-          moveUpLeft();
+          moveUpLeft(speed: speed);
         } else {
-          moveRight();
+          moveRight(speed: speed);
         }
         break;
       case Direction.upRight:
         if (enabledDiagonal) {
-          moveUpRight();
+          moveUpRight(speed: speed);
         } else {
-          moveRight();
+          moveRight(speed: speed);
         }
         break;
       case Direction.downLeft:
         if (enabledDiagonal) {
-          moveDownLeft();
+          moveDownLeft(speed: speed);
         } else {
-          moveLeft();
+          moveLeft(speed: speed);
         }
         break;
       case Direction.downRight:
         if (enabledDiagonal) {
-          moveDownRight();
+          moveDownRight(speed: speed);
         } else {
-          moveRight();
+          moveRight(speed: speed);
         }
         break;
     }

@@ -13,7 +13,7 @@ import 'package:example/shared/util/common_sprite_sheet.dart';
 /// Rafaelbarbosatec
 /// on 28/01/22
 class ZombieEnemy extends RotationEnemy
-    with BlockMovementCollision, AutomaticRandomMovement {
+    with BlockMovementCollision, RandomMovement {
   ZombieEnemy(Vector2 position)
       : super(
           position: position,

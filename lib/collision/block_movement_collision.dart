@@ -14,6 +14,8 @@ mixin BlockMovementCollision on Movement {
   bool get blockMovementCollisionEnabled => _blockMovementCollisionEnabled;
   bool get blockMovementCollisionReflectionEnabled => _isRigid;
   final Map<BlockMovementCollision, CollisionData> _collisionsResolution = {};
+  CollisionData? _lastCollisionData;
+  CollisionData? get lastCollisionData => _lastCollisionData!;
 
   void setupBlockMovementCollision({bool? enabled, bool? isRigid}) {
     _isRigid = isRigid ?? _isRigid;
@@ -38,6 +40,7 @@ mixin BlockMovementCollision on Movement {
     PositionComponent other,
     CollisionData collisionData,
   ) {
+    _lastCollisionData = collisionData;
     Vector2 correction;
     double depth = 0;
     if (collisionData.depth > 0) {

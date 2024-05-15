@@ -2,119 +2,96 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 
-enum RandomMovementDirectionEnum {
-  horizontally,
-  vertically,
-  horizontallyOrvertically,
-  all
+class RandomMovementDirections {
+  final List<Direction> values;
+
+  int get length => values.length;
+
+  const RandomMovementDirections({required this.values});
+
+  static const RandomMovementDirections all = RandomMovementDirections(
+    values: Direction.values,
+  );
+
+  static const RandomMovementDirections vertically = RandomMovementDirections(
+    values: [Direction.up, Direction.down],
+  );
+
+  static const RandomMovementDirections horizontally = RandomMovementDirections(
+    values: [Direction.left, Direction.right],
+  );
+
+  static const RandomMovementDirections withoutDiagonal =
+      RandomMovementDirections(
+    values: [
+      Direction.left,
+      Direction.right,
+      Direction.up,
+      Direction.down,
+    ],
+  );
 }
 
 /// Mixin responsible for adding random movement like enemy walking through the scene
-mixin AutomaticRandomMovement on Movement {
-  Vector2? _targetRandomMovement;
+mixin RandomMovement on Movement {
   // ignore: constant_identifier_names
   static const _KEY_INTERVAL_KEEP_STOPPED = 'INTERVAL_RANDOM_MOVEMENT';
 
-  Function(Vector2 target)? _startMoveCallback;
-  Function()? _arrivedTargetCallback;
+  Function(Direction direction)? _onStartMove;
+  Function()? _onStopMove;
 
   late Random _random;
 
-  bool get isVisibleReduction {
-    if (hasGameRef) {
-      return gameRef.isVisibleInCamera(this);
-    }
-    return false;
-  }
+  double? distanceToArrived;
+  Direction _currentDirection = Direction.left;
+  Vector2 _originPosition = Vector2.zero();
 
-  int _getTargetDistance(int minDistance, int maxDistance) {
-    int randomInt = _random.nextInt(maxDistance);
-    randomInt = randomInt < minDistance ? minDistance : randomInt;
-    return randomInt * (_random.nextBool() ? -1 : 1);
-  }
+  double _lastMinDistance = 0;
+  double _travelledDistance = 0;
 
   /// Method that bo used in [update] method.
   void runRandomMovement(
     double dt, {
-    bool runOnlyVisibleInCamera = true,
     double? speed,
-    int maxDistance = 50,
-    int minDistance = 25,
+    double maxDistance = 50,
+    double minDistance = 25,
 
     /// milliseconds
     int timeKeepStopped = 2000,
     bool updateAngle = false,
-    bool checkPositionWithRaycast = false,
-    RandomMovementDirectionEnum direction = RandomMovementDirectionEnum.all,
-    Function(Vector2 target)? onStartMove,
-    Function()? onArrivedTarget,
+    bool checkDirectionWithRayCast = false,
+    RandomMovementDirections directions = RandomMovementDirections.all,
+    Function(Direction direction)? onStartMove,
+    Function()? onStopMove,
   }) {
-    if (runOnlyVisibleInCamera && !isVisibleReduction) {
-      return;
-    }
-    _startMoveCallback = onStartMove;
-    _arrivedTargetCallback = onArrivedTarget;
+    _lastMinDistance = minDistance;
+    _onStartMove = onStartMove;
+    _onStopMove = onStopMove;
 
-    if (_targetRandomMovement == null) {
+    if (distanceToArrived == null) {
       if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
-        int randomX = 0, randomY = 0;
-
-        switch (direction) {
-          case RandomMovementDirectionEnum.horizontally:
-            randomX = _getTargetDistance(minDistance, maxDistance);
-            break;
-          case RandomMovementDirectionEnum.vertically:
-            randomY = _getTargetDistance(minDistance, maxDistance);
-            break;
-          case RandomMovementDirectionEnum.horizontallyOrvertically:
-            if (_random.nextBool()) {
-              randomX = _getTargetDistance(minDistance, maxDistance);
-            } else {
-              randomY = _getTargetDistance(minDistance, maxDistance);
-            }
-            break;
-          case RandomMovementDirectionEnum.all:
-            randomX = _getTargetDistance(minDistance, maxDistance);
-            randomY = _getTargetDistance(minDistance, maxDistance);
-            break;
-        }
-
-        final centerPosition = rectCollision.centerVector2;
-
-        _targetRandomMovement = centerPosition.translated(
-          randomX.toDouble(),
-          randomY.toDouble(),
-        );
-
-        if (checkPositionWithRaycast) {
-          final direct = (_targetRandomMovement! - centerPosition).normalized();
-          final result = raycast(
-            direct,
-            maxDistance: rectCollision.centerVector2.distanceTo(
-              _targetRandomMovement!,
-            ),
-          );
-          if (result?.hitbox != null) {
-            _targetRandomMovement = null;
-            tickInterval(_KEY_INTERVAL_KEEP_STOPPED);
+        final diffDistane = maxDistance - minDistance;
+        distanceToArrived = minDistance + _random.nextDouble() * diffDistane;
+        final randomInt = _random.nextInt(directions.length);
+        _currentDirection = directions.values[randomInt];
+        _originPosition = absoluteCenter.clone();
+        if (checkDirectionWithRayCast) {
+          if (!canMove(_currentDirection, displacement: distanceToArrived)) {
+            _stop();
+            return;
           }
         }
-
-        if (_targetRandomMovement != null) {
-          _startMoveCallback?.call(_targetRandomMovement!);
-        }
+        _onStartMove?.call(_currentDirection);
       }
     } else {
-      bool moved = moveToPosition(
-        _targetRandomMovement!,
-        speed: speed,
-      );
-      if (!moved) {
-        _arrivedTargetCallback?.call();
-        stopMove();
+      _travelledDistance = absoluteCenter.distanceTo(_originPosition);
+      if (_travelledDistance >= distanceToArrived!) {
+        _stop();
+        return;
       }
+      moveFromDirection(_currentDirection, speed: speed);
       if (updateAngle) {
-        angle = lastDirection.toRadians();
+        angle = _currentDirection.toRadians();
       }
     }
   }
@@ -122,19 +99,30 @@ mixin AutomaticRandomMovement on Movement {
   @override
   void positionCorrectionFromCollision(Vector2 position) {
     super.positionCorrectionFromCollision(position);
-    stopMove();
+    if (this is Jumper) {
+      if ((this is BlockMovementCollision)) {
+        final isV = (this as BlockMovementCollision)
+                .lastCollisionData
+                ?.direction
+                .isVertical ==
+            true;
+        if (isV) {
+          return;
+        }
+      }
+    }
+    _stop();
   }
 
-  @override
-  void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {
-    super.stopMove(forceIdle: forceIdle, isX: isX, isY: isY);
-    _targetRandomMovement = null;
-    idle();
-  }
-
-  @override
-  void setZeroVelocity({bool isX = true, bool isY = true}) {
-    super.setZeroVelocity(isX: isX, isY: isY);
+  void _stop() {
+    _onStopMove?.call();
+    if (_travelledDistance < _lastMinDistance) {
+      resetInterval(_KEY_INTERVAL_KEEP_STOPPED);
+    }
+    _onStopMove = null;
+    _onStartMove = null;
+    distanceToArrived = null;
+    _originPosition = Vector2.zero();
     stopMove();
   }
 
