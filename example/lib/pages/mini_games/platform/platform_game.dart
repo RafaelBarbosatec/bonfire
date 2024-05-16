@@ -30,23 +30,27 @@ class _PlatformGameState extends State<PlatformGame> {
               ),
         },
       ),
-      keyboardConfig: KeyboardConfig(
-        acceptedKeys: [
-          LogicalKeyboardKey.space,
-        ],
-      ),
-      joystick: Joystick(
-        directional: JoystickDirectional(
-          color: Colors.green,
-        ),
-        actions: [
-          JoystickAction(
-            actionId: 1,
-            margin: const EdgeInsets.all(50),
+      playerControllers: [
+        Joystick(
+          directional: JoystickDirectional(
             color: Colors.green,
           ),
-        ],
-      ),
+          actions: [
+            JoystickAction(
+              actionId: 1,
+              margin: const EdgeInsets.all(50),
+              color: Colors.green,
+            ),
+          ],
+        ),
+        Keyboard(
+          keyboardConfig: KeyboardConfig(
+            acceptedKeys: [
+              LogicalKeyboardKey.space,
+            ],
+          ),
+        ),
+      ],
       components: [PlatformGameController(reset: reset)],
       backgroundColor: const Color(0xFF2fbdff),
       globalForces: [

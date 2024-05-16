@@ -25,9 +25,11 @@ class LPCGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BonfireWidget(
-      joystick: Joystick(
-        directional: JoystickDirectional(),
-      ),
+      playerControllers: [
+        Joystick(
+          directional: JoystickDirectional(),
+        ),
+      ],
       map: WorldMapByTiled(
         WorldMapReader.fromAsset('tiled/mapa2.json'),
         forceTileSize: Vector2(32, 32),

@@ -52,12 +52,14 @@ class _RandomMapGameState extends State<RandomMapGame> {
         }
         MapGenerated result = snapshot.data!;
         return BonfireWidget(
-          joystick: Joystick(
-            directional: JoystickDirectional(
-              size: 100,
-              isFixed: false,
+          playerControllers: [
+            Joystick(
+              directional: JoystickDirectional(
+                size: 100,
+                isFixed: false,
+              ),
             ),
-          ),
+          ],
           player: result.player,
           cameraConfig: CameraConfig(
             moveOnlyMapArea: true,
