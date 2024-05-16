@@ -9,7 +9,11 @@ class TiledPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const tileSize = 16.0;
     return BonfireWidget(
-      joystick: Joystick(directional: JoystickDirectional()),
+      playerControllers: [
+        Joystick(
+          directional: JoystickDirectional(),
+        )
+      ],
       map: WorldMapByTiled(
         WorldMapReader.fromAsset('tiled/tiled_example.tmj'),
         objectsBuilder: {

@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                 child: ElevatedButton(
                   onPressed: () => _launch(itemSelected!.codeUrl),
                   style: const ButtonStyle(
-                    shape: MaterialStatePropertyAll(
+                    shape: WidgetStatePropertyAll(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),

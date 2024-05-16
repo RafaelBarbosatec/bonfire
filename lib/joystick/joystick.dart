@@ -1,8 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
-export 'package:bonfire/input/keyboard/keyboard_config.dart';
-
 class Joystick extends PlayerController {
   final List<JoystickAction> actions;
   JoystickDirectional? _directional;
@@ -12,8 +10,12 @@ class Joystick extends PlayerController {
   Joystick({
     this.actions = const [],
     JoystickDirectional? directional,
+    PlayerControllerListener? observer,
   }) {
     _directional = directional;
+    if (observer != null) {
+      addObserver(observer);
+    }
   }
 
   void initialize(Vector2 size) async {

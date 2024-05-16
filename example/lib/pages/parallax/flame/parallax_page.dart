@@ -9,15 +9,17 @@ class ParallaxPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BonfireWidget(
-      joystick: Joystick(
-        directional: JoystickDirectional(),
-        actions: [
-          JoystickAction(
-            actionId: 1,
-            margin: const EdgeInsets.all(50),
-          ),
-        ],
-      ),
+      playerControllers: [
+        Joystick(
+          directional: JoystickDirectional(),
+          actions: [
+            JoystickAction(
+              actionId: 1,
+              margin: const EdgeInsets.all(50),
+            ),
+          ],
+        ),
+      ],
       map: WorldMapByTiled(
         WorldMapReader.fromAsset('platform/parallax_map.tmj'),
       ),

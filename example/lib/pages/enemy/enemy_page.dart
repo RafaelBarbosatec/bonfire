@@ -18,9 +18,11 @@ class EnemyPage extends StatelessWidget {
           'melee': (properties) => MeleeEnemy(position: properties.position),
         },
       ),
-      joystick: Joystick(
-        directional: JoystickDirectional(),
-      ),
+      playerControllers: [
+        Joystick(
+          directional: JoystickDirectional(),
+        )
+      ],
       player: HumanPlayer(
         position: Vector2(tileSize * 7, tileSize * 8),
       ),

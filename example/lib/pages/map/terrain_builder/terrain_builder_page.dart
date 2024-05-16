@@ -13,7 +13,11 @@ class TerrainBuilderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BonfireWidget(
-      joystick: Joystick(directional: JoystickDirectional()),
+      playerControllers: [
+        Joystick(
+          directional: JoystickDirectional(),
+        )
+      ],
       map: MatrixMapGenerator.generate(
         layers: [
           MatrixLayer(

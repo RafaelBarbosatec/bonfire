@@ -108,6 +108,8 @@ abstract class PlayerController extends GameComponent {
     return _observers.contains(listener);
   }
 
+  bool get containObservers => _observers.isNotEmpty;
+
   @override
   int get priority {
     return LayerPriority.getHudJoystickPriority();

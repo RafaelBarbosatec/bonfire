@@ -7,7 +7,6 @@ import 'package:bonfire/camera/camera_config.dart';
 import 'package:bonfire/color_filter/game_color_filter.dart';
 import 'package:bonfire/forces/forces_2d.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
-import 'package:bonfire/input/keyboard/keyboard_config.dart';
 import 'package:bonfire/input/player_controller.dart';
 import 'package:bonfire/map/base/game_map.dart';
 import 'package:bonfire/player/player.dart';
@@ -15,7 +14,7 @@ import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {
   /// The player-controlling component.
-  final PlayerController? joystick;
+  final List<PlayerController>? playerControllers;
 
   /// Represents the character controlled by the user in the game. Instances of this class has actions and movements ready to be used and configured.
   final Player? player;
@@ -62,13 +61,11 @@ class BonfireWidget extends StatefulWidget {
   final GameColorFilter? colorFilter;
   final VoidCallback? onDispose;
   final List<Force2D>? globalForces;
-  final KeyboardConfig? keyboardConfig;
 
   const BonfireWidget({
     Key? key,
     required this.map,
-    this.joystick,
-    this.keyboardConfig,
+    this.playerControllers,
     this.player,
     this.interface,
     this.background,
@@ -124,9 +121,8 @@ class BonfireWidgetState extends State<BonfireWidget> {
 
   void _buildGame() {
     _game = BonfireGame(
-      keyboardConfig: widget.keyboardConfig,
       context: context,
-      joystickController: widget.joystick,
+      playerControllers: widget.playerControllers,
       player: widget.player,
       interface: widget.interface,
       map: widget.map,
