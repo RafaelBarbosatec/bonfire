@@ -3,18 +3,17 @@ import 'package:flutter/services.dart';
 
 export 'package:bonfire/input/keyboard/keyboard_config.dart';
 
-class Keyboard extends PlayerController
-    with KeyboardEventListener {
+class Keyboard extends PlayerController with KeyboardEventListener {
   bool _directionalIsIdle = false;
 
   KeyboardConfig keyboardConfig = KeyboardConfig();
 
   Keyboard({
-    KeyboardConfig? keyboardConfig,
+    KeyboardConfig? config,
     PlayerControllerListener? observer,
   }) {
-    if (keyboardConfig != null) {
-      this.keyboardConfig = keyboardConfig;
+    if (config != null) {
+      keyboardConfig = config;
     }
     if (observer != null) {
       addObserver(observer);

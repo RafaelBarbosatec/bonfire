@@ -57,7 +57,7 @@ class GameTiledMap extends StatelessWidget {
               ],
             ),
             Keyboard(
-              keyboardConfig: KeyboardConfig(
+              config: KeyboardConfig(
                 directionalKeys: [
                   KeyboardDirectionalKeys.arrows(),
                   KeyboardDirectionalKeys.wasd(),

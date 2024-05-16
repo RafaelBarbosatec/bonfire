@@ -44,7 +44,7 @@ class _PlatformGameState extends State<PlatformGame> {
           ],
         ),
         Keyboard(
-          keyboardConfig: KeyboardConfig(
+          config: KeyboardConfig(
             acceptedKeys: [
               LogicalKeyboardKey.space,
             ],

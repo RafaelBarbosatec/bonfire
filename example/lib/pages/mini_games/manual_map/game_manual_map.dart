@@ -42,7 +42,7 @@ class GameManualMap extends StatelessWidget {
             ],
           ),
           Keyboard(
-            keyboardConfig: KeyboardConfig(
+            config: KeyboardConfig(
               acceptedKeys: [
                 LogicalKeyboardKey.space,
               ],

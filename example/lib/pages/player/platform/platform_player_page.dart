@@ -24,7 +24,7 @@ class PlatformPlayerPage extends StatelessWidget {
           ],
         ),
         Keyboard(
-          keyboardConfig: KeyboardConfig(
+          config: KeyboardConfig(
             acceptedKeys: [
               LogicalKeyboardKey.space,
             ],
