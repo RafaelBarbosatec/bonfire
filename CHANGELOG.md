@@ -1,4 +1,4 @@
-# Next
+# 3.9.0
 - `JoystickDirectional` improvements. Now you can use `Alignment`.
 - `JoystickAction` improvements. Now you can use `Alignment`.
 - Adds param `PlayerControllerListener? observer` in `Joyctick`. If pass this param, the joystick will controll this observer and not the Component passed in `player` param.
