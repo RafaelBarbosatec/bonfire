@@ -1,13 +1,13 @@
 # 3.9.0
 - `JoystickDirectional` improvements. Now you can use `Alignment`.
 - `JoystickAction` improvements. Now you can use `Alignment`.
-- Adds param `PlayerControllerListener? observer` in `Joyctick`. If pass this param, the joystick will controll this observer and not the Component passed in `player` param.
+- Adds param `PlayerControllerListener? observer` in `Joystick`. If pass this param, the joystick will controll this observer and not the Component passed in `player` param.
 - Adds param `PlayerControllerListener? observer` in `Keyboard`. If pass this param, the keyboard will controll this observer and not the Component passed in `player` param.
 
 **Breaking Changes:**
-  - `BonfireWidget` expect `List<PlayerController>? playerControllers` instead of `joystick`. With this improvements is possible pass multi ways to controll de player or any component that contains the mixins `PlayerControllerListener`(use `MovementByJoystick` to move automatic by PlayerController interactions). With this improvements it's possible create a local multiplayer.
+  - `BonfireWidget` expect `List<PlayerController>? playerControllers` instead of `joystick`. With this improvements is possible pass multi ways to control de player or any component that contains the mixin `PlayerControllerListener`(use `MovementByJoystick` to move automatic by PlayerController interactions). With this improvements it's possible create a local multiplayer.
   - Removed `keyboardConfig` param from `BonfireWidget`. Now pass `Keyboard` instance in `playerControllers`.
-  Example using joystick and keyboad:
+  Example using joystick and keyboard:
   ```dart
     return BonfireWidget(
       map: ...,
