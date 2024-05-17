@@ -15,7 +15,8 @@ class SimplePlayerPage extends StatelessWidget {
       playerControllers: [
         Joystick(
           directional: JoystickDirectional(),
-        )
+        ),
+        Keyboard(),
       ],
       player: HumanPlayer(
         position: Vector2(tileSize * 7, tileSize * 6),
