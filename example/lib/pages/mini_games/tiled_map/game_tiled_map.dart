@@ -40,7 +40,6 @@ class GameTiledMap extends StatelessWidget {
                 JoystickAction(
                   actionId: PlayerAttackType.attackMelee,
                   sprite: Sprite.load('joystick_attack.png'),
-                  align: JoystickActionAlign.BOTTOM_RIGHT,
                   size: 80,
                   margin: const EdgeInsets.only(bottom: 50, right: 50),
                 ),

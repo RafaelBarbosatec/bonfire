@@ -13,9 +13,7 @@ class SimplePlayerPage extends StatelessWidget {
         WorldMapReader.fromAsset('tiled/punnyworld/simple_map.tmj'),
       ),
       playerControllers: [
-        Joystick(
-          directional: JoystickDirectional(),
-        ),
+        Joystick(directional: JoystickDirectional()),
         Keyboard(),
       ],
       player: HumanPlayer(
