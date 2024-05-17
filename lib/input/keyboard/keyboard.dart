@@ -8,6 +8,8 @@ class Keyboard extends PlayerController with KeyboardEventListener {
 
   KeyboardConfig keyboardConfig = KeyboardConfig();
 
+  /// Class responsible to adds a keyboard controller in your game.
+  /// If pass [oberver] this param, the joystick will controll this observer and not the Component passed in `player` param.
   Keyboard({
     KeyboardConfig? config,
     PlayerControllerListener? observer,

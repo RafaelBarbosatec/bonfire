@@ -13,7 +13,7 @@ import 'package:bonfire/player/player.dart';
 import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {
-  /// The player-controlling component.
+  /// Controls the player in the game. You can pass a list of controllers to control the player in different ways.
   final List<PlayerController>? playerControllers;
 
   /// Represents the character controlled by the user in the game. Instances of this class has actions and movements ready to be used and configured.
