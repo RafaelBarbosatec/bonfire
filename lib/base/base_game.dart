@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:bonfire/util/quadtree_collision/custom_has_quadtree_collision_detection.dart';
 import 'package:flame/game.dart';
@@ -23,26 +22,17 @@ abstract class BaseGame extends FlameGame
 
   /// to get the components that contain gestures
   Iterable<PointerDetectorHandler> get _gesturesComponents {
-    var cams = children.query<BonfireCamera>();
-    if (cams.isNotEmpty) {
-      final cam = cams.first;
-      return [...cam.world!.children, ...cam.viewport.children]
-          .where((c) => _hasGesture(c))
-          .cast<PointerDetectorHandler>();
-    }
-    return [];
+    return [...camera.world!.children, ...camera.viewport.children]
+        .where((c) => _hasGesture(c))
+        .cast<PointerDetectorHandler>();
   }
 
   /// to get the components that contain gestures
   Iterable<KeyboardEventListener> get _keyboardComponents {
-    var cams = children.query<BonfireCamera>();
-    if (cams.isNotEmpty) {
-      final cam = cams.first;
-      return [...cam.world!.children, ...cam.viewport.children]
-          .where((c) => _hasKeyboardEventListener(c))
-          .cast<KeyboardEventListener>();
-    }
-    return [];
+    return [
+      ...camera.world!.children.query<KeyboardEventListener>(),
+      ...camera.viewport.children.query<Keyboard>(),
+    ];
   }
 
   @override
@@ -110,26 +100,20 @@ abstract class BaseGame extends FlameGame
     KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
+    KeyEventResult result = KeyEventResult.ignored;
     if (!enabledKeyboard) {
-      return KeyEventResult.ignored;
+      return result;
     }
-    for (final c in _keyboardComponents) {
-      if (c.onKeyboard(event, keysPressed)) {
-        return super.onKeyEvent(event, keysPressed);
-      } else {
-        return KeyEventResult.ignored;
+    for (var listener in _keyboardComponents) {
+      if (listener.onKeyboard(event, keysPressed)) {
+        result = KeyEventResult.handled;
       }
     }
-    return super.onKeyEvent(event, keysPressed);
+    return result;
   }
 
   /// Verify if the Component contain gestures.
   bool _hasGesture(Component c) {
     return ((c is GameComponent && c.isVisible)) && ((c).hasGesture());
-  }
-
-  /// Verify if the Component contain gestures.
-  bool _hasKeyboardEventListener(Component c) {
-    return c is KeyboardEventListener;
   }
 }

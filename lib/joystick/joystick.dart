@@ -10,6 +10,7 @@ class Joystick extends PlayerController {
   /// Class responsable to adds a joystick controller in your game.
   /// If pass [oberver] this param, the joystick will controll this observer and not the Component passed in `player` param.
   Joystick({
+    super.id,
     this.actions = const [],
     JoystickDirectional? directional,
     PlayerControllerListener? observer,

@@ -289,10 +289,18 @@ class JoystickDirectional {
   }
 
   void _updateDirectionalRect(Offset position) {
-    if (_screenSize != null &&
-        (position.dx > _screenSize!.x / 3 ||
-            position.dy < _screenSize!.y / 3 ||
-            isFixed)) return;
+    if (isFixed || _screenSize == null) return;
+    if (alignment.x == -1) {
+      if (position.dx > _screenSize!.x * 0.33) {
+        return;
+      }
+    }
+
+    if (alignment.x == 1) {
+      if (position.dx < _screenSize!.x * 0.66) {
+        return;
+      }
+    }
 
     _backgroundRect = Rect.fromCircle(
       center: position,

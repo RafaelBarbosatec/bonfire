@@ -6,17 +6,15 @@ export 'package:bonfire/input/keyboard/keyboard_config.dart';
 class Keyboard extends PlayerController with KeyboardEventListener {
   bool _directionalIsIdle = false;
 
-  KeyboardConfig keyboardConfig = KeyboardConfig();
+  final KeyboardConfig keyboardConfig;
 
   /// Class responsible to adds a keyboard controller in your game.
   /// If pass [oberver] this param, the joystick will controll this observer and not the Component passed in `player` param.
   Keyboard({
+    super.id,
     KeyboardConfig? config,
     PlayerControllerListener? observer,
-  }) {
-    if (config != null) {
-      keyboardConfig = config;
-    }
+  }) : keyboardConfig = config ?? KeyboardConfig() {
     if (observer != null) {
       addObserver(observer);
     }
