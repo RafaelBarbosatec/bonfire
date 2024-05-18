@@ -38,7 +38,7 @@ class KeyboardDirectionalKeys {
 
 class KeyboardConfig {
   /// Use to enable ou disable keyboard events
-  final bool enable;
+  bool enable;
 
   /// Type of the directional (arrows, wasd or wasdAndArrows)
   final List<KeyboardDirectionalKeys> directionalKeys;
@@ -47,7 +47,7 @@ class KeyboardConfig {
   final List<LogicalKeyboardKey>? acceptedKeys;
 
   /// Use to enable diagonal input events
-  final bool enableDiagonalInput;
+  bool enableDiagonalInput;
 
   KeyboardConfig({
     this.enable = true,

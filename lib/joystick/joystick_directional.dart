@@ -34,12 +34,14 @@ class JoystickDirectional {
 
   /// Use to enable diagonal input events
   final bool enableDiagonalInput;
+  final Alignment alignment;
 
   JoystickDirectional({
     Future<Sprite>? spriteBackgroundDirectional,
     Future<Sprite>? spriteKnobDirectional,
     this.isFixed = true,
-    this.margin = const EdgeInsets.only(left: 100, bottom: 100),
+    this.margin = const EdgeInsets.all(100),
+    this.alignment = Alignment.bottomLeft,
     this.size = 80,
     this.color = Colors.blueGrey,
     this.enableDiagonalInput = true,
@@ -58,13 +60,20 @@ class JoystickDirectional {
   void initialize(Vector2 screenSize, PlayerController joystickController) {
     _screenSize = screenSize;
     _joystickController = joystickController;
-    Offset osBackground = Offset(
-      margin.left,
-      screenSize.y - margin.bottom,
+    final radius = size / 2;
+
+    final screenRect = Rect.fromLTRB(
+      margin.left + radius,
+      margin.top + radius,
+      screenSize.x - margin.right - radius,
+      screenSize.y - margin.bottom - radius,
     );
+
+    Offset osBackground = alignment.withinRect(screenRect);
+
     _backgroundRect = Rect.fromCircle(
       center: osBackground,
-      radius: size / 2,
+      radius: radius,
     );
 
     Offset osKnob = Offset(
@@ -280,10 +289,18 @@ class JoystickDirectional {
   }
 
   void _updateDirectionalRect(Offset position) {
-    if (_screenSize != null &&
-        (position.dx > _screenSize!.x / 3 ||
-            position.dy < _screenSize!.y / 3 ||
-            isFixed)) return;
+    if (isFixed || _screenSize == null) return;
+    if (alignment.x == -1) {
+      if (position.dx > _screenSize!.x * 0.33) {
+        return;
+      }
+    }
+
+    if (alignment.x == 1) {
+      if (position.dx < _screenSize!.x * 0.66) {
+        return;
+      }
+    }
 
     _backgroundRect = Rect.fromCircle(
       center: position,

@@ -3,9 +3,6 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
-// ignore: constant_identifier_names
-enum JoystickActionAlign { TOP_LEFT, BOTTOM_LEFT, TOP_RIGHT, BOTTOM_RIGHT }
-
 class JoystickAction {
   final dynamic actionId;
   Sprite? sprite;
@@ -14,11 +11,11 @@ class JoystickAction {
   final double sizeFactorBackgroundDirection;
   final double size;
   final EdgeInsets margin;
-  final JoystickActionAlign align;
   final bool enableDirection;
   final Color color;
   final double opacityBackground;
   final double opacityKnob;
+  final Alignment alignment;
 
   late double _sizeBackgroundDirection;
   late double _tileSize;
@@ -45,9 +42,9 @@ class JoystickAction {
     this.enableDirection = false,
     this.size = 50,
     this.sizeFactorBackgroundDirection = 1.5,
-    this.margin = EdgeInsets.zero,
+    this.margin = const EdgeInsets.all(50),
     this.color = Colors.blueGrey,
-    this.align = JoystickActionAlign.BOTTOM_RIGHT,
+    this.alignment = Alignment.bottomRight,
     this.opacityBackground = 0.5,
     this.opacityKnob = 0.8,
   }) {
@@ -67,32 +64,21 @@ class JoystickAction {
   void initialize(Vector2 screenSize, PlayerController joystickController) {
     _joystickController = joystickController;
     double radius = size / 2;
-    double dx = 0, dy = 0;
-    switch (align) {
-      case JoystickActionAlign.TOP_LEFT:
-        dx = margin.left + radius;
-        dy = margin.top + radius;
-        break;
-      case JoystickActionAlign.BOTTOM_LEFT:
-        dx = margin.left + radius;
-        dy = screenSize.y - (margin.bottom + radius);
-        break;
-      case JoystickActionAlign.TOP_RIGHT:
-        dx = screenSize.x - (margin.right + radius);
-        dy = margin.top + radius;
-        break;
-      case JoystickActionAlign.BOTTOM_RIGHT:
-        dx = screenSize.x - (margin.right + radius);
-        dy = screenSize.y - (margin.bottom + radius);
-        break;
-    }
+    final screenRect = Rect.fromLTRB(
+      margin.left + radius,
+      margin.top + radius,
+      screenSize.x - margin.right - radius,
+      screenSize.y - margin.bottom - radius,
+    );
+
+    Offset osBackground = alignment.withinRect(screenRect);
     _rect = Rect.fromCircle(
-      center: Offset(dx, dy),
+      center: osBackground,
       radius: radius,
     );
 
     _rectBackgroundDirection = Rect.fromCircle(
-      center: Offset(dx, dy),
+      center: osBackground,
       radius: _sizeBackgroundDirection / 2,
     );
 

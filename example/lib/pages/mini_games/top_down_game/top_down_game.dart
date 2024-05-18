@@ -29,15 +29,17 @@ class TopDownGame extends StatelessWidget {
           'armchair': (prop) => ArmchairDecoration(prop.position),
         },
       ),
-      joystick: Joystick(
-        directional: JoystickDirectional(),
-        actions: [
-          JoystickAction(
-            actionId: 1,
-            margin: const EdgeInsets.all(50),
-          ),
-        ],
-      ),
+      playerControllers: [
+        Joystick(
+          directional: JoystickDirectional(),
+          actions: [
+            JoystickAction(
+              actionId: 1,
+              margin: const EdgeInsets.all(50),
+            ),
+          ],
+        ),
+      ],
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
         zoom: getZoomFromMaxVisibleTile(context, 68, 12),

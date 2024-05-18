@@ -17,9 +17,11 @@ class MapBiome1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BonfireWidget(
-      joystick: Joystick(
-        directional: JoystickDirectional(),
-      ),
+      playerControllers: [
+        Joystick(
+          directional: JoystickDirectional(),
+        ),
+      ],
       player: GamePlayer(
         _getInitPosition(),
         PirateSpriteSheet.getAnimation(),

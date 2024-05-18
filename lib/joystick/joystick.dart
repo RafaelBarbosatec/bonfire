@@ -1,19 +1,24 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
-export 'package:bonfire/input/keyboard/keyboard_config.dart';
-
 class Joystick extends PlayerController {
   final List<JoystickAction> actions;
   JoystickDirectional? _directional;
 
   JoystickDirectional? get directional => _directional;
 
+  /// Class responsable to adds a joystick controller in your game.
+  /// If pass [oberver] this param, the joystick will controll this observer and not the Component passed in `player` param.
   Joystick({
+    super.id,
     this.actions = const [],
     JoystickDirectional? directional,
+    PlayerControllerListener? observer,
   }) {
     _directional = directional;
+    if (observer != null) {
+      addObserver(observer);
+    }
   }
 
   void initialize(Vector2 size) async {

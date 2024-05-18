@@ -30,6 +30,8 @@ import 'package:example/pages/player/simple/simple_player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../player_controllers/player_controllers_page.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -76,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                 child: ElevatedButton(
                   onPressed: () => _launch(itemSelected!.codeUrl),
                   style: const ButtonStyle(
-                    shape: MaterialStatePropertyAll(
+                    shape: WidgetStatePropertyAll(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),
@@ -171,6 +173,12 @@ class _HomePageState extends State<HomePage> {
             builder: (_) => const KeyboardPage(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/input/keyboard',
+          ),
+          ItemDrawer(
+            name: 'PlayerControllers',
+            builder: (_) => const PlayerControllersPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/player_controllers',
           ),
         ],
       ),

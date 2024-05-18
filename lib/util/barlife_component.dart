@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
-enum BarLifeDrawPorition { top, bottom, left, right }
+enum BarLifeDrawPosition { top, bottom, left, right }
 
 typedef BarLifeTextBuilder = String Function(double life, double maxLife);
 
@@ -10,7 +10,7 @@ class BarLifeComponent extends GameComponent {
   final Paint _barLifePaint = Paint()..style = PaintingStyle.fill;
   Paint _barLifeBorderPaint = Paint();
 
-  final BarLifeDrawPorition drawPosition;
+  final BarLifeDrawPosition drawPosition;
   final List<Color>? colors;
   final Color backgroundColor;
   final BorderRadius borderRadius;
@@ -36,7 +36,7 @@ class BarLifeComponent extends GameComponent {
     required Vector2 size,
     Vector2? offset,
     Vector2? textOffset,
-    this.drawPosition = BarLifeDrawPorition.top,
+    this.drawPosition = BarLifeDrawPosition.top,
     this.colors,
     this.textStyle,
     this.showLifeText = true,
@@ -75,16 +75,16 @@ class BarLifeComponent extends GameComponent {
     double yPosition = (y - height);
     double xPosition = (target.size.x - width) / 2;
     switch (drawPosition) {
-      case BarLifeDrawPorition.top:
+      case BarLifeDrawPosition.top:
         break;
-      case BarLifeDrawPorition.bottom:
+      case BarLifeDrawPosition.bottom:
         yPosition = target.size.y + y;
         break;
-      case BarLifeDrawPorition.left:
+      case BarLifeDrawPosition.left:
         xPosition = -width + x;
         yPosition = (target.size.y / 2 - height / 2) + y;
         break;
-      case BarLifeDrawPorition.right:
+      case BarLifeDrawPosition.right:
         xPosition = width + x;
         yPosition = (target.size.y / 2 - height / 2) + y;
         break;

@@ -12,9 +12,11 @@ class RotationPlayerPage extends StatelessWidget {
       map: WorldMapByTiled(
         WorldMapReader.fromAsset('tiled/simple_topdown/simple.tmj'),
       ),
-      joystick: Joystick(
-        directional: JoystickDirectional(),
-      ),
+      playerControllers: [
+        Joystick(
+          directional: JoystickDirectional(),
+        )
+      ],
       player: HumanTopdownPlayer(
         position: Vector2(5 * tileSize, 5 * tileSize),
       ),

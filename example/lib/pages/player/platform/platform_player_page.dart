@@ -13,20 +13,24 @@ class PlatformPlayerPage extends StatelessWidget {
       map: WorldMapByTiled(
         WorldMapReader.fromAsset('platform/simple_map.tmj'),
       ),
-      keyboardConfig: KeyboardConfig(
-        acceptedKeys: [
-          LogicalKeyboardKey.space,
-        ],
-      ),
-      joystick: Joystick(
-        directional: JoystickDirectional(),
-        actions: [
-          JoystickAction(
-            actionId: 1,
-            margin: const EdgeInsets.all(50),
+      playerControllers: [
+        Joystick(
+          directional: JoystickDirectional(),
+          actions: [
+            JoystickAction(
+              actionId: 1,
+              margin: const EdgeInsets.all(50),
+            ),
+          ],
+        ),
+        Keyboard(
+          config: KeyboardConfig(
+            acceptedKeys: [
+              LogicalKeyboardKey.space,
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
       player: SimpleFoxPlayer(
         position: Vector2(tileSize * 7, tileSize * 3),
       ),

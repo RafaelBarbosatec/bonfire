@@ -68,7 +68,7 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
   @override
   void update(double dt) {
     super.update(dt);
-    if (_isEnabled()) {
+    if (_settings.enabled) {
       _handleChangeDirectional();
       if (_isMoveByDirection) {
         _moveDirectional(_currentDirectional, _intensitySpeed);
@@ -161,11 +161,6 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
     _joystickAngle = 0;
     _lastSpeed = 0;
     super.idle();
-  }
-
-  bool _isEnabled() {
-    return (gameRef.joystick?.containObserver(this) ?? false) &&
-        _settings.enabled;
   }
 
   void _toCorrectDirection(JoystickMoveDirectional directional) {

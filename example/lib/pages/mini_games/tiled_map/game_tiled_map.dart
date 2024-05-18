@@ -26,44 +26,47 @@ class GameTiledMap extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return BonfireWidget(
-          keyboardConfig: KeyboardConfig(
-            directionalKeys: [
-              KeyboardDirectionalKeys.arrows(),
-              KeyboardDirectionalKeys.wasd(),
-            ],
-            acceptedKeys: [
-              LogicalKeyboardKey.space,
-            ],
-          ),
-          joystick: Joystick(
-            directional: JoystickDirectional(
-              spriteBackgroundDirectional: Sprite.load(
-                'joystick_background.png',
-              ),
-              spriteKnobDirectional: Sprite.load('joystick_knob.png'),
-              size: 100,
-              isFixed: false,
-            ),
-            actions: [
-              JoystickAction(
-                actionId: PlayerAttackType.attackMelee,
-                sprite: Sprite.load('joystick_attack.png'),
-                align: JoystickActionAlign.BOTTOM_RIGHT,
-                size: 80,
-                margin: const EdgeInsets.only(bottom: 50, right: 50),
-              ),
-              JoystickAction(
-                actionId: PlayerAttackType.attackRange,
-                sprite: Sprite.load('joystick_attack_range.png'),
-                spriteBackgroundDirection: Sprite.load(
+          playerControllers: [
+            Joystick(
+              directional: JoystickDirectional(
+                spriteBackgroundDirectional: Sprite.load(
                   'joystick_background.png',
                 ),
-                enableDirection: true,
-                size: 50,
-                margin: const EdgeInsets.only(bottom: 50, right: 160),
-              )
-            ],
-          ),
+                spriteKnobDirectional: Sprite.load('joystick_knob.png'),
+                size: 100,
+                isFixed: false,
+              ),
+              actions: [
+                JoystickAction(
+                  actionId: PlayerAttackType.attackMelee,
+                  sprite: Sprite.load('joystick_attack.png'),
+                  size: 80,
+                  margin: const EdgeInsets.only(bottom: 50, right: 50),
+                ),
+                JoystickAction(
+                  actionId: PlayerAttackType.attackRange,
+                  sprite: Sprite.load('joystick_attack_range.png'),
+                  spriteBackgroundDirection: Sprite.load(
+                    'joystick_background.png',
+                  ),
+                  enableDirection: true,
+                  size: 50,
+                  margin: const EdgeInsets.only(bottom: 50, right: 160),
+                )
+              ],
+            ),
+            Keyboard(
+              config: KeyboardConfig(
+                directionalKeys: [
+                  KeyboardDirectionalKeys.arrows(),
+                  KeyboardDirectionalKeys.wasd(),
+                ],
+                acceptedKeys: [
+                  LogicalKeyboardKey.space,
+                ],
+              ),
+            )
+          ],
           player: Knight(
             Vector2((8 * DungeonMap.tileSize), (5 * DungeonMap.tileSize)),
           ),

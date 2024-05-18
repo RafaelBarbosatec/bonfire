@@ -42,7 +42,11 @@ class _TiledNetworkPageState extends State<TiledNetworkPage>
           FadeTransition(
             opacity: _controller,
             child: BonfireWidget(
-              joystick: Joystick(directional: JoystickDirectional()),
+              playerControllers: [
+                Joystick(
+                  directional: JoystickDirectional(),
+                )
+              ],
               map: WorldMapByTiled(
                 WorldMapReader.fromNetwork(
                   Uri.parse(

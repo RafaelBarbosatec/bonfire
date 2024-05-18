@@ -24,7 +24,7 @@ import 'package:flutter/widgets.dart';
 abstract class BonfireGameInterface {
   BuildContext get context;
   Player? get player;
-  PlayerController? get joystick;
+  List<PlayerController>? get playerControllers;
   LightingInterface? get lighting;
   ColorFilterInterface? get colorFilter;
   BonfireCamera get camera;

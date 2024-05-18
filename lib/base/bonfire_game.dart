@@ -6,7 +6,6 @@ import 'package:bonfire/base/base_game.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
-import 'package:bonfire/input/keyboard/control_by_keyboard.dart';
 import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 // ignore: implementation_imports
@@ -36,7 +35,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   final GameMap map;
 
   /// The player-controlling component.
-  final PlayerController? joystickController;
+  @override
+  final List<PlayerController>? playerControllers;
 
   /// Background of the game. This can be a color or custom component
   final GameBackground? background;
@@ -55,8 +55,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   final List<Force2D> globalForces;
 
-  final KeyboardConfig? keyboardConfig;
-
   @override
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
@@ -74,9 +72,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   ColorFilterInterface get colorFilter =>
       camera.viewport.children.whereType<ColorFilterInterface>().first;
-
-  @override
-  PlayerController? get joystick => joystickController;
 
   @override
   Color backgroundColor() => _bgColor ?? super.backgroundColor();
@@ -103,8 +98,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   BonfireGame({
     required this.context,
     required this.map,
-    this.joystickController,
-    this.keyboardConfig,
+    this.playerControllers,
     this.player,
     this.interface,
     List<GameComponent>? components,
@@ -134,10 +128,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
               ColorFilterComponent(
                 colorFilter ?? GameColorFilter(),
               ),
-              if (joystickController != null) joystickController,
-              ControlByKeyboard(
-                keyboardConfig: keyboardConfig,
-              ),
+              ...playerControllers ?? [],
               if (interface != null) interface,
               ...hudComponents ?? []
             ],
@@ -171,9 +162,11 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
 
     camera.viewport.children.query<PlayerController>().forEach((element) {
-      element.addObserver(
-        player ?? JoystickMapExplorer(camera),
-      );
+      if (!element.containObservers) {
+        element.addObserver(
+          player ?? JoystickMapExplorer(camera),
+        );
+      }
     });
 
     if (camera.config.target != null) {
@@ -288,9 +281,13 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     bool moveCameraToTarget = false,
   }) {
     if (cleanObservers) {
-      joystickController?.cleanObservers();
+      playerControllers?.forEach(
+        (c) => c.cleanObservers(),
+      );
     }
-    joystickController?.addObserver(target);
+    playerControllers?.forEach(
+      (c) => c.addObserver(target),
+    );
     if (moveCameraToTarget && target is GameComponent) {
       camera.follow(target as GameComponent);
     }
