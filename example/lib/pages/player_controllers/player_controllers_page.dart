@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/src/services/keyboard_key.g.dart';
 import 'package:flutter/widgets.dart';
 
 import '../player/simple/human.dart';
@@ -35,8 +34,13 @@ class PlayerControllersPage extends StatelessWidget {
           directional: JoystickDirectional(alignment: Alignment.centerRight),
           observer: secondPlayer,
         ),
-        Keytest(
-          secondPlayer,
+        Keyboard(
+          config: KeyboardConfig(
+            directionalKeys: [
+              KeyboardDirectionalKeys.wasd(),
+            ],
+          ),
+          observer: secondPlayer,
         ),
       ],
       player: HumanPlayer(
@@ -48,22 +52,5 @@ class PlayerControllersPage extends StatelessWidget {
       ),
       backgroundColor: const Color(0xff20a0b4),
     );
-  }
-}
-
-class Keytest extends Keyboard {
-  Keytest(PlayerControllerListener o)
-      : super(
-            config: KeyboardConfig(
-              directionalKeys: [
-                KeyboardDirectionalKeys.wasd(),
-              ],
-            ),
-            observer: o);
-
-  @override
-  bool onKeyboard(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    print(keyboardConfig.directionalKeys.first.down);
-    return super.onKeyboard(event, keysPressed);
   }
 }
