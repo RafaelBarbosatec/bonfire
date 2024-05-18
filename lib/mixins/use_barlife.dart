@@ -12,7 +12,7 @@ mixin UseLifeBar on Attackable {
   Vector2? _barOffset;
   Vector2? _textOffset;
   BorderRadius _borderRadius = BorderRadius.zero;
-  BarLifeDrawPorition _barLifeDrawPosition = BarLifeDrawPorition.bottom;
+  BarLifeDrawPosition _barLifeDrawPosition = BarLifeDrawPosition.bottom;
   TextStyle? _textStyle;
   bool _showLifeText = true;
   ValueGeneratorComponent? _valueGenerator;
@@ -25,7 +25,7 @@ mixin UseLifeBar on Attackable {
     double borderWidth = 2,
     List<Color>? colors,
     BorderRadius? borderRadius,
-    BarLifeDrawPorition barLifeDrawPosition = BarLifeDrawPorition.top,
+    BarLifeDrawPosition barLifeDrawPosition = BarLifeDrawPosition.top,
     Vector2? offset,
     Vector2? textOffset,
     TextStyle? textStyle,

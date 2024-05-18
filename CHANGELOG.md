@@ -3,6 +3,7 @@
 - `JoystickAction` improvements. Now you can use `Alignment`.
 - Adds param `PlayerControllerListener? observer` in `Joystick`. If pass this param, the joystick will controll this observer and not the Component passed in `player` param.
 - Adds param `PlayerControllerListener? observer` in `Keyboard`. If pass this param, the keyboard will controll this observer and not the Component passed in `player` param.
+- Fix type `BarLifeDrawPosition`. [#515](https://github.com/RafaelBarbosatec/bonfire/issues/515)
 
 **Breaking Changes:**
   - `BonfireWidget` expect `List<PlayerController>? playerControllers` instead of `joystick`. With this improvements is possible pass multi ways to control de player or any component that contains the mixin `PlayerControllerListener`(use `MovementByJoystick` to move automatic by PlayerController interactions). With this improvements it's possible create a local multiplayer.
