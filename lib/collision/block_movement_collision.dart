@@ -6,19 +6,25 @@ import 'package:bonfire/collision/collision_util.dart';
 
 export 'collision_data.dart';
 
+enum BodyType {
+  dynamic,
+  static;
+
+  bool get isDynamic => this == BodyType.dynamic;
+  bool get isStatic => this == BodyType.static;
+}
+
 /// Mixin responsible for adding stop the movement when happen collision
 mixin BlockMovementCollision on Movement {
-  bool _isRigid = true;
-  bool _isStatic = false;
+  BodyType _bodyType = BodyType.static;
   bool _blockMovementCollisionEnabled = true;
   bool get blockMovementCollisionEnabled => _blockMovementCollisionEnabled;
-  bool get blockMovementCollisionReflectionEnabled => _isRigid;
   final Map<BlockMovementCollision, CollisionData> _collisionsResolution = {};
   CollisionData? _lastCollisionData;
   CollisionData? get lastCollisionData => _lastCollisionData!;
 
-  void setupBlockMovementCollision({bool? enabled, bool? isRigid}) {
-    _isRigid = isRigid ?? _isRigid;
+  void setupBlockMovementCollision({bool? enabled, BodyType? bodyType}) {
+    _bodyType = bodyType ?? _bodyType;
     _blockMovementCollisionEnabled = enabled ?? _blockMovementCollisionEnabled;
   }
 
@@ -44,7 +50,7 @@ mixin BlockMovementCollision on Movement {
     Vector2 correction;
     double depth = 0;
     if (collisionData.depth > 0) {
-      depth = collisionData.depth + 0.05;
+      depth = collisionData.depth + 0.08;
     }
     correction = (-collisionData.normal * depth);
     if (!correction.isZero()) {
@@ -57,7 +63,7 @@ mixin BlockMovementCollision on Movement {
     PositionComponent other,
     CollisionData collisionData,
   ) {
-    if (_isStatic) {
+    if (_bodyType.isStatic) {
       velocity -= Vector2(
         velocity.x * collisionData.normal.x.abs(),
         velocity.y * collisionData.normal.y.abs(),
@@ -74,22 +80,19 @@ mixin BlockMovementCollision on Movement {
     return data.normal * velocity.dot(data.normal);
   }
 
-  bool onCheckStaticCollision(BlockMovementCollision other) {
-    return _isRigid ? velocity.isZero() : false;
-  }
-
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
     if (other is Sensor || !_blockMovementCollisionEnabled) return;
     bool stopOtherMovement = true;
-    _isStatic = false;
     bool stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
         : true;
     if (other is BlockMovementCollision) {
-      stopOtherMovement = other.onBlockMovement(intersectionPoints, this);
-      _isStatic = onCheckStaticCollision(other);
+      stopOtherMovement = other.onBlockMovement(
+        intersectionPoints,
+        this,
+      );
     }
 
     if (!stopMovement || !stopOtherMovement) {
@@ -99,9 +102,7 @@ mixin BlockMovementCollision on Movement {
     if (_collisionsResolution.containsKey(other)) {
       onBlockedMovement(
         other,
-        _collisionsResolution[other]!.copyWith(
-          depth: _isStatic ? 0 : null,
-        ),
+        _collisionsResolution[other]!,
       );
       _collisionsResolution.remove(other);
       return;
@@ -144,12 +145,7 @@ mixin BlockMovementCollision on Movement {
         intersectionPoints: intersectionPoints.toList(),
         direction: colisionResult.normal.toDirection(),
       );
-      onBlockedMovement(
-        other,
-        data.copyWith(
-          depth: _isStatic ? 0 : null,
-        ),
-      );
+      onBlockedMovement(other, data);
       if (other is BlockMovementCollision) {
         other.setCollisionResolution(this, data.inverted());
       }

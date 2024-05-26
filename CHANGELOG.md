@@ -1,3 +1,6 @@
+# next
+- `BlockMovementCollision` improvements.
+
 # 3.9.0
 - `JoystickDirectional` improvements. Now you can use `Alignment`.
 - `JoystickAction` improvements. Now you can use `Alignment`.
