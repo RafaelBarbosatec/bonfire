@@ -1,4 +1,4 @@
-# next
+# 3.9.1
 - `BlockMovementCollision` improvements.
 - Create a `PinchGesture` mixin to listen pinch gestures.
 - Create a `UpdateCameraByPinchGesture` mixin to update zoom and camera position in pich events.
