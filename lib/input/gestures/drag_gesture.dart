@@ -121,4 +121,7 @@ mixin DragGesture on GameComponent {
   void onCancelDrag(GestureEvent event) {}
 
   bool get receiveInteraction => _pointer != -1;
+
+  @override
+  bool hasGesture() => true;
 }

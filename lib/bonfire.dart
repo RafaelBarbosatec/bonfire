@@ -53,6 +53,7 @@ export 'package:bonfire/mixins/use_assets_loader.dart';
 export 'package:bonfire/mixins/use_barlife.dart';
 export 'package:bonfire/mixins/use_sprite.dart';
 export 'package:bonfire/mixins/use_sprite_animation.dart';
+export 'package:bonfire/mixins/update_camera_by_pinch_gesture.dart';
 export 'package:bonfire/mixins/vision.dart';
 export 'package:bonfire/npc/ally/ally.dart';
 export 'package:bonfire/npc/enemy/enemy.dart';

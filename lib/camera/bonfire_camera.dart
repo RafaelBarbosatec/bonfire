@@ -37,6 +37,9 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
   double get zoom => viewfinder.zoom;
   set zoom(double scale) => viewfinder.zoom = scale;
 
+  double get angle => viewfinder.angle;
+  set angle(double angle) => viewfinder.angle = angle;
+
   bool canSeeWithMargin(PositionComponent component) {
     return cameraRectWithSpacing.overlaps(component.toAbsoluteRect());
   }

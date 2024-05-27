@@ -165,4 +165,7 @@ mixin MouseEventListener on GameComponent {
 
     return MouseButton.unknow;
   }
+
+  @override
+  bool hasGesture() => enableMouseGesture;
 }

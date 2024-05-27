@@ -77,4 +77,7 @@ mixin TapGesture on GameComponent {
   void onTapDownScreen(GestureEvent event) {}
   // It's called when happen tap up in the screen
   void onTapUpScreen(GestureEvent event) {}
+
+  @override
+  bool hasGesture() => true;
 }
