@@ -18,15 +18,10 @@ class FingerPoint {
 
 mixin PinchGesture on GameComponent {
   final List<FingerPoint> _fingers = [];
-  double _initialZoom = 1.0;
-  double _initialAngle = 0.0;
-  Vector2 _initialPosition = Vector2.zero();
+  bool _startPinch = false;
 
   @override
   bool handlerPointerDown(PointerDownEvent event) {
-    _initialZoom = gameRef.camera.zoom;
-    _initialPosition = gameRef.camera.position.clone();
-    _initialAngle = angle;
     final gEvent = GestureEvent.fromPointerEvent(
       event,
       screenToWorld: gameRef.screenToWorld,
@@ -45,12 +40,20 @@ mixin PinchGesture on GameComponent {
   @override
   bool handlerPointerUp(PointerUpEvent event) {
     _fingers.removeWhere((element) => element.id == event.pointer);
+    if (_startPinch) {
+      _startPinch = false;
+      onPinchEnd();
+    }
     return super.handlerPointerUp(event);
   }
 
   @override
   bool handlerPointerCancel(PointerCancelEvent event) {
     _fingers.removeWhere((element) => element.id == event.pointer);
+    if (_startPinch) {
+      _startPinch = false;
+      onPinchEnd();
+    }
     return super.handlerPointerCancel(event);
   }
 
@@ -82,30 +85,17 @@ mixin PinchGesture on GameComponent {
       final finger2 = _fingers[1];
       final event = PinchEvent.fromFingers(finger1, finger2);
 
-      _updateZoom(event);
-      _updatePosition(event);
-      _updateAngle(event);
+      if (!_startPinch) {
+        _startPinch = true;
+        onPinchStart(event);
+      }
       onPinchUpdate(event);
     }
   }
 
-  void _updateZoom(PinchEvent event) {
-    final scale = event.factorDistance;
-    gameRef.camera.zoom = _initialZoom * scale;
-  }
-
-  void _updatePosition(PinchEvent event) {
-    final diff = event.diffCenter;
-    gameRef.camera.position = _initialPosition - diff;
-  }
-
-  void _updateAngle(PinchEvent event) {
-    final diff = event.diffAngle;
-    print(diff);
-    angle = _initialAngle + diff;
-  }
-
-  void onPinchUpdate(PinchEvent event);
+  void onPinchUpdate(PinchEvent event) {}
+  void onPinchStart(PinchEvent event) {}
+  void onPinchEnd() {}
 
   @override
   bool hasGesture() => true;

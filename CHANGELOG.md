@@ -1,5 +1,7 @@
 # next
 - `BlockMovementCollision` improvements.
+- Create a `PinchGesture` mixin to listen pinch gestures.
+- Create a `UpdateCameraByPinchGesture` mixin to update zoom and camera position in pich events.
 
 # 3.9.0
 - `JoystickDirectional` improvements. Now you can use `Alignment`.

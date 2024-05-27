@@ -1,7 +1,8 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/person_sprite_sheet.dart';
 
-class HumanPlayer extends SimplePlayer with BlockMovementCollision {
+class HumanPlayer extends SimplePlayer
+    with BlockMovementCollision, PinchGesture, UpdateCameraByPinchGesture {
   HumanPlayer({
     required Vector2 position,
   }) : super(
