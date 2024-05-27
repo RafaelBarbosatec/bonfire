@@ -31,7 +31,7 @@ mixin BouncingObject on BlockMovementCollision {
 
   @override
   void onMount() {
-    setupBlockMovementCollision(isRigid: false);
+    setupBlockMovementCollision(bodyType: BodyType.dynamic);
     super.onMount();
   }
 }
