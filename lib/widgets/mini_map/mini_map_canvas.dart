@@ -18,7 +18,6 @@ class MiniMapCanvas extends CustomPainter {
   final Iterable<GameComponent> components;
   final Iterable<TileComponent> tiles;
   final Vector2 cameraPosition;
-  final Vector2 playerPosition;
   final Vector2 gameSize;
   final MiniMapCustomRender<TileComponent>? tileRender;
   final MiniMapCustomRender? componentsRender;
@@ -28,7 +27,6 @@ class MiniMapCanvas extends CustomPainter {
     required this.tiles,
     required this.components,
     required this.cameraPosition,
-    required this.playerPosition,
     required this.gameSize,
     this.zoom = 1,
     this.tileRender,
@@ -41,8 +39,8 @@ class MiniMapCanvas extends CustomPainter {
     double scaleY = size.height / gameSize.y;
     double scale = max(scaleX, scaleY) * zoom;
 
-    double restX = ((gameSize.x - size.width) / 2) * scaleX;
-    double restY = ((gameSize.y - size.height) / 2) * scaleY;
+    double restX = (gameSize.x - gameSize.y) / 2 * scale;
+    double restY = (gameSize.y - gameSize.x) / 2 * scale;
 
     if (gameSize.x > gameSize.y) {
       restY = 0;
@@ -67,7 +65,6 @@ class MiniMapCanvas extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant MiniMapCanvas oldDelegate) {
-    return cameraPosition != oldDelegate.cameraPosition ||
-        playerPosition != oldDelegate.playerPosition;
+    return true;
   }
 }

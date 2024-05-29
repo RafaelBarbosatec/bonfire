@@ -1,3 +1,6 @@
+# next
+- MiniMap improviments. Fix issue [#517](https://github.com/RafaelBarbosatec/bonfire/issues/517)
+
 # 3.9.1
 - `BlockMovementCollision` improvements.
 - Create a `PinchGesture` mixin to listen pinch gestures.

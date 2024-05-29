@@ -64,7 +64,6 @@ class MiniMap extends StatefulWidget {
 
 class _MiniMapState extends State<MiniMap> {
   Vector2 cameraPosition = Vector2.zero();
-  Vector2 playerPosition = Vector2.zero();
 
   Paint tilePaint = Paint();
   Paint tileCollisionPaint = Paint();
@@ -109,8 +108,8 @@ class _MiniMapState extends State<MiniMap> {
                   components: widget.game.visibles(),
                   tiles: widget.game.map.getRenderedTiles(),
                   cameraPosition: cameraPosition,
-                  playerPosition: playerPosition,
-                  gameSize: widget.game.size,
+                  gameSize:
+                      widget.game.camera.visibleWorldRect.size.toVector2(),
                   componentsRender:
                       widget.componentsRender ?? componentsRenderDefault(),
                   tileRender: widget.tileRender ?? tilesRenderDefault(),
@@ -129,20 +128,9 @@ class _MiniMapState extends State<MiniMap> {
       if (!widget.game.camera.isMounted) {
         return;
       }
-      bool needSetState = false;
-      if (widget.game.camera.position != cameraPosition) {
-        cameraPosition = widget.game.camera.topleft.clone();
-        needSetState = true;
-      }
+      cameraPosition = widget.game.camera.topleft.clone();
 
-      if (widget.game.player?.position != playerPosition) {
-        playerPosition = widget.game.player?.position.clone() ?? Vector2.zero();
-        needSetState = true;
-      }
-
-      if (needSetState) {
-        setState(() {});
-      }
+      setState(() {});
     });
   }
 
