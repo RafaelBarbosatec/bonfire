@@ -36,7 +36,7 @@ export 'package:bonfire/map/tiled/world_map_by_tiled.dart';
 export 'package:bonfire/map/world_map.dart';
 export 'package:bonfire/mixins/attackable.dart';
 export 'package:bonfire/mixins/automatic_random_movement.dart';
-export 'package:bonfire/mixins/bouncing_object.dart';
+export 'package:bonfire/mixins/elastic_collision.dart';
 export 'package:bonfire/mixins/flip_render.dart';
 export 'package:bonfire/mixins/follower.dart';
 export 'package:bonfire/mixins/interval_checker.dart';

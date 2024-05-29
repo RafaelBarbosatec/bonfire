@@ -97,8 +97,8 @@ mixin RandomMovement on Movement {
   }
 
   @override
-  void positionCorrectionFromCollision(Vector2 position) {
-    super.positionCorrectionFromCollision(position);
+  void correctPositionFromCollision(Vector2 position) {
+    super.correctPositionFromCollision(position);
     if (this is Jumper) {
       if ((this is BlockMovementCollision)) {
         final isV = (this as BlockMovementCollision)

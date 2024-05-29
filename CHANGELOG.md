@@ -1,5 +1,6 @@
 # next
 - MiniMap improviments. Fix issue [#517](https://github.com/RafaelBarbosatec/bonfire/issues/517)
+- Raname `BouncingObject` to `ElasticCollision`.
 
 # 3.9.1
 - `BlockMovementCollision` improvements.
