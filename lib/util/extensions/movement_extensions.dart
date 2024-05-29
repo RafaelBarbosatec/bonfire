@@ -24,7 +24,9 @@ extension MovementExtensions on Movement {
     }
 
     double radAngle = getAngleFromTarget(target);
-    Direction directionToMove = BonfireUtil.getDirectionFromAngle(radAngle);
+    Direction directionToMove = BonfireUtil.getDirectionFromAngle(
+      radAngle,
+    );
     final newDirectionToMove = _checkRestrictAxis(
       directionToMove,
       movementAxis,
@@ -37,6 +39,9 @@ extension MovementExtensions on Movement {
     }
 
     if (canMove(directionToMove, ignoreHitboxes: target.shapeHitboxes)) {
+      if (directionToMove != lastDirection) {
+        setZeroVelocity();
+      }
       moveFromDirection(directionToMove);
       return true;
     } else {

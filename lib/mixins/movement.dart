@@ -216,9 +216,6 @@ mixin Movement on GameComponent {
     bool enabledDiagonal = true,
     double? speed,
   }) {
-    if (direction != lastDirection) {
-      setZeroVelocity();
-    }
     switch (direction) {
       case Direction.left:
         moveLeft(speed: speed);

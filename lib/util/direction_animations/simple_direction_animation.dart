@@ -77,6 +77,7 @@ class SimpleDirectionAnimation {
   bool get canIdleUp => _idleUpAnim != null;
 
   late RenderTransformWrapper _renderWrapper;
+  late RenderTransformWrapper _fastAnimationRenderWrapper;
 
   SimpleDirectionAnimation({
     required FutureOr<SpriteAnimation> idleRight,
@@ -141,6 +142,17 @@ class SimpleDirectionAnimation {
       ],
       render: _myRender,
     );
+    _fastAnimationRenderWrapper = RenderTransformWrapper(
+      transforms: [
+        FlipRenderTransform(
+          _flipFastAnimationRenderTransform,
+        ),
+        CenterAdjustRenderTransform(
+          _adjustRenderTransform,
+        )
+      ],
+      render: _myFastAnimationRender,
+    );
   }
 
   CenterAdjustRenderData? _adjustRenderTransform() {
@@ -161,6 +173,10 @@ class SimpleDirectionAnimation {
         vertical: isFlipVertically,
       );
     }
+    return null;
+  }
+
+  FlipRenderTransformData? _flipFastAnimationRenderTransform() {
     if (_fastAnimation != null && _needDoFlipFastAnimation) {
       return FlipRenderTransformData(
         center: (size / 2),
@@ -567,15 +583,19 @@ class SimpleDirectionAnimation {
   }
 
   void render(Canvas canvas, Paint paint) {
-    _renderWrapper.execRender(canvas, paint);
+    if (_fastAnimation != null) {
+      _fastAnimationRenderWrapper.execRender(canvas, paint);
+    } else {
+      _renderWrapper.execRender(canvas, paint);
+    }
   }
 
   void _myRender(Canvas canvas, Paint paint) {
-    if (_fastAnimation != null) {
-      _renderFastAnimation(canvas, paint);
-    } else {
-      _renderCurrentAnimation(canvas, paint);
-    }
+    _renderCurrentAnimation(canvas, paint);
+  }
+
+  void _myFastAnimationRender(Canvas canvas, Paint paint) {
+    _renderFastAnimation(canvas, paint);
   }
 
   void _renderCurrentAnimation(Canvas canvas, Paint paint) {
