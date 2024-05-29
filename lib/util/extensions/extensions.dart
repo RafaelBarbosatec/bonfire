@@ -73,9 +73,9 @@ extension RectExt on Rect {
 }
 
 extension SpriteFutureExt on Future<Sprite> {
-  Future<SpriteAnimation> toAnimation() async {
+  Future<SpriteAnimation> toAnimation({double stepTime = 1}) async {
     var sprite = await this;
-    return SpriteAnimation.spriteList([sprite], stepTime: 1);
+    return SpriteAnimation.spriteList([sprite], stepTime: stepTime);
   }
 }
 
