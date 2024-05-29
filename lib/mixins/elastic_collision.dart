@@ -15,6 +15,8 @@ mixin ElasticCollision on BlockMovementCollision {
     _restitution = restitution ?? _restitution;
   }
 
+  // source https://chrishecker.com/images/e/e7/Gdmphys3.pdf
+  // Applying Impulse
   @override
   Vector2 getVelocityReflection(
     PositionComponent other,
