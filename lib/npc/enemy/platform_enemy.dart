@@ -2,7 +2,6 @@ import 'package:bonfire/bonfire.dart';
 
 class PlatformEnemy extends SimpleEnemy
     with BlockMovementCollision, Jumper, JumperAnimation {
-  bool _canIdle = true;
   PlatformEnemy({
     required super.position,
     required super.size,
@@ -35,23 +34,5 @@ class PlatformEnemy extends SimpleEnemy
           ),
         ) {
     setupJumper(maxJump: countJumps);
-  }
-
-  @override
-  void onMove(
-    double speed,
-    Vector2 displacement,
-    Direction direction,
-    double angle,
-  ) {
-    _canIdle = direction.isHorizontal;
-    super.onMove(speed, displacement, direction, angle);
-  }
-
-  @override
-  void idle() {
-    if (_canIdle) {
-      super.idle();
-    }
   }
 }

@@ -49,6 +49,8 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   @override
   void onDie() {
     super.onDie();
+    handleForcesEnabled = false;
+    velocity.setZero();
     animation?.playOnce(
       PlatformSpritesheet.enemyExplosion,
       runToTheEnd: true,

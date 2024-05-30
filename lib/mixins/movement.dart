@@ -57,7 +57,7 @@ mixin Movement on GameComponent {
     }
   }
 
-  void positionCorrectionFromCollision(Vector2 position) {
+  void correctPositionFromCollision(Vector2 position) {
     super.position = position;
   }
 
@@ -216,9 +216,6 @@ mixin Movement on GameComponent {
     bool enabledDiagonal = true,
     double? speed,
   }) {
-    if (direction != lastDirection) {
-      setZeroVelocity();
-    }
     switch (direction) {
       case Direction.left:
         moveLeft(speed: speed);

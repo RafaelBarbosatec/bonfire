@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
 class CollisionComponent extends GameDecoration
-    with Movement, BlockMovementCollision, HandleForces, BouncingObject {
+    with Movement, BlockMovementCollision, HandleForces, ElasticCollision {
   final bool isCircle;
   CollisionComponent({
     required Vector2 position,

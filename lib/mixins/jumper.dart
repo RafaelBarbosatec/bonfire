@@ -15,7 +15,7 @@ enum JumpingStateEnum {
 /// )
 mixin Jumper on Movement, BlockMovementCollision {
   final double _defaultJumpSpeed = 150;
-  bool jumping = false;
+  bool isJumping = false;
   JumpingStateEnum jumpingState = JumpingStateEnum.idle;
   int _maxJump = 1;
   int _currentJumps = 0;
@@ -30,10 +30,10 @@ mixin Jumper on Movement, BlockMovementCollision {
   }
 
   void jump({double? jumpSpeed, bool force = false}) {
-    if (!jumping || _currentJumps < _maxJump || force) {
+    if (!isJumping || _currentJumps < _maxJump || force) {
       _currentJumps++;
       moveUp(speed: jumpSpeed ?? _defaultJumpSpeed);
-      jumping = true;
+      isJumping = true;
     }
   }
 
@@ -43,26 +43,26 @@ mixin Jumper on Movement, BlockMovementCollision {
     CollisionData collisionData,
   ) {
     super.onBlockedMovement(other, collisionData);
-    if (jumping &&
+    if (isJumping &&
         lastDirectionVertical.isDownSide &&
         collisionData.direction.isDownSide) {
       _currentJumps = 0;
-      jumping = false;
+      isJumping = false;
     }
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (!jumping && displacement.y.abs() > 0.5) {
-      jumping = true;
+    if (!isJumping && displacement.y.abs() > 0.2) {
+      isJumping = true;
     }
     _notifyJump();
   }
 
   void _notifyJump() {
     JumpingStateEnum newDirection;
-    if (jumping) {
+    if (isJumping) {
       if (lastDirectionVertical == Direction.down) {
         newDirection = JumpingStateEnum.down;
       } else {
@@ -79,7 +79,7 @@ mixin Jumper on Movement, BlockMovementCollision {
 
   @override
   void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {
-    if (!jumping) {
+    if (!isJumping) {
       super.stopMove(forceIdle: forceIdle, isX: isX, isY: isY);
     }
   }

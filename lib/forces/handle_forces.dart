@@ -8,6 +8,8 @@ mixin HandleForces on Movement {
   /// Mass of the Component
   double _mass = 1.0;
 
+  bool handleForcesEnabled = true;
+
   set mass(double mass) {
     assert(mass >= 1);
     _mass = mass;
@@ -28,6 +30,9 @@ mixin HandleForces on Movement {
 
   @override
   Vector2 onVelocityUpdate(double dt, Vector2 velocity) {
+    if (!handleForcesEnabled) {
+      return super.onVelocityUpdate(dt, velocity);
+    }
     final oldVelocity = velocity.clone();
     List<Force2D> mergeForces = [..._forces, ...gameRef.globalForces];
     final acceleration = mergeForces.whereType<AccelerationForce2D>();

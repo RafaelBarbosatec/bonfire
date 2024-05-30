@@ -12,7 +12,7 @@ enum JumpAnimationsEnum {
 mixin JumperAnimation on Jumper, DirectionAnimation {
   @override
   void onPlayRunDownAnimation() {
-    if (jumping) {
+    if (isJumping) {
       if (lastDirectionHorizontal == Direction.left) {
         _jumpDownLeft();
       } else {
@@ -26,7 +26,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
 
   @override
   void onPlayRunDownRightAnimation() {
-    if (jumping) {
+    if (isJumping) {
       animation?.playOther(JumpAnimationsEnum.jumpDownRight, flipX: false);
     } else {
       super.onPlayRunDownRightAnimation();
@@ -35,7 +35,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
 
   @override
   void onPlayRunDownLeftAnimation() {
-    if (jumping) {
+    if (isJumping) {
       _jumpDownLeft();
     } else {
       super.onPlayRunDownLeftAnimation();
@@ -44,7 +44,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
 
   @override
   void onPlayRunUpLeftAnimation() {
-    if (jumping) {
+    if (isJumping) {
       _playJumpUpLeft();
     } else {
       super.onPlayRunUpLeftAnimation();
@@ -53,7 +53,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
 
   @override
   void onPlayRunLeftAnimation() {
-    if (jumping) {
+    if (isJumping) {
       _playJumpUpLeft();
     } else {
       super.onPlayRunLeftAnimation();
@@ -62,7 +62,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
 
   @override
   void onPlayRunRightAnimation() {
-    if (jumping) {
+    if (isJumping) {
       animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
     } else {
       super.onPlayRunRightAnimation();
@@ -71,7 +71,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
 
   @override
   void onPlayRunUpRightAnimation() {
-    if (jumping) {
+    if (isJumping) {
       animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
     } else {
       super.onPlayRunUpRightAnimation();
@@ -80,7 +80,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
 
   @override
   void onPlayRunUpAnimation() {
-    if (jumping) {
+    if (isJumping) {
       if (lastDirectionHorizontal == Direction.left) {
         _playJumpUpLeft();
       } else {
@@ -127,7 +127,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
 
   @override
   void idle() {
-    if (!jumping) {
+    if (!isJumping) {
       super.idle();
     }
   }

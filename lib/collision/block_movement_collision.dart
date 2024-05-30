@@ -16,7 +16,7 @@ enum BodyType {
 
 /// Mixin responsible for adding stop the movement when happen collision
 mixin BlockMovementCollision on Movement {
-  BodyType _bodyType = BodyType.static;
+  BodyType _bodyType = BodyType.dynamic;
   bool _blockMovementCollisionEnabled = true;
   bool get blockMovementCollisionEnabled => _blockMovementCollisionEnabled;
   final Map<BlockMovementCollision, CollisionData> _collisionsResolution = {};
@@ -47,36 +47,29 @@ mixin BlockMovementCollision on Movement {
     CollisionData collisionData,
   ) {
     _lastCollisionData = collisionData;
-    Vector2 correction;
-    double depth = 0;
-    if (collisionData.depth > 0) {
-      depth = collisionData.depth + 0.08;
+    if (_bodyType.isDynamic) {
+      Vector2 correction;
+      double depth = 0;
+      if (collisionData.depth > 0) {
+        depth = collisionData.depth + 0.08;
+      }
+
+      correction = (-collisionData.normal * depth);
+      if ((other is BlockMovementCollision) && other._bodyType.isDynamic) {
+        correction = (-collisionData.normal * depth / 2);
+      }
+      correctPositionFromCollision(position + correction);
     }
-    correction = (-collisionData.normal * depth);
-    if (!correction.isZero()) {
-      positionCorrectionFromCollision(position + correction);
-    }
-    onBlockMovementUpdateVelocity(other, collisionData);
+    velocity -= getVelocityReflection(other, collisionData);
   }
 
-  void onBlockMovementUpdateVelocity(
-    PositionComponent other,
-    CollisionData collisionData,
-  ) {
-    if (_bodyType.isStatic) {
-      velocity -= Vector2(
-        velocity.x * collisionData.normal.x.abs(),
-        velocity.y * collisionData.normal.y.abs(),
-      );
-    } else {
-      velocity -= getCollisionVelocityReflection(other, collisionData);
-    }
-  }
-
-  Vector2 getCollisionVelocityReflection(
+  Vector2 getVelocityReflection(
     PositionComponent other,
     CollisionData data,
   ) {
+    if (_bodyType.isStatic) {
+      return velocity;
+    }
     return data.normal * velocity.dot(data.normal);
   }
 
