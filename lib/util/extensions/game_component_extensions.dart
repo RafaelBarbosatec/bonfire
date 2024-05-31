@@ -141,7 +141,6 @@ extension GameComponentExtensions on GameComponent {
     Vector2? centerOffset,
   }) {
     final rect = rectCollision;
-
     simpleAttackMeleeByAngle(
       angle: direction.toRadians(),
       animation: animationRight,
@@ -215,10 +214,11 @@ extension GameComponentExtensions on GameComponent {
         id: id,
         onDamage: (attackable) {
           if (withPush && attackable is Movement) {
-            if ((attackable as Movement).canMove(diffBase.toDirection(),
-                displacement: diffBase.maxValue())) {
-              (attackable as Movement).translate(diffBase);
-            }
+            _doPush(
+              attackable as Movement,
+              BonfireUtil.getDirectionFromAngle(angle),
+              diffBase,
+            );
           }
         },
       ),
@@ -397,5 +397,18 @@ extension GameComponentExtensions on GameComponent {
       filterQuality: filterQuality,
       key: key,
     );
+  }
+
+  void _doPush(
+    Movement comp,
+    Direction directionFromAngle,
+    Vector2 displacement,
+  ) {
+    if (comp.canMove(
+      directionFromAngle,
+      displacement: displacement.maxValue(),
+    )) {
+      comp.translate(displacement);
+    }
   }
 }
