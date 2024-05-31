@@ -105,12 +105,13 @@ mixin UseSpriteAnimation on GameComponent {
     Vector2? offset,
     VoidCallback? onFinish,
     VoidCallback? onStart,
+    bool loop = false,
   }) async {
     _fastAnimation = SpriteAnimationRender(
       position: offset,
       size: size ?? this.size,
       animation: await animation,
-      loop: false,
+      loop: loop,
       onFinish: () {
         _fastAnimation = null;
         onFinish?.call();
