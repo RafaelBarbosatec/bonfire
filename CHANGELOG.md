@@ -1,6 +1,7 @@
-# next
+# 3.9.3
 - push improvements. 
 - `Movement` mixin improvements.
+- Other otimizations
 
 # 3.9.2
 - MiniMap improviments. Fix issue [#517](https://github.com/RafaelBarbosatec/bonfire/issues/517)
