@@ -91,9 +91,9 @@ mixin DirectionAnimation on Movement {
     await animation?.onLoad(gameRef);
     return super.onLoad();
   }
-  
+
   @override
-  void onMount(){
+  void onMount() {
     super.onMount();
     idle();
   }
