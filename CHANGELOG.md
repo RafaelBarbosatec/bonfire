@@ -2,7 +2,7 @@
 - push improvements. 
 - `Movement` mixin improvements.
 - Other otimizations
-- Fix intermittent crash after `simpleAttackRanged` is called
+- Fix intermittent crash after `simpleAttackRanged` is called. [#520](https://github.com/RafaelBarbosatec/bonfire/issues/520). Thanks [tkshnwesper](https://github.com/tkshnwesper)
 
 # 3.9.2
 - MiniMap improviments. Fix issue [#517](https://github.com/RafaelBarbosatec/bonfire/issues/517)
