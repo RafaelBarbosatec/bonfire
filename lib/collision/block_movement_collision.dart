@@ -75,8 +75,10 @@ mixin BlockMovementCollision on Movement {
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
-    if (other is Sensor || !_blockMovementCollisionEnabled) return;
+    if (other is Sensor || !_blockMovementCollisionEnabled) {
+      super.onCollision(intersectionPoints, other);
+      return;
+    }
     bool stopOtherMovement = true;
     bool stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
@@ -89,6 +91,7 @@ mixin BlockMovementCollision on Movement {
     }
 
     if (!stopMovement || !stopOtherMovement) {
+      super.onCollision(intersectionPoints, other);
       return;
     }
 
@@ -98,6 +101,7 @@ mixin BlockMovementCollision on Movement {
         _collisionsResolution[other]!,
       );
       _collisionsResolution.remove(other);
+      super.onCollision(intersectionPoints, other);
       return;
     }
 
@@ -148,6 +152,7 @@ mixin BlockMovementCollision on Movement {
         other.setCollisionResolution(this, data.inverted());
       }
     }
+    super.onCollision(intersectionPoints, other);
   }
 
   bool _isPolygon(ShapeHitbox shape) {
