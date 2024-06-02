@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
@@ -14,6 +15,20 @@ class PlatformJumpAnimations {
     this.jumpUpLeft,
     this.jumpDownLeft,
   });
+
+  PlatformJumpAnimations copyWith({
+    FutureOr<SpriteAnimation>? jumpUpRight,
+    FutureOr<SpriteAnimation>? jumpUpLeft,
+    FutureOr<SpriteAnimation>? jumpDownRight,
+    FutureOr<SpriteAnimation>? jumpDownLeft,
+  }) {
+    return PlatformJumpAnimations(
+      jumpUpRight: jumpUpRight ?? this.jumpUpRight,
+      jumpUpLeft: jumpUpLeft ?? this.jumpUpLeft,
+      jumpDownRight: jumpDownRight ?? this.jumpDownRight,
+      jumpDownLeft: jumpDownLeft ?? this.jumpDownLeft,
+    );
+  }
 }
 
 class PlatformAnimations {
@@ -34,4 +49,24 @@ class PlatformAnimations {
     this.others,
     this.centerAnchor,
   });
+
+  PlatformAnimations copyWith({
+    FutureOr<SpriteAnimation>? idleRight,
+    FutureOr<SpriteAnimation>? runRight,
+    FutureOr<SpriteAnimation>? idleLeft,
+    FutureOr<SpriteAnimation>? runLeft,
+    PlatformJumpAnimations? jump,
+    Map<String, FutureOr<SpriteAnimation>>? others,
+    Vector2? centerAnchor,
+  }) {
+    return PlatformAnimations(
+      idleRight: idleRight ?? this.idleRight,
+      runRight: runRight ?? this.runRight,
+      idleLeft: idleLeft ?? this.idleLeft,
+      runLeft: runLeft ?? this.runLeft,
+      jump: jump ?? this.jump,
+      others: others ?? this.others,
+      centerAnchor: centerAnchor ?? this.centerAnchor,
+    );
+  }
 }

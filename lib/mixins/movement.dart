@@ -6,7 +6,7 @@ import 'package:bonfire/bonfire.dart';
 mixin Movement on GameComponent {
   static const diaginalReduction = 0.7853981633974483;
   static const speedDefault = 80.0;
-
+  double minDisplacementToConsiderMove = 0.1;
   double dtUpdate = 0;
   double speed = speedDefault;
   double _lastSpeed = speedDefault;
@@ -338,12 +338,17 @@ mixin Movement on GameComponent {
 
   void _updatePosition(double dt) {
     onApplyDisplacement(dt);
-    if (!displacement.isZero()) {
+    if (_moveTheMin()) {
       if (lastDirection.isDownSide || lastDirection.isUpSide) {
         _requestUpdatePriority();
       }
       onMove(_lastSpeed, displacement, lastDirection, velocityRadAngle);
     }
+  }
+
+  bool _moveTheMin() {
+    return displacement.x.abs() > minDisplacementToConsiderMove ||
+        displacement.y.abs() > minDisplacementToConsiderMove;
   }
 
   bool isStopped() {

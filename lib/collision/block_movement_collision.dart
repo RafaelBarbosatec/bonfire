@@ -75,8 +75,10 @@ mixin BlockMovementCollision on Movement {
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollision(intersectionPoints, other);
-    if (other is Sensor || !_blockMovementCollisionEnabled) return;
+    if (other is Sensor || !_blockMovementCollisionEnabled) {
+      super.onCollision(intersectionPoints, other);
+      return;
+    }
     bool stopOtherMovement = true;
     bool stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
@@ -89,6 +91,7 @@ mixin BlockMovementCollision on Movement {
     }
 
     if (!stopMovement || !stopOtherMovement) {
+      super.onCollision(intersectionPoints, other);
       return;
     }
 
@@ -98,17 +101,23 @@ mixin BlockMovementCollision on Movement {
         _collisionsResolution[other]!,
       );
       _collisionsResolution.remove(other);
+      super.onCollision(intersectionPoints, other);
       return;
     }
 
-    ShapeHitbox shape1 = _getCollisionShapeHitbox(
+    ShapeHitbox? shape1 = _getCollisionShapeHitbox(
       shapeHitboxes,
       intersectionPoints,
     );
-    ShapeHitbox shape2 = _getCollisionShapeHitbox(
+    ShapeHitbox? shape2 = _getCollisionShapeHitbox(
       other.children.query<ShapeHitbox>(),
       intersectionPoints,
     );
+
+    if (shape1 == null || shape2 == null) {
+      super.onCollision(intersectionPoints, other);
+      return;
+    }
 
     ({Vector2 normal, double depth})? colisionResult;
 
@@ -143,6 +152,7 @@ mixin BlockMovementCollision on Movement {
         other.setCollisionResolution(this, data.inverted());
       }
     }
+    super.onCollision(intersectionPoints, other);
   }
 
   bool _isPolygon(ShapeHitbox shape) {
@@ -273,10 +283,11 @@ mixin BlockMovementCollision on Movement {
     return (normal: normal, depth: depth);
   }
 
-  ShapeHitbox _getCollisionShapeHitbox(
+  ShapeHitbox? _getCollisionShapeHitbox(
     List<ShapeHitbox> shapeHitboxes,
     Set<Vector2> intersectionPoints,
   ) {
+    if (shapeHitboxes.isEmpty || intersectionPoints.isEmpty) return null;
     if (shapeHitboxes.length == 1) {
       return shapeHitboxes.first;
     }

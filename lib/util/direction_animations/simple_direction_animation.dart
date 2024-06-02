@@ -380,7 +380,7 @@ class SimpleDirectionAnimation {
   bool containOther(dynamic key) => others.containsKey(key);
 
   /// Method used to play animation once time
-  Future playOnce(
+  Future<void> playOnce(
     FutureOr<SpriteAnimation> animation, {
     VoidCallback? onFinish,
     VoidCallback? onStart,
@@ -391,6 +391,7 @@ class SimpleDirectionAnimation {
     Vector2? size,
     Vector2? offset,
   }) async {
+    final completer = Completer();
     _fastAnimation?.onFinish?.call();
     runToTheEndFastAnimation = runToTheEnd;
     if (useCompFlip) {
@@ -408,13 +409,15 @@ class SimpleDirectionAnimation {
       onFinish: () {
         onFinish?.call();
         _fastAnimation = null;
+        completer.complete();
       },
     );
     onStart?.call();
+    return completer.future;
   }
 
   /// Method used to play animation once time
-  Future playOnceOther(
+  Future<void> playOnceOther(
     dynamic key, {
     VoidCallback? onFinish,
     VoidCallback? onStart,
@@ -428,6 +431,7 @@ class SimpleDirectionAnimation {
     if (others.containsKey(key) != true) {
       return Future.value();
     }
+    final completer = Completer();
     _fastAnimation?.onFinish?.call();
     runToTheEndFastAnimation = runToTheEnd;
     if (useCompFlip) {
@@ -446,9 +450,12 @@ class SimpleDirectionAnimation {
       onFinish: () {
         onFinish?.call();
         _fastAnimation = null;
+        completer.complete();
       },
     );
     onStart?.call();
+
+    return completer.future;
   }
 
   /// Method used to register new animation in others

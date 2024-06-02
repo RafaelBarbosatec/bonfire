@@ -139,9 +139,9 @@ extension GameComponentExtensions on GameComponent {
     double? sizePush,
     double? marginFromCenter,
     Vector2? centerOffset,
+    void Function(Attackable attackable)? onDamage,
   }) {
     final rect = rectCollision;
-
     simpleAttackMeleeByAngle(
       angle: direction.toRadians(),
       animation: animationRight,
@@ -152,6 +152,7 @@ extension GameComponentExtensions on GameComponent {
       marginFromCenter: marginFromCenter ?? max(rect.width, rect.height) / 2,
       id: id,
       withPush: withPush,
+      onDamage: onDamage,
     );
   }
 
@@ -170,6 +171,7 @@ extension GameComponentExtensions on GameComponent {
     bool withPush = true,
     double marginFromCenter = 0,
     Vector2? centerOffset,
+    void Function(Attackable attackable)? onDamage,
   }) {
     var initPosition = rectCollision;
 
@@ -214,11 +216,13 @@ extension GameComponentExtensions on GameComponent {
         angle: angle,
         id: id,
         onDamage: (attackable) {
+          onDamage?.call(attackable);
           if (withPush && attackable is Movement) {
-            if ((attackable as Movement).canMove(diffBase.toDirection(),
-                displacement: diffBase.maxValue())) {
-              (attackable as Movement).translate(diffBase);
-            }
+            _doPush(
+              attackable as Movement,
+              BonfireUtil.getDirectionFromAngle(angle),
+              diffBase,
+            );
           }
         },
       ),
@@ -397,5 +401,18 @@ extension GameComponentExtensions on GameComponent {
       filterQuality: filterQuality,
       key: key,
     );
+  }
+
+  void _doPush(
+    Movement comp,
+    Direction directionFromAngle,
+    Vector2 displacement,
+  ) {
+    if (comp.canMove(
+      directionFromAngle,
+      displacement: displacement.maxValue(),
+    )) {
+      comp.translate(displacement);
+    }
   }
 }

@@ -99,24 +99,28 @@ mixin UseSpriteAnimation on GameComponent {
   }
 
   /// Method used to play animation once time
-  Future playSpriteAnimationOnce(
+  Future<void> playSpriteAnimationOnce(
     FutureOr<SpriteAnimation> animation, {
     Vector2? size,
     Vector2? offset,
     VoidCallback? onFinish,
     VoidCallback? onStart,
+    bool loop = false,
   }) async {
+    final completer = Completer();
     _fastAnimation = SpriteAnimationRender(
       position: offset,
       size: size ?? this.size,
       animation: await animation,
-      loop: false,
+      loop: loop,
       onFinish: () {
         _fastAnimation = null;
         onFinish?.call();
+        completer.complete();
       },
       onStart: onStart,
     );
+    return completer.future;
   }
 
   void pauseAnimation() {

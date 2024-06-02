@@ -57,18 +57,15 @@ class GameDecoration extends AnimatedGameObject {
     Vector2? offset,
     VoidCallback? onFinish,
     VoidCallback? onStart,
+    bool loop = false,
   }) {
-    final spriteBackup = sprite;
     return super.playSpriteAnimationOnce(
       animation,
       size: size,
       offset: offset,
-      onFinish: () {
-        sprite = spriteBackup;
-        onFinish?.call();
-      },
+      loop: loop,
+      onFinish: onFinish,
       onStart: () {
-        sprite = null;
         onStart?.call();
       },
     );

@@ -89,8 +89,13 @@ mixin DirectionAnimation on Movement {
   @override
   Future<void> onLoad() async {
     await animation?.onLoad(gameRef);
-    idle();
     return super.onLoad();
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    idle();
   }
 
   Future<void> replaceAnimation(
