@@ -101,14 +101,19 @@ mixin BlockMovementCollision on Movement {
       return;
     }
 
-    ShapeHitbox shape1 = _getCollisionShapeHitbox(
+    ShapeHitbox? shape1 = _getCollisionShapeHitbox(
       shapeHitboxes,
       intersectionPoints,
     );
-    ShapeHitbox shape2 = _getCollisionShapeHitbox(
+    ShapeHitbox? shape2 = _getCollisionShapeHitbox(
       other.children.query<ShapeHitbox>(),
       intersectionPoints,
     );
+
+    if (shape1 == null || shape2 == null) {
+      super.onCollision(intersectionPoints, other);
+      return;
+    }
 
     ({Vector2 normal, double depth})? colisionResult;
 
@@ -273,10 +278,11 @@ mixin BlockMovementCollision on Movement {
     return (normal: normal, depth: depth);
   }
 
-  ShapeHitbox _getCollisionShapeHitbox(
+  ShapeHitbox? _getCollisionShapeHitbox(
     List<ShapeHitbox> shapeHitboxes,
     Set<Vector2> intersectionPoints,
   ) {
+    if (shapeHitboxes.isEmpty || intersectionPoints.isEmpty) return null;
     if (shapeHitboxes.length == 1) {
       return shapeHitboxes.first;
     }
