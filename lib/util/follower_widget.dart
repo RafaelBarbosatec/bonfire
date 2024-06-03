@@ -1,3 +1,5 @@
+import 'dart:async' as async;
+
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:flutter/widgets.dart';
@@ -20,12 +22,14 @@ final Map<String, OverlayEntry> _mapOverlayEntry = {};
 class FollowerWidget extends StatefulWidget {
   final GameComponent target;
   final Widget child;
-  final Offset align;
+  final Offset offset;
+  final AlignmentGeometry? alignment;
   const FollowerWidget({
     Key? key,
     required this.target,
     required this.child,
-    this.align = Offset.zero,
+    this.offset = Offset.zero,
+    this.alignment,
   }) : super(key: key);
 
   /// Use this method to show a widget what follow the component
@@ -34,13 +38,15 @@ class FollowerWidget extends StatefulWidget {
     required BuildContext context,
     required GameComponent target,
     required Widget child,
-    Offset align = Offset.zero,
+    Offset offset = Offset.zero,
+    AlignmentGeometry? alignment,
   }) {
     final overlay = OverlayEntry(
       builder: (context) {
         return FollowerWidget(
           target: target,
-          align: align,
+          offset: offset,
+          alignment: alignment,
           child: child,
         );
       },
@@ -83,15 +89,23 @@ class FollowerWidgetState extends State<FollowerWidget> {
   double lastZoom = 0.0;
   Vector2 lastCameraPosition = Vector2.zero();
   late BonfireCamera camera;
+  late async.Timer timer;
   @override
   void initState() {
-    widget.target.position.addListener(_positionListener);
+    _initTimer();
     super.initState();
+  }
+
+  void _initTimer() {
+    timer = async.Timer.periodic(
+      const Duration(milliseconds: 34),
+      (timer) => _positionListener(),
+    );
   }
 
   @override
   void dispose() {
-    widget.target.position.removeListener(_positionListener);
+    timer.cancel();
     super.dispose();
   }
 
@@ -99,9 +113,13 @@ class FollowerWidgetState extends State<FollowerWidget> {
   Widget build(BuildContext context) {
     if (widgetPosition != null) {
       return Positioned(
-        top: widgetPosition!.y + widget.align.dy,
-        left: widgetPosition!.x + widget.align.dx,
-        child: widget.child,
+        top: (widgetPosition!.y + widget.offset.dy),
+        left: (widgetPosition!.x + widget.offset.dx),
+        child: Transform.scale(
+          scale: lastZoom,
+          alignment: widget.alignment,
+          child: widget.child,
+        ),
       );
     }
     return const SizedBox.shrink();

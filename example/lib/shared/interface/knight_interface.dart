@@ -204,20 +204,7 @@ class KnightInterface extends GameInterface {
         identify: followerWidgetTestId,
         context: context,
         target: player,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          padding: const EdgeInsets.all(10),
-          child: ElevatedButton(
-            onPressed: () {
-              // ignore: avoid_print
-              print('Tapped');
-            },
-            child: const Text('Tap here'),
-          ),
-        ),
+        child: const TestWidget(),
       );
     });
   }
@@ -232,5 +219,28 @@ class KnightInterface extends GameInterface {
         gameRef.colorFilter?.config.color = null;
       });
     }
+  }
+}
+
+class TestWidget extends StatelessWidget {
+  const TestWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      padding: const EdgeInsets.all(10),
+      child: ElevatedButton(
+        onPressed: () {
+          FollowerWidget.remove(
+            KnightInterface.followerWidgetTestId,
+          );
+        },
+        child: const Text('Tap here to remove'),
+      ),
+    );
   }
 }
