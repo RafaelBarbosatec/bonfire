@@ -40,8 +40,24 @@ class SimpleDirectionAnimation {
   bool enabledFlipX;
   bool enabledFlipY;
 
-  bool isFlipHorizontally = false;
-  bool isFlipVertically = false;
+  bool _isFlipHorizontally = false;
+  bool _isFlipVertically = false;
+
+  bool get isFlipHorizontally => _isFlipHorizontally;
+  set isFlipHorizontally(bool value) {
+    _isFlipHorizontally = value;
+    if (fastAnimationUseCompFlip) {
+      isFlipHorizontallyFastAnimation = value;
+    }
+  }
+
+  bool get isFlipVertically => _isFlipVertically;
+  set isFlipVertically(bool value) {
+    _isFlipVertically = value;
+    if (fastAnimationUseCompFlip) {
+      isFlipVerticallyFastAnimation = value;
+    }
+  }
 
   BonfireGameInterface? gameRef;
 
@@ -190,8 +206,8 @@ class SimpleDirectionAnimation {
   /// Method used to play specific default animation
   void play(SimpleAnimationEnum animation) {
     if (_currentType == animation) return;
-    isFlipHorizontally = isFlipHorizontallyFastAnimation = false;
-    isFlipVertically = isFlipVerticallyFastAnimation = false;
+    isFlipHorizontally = false;
+    isFlipVertically = false;
 
     _currentType = animation;
     _currentKeyCustom = null;
@@ -213,7 +229,7 @@ class SimpleDirectionAnimation {
         if (_idleDownAnim != null) {
           _current.animation = _idleDownAnim;
         } else if (enabledFlipY && _idleUpAnim != null) {
-          isFlipVertically = isFlipVerticallyFastAnimation = true;
+          isFlipVertically = true;
           _current.animation = _idleUpAnim;
         }
         break;
@@ -222,7 +238,7 @@ class SimpleDirectionAnimation {
           _current.animation = _idleUpLeftAnim;
         } else if (_idleUpRightAnim != null) {
           _current.animation = _idleUpRightAnim;
-          isFlipHorizontally = isFlipHorizontallyFastAnimation = true;
+          isFlipHorizontally = true;
         } else {
           _idleLeft();
         }
@@ -239,7 +255,7 @@ class SimpleDirectionAnimation {
           _current.animation = _idleDownLeftAnim;
         } else if (_idleDownRightAnim != null) {
           _current.animation = _idleDownRightAnim;
-          isFlipHorizontally = isFlipHorizontallyFastAnimation = true;
+          isFlipHorizontally = true;
         } else {
           _idleLeft();
         }
@@ -287,7 +303,7 @@ class SimpleDirectionAnimation {
               if (_runDownAnim != null) {
                 _current.animation = _runDownAnim;
               } else if (enabledFlipY && _runUpAnim != null) {
-                isFlipVertically = isFlipVerticallyFastAnimation = true;
+                isFlipVertically = true;
                 _current.animation = _runUpAnim;
               }
             }
@@ -295,7 +311,7 @@ class SimpleDirectionAnimation {
             if (_runDownAnim != null) {
               _current.animation = _runDownAnim;
             } else if (enabledFlipY && _runUpAnim != null) {
-              isFlipVertically = isFlipHorizontallyFastAnimation = true;
+              isFlipVertically = true;
               _current.animation = _runUpAnim;
             }
           }
@@ -304,7 +320,7 @@ class SimpleDirectionAnimation {
           if (_runDownAnim != null) {
             _current.animation = _runDownAnim;
           } else if (enabledFlipY && _runUpAnim != null) {
-            isFlipVertically = isFlipVerticallyFastAnimation = true;
+            isFlipVertically = true;
             _current.animation = _runUpAnim;
           }
         }
@@ -318,7 +334,7 @@ class SimpleDirectionAnimation {
           _changeLastAnimation(SimpleAnimationEnum.runUpLeft);
         } else if (_runUpRightAnim != null) {
           _current.animation = _runUpRightAnim;
-          isFlipHorizontally = isFlipHorizontallyFastAnimation = true;
+          isFlipHorizontally = true;
           _changeLastAnimation(SimpleAnimationEnum.runUpLeft);
         } else {
           _runLeft();
@@ -338,7 +354,7 @@ class SimpleDirectionAnimation {
           _changeLastAnimation(SimpleAnimationEnum.runDownLeft);
         } else if (_runDownRightAnim != null) {
           _current.animation = _runDownRightAnim;
-          isFlipHorizontally = isFlipHorizontallyFastAnimation = true;
+          isFlipHorizontally = true;
           _changeLastAnimation(SimpleAnimationEnum.runDownLeft);
         } else {
           _runLeft();
@@ -379,6 +395,8 @@ class SimpleDirectionAnimation {
 
   bool containOther(dynamic key) => others.containsKey(key);
 
+  bool fastAnimationUseCompFlip = false;
+
   /// Method used to play animation once time
   Future<void> playOnce(
     FutureOr<SpriteAnimation> animation, {
@@ -391,6 +409,7 @@ class SimpleDirectionAnimation {
     Vector2? size,
     Vector2? offset,
   }) async {
+    fastAnimationUseCompFlip = useCompFlip;
     final completer = Completer();
     _fastAnimation?.onFinish?.call();
     runToTheEndFastAnimation = runToTheEnd;
@@ -431,6 +450,7 @@ class SimpleDirectionAnimation {
     if (others.containsKey(key) != true) {
       return Future.value();
     }
+    fastAnimationUseCompFlip = useCompFlip;
     final completer = Completer();
     _fastAnimation?.onFinish?.call();
     runToTheEndFastAnimation = runToTheEnd;
@@ -513,7 +533,10 @@ class SimpleDirectionAnimation {
           if (_runLeftAnim != null) {
             _current.animation = _runLeftAnim;
           } else if (enabledFlipX) {
-            isFlipHorizontally = isFlipHorizontallyFastAnimation = true;
+            isFlipHorizontally = true;
+            if (fastAnimationUseCompFlip) {
+              isFlipHorizontallyFastAnimation = isFlipHorizontally;
+            }
             _current.animation = _runRightAnim;
           }
         }
@@ -521,7 +544,7 @@ class SimpleDirectionAnimation {
         if (_runLeftAnim != null) {
           _current.animation = _runLeftAnim;
         } else if (enabledFlipX) {
-          isFlipHorizontally = isFlipHorizontallyFastAnimation = true;
+          isFlipHorizontally = true;
           _current.animation = _runRightAnim;
         }
       }
@@ -530,7 +553,7 @@ class SimpleDirectionAnimation {
       if (_runLeftAnim != null) {
         _current.animation = _runLeftAnim;
       } else if (enabledFlipX) {
-        isFlipHorizontally = isFlipHorizontallyFastAnimation = true;
+        isFlipHorizontally = true;
         _current.animation = _runRightAnim;
       }
     }
@@ -560,7 +583,7 @@ class SimpleDirectionAnimation {
     if (_idleLeftAnim != null) {
       _current.animation = _idleLeftAnim;
     } else if (enabledFlipX) {
-      isFlipHorizontally = isFlipHorizontallyFastAnimation = true;
+      isFlipHorizontally = true;
       _current.animation = _idleRightAnim;
     }
   }
