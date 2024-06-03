@@ -5,7 +5,7 @@ class PlatformEnemy extends SimpleEnemy
   PlatformEnemy({
     required super.position,
     required super.size,
-    required PlatformAnimations animation,
+    PlatformAnimations? animation,
     Direction initDirection = Direction.right,
     double? speed,
     double life = 100,
@@ -14,7 +14,7 @@ class PlatformEnemy extends SimpleEnemy
           initDirection: initDirection,
           speed: speed,
           life: life,
-          animation: animation.toSimpleDirectionAnimation(),
+          animation: animation?.toSimpleDirectionAnimation(),
         ) {
     setupJumper(maxJump: countJumps);
   }
