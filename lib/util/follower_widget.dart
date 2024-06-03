@@ -1,3 +1,5 @@
+import 'dart:async' as async;
+
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:flutter/widgets.dart';
@@ -83,16 +85,25 @@ class FollowerWidgetState extends State<FollowerWidget> {
   double lastZoom = 0.0;
   Vector2 lastCameraPosition = Vector2.zero();
   late BonfireCamera camera;
+  late async.Timer timer;
   @override
   void initState() {
-    _positionListener();
-    widget.target.position.addListener(_positionListener);
+    _initTimer();
     super.initState();
+  }
+
+  void _initTimer() {
+    timer = async.Timer.periodic(
+      const Duration(milliseconds: 34),
+      (timer) {
+        _positionListener();
+      },
+    );
   }
 
   @override
   void dispose() {
-    widget.target.position.removeListener(_positionListener);
+    timer.cancel();
     super.dispose();
   }
 
