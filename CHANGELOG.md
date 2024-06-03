@@ -1,5 +1,6 @@
 # next
 - fix bug in `FollowerWidged`.
+- Fix bug in `SimpleDirectionAnimation` where fast animation direction did not change when character direction changed
 
 # 3.9.3
 - push improvements. 
