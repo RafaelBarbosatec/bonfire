@@ -32,7 +32,7 @@ class LPCPlayer extends SimplePlayer with BlockMovementCollision {
         identify: customWidgetKey,
         context: context,
         target: this,
-        align: Offset(size.x * 1.8, -100),
+        offset: Offset(size.x * 1.8, -100),
         child: DialogCustomCharacter(
           customStatus: customStatus,
           simpleAnimationChanged: (newAnimation, status) {
