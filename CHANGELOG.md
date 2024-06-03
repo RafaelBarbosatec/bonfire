@@ -1,3 +1,6 @@
+# next
+- fix bug in `FollowerWidged`.
+
 # 3.9.3
 - push improvements. 
 - `Movement` mixin improvements.

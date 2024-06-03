@@ -85,6 +85,7 @@ class FollowerWidgetState extends State<FollowerWidget> {
   late BonfireCamera camera;
   @override
   void initState() {
+    _positionListener();
     widget.target.position.addListener(_positionListener);
     super.initState();
   }
