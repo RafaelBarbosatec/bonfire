@@ -46,7 +46,7 @@ class SimpleDirectionAnimation {
   bool get isFlipHorizontally => _isFlipHorizontally;
   set isFlipHorizontally(bool value) {
     _isFlipHorizontally = value;
-    if (fastAnimationUseCompFlip) {
+    if (_fastAnimationUseCompFlip) {
       isFlipHorizontallyFastAnimation = value;
     }
   }
@@ -54,7 +54,7 @@ class SimpleDirectionAnimation {
   bool get isFlipVertically => _isFlipVertically;
   set isFlipVertically(bool value) {
     _isFlipVertically = value;
-    if (fastAnimationUseCompFlip) {
+    if (_fastAnimationUseCompFlip) {
       isFlipVerticallyFastAnimation = value;
     }
   }
@@ -395,7 +395,7 @@ class SimpleDirectionAnimation {
 
   bool containOther(dynamic key) => others.containsKey(key);
 
-  bool fastAnimationUseCompFlip = false;
+  bool _fastAnimationUseCompFlip = false;
 
   /// Method used to play animation once time
   Future<void> playOnce(
@@ -409,7 +409,7 @@ class SimpleDirectionAnimation {
     Vector2? size,
     Vector2? offset,
   }) async {
-    fastAnimationUseCompFlip = useCompFlip;
+    _fastAnimationUseCompFlip = useCompFlip;
     final completer = Completer();
     _fastAnimation?.onFinish?.call();
     runToTheEndFastAnimation = runToTheEnd;
@@ -450,7 +450,7 @@ class SimpleDirectionAnimation {
     if (others.containsKey(key) != true) {
       return Future.value();
     }
-    fastAnimationUseCompFlip = useCompFlip;
+    _fastAnimationUseCompFlip = useCompFlip;
     final completer = Completer();
     _fastAnimation?.onFinish?.call();
     runToTheEndFastAnimation = runToTheEnd;
@@ -534,7 +534,7 @@ class SimpleDirectionAnimation {
             _current.animation = _runLeftAnim;
           } else if (enabledFlipX) {
             isFlipHorizontally = true;
-            if (fastAnimationUseCompFlip) {
+            if (_fastAnimationUseCompFlip) {
               isFlipHorizontallyFastAnimation = isFlipHorizontally;
             }
             _current.animation = _runRightAnim;
