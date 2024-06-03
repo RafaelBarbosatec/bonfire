@@ -235,8 +235,9 @@ class TestWidget extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: ElevatedButton(
         onPressed: () {
-          FollowerWidget.remove(KnightInterface.followerWidgetTestId);
-          print('Tapped');
+          FollowerWidget.remove(
+            KnightInterface.followerWidgetTestId,
+          );
         },
         child: const Text('Tap here to remove'),
       ),
