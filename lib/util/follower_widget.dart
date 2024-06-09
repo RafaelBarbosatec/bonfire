@@ -86,6 +86,7 @@ class FollowerWidget extends StatefulWidget {
 class FollowerWidgetState extends State<FollowerWidget> {
   Vector2 targetPosition = Vector2.zero();
   Vector2? widgetPosition;
+  Vector2 gameSize = Vector2.zero();
   double lastZoom = 0.0;
   Vector2 lastCameraPosition = Vector2.zero();
   late BonfireCamera camera;
@@ -128,17 +129,24 @@ class FollowerWidgetState extends State<FollowerWidget> {
   void _positionListener() {
     camera = widget.target.gameRef.camera;
     final absolutePosition = widget.target.absolutePosition;
+
     if (targetPosition != absolutePosition ||
         camera.zoom != lastZoom ||
-        camera.position != lastCameraPosition) {
+        camera.position != lastCameraPosition ||
+        camera.canvasSize != gameSize) {
+      gameSize = camera.canvasSize.clone();
       lastZoom = camera.zoom;
+
       targetPosition = absolutePosition.clone();
       lastCameraPosition = camera.position.clone();
       if (mounted) {
         setState(() {
-          widgetPosition = widget.target.gameRef.worldToScreen(
+          final globalPosition = widget.target.gameRef.worldToScreen(
             targetPosition,
           );
+          widgetPosition = widget.target
+              .viewportPositionToGlobal(globalPosition.toOffset())
+              .toVector2();
         });
       }
     }

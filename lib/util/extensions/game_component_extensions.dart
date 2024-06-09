@@ -415,4 +415,18 @@ extension GameComponentExtensions on GameComponent {
       comp.translate(displacement);
     }
   }
+
+  Offset globalToViewportPosition(Offset position) {
+    if (!hasGameRef) return position;
+    return gameRef.camera.viewport
+        .globalToLocal(position.toVector2())
+        .toOffset();
+  }
+
+  Offset viewportPositionToGlobal(Offset position) {
+    if (!hasGameRef) return position;
+    return gameRef.camera.viewport
+        .localToGlobal(position.toVector2())
+        .toOffset();
+  }
 }

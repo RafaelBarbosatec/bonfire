@@ -19,8 +19,9 @@ class GestureEvent {
   factory GestureEvent.fromPointerEvent(
     PointerEvent event, {
     required Vector2 Function(Vector2 position) screenToWorld,
+    required Offset Function(Offset position) globalToViewportPosition,
   }) {
-    final position = event.localPosition.toVector2();
+    final position = globalToViewportPosition(event.localPosition).toVector2();
     return GestureEvent(
       pointer: event.pointer,
       kind: event.kind,
