@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:flame/camera.dart' as camera;
 import 'package:flutter/material.dart';
 
 class JoystickAction {
@@ -29,7 +30,9 @@ class JoystickAction {
   Paint? _paintBackground;
   Paint? _paintAction;
   Paint? _paintActionPressed;
-  PlayerController? _joystickController;
+  late PlayerControllerListener _controller;
+  Vector2 _screenSize = Vector2.zero();
+  late camera.Viewport _viewport;
   bool isPressed = false;
 
   AssetsLoader? _loader = AssetsLoader();
@@ -61,14 +64,24 @@ class JoystickAction {
     _tileSize = _sizeBackgroundDirection / 2;
   }
 
-  void initialize(Vector2 screenSize, PlayerController joystickController) {
-    _joystickController = joystickController;
+  Offset getViewportPosition(Offset position) {
+    return _viewport.globalToLocal(position.toVector2()).toOffset();
+  }
+
+  void initialize(
+    PlayerControllerListener controller,
+    camera.Viewport viewport,
+  ) {
+    if (_screenSize == viewport.virtualSize) return;
+    _viewport = viewport;
+    _screenSize = viewport.virtualSize.clone();
+    _controller = controller;
     double radius = size / 2;
     final screenRect = Rect.fromLTRB(
       margin.left + radius,
       margin.top + radius,
-      screenSize.x - margin.right - radius,
-      screenSize.y - margin.bottom - radius,
+      _screenSize.x - margin.right - radius,
+      _screenSize.y - margin.bottom - radius,
     );
 
     Offset osBackground = alignment.withinRect(screenRect);
@@ -161,7 +174,7 @@ class JoystickAction {
 
       double intensity = dist / _tileSize;
 
-      _joystickController?.joystickAction(
+      _controller.onJoystickAction(
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.MOVE,
@@ -176,13 +189,14 @@ class JoystickAction {
   }
 
   void actionDown(int pointer, Offset localPosition) {
-    if (!_dragging && _rect != null && _rect!.contains(localPosition)) {
+    final pos = getViewportPosition(localPosition);
+    if (!_dragging && _rect != null && _rect!.contains(pos)) {
       _pointer = pointer;
       if (enableDirection) {
-        _dragPosition = localPosition;
+        _dragPosition = pos;
         _dragging = true;
       }
-      _joystickController?.joystickAction(
+      _controller.onJoystickAction(
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.DOWN,
@@ -195,7 +209,7 @@ class JoystickAction {
   void actionMove(int pointer, Offset localPosition) {
     if (pointer == _pointer) {
       if (_dragging) {
-        _dragPosition = localPosition;
+        _dragPosition = getViewportPosition(localPosition);
       }
     }
   }
@@ -208,7 +222,7 @@ class JoystickAction {
         _dragPosition = rectBackgroundDirection.center;
       });
 
-      _joystickController?.joystickAction(
+      _controller.onJoystickAction(
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.UP,

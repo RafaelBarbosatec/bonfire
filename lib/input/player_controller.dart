@@ -70,7 +70,7 @@ mixin PlayerControllerListener {
   void onJoystickAction(JoystickActionEvent event) {}
 }
 
-abstract class PlayerController extends GameComponent {
+abstract class PlayerController extends GameComponent with PlayerControllerListener{
   final dynamic id;
   final List<PlayerControllerListener> _observers = [];
 
@@ -80,13 +80,15 @@ abstract class PlayerController extends GameComponent {
     }
   }
 
-  void joystickChangeDirectional(JoystickDirectionalEvent event) {
+  @override
+  void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
     for (var o in _observers) {
       o.onJoystickChangeDirectional(event);
     }
   }
 
-  void joystickAction(JoystickActionEvent event) {
+  @override
+  void onJoystickAction(JoystickActionEvent event) {
     for (var o in _observers) {
       o.onJoystickAction(event);
     }
