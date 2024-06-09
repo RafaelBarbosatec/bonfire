@@ -70,7 +70,8 @@ mixin PlayerControllerListener {
   void onJoystickAction(JoystickActionEvent event) {}
 }
 
-abstract class PlayerController extends GameComponent with PlayerControllerListener{
+abstract class PlayerController extends GameComponent
+    with PlayerControllerListener {
   final dynamic id;
   final List<PlayerControllerListener> _observers = [];
 
