@@ -1,4 +1,4 @@
-# Next
+# 3.9.5
 
 - Fix Joystick bug when viewport is fixed resolution. [#526](https://github.com/RafaelBarbosatec/bonfire/issues/526)
 
