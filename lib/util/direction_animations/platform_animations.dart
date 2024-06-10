@@ -69,4 +69,25 @@ class PlatformAnimations {
       centerAnchor: centerAnchor ?? this.centerAnchor,
     );
   }
+
+  SimpleDirectionAnimation toSimpleDirectionAnimation() {
+    return SimpleDirectionAnimation(
+      idleRight: idleRight,
+      runRight: runRight,
+      idleLeft: idleLeft,
+      runLeft: runLeft,
+      others: {
+        if (jump?.jumpUpRight != null)
+          JumpAnimationsEnum.jumpUpRight: jump!.jumpUpRight,
+        if (jump?.jumpUpLeft != null)
+          JumpAnimationsEnum.jumpUpLeft: jump!.jumpUpLeft!,
+        if (jump?.jumpDownRight != null)
+          JumpAnimationsEnum.jumpDownRight: jump!.jumpDownRight,
+        if (jump?.jumpDownLeft != null)
+          JumpAnimationsEnum.jumpDownLeft: jump!.jumpDownLeft!,
+        ...others ?? {},
+      },
+      centerAnchor: centerAnchor,
+    );
+  }
 }

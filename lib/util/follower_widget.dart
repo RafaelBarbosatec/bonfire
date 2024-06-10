@@ -2,6 +2,7 @@ import 'dart:async' as async;
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/bonfire_camera.dart';
+import 'package:bonfire/util/extensions/viewport_extension.dart';
 import 'package:flutter/widgets.dart';
 
 ///
@@ -86,6 +87,7 @@ class FollowerWidget extends StatefulWidget {
 class FollowerWidgetState extends State<FollowerWidget> {
   Vector2 targetPosition = Vector2.zero();
   Vector2? widgetPosition;
+  Vector2 gameSize = Vector2.zero();
   double lastZoom = 0.0;
   Vector2 lastCameraPosition = Vector2.zero();
   late BonfireCamera camera;
@@ -128,10 +130,14 @@ class FollowerWidgetState extends State<FollowerWidget> {
   void _positionListener() {
     camera = widget.target.gameRef.camera;
     final absolutePosition = widget.target.absolutePosition;
+
     if (targetPosition != absolutePosition ||
         camera.zoom != lastZoom ||
-        camera.position != lastCameraPosition) {
-      lastZoom = camera.zoom;
+        camera.position != lastCameraPosition ||
+        camera.canvasSize != gameSize) {
+      gameSize = camera.canvasSize.clone();
+      lastZoom = camera.zoom * camera.viewport.scale;
+
       targetPosition = absolutePosition.clone();
       lastCameraPosition = camera.position.clone();
       if (mounted) {

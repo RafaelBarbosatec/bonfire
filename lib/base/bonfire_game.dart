@@ -8,8 +8,7 @@ import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
-// ignore: implementation_imports
-import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
+import 'package:flame/camera.dart';
 // ignore: implementation_imports
 import 'package:flutter/widgets.dart';
 
@@ -117,9 +116,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
         super(
           camera: BonfireCamera(
             config: cameraConfig,
-            viewport: cameraConfig?.resolution != null
-                ? FixedResolutionViewport(resolution: cameraConfig!.resolution!)
-                : null,
+            viewport: _getViewPort(cameraConfig),
             backdrop: background,
             hudComponents: [
               LightingComponent(
@@ -258,12 +255,28 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   Vector2 worldToScreen(Vector2 position) {
-    return camera.worldToScreen(position);
+    final worldPosition = camera.worldToScreen(position);
+    return viewportPositionToGlobal(
+      worldPosition,
+    );
   }
 
   @override
   Vector2 screenToWorld(Vector2 position) {
-    return camera.screenToWorld(position);
+    final viewportPosition = globalToViewportPosition(
+      position,
+    );
+    return camera.screenToWorld(viewportPosition);
+  }
+
+  @override
+  Vector2 globalToViewportPosition(Vector2 position) {
+    return camera.viewport.globalToLocal(position);
+  }
+
+  @override
+  Vector2 viewportPositionToGlobal(Vector2 position) {
+    return camera.viewport.localToGlobal(position);
   }
 
   @override
@@ -496,5 +509,14 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   FutureOr<void> addHud(Component component) {
     return camera.viewport.add(component);
+  }
+
+  static _getViewPort(CameraConfig? cameraConfig) {
+    if (cameraConfig?.resolution != null) {
+      return FixedResolutionViewport(
+        resolution: cameraConfig!.resolution!,
+      );
+    }
+    return null;
   }
 }

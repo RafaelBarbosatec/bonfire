@@ -187,7 +187,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
 
   @override
   void onGameResize(Vector2 size) {
-    bounds = Rect.fromLTWH(left, top, size.x, size.y);
+    bounds = gameRef.camera.viewport.virtualSize.toRect();
     super.onGameResize(size);
   }
 }

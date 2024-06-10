@@ -1,3 +1,7 @@
+# 3.9.5
+
+- Fix Joystick bug when viewport is fixed resolution. [#526](https://github.com/RafaelBarbosatec/bonfire/issues/526)
+
 # 3.9.4
 - Fix bug in `FollowerWidget`.
 - Fix bug in `SimpleDirectionAnimation` where fast animation direction did not change when character direction changed. Thanks [tkshnwesper](https://github.com/tkshnwesper)

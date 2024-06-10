@@ -22,20 +22,21 @@ class Joystick extends PlayerController {
   }
 
   void initialize(Vector2 size) async {
-    directional?.initialize(size, this);
+    if (!hasGameRef) return;
+    directional?.initialize(this, gameRef.camera.viewport);
     for (var action in actions) {
-      action.initialize(size, this);
+      action.initialize(this, gameRef.camera.viewport);
     }
   }
 
   Future updateDirectional(JoystickDirectional? directional) async {
-    directional?.initialize(gameRef.size, this);
+    directional?.initialize(this, gameRef.camera.viewport);
     await directional?.onLoad();
     _directional = directional;
   }
 
   Future addAction(JoystickAction action) async {
-    action.initialize(gameRef.size, this);
+    action.initialize(this, gameRef.camera.viewport);
     await action.onLoad();
     actions.add(action);
   }
@@ -102,6 +103,12 @@ class Joystick extends PlayerController {
   void onGameResize(Vector2 size) {
     initialize(size);
     super.onGameResize(size);
+  }
+
+  @override
+  void onMount() {
+    initialize(size);
+    super.onMount();
   }
 
   @override

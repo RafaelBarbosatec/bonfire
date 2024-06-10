@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:flame/camera.dart' as camera;
 import 'package:flutter/material.dart';
 
 class JoystickDirectional {
@@ -26,9 +27,11 @@ class JoystickDirectional {
 
   int _pointerDragging = 0;
 
-  PlayerController? _joystickController;
+  late PlayerControllerListener _controller;
 
-  Vector2? _screenSize;
+  late camera.Viewport _viewPort;
+
+  Vector2 _screenSize = Vector2.zero();
 
   AssetsLoader? _loader = AssetsLoader();
 
@@ -57,16 +60,25 @@ class JoystickDirectional {
     _tileSize = size / 2;
   }
 
-  void initialize(Vector2 screenSize, PlayerController joystickController) {
-    _screenSize = screenSize;
-    _joystickController = joystickController;
+  Offset getViewportPosition(Offset position) {
+    return _viewPort.globalToLocal(position.toVector2()).toOffset();
+  }
+
+  void initialize(
+    PlayerControllerListener controller,
+    camera.Viewport viewPort,
+  ) {
+    if (_screenSize == viewPort.virtualSize) return;
+    _viewPort = viewPort;
+    _screenSize = viewPort.virtualSize.clone();
+    _controller = controller;
     final radius = size / 2;
 
     final screenRect = Rect.fromLTRB(
       margin.left + radius,
       margin.top + radius,
-      screenSize.x - margin.right - radius,
-      screenSize.y - margin.bottom - radius,
+      _screenSize.x - margin.right - radius,
+      _screenSize.y - margin.bottom - radius,
     );
 
     Offset osBackground = alignment.withinRect(screenRect);
@@ -166,7 +178,7 @@ class JoystickDirectional {
       double intensity = dist / _tileSize;
 
       if (intensity == 0) {
-        _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
+        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.IDLE,
           intensity: intensity,
           radAngle: radAngle,
@@ -175,7 +187,7 @@ class JoystickDirectional {
       }
 
       if (degrees > -22.5 && degrees <= 22.5) {
-        _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
+        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_RIGHT,
           intensity: intensity,
           radAngle: radAngle,
@@ -183,7 +195,7 @@ class JoystickDirectional {
       }
 
       if (enableDiagonalInput && degrees > 22.5 && degrees <= 67.5) {
-        _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
+        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
           intensity: intensity,
           radAngle: radAngle,
@@ -191,7 +203,7 @@ class JoystickDirectional {
       }
 
       if (degrees > 67.5 && degrees <= 112.5) {
-        _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
+        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_DOWN,
           intensity: intensity,
           radAngle: radAngle,
@@ -199,7 +211,7 @@ class JoystickDirectional {
       }
 
       if (enableDiagonalInput && degrees > 112.5 && degrees <= 157.5) {
-        _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
+        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
           intensity: intensity,
           radAngle: radAngle,
@@ -208,7 +220,7 @@ class JoystickDirectional {
 
       if ((degrees > 157.5 && degrees <= 180) ||
           (degrees >= -180 && degrees <= -157.5)) {
-        _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
+        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_LEFT,
           intensity: intensity,
           radAngle: radAngle,
@@ -216,7 +228,7 @@ class JoystickDirectional {
       }
 
       if (enableDiagonalInput && degrees > -157.5 && degrees <= -112.5) {
-        _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
+        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_UP_LEFT,
           intensity: intensity,
           radAngle: radAngle,
@@ -224,7 +236,7 @@ class JoystickDirectional {
       }
 
       if (degrees > -112.5 && degrees <= -67.5) {
-        _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
+        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_UP,
           intensity: intensity,
           radAngle: radAngle,
@@ -232,7 +244,7 @@ class JoystickDirectional {
       }
 
       if (enableDiagonalInput && degrees > -67.5 && degrees <= -22.5) {
-        _joystickController?.joystickChangeDirectional(JoystickDirectionalEvent(
+        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
           intensity: intensity,
           radAngle: radAngle,
@@ -249,7 +261,9 @@ class JoystickDirectional {
   void directionalDown(int pointer, Offset localPosition) {
     if (_backgroundRect == null) return;
 
-    _updateDirectionalRect(localPosition);
+    final pos = getViewportPosition(localPosition);
+
+    _updateDirectionalRect(pos);
 
     _backgroundRect?.let((backgroundRect) {
       Rect directional = Rect.fromLTWH(
@@ -258,9 +272,9 @@ class JoystickDirectional {
         backgroundRect.width + 100,
         backgroundRect.height + 100,
       );
-      if (!_dragging && directional.contains(localPosition)) {
+      if (!_dragging && directional.contains(pos)) {
         _dragging = true;
-        _dragPosition = localPosition;
+        _dragPosition = pos;
         _pointerDragging = pointer;
       }
     });
@@ -269,7 +283,9 @@ class JoystickDirectional {
   void directionalMove(int pointer, Offset localPosition) {
     if (pointer == _pointerDragging) {
       if (_dragging) {
-        _dragPosition = localPosition;
+        _dragPosition = getViewportPosition(
+          localPosition,
+        );
       }
     }
   }
@@ -278,7 +294,7 @@ class JoystickDirectional {
     if (pointer == _pointerDragging) {
       _dragging = false;
       _dragPosition = _backgroundRect?.center;
-      _joystickController?.joystickChangeDirectional(
+      _controller.onJoystickChangeDirectional(
         JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.IDLE,
           intensity: 0.0,
@@ -289,15 +305,15 @@ class JoystickDirectional {
   }
 
   void _updateDirectionalRect(Offset position) {
-    if (isFixed || _screenSize == null) return;
+    if (isFixed) return;
     if (alignment.x == -1) {
-      if (position.dx > _screenSize!.x * 0.33) {
+      if (position.dx > _screenSize.x * 0.33) {
         return;
       }
     }
 
     if (alignment.x == 1) {
-      if (position.dx < _screenSize!.x * 0.66) {
+      if (position.dx < _screenSize.x * 0.66) {
         return;
       }
     }

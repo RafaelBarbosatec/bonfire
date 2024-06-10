@@ -37,7 +37,7 @@ class Keyboard extends PlayerController with KeyboardEventListener {
         !event.synthesized &&
         !_directionalIsIdle) {
       _directionalIsIdle = true;
-      joystickChangeDirectional(
+      onJoystickChangeDirectional(
         JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.IDLE,
           intensity: 0.0,
@@ -64,14 +64,14 @@ class Keyboard extends PlayerController with KeyboardEventListener {
     } else {
       /// Process action events
       if (event is KeyDownEvent) {
-        joystickAction(
+        onJoystickAction(
           JoystickActionEvent(
             id: event.logicalKey,
             event: ActionEvent.DOWN,
           ),
         );
       } else if (event is KeyUpEvent) {
-        joystickAction(
+        onJoystickAction(
           JoystickActionEvent(
             id: event.logicalKey,
             event: ActionEvent.UP,
@@ -109,15 +109,17 @@ class Keyboard extends PlayerController with KeyboardEventListener {
 
   void _sendOneDirection(LogicalKeyboardKey key) {
     if (isUpPressed(key)) {
-      joystickChangeDirectional(JoystickDirectionalEvent(
-        directional: JoystickMoveDirectional.MOVE_UP,
-        intensity: 1.0,
-        radAngle: 0.0,
-        isKeyboard: true,
-      ));
+      onJoystickChangeDirectional(
+        JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_UP,
+          intensity: 1.0,
+          radAngle: 0.0,
+          isKeyboard: true,
+        ),
+      );
     }
     if (isDownPressed(key)) {
-      joystickChangeDirectional(JoystickDirectionalEvent(
+      onJoystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_DOWN,
         intensity: 1.0,
         radAngle: 0.0,
@@ -126,7 +128,7 @@ class Keyboard extends PlayerController with KeyboardEventListener {
     }
 
     if (isLeftPressed(key)) {
-      joystickChangeDirectional(JoystickDirectionalEvent(
+      onJoystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_LEFT,
         intensity: 1.0,
         radAngle: 0.0,
@@ -135,7 +137,7 @@ class Keyboard extends PlayerController with KeyboardEventListener {
     }
 
     if (isRightPressed(key)) {
-      joystickChangeDirectional(JoystickDirectionalEvent(
+      onJoystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_RIGHT,
         intensity: 1.0,
         radAngle: 0.0,
@@ -147,7 +149,7 @@ class Keyboard extends PlayerController with KeyboardEventListener {
   void _sendTwoDirection(LogicalKeyboardKey key1, LogicalKeyboardKey key2) {
     if (isRightPressed(key1) && isDownPressed(key2) ||
         isDownPressed(key1) && isRightPressed(key2)) {
-      joystickChangeDirectional(JoystickDirectionalEvent(
+      onJoystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
         intensity: 1.0,
         radAngle: 0.0,
@@ -157,7 +159,7 @@ class Keyboard extends PlayerController with KeyboardEventListener {
 
     if (isLeftPressed(key1) && isDownPressed(key2) ||
         isDownPressed(key1) && isLeftPressed(key2)) {
-      joystickChangeDirectional(JoystickDirectionalEvent(
+      onJoystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
         intensity: 1.0,
         radAngle: 0.0,
@@ -167,7 +169,7 @@ class Keyboard extends PlayerController with KeyboardEventListener {
 
     if (isLeftPressed(key1) && isUpPressed(key2) ||
         isUpPressed(key1) && isLeftPressed(key2)) {
-      joystickChangeDirectional(JoystickDirectionalEvent(
+      onJoystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_UP_LEFT,
         intensity: 1.0,
         radAngle: 0.0,
@@ -177,7 +179,7 @@ class Keyboard extends PlayerController with KeyboardEventListener {
 
     if (isRightPressed(key1) && isUpPressed(key2) ||
         isUpPressed(key1) && isRightPressed(key2)) {
-      joystickChangeDirectional(JoystickDirectionalEvent(
+      onJoystickChangeDirectional(JoystickDirectionalEvent(
         directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
         intensity: 1.0,
         radAngle: 0.0,
