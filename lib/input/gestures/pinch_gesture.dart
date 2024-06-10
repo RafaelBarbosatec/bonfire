@@ -25,7 +25,7 @@ mixin PinchGesture on GameComponent {
     final gEvent = GestureEvent.fromPointerEvent(
       event,
       screenToWorld: gameRef.screenToWorld,
-      globalToViewportPosition: globalToViewportPosition,
+      globalToViewportPosition: gameRef.globalToViewportPosition,
     );
     if (!_fingers.contains(event.pointer)) {
       _fingers.add(
@@ -63,7 +63,7 @@ mixin PinchGesture on GameComponent {
     final gEvent = GestureEvent.fromPointerEvent(
       event,
       screenToWorld: gameRef.screenToWorld,
-      globalToViewportPosition: globalToViewportPosition,
+      globalToViewportPosition: gameRef.globalToViewportPosition,
     );
     _updateFingers(gEvent);
     _handleMove();

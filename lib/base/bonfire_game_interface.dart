@@ -102,6 +102,12 @@ abstract class BonfireGameInterface {
   /// This  method convert screen position to word position
   Vector2 screenToWorld(Vector2 screenPosition);
 
+  /// This  method convert viewport position to word position
+  Vector2 globalToViewportPosition(Vector2 position);
+
+  /// This  method convert viewport position to screen position
+  Vector2 viewportPositionToGlobal(Vector2 position);
+
   /// Used to check if a component is visible in the camera.
   bool isVisibleInCamera(GameComponent c);
 

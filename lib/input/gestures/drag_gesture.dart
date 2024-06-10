@@ -17,7 +17,7 @@ mixin DragGesture on GameComponent {
     final gEvent = GestureEvent.fromPointerEvent(
       event,
       screenToWorld: gameRef.screenToWorld,
-      globalToViewportPosition: globalToViewportPosition,
+      globalToViewportPosition: gameRef.globalToViewportPosition,
     );
     bool handler = false;
 
@@ -47,7 +47,7 @@ mixin DragGesture on GameComponent {
     final gEvent = GestureEvent.fromPointerEvent(
       event,
       screenToWorld: gameRef.screenToWorld,
-      globalToViewportPosition: globalToViewportPosition,
+      globalToViewportPosition: gameRef.globalToViewportPosition,
     );
     bool canMove = hasGameRef &&
         _startDragPosition != null &&
@@ -81,7 +81,7 @@ mixin DragGesture on GameComponent {
     final gEvent = GestureEvent.fromPointerEvent(
       event,
       screenToWorld: gameRef.screenToWorld,
-      globalToViewportPosition: globalToViewportPosition,
+      globalToViewportPosition: gameRef.globalToViewportPosition,
     );
     if (gEvent.pointer == _pointer && _inMoving) {
       _startDragPosition = null;
@@ -99,7 +99,7 @@ mixin DragGesture on GameComponent {
     final gEvent = GestureEvent.fromPointerEvent(
       event,
       screenToWorld: gameRef.screenToWorld,
-      globalToViewportPosition: globalToViewportPosition,
+      globalToViewportPosition: gameRef.globalToViewportPosition,
     );
     if (gEvent.pointer == _pointer && _inMoving) {
       _startDragPosition = null;

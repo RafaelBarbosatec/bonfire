@@ -258,12 +258,28 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   Vector2 worldToScreen(Vector2 position) {
-    return camera.worldToScreen(position);
+    final worldPosition = camera.worldToScreen(position);
+    return viewportPositionToGlobal(
+      worldPosition,
+    );
   }
 
   @override
   Vector2 screenToWorld(Vector2 position) {
-    return camera.screenToWorld(position);
+    final viewportPosition = globalToViewportPosition(
+      position,
+    );
+    return camera.screenToWorld(viewportPosition);
+  }
+
+  @override
+  Vector2 globalToViewportPosition(Vector2 position) {
+    return camera.viewport.globalToLocal(position);
+  }
+
+  @override
+  Vector2 viewportPositionToGlobal(Vector2 position) {
+    return camera.viewport.localToGlobal(position);
   }
 
   @override

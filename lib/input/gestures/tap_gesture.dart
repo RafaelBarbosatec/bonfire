@@ -9,7 +9,7 @@ mixin TapGesture on GameComponent {
     final tapEvent = GestureEvent.fromPointerEvent(
       event,
       screenToWorld: gameRef.screenToWorld,
-      globalToViewportPosition: globalToViewportPosition,
+      globalToViewportPosition: gameRef.globalToViewportPosition,
     );
     bool handler = false;
 
@@ -35,7 +35,7 @@ mixin TapGesture on GameComponent {
     final tapEvent = GestureEvent.fromPointerEvent(
       event,
       screenToWorld: gameRef.screenToWorld,
-      globalToViewportPosition: globalToViewportPosition,
+      globalToViewportPosition: gameRef.globalToViewportPosition,
     );
 
     if (enableTab && tapEvent.pointer == _pointer && hasGameRef) {

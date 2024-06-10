@@ -2,6 +2,7 @@ import 'dart:async' as async;
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/bonfire_camera.dart';
+import 'package:bonfire/util/extensions/viewport_extension.dart';
 import 'package:flutter/widgets.dart';
 
 ///
@@ -135,18 +136,15 @@ class FollowerWidgetState extends State<FollowerWidget> {
         camera.position != lastCameraPosition ||
         camera.canvasSize != gameSize) {
       gameSize = camera.canvasSize.clone();
-      lastZoom = camera.zoom;
+      lastZoom = camera.zoom * camera.viewport.scale;
 
       targetPosition = absolutePosition.clone();
       lastCameraPosition = camera.position.clone();
       if (mounted) {
         setState(() {
-          final globalPosition = widget.target.gameRef.worldToScreen(
+          widgetPosition = widget.target.gameRef.worldToScreen(
             targetPosition,
           );
-          widgetPosition = widget.target
-              .viewportPositionToGlobal(globalPosition.toOffset())
-              .toVector2();
         });
       }
     }
