@@ -132,7 +132,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }
 
   void _destroyObject(GameComponent component) {
-    if (isRemoving) return;
+    if (isRemoving || isRemoved) return;
     removeFromParent();
     if (animationDestroy != null) {
       if (direction != null) {
