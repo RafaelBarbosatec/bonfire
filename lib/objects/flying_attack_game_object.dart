@@ -132,13 +132,14 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }
 
   void _destroyObject(GameComponent component) {
-    if (isRemoving) return;
+    if (isRemoving || isRemoved) return;
     removeFromParent();
     if (animationDestroy != null) {
-      if (direction != null) {
-        _destroyByDirection(direction!, dtUpdate, component);
+      final currentDirection = direction;
+      if (currentDirection != null) {
+        _destroyByDirection(currentDirection);
       } else {
-        _destroyByAngle(component);
+        _destroyByAngle();
       }
     }
     removeAll(children);
@@ -149,11 +150,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     return gameRef.map.toRect().contains(center.toOffset());
   }
 
-  void _destroyByDirection(
-    Direction direction,
-    double dt,
-    GameComponent component,
-  ) {
+  void _destroyByDirection(Direction direction) {
     Vector2 positionDestroy;
 
     double biggerSide = max(width, height);
@@ -236,12 +233,11 @@ class FlyingAttackGameObject extends AnimatedGameObject
           innerSize.x,
           innerSize.y,
         ),
-        component,
       );
     }
   }
 
-  void _destroyByAngle(GameComponent component) {
+  void _destroyByAngle() {
     double nextX = (width / 2) * _cosAngle;
     double nextY = (height / 2) * _senAngle;
 
@@ -277,12 +273,11 @@ class FlyingAttackGameObject extends AnimatedGameObject
           innerSize.x,
           innerSize.y,
         ),
-        component,
       );
     }
   }
 
-  void _applyDestroyDamage(Rect rectPosition, GameComponent component) {
+  void _applyDestroyDamage(Rect rectPosition) {
     gameRef.add(
       DamageHitbox(
         id: id,
