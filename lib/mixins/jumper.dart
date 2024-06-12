@@ -58,7 +58,7 @@ mixin Jumper on Movement, BlockMovementCollision {
   @override
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is CollisionMapComponent) {
+    if (other is CollisionMapComponent || other is TileWithCollision) {
       ++_tileCollisionCount;
       resetInterval(_tileCollisionCountKey);
     }
@@ -67,7 +67,7 @@ mixin Jumper on Movement, BlockMovementCollision {
 
   @override
   void onCollisionEnd(PositionComponent other) {
-    if (other is CollisionMapComponent) {
+    if (other is CollisionMapComponent || other is TileWithCollision) {
       if (--_tileCollisionCount == 0) resetInterval(_tileCollisionCountKey);
     }
     super.onCollisionEnd(other);
