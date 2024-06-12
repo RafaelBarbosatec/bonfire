@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/collision_game_component.dart';
 
 enum JumpingStateEnum {
   up,
@@ -20,6 +21,9 @@ mixin Jumper on Movement, BlockMovementCollision {
   int _maxJump = 1;
   int _currentJumps = 0;
   JumpingStateEnum? _lastDirectionJump = JumpingStateEnum.idle;
+  int _tileCollisionCount = 0;
+
+  static const _tileCollisionCountKey = 'tileCollisionCount';
 
   void onJump(JumpingStateEnum state) {
     jumpingState = state;
@@ -42,22 +46,44 @@ mixin Jumper on Movement, BlockMovementCollision {
     PositionComponent other,
     CollisionData collisionData,
   ) {
-    super.onBlockedMovement(other, collisionData);
     if (isJumping &&
         lastDirectionVertical.isDownSide &&
         collisionData.direction.isDownSide) {
       _currentJumps = 0;
       isJumping = false;
     }
+    super.onBlockedMovement(other, collisionData);
+  }
+
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is CollisionMapComponent) {
+      ++_tileCollisionCount;
+      resetInterval(_tileCollisionCountKey);
+    }
+    super.onCollisionStart(intersectionPoints, other);
+  }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    if (other is CollisionMapComponent) {
+      if (--_tileCollisionCount == 0) resetInterval(_tileCollisionCountKey);
+    }
+    super.onCollisionEnd(other);
   }
 
   @override
   void update(double dt) {
-    super.update(dt);
-    if (!isJumping && displacement.y.abs() > 0.2) {
+    if (checkInterval(_tileCollisionCountKey, 100, dt,
+            firstCheckIsTrue: false) &&
+        !isJumping &&
+        _tileCollisionCount == 0 &&
+        displacement.y.abs() > 0.2) {
       isJumping = true;
     }
     _notifyJump();
+    super.update(dt);
   }
 
   void _notifyJump() {
