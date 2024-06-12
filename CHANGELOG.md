@@ -1,6 +1,7 @@
 # 3.9.5
 - Fix Joystick bug when viewport is fixed resolution. [#526](https://github.com/RafaelBarbosatec/bonfire/issues/526)
 - Add guard in `FlyingAttackGameObject` to prevent calling `onDestroy` after component has been destroyed.
+- Fix jump animation showing instead of run/idle animation on slanting floors
 
 # 3.9.4
 - Fix bug in `FollowerWidget`.
