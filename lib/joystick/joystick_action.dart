@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 
 class JoystickAction {
   final dynamic actionId;
+
+  final int logicalKeyboardKey;
+
   Sprite? sprite;
   Sprite? spritePressed;
   Sprite? spriteBackgroundDirection;
@@ -39,6 +42,7 @@ class JoystickAction {
 
   JoystickAction({
     required this.actionId,
+    required this.logicalKeyboardKey, // -1 for unused
     Future<Sprite>? sprite,
     Future<Sprite>? spritePressed,
     Future<Sprite>? spriteBackgroundDirection,
@@ -141,9 +145,7 @@ class JoystickAction {
   }
 
   void update(double dt) {
-    if (_dragPosition == null ||
-        _rectBackgroundDirection == null ||
-        _rect == null) return;
+    if (_dragPosition == null || _rectBackgroundDirection == null || _rect == null) return;
     if (_dragging) {
       double radAngle = atan2(
         _dragPosition!.dy - _rectBackgroundDirection!.center.dy,
@@ -180,6 +182,7 @@ class JoystickAction {
           event: ActionEvent.MOVE,
           intensity: intensity,
           radAngle: radAngle,
+          logicalKeyboardKey: logicalKeyboardKey,
         ),
       );
     } else {
@@ -200,6 +203,7 @@ class JoystickAction {
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.DOWN,
+          logicalKeyboardKey: logicalKeyboardKey,
         ),
       );
       pressed();
@@ -226,6 +230,7 @@ class JoystickAction {
         JoystickActionEvent(
           id: actionId,
           event: ActionEvent.UP,
+          logicalKeyboardKey: logicalKeyboardKey,
         ),
       );
       unPressed();

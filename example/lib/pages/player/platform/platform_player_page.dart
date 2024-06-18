@@ -20,6 +20,7 @@ class PlatformPlayerPage extends StatelessWidget {
             JoystickAction(
               actionId: 1,
               margin: const EdgeInsets.all(50),
+              logicalKeyboardKey: LogicalKeyboardKey.keyZ.keyId,
             ),
           ],
         ),

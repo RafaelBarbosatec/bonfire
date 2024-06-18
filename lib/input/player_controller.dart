@@ -3,7 +3,6 @@
 
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/util/priority_layer.dart';
-import 'package:flutter/services.dart';
 
 enum JoystickMoveDirectional {
   MOVE_UP,
@@ -55,13 +54,14 @@ class JoystickActionEvent {
   final double intensity;
   final double radAngle;
   final ActionEvent event;
-  LogicalKeyboardKey? get logicalKey => null;
+  final int logicalKeyboardKey;
 
   JoystickActionEvent({
+    required this.event,
+    this.logicalKeyboardKey = -1,
     this.id,
     this.intensity = 0.0,
     this.radAngle = 0.0,
-    required this.event,
   });
 }
 

@@ -68,14 +68,14 @@ class Keyboard extends PlayerController with KeyboardEventListener {
         onJoystickAction(
           KeyboardActionEvent(
             event: ActionEvent.DOWN,
-            logicalKey: event.logicalKey,
+            logicalKeyboardKey: event.logicalKey.keyId,
           ),
         );
       } else if (event is KeyUpEvent) {
         onJoystickAction(
           KeyboardActionEvent(
             event: ActionEvent.UP,
-            logicalKey: event.logicalKey,
+            logicalKeyboardKey: event.logicalKey.keyId,
           ),
         );
       }
