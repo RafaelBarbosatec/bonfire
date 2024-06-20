@@ -204,6 +204,15 @@ class Tile {
     tile.id = id;
     tile.angle = angle;
     tile.opacity = opacity;
+
+    if (angle != 0) {
+      tile.anchor = Anchor.center;
+      tile.position = tile.position +
+          Vector2(
+            width / 2,
+            height / 2,
+          );
+    }
     if (isFlipHorizontal) {
       tile.flipHorizontallyAroundCenter();
     }

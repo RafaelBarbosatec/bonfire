@@ -59,6 +59,7 @@ class TileLayerComponent extends PositionComponent with HasPaint {
   }
 
   void initLayer(Vector2 gameSize, Vector2 screenSize) {
+    if (gameSize.isZero()) return;
     _createQuadTree(gameSize, screenSize);
   }
 
