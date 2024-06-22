@@ -57,11 +57,17 @@ class JoystickActionEvent {
   final double radAngle;
   final ActionEvent event;
 
+  // strongly typed joystic/keyboard key
+  // Source is [`KeyEvent`.logicalKey.keyId]
+  // example: LogicalKeyboardKey.keyZ.keyId or your own keyId
+  final int logicalKeyboardKey;
+
   JoystickActionEvent({
+    required this.event,
+    this.logicalKeyboardKey = -1,
     this.id,
     this.intensity = 0.0,
     this.radAngle = 0.0,
-    required this.event,
   });
 }
 
