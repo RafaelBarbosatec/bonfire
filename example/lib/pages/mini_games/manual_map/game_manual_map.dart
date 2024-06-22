@@ -28,7 +28,6 @@ class GameManualMap extends StatelessWidget {
                 sprite: Sprite.load('joystick_attack.png'),
                 size: 80,
                 margin: const EdgeInsets.only(bottom: 50, right: 50),
-                logicalKeyboardKey: LogicalKeyboardKey.keyZ.keyId,
               ),
               JoystickAction(
                 actionId: PlayerAttackType.attackRange,
@@ -38,7 +37,6 @@ class GameManualMap extends StatelessWidget {
                 size: 50,
                 enableDirection: true,
                 margin: const EdgeInsets.only(bottom: 50, right: 160),
-                logicalKeyboardKey: LogicalKeyboardKey.keyX.keyId,
               )
             ],
           ),

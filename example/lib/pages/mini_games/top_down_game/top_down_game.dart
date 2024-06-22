@@ -2,7 +2,6 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/top_down_game/robot_enemy.dart';
 import 'package:example/pages/mini_games/top_down_game/soldier_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'armchair_decoration.dart';
 
@@ -37,7 +36,6 @@ class TopDownGame extends StatelessWidget {
             JoystickAction(
               actionId: 1,
               margin: const EdgeInsets.all(50),
-              logicalKeyboardKey: LogicalKeyboardKey.keyZ.keyId,
             ),
           ],
         ),

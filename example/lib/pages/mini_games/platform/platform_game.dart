@@ -40,7 +40,6 @@ class _PlatformGameState extends State<PlatformGame> {
               actionId: 1,
               margin: const EdgeInsets.all(50),
               color: Colors.green,
-              logicalKeyboardKey: LogicalKeyboardKey.keyZ.keyId,
             ),
           ],
         ),

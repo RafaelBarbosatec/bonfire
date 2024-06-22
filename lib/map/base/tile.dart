@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:bonfire/map/base/tile_component.dart';
 import 'package:bonfire/map/base/tile_with_collision.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
@@ -5,7 +7,6 @@ import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:math' as math;
 
 class TileSprite {
   final String path;
@@ -167,7 +168,8 @@ class Tile {
       }
     } else {
       if (collisions?.isNotEmpty == true) {
-        ControlledUpdateAnimation animationControlled = animation!.getSpriteControlledAnimation();
+        ControlledUpdateAnimation animationControlled =
+            animation!.getSpriteControlledAnimation();
         final tile = TileWithCollision.withAnimation(
           animation: animationControlled,
           position: Vector2(x, y),
@@ -182,7 +184,8 @@ class Tile {
 
         return tile;
       } else {
-        ControlledUpdateAnimation animationControlled = animation!.getSpriteControlledAnimation();
+        ControlledUpdateAnimation animationControlled =
+            animation!.getSpriteControlledAnimation();
         final tile = TileComponent.fromAnimation(
           animation: animationControlled,
           position: Vector2(x, y),
@@ -203,7 +206,6 @@ class Tile {
     tile.id = id;
     tile.angle = angle;
     tile.opacity = opacity;
-    
     if (isFlipHorizontal) {
       tile.flipHorizontallyAroundCenter();
     }
@@ -223,7 +225,8 @@ class Tile {
     final sin = math.sin(angle);
     final cos = math.cos(angle);
     if (tile.anchor.x != 0.5) {
-      final delta = (1 - 2 * tile.anchor.x) * tile.width * tile.transform.scale.x;
+      final delta =
+          (1 - 2 * tile.anchor.x) * tile.width * tile.transform.scale.x;
       if (cos < 0.9) {
         tile.transform.x -= delta * cos;
       }
@@ -233,7 +236,8 @@ class Tile {
     }
 
     if (tile.anchor.y != 0.5) {
-      final delta = (1 - 2 * tile.anchor.y) * tile.height * tile.transform.scale.y;
+      final delta =
+          (1 - 2 * tile.anchor.y) * tile.height * tile.transform.scale.y;
       if (sin > 0.9) {
         tile.transform.x += delta * sin;
       }

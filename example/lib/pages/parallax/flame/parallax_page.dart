@@ -2,7 +2,6 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/parallax/flame/parallax_background.dart';
 import 'package:example/pages/player/platform/simple_fox_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class ParallaxPage extends StatelessWidget {
   const ParallaxPage({Key? key}) : super(key: key);
@@ -17,7 +16,6 @@ class ParallaxPage extends StatelessWidget {
             JoystickAction(
               actionId: 1,
               margin: const EdgeInsets.all(50),
-              logicalKeyboardKey: LogicalKeyboardKey.keyZ.keyId,
             ),
           ],
         ),
