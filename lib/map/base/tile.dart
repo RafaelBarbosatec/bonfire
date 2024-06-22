@@ -203,7 +203,6 @@ class Tile {
     tile.id = id;
     tile.angle = angle;
     tile.opacity = opacity;
-    
     if (isFlipHorizontal) {
       tile.flipHorizontallyAroundCenter();
     }

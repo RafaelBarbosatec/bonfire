@@ -91,7 +91,7 @@ class TiledWorldBuilder {
     return Future.value(
       WorldBuildData(
         map: WorldMap(
-          _layers,
+          _layers.where((e) => e.tiles.isNotEmpty).toList(),
           tileSizeToUpdate: sizeToUpdate,
         ),
         components: _components,
@@ -341,7 +341,6 @@ class TiledWorldBuilder {
         tileSetContain,
         (index - tilesetFirsTgId),
       );
-
       return TiledItemTileSet(
         type: object.type,
         collisions: object.collisions,
