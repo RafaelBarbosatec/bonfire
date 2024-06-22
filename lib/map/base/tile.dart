@@ -5,6 +5,7 @@ import 'package:bonfire/util/controlled_update_animation.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
+import 'dart:math' as math;
 
 class TileSprite {
   final String path;
@@ -166,8 +167,7 @@ class Tile {
       }
     } else {
       if (collisions?.isNotEmpty == true) {
-        ControlledUpdateAnimation animationControlled =
-            animation!.getSpriteControlledAnimation();
+        ControlledUpdateAnimation animationControlled = animation!.getSpriteControlledAnimation();
         final tile = TileWithCollision.withAnimation(
           animation: animationControlled,
           position: Vector2(x, y),
@@ -182,8 +182,7 @@ class Tile {
 
         return tile;
       } else {
-        ControlledUpdateAnimation animationControlled =
-            animation!.getSpriteControlledAnimation();
+        ControlledUpdateAnimation animationControlled = animation!.getSpriteControlledAnimation();
         final tile = TileComponent.fromAnimation(
           animation: animationControlled,
           position: Vector2(x, y),
@@ -203,13 +202,44 @@ class Tile {
   void _setOtherParams(TileComponent tile) {
     tile.id = id;
     tile.angle = angle;
-    tile.anchor = Anchor.center; // rotated using [angle] around the center
     tile.opacity = opacity;
+    
     if (isFlipHorizontal) {
       tile.flipHorizontallyAroundCenter();
     }
     if (isFlipVertical) {
       tile.flipVerticallyAroundCenter();
+    }
+
+    // Needs to be debugged with different anchors. Works for default.
+    // tile.anchor = Anchor.topCenter;
+    _translateTileAngle(tile); // Force tile to be in it's box after rotation
+  }
+
+  void _translateTileAngle(TileComponent tile) {
+    // Depending or where the rotated object is - move it to positive coordinates:
+
+    final angle = tile.angle;
+    final sin = math.sin(angle);
+    final cos = math.cos(angle);
+    if (tile.anchor.x != 0.5) {
+      final delta = (1 - 2 * tile.anchor.x) * tile.width * tile.transform.scale.x;
+      if (cos < 0.9) {
+        tile.transform.x -= delta * cos;
+      }
+      if (sin < 0.9) {
+        tile.transform.y -= delta * sin;
+      }
+    }
+
+    if (tile.anchor.y != 0.5) {
+      final delta = (1 - 2 * tile.anchor.y) * tile.height * tile.transform.scale.y;
+      if (sin > 0.9) {
+        tile.transform.x += delta * sin;
+      }
+      if (cos < 0.9) {
+        tile.transform.y -= delta * cos;
+      }
     }
   }
 }
