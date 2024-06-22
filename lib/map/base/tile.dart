@@ -203,6 +203,7 @@ class Tile {
   void _setOtherParams(TileComponent tile) {
     tile.id = id;
     tile.angle = angle;
+    tile.anchor = Anchor.center; // rotated using [angle] around the center
     tile.opacity = opacity;
     if (isFlipHorizontal) {
       tile.flipHorizontallyAroundCenter();

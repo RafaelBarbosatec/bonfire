@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 class JoystickAction {
   final dynamic actionId;
 
+  // strongly typed joystic/keyboard key
+  // Source is [`KeyEvent`.logicalKey.keyId]
+  // example: LogicalKeyboardKey.keyZ.keyId or your own keyId
   final int logicalKeyboardKey;
 
   Sprite? sprite;
@@ -42,7 +45,7 @@ class JoystickAction {
 
   JoystickAction({
     required this.actionId,
-    required this.logicalKeyboardKey, // -1 for unused
+    this.logicalKeyboardKey = -1, // -1 for unused
     Future<Sprite>? sprite,
     Future<Sprite>? spritePressed,
     Future<Sprite>? spriteBackgroundDirection,
@@ -145,7 +148,9 @@ class JoystickAction {
   }
 
   void update(double dt) {
-    if (_dragPosition == null || _rectBackgroundDirection == null || _rect == null) return;
+    if (_dragPosition == null ||
+        _rectBackgroundDirection == null ||
+        _rect == null) return;
     if (_dragging) {
       double radAngle = atan2(
         _dragPosition!.dy - _rectBackgroundDirection!.center.dy,

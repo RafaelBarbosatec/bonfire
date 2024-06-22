@@ -1,5 +1,6 @@
 import 'package:bonfire/input/player_controller.dart';
 
+// Class for keyboard events
 class KeyboardActionEvent implements JoystickActionEvent {
   @override
   final dynamic id;

@@ -15,8 +15,10 @@ enum JoystickMoveDirectional {
   MOVE_LEFT,
   IDLE;
 
-  bool get isLeft => this == MOVE_LEFT || this == MOVE_DOWN_LEFT || this == MOVE_UP_LEFT;
-  bool get isRight => this == MOVE_RIGHT || this == MOVE_DOWN_RIGHT || this == MOVE_UP_RIGHT;
+  bool get isLeft =>
+      this == MOVE_LEFT || this == MOVE_DOWN_LEFT || this == MOVE_UP_LEFT;
+  bool get isRight =>
+      this == MOVE_RIGHT || this == MOVE_DOWN_RIGHT || this == MOVE_UP_RIGHT;
 }
 
 class JoystickDirectionalEvent {
@@ -54,6 +56,10 @@ class JoystickActionEvent {
   final double intensity;
   final double radAngle;
   final ActionEvent event;
+
+  // strongly typed joystic/keyboard key
+  // Source is [`KeyEvent`.logicalKey.keyId]
+  // example: LogicalKeyboardKey.keyZ.keyId or your own keyId
   final int logicalKeyboardKey;
 
   JoystickActionEvent({
@@ -70,7 +76,8 @@ mixin PlayerControllerListener {
   void onJoystickAction(JoystickActionEvent event) {}
 }
 
-abstract class PlayerController extends GameComponent with PlayerControllerListener {
+abstract class PlayerController extends GameComponent
+    with PlayerControllerListener {
   final dynamic id;
   final List<PlayerControllerListener> _observers = [];
 

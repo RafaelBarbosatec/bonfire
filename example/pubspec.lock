@@ -434,10 +434,9 @@ packages:
   tiledjsonreader:
     dependency: transitive
     description:
-      name: tiledjsonreader
-      sha256: "9390145be049ec4d73ef43672b337ce40fa6e4a72a0672ad680e4971edba2899"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../tiled_json_reader"
+      relative: true
+    source: path
     version: "1.3.4"
   typed_data:
     dependency: transitive
