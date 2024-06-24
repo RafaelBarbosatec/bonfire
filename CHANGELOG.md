@@ -1,3 +1,6 @@
+# next
+- Update `tiledjsonreader`
+
 # 3.9.6
 - Fix jump animation showing instead of run/idle animation on slanting floors
 - Fix above layer bug [#532](https://github.com/RafaelBarbosatec/bonfire/issues/532)
