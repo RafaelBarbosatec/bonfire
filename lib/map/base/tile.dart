@@ -168,8 +168,7 @@ class Tile {
       }
     } else {
       if (collisions?.isNotEmpty == true) {
-        ControlledUpdateAnimation animationControlled =
-            animation!.getSpriteControlledAnimation();
+        ControlledUpdateAnimation animationControlled = animation!.getSpriteControlledAnimation();
         final tile = TileWithCollision.withAnimation(
           animation: animationControlled,
           position: Vector2(x, y),
@@ -184,8 +183,7 @@ class Tile {
 
         return tile;
       } else {
-        ControlledUpdateAnimation animationControlled =
-            animation!.getSpriteControlledAnimation();
+        ControlledUpdateAnimation animationControlled = animation!.getSpriteControlledAnimation();
         final tile = TileComponent.fromAnimation(
           animation: animationControlled,
           position: Vector2(x, y),
@@ -225,8 +223,7 @@ class Tile {
     final sin = math.sin(angle);
     final cos = math.cos(angle);
     if (tile.anchor.x != 0.5) {
-      final delta =
-          (1 - 2 * tile.anchor.x) * tile.width * tile.transform.scale.x;
+      final delta = (1 - 2 * tile.anchor.x) * tile.width * tile.transform.scale.x;
       if (cos < 0.9) {
         tile.transform.x -= delta * cos;
       }
@@ -236,8 +233,7 @@ class Tile {
     }
 
     if (tile.anchor.y != 0.5) {
-      final delta =
-          (1 - 2 * tile.anchor.y) * tile.height * tile.transform.scale.y;
+      final delta = (1 - 2 * tile.anchor.y) * tile.height * tile.transform.scale.y;
       if (sin > 0.9) {
         tile.transform.x += delta * sin;
       }

@@ -10,6 +10,14 @@ class CollisionUtil {
     return [];
   }
 
+  static String _verticiesToString(List<Vector2> vertices) {
+    final result = StringBuffer();
+    for (var v in vertices) {
+      result.write('(${v.x.round()}, ${v.y.round()}), ');
+    }
+    return result.toString();
+  }
+
   static ({Vector2 normal, double depth}) getNormalAndDepth(
     List<Vector2> verticesA,
     List<Vector2> verticesB, {
@@ -25,10 +33,17 @@ class CollisionUtil {
       Vector2 axis = Vector2(-edge.y, edge.x);
       axis = axis.normalized();
 
+      print(' _intersectPolygons -> axis= $axis');
+      print(' _intersectPolygons -> va= ${_verticiesToString(verticesA)}');
+      print(' _intersectPolygons -> vb= ${_verticiesToString(verticesB)}}');
+
       final pA = projectVertices(insverted ? verticesB : verticesA, axis);
       final pB = projectVertices(insverted ? verticesA : verticesB, axis);
 
+      print(' _intersectPolygons -> a= ${pA.min.round()} ${pA.max.round()}, b= ${pB.min.round()} ${pB.max.round()}');
+
       double axisDepth = min(pB.max - pA.min, pA.max - pB.min);
+      print(' _intersectPolygons -> possible axisDepth=$axisDepth');
       if (axisDepth < depth) {
         depth = axisDepth;
         normal = axis;
@@ -56,8 +71,7 @@ class CollisionUtil {
     return (min: min, max: max);
   }
 
-  static ({double min, double max}) projectCircle(
-      Vector2 center, double radius, Vector2 axis) {
+  static ({double min, double max}) projectCircle(Vector2 center, double radius, Vector2 axis) {
     Vector2 direction = axis.normalized();
     Vector2 directionAndRadius = direction * radius;
 
@@ -97,11 +111,58 @@ class CollisionUtil {
   }
 }
 
+final _cachedGlobalVertices = ValueCache<List<Vector2>>();
+void _reverseList(List<Object> list) {
+  for (var i = 0; i < list.length / 2; i++) {
+    final temp = list[i];
+    list[i] = list[list.length - 1 - i];
+    list[list.length - 1 - i] = temp;
+  }
+}
+
 extension PolygonComponentExt on PolygonComponent {
   List<Vector2> get absoluteVertices {
+    // debug:
+    //
     Vector2 p = absolutePosition;
-    return vertices.map((element) {
+
+    final adjustedVerticies = absoluteAngle == 0 ? vertices : rotatedVerticesBonfire(absoluteAngle);
+
+    print(' > absoluteVertices -> p= $p, adjustedVerticies= $adjustedVerticies, angle=$absoluteAngle');
+
+    final result = adjustedVerticies.map((element) {
       return element.translated(p.x, p.y);
     }).toList();
+    print(' > absoluteVertices -> p= $p, result vertices= $result, angle=$absoluteAngle');
+    return result;
+  }
+
+  /// gives back the shape vectors multiplied by the size and scale
+  List<Vector2> rotatedVerticesBonfire(double parentAngle) {
+    final angle = parentAngle;
+    if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
+      size,
+      angle,
+    ])) {
+      final globalVertices = List.generate(
+        vertices.length,
+        (_) => Vector2.zero(),
+        growable: false,
+      );
+
+      for (var i = 0; i < vertices.length; i++) {
+        final vertex = vertices[i];
+        globalVertices[i]
+          ..setFrom(vertex)
+          //..multiply(scale)
+          ..rotate(angle);
+      }
+
+      _cachedGlobalVertices.updateCache<dynamic>(
+        globalVertices,
+        <dynamic>[size.clone(), angle],
+      );
+    }
+    return _cachedGlobalVertices.value!;
   }
 }
