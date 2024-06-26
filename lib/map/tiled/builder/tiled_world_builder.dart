@@ -341,7 +341,6 @@ class TiledWorldBuilder {
       final object = _getCollision(
         tileSetContain,
         (index - tilesetFirsTgId),
-        null,
       );
 
       return TiledItemTileSet(
@@ -442,7 +441,6 @@ class TiledWorldBuilder {
   TiledDataObjectCollision _getCollision(
     TileSetDetail tileSetContain,
     int index,
-    double? angle,
   ) {
     Iterable<TileSetItem> tileSetItemList = tileSetContain.tiles?.where(
           (element) => element.id == index,
@@ -475,7 +473,8 @@ class TiledWorldBuilder {
               height,
               ellipse: object.ellipse ?? false,
               polygon: object.polygon,
-              angle: angle,
+              // Angle here is not used because
+              // collision object is already rotated
             ),
           );
         }

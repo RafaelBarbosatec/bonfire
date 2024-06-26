@@ -101,16 +101,13 @@ final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
 extension PolygonComponentExt on PolygonComponent {
   List<Vector2> get absoluteVertices {
-    // debug:
-    //
-    Vector2 p = absolutePosition;
-
+    final Vector2 p = absolutePosition;
     final adjustedVerticies =
         absoluteAngle == 0 ? vertices : rotatedVerticesBonfire(absoluteAngle);
 
     final result = adjustedVerticies.map((element) {
       return element.translated(p.x, p.y);
-    }).toList();
+    }).toList(growable: false);
     return result;
   }
 
