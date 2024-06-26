@@ -128,7 +128,6 @@ extension PolygonComponentExt on PolygonComponent {
         final vertex = vertices[i];
         globalVertices[i]
           ..setFrom(vertex)
-          //..multiply(scale)
           ..rotate(angle);
       }
 
