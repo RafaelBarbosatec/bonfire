@@ -1,4 +1,3 @@
-import 'package:bonfire/a_lib_dvmatyun/input/keyboard_action_event.dart';
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/services.dart';
 
@@ -66,16 +65,16 @@ class Keyboard extends PlayerController with KeyboardEventListener {
       /// Process action events
       if (event is KeyDownEvent) {
         onJoystickAction(
-          KeyboardActionEvent(
+          JoystickActionEvent(
+            id: event.logicalKey,
             event: ActionEvent.DOWN,
-            logicalKeyboardKey: event.logicalKey.keyId,
           ),
         );
       } else if (event is KeyUpEvent) {
         onJoystickAction(
-          KeyboardActionEvent(
+          JoystickActionEvent(
+            id: event.logicalKey,
             event: ActionEvent.UP,
-            logicalKeyboardKey: event.logicalKey.keyId,
           ),
         );
       }
