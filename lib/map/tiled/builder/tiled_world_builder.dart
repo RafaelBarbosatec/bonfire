@@ -140,9 +140,11 @@ class TiledWorldBuilder {
     double offsetX = _getDoubleByProportion(tileLayer.offsetX);
     double offsetY = _getDoubleByProportion(tileLayer.offsetY);
     double opacity = tileLayer.opacity ?? 1.0;
-    bool layerIsAbove =
-        tileLayer.properties?.where((element) => element.name == 'type' && element.value == ABOVE_TYPE).isNotEmpty ??
-            false;
+    bool layerIsAbove = tileLayer.properties
+            ?.where((element) =>
+                element.name == 'type' && element.value == ABOVE_TYPE)
+            .isNotEmpty ??
+        false;
     for (var tile in tileLayer.data ?? const <int>[]) {
       if (tile != 0) {
         var data = _getDataTile(tile);
@@ -161,7 +163,6 @@ class TiledWorldBuilder {
               above: tileIsAbove,
             );
           } else {
-            print(' > adding tile with collisions: ${data.collisions?.length}, angle=${data.angle}');
             _addTile(data, count, tileLayer, offsetX, offsetY, opacity);
           }
         }
@@ -279,7 +280,8 @@ class TiledWorldBuilder {
       firsTgId = tileSetContain?.firsTgId ?? 0;
       tilesetFirsTgId = firsTgId;
       imagePath = tileSetContain?.image ?? '';
-      widthCount = (tileSetContain?.imageWidth ?? 0) ~/ (tileSetContain?.tileWidth ?? 1);
+      widthCount =
+          (tileSetContain?.imageWidth ?? 0) ~/ (tileSetContain?.tileWidth ?? 1);
 
       spriteSize = Vector2(
         tileSetContain?.tileWidth ?? 0.0,
@@ -294,7 +296,8 @@ class TiledWorldBuilder {
       }
 
       // to cases that the tileSet contain individual image.
-      if (tileSetContain?.image == null && tileSetContain?.tiles?.isNotEmpty == true) {
+      if (tileSetContain?.image == null &&
+          tileSetContain?.tiles?.isNotEmpty == true) {
         int tilePosition = index - firsTgId;
         final tile = tileSetContain!.tiles![tilePosition];
         imagePath = tile.image ?? '';
@@ -335,16 +338,12 @@ class TiledWorldBuilder {
         widthCount,
       );
 
-      // TODO: check collisions with [gidInfo.angle] here?
       final object = _getCollision(
         tileSetContain,
         (index - tilesetFirsTgId),
-        null,//gidInfo.angle,
+        null,
       );
 
-      print(' > collision position for angle=${gidInfo.angle} is ${object.collisions?.firstOrNull?.absolutePosition}');
-      print(
-          ' > collision form for angle=${gidInfo.angle} is ${object.collisions?.firstOrNull?.width}x${object.collisions?.firstOrNull?.height}');
       return TiledItemTileSet(
         type: object.type,
         collisions: object.collisions,
@@ -371,7 +370,8 @@ class TiledWorldBuilder {
       double width = _getDoubleByProportion(element.width);
       double height = _getDoubleByProportion(element.height);
       double rotation = (element.rotation ?? 0) * pi / 180;
-      bool isObjectCollision = element.typeOrClass?.toLowerCase() == 'collision' || isCollisionLayer;
+      bool isObjectCollision =
+          element.typeOrClass?.toLowerCase() == 'collision' || isCollisionLayer;
       final collision = _getCollisionObject(
         x,
         y,
@@ -393,9 +393,14 @@ class TiledWorldBuilder {
             style: material.TextStyle(
               fontSize: fontSize,
               fontFamily: element.text!.fontFamily,
-              decoration: element.text!.underline ? TextDecoration.underline : null,
-              fontWeight: element.text!.bold ? material.FontWeight.bold : material.FontWeight.normal,
-              fontStyle: element.text!.italic ? material.FontStyle.italic : material.FontStyle.normal,
+              decoration:
+                  element.text!.underline ? TextDecoration.underline : null,
+              fontWeight: element.text!.bold
+                  ? material.FontWeight.bold
+                  : material.FontWeight.normal,
+              fontStyle: element.text!.italic
+                  ? material.FontStyle.italic
+                  : material.FontStyle.normal,
               color: Color(
                 int.parse('0xFF${element.text!.color.replaceAll('#', '')}'),
               ),
@@ -409,7 +414,8 @@ class TiledWorldBuilder {
             position: Vector2(x, y),
             size: Vector2(collision.size.x, collision.size.y),
             collisions: [collision],
-            properties: MapLayerMapper.extractOtherProperties(element.properties),
+            properties:
+                MapLayerMapper.extractOtherProperties(element.properties),
           )..angle = rotation,
         );
       } else if (_objectsBuilder[element.name] != null) {
@@ -438,14 +444,14 @@ class TiledWorldBuilder {
     int index,
     double? angle,
   ) {
-    print(' > adding tile check collisions here for angle=$angle ');
     Iterable<TileSetItem> tileSetItemList = tileSetContain.tiles?.where(
           (element) => element.id == index,
         ) ??
         [];
 
     if (tileSetItemList.isNotEmpty) {
-      List<TileSetObject> tileSetObjectList = tileSetItemList.first.objectGroup?.objects ?? [];
+      List<TileSetObject> tileSetObjectList =
+          tileSetItemList.first.objectGroup?.objects ?? [];
 
       Map<String, dynamic> properties = MapLayerMapper.extractOtherProperties(
         tileSetItemList.first.properties,
@@ -559,7 +565,6 @@ class TiledWorldBuilder {
     bool isObjectCollision = false,
     double? angle,
   }) {
-    
     ShapeHitbox ca = RectangleHitbox(
       size: Vector2(width, height),
       position: isObjectCollision ? null : Vector2(x, y),
@@ -578,7 +583,6 @@ class TiledWorldBuilder {
     if (polygon?.isNotEmpty == true) {
       ca = _normalizePolygon(x, y, polygon!, isObjectCollision);
     }
-    print(' > adding tile check collisions here for angle=$angle -> ${ca.angle}');
     return ca;
   }
 

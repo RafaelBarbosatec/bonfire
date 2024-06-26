@@ -46,7 +46,6 @@ mixin BlockMovementCollision on Movement {
     PositionComponent other,
     CollisionData collisionData,
   ) {
-    print(' onBlockedMovement collisionData normal=${collisionData.normal}');
     _lastCollisionData = collisionData;
 
     if (_bodyType.isDynamic) {
@@ -57,20 +56,16 @@ mixin BlockMovementCollision on Movement {
       }
 
       correction = (-collisionData.normal * depth);
-      print(' onBlockedMovement normal=${collisionData.normal} depth=$depth');
       //print(' onBlockedMovement correction=$correction, collisionData=[depth=${collisionData.depth},collisionData.normal=${collisionData.normal}]');
       if ((other is BlockMovementCollision) && other._bodyType.isDynamic) {
         correction = (-collisionData.normal * depth / 2);
       }
 
       //print(' onBlockedMovement correction=$correction, collisionData=[depth=${depth},collisionData.normal=${collisionData.normal}]');
-      print(' onBlockedMovement correction=$correction position=$position');
       correctPositionFromCollision(position + correction);
     }
 
     velocity -= getVelocityReflection(other, collisionData);
-
-    print(' onBlockedMovement velocity=$velocity');
   }
 
   Vector2 getVelocityReflection(
@@ -90,7 +85,9 @@ mixin BlockMovementCollision on Movement {
       return;
     }
     bool stopOtherMovement = true;
-    bool stopMovement = other is GameComponent ? onBlockMovement(intersectionPoints, other) : true;
+    bool stopMovement = other is GameComponent
+        ? onBlockMovement(intersectionPoints, other)
+        : true;
 
     if (other is BlockMovementCollision) {
       stopOtherMovement = other.onBlockMovement(
@@ -105,7 +102,6 @@ mixin BlockMovementCollision on Movement {
     }
 
     if (_collisionsResolution.containsKey(other)) {
-      print(' onCollision _collisionsResolution.containsKey(other)');
       onBlockedMovement(
         other,
         _collisionsResolution[other]!,
@@ -134,14 +130,11 @@ mixin BlockMovementCollision on Movement {
     if (_isPolygon(shape1)) {
       if (_isPolygon(shape2)) {
         colisionResult = _intersectPolygons(shape1, shape2, other);
-        print(' onCollision -> _intersectPolygons -> ${colisionResult.normal} depth= ${colisionResult.depth}');
       } else if (shape2 is CircleHitbox) {
         colisionResult = _intersectCirclePolygon(shape1, shape2, other);
-        print(' onCollision -> _intersectCirclePolygon -> ${colisionResult.normal} depth= ${colisionResult.depth}');
       }
     } else if (shape1 is CircleHitbox) {
       if (_isPolygon(shape2)) {
-        print(' onCollision -> _intersectCirclePolygon');
         colisionResult = _intersectCirclePolygon(
           shape2,
           shape1,
@@ -149,7 +142,6 @@ mixin BlockMovementCollision on Movement {
           inverted: true,
         );
       } else if (shape2 is CircleHitbox) {
-        print(' onCollision -> _intersectCircles');
         colisionResult = _intersectCircles(shape1, shape2);
       }
     }
@@ -161,7 +153,6 @@ mixin BlockMovementCollision on Movement {
         intersectionPoints: intersectionPoints.toList(),
         direction: colisionResult.normal.toDirection(),
       );
-      print(' onCollision colisionResult != null');
       onBlockedMovement(other, data);
       if (other is BlockMovementCollision) {
         other.setCollisionResolution(this, data.inverted());
@@ -182,17 +173,13 @@ mixin BlockMovementCollision on Movement {
     Vector2 normal = Vector2.zero();
     double depth = double.maxFinite;
 
-    print(' > _intersectPolygons, angle a=${shapeA.angle} / ${shapeA.absoluteAngle}, angle b=${shapeB.angle} / ${shapeB.absoluteAngle}');
-
     List<Vector2> verticesA = CollisionUtil.getPolygonVertices(shapeA);
     List<Vector2> verticesB = CollisionUtil.getPolygonVertices(shapeB);
 
-    //TODO: debug here
     var normalAndDepthA = CollisionUtil.getNormalAndDepth(
       verticesA,
       verticesB,
     );
-    print(' _intersectPolygons -> a= ${normalAndDepthA.depth}');
 
     if (normalAndDepthA.depth < depth) {
       depth = normalAndDepthA.depth;
@@ -203,7 +190,6 @@ mixin BlockMovementCollision on Movement {
       verticesA,
       insverted: true,
     );
-    print(' _intersectPolygons -> b= ${normalAndDepthB.depth}');
 
     if (normalAndDepthB.depth < depth) {
       depth = normalAndDepthB.depth;
@@ -278,8 +264,9 @@ mixin BlockMovementCollision on Movement {
       normal = axis;
     }
 
-    Vector2 direction =
-        inverted ? shapeA.absoluteCenter - shapeB.absoluteCenter : shapeB.absoluteCenter - shapeA.absoluteCenter;
+    Vector2 direction = inverted
+        ? shapeA.absoluteCenter - shapeB.absoluteCenter
+        : shapeB.absoluteCenter - shapeA.absoluteCenter;
 
     if (direction.dot(normal) < 0) {
       normal = -normal;
@@ -288,7 +275,8 @@ mixin BlockMovementCollision on Movement {
     return (normal: normal, depth: depth);
   }
 
-  ({Vector2 normal, double depth}) _intersectCircles(CircleHitbox shapeA, CircleHitbox shapeB) {
+  ({Vector2 normal, double depth}) _intersectCircles(
+      CircleHitbox shapeA, CircleHitbox shapeB) {
     Vector2 normal = Vector2.zero();
     double depth = double.maxFinite;
 
