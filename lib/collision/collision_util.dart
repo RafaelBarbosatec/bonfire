@@ -97,11 +97,49 @@ class CollisionUtil {
   }
 }
 
+final _cachedGlobalVertices = ValueCache<List<Vector2>>();
+
 extension PolygonComponentExt on PolygonComponent {
   List<Vector2> get absoluteVertices {
+    // debug:
+    //
     Vector2 p = absolutePosition;
-    return vertices.map((element) {
+
+    final adjustedVerticies =
+        absoluteAngle == 0 ? vertices : rotatedVerticesBonfire(absoluteAngle);
+
+    final result = adjustedVerticies.map((element) {
       return element.translated(p.x, p.y);
     }).toList();
+    return result;
+  }
+
+  /// gives back the shape vectors multiplied by the size and scale
+  List<Vector2> rotatedVerticesBonfire(double parentAngle) {
+    final angle = parentAngle;
+    if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
+      size,
+      angle,
+    ])) {
+      final globalVertices = List.generate(
+        vertices.length,
+        (_) => Vector2.zero(),
+        growable: false,
+      );
+
+      for (var i = 0; i < vertices.length; i++) {
+        final vertex = vertices[i];
+        globalVertices[i]
+          ..setFrom(vertex)
+          //..multiply(scale)
+          ..rotate(angle);
+      }
+
+      _cachedGlobalVertices.updateCache<dynamic>(
+        globalVertices,
+        <dynamic>[size.clone(), angle],
+      );
+    }
+    return _cachedGlobalVertices.value!;
   }
 }

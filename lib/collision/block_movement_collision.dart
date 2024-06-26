@@ -47,19 +47,24 @@ mixin BlockMovementCollision on Movement {
     CollisionData collisionData,
   ) {
     _lastCollisionData = collisionData;
+
     if (_bodyType.isDynamic) {
       Vector2 correction;
-      double depth = 0;
-      if (collisionData.depth > 0) {
-        depth = collisionData.depth + 0.08;
+      double depth = collisionData.depth;
+      if (depth != 0) {
+        depth = collisionData.depth.abs() + 0.08;
       }
 
       correction = (-collisionData.normal * depth);
+      //print(' onBlockedMovement correction=$correction, collisionData=[depth=${collisionData.depth},collisionData.normal=${collisionData.normal}]');
       if ((other is BlockMovementCollision) && other._bodyType.isDynamic) {
         correction = (-collisionData.normal * depth / 2);
       }
+
+      //print(' onBlockedMovement correction=$correction, collisionData=[depth=${depth},collisionData.normal=${collisionData.normal}]');
       correctPositionFromCollision(position + correction);
     }
+
     velocity -= getVelocityReflection(other, collisionData);
   }
 
@@ -83,6 +88,7 @@ mixin BlockMovementCollision on Movement {
     bool stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
         : true;
+
     if (other is BlockMovementCollision) {
       stopOtherMovement = other.onBlockMovement(
         intersectionPoints,
