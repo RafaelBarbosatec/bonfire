@@ -47,19 +47,22 @@ mixin BlockMovementCollision on Movement {
     CollisionData collisionData,
   ) {
     _lastCollisionData = collisionData;
+
     if (_bodyType.isDynamic) {
       Vector2 correction;
-      double depth = 0;
-      if (collisionData.depth > 0) {
-        depth = collisionData.depth + 0.08;
+      double depth = collisionData.depth;
+      if (depth != 0) {
+        depth = collisionData.depth.abs() + 0.08;
       }
 
       correction = (-collisionData.normal * depth);
       if ((other is BlockMovementCollision) && other._bodyType.isDynamic) {
         correction = (-collisionData.normal * depth / 2);
       }
+
       correctPositionFromCollision(position + correction);
     }
+
     velocity -= getVelocityReflection(other, collisionData);
   }
 
