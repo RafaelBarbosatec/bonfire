@@ -95,6 +95,9 @@ class SimpleDirectionAnimation {
   late RenderTransformWrapper _renderWrapper;
   late RenderTransformWrapper _fastAnimationRenderWrapper;
 
+  int get currentIndex => _current.currentIndex;
+  int get fastAnimationcurrentIndex => _fastAnimation?.currentIndex ?? 0;
+
   SimpleDirectionAnimation({
     required FutureOr<SpriteAnimation> idleRight,
     required FutureOr<SpriteAnimation> runRight,

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:bonfire/map/base/tile_component.dart';
 import 'package:bonfire/map/base/tile_with_collision.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
@@ -204,20 +206,44 @@ class Tile {
     tile.id = id;
     tile.angle = angle;
     tile.opacity = opacity;
-
-    if (angle != 0) {
-      tile.anchor = Anchor.center;
-      tile.position = tile.position +
-          Vector2(
-            width / 2,
-            height / 2,
-          );
-    }
     if (isFlipHorizontal) {
       tile.flipHorizontallyAroundCenter();
     }
     if (isFlipVertical) {
       tile.flipVerticallyAroundCenter();
+    }
+
+    // Needs to be debugged with different anchors. Works for default.
+    // tile.anchor = Anchor.topCenter;
+    _translateTileAngle(tile); // Force tile to be in it's box after rotation
+  }
+
+  void _translateTileAngle(TileComponent tile) {
+    // Depending or where the rotated object is - move it to positive coordinates:
+
+    final angle = tile.angle;
+    final sin = math.sin(angle);
+    final cos = math.cos(angle);
+    if (tile.anchor.x != 0.5) {
+      final delta =
+          (1 - 2 * tile.anchor.x) * tile.width * tile.transform.scale.x;
+      if (cos < 0.9) {
+        tile.transform.x -= delta * cos;
+      }
+      if (sin < 0.9) {
+        tile.transform.y -= delta * sin;
+      }
+    }
+
+    if (tile.anchor.y != 0.5) {
+      final delta =
+          (1 - 2 * tile.anchor.y) * tile.height * tile.transform.scale.y;
+      if (sin > 0.9) {
+        tile.transform.x += delta * sin;
+      }
+      if (cos < 0.9) {
+        tile.transform.y -= delta * cos;
+      }
     }
   }
 }
