@@ -1,6 +1,7 @@
 # 3.9.7
 - Update `tiledjsonreader`
 - Bugfix/tile rotation collision. [#535](https://github.com/RafaelBarbosatec/bonfire/pull/535)
+- Adds 'currentIndex' and 'fastAnimationcurrentIndex' in `SimpleDirectionAnimation`.
 
 # 3.9.6
 - Fix jump animation showing instead of run/idle animation on slanting floors
