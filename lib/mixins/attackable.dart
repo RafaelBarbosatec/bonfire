@@ -25,12 +25,13 @@ mixin Attackable on GameComponent {
 
   double get life => _life;
 
+  /// Set initial life
   void initialLife(double life) {
     _life = life;
     _maxLife = life;
   }
 
-  /// increase life
+  /// Increase life
   void addLife(double life) {
     double newLife = _life + life;
 
@@ -43,6 +44,7 @@ mixin Attackable on GameComponent {
     _verifyLimitsLife();
   }
 
+  // Update life
   void updateLife(double life, {bool verifyDieOrRevive = true}) {
     _life = life;
     if (verifyDieOrRevive) {
@@ -62,7 +64,10 @@ mixin Attackable on GameComponent {
     _verifyLimitsLife();
   }
 
+  // Called when life is removed
   void onRemoveLife(double life) {}
+
+  // Called when life is restored
   void onRestoreLife(double life) {}
 
   void _verifyLimitsLife() {
@@ -87,6 +92,7 @@ mixin Attackable on GameComponent {
     return canReceive;
   }
 
+  // Called when the component receives damage
   void onReceiveDamage(
     AttackOriginEnum attacker,
     double damage,
@@ -120,15 +126,18 @@ mixin Attackable on GameComponent {
     return false;
   }
 
+  // Called when the component dies
   void onDie() {
     _isDead = true;
   }
 
+  // Called when the component revives
   void onRevive() {
     _isDead = false;
   }
 
   bool get isDead => _isDead;
 
+  // Get rect collision of the component used to receive damage
   Rect rectAttackable() => rectCollision;
 }
