@@ -1,5 +1,6 @@
 # NEXT
 - Fix bug when hitbox anchor is center.
+- Update `bool receiveDamage` to `void onReceiveDamage`. Now to perform attack use `handleAttack` method.
 
 # 3.9.7
 - Update `tiledjsonreader`
