@@ -50,9 +50,9 @@ mixin BlockMovementCollision on Movement {
 
     if (_bodyType.isDynamic) {
       Vector2 correction;
-      double depth = collisionData.depth;
-      if (depth != 0) {
-        depth = collisionData.depth.abs() + 0.08;
+      double depth = collisionData.depth.abs();
+      if (depth > 0) {
+        depth += 0.08;
       }
 
       correction = (-collisionData.normal * depth);

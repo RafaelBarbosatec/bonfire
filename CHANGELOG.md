@@ -1,3 +1,6 @@
+# NEXT
+- Fix bug when hitbox anchor is center.
+
 # 3.9.7
 - Update `tiledjsonreader`
 - Bugfix/tile rotation collision. [#535](https://github.com/RafaelBarbosatec/bonfire/pull/535)

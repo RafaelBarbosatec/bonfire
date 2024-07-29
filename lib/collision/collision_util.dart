@@ -101,7 +101,7 @@ final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
 extension PolygonComponentExt on PolygonComponent {
   List<Vector2> get absoluteVertices {
-    final Vector2 p = absolutePosition;
+    final Vector2 p = absoluteTopLeftPosition;
     final adjustedVerticies =
         absoluteAngle == 0 ? vertices : rotatedVerticesBonfire(absoluteAngle);
 
