@@ -1,4 +1,4 @@
-# NEXT
+# 3.9.8
 - Fix bug when hitbox anchor is center.
 - Update `bool receiveDamage` to `void onReceiveDamage`. Now to perform attack use `handleAttack` method.
 
