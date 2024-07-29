@@ -25,12 +25,13 @@ mixin Attackable on GameComponent {
 
   double get life => _life;
 
+  /// Set initial life
   void initialLife(double life) {
     _life = life;
     _maxLife = life;
   }
 
-  /// increase life
+  /// Increase life
   void addLife(double life) {
     double newLife = _life + life;
 
@@ -43,6 +44,7 @@ mixin Attackable on GameComponent {
     _verifyLimitsLife();
   }
 
+  // Update life
   void updateLife(double life, {bool verifyDieOrRevive = true}) {
     _life = life;
     if (verifyDieOrRevive) {
@@ -62,7 +64,10 @@ mixin Attackable on GameComponent {
     _verifyLimitsLife();
   }
 
+  // Called when life is removed
   void onRemoveLife(double life) {}
+
+  // Called when life is restored
   void onRestoreLife(double life) {}
 
   void _verifyLimitsLife() {
@@ -75,16 +80,25 @@ mixin Attackable on GameComponent {
 
   /// This method is called to give damage a this component.
   /// Only receive damage if the method [checkCanReceiveDamage] return `true`.
-  bool receiveDamage(
+  bool handleAttack(
     AttackOriginEnum attacker,
     double damage,
     dynamic identify,
   ) {
-    if (checkCanReceiveDamage(attacker)) {
-      removeLife(damage);
-      return true;
+    final canReceive = checkCanReceiveDamage(attacker);
+    if (canReceive) {
+      onReceiveDamage(attacker, damage, identify);
     }
-    return false;
+    return canReceive;
+  }
+
+  // Called when the component receives damage
+  void onReceiveDamage(
+    AttackOriginEnum attacker,
+    double damage,
+    dynamic identify,
+  ) {
+    removeLife(damage);
   }
 
   /// This method is used to check if this component can receive damage from any attacker.
@@ -112,15 +126,18 @@ mixin Attackable on GameComponent {
     return false;
   }
 
+  // Called when the component dies
   void onDie() {
     _isDead = true;
   }
 
+  // Called when the component revives
   void onRevive() {
     _isDead = false;
   }
 
   bool get isDead => _isDead;
 
+  // Get rect collision of the component used to receive damage
   Rect rectAttackable() => rectCollision;
 }

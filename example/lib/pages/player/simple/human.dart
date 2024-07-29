@@ -14,7 +14,12 @@ class HumanPlayer extends SimplePlayer with BlockMovementCollision {
   @override
   Future<void> onLoad() {
     /// Adds rectangle collision
-    add(RectangleHitbox(size: size / 2, position: size / 4));
+    add(
+      RectangleHitbox(
+        size: size / 2,
+        position: size / 4,
+      ),
+    );
     return super.onLoad();
   }
 }

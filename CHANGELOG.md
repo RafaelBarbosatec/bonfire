@@ -1,3 +1,7 @@
+# 3.9.8
+- Fix bug when hitbox anchor is center.
+- BREAKING CHANGE: Update `bool receiveDamage` to `void onReceiveDamage`. Now to perform receive of attack use `handleAttack` method.
+
 # 3.9.7
 - Update `tiledjsonreader`
 - Bugfix/tile rotation collision. [#535](https://github.com/RafaelBarbosatec/bonfire/pull/535)
