@@ -1,3 +1,8 @@
+# 3.9.9
+- Update `lgjenero`
+- Bugfix/MatrixLayer axisInverted. [#535](https://github.com/RafaelBarbosatec/bonfire/pull/545)
+- Makes it possible to set 'axisInverted' in `MatrixLayer` constructor.
+
 # 3.9.8
 - Fix bug when hitbox anchor is center.
 - BREAKING CHANGE: Update `bool receiveDamage` to `void onReceiveDamage`. Now to perform receive of attack use `handleAttack` method.
