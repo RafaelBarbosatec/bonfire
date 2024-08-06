@@ -15,12 +15,12 @@ import 'package:flutter/material.dart';
 /// on 18/05/22
 
 /// SceneAction that do something until the `completed` callback is called.
-class AwaitCallbackSceneAction extends SceneAction {
+class CallbackSceneAction extends SceneAction {
   bool _isDone = false;
   bool _isFirstRun = true;
   final ValueChanged<VoidCallback> completedCallback;
 
-  AwaitCallbackSceneAction({required this.completedCallback, dynamic id})
+  CallbackSceneAction({required this.completedCallback, dynamic id})
       : super(id);
 
   @override

@@ -15,13 +15,13 @@ import 'package:bonfire/bonfire.dart';
 /// on 04/03/22
 
 /// SceneAction that move the componente in the game.
-class MoveComponentSceneAction<T extends Movement> extends SceneAction {
+class MoveToPositionSceneAction<T extends Movement> extends SceneAction {
   final T component;
   final Vector2 newPosition;
 
   Vector2 _diffPosition = Vector2.zero();
 
-  MoveComponentSceneAction({
+  MoveToPositionSceneAction({
     dynamic id,
     required this.component,
     required this.newPosition,

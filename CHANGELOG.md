@@ -1,3 +1,6 @@
+# next
+- Adds new SceneActions
+
 # 3.9.9
 - Update `lgjenero`
 - Bugfix/MatrixLayer axisInverted. [#535](https://github.com/RafaelBarbosatec/bonfire/pull/545)
