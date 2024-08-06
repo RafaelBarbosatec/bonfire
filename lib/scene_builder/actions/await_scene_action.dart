@@ -1,10 +1,10 @@
 import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/scene_builder/scene_action.dart';
 
-class WaitSceneAction extends SceneAction {
-  final Future<void> wait;
+class AwaitSceneAction extends SceneAction {
+  final Future<void> Function() wait;
 
-  WaitSceneAction({required this.wait, dynamic id}) : super(id);
+  AwaitSceneAction({required this.wait, dynamic id}) : super(id);
 
   bool _isDone = false;
   bool _isFirstRun = true;
@@ -19,7 +19,7 @@ class WaitSceneAction extends SceneAction {
   }
 
   Future<void> _run() async {
-    await wait;
+    await wait();
     _isDone = true;
   }
 }
