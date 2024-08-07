@@ -1,4 +1,6 @@
 # next
+- BREAKING CHANGE: Bump Flutter SDK minimum version to 3.22.0
+- Upgrade: Packages (flame v1.18.0, http v1.2.2, a_star_algorithm v0.3.2).
 - Adds new SceneActions
 
 # 3.9.9
