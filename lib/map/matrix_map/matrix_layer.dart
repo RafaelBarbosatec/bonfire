@@ -1,9 +1,9 @@
 class MatrixLayer {
-  final bool axisInverted = false;
+  final bool axisInverted;
   final List<List<double>> matrix;
 
   MatrixLayer({
     required this.matrix,
-    axisInverted = false,
+    this.axisInverted = false,
   });
 }

@@ -1,3 +1,12 @@
+# 3.10.0
+- BREAKING CHANGE: Bump Flutter SDK minimum version to 3.22.0
+- Upgrade: Packages (flame v1.18.0, http v1.2.2, a_star_algorithm v0.3.2).
+- Adds new SceneActions
+
+# 3.9.9
+- Bugfix/MatrixLayer axisInverted. [#535](https://github.com/RafaelBarbosatec/bonfire/pull/545)
+- Makes it possible to set 'axisInverted' in `MatrixLayer` constructor.
+
 # 3.9.8
 - Fix bug when hitbox anchor is center.
 - BREAKING CHANGE: Update `bool receiveDamage` to `void onReceiveDamage`. Now to perform receive of attack use `handleAttack` method.

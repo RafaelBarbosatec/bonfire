@@ -168,21 +168,21 @@ class KnightInterface extends GameInterface {
         CameraSceneAction.target(gameRef.player!),
         CameraSceneAction.target(enemy, zoom: 2),
         DelaySceneAction(const Duration(seconds: 2)),
-        MoveComponentSceneAction(
+        MoveToPositionSceneAction(
           component: enemy,
           newPosition: enemy.position.clone()..add(Vector2(-40, -10)),
         ),
         CameraSceneAction.target(gameRef.player!, zoom: initialZoom),
-        AwaitCallbackSceneAction(
+        CallbackSceneAction(
           completedCallback: (completed) {
             _showDialogTest(completed);
           },
         ),
-        MoveComponentSceneAction(
+        MoveToPositionSceneAction(
           component: gameRef.player!,
           newPosition: gameRef.player!.position.clone()..add(Vector2(0, -20)),
         ),
-        MoveComponentSceneAction(
+        MoveToPositionSceneAction(
           component: gameRef.player!,
           newPosition: gameRef.player!.position.clone()..add(Vector2(50, -20)),
         ),
