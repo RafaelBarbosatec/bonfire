@@ -11,6 +11,7 @@ class WorldMap extends GameMap {
   Vector2 lastCameraWindow = Vector2.zero();
   double lastMinorZoom = 1.0;
   Vector2? lastSizeScreen;
+  bool infinite;
   bool _buildingTiles = false;
   bool _needUpdateRenderedTiles = false;
   Vector2 _mapPosition = Vector2.zero();
@@ -25,6 +26,7 @@ class WorldMap extends GameMap {
   WorldMap(
     List<Layer> layers, {
     double tileSizeToUpdate = 0,
+    this.infinite = false,
   }) : super(
           layers,
           sizeToUpdate: tileSizeToUpdate,
@@ -90,7 +92,7 @@ class WorldMap extends GameMap {
       lastMinorZoom = gameRef.camera.zoom;
       _calculatePositionAndSize();
       for (var layer in layersComponent) {
-        layer.initLayer(size, sizeScreen);
+        layer.initLayer(size, sizeScreen, infiniteMap: infinite);
       }
     }
     if (sizeToUpdate == 0) {

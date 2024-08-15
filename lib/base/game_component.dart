@@ -14,6 +14,7 @@ abstract class GameComponent extends PositionComponent
         CollisionCallbacks {
   final String _keyIntervalCheckIsVisible = "CHECK_VISIBLE";
   final int _intervalCheckIsVisible = 100;
+  final int _priorityOffset = 100000;
   Map<String, dynamic>? properties;
 
   /// When true this component render above all components in game.
@@ -50,9 +51,9 @@ abstract class GameComponent extends PositionComponent
   @override
   int get priority {
     if (renderAboveComponents && hasGameRef) {
-      return LayerPriority.getAbovePriority(gameRef.highestPriority);
+      return LayerPriority.getAbovePriority(gameRef.highestPriority) + _priorityOffset;
     }
-    return LayerPriority.getComponentPriority(rectCollision.bottom.floor());
+    return LayerPriority.getComponentPriority(rectCollision.bottom.floor()) + _priorityOffset;
   }
 
   @override

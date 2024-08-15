@@ -58,15 +58,16 @@ class TileLayerComponent extends PositionComponent with HasPaint {
     }
   }
 
-  void initLayer(Vector2 gameSize, Vector2 screenSize) {
+  void initLayer(Vector2 gameSize, Vector2 screenSize, {bool infiniteMap = false,}) {
     if (gameSize.isZero()) return;
-    _createQuadTree(gameSize, screenSize);
+    _createQuadTree(gameSize, screenSize, infiniteMap: infiniteMap);
   }
 
   void _createQuadTree(
     Vector2 mapSize,
     Vector2 screenSize, {
     bool force = false,
+    bool infiniteMap = false,
   }) {
     if (_lastScreenSize == screenSize && !force) return;
     _lastScreenSize = screenSize.clone();
@@ -77,13 +78,7 @@ class TileLayerComponent extends PositionComponent with HasPaint {
     int maxItems = 100;
     final minScreen = min(screenSize.x, screenSize.y);
     maxItems = ((minScreen / tileSize) / 2).ceil();
-    _quadTree = tree.QuadTree(
-      0,
-      0,
-      treeSize.x,
-      treeSize.y,
-      maxItems: maxItems,
-    );
+    _quadTree = infiniteMap ? _createInfiniteQuadTree(maxItems) : _createFiniteQuadTree(treeSize, maxItems);
 
     for (var tile in _tiles) {
       _quadTree?.insert(
@@ -92,6 +87,30 @@ class TileLayerComponent extends PositionComponent with HasPaint {
         id: tile.id,
       );
     }
+  }
+
+  tree.QuadTree<Tile> _createInfiniteQuadTree(int maxItems) {
+    return tree.QuadTree(
+      -90000,
+      -90000,
+      100000,
+      100000,
+      maxItems: maxItems,
+    );
+  }
+
+  tree.QuadTree<Tile> _createFiniteQuadTree(Vector2 treeSize, int maxItems) {
+    return tree.QuadTree(
+      0,
+      0,
+      treeSize.x,
+      treeSize.y,
+      maxItems: maxItems,
+    );
+  }
+
+  List<Tile> getTiles() {
+    return _tiles;
   }
 
   void updateTiles(List<Tile> tiles) {
