@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/base/layer.dart';
@@ -16,6 +17,7 @@ class WorldMap extends GameMap {
   bool _needUpdateRenderedTiles = false;
   Vector2 _mapPosition = Vector2.zero();
   Vector2 _mapSize = Vector2.zero();
+  double _mapTileMinPosition = 0.0;
 
   tree.QuadTree<Tile>? quadTree;
 
@@ -85,6 +87,12 @@ class WorldMap extends GameMap {
     }
   }
 
+  void refreshMapTileMinPosition() {
+    for (var element in layersComponent) {
+      _mapTileMinPosition = min(_mapTileMinPosition, element.tileMinPosition);
+    }
+  }
+
   void _confMap(Vector2 sizeScreen, {bool calculateSize = false}) {
     lastSizeScreen = sizeScreen;
     if (calculateSize) {
@@ -134,6 +142,11 @@ class WorldMap extends GameMap {
   @override
   Vector2 getMapPosition() {
     return _mapPosition;
+  }
+
+  @override
+  double getMapTileMinPosition() {
+    return _mapTileMinPosition;
   }
 
   @override

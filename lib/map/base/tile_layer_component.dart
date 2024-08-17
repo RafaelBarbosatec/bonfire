@@ -12,10 +12,12 @@ class TileLayerComponent extends PositionComponent with HasPaint {
   List<Tile> _tiles;
   bool _isVisible = true;
   double _tileSize = 0.0;
+  double _tileMinPosition = 0.0;
 
   Vector2? _lastScreenSize;
 
   double get tileSize => _tileSize;
+  double get tileMinPosition => _tileMinPosition;
   tree.QuadTree<Tile>? _quadTree;
 
   bool get visible => _isVisible;
@@ -53,6 +55,7 @@ class TileLayerComponent extends PositionComponent with HasPaint {
       for (var tile in _tiles) {
         if (tile.right > w) w = tile.right;
         if (tile.bottom > h) h = tile.bottom;
+        _tileMinPosition = min(_tileMinPosition, min(tile.left, tile.top));
       }
       size = Vector2(w, h);
     }

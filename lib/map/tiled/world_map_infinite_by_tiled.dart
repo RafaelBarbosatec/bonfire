@@ -120,6 +120,7 @@ class WorldMapInfiniteByTiled extends WorldMap {
         layerComponent.updateTiles([...layerComponent.getTiles(), ...newTiles]);
       }
     }
+    refreshMapTileMinPosition();
   }
 
   Future<void> _buildComponentsChunk(String chunkId, int chunkX, int chunkY) async {
