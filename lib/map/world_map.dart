@@ -120,7 +120,14 @@ class WorldMap extends GameMap {
       _mapPosition = Vector2(x, y);
 
       gameRef.camera.updateBoundsAndZoomFit();
-      (gameRef as BonfireGame).configCollision();
+      gameRef.configCollisionDetection(
+        Rect.fromLTWH(
+          -tileSize,
+          -tileSize,
+          size.x.ceilToDouble() + tileSize * 2,
+          size.y.ceilToDouble() + tileSize * 2,
+        ),
+      );
     }
   }
 

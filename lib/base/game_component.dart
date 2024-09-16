@@ -37,6 +37,9 @@ abstract class GameComponent extends PositionComponent
 
   double lastAngle = 0;
 
+  bool _gameMonted = false;
+  bool get gameMonted => _gameMonted;
+
   @override
   set angle(double a) {
     lastAngle = super.angle;
@@ -146,7 +149,7 @@ abstract class GameComponent extends PositionComponent
     return shapeHitboxes.isNotEmpty;
   }
 
-  List<ShapeHitbox> get shapeHitboxes => children.query<ShapeHitbox>();
+  Iterable<ShapeHitbox> get shapeHitboxes => children.query<ShapeHitbox>();
 
   Rect get rectCollision {
     if (_rectCollision == null) {
@@ -173,7 +176,7 @@ abstract class GameComponent extends PositionComponent
     Vector2 direction, {
     Vector2? origin,
     double? maxDistance,
-    List<ShapeHitbox>? ignoreHitboxes,
+    Iterable<ShapeHitbox>? ignoreHitboxes,
   }) {
     try {
       return gameRef.raycast(
@@ -258,6 +261,11 @@ abstract class GameComponent extends PositionComponent
   @override
   Future<void> onLoad() async => super.onLoad();
 
-  void onGameDetach() {}
-  void onGameMounted() {}
+  void onGameDetach() {
+    _gameMonted = false;
+  }
+
+  void onGameMounted() {
+    _gameMonted = true;
+  }
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -27,26 +28,28 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
   <title>example</title>
   <link rel="manifest" href="manifest.json">
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
+    var serviceWorkerVersion = '{{flutter_service_worker_version}}';
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
+  <script src="flutter_bootstrap.js" async></script>
 
   <style>
-
     body {
-        background-color: #3f3f3f
+      background-color: #3f3f3f
     }
-    p{
+
+    p {
       color: #fff;
     }
+
     .container {
       margin: 0;
       position: absolute;
@@ -55,34 +58,41 @@
       margin-right: -50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      
+
     }
-    .indicator{
+
+    .indicator {
       width: 10vw;
     }
-</style>
+  </style>
 </head>
-<body >
+
+<body>
   <div id="loading_indicator" class="container">
     <img class="indicator" src="./assets/bonfire.gif" />
   </div>
   <script>
-    window.addEventListener('load', function(ev) {
+
+    window.addEventListener('load', function (ev) {
+
+      { { flutter_js } }
+      { { flutter_build_config } }
       // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
+
+      _flutter.loader.load({
+        onEntrypointLoaded: async function (engineInitializer) {
+          engineInitializer.initializeEngine().then(function (appRunner) {
+            var loadingIndicator = document.getElementById("loading_indicator");
+            if (loadingIndicator) {
+              loadingIndicator.remove();
+            }
+            return appRunner.runApp();
+          });
         }
-      }).then(function(engineInitializer) {
-        return engineInitializer.initializeEngine();
-      }).then(function(appRunner) {
-        var loadingIndicator = document.getElementById("loading_indicator");
-        if (loadingIndicator) {
-          loadingIndicator.remove();
-        }
-        return appRunner.runApp();
       });
+
     });
   </script>
 </body>
+
 </html>

@@ -287,7 +287,7 @@ mixin BlockMovementCollision on Movement {
   }
 
   ShapeHitbox? _getCollisionShapeHitbox(
-    List<ShapeHitbox> shapeHitboxes,
+    Iterable<ShapeHitbox> shapeHitboxes,
     Set<Vector2> intersectionPoints,
   ) {
     if (shapeHitboxes.isEmpty || intersectionPoints.isEmpty) return null;

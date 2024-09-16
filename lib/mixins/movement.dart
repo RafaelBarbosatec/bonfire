@@ -442,7 +442,7 @@ mixin Movement on GameComponent {
   bool canMove(
     Direction direction, {
     double? displacement,
-    List<ShapeHitbox>? ignoreHitboxes,
+    Iterable<ShapeHitbox>? ignoreHitboxes,
   }) {
     double maxDistance = displacement ?? (speed * (dtUpdate * 2));
 
@@ -527,7 +527,7 @@ mixin Movement on GameComponent {
   bool _checkRaycastDirection(
     Direction direction,
     double maxDistance, {
-    List<ShapeHitbox>? ignoreHitboxes,
+    Iterable<ShapeHitbox>? ignoreHitboxes,
   }) {
     double distance = maxDistance;
     final centerComp = rectCollision.center.toVector2();
