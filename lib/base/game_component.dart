@@ -37,8 +37,8 @@ abstract class GameComponent extends PositionComponent
 
   double lastAngle = 0;
 
-  bool _gameMonted = false;
-  bool get gameMonted => _gameMonted;
+  bool _gameMounted = false;
+  bool get gameMonuted => _gameMounted;
 
   @override
   set angle(double a) {
@@ -262,10 +262,10 @@ abstract class GameComponent extends PositionComponent
   Future<void> onLoad() async => super.onLoad();
 
   void onGameDetach() {
-    _gameMonted = false;
+    _gameMounted = false;
   }
 
   void onGameMounted() {
-    _gameMonted = true;
+    _gameMounted = true;
   }
 }
