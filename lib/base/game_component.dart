@@ -264,6 +264,7 @@ abstract class GameComponent extends PositionComponent
   void onGameDetach() {
     _gameMonted = false;
   }
+
   void onGameMounted() {
     _gameMonted = true;
   }
