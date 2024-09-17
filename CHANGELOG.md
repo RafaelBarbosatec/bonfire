@@ -1,3 +1,6 @@
+# 3.10.2
+- Downgrade to Flame v1.18.0 (Crash in package 'ordered_set')
+
 # 3.10.1
 - Update Flame to v1.19.0
 

@@ -47,7 +47,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.10.0"
+    version: "3.10.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -124,10 +124,10 @@ packages:
     dependency: transitive
     description:
       name: flame
-      sha256: e6873a8540a197a9bfe251e10c9e1f200329041d6e6d70df2cf38aa681cf2ef7
+      sha256: "79133dc46a3ff870950f41d0dc1598414e7bd7ae2c29bd9f0a9de208d9a70cb7"
       url: "https://pub.dev"
     source: hosted
-    version: "1.19.0"
+    version: "1.18.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -270,10 +270,10 @@ packages:
     dependency: transitive
     description:
       name: ordered_set
-      sha256: "3129515e563a14817adebbdeee2acbb845fc69b6fc99a94349b641d1c829d5cd"
+      sha256: "1bfaaaee0419e43ecc9eaebd410eb4bd5039657b72011de75ff3e2915c9aac60"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "5.0.3"
   package_config:
     dependency: transitive
     description:
