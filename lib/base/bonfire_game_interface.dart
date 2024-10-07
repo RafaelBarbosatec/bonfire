@@ -169,4 +169,6 @@ abstract class BonfireGameInterface {
   void enableKeyboard(bool enable);
   bool get enabledGestures;
   bool get enabledKeyboard;
+
+  void configCollisionDetection(Rect mapDimensions);
 }
