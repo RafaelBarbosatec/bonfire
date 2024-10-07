@@ -116,4 +116,11 @@ abstract class BaseGame extends FlameGame
   bool _hasGesture(Component c) {
     return ((c is GameComponent && c.isVisible)) && ((c).hasGesture());
   }
+
+  @override
+  void onRemove() {
+    super.onRemove();
+    removeAll(children);
+    processLifecycleEvents();
+  }
 }
