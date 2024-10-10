@@ -1,3 +1,6 @@
+# 3.10.3
+- Clean up componentes when game will removed. `onRemove`.
+
 # 3.10.2
 - Downgrade to Flame v1.18.0 (Crash in package 'ordered_set')
 

@@ -256,7 +256,6 @@ class ListenerGameWidgetState<T extends Game>
   void disposeCurrentGame({bool callGameOnDispose = false}) {
     currentGame.removeGameStateListener(_onGameStateChange);
     currentGame.lifecycleStateChange(AppLifecycleState.paused);
-
     currentGame.finalizeRemoval();
     if (callGameOnDispose) {
       currentGame.onDispose();
@@ -286,7 +285,7 @@ class ListenerGameWidgetState<T extends Game>
   @override
   void dispose() {
     super.dispose();
-    disposeCurrentGame();
+    disposeCurrentGame(callGameOnDispose: true);
     // If we received a focus node from the user, they are responsible
     // for disposing it
     if (widget.focusNode == null) {
