@@ -58,6 +58,10 @@ mixin DirectionAnimation on Movement {
   @override
   void idle() {
     super.idle();
+    _playIdleAnimation();
+  }
+
+  void _playIdleAnimation() {
     switch (lastDirection) {
       case Direction.left:
         onPlayIdleLeftAnimation();
@@ -95,7 +99,7 @@ mixin DirectionAnimation on Movement {
   @override
   void onMount() {
     super.onMount();
-    idle();
+    _playIdleAnimation();
   }
 
   Future<void> replaceAnimation(
