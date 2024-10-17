@@ -23,7 +23,7 @@ mixin PathFinding on Movement {
   VoidCallback? _onFinish;
 
   final List<Point<int>> _barriers = [];
-  final List _ignoreCollisions = [];
+  final List<ShapeHitbox> _ignoreCollisions = [];
 
   LinePathComponent? _linePathComponent;
   Color _pathLineColor = const Color(0xFF40C4FF).withOpacity(0.5);
@@ -64,7 +64,7 @@ mixin PathFinding on Movement {
 
   Future<List<Vector2>> moveToPositionWithPathFinding(
     Vector2 position, {
-    List? ignoreCollisions,
+    List<GameComponent>? ignoreCollisions,
     VoidCallback? onFinish,
   }) async {
     if (!hasGameRef) {
@@ -104,13 +104,14 @@ mixin PathFinding on Movement {
 
   List<Vector2> getPathToPosition(
     Vector2 position, {
-    List? ignoreCollisions,
+    List<GameComponent>? ignoreCollisions,
   }) {
     _ignoreCollisions.clear();
-    _ignoreCollisions.add(this);
-    if (ignoreCollisions != null) {
-      _ignoreCollisions.addAll(ignoreCollisions);
-    }
+    _ignoreCollisions.addAll(getHitboxes);
+
+    ignoreCollisions?.forEach(
+      (comp) => _ignoreCollisions.addAll(comp.getHitboxes),
+    );
     return _calculatePath(position);
   }
 
@@ -197,9 +198,11 @@ mixin PathFinding on Movement {
     area = Rect.fromLTRB(left, top, right, bottom).inflate(inflate);
 
     for (final e in gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
-      var rect = e.toAbsoluteRect();
-      if (!_ignoreCollisions.contains(e) && area.overlaps(rect)) {
-        _addCollisionOffsetsPositionByTile(rect);
+      if (!_ignoreCollisions.contains(e)) {
+        var rect = e.toAbsoluteRect();
+        if (area.overlaps(rect)) {
+          _addCollisionOffsetsPositionByTile(rect);
+        }
       }
     }
 

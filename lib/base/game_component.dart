@@ -268,4 +268,6 @@ abstract class GameComponent extends PositionComponent
   void onGameMounted() {
     _gameMounted = true;
   }
+
+  List<ShapeHitbox> get getHitboxes => children.query<ShapeHitbox>();
 }
