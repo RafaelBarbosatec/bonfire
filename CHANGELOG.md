@@ -1,3 +1,7 @@
+# 3.10.4
+- Update `tiledjsonreader` to support web platform
+- `DirectionAnimation` improvements
+
 # 3.10.3
 - Clean up componentes when game will removed. `onRemove`.
 
