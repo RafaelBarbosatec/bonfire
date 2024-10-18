@@ -69,7 +69,7 @@ class TiledWorldBuilder {
     _objectsBuilder[name] = builder;
   }
 
-  Future<WorldBuildData> build() async {
+  Future<WorldBuildData> build({bool onlyObjects = false}) async {
     try {
       _tiledMap = await reader.readMap();
       if (_tiledMap?.orientation != _mapOrientationSupported) {
@@ -81,7 +81,7 @@ class TiledWorldBuilder {
       _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble() ?? 0.0;
       _tileWidth = forceTileSize?.x ?? _tileWidthOrigin;
       _tileHeight = forceTileSize?.y ?? _tileHeightOrigin;
-      await _load(_tiledMap!);
+      await _load(_tiledMap!, onlyObjects: onlyObjects);
     } catch (e) {
       onError?.call(e);
       // ignore: avoid_print
@@ -99,14 +99,14 @@ class TiledWorldBuilder {
     );
   }
 
-  Future<void> _load(TiledMap tiledMap) async {
+  Future<void> _load(TiledMap tiledMap, {bool onlyObjects = false}) async {
     for (var layer in tiledMap.layers ?? const <MapLayer>[]) {
-      await _loadLayer(layer);
+      await _loadLayer(layer, onlyObjects: onlyObjects);
     }
   }
 
-  Future<void> _loadLayer(MapLayer layer) async {
-    if (layer.visible != true) return;
+  Future<void> _loadLayer(MapLayer layer, {bool onlyObjects = false}) async {
+    if (layer.visible != true || (onlyObjects && layer is! ObjectLayer)) return;
 
     if (layer is tiled.TileLayer) {
       _layers.add(MapLayerMapper.toLayer(layer, countTileLayer));
