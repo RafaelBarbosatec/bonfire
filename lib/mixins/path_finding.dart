@@ -19,6 +19,7 @@ mixin PathFinding on Movement {
   bool _showBarriers = false;
   bool _gridSizeIsCollisionSize = false;
   bool _useOnlyVisibleBarriers = true;
+  bool _withDiagonal = true;
   double _factorInflateFindArea = 2;
   VoidCallback? _onFinish;
 
@@ -47,8 +48,10 @@ mixin PathFinding on Movement {
 
     /// If `false` the algorithm use map tile size with base of the grid. if true this use collision size of the component.
     bool gridSizeIsCollisionSize = false,
+    bool withDiagonal = true,
     double factorInflateFindArea = 2,
   }) {
+    _withDiagonal = withDiagonal;
     _linePathEnabled = linePathEnabled ?? _linePathEnabled;
     _useOnlyVisibleBarriers = useOnlyVisibleBarriers;
     _factorInflateFindArea = factorInflateFindArea;
@@ -220,6 +223,7 @@ mixin PathFinding on Movement {
         start: playerPosition,
         end: targetPosition,
         barriers: _barriers,
+        withDiagonal: _withDiagonal,
       ).findThePath();
 
       if (result.isNotEmpty || _isNeighbor(playerPosition, targetPosition)) {
