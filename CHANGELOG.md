@@ -1,3 +1,7 @@
+# 3.10.5
+- Adds param `withDiagonal` in `setupPathFinding` (PathFinding mixin)
+- Fix PathFinding bug. Now not consider your own collision as a barrier.
+
 # 3.10.4
 - Update `tiledjsonreader` to support web platform
 - `DirectionAnimation` improvements

@@ -19,11 +19,12 @@ mixin PathFinding on Movement {
   bool _showBarriers = false;
   bool _gridSizeIsCollisionSize = false;
   bool _useOnlyVisibleBarriers = true;
+  bool _withDiagonal = true;
   double _factorInflateFindArea = 2;
   VoidCallback? _onFinish;
 
   final List<Point<int>> _barriers = [];
-  final List _ignoreCollisions = [];
+  final List<ShapeHitbox> _ignoreCollisions = [];
 
   LinePathComponent? _linePathComponent;
   Color _pathLineColor = const Color(0xFF40C4FF).withOpacity(0.5);
@@ -47,8 +48,10 @@ mixin PathFinding on Movement {
 
     /// If `false` the algorithm use map tile size with base of the grid. if true this use collision size of the component.
     bool gridSizeIsCollisionSize = false,
+    bool withDiagonal = true,
     double factorInflateFindArea = 2,
   }) {
+    _withDiagonal = withDiagonal;
     _linePathEnabled = linePathEnabled ?? _linePathEnabled;
     _useOnlyVisibleBarriers = useOnlyVisibleBarriers;
     _factorInflateFindArea = factorInflateFindArea;
@@ -64,7 +67,7 @@ mixin PathFinding on Movement {
 
   Future<List<Vector2>> moveToPositionWithPathFinding(
     Vector2 position, {
-    List? ignoreCollisions,
+    List<GameComponent>? ignoreCollisions,
     VoidCallback? onFinish,
   }) async {
     if (!hasGameRef) {
@@ -104,13 +107,14 @@ mixin PathFinding on Movement {
 
   List<Vector2> getPathToPosition(
     Vector2 position, {
-    List? ignoreCollisions,
+    List<GameComponent>? ignoreCollisions,
   }) {
     _ignoreCollisions.clear();
-    _ignoreCollisions.add(this);
-    if (ignoreCollisions != null) {
-      _ignoreCollisions.addAll(ignoreCollisions);
-    }
+    _ignoreCollisions.addAll(getHitboxes);
+
+    ignoreCollisions?.forEach(
+      (comp) => _ignoreCollisions.addAll(comp.getHitboxes),
+    );
     return _calculatePath(position);
   }
 
@@ -197,9 +201,11 @@ mixin PathFinding on Movement {
     area = Rect.fromLTRB(left, top, right, bottom).inflate(inflate);
 
     for (final e in gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
-      var rect = e.toAbsoluteRect();
-      if (!_ignoreCollisions.contains(e) && area.overlaps(rect)) {
-        _addCollisionOffsetsPositionByTile(rect);
+      if (!_ignoreCollisions.contains(e)) {
+        var rect = e.toAbsoluteRect();
+        if (area.overlaps(rect)) {
+          _addCollisionOffsetsPositionByTile(rect);
+        }
       }
     }
 
@@ -217,6 +223,7 @@ mixin PathFinding on Movement {
         start: playerPosition,
         end: targetPosition,
         barriers: _barriers,
+        withDiagonal: _withDiagonal,
       ).findThePath();
 
       if (result.isNotEmpty || _isNeighbor(playerPosition, targetPosition)) {
