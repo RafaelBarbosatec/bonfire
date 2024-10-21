@@ -155,7 +155,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   FutureOr<void> onLoad() async {
     await super.onLoad();
     initializeCollisionDetection(
-      mapDimensions: Rect.zero,
+      mapDimensions: size.toRect(),
     );
 
     camera.viewport.children.query<PlayerController>().forEach((element) {

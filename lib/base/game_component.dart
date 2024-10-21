@@ -269,5 +269,5 @@ abstract class GameComponent extends PositionComponent
     _gameMounted = true;
   }
 
-  List<ShapeHitbox> get getHitboxes => children.query<ShapeHitbox>();
+  Iterable<ShapeHitbox> get getHitboxes => children.query<ShapeHitbox>();
 }
