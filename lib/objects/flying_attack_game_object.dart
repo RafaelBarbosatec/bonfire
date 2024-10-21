@@ -101,10 +101,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
   @override
   void update(double dt) {
     super.update(dt);
-
-    if (!_verifyExistInWorld()) {
-      removeFromParent();
-    }
+    _verifyExistInWorld(dt);
   }
 
   @override
@@ -146,8 +143,13 @@ class FlyingAttackGameObject extends AnimatedGameObject
     onDestroy?.call();
   }
 
-  bool _verifyExistInWorld() {
-    return gameRef.map.toRect().contains(center.toOffset());
+  void _verifyExistInWorld(double dt) {
+    if (checkInterval('checkCanSee', 1000, dt) && !isRemoving) {
+      final canSee = gameRef.camera.canSee(this);
+      if (!canSee) {
+        removeFromParent();
+      }
+    }
   }
 
   void _destroyByDirection(Direction direction) {
