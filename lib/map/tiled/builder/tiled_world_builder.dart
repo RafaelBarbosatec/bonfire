@@ -492,42 +492,44 @@ class TiledWorldBuilder {
     int index,
     int widthCount,
   ) {
-    try {
-      TileSetItem tileSetItemList = tileSetContain.tiles!.firstWhere(
-        (element) => element.id == index,
-      );
+    final filter = tileSetContain.tiles?.where(
+          (element) => element.id == index,
+        ) ??
+        [];
+    if (filter.isEmpty) {
+      return null;
+    }
 
-      List<FrameAnimation> animationFrames = tileSetItemList.animation ?? [];
+    TileSetItem tileSetItemList = filter.first;
 
-      List<TileSprite> frames = [];
-      if ((animationFrames.isNotEmpty)) {
-        double stepTime = (animationFrames[0].duration ?? 100) / 1000;
+    List<FrameAnimation> animationFrames = tileSetItemList.animation ?? [];
 
-        for (var frame in animationFrames) {
-          double y = _getY((frame.tileid ?? 0), widthCount);
-          double x = _getX((frame.tileid ?? 0), widthCount);
+    List<TileSprite> frames = [];
+    if ((animationFrames.isNotEmpty)) {
+      double stepTime = (animationFrames[0].duration ?? 100) / 1000;
 
-          final spritePath = '$_basePath$pathTileset${tileSetContain.image}';
+      for (var frame in animationFrames) {
+        double y = _getY((frame.tileid ?? 0), widthCount);
+        double x = _getX((frame.tileid ?? 0), widthCount);
 
-          TileSprite sprite = TileSprite(
-            path: spritePath,
-            size: Vector2(
-              tileSetContain.tileWidth ?? 0,
-              tileSetContain.tileHeight ?? 0,
-            ),
-            position: Vector2(x, y),
-          );
-          frames.add(sprite);
-        }
+        final spritePath = '$_basePath$pathTileset${tileSetContain.image}';
 
-        return TilelAnimation(
-          stepTime: stepTime,
-          frames: frames,
+        TileSprite sprite = TileSprite(
+          path: spritePath,
+          size: Vector2(
+            tileSetContain.tileWidth ?? 0,
+            tileSetContain.tileHeight ?? 0,
+          ),
+          position: Vector2(x, y),
         );
-      } else {
-        return null;
+        frames.add(sprite);
       }
-    } catch (e) {
+
+      return TilelAnimation(
+        stepTime: stepTime,
+        frames: frames,
+      );
+    } else {
       return null;
     }
   }
