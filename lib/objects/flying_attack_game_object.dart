@@ -133,6 +133,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
 
   void _destroyObject(GameComponent component) {
     if (isRemoving || isRemoved) return;
+    removeAll(children);
     removeFromParent();
     if (animationDestroy != null) {
       final currentDirection = direction;
@@ -142,7 +143,6 @@ class FlyingAttackGameObject extends AnimatedGameObject
         _destroyByAngle();
       }
     }
-    removeAll(children);
     onDestroy?.call();
   }
 
