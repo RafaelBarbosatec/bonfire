@@ -18,12 +18,14 @@ abstract class BaseGame extends FlameGame
   BaseGame({super.world, super.camera});
   bool enabledGestures = true;
   bool enabledKeyboard = true;
+  Iterable<PointerDetectorHandler> _gesturesComponents = [];
 
-  /// to get the components that contain gestures
-  Iterable<PointerDetectorHandler> get _gesturesComponents {
-    return [...world.children, ...camera.viewport.children]
+  @override
+  void updateTree(double dt) {
+    _gesturesComponents = [...world.children, ...camera.viewport.children]
         .where((c) => _hasGesture(c))
         .cast<PointerDetectorHandler>();
+    super.updateTree(dt);
   }
 
   /// to get the components that contain gestures
