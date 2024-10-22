@@ -110,10 +110,10 @@ mixin PathFinding on Movement {
     List<GameComponent>? ignoreCollisions,
   }) {
     _ignoreCollisions.clear();
-    _ignoreCollisions.addAll(getHitboxes);
+    _ignoreCollisions.addAll(shapeHitboxes);
 
     ignoreCollisions?.forEach(
-      (comp) => _ignoreCollisions.addAll(comp.getHitboxes),
+      (comp) => _ignoreCollisions.addAll(comp.shapeHitboxes),
     );
     return _calculatePath(position);
   }

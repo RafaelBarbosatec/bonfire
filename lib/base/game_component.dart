@@ -155,7 +155,7 @@ abstract class GameComponent extends PositionComponent
     if (_rectCollision == null) {
       var list = children.query<ShapeHitbox>();
       if (list.isNotEmpty) {
-        _rectCollision = children.query<ShapeHitbox>().fold(
+        _rectCollision = list.fold(
           list.first.toRect(),
           (previousValue, element) {
             return previousValue!.expandToInclude(element.toRect());
@@ -268,6 +268,4 @@ abstract class GameComponent extends PositionComponent
   void onGameMounted() {
     _gameMounted = true;
   }
-
-  Iterable<ShapeHitbox> get getHitboxes => children.query<ShapeHitbox>();
 }

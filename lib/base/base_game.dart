@@ -21,7 +21,7 @@ abstract class BaseGame extends FlameGame
 
   /// to get the components that contain gestures
   Iterable<PointerDetectorHandler> get _gesturesComponents {
-    return [...camera.world!.children, ...camera.viewport.children]
+    return [...world.children, ...camera.viewport.children]
         .where((c) => _hasGesture(c))
         .cast<PointerDetectorHandler>();
   }
@@ -29,7 +29,7 @@ abstract class BaseGame extends FlameGame
   /// to get the components that contain gestures
   Iterable<KeyboardEventListener> get _keyboardComponents {
     return [
-      ...camera.world!.children.query<KeyboardEventListener>(),
+      ...world.children.query<KeyboardEventListener>(),
       ...camera.viewport.children.query<Keyboard>(),
     ];
   }
