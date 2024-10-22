@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera_effects.dart';
+import 'package:bonfire/map/tiled/world_map_infinite_by_tiled.dart';
 import 'package:flame/experimental.dart';
 
 // Custom implmentation of Flame's `CameraComponent`
@@ -245,16 +246,44 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
     }
     config.moveOnlyMapArea = enabled;
     if (enabled) {
-      setBounds(
-        Rectangle.fromRect(
-          gameRef.map.getMapRect().deflatexy(
-                visibleWorldRect.width / 2,
-                visibleWorldRect.height / 2,
-              ),
-        ),
-      );
+      setBounds(_getBoundsMoveAreaByMapType());
     } else {
       setBounds(null);
+    }
+  }
+
+  Shape? _getBoundsMoveAreaByMapType() {
+    final mapRect = gameRef.map.getMapRect();
+    final deflateWidth = visibleWorldRect.width / 2;
+    final deflateHeight = visibleWorldRect.height / 2;
+
+    if (gameRef.map is WorldMapInfiniteByTiled) {
+      return _getBoundsMoveAreaWorldMapInfinite(mapRect, deflateWidth, deflateHeight);
+    }
+
+    return Rectangle.fromRect(
+      mapRect.deflatexy(deflateWidth, deflateHeight),
+    );
+  }
+
+  Rectangle? _getBoundsMoveAreaWorldMapInfinite(Rect mapRect, double deflateWidth, double deflateHeight) {
+    final mapType = (gameRef.map as WorldMapInfiniteByTiled).type;
+    
+    switch (mapType) {
+      case InfiniteWorldMapType.OPEN:
+        return null;
+      case InfiniteWorldMapType.VERTICAL:
+        return Rectangle.fromRect(
+          mapRect.deflatexy(deflateWidth, double.maxFinite),
+        );
+      case InfiniteWorldMapType.HORIZONTAL:
+        return Rectangle.fromRect(
+          mapRect.deflatexy(double.maxFinite, deflateHeight),
+        );
+      default:
+        return Rectangle.fromRect(
+          mapRect.deflatexy(deflateWidth, deflateHeight),
+        );
     }
   }
 
