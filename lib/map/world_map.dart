@@ -122,8 +122,8 @@ class WorldMap extends GameMap {
       gameRef.camera.updateBoundsAndZoomFit();
       gameRef.configCollisionDetection(
         Rect.fromLTWH(
-          -tileSize,
-          -tileSize,
+          x,
+          y,
           size.x.ceilToDouble() + tileSize * 2,
           size.y.ceilToDouble() + tileSize * 2,
         ),
