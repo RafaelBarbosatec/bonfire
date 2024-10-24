@@ -1,3 +1,6 @@
+# 3.10.6
+- Update `tiledjsonreader`
+
 # 3.10.5
 - Adds param `withDiagonal` in `setupPathFinding` (PathFinding mixin)
 - Fix PathFinding bug. Now not consider your own collision as a barrier.

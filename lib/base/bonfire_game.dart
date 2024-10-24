@@ -459,9 +459,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   void _optimizeCollisionTree() {
-    scheduleMicrotask(
-      () => collisionDetection.broadphase.tree.optimize(),
-    );
+    scheduleMicrotask(collisionDetection.broadphase.tree.optimize);
   }
 
   void _updateOrderPriorityMicrotask() {
