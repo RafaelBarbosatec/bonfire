@@ -25,8 +25,8 @@ class MapNavigator extends StatefulWidget {
   MapNavigator({
     super.key,
     required this.maps,
-    this.initialMap,
     required this.builder,
+    this.initialMap,
     this.transitionBuilder,
     this.layoutBuilder,
     this.transitionDuration = Durations.medium2,
@@ -62,6 +62,12 @@ class _MapNavigatorState extends State<MapNavigator> {
       initialMap: widget.initialMap,
     );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
