@@ -22,6 +22,7 @@ class Pirate extends SimplePlayer with BlockMovementCollision {
           animation: PirateSpriteSheet.getAnimation(),
           speed: DungeonMap.tileSize * 3,
         ) {
+    movementOnlyVisible = false;
     setupMovementByJoystick(
       diagonalEnabled: false,
     );

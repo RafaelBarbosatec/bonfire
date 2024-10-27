@@ -15,7 +15,7 @@ import 'package:example/pages/map/terrain_builder/terrain_builder_page.dart';
 import 'package:example/pages/map/tiled/tiled_network_page.dart';
 import 'package:example/pages/map/tiled/tiled_page.dart';
 import 'package:example/pages/mini_games/manual_map/game_manual_map.dart';
-import 'package:example/pages/mini_games/multi_scenario/multi_scenario.dart';
+import 'package:example/pages/mini_games/multi_scenario/multi_scenario_game.dart';
 import 'package:example/pages/mini_games/platform/platform_game.dart';
 import 'package:example/pages/mini_games/random_map/random_map_game.dart';
 import 'package:example/pages/mini_games/simple_example/simple_example_game.dart';

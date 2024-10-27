@@ -122,10 +122,10 @@ class WorldMap extends GameMap {
       gameRef.camera.updateBoundsAndZoomFit();
       gameRef.configCollisionDetection(
         Rect.fromLTWH(
-          x,
-          y,
-          size.x.ceilToDouble() + tileSize * 2,
-          size.y.ceilToDouble() + tileSize * 2,
+          x - tileSize * 2,
+          y - tileSize * 2,
+          _mapSize.x.ceilToDouble() + tileSize * 4,
+          _mapSize.y.ceilToDouble() + tileSize * 4,
         ),
       );
     }

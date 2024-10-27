@@ -1,3 +1,7 @@
+# 3.11.0
+- Adds `MapNavigator`. Structure to facilitate map navigations.
+- Some otimizations.
+
 # 3.10.6
 - Update `tiledjsonreader`
 

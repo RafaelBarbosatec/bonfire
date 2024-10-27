@@ -2,27 +2,27 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 
 class MapItem {
+  final String id;
   final GameMap map;
   final Map<String, dynamic> properties;
-  final Vector2 playerPosition;
-  Key get key => UniqueKey();
-  Object? arguments;
 
   MapItem({
+    required this.id,
     required this.map,
-    required this.playerPosition,
     Map<String, dynamic>? properties,
   }) : properties = properties ?? {};
 }
 
 class MapNavigatorController extends ChangeNotifier {
-  final Map<String, MapItem> _maps;
+  final Map<String, MapItemBuilder> _maps;
   final String? _initialMap;
-  late MapItem _currentMap;
-  MapItem get current => _currentMap;
+  late MapItemBuilder _currentMap;
+  Object? _arguments;
+  MapItem get current => _currentMap(_arguments);
+  Object? get arguments => _arguments;
 
   MapNavigatorController({
-    required Map<String, MapItem> maps,
+    required Map<String, MapItemBuilder> maps,
     String? initialMap,
   })  : _maps = maps,
         _initialMap = initialMap {
@@ -36,13 +36,14 @@ class MapNavigatorController extends ChangeNotifier {
     final map = _maps[name];
     if (map != null) {
       _currentMap = map;
-      _currentMap.arguments = arguments;
+      _arguments = arguments;
       notifyListeners();
     }
   }
 
-  void toMap(MapItem map) {
-    _currentMap = map;
+  void toMap(MapItem map, {Object? arguments}) {
+    _currentMap = (_) => map;
+    _arguments = arguments;
     notifyListeners();
   }
 }
