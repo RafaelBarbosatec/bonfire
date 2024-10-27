@@ -11,7 +11,8 @@ typedef BonfireMapBuilder = Widget Function(
   MapItem map,
 );
 
-typedef MapItemBuilder = MapItem Function(Object? arguments);
+typedef MapItemBuilder = MapItem Function(
+    BuildContext context, Object? arguments);
 
 class MapNavigator extends StatefulWidget {
   final Map<String, MapItemBuilder> maps;
@@ -77,7 +78,7 @@ class _MapNavigatorState extends State<MapNavigator> {
       child: ListenableBuilder(
         listenable: controller,
         builder: (context, child) {
-          final current = controller.current;
+          final current = controller.current(context, controller.arguments);
           return AnimatedSwitcher(
             duration: widget.transitionDuration,
             layoutBuilder:

@@ -6,7 +6,7 @@ import 'package:example/pages/mini_games/multi_scenario/utils/enums/map_id_enum.
 
 abstract class Maps {
   static get maps => {
-        MapBiomeId.biome1.name: (args) {
+        MapBiomeId.biome1.name: (context, args) {
           return MapItem(
             id: MapBiomeId.biome1.name,
             map: WorldMapByTiled(
@@ -16,7 +16,7 @@ abstract class Maps {
             ),
           );
         },
-        MapBiomeId.biome2.name: (args) => MapItem(
+        MapBiomeId.biome2.name: (context, args) => MapItem(
               id: MapBiomeId.biome2.name,
               map: WorldMapByTiled(
                 WorldMapReader.fromAsset(MultiScenarioAssets.mapBiome2),

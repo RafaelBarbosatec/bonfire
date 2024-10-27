@@ -18,7 +18,7 @@ class MapNavigatorController extends ChangeNotifier {
   final String? _initialMap;
   late MapItemBuilder _currentMap;
   Object? _arguments;
-  MapItem get current => _currentMap(_arguments);
+  MapItemBuilder get current => _currentMap;
   Object? get arguments => _arguments;
 
   MapNavigatorController({
@@ -42,7 +42,7 @@ class MapNavigatorController extends ChangeNotifier {
   }
 
   void toMap(MapItem map, {Object? arguments}) {
-    _currentMap = (_) => map;
+    _currentMap = (_, __) => map;
     _arguments = arguments;
     notifyListeners();
   }
