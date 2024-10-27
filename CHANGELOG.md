@@ -1,7 +1,7 @@
 # 3.11.0
 - Adds `MapNavigator`. Structure to facilitate map navigations.
 - Update `MultiScenario` example to use `MapNavigator`.
-- Some otimizations.
+- Some optimizations.
 
 # 3.10.6
 - Update `tiledjsonreader`
