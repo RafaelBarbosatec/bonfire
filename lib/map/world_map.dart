@@ -146,7 +146,6 @@ class WorldMap extends GameMap {
     await super.onLoad();
     await addAll(layers.map(LayerMapper.toLayerComponent));
     _confMap(gameRef.size, calculateSize: true);
-    _searchTilesToRender();
   }
 
   bool _checkNeedUpdateTiles() {

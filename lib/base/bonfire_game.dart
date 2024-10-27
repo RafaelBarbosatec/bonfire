@@ -153,11 +153,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   FutureOr<void> onLoad() async {
-    await super.onLoad();
     initializeCollisionDetection(
       mapDimensions: size.toRect(),
     );
-
+    await super.onLoad();
     camera.viewport.children.query<PlayerController>().forEach((element) {
       if (!element.containObservers) {
         element.addObserver(
@@ -185,6 +184,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   void update(double dt) {
+    print('update');
     super.update(dt);
     _intervalUpdateOder.update(dt);
     _intervalOprimizeTree.update(dt);
