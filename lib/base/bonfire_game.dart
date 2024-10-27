@@ -184,7 +184,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   void update(double dt) {
-    print('update');
     super.update(dt);
     _intervalUpdateOder.update(dt);
     _intervalOprimizeTree.update(dt);
