@@ -153,11 +153,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   FutureOr<void> onLoad() async {
-    await super.onLoad();
     initializeCollisionDetection(
-      mapDimensions: Rect.zero,
+      mapDimensions: size.toRect(),
     );
-
+    await super.onLoad();
     camera.viewport.children.query<PlayerController>().forEach((element) {
       if (!element.containObservers) {
         element.addObserver(
@@ -459,9 +458,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   void _optimizeCollisionTree() {
-    scheduleMicrotask(
-      () => collisionDetection.broadphase.tree.optimize(),
-    );
+    scheduleMicrotask(collisionDetection.broadphase.tree.optimize);
   }
 
   void _updateOrderPriorityMicrotask() {

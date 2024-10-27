@@ -38,4 +38,11 @@ enum Direction {
     }
     return false;
   }
+
+  factory Direction.fromName(String name) {
+    return Direction.values.firstWhere(
+      (e) => e.name == name,
+      orElse: () => Direction.down,
+    );
+  }
 }

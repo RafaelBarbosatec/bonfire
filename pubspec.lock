@@ -244,10 +244,10 @@ packages:
     dependency: "direct main"
     description:
       name: tiledjsonreader
-      sha256: d1ed2ec7bf1025d71afe306aa67d8477db0b57b70ec10a44e6c630d445836f06
+      sha256: "5d5731f17830f48ae8f926ddb2d81a5b7890d6047f78e35a13a29da9834aee32"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.0"
+    version: "1.4.1"
   typed_data:
     dependency: transitive
     description:
@@ -268,10 +268,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: "5c5f338a667b4c644744b661f309fb8080bb94b18a7e91ef1dbd343bed00ed6d"
+      sha256: f652077d0bdf60abe4c1f6377448e8655008eef28f128bc023f7b5e8dfeb48fc
       url: "https://pub.dev"
     source: hosted
-    version: "14.2.5"
+    version: "14.2.4"
   web:
     dependency: transitive
     description:
