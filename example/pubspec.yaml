@@ -43,7 +43,7 @@ flutter:
   uses-material-design: true
 
   shaders:
-    - shaders/myshader.frag
+    - shaders/waterShader.frag
 
   assets:
     - assets/
@@ -72,3 +72,4 @@ flutter:
     - assets/images/lpc/gloves/
     - assets/images/multi_scenario/tile/
     - assets/images/spritefusion/
+    - assets/images/solaria/

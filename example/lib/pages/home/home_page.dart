@@ -27,6 +27,7 @@ import 'package:example/pages/path_finding/path_finding_page.dart';
 import 'package:example/pages/player/platform/platform_player_page.dart';
 import 'package:example/pages/player/rotation/rotation_player_page.dart';
 import 'package:example/pages/player/simple/simple_player_page.dart';
+import 'package:example/pages/shader/shader_page.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -256,6 +257,16 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       SectionDrawer(
+        itens: [
+          ItemDrawer(
+            name: 'Shader',
+            builder: (_) => const ShaderPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/shader',
+          ),
+        ],
+      ),
+      SectionDrawer(
         name: 'Parallax',
         itens: [
           ItemDrawer(
@@ -272,6 +283,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      
       SectionDrawer(
         name: 'Mini games',
         itens: [
