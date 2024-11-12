@@ -17,8 +17,8 @@ class ShaderPage extends StatelessWidget {
         Keyboard(),
       ],
       cameraConfig: CameraConfig(
-        initialMapZoomFit: InitialMapZoomFitEnum.fitHeight,
-        moveOnlyMapArea: true,
+        initialMapZoomFit: InitialMapZoomFitEnum.fitWidth,
+        // moveOnlyMapArea: true,
       ),
       components: [
         ShaderConfiguration(),
@@ -32,7 +32,7 @@ class ShaderConfiguration extends GameComponent {
 
   late ui.Image noise;
 
-  final Color toneColor = Colors.blue.withOpacity(0.5);
+  final Color toneColor = const Color(0xFF5ca4ec);
 
   @override
   Future<void> onLoad() async {
@@ -62,7 +62,7 @@ class ShaderConfiguration extends GameComponent {
   }
 
   Future<void> _loadShader() async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(Duration.zero);
     gameRef.map.layersComponent.elementAtOrNull(1)?.shader = shader;
   }
 }
