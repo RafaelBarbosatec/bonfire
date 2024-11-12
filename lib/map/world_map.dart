@@ -50,6 +50,7 @@ class WorldMap extends GameMap {
 
   List<TileComponent> _renderedTiles = [];
 
+  @override
   Iterable<TileLayerComponent> get layersComponent =>
       children.whereType<TileLayerComponent>();
 

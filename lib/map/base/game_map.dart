@@ -34,4 +34,6 @@ abstract class GameMap extends GameComponent {
 
   @override
   bool get isVisible => true;
+
+  Iterable<TileLayerComponent> get layersComponent;
 }

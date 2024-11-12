@@ -6,6 +6,8 @@ import 'package:bonfire/bonfire.dart';
 mixin DirectionAnimation on Movement {
   SimpleDirectionAnimation? animation;
 
+  Vector2 get animationScale => size.clone()..divide(animation!.animationSize);
+
   @override
   void render(Canvas canvas) {
     super.render(canvas);

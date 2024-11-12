@@ -43,6 +43,8 @@ class SimpleDirectionAnimation {
   bool _isFlipHorizontally = false;
   bool _isFlipVertically = false;
 
+  Vector2 get animationSize => _idleRightAnim!.frames.first.sprite.srcSize;
+
   bool get isFlipHorizontally => _isFlipHorizontally;
   set isFlipHorizontally(bool value) {
     _isFlipHorizontally = value;
