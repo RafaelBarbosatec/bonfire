@@ -63,6 +63,7 @@ class ShaderConfiguration extends GameComponent {
 
   Future<void> _loadShader() async {
     await Future.delayed(Duration.zero);
-    gameRef.map.layersComponent.elementAtOrNull(1)?.shader = shader;
+    final layer = gameRef.map.layersComponent.elementAtOrNull(1);
+    layer?.shader = shader;
   }
 }

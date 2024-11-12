@@ -30,11 +30,16 @@ mixin UseShader on PositionComponent {
   void renderTree(ui.Canvas canvas) {
     if (_runShader) {
       decorator.applyChain(
-        (p0) {
-          _applyShader(p0, render);
-          for (var c in children) {
-            _applyShader(p0, c.renderTree);
-          }
+        (decoratorCanvas) {
+          _applyShader(
+            decoratorCanvas,
+            (recorderCanvas) {
+              render(recorderCanvas);
+              for (var c in children) {
+                c.renderTree(recorderCanvas);
+              }
+            },
+          );
         },
         canvas,
       );
