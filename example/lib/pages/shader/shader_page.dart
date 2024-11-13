@@ -17,7 +17,7 @@ class ShaderPage extends StatelessWidget {
       ],
       cameraConfig: CameraConfig(
         initialMapZoomFit: InitialMapZoomFitEnum.fitWidth,
-        // moveOnlyMapArea: true,
+        moveOnlyMapArea: true,
       ),
       components: [
         ShaderConfiguration(),
