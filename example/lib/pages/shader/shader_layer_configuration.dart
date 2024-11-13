@@ -20,8 +20,8 @@ class ShaderConfiguration extends GameComponent {
     valueGradiente = await Flame.images.load('noise/value_noise.png');
     shader.setImageSampler(1, noiseGradiente); // noise
     shader.setImageSampler(2, valueGradiente); // noise
-    shader.setFloat(3, 0.05); //scroll x
-    shader.setFloat(4, 0.05); //scroll y
+    shader.setFloat(3, 0.04); //scroll x
+    shader.setFloat(4, 0.04); //scroll y
     shader.setFloat(5, toneColor.red / 255 * toneColor.opacity);
     shader.setFloat(6, toneColor.green / 255 * toneColor.opacity);
     shader.setFloat(7, toneColor.blue / 255 * toneColor.opacity);
