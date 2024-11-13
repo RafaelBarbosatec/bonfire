@@ -44,6 +44,7 @@ flutter:
 
   shaders:
     - shaders/waterShader.frag
+    - shaders/waterShaderV2.frag
 
   assets:
     - assets/
@@ -73,3 +74,4 @@ flutter:
     - assets/images/multi_scenario/tile/
     - assets/images/spritefusion/
     - assets/images/solaria/
+    - assets/images/noise/

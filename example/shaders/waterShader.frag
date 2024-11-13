@@ -22,6 +22,6 @@ void main() {
   vec2 distorted_uv = uv + (noise_col.rg * 2.0 - 1.0) * distortion_strength;
   
   vec4 screen_col = texture(uTexture, distorted_uv);
-  float alpha = clamp(toneColor.a, 0.0, 1.0);
+
   fragColor = mix(screen_col,toneColor,0.6);
 }
