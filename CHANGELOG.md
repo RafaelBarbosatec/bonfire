@@ -1,4 +1,4 @@
-# next
+# 3.12.0
 - Adds `UseShader` mixin.
 
 # 3.11.0
