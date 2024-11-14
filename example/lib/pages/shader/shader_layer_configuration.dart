@@ -39,5 +39,6 @@ class ShaderConfiguration extends GameComponent {
     await Future.delayed(Duration.zero);
     final layer = gameRef.map.layersComponent.elementAtOrNull(1);
     layer?.shader = shader;
+    layer?.shaderComponentStatic = true;
   }
 }

@@ -22,6 +22,12 @@ mixin UseShader on PositionComponent {
   void update(double dt) {
     if (_runShader) {
       _shaderTime += dt;
+      shader!.setFloat(0, _shaderTime);
+      shader!.setFloat(1, width);
+      shader!.setFloat(2, height);
+      if (_shaderTime > 100000000) {
+        _shaderTime = 0;
+      }
     }
     super.update(dt);
   }
@@ -50,28 +56,27 @@ mixin UseShader on PositionComponent {
 
   void _applyShader(ui.Canvas canvas, Function(ui.Canvas canvas) apply) {
     ui.PictureRecorder recorder = ui.PictureRecorder();
-
     ui.Canvas canvasRecorder = ui.Canvas(recorder);
     canvasRecorder.scale(shaderCanvasScale);
     apply(canvasRecorder);
 
     if (shaderComponentStatic) {
-      _snapshot ??= recorder.endRecording().toImageSync(
-            (width * shaderCanvasScale).floor(),
-            (height * shaderCanvasScale).floor(),
-          );
+      if (_snapshot == null) {
+        _snapshot = recorder.endRecording().toImageSync(
+              (width * shaderCanvasScale).floor(),
+              (height * shaderCanvasScale).floor(),
+            );
+        shader!.setImageSampler(0, _snapshot!);
+      }
     } else {
       _snapshot = recorder.endRecording().toImageSync(
             (width * shaderCanvasScale).floor(),
             (height * shaderCanvasScale).floor(),
           );
+      shader!.setImageSampler(0, _snapshot!);
     }
 
     _paintShader ??= ui.Paint()..color = const Color(0xFFFFFFFF);
-    shader!.setFloat(0, _shaderTime);
-    shader!.setFloat(1, width);
-    shader!.setFloat(2, height);
-    shader!.setImageSampler(0, _snapshot!);
 
     canvas.drawRect(
       ui.Rect.fromLTWH(0, 0, width, height),
