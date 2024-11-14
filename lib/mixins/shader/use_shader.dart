@@ -2,6 +2,8 @@ import 'dart:ui' as ui;
 
 import 'package:bonfire/bonfire.dart';
 
+export 'shader_setter.dart';
+
 mixin UseShader on PositionComponent {
   ui.FragmentShader? shader;
   double shaderCanvasScale = 1;

@@ -19,23 +19,33 @@ class ShaderConfiguration extends GameComponent {
     shader = progam.fragmentShader();
     noiseGradiente = await Flame.images.load('noise/gradiente_noise.png');
     valueGradiente = await Flame.images.load('noise/value_noise.png');
-    shader.setImageSampler(1, noiseGradiente); // noise
-    shader.setImageSampler(2, valueGradiente); // noise
-    shader.setFloat(3, 0.05); //distorion Strength
-    shader.setFloat(4, 0.04); //scroll x
-    shader.setFloat(5, 0.04); //scroll y
 
-    // tone color
-    shader.setFloat(6, toneColor.red / 255 * toneColor.opacity);
-    shader.setFloat(7, toneColor.green / 255 * toneColor.opacity);
-    shader.setFloat(8, toneColor.blue / 255 * toneColor.opacity);
-    shader.setFloat(9, toneColor.opacity);
+    ShaderSetter(values: [
+      SetterImage(noiseGradiente),
+      SetterImage(valueGradiente),
+      SetterDouble(0.05),
+      SetterVector2(Vector2.all(0.04)),
+      SetterColor(toneColor),
+      SetterColor(lightColor),
+    ]).apply(shader);
 
-    // light color
-    shader.setFloat(10, lightColor.red / 255 * toneColor.opacity);
-    shader.setFloat(11, lightColor.green / 255 * toneColor.opacity);
-    shader.setFloat(12, lightColor.blue / 255 * toneColor.opacity);
-    shader.setFloat(13, lightColor.opacity);
+    // shader.setImageSampler(1, noiseGradiente); // noise
+    // shader.setImageSampler(2, valueGradiente); // noise
+    // shader.setFloat(3, 0.05); //distorion Strength
+    // shader.setFloat(4, 0.04); //scroll x
+    // shader.setFloat(5, 0.04); //scroll y
+
+    // // tone color
+    // shader.setFloat(6, toneColor.red / 255 * toneColor.opacity);
+    // shader.setFloat(7, toneColor.green / 255 * toneColor.opacity);
+    // shader.setFloat(8, toneColor.blue / 255 * toneColor.opacity);
+    // shader.setFloat(9, toneColor.opacity);
+
+    // // light color
+    // shader.setFloat(10, lightColor.red / 255 * toneColor.opacity);
+    // shader.setFloat(11, lightColor.green / 255 * toneColor.opacity);
+    // shader.setFloat(12, lightColor.blue / 255 * toneColor.opacity);
+    // shader.setFloat(13, lightColor.opacity);
     return super.onLoad();
   }
 
