@@ -9,6 +9,7 @@ class ShaderConfiguration extends GameComponent {
   late ui.Image valueGradiente;
 
   final Color toneColor = const Color(0xFF5ca4ec);
+  final Color lightColor = const Color(0xFFffffff);
 
   @override
   Future<void> onLoad() async {
@@ -20,12 +21,21 @@ class ShaderConfiguration extends GameComponent {
     valueGradiente = await Flame.images.load('noise/value_noise.png');
     shader.setImageSampler(1, noiseGradiente); // noise
     shader.setImageSampler(2, valueGradiente); // noise
-    shader.setFloat(3, 0.04); //scroll x
-    shader.setFloat(4, 0.04); //scroll y
-    shader.setFloat(5, toneColor.red / 255 * toneColor.opacity);
-    shader.setFloat(6, toneColor.green / 255 * toneColor.opacity);
-    shader.setFloat(7, toneColor.blue / 255 * toneColor.opacity);
-    shader.setFloat(8, toneColor.opacity);
+    shader.setFloat(3, 0.05); //distorion Strength
+    shader.setFloat(4, 0.04); //scroll x
+    shader.setFloat(5, 0.04); //scroll y
+
+    // tone color
+    shader.setFloat(6, toneColor.red / 255 * toneColor.opacity);
+    shader.setFloat(7, toneColor.green / 255 * toneColor.opacity);
+    shader.setFloat(8, toneColor.blue / 255 * toneColor.opacity);
+    shader.setFloat(9, toneColor.opacity);
+
+    // light color
+    shader.setFloat(10, lightColor.red / 255 * toneColor.opacity);
+    shader.setFloat(11, lightColor.green / 255 * toneColor.opacity);
+    shader.setFloat(12, lightColor.blue / 255 * toneColor.opacity);
+    shader.setFloat(13, lightColor.opacity);
     return super.onLoad();
   }
 

@@ -4,16 +4,17 @@ uniform float uTime; // TIME
 uniform vec2 uSize;  // COMPONETE SIZE
 uniform sampler2D uTexture; // COMPONETE TEXTURE
 
+uniform float distortionStrength; // TIME
 uniform sampler2D uNoise;
 uniform sampler2D uSecondNoise;
 uniform vec2 scroll;
 uniform vec4 toneColor;
+uniform vec4 lightColor;
 
 out vec4 fragColor;
 
 void main() {
   vec2 scroll2 = scroll * -1;
-  float distortion_strength = 0.05;
  
   vec2 uv = FlutterFragCoord().xy / uSize;
 
@@ -22,8 +23,7 @@ void main() {
 
   float depth = texture(uNoise,scrolledUV).r * texture(uSecondNoise,scrolledUV2 ).r;
 
-  vec4 screen_col = texture(uTexture, uv +distortion_strength * vec2(depth));
-  vec4 light_color = vec4(1.0, 1.0, 1.0, 1.0);
-  vec4 topLight = smoothstep(0.4, 0.5, depth) * light_color;
+  vec4 screen_col = texture(uTexture, uv + distortionStrength * vec2(depth));
+  vec4 topLight = smoothstep(0.4, 0.5, depth) * lightColor;
   fragColor = mix(screen_col+topLight ,toneColor,0.8);
 }
