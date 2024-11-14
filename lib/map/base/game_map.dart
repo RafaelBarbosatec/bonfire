@@ -3,7 +3,7 @@ import 'package:bonfire/map/base/layer.dart';
 
 export 'package:bonfire/map/base/tile_layer_component.dart';
 
-abstract class GameMap extends GameComponent {
+abstract class GameMap extends GameComponent with UseShader {
   List<Layer> layers;
   double sizeToUpdate;
   double tileSize = 0.0;
@@ -34,4 +34,6 @@ abstract class GameMap extends GameComponent {
 
   @override
   bool get isVisible => true;
+
+  Iterable<TileLayerComponent> get layersComponent;
 }

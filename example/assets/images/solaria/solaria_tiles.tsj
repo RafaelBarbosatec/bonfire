@@ -1,0 +1,14 @@
+{ "columns":56,
+ "image":"solaria_tiles.png",
+ "imageheight":240,
+ "imagewidth":448,
+ "margin":0,
+ "name":"solaria_tiles",
+ "spacing":0,
+ "tilecount":1680,
+ "tiledversion":"1.10.2",
+ "tileheight":8,
+ "tilewidth":8,
+ "type":"tileset",
+ "version":"1.10"
+}

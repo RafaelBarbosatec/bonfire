@@ -1,3 +1,6 @@
+# 3.12.0
+- Adds `UseShader` mixin.
+
 # 3.11.0
 - Adds `MapNavigator`. Structure to facilitate map navigations.
 - Update `MultiScenario` example to use `MapNavigator`.
