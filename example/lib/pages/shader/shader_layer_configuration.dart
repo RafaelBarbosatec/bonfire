@@ -29,10 +29,12 @@ class ShaderConfiguration extends GameComponent {
       values: [
         SetterImage(noiseGradiente),
         SetterImage(valueGradiente),
-        SetterDouble(0.05),
-        SetterVector2(Vector2.all(0.04)),
-        SetterColor(toneColor),
-        SetterColor(lightColor),
+        SetterDouble(controller.config.distortionStrength),
+        SetterVector2(Vector2.all(controller.config.speed)),
+        SetterColor(controller.config.toneColor),
+        SetterColor(controller.config.lightColor),
+        SetterDouble(controller.config.opacity),
+        SetterVector2(controller.config.lightRange),
       ],
     ).apply(shader);
 
@@ -46,10 +48,9 @@ class ShaderConfiguration extends GameComponent {
   }
 
   @override
-  void onRemove(){
+  void onRemove() {
     super.onRemove();
-  controller.removeListener(_controllerListener);
-
+    controller.removeListener(_controllerListener);
   }
 
   Future<void> _loadShader() async {
@@ -67,6 +68,8 @@ class ShaderConfiguration extends GameComponent {
         SetterVector2(Vector2.all(controller.config.speed)),
         SetterColor(controller.config.toneColor),
         SetterColor(controller.config.lightColor),
+        SetterDouble(controller.config.opacity),
+        SetterVector2(controller.config.lightRange),
       ],
     ).apply(shader);
   }

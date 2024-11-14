@@ -4,12 +4,14 @@ uniform float uTime; // TIME
 uniform vec2 uSize;  // COMPONETE SIZE
 uniform sampler2D uTexture; // COMPONETE TEXTURE
 
-uniform float distortionStrength; // TIME
+uniform float distortionStrength;
 uniform sampler2D uNoise;
 uniform sampler2D uSecondNoise;
 uniform vec2 scroll;
 uniform vec4 toneColor;
 uniform vec4 lightColor;
+uniform float opacity;
+uniform vec2 lightRange;
 
 out vec4 fragColor;
 
@@ -24,6 +26,6 @@ void main() {
   float depth = texture(uNoise,scrolledUV).r * texture(uSecondNoise,scrolledUV2 ).r;
 
   vec4 screen_col = texture(uTexture, uv + distortionStrength * vec2(depth));
-  vec4 topLight = smoothstep(0.4, 0.5, depth) * lightColor;
-  fragColor = mix(screen_col+topLight ,toneColor,0.8);
+  vec4 topLight = smoothstep(lightRange.x, lightRange.y, depth) * lightColor;
+  fragColor = mix(screen_col+topLight ,toneColor, opacity);
 }
