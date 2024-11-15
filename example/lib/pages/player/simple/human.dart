@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/person_sprite_sheet.dart';
 
-class HumanPlayer extends SimplePlayer with BlockMovementCollision, UseShader {
+class HumanPlayer extends SimplePlayer with BlockMovementCollision {
   HumanPlayer({
     required Vector2 position,
   }) : super(
@@ -14,7 +14,7 @@ class HumanPlayer extends SimplePlayer with BlockMovementCollision, UseShader {
         );
 
   @override
-  Future<void> onLoad() {
+  Future<void> onLoad() async {
     /// Adds rectangle collision
     add(
       RectangleHitbox(
