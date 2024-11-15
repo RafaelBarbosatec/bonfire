@@ -32,7 +32,8 @@ class ShaderSetter {
   final List<ShaderSetterItem> values;
   final int startFloatIndex;
   final int startImageIndex;
-
+  int _indexFloat = 0;
+  int _indexImage = 0;
   ShaderSetter({
     required this.values,
     this.startFloatIndex = 3,
@@ -40,36 +41,38 @@ class ShaderSetter {
   });
 
   void apply(FragmentShader shader) {
-    int indexFloat = startFloatIndex;
-    int indexImage = startImageIndex;
+    _indexFloat = startFloatIndex;
+    _indexImage = startImageIndex;
     for (var item in values) {
       if (item is SetterDouble) {
-        shader.setFloat(indexFloat, item.value);
-        indexFloat++;
+        _setFloat(shader, item.value);
       }
       if (item is SetterImage) {
-        shader.setImageSampler(indexImage, item.value);
-        indexImage++;
+        _setSampler(shader, item.value);
       }
 
       if (item is SetterVector2) {
-        shader.setFloat(indexFloat, item.value.x);
-        indexFloat++;
-        shader.setFloat(indexFloat, item.value.y);
-        indexFloat++;
+        _setFloat(shader, item.value.x);
+        _setFloat(shader, item.value.y);
       }
 
       if (item is SetterColor) {
         final color = item.value;
-        shader.setFloat(indexFloat, color.red / 255 * color.opacity);
-        indexFloat++;
-        shader.setFloat(indexFloat, color.green / 255 * color.opacity);
-        indexFloat++;
-        shader.setFloat(indexFloat, color.blue / 255 * color.opacity);
-        indexFloat++;
-        shader.setFloat(indexFloat, color.opacity);
-        indexFloat++;
+        _setFloat(shader, color.red / 255 * color.opacity);
+        _setFloat(shader, color.green / 255 * color.opacity);
+        _setFloat(shader, color.blue / 255 * color.opacity);
+        _setFloat(shader, color.opacity);
       }
     }
+  }
+
+  void _setFloat(FragmentShader shader, double value) {
+    shader.setFloat(_indexFloat, value);
+    _indexFloat++;
+  }
+
+  void _setSampler(FragmentShader shader, Image value) {
+    shader.setImageSampler(_indexImage, value);
+    _indexImage++;
   }
 }
