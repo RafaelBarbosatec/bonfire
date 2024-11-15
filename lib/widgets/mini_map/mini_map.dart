@@ -105,7 +105,7 @@ class _MiniMapState extends State<MiniMap> {
               borderRadius: widget.borderRadius ?? BorderRadius.zero,
               child: CustomPaint(
                 painter: MiniMapCanvas(
-                  components: widget.game.visibles(),
+                  components: widget.game.query(),
                   tiles: widget.game.map.getRenderedTiles(),
                   cameraPosition: cameraPosition,
                   gameSize:
