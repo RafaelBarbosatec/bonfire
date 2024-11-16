@@ -23,7 +23,9 @@ jobs:
       - name: Copy credentials
         run: |
          mkdir -p ~/Library/Application\ Support/dart
-         cat <<EOF > ~/Library/Application\ Support/dart/pub-credentials.json ${{ secrets.CREDENTIAL_JSON }} EOF
+         cat <<EOF > ~/Library/Application\ Support/dart/pub-credentials.json
+         ${{ secrets.CREDENTIAL_JSON }}
+         EOF
          mkdir -p ~/.pub-cache
          ln -s ~/Library/Application\ Support/dart/pub-credentials.json credentials.json
       - name: Publishing
