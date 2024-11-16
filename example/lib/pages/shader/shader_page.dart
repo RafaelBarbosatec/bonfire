@@ -20,6 +20,7 @@ class _ShaderPageState extends State<ShaderPage> {
     controller = ShaderConfigController();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -43,7 +44,10 @@ class _ShaderPageState extends State<ShaderPage> {
             ],
           ),
         ),
-        Expanded(child: ShaderConfigPanel(controller: controller,)),
+        Expanded(
+            child: ShaderConfigPanel(
+          controller: controller,
+        )),
       ],
     );
   }

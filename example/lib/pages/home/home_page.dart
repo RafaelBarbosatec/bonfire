@@ -283,7 +283,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      
       SectionDrawer(
         name: 'Mini games',
         itens: [
