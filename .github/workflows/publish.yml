@@ -1,8 +1,9 @@
 name: Publish plugin
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+  # release:
+  #   types: [published]
 
 jobs:
   publish:
@@ -19,10 +20,11 @@ jobs:
         with:
           channel: 'stable'
           cache: true
-      - name: Publish
-        uses: sakebook/actions-flutter-pub-publisher@v1.4.1
-        with:
-          credential: ${{ secrets.CREDENTIAL_JSON }}
-          flutter_package: true
-          skip_test: true
-          dry_run: true
+      - name: Copy credentials
+        run: |
+         mkdir -p ~/Library/Application\ Support/dart
+         cat <<EOF > ~/Library/Application\ Support/dart/pub-credentials.json ${{ secrets.CREDENTIAL_JSON }} EOF
+         mkdir -p ~/.pub-cache
+         ln -s ~/Library/Application\ Support/dart/pub-credentials.json credentials.json
+      - name: Publishing
+        run: flutter pub publish -f
