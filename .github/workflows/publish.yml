@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Intall dart
+        uses: dart-lang/setup-dart@v1
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:

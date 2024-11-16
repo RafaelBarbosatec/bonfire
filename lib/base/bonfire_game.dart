@@ -182,18 +182,16 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
   }
 
+  bool _gameMounted = false;
   @override
   void update(double dt) {
     super.update(dt);
     _intervalUpdateOder.update(dt);
     _intervalOprimizeTree.update(dt);
-  }
-
-  @override
-  void onMount() {
-    super.onMount();
-    _notifyGameMounted();
-    onReady?.call(this);
+    if (!_gameMounted && camera.world?.children.isNotEmpty == true) {
+      _gameMounted = true;
+      Future.delayed(Duration.zero, _notifyGameMounted);
+    }
   }
 
   @override
@@ -471,12 +469,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   void _notifyGameMounted() {
     void gameMontedComp(GameComponent c) => c.onGameMounted();
     query<GameComponent>().forEach(gameMontedComp);
-    for (var child in camera.children) {
-      if (child is GameComponent) {
-        child.onGameMounted();
-      }
-      child.children.query<GameComponent>().forEach(gameMontedComp);
-    }
+    camera.world?.children.query<GameComponent>().forEach(gameMontedComp);
+    onReady?.call(this);
   }
 
   void _notifyGameDetach() {

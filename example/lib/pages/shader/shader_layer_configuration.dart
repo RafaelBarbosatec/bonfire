@@ -42,19 +42,18 @@ class ShaderConfiguration extends GameComponent {
   }
 
   @override
-  void onMount() {
-    _loadShader();
-    super.onMount();
-  }
-
-  @override
   void onRemove() {
     super.onRemove();
     controller.removeListener(_controllerListener);
   }
 
-  Future<void> _loadShader() async {
-    await Future.delayed(Duration.zero);
+  @override
+  void onGameMounted() {
+    super.onGameMounted();
+    _setupShader();
+  }
+
+  void _setupShader() {
     final layer = gameRef.map.layersComponent.elementAtOrNull(1);
     layer?.shader = shader;
     layer?.shaderComponentStatic = true;

@@ -2,14 +2,16 @@ import 'dart:ui' as ui;
 
 import 'package:bonfire/bonfire.dart';
 
+import 'shader_util.dart';
+
 export 'shader_setter.dart';
 
 mixin UseShader on PositionComponent {
   ui.FragmentShader? shader;
   double shaderCanvasScale = 1;
-  ui.Paint? _paintShader;
   bool shaderComponentStatic = false;
   ui.Image? _snapshot;
+  ui.Paint? _paint;
 
   double _shaderTime = 0;
   bool get _runShader => shader != null && _canSee;
@@ -24,9 +26,9 @@ mixin UseShader on PositionComponent {
   void update(double dt) {
     if (_runShader) {
       _shaderTime += dt;
-      shader!.setFloat(0, _shaderTime);
-      shader!.setFloat(1, width);
-      shader!.setFloat(2, height);
+      shader?.setFloat(0, _shaderTime);
+      shader?.setFloat(1, width);
+      shader?.setFloat(2, height);
       if (_shaderTime > 100000000) {
         _shaderTime = 0;
       }
@@ -56,33 +58,17 @@ mixin UseShader on PositionComponent {
     }
   }
 
-  void _applyShader(ui.Canvas canvas, Function(ui.Canvas canvas) apply) {
-    ui.PictureRecorder recorder = ui.PictureRecorder();
-    ui.Canvas canvasRecorder = ui.Canvas(recorder);
-    canvasRecorder.scale(shaderCanvasScale);
-    apply(canvasRecorder);
-
-    if (shaderComponentStatic) {
-      if (_snapshot == null) {
-        _snapshot = recorder.endRecording().toImageSync(
-              (width * shaderCanvasScale).floor(),
-              (height * shaderCanvasScale).floor(),
-            );
-        shader!.setImageSampler(0, _snapshot!);
-      }
-    } else {
-      _snapshot = recorder.endRecording().toImageSync(
-            (width * shaderCanvasScale).floor(),
-            (height * shaderCanvasScale).floor(),
-          );
-      shader!.setImageSampler(0, _snapshot!);
-    }
-
-    _paintShader ??= ui.Paint()..color = const Color(0xFFFFFFFF);
-
-    canvas.drawRect(
-      ui.Rect.fromLTWH(0, 0, width, height),
-      _paintShader!..shader = shader!,
+  void _applyShader(ui.Canvas canvas, Function(ui.Canvas canvas) record) {
+    _paint ??= ui.Paint()..color = const ui.Color(0xFFFFFFFF);
+    _snapshot = ShaderUtils.renderShader(
+      shader: shader,
+      canvas: canvas,
+      record: record,
+      size: size,
+      paint: _paint!,
+      shaderCanvasScale: shaderCanvasScale,
+      shaderComponentStatic: shaderComponentStatic,
+      snapshot: _snapshot,
     );
   }
 }
