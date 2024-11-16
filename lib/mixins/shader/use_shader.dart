@@ -11,6 +11,7 @@ mixin UseShader on PositionComponent {
   double shaderCanvasScale = 1;
   bool shaderComponentStatic = false;
   ui.Image? _snapshot;
+  ui.Paint? _paint;
 
   double _shaderTime = 0;
   bool get _runShader => shader != null && _canSee;
@@ -58,11 +59,13 @@ mixin UseShader on PositionComponent {
   }
 
   void _applyShader(ui.Canvas canvas, Function(ui.Canvas canvas) record) {
+    _paint ??= ui.Paint()..color = const ui.Color(0xFFFFFFFF);
     _snapshot = ShaderUtils.renderShader(
       shader: shader,
       canvas: canvas,
       record: record,
       size: size,
+      paint: _paint!,
       shaderCanvasScale: shaderCanvasScale,
       shaderComponentStatic: shaderComponentStatic,
       snapshot: _snapshot,
