@@ -267,5 +267,8 @@ abstract class GameComponent extends PositionComponent
 
   void onGameMounted() {
     _gameMounted = true;
+    children.query<GameComponent>().forEach((c) {
+      c.onGameMounted();
+    });
   }
 }

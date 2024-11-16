@@ -1,5 +1,6 @@
 [next]
 - Resolve the alignment and visibility issues when using the MiniMap widget with non-1.0 zoom values.
+- Adds `randomMovementArea` param in `RandomMovement` mixin.
 
 # 3.12.0
 - Adds `UseShader` mixin.

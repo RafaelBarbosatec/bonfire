@@ -42,12 +42,15 @@ mixin RandomMovement on Movement {
 
   late Random _random;
 
-  double? distanceToArrived;
+  double? _distanceToArrived;
   Direction _currentDirection = Direction.left;
   Vector2 _originPosition = Vector2.zero();
 
   double _lastMinDistance = 0;
   double _travelledDistance = 0;
+
+  // Area where the random movement will be made
+  ShapeHitbox? randomMovementArea;
 
   /// Method that bo used in [update] method.
   void runRandomMovement(
@@ -68,15 +71,26 @@ mixin RandomMovement on Movement {
     _onStartMove = onStartMove;
     _onStopMove = onStopMove;
 
-    if (distanceToArrived == null) {
+    if (_distanceToArrived == null) {
       if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
-        final diffDistane = maxDistance - minDistance;
-        distanceToArrived = minDistance + _random.nextDouble() * diffDistane;
-        final randomInt = _random.nextInt(directions.length);
-        _currentDirection = directions.values[randomInt];
+        _distanceToArrived = _getDistance(minDistance, maxDistance);
+        _currentDirection = _getDirection(directions);
         _originPosition = absoluteCenter.clone();
+        if (randomMovementArea != null) {
+          final targetPosition = _getTargetPosition(
+            _currentDirection,
+            _distanceToArrived,
+          );
+          final insideArea = randomMovementArea!.containsLocalPoint(
+            targetPosition,
+          );
+          if (!insideArea) {
+            _stop();
+            return;
+          }
+        }
         if (checkDirectionWithRayCast) {
-          if (!canMove(_currentDirection, displacement: distanceToArrived)) {
+          if (!canMove(_currentDirection, displacement: _distanceToArrived)) {
             _stop();
             return;
           }
@@ -85,7 +99,7 @@ mixin RandomMovement on Movement {
       }
     } else {
       _travelledDistance = absoluteCenter.distanceTo(_originPosition);
-      if (_travelledDistance >= distanceToArrived!) {
+      if (_travelledDistance >= _distanceToArrived!) {
         _stop();
         return;
       }
@@ -121,7 +135,7 @@ mixin RandomMovement on Movement {
     }
     _onStopMove = null;
     _onStartMove = null;
-    distanceToArrived = null;
+    _distanceToArrived = null;
     _originPosition = Vector2.zero();
     stopMove();
   }
@@ -130,5 +144,20 @@ mixin RandomMovement on Movement {
   void onMount() {
     _random = Random(Random().nextInt(1000));
     super.onMount();
+  }
+
+  double? _getDistance(double minDistance, double maxDistance) {
+    final diffDistane = maxDistance - minDistance;
+    return minDistance + _random.nextDouble() * diffDistane;
+  }
+
+  Direction _getDirection(RandomMovementDirections directions) {
+    final randomInt = _random.nextInt(directions.length);
+    return directions.values[randomInt];
+  }
+
+  Vector2 _getTargetPosition(
+      Direction currentDirection, double? distanceToArrived) {
+    return absoluteCenter + currentDirection.toVector2() * distanceToArrived!;
   }
 }
