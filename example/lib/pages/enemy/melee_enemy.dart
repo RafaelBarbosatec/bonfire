@@ -16,15 +16,18 @@ class MeleeEnemy extends SimpleEnemy {
 
   @override
   void update(double dt) {
-    seeAndMoveToPlayer(closePlayer: (p) {
-      animation?.showStroke(Colors.white, 1);
-      if (checkInterval('attack', 600, dt)) {
-        _playAttackAnimation();
-      }
-    }, notObserved: () {
-      animation?.hideStroke();
-      return true;
-    });
+    seeAndMoveToPlayer(
+      closePlayer: (p) {
+        animation?.showStroke(Colors.white, 1);
+        if (checkInterval('attack', 600, dt)) {
+          _playAttackAnimation();
+        }
+      },
+      notObserved: () {
+        animation?.hideStroke();
+        return true;
+      },
+    );
     super.update(dt);
   }
 
