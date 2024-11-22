@@ -46,7 +46,6 @@ mixin RandomMovement on Movement {
   Direction _currentDirection = Direction.left;
   Vector2 _originPosition = Vector2.zero();
 
-  double _lastMinDistance = 0;
   double _travelledDistance = 0;
 
   // Area where the random movement will be made
@@ -67,42 +66,33 @@ mixin RandomMovement on Movement {
     Function(Direction direction)? onStartMove,
     Function()? onStopMove,
   }) {
-    _lastMinDistance = minDistance;
     _onStartMove = onStartMove;
     _onStopMove = onStopMove;
 
     if (_distanceToArrived == null) {
       if (checkInterval(_KEY_INTERVAL_KEEP_STOPPED, timeKeepStopped, dt)) {
-        _distanceToArrived = _getDistance(minDistance, maxDistance);
-        _currentDirection = _getDirection(directions);
+        final target = _getTarget(
+          minDistance,
+          maxDistance,
+          checkDirectionWithRayCast,
+        );
+        if (target == null) {
+          _stop();
+          return;
+        }
+        _currentDirection = target.direction;
+        _distanceToArrived = target.distance;
         _originPosition = absoluteCenter.clone();
-        if (randomMovementArea != null) {
-          final targetPosition = _getTargetPosition(
-            _currentDirection,
-            _distanceToArrived,
-          );
-          final insideArea = randomMovementArea!.containsLocalPoint(
-            targetPosition,
-          );
-          if (!insideArea) {
-            _stop();
-            return;
-          }
-        }
-        if (checkDirectionWithRayCast) {
-          if (!canMove(_currentDirection, displacement: _distanceToArrived)) {
-            _stop();
-            return;
-          }
-        }
         _onStartMove?.call(_currentDirection);
       }
     } else {
       _travelledDistance = absoluteCenter.distanceTo(_originPosition);
-      if (_travelledDistance >= _distanceToArrived!) {
+      final isCanMove = canMove(_currentDirection, displacement: speed);
+      if (_travelledDistance >= _distanceToArrived! || !isCanMove) {
         _stop();
         return;
       }
+
       moveFromDirection(_currentDirection, speed: speed);
       if (updateAngle) {
         angle = _currentDirection.toRadians();
@@ -130,9 +120,6 @@ mixin RandomMovement on Movement {
 
   void _stop() {
     _onStopMove?.call();
-    if (_travelledDistance < _lastMinDistance) {
-      resetInterval(_KEY_INTERVAL_KEEP_STOPPED);
-    }
     _onStopMove = null;
     _onStartMove = null;
     _distanceToArrived = null;
@@ -146,7 +133,7 @@ mixin RandomMovement on Movement {
     super.onMount();
   }
 
-  double? _getDistance(double minDistance, double maxDistance) {
+  double _getDistance(double minDistance, double maxDistance) {
     final diffDistane = maxDistance - minDistance;
     return minDistance + _random.nextDouble() * diffDistane;
   }
@@ -157,7 +144,63 @@ mixin RandomMovement on Movement {
   }
 
   Vector2 _getTargetPosition(
-      Direction currentDirection, double? distanceToArrived) {
+    Direction currentDirection,
+    double? distanceToArrived,
+  ) {
     return absoluteCenter + currentDirection.toVector2() * distanceToArrived!;
   }
+
+  _RandomPositionTarget? _getTarget(
+    double minDistance,
+    double maxDistance,
+    bool checkDirectionWithRayCast,
+  ) {
+    int index = 0;
+    while (index < 100) {
+      final distance = _getDistance(minDistance, maxDistance);
+      final direction = _getDirection(RandomMovementDirections.all);
+      final targetPosition = _getTargetPosition(direction, distance);
+      bool isRaycastOk = true;
+
+      if (checkDirectionWithRayCast) {
+        isRaycastOk = canMove(
+          _currentDirection,
+          displacement: _distanceToArrived,
+        );
+      }
+
+      if (randomMovementArea != null) {
+        final insideArea = randomMovementArea!.containsPoint(
+          targetPosition,
+        );
+        if (insideArea && isRaycastOk) {
+          return _RandomPositionTarget(
+            position: targetPosition,
+            direction: direction,
+            distance: distance,
+          );
+        }
+      } else if (isRaycastOk) {
+        return _RandomPositionTarget(
+          position: targetPosition,
+          direction: direction,
+          distance: distance,
+        );
+      }
+
+      index++;
+    }
+    return null;
+  }
+}
+
+class _RandomPositionTarget {
+  final Vector2 position;
+  final Direction direction;
+  final double distance;
+
+  _RandomPositionTarget(
+      {required this.position,
+      required this.direction,
+      required this.distance});
 }
