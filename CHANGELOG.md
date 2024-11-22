@@ -1,3 +1,6 @@
+# 3.12.4
+- Switched to declarative mode to apply Grandle plugins
+
 # 3.12.3
 - `RandomMovement` improvements
 
