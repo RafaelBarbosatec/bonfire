@@ -75,6 +75,7 @@ mixin RandomMovement on Movement {
           minDistance,
           maxDistance,
           checkDirectionWithRayCast,
+          directions,
         );
         if (target == null) {
           _stop();
@@ -154,11 +155,12 @@ mixin RandomMovement on Movement {
     double minDistance,
     double maxDistance,
     bool checkDirectionWithRayCast,
+    RandomMovementDirections directions,
   ) {
     int index = 0;
     while (index < 100) {
       final distance = _getDistance(minDistance, maxDistance);
-      final direction = _getDirection(RandomMovementDirections.all);
+      final direction = _getDirection(directions);
       final targetPosition = _getTargetPosition(direction, distance);
       bool isRaycastOk = true;
 
