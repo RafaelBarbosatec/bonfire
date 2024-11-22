@@ -1,4 +1,4 @@
-# 3.12.2
+# 3.12.3
 - `RandomMovement` improvements
 
 # 3.12.1
