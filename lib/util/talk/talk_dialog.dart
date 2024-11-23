@@ -20,7 +20,7 @@ class TalkDialog extends StatefulWidget {
     this.speed = 50,
   }) : super(key: key);
 
-  static show(
+  static Future<T?> show<T>(
     BuildContext context,
     List<Say> sayList, {
     VoidCallback? onFinish,
@@ -31,14 +31,18 @@ class TalkDialog extends StatefulWidget {
     List<LogicalKeyboardKey> logicalKeyboardKeysToNext = const [],
     EdgeInsetsGeometry? padding,
     bool dismissible = false,
+    bool useSafeArea = true,
+    bool useRootNavigator = true,
     Alignment talkAlignment = Alignment.bottomCenter,
     TextStyle? style,
     int speed = 50,
   }) {
-    showDialog(
+    return showDialog<T>(
       barrierDismissible: dismissible,
       barrierColor: backgroundColor,
       context: context,
+      useSafeArea: useSafeArea,
+      useRootNavigator: useRootNavigator,
       builder: (BuildContext context) {
         return TalkDialog(
           says: sayList,
