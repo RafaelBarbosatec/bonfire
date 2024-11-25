@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/base/layer.dart';
@@ -11,10 +12,12 @@ class WorldMap extends GameMap {
   Vector2 lastCameraWindow = Vector2.zero();
   double lastMinorZoom = 1.0;
   Vector2? lastSizeScreen;
+  bool infinite;
   bool _buildingTiles = false;
   bool _needUpdateRenderedTiles = false;
   Vector2 _mapPosition = Vector2.zero();
   Vector2 _mapSize = Vector2.zero();
+  double _mapTileMinPosition = 0.0;
 
   tree.QuadTree<Tile>? quadTree;
 
@@ -25,6 +28,7 @@ class WorldMap extends GameMap {
   WorldMap(
     List<Layer> layers, {
     double tileSizeToUpdate = 0,
+    this.infinite = false,
   }) : super(
           layers,
           sizeToUpdate: tileSizeToUpdate,
@@ -84,6 +88,12 @@ class WorldMap extends GameMap {
     }
   }
 
+  void refreshMapTileMinPosition() {
+    for (var element in layersComponent) {
+      _mapTileMinPosition = min(_mapTileMinPosition, element.tileMinPosition);
+    }
+  }
+
   void _confMap(Vector2 sizeScreen, {bool calculateSize = false}) {
     lastSizeScreen = sizeScreen;
     if (calculateSize) {
@@ -91,7 +101,7 @@ class WorldMap extends GameMap {
       lastMinorZoom = gameRef.camera.zoom;
       _calculatePositionAndSize();
       for (var layer in layersComponent) {
-        layer.initLayer(size, sizeScreen);
+        layer.initLayer(size, sizeScreen, infiniteMap: infinite);
       }
     }
     if (sizeToUpdate == 0) {
@@ -140,6 +150,11 @@ class WorldMap extends GameMap {
   @override
   Vector2 getMapPosition() {
     return _mapPosition;
+  }
+
+  @override
+  double getMapTileMinPosition() {
+    return _mapTileMinPosition;
   }
 
   @override

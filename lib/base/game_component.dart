@@ -52,10 +52,18 @@ abstract class GameComponent extends PositionComponent
 
   @override
   int get priority {
-    if (renderAboveComponents && hasGameRef) {
+    if (!hasGameRef) {
+      return LayerPriority.getComponentPriority(rectCollision.bottom.floor());
+    }
+
+    if (renderAboveComponents) {
       return LayerPriority.getAbovePriority(gameRef.highestPriority);
     }
-    return LayerPriority.getComponentPriority(rectCollision.bottom.floor());
+
+    int collisionPriority = rectCollision.bottom.floor();
+    int basePriority = gameRef.map.getMapTileMinPosition().floor().abs();
+
+    return LayerPriority.getComponentPriority(basePriority + collisionPriority);
   }
 
   @override

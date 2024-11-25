@@ -12,6 +12,7 @@ abstract class GameMap extends GameComponent with UseShader {
 
   Iterable<TileComponent> getRenderedTiles();
 
+  double getMapTileMinPosition();
   Vector2 getMapPosition();
   Vector2 getMapSize();
   void refreshMap();

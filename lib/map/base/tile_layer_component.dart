@@ -12,10 +12,12 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
   List<Tile> _tiles;
   bool _isVisible = true;
   double _tileSize = 0.0;
+  double _tileMinPosition = 0.0;
 
   Vector2? _lastScreenSize;
 
   double get tileSize => _tileSize;
+  double get tileMinPosition => _tileMinPosition;
   tree.QuadTree<Tile>? _quadTree;
 
   bool get visible => _isVisible;
@@ -53,20 +55,22 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
       for (var tile in _tiles) {
         if (tile.right > w) w = tile.right;
         if (tile.bottom > h) h = tile.bottom;
+        _tileMinPosition = min(_tileMinPosition, min(tile.left, tile.top));
       }
       size = Vector2(w, h);
     }
   }
 
-  void initLayer(Vector2 gameSize, Vector2 screenSize) {
+  void initLayer(Vector2 gameSize, Vector2 screenSize, {bool infiniteMap = false,}) {
     if (gameSize.isZero()) return;
-    _createQuadTree(gameSize, screenSize);
+    _createQuadTree(gameSize, screenSize, infiniteMap: infiniteMap);
   }
 
   void _createQuadTree(
     Vector2 mapSize,
     Vector2 screenSize, {
     bool force = false,
+    bool infiniteMap = false,
   }) {
     if (_lastScreenSize == screenSize && !force) return;
     _lastScreenSize = screenSize.clone();
@@ -77,13 +81,7 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
     int maxItems = 100;
     final minScreen = min(screenSize.x, screenSize.y);
     maxItems = ((minScreen / tileSize) / 2).ceil();
-    _quadTree = tree.QuadTree(
-      0,
-      0,
-      treeSize.x,
-      treeSize.y,
-      maxItems: maxItems,
-    );
+    _quadTree = infiniteMap ? _createInfiniteQuadTree(maxItems) : _createFiniteQuadTree(treeSize, maxItems);
 
     for (var tile in _tiles) {
       _quadTree?.insert(
@@ -92,6 +90,30 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
         id: tile.id,
       );
     }
+  }
+
+  tree.QuadTree<Tile> _createInfiniteQuadTree(int maxItems) {
+    return tree.QuadTree(
+      -90000,
+      -90000,
+      100000,
+      100000,
+      maxItems: maxItems,
+    );
+  }
+
+  tree.QuadTree<Tile> _createFiniteQuadTree(Vector2 treeSize, int maxItems) {
+    return tree.QuadTree(
+      0,
+      0,
+      treeSize.x,
+      treeSize.y,
+      maxItems: maxItems,
+    );
+  }
+
+  List<Tile> getTiles() {
+    return _tiles;
   }
 
   void updateTiles(List<Tile> tiles) {
