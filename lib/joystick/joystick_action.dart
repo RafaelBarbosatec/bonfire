@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/extensions/color_extensions.dart';
 import 'package:flame/camera.dart' as camera;
 import 'package:flutter/material.dart';
 
@@ -51,15 +52,18 @@ class JoystickAction {
     this.opacityBackground = 0.5,
     this.opacityKnob = 0.8,
   }) {
-    _loader?.add(AssetToLoad(sprite, (value) {
-      this.sprite = value;
-    }));
-    _loader?.add(AssetToLoad(spritePressed, (value) {
-      this.spritePressed = value;
-    }));
-    _loader?.add(AssetToLoad(spriteBackgroundDirection, (value) {
-      this.spriteBackgroundDirection = value;
-    }));
+    _loader?.add(
+      AssetToLoad<Sprite>(sprite, (value) => this.sprite = value),
+    );
+    _loader?.add(
+      AssetToLoad<Sprite>(spritePressed, (value) => this.spritePressed = value),
+    );
+    _loader?.add(
+      AssetToLoad<Sprite>(
+        spriteBackgroundDirection,
+        (value) => this.spriteBackgroundDirection = value,
+      ),
+    );
     _sizeBackgroundDirection = sizeFactorBackgroundDirection * size;
     _tileSize = _sizeBackgroundDirection / 2;
   }
@@ -76,7 +80,7 @@ class JoystickAction {
     _viewport = viewport;
     _screenSize = viewport.virtualSize.clone();
     _controller = controller;
-    double radius = size / 2;
+    final radius = size / 2;
     final screenRect = Rect.fromLTRB(
       margin.left + radius,
       margin.top + radius,
@@ -84,7 +88,7 @@ class JoystickAction {
       _screenSize.y - margin.bottom - radius,
     );
 
-    Offset osBackground = alignment.withinRect(screenRect);
+    final osBackground = alignment.withinRect(screenRect);
     _rect = Rect.fromCircle(
       center: osBackground,
       radius: radius,
@@ -102,7 +106,7 @@ class JoystickAction {
     if (_rectBackgroundDirection != null && _dragging && enableDirection) {
       if (spriteBackgroundDirection == null) {
         _paintBackground?.let((paintBackground) {
-          double radiusBackground = _rectBackgroundDirection!.width / 2;
+          final radiusBackground = _rectBackgroundDirection!.width / 2;
           c.drawCircle(
             Offset(
               _rectBackgroundDirection!.left + radiusBackground,
@@ -127,7 +131,7 @@ class JoystickAction {
           rect,
         );
       } else {
-        double radiusAction = rect.width / 2;
+        final radiusAction = rect.width / 2;
         c.drawCircle(
           Offset(
             rect.left + radiusAction,
@@ -143,17 +147,19 @@ class JoystickAction {
   void update(double dt) {
     if (_dragPosition == null ||
         _rectBackgroundDirection == null ||
-        _rect == null) return;
+        _rect == null) {
+      return;
+    }
     if (_dragging) {
-      double radAngle = atan2(
+      final radAngle = atan2(
         _dragPosition!.dy - _rectBackgroundDirection!.center.dy,
         _dragPosition!.dx - _rectBackgroundDirection!.center.dx,
       );
 
       // Distance between the center of joystick background & drag position
-      Vector2 centerPosition = _rectBackgroundDirection!.center.toVector2();
-      Vector2 dragPosition = _dragPosition!.toVector2();
-      double dist = centerPosition.distanceTo(dragPosition);
+      final centerPosition = _rectBackgroundDirection!.center.toVector2();
+      final dragPosition = _dragPosition!.toVector2();
+      var dist = centerPosition.distanceTo(dragPosition);
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the
@@ -161,18 +167,18 @@ class JoystickAction {
       dist = min(dist, _tileSize);
 
       // Calculation the knob position
-      double nextX = dist * cos(radAngle);
-      double nextY = dist * sin(radAngle);
-      Offset nextPoint = Offset(nextX, nextY);
+      final nextX = dist * cos(radAngle);
+      final nextY = dist * sin(radAngle);
+      final nextPoint = Offset(nextX, nextY);
 
-      Offset diff = Offset(
+      final diff = Offset(
             _rectBackgroundDirection!.center.dx + nextPoint.dx,
             _rectBackgroundDirection!.center.dy + nextPoint.dy,
           ) -
           _rect!.center;
       _rect = _rect!.shift(diff);
 
-      double intensity = dist / _tileSize;
+      final intensity = dist / _tileSize;
 
       _controller.onJoystickAction(
         JoystickActionEvent(
@@ -183,7 +189,7 @@ class JoystickAction {
         ),
       );
     } else {
-      Offset diff = _dragPosition! - _rect!.center;
+      final diff = _dragPosition! - _rect!.center;
       _rect = _rect!.shift(diff);
     }
   }
@@ -251,19 +257,19 @@ class JoystickAction {
 
     if (spriteBackgroundDirection == null) {
       _paintBackground = Paint()
-        ..color = color.withOpacity(opacityBackground)
+        ..color = color.setOpacity(opacityBackground)
         ..style = PaintingStyle.fill;
     }
 
     if (sprite == null) {
       _paintAction = Paint()
-        ..color = color.withOpacity(opacityKnob)
+        ..color = color.setOpacity(opacityKnob)
         ..style = PaintingStyle.fill;
     }
 
     if (spritePressed == null) {
       _paintActionPressed = Paint()
-        ..color = color.withOpacity(opacityBackground)
+        ..color = color.setOpacity(opacityBackground)
         ..style = PaintingStyle.fill;
     }
 

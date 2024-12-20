@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/extensions/color_extensions.dart';
 import 'package:flame/camera.dart' as camera;
 import 'package:flutter/material.dart';
 
@@ -49,13 +50,17 @@ class JoystickDirectional {
     this.color = Colors.blueGrey,
     this.enableDiagonalInput = true,
   }) {
-    _loader?.add(AssetToLoad(spriteBackgroundDirectional, (value) {
-      _backgroundSprite = value;
-    }));
+    _loader?.add(
+      AssetToLoad<Sprite>(spriteBackgroundDirectional, (value) {
+        _backgroundSprite = value;
+      }),
+    );
 
-    _loader?.add(AssetToLoad(spriteKnobDirectional, (value) {
-      _knobSprite = value;
-    }));
+    _loader?.add(
+      AssetToLoad<Sprite>(spriteKnobDirectional, (value) {
+        _knobSprite = value;
+      }),
+    );
 
     _tileSize = size / 2;
   }
@@ -81,14 +86,14 @@ class JoystickDirectional {
       _screenSize.y - margin.bottom - radius,
     );
 
-    Offset osBackground = alignment.withinRect(screenRect);
+    final osBackground = alignment.withinRect(screenRect);
 
     _backgroundRect = Rect.fromCircle(
       center: osBackground,
       radius: radius,
     );
 
-    Offset osKnob = Offset(
+    final osKnob = Offset(
       _backgroundRect!.center.dx,
       _backgroundRect!.center.dy,
     );
@@ -110,10 +115,12 @@ class JoystickDirectional {
         );
       } else {
         _paintBackground?.let((paintBg) {
-          double radiusBackground = background.width / 2;
+          final radiusBackground = background.width / 2;
           canvas.drawCircle(
-            Offset(background.left + radiusBackground,
-                background.top + radiusBackground),
+            Offset(
+              background.left + radiusBackground,
+              background.top + radiusBackground,
+            ),
             radiusBackground,
             paintBg,
           );
@@ -126,7 +133,7 @@ class JoystickDirectional {
         _knobSprite?.renderRect(canvas, knobRect);
       } else {
         _paintKnob?.let((paintKnob) {
-          double radiusKnob = knobRect.width / 2;
+          final radiusKnob = knobRect.width / 2;
           canvas.drawCircle(
             Offset(
               knobRect.left + radiusKnob,
@@ -146,17 +153,17 @@ class JoystickDirectional {
     }
 
     if (_dragging) {
-      double radAngle = atan2(
+      final radAngle = atan2(
         _dragPosition!.dy - _backgroundRect!.center.dy,
         _dragPosition!.dx - _backgroundRect!.center.dx,
       );
 
-      double degrees = radAngle * 180 / pi;
+      final degrees = radAngle * 180 / pi;
 
       // Distance between the center of joystick background & drag position
-      Vector2 centerPosition = _backgroundRect!.center.toVector2();
-      Vector2 dragPosition = _dragPosition!.toVector2();
-      double dist = centerPosition.distanceTo(dragPosition);
+      final centerPosition = _backgroundRect!.center.toVector2();
+      final dragPosition = _dragPosition!.toVector2();
+      var dist = centerPosition.distanceTo(dragPosition);
 
       // The maximum distance for the knob position the edge of
       // the background + half of its own size. The knob can wander in the
@@ -164,95 +171,113 @@ class JoystickDirectional {
       dist = min(dist, _tileSize);
 
       // Calculation the knob position
-      double nextX = dist * cos(radAngle);
-      double nextY = dist * sin(radAngle);
-      Offset nextPoint = Offset(nextX, nextY);
+      final nextX = dist * cos(radAngle);
+      final nextY = dist * sin(radAngle);
+      final nextPoint = Offset(nextX, nextY);
 
-      Offset diff = Offset(
+      final diff = Offset(
             _backgroundRect!.center.dx + nextPoint.dx,
             _backgroundRect!.center.dy + nextPoint.dy,
           ) -
           _knobRect!.center;
       _knobRect = _knobRect!.shift(diff);
 
-      double intensity = dist / _tileSize;
+      final intensity = dist / _tileSize;
 
       if (intensity == 0) {
-        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.IDLE,
-          intensity: intensity,
-          radAngle: radAngle,
-        ));
+        _controller.onJoystickChangeDirectional(
+          JoystickDirectionalEvent(
+            directional: JoystickMoveDirectional.IDLE,
+            intensity: intensity,
+            radAngle: radAngle,
+          ),
+        );
         return;
       }
 
       if (degrees > -22.5 && degrees <= 22.5) {
-        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.MOVE_RIGHT,
-          intensity: intensity,
-          radAngle: radAngle,
-        ));
+        _controller.onJoystickChangeDirectional(
+          JoystickDirectionalEvent(
+            directional: JoystickMoveDirectional.MOVE_RIGHT,
+            intensity: intensity,
+            radAngle: radAngle,
+          ),
+        );
       }
 
       if (enableDiagonalInput && degrees > 22.5 && degrees <= 67.5) {
-        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
-          intensity: intensity,
-          radAngle: radAngle,
-        ));
+        _controller.onJoystickChangeDirectional(
+          JoystickDirectionalEvent(
+            directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
+            intensity: intensity,
+            radAngle: radAngle,
+          ),
+        );
       }
 
       if (degrees > 67.5 && degrees <= 112.5) {
-        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.MOVE_DOWN,
-          intensity: intensity,
-          radAngle: radAngle,
-        ));
+        _controller.onJoystickChangeDirectional(
+          JoystickDirectionalEvent(
+            directional: JoystickMoveDirectional.MOVE_DOWN,
+            intensity: intensity,
+            radAngle: radAngle,
+          ),
+        );
       }
 
       if (enableDiagonalInput && degrees > 112.5 && degrees <= 157.5) {
-        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
-          intensity: intensity,
-          radAngle: radAngle,
-        ));
+        _controller.onJoystickChangeDirectional(
+          JoystickDirectionalEvent(
+            directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
+            intensity: intensity,
+            radAngle: radAngle,
+          ),
+        );
       }
 
       if ((degrees > 157.5 && degrees <= 180) ||
           (degrees >= -180 && degrees <= -157.5)) {
-        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.MOVE_LEFT,
-          intensity: intensity,
-          radAngle: radAngle,
-        ));
+        _controller.onJoystickChangeDirectional(
+          JoystickDirectionalEvent(
+            directional: JoystickMoveDirectional.MOVE_LEFT,
+            intensity: intensity,
+            radAngle: radAngle,
+          ),
+        );
       }
 
       if (enableDiagonalInput && degrees > -157.5 && degrees <= -112.5) {
-        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.MOVE_UP_LEFT,
-          intensity: intensity,
-          radAngle: radAngle,
-        ));
+        _controller.onJoystickChangeDirectional(
+          JoystickDirectionalEvent(
+            directional: JoystickMoveDirectional.MOVE_UP_LEFT,
+            intensity: intensity,
+            radAngle: radAngle,
+          ),
+        );
       }
 
       if (degrees > -112.5 && degrees <= -67.5) {
-        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.MOVE_UP,
-          intensity: intensity,
-          radAngle: radAngle,
-        ));
+        _controller.onJoystickChangeDirectional(
+          JoystickDirectionalEvent(
+            directional: JoystickMoveDirectional.MOVE_UP,
+            intensity: intensity,
+            radAngle: radAngle,
+          ),
+        );
       }
 
       if (enableDiagonalInput && degrees > -67.5 && degrees <= -22.5) {
-        _controller.onJoystickChangeDirectional(JoystickDirectionalEvent(
-          directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
-          intensity: intensity,
-          radAngle: radAngle,
-        ));
+        _controller.onJoystickChangeDirectional(
+          JoystickDirectionalEvent(
+            directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
+            intensity: intensity,
+            radAngle: radAngle,
+          ),
+        );
       }
     } else {
       if (_knobRect != null) {
-        Offset diff = _dragPosition! - _knobRect!.center;
+        final diff = _dragPosition! - _knobRect!.center;
         _knobRect = _knobRect!.shift(diff);
       }
     }
@@ -266,7 +291,7 @@ class JoystickDirectional {
     _updateDirectionalRect(pos);
 
     _backgroundRect?.let((backgroundRect) {
-      Rect directional = Rect.fromLTWH(
+      final directional = Rect.fromLTWH(
         backgroundRect.left - 50,
         backgroundRect.top - 50,
         backgroundRect.width + 100,
@@ -297,15 +322,15 @@ class JoystickDirectional {
       _controller.onJoystickChangeDirectional(
         JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.IDLE,
-          intensity: 0.0,
-          radAngle: 0.0,
         ),
       );
     }
   }
 
   void _updateDirectionalRect(Offset position) {
-    if (isFixed) return;
+    if (isFixed) {
+      return;
+    }
     if (alignment.x == -1) {
       if (position.dx > _screenSize.x * 0.33) {
         return;
@@ -323,7 +348,7 @@ class JoystickDirectional {
       radius: size / 2,
     );
 
-    Offset osKnob = Offset(
+    final osKnob = Offset(
       _backgroundRect!.center.dx,
       _backgroundRect!.center.dy,
     );
@@ -337,12 +362,12 @@ class JoystickDirectional {
     await _loader?.load();
     if (_backgroundSprite == null) {
       _paintBackground = Paint()
-        ..color = color.withOpacity(0.5)
+        ..color = color.setOpacity(0.5)
         ..style = PaintingStyle.fill;
     }
 
     _paintKnob ??= Paint()
-      ..color = color.withOpacity(0.8)
+      ..color = color.setOpacity(0.8)
       ..style = PaintingStyle.fill;
 
     _loader = null;

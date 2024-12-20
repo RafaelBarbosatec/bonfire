@@ -47,10 +47,10 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
     if (_tiles.isNotEmpty) {
       _tileSize = _tiles.first.width;
 
-      double w = _tiles.first.right;
-      double h = _tiles.first.bottom;
+      var w = _tiles.first.right;
+      var h = _tiles.first.bottom;
 
-      for (var tile in _tiles) {
+      for (final tile in _tiles) {
         if (tile.right > w) w = tile.right;
         if (tile.bottom > h) h = tile.bottom;
       }
@@ -59,7 +59,9 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
   }
 
   void initLayer(Vector2 gameSize, Vector2 screenSize) {
-    if (gameSize.isZero()) return;
+    if (gameSize.isZero()) {
+      return;
+    }
     _createQuadTree(gameSize, screenSize);
   }
 
@@ -68,13 +70,15 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
     Vector2 screenSize, {
     bool force = false,
   }) {
-    if (_lastScreenSize == screenSize && !force) return;
+    if (_lastScreenSize == screenSize && !force) {
+      return;
+    }
     _lastScreenSize = screenSize.clone();
-    Vector2 treeSize = Vector2(
+    final treeSize = Vector2(
       mapSize.x / tileSize,
       mapSize.y / tileSize,
     );
-    int maxItems = 100;
+    var maxItems = 100;
     final minScreen = min(screenSize.x, screenSize.y);
     maxItems = ((minScreen / tileSize) / 2).ceil();
     _quadTree = tree.QuadTree(
@@ -85,7 +89,7 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
       maxItems: maxItems,
     );
 
-    for (var tile in _tiles) {
+    for (final tile in _tiles) {
       _quadTree?.insert(
         tile,
         Point(tile.x, tile.y),
@@ -100,7 +104,7 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
     _quadTree?.clear();
     _updateSizeAndPosition();
 
-    for (var tile in _tiles) {
+    for (final tile in _tiles) {
       _quadTree?.insert(
         tile,
         Point(tile.x, tile.y),
@@ -147,7 +151,7 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
     }
     _lastRectCamera = rectCamera;
 
-    List<Tile> visibleTiles = _quadTree!.query(
+    final visibleTiles = _quadTree!.query(
       rectCamera.getRectangleByTileSize(_tileSize),
     );
 
@@ -174,10 +178,10 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
 
   Future<void> _loadTile(Tile element) async {
     if (element.sprite != null) {
-      await MapAssetsManager.loadImage((element.sprite?.path ?? ''));
+      await MapAssetsManager.loadImage(element.sprite?.path ?? '');
     }
     if (element.animation != null) {
-      for (var frame in (element.animation?.frames ?? [])) {
+      for (final frame in (element.animation?.frames ?? <TileSprite>[])) {
         await MapAssetsManager.loadImage(frame.path);
       }
     }

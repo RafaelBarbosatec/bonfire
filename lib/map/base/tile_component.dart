@@ -31,7 +31,10 @@ class TileComponent extends GameComponent with UseAssetsLoader {
     );
     if (spritePath.isNotEmpty) {
       loader?.add(
-        AssetToLoad(Sprite.load(spritePath), (value) => _sprite = value),
+        AssetToLoad<Sprite>(
+          Sprite.load(spritePath),
+          (value) => _sprite = value,
+        ),
       );
     }
   }
@@ -101,7 +104,7 @@ class TileComponent extends GameComponent with UseAssetsLoader {
   @override
   Paint get paint {
     if (parent is HasPaint) {
-      return (parent as HasPaint).paint;
+      return (parent! as HasPaint).paint;
     }
     return super.paint;
   }
