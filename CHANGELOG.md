@@ -1,3 +1,6 @@
+# next
+- Update `a_star_algorithm`.
+
 # 3.12.4
 - Switched to declarative mode to apply Grandle plugins
 
