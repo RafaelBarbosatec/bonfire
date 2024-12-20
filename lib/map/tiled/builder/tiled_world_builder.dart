@@ -6,6 +6,8 @@ import 'dart:ui';
 import 'package:bonfire/background/background_image_game.dart';
 import 'package:bonfire/bonfire.dart' hide TileComponent;
 import 'package:bonfire/map/base/layer.dart';
+import 'package:bonfire/map/tiled/model/tiled_data_object_collision.dart';
+import 'package:bonfire/map/tiled/model/tiled_item_tile_set.dart';
 import 'package:bonfire/map/tiled/model/tiled_world_data.dart';
 import 'package:bonfire/map/util/map_layer_mapper.dart';
 import 'package:bonfire/util/collision_game_component.dart';
@@ -20,13 +22,7 @@ import 'package:tiledjsonreader/map/layer/objects.dart';
 import 'package:tiledjsonreader/map/layer/tile_layer.dart' as tiled;
 import 'package:tiledjsonreader/map/tile_set_detail.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
-import 'package:tiledjsonreader/tile_set/frame_animation.dart';
 import 'package:tiledjsonreader/tile_set/polygon.dart';
-import 'package:tiledjsonreader/tile_set/tile_set_item.dart';
-import 'package:tiledjsonreader/tile_set/tile_set_object.dart';
-
-import '../model/tiled_data_object_collision.dart';
-import '../model/tiled_item_tile_set.dart';
 
 typedef ObjectBuilder = GameComponent Function(
   TiledObjectProperties properties,
@@ -100,7 +96,7 @@ class TiledWorldBuilder {
   }
 
   Future<void> _load(TiledMap tiledMap) async {
-    for (var layer in tiledMap.layers ?? const <MapLayer>[]) {
+    for (final layer in tiledMap.layers ?? const <MapLayer>[]) {
       await _loadLayer(layer);
     }
   }
@@ -109,7 +105,9 @@ class TiledWorldBuilder {
     if (layer.visible != true) return;
 
     if (layer is tiled.TileLayer) {
-      _layers.add(MapLayerMapper.toLayer(layer, countTileLayer));
+      _layers.add(
+        MapLayerMapper.toLayer(layer, countTileLayer),
+      );
       await _addTileLayer(layer);
       countTileLayer++;
     }
@@ -124,7 +122,7 @@ class TiledWorldBuilder {
     }
 
     if (layer is GroupLayer) {
-      for (var layer in layer.layers ?? const <MapLayer>[]) {
+      for (final layer in layer.layers ?? const <MapLayer>[]) {
         await _loadLayer(layer);
       }
     }
@@ -136,24 +134,26 @@ class TiledWorldBuilder {
 
   Future<void> _addTileLayer(tiled.TileLayer tileLayer) async {
     if (tileLayer.visible != true) return;
-    int count = 0;
-    double offsetX = _getDoubleByProportion(tileLayer.offsetX);
-    double offsetY = _getDoubleByProportion(tileLayer.offsetY);
-    double opacity = tileLayer.opacity ?? 1.0;
-    bool layerIsAbove = tileLayer.properties
-            ?.where((element) =>
-                element.name == 'type' && element.value == ABOVE_TYPE)
+    var count = 0;
+    final offsetX = _getDoubleByProportion(tileLayer.offsetX);
+    final offsetY = _getDoubleByProportion(tileLayer.offsetY);
+    final opacity = tileLayer.opacity ?? 1.0;
+    final layerIsAbove = tileLayer.properties
+            ?.where(
+              (element) =>
+                  element.name == 'type' && element.value == ABOVE_TYPE,
+            )
             .isNotEmpty ??
         false;
-    for (var tile in tileLayer.data ?? const <int>[]) {
+    for (final tile in tileLayer.data ?? const <int>[]) {
       if (tile != 0) {
-        var data = _getDataTile(tile);
+        final data = _getDataTile(tile);
 
         if (data != null) {
-          bool tileIsAbove = ((data.type?.contains(ABOVE_TYPE) ?? false) ||
+          final tileIsAbove = (data.type?.contains(ABOVE_TYPE) ?? false) ||
               (data.tileClass?.contains(ABOVE_TYPE) ?? false) ||
-              layerIsAbove);
-          bool isDynamic = data.type?.contains(DYNAMIC_ABOVE_TYPE) ?? false;
+              layerIsAbove;
+          final isDynamic = data.type?.contains(DYNAMIC_ABOVE_TYPE) ?? false;
           if (tileIsAbove || isDynamic) {
             _addGameDecorationAbove(
               data,
@@ -212,8 +212,8 @@ class TiledWorldBuilder {
       comp = GameDecorationWithCollision.withAnimation(
         animation: data.animation!.getFutureSpriteAnimation(),
         position: Vector2(
-          _getX(count, (tileLayer.width?.toInt()) ?? 1) * _tileWidth,
-          _getY(count, (tileLayer.width?.toInt()) ?? 1) * _tileHeight,
+          _getX(count, tileLayer.width?.toInt() ?? 1) * _tileWidth,
+          _getY(count, tileLayer.width?.toInt() ?? 1) * _tileHeight,
         ),
         size: Vector2(_tileWidth, _tileHeight),
         collisions: data.collisions,
@@ -228,8 +228,8 @@ class TiledWorldBuilder {
         comp = GameDecorationWithCollision.withSprite(
           sprite: data.sprite!.getFutureSprite(),
           position: Vector2(
-            _getX(count, (tileLayer.width?.toInt()) ?? 1) * _tileWidth,
-            _getY(count, (tileLayer.width?.toInt()) ?? 1) * _tileHeight,
+            _getX(count, tileLayer.width?.toInt() ?? 1) * _tileWidth,
+            _getY(count, tileLayer.width?.toInt() ?? 1) * _tileHeight,
           ),
           size: Vector2(_tileWidth, _tileHeight),
           collisions: data.collisions,
@@ -262,15 +262,15 @@ class TiledWorldBuilder {
 
   TiledItemTileSet? _getDataTile(int gid) {
     final gidInfo = tiled.TileLayer.getGidInfo(gid);
-    int index = gidInfo.index;
+    final index = gidInfo.index;
 
     TileSetDetail? tileSetContain;
-    String pathTileset = '';
-    String imagePath = '';
-    int firsTgId = 0;
-    int tilesetFirsTgId = 0;
-    int widthCount = 1;
-    Vector2 spriteSize = Vector2.all(0);
+    var pathTileset = '';
+    var imagePath = '';
+    var firsTgId = 0;
+    var tilesetFirsTgId = 0;
+    var widthCount = 1;
+    var spriteSize = Vector2.all(0);
 
     try {
       tileSetContain = _tiledMap?.tileSets?.lastWhere((tileSet) {
@@ -298,7 +298,7 @@ class TiledWorldBuilder {
       // to cases that the tileSet contain individual image.
       if (tileSetContain?.image == null &&
           tileSetContain?.tiles?.isNotEmpty == true) {
-        int tilePosition = index - firsTgId;
+        final tilePosition = index - firsTgId;
         final tile = tileSetContain!.tiles![tilePosition];
         imagePath = tile.image ?? '';
         widthCount = 1;
@@ -313,14 +313,14 @@ class TiledWorldBuilder {
 
     if (tileSetContain != null) {
       final spritePosition = Vector2(
-        _getX((index - firsTgId), widthCount),
-        _getY((index - firsTgId), widthCount),
+        _getX(index - firsTgId, widthCount),
+        _getY(index - firsTgId, widthCount),
       );
 
       final pathSprite = '$_basePath$pathTileset$imagePath';
 
       TileSprite sprite;
-      String tileKey = '$pathSprite/${spritePosition.x}/${spritePosition.y}';
+      final tileKey = '$pathSprite/${spritePosition.x}/${spritePosition.y}';
       if (_tileModelSpriteCache.containsKey(tileKey)) {
         sprite = _tileModelSpriteCache[tileKey]!;
       } else {
@@ -334,13 +334,13 @@ class TiledWorldBuilder {
       final animation = _getAnimation(
         tileSetContain,
         pathTileset,
-        (index - tilesetFirsTgId),
+        index - tilesetFirsTgId,
         widthCount,
       );
 
       final object = _getCollision(
         tileSetContain,
-        (index - tilesetFirsTgId),
+        index - tilesetFirsTgId,
       );
 
       return TiledItemTileSet(
@@ -360,16 +360,16 @@ class TiledWorldBuilder {
 
   void _addObjects(ObjectLayer layer) {
     if (layer.visible != true) return;
-    bool isCollisionLayer = layer.layerClass?.toLowerCase() == 'collision';
-    double offsetX = _getDoubleByProportion(layer.offsetX);
-    double offsetY = _getDoubleByProportion(layer.offsetY);
-    for (var element in layer.objects ?? const <Objects>[]) {
-      double x = _getDoubleByProportion(element.x) + offsetX;
-      double y = _getDoubleByProportion(element.y) + offsetY;
-      double width = _getDoubleByProportion(element.width);
-      double height = _getDoubleByProportion(element.height);
-      double rotation = (element.rotation ?? 0) * pi / 180;
-      bool isObjectCollision =
+    final isCollisionLayer = layer.layerClass?.toLowerCase() == 'collision';
+    final offsetX = _getDoubleByProportion(layer.offsetX);
+    final offsetY = _getDoubleByProportion(layer.offsetY);
+    for (final element in layer.objects ?? const <Objects>[]) {
+      final x = _getDoubleByProportion(element.x) + offsetX;
+      final y = _getDoubleByProportion(element.y) + offsetY;
+      final width = _getDoubleByProportion(element.width);
+      final height = _getDoubleByProportion(element.height);
+      final rotation = (element.rotation ?? 0) * pi / 180;
+      final isObjectCollision =
           element.typeOrClass?.toLowerCase() == 'collision' || isCollisionLayer;
       final collision = _getCollisionObject(
         x,
@@ -382,7 +382,7 @@ class TiledWorldBuilder {
       );
 
       if (element.text != null) {
-        double fontSize = element.text!.pixelSize.toDouble();
+        var fontSize = element.text!.pixelSize.toDouble();
         fontSize = (_tileWidth * fontSize) / _tileWidthOrigin;
         _components.add(
           TextGameComponent(
@@ -442,28 +442,28 @@ class TiledWorldBuilder {
     TileSetDetail tileSetContain,
     int index,
   ) {
-    Iterable<TileSetItem> tileSetItemList = tileSetContain.tiles?.where(
+    final tileSetItemList = tileSetContain.tiles?.where(
           (element) => element.id == index,
         ) ??
         [];
 
     if (tileSetItemList.isNotEmpty) {
-      List<TileSetObject> tileSetObjectList =
+      final tileSetObjectList =
           tileSetItemList.first.objectGroup?.objects ?? [];
 
-      Map<String, dynamic> properties = MapLayerMapper.extractOtherProperties(
+      final properties = MapLayerMapper.extractOtherProperties(
         tileSetItemList.first.properties,
       );
 
-      List<ShapeHitbox> collisions = [];
+      final collisions = <ShapeHitbox>[];
 
       if (tileSetObjectList.isNotEmpty) {
-        for (var object in tileSetObjectList) {
-          double width = _getDoubleByProportion(object.width);
-          double height = _getDoubleByProportion(object.height);
+        for (final object in tileSetObjectList) {
+          final width = _getDoubleByProportion(object.width);
+          final height = _getDoubleByProportion(object.height);
 
-          double x = _getDoubleByProportion(object.x);
-          double y = _getDoubleByProportion(object.y);
+          final x = _getDoubleByProportion(object.x);
+          final y = _getDoubleByProportion(object.y);
 
           collisions.add(
             _getCollisionObject(
@@ -500,21 +500,21 @@ class TiledWorldBuilder {
       return null;
     }
 
-    TileSetItem tileSetItemList = filter.first;
+    final tileSetItemList = filter.first;
 
-    List<FrameAnimation> animationFrames = tileSetItemList.animation ?? [];
+    final animationFrames = tileSetItemList.animation ?? [];
 
-    List<TileSprite> frames = [];
-    if ((animationFrames.isNotEmpty)) {
-      double stepTime = (animationFrames[0].duration ?? 100) / 1000;
+    final frames = <TileSprite>[];
+    if (animationFrames.isNotEmpty) {
+      final stepTime = (animationFrames[0].duration ?? 100) / 1000;
 
-      for (var frame in animationFrames) {
-        double y = _getY((frame.tileid ?? 0), widthCount);
-        double x = _getX((frame.tileid ?? 0), widthCount);
+      for (final frame in animationFrames) {
+        final y = _getY(frame.tileid ?? 0, widthCount);
+        final x = _getX(frame.tileid ?? 0, widthCount);
 
         final spritePath = '$_basePath$pathTileset${tileSetContain.image}';
 
-        TileSprite sprite = TileSprite(
+        final sprite = TileSprite(
           path: spritePath,
           size: Vector2(
             tileSetContain.tileWidth ?? 0,
@@ -535,7 +535,9 @@ class TiledWorldBuilder {
   }
 
   void _addImageLayer(ImageLayer layer) {
-    if (!(layer.visible ?? false)) return;
+    if (!(layer.visible ?? false)) {
+      return;
+    }
     _components.add(
       BackgroundImageGame(
         id: layer.id,
@@ -591,10 +593,10 @@ class TiledWorldBuilder {
     List<Polygon> polygon,
     bool isObjectCollision,
   ) {
-    double minorX = _getDoubleByProportion(polygon.first.x);
-    double minorY = _getDoubleByProportion(polygon.first.y);
-    List<Vector2> points = polygon.map((e) {
-      Vector2 vector = Vector2(
+    var minorX = _getDoubleByProportion(polygon.first.x);
+    var minorY = _getDoubleByProportion(polygon.first.y);
+    var points = polygon.map((e) {
+      final vector = Vector2(
         _getDoubleByProportion(e.x),
         _getDoubleByProportion(e.y),
       );
@@ -621,8 +623,8 @@ class TiledWorldBuilder {
       }).toList();
     }
 
-    double alignX = x - points.first.x;
-    double alignY = y - points.first.y;
+    var alignX = x - points.first.x;
+    var alignY = y - points.first.y;
 
     if (isObjectCollision) {
       alignX = minorX;

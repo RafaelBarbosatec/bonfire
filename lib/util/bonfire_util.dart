@@ -4,13 +4,13 @@ import 'package:bonfire/bonfire.dart';
 
 class BonfireUtil {
   // ignore: constant_identifier_names
-  static const PI_180 = (180 / pi);
+  static const PI_180 = 180 / pi;
 
   static Direction getDirectionFromAngle(
     double angle, {
     double directionSpace = 2.5,
   }) {
-    double degrees = angle * PI_180;
+    final degrees = angle * PI_180;
     if (degrees > -directionSpace && degrees <= directionSpace) {
       return Direction.right;
     }
@@ -68,8 +68,6 @@ class BonfireUtil {
         return 135 / PI_180;
       case Direction.downRight:
         return 45 / PI_180;
-      default:
-        return 0;
     }
   }
 
@@ -85,11 +83,11 @@ class BonfireUtil {
     final s = sin(angle);
     final c = cos(angle);
 
-    double x1 = point.dx - center.dx;
-    double y1 = point.dy - center.dy;
+    final x1 = point.dx - center.dx;
+    final y1 = point.dy - center.dy;
 
-    double x2 = x1 * c - y1 * s;
-    double y2 = x1 * s + y1 * c;
+    final x2 = x1 * c - y1 * s;
+    final y2 = x1 * s + y1 * c;
 
     return Offset(x2 + center.dx, y2 + center.dy);
   }
@@ -99,8 +97,8 @@ class BonfireUtil {
     double speed,
     double angle,
   ) {
-    double nextX = speed * cos(angle);
-    double nextY = speed * sin(angle);
+    final nextX = speed * cos(angle);
+    final nextY = speed * sin(angle);
     return Vector2(point.x + nextX, point.y + nextY);
   }
 

@@ -1,5 +1,8 @@
 include: package:flame_lint/analysis_options.yaml
 
 analyzer:
+  errors:
+    avoid_catches_without_on_clauses: ignore
+    use_if_null_to_convert_nulls_to_bools: ignore
   exclude:
     - 'example/**'

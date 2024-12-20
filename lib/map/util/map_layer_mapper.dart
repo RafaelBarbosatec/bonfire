@@ -4,7 +4,7 @@ import 'package:tiledjsonreader/map/layer/map_layer.dart';
 import 'package:tiledjsonreader/map/layer/objects.dart';
 
 abstract class MapLayerMapper {
-  static toLayer(MapLayer layer, int priority) {
+  static Layer toLayer(MapLayer layer, int priority) {
     return Layer(
       id: layer.id,
       layerClass: layer.layerClass,
@@ -26,10 +26,11 @@ abstract class MapLayerMapper {
   }
 
   static Map<String, dynamic> extractOtherProperties(
-      List<Property>? properties) {
+    List<Property>? properties,
+  ) {
     final map = <String, dynamic>{};
 
-    for (var element in properties ?? const <Property>[]) {
+    for (final element in properties ?? const <Property>[]) {
       if (element.value != null && element.name != null) {
         map[element.name!] = element.value;
       }

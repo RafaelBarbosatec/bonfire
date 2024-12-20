@@ -11,7 +11,6 @@ class GameObject extends GameComponent
     required Vector2 position,
     required Vector2 size,
     required FutureOr<Sprite>? sprite,
-    Vector2? positionFromTarget,
     LightingConfig? lightingConfig,
     this.objectPriority,
     double angle = 0,
@@ -23,7 +22,7 @@ class GameObject extends GameComponent
     this.position = position;
     this.size = size;
     this.angle = angle;
-    loader?.add(AssetToLoad(sprite, (value) => this.sprite = value));
+    loader?.add(AssetToLoad<Sprite>(sprite, (value) => this.sprite = value));
     setupLighting(lightingConfig);
   }
 
