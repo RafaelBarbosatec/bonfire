@@ -1,5 +1,6 @@
 # next
 - Update `a_star_algorithm`.
+- InitialMapZoomFitEnum improvements
 
 # 3.12.4
 - Switched to declarative mode to apply Grandle plugins
