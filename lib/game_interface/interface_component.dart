@@ -13,7 +13,8 @@ class InterfaceComponent extends GameComponent
   /// sprite that will be render when pressed
   Sprite? spriteSelected;
 
-  /// Callback used to receive onTab gesture in your component. this return if is selected
+  /// Callback used to receive onTab gesture in your component.
+  ///  this return if is selected
   final ValueChanged<bool>? onTapComponent;
   final bool selectable;
   bool _lastSelected = false;
@@ -28,12 +29,16 @@ class InterfaceComponent extends GameComponent
     this.selectable = false,
     this.onTapComponent,
   }) {
-    loader?.add(AssetToLoad(spriteUnselected, (value) {
-      this.spriteUnselected = value;
-    }));
-    loader?.add(AssetToLoad(spriteSelected, (value) {
-      this.spriteSelected = value;
-    }));
+    loader?.add(
+      AssetToLoad<Sprite>(spriteUnselected, (value) {
+        this.spriteUnselected = value;
+      }),
+    );
+    loader?.add(
+      AssetToLoad<Sprite>(spriteSelected, (value) {
+        this.spriteSelected = value;
+      }),
+    );
     this.position = position;
     this.size = size;
   }
@@ -46,7 +51,9 @@ class InterfaceComponent extends GameComponent
 
   @override
   void onTapCancel() {
-    if (selectable) return;
+    if (selectable) {
+      return;
+    }
     selected = !selected;
   }
 

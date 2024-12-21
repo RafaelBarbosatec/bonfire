@@ -10,7 +10,7 @@ import 'package:bonfire/joystick/joystick_map_explorer.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:flame/camera.dart';
 // ignore: implementation_imports
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' hide Viewport;
 
 /// Is a customGame where all magic of the Bonfire happen.
 class BonfireGame extends BaseGame implements BonfireGameInterface {
@@ -21,11 +21,13 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   final BuildContext context;
 
-  /// Represents the character controlled by the user in the game. Instances of this class has actions and movements ready to be used and configured.
+  /// Represents the character controlled by the user in the game. Instances of
+  ///  this class has actions and movements ready to be used and configured.
   @override
   final Player? player;
 
-  /// The way you can draw things like life bars, stamina and settings. In another words, anything that you may add to the interface to the game.
+  /// The way you can draw things like life bars, stamina and settings.
+  /// In another words, anything that you may add to the interface to the game.
   @override
   final GameInterface? interface;
 
@@ -87,7 +89,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     throw Exception('Is forbiden updade camera');
   }
 
-  /// variable that keeps the highest rendering priority per frame. This is used to determine the order in which to render the `interface`, `lighting` and `joystick`
+  /// variable that keeps the highest rendering priority per frame.
+  ///  This is used to determine the order in which to render the `interface`,
+  ///  `lighting` and `joystick`
   int _highestPriority = 1000000;
 
   /// Get of the _highestPriority
@@ -127,7 +131,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
               ),
               ...playerControllers ?? [],
               if (interface != null) interface,
-              ...hudComponents ?? []
+              ...hudComponents ?? [],
             ],
           ),
           world: World(
@@ -188,6 +192,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     super.update(dt);
     _intervalUpdateOder.update(dt);
     _intervalOprimizeTree.update(dt);
+    // ignore: use_if_null_to_convert_nulls_to_bools
     if (!_gameMounted && camera.world?.children.isNotEmpty == true) {
       _gameMounted = true;
       Future.delayed(Duration.zero, _notifyGameMounted);
@@ -223,7 +228,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   Iterable<ShapeHitbox> collisions({bool onlyVisible = false}) {
     if (onlyVisible) {
-      List<ShapeHitbox> tilesCollision = [];
+      final tilesCollision = <ShapeHitbox>[];
       map
           .getRenderedTiles()
           .where((element) => element.containsShapeHitbox)
@@ -274,8 +279,12 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   bool isVisibleInCamera(GameComponent c) {
-    if (!hasLayout) return false;
-    if (c.isRemoving) return false;
+    if (!hasLayout) {
+      return false;
+    }
+    if (c.isRemoving) {
+      return false;
+    }
     return camera.canSee(c);
   }
 
@@ -308,13 +317,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   void stopScene() {
-    try {
-      world.children
-          .firstWhere((value) => value is SceneBuilderComponent)
-          .removeFromParent();
-    } catch (e) {
-      /// Not found SceneBuilderComponent
-    }
+    world.children
+        .whereType<SceneBuilderComponent>()
+        .firstOrNull
+        ?.removeFromParent();
   }
 
   @override
@@ -333,9 +339,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   void removeVisible(GameComponent obj) {
     _visibleComponents.remove(obj);
     if (obj.containsShapeHitbox) {
-      obj.children.query<ShapeHitbox>().forEach((element) {
-        _visibleCollisions.remove(element);
-      });
+      obj.children.query<ShapeHitbox>().forEach(_visibleCollisions.remove);
     }
   }
 
@@ -477,7 +481,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     FollowerWidget.removeAll();
     void gameDetachComp(GameComponent c) => c.onGameDetach();
     query<GameComponent>().forEach(gameDetachComp);
-    for (var child in camera.children) {
+    for (final child in camera.children) {
       if (child is GameComponent) {
         child.onGameDetach();
       }
@@ -498,7 +502,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     return camera.viewport.add(component);
   }
 
-  static _getViewPort(CameraConfig? cameraConfig) {
+  static Viewport? _getViewPort(CameraConfig? cameraConfig) {
     if (cameraConfig?.resolution != null) {
       return FixedResolutionViewport(
         resolution: cameraConfig!.resolution!,

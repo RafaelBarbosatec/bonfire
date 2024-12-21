@@ -7,25 +7,30 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
   bool _isRunning = false;
 
   RotationPlayer({
-    required Vector2 position,
-    required Vector2 size,
+    required super.position,
+    required super.size,
     required Future<SpriteAnimation> animIdle,
     required Future<SpriteAnimation> animRun,
-    double? speed,
+    super.speed,
     double currentRadAngle = -1.55,
-    double life = 100,
-  }) : super(
-          position: position,
-          size: size,
-          life: life,
-          speed: speed,
-        ) {
+    super.life,
+  }) {
     setupMovementByJoystick(
       moveType: MovementByJoystickType.angle,
     );
     movementByJoystickRadAngle = currentRadAngle;
-    loader?.add(AssetToLoad(animIdle, (value) => this.animIdle = value));
-    loader?.add(AssetToLoad(animRun, (value) => this.animRun = value));
+    loader?.add(
+      AssetToLoad<SpriteAnimation>(
+        animIdle,
+        (value) => this.animIdle = value,
+      ),
+    );
+    loader?.add(
+      AssetToLoad<SpriteAnimation>(
+        animRun,
+        (value) => this.animRun = value,
+      ),
+    );
   }
 
   @override

@@ -10,15 +10,17 @@ class ControlledUpdateAnimation {
 
   ControlledUpdateAnimation(Future<SpriteAnimation> animation, Vector2 size) {
     _loader = AssetsLoader();
-    _loader?.add(AssetToLoad(
-      animation,
-      (value) {
-        this.animation = SpriteAnimationRender(
-          animation: value,
-          size: size,
-        );
-      },
-    ));
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(
+        animation,
+        (value) {
+          this.animation = SpriteAnimationRender(
+            animation: value,
+            size: size,
+          );
+        },
+      ),
+    );
   }
 
   ControlledUpdateAnimation.fromSpriteAnimation(SpriteAnimation animation) {

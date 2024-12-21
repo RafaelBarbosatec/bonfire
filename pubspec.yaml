@@ -16,12 +16,11 @@ dependencies:
   flame: 1.18.0
   tiledjsonreader: ^1.4.1
   http: ^1.2.2
-  a_star_algorithm: ^0.3.2
+  a_star_algorithm: ^0.4.1
 
 dev_dependencies:
+  flame_lint: ^1.2.1
   flutter_test:
     sdk: flutter
-
-  flutter_lints: ^2.0.0
 
 flutter:

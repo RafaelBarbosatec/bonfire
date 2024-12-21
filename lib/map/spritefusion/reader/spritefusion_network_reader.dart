@@ -23,7 +23,7 @@ class SpritefusionNetworkReader extends WorldMapReader<SpritefusionMap> {
     this.headers,
   }) : cache = cacheProvider ?? TiledMemoryCacheProvider() {
     _imageLoader = ServerImageLoader(cache: cache);
-    String url = uri.toString();
+    final url = uri.toString();
     basePath = url.replaceAll(url.split('/').last, '');
   }
 
@@ -36,16 +36,16 @@ class SpritefusionNetworkReader extends WorldMapReader<SpritefusionMap> {
 
   Future<SpritefusionMap> _fetchMap() async {
     final uriKey = uri.toString();
-    bool containCache = await cache.containsKey(uriKey);
+    final containCache = await cache.containsKey(uriKey);
     if (containCache) {
       final map = await cache.get(uriKey);
       return SpritefusionMap.fromMap(map);
     } else {
       final mapResponse = await http.get(uri, headers: headers);
-      final map = jsonDecode(mapResponse.body);
+      final map = (jsonDecode(mapResponse.body) as Map).cast<String, dynamic>();
       map['imgPath'] = '${basePath}spritesheet.png';
-      cache.put(uriKey, map);
-      return SpritefusionMap.fromJson(map);
+      cache.put(uriKey, map.cast());
+      return SpritefusionMap.fromMap(map);
     }
   }
 }

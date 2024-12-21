@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera_effects.dart';
 import 'package:flame/experimental.dart';
@@ -76,7 +74,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
     Function()? onComplete,
   }) {
     stop();
-    var controller = effectController ?? EffectController(duration: 1);
+    final controller = effectController ?? EffectController(duration: 1);
     final moveToEffect = MoveToEffect(
       position,
       controller,
@@ -216,7 +214,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
 
   set mapZoomFit(InitialMapZoomFitEnum value) {
     config.initialMapZoomFit = value;
-    Vector2 sizeScreen = canvasSize;
+    final sizeScreen = canvasSize;
     switch (value) {
       case InitialMapZoomFitEnum.none:
         break;
@@ -227,12 +225,11 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
         zoom = sizeScreen.y / gameRef.map.getMapSize().y;
         break;
       case InitialMapZoomFitEnum.fit:
-        double minScreenDimension = min(sizeScreen.x, sizeScreen.y);
-        double minMapDimension = max(
-          gameRef.map.getMapSize().x,
-          gameRef.map.getMapSize().y,
-        );
-        zoom = minScreenDimension / minMapDimension;
+        if (sizeScreen.x > sizeScreen.y) {
+          zoom = sizeScreen.x / gameRef.map.getMapSize().x;
+        } else {
+          zoom = sizeScreen.y / gameRef.map.getMapSize().y;
+        }
         break;
     }
   }
