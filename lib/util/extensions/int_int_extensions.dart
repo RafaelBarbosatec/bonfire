@@ -11,6 +11,7 @@ extension IntIntExtensions on (int, int) {
       return (x - other.x).abs() <= 1 && (y - other.y).abs() <= 1;
     }
 
-    return (x - other.x).abs() <= 1 && y == other.y || x == other.x && (y - other.y).abs() <= 1;
+    return (x - other.x).abs() <= 1 && y == other.y ||
+        x == other.x && (y - other.y).abs() <= 1;
   }
 }
