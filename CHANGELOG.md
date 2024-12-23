@@ -1,4 +1,4 @@
-# next
+# 3.12.5
 - Update `a_star_algorithm`.
 - InitialMapZoomFitEnum improvements
 
