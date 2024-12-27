@@ -1,8 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:bonfire/bonfire.dart';
-
-import 'shader_util.dart';
+import 'package:bonfire/mixins/shader/shader_util.dart';
 
 export 'shader_setter.dart';
 
@@ -45,7 +44,7 @@ mixin UseShader on PositionComponent {
             decoratorCanvas,
             (recorderCanvas) {
               render(recorderCanvas);
-              for (var c in children) {
+              for (final c in children) {
                 c.renderTree(recorderCanvas);
               }
             },

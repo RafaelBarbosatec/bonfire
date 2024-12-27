@@ -16,14 +16,14 @@ class CCanSeeType<T extends GameComponent> extends Condition {
   @override
   bool execute(GameComponent comp, BonfireGameInterface game) {
     if (comp is Vision) {
-      bool see = false;
+      var see = false;
       comp.seeComponentType<T>(
         radiusVision: radiusVision,
         visionAngle: visionAngle,
         angle: angle,
         observed: (c) {
           observed?.call(c);
-          return see = true;
+          see = true;
         },
       );
       return see;

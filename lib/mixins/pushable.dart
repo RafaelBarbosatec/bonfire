@@ -56,10 +56,10 @@ mixin Pushable on Movement {
             }
           case PushableFromEnum.ALL:
         }
-        GameComponent component = other;
+        final component = other;
         if (component is Movement && onPush(component)) {
-          Vector2 displacement = (rectCollision.centerVector2 -
-              component.rectCollision.centerVector2);
+          final displacement = rectCollision.centerVector2 -
+              component.rectCollision.centerVector2;
           if (_pushPerCellEnabled) {
             _movePercell(component, displacement);
           } else {
@@ -111,7 +111,7 @@ mixin Pushable on Movement {
     if (_percellMoving) {
       return;
     }
-    Vector2 cellSize = _cellSize ?? size;
+    final cellSize = _cellSize ?? size;
     _percellMoving = true;
     if (displacement.x.abs() > displacement.y.abs()) {
       if (displacement.x < 0) {

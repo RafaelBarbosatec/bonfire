@@ -14,9 +14,9 @@ abstract class ShaderUtils {
     ui.Image? snapshot,
   }) {
     {
-      ui.Image? innerSnapshot = snapshot;
-      ui.PictureRecorder recorder = ui.PictureRecorder();
-      ui.Canvas canvasRecorder = ui.Canvas(recorder);
+      var innerSnapshot = snapshot;
+      final recorder = ui.PictureRecorder();
+      final canvasRecorder = ui.Canvas(recorder);
       canvasRecorder.scale(shaderCanvasScale);
       record(canvasRecorder);
 

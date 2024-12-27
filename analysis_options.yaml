@@ -2,7 +2,10 @@ include: package:flame_lint/analysis_options.yaml
 
 analyzer:
   errors:
+    avoid_bool_literals_in_conditional_expressions: ignore
     avoid_catches_without_on_clauses: ignore
+    avoid_positional_boolean_parameters: ignore
+    comment_references: ignore
     use_if_null_to_convert_nulls_to_bools: ignore
   exclude:
     - 'example/**'

@@ -29,7 +29,9 @@ mixin MovePerCell on Movement {
   @override
   void moveLeft({double? speed}) {
     if (_perCellEnabled) {
-      if (_perCellMoving) return;
+      if (_perCellMoving) {
+        return;
+      }
       _perCellMoving = true;
       add(
         MoveEffect.by(
@@ -49,7 +51,9 @@ mixin MovePerCell on Movement {
   @override
   void moveRight({double? speed}) {
     if (_perCellEnabled) {
-      if (_perCellMoving) return;
+      if (_perCellMoving) {
+        return;
+      }
       _perCellMoving = true;
       add(
         MoveEffect.by(
@@ -69,7 +73,9 @@ mixin MovePerCell on Movement {
   @override
   void moveDown({double? speed}) {
     if (_perCellEnabled) {
-      if (_perCellMoving) return;
+      if (_perCellMoving) {
+        return;
+      }
       _perCellMoving = true;
       add(
         MoveEffect.by(
@@ -89,7 +95,9 @@ mixin MovePerCell on Movement {
   @override
   void moveUp({double? speed}) {
     if (_perCellEnabled) {
-      if (_perCellMoving) return;
+      if (_perCellMoving) {
+        return;
+      }
       _perCellMoving = true;
       add(
         MoveEffect.by(

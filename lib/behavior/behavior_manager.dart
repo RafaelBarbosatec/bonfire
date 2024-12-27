@@ -23,7 +23,7 @@ class BehaviorManager extends Component with BonfireHasGameRef {
 
   @override
   void onMount() {
-    _comp = parent as GameComponent;
+    _comp = parent! as GameComponent;
     super.onMount();
   }
 }

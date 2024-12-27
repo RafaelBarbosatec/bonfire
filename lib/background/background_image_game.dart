@@ -9,6 +9,8 @@
 ///
 /// Rafaelbarbosatec
 /// on 30/11/21
+library;
+
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
@@ -48,8 +50,8 @@ class BackgroundImageGame extends GameBackground with UseSprite {
     if (camera.position != _lastPosition) {
       _lastPosition = camera.position.clone();
       position = _parallaxOffset.translated(
-        (camera.position.x * -(parallaxX / camera.zoom)),
-        (camera.position.y * -(parallaxY / camera.zoom)),
+        camera.position.x * -(parallaxX / camera.zoom),
+        camera.position.y * -(parallaxY / camera.zoom),
       );
     }
   }

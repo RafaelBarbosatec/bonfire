@@ -1,9 +1,8 @@
 import 'dart:ui';
 
+import 'package:bonfire/geometry/rectangle.dart';
+import 'package:bonfire/geometry/shape.dart';
 import 'package:flame/extensions.dart';
-
-import 'rectangle.dart';
-import 'shape.dart';
 
 class CircleShape extends Shape {
   final double radius;

@@ -3,7 +3,8 @@ import 'package:bonfire/bonfire.dart';
 enum MovementByJoystickType { direction, angle }
 
 class MovementByJoystickProps {
-  /// MovementByJoystickType.direction if you only want the 8 directions movement.
+  /// MovementByJoystickType.direction if you only want the
+  ///  8 directions movement.
   ///  Set MovementByJoystickType.angle to have full 360 movement
   MovementByJoystickType moveType;
   bool intensityEnabled;

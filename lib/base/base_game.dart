@@ -23,7 +23,7 @@ abstract class BaseGame extends FlameGame
   @override
   void updateTree(double dt) {
     _gesturesComponents = [...world.children, ...camera.viewport.children]
-        .where((c) => _hasGesture(c))
+        .where(_hasGesture)
         .cast<PointerDetectorHandler>();
     super.updateTree(dt);
   }
@@ -38,7 +38,9 @@ abstract class BaseGame extends FlameGame
 
   @override
   void onPointerCancel(PointerCancelEvent event) {
-    if (!hasLayout || !enabledGestures) return;
+    if (!hasLayout || !enabledGestures) {
+      return;
+    }
     for (final c in _gesturesComponents) {
       if (c.handlerPointerCancel(event)) {
         return;
@@ -48,7 +50,9 @@ abstract class BaseGame extends FlameGame
 
   @override
   void onPointerUp(PointerUpEvent event) {
-    if (!hasLayout || !enabledGestures) return;
+    if (!hasLayout || !enabledGestures) {
+      return;
+    }
     for (final c in _gesturesComponents) {
       if (c.handlerPointerUp(event)) {
         return;
@@ -58,7 +62,9 @@ abstract class BaseGame extends FlameGame
 
   @override
   void onPointerMove(PointerMoveEvent event) {
-    if (!hasLayout || !enabledGestures) return;
+    if (!hasLayout || !enabledGestures) {
+      return;
+    }
     for (final c in _gesturesComponents) {
       if (c.handlerPointerMove(event)) {
         return;
@@ -68,7 +74,9 @@ abstract class BaseGame extends FlameGame
 
   @override
   void onPointerDown(PointerDownEvent event) {
-    if (!hasLayout || !enabledGestures) return;
+    if (!hasLayout || !enabledGestures) {
+      return;
+    }
     for (final c in _gesturesComponents) {
       if (c.handlerPointerDown(event)) {
         return;
@@ -78,7 +86,9 @@ abstract class BaseGame extends FlameGame
 
   @override
   void onPointerHover(PointerHoverEvent event) {
-    if (!hasLayout || !enabledGestures) return;
+    if (!hasLayout || !enabledGestures) {
+      return;
+    }
     for (final c in _gesturesComponents) {
       if (c.handlerPointerHover(event)) {
         return;
@@ -88,7 +98,9 @@ abstract class BaseGame extends FlameGame
 
   @override
   void onPointerSignal(PointerSignalEvent event) {
-    if (!hasLayout || !enabledGestures) return;
+    if (!hasLayout || !enabledGestures) {
+      return;
+    }
     for (final c in _gesturesComponents) {
       if (c.handlerPointerSignal(event)) {
         return;
@@ -101,11 +113,11 @@ abstract class BaseGame extends FlameGame
     KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    KeyEventResult result = KeyEventResult.ignored;
+    var result = KeyEventResult.ignored;
     if (!enabledKeyboard) {
       return result;
     }
-    for (var listener in _keyboardComponents) {
+    for (final listener in _keyboardComponents) {
       if (listener.onKeyboard(event, keysPressed)) {
         result = KeyEventResult.handled;
       }
@@ -115,7 +127,7 @@ abstract class BaseGame extends FlameGame
 
   /// Verify if the Component contain gestures.
   bool _hasGesture(Component c) {
-    return ((c is GameComponent && c.isVisible)) && ((c).hasGesture());
+    return (c is GameComponent && c.isVisible) && (c.hasGesture());
   }
 
   @override
