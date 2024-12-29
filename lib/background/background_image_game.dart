@@ -1,16 +1,3 @@
-///
-/// Created by
-///
-/// ─▄▀─▄▀
-/// ──▀──▀
-/// █▀▀▀▀▀█▄
-/// █░░░░░█─█
-/// ▀▄▄▄▄▄▀▀
-///
-/// Rafaelbarbosatec
-/// on 30/11/21
-library;
-
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';

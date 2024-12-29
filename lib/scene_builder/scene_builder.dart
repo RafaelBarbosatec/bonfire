@@ -1,16 +1,3 @@
-///
-/// Created by
-///
-/// ─▄▀─▄▀
-/// ──▀──▀
-/// █▀▀▀▀▀█▄
-/// █░░░░░█─█
-/// ▀▄▄▄▄▄▀▀
-///
-/// Rafaelbarbosatec
-/// on 04/03/22
-library;
-
 export 'actions/await_scene_action.dart';
 export 'actions/callback_scene_action.dart';
 export 'actions/camera_scene_action.dart';
