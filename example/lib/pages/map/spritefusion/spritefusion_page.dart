@@ -17,10 +17,8 @@ class SpritefusionPage extends StatelessWidget {
         WorldMapReader.fromAsset('spritefusion/map.json'),
       ),
       cameraConfig: CameraConfig(
-        // zoom: getZoomFromMaxVisibleTile(context, tileSize, 20),
-        // initPosition: Vector2(tileSize * 5, tileSize * 5),
-        initialMapZoomFit: InitialMapZoomFitEnum.fit,
-        moveOnlyMapArea: true,
+        zoom: getZoomFromMaxVisibleTile(context, tileSize, 20),
+        initPosition: Vector2(tileSize * 5, tileSize * 5),
       ),
     );
   }
