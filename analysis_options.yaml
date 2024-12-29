@@ -6,6 +6,8 @@ analyzer:
     avoid_catches_without_on_clauses: ignore
     avoid_positional_boolean_parameters: ignore
     comment_references: ignore
+    lines_longer_than_80_chars: ignore
     use_if_null_to_convert_nulls_to_bools: ignore
+    use_setters_to_change_properties: ignore
   exclude:
     - 'example/**'

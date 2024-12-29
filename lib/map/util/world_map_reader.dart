@@ -15,9 +15,9 @@ abstract class WorldMapReader<T> {
 
   static WorldMapReader<T> fromAsset<T>(String asset) {
     switch (T) {
-      case TiledMap:
+      case TiledMap _:
         return TiledAssetReader(asset: asset) as WorldMapReader<T>;
-      case SpritefusionMap:
+      case SpritefusionMap _:
         return SpritefusionAssetReader(asset: asset) as WorldMapReader<T>;
       default:
         throw Exception('There is not a WorldMapReader.asset to $T');
@@ -30,13 +30,13 @@ abstract class WorldMapReader<T> {
     Map<String, String>? headers,
   }) {
     switch (T) {
-      case TiledMap:
+      case TiledMap _:
         return TiledNetworkReader(
           uri: uri,
           cacheProvider: cacheProvider,
           headers: headers,
         ) as WorldMapReader<T>;
-      case SpritefusionMap:
+      case SpritefusionMap _:
         return SpritefusionNetworkReader(
           uri: uri,
           cacheProvider: cacheProvider,

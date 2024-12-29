@@ -10,12 +10,12 @@ class MapAssetsManager {
     Vector2 position,
     Vector2 size,
   ) {
-    String pathCache = '$image/${position.x}/${position.y}';
+    final pathCache = '$image/${position.x}/${position.y}';
     if (spriteCache.containsKey(pathCache)) {
       return spriteCache[pathCache]!;
     }
 
-    Image? spriteSheetImg = getImageCache(image);
+    final spriteSheetImg = getImageCache(image);
 
     return spriteCache[pathCache] = spriteSheetImg!.getSprite(
       position: Vector2(position.x * size.x, position.y * size.y),
@@ -31,20 +31,20 @@ class MapAssetsManager {
     Vector2? position,
     Vector2? size,
   }) async {
-    String pathCache = '$image/${position?.x ?? 0}/${position?.y ?? 0}';
+    final pathCache = '$image/${position?.x ?? 0}/${position?.y ?? 0}';
 
     if (spriteCache.containsKey(pathCache)) {
       return Future.value(spriteCache[pathCache]);
     }
 
-    Image spriteSheetImg = await loadImage(
+    final spriteSheetImg = await loadImage(
       image,
     );
 
     return spriteCache[pathCache] = spriteSheetImg.getSprite(
       position: Vector2(
-        ((position?.x ?? 0.0) * (size?.x ?? 0.0)),
-        ((position?.y ?? 0.0) * (size?.y ?? 0.0)),
+        (position?.x ?? 0.0) * (size?.x ?? 0.0),
+        (position?.y ?? 0.0) * (size?.y ?? 0.0),
       ),
       size: Vector2(
         (size?.x ?? 0.0) == 0.0 ? spriteSheetImg.width.toDouble() : size!.x,
@@ -57,10 +57,10 @@ class MapAssetsManager {
     List<TileSprite> frames,
     double stepTime,
   ) async {
-    List<Sprite> spriteList = [];
+    final spriteList = <Sprite>[];
 
-    for (var frame in frames) {
-      Sprite sprite = await MapAssetsManager.getFutureSprite(
+    for (final frame in frames) {
+      final sprite = await MapAssetsManager.getFutureSprite(
         frame.path,
         position: frame.position,
         size: frame.size,
@@ -78,11 +78,11 @@ class MapAssetsManager {
     List<TileSprite> frames,
     double stepTime,
   ) {
-    String key = '';
-    List<Sprite> spriteList = [];
+    var key = '';
+    final spriteList = <Sprite>[];
 
-    for (var frame in frames) {
-      Sprite sprite = MapAssetsManager.getSprite(
+    for (final frame in frames) {
+      final sprite = MapAssetsManager.getSprite(
         frame.path,
         frame.position,
         frame.size,

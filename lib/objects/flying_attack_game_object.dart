@@ -129,7 +129,9 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }
 
   void _destroyObject(GameComponent component) {
-    if (isRemoving || isRemoved) return;
+    if (isRemoving || isRemoved) {
+      return;
+    }
     removeAll(children);
     removeFromParent();
     if (animationDestroy != null) {
@@ -155,15 +157,15 @@ class FlyingAttackGameObject extends AnimatedGameObject
   void _destroyByDirection(Direction direction) {
     Vector2 positionDestroy;
 
-    double biggerSide = max(width, height);
+    final double biggerSide = max(width, height);
     double addCenterX = 0;
     double addCenterY = 0;
 
     const double divisionFactor = 2;
 
     if (destroySize != null) {
-      addCenterX = ((size.x - destroySize!.x) / divisionFactor);
-      addCenterY = ((size.y - destroySize!.y) / divisionFactor);
+      addCenterX = (size.x - destroySize!.x) / divisionFactor;
+      addCenterY = (size.y - destroySize!.y) / divisionFactor;
     }
     switch (direction) {
       case Direction.left:
@@ -217,10 +219,10 @@ class FlyingAttackGameObject extends AnimatedGameObject
     }
 
     if (hasGameRef) {
-      Vector2 innerSize = destroySize ?? size;
+      final innerSize = destroySize ?? size;
       gameRef.add(
         AnimatedGameObject(
-          animation: animationDestroy!,
+          animation: animationDestroy,
           position: positionDestroy,
           size: innerSize,
           lightingConfig: lightingConfig,
@@ -240,12 +242,12 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }
 
   void _destroyByAngle() {
-    double nextX = (width / 2) * _cosAngle;
-    double nextY = (height / 2) * _senAngle;
+    final nextX = (width / 2) * _cosAngle;
+    final nextY = (height / 2) * _senAngle;
 
-    Vector2 innerSize = destroySize ?? size;
+    final innerSize = destroySize ?? size;
     final rect = rectCollision;
-    Offset diffBase = Offset(
+    final diffBase = Offset(
           rect.center.dx + nextX,
           rect.center.dy + nextY,
         ) -
@@ -256,7 +258,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     if (hasGameRef) {
       gameRef.add(
         AnimatedGameObject(
-          animation: animationDestroy!,
+          animation: animationDestroy,
           position: Rect.fromCenter(
             center: positionDestroy.toOffset(),
             width: innerSize.x,

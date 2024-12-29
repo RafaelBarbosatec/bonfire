@@ -16,7 +16,9 @@ extension PlayerExtensions on Player {
     double? visionAngle,
     double? angle,
   }) {
-    if (isDead) return null;
+    if (isDead) {
+      return null;
+    }
     return seeComponentType<Enemy>(
       observed: observed,
       notObserved: notObserved,
@@ -27,9 +29,9 @@ extension PlayerExtensions on Player {
   }
 
   void simpleAttackMelee({
-    Future<SpriteAnimation>? animationRight,
     required double damage,
     required Vector2 size,
+    Future<SpriteAnimation>? animationRight,
     dynamic id,
     Direction? direction,
     bool withPush = true,
@@ -54,8 +56,8 @@ extension PlayerExtensions on Player {
 
   void simpleAttackRange({
     required Future<SpriteAnimation> animationRight,
-    Future<SpriteAnimation>? animationDestroy,
     required Vector2 size,
+    Future<SpriteAnimation>? animationDestroy,
     Vector2? destroySize,
     dynamic id,
     double speed = 150,
@@ -67,7 +69,7 @@ extension PlayerExtensions on Player {
     ShapeHitbox? collision,
     LightingConfig? lightingConfig,
   }) {
-    Direction attackDirection = direction ?? _getLastDirection(diagonalEnabled);
+    final attackDirection = direction ?? _getLastDirection(diagonalEnabled);
     simpleAttackRangeByDirection(
       direction: attackDirection,
       animationRight: animationRight,

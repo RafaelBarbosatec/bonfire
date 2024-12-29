@@ -23,7 +23,9 @@ class Keyboard extends PlayerController with KeyboardEventListener {
   @override
   bool onKeyboard(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     /// If the keyboard is disabled, we do not process the event
-    if (!keyboardConfig.enable) return false;
+    if (!keyboardConfig.enable) {
+      return false;
+    }
 
     /// If the key is not accepted, we do not process the event
     if (keyboardConfig.acceptedKeys != null) {
@@ -40,8 +42,6 @@ class Keyboard extends PlayerController with KeyboardEventListener {
       onJoystickChangeDirectional(
         JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.IDLE,
-          intensity: 0.0,
-          radAngle: 0.0,
         ),
       );
     }
@@ -113,83 +113,89 @@ class Keyboard extends PlayerController with KeyboardEventListener {
         JoystickDirectionalEvent(
           directional: JoystickMoveDirectional.MOVE_UP,
           intensity: 1.0,
-          radAngle: 0.0,
           isKeyboard: true,
         ),
       );
     }
     if (isDownPressed(key)) {
-      onJoystickChangeDirectional(JoystickDirectionalEvent(
-        directional: JoystickMoveDirectional.MOVE_DOWN,
-        intensity: 1.0,
-        radAngle: 0.0,
-        isKeyboard: true,
-      ));
+      onJoystickChangeDirectional(
+        JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_DOWN,
+          intensity: 1.0,
+          isKeyboard: true,
+        ),
+      );
     }
 
     if (isLeftPressed(key)) {
-      onJoystickChangeDirectional(JoystickDirectionalEvent(
-        directional: JoystickMoveDirectional.MOVE_LEFT,
-        intensity: 1.0,
-        radAngle: 0.0,
-        isKeyboard: true,
-      ));
+      onJoystickChangeDirectional(
+        JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_LEFT,
+          intensity: 1.0,
+          isKeyboard: true,
+        ),
+      );
     }
 
     if (isRightPressed(key)) {
-      onJoystickChangeDirectional(JoystickDirectionalEvent(
-        directional: JoystickMoveDirectional.MOVE_RIGHT,
-        intensity: 1.0,
-        radAngle: 0.0,
-        isKeyboard: true,
-      ));
+      onJoystickChangeDirectional(
+        JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_RIGHT,
+          intensity: 1.0,
+          isKeyboard: true,
+        ),
+      );
     }
   }
 
   void _sendTwoDirection(LogicalKeyboardKey key1, LogicalKeyboardKey key2) {
     if (isRightPressed(key1) && isDownPressed(key2) ||
         isDownPressed(key1) && isRightPressed(key2)) {
-      onJoystickChangeDirectional(JoystickDirectionalEvent(
-        directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
-        intensity: 1.0,
-        radAngle: 0.0,
-        isKeyboard: true,
-      ));
+      onJoystickChangeDirectional(
+        JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_DOWN_RIGHT,
+          intensity: 1.0,
+          isKeyboard: true,
+        ),
+      );
     }
 
     if (isLeftPressed(key1) && isDownPressed(key2) ||
         isDownPressed(key1) && isLeftPressed(key2)) {
-      onJoystickChangeDirectional(JoystickDirectionalEvent(
-        directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
-        intensity: 1.0,
-        radAngle: 0.0,
-        isKeyboard: true,
-      ));
+      onJoystickChangeDirectional(
+        JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_DOWN_LEFT,
+          intensity: 1.0,
+          isKeyboard: true,
+        ),
+      );
     }
 
     if (isLeftPressed(key1) && isUpPressed(key2) ||
         isUpPressed(key1) && isLeftPressed(key2)) {
-      onJoystickChangeDirectional(JoystickDirectionalEvent(
-        directional: JoystickMoveDirectional.MOVE_UP_LEFT,
-        intensity: 1.0,
-        radAngle: 0.0,
-        isKeyboard: true,
-      ));
+      onJoystickChangeDirectional(
+        JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_UP_LEFT,
+          intensity: 1.0,
+          isKeyboard: true,
+        ),
+      );
     }
 
     if (isRightPressed(key1) && isUpPressed(key2) ||
         isUpPressed(key1) && isRightPressed(key2)) {
-      onJoystickChangeDirectional(JoystickDirectionalEvent(
-        directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
-        intensity: 1.0,
-        radAngle: 0.0,
-        isKeyboard: true,
-      ));
+      onJoystickChangeDirectional(
+        JoystickDirectionalEvent(
+          directional: JoystickMoveDirectional.MOVE_UP_RIGHT,
+          intensity: 1.0,
+          isKeyboard: true,
+        ),
+      );
     }
   }
 
   bool _containDirectionalPressed(Set<LogicalKeyboardKey> keysPressed) {
-    for (var element in keysPressed) {
+    for (final element in keysPressed) {
       if (_isDirectional(element)) {
         return true;
       }

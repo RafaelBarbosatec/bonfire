@@ -19,7 +19,7 @@ mixin DragGesture on GameComponent {
       screenToWorld: gameRef.screenToWorld,
       globalToViewportPosition: gameRef.globalToViewportPosition,
     );
-    bool handler = false;
+    var handler = false;
 
     if (enableDrag && hasGameRef) {
       if (isHud) {
@@ -49,7 +49,7 @@ mixin DragGesture on GameComponent {
       screenToWorld: gameRef.screenToWorld,
       globalToViewportPosition: gameRef.globalToViewportPosition,
     );
-    bool canMove = hasGameRef &&
+    final canMove = hasGameRef &&
         _startDragPosition != null &&
         enableDrag &&
         gEvent.pointer == _pointer;

@@ -65,9 +65,9 @@ class TypeWriter extends StatefulWidget {
   /// {@macro flutter.painting.textPainter.textWidthBasis}
   final TextWidthBasis textWidthBasis;
   const TypeWriter({
-    Key? key,
-    this.style,
     required this.text,
+    super.key,
+    this.style,
     this.speed = 50,
     this.autoStart = true,
     this.onFinish,
@@ -75,12 +75,12 @@ class TypeWriter extends StatefulWidget {
     this.textDirection,
     this.softWrap = true,
     this.overflow = TextOverflow.clip,
-    this.textScaler = const TextScaler.linear(1),
+    this.textScaler = TextScaler.noScaling,
     this.maxLines,
     this.locale,
     this.strutStyle,
     this.textWidthBasis = TextWidthBasis.parent,
-  }) : super(key: key);
+  });
 
   @override
   State<TypeWriter> createState() => TypeWriterState();
@@ -131,7 +131,7 @@ class TypeWriterState extends State<TypeWriter> {
     );
   }
 
-  void start({List<TextSpan>? text}) async {
+  Future<void> start({List<TextSpan>? text}) async {
     _finished = false;
     if (text != null) {
       textSpanList = text;
@@ -139,11 +139,15 @@ class TypeWriterState extends State<TypeWriter> {
     // Clean the stream to prevent textStyle from changing before the text
     _textSpanController.add([const TextSpan()]);
 
-    for (var span in textSpanList) {
-      if (_textSpanController.isClosed) return;
-      for (int i = 0; i < (span.text?.length ?? 0); i++) {
+    for (final span in textSpanList) {
+      if (_textSpanController.isClosed) {
+        return;
+      }
+      for (var i = 0; i < (span.text?.length ?? 0); i++) {
         await Future.delayed(Duration(milliseconds: widget.speed));
-        if (_textSpanController.isClosed || _finished) return;
+        if (_textSpanController.isClosed || _finished) {
+          return;
+        }
         _textSpanController.add(
           [
             ...textSpanList.sublist(0, textSpanList.indexOf(span)),

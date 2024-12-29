@@ -13,11 +13,11 @@ class DamageHitbox extends GameComponent {
   final Paint _paint = Paint()..color = Sensor.color;
 
   DamageHitbox({
-    this.id,
     required Vector2 position,
     required this.damage,
     required this.origin,
     required Vector2 size,
+    this.id,
     double angle = 0,
     this.onDamage,
     Anchor anchor = Anchor.center,

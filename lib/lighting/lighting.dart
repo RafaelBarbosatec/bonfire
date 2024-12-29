@@ -19,7 +19,7 @@ mixin Lighting on GameComponent {
 
   double _lightingAngle() {
     if (_lightingConfig != null && _lightingConfig?.type is ArcLightingType) {
-      var type = _lightingConfig?.type as ArcLightingType;
+      final type = _lightingConfig!.type as ArcLightingType;
       if (type.isCenter) {
         return this.angle - (type.endRadAngle / 2);
       } else {

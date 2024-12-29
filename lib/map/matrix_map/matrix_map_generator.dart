@@ -71,9 +71,9 @@ class MatrixMapGenerator {
     required List<MatrixLayer> layers,
     required TileModelBuilder builder,
   }) {
-    List<Layer> tileLayers = [];
-    int index = 0;
-    for (var layer in layers) {
+    final tileLayers = <Layer>[];
+    var index = 0;
+    for (final layer in layers) {
       if (layer.axisInverted) {
         tileLayers.add(
           Layer(
@@ -107,7 +107,7 @@ class MatrixMapGenerator {
     List<List<double>> matrix,
     TileModelBuilder builder,
   ) {
-    List<Tile> tiles = [];
+    final tiles = <Tile>[];
     final h = matrix.first.length;
     final w = matrix.length;
     for (var x = 0; x < w; x++) {
@@ -137,7 +137,7 @@ class MatrixMapGenerator {
     List<List<double>> matrix,
     TileModelBuilder builder,
   ) {
-    List<Tile> tiles = [];
+    final tiles = <Tile>[];
     final w = matrix.first.length;
     final h = matrix.length;
     for (var y = 0; y < h; y++) {

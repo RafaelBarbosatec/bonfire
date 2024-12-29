@@ -1,23 +1,17 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:flutter/widgets.dart';
 
 /// Component used to add Text in your [GameInterface]
 class TextInterfaceComponent extends InterfaceComponent {
   String text;
-  double? _measuredWidth;
-  double? _measuredHeight;
   late TextPaint textConfig;
   TextInterfaceComponent({
-    required int id,
-    required Vector2 position,
+    required super.id,
+    required super.position,
     this.text = '',
-    ValueChanged<bool>? onTapComponent,
+    super.onTapComponent,
     TextStyle? textConfig,
   }) : super(
-          id: id,
-          position: position,
           size: Vector2.zero(),
-          onTapComponent: onTapComponent,
         ) {
     this.textConfig = TextPaint(style: textConfig);
   }
@@ -35,9 +29,10 @@ class TextInterfaceComponent extends InterfaceComponent {
   @override
   void update(double dt) {
     if (size == Vector2.zero()) {
-      _measuredWidth = textConfig.getLineMetrics(text).width;
-      _measuredHeight = textConfig.getLineMetrics(text).height;
-      size = Vector2(_measuredWidth!, _measuredHeight!);
+      size = Vector2(
+        textConfig.getLineMetrics(text).width,
+        textConfig.getLineMetrics(text).height,
+      );
     }
     super.update(dt);
   }

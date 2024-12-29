@@ -29,8 +29,10 @@ E? firstWhere<E>(
   Iterable<E> list,
   bool Function(E element) test,
 ) {
-  for (E element in list) {
-    if (test(element)) return element;
+  for (final element in list) {
+    if (test(element)) {
+      return element;
+    }
   }
   return null;
 }

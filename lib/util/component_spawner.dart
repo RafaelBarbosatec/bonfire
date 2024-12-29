@@ -44,8 +44,8 @@ class ComponentSpawner extends GameComponent {
   }
 
   void _spawn() {
-    Vector2 point = Vector2.zero();
-    int count = 0;
+    var point = Vector2.zero();
+    var count = 0;
     do {
       point = Vector2(
         size.x * _random.nextDouble(),

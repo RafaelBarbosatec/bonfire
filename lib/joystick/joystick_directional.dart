@@ -73,7 +73,9 @@ class JoystickDirectional {
     PlayerControllerListener controller,
     camera.Viewport viewPort,
   ) {
-    if (_screenSize == viewPort.virtualSize) return;
+    if (_screenSize == viewPort.virtualSize) {
+      return;
+    }
     _viewPort = viewPort;
     _screenSize = viewPort.virtualSize.clone();
     _controller = controller;
@@ -284,7 +286,9 @@ class JoystickDirectional {
   }
 
   void directionalDown(int pointer, Offset localPosition) {
-    if (_backgroundRect == null) return;
+    if (_backgroundRect == null) {
+      return;
+    }
 
     final pos = getViewportPosition(localPosition);
 

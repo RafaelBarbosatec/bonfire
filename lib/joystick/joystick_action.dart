@@ -76,7 +76,9 @@ class JoystickAction {
     PlayerControllerListener controller,
     camera.Viewport viewport,
   ) {
-    if (_screenSize == viewport.virtualSize) return;
+    if (_screenSize == viewport.virtualSize) {
+      return;
+    }
     _viewport = viewport;
     _screenSize = viewport.virtualSize.clone();
     _controller = controller;

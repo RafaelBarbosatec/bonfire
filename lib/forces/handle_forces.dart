@@ -3,7 +3,8 @@ import 'package:bonfire/bonfire.dart';
 export 'package:bonfire/forces/forces_2d.dart';
 
 /// Mixin that makes the component suffer influences from global or local forces.
-/// To adds local forces just call `addForce` method. To adds global foreces use the param `globalForces` in `BonfireWidget`.
+/// To adds local forces just call `addForce` method. To adds global foreces use
+///  the param `globalForces` in `BonfireWidget`.
 mixin HandleForces on Movement {
   /// Mass of the Component
   double _mass = 1.0;
@@ -34,12 +35,12 @@ mixin HandleForces on Movement {
       return super.onVelocityUpdate(dt, velocity);
     }
     final oldVelocity = velocity.clone();
-    List<Force2D> mergeForces = [..._forces, ...gameRef.globalForces];
+    final mergeForces = <Force2D>[..._forces, ...gameRef.globalForces];
     final acceleration = mergeForces.whereType<AccelerationForce2D>();
     final resistence = mergeForces.whereType<ResistanceForce2D>();
     final linear = mergeForces.whereType<LinearForce2D>();
 
-    Vector2 newVel = onApplyAccelerationForces(acceleration, velocity, dt);
+    var newVel = onApplyAccelerationForces(acceleration, velocity, dt);
     newVel = onApplyLinearForces(linear, newVel, dt);
     newVel = onApplyResistenceForces(resistence, newVel, dt);
 

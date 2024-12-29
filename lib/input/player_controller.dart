@@ -58,10 +58,10 @@ class JoystickActionEvent {
   final ActionEvent event;
 
   JoystickActionEvent({
+    required this.event,
     this.id,
     this.intensity = 0.0,
     this.radAngle = 0.0,
-    required this.event,
   });
 }
 
@@ -83,14 +83,14 @@ abstract class PlayerController extends GameComponent
 
   @override
   void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
-    for (var o in _observers) {
+    for (final o in _observers) {
       o.onJoystickChangeDirectional(event);
     }
   }
 
   @override
   void onJoystickAction(JoystickActionEvent event) {
-    for (var o in _observers) {
+    for (final o in _observers) {
       o.onJoystickAction(event);
     }
   }

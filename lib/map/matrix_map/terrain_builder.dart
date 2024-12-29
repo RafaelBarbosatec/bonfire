@@ -23,7 +23,7 @@ class TerrainBuilder {
   TerrainBuilder({required this.tileSize, required this.terrainList});
 
   Tile build(ItemMatrixProperties prop) {
-    Iterable<MapTerrain> findList = terrainList.where(
+    final findList = terrainList.where(
       (element) => element.value == prop.value,
     );
 
@@ -33,7 +33,7 @@ class TerrainBuilder {
 
     try {
       if (prop.isCenterTile) {
-        MapTerrain terrain = findList.where((element) {
+        final terrain = findList.where((element) {
           return element is! MapTerrainCorners;
         }).first;
         return _buildTile(terrain, prop);
@@ -50,8 +50,7 @@ class TerrainBuilder {
     ItemMatrixProperties prop,
   ) {
     TileSprite? sprite;
-    Iterable<MapTerrainCorners> corners =
-        terrains.whereType<MapTerrainCorners>();
+    final corners = terrains.whereType<MapTerrainCorners>();
 
     MapTerrain? terrain;
 
@@ -66,7 +65,7 @@ class TerrainBuilder {
     }
 
     if (sprite == null) {
-      MapTerrainCorners? left = firstWhere(
+      final MapTerrainCorners? left = firstWhere(
         corners,
         (element) => element.to == prop.valueLeft,
       );
@@ -78,7 +77,7 @@ class TerrainBuilder {
     }
 
     if (sprite == null) {
-      MapTerrainCorners? right = firstWhere(
+      final MapTerrainCorners? right = firstWhere(
         corners,
         (element) => element.to == prop.valueRight,
       );
@@ -90,7 +89,7 @@ class TerrainBuilder {
     }
 
     if (sprite == null) {
-      MapTerrainCorners? top = firstWhere(
+      final MapTerrainCorners? top = firstWhere(
         corners,
         (element) => element.to == prop.valueTop,
       );
@@ -101,7 +100,7 @@ class TerrainBuilder {
     }
 
     if (sprite == null) {
-      MapTerrainCorners? bottom = firstWhere(
+      final MapTerrainCorners? bottom = firstWhere(
         corners,
         (element) => element.to == prop.valueBottom,
       );
@@ -112,7 +111,7 @@ class TerrainBuilder {
     }
 
     if (sprite == null) {
-      MapTerrain? center = firstWhere(
+      final MapTerrain? center = firstWhere(
         terrains,
         (element) => element is! MapTerrainCorners,
       );
@@ -165,7 +164,7 @@ class TerrainBuilder {
     if (prop.valueBottom != prop.value &&
         prop.valueBottom == prop.valueBottomLeft &&
         prop.valueBottom == prop.valueLeft) {
-      MapTerrainCorners? bottomLeft = firstWhere(
+      final MapTerrainCorners? bottomLeft = firstWhere(
         corners,
         (element) => element.to == prop.valueBottom,
       );
@@ -178,7 +177,7 @@ class TerrainBuilder {
     if (prop.valueBottom != prop.value &&
         prop.valueBottom == prop.valueBottomRight &&
         prop.valueBottom == prop.valueRight) {
-      MapTerrainCorners? bottomRight = firstWhere(
+      final MapTerrainCorners? bottomRight = firstWhere(
         corners,
         (element) => element.to == prop.valueBottom,
       );
@@ -191,7 +190,7 @@ class TerrainBuilder {
     if (prop.valueBottomLeft != prop.value &&
         prop.valueLeft == prop.value &&
         prop.valueLeft == prop.valueBottom) {
-      MapTerrainCorners? bottomLeft = firstWhere(
+      final MapTerrainCorners? bottomLeft = firstWhere(
         corners,
         (element) => element.to == prop.valueBottomLeft,
       );
@@ -204,7 +203,7 @@ class TerrainBuilder {
     if (prop.valueBottomRight != prop.value &&
         prop.valueRight == prop.value &&
         prop.valueRight == prop.valueBottom) {
-      MapTerrainCorners? bottomRight = firstWhere(
+      final MapTerrainCorners? bottomRight = firstWhere(
         corners,
         (element) => element.to == prop.valueBottomRight,
       );
@@ -226,7 +225,7 @@ class TerrainBuilder {
     if (prop.valueTop != prop.value &&
         prop.valueTop == prop.valueTopLeft &&
         prop.valueTop == prop.valueLeft) {
-      MapTerrainCorners? topLeft = firstWhere(
+      final MapTerrainCorners? topLeft = firstWhere(
         corners,
         (element) => element.to == prop.valueTop,
       );
@@ -239,7 +238,7 @@ class TerrainBuilder {
     if (prop.valueTop != prop.value &&
         prop.valueTop == prop.valueTopRight &&
         prop.valueTop == prop.valueRight) {
-      MapTerrainCorners? topRight = firstWhere(
+      final MapTerrainCorners? topRight = firstWhere(
         corners,
         (element) => element.to == prop.valueTop,
       );
@@ -252,7 +251,7 @@ class TerrainBuilder {
     if (prop.valueTopLeft != prop.value &&
         prop.valueLeft == prop.value &&
         prop.valueLeft == prop.valueTop) {
-      MapTerrainCorners? topLeftInverted = firstWhere(
+      final MapTerrainCorners? topLeftInverted = firstWhere(
         corners,
         (element) => element.to == prop.valueTopLeft,
       );
@@ -265,7 +264,7 @@ class TerrainBuilder {
     if (prop.valueTopRight != prop.value &&
         prop.valueRight == prop.value &&
         prop.valueRight == prop.valueTop) {
-      MapTerrainCorners? topRightInverted = firstWhere(
+      final MapTerrainCorners? topRightInverted = firstWhere(
         corners,
         (element) => element.to == prop.valueTopRight,
       );

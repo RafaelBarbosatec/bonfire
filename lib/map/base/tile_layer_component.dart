@@ -51,8 +51,12 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
       var h = _tiles.first.bottom;
 
       for (final tile in _tiles) {
-        if (tile.right > w) w = tile.right;
-        if (tile.bottom > h) h = tile.bottom;
+        if (tile.right > w) {
+          w = tile.right;
+        }
+        if (tile.bottom > h) {
+          h = tile.bottom;
+        }
       }
       size = Vector2(w, h);
     }

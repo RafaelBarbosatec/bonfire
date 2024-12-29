@@ -102,7 +102,9 @@ class TiledWorldBuilder {
   }
 
   Future<void> _loadLayer(MapLayer layer) async {
-    if (layer.visible != true) return;
+    if (layer.visible != true) {
+      return;
+    }
 
     if (layer is tiled.TileLayer) {
       _layers.add(
@@ -133,7 +135,9 @@ class TiledWorldBuilder {
   }
 
   Future<void> _addTileLayer(tiled.TileLayer tileLayer) async {
-    if (tileLayer.visible != true) return;
+    if (tileLayer.visible != true) {
+      return;
+    }
     var count = 0;
     final offsetX = _getDoubleByProportion(tileLayer.offsetX);
     final offsetY = _getDoubleByProportion(tileLayer.offsetY);
@@ -359,7 +363,9 @@ class TiledWorldBuilder {
   }
 
   void _addObjects(ObjectLayer layer) {
-    if (layer.visible != true) return;
+    if (layer.visible != true) {
+      return;
+    }
     final isCollisionLayer = layer.layerClass?.toLowerCase() == 'collision';
     final offsetX = _getDoubleByProportion(layer.offsetX);
     final offsetY = _getDoubleByProportion(layer.offsetY);

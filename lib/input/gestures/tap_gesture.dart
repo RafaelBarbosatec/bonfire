@@ -11,7 +11,7 @@ mixin TapGesture on GameComponent {
       screenToWorld: gameRef.screenToWorld,
       globalToViewportPosition: gameRef.globalToViewportPosition,
     );
-    bool handler = false;
+    var handler = false;
 
     if (enableTab && hasGameRef) {
       onTapDownScreen(tapEvent);

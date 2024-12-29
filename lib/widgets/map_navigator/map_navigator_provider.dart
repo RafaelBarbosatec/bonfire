@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 class MapNavigatorProvider extends InheritedWidget {
   final MapNavigatorController controller;
   const MapNavigatorProvider({
-    super.key,
     required this.controller,
     required super.child,
+    super.key,
   });
 
   static MapNavigatorProvider? maybeOf(BuildContext context) {
@@ -14,7 +14,7 @@ class MapNavigatorProvider extends InheritedWidget {
   }
 
   static MapNavigatorProvider of(BuildContext context) {
-    final MapNavigatorProvider? result = maybeOf(context);
+    final result = maybeOf(context);
     assert(result != null, 'No FrogColor found in context');
     return result!;
   }

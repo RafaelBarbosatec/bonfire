@@ -1,9 +1,7 @@
-import 'package:bonfire/mixins/attackable.dart';
 import 'package:bonfire/mixins/direction_animation.dart';
 import 'package:bonfire/npc/ally/ally.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
-import 'package:flame/components.dart';
 
 ///
 /// Created by
@@ -20,21 +18,14 @@ import 'package:flame/components.dart';
 /// Enemy with animation in all direction
 class SimpleAlly extends Ally with DirectionAnimation {
   SimpleAlly({
-    required Vector2 position,
-    required Vector2 size,
+    required super.position,
+    required super.size,
     SimpleDirectionAnimation? animation,
-    double life = 100,
-    double speed = 100,
+    super.life = 100,
+    super.speed,
     Direction initDirection = Direction.right,
-    AcceptableAttackOriginEnum receivesAttackFrom =
-        AcceptableAttackOriginEnum.ENEMY,
-  }) : super(
-          position: position,
-          size: size,
-          life: life,
-          speed: speed,
-          receivesAttackFrom: receivesAttackFrom,
-        ) {
+    super.receivesAttackFrom,
+  }) {
     this.animation = animation;
     lastDirection = initDirection;
     lastDirectionHorizontal =

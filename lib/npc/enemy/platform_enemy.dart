@@ -6,14 +6,11 @@ class PlatformEnemy extends SimpleEnemy
     required super.position,
     required super.size,
     PlatformAnimations? animation,
-    Direction initDirection = Direction.right,
-    double? speed,
-    double life = 100,
+    super.initDirection,
+    super.speed,
+    super.life,
     int countJumps = 1,
   }) : super(
-          initDirection: initDirection,
-          speed: speed,
-          life: life,
           animation: animation?.toSimpleDirectionAnimation(),
         ) {
     setupJumper(maxJump: countJumps);

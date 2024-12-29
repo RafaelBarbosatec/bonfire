@@ -27,11 +27,11 @@ extension AllyExtensions on Ally {
     VoidCallback? execute,
     Vector2? centerOffset,
   }) {
-    if (!checkInterval('attackMelee', interval, dtUpdate)) return;
+    if (!checkInterval('attackMelee', interval, dtUpdate) || isDead) {
+      return;
+    }
 
-    if (isDead) return;
-
-    Direction direct = direction ?? lastDirection;
+    final direct = direction ?? lastDirection;
 
     simpleAttackMeleeByDirection(
       damage: damage,
@@ -65,11 +65,11 @@ extension AllyExtensions on Ally {
     VoidCallback? execute,
     LightingConfig? lightingConfig,
   }) {
-    if (!checkInterval('attackRange', interval, dtUpdate)) return;
+    if (!checkInterval('attackRange', interval, dtUpdate) || isDead) {
+      return;
+    }
 
-    if (isDead) return;
-
-    Direction direct = direction ?? lastDirection;
+    final direct = direction ?? lastDirection;
 
     simpleAttackRangeByDirection(
       animationRight: animationRight,
@@ -87,7 +87,7 @@ extension AllyExtensions on Ally {
       attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
     );
 
-    if (execute != null) execute();
+    execute?.call();
   }
 
   /// Checks whether the Enemy is within range. If so, move to it.
@@ -104,18 +104,20 @@ extension AllyExtensions on Ally {
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
   }) {
-    if (isDead) return;
+    if (isDead) {
+      return;
+    }
 
     seeComponentType<Enemy>(
       radiusVision: radiusVision,
       angle: angle ?? lastDirection.toRadians(),
       visionAngle: visionAngle,
       observed: (enemy) {
-        var e = enemy.first;
+        final e = enemy.first;
         observed?.call(e);
-        bool inDistance = keepDistance(
+        final inDistance = keepDistance(
           e,
-          (minDistanceFromPlayer ?? (radiusVision - 5)),
+          minDistanceFromPlayer ?? (radiusVision - 5),
         );
         if (inDistance) {
           final playerDirection = getComponentDirectionFromMe(e);
@@ -132,7 +134,7 @@ extension AllyExtensions on Ally {
         }
       },
       notObserved: () {
-        bool stop = notObserved?.call() ?? true;
+        final stop = notObserved?.call() ?? true;
         if (stop) {
           stopMove();
         }

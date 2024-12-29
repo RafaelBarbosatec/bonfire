@@ -16,11 +16,11 @@ extension EnemyExtensions on Enemy {
     VoidCallback? execute,
     Vector2? centerOffset,
   }) {
-    if (!checkInterval('attackMelee', interval, dtUpdate)) return;
+    if (!checkInterval('attackMelee', interval, dtUpdate) || isDead) {
+      return;
+    }
 
-    if (isDead) return;
-
-    Direction direct = direction ??
+    final direct = direction ??
         (gameRef.player != null
             ? getComponentDirectionFromMe(gameRef.player!)
             : lastDirection);
@@ -57,11 +57,11 @@ extension EnemyExtensions on Enemy {
     VoidCallback? execute,
     LightingConfig? lightingConfig,
   }) {
-    if (!checkInterval('attackRange', interval, dtUpdate)) return;
+    if (!checkInterval('attackRange', interval, dtUpdate) || isDead) {
+      return;
+    }
 
-    if (isDead) return;
-
-    Direction direct = direction ??
+    final direct = direction ??
         (gameRef.player != null
             ? getComponentDirectionFromMe(gameRef.player!)
             : lastDirection);
@@ -103,7 +103,9 @@ extension EnemyExtensions on Enemy {
       assert(minDistanceFromPlayer < radiusVision);
     }
 
-    if (isDead) return;
+    if (isDead) {
+      return;
+    }
 
     seePlayer(
       radiusVision: radiusVision,
@@ -111,9 +113,9 @@ extension EnemyExtensions on Enemy {
       angle: angle,
       observed: (player) {
         observed?.call(player);
-        double minD = (minDistanceFromPlayer ?? (radiusVision - 5));
+        final minD = minDistanceFromPlayer ?? (radiusVision - 5);
         if (useDiagonal) {
-          bool inDistance = keepDistance(
+          final inDistance = keepDistance(
             player,
             minD,
           );
@@ -152,7 +154,7 @@ extension EnemyExtensions on Enemy {
         }
       },
       notObserved: () {
-        bool stop = notObserved?.call() ?? true;
+        final stop = notObserved?.call() ?? true;
         if (stop) {
           stopMove(forceIdle: true);
         }

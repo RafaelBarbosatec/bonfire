@@ -17,16 +17,17 @@ extension RotationEnemyExtensions on RotationEnemy {
     double margin = 10,
     bool runOnlyVisibleInScreen = true,
   }) {
-    if (isDead) return;
-    if (runOnlyVisibleInScreen && !isVisible) return;
+    if ((runOnlyVisibleInScreen && !isVisible) || isDead) {
+      return;
+    }
 
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
-        double radAngle = getAngleFromPlayer();
+        final radAngle = getAngleFromPlayer();
 
-        Rect playerRect = player.rectCollision;
-        Rect rectPlayerCollision = playerRect.inflate(margin);
+        final playerRect = player.rectCollision;
+        final rectPlayerCollision = playerRect.inflate(margin);
 
         if (rectCollision.overlaps(rectPlayerCollision)) {
           closePlayer(player);
@@ -38,7 +39,7 @@ extension RotationEnemyExtensions on RotationEnemy {
         moveFromAngle(radAngle);
       },
       notObserved: () {
-        bool stop = notObserved?.call() ?? true;
+        final stop = notObserved?.call() ?? true;
         if (stop) {
           stopMove();
         }
@@ -55,28 +56,29 @@ extension RotationEnemyExtensions on RotationEnemy {
     double? minDistanceCellsFromPlayer,
     bool runOnlyVisibleInScreen = true,
   }) {
-    if (isDead) return;
-    if (runOnlyVisibleInScreen && !isVisible) return;
+    if ((runOnlyVisibleInScreen && !isVisible) || isDead) {
+      return;
+    }
 
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
         positioned(player);
 
-        Rect playerRect = player.rectCollision;
-        double distance = (minDistanceCellsFromPlayer ?? radiusVision);
+        final playerRect = player.rectCollision;
+        final distance = minDistanceCellsFromPlayer ?? radiusVision;
 
-        Vector2 myPosition = Vector2(
+        final myPosition = Vector2(
           center.x,
           center.y,
         );
 
-        Vector2 playerPosition = Vector2(
+        final playerPosition = Vector2(
           playerRect.center.dx,
           playerRect.center.dy,
         );
 
-        double dist = myPosition.distanceTo(playerPosition);
+        final dist = myPosition.distanceTo(playerPosition);
 
         if (dist >= distance) {
           stopMove();
@@ -88,7 +90,7 @@ extension RotationEnemyExtensions on RotationEnemy {
         );
       },
       notObserved: () {
-        bool stop = notObserved?.call() ?? true;
+        final stop = notObserved?.call() ?? true;
         if (stop) {
           stopMove();
         }
@@ -109,9 +111,9 @@ extension RotationEnemyExtensions on RotationEnemy {
     double marginFromCenter = 16,
     Vector2? centerOffset,
   }) {
-    if (!checkInterval('attackMelee', interval, dtUpdate)) return;
-
-    if (isDead) return;
+    if (!checkInterval('attackMelee', interval, dtUpdate) || isDead) {
+      return;
+    }
 
     simpleAttackMeleeByAngle(
       id: id,
@@ -148,9 +150,9 @@ extension RotationEnemyExtensions on RotationEnemy {
     Vector2? centerOffset,
     double marginFromOrigin = 16,
   }) {
-    if (!checkInterval('attackRange', interval, dtUpdate)) return;
-
-    if (isDead) return;
+    if (!checkInterval('attackRange', interval, dtUpdate) || isDead) {
+      return;
+    }
 
     simpleAttackRangeByAngle(
       animation: animation,

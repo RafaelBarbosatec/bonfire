@@ -1,7 +1,6 @@
 import 'package:bonfire/widgets/map_navigator/map_navigator_controller.dart';
+import 'package:bonfire/widgets/map_navigator/map_navigator_provider.dart';
 import 'package:flutter/material.dart';
-
-import 'map_navigator_provider.dart';
 
 export 'package:bonfire/widgets/map_navigator/map_navigator_controller.dart';
 
@@ -12,7 +11,9 @@ typedef BonfireMapBuilder = Widget Function(
 );
 
 typedef MapItemBuilder = MapItem Function(
-    BuildContext context, Object? arguments);
+  BuildContext context,
+  Object? arguments,
+);
 
 class MapNavigator extends StatefulWidget {
   final Map<String, MapItemBuilder> maps;
@@ -24,9 +25,9 @@ class MapNavigator extends StatefulWidget {
   final Curve transitionCurve;
 
   MapNavigator({
-    super.key,
     required this.maps,
     required this.builder,
+    super.key,
     this.initialMap,
     this.transitionBuilder,
     this.layoutBuilder,

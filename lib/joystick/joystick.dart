@@ -21,10 +21,12 @@ class Joystick extends PlayerController {
     }
   }
 
-  void initialize(Vector2 size) async {
-    if (!hasGameRef) return;
+  void initialize(Vector2 size) {
+    if (!hasGameRef) {
+      return;
+    }
     directional?.initialize(this, gameRef.camera.viewport);
-    for (var action in actions) {
+    for (final action in actions) {
       action.initialize(this, gameRef.camera.viewport);
     }
   }
@@ -49,7 +51,7 @@ class Joystick extends PlayerController {
   void render(Canvas canvas) {
     super.render(canvas);
     directional?.render(canvas);
-    for (JoystickAction action in actions) {
+    for (final action in actions) {
       action.render(canvas);
     }
   }
@@ -57,7 +59,7 @@ class Joystick extends PlayerController {
   @override
   void update(double dt) {
     directional?.update(dt);
-    for (JoystickAction action in actions) {
+    for (final action in actions) {
       action.update(dt);
     }
     super.update(dt);
@@ -65,7 +67,7 @@ class Joystick extends PlayerController {
 
   @override
   bool handlerPointerCancel(PointerCancelEvent event) {
-    for (JoystickAction action in actions) {
+    for (final action in actions) {
       action.actionUp(event.pointer);
     }
     directional?.directionalUp(event.pointer);
@@ -75,7 +77,7 @@ class Joystick extends PlayerController {
   @override
   bool handlerPointerDown(PointerDownEvent event) {
     directional?.directionalDown(event.pointer, event.localPosition);
-    for (JoystickAction action in actions) {
+    for (final action in actions) {
       action.actionDown(event.pointer, event.localPosition);
     }
     return super.handlerPointerDown(event);
@@ -83,7 +85,7 @@ class Joystick extends PlayerController {
 
   @override
   bool handlerPointerMove(PointerMoveEvent event) {
-    for (JoystickAction action in actions) {
+    for (final action in actions) {
       action.actionMove(event.pointer, event.localPosition);
     }
     directional?.directionalMove(event.pointer, event.localPosition);
@@ -92,7 +94,7 @@ class Joystick extends PlayerController {
 
   @override
   bool handlerPointerUp(PointerUpEvent event) {
-    for (JoystickAction action in actions) {
+    for (final action in actions) {
       action.actionUp(event.pointer);
     }
     directional?.directionalUp(event.pointer);
@@ -115,7 +117,7 @@ class Joystick extends PlayerController {
   Future<void> onLoad() async {
     await super.onLoad();
     await directional?.onLoad();
-    for (var ac in actions) {
+    for (final ac in actions) {
       await ac.onLoad();
     }
   }

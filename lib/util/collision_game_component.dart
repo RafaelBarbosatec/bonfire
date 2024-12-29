@@ -17,10 +17,10 @@ class CollisionMapComponent extends GameComponent {
   List<ShapeHitbox>? collisions;
 
   CollisionMapComponent({
-    this.name = '',
-    Map<String, dynamic>? properties,
     required Vector2 position,
     required Vector2 size,
+    this.name = '',
+    Map<String, dynamic>? properties,
     this.collisions,
   }) {
     this.properties = properties;

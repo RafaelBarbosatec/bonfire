@@ -26,12 +26,12 @@ class FollowerWidget extends StatefulWidget {
   final Offset offset;
   final AlignmentGeometry? alignment;
   const FollowerWidget({
-    Key? key,
     required this.target,
     required this.child,
+    super.key,
     this.offset = Offset.zero,
     this.alignment,
-  }) : super(key: key);
+  });
 
   /// Use this method to show a widget what follow the component
   static void show({
@@ -60,7 +60,7 @@ class FollowerWidget extends StatefulWidget {
   }
 
   /// Use this method to remove a widget what follow the component
-  static remove(String identify) {
+  static void remove(String identify) {
     if (_mapOverlayEntry.containsKey(identify)) {
       _mapOverlayEntry[identify]?.remove();
       _mapOverlayEntry.remove(identify);
@@ -68,7 +68,7 @@ class FollowerWidget extends StatefulWidget {
   }
 
   /// Use this method to remove all widgets what follow the component.
-  static removeAll() {
+  static void removeAll() {
     _mapOverlayEntry.forEach((key, value) {
       value.remove();
     });
@@ -115,8 +115,8 @@ class FollowerWidgetState extends State<FollowerWidget> {
   Widget build(BuildContext context) {
     if (widgetPosition != null) {
       return Positioned(
-        top: (widgetPosition!.y + widget.offset.dy),
-        left: (widgetPosition!.x + widget.offset.dx),
+        top: widgetPosition!.y + widget.offset.dy,
+        left: widgetPosition!.x + widget.offset.dx,
         child: Transform.scale(
           scale: lastZoom,
           alignment: widget.alignment,

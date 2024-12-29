@@ -52,11 +52,12 @@ class CameraParallax extends Parallax {
   final _delta = Vector2.zero();
 
   void moveParallax(Vector2 velocity, double dt) {
-    for (var layer in layers) {
+    for (final layer in layers) {
       layer.update(
         _delta
           ..setFrom(
-              Vector2(baseVelocity.x * velocity.x, baseVelocity.y * velocity.y))
+            Vector2(baseVelocity.x * velocity.x, baseVelocity.y * velocity.y),
+          )
           ..multiply(layer.velocityMultiplier)
           ..scale(dt),
         dt,
@@ -69,7 +70,7 @@ extension IterableExtension<T> on Iterable<T> {
   /// Maps each element and its index to a new value.
   Iterable<R> mapIndexed<R>(R Function(int index, T element) convert) sync* {
     var index = 0;
-    for (var element in this) {
+    for (final element in this) {
       yield convert(index++, element);
     }
   }

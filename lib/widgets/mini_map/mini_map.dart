@@ -1,9 +1,9 @@
 import 'dart:async' as async;
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/extensions/color_extensions.dart';
+import 'package:bonfire/widgets/mini_map/mini_map_canvas.dart';
 import 'package:flutter/material.dart';
-
-import 'mini_map_canvas.dart';
 
 ///
 /// Created by
@@ -18,7 +18,9 @@ import 'mini_map_canvas.dart';
 /// on 12/04/22
 
 typedef MiniMapCustomRender<T extends GameComponent> = void Function(
-    Canvas canvas, T component);
+  Canvas canvas,
+  T component,
+);
 
 class MiniMap extends StatefulWidget {
   final BonfireGame game;
@@ -38,8 +40,8 @@ class MiniMap extends StatefulWidget {
   final Color? decorationColor;
   final double zoom;
   MiniMap({
-    Key? key,
     required this.game,
+    super.key,
     this.tileRender,
     this.componentsRender,
     Vector2? size,
@@ -55,8 +57,7 @@ class MiniMap extends StatefulWidget {
     this.allyColor,
     this.zoom = 1.0,
     this.decorationColor,
-  })  : size = size ?? Vector2(200, 200),
-        super(key: key);
+  }) : size = size ?? Vector2(200, 200);
 
   @override
   State<MiniMap> createState() => _MiniMapState();
@@ -98,7 +99,7 @@ class _MiniMapState extends State<MiniMap> {
             height: widget.size.y,
             decoration: BoxDecoration(
               border: widget.border,
-              color: widget.backgroundColor ?? Colors.grey.withOpacity(0.5),
+              color: widget.backgroundColor ?? Colors.grey.setOpacity(0.5),
               borderRadius: widget.borderRadius,
             ),
             child: ClipRRect(
@@ -136,20 +137,20 @@ class _MiniMapState extends State<MiniMap> {
 
   MiniMapCustomRender<TileComponent> tilesRenderDefault() =>
       (canvas, component) {
-        var collisionList = component.children.query<ShapeHitbox>();
+        final collisionList = component.children.query<ShapeHitbox>();
         if (collisionList.isEmpty && widget.tileColor != null) {
           canvas.drawRect(
             component.toRect(),
             tilePaint..color = widget.tileColor!,
           );
         } else {
-          for (var element in collisionList) {
-            var rect = element.toRect();
+          for (final element in collisionList) {
+            final rect = element.toRect();
             canvas.drawRect(
               rect.translate(component.x, component.y),
               tileCollisionPaint
                 ..color =
-                    widget.tileCollisionColor ?? Colors.black.withOpacity(0.5),
+                    widget.tileCollisionColor ?? Colors.black.setOpacity(0.5),
             );
           }
         }
@@ -161,7 +162,7 @@ class _MiniMapState extends State<MiniMap> {
             component.center.toOffset(),
             component.width / 2,
             paintComponent
-              ..color = widget.playerColor ?? Colors.cyan.withOpacity(0.5),
+              ..color = widget.playerColor ?? Colors.cyan.setOpacity(0.5),
           );
           return;
         }
@@ -171,7 +172,7 @@ class _MiniMapState extends State<MiniMap> {
             component.center.toOffset(),
             component.width / 2,
             paintComponent
-              ..color = widget.enemyColor ?? Colors.red.withOpacity(0.5),
+              ..color = widget.enemyColor ?? Colors.red.setOpacity(0.5),
           );
           return;
         }
@@ -181,7 +182,7 @@ class _MiniMapState extends State<MiniMap> {
             component.center.toOffset(),
             component.width / 2,
             paintComponent
-              ..color = widget.allyColor ?? Colors.yellow.withOpacity(0.5),
+              ..color = widget.allyColor ?? Colors.yellow.setOpacity(0.5),
           );
           return;
         }
@@ -191,7 +192,7 @@ class _MiniMapState extends State<MiniMap> {
             component.center.toOffset(),
             component.width / 2,
             paintComponent
-              ..color = widget.npcColor ?? Colors.green.withOpacity(0.5),
+              ..color = widget.npcColor ?? Colors.green.setOpacity(0.5),
           );
           return;
         }
@@ -200,7 +201,7 @@ class _MiniMapState extends State<MiniMap> {
           canvas.drawRect(
             component.toRect(),
             paintComponent
-              ..color = widget.decorationColor ?? Colors.grey.withOpacity(0.5),
+              ..color = widget.decorationColor ?? Colors.grey.setOpacity(0.5),
           );
         }
       };

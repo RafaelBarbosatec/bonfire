@@ -1,9 +1,8 @@
 import 'dart:ui';
 
 import 'package:bonfire/npc/ally/ally.dart';
-
-import '../../../player/player.dart';
-import '../extensions.dart';
+import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/extensions/extensions.dart';
 
 ///
 /// Created by
@@ -26,16 +25,17 @@ extension RotationEnemyExtensions on RotationAlly {
     double margin = 10,
     bool runOnlyVisibleInScreen = true,
   }) {
-    if (isDead) return;
-    if (runOnlyVisibleInScreen && !isVisible) return;
+    if ((runOnlyVisibleInScreen && !isVisible) || isDead) {
+      return;
+    }
 
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
-        double radAngle = getAngleFromPlayer();
+        final radAngle = getAngleFromPlayer();
 
-        Rect playerRect = player.rectCollision;
-        Rect rectPlayerCollision = Rect.fromLTWH(
+        final playerRect = player.rectCollision;
+        final rectPlayerCollision = Rect.fromLTWH(
           playerRect.left - margin,
           playerRect.top - margin,
           playerRect.width + (margin * 2),
@@ -51,7 +51,7 @@ extension RotationEnemyExtensions on RotationAlly {
         moveFromAngle(radAngle);
       },
       notObserved: () {
-        bool stop = notObserved?.call() ?? true;
+        final stop = notObserved?.call() ?? true;
         if (stop) {
           stopMove();
         }
