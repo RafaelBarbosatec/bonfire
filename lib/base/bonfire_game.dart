@@ -192,8 +192,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     super.update(dt);
     _intervalUpdateOder.update(dt);
     _intervalOprimizeTree.update(dt);
-    // ignore: use_if_null_to_convert_nulls_to_bools
-    if (!_gameMounted && camera.world?.children.isNotEmpty == true) {
+    final containsChildren = camera.world?.children.isNotEmpty == true;
+    if (!_gameMounted && containsChildren) {
       _gameMounted = true;
       Future.delayed(Duration.zero, _notifyGameMounted);
     }
