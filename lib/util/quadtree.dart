@@ -1,14 +1,3 @@
-///
-/// Created by
-///
-/// ─▄▀─▄▀
-/// ──▀──▀
-/// █▀▀▀▀▀█▄
-/// █░░░░░█─█
-/// ▀▄▄▄▄▄▀▀
-///
-/// Rafaelbarbosatec
-/// on 30/08/21
 import 'dart:math';
 
 // defaults should almost never be used, tune the quad tree to fit your problem
@@ -50,16 +39,23 @@ class QuadTree<T> extends Rectangle<num> {
         maxItems: maxItems,
       );
 
-  QuadTree._(num left, num top, num width, num height, int depth,
-      {int? maxDepth, int? maxItems})
-      : maxDepth = maxDepth ?? default_max_depth,
+  QuadTree._(
+    super.left,
+    super.top,
+    super.width,
+    super.height,
+    int depth, {
+    int? maxDepth,
+    int? maxItems,
+  })  : maxDepth = maxDepth ?? default_max_depth,
         maxItems = maxItems ?? default_max_items,
         _depth = depth,
-        _center = Point<num>(left + width / 2.0, top + height / 2.0),
-        super(left, top, width, height);
+        _center = Point<num>(left + width / 2.0, top + height / 2.0);
 
   bool insert(T item, Point<num> atPoint, {dynamic id}) {
-    if (!containsPoint(atPoint)) return false;
+    if (!containsPoint(atPoint)) {
+      return false;
+    }
     if (_children.isEmpty) {
       if (_items.length + 1 <= maxItems || _depth + 1 > maxDepth) {
         _items.add(_ItemAtPoint<T>(id, item, atPoint));
@@ -74,14 +70,14 @@ class QuadTree<T> extends Rectangle<num> {
     if (_children.isEmpty) {
       _items.removeWhere((item) => item.id == id);
     }
-    for (var element in _children) {
+    for (final element in _children) {
       element.removeById(id);
     }
   }
 
   void clear() {
     _items.clear();
-    for (var element in _children) {
+    for (final element in _children) {
       element.clear();
     }
     _children.clear();
@@ -91,7 +87,7 @@ class QuadTree<T> extends Rectangle<num> {
     if (_children.isEmpty) {
       _items.removeWhere((i) => i.item == item);
     }
-    for (var element in _children) {
+    for (final element in _children) {
       element.remove(item);
     }
   }
@@ -134,7 +130,7 @@ class QuadTree<T> extends Rectangle<num> {
       _newUpperLeft, // _upperLeftIndex = 0
       _newUpperRight, // _upperRightIndex = 1
       _newLowerLeft, // _lowerLeftIndex = 2
-      _newLowerRight // _lowerRightIndex = 3
+      _newLowerRight, // _lowerRightIndex = 3
     ]);
     for (final item in _items) {
       _insertItemIntoChildren(item.item, item.point, id: item.id);

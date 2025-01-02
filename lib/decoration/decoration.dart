@@ -33,7 +33,9 @@ class GameDecoration extends AnimatedGameObject {
     super.lightingConfig,
     super.renderAboveComponents,
   }) {
-    loader?.add(AssetToLoad(sprite, (value) => this.sprite = value));
+    loader?.add(
+      AssetToLoad<Sprite>(sprite, (value) => this.sprite = value),
+    );
     applyBleedingPixel(position: position, size: size);
   }
 
@@ -46,7 +48,7 @@ class GameDecoration extends AnimatedGameObject {
     super.lightingConfig,
     super.renderAboveComponents,
   }) {
-    loader?.add(AssetToLoad(animation, (value) => setAnimation(value)));
+    loader?.add(AssetToLoad<SpriteAnimation>(animation, setAnimation));
     applyBleedingPixel(position: position, size: size);
   }
 

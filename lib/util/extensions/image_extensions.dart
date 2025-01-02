@@ -37,9 +37,9 @@ extension BonfireImageExtension on Image {
   /// Do merge image. Overlaying the images
   /// @deprecated Use [ImageComposition]
   Future<Image> overlap(Image other) {
-    PictureRecorder recorder = PictureRecorder();
+    final recorder = PictureRecorder();
     final paint = Paint();
-    Canvas canvas = Canvas(recorder);
+    final canvas = Canvas(recorder);
     final totalWidth = max(width, other.width);
     final totalHeight = max(height, other.height);
     canvas.drawImage(this, Offset.zero, paint);
@@ -49,13 +49,13 @@ extension BonfireImageExtension on Image {
 
   /// Do merge image list. Overlaying the images
   Future<Image> overlapList(List<Image> others) {
-    PictureRecorder recorder = PictureRecorder();
+    final recorder = PictureRecorder();
     final paint = Paint();
-    Canvas canvas = Canvas(recorder);
-    int totalWidth = width;
-    int totalHeight = height;
+    final canvas = Canvas(recorder);
+    var totalWidth = width;
+    var totalHeight = height;
     canvas.drawImage(this, Offset.zero, paint);
-    for (var i in others) {
+    for (final i in others) {
       totalWidth = max(totalWidth, i.width);
       totalHeight = max(totalHeight, i.height);
       canvas.drawImage(i, Offset.zero, paint);
@@ -65,15 +65,15 @@ extension BonfireImageExtension on Image {
 
   // flip the frames horizontally
   Future<Image> flipAnimation({required Vector2 size, required int count}) {
-    PictureRecorder recorder = PictureRecorder();
+    final recorder = PictureRecorder();
     final paint = Paint();
-    Canvas canvas = Canvas(recorder);
+    final canvas = Canvas(recorder);
 
     canvas.translate(width / 2, height / 2);
     canvas.scale(-1, 1);
     canvas.translate(-width / 2, -height / 2);
-    int indexAux = 0;
-    for (int i = count - 1; i >= 0; i--) {
+    var indexAux = 0;
+    for (var i = count - 1; i >= 0; i--) {
       final dstPosition = Vector2(size.x * i, 0);
       final srcPosition = Vector2(size.x * indexAux, 0);
       canvas.drawImageRect(

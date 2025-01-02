@@ -13,7 +13,7 @@ mixin PointerDetector {
 mixin PointerDetectorHandler on Component {
   // If return 'true' this event is not relay to others components.
   bool handlerPointerDown(PointerDownEvent event) {
-    for (var child in children) {
+    for (final child in children) {
       if (child is GameComponent) {
         if (child.handlerPointerDown(event)) {
           return true;
@@ -25,7 +25,7 @@ mixin PointerDetectorHandler on Component {
 
   // If return 'true' this event is not relay to others components.
   bool handlerPointerMove(PointerMoveEvent event) {
-    for (var child in children) {
+    for (final child in children) {
       if (child is GameComponent) {
         if (child.handlerPointerMove(event)) {
           return true;
@@ -37,7 +37,7 @@ mixin PointerDetectorHandler on Component {
 
   // If return 'true' this event is not relay to others components.
   bool handlerPointerUp(PointerUpEvent event) {
-    for (var child in children) {
+    for (final child in children) {
       if (child is GameComponent) {
         if (child.handlerPointerUp(event)) {
           return true;
@@ -49,7 +49,7 @@ mixin PointerDetectorHandler on Component {
 
   // If return 'true' this event is not relay to others components.
   bool handlerPointerCancel(PointerCancelEvent event) {
-    for (var child in children) {
+    for (final child in children) {
       if (child is GameComponent) {
         if (child.handlerPointerCancel(event)) {
           return true;

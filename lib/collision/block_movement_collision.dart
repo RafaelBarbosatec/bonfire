@@ -21,7 +21,7 @@ mixin BlockMovementCollision on Movement {
   bool get blockMovementCollisionEnabled => _blockMovementCollisionEnabled;
   final Map<BlockMovementCollision, CollisionData> _collisionsResolution = {};
   CollisionData? _lastCollisionData;
-  CollisionData? get lastCollisionData => _lastCollisionData!;
+  CollisionData? get lastCollisionData => _lastCollisionData;
 
   void setupBlockMovementCollision({bool? enabled, BodyType? bodyType}) {
     _bodyType = bodyType ?? _bodyType;
@@ -50,14 +50,14 @@ mixin BlockMovementCollision on Movement {
 
     if (_bodyType.isDynamic) {
       Vector2 correction;
-      double depth = collisionData.depth.abs();
+      var depth = collisionData.depth.abs();
       if (depth > 0) {
         depth += 0.08;
       }
 
-      correction = (-collisionData.normal * depth);
+      correction = -collisionData.normal * depth;
       if ((other is BlockMovementCollision) && other._bodyType.isDynamic) {
-        correction = (-collisionData.normal * depth / 2);
+        correction = -collisionData.normal * depth / 2;
       }
 
       correctPositionFromCollision(position + correction);
@@ -82,8 +82,8 @@ mixin BlockMovementCollision on Movement {
       super.onCollision(intersectionPoints, other);
       return;
     }
-    bool stopOtherMovement = true;
-    bool stopMovement = other is GameComponent
+    var stopOtherMovement = true;
+    final stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
         : true;
     if (other is BlockMovementCollision) {
@@ -108,11 +108,11 @@ mixin BlockMovementCollision on Movement {
       return;
     }
 
-    ShapeHitbox? shape1 = _getCollisionShapeHitbox(
+    final shape1 = _getCollisionShapeHitbox(
       shapeHitboxes,
       intersectionPoints,
     );
-    ShapeHitbox? shape2 = _getCollisionShapeHitbox(
+    final shape2 = _getCollisionShapeHitbox(
       other.children.query<ShapeHitbox>(),
       intersectionPoints,
     );
@@ -167,13 +167,13 @@ mixin BlockMovementCollision on Movement {
     ShapeHitbox shapeB,
     PositionComponent other,
   ) {
-    Vector2 normal = Vector2.zero();
-    double depth = double.maxFinite;
+    var normal = Vector2.zero();
+    var depth = double.maxFinite;
 
-    List<Vector2> verticesA = CollisionUtil.getPolygonVertices(shapeA);
-    List<Vector2> verticesB = CollisionUtil.getPolygonVertices(shapeB);
+    final verticesA = CollisionUtil.getPolygonVertices(shapeA);
+    final verticesB = CollisionUtil.getPolygonVertices(shapeB);
 
-    var normalAndDepthA = CollisionUtil.getNormalAndDepth(
+    final normalAndDepthA = CollisionUtil.getNormalAndDepth(
       verticesA,
       verticesB,
     );
@@ -182,7 +182,7 @@ mixin BlockMovementCollision on Movement {
       depth = normalAndDepthA.depth;
       normal = normalAndDepthA.normal;
     }
-    var normalAndDepthB = CollisionUtil.getNormalAndDepth(
+    final normalAndDepthB = CollisionUtil.getNormalAndDepth(
       verticesB,
       verticesA,
       insverted: true,
@@ -193,7 +193,7 @@ mixin BlockMovementCollision on Movement {
       normal = normalAndDepthB.normal;
     }
 
-    Vector2 direction = shapeB.absoluteCenter - shapeA.absoluteCenter;
+    final direction = shapeB.absoluteCenter - shapeA.absoluteCenter;
 
     if (direction.dot(normal) < 0) {
       normal = -normal;
@@ -208,18 +208,18 @@ mixin BlockMovementCollision on Movement {
     PositionComponent other, {
     bool inverted = false,
   }) {
-    Vector2 normal = Vector2.zero();
-    double depth = double.maxFinite;
-    Vector2 axis = Vector2.zero();
+    var normal = Vector2.zero();
+    var depth = double.maxFinite;
+    var axis = Vector2.zero();
     double axisDepth = 0;
 
-    List<Vector2> vertices = CollisionUtil.getPolygonVertices(shapeA);
+    final vertices = CollisionUtil.getPolygonVertices(shapeA);
 
-    for (int i = 0; i < vertices.length; i++) {
-      Vector2 va = vertices[i];
-      Vector2 vb = vertices[(i + 1) % vertices.length];
+    for (var i = 0; i < vertices.length; i++) {
+      final va = vertices[i];
+      final vb = vertices[(i + 1) % vertices.length];
 
-      Vector2 edge = vb - va;
+      final edge = vb - va;
       axis = Vector2(-edge.y, edge.x);
       axis = axis.normalized();
 
@@ -238,11 +238,11 @@ mixin BlockMovementCollision on Movement {
       }
     }
 
-    int cpIndex = CollisionUtil.findClosesPointOnPolygon(
+    final cpIndex = CollisionUtil.findClosesPointOnPolygon(
       shapeB.absoluteCenter,
       vertices,
     );
-    Vector2 cp = vertices[cpIndex];
+    final cp = vertices[cpIndex];
 
     axis = cp - shapeB.absoluteCenter;
     axis = axis.normalized();
@@ -261,7 +261,7 @@ mixin BlockMovementCollision on Movement {
       normal = axis;
     }
 
-    Vector2 direction = inverted
+    final direction = inverted
         ? shapeA.absoluteCenter - shapeB.absoluteCenter
         : shapeB.absoluteCenter - shapeA.absoluteCenter;
 
@@ -273,12 +273,14 @@ mixin BlockMovementCollision on Movement {
   }
 
   ({Vector2 normal, double depth}) _intersectCircles(
-      CircleHitbox shapeA, CircleHitbox shapeB) {
-    Vector2 normal = Vector2.zero();
-    double depth = double.maxFinite;
+    CircleHitbox shapeA,
+    CircleHitbox shapeB,
+  ) {
+    var normal = Vector2.zero();
+    var depth = double.maxFinite;
 
-    double distance = shapeA.absoluteCenter.distanceTo(shapeB.absoluteCenter);
-    double radii = shapeA.radius + shapeB.radius;
+    final distance = shapeA.absoluteCenter.distanceTo(shapeB.absoluteCenter);
+    final radii = shapeA.radius + shapeB.radius;
 
     normal = (shapeB.absoluteCenter - shapeA.absoluteCenter).normalized();
     depth = radii - distance;
@@ -290,13 +292,15 @@ mixin BlockMovementCollision on Movement {
     Iterable<ShapeHitbox> shapeHitboxes,
     Set<Vector2> intersectionPoints,
   ) {
-    if (shapeHitboxes.isEmpty || intersectionPoints.isEmpty) return null;
+    if (shapeHitboxes.isEmpty || intersectionPoints.isEmpty) {
+      return null;
+    }
     if (shapeHitboxes.length == 1) {
       return shapeHitboxes.first;
     }
-    Map<ShapeHitbox, double> distances = {};
-    for (var hitbox in shapeHitboxes) {
-      for (var element in intersectionPoints) {
+    final distances = <ShapeHitbox, double>{};
+    for (final hitbox in shapeHitboxes) {
+      for (final element in intersectionPoints) {
         distances[hitbox] = hitbox.absoluteCenter.distanceTo(element);
         if (hitbox.containsPoint(element)) {
           return hitbox;

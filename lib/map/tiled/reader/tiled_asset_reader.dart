@@ -13,7 +13,7 @@ class TiledAssetReader extends WorldMapReader<TiledMap> {
   TiledAssetReader({
     required this.asset,
   }) {
-    var assetKey = asset.startsWith(_ASSET_KEY_PREFIX)
+    final assetKey = asset.startsWith(_ASSET_KEY_PREFIX)
         ? asset.substring(_ASSET_KEY_PREFIX.length)
         : asset;
     basePath = assetKey.replaceAll(assetKey.split('/').last, '');

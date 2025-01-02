@@ -15,20 +15,20 @@ class CollisionUtil {
     List<Vector2> verticesB, {
     bool insverted = false,
   }) {
-    Vector2 normal = Vector2.zero();
-    double depth = double.maxFinite;
-    for (int i = 0; i < verticesA.length; i++) {
-      Vector2 va = verticesA[i];
-      Vector2 vb = verticesA[(i + 1) % verticesA.length];
+    var normal = Vector2.zero();
+    var depth = double.maxFinite;
+    for (var i = 0; i < verticesA.length; i++) {
+      final va = verticesA[i];
+      final vb = verticesA[(i + 1) % verticesA.length];
 
-      Vector2 edge = vb - va;
-      Vector2 axis = Vector2(-edge.y, edge.x);
+      final edge = vb - va;
+      var axis = Vector2(-edge.y, edge.x);
       axis = axis.normalized();
 
       final pA = projectVertices(insverted ? verticesB : verticesA, axis);
       final pB = projectVertices(insverted ? verticesA : verticesB, axis);
 
-      double axisDepth = min(pB.max - pA.min, pA.max - pB.min);
+      final double axisDepth = min(pB.max - pA.min, pA.max - pB.min);
       if (axisDepth < depth) {
         depth = axisDepth;
         normal = axis;
@@ -41,10 +41,10 @@ class CollisionUtil {
     List<Vector2> vertices,
     Vector2 axis,
   ) {
-    double min = double.maxFinite;
-    double max = -double.maxFinite;
-    for (var v in vertices) {
-      double proj = v.dot(axis);
+    var min = double.maxFinite;
+    var max = -double.maxFinite;
+    for (final v in vertices) {
+      final proj = v.dot(axis);
 
       if (proj < min) {
         min = proj;
@@ -57,19 +57,22 @@ class CollisionUtil {
   }
 
   static ({double min, double max}) projectCircle(
-      Vector2 center, double radius, Vector2 axis) {
-    Vector2 direction = axis.normalized();
-    Vector2 directionAndRadius = direction * radius;
+    Vector2 center,
+    double radius,
+    Vector2 axis,
+  ) {
+    final direction = axis.normalized();
+    final directionAndRadius = direction * radius;
 
-    Vector2 p1 = center + directionAndRadius;
-    Vector2 p2 = center - directionAndRadius;
+    final p1 = center + directionAndRadius;
+    final p2 = center - directionAndRadius;
 
-    double min = p1.dot(axis);
-    double max = p2.dot(axis);
+    var min = p1.dot(axis);
+    var max = p2.dot(axis);
 
     if (min > max) {
       // swap the min and max values.
-      double t = min;
+      final t = min;
       min = max;
       max = t;
     }
@@ -80,12 +83,12 @@ class CollisionUtil {
     Vector2 circleCenter,
     List<Vector2> vertices,
   ) {
-    int result = -1;
-    double minDistance = double.maxFinite;
+    var result = -1;
+    var minDistance = double.maxFinite;
 
-    for (int i = 0; i < vertices.length; i++) {
-      Vector2 v = vertices[i];
-      double distance = v.distanceTo(circleCenter);
+    for (var i = 0; i < vertices.length; i++) {
+      final v = vertices[i];
+      final distance = v.distanceTo(circleCenter);
 
       if (distance < minDistance) {
         minDistance = distance;
@@ -101,7 +104,7 @@ final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
 extension PolygonComponentExt on PolygonComponent {
   List<Vector2> get absoluteVertices {
-    final Vector2 p = absoluteTopLeftPosition;
+    final p = absoluteTopLeftPosition;
     final adjustedVerticies =
         absoluteAngle == 0 ? vertices : rotatedVerticesBonfire(absoluteAngle);
 

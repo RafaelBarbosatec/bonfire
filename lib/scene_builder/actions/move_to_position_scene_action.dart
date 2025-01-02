@@ -22,28 +22,28 @@ class MoveToPositionSceneAction<T extends Movement> extends SceneAction {
   Vector2 _diffPosition = Vector2.zero();
 
   MoveToPositionSceneAction({
-    dynamic id,
     required this.component,
     required this.newPosition,
+    dynamic id,
   }) : super(id);
 
   @override
   bool runAction(double dt, BonfireGameInterface game) {
-    var diffPosition = newPosition - component.position;
+    final diffPosition = newPosition - component.position;
 
-    var dtSpeed = component.speed * dt;
+    final dtSpeed = component.speed * dt;
     if (diffPosition.x.abs() < dtSpeed && diffPosition.y.abs() < dtSpeed) {
       component.stopMove();
       return true;
     }
 
-    var d = _diffPosition - diffPosition;
+    final d = _diffPosition - diffPosition;
     if (d.isZero()) {
       component.stopMove();
       return true;
     }
     _diffPosition = diffPosition;
-    var radAngle = atan2(diffPosition.y, diffPosition.x);
+    final radAngle = atan2(diffPosition.y, diffPosition.x);
     component.moveFromAngle(radAngle);
     return false;
   }

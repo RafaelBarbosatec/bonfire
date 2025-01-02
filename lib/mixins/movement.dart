@@ -57,6 +57,7 @@ mixin Movement on GameComponent {
     }
   }
 
+  // ignore: use_setters_to_change_properties
   void correctPositionFromCollision(Vector2 position) {
     super.position = position;
   }
@@ -185,7 +186,9 @@ mixin Movement on GameComponent {
   }
 
   void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {
-    if (isIdle && !forceIdle) return;
+    if (isIdle && !forceIdle) {
+      return;
+    }
     setZeroVelocity(isX: isX, isY: isY);
     idle();
   }
@@ -292,8 +295,8 @@ mixin Movement on GameComponent {
       return;
     }
 
-    var normal = velocity.normalized()..absolute();
-    double baseDiagonal = 0.2;
+    final normal = velocity.normalized()..absolute();
+    const baseDiagonal = 0.2;
 
     if (velocity.x > 0 && velocity.y > 0) {
       if (normal.x > baseDiagonal && normal.y > baseDiagonal) {
@@ -361,15 +364,15 @@ mixin Movement on GameComponent {
     double? speed,
     bool useCenter = true,
   }) {
-    double diagonalSpeed = (speed ?? this.speed) * diaginalReduction;
-    double dtSpeed = (speed ?? this.speed) * dtUpdate * 1.1;
-    double dtDiagonalSpeed = diagonalSpeed * dtUpdate * 1.1;
+    final diagonalSpeed = (speed ?? this.speed) * diaginalReduction;
+    final dtSpeed = (speed ?? this.speed) * dtUpdate * 1.1;
+    final dtDiagonalSpeed = diagonalSpeed * dtUpdate * 1.1;
     final rect = rectCollision;
     final compCenter = rect.centerVector2;
     final compPosition = rect.positionVector2;
 
-    double diffX = position.x - (useCenter ? compCenter : compPosition).x;
-    double diffY = position.y - (useCenter ? compCenter : compPosition).y;
+    final diffX = position.x - (useCenter ? compCenter : compPosition).x;
+    final diffY = position.y - (useCenter ? compCenter : compPosition).y;
 
     if (diffX.abs() < dtSpeed && diffY.abs() < dtSpeed) {
       return false;
@@ -444,7 +447,7 @@ mixin Movement on GameComponent {
     double? displacement,
     Iterable<ShapeHitbox>? ignoreHitboxes,
   }) {
-    double maxDistance = displacement ?? (speed * (dtUpdate * 2));
+    final maxDistance = displacement ?? (speed * (dtUpdate * 2));
 
     switch (direction) {
       case Direction.right:
@@ -529,26 +532,26 @@ mixin Movement on GameComponent {
     double maxDistance, {
     Iterable<ShapeHitbox>? ignoreHitboxes,
   }) {
-    double distance = maxDistance;
+    var distance = maxDistance;
     final centerComp = rectCollision.center.toVector2();
-    Vector2 origin1 = centerComp;
-    Vector2 origin3 = centerComp;
+    var origin1 = centerComp;
+    var origin3 = centerComp;
     final size = rectCollision.sizeVector2;
     final vetorDirection = direction.toVector2();
 
     switch (direction) {
       case Direction.right:
       case Direction.left:
-        double halfY = (size.y / 2);
-        double halfX = (size.y / 2);
+        final halfY = size.y / 2;
+        final halfX = size.y / 2;
         origin1 = origin1.translated(0, -halfY);
         origin3 = origin3.translated(0, halfY);
         distance += halfX;
         break;
       case Direction.up:
       case Direction.down:
-        double halfX = (size.x / 2);
-        double halfY = (size.y / 2);
+        final halfX = size.x / 2;
+        final halfY = size.y / 2;
         origin1 = origin1.translated(-halfX, 0);
         origin3 = origin3.translated(halfX, 0);
         distance += halfY;
@@ -558,20 +561,20 @@ mixin Movement on GameComponent {
       case Direction.downLeft:
       case Direction.downRight:
     }
-    bool check1 = raycast(
+    final check1 = raycast(
           vetorDirection,
           maxDistance: distance,
           origin: origin1,
           ignoreHitboxes: ignoreHitboxes,
         ) !=
         null;
-    bool check2 = raycast(
+    final check2 = raycast(
           vetorDirection,
           maxDistance: distance,
           ignoreHitboxes: ignoreHitboxes,
         ) !=
         null;
-    bool check3 = raycast(
+    final check3 = raycast(
           vetorDirection,
           maxDistance: distance,
           origin: origin3,

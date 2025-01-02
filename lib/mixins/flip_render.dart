@@ -18,7 +18,7 @@ mixin FlipRender on GameComponent {
   bool get _needFlip => flipRenderVertically || flipRenderHorizonally;
 
   void _doFlip(Canvas canvas) {
-    Vector2 center = (size / 2);
+    final center = size / 2;
     canvas.save();
     canvas.translate(center.x, center.y);
     canvas.scale(

@@ -12,7 +12,7 @@ abstract class GameComponent extends PositionComponent
         InternalChecker,
         HasPaint,
         CollisionCallbacks {
-  final String _keyIntervalCheckIsVisible = "CHECK_VISIBLE";
+  final String _keyIntervalCheckIsVisible = 'CHECK_VISIBLE';
   final int _intervalCheckIsVisible = 100;
   Map<String, dynamic>? properties;
 
@@ -22,7 +22,14 @@ abstract class GameComponent extends PositionComponent
   /// Param checks if this component is visible on the screen
   bool _isVisibleInScreen = false;
 
-  bool get isVisible => _visible ? _isVisibleInScreen : false;
+  bool get isVisible {
+    if (_visible) {
+      return _isVisibleInScreen;
+    }
+
+    return false;
+  }
+
   set isVisible(bool visible) {
     _visible = visible;
   }
@@ -67,7 +74,9 @@ abstract class GameComponent extends PositionComponent
   }
 
   void _checkIsVisible(double dt) {
-    if (!enabledCheckIsVisible) return;
+    if (!enabledCheckIsVisible) {
+      return;
+    }
     if (checkInterval(
       _keyIntervalCheckIsVisible,
       _intervalCheckIsVisible,
@@ -90,7 +99,10 @@ abstract class GameComponent extends PositionComponent
   /// Method that checks if this component is visible on the screen
   @mustCallSuper
   bool isVisibleInCamera() {
-    return hasGameRef ? gameRef.isVisibleInCamera(this) : false;
+    if (hasGameRef) {
+      return gameRef.isVisibleInCamera(this);
+    }
+    return false;
   }
 
   @override
@@ -101,8 +113,10 @@ abstract class GameComponent extends PositionComponent
   }
 
   void _onSetIfVisible() {
-    if (!_visible) return;
-    bool nowIsVisible = isVisibleInCamera();
+    if (!_visible) {
+      return;
+    }
+    var nowIsVisible = isVisibleInCamera();
     if (isHud) {
       nowIsVisible = true;
       enabledCheckIsVisible = false;
@@ -134,7 +148,7 @@ abstract class GameComponent extends PositionComponent
   void _confHitBoxRender(Component component) {
     if (component is ShapeHitbox) {
       if (gameRef.showCollisionArea) {
-        var paintCollition = Paint()
+        final paintCollition = Paint()
           ..color = gameRef.collisionAreaColor ?? const Color(0xffffffff);
         if (this is Sensor) {
           paintCollition.color = Sensor.color;
@@ -153,7 +167,7 @@ abstract class GameComponent extends PositionComponent
 
   Rect get rectCollision {
     if (_rectCollision == null) {
-      var list = children.query<ShapeHitbox>();
+      final list = children.query<ShapeHitbox>();
       if (list.isNotEmpty) {
         _rectCollision = list.fold(
           list.first.toRect(),
@@ -163,7 +177,7 @@ abstract class GameComponent extends PositionComponent
         );
       }
     }
-    var absoluteRect = toAbsoluteRect();
+    final absoluteRect = toAbsoluteRect();
 
     if (_rectCollision != null) {
       return _rectCollision!.translate(absoluteRect.left, absoluteRect.top);
@@ -245,7 +259,7 @@ abstract class GameComponent extends PositionComponent
   }
 
   List<ShapeHitbox> _getSensorsHitbox() {
-    var sensorHitBox = <ShapeHitbox>[];
+    final sensorHitBox = <ShapeHitbox>[];
     gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
       sensorHitBox.addAll(e.children.query<ShapeHitbox>());
     });

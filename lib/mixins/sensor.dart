@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/extensions/color_extensions.dart';
 
 /// Mixin responsible for adding trigger to detect other objects above
 /// T is a type that Sensor will be find contact.
 mixin Sensor<T extends GameComponent> on GameComponent {
-  static Color color = const Color(0xFFF44336).withOpacity(0.5);
+  static Color color = const Color(0xFFF44336).setOpacity(0.5);
   static const _sensorIntervalKey = 'SensorContact';
   int _intervalCallback = 100;
   bool sensorEnabled = true;
@@ -13,14 +14,14 @@ mixin Sensor<T extends GameComponent> on GameComponent {
   void onContact(T component) {}
   void onContactExit(T component) {}
 
-  void setSensorInterval(int intervalCallback) {
+  set sensorInterval(int intervalCallback) {
     _intervalCallback = intervalCallback;
   }
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    bool containsShape = children.query<ShapeHitbox>().isNotEmpty;
+    final containsShape = children.query<ShapeHitbox>().isNotEmpty;
     if (!containsShape) {
       add(RectangleHitbox(size: size, isSolid: true));
     }

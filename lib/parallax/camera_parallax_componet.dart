@@ -60,9 +60,9 @@ class CameraParallaxComponent extends ParallaxComponent with BonfireHasGameRef {
   void update(double dt) {
     final campP = gameRef.camera.position;
     if (campP != _camPosition) {
-      Vector2 velocity = campP - _camPosition;
+      final velocity = campP - _camPosition;
       _camPosition = campP.clone();
-      (parallax as CameraParallax).moveParallax(velocity, dt);
+      (parallax! as CameraParallax).moveParallax(velocity, dt);
     }
   }
 }

@@ -123,33 +123,97 @@ class SimpleDirectionAnimation {
     this.eightDirection = false,
     this.centerAnchor,
   }) {
-    _loader?.add(AssetToLoad(idleLeft, (value) => _idleLeftAnim = value));
-    _loader?.add(AssetToLoad(idleRight, (value) => _idleRightAnim = value));
-    _loader?.add(AssetToLoad(idleDown, (value) => _idleDownAnim = value));
-    _loader?.add(AssetToLoad(idleUp, (value) => _idleUpAnim = value));
-    _loader?.add(AssetToLoad(idleUpLeft, (value) => _idleUpLeftAnim = value));
-    _loader?.add(AssetToLoad(idleUpRight, (value) => _idleUpRightAnim = value));
     _loader?.add(
-      AssetToLoad(idleDownLeft, (value) => _idleDownLeftAnim = value),
+      AssetToLoad<SpriteAnimation>(
+        idleLeft,
+        (value) => _idleLeftAnim = value,
+      ),
     );
     _loader?.add(
-      AssetToLoad(idleDownRight, (value) => _idleDownRightAnim = value),
+      AssetToLoad<SpriteAnimation>(
+        idleRight,
+        (value) => _idleRightAnim = value,
+      ),
     );
-    _loader?.add(AssetToLoad(runUp, (value) => _runUpAnim = value));
-    _loader?.add(AssetToLoad(runRight, (value) => _runRightAnim = value));
-    _loader?.add(AssetToLoad(runDown, (value) => _runDownAnim = value));
-    _loader?.add(AssetToLoad(runLeft, (value) => _runLeftAnim = value));
-    _loader?.add(AssetToLoad(runUpLeft, (value) => _runUpLeftAnim = value));
-    _loader?.add(AssetToLoad(runUpRight, (value) => _runUpRightAnim = value));
-    _loader?.add(AssetToLoad(runDownLeft, (value) => _runDownLeftAnim = value));
     _loader?.add(
-      AssetToLoad(runDownRight, (value) => _runDownRightAnim = value),
+      AssetToLoad<SpriteAnimation>(
+        idleDown,
+        (value) => _idleDownAnim = value,
+      ),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(idleUp, (value) => _idleUpAnim = value),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(
+        idleUpLeft,
+        (value) => _idleUpLeftAnim = value,
+      ),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(
+        idleUpRight,
+        (value) => _idleUpRightAnim = value,
+      ),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(
+        idleDownLeft,
+        (value) => _idleDownLeftAnim = value,
+      ),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(
+        idleDownRight,
+        (value) => _idleDownRightAnim = value,
+      ),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(runUp, (value) => _runUpAnim = value),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(
+        runRight,
+        (value) => _runRightAnim = value,
+      ),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(runDown, (value) => _runDownAnim = value),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(runLeft, (value) => _runLeftAnim = value),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(
+        runUpLeft,
+        (value) => _runUpLeftAnim = value,
+      ),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(
+        runUpRight,
+        (value) => _runUpRightAnim = value,
+      ),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(
+        runDownLeft,
+        (value) => _runDownLeftAnim = value,
+      ),
+    );
+    _loader?.add(
+      AssetToLoad<SpriteAnimation>(
+        runDownRight,
+        (value) => _runDownRightAnim = value,
+      ),
     );
 
     others?.forEach((key, anim) {
-      _loader?.add(AssetToLoad(anim, (value) {
-        return this.others[key] = value;
-      }));
+      _loader?.add(
+        AssetToLoad<SpriteAnimation>(anim, (value) {
+          return this.others[key] = value!;
+        }),
+      );
     });
 
     _renderWrapper = RenderTransformWrapper(
@@ -159,7 +223,7 @@ class SimpleDirectionAnimation {
         ),
         CenterAdjustRenderTransform(
           _adjustRenderTransform,
-        )
+        ),
       ],
       render: _myRender,
     );
@@ -170,7 +234,7 @@ class SimpleDirectionAnimation {
         ),
         CenterAdjustRenderTransform(
           _adjustRenderTransform,
-        )
+        ),
       ],
       render: _myFastAnimationRender,
     );
@@ -179,7 +243,7 @@ class SimpleDirectionAnimation {
   CenterAdjustRenderData? _adjustRenderTransform() {
     if (centerAnchor != null) {
       return CenterAdjustRenderData(
-        center: (size / 2),
+        center: size / 2,
         newCenter: centerAnchor!,
       );
     }
@@ -189,7 +253,7 @@ class SimpleDirectionAnimation {
   FlipRenderTransformData? _flipRenderTransform() {
     if (_needDoFlip) {
       return FlipRenderTransformData(
-        center: (size / 2),
+        center: size / 2,
         horizontal: isFlipHorizontally,
         vertical: isFlipVertically,
       );
@@ -200,7 +264,7 @@ class SimpleDirectionAnimation {
   FlipRenderTransformData? _flipFastAnimationRenderTransform() {
     if (_fastAnimation != null && _needDoFlipFastAnimation) {
       return FlipRenderTransformData(
-        center: (size / 2),
+        center: size / 2,
         horizontal: isFlipHorizontallyFastAnimation,
         vertical: isFlipVerticallyFastAnimation,
       );
@@ -210,7 +274,9 @@ class SimpleDirectionAnimation {
 
   /// Method used to play specific default animation
   void play(SimpleAnimationEnum animation) {
-    if (_currentType == animation) return;
+    if (_currentType == animation) {
+      return;
+    }
     isFlipHorizontally = false;
     isFlipVertically = false;
 
@@ -228,7 +294,9 @@ class SimpleDirectionAnimation {
         _current.animation = _idleRightAnim;
         break;
       case SimpleAnimationEnum.idleUp:
-        if (_idleUpAnim != null) _current.animation = _idleUpAnim;
+        if (_idleUpAnim != null) {
+          _current.animation = _idleUpAnim;
+        }
         break;
       case SimpleAnimationEnum.idleDown:
         if (_idleDownAnim != null) {
@@ -385,8 +453,8 @@ class SimpleDirectionAnimation {
       if (!runToTheEndFastAnimation) {
         _fastAnimation = null;
       }
-      isFlipHorizontally = flipX ?? (isFlipHorizontally);
-      isFlipVertically = flipY ?? (isFlipVertically);
+      isFlipHorizontally = flipX ?? isFlipHorizontally;
+      isFlipVertically = flipY ?? isFlipVertically;
       _current.animation = others[key];
       _currentKeyCustom = key;
       _currentType = SimpleAnimationEnum.custom;
@@ -653,7 +721,7 @@ class SimpleDirectionAnimation {
     if (_strockePaint != null) {
       _fastAnimation?.render(
         canvas,
-        overridePaint: _strockePaint!,
+        overridePaint: _strockePaint,
         size: _strokeSize,
         position: _strokePosition + (spriteAnimationOffset ?? Vector2.zero()),
       );

@@ -29,7 +29,9 @@ class MyFollowBehavior extends FollowBehavior {
       delta = _moveVertical(delta);
     }
 
-    if (delta.isZero()) return;
+    if (delta.isZero()) {
+      return;
+    }
     if (delta.length <= maxSpeed * dt) {
       owner.position = delta..add(owner.position);
     } else {
@@ -68,7 +70,7 @@ class MyFollowBehavior extends FollowBehavior {
 class ShakeEffect extends Component {
   final double intensity;
   final Duration duration;
-  PositionProvider get target => parent as PositionProvider;
+  PositionProvider get target => parent! as PositionProvider;
   final void Function()? onComplete;
   double _shakeTimer = 0.0;
   late Vector2 initialPosition;

@@ -12,7 +12,8 @@ import 'package:bonfire/bonfire.dart';
 /// Rafaelbarbosatec
 /// on 17/05/22
 mixin InternalChecker on Component {
-  /// Map available to store times that can be used to control the frequency of any action.
+  /// Map available to store times that can be used to control
+  ///  the frequency of any action.
   Map<String, IntervalTick>? _timers;
 
   /// Returns true if for each time the defined millisecond interval passes.

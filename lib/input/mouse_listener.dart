@@ -24,7 +24,10 @@ mixin MouseEventListener on GameComponent {
 
   /// Listen when use scroll of the mouse across the screen
   void onMouseScrollScreen(
-      int pointer, Vector2 position, Vector2 scrollDelta) {}
+    int pointer,
+    Vector2 position,
+    Vector2 scrollDelta,
+  ) {}
 
   /// Listen when use scroll of the mouse in your component
   void onMouseScroll(int pointer, Vector2 position, Vector2 scrollDelta) {}
@@ -42,8 +45,8 @@ mixin MouseEventListener on GameComponent {
   @override
   bool handlerPointerMove(PointerMoveEvent event) {
     if (event.kind == PointerDeviceKind.mouse) {
-      int pointer = event.pointer;
-      Vector2 position = event.localPosition.toVector2();
+      final pointer = event.pointer;
+      final position = event.localPosition.toVector2();
       onMouseMoveScreen(pointer, position, _getMouseButtonByInt(event.buttons));
     }
     return super.handlerPointerMove(event);
@@ -54,9 +57,9 @@ mixin MouseEventListener on GameComponent {
     if (!enableMouseGesture) {
       return super.handlerPointerHover(event);
     }
-    int pointer = event.pointer;
-    Vector2 position = event.localPosition.toVector2();
-    Vector2 realPosition = position;
+    final pointer = event.pointer;
+    final position = event.localPosition.toVector2();
+    var realPosition = position;
     if (!isHud) {
       realPosition = gameRef.screenToWorld(realPosition);
     }
@@ -78,13 +81,13 @@ mixin MouseEventListener on GameComponent {
     if (!enableMouseGesture) {
       return super.handlerPointerSignal(event);
     }
-    int pointer = event.pointer;
-    Vector2 position = event.localPosition.toVector2();
-    Vector2 realPosition = event.localPosition.toVector2();
+    final pointer = event.pointer;
+    final position = event.localPosition.toVector2();
+    var realPosition = event.localPosition.toVector2();
     if (!isHud) {
       realPosition = gameRef.screenToWorld(realPosition);
     }
-    Vector2 scrollDelta = (event as PointerScrollEvent).scrollDelta.toVector2();
+    final scrollDelta = (event as PointerScrollEvent).scrollDelta.toVector2();
     onMouseScrollScreen(pointer, position, scrollDelta);
     if (containsPoint(realPosition)) {
       onMouseScroll(pointer, position, scrollDelta);
@@ -125,7 +128,7 @@ mixin MouseEventListener on GameComponent {
 
   // Listen when mouse is clicked down in screen
   void onMouseScreenTapDown(int pointer, Vector2 position, MouseButton button) {
-    Vector2 realPosition = position;
+    var realPosition = position;
     if (!isHud) {
       realPosition = gameRef.screenToWorld(realPosition);
     }
@@ -138,7 +141,7 @@ mixin MouseEventListener on GameComponent {
 
   // Listen when mouse is clicked up in screen
   void onMouseScreenTapUp(int pointer, Vector2 position) {
-    Vector2 realPosition = position;
+    var realPosition = position;
     if (!isHud) {
       realPosition = gameRef.screenToWorld(realPosition);
     }

@@ -23,26 +23,26 @@ mixin ElasticCollision on BlockMovementCollision {
     CollisionData data,
   ) {
     if (_bouncingObjectEnabled) {
-      Vector2 otherVelocity =
+      final otherVelocity =
           (other is Movement) ? other.velocity : Vector2.zero();
-      Vector2 relativeVelocity = otherVelocity - velocity;
+      final relativeVelocity = otherVelocity - velocity;
 
       if (relativeVelocity.dot(data.normal) > 0) {
         return super.getVelocityReflection(other, data);
       }
 
-      double bRestitution =
+      final bRestitution =
           (other is ElasticCollision) ? other._restitution : _restitution;
 
-      double e = min(_restitution, bRestitution);
+      final double e = min(_restitution, bRestitution);
 
-      double j = -(1 + e) * relativeVelocity.dot(data.normal);
+      var j = -(1 + e) * relativeVelocity.dot(data.normal);
 
-      double mass = (this is HandleForces) ? (this as HandleForces).mass : 1;
-      double massB = (other is HandleForces) ? (other).mass : 1;
+      final mass = (this is HandleForces) ? (this as HandleForces).mass : 1;
+      final massB = (other is HandleForces) ? other.mass : 1;
       j /= mass + massB;
 
-      Vector2 impulse = data.normal * j;
+      final impulse = data.normal * j;
       return impulse;
     }
     return super.getVelocityReflection(other, data);

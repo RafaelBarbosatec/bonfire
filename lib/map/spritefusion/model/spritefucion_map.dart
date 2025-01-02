@@ -31,7 +31,7 @@ class SpritefusionMap {
       tileSize: double.parse(map['tileSize'].toString()),
       mapWidth: double.parse(map['mapWidth'].toString()),
       mapHeight: double.parse(map['mapHeight'].toString()),
-      imgPath: map['imgPath'] ?? '',
+      imgPath: map['imgPath']?.toString() ?? '',
       layers: List<SpritefusionMapLayer>.from(
         (map['layers'] as List).map<SpritefusionMapLayer>(
           (x) => SpritefusionMapLayer.fromMap(x as Map<String, dynamic>),
@@ -52,8 +52,11 @@ class SpritefusionMapLayer {
   final bool collider;
   final List<SpritefusionMapLayerTile> tiles;
 
-  SpritefusionMapLayer(
-      {required this.name, required this.tiles, this.collider = false});
+  SpritefusionMapLayer({
+    required this.name,
+    required this.tiles,
+    this.collider = false,
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -66,7 +69,7 @@ class SpritefusionMapLayer {
   factory SpritefusionMapLayer.fromMap(Map<String, dynamic> map) {
     return SpritefusionMapLayer(
       name: map['name'] as String,
-      collider: map['collider'] ?? false,
+      collider: map['collider'] as bool? ?? false,
       tiles: List<SpritefusionMapLayerTile>.from(
         (map['tiles'] as List).map<SpritefusionMapLayerTile>(
           (x) => SpritefusionMapLayerTile.fromMap(x as Map<String, dynamic>),
@@ -114,5 +117,6 @@ class SpritefusionMapLayerTile {
 
   factory SpritefusionMapLayerTile.fromJson(String source) =>
       SpritefusionMapLayerTile.fromMap(
-          json.decode(source) as Map<String, dynamic>);
+        json.decode(source) as Map<String, dynamic>,
+      );
 }

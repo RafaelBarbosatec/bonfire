@@ -1,6 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
-// Mixin usend in component that use PinchGesture to update zoom and cameraposition in pich gestures.
+// Mixin usend in component that use PinchGesture to update zoom and
+//cameraposition in pich gestures.
 mixin UpdateCameraByPinchGesture on PinchGesture {
   double _initialZoom = 1.0;
   Vector2 _initialPosition = Vector2.zero();
@@ -20,8 +21,7 @@ mixin UpdateCameraByPinchGesture on PinchGesture {
       final scale = event.factorDistance;
       gameRef.camera.zoom = _initialZoom * scale;
       final diff = event.diffCenter;
-      gameRef.camera.position =
-          (_initialPosition - diff / (gameRef.camera.zoom));
+      gameRef.camera.position = _initialPosition - diff / (gameRef.camera.zoom);
     }
 
     super.onPinchUpdate(event);

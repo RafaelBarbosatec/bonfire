@@ -47,10 +47,10 @@ extension RectExt on Rect {
   }
 
   bool overlapComponent(PositionComponent c) {
-    double left = c.position.x;
-    double top = c.position.y;
-    double right = c.position.x + c.size.x;
-    double bottom = c.position.y + c.size.y;
+    final left = c.position.x;
+    final top = c.position.y;
+    final right = c.position.x + c.size.x;
+    final bottom = c.position.y + c.size.y;
     if (this.right <= left || right <= this.left) {
       return false;
     }
@@ -63,7 +63,11 @@ extension RectExt on Rect {
   /// Returns a new rectangle with edges moved outwards by the given delta.
   Rect inflatexy(double deltaX, double deltaY) {
     return Rect.fromLTRB(
-        left - deltaX, top - deltaY, right + deltaX, bottom + deltaY);
+      left - deltaX,
+      top - deltaY,
+      right + deltaX,
+      bottom + deltaY,
+    );
   }
 
   /// Returns a new rectangle with edges moved inwards by the given delta.
@@ -74,7 +78,7 @@ extension RectExt on Rect {
 
 extension SpriteFutureExt on Future<Sprite> {
   Future<SpriteAnimation> toAnimation({double stepTime = 1}) async {
-    var sprite = await this;
+    final sprite = await this;
     return SpriteAnimation.spriteList([sprite], stepTime: stepTime);
   }
 }
@@ -146,7 +150,9 @@ extension FutureSpriteAnimationExt on FutureOr<SpriteAnimation> {
         key: key,
         future: this as Future<SpriteAnimation>,
         builder: (context, data) {
-          if (!data.hasData) return const widget.SizedBox.shrink();
+          if (!data.hasData) {
+            return const widget.SizedBox.shrink();
+          }
           return widget.Container(
             constraints: widget.BoxConstraints(
               minWidth: data.data!.frames.first.sprite.src.width,
@@ -190,7 +196,9 @@ extension FutureSpriteExt on FutureOr<Sprite> {
         key: key,
         future: this as Future<Sprite>,
         builder: (context, data) {
-          if (!data.hasData) return const widget.SizedBox.shrink();
+          if (!data.hasData) {
+            return const widget.SizedBox.shrink();
+          }
           return widget.Container(
             constraints: widget.BoxConstraints(
               minWidth: data.data!.src.width,
@@ -224,8 +232,8 @@ extension FutureSpriteExt on FutureOr<Sprite> {
 extension ComponentExt on GameComponent {
   bool get isHud {
     if (hasGameRef) {
-      bool thisIs = gameRef.camera.viewport.contains(this);
-      bool parentIs = false;
+      final thisIs = gameRef.camera.viewport.contains(this);
+      var parentIs = false;
       if (parent != null) {
         parentIs = gameRef.camera.viewport.contains(parent!);
       }
@@ -271,13 +279,13 @@ extension PositionComponentExt on PositionComponent {
     double offsetY = 0,
     bool calculatePosition = false,
   }) {
-    double bleedingPixel = max(size.x, size.y) * factor;
+    var bleedingPixel = max(size.x, size.y) * factor;
 
     bleedingPixel = bleedingPixel > 2 ? 2 : bleedingPixel;
     bleedingPixel = bleedingPixel < 0.6 ? 0.6 : bleedingPixel;
-    bool xIsEven = position.x % 2 == 0;
-    bool yIsEven = position.y % 2 == 0;
-    Vector2 baseP = position;
+    final xIsEven = position.x % 2 == 0;
+    final yIsEven = position.y % 2 == 0;
+    var baseP = position;
     if (calculatePosition) {
       baseP = Vector2(position.x * size.x, position.y * size.y);
     }
@@ -295,7 +303,7 @@ extension PositionComponentExt on PositionComponent {
 extension ShapeHitbocExt on ShapeHitbox {
   ShapeHitbox clone() {
     if (e is RectangleHitbox) {
-      RectangleHitbox rect = e as RectangleHitbox;
+      final rect = e as RectangleHitbox;
       return RectangleHitbox(
         anchor: rect.anchor,
         angle: rect.angle,
@@ -307,7 +315,7 @@ extension ShapeHitbocExt on ShapeHitbox {
     }
 
     if (e is CircleHitbox) {
-      CircleHitbox circle = e as CircleHitbox;
+      final circle = e as CircleHitbox;
       return CircleHitbox(
         anchor: circle.anchor,
         angle: circle.angle,
@@ -318,7 +326,7 @@ extension ShapeHitbocExt on ShapeHitbox {
     }
 
     if (e is PolygonHitbox) {
-      PolygonHitbox poly = e as PolygonHitbox;
+      final poly = e as PolygonHitbox;
       return PolygonHitbox(
         poly.vertices,
         anchor: poly.anchor,

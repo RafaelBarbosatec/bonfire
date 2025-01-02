@@ -72,8 +72,8 @@ class BarLifeComponent extends GameComponent {
 
   @override
   void render(Canvas canvas) {
-    double yPosition = (y - height);
-    double xPosition = (target.size.x - width) / 2;
+    var yPosition = y - height;
+    var xPosition = (target.size.x - width) / 2;
     switch (drawPosition) {
       case BarLifeDrawPosition.top:
         break;
@@ -90,10 +90,10 @@ class BarLifeComponent extends GameComponent {
         break;
     }
 
-    double currentBarLife = (_life * width) / _maxLife;
+    final currentBarLife = (_life * width) / _maxLife;
 
     if (borderWidth > 0) {
-      final RRect borderRect = borderRadius.toRRect(
+      final borderRect = borderRadius.toRRect(
         Rect.fromLTWH(
           xPosition,
           yPosition,
@@ -108,24 +108,28 @@ class BarLifeComponent extends GameComponent {
       );
     }
 
-    final RRect bgRect = borderRadius.toRRect(Rect.fromLTWH(
-      xPosition,
-      yPosition,
-      width,
-      height,
-    ));
+    final bgRect = borderRadius.toRRect(
+      Rect.fromLTWH(
+        xPosition,
+        yPosition,
+        width,
+        height,
+      ),
+    );
 
     canvas.drawRRect(
       bgRect,
       _barLifeBgPaint,
     );
 
-    final RRect lifeRect = borderRadius.toRRect(Rect.fromLTWH(
-      xPosition,
-      yPosition,
-      currentBarLife,
-      height,
-    ));
+    final lifeRect = borderRadius.toRRect(
+      Rect.fromLTWH(
+        xPosition,
+        yPosition,
+        currentBarLife,
+        height,
+      ),
+    );
 
     canvas.drawRRect(
       lifeRect,
@@ -143,8 +147,8 @@ class BarLifeComponent extends GameComponent {
     );
 
     if (showLifeText) {
-      double xText = _textOffset.x + xPosition + (width - _textSize.x) / 2;
-      double yText = _textOffset.y + yPosition + (height - _textSize.y) / 2;
+      final xText = _textOffset.x + xPosition + (width - _textSize.x) / 2;
+      final yText = _textOffset.y + yPosition + (height - _textSize.y) / 2;
       _textConfig.render(
         canvas,
         _getLifeText(),
@@ -161,7 +165,7 @@ class BarLifeComponent extends GameComponent {
     List<Color> colors,
   ) {
     final parts = maxWidth / colors.length;
-    int index = (currentBarLife / parts).ceil() - 1;
+    final index = (currentBarLife / parts).ceil() - 1;
     if (index < 0) {
       return colors[0];
     }

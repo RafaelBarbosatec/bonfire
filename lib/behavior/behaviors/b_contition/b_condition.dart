@@ -9,9 +9,9 @@ class BCondition extends Behavior {
   final Behavior? doElseBehavior;
 
   BCondition({
-    dynamic id,
     required this.condition,
     required this.doBehavior,
+    dynamic id,
     this.doElseBehavior,
   }) : super(id);
 

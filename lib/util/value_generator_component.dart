@@ -38,7 +38,9 @@ class ValueGeneratorComponent extends Component {
 
   @override
   void updateTree(double dt) {
-    if (!_isRunning) return;
+    if (!_isRunning) {
+      return;
+    }
 
     if (_reversing) {
       _currentValue -= dt * _maxInMilliSeconds;
@@ -58,11 +60,11 @@ class ValueGeneratorComponent extends Component {
     } else {
       double realValue;
       if (_reversing) {
-        double value = (reverseCurve ?? curve)
+        final value = (reverseCurve ?? curve)
             .transform(1 - (_currentValue / duration.inMilliseconds));
         realValue = begin + (_displacement * (1 - value));
       } else {
-        double value = curve.transform(_currentValue / duration.inMilliseconds);
+        final value = curve.transform(_currentValue / duration.inMilliseconds);
         realValue = begin + (_displacement * value);
       }
 

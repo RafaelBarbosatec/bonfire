@@ -32,7 +32,8 @@ class RandomMovementDirections {
   );
 }
 
-/// Mixin responsible for adding random movement like enemy walking through the scene
+/// Mixin responsible for adding random movement like enemy
+/// walking through the scene
 mixin RandomMovement on Movement {
   // ignore: constant_identifier_names
   static const _KEY_INTERVAL_KEEP_STOPPED = 'INTERVAL_RANDOM_MOVEMENT';
@@ -105,7 +106,7 @@ mixin RandomMovement on Movement {
   void correctPositionFromCollision(Vector2 position) {
     super.correctPositionFromCollision(position);
     if (this is Jumper) {
-      if ((this is BlockMovementCollision)) {
+      if (this is BlockMovementCollision) {
         final isV = (this as BlockMovementCollision)
                 .lastCollisionData
                 ?.direction
@@ -157,12 +158,12 @@ mixin RandomMovement on Movement {
     bool checkDirectionWithRayCast,
     RandomMovementDirections directions,
   ) {
-    int index = 0;
+    var index = 0;
     while (index < 100) {
       final distance = _getDistance(minDistance, maxDistance);
       final direction = _getDirection(directions);
       final targetPosition = _getTargetPosition(direction, distance);
-      bool isRaycastOk = true;
+      var isRaycastOk = true;
 
       if (checkDirectionWithRayCast) {
         isRaycastOk = canMove(
@@ -201,8 +202,9 @@ class _RandomPositionTarget {
   final Direction direction;
   final double distance;
 
-  _RandomPositionTarget(
-      {required this.position,
-      required this.direction,
-      required this.distance});
+  _RandomPositionTarget({
+    required this.position,
+    required this.direction,
+    required this.distance,
+  });
 }

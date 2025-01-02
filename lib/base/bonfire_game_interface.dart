@@ -4,7 +4,6 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/bonfire_camera.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
-import 'package:flame/game.dart';
 // ignore: implementation_imports
 import 'package:flame/src/game/overlay_manager.dart';
 import 'package:flutter/widgets.dart';
@@ -40,23 +39,6 @@ abstract class BonfireGameInterface {
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
   double timeScale = 1.0;
 
-  /// A property that stores an [ActiveOverlaysNotifier]
-  ///
-  /// This is useful to render widgets above a game, like a pause menu for
-  /// example.
-  /// Overlays visible or hidden via [overlays].add or [overlays].remove,
-  /// respectively.
-  ///
-  /// Ex:
-  /// ```
-  /// final pauseOverlayIdentifier = 'PauseMenu';
-  /// overlays.add(pauseOverlayIdentifier); // marks 'PauseMenu' to be rendered.
-  /// overlays.remove(pauseOverlayIdentifier); // marks 'PauseMenu' to not be rendered.
-  /// ```
-  ///
-  /// See also:
-  /// - GameWidget
-  /// - [Game.overlayManager]
   // ignore: invalid_use_of_internal_member
   OverlayManager get overlays;
 

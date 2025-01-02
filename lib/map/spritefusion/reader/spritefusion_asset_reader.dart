@@ -13,7 +13,7 @@ class SpritefusionAssetReader extends WorldMapReader<SpritefusionMap> {
   SpritefusionAssetReader({
     required this.asset,
   }) {
-    var assetKey = asset.startsWith(_assetPrefixKey)
+    final assetKey = asset.startsWith(_assetPrefixKey)
         ? asset.substring(_assetPrefixKey.length)
         : asset;
     basePath = assetKey.replaceAll(assetKey.split('/').last, '');
@@ -22,7 +22,7 @@ class SpritefusionAssetReader extends WorldMapReader<SpritefusionMap> {
 
   @override
   Future<SpritefusionMap> readMap() async {
-    String data = await rootBundle.loadString(_path);
+    final data = await rootBundle.loadString(_path);
     return SpritefusionMap.fromJson(data)
       ..imgPath = '${basePath}spritesheet.png';
   }

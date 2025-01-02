@@ -14,13 +14,13 @@ class ServerImageLoader {
   });
   Future<Image?> load(String url) async {
     if (!Flame.images.containsKey(url)) {
-      bool containCache = await cache.containsKey(url);
+      final containCache = await cache.containsKey(url);
       if (containCache) {
-        String base64 = (await cache.get(url))[_keyImgBase64];
+        final base64 = (await cache.get(url))[_keyImgBase64].toString();
         return Flame.images.fromBase64(url, base64);
       } else {
         final response = await http.get(Uri.parse(url), headers: headers);
-        String img64 = base64Encode(response.bodyBytes);
+        final img64 = base64Encode(response.bodyBytes);
         cache.put(url, {_keyImgBase64: img64});
         return Flame.images.fromBase64(url, img64);
       }

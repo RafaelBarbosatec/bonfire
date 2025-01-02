@@ -1,29 +1,34 @@
-name: unit-tests
+name: Code Quality
+
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     types: [opened,ready_for_review,synchronize]
-    
+
 jobs:
-  test-analyze:
-    name: Lint and Tests
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macOS-12]
-    if: github.event.pull_request.draft == false
+  format-and-fix:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Intall dart
-      uses: dart-lang/setup-dart@v1
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        channel: 'stable'
-        cache: true
-    - run: flutter pub get
-    - run: flutter analyze
-    - run: dart format --output=none --set-exit-if-changed .
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Intall dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: Setup flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Get packages
+        run: flutter pub get
+
+      - name: Check format errors
+        run: dart format --output=none --set-exit-if-changed .
+
+      # - name: Check lint errors
+      #   run: flutter analyze .

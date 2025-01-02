@@ -1,13 +1,14 @@
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/extensions/color_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class TalkDialog extends StatefulWidget {
   const TalkDialog({
-    Key? key,
     required this.says,
+    super.key,
     this.onFinish,
     this.onChangeTalk,
     this.textBoxMinHeight = 100,
@@ -18,9 +19,9 @@ class TalkDialog extends StatefulWidget {
     this.talkAlignment = Alignment.bottomCenter,
     this.style,
     this.speed = 50,
-  }) : super(key: key);
+  });
 
-  static show(
+  static Future<T?> show<T>(
     BuildContext context,
     List<Say> sayList, {
     VoidCallback? onFinish,
@@ -31,14 +32,18 @@ class TalkDialog extends StatefulWidget {
     List<LogicalKeyboardKey> logicalKeyboardKeysToNext = const [],
     EdgeInsetsGeometry? padding,
     bool dismissible = false,
+    bool useSafeArea = true,
+    bool useRootNavigator = true,
     Alignment talkAlignment = Alignment.bottomCenter,
     TextStyle? style,
     int speed = 50,
   }) {
-    showDialog(
+    return showDialog<T>(
       barrierDismissible: dismissible,
       barrierColor: backgroundColor,
       context: context,
+      useSafeArea: useSafeArea,
+      useRootNavigator: useRootNavigator,
       builder: (BuildContext context) {
         return TalkDialog(
           says: sayList,
@@ -86,9 +91,7 @@ class TalkDialogState extends State<TalkDialog> {
   @override
   void initState() {
     currentSay = widget.says[currentIndexTalk];
-    Future.delayed(Duration.zero, () {
-      _focusNode.requestFocus();
-    });
+    Future.delayed(Duration.zero, _focusNode.requestFocus);
     super.initState();
   }
 
@@ -130,7 +133,6 @@ class TalkDialogState extends State<TalkDialog> {
                   child: currentSay.background ?? const SizedBox.shrink(),
                 ),
                 Row(
-                  mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     ..._buildPerson(PersonSayDirection.LEFT),
@@ -152,10 +154,10 @@ class TalkDialogState extends State<TalkDialog> {
                                 : null,
                             decoration: currentSay.boxDecoration ??
                                 BoxDecoration(
-                                  color: Colors.black.withOpacity(0.5),
+                                  color: Colors.black.setOpacity(0.5),
                                   borderRadius: BorderRadius.circular(10.0),
                                   border: Border.all(
-                                    color: Colors.white.withOpacity(0.5),
+                                    color: Colors.white.setOpacity(0.5),
                                   ),
                                 ),
                             child: TypeWriter(

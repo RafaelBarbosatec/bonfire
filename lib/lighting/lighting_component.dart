@@ -54,18 +54,22 @@ class LightingComponent extends GameComponent implements LightingInterface {
 
   @override
   void renderTree(Canvas canvas) {
-    if (!_containColor) return;
+    if (!_containColor) {
+      return;
+    }
     canvas.saveLayer(bounds, paint);
     canvas.drawColor(color!, BlendMode.dstATop);
-    for (var light in _visibleLight) {
+    for (final light in _visibleLight) {
       final config = light.lightingConfig;
-      if (config == null || !light.lightingEnabled) continue;
+      if (config == null || !light.lightingEnabled) {
+        continue;
+      }
       config.update(_dtUpdate);
       canvas.save();
 
       canvas.scale(gameRef.camera.zoom);
       final tl = gameRef.camera.topleft;
-      canvas.translate(-(tl.x), -(tl.y));
+      canvas.translate(-tl.x, -tl.y);
 
       if (config.type is CircleLightingType) {
         _drawCircle(canvas, light);
@@ -117,9 +121,9 @@ class LightingComponent extends GameComponent implements LightingInterface {
   }
 
   void _drawArc(Canvas canvas, Lighting light) {
-    var config = light.lightingConfig!;
-    var type = config.type as ArcLightingType;
-    Offset offset = (light.absoluteCenter + config.align).toOffset();
+    final config = light.lightingConfig!;
+    final type = config.type as ArcLightingType;
+    final offset = (light.absoluteCenter + config.align).toOffset();
 
     canvas.save();
 
@@ -165,8 +169,8 @@ class LightingComponent extends GameComponent implements LightingInterface {
   }
 
   void _drawCircle(Canvas canvas, Lighting light) {
-    var config = light.lightingConfig!;
-    Offset offset = (light.absoluteCenter + config.align).toOffset();
+    final config = light.lightingConfig!;
+    final offset = (light.absoluteCenter + config.align).toOffset();
 
     canvas.drawCircle(
       offset,

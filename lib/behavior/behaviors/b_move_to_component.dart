@@ -7,8 +7,8 @@ class BMoveToComponent extends Behavior {
   final MovementAxis movementAxis;
 
   BMoveToComponent({
-    dynamic id,
     required this.target,
+    dynamic id,
     this.margin = 0,
     this.movementAxis = MovementAxis.all,
   }) : super(id);

@@ -2,12 +2,11 @@
 
 import 'dart:math';
 
+import 'package:bonfire/util/bonfire_game_ref.dart';
 import 'package:bonfire/util/priority_layer.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/cupertino.dart';
-
-import 'bonfire_game_ref.dart';
 
 enum DirectionTextDamage { LEFT, RIGHT, RANDOM, NONE }
 
@@ -57,14 +56,18 @@ class TextDamageComponent extends TextComponent with BonfireHasGameRef {
 
   @override
   void render(Canvas canvas) {
-    if (isRemoving) return;
+    if (isRemoving) {
+      return;
+    }
     super.render(canvas);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    if (isRemoving) return;
+    if (isRemoving) {
+      return;
+    }
     position.y += _velocity;
     position.x += _moveAxisX;
     _velocity += gravity;

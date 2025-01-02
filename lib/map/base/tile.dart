@@ -38,9 +38,15 @@ class TileSprite {
 
   factory TileSprite.fromMap(Map<String, dynamic> map) {
     return TileSprite(
-      path: map['path'],
-      position: Vector2(map['column'], map['row']),
-      size: Vector2(map['width'], map['height']),
+      path: map['path'].toString(),
+      position: Vector2(
+        double.parse(map['column'].toString()),
+        double.parse(map['row'].toString()),
+      ),
+      size: Vector2(
+        double.parse(map['width'].toString()),
+        double.parse(map['height'].toString()),
+      ),
     );
   }
 
@@ -74,10 +80,10 @@ class TilelAnimation {
 
   factory TilelAnimation.fromMap(Map<String, dynamic> map) {
     return TilelAnimation(
-      stepTime: map['stepTime'],
+      stepTime: double.parse(map['stepTime'].toString()),
       frames: map['frames'] != null
           ? (map['frames'] as List).map((e) {
-              return TileSprite.fromMap(e);
+              return TileSprite.fromMap((e as Map).cast());
             }).toList()
           : [],
     );
@@ -113,10 +119,10 @@ class Tile {
   Tile({
     required this.x,
     required this.y,
-    this.offsetX = 0.0,
-    this.offsetY = 0.0,
     required this.width,
     required this.height,
+    this.offsetX = 0.0,
+    this.offsetY = 0.0,
     this.tileClass,
     this.properties,
     this.sprite,
@@ -130,9 +136,9 @@ class Tile {
   }) {
     id = '$x/$y:${DateTime.now().microsecondsSinceEpoch}';
   }
-  double get left => (x * width);
+  double get left => x * width;
   double get right => (x * width) + width;
-  double get top => (y * height);
+  double get top => y * height;
   double get bottom => (y * height) + height;
 
   TileComponent getTile() {
@@ -168,8 +174,7 @@ class Tile {
       }
     } else {
       if (collisions?.isNotEmpty == true) {
-        ControlledUpdateAnimation animationControlled =
-            animation!.getSpriteControlledAnimation();
+        final animationControlled = animation!.getSpriteControlledAnimation();
         final tile = TileWithCollision.withAnimation(
           animation: animationControlled,
           position: Vector2(x, y),
@@ -184,8 +189,7 @@ class Tile {
 
         return tile;
       } else {
-        ControlledUpdateAnimation animationControlled =
-            animation!.getSpriteControlledAnimation();
+        final animationControlled = animation!.getSpriteControlledAnimation();
         final tile = TileComponent.fromAnimation(
           animation: animationControlled,
           position: Vector2(x, y),

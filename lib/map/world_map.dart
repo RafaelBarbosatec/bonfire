@@ -18,17 +18,16 @@ class WorldMap extends GameMap {
 
   tree.QuadTree<Tile>? quadTree;
 
+  WorldMap(
+    super.layers, {
+    double tileSizeToUpdate = 0,
+  }) : super(
+          sizeToUpdate: tileSizeToUpdate,
+        );
+
   factory WorldMap.empty({Vector2? size}) {
     return EmptyWorldMap(size: size);
   }
-
-  WorldMap(
-    List<Layer> layers, {
-    double tileSizeToUpdate = 0,
-  }) : super(
-          layers,
-          sizeToUpdate: tileSizeToUpdate,
-        );
 
   @override
   void update(double dt) {
@@ -39,9 +38,9 @@ class WorldMap extends GameMap {
     }
   }
 
-  void _searchTilesToRender() async {
+  Future<void> _searchTilesToRender() async {
     final rectCamera = gameRef.camera.cameraRectWithSpacing;
-    for (var layer in layersComponent) {
+    for (final layer in layersComponent) {
       await layer.onMoveCamera(rectCamera);
     }
     _buildingTiles = false;
@@ -79,7 +78,7 @@ class WorldMap extends GameMap {
 
   @override
   void refreshMap() {
-    for (var element in layersComponent) {
+    for (final element in layersComponent) {
       element.refresh();
     }
   }
@@ -90,7 +89,7 @@ class WorldMap extends GameMap {
       lastCameraWindow = Vector2.zero();
       lastMinorZoom = gameRef.camera.zoom;
       _calculatePositionAndSize();
-      for (var layer in layersComponent) {
+      for (final layer in layersComponent) {
         layer.initLayer(size, sizeScreen);
       }
     }
@@ -106,15 +105,23 @@ class WorldMap extends GameMap {
       double x = 0;
       double y = 0;
 
-      double w = layersComponent.first.size.x;
-      double h = layersComponent.first.size.y;
+      var w = layersComponent.first.size.x;
+      var h = layersComponent.first.size.y;
 
-      for (var layer in layersComponent) {
-        if (layer.left < x) x = layer.left;
-        if (layer.top < y) y = layer.top;
+      for (final layer in layersComponent) {
+        if (layer.left < x) {
+          x = layer.left;
+        }
+        if (layer.top < y) {
+          y = layer.top;
+        }
 
-        if (layer.right > w) w = layer.right;
-        if (layer.bottom > h) h = layer.bottom;
+        if (layer.right > w) {
+          w = layer.right;
+        }
+        if (layer.bottom > h) {
+          h = layer.bottom;
+        }
       }
       _mapSize = Vector2(w - x, h - y);
       size = Vector2(w, h);

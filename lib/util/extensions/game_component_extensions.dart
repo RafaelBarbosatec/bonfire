@@ -15,7 +15,9 @@ extension GameComponentExtensions on GameComponent {
     DirectionTextDamage direction = DirectionTextDamage.RANDOM,
     bool onlyUp = false,
   }) {
-    if (!hasGameRef) return;
+    if (!hasGameRef) {
+      return;
+    }
     gameRef.add(
       TextDamageComponent(
         damage.toInt().toString(),
@@ -56,12 +58,12 @@ extension GameComponentExtensions on GameComponent {
     double marginFromOrigin = 16,
     Vector2? centerOffset,
   }) {
-    var initPosition = rectCollision;
+    final initPosition = rectCollision;
 
-    Vector2 startPosition =
+    var startPosition =
         initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
 
-    double displacement =
+    final displacement =
         max(initPosition.width, initPosition.height) / 2 + marginFromOrigin;
 
     startPosition = BonfireUtil.movePointByAngle(
@@ -129,12 +131,12 @@ extension GameComponentExtensions on GameComponent {
 
   ///Execute simple attack melee using animation
   void simpleAttackMeleeByDirection({
-    Future<SpriteAnimation>? animationRight,
-    dynamic id,
     required double damage,
     required Direction direction,
     required Vector2 size,
     required AttackOriginEnum attackFrom,
+    Future<SpriteAnimation>? animationRight,
+    dynamic id,
     bool withPush = true,
     double? sizePush,
     double? marginFromCenter,
@@ -158,34 +160,34 @@ extension GameComponentExtensions on GameComponent {
 
   ///Execute simple attack melee using animation
   void simpleAttackMeleeByAngle({
-    dynamic id,
-
-    /// use animation facing right.
-    Future<SpriteAnimation>? animation,
     required double damage,
 
     /// Use radians angle
     required double angle,
     required AttackOriginEnum attackFrom,
     required Vector2 size,
+    dynamic id,
+
+    /// use animation facing right.
+    Future<SpriteAnimation>? animation,
     bool withPush = true,
     double marginFromCenter = 0,
     Vector2? centerOffset,
     void Function(Attackable attackable)? onDamage,
   }) {
-    var initPosition = rectCollision;
+    final initPosition = rectCollision;
 
-    Vector2 startPosition =
+    final startPosition =
         initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
 
-    double displacement = max(
+    final displacement = max(
               initPosition.width,
               initPosition.height,
             ) /
             2 +
         marginFromCenter;
 
-    Vector2 diffBase = BonfireUtil.diffMovePointByAngle(
+    final diffBase = BonfireUtil.diffMovePointByAngle(
       startPosition,
       displacement,
       angle,
@@ -241,18 +243,24 @@ extension GameComponentExtensions on GameComponent {
   double get right => absolutePositionOfAnchor(Anchor.bottomRight).x;
 
   bool overlaps(Rect other) {
-    if (right <= other.left || other.right <= left) return false;
-    if (bottom <= other.top || other.bottom <= top) return false;
+    if (right <= other.left || other.right <= left) {
+      return false;
+    }
+    if (bottom <= other.top || other.bottom <= top) {
+      return false;
+    }
     return true;
   }
 
   Direction? directionThePlayerIsIn() {
-    Player? player = gameRef.player;
-    if (player == null) return null;
+    final player = gameRef.player;
+    if (player == null) {
+      return null;
+    }
     var diffX = center.x - player.center.x;
-    var diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;
+    final diffPositiveX = diffX < 0 ? diffX *= -1 : diffX;
     var diffY = center.y - player.center.y;
-    var diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
+    final diffPositiveY = diffY < 0 ? diffY *= -1 : diffY;
 
     if (diffPositiveX > diffPositiveY) {
       if (player.center.x > center.x) {
@@ -417,12 +425,16 @@ extension GameComponentExtensions on GameComponent {
   }
 
   Offset globalToViewportPosition(Offset position) {
-    if (!hasGameRef) return position;
+    if (!hasGameRef) {
+      return position;
+    }
     return gameRef.globalToViewportPosition(position.toVector2()).toOffset();
   }
 
   Offset viewportPositionToGlobal(Offset position) {
-    if (!hasGameRef) return position;
+    if (!hasGameRef) {
+      return position;
+    }
     return gameRef.viewportPositionToGlobal(position.toVector2()).toOffset();
   }
 }

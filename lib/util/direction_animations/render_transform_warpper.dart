@@ -9,14 +9,14 @@ class RenderTransformWrapper {
   RenderTransformWrapper({required this.transforms, required this.render});
 
   void execRender(Canvas canvas, Paint paint) {
-    int index = 0;
+    var index = 0;
     for (final transform in transforms) {
       if (transform.transform(canvas)) {
         index++;
       }
     }
     render(canvas, paint);
-    for (int i = 0; i < index; i++) {
+    for (var i = 0; i < index; i++) {
       canvas.restore();
     }
   }
@@ -38,7 +38,7 @@ class CenterAdjustRenderTransform extends RenderTransformer {
       return false;
     }
     canvas.save();
-    Vector2 diff = data.center - data.newCenter;
+    final diff = data.center - data.newCenter;
     canvas.translate(diff.x, diff.y);
     return true;
   }

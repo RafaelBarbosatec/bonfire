@@ -27,14 +27,14 @@ class TiledNetworkReader extends WorldMapReader<TiledMap> {
     this.headers,
   }) : cache = cacheProvider ?? TiledMemoryCacheProvider() {
     _imageLoader = ServerImageLoader(cache: cache);
-    String url = uri.toString();
+    final url = uri.toString();
     basePath = url.replaceAll(url.split('/').last, '');
   }
 
   @override
   Future<TiledMap> readMap() async {
     try {
-      TiledMap tiledMap = await _fetchMap();
+      final tiledMap = await _fetchMap();
 
       await Future.forEach<MapLayer>(
         tiledMap.layers ?? [],
@@ -60,7 +60,7 @@ class TiledNetworkReader extends WorldMapReader<TiledMap> {
   Future<void> preload() => readMap();
 
   Future<void> _loadTileset(TileSetDetail tileSet) async {
-    String sourceBasePath = '';
+    var sourceBasePath = '';
     if (tileSet.source != null) {
       if (!_isSuppotedTilesetFileType(tileSet.source!)) {
         throw Exception('Invalid TileSet source: only supports json|tsj files');
@@ -82,16 +82,16 @@ class TiledNetworkReader extends WorldMapReader<TiledMap> {
   }
 
   bool _isSuppotedTilesetFileType(String source) {
-    return (source.contains('.json') || source.contains('.tsj'));
+    return source.contains('.json') || source.contains('.tsj');
   }
 
   bool _isSuppotedMapFileType(String source) {
-    return (source.contains('.json') || source.contains('.tmj'));
+    return source.contains('.json') || source.contains('.tmj');
   }
 
   Future<TiledMap> _fetchMap() async {
     final uriKey = uri.toString();
-    bool containCache = await cache.containsKey(uriKey);
+    final containCache = await cache.containsKey(uriKey);
     if (containCache) {
       final map = await cache.get(uriKey);
       return TiledMap.fromJson(map);
@@ -100,7 +100,7 @@ class TiledNetworkReader extends WorldMapReader<TiledMap> {
         throw Exception('Invalid TileMap source: only supports json|tmj files');
       }
       final mapResponse = await http.get(uri, headers: headers);
-      final map = jsonDecode(mapResponse.body);
+      final map = (jsonDecode(mapResponse.body) as Map).cast<String, dynamic>();
       cache.put(uriKey, map);
       return TiledMap.fromJson(map);
     }
@@ -110,7 +110,7 @@ class TiledNetworkReader extends WorldMapReader<TiledMap> {
     final uri = Uri.parse('$basePath$source');
     final uriKey = uri.toString();
 
-    bool containCache = await cache.containsKey(uriKey);
+    final containCache = await cache.containsKey(uriKey);
 
     if (containCache) {
       return cache.get(uriKey);
@@ -119,14 +119,14 @@ class TiledNetworkReader extends WorldMapReader<TiledMap> {
         Uri.parse('$basePath$source'),
         headers: headers,
       );
-      final map = jsonDecode(tileSetResponse.body);
+      final map = jsonDecode(tileSetResponse.body) as Map<String, dynamic>;
       cache.put(uriKey, map);
       return map;
     }
   }
 
   Future<void> _fetchTilesetImage(String sourceBasePath, String image) async {
-    String url = '$basePath$sourceBasePath$image';
+    var url = '$basePath$sourceBasePath$image';
     if (image.contains('http')) {
       url = image;
     }
@@ -136,7 +136,7 @@ class TiledNetworkReader extends WorldMapReader<TiledMap> {
 
   Future<void> _fetchLayerImage(MapLayer layer) async {
     if (layer is ImageLayer) {
-      String url = '$basePath${layer.image}';
+      var url = '$basePath${layer.image}';
       if (layer.image.contains('http')) {
         url = layer.image;
       }

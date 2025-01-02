@@ -44,7 +44,7 @@ class ColorFilterComponent extends GameComponent
     Color color, {
     BlendMode? blendMode,
     Duration duration = const Duration(milliseconds: 500),
-    curve = Curves.decelerate,
+    Curve curve = Curves.decelerate,
     VoidCallback? onFinish,
   }) {
     if (blendMode != null) {

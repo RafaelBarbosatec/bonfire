@@ -27,7 +27,7 @@ mixin PinchGesture on GameComponent {
       screenToWorld: gameRef.screenToWorld,
       globalToViewportPosition: gameRef.globalToViewportPosition,
     );
-    if (!_fingers.contains(event.pointer)) {
+    if (!_fingers.any((element) => element.id == gEvent.pointer)) {
       _fingers.add(
         FingerPoint(
           id: gEvent.pointer,
@@ -74,7 +74,7 @@ mixin PinchGesture on GameComponent {
   bool get isVisible => true;
 
   void _updateFingers(GestureEvent event) {
-    for (var finger in _fingers) {
+    for (final finger in _fingers) {
       if (finger.id == event.pointer) {
         finger.position.setFrom(event.screenPosition);
       }
@@ -125,11 +125,11 @@ class PinchEvent {
   });
 
   factory PinchEvent.fromFingers(FingerPoint f1, FingerPoint f2) {
-    final Vector2 initialPosition = Vector2(
+    final initialPosition = Vector2(
       min(f1.initialPosition.x, f2.initialPosition.x),
       min(f1.initialPosition.y, f2.initialPosition.y),
     );
-    final Vector2 position = Vector2(
+    final position = Vector2(
       min(f1.position.x, f2.position.x),
       min(f1.position.y, f2.position.y),
     );

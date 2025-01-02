@@ -47,10 +47,10 @@ class SpritefusionWorldBuilder {
   }
 
   Future<void> _load(SpritefusionMap map) async {
-    int index = 0;
+    var index = 0;
     final spritesheet = await MapAssetsManager.loadImage(map.imgPath);
     final maxRow = spritesheet.width / map.tileSize;
-    for (var layer in map.layers.reversed) {
+    for (final layer in map.layers.reversed) {
       final objectBuilder = objectsBuilder?[layer.name];
       if (objectBuilder != null) {
         _addObjects(layer, objectBuilder, map.tileSize);
@@ -61,9 +61,13 @@ class SpritefusionWorldBuilder {
     }
   }
 
-  void _addTile(SpritefusionMapLayer layer, SpritefusionMap map, double maxRow,
-      int index) {
-    List<Tile> tiles = _loadTiles(
+  void _addTile(
+    SpritefusionMapLayer layer,
+    SpritefusionMap map,
+    double maxRow,
+    int index,
+  ) {
+    final tiles = _loadTiles(
       layer.tiles,
       map.tileSize,
       map.imgPath,
@@ -89,8 +93,8 @@ class SpritefusionWorldBuilder {
     final size = Vector2.all(tileSize);
     return tiles.map(
       (tile) {
-        int row = tile.idInt ~/ maxRow;
-        int col = (tile.idInt % maxRow).toInt();
+        final row = tile.idInt ~/ maxRow;
+        final col = (tile.idInt % maxRow).toInt();
         return Tile(
           x: tile.x.toDouble(),
           y: tile.y.toDouble(),
@@ -107,9 +111,12 @@ class SpritefusionWorldBuilder {
     ).toList();
   }
 
-  void _addObjects(SpritefusionMapLayer layer,
-      SpritefusionObjectBuilder objectBuilder, double tileSize) {
-    for (var tile in layer.tiles) {
+  void _addObjects(
+    SpritefusionMapLayer layer,
+    SpritefusionObjectBuilder objectBuilder,
+    double tileSize,
+  ) {
+    for (final tile in layer.tiles) {
       final position = Vector2(
             tile.x.toDouble(),
             tile.y.toDouble(),

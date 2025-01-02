@@ -6,29 +6,26 @@ class RotationEnemy extends Enemy with UseSpriteAnimation, UseAssetsLoader {
   SpriteAnimation? animRun;
 
   RotationEnemy({
-    required Vector2 position,
-    required Vector2 size,
+    required super.position,
+    required super.size,
     required Future<SpriteAnimation> animIdle,
     required Future<SpriteAnimation> animRun,
     double currentRadAngle = -1.55,
-    double? speed,
-    double life = 100,
-    AcceptableAttackOriginEnum receivesAttackFrom =
-        AcceptableAttackOriginEnum.PLAYER_AND_ALLY,
-  }) : super(
-          position: position,
-          size: size,
-          life: life,
-          speed: speed,
-          receivesAttackFrom: receivesAttackFrom,
-        ) {
+    super.speed,
+    super.life = 100,
+    super.receivesAttackFrom,
+  }) {
     angle = currentRadAngle;
-    loader?.add(AssetToLoad(animIdle, (value) {
-      this.animIdle = value;
-    }));
-    loader?.add(AssetToLoad(animRun, (value) {
-      this.animRun = value;
-    }));
+    loader?.add(
+      AssetToLoad<SpriteAnimation>(animIdle, (value) {
+        this.animIdle = value;
+      }),
+    );
+    loader?.add(
+      AssetToLoad<SpriteAnimation>(animRun, (value) {
+        this.animRun = value;
+      }),
+    );
   }
 
   @override

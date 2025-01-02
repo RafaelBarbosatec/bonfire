@@ -10,6 +10,7 @@ import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/input/player_controller.dart';
 import 'package:bonfire/map/base/game_map.dart';
 import 'package:bonfire/player/player.dart';
+import 'package:bonfire/util/extensions/color_extensions.dart';
 import 'package:flutter/material.dart';
 
 class BonfireWidget extends StatefulWidget {
@@ -63,8 +64,8 @@ class BonfireWidget extends StatefulWidget {
   final List<Force2D>? globalForces;
 
   const BonfireWidget({
-    Key? key,
     required this.map,
+    super.key,
     this.playerControllers,
     this.player,
     this.interface,
@@ -86,7 +87,7 @@ class BonfireWidget extends StatefulWidget {
     this.mouseCursor,
     this.onDispose,
     this.globalForces,
-  }) : super(key: key);
+  });
 
   @override
   BonfireWidgetState createState() => BonfireWidgetState();
@@ -133,7 +134,7 @@ class BonfireWidgetState extends State<BonfireWidget> {
       debugMode: widget.debugMode,
       showCollisionArea: widget.showCollisionArea,
       collisionAreaColor:
-          widget.collisionAreaColor ?? Colors.lightGreenAccent.withOpacity(0.5),
+          widget.collisionAreaColor ?? Colors.lightGreenAccent.setOpacity(0.5),
       lightingColorGame: widget.lightingColorGame,
       cameraConfig: widget.cameraConfig,
       colorFilter: widget.colorFilter,

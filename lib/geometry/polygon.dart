@@ -37,12 +37,12 @@ class PolygonShape extends Shape {
     double height = 0;
     double width = 0;
 
-    double minX = relativePoints.first.x;
-    double maxX = relativePoints.first.x;
+    var minX = relativePoints.first.x;
+    var maxX = relativePoints.first.x;
 
-    double minY = relativePoints.first.y;
-    double maxY = relativePoints.first.y;
-    for (var offset in relativePoints) {
+    var minY = relativePoints.first.y;
+    var maxY = relativePoints.first.y;
+    for (final offset in relativePoints) {
       if (offset.x < minX) {
         minX = offset.x;
       }

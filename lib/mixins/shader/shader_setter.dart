@@ -43,7 +43,7 @@ class ShaderSetter {
   void apply(FragmentShader shader) {
     _indexFloat = startFloatIndex;
     _indexImage = startImageIndex;
-    for (var item in values) {
+    for (final item in values) {
       if (item is SetterDouble) {
         _setFloat(shader, item.value);
       }
@@ -58,10 +58,10 @@ class ShaderSetter {
 
       if (item is SetterColor) {
         final color = item.value;
-        _setFloat(shader, color.red / 255 * color.opacity);
-        _setFloat(shader, color.green / 255 * color.opacity);
-        _setFloat(shader, color.blue / 255 * color.opacity);
-        _setFloat(shader, color.opacity);
+        _setFloat(shader, color.r * color.a);
+        _setFloat(shader, color.g * color.a);
+        _setFloat(shader, color.b * color.a);
+        _setFloat(shader, color.a);
       }
     }
   }

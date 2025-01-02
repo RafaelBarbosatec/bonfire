@@ -26,7 +26,9 @@ mixin TileRecognizer on GameComponent {
 
   /// Method that checks what types map tile is currently
   List<String> tileTypeListBelow() {
-    if (!hasGameRef) return [];
+    if (!hasGameRef) {
+      return [];
+    }
     final map = gameRef.map;
     if (map.getRenderedTiles().isNotEmpty) {
       return tileListBelow().map<String>((e) => e.tileClass!).toList();
@@ -46,7 +48,9 @@ mixin TileRecognizer on GameComponent {
 
   /// Method that checks what properties list map tile is currently
   List<Map<String, dynamic>>? tilePropertiesListBelow() {
-    if (!hasGameRef) return null;
+    if (!hasGameRef) {
+      return null;
+    }
     final map = gameRef.map;
     if (map.layers.isNotEmpty) {
       return tileListBelow()
@@ -58,12 +62,13 @@ mixin TileRecognizer on GameComponent {
 
   /// Method that checks what map tiles is below
   Iterable<TileComponent> tileListBelow() {
-    if (!hasGameRef) return [];
+    if (!hasGameRef) {
+      return [];
+    }
     final map = gameRef.map;
     if (map.layers.isNotEmpty) {
       return map.getRenderedTiles().where((element) {
-        return (element.overlaps(rectCollision) &&
-            (element.properties != null));
+        return element.overlaps(rectCollision) && (element.properties != null);
       });
     }
     return [];

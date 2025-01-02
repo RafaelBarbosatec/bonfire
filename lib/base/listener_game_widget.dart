@@ -32,8 +32,8 @@ typedef GameFactory<T extends Game> = T Function();
 class ListenerGameWidget<T extends Game> extends StatefulWidget {
   /// The game instance which this widget will render, if the normal constructor
   /// is used.
-  /// If the [ListenerGameWidget.controlled] constructor is used, this will always be
-  /// `null`.
+  /// If the [ListenerGameWidget.controlled] constructor is used, this will
+  /// aways be `null`.
   final T? game;
 
   /// A function that creates a [Game] that this widget will render.
@@ -121,8 +121,8 @@ class ListenerGameWidget<T extends Game> extends StatefulWidget {
   /// game.overlays.add('PauseMenu');
   /// ```
   ListenerGameWidget({
-    Key? key,
     required T this.game,
+    super.key,
     this.textDirection,
     this.loadingBuilder,
     this.errorBuilder,
@@ -133,8 +133,7 @@ class ListenerGameWidget<T extends Game> extends StatefulWidget {
     this.autofocus = true,
     this.mouseCursor,
     this.addRepaintBoundary = true,
-  })  : gameFactory = null,
-        super(key: key) {
+  }) : gameFactory = null {
     _initializeGame(game!);
   }
 
@@ -198,11 +197,12 @@ class ListenerGameWidgetState<T extends Game>
   ///
   /// This is needed because our build function invokes user code, which in turn
   /// may change some of the [Game]'s properties which would require the
-  /// [ListenerGameWidget] to be rebuilt. However, Flutter doesn't allow widgets to be
+  /// [ListenerGameWidget] to be rebuilt. However, Flutter doesn't allow widgets
+  /// to be
   /// marked dirty while they are building. So, this method is needed to avoid
   /// such a limitation and ensure that the user code can set [Game]'s
-  /// properties freely, and that they will be propagated to the [ListenerGameWidget]
-  /// at the earliest opportunity.
+  /// properties freely, and that they will be propagated to the
+  ///  [ListenerGameWidget] at the earliest opportunity.
   Widget _protectedBuild(Widget Function() build) {
     late final Widget result;
     try {
@@ -382,9 +382,10 @@ class ListenerGameWidgetState<T extends Game>
                                 Container();
                           }
                           currentGame.onGameResize(size);
-                          // This should only be called if the game has already been
-                          // loaded (in the case of resizing for example), since
-                          // update otherwise should be called after onMount.
+                          // This should only be called if the game has already
+                          // been loaded (in the case of resizing for example),
+                          // since update otherwise should be called after
+                          // onMount.
                           if (!currentGame.paused && currentGame.isAttached) {
                             currentGame.update(0);
                           }

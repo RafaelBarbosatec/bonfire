@@ -26,13 +26,13 @@ class CameraSceneAction extends SceneAction {
   bool _done = false;
 
   CameraSceneAction({
+    required this.duration,
     dynamic id,
     this.position,
     this.target,
     this.zoom,
     this.angle,
     this.curve = widget.Curves.decelerate,
-    required this.duration,
   }) : super(id);
   CameraSceneAction.position(
     this.position, {

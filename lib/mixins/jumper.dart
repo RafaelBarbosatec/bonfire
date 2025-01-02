@@ -1,3 +1,5 @@
+// ignore_for_file: use_setters_to_change_properties
+
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision_game_component.dart';
 
@@ -57,7 +59,9 @@ mixin Jumper on Movement, BlockMovementCollision {
 
   @override
   void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     if (other is CollisionMapComponent || other is TileWithCollision) {
       ++_tileCollisionCount;
       resetInterval(_tileCollisionCountKey);
@@ -68,15 +72,21 @@ mixin Jumper on Movement, BlockMovementCollision {
   @override
   void onCollisionEnd(PositionComponent other) {
     if (other is CollisionMapComponent || other is TileWithCollision) {
-      if (--_tileCollisionCount == 0) resetInterval(_tileCollisionCountKey);
+      if (--_tileCollisionCount == 0) {
+        resetInterval(_tileCollisionCountKey);
+      }
     }
     super.onCollisionEnd(other);
   }
 
   @override
   void update(double dt) {
-    if (checkInterval(_tileCollisionCountKey, 100, dt,
-            firstCheckIsTrue: false) &&
+    if (checkInterval(
+          _tileCollisionCountKey,
+          100,
+          dt,
+          firstCheckIsTrue: false,
+        ) &&
         !isJumping &&
         _tileCollisionCount == 0 &&
         displacement.y.abs() > 0.2) {

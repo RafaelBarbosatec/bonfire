@@ -33,7 +33,7 @@ mixin Attackable on GameComponent {
 
   /// Increase life
   void addLife(double life) {
-    double newLife = _life + life;
+    var newLife = _life + life;
 
     if (newLife > maxLife) {
       newLife = maxLife;
@@ -54,7 +54,7 @@ mixin Attackable on GameComponent {
 
   /// reduce life
   void removeLife(double life) {
-    double newLife = _life - life;
+    var newLife = _life - life;
     if (newLife < 0) {
       newLife = 0;
     }
@@ -101,9 +101,12 @@ mixin Attackable on GameComponent {
     removeLife(damage);
   }
 
-  /// This method is used to check if this component can receive damage from any attacker.
+  /// This method is used to check if this component can
+  /// receive damage from any attacker.
   bool checkCanReceiveDamage(AttackOriginEnum attacker) {
-    if (isDead || isRemoving) return false;
+    if (isDead || isRemoving) {
+      return false;
+    }
     switch (receivesAttackFrom) {
       case AcceptableAttackOriginEnum.ALL:
         return true;

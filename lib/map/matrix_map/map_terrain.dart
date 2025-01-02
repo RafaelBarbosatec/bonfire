@@ -46,7 +46,7 @@ class TerrainSpriteSheet {
     required this.invertedBottomRight,
   });
 
-  static TerrainSpriteSheet create({
+  factory TerrainSpriteSheet.create({
     required String path,
     required Vector2 tileSize,
     Vector2? position,
@@ -151,16 +151,16 @@ class MapTerrain {
     this.collisionsBuilder,
     this.collisionOnlyCloseCorners = false,
   }) {
-    int last = 0;
-    for (var element in spritesProportion) {
+    var last = 0;
+    for (final element in spritesProportion) {
       final value = (element * 100).toInt();
-      _rangeProportion.add(_RandomRange(last, (last + value)));
+      _rangeProportion.add(_RandomRange(last, last + value));
       last += value;
     }
   }
 
   int inRange(int value) {
-    int index = _rangeProportion.indexWhere(
+    final index = _rangeProportion.indexWhere(
       (element) => element.inRange(value),
     );
     return index == -1 ? 0 : index;
@@ -176,8 +176,8 @@ class MapTerrain {
 
   TileSprite? getSingleSprite() {
     if (sprites.length > 1 && sprites.length == spritesProportion.length) {
-      int randomValue = _random.nextInt(maxRandomValue);
-      int index = inRange(randomValue);
+      final randomValue = _random.nextInt(maxRandomValue);
+      final index = inRange(randomValue);
 
       return sprites[index];
     } else {
@@ -191,17 +191,13 @@ class MapTerrainCorners extends MapTerrain {
   final TerrainSpriteSheet spriteSheet;
 
   MapTerrainCorners({
-    required double value,
+    required super.value,
     required this.to,
     required this.spriteSheet,
-    String? type,
-    Map<String, dynamic>? properties,
-    List<ShapeHitbox>? Function()? collisionsBuilder,
+    super.type,
+    super.properties,
+    super.collisionsBuilder,
   }) : super(
-          value: value,
           sprites: [],
-          type: type,
-          properties: properties,
-          collisionsBuilder: collisionsBuilder,
         );
 }

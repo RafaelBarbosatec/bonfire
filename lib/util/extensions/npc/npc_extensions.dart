@@ -27,7 +27,7 @@ extension NpcExtensions on Npc {
     double? visionAngle,
     double? angle,
   }) {
-    Player? player = gameRef.player;
+    final player = gameRef.player;
     if (player == null || player.isDead) {
       notObserved?.call();
       return null;
@@ -58,7 +58,9 @@ extension NpcExtensions on Npc {
     bool runOnlyVisibleInScreen = true,
     MovementAxis movementAxis = MovementAxis.all,
   }) {
-    if (runOnlyVisibleInScreen && !isVisible) return null;
+    if (runOnlyVisibleInScreen && !isVisible) {
+      return null;
+    }
 
     return seePlayer(
       radiusVision: radiusVision,
@@ -66,7 +68,7 @@ extension NpcExtensions on Npc {
       angle: angle,
       observed: (player) {
         observed?.call();
-        bool move = moveTowardsTarget(
+        final move = moveTowardsTarget(
           target: player,
           close: () => closePlayer?.call(player),
           margin: margin,
@@ -77,7 +79,7 @@ extension NpcExtensions on Npc {
         }
       },
       notObserved: () {
-        bool stop = notObserved?.call() ?? true;
+        final stop = notObserved?.call() ?? true;
         if (stop) {
           stopMove();
         }
@@ -101,7 +103,9 @@ extension NpcExtensions on Npc {
     bool runOnlyVisibleInScreen = true,
     MovementAxis movementAxis = MovementAxis.all,
   }) {
-    if (runOnlyVisibleInScreen && !isVisible) return;
+    if (runOnlyVisibleInScreen && !isVisible) {
+      return;
+    }
 
     seeComponentType<Enemy>(
       radiusVision: radiusVision,
@@ -109,7 +113,7 @@ extension NpcExtensions on Npc {
       angle: angle ?? lastDirection.toRadians(),
       observed: (enemy) {
         observed?.call();
-        bool move = moveTowardsTarget(
+        final move = moveTowardsTarget(
           target: enemy.first,
           close: () {
             closeEnemy(enemy.first);
@@ -122,7 +126,7 @@ extension NpcExtensions on Npc {
         }
       },
       notObserved: () {
-        bool stop = notObserved?.call() ?? true;
+        final stop = notObserved?.call() ?? true;
         if (stop) {
           stopMove();
         }
@@ -146,7 +150,9 @@ extension NpcExtensions on Npc {
     bool runOnlyVisibleInScreen = true,
     MovementAxis movementAxis = MovementAxis.all,
   }) {
-    if (runOnlyVisibleInScreen && !isVisible) return;
+    if (runOnlyVisibleInScreen && !isVisible) {
+      return;
+    }
 
     seeComponentType<Ally>(
       radiusVision: radiusVision,
@@ -154,7 +160,7 @@ extension NpcExtensions on Npc {
       angle: angle ?? lastDirection.toRadians(),
       observed: (ally) {
         observed?.call();
-        bool move = moveTowardsTarget(
+        final move = moveTowardsTarget(
           target: ally.first,
           close: () {
             closeAlly(ally.first);
@@ -167,7 +173,7 @@ extension NpcExtensions on Npc {
         }
       },
       notObserved: () {
-        bool stop = notObserved?.call() ?? true;
+        final stop = notObserved?.call() ?? true;
         if (stop) {
           stopMove();
         }
@@ -183,16 +189,20 @@ extension NpcExtensions on Npc {
   /// Get angle between enemy and player
   /// player as a base
   double getAngleFromPlayer() {
-    Player? player = gameRef.player;
-    if (player == null) return 0.0;
+    final player = gameRef.player;
+    if (player == null) {
+      return 0.0;
+    }
     return getAngleFromTarget(player);
   }
 
   /// Get angle between enemy and player
   /// enemy position as a base
   double getInverseAngleFromPlayer() {
-    Player? player = gameRef.player;
-    if (player == null) return 0.0;
+    final player = gameRef.player;
+    if (player == null) {
+      return 0.0;
+    }
     return BonfireUtil.angleBetweenPoints(
       playerRect.center.toVector2(),
       rectCollision.centerVector2,

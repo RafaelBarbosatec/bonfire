@@ -5,11 +5,14 @@ import 'dart:ui';
 
 import 'package:a_star_algorithm/a_star_algorithm.dart';
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/extensions/color_extensions.dart';
+import 'package:bonfire/util/extensions/int_int_extensions.dart';
 import 'package:bonfire/util/line_path_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-/// Mixin responsible for find path using `a_star_algorithm` and moving the component through the path
+/// Mixin responsible for find path using `a_star_algorithm` and
+///  moving the component through the path
 mixin PathFinding on Movement {
   static const REDUCTION_TO_AVOID_ROUNDING_PROBLEMS = 4;
 
@@ -23,14 +26,14 @@ mixin PathFinding on Movement {
   double _factorInflateFindArea = 2;
   VoidCallback? _onFinish;
 
-  final List<Point<int>> _barriers = [];
+  final List<(int, int)> _barriers = [];
   final List<ShapeHitbox> _ignoreCollisions = [];
 
   LinePathComponent? _linePathComponent;
-  Color _pathLineColor = const Color(0xFF40C4FF).withOpacity(0.5);
+  Color _pathLineColor = const Color(0xFF40C4FF).setOpacity(0.5);
   double _pathLineStrokeWidth = 4;
   final Paint _paintShowBarriers = Paint()
-    ..color = const Color(0xFF2196F3).withOpacity(0.5);
+    ..color = const Color(0xFF2196F3).setOpacity(0.5);
 
   void setupPathFinding({
     bool? linePathEnabled,
@@ -46,7 +49,8 @@ mixin PathFinding on Movement {
     bool showBarriersCalculated = false,
     bool useOnlyVisibleBarriers = true,
 
-    /// If `false` the algorithm use map tile size with base of the grid. if true this use collision size of the component.
+    /// If `false` the algorithm use map tile size with base of the grid.
+    ///  if true this use collision size of the component.
     bool gridSizeIsCollisionSize = false,
     bool withDiagonal = true,
     double factorInflateFindArea = 2,
@@ -56,12 +60,12 @@ mixin PathFinding on Movement {
     _useOnlyVisibleBarriers = useOnlyVisibleBarriers;
     _factorInflateFindArea = factorInflateFindArea;
     _paintShowBarriers.color =
-        barriersCalculatedColor ?? const Color(0xFF2196F3).withOpacity(0.5);
+        barriersCalculatedColor ?? const Color(0xFF2196F3).setOpacity(0.5);
     _showBarriers = showBarriersCalculated;
 
     _pathLineColor = pathLineColor ?? _pathLineColor;
     _pathLineStrokeWidth = pathLineStrokeWidth;
-    _pathLineColor = pathLineColor ?? const Color(0xFF40C4FF).withOpacity(0.5);
+    _pathLineColor = pathLineColor ?? const Color(0xFF40C4FF).setOpacity(0.5);
     _gridSizeIsCollisionSize = gridSizeIsCollisionSize;
   }
 
@@ -154,38 +158,38 @@ mixin PathFinding on Movement {
 
     final positionPlayer = player.rectCollision.centerVector2;
 
-    Point<int> playerPosition = _getCenterPositionByTile(positionPlayer);
+    final playerPosition = _getCenterPositionByTile(positionPlayer);
 
-    Point<int> targetPosition = _getCenterPositionByTile(finalPosition);
+    final targetPosition = _getCenterPositionByTile(finalPosition);
 
-    double inflate = _tileSize * _factorInflateFindArea;
+    final inflate = _tileSize * _factorInflateFindArea;
 
-    int maxY = max(
+    final int maxY = max(
       playerPosition.y,
       targetPosition.y,
     );
 
-    int maxX = max(
+    final int maxX = max(
       playerPosition.x,
       targetPosition.x,
     );
 
-    int rows = maxY.toInt() + inflate.toInt();
+    final rows = maxY + inflate.toInt();
 
-    int columns = maxX.toInt() + inflate.toInt();
+    final columns = maxX + inflate.toInt();
 
     _barriers.clear();
 
-    Rect area = Rect.fromPoints(
+    var area = Rect.fromPoints(
       positionPlayer.toOffset(),
       finalPosition.toOffset(),
     );
 
-    double left = area.left;
-    double right = area.right;
-    double top = area.top;
-    double bottom = area.bottom;
-    double size = max(area.width, area.height);
+    var left = area.left;
+    var right = area.right;
+    var top = area.top;
+    var bottom = area.bottom;
+    final double size = max(area.width, area.height);
     if (positionPlayer.x < finalPosition.x) {
       left -= size;
     } else if (positionPlayer.x > finalPosition.x) {
@@ -202,14 +206,14 @@ mixin PathFinding on Movement {
 
     for (final e in gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
       if (!_ignoreCollisions.contains(e)) {
-        var rect = e.toAbsoluteRect();
+        final rect = e.toAbsoluteRect();
         if (area.overlaps(rect)) {
           _addCollisionOffsetsPositionByTile(rect);
         }
       }
     }
 
-    Iterable<Point<int>> result = [];
+    Iterable<(int, int)> result = [];
 
     if (_barriers.contains(targetPosition)) {
       stopMove();
@@ -227,7 +231,7 @@ mixin PathFinding on Movement {
       ).findThePath();
 
       if (result.isNotEmpty || _isNeighbor(playerPosition, targetPosition)) {
-        result = AStar.resumePath(result);
+        result = AStar.simplifyPath(result);
         return _mapToWorldPositions(result);
       }
     } catch (e, stacktrace) {
@@ -239,7 +243,7 @@ mixin PathFinding on Movement {
 
   /// Get size of the grid used on algorithm to calculate path
   double get _tileSize {
-    double tileSize = gameRef.map.tileSize;
+    final tileSize = gameRef.map.tileSize;
     if (_gridSizeIsCollisionSize) {
       final rect = rectCollision;
       return max(rect.height, rect.width) +
@@ -250,58 +254,61 @@ mixin PathFinding on Movement {
 
   bool get isMovingAlongThePath => _currentPath.isNotEmpty;
 
-  Point<int> _getCenterPositionByTile(Vector2 center) {
-    return Point(
+  (int, int) _getCenterPositionByTile(Vector2 center) {
+    return (
       (center.x / _tileSize).floor(),
       (center.y / _tileSize).floor(),
     );
   }
 
-  /// creating an imaginary grid would calculate how many tile this object is occupying.
+  /// creating an imaginary grid would calculate how many tile
+  ///  this object is occupying.
   void _addCollisionOffsetsPositionByTile(Rect rect) {
     final leftTop = Offset(
-      ((rect.left / _tileSize).floor() * _tileSize),
-      ((rect.top / _tileSize).floor() * _tileSize),
+      (rect.left / _tileSize).floor() * _tileSize,
+      (rect.top / _tileSize).floor() * _tileSize,
     );
 
-    List<Rect> grid = [];
-    int countColumns = (rect.width / _tileSize).ceil() + 1;
-    int countRows = (rect.height / _tileSize).ceil() + 1;
+    final grid = <Rect>[];
+    final countColumns = (rect.width / _tileSize).ceil() + 1;
+    final countRows = (rect.height / _tileSize).ceil() + 1;
 
     List.generate(countRows, (r) {
       List.generate(countColumns, (c) {
-        grid.add(Rect.fromLTWH(
-          leftTop.dx +
-              (c * _tileSize) +
-              REDUCTION_TO_AVOID_ROUNDING_PROBLEMS / 2,
-          leftTop.dy +
-              (r * _tileSize) +
-              REDUCTION_TO_AVOID_ROUNDING_PROBLEMS / 2,
-          _tileSize - REDUCTION_TO_AVOID_ROUNDING_PROBLEMS,
-          _tileSize - REDUCTION_TO_AVOID_ROUNDING_PROBLEMS,
-        ));
+        grid.add(
+          Rect.fromLTWH(
+            leftTop.dx +
+                (c * _tileSize) +
+                REDUCTION_TO_AVOID_ROUNDING_PROBLEMS / 2,
+            leftTop.dy +
+                (r * _tileSize) +
+                REDUCTION_TO_AVOID_ROUNDING_PROBLEMS / 2,
+            _tileSize - REDUCTION_TO_AVOID_ROUNDING_PROBLEMS,
+            _tileSize - REDUCTION_TO_AVOID_ROUNDING_PROBLEMS,
+          ),
+        );
       });
     });
 
-    List<Rect> listRect = grid.where((element) {
+    final listRect = grid.where((element) {
       return rect.overlaps(element);
     }).toList();
 
     final result = listRect.map((e) {
-      return Point<int>(
+      return (
         (e.center.dx / _tileSize).floor(),
         (e.center.dy / _tileSize).floor(),
       );
     }).toList();
 
-    for (var element in result) {
+    for (final element in result) {
       if (!_barriers.contains(element)) {
         _barriers.add(element);
       }
     }
   }
 
-  bool _isNeighbor(Point<int> playerPosition, Point<int> targetPosition) {
+  bool _isNeighbor((int, int) playerPosition, (int, int) targetPosition) {
     if ((playerPosition.x - targetPosition.x).abs() == 1) {
       return true;
     }
@@ -321,7 +328,7 @@ mixin PathFinding on Movement {
 
   void _drawBarrries(Canvas canvas) {
     if (_showBarriers) {
-      for (var element in _barriers) {
+      for (final element in _barriers) {
         canvas.drawRect(
           Rect.fromLTWH(
             element.x * _tileSize,
@@ -358,7 +365,7 @@ mixin PathFinding on Movement {
     }
   }
 
-  List<Vector2> _mapToWorldPositions(Iterable<Point<int>> result) {
+  List<Vector2> _mapToWorldPositions(Iterable<(int, int)> result) {
     return result.map((e) {
       return Vector2(e.x * _tileSize, e.y * _tileSize)
           .translated(_tileSize / 2, _tileSize / 2);

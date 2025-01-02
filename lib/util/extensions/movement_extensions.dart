@@ -11,11 +11,11 @@ extension MovementExtensions on Movement {
   /// return true if moved.
   bool moveTowardsTarget<T extends GameComponent>({
     required T target,
-    Function? close,
+    void Function()? close,
     double margin = 4,
     MovementAxis movementAxis = MovementAxis.all,
   }) {
-    Rect rectPlayerCollision = target.rectCollision.inflate(margin);
+    final rectPlayerCollision = target.rectCollision.inflate(margin);
 
     if (rectCollision.overlaps(rectPlayerCollision)) {
       close?.call();
@@ -23,8 +23,8 @@ extension MovementExtensions on Movement {
       return false;
     }
 
-    double radAngle = getAngleFromTarget(target);
-    Direction directionToMove = BonfireUtil.getDirectionFromAngle(
+    final radAngle = getAngleFromTarget(target);
+    var directionToMove = BonfireUtil.getDirectionFromAngle(
       radAngle,
     );
     final newDirectionToMove = _checkRestrictAxis(
@@ -94,13 +94,15 @@ extension MovementExtensions on Movement {
   }
 
   bool keepDistance(GameComponent target, double minDistance) {
-    if (!isVisible) return true;
-    double distance = rectCollision.centerVector2.distanceTo(
+    if (!isVisible) {
+      return true;
+    }
+    final distance = rectCollision.centerVector2.distanceTo(
       target.rectCollision.centerVector2,
     );
 
     if (distance < minDistance) {
-      var angle = getAngleFromTarget(target);
+      final angle = getAngleFromTarget(target);
       moveFromAngle(angle + pi);
       return false;
     }
@@ -116,19 +118,21 @@ extension MovementExtensions on Movement {
     double? minDistanceFromPlayer,
     bool runOnlyVisibleInScreen = true,
   }) {
-    if (runOnlyVisibleInScreen && !isVisible) return false;
-    double distance = (minDistanceFromPlayer ?? radiusVision);
+    if (runOnlyVisibleInScreen && !isVisible) {
+      return false;
+    }
+    final distance = minDistanceFromPlayer ?? radiusVision;
 
-    Rect rectTarget = target.rectCollision;
-    double centerXTarget = rectTarget.center.dx;
-    double centerYTarget = rectTarget.center.dy;
+    final rectTarget = target.rectCollision;
+    final centerXTarget = rectTarget.center.dx;
+    final centerYTarget = rectTarget.center.dy;
 
     double translateX = 0;
     double translateY = 0;
 
-    double speed = this.speed * dtUpdate;
+    final speed = this.speed * dtUpdate;
 
-    Rect rectToMove = rectCollision;
+    final rectToMove = rectCollision;
 
     translateX = rectToMove.center.dx > centerXTarget ? (-1 * speed) : speed;
     translateX = _adjustTranslate(
@@ -144,10 +148,10 @@ extension MovementExtensions on Movement {
       centerYTarget,
     );
 
-    double translateXPositive =
+    final translateXPositive =
         (rectToMove.center.dx - rectTarget.center.dx).abs();
 
-    double translateYPositive =
+    final translateYPositive =
         (rectToMove.center.dy - rectTarget.center.dy).abs();
 
     if (translateXPositive >= distance &&
@@ -179,7 +183,7 @@ extension MovementExtensions on Movement {
     double centerEnemy,
     double centerPlayer,
   ) {
-    double diff = centerPlayer - centerEnemy;
+    final diff = centerPlayer - centerEnemy;
     double newTrasnlate = 0;
     if (translate.abs() > diff.abs()) {
       newTrasnlate = diff;

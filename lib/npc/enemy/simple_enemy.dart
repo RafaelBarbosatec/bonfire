@@ -1,29 +1,19 @@
-import 'package:bonfire/mixins/attackable.dart';
 import 'package:bonfire/mixins/direction_animation.dart';
+import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
-import 'package:flame/components.dart';
-
-import 'enemy.dart';
 
 /// Enemy with animation in all direction
 class SimpleEnemy extends Enemy with DirectionAnimation {
   SimpleEnemy({
-    required Vector2 position,
-    required Vector2 size,
+    required super.position,
+    required super.size,
     SimpleDirectionAnimation? animation,
-    double life = 100,
-    double? speed,
+    super.life = 100,
+    super.speed,
     Direction initDirection = Direction.right,
-    AcceptableAttackOriginEnum receivesAttackFrom =
-        AcceptableAttackOriginEnum.PLAYER_AND_ALLY,
-  }) : super(
-          position: position,
-          size: size,
-          life: life,
-          speed: speed,
-          receivesAttackFrom: receivesAttackFrom,
-        ) {
+    super.receivesAttackFrom,
+  }) {
     this.animation = animation;
     lastDirection = initDirection;
     lastDirectionHorizontal =

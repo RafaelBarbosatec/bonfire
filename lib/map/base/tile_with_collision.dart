@@ -1,67 +1,41 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/collision_game_component.dart';
-import 'package:bonfire/util/controlled_update_animation.dart';
 
 class TileWithCollision extends TileComponent {
   Iterable<ShapeHitbox>? collisions;
   TileWithCollision({
-    required String spritePath,
-    required Vector2 position,
-    required Vector2 size,
-    String? tileClass,
+    required super.spritePath,
+    required super.position,
+    required super.size,
+    super.tileClass,
     this.collisions,
-    double offsetX = 0,
-    double offsetY = 0,
-    Map<String, dynamic>? properties,
-  }) : super(
-          spritePath: spritePath,
-          position: position,
-          size: size,
-          tileClass: tileClass,
-          offsetX: offsetX,
-          offsetY: offsetY,
-          properties: properties,
-        );
+    super.offsetX,
+    super.offsetY,
+    super.properties,
+  });
 
   TileWithCollision.fromSprite({
-    required Sprite? sprite,
-    required Vector2 position,
-    required Vector2 size,
-    String? tileClass,
+    required super.sprite,
+    required super.position,
+    required super.size,
+    super.tileClass,
     this.collisions,
-    double offsetX = 0,
-    double offsetY = 0,
-    Color? color,
-    Map<String, dynamic>? properties,
-  }) : super.fromSprite(
-          sprite: sprite,
-          position: position,
-          size: size,
-          tileClass: tileClass,
-          offsetX: offsetX,
-          offsetY: offsetY,
-          properties: properties,
-          color: color,
-        );
+    super.offsetX,
+    super.offsetY,
+    super.color,
+    super.properties,
+  }) : super.fromSprite();
 
   TileWithCollision.withAnimation({
-    required ControlledUpdateAnimation animation,
-    required Vector2 position,
-    required Vector2 size,
-    String? tileClass,
+    required super.animation,
+    required super.position,
+    required super.size,
+    super.tileClass,
     this.collisions,
-    double offsetX = 0,
-    double offsetY = 0,
-    Map<String, dynamic>? properties,
-  }) : super.fromAnimation(
-          animation: animation,
-          position: position,
-          size: size,
-          offsetX: offsetX,
-          offsetY: offsetY,
-          tileClass: tileClass,
-          properties: properties,
-        );
+    super.offsetX,
+    super.offsetY,
+    super.properties,
+  }) : super.fromAnimation();
 
   @override
   Future<void> onLoad() {

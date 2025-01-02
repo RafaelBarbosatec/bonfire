@@ -1,11 +1,10 @@
 import 'dart:math';
 
+import 'package:bonfire/geometry/circle.dart';
+import 'package:bonfire/geometry/polygon.dart';
+import 'package:bonfire/geometry/rectangle.dart';
+import 'package:bonfire/geometry/shape.dart';
 import 'package:flame/extensions.dart';
-
-import 'circle.dart';
-import 'polygon.dart';
-import 'rectangle.dart';
-import 'shape.dart';
 
 /// Class responsible to verify collision of the Shapes.
 /// Code based from: https://github.com/hahafather007/collision_check
@@ -49,7 +48,9 @@ class ShapeCollision {
   }
 
   static bool rectToCircle(RectangleShape a, CircleShape b) {
-    if (!rectToRect(a, b.rect)) return false;
+    if (!rectToRect(a, b.rect)) {
+      return false;
+    }
 
     final points = [
       a.leftTop,
@@ -60,21 +61,27 @@ class ShapeCollision {
     ];
     for (var i = 0; i < points.length - 1; i++) {
       final distance = getNearestDistance(points[i], points[i + 1], b.center);
-      if (_getFixDouble(distance) <= b.radius) return true;
+      if (_getFixDouble(distance) <= b.radius) {
+        return true;
+      }
     }
 
     return false;
   }
 
   static bool rectToPolygon(RectangleShape a, PolygonShape b) {
-    if (!rectToRect(a, b.rect)) return false;
+    if (!rectToRect(a, b.rect)) {
+      return false;
+    }
 
     if (!isLinesShadowOver(
       a.leftTop,
       a.rightBottom,
       b.rect.leftTop,
       b.rect.rightBottom,
-    )) return false;
+    )) {
+      return false;
+    }
 
     if (polygonPoint(b, a.position)) {
       return true;
@@ -110,7 +117,9 @@ class ShapeCollision {
   }
 
   static bool circleToCircle(CircleShape a, CircleShape b) {
-    if (!rectToRect(a.rect, b.rect)) return false;
+    if (!rectToRect(a.rect, b.rect)) {
+      return false;
+    }
 
     final distance = a.radius + b.radius;
     final w = a.center.x - b.center.x;
@@ -120,7 +129,9 @@ class ShapeCollision {
   }
 
   static bool circleToPolygon(CircleShape a, PolygonShape b) {
-    if (!rectToRect(a.rect, b.rect)) return false;
+    if (!rectToRect(a.rect, b.rect)) {
+      return false;
+    }
 
     if (b.points.isNotEmpty) {
       final points = b.points.toList();
@@ -137,7 +148,9 @@ class ShapeCollision {
   }
 
   static bool polygonToPolygon(PolygonShape a, PolygonShape b) {
-    if (!rectToRect(a.rect, b.rect)) return false;
+    if (!rectToRect(a.rect, b.rect)) {
+      return false;
+    }
 
     final pointsA = a.points.toList()..add(a.points.first);
     final pointsB = b.points.toList()..add(b.points.first);
@@ -146,7 +159,11 @@ class ShapeCollision {
       final pointB = pointsA[i + 1];
 
       if (!isLinesShadowOver(
-          pointA, pointB, b.rect.leftTop, b.rect.rightBottom)) {
+        pointA,
+        pointB,
+        b.rect.leftTop,
+        b.rect.rightBottom,
+      )) {
         continue;
       }
 
@@ -170,14 +187,20 @@ class ShapeCollision {
   /// Get [o] point distance [o1] and [o2] line segment distance
   /// https://blog.csdn.net/yjukh/article/details/5213577
   static double getNearestDistance(Vector2 o1, Vector2 o2, Vector2 o) {
-    if (o1 == o || o2 == o) return 0;
+    if (o1 == o || o2 == o) {
+      return 0;
+    }
 
     final a = o2.distanceTo(o);
     final b = o1.distanceTo(o);
     final c = o1.distanceTo(o2);
 
-    if (a * a >= b * b + c * c) return b;
-    if (b * b >= a * a + c * c) return a;
+    if (a * a >= b * b + c * c) {
+      return b;
+    }
+    if (b * b >= a * a + c * c) {
+      return a;
+    }
 
     // 海伦公式
     final l = (a + b + c) / 2;
@@ -229,22 +252,24 @@ class ShapeCollision {
 // only needed if you're going to check if the rectangle
 // is INSIDE the polygon
   static bool polygonPoint(PolygonShape b, Vector2 point) {
-    bool collision = false;
+    var collision = false;
 
     // go through each of the vertices, plus the next
     // vertex in the list
-    List<Vector2> vertices = b.points;
-    int next = 0;
-    for (int current = 0; current < vertices.length; current++) {
+    final vertices = b.points;
+    var next = 0;
+    for (var current = 0; current < vertices.length; current++) {
       // get next vertex in list
       // if we've hit the end, wrap around to 0
       next = current + 1;
-      if (next == vertices.length) next = 0;
+      if (next == vertices.length) {
+        next = 0;
+      }
 
       // get the PVectors at our current position
       // this makes our if statement a little cleaner
-      Vector2 vc = vertices[current]; // c for "current"
-      Vector2 vn = vertices[next]; // n for "next"
+      final vc = vertices[current]; // c for "current"
+      final vn = vertices[next]; // n for "next"
 
       // compare position, flip 'collision' variable
       // back and forth

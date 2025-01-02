@@ -6,14 +6,11 @@ class PlatformPlayer extends SimplePlayer
     required super.position,
     required super.size,
     PlatformAnimations? animation,
-    Direction initDirection = Direction.right,
-    double? speed,
-    double life = 100,
+    super.initDirection,
+    super.speed,
+    super.life,
     int countJumps = 1,
   }) : super(
-          initDirection: initDirection,
-          speed: speed,
-          life: life,
           animation: animation?.toSimpleDirectionAnimation(),
         ) {
     setupJumper(maxJump: countJumps);
@@ -21,7 +18,7 @@ class PlatformPlayer extends SimplePlayer
 
   @override
   void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
-    JoystickMoveDirectional newDirectional = JoystickMoveDirectional.IDLE;
+    var newDirectional = JoystickMoveDirectional.IDLE;
 
     if (event.directional.isRight) {
       newDirectional = JoystickMoveDirectional.MOVE_RIGHT;
