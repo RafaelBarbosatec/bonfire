@@ -28,23 +28,27 @@ class Goblin extends SimpleEnemy
     );
   }
 
-  List<Behavior> get behavior => [
+  @override
+  List<Behavior> get behaviors => [
         BCondition(
-          condition: (dt, comp, game) => !game.sceneBuilderStatus.isRunning,
-          doBehavior: BCanSeeType<Player>(
-            doBehavior: (list) {
-              final player = list.first;
-              return BCondition(
-                condition: (dt, comp, game) =>
-                    !game.sceneBuilderStatus.isRunning,
-                doBehavior: BAction(
-                  action: (dt, comp, game) {
-                    execAttack(attack);
-                  },
-                ),
-                doElseBehavior: BMoveToComponent(target: player),
-              );
-            },
+          condition: (_, __, game) {
+            return !game.sceneBuilderStatus.isRunning;
+          },
+          doBehavior: BCondition(
+            condition: (_, __, game) => gameRef.player != null,
+            doBehavior: BSeeAndMoveToComponent(
+              target: gameRef.player!,
+              radiusVision: DungeonMap.tileSize,
+              onClose: (dt, target) => execAttack(attack),
+              doElseBehavior: BRandomMovement(
+                speed: speed / 2,
+                maxDistance: (DungeonMap.tileSize * 3),
+              ),
+            ),
+            doElseBehavior: BRandomMovement(
+              speed: speed / 2,
+              maxDistance: (DungeonMap.tileSize * 3),
+            ),
           ),
         ),
       ];
@@ -54,33 +58,33 @@ class Goblin extends SimpleEnemy
     super.update(dt);
     if (!enableBehaviors) return;
 
-    if (!gameRef.sceneBuilderStatus.isRunning) {
-      seeAndMoveToPlayer(
-        radiusVision: DungeonMap.tileSize,
-        closePlayer: (p) {
-          execAttack(attack);
-        },
-        notObserved: () {
-          seeAndMoveToAttackRange(
-            minDistanceFromPlayer: DungeonMap.tileSize * 2,
-            useDiagonal: false,
-            positioned: (p) {
-              execAttackRange(attack);
-            },
-            radiusVision: DungeonMap.tileSize * 3,
-            notObserved: () {
-              runRandomMovement(
-                dt,
-                speed: speed / 2,
-                maxDistance: (DungeonMap.tileSize * 3),
-              );
-              return false;
-            },
-          );
-          return false;
-        },
-      );
-    }
+    // if (!gameRef.sceneBuilderStatus.isRunning) {
+    //   seeAndMoveToPlayer(
+    //     radiusVision: DungeonMap.tileSize,
+    //     closePlayer: (p) {
+    //       execAttack(attack);
+    //     },
+    //     notObserved: () {
+    //       seeAndMoveToAttackRange(
+    //         minDistanceFromPlayer: DungeonMap.tileSize * 2,
+    //         useDiagonal: false,
+    //         positioned: (p) {
+    //           execAttackRange(attack);
+    //         },
+    //         radiusVision: DungeonMap.tileSize * 3,
+    //         notObserved: () {
+    //           runRandomMovement(
+    //             dt,
+    //             speed: speed / 2,
+    //             maxDistance: (DungeonMap.tileSize * 3),
+    //           );
+    //           return false;
+    //         },
+    //       );
+    //       return false;
+    //     },
+    //   );
+    // }
   }
 
   @override

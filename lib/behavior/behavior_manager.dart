@@ -1,23 +1,42 @@
 import 'package:bonfire/bonfire.dart';
 
 class BehaviorManager extends Component with BonfireHasGameRef {
-  final List<Behavior> behaviors;
+  List<Behavior> _behaviors;
   late GameComponent _comp;
   int _indexCurrent = 0;
+  bool _isRunning = true;
 
-  BehaviorManager({required this.behaviors});
+  bool get isRunning => _isRunning;
+
+  BehaviorManager({required List<Behavior> behaviors}) : _behaviors = behaviors;
+
+  void updateBehaviors(List<Behavior> behaviors) {
+    _indexCurrent = 0;
+    _behaviors = behaviors;
+  }
 
   @override
   void update(double dt) {
-    final currentAction = behaviors[_indexCurrent];
-    if (currentAction.runAction(dt, _comp, gameRef)) {
-      if (_indexCurrent < behaviors.length - 1) {
-        _indexCurrent++;
-      } else {
-        _indexCurrent = 0;
+    if (_isRunning) {
+      final currentAction = _behaviors[_indexCurrent];
+      if (currentAction.runAction(dt, _comp, gameRef)) {
+        if (_indexCurrent < _behaviors.length - 1) {
+          _indexCurrent++;
+        } else {
+          _indexCurrent = 0;
+        }
       }
     }
+
     super.update(dt);
+  }
+
+  void pause() {
+    _isRunning = false;
+  }
+
+  void resume() {
+    _isRunning = true;
   }
 
   @override
