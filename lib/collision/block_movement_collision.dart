@@ -211,7 +211,7 @@ mixin BlockMovementCollision on Movement {
     var normal = Vector2.zero();
     var depth = double.maxFinite;
     var axis = Vector2.zero();
-    double axisDepth = 0;
+    var axisDepth = 0.0;
 
     final vertices = CollisionUtil.getPolygonVertices(shapeA);
 

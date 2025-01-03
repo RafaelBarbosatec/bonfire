@@ -185,7 +185,7 @@ class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
       await MapAssetsManager.loadImage(element.sprite?.path ?? '');
     }
     if (element.animation != null) {
-      for (final frame in (element.animation?.frames ?? <TileSprite>[])) {
+      for (final frame in element.animation?.frames ?? <TileSprite>[]) {
         await MapAssetsManager.loadImage(frame.path);
       }
     }

@@ -42,16 +42,16 @@ extension EnemyExtensions on Enemy {
 
   /// Execute the ranged attack using a component with animation
   void simpleAttackRange({
-    required Future<SpriteAnimation> animationRight,
+    required Future<SpriteAnimation> animation,
     required Future<SpriteAnimation> animationDestroy,
     required Vector2 size,
     Vector2? destroySize,
     int? id,
     double speed = 150,
     double damage = 1,
-    Direction? direction,
     int interval = 1000,
     bool withCollision = true,
+    bool useAngle = false,
     ShapeHitbox? collision,
     VoidCallback? onDestroy,
     VoidCallback? execute,
@@ -61,26 +61,43 @@ extension EnemyExtensions on Enemy {
       return;
     }
 
-    final direct = direction ??
-        (gameRef.player != null
-            ? getComponentDirectionFromMe(gameRef.player!)
-            : lastDirection);
+    if (useAngle) {
+      simpleAttackRangeByAngle(
+        animation: animation,
+        animationDestroy: animationDestroy,
+        size: size,
+        angle: getAngleFromPlayer(),
+        id: id,
+        speed: speed,
+        damage: damage,
+        withDecorationCollision: withCollision,
+        collision: collision,
+        onDestroy: onDestroy,
+        destroySize: destroySize,
+        lightingConfig: lightingConfig,
+        attackFrom: AttackOriginEnum.ENEMY,
+      );
+    } else {
+      final direct = gameRef.player != null
+          ? getComponentDirectionFromMe(gameRef.player!)
+          : lastDirection;
+      simpleAttackRangeByDirection(
+        animationRight: animation,
+        animationDestroy: animationDestroy,
+        size: size,
+        direction: direct,
+        id: id,
+        speed: speed,
+        damage: damage,
+        withCollision: withCollision,
+        collision: collision,
+        onDestroy: onDestroy,
+        destroySize: destroySize,
+        lightingConfig: lightingConfig,
+        attackFrom: AttackOriginEnum.ENEMY,
+      );
+    }
 
-    simpleAttackRangeByDirection(
-      animationRight: animationRight,
-      animationDestroy: animationDestroy,
-      size: size,
-      direction: direct,
-      id: id,
-      speed: speed,
-      damage: damage,
-      withCollision: withCollision,
-      collision: collision,
-      onDestroy: onDestroy,
-      destroySize: destroySize,
-      lightingConfig: lightingConfig,
-      attackFrom: AttackOriginEnum.ENEMY,
-    );
     execute?.call();
   }
 

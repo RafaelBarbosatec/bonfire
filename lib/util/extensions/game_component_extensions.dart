@@ -437,4 +437,9 @@ extension GameComponentExtensions on GameComponent {
     }
     return gameRef.viewportPositionToGlobal(position.toVector2()).toOffset();
   }
+
+  bool isCloseTo(GameComponent target, {double distance = 5}) {
+    final rectPlayerCollision = target.rectCollision.inflate(distance);
+    return rectCollision.overlaps(rectPlayerCollision);
+  }
 }

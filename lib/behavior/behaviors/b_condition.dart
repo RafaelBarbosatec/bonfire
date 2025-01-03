@@ -1,26 +1,25 @@
-import 'package:bonfire/behavior/behavior.dart';
 import 'package:bonfire/bonfire.dart';
 
-export 'condition.dart';
-
 class BCondition extends Behavior {
-  final Condition condition;
+  final bool Function(double dt, GameComponent comp, BonfireGameInterface game)
+      condition;
+
   final Behavior doBehavior;
   final Behavior? doElseBehavior;
 
   BCondition({
     required this.condition,
     required this.doBehavior,
-    dynamic id,
+    super.id,
     this.doElseBehavior,
-  }) : super(id);
+  });
 
   @override
   bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
-    if (condition.execute(comp, game)) {
+    if (condition(dt, comp, game)) {
       return doBehavior.runAction(dt, comp, game);
     } else {
-      return doElseBehavior?.runAction(dt, comp, game) ?? false;
+      return doElseBehavior?.runAction(dt, comp, game) ?? true;
     }
   }
 }

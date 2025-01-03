@@ -127,8 +127,8 @@ extension MovementExtensions on Movement {
     final centerXTarget = rectTarget.center.dx;
     final centerYTarget = rectTarget.center.dy;
 
-    double translateX = 0;
-    double translateY = 0;
+    var translateX = 0.0;
+    var translateY = 0.0;
 
     final speed = this.speed * dtUpdate;
 
@@ -184,7 +184,7 @@ extension MovementExtensions on Movement {
     double centerPlayer,
   ) {
     final diff = centerPlayer - centerEnemy;
-    double newTrasnlate = 0;
+    var newTrasnlate = 0.0;
     if (translate.abs() > diff.abs()) {
       newTrasnlate = diff;
     } else {

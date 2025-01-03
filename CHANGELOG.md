@@ -1,3 +1,6 @@
+# 3.13.0
+- Update Flame to `1.23.0`.
+
 # 3.12.6
 - Fix `RangerError`.
 

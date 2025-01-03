@@ -1,4 +1,3 @@
-import 'package:bonfire/behavior/behavior.dart';
 import 'package:bonfire/bonfire.dart';
 
 class BMoveToComponent extends Behavior {
@@ -8,10 +7,10 @@ class BMoveToComponent extends Behavior {
 
   BMoveToComponent({
     required this.target,
-    dynamic id,
+    super.id,
     this.margin = 0,
     this.movementAxis = MovementAxis.all,
-  }) : super(id);
+  });
 
   @override
   bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {

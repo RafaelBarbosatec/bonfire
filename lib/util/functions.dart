@@ -48,7 +48,7 @@ double getZoomFromMaxVisibleTile(
   if (screenSize == Size.zero || screenSize == Size.infinite) {
     return 1;
   }
-  double maxSize = 0;
+  var maxSize = 0.0;
   switch (orientation) {
     case Orientation.portrait:
       maxSize = screenSize.height;
