@@ -10,7 +10,8 @@ export 'behaviors/b_interval.dart';
 export 'behaviors/b_list.dart';
 export 'behaviors/b_move_to_component.dart';
 export 'behaviors/b_random_movement.dart';
-export 'behaviors/b_see_and_move_to_component.dart';
+export 'behaviors/b_see_and_move_to_target.dart';
+export 'behaviors/b_see_and_positioned.dart';
 export 'use_behavior.dart';
 
 abstract class Behavior {

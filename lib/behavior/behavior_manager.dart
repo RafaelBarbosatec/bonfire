@@ -11,7 +11,9 @@ class BehaviorManager extends Component with BonfireHasGameRef {
   BehaviorManager({required List<Behavior> behaviors}) : _behaviors = behaviors;
 
   void updateBehaviors(List<Behavior> behaviors) {
-    _indexCurrent = 0;
+    if (_behaviors.length != behaviors.length) {
+      _indexCurrent = 0;
+    }
     _behaviors = behaviors;
   }
 

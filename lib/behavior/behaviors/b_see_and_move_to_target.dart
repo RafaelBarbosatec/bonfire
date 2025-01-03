@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 
-class BSeeAndMoveToComponent extends Behavior {
+class BSeeAndMoveToTarget extends Behavior {
   final GameComponent target;
   final double radiusVision;
   final double? visionAngle;
@@ -9,7 +9,7 @@ class BSeeAndMoveToComponent extends Behavior {
   final double distance;
   final MovementAxis movementAxis;
 
-  BSeeAndMoveToComponent({
+  BSeeAndMoveToTarget({
     required this.target,
     required this.onClose,
     this.radiusVision = 32,

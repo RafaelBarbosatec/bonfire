@@ -32,17 +32,24 @@ class Goblin extends SimpleEnemy
   List<Behavior> get behaviors => [
         BCondition(
           condition: (_, __, game) {
-            return !game.sceneBuilderStatus.isRunning;
+            return !game.sceneBuilderStatus.isRunning && enableBehaviors;
           },
           doBehavior: BCondition(
-            condition: (_, __, game) => gameRef.player != null,
-            doBehavior: BSeeAndMoveToComponent(
+            condition: (_, __, game) {
+              return game.player != null && game.player?.isDead == false;
+            },
+            doBehavior: BSeeAndMoveToTarget(
               target: gameRef.player!,
               radiusVision: DungeonMap.tileSize,
-              onClose: (dt, target) => execAttack(attack),
-              doElseBehavior: BRandomMovement(
-                speed: speed / 2,
-                maxDistance: (DungeonMap.tileSize * 3),
+              onClose: (_, __) => execAttack(attack),
+              doElseBehavior: BSeeAndPositioned(
+                radiusVision: DungeonMap.tileSize * 3,
+                positioned: (_) => execAttackRange(attack),
+                target: gameRef.player!,
+                doElseBehavior: BRandomMovement(
+                  speed: speed / 2,
+                  maxDistance: (DungeonMap.tileSize * 3),
+                ),
               ),
             ),
             doElseBehavior: BRandomMovement(
@@ -52,40 +59,6 @@ class Goblin extends SimpleEnemy
           ),
         ),
       ];
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    if (!enableBehaviors) return;
-
-    // if (!gameRef.sceneBuilderStatus.isRunning) {
-    //   seeAndMoveToPlayer(
-    //     radiusVision: DungeonMap.tileSize,
-    //     closePlayer: (p) {
-    //       execAttack(attack);
-    //     },
-    //     notObserved: () {
-    //       seeAndMoveToAttackRange(
-    //         minDistanceFromPlayer: DungeonMap.tileSize * 2,
-    //         useDiagonal: false,
-    //         positioned: (p) {
-    //           execAttackRange(attack);
-    //         },
-    //         radiusVision: DungeonMap.tileSize * 3,
-    //         notObserved: () {
-    //           runRandomMovement(
-    //             dt,
-    //             speed: speed / 2,
-    //             maxDistance: (DungeonMap.tileSize * 3),
-    //           );
-    //           return false;
-    //         },
-    //       );
-    //       return false;
-    //     },
-    //   );
-    // }
-  }
 
   @override
   void onDie() {
@@ -104,9 +77,10 @@ class Goblin extends SimpleEnemy
   void execAttackRange(double damage) {
     if (gameRef.player != null && gameRef.player?.isDead == true) return;
     simpleAttackRange(
-      animationRight: CommonSpriteSheet.fireBallRight,
+      animation: CommonSpriteSheet.fireBallRight,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
       id: 35,
+      useAngle: true,
       size: Vector2.all(width * 0.9),
       damage: damage,
       speed: DungeonMap.tileSize * 3,
