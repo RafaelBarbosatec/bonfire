@@ -157,11 +157,8 @@ class MapGenerator {
             matrix[x][y] == tileGrass;
 
     bool baseTreeInGrass = false;
-    try {
+    if (x + 3 < matrix.length && y + 3 < matrix.first.length) {
       baseTreeInGrass = matrix[x + 3][y + 3] == tileGrass;
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
     }
 
     bool randomFactor = Random().nextDouble() > 0.5;
