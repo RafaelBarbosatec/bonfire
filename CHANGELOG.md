@@ -1,3 +1,6 @@
+# 3.12.6
+- Fix `RangerError`.
+
 # 3.12.5
 - Update `a_star_algorithm`.
 - InitialMapZoomFitEnum improvements

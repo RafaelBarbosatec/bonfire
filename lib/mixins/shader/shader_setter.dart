@@ -58,10 +58,10 @@ class ShaderSetter {
 
       if (item is SetterColor) {
         final color = item.value;
-        _setFloat(shader, color.r * color.a);
-        _setFloat(shader, color.g * color.a);
-        _setFloat(shader, color.b * color.a);
-        _setFloat(shader, color.a);
+        _setFloat(shader, color.red / 255 * color.opacity);
+        _setFloat(shader, color.green / 255 * color.opacity);
+        _setFloat(shader, color.blue / 255 * color.opacity);
+        _setFloat(shader, color.opacity);
       }
     }
   }

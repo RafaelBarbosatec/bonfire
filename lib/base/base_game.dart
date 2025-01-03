@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/collision/quad_tree/custom_has_quadtree_collision_detection.dart';
 import 'package:bonfire/mixins/pointer_detector.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -13,7 +14,7 @@ abstract class BaseGame extends FlameGame
     with
         PointerDetector,
         KeyboardEvents,
-        HasQuadTreeCollisionDetection,
+        CustomHasQuadTreeCollisionDetection,
         HasTimeScale {
   BaseGame({super.world, super.camera});
   bool enabledGestures = true;
