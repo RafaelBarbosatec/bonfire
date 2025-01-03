@@ -158,10 +158,10 @@ class FlyingAttackGameObject extends AnimatedGameObject
     Vector2 positionDestroy;
 
     final double biggerSide = max(width, height);
-    double addCenterX = 0;
-    double addCenterY = 0;
+    var addCenterX = 0.0;
+    var addCenterY = 0.0;
 
-    const double divisionFactor = 2;
+    const divisionFactor = 2.0;
 
     if (destroySize != null) {
       addCenterX = (size.x - destroySize!.x) / divisionFactor;

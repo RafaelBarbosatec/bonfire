@@ -102,8 +102,8 @@ class WorldMap extends GameMap {
   void _calculatePositionAndSize() {
     if (layersComponent.isNotEmpty) {
       tileSize = layersComponent.first.tileSize;
-      double x = 0;
-      double y = 0;
+      var x = 0.0;
+      var y = 0.0;
 
       var w = layersComponent.first.size.x;
       var h = layersComponent.first.size.y;

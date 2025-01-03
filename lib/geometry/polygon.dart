@@ -34,8 +34,8 @@ class PolygonShape extends Shape {
     List<Vector2> relativePoints,
     Vector2 position,
   ) {
-    double height = 0;
-    double width = 0;
+    var height = 0.0;
+    var width = 0.0;
 
     var minX = relativePoints.first.x;
     var maxX = relativePoints.first.x;

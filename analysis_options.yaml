@@ -10,5 +10,6 @@ analyzer:
     type_literal_in_constant_pattern: ignore
     use_if_null_to_convert_nulls_to_bools: ignore
     use_setters_to_change_properties: ignore
+    sort_pub_dependencies: ignore
   exclude:
     - 'example/**'
