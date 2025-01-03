@@ -1,7 +1,5 @@
-import 'package:bonfire/base/game_component.dart';
-import 'package:bonfire/behavior/behavior.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:flutter/foundation.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 mixin UseBehavior on GameComponent {
   List<Behavior> get behaviors;
