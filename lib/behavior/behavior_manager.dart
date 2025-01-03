@@ -1,4 +1,3 @@
-import 'package:bonfire/behavior/behavior.dart';
 import 'package:bonfire/bonfire.dart';
 
 class BehaviorManager extends Component with BonfireHasGameRef {

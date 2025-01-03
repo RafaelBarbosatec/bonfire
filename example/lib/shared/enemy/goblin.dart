@@ -10,7 +10,8 @@ class Goblin extends SimpleEnemy
         PlayerControllerListener,
         MovementByJoystick,
         RandomMovement,
-        UseLifeBar {
+        UseLifeBar,
+        UseBehavior {
   double attack = 20;
   bool enableBehaviors = true;
   Goblin(Vector2 position)
@@ -26,6 +27,27 @@ class Goblin extends SimpleEnemy
       borderWidth: 2,
     );
   }
+
+  List<Behavior> get behavior => [
+        BCondition(
+          condition: (dt, comp, game) => !game.sceneBuilderStatus.isRunning,
+          doBehavior: BCanSeeType<Player>(
+            doBehavior: (list) {
+              final player = list.first;
+              return BCondition(
+                condition: (dt, comp, game) =>
+                    !game.sceneBuilderStatus.isRunning,
+                doBehavior: BAction(
+                  action: (dt, comp, game) {
+                    execAttack(attack);
+                  },
+                ),
+                doElseBehavior: BMoveToComponent(target: player),
+              );
+            },
+          ),
+        ),
+      ];
 
   @override
   void update(double dt) {

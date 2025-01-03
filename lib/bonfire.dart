@@ -4,6 +4,7 @@ export 'package:bonfire/background/game_background.dart';
 export 'package:bonfire/base/bonfire_game.dart';
 export 'package:bonfire/base/bonfire_game_interface.dart';
 export 'package:bonfire/base/game_component.dart';
+export 'package:bonfire/behavior/behavior.dart';
 export 'package:bonfire/camera/camera_config.dart';
 export 'package:bonfire/collision/block_movement_collision.dart';
 export 'package:bonfire/color_filter/game_color_filter.dart';
