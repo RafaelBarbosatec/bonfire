@@ -1,3 +1,6 @@
+# next
+- BarLifeComponent improvements
+
 # 3.13.0
 - Update Flame to `1.23.0`.
 
