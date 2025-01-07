@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 // Mixin used to adds a BarLife to the attacable component
 mixin UseLifeBar on Attackable {
   BarLifeComponent? barLife;
-  Vector2? _barLifeSize;
+
   Color _backgroundColor = const Color(0xFF000000);
   Color _borderColor = const Color(0xFFFFFFFF);
   double _borderWidth = 2;
   List<Color>? _colors;
   Vector2? _barOffset;
-  Vector2? _textOffset;
   BorderRadius _borderRadius = BorderRadius.zero;
   BarLifeDrawPosition _barLifeDrawPosition = BarLifeDrawPosition.bottom;
   TextStyle? _textStyle;
   bool _showLifeText = true;
   ValueGeneratorComponent? _valueGenerator;
   BarLifeTextBuilder? _barLifetextBuilder;
+  EdgeInsets? _padding;
 
   void setupLifeBar({
     Vector2? size,
@@ -31,8 +31,9 @@ mixin UseLifeBar on Attackable {
     TextStyle? textStyle,
     bool showLifeText = true,
     BarLifeTextBuilder? barLifetextBuilder,
+    EdgeInsets? padding,
   }) {
-    _barLifeSize = size;
+    _padding = padding;
     _backgroundColor = backgroundColor ?? _backgroundColor;
     _borderColor = borderColor ?? _borderColor;
     _borderWidth = borderWidth;
@@ -42,7 +43,6 @@ mixin UseLifeBar on Attackable {
     _barOffset = offset;
     _textStyle = textStyle;
     _showLifeText = showLifeText;
-    _textOffset = textOffset;
     _barLifetextBuilder = barLifetextBuilder;
   }
 
@@ -52,7 +52,6 @@ mixin UseLifeBar on Attackable {
       barLife = BarLifeComponent(
         target: this,
         offset: _barOffset,
-        size: _barLifeSize ?? Vector2(width, 6),
         backgroundColor: _backgroundColor,
         borderColor: _borderColor,
         borderWidth: _borderWidth,
@@ -63,8 +62,8 @@ mixin UseLifeBar on Attackable {
         drawPosition: _barLifeDrawPosition,
         textStyle: _textStyle,
         showLifeText: _showLifeText,
-        textOffset: _textOffset,
         barLifeTextBuilder: _barLifetextBuilder,
+        padding: _padding,
       ),
     );
     super.onMount();

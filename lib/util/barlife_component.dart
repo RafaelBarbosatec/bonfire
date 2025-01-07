@@ -19,6 +19,7 @@ class BarLifeComponent extends GameComponent {
   final bool showLifeText;
   final TextStyle? textStyle;
   final BarLifeTextBuilder? barLifeTextBuilder;
+  late EdgeInsets padding;
   double _life = 100;
   double _maxLife = 100;
 
@@ -26,16 +27,13 @@ class BarLifeComponent extends GameComponent {
   bool show = true;
 
   Vector2 _textSize = Vector2.zero();
-  Vector2 _textOffset = Vector2.zero();
 
   TextPaint _textConfig = TextPaint();
   final GameComponent target;
 
   BarLifeComponent({
     required this.target,
-    required Vector2 size,
     Vector2? offset,
-    Vector2? textOffset,
     this.drawPosition = BarLifeDrawPosition.top,
     this.colors,
     this.textStyle,
@@ -47,10 +45,10 @@ class BarLifeComponent extends GameComponent {
     this.barLifeTextBuilder,
     double life = 100,
     double maxLife = 100,
+    EdgeInsets? padding,
   }) {
     _life = life;
     _maxLife = maxLife;
-    _textOffset = textOffset ?? _textOffset;
     _barLifeBorderPaint = _barLifeBorderPaint
       ..color = borderColor
       ..strokeWidth = borderWidth
@@ -60,14 +58,26 @@ class BarLifeComponent extends GameComponent {
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
     position = offset ?? Vector2.zero();
-    this.size = size;
 
     _textConfig = TextPaint(
-      style: textStyle?.copyWith(fontSize: size.y * 0.8) ??
-          TextStyle(fontSize: size.y * 0.8, color: Colors.white),
+      style: textStyle ??
+          TextStyle(
+            fontSize: target.width * 0.2,
+            color: Colors.white,
+          ),
     );
 
     _textSize = _textConfig.getLineMetrics(_getLifeText()).size;
+    final horizontal = _textSize.x * 0.2;
+    this.padding = padding ??
+        EdgeInsets.symmetric(
+          horizontal: horizontal,
+          vertical: horizontal / 2,
+        );
+    size = Vector2(
+      _textSize.x + this.padding.horizontal,
+      _textSize.y + this.padding.vertical,
+    );
   }
 
   @override
@@ -147,8 +157,8 @@ class BarLifeComponent extends GameComponent {
     );
 
     if (showLifeText) {
-      final xText = _textOffset.x + xPosition + (width - _textSize.x) / 2;
-      final yText = _textOffset.y + yPosition + (height - _textSize.y) / 2;
+      final xText = padding.left + xPosition;
+      final yText = padding.top + yPosition;
       _textConfig.render(
         canvas,
         _getLifeText(),
