@@ -19,7 +19,7 @@ class BehaviorManager extends Component with BonfireHasGameRef {
 
   @override
   void update(double dt) {
-    if (_isRunning) {
+    if (_isRunning && _behaviors.isNotEmpty) {
       final currentAction = _behaviors[_indexCurrent];
       if (currentAction.runAction(dt, _comp, gameRef)) {
         if (_indexCurrent < _behaviors.length - 1) {
