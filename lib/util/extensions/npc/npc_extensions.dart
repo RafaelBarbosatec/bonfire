@@ -182,23 +182,27 @@ extension NpcExtensions on Npc {
   }
 
   /// Gives the direction of the player in relation to this component
-  Direction directionThatPlayerIs() {
-    return BonfireUtil.getDirectionFromAngle(getAngleFromPlayer());
+  Direction? getDirectionToPlayer() {
+    final player = gameRef.player;
+    if (player == null) {
+      return null;
+    }
+    return getDirectionToTarget(player);
   }
 
   /// Get angle between enemy and player
   /// player as a base
-  double getAngleFromPlayer() {
+  double getAngleToPlayer() {
     final player = gameRef.player;
     if (player == null) {
       return 0.0;
     }
-    return getAngleFromTarget(player);
+    return getAngleToTarget(player);
   }
 
   /// Get angle between enemy and player
   /// enemy position as a base
-  double getInverseAngleFromPlayer() {
+  double getInverseAngleToPlayer() {
     final player = gameRef.player;
     if (player == null) {
       return 0.0;

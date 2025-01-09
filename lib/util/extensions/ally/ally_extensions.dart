@@ -120,7 +120,7 @@ extension AllyExtensions on Ally {
           minDistanceFromPlayer ?? (radiusVision - 5),
         );
         if (inDistance) {
-          final playerDirection = getComponentDirectionFromMe(e);
+          final playerDirection = getDirectionToTarget(e);
           lastDirection = playerDirection;
           if (lastDirection == Direction.left ||
               lastDirection == Direction.right) {

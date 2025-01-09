@@ -1,5 +1,6 @@
 # next
 - BarLifeComponent improvements
+- rename extension method `directionThatPlayerIs` to `getDirectionToPlayer`, `getAngleFromPlayer` to `getAngleToPlayer`, `getInverseAngleFromPlayer` to `getInverseAngleToPlayer`
 
 # 3.13.0
 - Update Flame to `1.23.0`.

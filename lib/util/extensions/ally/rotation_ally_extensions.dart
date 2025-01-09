@@ -32,7 +32,7 @@ extension RotationEnemyExtensions on RotationAlly {
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
-        final radAngle = getAngleFromPlayer();
+        final radAngle = getAngleToPlayer();
 
         final playerRect = player.rectCollision;
         final rectPlayerCollision = Rect.fromLTWH(

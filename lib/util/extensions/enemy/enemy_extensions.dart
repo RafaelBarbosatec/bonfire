@@ -22,7 +22,7 @@ extension EnemyExtensions on Enemy {
 
     final direct = direction ??
         (gameRef.player != null
-            ? getComponentDirectionFromMe(gameRef.player!)
+            ? getDirectionToTarget(gameRef.player!)
             : lastDirection);
 
     simpleAttackMeleeByDirection(
@@ -66,7 +66,7 @@ extension EnemyExtensions on Enemy {
         animation: animation,
         animationDestroy: animationDestroy,
         size: size,
-        angle: getAngleFromPlayer(),
+        angle: getAngleToPlayer(),
         id: id,
         speed: speed,
         damage: damage,
@@ -79,7 +79,7 @@ extension EnemyExtensions on Enemy {
       );
     } else {
       final direct = gameRef.player != null
-          ? getComponentDirectionFromMe(gameRef.player!)
+          ? getDirectionToTarget(gameRef.player!)
           : lastDirection;
       simpleAttackRangeByDirection(
         animationRight: animation,
@@ -137,7 +137,7 @@ extension EnemyExtensions on Enemy {
             minD,
           );
           if (inDistance) {
-            final playerDirection = getComponentDirectionFromMe(player);
+            final playerDirection = getDirectionToTarget(player);
             lastDirection = playerDirection;
             if (lastDirection == Direction.left ||
                 lastDirection == Direction.right) {
@@ -155,7 +155,7 @@ extension EnemyExtensions on Enemy {
             minDistanceFromPlayer: minD,
             radiusVision: radiusVision,
             positioned: (player) {
-              final playerDirection = getComponentDirectionFromMe(player);
+              final playerDirection = getDirectionToTarget(player);
               lastDirection = playerDirection;
               if (lastDirection == Direction.left ||
                   lastDirection == Direction.right) {
