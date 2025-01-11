@@ -50,3 +50,6 @@ macos/Pods/Target Support Files/FlutterMacOS/FlutterMacOS.release.xcconfig
 macos
 linux
 windows
+android
+ios
+web
