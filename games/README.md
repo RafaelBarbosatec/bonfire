@@ -4,7 +4,7 @@ Welcome to the Bonfire game examples repository. Here you can find various examp
 
 ## Examples
 
-1. [Darkness Dangeus](flappy_bird)
+1. [Darkness Dangeus](https://github.com/RafaelBarbosatec/darkness_dungeon)
 2. [Flappy Bird](flappy_bird)
 3. [Example 3](./path/to/example3)
 
