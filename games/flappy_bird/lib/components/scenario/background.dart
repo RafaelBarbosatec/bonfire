@@ -20,4 +20,3 @@ class ParallaxBackground extends GameBackground {
     add(p);
   }
 }
-
