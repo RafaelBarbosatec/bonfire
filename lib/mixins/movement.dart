@@ -561,26 +561,18 @@ mixin Movement on GameComponent {
       case Direction.downLeft:
       case Direction.downRight:
     }
-    final check1 = raycast(
-          vetorDirection,
-          maxDistance: distance,
-          origin: origin1,
-          ignoreHitboxes: ignoreHitboxes,
-        ) !=
-        null;
-    final check2 = raycast(
-          vetorDirection,
-          maxDistance: distance,
-          ignoreHitboxes: ignoreHitboxes,
-        ) !=
-        null;
-    final check3 = raycast(
-          vetorDirection,
-          maxDistance: distance,
-          origin: origin3,
-          ignoreHitboxes: ignoreHitboxes,
-        ) !=
-        null;
-    return check1 || check2 || check3;
+
+    final origins = [origin1, null, origin3];
+
+    return origins.any(
+      (origin) =>
+          raycast(
+            vetorDirection,
+            maxDistance: distance,
+            origin: origin,
+            ignoreHitboxes: ignoreHitboxes,
+          ) !=
+          null,
+    );
   }
 }

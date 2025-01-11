@@ -231,12 +231,6 @@ extension GameComponentExtensions on GameComponent {
     );
   }
 
-  Direction getComponentDirectionFromMe(GameComponent comp) {
-    return BonfireUtil.getDirectionFromAngle(
-      getAngleFromTarget(comp),
-    );
-  }
-
   double get top => position.y;
   double get bottom => absolutePositionOfAnchor(Anchor.bottomRight).y;
   double get left => position.x;
@@ -332,10 +326,20 @@ extension GameComponentExtensions on GameComponent {
   }
 
   /// Get angle between this comp to target
-  double getAngleFromTarget(GameComponent target) {
+  double getAngleToTarget(GameComponent target) {
     return BonfireUtil.angleBetweenPointsOffset(
       rectCollision.center,
       target.rectCollision.center,
+    );
+  }
+
+  Direction getDirectionToTarget(
+    GameComponent target, {
+    bool withDiagonal = true,
+  }) {
+    return BonfireUtil.getDirectionFromAngle(
+      getAngleToTarget(target),
+      directionSpace: withDiagonal ? 2.5 : 45,
     );
   }
 

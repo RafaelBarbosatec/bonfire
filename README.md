@@ -31,6 +31,12 @@ Test our online [DEMO](https://bonfire-engine.github.io/examples/bonfire-v3/) or
 
 [bonfire-engine.github.io](https://bonfire-engine.github.io)
 
+## Games
+
+[Link](games)
+
+If you build a game using Bonfire, you can open a PR to add your game to the [Games](games) section.
+
 ## Build for web
 
 Use this command: `flutter build web --web-renderer=canvaskit`

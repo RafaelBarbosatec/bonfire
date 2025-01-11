@@ -46,7 +46,7 @@ class BSeeAndPositioned extends Behavior {
                 minD,
               );
               if (inDistance) {
-                final playerDirection = comp.getComponentDirectionFromMe(
+                final playerDirection = comp.getDirectionToTarget(
                   target,
                 );
                 comp.lastDirection = playerDirection;

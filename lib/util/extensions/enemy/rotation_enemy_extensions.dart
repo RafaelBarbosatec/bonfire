@@ -24,7 +24,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     seePlayer(
       radiusVision: radiusVision,
       observed: (player) {
-        final radAngle = getAngleFromPlayer();
+        final radAngle = getAngleToPlayer();
 
         final playerRect = player.rectCollision;
         final rectPlayerCollision = playerRect.inflate(margin);
@@ -86,7 +86,7 @@ extension RotationEnemyExtensions on RotationEnemy {
         }
 
         moveFromAngle(
-          getInverseAngleFromPlayer(),
+          getInverseAngleToPlayer(),
         );
       },
       notObserved: () {
