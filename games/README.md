@@ -6,9 +6,8 @@ Welcome to the Bonfire game examples repository. Here you can find various examp
 
 | Preview | Name |
 |--------------|-----------|
-| ![Darkness Dangeus](https://github.com/RafaelBarbosatec/darkness_dungeon/raw/main/preview.png) | [Darkness Dangeus](https://github.com/RafaelBarbosatec/darkness_dungeon) |
-| ![Flappy Bird](flappy_bird/preview.png) | [Flappy Bird](flappy_bird) |
-| ![Example 3](./path/to/example3/preview.png) | [Example 3](./path/to/example3) |
+| <img src="https://github.com/RafaelBarbosatec/darkness_dungeon/raw/main/preview.png" width="300"/> | [Darkness Dangeus](https://github.com/RafaelBarbosatec/darkness_dungeon) |
+| <img src="flappy_bird/media/print.png" width="300"/> | [Flappy Bird](flappy_bird) |
+| <img src="./path/to/example3/preview.png" width="300"/> | [Example 3](./path/to/example3) |
 
-Feel free to explore the code and learn how to create your own games using Bonfire!
 Feel free to explore the code and learn how to create your own games using Bonfire!
