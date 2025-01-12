@@ -1,6 +1,6 @@
-# Bonfire Game Examples
+# Bonfire Awesome
 
-Welcome to the Bonfire game examples repository. Here you can find various examples of games built using the Bonfire framework.
+Welcome to the Bonfire Awesome repository. Here you can find various examples of games built using the Bonfire framework.
 
 ## Games
 

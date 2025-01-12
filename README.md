@@ -31,7 +31,7 @@ Test our online [DEMO](https://bonfire-engine.github.io/examples/bonfire-v3/) or
 
 [bonfire-engine.github.io](https://bonfire-engine.github.io)
 
-## Games
+## Bonfire Awesome
 
 [Link](games)
 
