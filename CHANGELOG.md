@@ -1,3 +1,6 @@
+# 3.13.2
+- Collision performance improvements
+
 # 3.13.1
 - BarLifeComponent improvements
 - rename extension method `directionThatPlayerIs` to `getDirectionToPlayer`, `getAngleFromPlayer` to `getAngleToPlayer`, `getInverseAngleFromPlayer` to `getInverseAngleToPlayer`.

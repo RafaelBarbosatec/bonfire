@@ -23,7 +23,13 @@ mixin Sensor<T extends GameComponent> on GameComponent {
     await super.onLoad();
     final containsShape = children.query<ShapeHitbox>().isNotEmpty;
     if (!containsShape) {
-      add(RectangleHitbox(size: size, isSolid: true));
+      add(
+        RectangleHitbox(
+          size: size,
+          isSolid: true,
+          collisionType: CollisionType.passive,
+        ),
+      );
     }
   }
 
