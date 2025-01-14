@@ -1,5 +1,5 @@
-# NEXT
-- Collision pperformance improvements
+# 3.13.2
+- Collision performance improvements
 
 # 3.13.1
 - BarLifeComponent improvements
