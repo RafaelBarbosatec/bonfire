@@ -1,3 +1,6 @@
+# Next
+- Fix size in `setupLifeBar`
+
 # 3.13.3
 - rollback to deprecated colors
 

@@ -17,6 +17,7 @@ mixin UseLifeBar on Attackable {
   ValueGeneratorComponent? _valueGenerator;
   BarLifeTextBuilder? _barLifetextBuilder;
   EdgeInsets? _padding;
+  Vector2? _size;
 
   void setupLifeBar({
     Vector2? size,
@@ -44,6 +45,7 @@ mixin UseLifeBar on Attackable {
     _textStyle = textStyle;
     _showLifeText = showLifeText;
     _barLifetextBuilder = barLifetextBuilder;
+    _size = size;
   }
 
   @override
@@ -51,6 +53,7 @@ mixin UseLifeBar on Attackable {
     add(
       barLife = BarLifeComponent(
         target: this,
+        size: _size,
         offset: _barOffset,
         backgroundColor: _backgroundColor,
         borderColor: _borderColor,
