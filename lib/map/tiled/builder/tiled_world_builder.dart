@@ -584,7 +584,6 @@ class TiledWorldBuilder {
         radius: (width > height ? width : height) / 2,
         position: isObjectCollision ? null : Vector2(x, y),
         isSolid: true,
-        collisionType: CollisionType.passive,
       );
     }
 
@@ -642,7 +641,6 @@ class TiledWorldBuilder {
       points,
       position: Vector2(alignX, alignY),
       isSolid: true,
-      collisionType: CollisionType.passive,
     );
   }
 }
