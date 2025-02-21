@@ -1,4 +1,4 @@
-# Next
+# 3.13.4
 - Fix size in `setupLifeBar`
 
 # 3.13.3
