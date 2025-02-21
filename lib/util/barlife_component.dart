@@ -46,6 +46,7 @@ class BarLifeComponent extends GameComponent {
     double life = 100,
     double maxLife = 100,
     EdgeInsets? padding,
+    Vector2? size,
   }) {
     _life = life;
     _maxLife = maxLife;
@@ -67,17 +68,21 @@ class BarLifeComponent extends GameComponent {
           ),
     );
 
-    _textSize = _textConfig.getLineMetrics(_getLifeText()).size;
-    final horizontal = _textSize.x * 0.2;
-    this.padding = padding ??
-        EdgeInsets.symmetric(
-          horizontal: horizontal,
-          vertical: horizontal / 2,
-        );
-    size = Vector2(
-      _textSize.x + this.padding.horizontal,
-      _textSize.y + this.padding.vertical,
-    );
+    if (size != null) {
+      this.size = size;
+    } else {
+      _textSize = _textConfig.getLineMetrics(_getLifeText()).size;
+      final horizontal = _textSize.x * 0.2;
+      this.padding = padding ??
+          EdgeInsets.symmetric(
+            horizontal: horizontal,
+            vertical: horizontal / 2,
+          );
+      this.size = Vector2(
+        _textSize.x + this.padding.horizontal,
+        _textSize.y + this.padding.vertical,
+      );
+    }
   }
 
   @override
