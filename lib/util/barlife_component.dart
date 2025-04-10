@@ -63,7 +63,7 @@ class BarLifeComponent extends GameComponent {
     _textConfig = TextPaint(
       style: textStyle ??
           TextStyle(
-            fontSize: target.width * 0.2,
+            fontSize: size?.x ?? target.width * 0.2,
             color: Colors.white,
           ),
     );

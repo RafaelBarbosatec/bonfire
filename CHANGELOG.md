@@ -1,3 +1,6 @@
+# Next
+- Fix textSize in `BarLifeComponent`
+
 # 3.13.5
 - Fix ellipse and polygon collision objects in Tiled maps, the `CollisionType` was set to `inactive`, changed to `active` as the `RectangleHitbox`.
 - Fiz padding in `BarLifeComponent`
