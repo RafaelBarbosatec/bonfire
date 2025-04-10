@@ -19,7 +19,7 @@ class BarLifeComponent extends GameComponent {
   final bool showLifeText;
   final TextStyle? textStyle;
   final BarLifeTextBuilder? barLifeTextBuilder;
-  late EdgeInsets padding;
+  EdgeInsets padding = EdgeInsets.zero;
   double _life = 100;
   double _maxLife = 100;
 
