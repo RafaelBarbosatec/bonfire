@@ -15,7 +15,6 @@ mixin Movement on GameComponent {
   Direction lastDirection = Direction.right;
   Direction lastDirectionHorizontal = Direction.right;
   Direction lastDirectionVertical = Direction.down;
-  bool movementOnlyVisible = true;
 
   Vector2 get acceleration => velocity / lastDt;
 
@@ -207,9 +206,7 @@ mixin Movement on GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (isVisible || !movementOnlyVisible) {
-      _updatePosition(dt);
-    }
+    _updatePosition(dt);
   }
 
   void moveFromDirection(

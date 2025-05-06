@@ -18,11 +18,18 @@ abstract class GameComponent extends PositionComponent
   bool renderAboveComponents = false;
 
   bool get isVisible {
-    if (_visible) {
-      return isVisibleInCamera() || isHud;
+    // Early return if _visible is false
+    if (!_visible) {
+      return false;
     }
 
-    return false;
+    // HUD components are always visible if _visible is true
+    if (isHud) {
+      return true;
+    }
+
+    // Only do the expensive camera visibility check if necessary
+    return isVisibleInCamera();
   }
 
   set isVisible(bool visible) {

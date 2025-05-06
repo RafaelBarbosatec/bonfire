@@ -19,10 +19,8 @@ mixin DirectionAnimation on Movement {
   @override
   void update(double dt) {
     super.update(dt);
-    if (isVisible) {
-      _updateAnimation();
-      animation?.update(dt, size);
-    }
+    _updateAnimation();
+    animation?.update(dt, size);
   }
 
   void _updateAnimation() {

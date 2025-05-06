@@ -38,8 +38,7 @@ mixin Lighting on GameComponent {
   }
 
   @override
-  // ignore: must_call_super
-  bool isVisibleInCamera() {
+  bool get isVisible {
     return hasGameRef ? gameRef.camera.canSeeWithMargin(this) : false;
   }
 }
