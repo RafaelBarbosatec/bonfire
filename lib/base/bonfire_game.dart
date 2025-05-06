@@ -195,7 +195,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   Iterable<T> visibles<T extends GameComponent>() {
-    return world.children.whereType<T>().where(isVisibleInCamera);
+    return world.children.whereType<T>().where((e) => e.isVisibleInCamera());
   }
 
   @override
