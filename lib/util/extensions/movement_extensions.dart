@@ -130,7 +130,7 @@ extension MovementExtensions on Movement {
     var translateX = 0.0;
     var translateY = 0.0;
 
-    final speed = this.speed * dtUpdate;
+    final speed = this.speed * lastDt;
 
     final rectToMove = rectCollision;
 
