@@ -4,6 +4,12 @@ version: 3.13.5
 homepage: https://bonfire-engine.github.io
 repository: https://github.com/RafaelBarbosatec/bonfire
 issue_tracker: https://github.com/RafaelBarbosatec/bonfire/issues
+topics:
+  - bonfire
+  - rpg
+  - flame
+  - game-engine
+  - games
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
