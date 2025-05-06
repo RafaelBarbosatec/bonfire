@@ -196,7 +196,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   Iterable<T> visibles<T extends GameComponent>() {
     return world.children.whereType<T>().where(isVisibleInCamera);
-    // return _visibleComponents.whereType<T>();
   }
 
   @override
@@ -314,20 +313,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     super.onDetach();
   }
 
-  // void addVisible(GameComponent obj) {
-  //   _visibleComponents.add(obj);
-  //   if (obj.containsShapeHitbox) {
-  //     _visibleCollisions.addAll(obj.children.query<ShapeHitbox>());
-  //   }
-  // }
-
-  // void removeVisible(GameComponent obj) {
-  //   _visibleComponents.remove(obj);
-  //   if (obj.containsShapeHitbox) {
-  //     obj.children.query<ShapeHitbox>().forEach(_visibleCollisions.remove);
-  //   }
-  // }
-
   @override
   void enableGestures(bool enable) {
     enabledGestures = enable;
@@ -358,8 +343,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   /// reorder components by priority
   void _updateOrderPriority() {
-    // ignore: invalid_use_of_internal_member
-    world.children.reorder();
+    world.children.rebalanceAll();
     _highestPriority = world.children.last.priority;
   }
 
