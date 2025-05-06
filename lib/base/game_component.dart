@@ -12,19 +12,14 @@ abstract class GameComponent extends PositionComponent
         InternalChecker,
         HasPaint,
         CollisionCallbacks {
-  final String _keyIntervalCheckIsVisible = 'CHECK_VISIBLE';
-  final int _intervalCheckIsVisible = 100;
   Map<String, dynamic>? properties;
 
   /// When true this component render above all components in game.
   bool renderAboveComponents = false;
 
-  /// Param checks if this component is visible on the screen
-  bool _isVisibleInScreen = false;
-
   bool get isVisible {
     if (_visible) {
-      return _isVisibleInScreen;
+      return isVisibleInCamera() || isHud;
     }
 
     return false;
@@ -36,8 +31,6 @@ abstract class GameComponent extends PositionComponent
 
   /// Param used to enable or disable the render.
   bool _visible = true;
-
-  bool enabledCheckIsVisible = true;
 
   /// Get BuildContext
   BuildContext get context => gameRef.context;
@@ -70,20 +63,6 @@ abstract class GameComponent extends PositionComponent
   void update(double dt) {
     lastDt = dt;
     super.update(dt);
-    _checkIsVisible(dt);
-  }
-
-  void _checkIsVisible(double dt) {
-    if (!enabledCheckIsVisible) {
-      return;
-    }
-    if (checkInterval(
-      _keyIntervalCheckIsVisible,
-      _intervalCheckIsVisible,
-      dt,
-    )) {
-      _onSetIfVisible();
-    }
   }
 
   /// Return screen position of this component.
@@ -106,31 +85,6 @@ abstract class GameComponent extends PositionComponent
   }
 
   @override
-  @mustCallSuper
-  void onRemove() {
-    (gameRef as BonfireGame).removeVisible(this);
-    super.onRemove();
-  }
-
-  void _onSetIfVisible() {
-    if (!_visible) {
-      return;
-    }
-    var nowIsVisible = isVisibleInCamera();
-    if (isHud) {
-      nowIsVisible = true;
-      enabledCheckIsVisible = false;
-    }
-    if (nowIsVisible && !isVisible) {
-      (gameRef as BonfireGame).addVisible(this);
-    }
-    if (!nowIsVisible && isVisible) {
-      (gameRef as BonfireGame).removeVisible(this);
-    }
-    _isVisibleInScreen = nowIsVisible;
-  }
-
-  @override
   Future<void> addAll(Iterable<Component> components) {
     components.forEach(_confHitBoxRender);
     return super.addAll(components);
@@ -146,16 +100,14 @@ abstract class GameComponent extends PositionComponent
   }
 
   void _confHitBoxRender(Component component) {
-    if (component is ShapeHitbox) {
-      if (gameRef.showCollisionArea) {
-        final paintCollition = Paint()
-          ..color = gameRef.collisionAreaColor ?? const Color(0xffffffff);
-        if (this is Sensor) {
-          paintCollition.color = Sensor.color;
-        }
-        component.paint = paintCollition;
-        component.renderShape = true;
+    if (component is ShapeHitbox && gameRef.showCollisionArea) {
+      final paintCollition = Paint()
+        ..color = gameRef.collisionAreaColor ?? const Color(0xffffffff);
+      if (this is Sensor) {
+        paintCollition.color = Sensor.color;
       }
+      component.paint = paintCollition;
+      component.renderShape = true;
     }
   }
 
@@ -177,10 +129,14 @@ abstract class GameComponent extends PositionComponent
         );
       }
     }
+
     final absoluteRect = toAbsoluteRect();
 
     if (_rectCollision != null) {
-      return _rectCollision!.translate(absoluteRect.left, absoluteRect.top);
+      return _rectCollision!.translate(
+        absoluteRect.left,
+        absoluteRect.top,
+      );
     } else {
       return absoluteRect;
     }

@@ -124,9 +124,6 @@ class TileComponent extends GameComponent with UseAssetsLoader {
   bool get containAnimation => _animation != null;
 
   @override
-  bool get enabledCheckIsVisible => false;
-
-  @override
   int get priority => 0;
 
   @override

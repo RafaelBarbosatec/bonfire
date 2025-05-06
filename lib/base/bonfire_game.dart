@@ -59,10 +59,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
-  final List<GameComponent> _visibleComponents = List.empty(growable: true);
-  final List<ShapeHitbox> _visibleCollisions = List.empty(growable: true);
+  // final List<GameComponent> _visibleComponents = List.empty(growable: true);
+  // final List<ShapeHitbox> _visibleCollisions = List.empty(growable: true);
   late IntervalTick _intervalUpdateOder;
-  late IntervalTick _intervalOprimizeTree;
 
   ValueChanged<BonfireGame>? onReady;
 
@@ -149,10 +148,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       INTERVAL_UPDATE_ORDER,
       onTick: _updateOrderPriorityMicrotask,
     );
-    _intervalOprimizeTree = IntervalTick(
-      INTERVAL_OPTIMIZE_TREE,
-      onTick: _optimizeCollisionTree,
-    );
   }
 
   @override
@@ -191,7 +186,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   void update(double dt) {
     super.update(dt);
     _intervalUpdateOder.update(dt);
-    _intervalOprimizeTree.update(dt);
     final containsChildren = camera.world?.children.isNotEmpty == true;
     if (!_gameMounted && containsChildren) {
       _gameMounted = true;
@@ -201,7 +195,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   Iterable<T> visibles<T extends GameComponent>() {
-    return _visibleComponents.whereType<T>();
+    return world.children.whereType<T>().where(isVisibleInCamera);
+    // return _visibleComponents.whereType<T>();
   }
 
   @override
@@ -228,25 +223,15 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   Iterable<ShapeHitbox> collisions({bool onlyVisible = false}) {
     if (onlyVisible) {
-      final tilesCollision = <ShapeHitbox>[];
-      map
-          .getRenderedTiles()
-          .where((element) => element.containsShapeHitbox)
-          .forEach(
-            (e) => tilesCollision.addAll(e.children.query<ShapeHitbox>()),
-          );
-      return [
-        ..._visibleCollisions,
-        ...tilesCollision,
-      ];
+      return collisionDetection.items.where(isVisibleInCamera);
     }
     return collisionDetection.items;
   }
 
   @override
-  Iterable<T> query<T extends Component>({bool onlyVisible = false}) {
+  Iterable<T> query<T extends GameComponent>({bool onlyVisible = false}) {
     if (onlyVisible) {
-      return _visibleComponents.whereType<T>();
+      return visibles<T>();
     }
     return world.children.query<T>();
   }
@@ -278,7 +263,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  bool isVisibleInCamera(GameComponent c) {
+  bool isVisibleInCamera(PositionComponent c) {
     if (!hasLayout) {
       return false;
     }
@@ -329,19 +314,19 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     super.onDetach();
   }
 
-  void addVisible(GameComponent obj) {
-    _visibleComponents.add(obj);
-    if (obj.containsShapeHitbox) {
-      _visibleCollisions.addAll(obj.children.query<ShapeHitbox>());
-    }
-  }
+  // void addVisible(GameComponent obj) {
+  //   _visibleComponents.add(obj);
+  //   if (obj.containsShapeHitbox) {
+  //     _visibleCollisions.addAll(obj.children.query<ShapeHitbox>());
+  //   }
+  // }
 
-  void removeVisible(GameComponent obj) {
-    _visibleComponents.remove(obj);
-    if (obj.containsShapeHitbox) {
-      obj.children.query<ShapeHitbox>().forEach(_visibleCollisions.remove);
-    }
-  }
+  // void removeVisible(GameComponent obj) {
+  //   _visibleComponents.remove(obj);
+  //   if (obj.containsShapeHitbox) {
+  //     obj.children.query<ShapeHitbox>().forEach(_visibleCollisions.remove);
+  //   }
+  // }
 
   @override
   void enableGestures(bool enable) {
@@ -457,10 +442,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
     add(valueGenerator);
     return valueGenerator;
-  }
-
-  void _optimizeCollisionTree() {
-    scheduleMicrotask(collisionDetection.broadphase.tree.optimize);
   }
 
   void _updateOrderPriorityMicrotask() {

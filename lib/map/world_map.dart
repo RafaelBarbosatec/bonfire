@@ -203,7 +203,4 @@ class WorldMap extends GameMap {
     _confMap(lastSizeScreen!, calculateSize: true);
     refreshMap();
   }
-
-  @override
-  bool get enabledCheckIsVisible => false;
 }

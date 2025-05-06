@@ -119,9 +119,6 @@ abstract class PlayerController extends GameComponent
   }
 
   @override
-  bool get enabledCheckIsVisible => false;
-
-  @override
   bool get isVisible => true;
 
   @override
