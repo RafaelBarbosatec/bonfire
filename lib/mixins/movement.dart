@@ -7,7 +7,6 @@ mixin Movement on GameComponent {
   static const diaginalReduction = 0.7853981633974483;
   static const speedDefault = 80.0;
   double minDisplacementToConsiderMove = 0.1;
-  double dtUpdate = 0;
   double speed = speedDefault;
   double _lastSpeed = speedDefault;
   double velocityRadAngle = 0.0;
@@ -18,13 +17,13 @@ mixin Movement on GameComponent {
   Direction lastDirectionVertical = Direction.down;
   bool movementOnlyVisible = true;
 
-  Vector2 get acceleration => velocity / dtUpdate;
+  Vector2 get acceleration => velocity / lastDt;
 
   bool get isIdle => _velocity.isZero();
   Vector2 get velocity => _velocity;
   double get diagonalSpeed => speed * diaginalReduction;
-  double get dtSpeed => speed * dtUpdate;
-  double get dtDiagonalSpeed => diagonalSpeed * dtUpdate;
+  double get dtSpeed => speed * lastDt;
+  double get dtDiagonalSpeed => diagonalSpeed * lastDt;
   set velocity(Vector2 velocity) {
     _velocity = velocity;
     _updateLastDirection(_velocity);
@@ -77,7 +76,7 @@ mixin Movement on GameComponent {
   void moveLeftOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(x: -_lastSpeed);
-    onApplyDisplacement(dtUpdate);
+    onApplyDisplacement(lastDt);
     _velocity.add(Vector2(_lastSpeed, 0));
     setVelocityAxis(x: 0);
   }
@@ -85,49 +84,49 @@ mixin Movement on GameComponent {
   void moveRightOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(x: _lastSpeed);
-    onApplyDisplacement(dtUpdate);
+    onApplyDisplacement(lastDt);
     setVelocityAxis(x: 0);
   }
 
   void moveUpOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(y: -_lastSpeed);
-    onApplyDisplacement(dtUpdate);
+    onApplyDisplacement(lastDt);
     setVelocityAxis(y: 0);
   }
 
   void moveDownOnce({double? speed}) {
     _lastSpeed = speed ?? this.speed;
     setVelocityAxis(y: _lastSpeed);
-    onApplyDisplacement(dtUpdate);
+    onApplyDisplacement(lastDt);
     setVelocityAxis(y: 0);
   }
 
   void moveDownRightOnce({double? speed}) {
     _lastSpeed = (speed ?? this.speed) * diaginalReduction;
     setVelocityAxis(y: _lastSpeed, x: _lastSpeed);
-    onApplyDisplacement(dtUpdate);
+    onApplyDisplacement(lastDt);
     setVelocityAxis(y: 0, x: 0);
   }
 
   void moveDownLeftOnce({double? speed}) {
     _lastSpeed = (speed ?? this.speed) * diaginalReduction;
     setVelocityAxis(y: _lastSpeed, x: -_lastSpeed);
-    onApplyDisplacement(dtUpdate);
+    onApplyDisplacement(lastDt);
     setVelocityAxis(y: 0, x: 0);
   }
 
   void moveUpRightOnce({double? speed}) {
     _lastSpeed = (speed ?? this.speed) * diaginalReduction;
     setVelocityAxis(y: -_lastSpeed, x: _lastSpeed);
-    onApplyDisplacement(dtUpdate);
+    onApplyDisplacement(lastDt);
     setVelocityAxis(y: 0, x: 0);
   }
 
   void moveUpLeftOnce({double? speed}) {
     _lastSpeed = (speed ?? this.speed) * diaginalReduction;
     setVelocityAxis(y: -_lastSpeed, x: -_lastSpeed);
-    onApplyDisplacement(dtUpdate);
+    onApplyDisplacement(lastDt);
     setVelocityAxis(y: 0, x: 0);
   }
 
@@ -207,7 +206,6 @@ mixin Movement on GameComponent {
 
   @override
   void update(double dt) {
-    dtUpdate = dt;
     super.update(dt);
     if (isVisible || !movementOnlyVisible) {
       _updatePosition(dt);
@@ -365,8 +363,8 @@ mixin Movement on GameComponent {
     bool useCenter = true,
   }) {
     final diagonalSpeed = (speed ?? this.speed) * diaginalReduction;
-    final dtSpeed = (speed ?? this.speed) * dtUpdate * 1.1;
-    final dtDiagonalSpeed = diagonalSpeed * dtUpdate * 1.1;
+    final dtSpeed = (speed ?? this.speed) * lastDt * 1.1;
+    final dtDiagonalSpeed = diagonalSpeed * lastDt * 1.1;
     final rect = rectCollision;
     final compCenter = rect.centerVector2;
     final compPosition = rect.positionVector2;
@@ -379,8 +377,8 @@ mixin Movement on GameComponent {
     } else {
       if (diffX.abs() > dtDiagonalSpeed && diffY.abs() > dtDiagonalSpeed) {
         final minToMOve = dtDiagonalSpeed * 2;
-        final xOnce = diffX.abs() / dtUpdate;
-        final yOnce = diffY.abs() / dtUpdate;
+        final xOnce = diffX.abs() / lastDt;
+        final yOnce = diffY.abs() / lastDt;
         if (diffX > 0 && diffY > 0) {
           if (diffX.abs() < minToMOve) {
             moveRightOnce(speed: xOnce);
@@ -447,7 +445,7 @@ mixin Movement on GameComponent {
     double? displacement,
     Iterable<ShapeHitbox>? ignoreHitboxes,
   }) {
-    final maxDistance = displacement ?? (speed * (dtUpdate * 2));
+    final maxDistance = displacement ?? (speed * (lastDt * 2));
 
     switch (direction) {
       case Direction.right:
