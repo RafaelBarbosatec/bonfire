@@ -74,10 +74,19 @@ abstract class GameComponent extends PositionComponent
     super.update(dt);
   }
 
+  int _contV = 0;
+
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    _visibleCache = null;
+    if (_visibleCache != null) {
+      if (_contV > 4) {
+        _contV = 0;
+        _visibleCache = null;
+      } else {
+        _contV++;
+      }
+    }
   }
 
   /// Return screen position of this component.
