@@ -16,6 +16,8 @@ abstract class GameComponent extends PositionComponent
 
   /// When true this component render above all components in game.
   bool renderAboveComponents = false;
+  bool get isHud =>_isHud;
+  bool _isHud = false;
 
   bool get isVisible {
     // Early return if _visible is false
@@ -28,7 +30,6 @@ abstract class GameComponent extends PositionComponent
       return true;
     }
 
-    // Only do the expensive camera visibility check if necessary
     return isVisibleInCamera();
   }
 
@@ -231,8 +232,9 @@ abstract class GameComponent extends PositionComponent
 
   @override
   void onMount() {
-    paint.isAntiAlias = false;
     super.onMount();
+    paint.isAntiAlias = false;
+    _isHud = componentIsHud;
   }
 
   @override

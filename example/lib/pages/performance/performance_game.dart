@@ -3,7 +3,7 @@ import 'package:example/pages/mini_games/simple_example/my_enemy.dart';
 import 'package:flutter/material.dart';
 
 class PerformanceGame extends StatelessWidget {
-  static const countEnemies = 200;
+  static const countEnemies = 100;
   const PerformanceGame({Key? key}) : super(key: key);
 
   @override
