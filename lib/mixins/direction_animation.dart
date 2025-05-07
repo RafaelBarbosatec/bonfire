@@ -11,7 +11,7 @@ mixin DirectionAnimation on Movement {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (!isRemoving) {
+    if (!isRemoving && isVisible) {
       animation?.render(canvas, paint);
     }
   }

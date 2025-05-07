@@ -48,7 +48,7 @@ mixin UseSpriteAnimation on GameComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (!isRemoving) {
+    if (!isRemoving && isVisible) {
       if (_fastAnimation != null) {
         if (_strockePaint != null) {
           _fastAnimation?.render(

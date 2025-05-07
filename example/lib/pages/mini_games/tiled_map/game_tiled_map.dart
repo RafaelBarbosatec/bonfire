@@ -67,9 +67,9 @@ class GameTiledMap extends StatelessWidget {
               ),
             )
           ],
-          player: Knight(
-            Vector2((8 * DungeonMap.tileSize), (5 * DungeonMap.tileSize)),
-          ),
+          // player: Knight(
+          //   Vector2((8 * DungeonMap.tileSize), (5 * DungeonMap.tileSize)),
+          // ),
           interface: KnightInterface(),
           map: WorldMapByTiled(
             WorldMapReader.fromAsset('tiled/mapa$map.json'),
