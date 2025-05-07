@@ -16,29 +16,31 @@ abstract class GameComponent extends PositionComponent
 
   /// When true this component render above all components in game.
   bool renderAboveComponents = false;
-  bool get isHud =>_isHud;
+  bool get isHud => _isHud;
   bool _isHud = false;
+  bool? _visibleCache;
 
   bool get isVisible {
-    // Early return if _visible is false
-    if (!_visible) {
-      return false;
+    if (_visibleCache != null) {
+      return _visibleCache!;
     }
-
     // HUD components are always visible if _visible is true
     if (isHud) {
-      return true;
+      return _visibleCache = true;
     }
 
-    return isVisibleInCamera();
+    return _visibleCache = isVisibleInCamera();
   }
 
-  set isVisible(bool visible) {
-    _visible = visible;
+  bool get isHidded => paint.color == const Color(0x00000000);
+
+  void hideComp() {
+    paint.color = const Color(0x00000000);
   }
 
-  /// Param used to enable or disable the render.
-  bool _visible = true;
+  void showComp() {
+    paint.color = const Color(0xFFFFFFFF);
+  }
 
   /// Get BuildContext
   BuildContext get context => gameRef.context;
@@ -67,10 +69,15 @@ abstract class GameComponent extends PositionComponent
   }
 
   @override
-  @mustCallSuper
   void update(double dt) {
     lastDt = dt;
     super.update(dt);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    _visibleCache = null;
   }
 
   /// Return screen position of this component.
