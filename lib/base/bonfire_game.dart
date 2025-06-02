@@ -13,9 +13,8 @@ import 'package:flame/camera.dart';
 import 'package:flutter/widgets.dart' hide Viewport;
 
 /// Is a customGame where all magic of the Bonfire happen.
-class BonfireGame extends BaseGame implements BonfireGameInterface {
+abstract class BonfireGame extends BaseGame implements BonfireGameInterface {
   static const INTERVAL_UPDATE_ORDER = 500;
-  static const INTERVAL_OPTIMIZE_TREE = 5001;
 
   /// Context used to access all Flutter power in your game.
   @override
@@ -152,9 +151,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   FutureOr<void> onLoad() async {
-    initializeCollisionDetection(
-      mapDimensions: size.toRect(),
-    );
     await super.onLoad();
     camera.viewport.children.query<PlayerController>().forEach((element) {
       if (!element.containObservers) {
@@ -172,13 +168,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     } else if (player != null && camera.config.startFollowPlayer) {
       camera.moveToPlayer();
     }
-  }
-
-  @override
-  void configCollisionDetection(Rect mapDimensions) {
-    initializeCollisionDetection(
-      mapDimensions: mapDimensions,
-    );
   }
 
   bool _gameMounted = false;
@@ -217,14 +206,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   Iterable<Attackable> attackables({bool onlyVisible = false}) {
     return query<Attackable>(onlyVisible: onlyVisible);
-  }
-
-  @override
-  Iterable<ShapeHitbox> collisions({bool onlyVisible = false}) {
-    if (onlyVisible) {
-      return collisionDetection.items.where(isVisibleInCamera);
-    }
-    return collisionDetection.items;
   }
 
   @override
@@ -345,59 +326,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   void _updateOrderPriority() {
     world.children.rebalanceAll();
     _highestPriority = world.children.last.priority;
-  }
-
-  @override
-  List<RaycastResult<ShapeHitbox>> raycastAll(
-    Vector2 origin, {
-    required int numberOfRays,
-    double startAngle = 0,
-    double sweepAngle = tau,
-    double? maxDistance,
-    List<Ray2>? rays,
-    List<ShapeHitbox>? ignoreHitboxes,
-    List<RaycastResult<ShapeHitbox>>? out,
-  }) {
-    return collisionDetection.raycastAll(
-      origin,
-      numberOfRays: numberOfRays,
-      startAngle: startAngle,
-      sweepAngle: sweepAngle,
-      maxDistance: maxDistance,
-      rays: rays,
-      ignoreHitboxes: ignoreHitboxes,
-      out: out,
-    );
-  }
-
-  @override
-  RaycastResult<ShapeHitbox>? raycast(
-    Ray2 ray, {
-    double? maxDistance,
-    List<ShapeHitbox>? ignoreHitboxes,
-    RaycastResult<ShapeHitbox>? out,
-  }) {
-    return collisionDetection.raycast(
-      ray,
-      maxDistance: maxDistance,
-      ignoreHitboxes: ignoreHitboxes,
-      out: out,
-    );
-  }
-
-  @override
-  Iterable<RaycastResult<ShapeHitbox>> raytrace(
-    Ray2 ray, {
-    int maxDepth = 10,
-    List<ShapeHitbox>? ignoreHitboxes,
-    List<RaycastResult<ShapeHitbox>>? out,
-  }) {
-    return collisionDetection.raytrace(
-      ray,
-      maxDepth: maxDepth,
-      ignoreHitboxes: ignoreHitboxes,
-      out: out,
-    );
   }
 
   /// Used to generate numbers to create your animations or anythings
