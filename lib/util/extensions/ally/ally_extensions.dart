@@ -27,7 +27,7 @@ extension AllyExtensions on Ally {
     VoidCallback? execute,
     Vector2? centerOffset,
   }) {
-    if (!checkInterval('attackMelee', interval, dtUpdate) || isDead) {
+    if (!checkInterval('attackMelee', interval, lastDt) || isDead) {
       return;
     }
 
@@ -65,7 +65,7 @@ extension AllyExtensions on Ally {
     VoidCallback? execute,
     LightingConfig? lightingConfig,
   }) {
-    if (!checkInterval('attackRange', interval, dtUpdate) || isDead) {
+    if (!checkInterval('attackRange', interval, lastDt) || isDead) {
       return;
     }
 
@@ -127,7 +127,7 @@ extension AllyExtensions on Ally {
             lastDirectionHorizontal = lastDirection;
           }
 
-          if (checkInterval('seeAndMoveToAttackRange', 500, dtUpdate)) {
+          if (checkInterval('seeAndMoveToAttackRange', 500, lastDt)) {
             stopMove();
           }
           positioned?.call(e);

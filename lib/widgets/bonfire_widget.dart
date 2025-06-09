@@ -1,6 +1,9 @@
 import 'package:bonfire/background/game_background.dart';
+import 'package:bonfire/base/bonfire_collision_config.dart';
 import 'package:bonfire/base/bonfire_game.dart';
 import 'package:bonfire/base/bonfire_game_interface.dart';
+import 'package:bonfire/base/bonfire_quad_tree_collision.dart';
+import 'package:bonfire/base/bonfire_with_collision.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/base/listener_game_widget.dart';
 import 'package:bonfire/camera/camera_config.dart';
@@ -62,6 +65,7 @@ class BonfireWidget extends StatefulWidget {
   final GameColorFilter? colorFilter;
   final VoidCallback? onDispose;
   final List<Force2D>? globalForces;
+  final BonfireCollisionConfig? collisionConfig;
 
   const BonfireWidget({
     required this.map,
@@ -87,6 +91,7 @@ class BonfireWidget extends StatefulWidget {
     this.mouseCursor,
     this.onDispose,
     this.globalForces,
+    this.collisionConfig,
   });
 
   @override
@@ -95,6 +100,7 @@ class BonfireWidget extends StatefulWidget {
 
 class BonfireWidgetState extends State<BonfireWidget> {
   late BonfireGame _game;
+  late BonfireCollisionConfig _collisionConfig;
 
   @override
   void dispose() {
@@ -104,6 +110,8 @@ class BonfireWidgetState extends State<BonfireWidget> {
 
   @override
   void initState() {
+    _collisionConfig =
+        widget.collisionConfig ?? BonfireCollisionConfig.dafault();
     _buildGame();
     super.initState();
   }
@@ -121,25 +129,49 @@ class BonfireWidgetState extends State<BonfireWidget> {
   }
 
   void _buildGame() {
-    _game = BonfireGame(
-      context: context,
-      playerControllers: widget.playerControllers,
-      player: widget.player,
-      interface: widget.interface,
-      map: widget.map,
-      components: widget.components,
-      hudComponents: widget.hudComponents,
-      background: widget.background,
-      backgroundColor: widget.backgroundColor,
-      debugMode: widget.debugMode,
-      showCollisionArea: widget.showCollisionArea,
-      collisionAreaColor:
-          widget.collisionAreaColor ?? Colors.lightGreenAccent.setOpacity(0.5),
-      lightingColorGame: widget.lightingColorGame,
-      cameraConfig: widget.cameraConfig,
-      colorFilter: widget.colorFilter,
-      onReady: widget.onReady,
-      globalForces: widget.globalForces,
+    _game = _collisionConfig.when(
+      defaultCollision: (c) => BonfireWithCollision(
+        configDefault: c,
+        context: context,
+        playerControllers: widget.playerControllers,
+        player: widget.player,
+        interface: widget.interface,
+        map: widget.map,
+        components: widget.components,
+        hudComponents: widget.hudComponents,
+        background: widget.background,
+        backgroundColor: widget.backgroundColor,
+        debugMode: widget.debugMode,
+        showCollisionArea: widget.showCollisionArea,
+        collisionAreaColor: widget.collisionAreaColor ??
+            Colors.lightGreenAccent.setOpacity(0.5),
+        lightingColorGame: widget.lightingColorGame,
+        cameraConfig: widget.cameraConfig,
+        colorFilter: widget.colorFilter,
+        onReady: widget.onReady,
+        globalForces: widget.globalForces,
+      ),
+      quadTreeCollision: (c) => BonfireQuadTreeCollision(
+        configQuadTree: c,
+        context: context,
+        playerControllers: widget.playerControllers,
+        player: widget.player,
+        interface: widget.interface,
+        map: widget.map,
+        components: widget.components,
+        hudComponents: widget.hudComponents,
+        background: widget.background,
+        backgroundColor: widget.backgroundColor,
+        debugMode: widget.debugMode,
+        showCollisionArea: widget.showCollisionArea,
+        collisionAreaColor: widget.collisionAreaColor ??
+            Colors.lightGreenAccent.setOpacity(0.5),
+        lightingColorGame: widget.lightingColorGame,
+        cameraConfig: widget.cameraConfig,
+        colorFilter: widget.colorFilter,
+        onReady: widget.onReady,
+        globalForces: widget.globalForces,
+      ),
     );
   }
 }

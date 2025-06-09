@@ -48,7 +48,7 @@ mixin UseSpriteAnimation on GameComponent {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (isVisible && !isRemoving) {
+    if (!isRemoving && isVisible) {
       if (_fastAnimation != null) {
         if (_strockePaint != null) {
           _fastAnimation?.render(
@@ -83,12 +83,10 @@ mixin UseSpriteAnimation on GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (isVisible) {
-      if (_fastAnimation != null) {
-        _fastAnimation?.update(dt);
-      } else {
-        _animationRender?.update(dt);
-      }
+    if (_fastAnimation != null) {
+      _fastAnimation?.update(dt);
+    } else {
+      _animationRender?.update(dt);
     }
     if (_strokeSize.isZero()) {
       _strokeSize = Vector2(

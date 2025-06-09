@@ -76,7 +76,7 @@ abstract class BonfireGameInterface {
   Iterable<ShapeHitbox> collisions({bool onlyVisible = false});
 
   /// Used to find component by type visible or not.
-  Iterable<T> query<T extends Component>({bool onlyVisible = false});
+  Iterable<T> query<T extends GameComponent>({bool onlyVisible = false});
 
   /// This  method convert word position to screen position
   Vector2 worldToScreen(Vector2 worldPosition);
@@ -91,7 +91,7 @@ abstract class BonfireGameInterface {
   Vector2 viewportPositionToGlobal(Vector2 position);
 
   /// Used to check if a component is visible in the camera.
-  bool isVisibleInCamera(GameComponent c);
+  bool isVisibleInCamera(PositionComponent c);
 
   /// Used to change Joystick listener. And move camera to new target.
   void addJoystickObserver(

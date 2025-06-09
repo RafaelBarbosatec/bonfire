@@ -13,9 +13,8 @@ import 'package:flame/camera.dart';
 import 'package:flutter/widgets.dart' hide Viewport;
 
 /// Is a customGame where all magic of the Bonfire happen.
-class BonfireGame extends BaseGame implements BonfireGameInterface {
+abstract class BonfireGame extends BaseGame implements BonfireGameInterface {
   static const INTERVAL_UPDATE_ORDER = 500;
-  static const INTERVAL_OPTIMIZE_TREE = 5001;
 
   /// Context used to access all Flutter power in your game.
   @override
@@ -59,10 +58,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   @override
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
 
-  final List<GameComponent> _visibleComponents = List.empty(growable: true);
-  final List<ShapeHitbox> _visibleCollisions = List.empty(growable: true);
+  // final List<GameComponent> _visibleComponents = List.empty(growable: true);
+  // final List<ShapeHitbox> _visibleCollisions = List.empty(growable: true);
   late IntervalTick _intervalUpdateOder;
-  late IntervalTick _intervalOprimizeTree;
 
   ValueChanged<BonfireGame>? onReady;
 
@@ -149,17 +147,10 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
       INTERVAL_UPDATE_ORDER,
       onTick: _updateOrderPriorityMicrotask,
     );
-    _intervalOprimizeTree = IntervalTick(
-      INTERVAL_OPTIMIZE_TREE,
-      onTick: _optimizeCollisionTree,
-    );
   }
 
   @override
   FutureOr<void> onLoad() async {
-    initializeCollisionDetection(
-      mapDimensions: size.toRect(),
-    );
     await super.onLoad();
     camera.viewport.children.query<PlayerController>().forEach((element) {
       if (!element.containObservers) {
@@ -179,19 +170,11 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     }
   }
 
-  @override
-  void configCollisionDetection(Rect mapDimensions) {
-    initializeCollisionDetection(
-      mapDimensions: mapDimensions,
-    );
-  }
-
   bool _gameMounted = false;
   @override
   void update(double dt) {
     super.update(dt);
     _intervalUpdateOder.update(dt);
-    _intervalOprimizeTree.update(dt);
     final containsChildren = camera.world?.children.isNotEmpty == true;
     if (!_gameMounted && containsChildren) {
       _gameMounted = true;
@@ -201,7 +184,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   @override
   Iterable<T> visibles<T extends GameComponent>() {
-    return _visibleComponents.whereType<T>();
+    return world.children.whereType<T>().where((e) => e.isVisible);
   }
 
   @override
@@ -226,27 +209,9 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  Iterable<ShapeHitbox> collisions({bool onlyVisible = false}) {
+  Iterable<T> query<T extends GameComponent>({bool onlyVisible = false}) {
     if (onlyVisible) {
-      final tilesCollision = <ShapeHitbox>[];
-      map
-          .getRenderedTiles()
-          .where((element) => element.containsShapeHitbox)
-          .forEach(
-            (e) => tilesCollision.addAll(e.children.query<ShapeHitbox>()),
-          );
-      return [
-        ..._visibleCollisions,
-        ...tilesCollision,
-      ];
-    }
-    return collisionDetection.items;
-  }
-
-  @override
-  Iterable<T> query<T extends Component>({bool onlyVisible = false}) {
-    if (onlyVisible) {
-      return _visibleComponents.whereType<T>();
+      return visibles<T>();
     }
     return world.children.query<T>();
   }
@@ -278,7 +243,7 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  bool isVisibleInCamera(GameComponent c) {
+  bool isVisibleInCamera(PositionComponent c) {
     if (!hasLayout) {
       return false;
     }
@@ -329,20 +294,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     super.onDetach();
   }
 
-  void addVisible(GameComponent obj) {
-    _visibleComponents.add(obj);
-    if (obj.containsShapeHitbox) {
-      _visibleCollisions.addAll(obj.children.query<ShapeHitbox>());
-    }
-  }
-
-  void removeVisible(GameComponent obj) {
-    _visibleComponents.remove(obj);
-    if (obj.containsShapeHitbox) {
-      obj.children.query<ShapeHitbox>().forEach(_visibleCollisions.remove);
-    }
-  }
-
   @override
   void enableGestures(bool enable) {
     enabledGestures = enable;
@@ -373,62 +324,8 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   /// reorder components by priority
   void _updateOrderPriority() {
-    // ignore: invalid_use_of_internal_member
-    world.children.reorder();
+    world.children.rebalanceAll();
     _highestPriority = world.children.last.priority;
-  }
-
-  @override
-  List<RaycastResult<ShapeHitbox>> raycastAll(
-    Vector2 origin, {
-    required int numberOfRays,
-    double startAngle = 0,
-    double sweepAngle = tau,
-    double? maxDistance,
-    List<Ray2>? rays,
-    List<ShapeHitbox>? ignoreHitboxes,
-    List<RaycastResult<ShapeHitbox>>? out,
-  }) {
-    return collisionDetection.raycastAll(
-      origin,
-      numberOfRays: numberOfRays,
-      startAngle: startAngle,
-      sweepAngle: sweepAngle,
-      maxDistance: maxDistance,
-      rays: rays,
-      ignoreHitboxes: ignoreHitboxes,
-      out: out,
-    );
-  }
-
-  @override
-  RaycastResult<ShapeHitbox>? raycast(
-    Ray2 ray, {
-    double? maxDistance,
-    List<ShapeHitbox>? ignoreHitboxes,
-    RaycastResult<ShapeHitbox>? out,
-  }) {
-    return collisionDetection.raycast(
-      ray,
-      maxDistance: maxDistance,
-      ignoreHitboxes: ignoreHitboxes,
-      out: out,
-    );
-  }
-
-  @override
-  Iterable<RaycastResult<ShapeHitbox>> raytrace(
-    Ray2 ray, {
-    int maxDepth = 10,
-    List<ShapeHitbox>? ignoreHitboxes,
-    List<RaycastResult<ShapeHitbox>>? out,
-  }) {
-    return collisionDetection.raytrace(
-      ray,
-      maxDepth: maxDepth,
-      ignoreHitboxes: ignoreHitboxes,
-      out: out,
-    );
   }
 
   /// Used to generate numbers to create your animations or anythings
@@ -457,10 +354,6 @@ class BonfireGame extends BaseGame implements BonfireGameInterface {
     );
     add(valueGenerator);
     return valueGenerator;
-  }
-
-  void _optimizeCollisionTree() {
-    scheduleMicrotask(collisionDetection.broadphase.tree.optimize);
   }
 
   void _updateOrderPriorityMicrotask() {

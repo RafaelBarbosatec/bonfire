@@ -11,7 +11,7 @@ mixin DirectionAnimation on Movement {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    if (isVisible && !isRemoving) {
+    if (!isRemoving && isVisible) {
       animation?.render(canvas, paint);
     }
   }
@@ -19,10 +19,8 @@ mixin DirectionAnimation on Movement {
   @override
   void update(double dt) {
     super.update(dt);
-    if (isVisible) {
-      _updateAnimation();
-      animation?.update(dt, size);
-    }
+    _updateAnimation();
+    animation?.update(dt, size);
   }
 
   void _updateAnimation() {

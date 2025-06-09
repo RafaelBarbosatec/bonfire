@@ -10,6 +10,7 @@ mixin HandleForces on Movement {
   double _mass = 1.0;
 
   bool handleForcesEnabled = true;
+  bool handleForcesOnlyVisible = true;
 
   set mass(double mass) {
     assert(mass >= 1);
@@ -31,6 +32,11 @@ mixin HandleForces on Movement {
 
   @override
   Vector2 onVelocityUpdate(double dt, Vector2 velocity) {
+    if (handleForcesOnlyVisible) {
+      if (!isVisible) {
+        return super.onVelocityUpdate(dt, velocity);
+      }
+    }
     if (!handleForcesEnabled) {
       return super.onVelocityUpdate(dt, velocity);
     }

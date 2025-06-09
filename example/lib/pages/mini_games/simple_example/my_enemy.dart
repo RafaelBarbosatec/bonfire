@@ -13,7 +13,8 @@ import 'package:example/shared/util/enemy_sprite_sheet.dart';
 /// Rafaelbarbosatec
 /// on 19/10/21
 class MyEnemy extends SimpleEnemy with BlockMovementCollision, RandomMovement {
-  MyEnemy(Vector2 position)
+  final bool withCollision;
+  MyEnemy(Vector2 position, {this.withCollision = true})
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,
           position: position,
@@ -22,7 +23,10 @@ class MyEnemy extends SimpleEnemy with BlockMovementCollision, RandomMovement {
 
   @override
   Future<void> onLoad() {
-    add(RectangleHitbox(size: size, isSolid: true));
+    if (withCollision) {
+      add(RectangleHitbox(size: size, isSolid: true));
+    }
+
     return super.onLoad();
   }
 

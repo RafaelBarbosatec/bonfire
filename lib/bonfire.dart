@@ -1,6 +1,7 @@
 library bonfire;
 
 export 'package:bonfire/background/game_background.dart';
+export 'package:bonfire/base/bonfire_collision_config.dart';
 export 'package:bonfire/base/bonfire_game.dart';
 export 'package:bonfire/base/bonfire_game_interface.dart';
 export 'package:bonfire/base/game_component.dart';

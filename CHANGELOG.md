@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 # Next
 - Fix textSize in `BarLifeComponent`
+=======
+# 3.15.0
+- Adds params `collisionConfig`. Now collision system used is a default. take a look [Flame Doc](https://docs.flame-engine.org/latest/flame/collision_detection.html). To use QuadTree approatch pass `BonfireCollisionConfig.quadTree()` as a params.
+
+# 3.14.0
+- Performance improvements.
+>>>>>>> master
 
 # 3.13.5
 - Fix ellipse and polygon collision objects in Tiled maps, the `CollisionType` was set to `inactive`, changed to `active` as the `RectangleHitbox`.

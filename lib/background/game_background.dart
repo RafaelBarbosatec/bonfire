@@ -7,8 +7,5 @@ class GameBackground extends GameComponent {
   int get priority => LayerPriority.BACKGROUND;
 
   @override
-  bool get enabledCheckIsVisible => false;
-
-  @override
   bool get isVisible => true;
 }

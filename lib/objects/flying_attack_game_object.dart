@@ -47,7 +47,6 @@ class FlyingAttackGameObject extends AnimatedGameObject
     } else {
       moveFromAngle(angle);
     }
-    movementOnlyVisible = false;
   }
 
   FlyingAttackGameObject.byDirection({
@@ -69,7 +68,6 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }) {
     this.speed = speed;
     moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
-    movementOnlyVisible = false;
   }
 
   FlyingAttackGameObject.byAngle({
@@ -95,7 +93,6 @@ class FlyingAttackGameObject extends AnimatedGameObject
     _senAngle = sin(angle);
 
     moveFromAngle(angle);
-    movementOnlyVisible = false;
   }
 
   @override

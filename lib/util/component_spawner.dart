@@ -34,13 +34,16 @@ class ComponentSpawner extends GameComponent {
 
   @override
   void update(double dt) {
-    if (checkInterval('SpawnPosition', interval, dt) &&
-        !(onlyVisible && !isVisible)) {
-      if (spawnCondition?.call(gameRef) ?? true) {
+    super.update(dt);
+    if (checkInterval('SpawnPosition', interval, dt)) {
+      var enabled = true;
+      if (onlyVisible) {
+        enabled = isVisible;
+      }
+      if (spawnCondition?.call(gameRef) ?? true && enabled) {
         _spawn();
       }
     }
-    super.update(dt);
   }
 
   void _spawn() {

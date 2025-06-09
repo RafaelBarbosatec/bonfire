@@ -111,7 +111,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     double marginFromCenter = 16,
     Vector2? centerOffset,
   }) {
-    if (!checkInterval('attackMelee', interval, dtUpdate) || isDead) {
+    if (!checkInterval('attackMelee', interval, lastDt) || isDead) {
       return;
     }
 
@@ -150,7 +150,7 @@ extension RotationEnemyExtensions on RotationEnemy {
     Vector2? centerOffset,
     double marginFromOrigin = 16,
   }) {
-    if (!checkInterval('attackRange', interval, dtUpdate) || isDead) {
+    if (!checkInterval('attackRange', interval, lastDt) || isDead) {
       return;
     }
 

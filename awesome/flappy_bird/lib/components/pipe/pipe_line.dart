@@ -14,7 +14,6 @@ class PipeLine extends GameDecoration with Movement {
         ) {
     this.speed = speed;
     moveLeft();
-    movementOnlyVisible = false;
   }
 
   @override
