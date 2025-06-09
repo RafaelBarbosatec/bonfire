@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 
 /// Animated component used like range attack.
 class FlyingAttackGameObject extends AnimatedGameObject
-    with Movement, BlockMovementCollision, CanNotSeen {
+    with Movement, CanNotSeen {
   final dynamic id;
   Future<SpriteAnimation>? animationDestroy;
   final Direction? direction;
