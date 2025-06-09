@@ -120,10 +120,12 @@ class FlyingAttackGameObject extends AnimatedGameObject
       if (!other.checkCanReceiveDamage(attackFrom)) {
         return;
       }
+
+      if (animationDestroy == null) {
+        other.handleAttack(attackFrom, damage, id);
+      }
     }
-    if (other is Attackable && animationDestroy == null) {
-      other.handleAttack(attackFrom, damage, id);
-    }
+
     _destroyObject();
     super.onCollision(intersectionPoints, other);
   }
