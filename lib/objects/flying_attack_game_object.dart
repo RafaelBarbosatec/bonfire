@@ -106,17 +106,21 @@ class FlyingAttackGameObject extends AnimatedGameObject
     if (other is Sensor) {
       return false;
     }
-    if (other is Attackable) {
-      return other.checkCanReceiveDamage(attackFrom);
-    }
+
     if (!withDecorationCollision && other is GameDecoration) {
       return false;
     }
+
     return super.onComponentTypeCheck(other);
   }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Attackable) {
+      if (!other.checkCanReceiveDamage(attackFrom)) {
+        return;
+      }
+    }
     if (other is Attackable && animationDestroy == null) {
       other.handleAttack(attackFrom, damage, id);
     }
