@@ -110,9 +110,10 @@ class FlyingAttackGameObject extends AnimatedGameObject
       return false;
     }
     if (other is Attackable) {
-      if (!other.checkCanReceiveDamage(attackFrom)) {
-        return false;
-      }
+      return other.checkCanReceiveDamage(attackFrom);
+    }
+    if (!withDecorationCollision && other is GameDecoration) {
+      return false;
     }
     return super.onComponentTypeCheck(other);
   }
@@ -122,13 +123,11 @@ class FlyingAttackGameObject extends AnimatedGameObject
     if (other is Attackable && animationDestroy == null) {
       other.handleAttack(attackFrom, damage, id);
     }
-    if (other is GameComponent) {
-      _destroyObject(other);
-    }
+    _destroyObject();
     super.onCollision(intersectionPoints, other);
   }
 
-  void _destroyObject(GameComponent component) {
+  void _destroyObject() {
     if (isRemoving || isRemoved) {
       return;
     }
@@ -301,11 +300,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
 
   @override
   Future<void> onLoad() {
-    if (collision != null) {
-      add(collision!);
-    } else {
-      add(RectangleHitbox(size: size, isSolid: true));
-    }
+    add(collision ?? RectangleHitbox(size: size, isSolid: true));
 
     return super.onLoad();
   }
