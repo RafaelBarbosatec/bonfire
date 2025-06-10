@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 
 /// Animated component used like range attack.
 class FlyingAttackGameObject extends AnimatedGameObject
-    with Movement, BlockMovementCollision, CanNotSeen {
+    with Movement, CanNotSeen, BlockMovementCollision {
   final dynamic id;
   Future<SpriteAnimation>? animationDestroy;
   final Direction? direction;
@@ -106,26 +106,31 @@ class FlyingAttackGameObject extends AnimatedGameObject
     if (other is Sensor) {
       return false;
     }
-    if (other is Attackable) {
-      if (!other.checkCanReceiveDamage(attackFrom)) {
-        return false;
-      }
+
+    if (!withDecorationCollision && other is GameDecoration) {
+      return false;
     }
+
     return super.onComponentTypeCheck(other);
   }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Attackable && animationDestroy == null) {
-      other.handleAttack(attackFrom, damage, id);
+    if (other is Attackable) {
+      if (!other.checkCanReceiveDamage(attackFrom)) {
+        return;
+      }
+
+      if (animationDestroy == null) {
+        other.handleAttack(attackFrom, damage, id);
+      }
     }
-    if (other is GameComponent) {
-      _destroyObject(other);
-    }
+
+    _destroyObject();
     super.onCollision(intersectionPoints, other);
   }
 
-  void _destroyObject(GameComponent component) {
+  void _destroyObject() {
     if (isRemoving || isRemoved) {
       return;
     }
@@ -291,6 +296,11 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }
 
   @override
+  bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
+    return false;
+  }
+
+  @override
   void onMount() {
     anchor = Anchor.center;
     super.onMount();
@@ -298,12 +308,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
 
   @override
   Future<void> onLoad() {
-    if (collision != null) {
-      add(collision!);
-    } else {
-      add(RectangleHitbox(size: size, isSolid: true));
-    }
-
+    add(collision ?? RectangleHitbox(size: size, isSolid: true));
     return super.onLoad();
   }
 }
