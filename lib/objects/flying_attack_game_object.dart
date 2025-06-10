@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 
 /// Animated component used like range attack.
 class FlyingAttackGameObject extends AnimatedGameObject
-    with Movement, CanNotSeen {
+    with Movement, CanNotSeen, BlockMovementCollision {
   final dynamic id;
   Future<SpriteAnimation>? animationDestroy;
   final Direction? direction;
@@ -296,6 +296,11 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }
 
   @override
+  bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
+    return false;
+  }
+
+  @override
   void onMount() {
     anchor = Anchor.center;
     super.onMount();
@@ -304,7 +309,6 @@ class FlyingAttackGameObject extends AnimatedGameObject
   @override
   Future<void> onLoad() {
     add(collision ?? RectangleHitbox(size: size, isSolid: true));
-
     return super.onLoad();
   }
 }
