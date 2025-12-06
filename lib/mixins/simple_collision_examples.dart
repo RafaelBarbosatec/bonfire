@@ -1,6 +1,4 @@
-import 'package:bonfire/bonfire.dart' hide BodyType;
-import 'package:bonfire/mixins/simple_collision.dart';
-import 'package:bonfire/mixins/simple_movement.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:flutter/services.dart';
 
 /// Examples of using SimpleCollision with SimpleMovement
@@ -37,7 +35,8 @@ class CollidingComponent extends GameComponent
 
     // Custom behavior when blocked
     print(
-        'Collision with ${other.runtimeType} from ${collisionData.direction}');
+      'Collision with ${other.runtimeType} from ${collisionData.direction}',
+    );
 
     // Maybe change direction when hitting a wall
     if (collisionData.direction == Direction.right) {
@@ -92,7 +91,9 @@ class TriggerArea extends GameComponent
 
   @override
   bool shouldBlockMovement(
-      Set<Vector2> intersectionPoints, GameComponent other) {
+    Set<Vector2> intersectionPoints,
+    GameComponent other,
+  ) {
     // Don't block movement, just trigger events
     print('Player entered trigger area!');
     return false;
@@ -110,7 +111,9 @@ class OneWayPlatform extends GameComponent
 
   @override
   bool shouldBlockMovement(
-      Set<Vector2> intersectionPoints, GameComponent other) {
+    Set<Vector2> intersectionPoints,
+    GameComponent other,
+  ) {
     // Only block if other component is coming from above
     if (other is SimpleMovement) {
       return other.velocity.y > 0; // Moving down

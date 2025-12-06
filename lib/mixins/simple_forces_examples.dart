@@ -1,7 +1,4 @@
-import 'package:bonfire/bonfire.dart' hide BodyType;
-import 'package:bonfire/mixins/simple_collision.dart';
-import 'package:bonfire/mixins/simple_forces.dart';
-import 'package:bonfire/mixins/simple_movement.dart';
+import 'package:bonfire/bonfire.dart';
 
 /// Examples of using SimpleForces with SimpleMovement
 

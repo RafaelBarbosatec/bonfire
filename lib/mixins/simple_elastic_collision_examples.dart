@@ -1,9 +1,6 @@
 import 'dart:math';
 
-import 'package:bonfire/bonfire.dart' hide BodyType;
-import 'package:bonfire/mixins/simple_collision.dart';
-import 'package:bonfire/mixins/simple_elastic_collision.dart';
-import 'package:bonfire/mixins/simple_movement.dart';
+import 'package:bonfire/bonfire.dart';
 
 /// Examples of using SimpleElasticCollision
 
@@ -28,7 +25,10 @@ class BouncyBall extends GameComponent
 
   @override
   void onBounce(
-      PositionComponent other, CollisionData data, Vector2 bounceVel) {
+    PositionComponent other,
+    CollisionData data,
+    Vector2 bounceVel,
+  ) {
     super.onBounce(other, data, bounceVel);
 
     // Add visual/audio effects
@@ -67,7 +67,10 @@ class Basketball extends GameComponent
 
   @override
   void onBounce(
-      PositionComponent other, CollisionData data, Vector2 bounceVel) {
+    PositionComponent other,
+    CollisionData data,
+    Vector2 bounceVel,
+  ) {
     super.onBounce(other, data, bounceVel);
 
     // Basketball-specific effects
@@ -114,7 +117,10 @@ class HeavyCrate extends GameComponent
 
   @override
   void onBounce(
-      PositionComponent other, CollisionData data, Vector2 bounceVel) {
+    PositionComponent other,
+    CollisionData data,
+    Vector2 bounceVel,
+  ) {
     super.onBounce(other, data, bounceVel);
 
     // Heavy objects make more impact
@@ -149,7 +155,10 @@ class CustomBouncyObject extends GameComponent
 
   @override
   void onBounce(
-      PositionComponent other, CollisionData data, Vector2 bounceVel) {
+    PositionComponent other,
+    CollisionData data,
+    Vector2 bounceVel,
+  ) {
     super.onBounce(other, data, bounceVel);
 
     bounceCount++;

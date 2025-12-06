@@ -4,15 +4,8 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/collision_util.dart';
 
+export 'body_type.dart';
 export 'collision_data.dart';
-
-enum BodyType {
-  dynamic,
-  static;
-
-  bool get isDynamic => this == BodyType.dynamic;
-  bool get isStatic => this == BodyType.static;
-}
 
 /// Mixin responsible for adding stop the movement when happen collision
 mixin BlockMovementCollision on Movement {
