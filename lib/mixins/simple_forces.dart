@@ -108,7 +108,9 @@ mixin SimpleForces on SimpleMovement {
 
   /// Apply gravity (acceleration force)
   Vector2 _applyGravity(Vector2 velocity, double dt) {
-    if (_gravity.isZero()) return velocity;
+    if (_gravity.isZero()) {
+      return velocity;
+    }
 
     // F = ma, so a = F/m
     final acceleration = _gravity / _mass;
@@ -117,7 +119,9 @@ mixin SimpleForces on SimpleMovement {
 
   /// Apply wind (constant velocity addition)
   Vector2 _applyWind(Vector2 velocity, double dt) {
-    if (_wind.isZero()) return velocity;
+    if (_wind.isZero()) {
+      return velocity;
+    }
 
     // Wind affects lighter objects more
     final windEffect = _wind / (_mass * 0.5 + 0.5);
@@ -126,7 +130,9 @@ mixin SimpleForces on SimpleMovement {
 
   /// Apply custom forces (treated as acceleration)
   Vector2 _applyCustomForces(Vector2 velocity, double dt) {
-    if (_customForces.isEmpty) return velocity;
+    if (_customForces.isEmpty) {
+      return velocity;
+    }
 
     var result = velocity;
     for (final force in _customForces.values) {
@@ -138,7 +144,9 @@ mixin SimpleForces on SimpleMovement {
 
   /// Apply friction (velocity reduction)
   Vector2 _applyFriction(Vector2 velocity, double dt) {
-    if (_friction.isZero()) return velocity;
+    if (_friction.isZero()) {
+      return velocity;
+    }
 
     final frictionX = _friction.x.clamp(0.0, 1.0);
     final frictionY = _friction.y.clamp(0.0, 1.0);
@@ -151,11 +159,15 @@ mixin SimpleForces on SimpleMovement {
 
   /// Apply air drag (velocity-dependent resistance)
   Vector2 _applyDrag(Vector2 velocity, double dt) {
-    if (_dragCoefficient == 0.0) return velocity;
+    if (_dragCoefficient == 0.0) {
+      return velocity;
+    }
 
     // Drag force is proportional to velocity squared
     final speed = velocity.length;
-    if (speed == 0.0) return velocity;
+    if (speed == 0.0) {
+      return velocity;
+    }
 
     final dragMagnitude = _dragCoefficient * speed * speed;
     final dragDirection = velocity.normalized() * -1;
@@ -245,8 +257,12 @@ extension CommonForces on SimpleForces {
   }
 
   /// Add spring force (like elastic band)
-  void addSpringForce(String name, Vector2 anchor, double stiffness,
-      {double restLength = 0}) {
+  void addSpringForce(
+    String name,
+    Vector2 anchor,
+    double stiffness, {
+    double restLength = 0,
+  }) {
     final displacement = position - anchor;
     final distance = displacement.length;
     final extension = distance - restLength;
@@ -258,8 +274,12 @@ extension CommonForces on SimpleForces {
   }
 
   /// Add repulsion force from a point
-  void addRepulsionForce(String name, Vector2 source, double strength,
-      {double minDistance = 10}) {
+  void addRepulsionForce(
+    String name,
+    Vector2 source,
+    double strength, {
+    double minDistance = 10,
+  }) {
     final toTarget = position - source;
     final distance = max(toTarget.length, minDistance);
 
