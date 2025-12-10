@@ -29,6 +29,7 @@ import 'package:example/pages/player/platform/platform_player_page.dart';
 import 'package:example/pages/player/rotation/rotation_player_page.dart';
 import 'package:example/pages/player/simple/simple_player_page.dart';
 import 'package:example/pages/shader/shader_page.dart';
+import 'package:example/pages/simple_test/simple_game_test.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -254,6 +255,15 @@ class _HomePageState extends State<HomePage> {
             builder: (_) => const PathFindingPage(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/path_finding',
+          ),
+        ],
+      ),
+      SectionDrawer(
+        itens: [
+          ItemDrawer(
+            name: 'Simple',
+            builder: (_) => const SimpleGameTest(),
+            codeUrl: '',
           ),
         ],
       ),

@@ -53,7 +53,7 @@ mixin SimpleCollision on SimpleMovement {
   void _correctPosition(CollisionData collisionData) {
     var depth = collisionData.depth.abs();
     if (depth > 0) {
-      depth += 0.01; // Small margin to prevent sticking
+      depth += 0.05; // Small margin to prevent sticking
     }
 
     final correction = -collisionData.normal * depth;
