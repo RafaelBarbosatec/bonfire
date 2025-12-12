@@ -2,14 +2,15 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
 class SimplePM extends GameComponent
-    with SimpleMovement, SimpleCollision, PlayerControllerListener {
+    with
+        SimpleMovement,
+        SimpleCollision,
+        SimpleElasticCollision,
+        PlayerControllerListener {
   SimplePM() {
     size = Vector2(50, 50);
     position = Vector2(0, 0);
     speed = 100;
-    setupCollision(
-      bodyType: BodyType.dynamic,
-    );
   }
   @override
   void render(Canvas canvas) {
@@ -18,16 +19,6 @@ class SimplePM extends GameComponent
       paint..color = Colors.blue,
     );
     super.render(canvas);
-  }
-
-  @override
-  void onMovementBlocked(PositionComponent other, CollisionData collisionData) {
-    print('Colisão detectada com: ${other.runtimeType}');
-    print('Posição do player: $position');
-    print('Posição do outro objeto: ${other.position}');
-    // Para completamente o movimento quando há colisão
-    stop();
-    super.onMovementBlocked(other, collisionData);
   }
 
   @override
@@ -62,14 +53,10 @@ class SimplePM extends GameComponent
   }
 }
 
-class SimpleCollitionT extends GameComponent
-    with SimpleMovement, SimpleCollision {
+class SimpleCollitionT extends GameComponent {
   SimpleCollitionT() {
     size = Vector2(50, 50);
     position = Vector2(100, 100);
-    setupCollision(
-      bodyType: BodyType.static,
-    );
   }
 
   @override

@@ -53,6 +53,7 @@ mixin BlockMovementCollision on Movement {
         correction = -collisionData.normal * depth / 2;
       }
 
+      
       correctPositionFromCollision(position + correction);
     }
 

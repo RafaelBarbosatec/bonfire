@@ -1,197 +1,303 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/collision/collision_util.dart';
 
-/// Simplified collision system for SimpleMovement
-///
-/// This mixin adds collision detection and movement blocking to components
-/// using SimpleMovement. It's much simpler than the original BlockMovementCollision
-/// but covers the most common collision scenarios.
+/// Mixin responsible for adding stop the movement when happen collision
 mixin SimpleCollision on SimpleMovement {
-  BodyType _bodyType = BodyType.dynamic;
-  bool _collisionEnabled = true;
+  BodyType bodyType = BodyType.dynamic;
+  bool _blockMovementCollisionEnabled = true;
+  bool get blockMovementCollisionEnabled => _blockMovementCollisionEnabled;
+  final Map<SimpleCollision, CollisionData> _collisionsResolution = {};
   CollisionData? _lastCollisionData;
-
-  // Public getters
-  bool get collisionEnabled => _collisionEnabled;
   CollisionData? get lastCollisionData => _lastCollisionData;
-  BodyType get bodyType => _bodyType;
 
-  /// Setup collision behavior
-  void setupCollision({
-    bool? enabled,
-    BodyType? bodyType,
-  }) {
-    _collisionEnabled = enabled ?? _collisionEnabled;
-    _bodyType = bodyType ?? _bodyType;
+  void setupCollision({bool? enabled, BodyType? bodyType}) {
+    this.bodyType = bodyType ?? this.bodyType;
+    _blockMovementCollisionEnabled = enabled ?? _blockMovementCollisionEnabled;
   }
 
-  /// Override this to customize collision behavior
-  /// Return false to ignore this collision
-  bool shouldBlockMovement(
+  void setCollisionResolution(
+    SimpleCollision other,
+    CollisionData data,
+  ) {
+    _collisionsResolution[other] = data;
+  }
+
+  bool onBlockMovement(
     Set<Vector2> intersectionPoints,
     GameComponent other,
   ) {
     return true;
   }
 
-  /// Called when movement is blocked by collision
   void onMovementBlocked(
     PositionComponent other,
     CollisionData collisionData,
   ) {
     _lastCollisionData = collisionData;
 
-    // Only dynamic bodies get moved
-    if (_bodyType.isDynamic) {
-      _correctPosition(collisionData);
-      _adjustVelocity(collisionData);
+    if (bodyType.isDynamic) {
+      Vector2 correction;
+      var depth = collisionData.depth.abs();
+      if (depth > 0) {
+        depth += 0.08;
+      }
+
+      correction = -collisionData.normal * depth;
+      if ((other is SimpleCollision) && other.bodyType.isDynamic) {
+        correction = -collisionData.normal * depth / 2;
+      }
+
+      position += correction;
     }
+
+    velocity -= getVelocityReflection(other, collisionData);
   }
 
-  /// Correct position to resolve collision penetration
-  void _correctPosition(CollisionData collisionData) {
-    var depth = collisionData.depth.abs();
-    if (depth > 0) {
-      depth += 0.05; // Small margin to prevent sticking
+  Vector2 getVelocityReflection(
+    PositionComponent other,
+    CollisionData data,
+  ) {
+    if (bodyType.isStatic) {
+      return velocity;
     }
-
-    final correction = -collisionData.normal * depth;
-    position += correction;
-  }
-
-  /// Adjust velocity to stop movement into collision
-  void _adjustVelocity(CollisionData collisionData) {
-    if (_bodyType.isStatic) return;
-
-    // Remove velocity component that's moving into the collision
-    final velocityIntoCollision =
-        collisionData.normal * velocity.dot(collisionData.normal);
-
-    if (velocityIntoCollision.dot(collisionData.normal) > 0) {
-      velocity -= velocityIntoCollision;
-    }
+    return data.normal * velocity.dot(data.normal);
   }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    // Skip if collision disabled or other is a sensor
-    if (!_collisionEnabled || other is Sensor) {
+    if (other is Sensor || !_blockMovementCollisionEnabled) {
       super.onCollision(intersectionPoints, other);
       return;
     }
-
-    // Check if we should block this collision
-    final shouldBlock = other is GameComponent
-        ? shouldBlockMovement(intersectionPoints, other)
+    var stopOtherMovement = true;
+    final stopMovement = other is GameComponent
+        ? onBlockMovement(intersectionPoints, other)
         : true;
+    if (other is BlockMovementCollision) {
+      stopOtherMovement = other.onBlockMovement(
+        intersectionPoints,
+        this,
+      );
+    }
 
-    if (!shouldBlock) {
+    if (!stopMovement || !stopOtherMovement) {
       super.onCollision(intersectionPoints, other);
       return;
     }
 
-    // Calculate collision data
-    final collisionData = _calculateCollisionData(intersectionPoints, other);
-    if (collisionData != null) {
-      onMovementBlocked(other, collisionData);
+    if (_collisionsResolution.containsKey(other)) {
+      onMovementBlocked(
+        other,
+        _collisionsResolution[other]!,
+      );
+      _collisionsResolution.remove(other);
+      super.onCollision(intersectionPoints, other);
+      return;
     }
 
-    super.onCollision(intersectionPoints, other);
-  }
-
-  /// Calculate collision normal and depth (simplified version)
-  CollisionData? _calculateCollisionData(
-    Set<Vector2> intersectionPoints,
-    PositionComponent other,
-  ) {
-    if (intersectionPoints.isEmpty) return null;
-
-    final myHitbox = _getMainHitbox(shapeHitboxes, intersectionPoints);
-    final otherHitbox = _getMainHitbox(
+    final shape1 = _getCollisionShapeHitbox(
+      shapeHitboxes,
+      intersectionPoints,
+    );
+    final shape2 = _getCollisionShapeHitbox(
       other.children.query<ShapeHitbox>(),
       intersectionPoints,
     );
 
-    if (myHitbox == null || otherHitbox == null) return null;
+    if (shape1 == null || shape2 == null) {
+      super.onCollision(intersectionPoints, other);
+      return;
+    }
 
-    // Simple collision resolution based on centers
-    final myCenter = myHitbox.absoluteCenter;
-    final otherCenter = otherHitbox.absoluteCenter;
-    final direction = myCenter - otherCenter;
+    ({Vector2 normal, double depth})? colisionResult;
 
-    if (direction.isZero()) {
-      // Fallback if centers are the same
-      return CollisionData(
-        normal: Vector2(1, 0), // Default to right
-        depth: 1.0,
+    if (_isPolygon(shape1)) {
+      if (_isPolygon(shape2)) {
+        colisionResult = _intersectPolygons(shape1, shape2, other);
+      } else if (shape2 is CircleHitbox) {
+        colisionResult = _intersectCirclePolygon(shape1, shape2, other);
+      }
+    } else if (shape1 is CircleHitbox) {
+      if (_isPolygon(shape2)) {
+        colisionResult = _intersectCirclePolygon(
+          shape2,
+          shape1,
+          other,
+          inverted: true,
+        );
+      } else if (shape2 is CircleHitbox) {
+        colisionResult = _intersectCircles(shape1, shape2);
+      }
+    }
+
+    if (colisionResult != null) {
+      final data = CollisionData(
+        normal: colisionResult.normal,
+        depth: colisionResult.depth,
         intersectionPoints: intersectionPoints.toList(),
-        direction: Direction.right,
+        direction: colisionResult.normal.toDirection(),
       );
+      onMovementBlocked(other, data);
+      if (other is SimpleCollision) {
+        other.setCollisionResolution(this, data.inverted());
+      }
     }
+    super.onCollision(intersectionPoints, other);
+  }
 
-    final normal = direction.normalized();
-    final depth = _calculateCollisionDepth(myHitbox, otherHitbox);
+  bool _isPolygon(ShapeHitbox shape) {
+    return shape is RectangleHitbox || shape is PolygonHitbox;
+  }
 
-    return CollisionData(
-      normal: normal,
-      depth: depth,
-      intersectionPoints: intersectionPoints.toList(),
-      direction: normal.toDirection(),
+  ({Vector2 normal, double depth}) _intersectPolygons(
+    ShapeHitbox shapeA,
+    ShapeHitbox shapeB,
+    PositionComponent other,
+  ) {
+    var normal = Vector2.zero();
+    var depth = double.maxFinite;
+
+    final verticesA = CollisionUtil.getPolygonVertices(shapeA);
+    final verticesB = CollisionUtil.getPolygonVertices(shapeB);
+
+    final normalAndDepthA = CollisionUtil.getNormalAndDepth(
+      verticesA,
+      verticesB,
     );
-  }
 
-  /// Calculate collision depth (simplified)
-  double _calculateCollisionDepth(ShapeHitbox hitbox1, ShapeHitbox hitbox2) {
-    // Simple depth calculation based on distance and sizes
-    final distance = hitbox1.absoluteCenter.distanceTo(hitbox2.absoluteCenter);
+    if (normalAndDepthA.depth < depth) {
+      depth = normalAndDepthA.depth;
+      normal = normalAndDepthA.normal;
+    }
+    final normalAndDepthB = CollisionUtil.getNormalAndDepth(
+      verticesB,
+      verticesA,
+      insverted: true,
+    );
 
-    if (hitbox1 is CircleHitbox && hitbox2 is CircleHitbox) {
-      final combinedRadius = hitbox1.radius + hitbox2.radius;
-      return max(0, combinedRadius - distance);
+    if (normalAndDepthB.depth < depth) {
+      depth = normalAndDepthB.depth;
+      normal = normalAndDepthB.normal;
     }
 
-    // For rectangles/polygons, use a simplified approach
-    final avgSize1 = _getAverageSize(hitbox1);
-    final avgSize2 = _getAverageSize(hitbox2);
-    final combinedSize = (avgSize1 + avgSize2) / 2;
+    final direction = shapeB.absoluteCenter - shapeA.absoluteCenter;
 
-    return max(0, combinedSize - distance);
-  }
-
-  /// Get average size of a hitbox
-  double _getAverageSize(ShapeHitbox hitbox) {
-    if (hitbox is CircleHitbox) {
-      return hitbox.radius;
-    } else if (hitbox is RectangleHitbox) {
-      return (hitbox.size.x + hitbox.size.y) / 4; // Quarter of perimeter
+    if (direction.dot(normal) < 0) {
+      normal = -normal;
     }
-    // Fallback for other shapes
-    return 10.0;
+
+    return (normal: normal, depth: depth);
   }
 
-  /// Get the main hitbox for collision (prefer closest to intersection)
-  ShapeHitbox? _getMainHitbox(
-    Iterable<ShapeHitbox> hitboxes,
+  ({Vector2 normal, double depth}) _intersectCirclePolygon(
+    ShapeHitbox shapeA,
+    CircleHitbox shapeB,
+    PositionComponent other, {
+    bool inverted = false,
+  }) {
+    var normal = Vector2.zero();
+    var depth = double.maxFinite;
+    var axis = Vector2.zero();
+    var axisDepth = 0.0;
+
+    final vertices = CollisionUtil.getPolygonVertices(shapeA);
+
+    for (var i = 0; i < vertices.length; i++) {
+      final va = vertices[i];
+      final vb = vertices[(i + 1) % vertices.length];
+
+      final edge = vb - va;
+      axis = Vector2(-edge.y, edge.x);
+      axis = axis.normalized();
+
+      final pA = CollisionUtil.projectVertices(vertices, axis);
+      final pB = CollisionUtil.projectCircle(
+        shapeB.absoluteCenter,
+        shapeB.radius,
+        axis,
+      );
+
+      axisDepth = min(pB.max - pA.min, pA.max - pB.min);
+
+      if (axisDepth < depth) {
+        depth = axisDepth;
+        normal = axis;
+      }
+    }
+
+    final cpIndex = CollisionUtil.findClosesPointOnPolygon(
+      shapeB.absoluteCenter,
+      vertices,
+    );
+    final cp = vertices[cpIndex];
+
+    axis = cp - shapeB.absoluteCenter;
+    axis = axis.normalized();
+
+    final pA = CollisionUtil.projectVertices(vertices, axis);
+    final pB = CollisionUtil.projectCircle(
+      shapeB.absoluteCenter,
+      shapeB.radius,
+      axis,
+    );
+
+    axisDepth = min(pB.max - pA.min, pA.max - pB.min);
+
+    if (axisDepth < depth) {
+      depth = axisDepth;
+      normal = axis;
+    }
+
+    final direction = inverted
+        ? shapeA.absoluteCenter - shapeB.absoluteCenter
+        : shapeB.absoluteCenter - shapeA.absoluteCenter;
+
+    if (direction.dot(normal) < 0) {
+      normal = -normal;
+    }
+
+    return (normal: normal, depth: depth);
+  }
+
+  ({Vector2 normal, double depth}) _intersectCircles(
+    CircleHitbox shapeA,
+    CircleHitbox shapeB,
+  ) {
+    var normal = Vector2.zero();
+    var depth = double.maxFinite;
+
+    final distance = shapeA.absoluteCenter.distanceTo(shapeB.absoluteCenter);
+    final radii = shapeA.radius + shapeB.radius;
+
+    normal = (shapeB.absoluteCenter - shapeA.absoluteCenter).normalized();
+    depth = radii - distance;
+
+    return (normal: normal, depth: depth);
+  }
+
+  ShapeHitbox? _getCollisionShapeHitbox(
+    Iterable<ShapeHitbox> shapeHitboxes,
     Set<Vector2> intersectionPoints,
   ) {
-    if (hitboxes.isEmpty || intersectionPoints.isEmpty) return null;
-    if (hitboxes.length == 1) return hitboxes.first;
-
-    // Find hitbox closest to intersection points
-    ShapeHitbox? closest;
-    var closestDistance = double.infinity;
-
-    for (final hitbox in hitboxes) {
-      for (final point in intersectionPoints) {
-        final distance = hitbox.absoluteCenter.distanceTo(point);
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closest = hitbox;
+    if (shapeHitboxes.isEmpty || intersectionPoints.isEmpty) {
+      return null;
+    }
+    if (shapeHitboxes.length == 1) {
+      return shapeHitboxes.first;
+    }
+    final distances = <ShapeHitbox, double>{};
+    for (final hitbox in shapeHitboxes) {
+      for (final element in intersectionPoints) {
+        distances[hitbox] = hitbox.absoluteCenter.distanceTo(element);
+        if (hitbox.containsPoint(element)) {
+          return hitbox;
         }
       }
     }
 
-    return closest;
+    return distances.entries.reduce((a, b) => a.value < b.value ? a : b).key;
   }
 }

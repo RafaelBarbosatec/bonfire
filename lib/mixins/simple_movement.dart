@@ -15,7 +15,7 @@ mixin SimpleMovement on GameComponent {
 
   double speed = defaultSpeed;
   Vector2 _velocity = Vector2.zero();
-  Direction lastDirection = Direction.right;
+  Direction direction = Direction.right;
 
   // Essential getters
   Vector2 get velocity => _velocity;
@@ -26,7 +26,7 @@ mixin SimpleMovement on GameComponent {
   set velocity(Vector2 newVelocity) {
     _velocity = newVelocity;
     if (!newVelocity.isZero()) {
-      lastDirection = _getDirectionFromVelocity(newVelocity);
+      direction = _getDirectionFromVelocity(newVelocity);
     }
   }
 
