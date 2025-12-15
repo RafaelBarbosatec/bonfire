@@ -6,17 +6,22 @@ class SimplePM extends GameComponent
         SimpleMovement,
         SimpleCollision,
         SimpleElasticCollision,
-        PlayerControllerListener {
-  SimplePM() {
+        PlayerControllerListener,
+        SimpleForces {
+  SimplePM({Vector2? position}) {
     size = Vector2(50, 50);
-    position = Vector2(0, 0);
+    this.position = position ?? Vector2(100, 0);
     speed = 100;
+
     makeBasketball();
+    enableEarthGravity();
+    // enableHighFriction();
   }
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(
-      Rect.fromLTWH(0, 0, size.x, size.y),
+    canvas.drawCircle(
+      Offset(size.x / 2, size.y / 2),
+      size.x / 2,
       paint..color = Colors.blue,
     );
     super.render(canvas);
@@ -44,8 +49,8 @@ class SimplePM extends GameComponent
   @override
   Future<void> onLoad() {
     add(
-      RectangleHitbox(
-        size: size,
+      CircleHitbox(
+        radius: size.x / 2,
         position: Vector2(0, 0),
         isSolid: true,
       ),
@@ -56,8 +61,36 @@ class SimplePM extends GameComponent
 
 class SimpleCollitionT extends GameComponent {
   SimpleCollitionT() {
-    size = Vector2(50, 50);
-    position = Vector2(100, 100);
+    size = Vector2(300, 50);
+    position = Vector2(0, 250);
+  }
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, size.x, size.y),
+      paint..color = Colors.red.withOpacity(0.5),
+    );
+    super.render(canvas);
+  }
+
+  @override
+  Future<void> onLoad() {
+    add(
+      RectangleHitbox(
+        size: size,
+        position: Vector2(0, 0),
+        isSolid: true,
+      ),
+    );
+    return super.onLoad();
+  }
+}
+
+class SimpleCollitionV extends GameComponent {
+  SimpleCollitionV({Vector2? position}) {
+    size = Vector2(50, 300);
+    this.position = position ?? Vector2(-50, 0);
   }
 
   @override

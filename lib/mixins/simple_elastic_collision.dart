@@ -20,7 +20,7 @@ mixin SimpleElasticCollision on SimpleCollision {
   }) {
     _bouncingObjectEnabled = enabled ?? _bouncingObjectEnabled;
     _minBounceVelocity = minBounceVelocity ?? _minBounceVelocity;
-    this.bounciness = bounciness ?? this.bounciness;
+    this.bounciness = (bounciness ?? this.bounciness).clamp(0.0, 1.0);
     _restitution = this.bounciness * baseRestitution;
   }
 

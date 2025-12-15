@@ -90,7 +90,7 @@ class TriggerArea extends GameComponent
   }
 
   @override
-  bool shouldBlockMovement(
+  bool onBlockMovement(
     Set<Vector2> intersectionPoints,
     GameComponent other,
   ) {
@@ -110,7 +110,7 @@ class OneWayPlatform extends GameComponent
   }
 
   @override
-  bool shouldBlockMovement(
+  bool onBlockMovement(
     Set<Vector2> intersectionPoints,
     GameComponent other,
   ) {
@@ -119,29 +119,6 @@ class OneWayPlatform extends GameComponent
       return other.velocity.y > 0; // Moving down
     }
     return true;
-  }
-}
-
-// Example 6: Bouncy object
-class BouncyBall extends GameComponent
-    with SimpleMovement, SimpleCollision, HasCollisionDetection {
-  BouncyBall({required Vector2 position}) {
-    this.position = position;
-    add(CircleHitbox(radius: 16));
-    setupCollision(bodyType: BodyType.dynamic);
-
-    // Start with some initial velocity
-    velocity = Vector2(100, -150);
-  }
-
-  @override
-  void onMovementBlocked(PositionComponent other, CollisionData collisionData) {
-    super.onMovementBlocked(other, collisionData);
-
-    // Bounce off surfaces
-    final reflection = velocity -
-        (collisionData.normal * (2 * velocity.dot(collisionData.normal)));
-    velocity = reflection * 0.8; // Lose some energy
   }
 }
 

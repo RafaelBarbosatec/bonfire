@@ -11,7 +11,15 @@ class SimpleGameTest extends StatelessWidget {
     final p = SimplePM();
     return BonfireWidget(
       map: EmptyWorldMap(),
-      components: [p, SimpleCollitionT()],
+      components: [
+        p,
+        SimplePM(position: Vector2(125, -100)),
+        SimplePM(position: Vector2(75, -50)),
+        SimplePM(position: Vector2(75, -200)),
+        SimpleCollitionT(),
+        SimpleCollitionV(),
+        SimpleCollitionV(position: Vector2(300, 0))
+      ],
       debugMode: true,
       playerControllers: [
         Keyboard(
