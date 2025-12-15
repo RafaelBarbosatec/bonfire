@@ -11,6 +11,7 @@ class SimplePM extends GameComponent
     size = Vector2(50, 50);
     position = Vector2(0, 0);
     speed = 100;
+    makeBasketball();
   }
   @override
   void render(Canvas canvas) {

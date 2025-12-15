@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/simple_movement.dart';
 
 /// Simple physics forces for SimpleMovement
 ///

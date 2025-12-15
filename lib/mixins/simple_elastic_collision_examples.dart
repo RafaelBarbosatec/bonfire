@@ -203,7 +203,7 @@ class Trampoline extends GameComponent
   }
 
   @override
-  bool shouldBlockMovement(Set<Vector2> points, GameComponent other) {
+  bool onBlockMovement(Set<Vector2> points, GameComponent other) {
     // Give extra bounce to elastic objects
     if (other is SimpleElasticCollision) {
       // Add extra upward velocity (trampoline effect)

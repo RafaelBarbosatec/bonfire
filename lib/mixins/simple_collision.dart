@@ -52,7 +52,6 @@ mixin SimpleCollision on SimpleMovement {
 
       position += correction;
     }
-
     velocity -= getVelocityReflection(other, collisionData);
   }
 
