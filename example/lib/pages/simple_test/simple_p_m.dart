@@ -13,7 +13,7 @@ class SimplePM extends GameComponent
     this.position = position ?? Vector2(100, 0);
     speed = 100;
 
-    makeBasketball();
+    makePingPongBall();
     enableEarthGravity();
     // enableHighFriction();
   }
