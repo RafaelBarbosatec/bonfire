@@ -32,13 +32,28 @@ mixin SimpleForces on SimpleMovement {
     double? mass,
     double? dragCoefficient,
     bool? enabled,
+    Vector2? gravity,
+    Vector2? wind,
+    Vector2? friction,
   }) {
-    if (mass != null) {
-      assert(mass > 0, 'Mass must be positive');
-      _mass = mass;
-    }
-    _dragCoefficient = (dragCoefficient ?? _dragCoefficient).clamp(0.0, 1.0);
     _forcesEnabled = enabled ?? _forcesEnabled;
+
+    if (mass != null) {
+      setMass(mass);
+    }
+    if (dragCoefficient != null) {
+      setDragCoefficient(dragCoefficient);
+    }
+
+    if (gravity != null) {
+      setGravity(gravity);
+    }
+    if (wind != null) {
+      setWind(wind);
+    }
+    if (friction != null) {
+      setFriction(friction);
+    }
   }
 
   /// Set gravity force (pixels/second²)
@@ -57,6 +72,17 @@ mixin SimpleForces on SimpleMovement {
       friction.x.clamp(0.0, 1.0),
       friction.y.clamp(0.0, 1.0),
     );
+  }
+
+  /// Set air drag coefficient (0.0 to 1.0)
+  void setDragCoefficient(double coefficient) {
+    _dragCoefficient = coefficient.clamp(0.0, 1.0);
+  }
+
+  /// Set mass of the object
+  void setMass(double mass) {
+    assert(mass > 0, 'Mass must be positive');
+    _mass = mass;
   }
 
   /// Add a custom force by name
