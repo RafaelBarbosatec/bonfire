@@ -93,7 +93,15 @@ mixin SimpleMovement on GameComponent {
   }
 
   // Optional callback - override if you need movement events
-  void onMove() {}
+  void onMove() {
+    _requestUpdatePriority();
+  }
+
+  void _requestUpdatePriority() {
+    if (hasGameRef && direction.isVertical) {
+      (gameRef as BonfireGame).requestUpdatePriority();
+    }
+  }
 }
 
 /// Extension methods for even simpler usage
