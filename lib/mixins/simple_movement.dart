@@ -287,4 +287,79 @@ extension SimpleMovementHelpers on SimpleMovement {
           null,
     );
   }
+
+  /// Move component towards a target position with smart pathfinding
+  ///
+  /// This is an improved version of moveToPosition that:
+  /// - Uses more precise distance calculations
+  /// - Has better diagonal movement logic
+  /// - Cleaner code structure and better performance
+  /// - Returns true if movement occurred, false if already at target
+  bool moveToPosition(
+    Vector2 targetPosition, {
+    double? speed,
+    bool useCenter = true,
+  }) {
+    final moveSpeed = speed ?? this.speed;
+    final diagonalSpeed = moveSpeed * diagonalFactor;
+    final rect = rectCollision;
+
+    // Get current position (center or top-left based on useCenter)
+    final currentPos = useCenter ? rect.centerVector2 : rect.positionVector2;
+
+    // Calculate the difference vector
+    final diff = targetPosition - currentPos;
+
+    // Calculate movement thresholds based on speed and delta time
+    final dtSpeed = moveSpeed * lastDt * 1.1; // Add small buffer
+    final dtDiagonalSpeed = diagonalSpeed * lastDt * 1.1;
+
+    // Check if we're close enough to the target (arrived)
+    if (diff.length < dtSpeed) {
+      stop(); // Stop moving when we arrive
+      return false;
+    }
+
+    final absDiffX = diff.x.abs();
+    final absDiffY = diff.y.abs();
+
+    // Determine movement type and execute
+    if (absDiffX > dtDiagonalSpeed && absDiffY > dtDiagonalSpeed) {
+      // Diagonal movement - both components are significant
+      _executeDiagonalMove(diff, moveSpeed);
+    } else if (absDiffX > dtSpeed) {
+      // Horizontal movement only
+      if (diff.x > 0) {
+        moveRight(speed: moveSpeed);
+      } else {
+        moveLeft(speed: moveSpeed);
+      }
+    } else if (absDiffY > dtSpeed) {
+      // Vertical movement only
+      if (diff.y > 0) {
+        moveDown(speed: moveSpeed);
+      } else {
+        moveUp(speed: moveSpeed);
+      }
+    } else {
+      // Very close - make a direct translation to avoid oscillation
+      final directMovement = diff.normalized() * dtSpeed;
+      position += directMovement;
+    }
+
+    return true;
+  }
+
+  /// Execute diagonal movement with proper speed normalization
+  void _executeDiagonalMove(Vector2 diff, double speed) {
+    if (diff.x > 0 && diff.y > 0) {
+      moveDownRight(speed: speed);
+    } else if (diff.x < 0 && diff.y > 0) {
+      moveDownLeft(speed: speed);
+    } else if (diff.x > 0 && diff.y < 0) {
+      moveUpRight(speed: speed);
+    } else if (diff.x < 0 && diff.y < 0) {
+      moveUpLeft(speed: speed);
+    }
+  }
 }
