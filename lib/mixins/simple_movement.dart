@@ -158,4 +158,133 @@ extension SimpleMovementHelpers on SimpleMovement {
         break;
     }
   }
+
+  /// Check if the component can move in the specified direction without collision
+  ///
+  /// This is an optimized version of the canMove function that:
+  /// - Uses fewer raycasts for better performance
+  /// - Has cleaner collision detection logic
+  /// - Properly handles diagonal movement checking
+  bool canMove(
+    Direction direction, {
+    double? displacement,
+    Iterable<ShapeHitbox>? ignoreHitboxes,
+  }) {
+    // Calculate maximum distance to check based on speed and delta time
+    final maxDistance = displacement ?? (speed * (lastDt * 2));
+
+    // For diagonal directions, check both component directions
+    switch (direction) {
+      case Direction.upLeft:
+        return canMove(
+              Direction.up,
+              displacement: maxDistance,
+              ignoreHitboxes: ignoreHitboxes,
+            ) &&
+            canMove(
+              Direction.left,
+              displacement: maxDistance,
+              ignoreHitboxes: ignoreHitboxes,
+            );
+      case Direction.upRight:
+        return canMove(
+              Direction.up,
+              displacement: maxDistance,
+              ignoreHitboxes: ignoreHitboxes,
+            ) &&
+            canMove(
+              Direction.right,
+              displacement: maxDistance,
+              ignoreHitboxes: ignoreHitboxes,
+            );
+      case Direction.downLeft:
+        return canMove(
+              Direction.down,
+              displacement: maxDistance,
+              ignoreHitboxes: ignoreHitboxes,
+            ) &&
+            canMove(
+              Direction.left,
+              displacement: maxDistance,
+              ignoreHitboxes: ignoreHitboxes,
+            );
+      case Direction.downRight:
+        return canMove(
+              Direction.down,
+              displacement: maxDistance,
+              ignoreHitboxes: ignoreHitboxes,
+            ) &&
+            canMove(
+              Direction.right,
+              displacement: maxDistance,
+              ignoreHitboxes: ignoreHitboxes,
+            );
+      case Direction.up:
+      case Direction.down:
+      case Direction.left:
+      case Direction.right:
+        return !_hasCollisionInDirection(
+          direction,
+          maxDistance,
+          ignoreHitboxes,
+        );
+    }
+  }
+
+  /// Optimized collision detection for a single direction
+  /// Uses strategic raycast points for more accurate collision detection
+  bool _hasCollisionInDirection(
+    Direction direction,
+    double maxDistance,
+    Iterable<ShapeHitbox>? ignoreHitboxes,
+  ) {
+    final rect = rectCollision;
+    final center = rect.center.toVector2();
+    final size = rect.sizeVector2;
+    final directionVector = direction.toVector2();
+
+    // Calculate strategic raycast origins and extend distance
+    List<Vector2> origins;
+    var extendedDistance = maxDistance;
+
+    switch (direction) {
+      case Direction.left:
+      case Direction.right:
+        // For horizontal movement, check top, center, and bottom edges
+        final halfY = size.y / 2;
+        extendedDistance += size.x / 2; // Account for component width
+        origins = [
+          center.translated(0, -halfY * 0.8), // Near top
+          center, // Center
+          center.translated(0, halfY * 0.8), // Near bottom
+        ];
+        break;
+      case Direction.up:
+      case Direction.down:
+        // For vertical movement, check left, center, and right edges
+        final halfX = size.x / 2;
+        extendedDistance += size.y / 2; // Account for component height
+        origins = [
+          center.translated(-halfX * 0.8, 0), // Near left
+          center, // Center
+          center.translated(halfX * 0.8, 0), // Near right
+        ];
+        break;
+      default:
+        // This shouldn't happen for cardinal directions
+        origins = [center];
+    }
+
+    // Check if any raycast hits a collision
+    return origins.any(
+      (origin) =>
+          raycast(
+            directionVector,
+            maxDistance: extendedDistance,
+            origin: origin,
+            ignoreHitboxes: ignoreHitboxes,
+          ) !=
+          null,
+    );
+  }
 }
