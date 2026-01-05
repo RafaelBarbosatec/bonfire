@@ -98,24 +98,26 @@ mixin SimpleMovement on GameComponent {
 
 /// Extension methods for even simpler usage
 extension SimpleMovementHelpers on SimpleMovement {
+  static const double diagonalFactor = 0.7071; // 1/sqrt(2)
   // Diagonal movements (for those who need them)
   void moveUpRight({double? speed}) {
-    final moveSpeed = (speed ?? this.speed) * 0.707; // Normalize diagonal
+    final moveSpeed =
+        (speed ?? this.speed) * diagonalFactor; // Normalize diagonal
     velocity = Vector2(moveSpeed, -moveSpeed);
   }
 
   void moveUpLeft({double? speed}) {
-    final moveSpeed = (speed ?? this.speed) * 0.707;
+    final moveSpeed = (speed ?? this.speed) * diagonalFactor;
     velocity = Vector2(-moveSpeed, -moveSpeed);
   }
 
   void moveDownRight({double? speed}) {
-    final moveSpeed = (speed ?? this.speed) * 0.707;
+    final moveSpeed = (speed ?? this.speed) * diagonalFactor;
     velocity = Vector2(moveSpeed, moveSpeed);
   }
 
   void moveDownLeft({double? speed}) {
-    final moveSpeed = (speed ?? this.speed) * 0.707;
+    final moveSpeed = (speed ?? this.speed) * diagonalFactor;
     velocity = Vector2(-moveSpeed, moveSpeed);
   }
 
