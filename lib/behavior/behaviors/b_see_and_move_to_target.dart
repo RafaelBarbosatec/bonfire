@@ -28,7 +28,7 @@ class BSeeAndMoveToTarget extends Behavior {
       doElseBehavior: BCustom(
         behavior: (dt, comp, game) {
           if (comp is Movement && doElseBehavior == null) {
-            comp.stopMove();
+            comp.stop();
           }
           return doElseBehavior?.runAction(dt, comp, game) ?? true;
         },
@@ -42,7 +42,7 @@ class BSeeAndMoveToTarget extends Behavior {
           doBehavior: BAction(
             action: (dt, comp, game) {
               if (comp is Movement) {
-                comp.stopMove();
+                comp.stop();
               }
               onClose(dt, comp);
             },

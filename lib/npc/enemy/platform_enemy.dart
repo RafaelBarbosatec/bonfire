@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
 class PlatformEnemy extends SimpleEnemy
-    with BlockMovementCollision, Jumper, JumperAnimation {
+    with SimpleCollision, Jumper, JumperAnimation {
   PlatformEnemy({
     required super.position,
     required super.size,

@@ -216,7 +216,7 @@ mixin PathFinding on Movement {
     Iterable<(int, int)> result = [];
 
     if (_barriers.contains(targetPosition)) {
-      stopMove();
+      stop();
       return [];
     }
 
@@ -322,7 +322,7 @@ mixin PathFinding on Movement {
     if (_currentIndex < _currentPath.length - 1) {
       _currentIndex++;
     } else {
-      stopMove();
+      stop();
     }
   }
 

@@ -6,7 +6,7 @@ import 'package:bonfire/bonfire.dart';
 ///
 /// This mixin adds realistic physics forces like gravity, friction, wind, etc.
 /// It's much simpler than the original HandleForces but covers most common cases.
-mixin SimpleForces on SimpleMovement {
+mixin Forces on Movement {
   double _mass = 1.0;
   double _dragCoefficient = 0.01; // Air resistance
   bool _forcesEnabled = true;
@@ -250,7 +250,7 @@ mixin SimpleForces on SimpleMovement {
 }
 
 /// Extension for common force patterns
-extension CommonForces on SimpleForces {
+extension CommonForces on Forces {
   /// Add temporary impulse force (like explosion, jump, etc.)
   void addImpulse(String name, Vector2 force, {double duration = 0.1}) {
     addForce(name, force);

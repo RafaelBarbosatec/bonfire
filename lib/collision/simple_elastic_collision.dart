@@ -50,8 +50,8 @@ mixin SimpleElasticCollision on SimpleCollision {
 
       var j = -(1 + e) * relativeVelocity.dot(data.normal);
 
-      final mass = (this is HandleForces) ? (this as HandleForces).mass : 1;
-      final massB = (other is HandleForces) ? other.mass : 1;
+      final mass = (this is Forces) ? (this as Forces).mass : 1;
+      final massB = (other is Forces) ? other.mass : 1;
       j /= mass + massB;
 
       final impulse = data.normal * j;

@@ -25,7 +25,7 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
   double _currentDirectionalAngle = 0;
   double _joystickAngle = 0;
   double _lastSpeed = 0;
-  double get _lastSpeedDiagonal => _lastSpeed * Movement.diaginalReduction;
+  double get _lastSpeedDiagonal => _lastSpeed * Movement.diagonalFactor;
 
   /// the angle the player should move in 360 mode
   double movementByJoystickRadAngle = 0;
@@ -136,7 +136,7 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
       case JoystickMoveDirectional.IDLE:
         if (!_isIdle) {
           _isIdle = true;
-          stopMove(forceIdle: true);
+          stop();
         }
         break;
     }
@@ -145,11 +145,11 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
   void _moveAngle(double speed) {
     if (_currentDirectional != JoystickMoveDirectional.IDLE) {
       _isIdle = false;
-      moveFromAngle(movementByJoystickRadAngle, speed: speed);
+      moveByAngle(movementByJoystickRadAngle, speed: speed);
     } else {
       if (!_isIdle) {
         _isIdle = true;
-        stopMove(forceIdle: true);
+        stop();
       }
     }
   }

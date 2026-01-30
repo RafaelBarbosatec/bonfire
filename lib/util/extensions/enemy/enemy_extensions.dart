@@ -23,7 +23,7 @@ extension EnemyExtensions on Enemy {
     final direct = direction ??
         (gameRef.player != null
             ? getDirectionToTarget(gameRef.player!)
-            : lastDirection);
+            : direction!);
 
     simpleAttackMeleeByDirection(
       damage: damage,
@@ -80,7 +80,7 @@ extension EnemyExtensions on Enemy {
     } else {
       final direct = gameRef.player != null
           ? getDirectionToTarget(gameRef.player!)
-          : lastDirection;
+          : direction;
       simpleAttackRangeByDirection(
         animationRight: animation,
         animationDestroy: animationDestroy,
@@ -138,14 +138,10 @@ extension EnemyExtensions on Enemy {
           );
           if (inDistance) {
             final playerDirection = getDirectionToTarget(player);
-            lastDirection = playerDirection;
-            if (lastDirection == Direction.left ||
-                lastDirection == Direction.right) {
-              lastDirectionHorizontal = lastDirection;
-            }
+            direction = playerDirection;
 
             if (checkInterval('seeAndMoveToAttackRange', 500, lastDt)) {
-              stopMove();
+              stop();
             }
             positioned?.call(player);
           }
@@ -156,14 +152,10 @@ extension EnemyExtensions on Enemy {
             radiusVision: radiusVision,
             positioned: (player) {
               final playerDirection = getDirectionToTarget(player);
-              lastDirection = playerDirection;
-              if (lastDirection == Direction.left ||
-                  lastDirection == Direction.right) {
-                lastDirectionHorizontal = lastDirection;
-              }
+              direction = playerDirection;
 
               if (checkInterval('seeAndMoveToAttackRange', 500, lastDt)) {
-                stopMove();
+                stop();
               }
               positioned?.call(player);
             },
@@ -171,9 +163,9 @@ extension EnemyExtensions on Enemy {
         }
       },
       notObserved: () {
-        final stop = notObserved?.call() ?? true;
-        if (stop) {
-          stopMove(forceIdle: true);
+        final canStop = notObserved?.call() ?? true;
+        if (canStop) {
+          stop();
         }
       },
     );

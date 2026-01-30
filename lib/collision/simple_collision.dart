@@ -3,9 +3,11 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/collision_util.dart';
+export 'body_type.dart';
+export 'collision_data.dart';
 
 /// Mixin responsible for adding stop the movement when happen collision
-mixin SimpleCollision on SimpleMovement {
+mixin SimpleCollision on Movement {
   BodyType bodyType = BodyType.dynamic;
   bool _blockMovementCollisionEnabled = true;
   bool get blockMovementCollisionEnabled => _blockMovementCollisionEnabled;
@@ -75,7 +77,7 @@ mixin SimpleCollision on SimpleMovement {
     final stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
         : true;
-    if (other is BlockMovementCollision) {
+    if (other is SimpleCollision) {
       stopOtherMovement = other.onBlockMovement(
         intersectionPoints,
         this,

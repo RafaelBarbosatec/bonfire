@@ -44,16 +44,16 @@ extension RotationEnemyExtensions on RotationAlly {
 
         if (rectCollision.overlaps(rectPlayerCollision)) {
           closePlayer(player);
-          stopMove();
+          stop();
           return;
         }
 
-        moveFromAngle(radAngle);
+        moveByAngle(radAngle);
       },
       notObserved: () {
-        final stop = notObserved?.call() ?? true;
-        if (stop) {
-          stopMove();
+        final canStop = notObserved?.call() ?? true;
+        if (canStop) {
+          stop();
         }
       },
     );

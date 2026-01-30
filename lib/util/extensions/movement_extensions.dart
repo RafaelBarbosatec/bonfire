@@ -19,7 +19,7 @@ extension MovementExtensions on Movement {
 
     if (rectCollision.overlaps(rectPlayerCollision)) {
       close?.call();
-      stopMove();
+      stop();
       return false;
     }
 
@@ -34,13 +34,13 @@ extension MovementExtensions on Movement {
     if (newDirectionToMove != null) {
       directionToMove = newDirectionToMove;
     } else {
-      stopMove();
+      stop();
       return false;
     }
 
     if (canMove(directionToMove, ignoreHitboxes: target.shapeHitboxes)) {
-      if (directionToMove != lastDirection) {
-        setZeroVelocity();
+      if (directionToMove != direction) {
+        stop();
       }
       moveFromDirection(directionToMove);
       return true;
@@ -88,7 +88,7 @@ extension MovementExtensions on Movement {
           }
           break;
       }
-      stopMove();
+      stop();
       return false;
     }
   }
@@ -103,7 +103,7 @@ extension MovementExtensions on Movement {
 
     if (distance < minDistance) {
       final angle = getAngleToTarget(target);
-      moveFromAngle(angle + pi);
+      moveByAngle(angle + pi);
       return false;
     }
     return true;
@@ -168,8 +168,8 @@ extension MovementExtensions on Movement {
       translateY = translateY * -1;
     }
 
-    if (translateX.abs() < dtSpeed && translateY.abs() < dtSpeed) {
-      stopMove();
+    if (translateX.abs() < 0.1 && translateY.abs() < 0.1) {
+      stop();
       positioned?.call(target);
       return false;
     } else {
@@ -208,26 +208,26 @@ extension MovementExtensions on Movement {
     } else if (translateX < 0 && translateY > 0) {
       moveDownLeft();
     } else {
-      if (translateX.abs() > dtSpeed) {
+      if (translateX.abs() > 0.1) {
         if (translateX > 0) {
           moveRight();
         } else if (translateX < 0) {
           moveLeft();
         }
-      } else if (translateX.abs() > dtSpeed / 2) {
+      } else if (translateX.abs() > 0.1 / 2) {
         if (translateX > 0) {
           moveRight(speed: speed / 2);
         } else if (translateX < 0) {
           moveLeft(speed: speed / 2);
         }
       }
-      if (translateY.abs() > dtSpeed) {
+      if (translateY.abs() > 0.1) {
         if (translateY > 0) {
           moveDown();
         } else if (translateY < 0) {
           moveUp();
         }
-      } else if (translateY.abs() > dtSpeed / 2) {
+      } else if (translateY.abs() > 0.1 / 2) {
         if (translateY > 0) {
           moveDown(speed: speed / 2);
         } else if (translateY < 0) {

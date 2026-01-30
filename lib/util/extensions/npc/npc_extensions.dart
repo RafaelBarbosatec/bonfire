@@ -38,7 +38,7 @@ extension NpcExtensions on Npc {
       notObserved: notObserved,
       radiusVision: radiusVision,
       visionAngle: visionAngle,
-      angle: angle ?? lastDirection.toRadians(),
+      angle: angle ?? direction.toRadians(),
     );
   }
 
@@ -79,9 +79,9 @@ extension NpcExtensions on Npc {
         }
       },
       notObserved: () {
-        final stop = notObserved?.call() ?? true;
-        if (stop) {
-          stopMove();
+        final canStop = notObserved?.call() ?? true;
+        if (canStop) {
+          stop();
         }
       },
     );
@@ -110,7 +110,7 @@ extension NpcExtensions on Npc {
     seeComponentType<Enemy>(
       radiusVision: radiusVision,
       visionAngle: visionAngle,
-      angle: angle ?? lastDirection.toRadians(),
+      angle: angle ?? direction.toRadians(),
       observed: (enemy) {
         observed?.call();
         final move = moveTowardsTarget(
@@ -126,9 +126,9 @@ extension NpcExtensions on Npc {
         }
       },
       notObserved: () {
-        final stop = notObserved?.call() ?? true;
-        if (stop) {
-          stopMove();
+        final canStop = notObserved?.call() ?? true;
+        if (canStop) {
+          stop();
         }
       },
     );
@@ -157,7 +157,7 @@ extension NpcExtensions on Npc {
     seeComponentType<Ally>(
       radiusVision: radiusVision,
       visionAngle: visionAngle,
-      angle: angle ?? lastDirection.toRadians(),
+      angle: angle ?? direction.toRadians(),
       observed: (ally) {
         observed?.call();
         final move = moveTowardsTarget(
@@ -173,9 +173,9 @@ extension NpcExtensions on Npc {
         }
       },
       notObserved: () {
-        final stop = notObserved?.call() ?? true;
-        if (stop) {
-          stopMove();
+        final canStop = notObserved?.call() ?? true;
+        if (canStop) {
+          stop();
         }
       },
     );
