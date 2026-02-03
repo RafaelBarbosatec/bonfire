@@ -40,7 +40,7 @@ extension MovementExtensions on Movement {
     }
 
     if (canMove(directionToMove, ignoreHitboxes: target.shapeHitboxes)) {
-      moveFromDirection(directionToMove);
+      moveFromDirection(directionToMove, resetCrossAxis: true);
       return true;
     } else {
       stop();

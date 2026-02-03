@@ -39,7 +39,6 @@ mixin Movement on GameComponent {
   set position(Vector2 newPosition) {
     final diff = newPosition - position;
     super.position = newPosition;
-    
   }
 
   // Advanced: move by angle (for custom directions, pathfinding, etc.)
@@ -116,24 +115,36 @@ mixin Movement on GameComponent {
 /// Extension methods for even simpler usage
 extension MovementHelpers on Movement {
   // Basic cardinal movements - covers 90% of use cases
-  void moveUp({double? speed}) {
+  void moveUp({double? speed, bool resetCrossAxis = false}) {
     final moveSpeed = speed ?? this.speed;
-    velocity = velocity.copyWith(y: -moveSpeed);
+    velocity = velocity.copyWith(
+      y: -moveSpeed,
+      x: resetCrossAxis ? 0 : null,
+    );
   }
 
-  void moveDown({double? speed}) {
+  void moveDown({double? speed, bool resetCrossAxis = false}) {
     final moveSpeed = speed ?? this.speed;
-    velocity = velocity.copyWith(y: moveSpeed);
+    velocity = velocity.copyWith(
+      y: moveSpeed,
+      x: resetCrossAxis ? 0 : null,
+    );
   }
 
-  void moveLeft({double? speed}) {
+  void moveLeft({double? speed, bool resetCrossAxis = false}) {
     final moveSpeed = speed ?? this.speed;
-    velocity = velocity.copyWith(x: -moveSpeed);
+    velocity = velocity.copyWith(
+      x: -moveSpeed,
+      y: resetCrossAxis ? 0 : null,
+    );
   }
 
-  void moveRight({double? speed}) {
+  void moveRight({double? speed, bool resetCrossAxis = false}) {
     final moveSpeed = speed ?? this.speed;
-    velocity = velocity.copyWith(x: moveSpeed);
+    velocity = velocity.copyWith(
+      x: moveSpeed,
+      y: resetCrossAxis ? 0 : null,
+    );
   }
 
   // Diagonal movements (for those who need them)
@@ -163,46 +174,47 @@ extension MovementHelpers on Movement {
     Direction direction, {
     double? speed,
     bool useDiagonal = true,
+    bool resetCrossAxis = false,
   }) {
     switch (direction) {
       case Direction.up:
-        moveUp(speed: speed);
+        moveUp(speed: speed, resetCrossAxis: resetCrossAxis);
         break;
       case Direction.down:
-        moveDown(speed: speed);
+        moveDown(speed: speed, resetCrossAxis: resetCrossAxis);
         break;
       case Direction.left:
-        moveLeft(speed: speed);
+        moveLeft(speed: speed, resetCrossAxis: resetCrossAxis);
         break;
       case Direction.right:
-        moveRight(speed: speed);
+        moveRight(speed: speed, resetCrossAxis: resetCrossAxis);
         break;
       case Direction.upLeft:
         if (useDiagonal) {
           moveUpLeft(speed: speed);
         } else {
-          moveUp(speed: speed);
+          moveUp(speed: speed, resetCrossAxis: resetCrossAxis);
         }
         break;
       case Direction.upRight:
         if (useDiagonal) {
           moveUpRight(speed: speed);
         } else {
-          moveUp(speed: speed);
+          moveUp(speed: speed, resetCrossAxis: resetCrossAxis);
         }
         break;
       case Direction.downLeft:
         if (useDiagonal) {
           moveDownLeft(speed: speed);
         } else {
-          moveDown(speed: speed);
+          moveDown(speed: speed, resetCrossAxis: resetCrossAxis);
         }
         break;
       case Direction.downRight:
         if (useDiagonal) {
           moveDownRight(speed: speed);
         } else {
-          moveDown(speed: speed);
+          moveDown(speed: speed, resetCrossAxis: resetCrossAxis);
         }
         break;
     }
