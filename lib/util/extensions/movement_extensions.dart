@@ -35,6 +35,7 @@ extension MovementExtensions on Movement {
     if (newDirectionToMove != null) {
       directionToMove = newDirectionToMove;
     } else {
+      stop();
       return false;
     }
 
