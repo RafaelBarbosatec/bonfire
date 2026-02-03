@@ -1,13 +1,13 @@
 import 'package:bonfire/bonfire.dart';
 
 class CollisionComponent extends GameDecoration
-    with Movement, BlockMovementCollision, HandleForces, ElasticCollision {
+    with Movement, SimpleCollision, Forces, SimpleElasticCollision {
   final bool isCircle;
   CollisionComponent({
     required Vector2 position,
     required this.isCircle,
   }) : super(position: position, size: Vector2.all(16)) {
-    addForce(GravityForce2D());
+    enableEarthGravity();
   }
 
   @override

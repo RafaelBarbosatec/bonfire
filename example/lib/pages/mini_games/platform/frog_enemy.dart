@@ -4,7 +4,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/platform/fox_player.dart';
 import 'package:example/pages/mini_games/platform/platform_spritesheet.dart';
 
-class FrogEnemy extends PlatformEnemy with HandleForces {
+class FrogEnemy extends PlatformEnemy with Forces {
   int _timeToWaitBeforeJump = 4000;
   FrogEnemy({
     required Vector2 position,
@@ -29,11 +29,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   }
 
   @override
-  void onBlockedMovement(
-    PositionComponent other,
-    CollisionData collisionData,
-  ) {
-    super.onBlockedMovement(other, collisionData);
+  void onMovementBlocked(PositionComponent other, CollisionData collisionData) {
     if (other is FoxPlayer) {
       if (collisionData.direction.isUpSide) {
         if (!isDead) {
@@ -44,12 +40,13 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
         other.onDie();
       }
     }
+    super.onMovementBlocked(other, collisionData);
   }
 
   @override
   void onDie() {
     super.onDie();
-    handleForcesEnabled = false;
+    disableForces();
     velocity.setZero();
     animation?.playOnce(
       PlatformSpritesheet.enemyExplosion,
@@ -66,7 +63,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
         isVisible) {
       animation?.playOnce(
         PlatformSpritesheet.frogActionRight,
-        flipX: lastDirectionHorizontal == Direction.left,
+        flipX: direction.isLeftSide,
         onFinish: () async {
           await Future.delayed(const Duration(seconds: 2));
           if (!isDead) {
@@ -81,7 +78,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   @override
   void onJump(JumpingStateEnum state) {
     if (state == JumpingStateEnum.idle) {
-      stopMove(isY: false);
+      velocity = velocity.copyWith(x: 0);
     }
     super.onJump(state);
   }

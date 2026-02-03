@@ -4,7 +4,7 @@ import 'package:bonfire/bonfire.dart';
 
 /// Simple elastic collision system for bouncy objects
 ///
-/// This mixin adds realistic bounce behavior to components using SimpleCollision.
+/// This mixin adds realistic bounce behavior to components using Collision.
 /// It's much simpler and more predictable than the original ElasticCollision.
 mixin SimpleElasticCollision on SimpleCollision {
   static const double baseRestitution = 3.0; // Default restitution value

@@ -117,7 +117,7 @@ mixin DirectionAnimation on Movement {
     if (animation?.canRunDown == true) {
       animation?.play(SimpleAnimationEnum.runDown);
     } else {
-      if (direction == Direction.left) {
+      if (hDirection.isLeftSide) {
         animation?.play(SimpleAnimationEnum.runLeft);
       } else {
         animation?.play(SimpleAnimationEnum.runRight);
@@ -129,7 +129,7 @@ mixin DirectionAnimation on Movement {
     if (animation?.canRunUp == true) {
       animation?.play(SimpleAnimationEnum.runUp);
     } else {
-      if (direction.isLeftSide) {
+      if (hDirection.isLeftSide) {
         animation?.play(SimpleAnimationEnum.runLeft);
       } else {
         animation?.play(SimpleAnimationEnum.runRight);
@@ -181,7 +181,7 @@ mixin DirectionAnimation on Movement {
     if (animation?.canIdleUp == true) {
       animation?.play(SimpleAnimationEnum.idleUp);
     } else {
-      if (direction.isLeftSide) {
+      if (hDirection.isLeftSide) {
         animation?.play(SimpleAnimationEnum.idleLeft);
       } else {
         animation?.play(SimpleAnimationEnum.idleRight);
@@ -193,7 +193,7 @@ mixin DirectionAnimation on Movement {
     if (animation?.canIdleDown == true) {
       animation?.play(SimpleAnimationEnum.idleDown);
     } else {
-      if (direction.isLeftSide) {
+      if (hDirection.isLeftSide) {
         animation?.play(SimpleAnimationEnum.idleLeft);
       } else {
         animation?.play(SimpleAnimationEnum.idleRight);

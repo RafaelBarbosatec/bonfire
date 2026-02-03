@@ -85,9 +85,7 @@ mixin Jumper on Movement, SimpleCollision {
       firstCheckIsTrue: false,
     );
     if (tick) {
-      if (!isJumping &&
-          _tileCollisionCount == 0 &&
-          velocity.y.abs() > 0.2) {
+      if (!isJumping && _tileCollisionCount == 0 && velocity.y.abs() > 0.2) {
         isJumping = true;
       }
     }

@@ -35,7 +35,7 @@ abstract class BonfireGameInterface {
   bool get showCollisionArea;
   Color? get collisionAreaColor;
   GameInterface? get interface;
-  List<Force2D> get globalForces;
+  GlobalForcesSettings get globalForces;
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
   double timeScale = 1.0;
 

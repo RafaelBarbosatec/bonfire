@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/platform/platform_spritesheet.dart';
 import 'package:flutter/services.dart';
 
-class FoxPlayer extends PlatformPlayer with HandleForces {
+class FoxPlayer extends PlatformPlayer with Forces {
   bool inTrunk = false;
   FoxPlayer({
     required Vector2 position,

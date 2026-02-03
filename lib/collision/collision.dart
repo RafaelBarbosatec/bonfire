@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/collision_util.dart';
+
 export 'body_type.dart';
 export 'collision_data.dart';
 

@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/person_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
-class RageEnemy extends SimpleEnemy with BlockMovementCollision {
+class RageEnemy extends SimpleEnemy with SimpleCollision {
   late TextPaint _textPaint;
   final String text = 'RangeEnemy';
   RageEnemy({
@@ -54,7 +54,7 @@ class RageEnemy extends SimpleEnemy with BlockMovementCollision {
   }
 
   void _playAttackAnimation() {
-    switch (lastDirection) {
+    switch (direction) {
       case Direction.left:
         animation?.playOnceOther(PersonAttackEnum.rangeLeft);
         break;

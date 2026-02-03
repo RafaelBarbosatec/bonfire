@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/person_sprite_sheet.dart';
 
-class HumanPlayer extends SimplePlayer with BlockMovementCollision {
+class HumanPlayer extends SimplePlayer with SimpleCollision {
   HumanPlayer({
     required Vector2 position,
   }) : super(
@@ -11,7 +11,11 @@ class HumanPlayer extends SimplePlayer with BlockMovementCollision {
           position: position,
           size: Vector2.all(24),
           speed: 32,
-        );
+        ) {
+    setupMovementByJoystick(
+      diagonalEnabled: false,
+    );
+  }
 
   @override
   Future<void> onLoad() async {

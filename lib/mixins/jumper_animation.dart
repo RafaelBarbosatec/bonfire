@@ -13,7 +13,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
   @override
   void onPlayRunDownAnimation() {
     if (isJumping) {
-      if (direction.isLeftSide) {
+      if (hDirection.isLeftSide) {
         _jumpDownLeft();
       } else {
         animation?.playOther(
@@ -81,7 +81,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
   @override
   void onPlayRunUpAnimation() {
     if (isJumping) {
-      if (direction.isLeftSide) {
+      if (hDirection.isLeftSide) {
         _playJumpUpLeft();
       } else {
         animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
@@ -117,7 +117,7 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
   void onJump(JumpingStateEnum state) {
     super.onJump(state);
     if (state == JumpingStateEnum.idle) {
-      if (direction.isLeftSide) {
+      if (hDirection.isLeftSide) {
         animation?.play(SimpleAnimationEnum.idleLeft);
       } else {
         animation?.play(SimpleAnimationEnum.idleRight);

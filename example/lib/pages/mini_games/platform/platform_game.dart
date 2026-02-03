@@ -53,9 +53,9 @@ class _PlatformGameState extends State<PlatformGame> {
       ],
       components: [PlatformGameController(reset: reset)],
       backgroundColor: const Color(0xFF2fbdff),
-      globalForces: [
-        GravityForce2D(),
-      ],
+      globalForces: GlobalForcesSettings(
+        gravity: Vector2(0, 300),
+      ),
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
         zoom: getZoomFromMaxVisibleTile(context, 16, 25),

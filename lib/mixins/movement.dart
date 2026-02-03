@@ -17,6 +17,8 @@ mixin Movement on GameComponent {
   double speed = defaultSpeed;
   Vector2 _velocity = Vector2.zero();
   Direction direction = Direction.right;
+  Direction hDirection = Direction.right;
+  Direction vDirection = Direction.down;
 
   // Essential getters
   Vector2 get velocity => _velocity;
@@ -28,15 +30,16 @@ mixin Movement on GameComponent {
   // Velocity control
   set velocity(Vector2 newVelocity) {
     _velocity = newVelocity;
+    if (!_velocity.isZero()) {
+      direction = _getDirectionFromVelocity(_velocity);
+    }
   }
 
   @override
   set position(Vector2 newPosition) {
     final diff = newPosition - position;
     super.position = newPosition;
-    if (!diff.isZero()) {
-      direction = _getDirectionFromVelocity(diff);
-    }
+    
   }
 
   // Advanced: move by angle (for custom directions, pathfinding, etc.)
@@ -66,7 +69,7 @@ mixin Movement on GameComponent {
       _alreadyCallIdle = false;
     } else {
       if (!_alreadyCallIdle) {
-        idle();
+        _handleIdle();
         _alreadyCallIdle = true;
       }
     }
@@ -75,9 +78,11 @@ mixin Movement on GameComponent {
   // Simple direction calculation from velocity
   Direction _getDirectionFromVelocity(Vector2 vel) {
     if (vel.x.abs() > vel.y.abs()) {
-      return vel.x > 0 ? Direction.right : Direction.left;
+      hDirection = vel.x > 0 ? Direction.right : Direction.left;
+      return hDirection;
     } else {
-      return vel.y > 0 ? Direction.down : Direction.up;
+      vDirection = vel.y > 0 ? Direction.down : Direction.up;
+      return vDirection;
     }
   }
 
@@ -92,11 +97,19 @@ mixin Movement on GameComponent {
     }
   }
 
+  void _handleIdle() {
+    if (!_alreadyCallIdle) {
+      idle();
+      _alreadyCallIdle = true;
+    }
+  }
+
   void idle() {}
 
   // Stop movement
   void stop() {
     velocity = Vector2.zero();
+    _handleIdle();
   }
 }
 
@@ -105,22 +118,22 @@ extension MovementHelpers on Movement {
   // Basic cardinal movements - covers 90% of use cases
   void moveUp({double? speed}) {
     final moveSpeed = speed ?? this.speed;
-    velocity = Vector2(0, -moveSpeed);
+    velocity = velocity.copyWith(y: -moveSpeed);
   }
 
   void moveDown({double? speed}) {
     final moveSpeed = speed ?? this.speed;
-    velocity = Vector2(0, moveSpeed);
+    velocity = velocity.copyWith(y: moveSpeed);
   }
 
   void moveLeft({double? speed}) {
     final moveSpeed = speed ?? this.speed;
-    velocity = Vector2(-moveSpeed, 0);
+    velocity = velocity.copyWith(x: -moveSpeed);
   }
 
   void moveRight({double? speed}) {
     final moveSpeed = speed ?? this.speed;
-    velocity = Vector2(moveSpeed, 0);
+    velocity = velocity.copyWith(x: moveSpeed);
   }
 
   // Diagonal movements (for those who need them)

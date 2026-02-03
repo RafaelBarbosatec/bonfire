@@ -37,7 +37,9 @@ class PlatformPlayerPage extends StatelessWidget {
       cameraConfig: CameraConfig(
         zoom: getZoomFromMaxVisibleTile(context, tileSize, 20),
       ),
-      globalForces: [GravityForce2D()],
+      globalForces: GlobalForcesSettings(
+        gravity: Vector2(0, 300),
+      ),
       backgroundColor: const Color(0xff2fbdff),
     );
   }

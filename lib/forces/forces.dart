@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 
+export 'global_forces_settings.dart';
+
 /// Simple physics forces for SimpleMovement
 ///
 /// This mixin adds realistic physics forces like gravity, friction, wind, etc.
@@ -133,23 +135,25 @@ mixin Forces on Movement {
 
   /// Apply gravity (acceleration force)
   Vector2 _applyGravity(Vector2 velocity, double dt) {
-    if (_gravity.isZero()) {
+    final gravity = _gravity + (gameRef.globalForces.gravity ?? Vector2.zero());
+    if (gravity.isZero()) {
       return velocity;
     }
 
     // F = ma, so a = F/m
-    final acceleration = _gravity / _mass;
+    final acceleration = gravity / _mass;
     return velocity + (acceleration * dt);
   }
 
   /// Apply wind (constant velocity addition)
   Vector2 _applyWind(Vector2 velocity, double dt) {
-    if (_wind.isZero()) {
+      final wind = _wind + (gameRef.globalForces.wind ?? Vector2.zero());
+    if (wind.isZero()) {
       return velocity;
     }
 
     // Wind affects lighter objects more
-    final windEffect = _wind / (_mass * 0.5 + 0.5);
+    final windEffect = wind / (_mass * 0.5 + 0.5);
     return velocity + (windEffect * dt);
   }
 
@@ -169,12 +173,13 @@ mixin Forces on Movement {
 
   /// Apply friction (velocity reduction)
   Vector2 _applyFriction(Vector2 velocity, double dt) {
-    if (_friction.isZero()) {
+    final friction = _friction + (gameRef.globalForces.friction ?? Vector2.zero());
+    if (friction.isZero()) {
       return velocity;
     }
 
-    final frictionX = _friction.x.clamp(0.0, 1.0);
-    final frictionY = _friction.y.clamp(0.0, 1.0);
+    final frictionX = friction.x.clamp(0.0, 1.0);
+    final frictionY = friction.y.clamp(0.0, 1.0);
 
     return Vector2(
       velocity.x * (1.0 - frictionX * dt),
@@ -184,7 +189,9 @@ mixin Forces on Movement {
 
   /// Apply air drag (velocity-dependent resistance)
   Vector2 _applyDrag(Vector2 velocity, double dt) {
-    if (_dragCoefficient == 0.0) {
+    final dragCoefficient = _dragCoefficient +
+        (gameRef.globalForces.dragCoefficient ?? 0.0);
+    if (dragCoefficient == 0.0) {
       return velocity;
     }
 
@@ -194,7 +201,7 @@ mixin Forces on Movement {
       return velocity;
     }
 
-    final dragMagnitude = _dragCoefficient * speed * speed;
+    final dragMagnitude = dragCoefficient * speed * speed;
     final dragDirection = velocity.normalized() * -1;
     final dragForce = dragDirection * dragMagnitude;
 

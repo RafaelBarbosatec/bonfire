@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/player/rotation/human_topdown_player_spritesheet.dart';
 
-class HumanTopdownPlayer extends RotationPlayer with BlockMovementCollision {
+class HumanTopdownPlayer extends RotationPlayer with SimpleCollision {
   HumanTopdownPlayer({
     required Vector2 position,
   }) : super(
@@ -14,7 +14,13 @@ class HumanTopdownPlayer extends RotationPlayer with BlockMovementCollision {
 
   @override
   Future<void> onLoad() {
-    add(CircleHitbox(radius: 8, position: Vector2(4, 0)));
+    add(CircleHitbox(radius: 8, position: Vector2(-2, 0)));
     return super.onLoad();
+  }
+
+  @override
+  void onMount() {
+    anchor = const Anchor(0.3, 0.5);
+    super.onMount();
   }
 }

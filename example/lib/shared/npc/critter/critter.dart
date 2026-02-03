@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/critter_sprite_sheet.dart';
 
-class Critter extends SimpleNpc with BlockMovementCollision, RandomMovement {
+class Critter extends SimpleNpc with SimpleCollision, RandomMovement {
   bool enableBehaviors = true;
   Critter(Vector2 position)
       : super(
