@@ -27,6 +27,7 @@ extension MovementExtensions on Movement {
     var directionToMove = BonfireUtil.getDirectionFromAngle(
       radAngle,
     );
+
     final newDirectionToMove = _checkRestrictAxis(
       directionToMove,
       movementAxis,
@@ -34,60 +35,13 @@ extension MovementExtensions on Movement {
     if (newDirectionToMove != null) {
       directionToMove = newDirectionToMove;
     } else {
-      stop();
       return false;
     }
 
     if (canMove(directionToMove, ignoreHitboxes: target.shapeHitboxes)) {
-      if (directionToMove != direction) {
-        stop();
-      }
       moveFromDirection(directionToMove);
       return true;
     } else {
-      switch (directionToMove) {
-        case Direction.right:
-        case Direction.left:
-        case Direction.up:
-        case Direction.down:
-          break;
-        case Direction.upLeft:
-          if (canMove(Direction.left)) {
-            moveLeft();
-            return true;
-          } else if (canMove(Direction.up)) {
-            moveUp();
-            return true;
-          }
-          break;
-        case Direction.upRight:
-          if (canMove(Direction.right)) {
-            moveRight();
-            return true;
-          } else if (canMove(Direction.up)) {
-            moveUp();
-            return true;
-          }
-          break;
-        case Direction.downLeft:
-          if (canMove(Direction.left)) {
-            moveLeft();
-            return true;
-          } else if (canMove(Direction.down)) {
-            moveDown();
-            return true;
-          }
-          break;
-        case Direction.downRight:
-          if (canMove(Direction.right)) {
-            moveRight();
-            return true;
-          } else if (canMove(Direction.down)) {
-            moveDown();
-            return true;
-          }
-          break;
-      }
       stop();
       return false;
     }
