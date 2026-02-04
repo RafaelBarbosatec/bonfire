@@ -58,17 +58,17 @@ class FrogEnemy extends PlatformEnemy with Forces {
   @override
   void update(double dt) {
     super.update(dt);
-    if (checkInterval('jump', _timeToWaitBeforeJump, dt) &&
-        !isDead &&
-        isVisible) {
+    if (isDead) return;
+    if (!isVisible) return;
+    if (checkInterval('jump', _timeToWaitBeforeJump, dt)) {
       animation?.playOnce(
         PlatformSpritesheet.frogActionRight,
         flipX: direction.isLeftSide,
         onFinish: () async {
           await Future.delayed(const Duration(seconds: 2));
           if (!isDead) {
-            jump(jumpSpeed: 160);
             Random().nextBool() ? moveRight() : moveLeft();
+            jump(jumpSpeed: 160);
           }
         },
       );

@@ -10,6 +10,7 @@ class FoxPlayer extends PlatformPlayer with Forces {
           position: position,
           size: Vector2.all(33),
           speed: 50,
+          countJumps: 2,
           animation: PlatformAnimations(
             idleRight: PlatformSpritesheet.playerIdleRight,
             runRight: PlatformSpritesheet.playerRunRight,

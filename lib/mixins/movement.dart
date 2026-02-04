@@ -70,11 +70,12 @@ mixin Movement on GameComponent {
 
   // Simple direction calculation from velocity
   Direction _getDirectionFromVelocity(Vector2 vel) {
+    hDirection = vel.x > 0 ? Direction.right : Direction.left;
+    vDirection = vel.y > 0 ? Direction.down : Direction.up;
     if (vel.x.abs() > vel.y.abs()) {
       hDirection = vel.x > 0 ? Direction.right : Direction.left;
       return hDirection;
     } else {
-      vDirection = vel.y > 0 ? Direction.down : Direction.up;
       return vDirection;
     }
   }

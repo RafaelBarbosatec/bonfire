@@ -106,7 +106,9 @@ mixin Forces on Movement {
   void update(double dt) {
     // Apply forces before normal movement update
     if (_forcesEnabled && !velocity.isZero() || !_allForcesAreZero()) {
-      _applyAllForces(dt);
+      if (isVisible) {
+        _applyAllForces(dt);
+      }
     }
     super.update(dt);
   }
@@ -147,7 +149,7 @@ mixin Forces on Movement {
 
   /// Apply wind (constant velocity addition)
   Vector2 _applyWind(Vector2 velocity, double dt) {
-      final wind = _wind + (gameRef.globalForces.wind ?? Vector2.zero());
+    final wind = _wind + (gameRef.globalForces.wind ?? Vector2.zero());
     if (wind.isZero()) {
       return velocity;
     }
@@ -173,7 +175,8 @@ mixin Forces on Movement {
 
   /// Apply friction (velocity reduction)
   Vector2 _applyFriction(Vector2 velocity, double dt) {
-    final friction = _friction + (gameRef.globalForces.friction ?? Vector2.zero());
+    final friction =
+        _friction + (gameRef.globalForces.friction ?? Vector2.zero());
     if (friction.isZero()) {
       return velocity;
     }
@@ -189,8 +192,8 @@ mixin Forces on Movement {
 
   /// Apply air drag (velocity-dependent resistance)
   Vector2 _applyDrag(Vector2 velocity, double dt) {
-    final dragCoefficient = _dragCoefficient +
-        (gameRef.globalForces.dragCoefficient ?? 0.0);
+    final dragCoefficient =
+        _dragCoefficient + (gameRef.globalForces.dragCoefficient ?? 0.0);
     if (dragCoefficient == 0.0) {
       return velocity;
     }
