@@ -368,7 +368,7 @@ extension MovementHelpers on Movement {
 
     // Calculate movement thresholds based on speed and delta time
     final dtSpeed = moveSpeed * lastDt * 1.1; // Add small buffer
-    final dtDiagonalSpeed = diagonalSpeed * lastDt * 1.1;
+    final dtDiagonalSpeed = diagonalSpeed * lastDt * 1.3;
 
     // Check if we're close enough to the target (arrived)
     if (diff.length < dtSpeed) {
