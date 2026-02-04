@@ -35,12 +35,6 @@ mixin Movement on GameComponent {
     }
   }
 
-  @override
-  set position(Vector2 newPosition) {
-    final diff = newPosition - position;
-    super.position = newPosition;
-  }
-
   // Advanced: move by angle (for custom directions, pathfinding, etc.)
   void moveByAngle(double angleRadians, {double? speed}) {
     final moveSpeed = speed ?? this.speed;
