@@ -16,7 +16,6 @@ import 'package:example/pages/map/tiled/tiled_network_page.dart';
 import 'package:example/pages/map/tiled/tiled_page.dart';
 import 'package:example/pages/mini_games/manual_map/game_manual_map.dart';
 import 'package:example/pages/mini_games/multi_scenario/multi_scenario_game.dart';
-import 'package:example/pages/mini_games/platform/platform_game.dart';
 import 'package:example/pages/mini_games/random_map/random_map_game.dart';
 import 'package:example/pages/mini_games/simple_example/simple_example_game.dart';
 import 'package:example/pages/mini_games/tiled_map/game_tiled_map.dart';
@@ -305,12 +304,6 @@ class _HomePageState extends State<HomePage> {
           ItemDrawer(
             name: 'Topdown game',
             builder: (_) => const TopDownGame(),
-            codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/mini_games',
-          ),
-          ItemDrawer(
-            name: 'Platform game',
-            builder: (_) => const PlatformGame(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/mini_games',
           ),

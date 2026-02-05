@@ -1,26 +1,24 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:example/pages/mini_games/platform/fox_player.dart';
-import 'package:example/pages/mini_games/platform/platform_spritesheet.dart';
+import 'package:platform_game/components/fox_player.dart';
+import 'package:platform_game/util/platform_spritesheet.dart';
 
 class FrogEnemy extends PlatformEnemy with Forces {
   int _timeToWaitBeforeJump = 4000;
-  FrogEnemy({
-    required Vector2 position,
-  }) : super(
-          position: position,
-          size: Vector2(35, 32),
-          speed: 50,
-          animation: PlatformAnimations(
-            idleRight: PlatformSpritesheet.frogIdleRight,
-            runRight: PlatformSpritesheet.frogIdleRight,
-            jump: PlatformJumpAnimations(
-              jumpUpRight: PlatformSpritesheet.frogJumpUp,
-              jumpDownRight: PlatformSpritesheet.frogJumpDown,
-            ),
+  FrogEnemy({required super.position})
+    : super(
+        size: Vector2(35, 32),
+        speed: 50,
+        animation: PlatformAnimations(
+          idleRight: PlatformSpritesheet.frogIdleRight,
+          runRight: PlatformSpritesheet.frogIdleRight,
+          jump: PlatformJumpAnimations(
+            jumpUpRight: PlatformSpritesheet.frogJumpUp,
+            jumpDownRight: PlatformSpritesheet.frogJumpDown,
           ),
-        );
+        ),
+      );
 
   @override
   bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
