@@ -23,7 +23,6 @@ class Bird extends PlatformPlayer with Forces, TapGesture {
         ) {
     _initialPosition = position.clone();
     anchor = Anchor.center;
-    setGravity(Vector2(0, 800));
   }
 
   @override

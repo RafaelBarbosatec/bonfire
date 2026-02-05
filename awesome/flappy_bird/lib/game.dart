@@ -47,12 +47,9 @@ class _GameState extends State<Game> {
         _pipeLineController,
         ParallaxBaseBackground(speed: speed),
       ],
-      globalForces: [
-        AccelerationForce2D(
-          id: 1,
-          value: Vector2(0, 1000),
-        ),
-      ],
+      globalForces: GlobalForcesSettings(
+        gravity: Vector2(0, 800),
+      ),
       cameraConfig: CameraConfig(
         initPosition: sizeGame / 2,
         startFollowPlayer: false,
