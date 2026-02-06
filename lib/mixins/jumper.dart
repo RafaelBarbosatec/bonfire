@@ -1,7 +1,6 @@
 // ignore_for_file: use_setters_to_change_properties
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/util/collision_game_component.dart';
 
 enum JumpingStateEnum {
   up,
@@ -57,19 +56,16 @@ mixin Jumper on Movement, SimpleCollision {
     Set<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
-    if (other is CollisionMapComponent || other is TileWithCollision) {
-      ++_tileCollisionCount;
-      resetInterval(_tileCollisionCountKey);
-    }
+    ++_tileCollisionCount;
+    resetInterval(_tileCollisionCountKey);
+
     super.onCollisionStart(intersectionPoints, other);
   }
 
   @override
   void onCollisionEnd(PositionComponent other) {
-    if (other is CollisionMapComponent || other is TileWithCollision) {
-      if (--_tileCollisionCount == 0) {
-        resetInterval(_tileCollisionCountKey);
-      }
+    if (--_tileCollisionCount == 0) {
+      resetInterval(_tileCollisionCountKey);
     }
     super.onCollisionEnd(other);
   }
@@ -83,7 +79,7 @@ mixin Jumper on Movement, SimpleCollision {
       firstCheckIsTrue: false,
     );
     if (tick) {
-      if (!isJumping && _tileCollisionCount == 0 && velocity.y > 0.2) {
+      if (!isJumping && _tileCollisionCount == 0 && velocity.y.abs() > 0.1) {
         isJumping = true;
       }
     }
