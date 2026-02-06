@@ -111,10 +111,7 @@ mixin Movement on GameComponent {
     velocity = Vector2.zero();
     _handleIdle();
   }
-}
 
-/// Extension methods for even simpler usage
-extension MovementHelpers on Movement {
   // Basic cardinal movements - covers 90% of use cases
   void moveUp({double? speed, bool resetCrossAxis = false}) {
     final moveSpeed = speed ?? this.speed;
@@ -147,7 +144,10 @@ extension MovementHelpers on Movement {
       y: resetCrossAxis ? 0 : null,
     );
   }
+}
 
+/// Extension methods for even simpler usage
+extension MovementHelpers on Movement {
   // Diagonal movements (for those who need them)
   void moveUpRight({double? speed}) {
     final moveSpeed =
