@@ -10,11 +10,13 @@ class MovementByJoystickProps {
   bool intensityEnabled;
   bool diagonalEnabled;
   bool enabled;
+  bool stopOnIdle;
   MovementByJoystickProps({
     this.moveType = MovementByJoystickType.direction,
     this.intensityEnabled = false,
     this.diagonalEnabled = true,
     this.enabled = true,
+    this.stopOnIdle = true,
   });
 }
 
@@ -37,12 +39,14 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
     bool intensityEnabled = false,
     bool diagonalEnabled = true,
     bool enabled = true,
+    bool startOnIdle = true,
   }) {
     _settings = MovementByJoystickProps(
       moveType: moveType,
       intensityEnabled: intensityEnabled,
       diagonalEnabled: diagonalEnabled,
       enabled: enabled,
+      stopOnIdle: startOnIdle,
     );
   }
 
@@ -134,6 +138,9 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
         _isIdle = false;
         break;
       case JoystickMoveDirectional.IDLE:
+        if (!_settings.stopOnIdle) {
+          return;
+        }
         if (!_isIdle) {
           _isIdle = true;
           stop();
@@ -165,6 +172,9 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
   }
 
   void _toCorrectDirection(JoystickMoveDirectional directional) {
+    if(!_settings.stopOnIdle){
+      return;
+    }
     velocity.sub(_getRestDirectionalVelocity(_currentDirectional));
     velocity.add(_getDirectionalVelocity(directional));
   }
