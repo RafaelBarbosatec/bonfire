@@ -158,7 +158,11 @@ class TiledWorldBuilder {
               (data.tileClass?.contains(ABOVE_TYPE) ?? false) ||
               layerIsAbove;
           final isDynamic = data.type?.contains(DYNAMIC_ABOVE_TYPE) ?? false;
-          if (tileIsAbove || isDynamic) {
+          final nativeSize = data.sprite?.size;
+          final isOversized = nativeSize != null &&
+              (nativeSize.x > _tileWidthOrigin ||
+                  nativeSize.y > _tileHeightOrigin);
+          if (tileIsAbove || isDynamic || isOversized) {
             _addGameDecorationAbove(
               data,
               count,
@@ -211,15 +215,31 @@ class TiledWorldBuilder {
     double opacity, {
     bool above = false,
   }) {
+    // Native tileset size (may exceed the map's tile size for oversized
+    // decorations like trees). When it does, draw at the native size and
+    // anchor the sprite to the bottom-left of its grid cell, matching how
+    // the Tiled editor renders oversized tiles.
+    final nativeSize = data.sprite?.size;
+    final scaleX =
+        _tileWidthOrigin == 0 ? 1.0 : _tileWidth / _tileWidthOrigin;
+    final scaleY =
+        _tileHeightOrigin == 0 ? 1.0 : _tileHeight / _tileHeightOrigin;
+    final drawW = (nativeSize?.x ?? _tileWidthOrigin) * scaleX;
+    final drawH = (nativeSize?.y ?? _tileHeightOrigin) * scaleY;
+    final cellX = _getX(count, tileLayer.width?.toInt() ?? 1);
+    final cellY = _getY(count, tileLayer.width?.toInt() ?? 1);
+    final position = Vector2(
+      cellX * _tileWidth,
+      (cellY + 1) * _tileHeight - drawH,
+    );
+    final size = Vector2(drawW, drawH);
+
     GameDecoration? comp;
     if (data.animation != null) {
       comp = GameDecorationWithCollision.withAnimation(
         animation: data.animation!.getFutureSpriteAnimation(),
-        position: Vector2(
-          _getX(count, tileLayer.width?.toInt() ?? 1) * _tileWidth,
-          _getY(count, tileLayer.width?.toInt() ?? 1) * _tileHeight,
-        ),
-        size: Vector2(_tileWidth, _tileHeight),
+        position: position,
+        size: size,
         collisions: data.collisions,
         renderAboveComponents: above,
       )
@@ -231,11 +251,8 @@ class TiledWorldBuilder {
       if (data.sprite != null) {
         comp = GameDecorationWithCollision.withSprite(
           sprite: data.sprite!.getFutureSprite(),
-          position: Vector2(
-            _getX(count, tileLayer.width?.toInt() ?? 1) * _tileWidth,
-            _getY(count, tileLayer.width?.toInt() ?? 1) * _tileHeight,
-          ),
-          size: Vector2(_tileWidth, _tileHeight),
+          position: position,
+          size: size,
           collisions: data.collisions,
           renderAboveComponents: above,
         )
