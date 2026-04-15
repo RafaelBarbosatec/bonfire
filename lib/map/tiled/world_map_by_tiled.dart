@@ -27,13 +27,6 @@ class WorldMapByTiled extends WorldMap {
     final map = await _builder.build();
     layers = map.map.layers;
     gameRef.addAll(map.components ?? []);
-    // `mapChildren` are decorations that must live inside the WorldMap
-    // subtree (not as game-level siblings) so their priority is compared
-    // against the tile layers and they can interleave following Tiled's
-    // layer order. See `type=layered` handling in TiledWorldBuilder.
-    for (final child in map.mapChildren ?? const <GameComponent>[]) {
-      add(child);
-    }
     return super.onLoad();
   }
 }

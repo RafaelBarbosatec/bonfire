@@ -35,7 +35,7 @@ Test our online [DEMO](https://bonfire-engine.github.io/examples/bonfire-v3/) or
 
 [Link](awesome)
 
-If you build a game using Bonfire, you can open a PR to add your game here.
+If you build a game using Bonfire, you can open a PR to add your game to the [Games](games) section.
 
 ## Build recomendations
 
