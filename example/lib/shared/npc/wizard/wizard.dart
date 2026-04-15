@@ -5,7 +5,7 @@ import 'package:example/shared/util/wizard_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Wizard extends SimpleNpc with SimpleCollision, TapGesture {
+class Wizard extends SimpleNpc with BlockMovementCollision, TapGesture {
   double lastZoom = 1.0;
   Wizard(Vector2 position)
       : super(

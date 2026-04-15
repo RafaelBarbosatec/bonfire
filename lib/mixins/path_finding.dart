@@ -133,6 +133,12 @@ mixin PathFinding on Movement {
   }
 
   @override
+  void idle() {
+    stopMoveAlongThePath();
+    super.idle();
+  }
+
+  @override
   void renderTree(Canvas canvas) {
     _drawBarrries(canvas);
     super.renderTree(canvas);
@@ -145,7 +151,6 @@ mixin PathFinding on Movement {
     _removeLinePathComponent();
     _onFinish?.call();
     _onFinish = null;
-    stop();
   }
 
   List<Vector2> _calculatePath(Vector2 finalPosition) {
@@ -211,7 +216,7 @@ mixin PathFinding on Movement {
     Iterable<(int, int)> result = [];
 
     if (_barriers.contains(targetPosition)) {
-      stop();
+      stopMove();
       return [];
     }
 
@@ -317,7 +322,7 @@ mixin PathFinding on Movement {
     if (_currentIndex < _currentPath.length - 1) {
       _currentIndex++;
     } else {
-      stopMoveAlongThePath();
+      stopMove();
     }
   }
 

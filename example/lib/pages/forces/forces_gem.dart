@@ -3,7 +3,7 @@ import 'package:example/pages/mini_games/platform/platform_spritesheet.dart';
 import 'package:flutter/material.dart';
 
 class ForcesGem extends GameDecoration
-    with Movement, Forces, SimpleCollision {
+    with Movement, HandleForces, BlockMovementCollision {
   final String text;
   final bool execMoveDown;
   late TextPaint _textPaint;
@@ -11,7 +11,7 @@ class ForcesGem extends GameDecoration
   ForcesGem({
     required Vector2 position,
     this.text = 'AccelerationForce',
-    Vector2? force,
+    Force2D? force,
     this.execMoveDown = false,
   }) : super.withAnimation(
           animation: PlatformSpritesheet.gem,
@@ -19,7 +19,7 @@ class ForcesGem extends GameDecoration
           size: Vector2(15, 13),
         ) {
     initPosition = position.clone();
-    force.let((i) => addForce('d',i),);
+    force.let(addForce);
     if (execMoveDown) {
       moveDown();
     }

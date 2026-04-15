@@ -13,7 +13,7 @@ import 'package:example/pages/mini_games/random_map/player/pirate_sprite_sheet.d
 ///
 /// Rafaelbarbosatec
 /// on 03/06/22
-class Pirate extends SimplePlayer with SimpleCollision {
+class Pirate extends SimplePlayer with BlockMovementCollision {
   Pirate({
     required Vector2 position,
   }) : super(

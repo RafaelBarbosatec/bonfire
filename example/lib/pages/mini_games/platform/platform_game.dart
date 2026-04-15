@@ -1,14 +1,13 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/pages/mini_games/platform/fox_player.dart';
+import 'package:example/pages/mini_games/platform/frog_enemy.dart';
+import 'package:example/pages/mini_games/platform/gem_decoration.dart';
+import 'package:example/pages/mini_games/platform/platform_game_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:platform_game/components/fox_player.dart';
-import 'package:platform_game/components/frog_enemy.dart';
-import 'package:platform_game/components/gem_decoration.dart';
-import 'package:platform_game/util/platform_game_controller.dart';
 
 class PlatformGame extends StatefulWidget {
-  static const double tileSize = 16.0;
-  const PlatformGame({super.key});
+  const PlatformGame({Key? key}) : super(key: key);
 
   @override
   State<PlatformGame> createState() => _PlatformGameState();
@@ -21,15 +20,21 @@ class _PlatformGameState extends State<PlatformGame> {
     return BonfireWidget(
       key: _gameKey,
       map: WorldMapByTiled(
-        WorldMapReader.fromAsset('platform_map.tmj'),
+        WorldMapReader.fromAsset('platform/platform_map.tmj'),
         objectsBuilder: {
-          'frog': (properties) => FrogEnemy(position: properties.position),
-          'gem': (properties) => GemDecoration(position: properties.position),
+          'frog': (properties) => FrogEnemy(
+                position: properties.position,
+              ),
+          'gem': (properties) => GemDecoration(
+                position: properties.position,
+              ),
         },
       ),
       playerControllers: [
         Joystick(
-          directional: JoystickDirectional(color: Colors.green),
+          directional: JoystickDirectional(
+            color: Colors.green,
+          ),
           actions: [
             JoystickAction(
               actionId: 1,
@@ -39,27 +44,25 @@ class _PlatformGameState extends State<PlatformGame> {
           ],
         ),
         Keyboard(
-          config: KeyboardConfig(acceptedKeys: [LogicalKeyboardKey.space]),
+          config: KeyboardConfig(
+            acceptedKeys: [
+              LogicalKeyboardKey.space,
+            ],
+          ),
         ),
       ],
       components: [PlatformGameController(reset: reset)],
       backgroundColor: const Color(0xFF2fbdff),
-      globalForces: GlobalForcesSettings(gravity: Vector2(0, 300)),
+      globalForces: [
+        GravityForce2D(),
+      ],
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,
-        zoom: getZoomFromMaxVisibleTile(
-          context,
-          PlatformGame.tileSize,
-          20,
-          orientation: Orientation.landscape,
-        ),
+        zoom: getZoomFromMaxVisibleTile(context, 16, 25),
         speed: 4,
       ),
       player: FoxPlayer(
-        position: Vector2(
-          50 * PlatformGame.tileSize,
-          3 * PlatformGame.tileSize,
-        ),
+        position: Vector2(50 * 16, 3 * 16),
       ),
     );
   }

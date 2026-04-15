@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class Goblin extends SimpleEnemy
     with
-        SimpleCollision,
+        BlockMovementCollision,
         PlayerControllerListener,
         MovementByJoystick,
         RandomMovement,

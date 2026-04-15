@@ -23,7 +23,7 @@ extension PlayerExtensions on Player {
       observed: observed,
       notObserved: notObserved,
       radiusVision: radiusVision,
-      angle: angle ?? direction.toRadians(),
+      angle: angle ?? lastDirection.toRadians(),
       visionAngle: visionAngle,
     );
   }
@@ -89,21 +89,20 @@ extension PlayerExtensions on Player {
 
   Direction _getLastDirection(bool diagonalEnabled) {
     if (diagonalEnabled) {
-      return direction;
+      return lastDirection;
     }
 
-    switch (direction) {
+    switch (lastDirection) {
       case Direction.left:
       case Direction.right:
       case Direction.up:
       case Direction.down:
-        return direction;
+        return lastDirection;
       case Direction.upLeft:
-      case Direction.downLeft:
-        return Direction.left;
       case Direction.upRight:
+      case Direction.downLeft:
       case Direction.downRight:
-        return Direction.right;
+        return lastDirectionHorizontal;
     }
   }
 }

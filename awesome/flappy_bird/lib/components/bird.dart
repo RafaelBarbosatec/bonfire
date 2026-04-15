@@ -7,7 +7,7 @@ import 'package:flappy_bird/util/spritesheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Bird extends PlatformPlayer with Forces, TapGesture {
+class Bird extends PlatformPlayer with HandleForces, TapGesture {
   Vector2? _initialPosition;
   Bird({required super.position})
       : super(
@@ -46,7 +46,7 @@ class Bird extends PlatformPlayer with Forces, TapGesture {
   }
 
   void doJump() async {
-    jump(force: true, jumpSpeed: 250);
+    jump(force: true, jumpSpeed: 160);
   }
 
   final graus90 = 1.0472;
@@ -95,9 +95,9 @@ class Bird extends PlatformPlayer with Forces, TapGesture {
   void _resetGame() {
     gameRef.query<PipeLineController>().first.reset();
     gameRef.query<PipeLine>().forEach((element) => element.removeFromParent());
-    stop();
+    setZeroVelocity();
     position = _initialPosition!.clone();
-    direction = Direction.right;
+    lastDirection = Direction.right;
     gameRef.resumeEngine();
     Navigator.pop(context);
   }

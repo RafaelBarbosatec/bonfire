@@ -31,7 +31,7 @@ extension AllyExtensions on Ally {
       return;
     }
 
-    final direct = direction ?? this.direction;
+    final direct = direction ?? lastDirection;
 
     simpleAttackMeleeByDirection(
       damage: damage,
@@ -69,7 +69,7 @@ extension AllyExtensions on Ally {
       return;
     }
 
-    final direct = direction ?? this.direction;
+    final direct = direction ?? lastDirection;
 
     simpleAttackRangeByDirection(
       animationRight: animationRight,
@@ -110,7 +110,7 @@ extension AllyExtensions on Ally {
 
     seeComponentType<Enemy>(
       radiusVision: radiusVision,
-      angle: angle ?? direction.toRadians(),
+      angle: angle ?? lastDirection.toRadians(),
       visionAngle: visionAngle,
       observed: (enemy) {
         final e = enemy.first;
@@ -121,18 +121,22 @@ extension AllyExtensions on Ally {
         );
         if (inDistance) {
           final playerDirection = getDirectionToTarget(e);
-          direction = playerDirection;
+          lastDirection = playerDirection;
+          if (lastDirection == Direction.left ||
+              lastDirection == Direction.right) {
+            lastDirectionHorizontal = lastDirection;
+          }
 
           if (checkInterval('seeAndMoveToAttackRange', 500, lastDt)) {
-            stop();
+            stopMove();
           }
           positioned?.call(e);
         }
       },
       notObserved: () {
-        final canStop = notObserved?.call() ?? true;
-        if (canStop) {
-          stop();
+        final stop = notObserved?.call() ?? true;
+        if (stop) {
+          stopMove();
         }
       },
     );

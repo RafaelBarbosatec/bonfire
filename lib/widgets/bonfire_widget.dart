@@ -8,7 +8,7 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/base/listener_game_widget.dart';
 import 'package:bonfire/camera/camera_config.dart';
 import 'package:bonfire/color_filter/game_color_filter.dart';
-import 'package:bonfire/forces/global_forces_settings.dart';
+import 'package:bonfire/forces/forces_2d.dart';
 import 'package:bonfire/game_interface/game_interface.dart';
 import 'package:bonfire/input/player_controller.dart';
 import 'package:bonfire/map/base/game_map.dart';
@@ -64,7 +64,7 @@ class BonfireWidget extends StatefulWidget {
   final CameraConfig? cameraConfig;
   final GameColorFilter? colorFilter;
   final VoidCallback? onDispose;
-  final GlobalForcesSettings? globalForces;
+  final List<Force2D>? globalForces;
   final BonfireCollisionConfig? collisionConfig;
 
   const BonfireWidget({

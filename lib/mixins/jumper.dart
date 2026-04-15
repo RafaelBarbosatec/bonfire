@@ -1,6 +1,7 @@
 // ignore_for_file: use_setters_to_change_properties
 
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/util/collision_game_component.dart';
 
 enum JumpingStateEnum {
   up,
@@ -15,7 +16,7 @@ enum JumpingStateEnum {
 ///     GravityForce2D(),
 ///   ],
 /// )
-mixin Jumper on Movement, SimpleCollision {
+mixin Jumper on Movement, BlockMovementCollision {
   final double _defaultJumpSpeed = 150;
   bool isJumping = false;
   JumpingStateEnum jumpingState = JumpingStateEnum.idle;
@@ -43,12 +44,17 @@ mixin Jumper on Movement, SimpleCollision {
   }
 
   @override
-  void onMovementBlocked(PositionComponent other, CollisionData collisionData) {
-    if (isJumping && collisionData.direction.isDownSide) {
+  void onBlockedMovement(
+    PositionComponent other,
+    CollisionData collisionData,
+  ) {
+    if (isJumping &&
+        lastDirectionVertical.isDownSide &&
+        collisionData.direction.isDownSide) {
       _currentJumps = 0;
       isJumping = false;
     }
-    super.onMovementBlocked(other, collisionData);
+    super.onBlockedMovement(other, collisionData);
   }
 
   @override
@@ -56,32 +62,35 @@ mixin Jumper on Movement, SimpleCollision {
     Set<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
-    ++_tileCollisionCount;
-    resetInterval(_tileCollisionCountKey);
-
+    if (other is CollisionMapComponent || other is TileWithCollision) {
+      ++_tileCollisionCount;
+      resetInterval(_tileCollisionCountKey);
+    }
     super.onCollisionStart(intersectionPoints, other);
   }
 
   @override
   void onCollisionEnd(PositionComponent other) {
-    if (--_tileCollisionCount == 0) {
-      resetInterval(_tileCollisionCountKey);
+    if (other is CollisionMapComponent || other is TileWithCollision) {
+      if (--_tileCollisionCount == 0) {
+        resetInterval(_tileCollisionCountKey);
+      }
     }
     super.onCollisionEnd(other);
   }
 
   @override
   void update(double dt) {
-    final tick = checkInterval(
-      _tileCollisionCountKey,
-      100,
-      dt,
-      firstCheckIsTrue: false,
-    );
-    if (tick) {
-      if (!isJumping && _tileCollisionCount == 0 && velocity.y.abs() > 0.1) {
-        isJumping = true;
-      }
+    if (checkInterval(
+          _tileCollisionCountKey,
+          100,
+          dt,
+          firstCheckIsTrue: false,
+        ) &&
+        !isJumping &&
+        _tileCollisionCount == 0 &&
+        displacement.y.abs() > 0.2) {
+      isJumping = true;
     }
     _notifyJump();
     super.update(dt);
@@ -90,7 +99,7 @@ mixin Jumper on Movement, SimpleCollision {
   void _notifyJump() {
     JumpingStateEnum newDirection;
     if (isJumping) {
-      if (direction.isDownSide) {
+      if (lastDirectionVertical == Direction.down) {
         newDirection = JumpingStateEnum.down;
       } else {
         newDirection = JumpingStateEnum.up;
@@ -105,9 +114,9 @@ mixin Jumper on Movement, SimpleCollision {
   }
 
   @override
-  void stop() {
+  void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {
     if (!isJumping) {
-      super.stop();
+      super.stopMove(forceIdle: forceIdle, isX: isX, isY: isY);
     }
   }
 }

@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/platform/platform_spritesheet.dart';
 import 'package:flutter/services.dart';
 
-class SimpleFoxPlayer extends PlatformPlayer with Forces {
+class SimpleFoxPlayer extends PlatformPlayer with HandleForces {
   SimpleFoxPlayer({
     required Vector2 position,
   }) : super(

@@ -11,6 +11,9 @@ class SimplePlayer extends Player with DirectionAnimation {
     super.life,
   }) {
     this.animation = animation;
-    direction = initDirection;
+    lastDirection = initDirection;
+    if (initDirection == Direction.left || initDirection == Direction.right) {
+      lastDirectionHorizontal = initDirection;
+    }
   }
 }

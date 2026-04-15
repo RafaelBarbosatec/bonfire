@@ -16,7 +16,10 @@ class ForcesPage extends StatelessWidget {
           'gem_acceleration': (prop) => ForcesGem(
                 position: prop.position,
                 text: 'AccelerationForce2D',
-                force: Vector2(0, 100),
+                force: AccelerationForce2D(
+                  id: 'acc',
+                  value: Vector2(0, 100),
+                ),
               ),
           'gem_bouncing': (prop) => ForcesGemBouncing(
                 position: prop.position,
@@ -24,13 +27,19 @@ class ForcesPage extends StatelessWidget {
           'gem_linear': (prop) => ForcesGem(
                 position: prop.position,
                 text: 'LinearForce2D',
-                force: Vector2(0, 10),
+                force: LinearForce2D(
+                  id: 'linear',
+                  value: Vector2(0, 10),
+                ),
               ),
           'gem_resistence': (prop) => ForcesGem(
                 position: prop.position,
                 execMoveDown: true,
                 text: 'ResistanceForce2D',
-                force: Vector2(0, 3),
+                force: ResistanceForce2D(
+                  id: 'resi',
+                  value: Vector2(0, 3),
+                ),
               ),
         },
       ),

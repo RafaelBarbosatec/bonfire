@@ -2,426 +2,572 @@ import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
 
-/// Ultra-simplified movement mixin - focuses on essentials only
-///
-/// This replaces the complex Movement mixin with a minimal, clean approach:
-/// - Basic velocity-based movement
-/// - Cardinal directions (up, down, left, right)
-/// - Simple stop/start mechanics
-/// - Direction tracking
-/// - Extensible for advanced cases
+/// Mixin responsible for adding movements
 mixin Movement on GameComponent {
-  static const double diagonalFactor = 0.7071; // 1/sqrt(2)
-  static const double defaultSpeed = 80.0;
-
-  double speed = defaultSpeed;
+  static const diaginalReduction = 0.7853981633974483;
+  static const speedDefault = 80.0;
+  double minDisplacementToConsiderMove = 0.1;
+  double speed = speedDefault;
+  double _lastSpeed = speedDefault;
+  double velocityRadAngle = 0.0;
+  Vector2 displacement = Vector2.zero();
   Vector2 _velocity = Vector2.zero();
-  Direction direction = Direction.right;
-  Direction hDirection = Direction.right;
-  Direction vDirection = Direction.down;
+  Direction lastDirection = Direction.right;
+  Direction lastDirectionHorizontal = Direction.right;
+  Direction lastDirectionVertical = Direction.down;
 
-  // Essential getters
-  Vector2 get velocity => _velocity;
-  bool get isMoving => !_velocity.isZero();
+  Vector2 get acceleration => velocity / lastDt;
+
   bool get isIdle => _velocity.isZero();
+  Vector2 get velocity => _velocity;
+  double get diagonalSpeed => speed * diaginalReduction;
+  double get dtSpeed => speed * lastDt;
+  double get dtDiagonalSpeed => diagonalSpeed * lastDt;
+  set velocity(Vector2 velocity) {
+    _velocity = velocity;
+    _updateLastDirection(_velocity);
+  }
 
-  bool _alreadyCallIdle = false;
+  void setVelocityAxis({double? x, double? y}) {
+    _velocity.x = x ?? _velocity.x;
+    _velocity.y = y ?? _velocity.y;
+  }
 
-  // Velocity control
-  set velocity(Vector2 newVelocity) {
-    _velocity = newVelocity;
-    if (!_velocity.isZero()) {
-      direction = _getDirectionFromVelocity(_velocity);
+  /// You can override this method to listen the movement of this component
+  void onMove(
+    double speed,
+    Vector2 displacement,
+    Direction direction,
+    double angle,
+  ) {}
+
+  Vector2 onVelocityUpdate(double dt, Vector2 velocity) {
+    return velocity;
+  }
+
+  void onApplyDisplacement(double dt) {
+    velocity = onVelocityUpdate(dt, velocity);
+    if (!velocity.isZero()) {
+      super.position += displacement = velocity * dt;
+      _updateLastDirection(velocity);
+    } else {
+      displacement.setZero();
     }
   }
 
-  // Advanced: move by angle (for custom directions, pathfinding, etc.)
-  void moveByAngle(double angleRadians, {double? speed}) {
-    final moveSpeed = speed ?? this.speed;
-    velocity = Vector2(
-      cos(angleRadians) * moveSpeed,
-      sin(angleRadians) * moveSpeed,
-    );
+  // ignore: use_setters_to_change_properties
+  void correctPositionFromCollision(Vector2 position) {
+    super.position = position;
   }
 
-  // Advanced: move toward a target position (optional helper)
-  void moveToward(Vector2 target, {double? speed}) {
-    final direction = (target - position).normalized();
-    final moveSpeed = speed ?? this.speed;
-    velocity = direction * moveSpeed;
+  @override
+  set position(Vector2 newP) {
+    translate(newP - this.position);
+  }
+
+  /// Method used to translate component
+  void translate(Vector2 displacement) {
+    this.displacement = displacement;
+    _updateLastDirection(displacement);
+    position.add(displacement);
+  }
+
+  void moveLeftOnce({double? speed}) {
+    _lastSpeed = speed ?? this.speed;
+    setVelocityAxis(x: -_lastSpeed);
+    onApplyDisplacement(lastDt);
+    _velocity.add(Vector2(_lastSpeed, 0));
+    setVelocityAxis(x: 0);
+  }
+
+  void moveRightOnce({double? speed}) {
+    _lastSpeed = speed ?? this.speed;
+    setVelocityAxis(x: _lastSpeed);
+    onApplyDisplacement(lastDt);
+    setVelocityAxis(x: 0);
+  }
+
+  void moveUpOnce({double? speed}) {
+    _lastSpeed = speed ?? this.speed;
+    setVelocityAxis(y: -_lastSpeed);
+    onApplyDisplacement(lastDt);
+    setVelocityAxis(y: 0);
+  }
+
+  void moveDownOnce({double? speed}) {
+    _lastSpeed = speed ?? this.speed;
+    setVelocityAxis(y: _lastSpeed);
+    onApplyDisplacement(lastDt);
+    setVelocityAxis(y: 0);
+  }
+
+  void moveDownRightOnce({double? speed}) {
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
+    setVelocityAxis(y: _lastSpeed, x: _lastSpeed);
+    onApplyDisplacement(lastDt);
+    setVelocityAxis(y: 0, x: 0);
+  }
+
+  void moveDownLeftOnce({double? speed}) {
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
+    setVelocityAxis(y: _lastSpeed, x: -_lastSpeed);
+    onApplyDisplacement(lastDt);
+    setVelocityAxis(y: 0, x: 0);
+  }
+
+  void moveUpRightOnce({double? speed}) {
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
+    setVelocityAxis(y: -_lastSpeed, x: _lastSpeed);
+    onApplyDisplacement(lastDt);
+    setVelocityAxis(y: 0, x: 0);
+  }
+
+  void moveUpLeftOnce({double? speed}) {
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
+    setVelocityAxis(y: -_lastSpeed, x: -_lastSpeed);
+    onApplyDisplacement(lastDt);
+    setVelocityAxis(y: 0, x: 0);
+  }
+
+  /// Move player to Up
+  void moveUp({double? speed}) {
+    _lastSpeed = speed ?? this.speed;
+    setVelocityAxis(y: -_lastSpeed);
+  }
+
+  /// Move player to Down
+  void moveDown({double? speed}) {
+    _lastSpeed = speed ?? this.speed;
+    setVelocityAxis(y: _lastSpeed);
+  }
+
+  /// Move player to Left
+  void moveLeft({double? speed}) {
+    _lastSpeed = speed ?? this.speed;
+    setVelocityAxis(x: -_lastSpeed);
+  }
+
+  /// Move player to Right
+  void moveRight({double? speed}) {
+    _lastSpeed = speed ?? this.speed;
+    setVelocityAxis(x: _lastSpeed);
+  }
+
+  /// Move player to Up and Right
+  void moveUpRight({double? speed}) {
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
+    velocity = Vector2(_lastSpeed, -_lastSpeed);
+  }
+
+  /// Move player to Up and Left
+  void moveUpLeft({double? speed}) {
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
+    velocity = Vector2(-_lastSpeed, -_lastSpeed);
+  }
+
+  /// Move player to Down and Left
+  void moveDownLeft({double? speed}) {
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
+    velocity = Vector2(-_lastSpeed, _lastSpeed);
+  }
+
+  /// Move player to Down and Right
+  void moveDownRight({double? speed}) {
+    _lastSpeed = (speed ?? this.speed) * diaginalReduction;
+    velocity = Vector2(_lastSpeed, _lastSpeed);
+  }
+
+  /// Move Player to direction by radAngle
+  void moveFromAngle(double angle, {double? speed}) {
+    _lastSpeed = speed ?? this.speed;
+    velocity = BonfireUtil.vector2ByAngle(angle, intensity: _lastSpeed);
+  }
+
+  void stopMove({bool forceIdle = false, bool isX = true, bool isY = true}) {
+    if (isIdle && !forceIdle) {
+      return;
+    }
+    setZeroVelocity(isX: isX, isY: isY);
+    idle();
+  }
+
+  void idle() {}
+
+  void setZeroVelocity({bool isX = true, bool isY = true}) {
+    _velocity = _velocity.copyWith(
+      x: isX ? 0.0 : _velocity.x,
+      y: isY ? 0.0 : _velocity.y,
+    );
+    if (isX && isY) {
+      velocityRadAngle = 0.0;
+    }
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+    _updatePosition(dt);
+  }
 
-    // Apply movement
-    if (!velocity.isZero()) {
-      position += velocity * dt;
-      onMove(); // Optional callback
-      _alreadyCallIdle = false;
-    } else {
-      if (!_alreadyCallIdle) {
-        _handleIdle();
-        _alreadyCallIdle = true;
+  void moveFromDirection(
+    Direction direction, {
+    bool enabledDiagonal = true,
+    double? speed,
+  }) {
+    switch (direction) {
+      case Direction.left:
+        moveLeft(speed: speed);
+        break;
+      case Direction.right:
+        moveRight(speed: speed);
+        break;
+      case Direction.up:
+        moveUp(speed: speed);
+        break;
+      case Direction.down:
+        moveDown(speed: speed);
+        break;
+      case Direction.upLeft:
+        if (enabledDiagonal) {
+          moveUpLeft(speed: speed);
+        } else {
+          moveRight(speed: speed);
+        }
+        break;
+      case Direction.upRight:
+        if (enabledDiagonal) {
+          moveUpRight(speed: speed);
+        } else {
+          moveRight(speed: speed);
+        }
+        break;
+      case Direction.downLeft:
+        if (enabledDiagonal) {
+          moveDownLeft(speed: speed);
+        } else {
+          moveLeft(speed: speed);
+        }
+        break;
+      case Direction.downRight:
+        if (enabledDiagonal) {
+          moveDownRight(speed: speed);
+        } else {
+          moveRight(speed: speed);
+        }
+        break;
+    }
+  }
+
+  void _updateLastDirection(Vector2 velocity) {
+    velocityRadAngle = atan2(velocity.y, velocity.x);
+
+    if (velocity.x > 0) {
+      lastDirectionHorizontal = Direction.right;
+    } else if (velocity.x < 0) {
+      lastDirectionHorizontal = Direction.left;
+    }
+
+    if (velocity.y > 0) {
+      lastDirectionVertical = Direction.down;
+    } else if (velocity.y < 0) {
+      lastDirectionVertical = Direction.up;
+    }
+
+    if (velocity.y != 0 && velocity.x == 0) {
+      if (velocity.y > 0) {
+        lastDirection = Direction.down;
+      } else if (velocity.y < 0) {
+        lastDirection = Direction.up;
+      }
+      return;
+    }
+    if (velocity.x != 0 && velocity.y == 0) {
+      if (velocity.x > 0) {
+        lastDirection = Direction.right;
+      } else if (velocity.x < 0) {
+        lastDirection = Direction.left;
+      }
+      return;
+    }
+
+    final normal = velocity.normalized()..absolute();
+    const baseDiagonal = 0.2;
+
+    if (velocity.x > 0 && velocity.y > 0) {
+      if (normal.x > baseDiagonal && normal.y > baseDiagonal) {
+        lastDirection = Direction.downRight;
+      } else if (normal.x > normal.y) {
+        lastDirection = Direction.right;
+      } else {
+        lastDirection = Direction.down;
+      }
+    } else if (velocity.x > 0 && velocity.y < 0) {
+      if (normal.x > baseDiagonal && normal.y > baseDiagonal) {
+        lastDirection = Direction.upRight;
+      } else if (normal.x > normal.y) {
+        lastDirection = Direction.right;
+      } else {
+        lastDirection = Direction.up;
+      }
+    } else if (velocity.x < 0 && velocity.y > 0) {
+      if (normal.x > baseDiagonal && normal.y > baseDiagonal) {
+        lastDirection = Direction.downLeft;
+      } else if (normal.x > normal.y) {
+        lastDirection = Direction.left;
+      } else {
+        lastDirection = Direction.down;
+      }
+    } else if (velocity.x < 0 && velocity.y < 0) {
+      if (normal.x > baseDiagonal && normal.y > baseDiagonal) {
+        lastDirection = Direction.upLeft;
+      } else if (normal.x > normal.y) {
+        lastDirection = Direction.left;
+      } else {
+        lastDirection = Direction.up;
       }
     }
   }
 
-  // Simple direction calculation from velocity
-  Direction _getDirectionFromVelocity(Vector2 vel) {
-    if (vel.x.abs() <= 0.1 && vel.y.abs() <= 0.1) {
-      return direction;
-    }
-    if (vel.x.abs() > 0.1) {
-      hDirection = vel.x > 0 ? Direction.right : Direction.left;
-    }
-    if (vel.y.abs() > 0.1) {
-      vDirection = vel.y > 0 ? Direction.down : Direction.up;
-    }
-    if (vel.x.abs() > vel.y.abs()) {
-      return hDirection;
-    } else {
-      return vDirection;
-    }
-  }
-
-  // Optional callback - override if you need movement events
-  void onMove() {
-    _requestUpdatePriority();
-  }
-
   void _requestUpdatePriority() {
-    if (hasGameRef && direction.isVertical) {
+    if (hasGameRef) {
       (gameRef as BonfireGame).requestUpdatePriority();
     }
   }
 
-  void _handleIdle() {
-    if (!_alreadyCallIdle) {
-      idle();
-      _alreadyCallIdle = true;
+  void _updatePosition(double dt) {
+    onApplyDisplacement(dt);
+    if (_moveTheMin()) {
+      if (lastDirection.isDownSide || lastDirection.isUpSide) {
+        _requestUpdatePriority();
+      }
+      onMove(_lastSpeed, displacement, lastDirection, velocityRadAngle);
     }
   }
 
-  void idle() {}
-
-  // Stop movement
-  void stop() {
-    velocity = Vector2.zero();
-    _handleIdle();
+  bool _moveTheMin() {
+    return displacement.x.abs() > minDisplacementToConsiderMove ||
+        displacement.y.abs() > minDisplacementToConsiderMove;
   }
 
-  // Basic cardinal movements - covers 90% of use cases
-  void moveUp({double? speed, bool resetCrossAxis = false}) {
-    final moveSpeed = speed ?? this.speed;
-    velocity = velocity.copyWith(
-      y: -moveSpeed,
-      x: resetCrossAxis ? 0 : null,
-    );
+  bool isStopped() {
+    return velocity.x.abs() < 0.01 && velocity.y.abs() < 0.01;
   }
 
-  void moveDown({double? speed, bool resetCrossAxis = false}) {
-    final moveSpeed = speed ?? this.speed;
-    velocity = velocity.copyWith(
-      y: moveSpeed,
-      x: resetCrossAxis ? 0 : null,
-    );
-  }
-
-  void moveLeft({double? speed, bool resetCrossAxis = false}) {
-    final moveSpeed = speed ?? this.speed;
-    velocity = velocity.copyWith(
-      x: -moveSpeed,
-      y: resetCrossAxis ? 0 : null,
-    );
-  }
-
-  void moveRight({double? speed, bool resetCrossAxis = false}) {
-    final moveSpeed = speed ?? this.speed;
-    velocity = velocity.copyWith(
-      x: moveSpeed,
-      y: resetCrossAxis ? 0 : null,
-    );
-  }
-}
-
-/// Extension methods for even simpler usage
-extension MovementHelpers on Movement {
-  // Diagonal movements (for those who need them)
-  void moveUpRight({double? speed}) {
-    final moveSpeed =
-        (speed ?? this.speed) * Movement.diagonalFactor; // Normalize diagonal
-    velocity = Vector2(moveSpeed, -moveSpeed);
-  }
-
-  void moveUpLeft({double? speed}) {
-    final moveSpeed = (speed ?? this.speed) * Movement.diagonalFactor;
-    velocity = Vector2(-moveSpeed, -moveSpeed);
-  }
-
-  void moveDownRight({double? speed}) {
-    final moveSpeed = (speed ?? this.speed) * Movement.diagonalFactor;
-    velocity = Vector2(moveSpeed, moveSpeed);
-  }
-
-  void moveDownLeft({double? speed}) {
-    final moveSpeed = (speed ?? this.speed) * Movement.diagonalFactor;
-    velocity = Vector2(-moveSpeed, moveSpeed);
-  }
-
-  // Move from Direction enum
-  void moveFromDirection(
-    Direction direction, {
+  // Move to position. return true whether move.
+  bool moveToPosition(
+    Vector2 position, {
     double? speed,
-    bool useDiagonal = true,
-    bool resetCrossAxis = false,
+    bool useCenter = true,
   }) {
-    switch (direction) {
-      case Direction.up:
-        moveUp(speed: speed, resetCrossAxis: resetCrossAxis);
-        break;
-      case Direction.down:
-        moveDown(speed: speed, resetCrossAxis: resetCrossAxis);
-        break;
-      case Direction.left:
-        moveLeft(speed: speed, resetCrossAxis: resetCrossAxis);
-        break;
-      case Direction.right:
-        moveRight(speed: speed, resetCrossAxis: resetCrossAxis);
-        break;
-      case Direction.upLeft:
-        if (useDiagonal) {
-          moveUpLeft(speed: speed);
-        } else {
-          moveUp(speed: speed, resetCrossAxis: resetCrossAxis);
+    final diagonalSpeed = (speed ?? this.speed) * diaginalReduction;
+    final dtSpeed = (speed ?? this.speed) * lastDt * 1.1;
+    final dtDiagonalSpeed = diagonalSpeed * lastDt * 1.1;
+    final rect = rectCollision;
+    final compCenter = rect.centerVector2;
+    final compPosition = rect.positionVector2;
+
+    final diffX = position.x - (useCenter ? compCenter : compPosition).x;
+    final diffY = position.y - (useCenter ? compCenter : compPosition).y;
+
+    if (diffX.abs() < dtSpeed && diffY.abs() < dtSpeed) {
+      return false;
+    } else {
+      if (diffX.abs() > dtDiagonalSpeed && diffY.abs() > dtDiagonalSpeed) {
+        final minToMOve = dtDiagonalSpeed * 2;
+        final xOnce = diffX.abs() / lastDt;
+        final yOnce = diffY.abs() / lastDt;
+        if (diffX > 0 && diffY > 0) {
+          if (diffX.abs() < minToMOve) {
+            moveRightOnce(speed: xOnce);
+          } else if (diffY.abs() < minToMOve) {
+            moveDownOnce(speed: yOnce);
+          } else {
+            moveDownRight(speed: speed);
+          }
+          return true;
+        } else if (diffX < 0 && diffY > 0) {
+          if (diffX.abs() < minToMOve) {
+            moveLeftOnce(speed: xOnce);
+          } else if (diffY.abs() < minToMOve) {
+            moveDownOnce(speed: yOnce);
+          } else {
+            moveDownLeft(speed: speed);
+          }
+          return true;
+        } else if (diffX > 0 && diffY < 0) {
+          if (diffX.abs() < minToMOve) {
+            moveRightOnce(speed: xOnce);
+          } else if (diffY.abs() < minToMOve) {
+            moveUpOnce(speed: yOnce);
+          } else {
+            moveUpRight(speed: speed);
+          }
+          return true;
+        } else if (diffX < 0 && diffY < 0) {
+          if (diffX.abs() < dtSpeed) {
+            moveLeftOnce(speed: xOnce);
+          } else if (diffY.abs() < dtSpeed) {
+            moveUpOnce(speed: yOnce);
+          } else {
+            moveUpLeft(speed: speed);
+          }
+          return true;
         }
-        break;
-      case Direction.upRight:
-        if (useDiagonal) {
-          moveUpRight(speed: speed);
-        } else {
-          moveUp(speed: speed, resetCrossAxis: resetCrossAxis);
+      } else if (diffX.abs() > dtSpeed) {
+        if (diffX > 0) {
+          moveRight(speed: speed);
+          return true;
+        } else if (diffX < 0) {
+          moveLeft(speed: speed);
+          return true;
         }
-        break;
-      case Direction.downLeft:
-        if (useDiagonal) {
-          moveDownLeft(speed: speed);
-        } else {
-          moveDown(speed: speed, resetCrossAxis: resetCrossAxis);
+      } else if (diffY.abs() > dtSpeed) {
+        if (diffY > 0) {
+          moveDown(speed: speed);
+          return true;
+        } else if (diffY < 0) {
+          moveUp(speed: speed);
+          return true;
         }
-        break;
-      case Direction.downRight:
-        if (useDiagonal) {
-          moveDownRight(speed: speed);
-        } else {
-          moveDown(speed: speed, resetCrossAxis: resetCrossAxis);
-        }
-        break;
+      } else {
+        translate(Vector2(diffX, diffY));
+        return true;
+      }
     }
+    return false;
   }
 
-  /// Check if the component can move in the specified direction without collision
-  ///
-  /// This is an optimized version of the canMove function that:
-  /// - Uses fewer raycasts for better performance
-  /// - Has cleaner collision detection logic
-  /// - Properly handles diagonal movement checking
   bool canMove(
     Direction direction, {
     double? displacement,
     Iterable<ShapeHitbox>? ignoreHitboxes,
   }) {
-    // Calculate maximum distance to check based on speed and delta time
     final maxDistance = displacement ?? (speed * (lastDt * 2));
 
-    // For diagonal directions, check both component directions
     switch (direction) {
-      case Direction.upLeft:
-        return canMove(
-              Direction.up,
-              displacement: maxDistance,
-              ignoreHitboxes: ignoreHitboxes,
-            ) &&
-            canMove(
-              Direction.left,
-              displacement: maxDistance,
-              ignoreHitboxes: ignoreHitboxes,
-            );
-      case Direction.upRight:
-        return canMove(
-              Direction.up,
-              displacement: maxDistance,
-              ignoreHitboxes: ignoreHitboxes,
-            ) &&
-            canMove(
-              Direction.right,
-              displacement: maxDistance,
-              ignoreHitboxes: ignoreHitboxes,
-            );
-      case Direction.downLeft:
-        return canMove(
-              Direction.down,
-              displacement: maxDistance,
-              ignoreHitboxes: ignoreHitboxes,
-            ) &&
-            canMove(
-              Direction.left,
-              displacement: maxDistance,
-              ignoreHitboxes: ignoreHitboxes,
-            );
-      case Direction.downRight:
-        return canMove(
-              Direction.down,
-              displacement: maxDistance,
-              ignoreHitboxes: ignoreHitboxes,
-            ) &&
-            canMove(
-              Direction.right,
-              displacement: maxDistance,
-              ignoreHitboxes: ignoreHitboxes,
-            );
+      case Direction.right:
+      case Direction.left:
       case Direction.up:
       case Direction.down:
-      case Direction.left:
-      case Direction.right:
-        return !_hasCollisionInDirection(
+        if (_checkRaycastDirection(
           direction,
           maxDistance,
-          ignoreHitboxes,
-        );
-    }
-  }
-
-  /// Optimized collision detection for a single direction
-  /// Uses strategic raycast points for more accurate collision detection
-  bool _hasCollisionInDirection(
-    Direction direction,
-    double maxDistance,
-    Iterable<ShapeHitbox>? ignoreHitboxes,
-  ) {
-    final rect = rectCollision;
-    final center = rect.center.toVector2();
-    final size = rect.sizeVector2;
-    final directionVector = direction.toVector2();
-
-    // Calculate strategic raycast origins and extend distance
-    List<Vector2> origins;
-    var extendedDistance = maxDistance;
-
-    switch (direction) {
-      case Direction.left:
-      case Direction.right:
-        // For horizontal movement, check top, center, and bottom edges
-        final halfY = size.y / 2;
-        extendedDistance += size.x / 2; // Account for component width
-        origins = [
-          center.translated(0, -halfY * 0.8), // Near top
-          center, // Center
-          center.translated(0, halfY * 0.8), // Near bottom
-        ];
+          ignoreHitboxes: ignoreHitboxes,
+        )) {
+          return false;
+        }
         break;
-      case Direction.up:
-      case Direction.down:
-        // For vertical movement, check left, center, and right edges
-        final halfX = size.x / 2;
-        extendedDistance += size.y / 2; // Account for component height
-        origins = [
-          center.translated(-halfX * 0.8, 0), // Near left
-          center, // Center
-          center.translated(halfX * 0.8, 0), // Near right
-        ];
+      case Direction.upLeft:
+        if (_checkRaycastDirection(
+          Direction.left,
+          maxDistance,
+          ignoreHitboxes: ignoreHitboxes,
+        )) {
+          return false;
+        } else if (_checkRaycastDirection(
+          Direction.up,
+          maxDistance,
+          ignoreHitboxes: ignoreHitboxes,
+        )) {
+          return false;
+        }
         break;
-      default:
-        // This shouldn't happen for cardinal directions
-        origins = [center];
-    }
-
-    // Check if any raycast hits a collision
-    return origins.any(
-      (origin) =>
-          raycast(
-            directionVector,
-            maxDistance: extendedDistance,
-            origin: origin,
-            ignoreHitboxes: ignoreHitboxes,
-          ) !=
-          null,
-    );
-  }
-
-  /// Move component towards a target position with smart pathfinding
-  ///
-  /// This is an improved version of moveToPosition that:
-  /// - Uses more precise distance calculations
-  /// - Has better diagonal movement logic
-  /// - Cleaner code structure and better performance
-  /// - Returns true if movement occurred, false if already at target
-  bool moveToPosition(
-    Vector2 targetPosition, {
-    double? speed,
-    bool useCenter = true,
-  }) {
-    final moveSpeed = speed ?? this.speed;
-    final diagonalSpeed = moveSpeed * Movement.diagonalFactor;
-    final rect = rectCollision;
-
-    // Get current position (center or top-left based on useCenter)
-    final currentPos = useCenter ? rect.centerVector2 : rect.positionVector2;
-
-    // Calculate the difference vector
-    final diff = targetPosition - currentPos;
-
-    // Calculate movement thresholds based on speed and delta time
-    final dtSpeed = moveSpeed * lastDt * 1.1; // Add small buffer
-    final dtDiagonalSpeed = diagonalSpeed * lastDt * 1.3;
-
-    // Check if we're close enough to the target (arrived)
-    if (diff.length < dtSpeed) {
-      stop(); // Stop moving when we arrive
-      return false;
-    }
-
-    final absDiffX = diff.x.abs();
-    final absDiffY = diff.y.abs();
-
-    // Determine movement type and execute
-    if (absDiffX > dtDiagonalSpeed && absDiffY > dtDiagonalSpeed) {
-      // Diagonal movement - both components are significant
-      _executeDiagonalMove(diff, moveSpeed);
-    } else if (absDiffX > dtSpeed) {
-      // Horizontal movement only
-      if (diff.x > 0) {
-        moveRight(speed: moveSpeed);
-      } else {
-        moveLeft(speed: moveSpeed);
-      }
-    } else if (absDiffY > dtSpeed) {
-      // Vertical movement only
-      if (diff.y > 0) {
-        moveDown(speed: moveSpeed);
-      } else {
-        moveUp(speed: moveSpeed);
-      }
-    } else {
-      // Very close - make a direct translation to avoid oscillation
-      final directMovement = diff.normalized() * dtSpeed;
-      position += directMovement;
+      case Direction.upRight:
+        if (_checkRaycastDirection(
+          Direction.right,
+          maxDistance,
+          ignoreHitboxes: ignoreHitboxes,
+        )) {
+          return false;
+        } else if (_checkRaycastDirection(
+          Direction.up,
+          maxDistance,
+          ignoreHitboxes: ignoreHitboxes,
+        )) {
+          return false;
+        }
+        break;
+      case Direction.downLeft:
+        if (_checkRaycastDirection(
+          Direction.left,
+          maxDistance,
+          ignoreHitboxes: ignoreHitboxes,
+        )) {
+          return false;
+        } else if (_checkRaycastDirection(
+          Direction.down,
+          maxDistance,
+          ignoreHitboxes: ignoreHitboxes,
+        )) {
+          return false;
+        }
+        break;
+      case Direction.downRight:
+        if (_checkRaycastDirection(
+          Direction.right,
+          maxDistance,
+          ignoreHitboxes: ignoreHitboxes,
+        )) {
+          return false;
+        } else if (_checkRaycastDirection(
+          Direction.down,
+          maxDistance,
+          ignoreHitboxes: ignoreHitboxes,
+        )) {
+          return false;
+        }
+        break;
     }
 
     return true;
   }
 
-  /// Execute diagonal movement with proper speed normalization
-  void _executeDiagonalMove(Vector2 diff, double speed) {
-    if (diff.x > 0 && diff.y > 0) {
-      moveDownRight(speed: speed);
-    } else if (diff.x < 0 && diff.y > 0) {
-      moveDownLeft(speed: speed);
-    } else if (diff.x > 0 && diff.y < 0) {
-      moveUpRight(speed: speed);
-    } else if (diff.x < 0 && diff.y < 0) {
-      moveUpLeft(speed: speed);
+  bool _checkRaycastDirection(
+    Direction direction,
+    double maxDistance, {
+    Iterable<ShapeHitbox>? ignoreHitboxes,
+  }) {
+    var distance = maxDistance;
+    final centerComp = rectCollision.center.toVector2();
+    var origin1 = centerComp;
+    var origin3 = centerComp;
+    final size = rectCollision.sizeVector2;
+    final vetorDirection = direction.toVector2();
+
+    switch (direction) {
+      case Direction.right:
+      case Direction.left:
+        final halfY = size.y / 2;
+        final halfX = size.y / 2;
+        origin1 = origin1.translated(0, -halfY);
+        origin3 = origin3.translated(0, halfY);
+        distance += halfX;
+        break;
+      case Direction.up:
+      case Direction.down:
+        final halfX = size.x / 2;
+        final halfY = size.y / 2;
+        origin1 = origin1.translated(-halfX, 0);
+        origin3 = origin3.translated(halfX, 0);
+        distance += halfY;
+        break;
+      case Direction.upLeft:
+      case Direction.upRight:
+      case Direction.downLeft:
+      case Direction.downRight:
     }
+
+    final origins = [origin1, null, origin3];
+
+    return origins.any(
+      (origin) =>
+          raycast(
+            vetorDirection,
+            maxDistance: distance,
+            origin: origin,
+            ignoreHitboxes: ignoreHitboxes,
+          ) !=
+          null,
+    );
   }
 }

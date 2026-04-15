@@ -13,7 +13,7 @@ import 'package:example/pages/mini_games/lpc/widgets/dialog_custom_character.dar
 ///
 /// Rafaelbarbosatec
 /// on 27/06/22
-class LPCPlayer extends SimplePlayer with SimpleCollision {
+class LPCPlayer extends SimplePlayer with BlockMovementCollision {
   static String customWidgetKey = 'dialogCharacter';
   CustomStatus customStatus;
   LPCPlayer({

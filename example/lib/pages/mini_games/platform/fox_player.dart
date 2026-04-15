@@ -1,23 +1,24 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/pages/mini_games/platform/platform_spritesheet.dart';
 import 'package:flutter/services.dart';
-import 'package:platform_game/util/platform_spritesheet.dart';
 
-class FoxPlayer extends PlatformPlayer with Forces {
+class FoxPlayer extends PlatformPlayer with HandleForces {
   bool inTrunk = false;
-  FoxPlayer({required super.position})
-    : super(
-        size: Vector2.all(33),
-        speed: 50,
-        countJumps: 2,
-        animation: PlatformAnimations(
-          idleRight: PlatformSpritesheet.playerIdleRight,
-          runRight: PlatformSpritesheet.playerRunRight,
-          jump: PlatformJumpAnimations(
-            jumpUpRight: PlatformSpritesheet.playerJumpUp,
-            jumpDownRight: PlatformSpritesheet.playerJumpDown,
+  FoxPlayer({
+    required Vector2 position,
+  }) : super(
+          position: position,
+          size: Vector2.all(33),
+          speed: 50,
+          animation: PlatformAnimations(
+            idleRight: PlatformSpritesheet.playerIdleRight,
+            runRight: PlatformSpritesheet.playerRunRight,
+            jump: PlatformJumpAnimations(
+              jumpUpRight: PlatformSpritesheet.playerJumpUp,
+              jumpDownRight: PlatformSpritesheet.playerJumpDown,
+            ),
           ),
-        ),
-      );
+        );
 
   @override
   void onJoystickAction(JoystickActionEvent event) {
