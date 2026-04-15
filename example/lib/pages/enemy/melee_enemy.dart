@@ -40,7 +40,7 @@ class MeleeEnemy extends SimpleEnemy {
   }
 
   void _playAttackAnimation() {
-    switch (direction) {
+    switch (lastDirection) {
       case Direction.left:
         animation?.playOnceOther(PersonAttackEnum.meeleLeft);
         break;

@@ -9,8 +9,6 @@ mixin MovePerCell on Movement {
   bool _perCellEnabled = true;
   bool _perCellMoving = false;
 
-  Vector2? _targetCellPosition;
-
   void setupMovePerCell({
     bool? enabled,
     PushableFromEnum? pushableFrom,
@@ -29,77 +27,131 @@ mixin MovePerCell on Movement {
   Vector2 get cellSize => _cellSize ?? size;
 
   @override
-  void update(double dt) {
-    if (_perCellEnabled && _perCellMoving) {
-      if (_targetCellPosition != null) {
-        if (position.distanceTo(_targetCellPosition!) < 1.0) {
-          stop();
-          _perCellMoving = false;
-          _targetCellPosition = null;
-        }
-      }
-    }
-    super.update(dt);
-  }
-
-  @override
-  void moveLeft({double? speed, bool resetCrossAxis = false}) {
+  void moveLeft({double? speed}) {
     if (_perCellEnabled) {
       if (_perCellMoving) {
         return;
       }
-      _targetCellPosition = position + Vector2(-cellSize.x, 0);
       _perCellMoving = true;
-      super.moveLeft(speed: speed, resetCrossAxis: resetCrossAxis);
+      add(
+        MoveEffect.by(
+          Vector2(-cellSize.x, 0),
+          EffectController(
+            duration: _pushPerCellDuration,
+            curve: _pushPerCellCurve,
+          ),
+          onComplete: _perCeelMovecomplete,
+        ),
+      );
     } else {
-      super.moveLeft(speed: speed, resetCrossAxis: resetCrossAxis);
+      super.moveLeft(speed: speed);
     }
   }
 
   @override
-  void moveRight({double? speed, bool resetCrossAxis = false}) {
+  void moveRight({double? speed}) {
     if (_perCellEnabled) {
       if (_perCellMoving) {
         return;
       }
-      _targetCellPosition = position + Vector2(cellSize.x, 0);
       _perCellMoving = true;
-      super.moveRight(speed: speed, resetCrossAxis: resetCrossAxis);
+      add(
+        MoveEffect.by(
+          Vector2(cellSize.x, 0),
+          EffectController(
+            duration: _pushPerCellDuration,
+            curve: _pushPerCellCurve,
+          ),
+          onComplete: _perCeelMovecomplete,
+        ),
+      );
     } else {
-      super.moveRight(speed: speed, resetCrossAxis: resetCrossAxis);
+      super.moveRight(speed: speed);
     }
   }
 
   @override
-  void moveDown({double? speed, bool resetCrossAxis = false}) {
+  void moveDown({double? speed}) {
     if (_perCellEnabled) {
       if (_perCellMoving) {
         return;
       }
-      _targetCellPosition = position + Vector2(0, cellSize.y);
       _perCellMoving = true;
-      super.moveDown(speed: speed, resetCrossAxis: resetCrossAxis);
+      add(
+        MoveEffect.by(
+          Vector2(0, cellSize.x),
+          EffectController(
+            duration: _pushPerCellDuration,
+            curve: _pushPerCellCurve,
+          ),
+          onComplete: _perCeelMovecomplete,
+        ),
+      );
     } else {
-      super.moveDown(speed: speed, resetCrossAxis: resetCrossAxis);
+      super.moveDown(speed: speed);
     }
   }
 
   @override
-  void moveUp({double? speed, bool resetCrossAxis = false}) {
+  void moveUp({double? speed}) {
     if (_perCellEnabled) {
       if (_perCellMoving) {
         return;
       }
-      _targetCellPosition = position + Vector2(0, -cellSize.y);
       _perCellMoving = true;
-      super.moveUp(speed: speed, resetCrossAxis: resetCrossAxis);
+      add(
+        MoveEffect.by(
+          Vector2(0, -cellSize.x),
+          EffectController(
+            duration: _pushPerCellDuration,
+            curve: _pushPerCellCurve,
+          ),
+          onComplete: _perCeelMovecomplete,
+        ),
+      );
     } else {
-      super.moveUp(speed: speed, resetCrossAxis: resetCrossAxis);
+      super.moveUp(speed: speed);
     }
   }
 
   @override
-  void moveByAngle(double angle, {double? speed}) {
+  void moveDownLeft({double? speed}) {
+    if (!_perCellEnabled) {
+      super.moveDownLeft(speed: speed);
+    } else {
+      stopMove();
+    }
+  }
+
+  @override
+  void moveDownRight({double? speed}) {
+    if (!_perCellEnabled) {
+      super.moveDownRight(speed: speed);
+    } else {
+      stopMove();
+    }
+  }
+
+  @override
+  void moveUpRight({double? speed}) {
+    if (!_perCellEnabled) {
+      super.moveUpRight(speed: speed);
+    } else {
+      stopMove();
+    }
+  }
+
+  @override
+  void moveUpLeft({double? speed}) {
+    if (!_perCellEnabled) {
+      super.moveUpLeft(speed: speed);
+    } else {
+      stopMove();
+    }
+  }
+
+  @override
+  void moveFromAngle(double angle, {double? speed}) {
     if (_perCellEnabled) {
       switch (BonfireUtil.getDirectionFromAngle(angle, directionSpace: 45)) {
         case Direction.left:
@@ -117,18 +169,11 @@ mixin MovePerCell on Movement {
         default:
       }
     } else {
-      super.moveByAngle(angle, speed: speed);
+      super.moveFromAngle(angle, speed: speed);
     }
   }
 
-  @override
-  void onGameMounted() {
-    if (this is MovementByJoystick) {
-      (this as MovementByJoystick).setupMovementByJoystick(
-        startOnIdle: false,
-        diagonalEnabled: false,
-      );
-    }
-    super.onGameMounted();
+  void _perCeelMovecomplete() {
+    _perCellMoving = false;
   }
 }

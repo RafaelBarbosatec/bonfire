@@ -4,25 +4,32 @@ import 'dart:math';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/collision/collision_util.dart';
 
-export 'body_type.dart';
 export 'collision_data.dart';
 
+enum BodyType {
+  dynamic,
+  static;
+
+  bool get isDynamic => this == BodyType.dynamic;
+  bool get isStatic => this == BodyType.static;
+}
+
 /// Mixin responsible for adding stop the movement when happen collision
-mixin SimpleCollision on Movement {
-  BodyType bodyType = BodyType.dynamic;
+mixin BlockMovementCollision on Movement {
+  BodyType _bodyType = BodyType.dynamic;
   bool _blockMovementCollisionEnabled = true;
   bool get blockMovementCollisionEnabled => _blockMovementCollisionEnabled;
-  final Map<SimpleCollision, CollisionData> _collisionsResolution = {};
+  final Map<BlockMovementCollision, CollisionData> _collisionsResolution = {};
   CollisionData? _lastCollisionData;
   CollisionData? get lastCollisionData => _lastCollisionData;
 
-  void setupCollision({bool? enabled, BodyType? bodyType}) {
-    this.bodyType = bodyType ?? this.bodyType;
+  void setupBlockMovementCollision({bool? enabled, BodyType? bodyType}) {
+    _bodyType = bodyType ?? _bodyType;
     _blockMovementCollisionEnabled = enabled ?? _blockMovementCollisionEnabled;
   }
 
   void setCollisionResolution(
-    SimpleCollision other,
+    BlockMovementCollision other,
     CollisionData data,
   ) {
     _collisionsResolution[other] = data;
@@ -35,13 +42,13 @@ mixin SimpleCollision on Movement {
     return true;
   }
 
-  void onMovementBlocked(
+  void onBlockedMovement(
     PositionComponent other,
     CollisionData collisionData,
   ) {
     _lastCollisionData = collisionData;
 
-    if (bodyType.isDynamic) {
+    if (_bodyType.isDynamic) {
       Vector2 correction;
       var depth = collisionData.depth.abs();
       if (depth > 0) {
@@ -49,12 +56,13 @@ mixin SimpleCollision on Movement {
       }
 
       correction = -collisionData.normal * depth;
-      if ((other is SimpleCollision) && other.bodyType.isDynamic) {
+      if ((other is BlockMovementCollision) && other._bodyType.isDynamic) {
         correction = -collisionData.normal * depth / 2;
       }
 
-      position += correction;
+      correctPositionFromCollision(position + correction);
     }
+
     velocity -= getVelocityReflection(other, collisionData);
   }
 
@@ -62,7 +70,7 @@ mixin SimpleCollision on Movement {
     PositionComponent other,
     CollisionData data,
   ) {
-    if (bodyType.isStatic) {
+    if (_bodyType.isStatic) {
       return velocity;
     }
     return data.normal * velocity.dot(data.normal);
@@ -78,7 +86,7 @@ mixin SimpleCollision on Movement {
     final stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
         : true;
-    if (other is SimpleCollision) {
+    if (other is BlockMovementCollision) {
       stopOtherMovement = other.onBlockMovement(
         intersectionPoints,
         this,
@@ -91,7 +99,7 @@ mixin SimpleCollision on Movement {
     }
 
     if (_collisionsResolution.containsKey(other)) {
-      onMovementBlocked(
+      onBlockedMovement(
         other,
         _collisionsResolution[other]!,
       );
@@ -142,8 +150,8 @@ mixin SimpleCollision on Movement {
         intersectionPoints: intersectionPoints.toList(),
         direction: colisionResult.normal.toDirection(),
       );
-      onMovementBlocked(other, data);
-      if (other is SimpleCollision) {
+      onBlockedMovement(other, data);
+      if (other is BlockMovementCollision) {
         other.setCollisionResolution(this, data.inverted());
       }
     }

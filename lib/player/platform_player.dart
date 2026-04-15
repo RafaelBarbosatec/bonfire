@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
 class PlatformPlayer extends SimplePlayer
-    with SimpleCollision, Jumper, JumperAnimation {
+    with BlockMovementCollision, Jumper, JumperAnimation {
   PlatformPlayer({
     required super.position,
     required super.size,

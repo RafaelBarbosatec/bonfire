@@ -5,7 +5,7 @@ import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class BarrelTap extends GameDecoration
-    with TapGesture, Movement, Forces, SimpleCollision {
+    with TapGesture, Movement, HandleForces, BlockMovementCollision {
   late TextPaint _textPaint;
   final String text = 'Touch me';
   BarrelTap({required Vector2 position})
@@ -14,13 +14,13 @@ class BarrelTap extends GameDecoration
           position: position,
           size: Vector2.all(16),
         ) {
-    setFriction(Vector2.all(1));
+    addForce(ResistanceForce2D(id: 'resi', value: Vector2.all(5)));
   }
 
   @override
   void onTap() {
     double randomAngle = Random().nextDouble() * pi * 2;
-    moveByAngle(randomAngle);
+    moveFromAngle(randomAngle);
   }
 
   @override

@@ -15,6 +15,8 @@ class SimpleEnemy extends Enemy with DirectionAnimation {
     super.receivesAttackFrom,
   }) {
     this.animation = animation;
-    direction = initDirection;
+    lastDirection = initDirection;
+    lastDirectionHorizontal =
+        initDirection == Direction.left ? Direction.left : Direction.right;
   }
 }

@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:example/pages/mini_games/platform/fox_player.dart';
+import 'package:example/pages/mini_games/platform/gem_decoration.dart';
 import 'package:flutter/material.dart';
-import 'package:platform_game/components/fox_player.dart';
-import 'package:platform_game/components/gem_decoration.dart';
 
 class PlatformGameController extends GameComponent {
   bool showGameOver = false;

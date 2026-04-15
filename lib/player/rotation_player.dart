@@ -15,7 +15,6 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
     double currentRadAngle = -1.55,
     super.life,
   }) {
-    anchor = Anchor.center;
     setupMovementByJoystick(
       moveType: MovementByJoystickType.angle,
     );
@@ -56,5 +55,11 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
   Future<void> onLoad() async {
     await super.onLoad();
     setAnimation(animIdle);
+  }
+
+  @override
+  void onMount() {
+    anchor = Anchor.center;
+    super.onMount();
   }
 }
