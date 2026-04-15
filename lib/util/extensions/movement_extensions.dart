@@ -19,7 +19,7 @@ extension MovementExtensions on Movement {
 
     if (rectCollision.overlaps(rectPlayerCollision)) {
       close?.call();
-      stopMove();
+      stop();
       return false;
     }
 
@@ -27,6 +27,7 @@ extension MovementExtensions on Movement {
     var directionToMove = BonfireUtil.getDirectionFromAngle(
       radAngle,
     );
+
     final newDirectionToMove = _checkRestrictAxis(
       directionToMove,
       movementAxis,
@@ -34,61 +35,15 @@ extension MovementExtensions on Movement {
     if (newDirectionToMove != null) {
       directionToMove = newDirectionToMove;
     } else {
-      stopMove();
+      stop();
       return false;
     }
 
     if (canMove(directionToMove, ignoreHitboxes: target.shapeHitboxes)) {
-      if (directionToMove != lastDirection) {
-        setZeroVelocity();
-      }
-      moveFromDirection(directionToMove);
+      moveFromDirection(directionToMove, resetCrossAxis: true);
       return true;
     } else {
-      switch (directionToMove) {
-        case Direction.right:
-        case Direction.left:
-        case Direction.up:
-        case Direction.down:
-          break;
-        case Direction.upLeft:
-          if (canMove(Direction.left)) {
-            moveLeft();
-            return true;
-          } else if (canMove(Direction.up)) {
-            moveUp();
-            return true;
-          }
-          break;
-        case Direction.upRight:
-          if (canMove(Direction.right)) {
-            moveRight();
-            return true;
-          } else if (canMove(Direction.up)) {
-            moveUp();
-            return true;
-          }
-          break;
-        case Direction.downLeft:
-          if (canMove(Direction.left)) {
-            moveLeft();
-            return true;
-          } else if (canMove(Direction.down)) {
-            moveDown();
-            return true;
-          }
-          break;
-        case Direction.downRight:
-          if (canMove(Direction.right)) {
-            moveRight();
-            return true;
-          } else if (canMove(Direction.down)) {
-            moveDown();
-            return true;
-          }
-          break;
-      }
-      stopMove();
+      stop();
       return false;
     }
   }
@@ -103,7 +58,7 @@ extension MovementExtensions on Movement {
 
     if (distance < minDistance) {
       final angle = getAngleToTarget(target);
-      moveFromAngle(angle + pi);
+      moveByAngle(angle + pi);
       return false;
     }
     return true;
@@ -168,8 +123,8 @@ extension MovementExtensions on Movement {
       translateY = translateY * -1;
     }
 
-    if (translateX.abs() < dtSpeed && translateY.abs() < dtSpeed) {
-      stopMove();
+    if (translateX.abs() < 0.1 && translateY.abs() < 0.1) {
+      stop();
       positioned?.call(target);
       return false;
     } else {
@@ -208,26 +163,26 @@ extension MovementExtensions on Movement {
     } else if (translateX < 0 && translateY > 0) {
       moveDownLeft();
     } else {
-      if (translateX.abs() > dtSpeed) {
+      if (translateX.abs() > 0.1) {
         if (translateX > 0) {
           moveRight();
         } else if (translateX < 0) {
           moveLeft();
         }
-      } else if (translateX.abs() > dtSpeed / 2) {
+      } else if (translateX.abs() > 0.1 / 2) {
         if (translateX > 0) {
           moveRight(speed: speed / 2);
         } else if (translateX < 0) {
           moveLeft(speed: speed / 2);
         }
       }
-      if (translateY.abs() > dtSpeed) {
+      if (translateY.abs() > 0.1) {
         if (translateY > 0) {
           moveDown();
         } else if (translateY < 0) {
           moveUp();
         }
-      } else if (translateY.abs() > dtSpeed / 2) {
+      } else if (translateY.abs() > 0.1 / 2) {
         if (translateY > 0) {
           moveDown(speed: speed / 2);
         } else if (translateY < 0) {

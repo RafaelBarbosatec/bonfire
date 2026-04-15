@@ -31,7 +31,7 @@ class BSeeAndPositioned extends Behavior {
       doElseBehavior: BCustom(
         behavior: (dt, comp, game) {
           if (comp is Movement && doElseBehavior == null) {
-            comp.stopMove();
+            comp.stop();
           }
           return doElseBehavior?.runAction(dt, comp, game) ?? true;
         },
@@ -49,13 +49,11 @@ class BSeeAndPositioned extends Behavior {
                 final playerDirection = comp.getDirectionToTarget(
                   target,
                 );
-                comp.lastDirection = playerDirection;
-                if (comp.lastDirection.isHorizontal) {
-                  comp.lastDirectionHorizontal = comp.lastDirection;
-                }
+                
+                comp.direction = playerDirection;
 
                 if (comp.checkInterval(_intervalKey, 500, dt)) {
-                  comp.stopMove();
+                  comp.stop();
                 }
                 positioned.call(target);
               }

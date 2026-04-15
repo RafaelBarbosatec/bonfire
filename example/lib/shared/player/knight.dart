@@ -14,7 +14,7 @@ enum PlayerAttackType {
 }
 
 class Knight extends SimplePlayer
-    with Lighting, BlockMovementCollision, FireballAttack {
+    with Lighting, SimpleCollision, FireballAttack {
   double attack = 20;
   bool canShowEmote = true;
   bool showedDialog = false;
@@ -153,7 +153,7 @@ class Knight extends SimplePlayer
     if (!showedDialog) {
       showedDialog = true;
       double lastZoom = gameRef.camera.zoom;
-      stopMove();
+      stop();
       PlayerDialog.execShowTalk(
         gameRef,
         enemy,

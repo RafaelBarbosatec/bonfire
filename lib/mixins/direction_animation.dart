@@ -27,7 +27,7 @@ mixin DirectionAnimation on Movement {
     if (isIdle) {
       return;
     }
-    switch (lastDirection) {
+    switch (direction) {
       case Direction.left:
         onPlayRunLeftAnimation();
         break;
@@ -62,7 +62,7 @@ mixin DirectionAnimation on Movement {
   }
 
   void _playIdleAnimation() {
-    switch (lastDirection) {
+    switch (direction) {
       case Direction.left:
         onPlayIdleLeftAnimation();
         break;
@@ -117,7 +117,7 @@ mixin DirectionAnimation on Movement {
     if (animation?.canRunDown == true) {
       animation?.play(SimpleAnimationEnum.runDown);
     } else {
-      if (lastDirectionHorizontal == Direction.left) {
+      if (hDirection.isLeftSide) {
         animation?.play(SimpleAnimationEnum.runLeft);
       } else {
         animation?.play(SimpleAnimationEnum.runRight);
@@ -129,7 +129,7 @@ mixin DirectionAnimation on Movement {
     if (animation?.canRunUp == true) {
       animation?.play(SimpleAnimationEnum.runUp);
     } else {
-      if (lastDirectionHorizontal == Direction.left) {
+      if (hDirection.isLeftSide) {
         animation?.play(SimpleAnimationEnum.runLeft);
       } else {
         animation?.play(SimpleAnimationEnum.runRight);
@@ -181,7 +181,7 @@ mixin DirectionAnimation on Movement {
     if (animation?.canIdleUp == true) {
       animation?.play(SimpleAnimationEnum.idleUp);
     } else {
-      if (lastDirectionHorizontal == Direction.left) {
+      if (hDirection.isLeftSide) {
         animation?.play(SimpleAnimationEnum.idleLeft);
       } else {
         animation?.play(SimpleAnimationEnum.idleRight);
@@ -193,7 +193,7 @@ mixin DirectionAnimation on Movement {
     if (animation?.canIdleDown == true) {
       animation?.play(SimpleAnimationEnum.idleDown);
     } else {
-      if (lastDirectionHorizontal == Direction.left) {
+      if (hDirection.isLeftSide) {
         animation?.play(SimpleAnimationEnum.idleLeft);
       } else {
         animation?.play(SimpleAnimationEnum.idleRight);

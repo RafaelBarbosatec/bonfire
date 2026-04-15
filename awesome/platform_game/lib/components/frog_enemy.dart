@@ -1,26 +1,24 @@
 import 'dart:math';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:example/pages/mini_games/platform/fox_player.dart';
-import 'package:example/pages/mini_games/platform/platform_spritesheet.dart';
+import 'package:platform_game/components/fox_player.dart';
+import 'package:platform_game/util/platform_spritesheet.dart';
 
-class FrogEnemy extends PlatformEnemy with HandleForces {
+class FrogEnemy extends PlatformEnemy with Forces {
   int _timeToWaitBeforeJump = 4000;
-  FrogEnemy({
-    required Vector2 position,
-  }) : super(
-          position: position,
-          size: Vector2(35, 32),
-          speed: 50,
-          animation: PlatformAnimations(
-            idleRight: PlatformSpritesheet.frogIdleRight,
-            runRight: PlatformSpritesheet.frogIdleRight,
-            jump: PlatformJumpAnimations(
-              jumpUpRight: PlatformSpritesheet.frogJumpUp,
-              jumpDownRight: PlatformSpritesheet.frogJumpDown,
-            ),
+  FrogEnemy({required super.position})
+    : super(
+        size: Vector2(35, 32),
+        speed: 50,
+        animation: PlatformAnimations(
+          idleRight: PlatformSpritesheet.frogIdleRight,
+          runRight: PlatformSpritesheet.frogIdleRight,
+          jump: PlatformJumpAnimations(
+            jumpUpRight: PlatformSpritesheet.frogJumpUp,
+            jumpDownRight: PlatformSpritesheet.frogJumpDown,
           ),
-        );
+        ),
+      );
 
   @override
   bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
@@ -29,11 +27,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   }
 
   @override
-  void onBlockedMovement(
-    PositionComponent other,
-    CollisionData collisionData,
-  ) {
-    super.onBlockedMovement(other, collisionData);
+  void onMovementBlocked(PositionComponent other, CollisionData collisionData) {
     if (other is FoxPlayer) {
       if (collisionData.direction.isUpSide) {
         if (!isDead) {
@@ -44,12 +38,13 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
         other.onDie();
       }
     }
+    super.onMovementBlocked(other, collisionData);
   }
 
   @override
   void onDie() {
     super.onDie();
-    handleForcesEnabled = false;
+    disableForces();
     velocity.setZero();
     animation?.playOnce(
       PlatformSpritesheet.enemyExplosion,
@@ -61,17 +56,17 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   @override
   void update(double dt) {
     super.update(dt);
-    if (checkInterval('jump', _timeToWaitBeforeJump, dt) &&
-        !isDead &&
-        isVisible) {
+    if (isDead) return;
+    if (!isVisible) return;
+    if (checkInterval('jump', _timeToWaitBeforeJump, dt)) {
       animation?.playOnce(
         PlatformSpritesheet.frogActionRight,
-        flipX: lastDirectionHorizontal == Direction.left,
+        flipX: direction.isLeftSide,
         onFinish: () async {
           await Future.delayed(const Duration(seconds: 2));
           if (!isDead) {
-            jump(jumpSpeed: 160);
             Random().nextBool() ? moveRight() : moveLeft();
+            jump(jumpSpeed: 160);
           }
         },
       );
@@ -81,7 +76,7 @@ class FrogEnemy extends PlatformEnemy with HandleForces {
   @override
   void onJump(JumpingStateEnum state) {
     if (state == JumpingStateEnum.idle) {
-      stopMove(isY: false);
+      velocity = velocity.copyWith(x: 0);
     }
     super.onJump(state);
   }

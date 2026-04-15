@@ -10,11 +10,13 @@ class MovementByJoystickProps {
   bool intensityEnabled;
   bool diagonalEnabled;
   bool enabled;
+  bool stopOnIdle;
   MovementByJoystickProps({
     this.moveType = MovementByJoystickType.direction,
     this.intensityEnabled = false,
     this.diagonalEnabled = true,
     this.enabled = true,
+    this.stopOnIdle = true,
   });
 }
 
@@ -25,7 +27,7 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
   double _currentDirectionalAngle = 0;
   double _joystickAngle = 0;
   double _lastSpeed = 0;
-  double get _lastSpeedDiagonal => _lastSpeed * Movement.diaginalReduction;
+  double get _lastSpeedDiagonal => _lastSpeed * Movement.diagonalFactor;
 
   /// the angle the player should move in 360 mode
   double movementByJoystickRadAngle = 0;
@@ -37,12 +39,14 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
     bool intensityEnabled = false,
     bool diagonalEnabled = true,
     bool enabled = true,
+    bool startOnIdle = true,
   }) {
     _settings = MovementByJoystickProps(
       moveType: moveType,
       intensityEnabled: intensityEnabled,
       diagonalEnabled: diagonalEnabled,
       enabled: enabled,
+      stopOnIdle: startOnIdle,
     );
   }
 
@@ -134,9 +138,12 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
         _isIdle = false;
         break;
       case JoystickMoveDirectional.IDLE:
+        if (!_settings.stopOnIdle) {
+          return;
+        }
         if (!_isIdle) {
           _isIdle = true;
-          stopMove(forceIdle: true);
+          stop();
         }
         break;
     }
@@ -145,11 +152,11 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
   void _moveAngle(double speed) {
     if (_currentDirectional != JoystickMoveDirectional.IDLE) {
       _isIdle = false;
-      moveFromAngle(movementByJoystickRadAngle, speed: speed);
+      moveByAngle(movementByJoystickRadAngle, speed: speed);
     } else {
       if (!_isIdle) {
         _isIdle = true;
-        stopMove(forceIdle: true);
+        stop();
       }
     }
   }
@@ -165,6 +172,9 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
   }
 
   void _toCorrectDirection(JoystickMoveDirectional directional) {
+    if(!_settings.stopOnIdle){
+      return;
+    }
     velocity.sub(_getRestDirectionalVelocity(_currentDirectional));
     velocity.add(_getDirectionalVelocity(directional));
   }

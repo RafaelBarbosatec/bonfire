@@ -78,31 +78,15 @@ mixin Pushable on Movement {
   void _move(Movement component, Vector2 displacement) {
     if (displacement.x.abs() > displacement.y.abs()) {
       if (displacement.x < 0) {
-        if (this is HandleForces) {
-          moveLeft(speed: component.speed / (this as HandleForces).mass);
-        } else {
-          moveLeftOnce();
-        }
+        moveLeft();
       } else {
-        if (this is HandleForces) {
-          moveRight(speed: component.speed / (this as HandleForces).mass);
-        } else {
-          moveRightOnce();
-        }
+        moveRight();
       }
     } else {
       if (displacement.y < 0) {
-        if (this is HandleForces) {
-          moveUp(speed: component.speed / (this as HandleForces).mass);
-        } else {
-          moveUpOnce();
-        }
+        moveUp();
       } else {
-        if (this is HandleForces) {
-          moveDown(speed: component.speed / (this as HandleForces).mass);
-        } else {
-          moveDownOnce();
-        }
+        moveDown();
       }
     }
   }

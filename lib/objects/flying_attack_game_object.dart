@@ -5,10 +5,10 @@ import 'package:flutter/widgets.dart';
 
 /// Animated component used like range attack.
 class FlyingAttackGameObject extends AnimatedGameObject
-    with Movement, CanNotSeen, BlockMovementCollision {
+    with Movement, CanNotSeen, SimpleCollision {
   final dynamic id;
   Future<SpriteAnimation>? animationDestroy;
-  final Direction? direction;
+
   final double damage;
   final AttackOriginEnum attackFrom;
   final bool withDecorationCollision;
@@ -24,7 +24,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     required super.size,
     required super.animation,
     super.angle = 0,
-    this.direction,
+    Direction? direction,
     this.id,
     this.animationDestroy,
     this.destroySize,
@@ -43,9 +43,9 @@ class FlyingAttackGameObject extends AnimatedGameObject
     _senAngle = sin(angle);
 
     if (direction != null) {
-      moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
+      moveFromDirection(direction, useDiagonal: enabledDiagonal);
     } else {
-      moveFromAngle(angle);
+      moveByAngle(angle);
     }
   }
 
@@ -53,7 +53,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     required super.position,
     required super.size,
     required super.animation,
-    required this.direction,
+    Direction? direction,
     this.id,
     this.animationDestroy,
     this.destroySize,
@@ -67,7 +67,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     this.collision,
   }) {
     this.speed = speed;
-    moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
+    moveFromDirection(direction!, useDiagonal: enabledDiagonal);
   }
 
   FlyingAttackGameObject.byAngle({
@@ -86,13 +86,13 @@ class FlyingAttackGameObject extends AnimatedGameObject
     this.enabledDiagonal = true,
     super.lightingConfig,
     this.collision,
-  }) : direction = null {
+  }) {
     this.speed = speed;
 
     _cosAngle = cos(angle);
     _senAngle = sin(angle);
 
-    moveFromAngle(angle);
+    moveByAngle(angle);
   }
 
   @override
@@ -142,11 +142,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     removeFromParent();
     if (animationDestroy != null) {
       final currentDirection = direction;
-      if (currentDirection != null) {
-        _destroyByDirection(currentDirection);
-      } else {
-        _destroyByAngle();
-      }
+      _destroyByDirection(currentDirection);
     }
     onDestroy?.call();
   }

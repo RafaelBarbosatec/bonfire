@@ -16,7 +16,7 @@ import 'package:flutter/services.dart';
 /// Rafaelbarbosatec
 /// on 27/01/22
 class SoldierPlayer extends RotationPlayer
-    with BlockMovementCollision, Lighting {
+    with SimpleCollision, Lighting {
   SoldierPlayer(Vector2 position)
       : super(
           position: position,
@@ -55,7 +55,7 @@ class SoldierPlayer extends RotationPlayer
   void actionAttack() {
     Vector2 centerOffset = Vector2.zero();
 
-    switch (lastDirection) {
+    switch (direction) {
       case Direction.left:
         centerOffset = Vector2(10, -10);
         break;

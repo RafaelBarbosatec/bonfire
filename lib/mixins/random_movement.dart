@@ -102,23 +102,23 @@ mixin RandomMovement on Movement {
     }
   }
 
-  @override
-  void correctPositionFromCollision(Vector2 position) {
-    super.correctPositionFromCollision(position);
-    if (this is Jumper) {
-      if (this is BlockMovementCollision) {
-        final isV = (this as BlockMovementCollision)
-                .lastCollisionData
-                ?.direction
-                .isVertical ==
-            true;
-        if (isV) {
-          return;
-        }
-      }
-    }
-    _stop();
-  }
+  // @override
+  // void correctPositionFromCollision(Vector2 position) {
+  //   super.correctPositionFromCollision(position);
+  //   if (this is Jumper) {
+  //     if (this is BlockMovementCollision) {
+  //       final isV = (this as BlockMovementCollision)
+  //               .lastCollisionData
+  //               ?.direction
+  //               .isVertical ==
+  //           true;
+  //       if (isV) {
+  //         return;
+  //       }
+  //     }
+  //   }
+  //   _stop();
+  // }
 
   void _stop() {
     _onStopMove?.call();
@@ -126,7 +126,7 @@ mixin RandomMovement on Movement {
     _onStartMove = null;
     _distanceToArrived = null;
     _originPosition = Vector2.zero();
-    stopMove();
+    stop();
   }
 
   @override

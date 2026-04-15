@@ -424,7 +424,7 @@ extension GameComponentExtensions on GameComponent {
       directionFromAngle,
       displacement: displacement.maxValue(),
     )) {
-      comp.translate(displacement);
+      comp.position = comp.position + displacement;
     }
   }
 

@@ -24,7 +24,9 @@ class ParallaxPage extends StatelessWidget {
         WorldMapReader.fromAsset('platform/parallax_map.tmj'),
       ),
       background: ParallaxBackground(),
-      globalForces: [GravityForce2D()],
+      globalForces: GlobalForcesSettings(
+        gravity: Vector2(0, 300),
+      ),
       player: SimpleFoxPlayer(position: Vector2.all(50)),
       cameraConfig: CameraConfig(
         moveOnlyMapArea: true,

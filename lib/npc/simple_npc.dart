@@ -25,8 +25,6 @@ class SimpleNpc extends Npc with DirectionAnimation {
     Direction initDirection = Direction.right,
   }) {
     this.animation = animation;
-    lastDirection = initDirection;
-    lastDirectionHorizontal =
-        initDirection == Direction.left ? Direction.left : Direction.right;
+    direction = initDirection;
   }
 }

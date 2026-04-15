@@ -1,0 +1,14 @@
+{ "columns":26,
+ "image":"props.png",
+ "imageheight":224,
+ "imagewidth":416,
+ "margin":0,
+ "name":"props",
+ "spacing":0,
+ "tilecount":364,
+ "tiledversion":"1.9.0",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.8"
+}

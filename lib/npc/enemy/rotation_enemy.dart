@@ -29,10 +29,10 @@ class RotationEnemy extends Enemy with UseSpriteAnimation, UseAssetsLoader {
   }
 
   @override
-  void moveFromAngle(double angle, {double? speed}) {
+  void moveByAngle(double angle, {double? speed}) {
     setAnimation(animRun);
     this.angle = angle;
-    super.moveFromAngle(angle, speed: speed);
+    super.moveByAngle(angle, speed: speed);
   }
 
   @override

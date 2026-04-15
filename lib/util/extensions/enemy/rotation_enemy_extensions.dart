@@ -31,17 +31,17 @@ extension RotationEnemyExtensions on RotationEnemy {
 
         if (rectCollision.overlaps(rectPlayerCollision)) {
           closePlayer(player);
-          moveFromAngle(radAngle);
-          stopMove();
+          moveByAngle(radAngle);
+          stop();
           return;
         }
 
-        moveFromAngle(radAngle);
+        moveByAngle(radAngle);
       },
       notObserved: () {
-        final stop = notObserved?.call() ?? true;
-        if (stop) {
-          stopMove();
+        final canStop = notObserved?.call() ?? true;
+        if (canStop) {
+          stop();
         }
       },
     );
@@ -81,18 +81,18 @@ extension RotationEnemyExtensions on RotationEnemy {
         final dist = myPosition.distanceTo(playerPosition);
 
         if (dist >= distance) {
-          stopMove();
+          stop();
           return;
         }
 
-        moveFromAngle(
+        moveByAngle(
           getInverseAngleToPlayer(),
         );
       },
       notObserved: () {
-        final stop = notObserved?.call() ?? true;
-        if (stop) {
-          stopMove();
+        final canStop = notObserved?.call() ?? true;
+        if (canStop) {
+          stop();
         }
       },
     );
