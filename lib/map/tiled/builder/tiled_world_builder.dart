@@ -30,6 +30,7 @@ typedef ObjectBuilder = GameComponent Function(
 
 class TiledWorldBuilder {
   static const ABOVE_TYPE = 'above';
+  static const LAYERED_TYPE = 'layered';
   static const DYNAMIC_ABOVE_TYPE = 'dynamicAbove';
   static const _mapOrientationSupported = 'orthogonal';
 
@@ -39,6 +40,7 @@ class TiledWorldBuilder {
   final double sizeToUpdate;
   final List<Layer> _layers = [];
   final List<GameComponent> _components = [];
+  final List<GameComponent> _mapDecorations = [];
   String? _basePath;
   TiledMap? _tiledMap;
   double _tileWidth = 0;
@@ -91,6 +93,7 @@ class TiledWorldBuilder {
           tileSizeToUpdate: sizeToUpdate,
         ),
         components: _components,
+        mapChildren: _mapDecorations,
       ),
     );
   }
@@ -142,13 +145,9 @@ class TiledWorldBuilder {
     final offsetX = _getDoubleByProportion(tileLayer.offsetX);
     final offsetY = _getDoubleByProportion(tileLayer.offsetY);
     final opacity = tileLayer.opacity ?? 1.0;
-    final layerIsAbove = tileLayer.properties
-            ?.where(
-              (element) =>
-                  element.name == 'type' && element.value == ABOVE_TYPE,
-            )
-            .isNotEmpty ??
-        false;
+    final layerIsAbove = _layerHasType(tileLayer, ABOVE_TYPE);
+    final layerIsLayered = _layerHasType(tileLayer, LAYERED_TYPE);
+    final layerIndex = countTileLayer;
     for (final tile in tileLayer.data ?? const <int>[]) {
       if (tile != 0) {
         final data = _getDataTile(tile);
@@ -158,13 +157,19 @@ class TiledWorldBuilder {
               (data.tileClass?.contains(ABOVE_TYPE) ?? false) ||
               layerIsAbove;
           final isDynamic = data.type?.contains(DYNAMIC_ABOVE_TYPE) ?? false;
-          if (tileIsAbove || isDynamic) {
+          final nativeSize = data.sprite?.size;
+          final isOversized = nativeSize != null &&
+              (nativeSize.x > _tileWidthOrigin ||
+                  nativeSize.y > _tileHeightOrigin);
+          if (tileIsAbove || isDynamic || isOversized) {
             _addGameDecorationAbove(
               data,
               count,
               tileLayer,
               opacity,
               above: tileIsAbove,
+              layered: layerIsLayered,
+              layerIndex: layerIndex,
             );
           } else {
             _addTile(data, count, tileLayer, offsetX, offsetY, opacity);
@@ -173,6 +178,14 @@ class TiledWorldBuilder {
       }
       count++;
     }
+  }
+
+  bool _layerHasType(tiled.TileLayer tileLayer, String type) {
+    return tileLayer.properties
+            ?.where((element) =>
+                element.name == 'type' && element.value == type)
+            .isNotEmpty ??
+        false;
   }
 
   void _addTile(
@@ -210,35 +223,65 @@ class TiledWorldBuilder {
     tiled.TileLayer tileLayer,
     double opacity, {
     bool above = false,
+    bool layered = false,
+    int layerIndex = 0,
   }) {
+    // Native tileset size (may exceed the map's tile size for oversized
+    // decorations like trees). When it does, draw at the native size and
+    // anchor the sprite to the bottom-left of its grid cell, matching how
+    // the Tiled editor renders oversized tiles.
+    final nativeSize = data.sprite?.size;
+    final scaleX =
+        _tileWidthOrigin == 0 ? 1.0 : _tileWidth / _tileWidthOrigin;
+    final scaleY =
+        _tileHeightOrigin == 0 ? 1.0 : _tileHeight / _tileHeightOrigin;
+    final drawW = (nativeSize?.x ?? _tileWidthOrigin) * scaleX;
+    final drawH = (nativeSize?.y ?? _tileHeightOrigin) * scaleY;
+    final cellX = _getX(count, tileLayer.width?.toInt() ?? 1);
+    final cellY = _getY(count, tileLayer.width?.toInt() ?? 1);
+    final position = Vector2(
+      cellX * _tileWidth,
+      (cellY + 1) * _tileHeight - drawH,
+    );
+    final size = Vector2(drawW, drawH);
+
     GameDecoration? comp;
     if (data.animation != null) {
-      comp = GameDecorationWithCollision.withAnimation(
-        animation: data.animation!.getFutureSpriteAnimation(),
-        position: Vector2(
-          _getX(count, tileLayer.width?.toInt() ?? 1) * _tileWidth,
-          _getY(count, tileLayer.width?.toInt() ?? 1) * _tileHeight,
-        ),
-        size: Vector2(_tileWidth, _tileHeight),
-        collisions: data.collisions,
-        renderAboveComponents: above,
-      )
+      comp = (layered
+          ? _LayeredTiledDecoration.withAnimation(
+              fixedPriority: layerIndex,
+              animation: data.animation!.getFutureSpriteAnimation(),
+              position: position,
+              size: size,
+              collisions: data.collisions,
+            )
+          : GameDecorationWithCollision.withAnimation(
+              animation: data.animation!.getFutureSpriteAnimation(),
+              position: position,
+              size: size,
+              collisions: data.collisions,
+              renderAboveComponents: above,
+            ))
         ..angle = data.angle
         ..opacity = opacity
         ..properties = data.properties;
-      _components.add(comp);
     } else {
       if (data.sprite != null) {
-        comp = GameDecorationWithCollision.withSprite(
-          sprite: data.sprite!.getFutureSprite(),
-          position: Vector2(
-            _getX(count, tileLayer.width?.toInt() ?? 1) * _tileWidth,
-            _getY(count, tileLayer.width?.toInt() ?? 1) * _tileHeight,
-          ),
-          size: Vector2(_tileWidth, _tileHeight),
-          collisions: data.collisions,
-          renderAboveComponents: above,
-        )
+        comp = (layered
+            ? _LayeredTiledDecoration.withSprite(
+                fixedPriority: layerIndex,
+                sprite: data.sprite!.getFutureSprite(),
+                position: position,
+                size: size,
+                collisions: data.collisions,
+              )
+            : GameDecorationWithCollision.withSprite(
+                sprite: data.sprite!.getFutureSprite(),
+                position: position,
+                size: size,
+                collisions: data.collisions,
+                renderAboveComponents: above,
+              ))
           ..angle = data.angle
           ..properties = data.properties;
       }
@@ -252,7 +295,15 @@ class TiledWorldBuilder {
       comp?.flipVerticallyAroundCenter();
     }
     if (comp != null) {
-      _components.add(comp);
+      if (layered) {
+        // Opt-in via `type=layered`: attach as a child of the WorldMap so
+        // the decoration interleaves with the regular tile layers following
+        // Tiled's layer order. Without this flag the decoration stays at
+        // game level (legacy behaviour) and is Y-sorted above the tile map.
+        _mapDecorations.add(comp);
+      } else {
+        _components.add(comp);
+      }
     }
   }
 
@@ -643,4 +694,31 @@ class TiledWorldBuilder {
       isSolid: true,
     );
   }
+}
+
+/// `GameDecoration` used by [TiledWorldBuilder] for tiles marked with
+/// `type=layered`. Its render priority is fixed to the Tiled layer index so it
+/// interleaves with the tile layers inside the `WorldMap` subtree instead of
+/// being Y-sorted against the game-level components.
+class _LayeredTiledDecoration extends GameDecorationWithCollision {
+  _LayeredTiledDecoration.withSprite({
+    required this.fixedPriority,
+    required super.sprite,
+    required super.position,
+    required super.size,
+    super.collisions,
+  }) : super.withSprite();
+
+  _LayeredTiledDecoration.withAnimation({
+    required this.fixedPriority,
+    required super.animation,
+    required super.position,
+    required super.size,
+    super.collisions,
+  }) : super.withAnimation();
+
+  final int fixedPriority;
+
+  @override
+  int get priority => fixedPriority;
 }
