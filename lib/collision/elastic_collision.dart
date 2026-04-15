@@ -10,7 +10,7 @@ mixin SimpleElasticCollision on SimpleCollision {
   static const double baseRestitution = 3.0; // Default restitution value
   double _restitution = baseRestitution;
   bool _bouncingObjectEnabled = true;
-  double bounciness = 0.8;
+  double bounciness = 1;
   double _minBounceVelocity = 0.0; // Minimum velocity to bounce
 
   void setupElasticCollision({
@@ -20,7 +20,7 @@ mixin SimpleElasticCollision on SimpleCollision {
   }) {
     _bouncingObjectEnabled = enabled ?? _bouncingObjectEnabled;
     _minBounceVelocity = minBounceVelocity ?? _minBounceVelocity;
-    this.bounciness = (bounciness ?? this.bounciness).clamp(0.0, 1.0);
+    this.bounciness = bounciness ?? this.bounciness;
     _restitution = this.bounciness * baseRestitution;
   }
 

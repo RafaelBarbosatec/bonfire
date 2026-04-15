@@ -11,7 +11,7 @@ class ForcesGemBouncing extends GameDecoration
           size: Vector2(15, 13),
         ) {
     enableEarthGravity();
-    setupElasticCollision(bounciness: 3);
+    setupElasticCollision(bounciness: 4);
   }
 
   @override
