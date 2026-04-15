@@ -109,7 +109,7 @@ class BonfireCamera extends CameraComponent with BonfireHasGameRef {
     bool followTarget = true,
   }) {
     moveToPositionAnimated(
-      position: target.center,
+      position: target.position,
       effectController: effectController,
       zoom: zoom,
       angle: angle,

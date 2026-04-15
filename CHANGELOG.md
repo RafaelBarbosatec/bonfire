@@ -1,8 +1,3 @@
-# 3.17.0
-- **BREAKING:** Tiles whose sprite is larger than the map cell (e.g. a 192×256 tree on a 64×64 map) are no longer squished to fit the cell. They are now automatically extracted as `GameDecoration` and rendered at their native size, anchored to the bottom-left of the cell — matching how the Tiled editor previews them. Projects that relied on the previous behaviour (oversized tilesets being forced into the map tile size) will see these tiles render larger than before.
-- Add `type=layered` Tiled layer property. When set, extracted decorations from that layer are attached as children of the `WorldMap` (instead of game-level siblings), so they interleave with regular tile layers following Tiled's natural layer order. Opt-in to avoid breaking maps that rely on the current Y-sort behaviour.
-- Add `priorityOverride` to `GameComponent` to let components pin a fixed render priority instead of using the default Y-sort computation.
-
 # 3.16.1
 - Performance improvements
 
