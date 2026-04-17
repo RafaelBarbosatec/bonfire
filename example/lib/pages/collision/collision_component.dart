@@ -7,8 +7,6 @@ class CollisionComponent extends GameDecoration
     required Vector2 position,
     required this.isCircle,
   }) : super(position: position, size: Vector2.all(16)) {
-    enableEarthGravity();
-
     // Configurar física realista para estabilização
     setupElasticCollision(
       bounciness:
@@ -19,8 +17,13 @@ class CollisionComponent extends GameDecoration
     // Configurar fricção para amortecimento
     setupPhysics(
       friction: Vector2(0.3, 0.3), // fricção horizontal e vertical
-      dragCoefficient: 0.05, // resistência do ar aumentada
+      dragCoefficient:
+          0.02, // resistência do ar reduzida para não interferir na gravidade
+      mass: 1.0, // massa padrão
     );
+
+    // Gravidade mais forte para ser mais perceptível
+    setGravity(Vector2(0, 600)); // 600 pixels/s² (mais realista visualmente)
   }
 
   @override
