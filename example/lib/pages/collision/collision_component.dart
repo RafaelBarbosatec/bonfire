@@ -8,6 +8,19 @@ class CollisionComponent extends GameDecoration
     required this.isCircle,
   }) : super(position: position, size: Vector2.all(16)) {
     enableEarthGravity();
+
+    // Configurar física realista para estabilização
+    setupElasticCollision(
+      bounciness:
+          0.75, // restitution = 0.75 * 1.0 = 0.75 (como bola de basquete)
+      minBounceVelocity: 20.0, // velocidade mínima para bounce (pixels/s)
+    );
+
+    // Configurar fricção para amortecimento
+    setupPhysics(
+      friction: Vector2(0.3, 0.3), // fricção horizontal e vertical
+      dragCoefficient: 0.05, // resistência do ar aumentada
+    );
   }
 
   @override
