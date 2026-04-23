@@ -315,6 +315,7 @@ class ListenerGameWidgetState<T extends Game>
       Widget internalGameWidget = RenderGameWidget(
         game: currentGame,
         addRepaintBoundary: widget.addRepaintBoundary,
+        behavior: HitTestBehavior.opaque,
       );
 
       assert(
