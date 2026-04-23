@@ -23,7 +23,7 @@ mixin PathFinding on Movement {
   bool _gridSizeIsCollisionSize = false;
   bool _useOnlyVisibleBarriers = true;
   bool _withDiagonal = true;
-  bool _useAreaBetweenPlayerAndTarget = true;
+  bool _useAreaBetweenPlayerAndTarget = false;
   double _factorInflateFindArea = 2;
   VoidCallback? _onFinish;
 
