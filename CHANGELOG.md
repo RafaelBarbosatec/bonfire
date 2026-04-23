@@ -1,3 +1,6 @@
+# 3.16.2
+- Adds params `useAreaBetweenPlayerAndTarget` to fix issue 592
+
 # 3.16.1
 - Performance improvements
 

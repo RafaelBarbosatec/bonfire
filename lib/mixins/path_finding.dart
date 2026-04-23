@@ -23,6 +23,7 @@ mixin PathFinding on Movement {
   bool _gridSizeIsCollisionSize = false;
   bool _useOnlyVisibleBarriers = true;
   bool _withDiagonal = true;
+  bool _useAreaBetweenPlayerAndTarget = true;
   double _factorInflateFindArea = 2;
   VoidCallback? _onFinish;
 
@@ -49,6 +50,9 @@ mixin PathFinding on Movement {
     bool showBarriersCalculated = false,
     bool useOnlyVisibleBarriers = true,
 
+    /// If `true` the algorithm use the area between player and target to find the path, if false this use the entire map.
+    bool useAreaBetweenPlayerAndTarget = false,
+
     /// If `false` the algorithm use map tile size with base of the grid.
     ///  if true this use collision size of the component.
     bool gridSizeIsCollisionSize = false,
@@ -67,6 +71,7 @@ mixin PathFinding on Movement {
     _pathLineStrokeWidth = pathLineStrokeWidth;
     _pathLineColor = pathLineColor ?? const Color(0xFF40C4FF).setOpacity(0.5);
     _gridSizeIsCollisionSize = gridSizeIsCollisionSize;
+    _useAreaBetweenPlayerAndTarget = useAreaBetweenPlayerAndTarget;
   }
 
   Future<List<Vector2>> moveToPositionWithPathFinding(
@@ -207,7 +212,7 @@ mixin PathFinding on Movement {
     for (final e in gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
       if (!_ignoreCollisions.contains(e)) {
         final rect = e.toAbsoluteRect();
-        if (area.overlaps(rect)) {
+        if (area.overlaps(rect) || !_useAreaBetweenPlayerAndTarget) {
           _addCollisionOffsetsPositionByTile(rect);
         }
       }
@@ -233,6 +238,9 @@ mixin PathFinding on Movement {
       if (result.isNotEmpty || _isNeighbor(playerPosition, targetPosition)) {
         result = AStar.simplifyPath(result);
         return _mapToWorldPositions(result);
+      } else {
+        stopMove();
+        return [];
       }
     } catch (e, stacktrace) {
       // ignore: avoid_print

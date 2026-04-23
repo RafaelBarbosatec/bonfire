@@ -3,7 +3,11 @@ import 'package:example/pages/player/simple/human.dart';
 
 class HumanPathFinding extends HumanPlayer with PathFinding, TapGesture {
   HumanPathFinding({required Vector2 position}) : super(position: position) {
-    setupPathFinding(pathLineStrokeWidth: 2);
+    setupPathFinding(
+      pathLineStrokeWidth: 2,
+      showBarriersCalculated: true,
+      useOnlyVisibleBarriers: false,
+    );
   }
 
   @override
