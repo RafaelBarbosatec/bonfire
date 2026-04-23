@@ -1,3 +1,6 @@
+# 4.0.0-beta.5
+- Fix issue 592
+
 # 4.0.0-beta.4
 - Updates Flame to 1.37.0
 
