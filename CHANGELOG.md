@@ -1,4 +1,4 @@
-# 4.0.0-beta.5
+# Next
 - Fix issue 592
 
 # 4.0.0-beta.4
