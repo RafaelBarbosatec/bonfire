@@ -1,3 +1,6 @@
+# 3.16.2
+- Adds params `useAreaBetweenPlayerAndTarget` to fix issue 592
+
 # 3.17.1
 - Updates flame to 1.37.0
 
