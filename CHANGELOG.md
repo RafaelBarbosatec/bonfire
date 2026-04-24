@@ -1,5 +1,6 @@
-# Next
+# 4.0.0-beta.5
 - Fix issue 592
+- Fix elastic collision
 
 # 4.0.0-beta.4
 - Updates Flame to 1.37.0
