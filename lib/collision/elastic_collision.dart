@@ -7,12 +7,9 @@ import 'package:bonfire/bonfire.dart';
 /// This mixin adds realistic bounce behavior to components using Collision.
 /// It's much simpler and more predictable than the original ElasticCollision.
 mixin SimpleElasticCollision on SimpleCollision {
-  static const double baseRestitution =
-      1.0; // Default restitution value (realistic)
-  double _restitution = baseRestitution;
+  double _restitution = 1.0; // Initial restitution (can be configured)
   bool _bouncingObjectEnabled = true;
-  double bounciness = 1;
-  double _minBounceVelocity = 0.0; // Minimum velocity to bounce
+  double _minBounceVelocity = 10.0; // Minimum velocity to bounce
 
   void setupElasticCollision({
     bool? enabled,
@@ -21,8 +18,7 @@ mixin SimpleElasticCollision on SimpleCollision {
   }) {
     _bouncingObjectEnabled = enabled ?? _bouncingObjectEnabled;
     _minBounceVelocity = minBounceVelocity ?? _minBounceVelocity;
-    this.bounciness = bounciness ?? this.bounciness;
-    _restitution = this.bounciness * baseRestitution;
+    _restitution = bounciness ?? _restitution;
   }
 
   // source https://chrishecker.com/images/e/e7/Gdmphys3.pdf
@@ -59,7 +55,11 @@ mixin SimpleElasticCollision on SimpleCollision {
 
       onBounce(other, data, impulse);
 
-      return impulse;
+      // Sistema base: velocity -= getVelocityReflection
+      // Para reflexão com coeficiente e: v_final = -e * v_normal + v_tangencial
+      // Como sistema subtrai nosso retorno, retornamos: v_normal + impulse
+      final normalComponent = data.normal * velocity.dot(data.normal);
+      return normalComponent + impulse;
     }
     return super.getVelocityReflection(other, data);
   }
@@ -77,12 +77,21 @@ mixin SimpleElasticCollision on SimpleCollision {
 
 /// Extension for common bounce patterns
 extension BounceBehaviors on SimpleElasticCollision {
+  /// Make object bounce eternally (near-perfect elasticity)
+  void makeEternalBounce() {
+    setupElasticCollision(
+      enabled: true,
+      bounciness: 0.99,
+      minBounceVelocity: 5.0,
+    );
+  }
+
   /// Make object bounce like a rubber ball
   void makeRubberBall() {
     setupElasticCollision(
       enabled: true,
       bounciness: 0.9,
-      minBounceVelocity: 5.0,
+      minBounceVelocity: 10.0,
     );
   }
 
@@ -90,7 +99,7 @@ extension BounceBehaviors on SimpleElasticCollision {
   void makeBasketball() {
     setupElasticCollision(
       enabled: true,
-      bounciness: 0.7,
+      bounciness: 0.75,
       minBounceVelocity: 15.0,
     );
   }
@@ -100,7 +109,7 @@ extension BounceBehaviors on SimpleElasticCollision {
     setupElasticCollision(
       enabled: true,
       bounciness: 0.95,
-      minBounceVelocity: 3.0,
+      minBounceVelocity: 8.0,
     );
   }
 
@@ -109,7 +118,7 @@ extension BounceBehaviors on SimpleElasticCollision {
     setupElasticCollision(
       enabled: true,
       bounciness: 0.6,
-      minBounceVelocity: 8.0,
+      minBounceVelocity: 12.0,
     );
   }
 
@@ -117,8 +126,8 @@ extension BounceBehaviors on SimpleElasticCollision {
   void makeHeavyObject() {
     setupElasticCollision(
       enabled: true,
-      bounciness: 0.2,
-      minBounceVelocity: 20.0,
+      bounciness: 0.3,
+      minBounceVelocity: 25.0,
     );
   }
 }
