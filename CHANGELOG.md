@@ -1,3 +1,6 @@
+# next
+- Fix FlyingAttackGameObject destroy method
+
 # 4.0.0-beta.5
 - Fix issue 592
 - Fix elastic collision
