@@ -141,8 +141,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     removeAll(children);
     removeFromParent();
     if (animationDestroy != null) {
-      final currentDirection = direction;
-      _destroyByDirection(currentDirection);
+      _destroyByAngle();
     }
     onDestroy?.call();
   }
@@ -153,93 +152,6 @@ class FlyingAttackGameObject extends AnimatedGameObject
       if (!canSee) {
         removeFromParent();
       }
-    }
-  }
-
-  void _destroyByDirection(Direction direction) {
-    Vector2 positionDestroy;
-
-    final double biggerSide = max(width, height);
-    var addCenterX = 0.0;
-    var addCenterY = 0.0;
-
-    const divisionFactor = 2.0;
-
-    if (destroySize != null) {
-      addCenterX = (size.x - destroySize!.x) / divisionFactor;
-      addCenterY = (size.y - destroySize!.y) / divisionFactor;
-    }
-    switch (direction) {
-      case Direction.left:
-        positionDestroy = Vector2(
-          left - (biggerSide / divisionFactor) + addCenterX,
-          top + addCenterY,
-        );
-        break;
-      case Direction.right:
-        positionDestroy = Vector2(
-          left + (biggerSide / divisionFactor) + addCenterX,
-          top + addCenterY,
-        );
-        break;
-      case Direction.up:
-        positionDestroy = Vector2(
-          left + addCenterX,
-          top - (biggerSide / divisionFactor) + addCenterY,
-        );
-        break;
-      case Direction.down:
-        positionDestroy = Vector2(
-          left + addCenterX,
-          top + (biggerSide / divisionFactor) + addCenterY,
-        );
-        break;
-      case Direction.upLeft:
-        positionDestroy = Vector2(
-          left - (biggerSide / divisionFactor) + addCenterX,
-          top - (biggerSide / divisionFactor) + addCenterY,
-        );
-        break;
-      case Direction.upRight:
-        positionDestroy = Vector2(
-          left + (biggerSide / divisionFactor) + addCenterX,
-          top - (biggerSide / divisionFactor) + addCenterY,
-        );
-        break;
-      case Direction.downLeft:
-        positionDestroy = Vector2(
-          left - (biggerSide / divisionFactor) + addCenterX,
-          top + (biggerSide / divisionFactor) + addCenterY,
-        );
-        break;
-      case Direction.downRight:
-        positionDestroy = Vector2(
-          left + (biggerSide / divisionFactor) + addCenterX,
-          top + (biggerSide / divisionFactor) + addCenterY,
-        );
-        break;
-    }
-
-    if (hasGameRef) {
-      final innerSize = destroySize ?? size;
-      gameRef.add(
-        AnimatedGameObject(
-          animation: animationDestroy,
-          position: positionDestroy,
-          size: innerSize,
-          lightingConfig: lightingConfig,
-          loop: false,
-          renderAboveComponents: true,
-        ),
-      );
-      _applyDestroyDamage(
-        Rect.fromLTWH(
-          positionDestroy.x,
-          positionDestroy.y,
-          innerSize.x,
-          innerSize.y,
-        ),
-      );
     }
   }
 
