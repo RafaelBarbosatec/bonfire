@@ -17,8 +17,8 @@ Build RPG games and similar with the power of [FlameEngine](https://flame-engine
 
 |   |    |
 | ------------------- | ------------------- |
-| ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/video.gif) |  ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/sunnyplace.gif) |
-| ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/multi_biome.gif) | ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/defector.gif) |
+| [![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/video.gif)](awesome) |  [![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/sunnyplace.gif)](awesome) |
+| [![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/multi_biome.gif)](awesome) | [![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/defector.gif)](awesome) |
 
 ## Bonfire Awesome
 
