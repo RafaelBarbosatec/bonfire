@@ -20,22 +20,21 @@ Build RPG games and similar with the power of [FlameEngine](https://flame-engine
 | ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/video.gif) |  ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/sunnyplace.gif) |
 | ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/multi_biome.gif) | ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/defector.gif) |
 
+## Bonfire Awesome
+
+[Link](awesome)
+
+If you build a game using Bonfire, you can open a PR to add your game here.
+
+## Documentation
+
+[bonfire-engine.github.io](https://bonfire-engine.github.io)
 
 Bonfire is ideal for building games from the following perspectives:
 
 ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/perspectiva.jpg)
 
 Test our online [DEMO](https://bonfire-engine.github.io/examples/bonfire-v3/) or [Download APK](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/develop/media/example.apk).
-
-## Documentation
-
-[bonfire-engine.github.io](https://bonfire-engine.github.io)
-
-## Bonfire Awesome
-
-[Link](awesome)
-
-If you build a game using Bonfire, you can open a PR to add your game here.
 
 ## Build recomendations
 
