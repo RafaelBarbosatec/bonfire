@@ -37,6 +37,7 @@ class Tree extends GameDecoration {
           getSizeByTileSize(16),
           getSizeByTileSize(32),
         ),
+        isSolid: true,
       ),
     );
     return super.onLoad();
