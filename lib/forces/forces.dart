@@ -70,10 +70,7 @@ mixin Forces on Movement {
 
   /// Set friction force (velocity reduction factor)
   void setFriction(Vector2 friction) {
-    _friction = Vector2(
-      friction.x.clamp(0.0, 1.0),
-      friction.y.clamp(0.0, 1.0),
-    );
+    _friction = friction;
   }
 
   /// Set air drag coefficient (0.0 to 1.0)
