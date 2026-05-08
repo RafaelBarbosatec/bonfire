@@ -8,11 +8,11 @@ export 'body_type.dart';
 export 'collision_data.dart';
 
 /// Mixin responsible for adding stop the movement when happen collision
-mixin SimpleCollision on Movement {
+mixin WithCollision on Movement {
   BodyType bodyType = BodyType.dynamic;
   bool _blockMovementCollisionEnabled = true;
   bool get blockMovementCollisionEnabled => _blockMovementCollisionEnabled;
-  final Map<SimpleCollision, CollisionData> _collisionsResolution = {};
+  final Map<WithCollision, CollisionData> _collisionsResolution = {};
   CollisionData? _lastCollisionData;
   CollisionData? get lastCollisionData => _lastCollisionData;
 
@@ -22,7 +22,7 @@ mixin SimpleCollision on Movement {
   }
 
   void setCollisionResolution(
-    SimpleCollision other,
+    WithCollision other,
     CollisionData data,
   ) {
     _collisionsResolution[other] = data;
@@ -49,7 +49,7 @@ mixin SimpleCollision on Movement {
       }
 
       correction = -collisionData.normal * depth;
-      if ((other is SimpleCollision) && other.bodyType.isDynamic) {
+      if ((other is WithCollision) && other.bodyType.isDynamic) {
         correction = -collisionData.normal * depth / 2;
       }
 
@@ -78,7 +78,7 @@ mixin SimpleCollision on Movement {
     final stopMovement = other is GameComponent
         ? onBlockMovement(intersectionPoints, other)
         : true;
-    if (other is SimpleCollision) {
+    if (other is WithCollision) {
       stopOtherMovement = other.onBlockMovement(
         intersectionPoints,
         this,
@@ -143,7 +143,7 @@ mixin SimpleCollision on Movement {
         direction: colisionResult.normal.toDirection(),
       );
       onMovementBlocked(other, data);
-      if (other is SimpleCollision) {
+      if (other is WithCollision) {
         other.setCollisionResolution(this, data.inverted());
       }
     }

@@ -6,7 +6,7 @@ import 'package:bonfire/bonfire.dart';
 ///
 /// This mixin adds realistic bounce behavior to components using Collision.
 /// It's much simpler and more predictable than the original ElasticCollision.
-mixin SimpleElasticCollision on SimpleCollision {
+mixin SimpleElasticCollision on WithCollision {
   double _restitution = 1.0; // Initial restitution (can be configured)
   bool _bouncingObjectEnabled = true;
   double _minBounceVelocity = 10.0; // Minimum velocity to bounce
@@ -47,8 +47,8 @@ mixin SimpleElasticCollision on SimpleCollision {
 
       var j = -(1 + e) * relativeVelocity.dot(data.normal);
 
-      final mass = (this is Forces) ? (this as Forces).mass : 1;
-      final massB = (other is Forces) ? other.mass : 1;
+      final mass = (this is WithForces) ? (this as WithForces).forces.mass : 1;
+      final massB = (other is WithForces) ? other.forces.mass : 1;
       j /= mass + massB;
 
       final impulse = data.normal * j;

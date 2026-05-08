@@ -13,8 +13,7 @@ enum PlayerAttackType {
   attackRange,
 }
 
-class Knight extends SimplePlayer
-    with Lighting, SimpleCollision, FireballAttack {
+class Knight extends SimplePlayer with Lighting, WithCollision, FireballAttack {
   double attack = 20;
   bool canShowEmote = true;
   bool showedDialog = false;

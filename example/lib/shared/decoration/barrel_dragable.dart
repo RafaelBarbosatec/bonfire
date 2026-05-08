@@ -4,7 +4,7 @@ import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class BarrelDraggable extends GameDecoration
-    with DragGesture, Movement, SimpleCollision, Forces, Pushable {
+    with DragGesture, Movement, WithCollision, WithForces, Pushable {
   late TextPaint _textConfig;
   String text = 'Drag here';
   double xCenter = 0;
@@ -19,7 +19,7 @@ class BarrelDraggable extends GameDecoration
     _textConfig = TextPaint(
       style: TextStyle(color: Colors.white, fontSize: width / 4),
     );
-    setFriction(
+    forces.setFriction(
       Vector2.all(0.8),
     );
   }

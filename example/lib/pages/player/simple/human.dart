@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/person_sprite_sheet.dart';
 
-class HumanPlayer extends SimplePlayer with SimpleCollision {
+class HumanPlayer extends SimplePlayer with WithCollision {
   HumanPlayer({
     required Vector2 position,
   }) : super(

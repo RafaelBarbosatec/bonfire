@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/services.dart';
 import 'package:platform_game/util/platform_spritesheet.dart';
 
-class FoxPlayer extends PlatformPlayer with Forces {
+class FoxPlayer extends PlatformPlayer with WithForces {
   bool inTrunk = false;
   FoxPlayer({required super.position})
     : super(

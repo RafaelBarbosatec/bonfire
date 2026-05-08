@@ -15,8 +15,7 @@ import 'package:flutter/services.dart';
 ///
 /// Rafaelbarbosatec
 /// on 27/01/22
-class SoldierPlayer extends RotationPlayer
-    with SimpleCollision, Lighting {
+class SoldierPlayer extends RotationPlayer with WithCollision, Lighting {
   SoldierPlayer(Vector2 position)
       : super(
           position: position,

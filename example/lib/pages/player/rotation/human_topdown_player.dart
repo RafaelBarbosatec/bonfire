@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/player/rotation/human_topdown_player_spritesheet.dart';
 
-class HumanTopdownPlayer extends RotationPlayer with SimpleCollision {
+class HumanTopdownPlayer extends RotationPlayer with WithCollision {
   HumanTopdownPlayer({
     required Vector2 position,
   }) : super(

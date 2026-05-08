@@ -15,7 +15,7 @@ enum JumpingStateEnum {
 ///     GravityForce2D(),
 ///   ],
 /// )
-mixin Jumper on Movement, SimpleCollision {
+mixin Jumper on Movement, WithCollision {
   final double _defaultJumpSpeed = 150;
   bool isJumping = false;
   JumpingStateEnum jumpingState = JumpingStateEnum.idle;

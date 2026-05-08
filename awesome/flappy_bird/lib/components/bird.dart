@@ -7,7 +7,7 @@ import 'package:flappy_bird/util/spritesheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Bird extends PlatformPlayer with Forces, TapGesture {
+class Bird extends PlatformPlayer with WithForces, TapGesture {
   Vector2? _initialPosition;
   Bird({required super.position})
       : super(

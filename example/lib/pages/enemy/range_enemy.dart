@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/person_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
-class RageEnemy extends SimpleEnemy with SimpleCollision {
+class RageEnemy extends SimpleEnemy with WithCollision {
   late TextPaint _textPaint;
   final String text = 'RangeEnemy';
   RageEnemy({

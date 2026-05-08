@@ -4,7 +4,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:platform_game/components/fox_player.dart';
 import 'package:platform_game/util/platform_spritesheet.dart';
 
-class FrogEnemy extends PlatformEnemy with Forces {
+class FrogEnemy extends PlatformEnemy with WithForces {
   int _timeToWaitBeforeJump = 4000;
   FrogEnemy({required super.position})
     : super(
@@ -44,7 +44,7 @@ class FrogEnemy extends PlatformEnemy with Forces {
   @override
   void onDie() {
     super.onDie();
-    disableForces();
+    forces.disable();
     velocity.setZero();
     animation?.playOnce(
       PlatformSpritesheet.enemyExplosion,
