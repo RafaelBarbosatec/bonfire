@@ -92,7 +92,7 @@ class ForcesApi {
 
   void update(double dt) {
     // Apply forces before normal movement update
-    if (_isEnabled && !comp.velocity.isZero() || !_allForcesAreZero()) {
+    if (_isEnabled && (!comp.velocity.isZero() || !_allForcesAreZero())) {
       if (comp.isVisible) {
         _applyAllForces(dt);
       }
