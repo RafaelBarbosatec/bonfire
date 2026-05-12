@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/platform/platform_spritesheet.dart';
 
 class ForcesGemBouncing extends GameDecoration
-    with Movement, WithForces, WithCollision, SimpleElasticCollision {
+    with Movement, WithForces, WithCollision, WithElasticCollision {
   ForcesGemBouncing({
     required Vector2 position,
   }) : super.withAnimation(
@@ -10,7 +10,7 @@ class ForcesGemBouncing extends GameDecoration
           position: position,
           size: Vector2(15, 13),
         ) {
-    setupElasticCollision(bounciness: 2);
+    elasticCollision.setup(bounciness: 2);
     forces.setup(friction: Vector2.all(0));
     forces.enableEarthGravity();
   }

@@ -1,133 +1,18 @@
-import 'dart:math';
-
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/collision/elastic_collision_api.dart';
+
+export 'elastic_collision_api_ext.dart';
 
 /// Simple elastic collision system for bouncy objects
 ///
 /// This mixin adds realistic bounce behavior to components using Collision.
 /// It's much simpler and more predictable than the original ElasticCollision.
-mixin SimpleElasticCollision on WithCollision {
-  double _restitution = 1.0; // Initial restitution (can be configured)
-  bool _bouncingObjectEnabled = true;
-  double _minBounceVelocity = 10.0; // Minimum velocity to bounce
+mixin WithElasticCollision on WithCollision {
+  late final ElasticCollisionApi elasticCollision = ElasticCollisionApi(this);
 
-  void setupElasticCollision({
-    bool? enabled,
-    double? bounciness,
-    double? minBounceVelocity,
-  }) {
-    _bouncingObjectEnabled = enabled ?? _bouncingObjectEnabled;
-    _minBounceVelocity = minBounceVelocity ?? _minBounceVelocity;
-    _restitution = bounciness ?? _restitution;
-  }
-
-  // source https://chrishecker.com/images/e/e7/Gdmphys3.pdf
-  // Applying Impulse
   @override
-  Vector2 getVelocityReflection(
-    PositionComponent other,
-    CollisionData data,
-  ) {
-    if (_bouncingObjectEnabled) {
-      if (velocity.length < _minBounceVelocity) {
-        return super.getVelocityReflection(other, data);
-      }
-      final otherVelocity =
-          (other is Movement) ? other.velocity : Vector2.zero();
-      final relativeVelocity = otherVelocity - velocity;
-
-      if (relativeVelocity.dot(data.normal) > 0) {
-        return super.getVelocityReflection(other, data);
-      }
-
-      final bRestitution =
-          (other is SimpleElasticCollision) ? other._restitution : _restitution;
-
-      final double e = min(_restitution, bRestitution);
-
-      var j = -(1 + e) * relativeVelocity.dot(data.normal);
-
-      final mass = (this is WithForces) ? (this as WithForces).forces.mass : 1;
-      final massB = (other is WithForces) ? other.forces.mass : 1;
-      j /= mass + massB;
-
-      final impulse = data.normal * j;
-
-      onBounce(other, data, impulse);
-
-      // Sistema base: velocity -= getVelocityReflection
-      // Para reflexão com coeficiente e: v_final = -e * v_normal + v_tangencial
-      // Como sistema subtrai nosso retorno, retornamos: v_normal + impulse
-      final normalComponent = data.normal * velocity.dot(data.normal);
-      return normalComponent + impulse;
-    }
-    return super.getVelocityReflection(other, data);
-  }
-
-  void stopBouncing() {
-    _bouncingObjectEnabled = false;
-  }
-
-  void onBounce(
-    PositionComponent other,
-    CollisionData data,
-    Vector2 bounceVel,
-  ) {}
-}
-
-/// Extension for common bounce patterns
-extension BounceBehaviors on SimpleElasticCollision {
-  /// Make object bounce eternally (near-perfect elasticity)
-  void makeEternalBounce() {
-    setupElasticCollision(
-      enabled: true,
-      bounciness: 0.99,
-      minBounceVelocity: 5.0,
-    );
-  }
-
-  /// Make object bounce like a rubber ball
-  void makeRubberBall() {
-    setupElasticCollision(
-      enabled: true,
-      bounciness: 0.9,
-      minBounceVelocity: 10.0,
-    );
-  }
-
-  /// Make object bounce like a basketball
-  void makeBasketball() {
-    setupElasticCollision(
-      enabled: true,
-      bounciness: 0.75,
-      minBounceVelocity: 15.0,
-    );
-  }
-
-  /// Make object bounce like a ping pong ball
-  void makePingPongBall() {
-    setupElasticCollision(
-      enabled: true,
-      bounciness: 0.95,
-      minBounceVelocity: 8.0,
-    );
-  }
-
-  /// Make object bounce and gradually lose energy (like a dropped ball)
-  void makeDroppedBall() {
-    setupElasticCollision(
-      enabled: true,
-      bounciness: 0.6,
-      minBounceVelocity: 12.0,
-    );
-  }
-
-  /// Make object barely bounce (like a heavy object)
-  void makeHeavyObject() {
-    setupElasticCollision(
-      enabled: true,
-      bounciness: 0.3,
-      minBounceVelocity: 25.0,
-    );
+  void onRemove() {
+    elasticCollision.dispose();
+    super.onRemove();
   }
 }

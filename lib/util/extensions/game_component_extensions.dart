@@ -81,7 +81,7 @@ extension GameComponentExtensions on GameComponent {
         damage: damage,
         speed: speed,
         attackFrom: attackFrom,
-        collision: collision,
+        shapeCollision: collision,
         withDecorationCollision: withDecorationCollision,
         onDestroy: onDestroy,
         destroySize: destroySize,

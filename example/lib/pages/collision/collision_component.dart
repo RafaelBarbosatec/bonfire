@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
 class CollisionComponent extends GameDecoration
-    with Movement, WithCollision, WithForces, SimpleElasticCollision {
+    with Movement, WithCollision, WithForces, WithElasticCollision {
   final bool isCircle;
 
   CollisionComponent({
@@ -9,8 +9,7 @@ class CollisionComponent extends GameDecoration
     required this.isCircle,
   }) : super(position: position, size: Vector2.all(16)) {
     // Configurar comportamento elástico - AGORA com valores físicos corretos
-    setupElasticCollision(
-      enabled: true,
+    elasticCollision.setup(
       bounciness: 0.85, // Valor físicamente realístico
       minBounceVelocity: 20.0,
     );

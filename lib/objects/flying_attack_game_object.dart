@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 
 /// Animated component used like range attack.
 class FlyingAttackGameObject extends AnimatedGameObject
-    with Movement, CanNotSeen, WithCollision {
+    with Movement, CanNotSeen {
   final dynamic id;
   Future<SpriteAnimation>? animationDestroy;
 
@@ -17,7 +17,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
   final Vector2? destroySize;
   double _cosAngle = 0;
   double _senAngle = 0;
-  ShapeHitbox? collision;
+  ShapeHitbox? shapeCollision;
 
   FlyingAttackGameObject({
     required super.position,
@@ -35,7 +35,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     this.onDestroy,
     this.enabledDiagonal = true,
     super.lightingConfig,
-    this.collision,
+    this.shapeCollision,
   }) {
     this.speed = speed;
 
@@ -64,7 +64,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     this.onDestroy,
     this.enabledDiagonal = true,
     super.lightingConfig,
-    this.collision,
+    this.shapeCollision,
   }) {
     this.speed = speed;
     moveFromDirection(direction!, useDiagonal: enabledDiagonal);
@@ -85,7 +85,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     this.onDestroy,
     this.enabledDiagonal = true,
     super.lightingConfig,
-    this.collision,
+    this.shapeCollision,
   }) {
     this.speed = speed;
 
@@ -208,19 +208,14 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }
 
   @override
-  bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
-    return false;
-  }
-
-  @override
   void onMount() {
-    anchor = Anchor.center;
     super.onMount();
+    anchor = Anchor.center;
   }
 
   @override
   Future<void> onLoad() {
-    add(collision ?? RectangleHitbox(size: size, isSolid: true));
+    add(shapeCollision ?? RectangleHitbox(size: size, isSolid: true));
     return super.onLoad();
   }
 }

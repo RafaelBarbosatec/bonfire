@@ -43,12 +43,17 @@ mixin Jumper on Movement, WithCollision {
   }
 
   @override
-  void onMovementBlocked(PositionComponent other, CollisionData collisionData) {
+  void onMount() {
+    super.onMount();
+    collision.onMovementBlockedListener(onMovementBlockedListener);
+  }
+
+  void onMovementBlockedListener(
+      PositionComponent other, CollisionData collisionData) {
     if (isJumping && collisionData.direction.isDownSide) {
       _currentJumps = 0;
       isJumping = false;
     }
-    super.onMovementBlocked(other, collisionData);
   }
 
   @override
