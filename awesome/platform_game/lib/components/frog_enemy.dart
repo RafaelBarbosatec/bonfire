@@ -18,16 +18,23 @@ class FrogEnemy extends PlatformEnemy with WithForces {
             jumpDownRight: PlatformSpritesheet.frogJumpDown,
           ),
         ),
-      );
-
-  @override
-  bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
-    if (other is FoxPlayer && isDead) return false;
-    return super.onBlockMovement(intersectionPoints, other);
+      ) {
+    collision.onBlockMovementListener(onBlockMovementListener);
+    collision.onMovementBlockedListener(onMovementBlockedListener);
   }
 
-  @override
-  void onMovementBlocked(PositionComponent other, CollisionData collisionData) {
+  bool onBlockMovementListener(
+    Set<Vector2> intersectionPoints,
+    GameComponent other,
+  ) {
+    if (other is FoxPlayer && isDead) return false;
+    return true;
+  }
+
+  void onMovementBlockedListener(
+    PositionComponent other,
+    CollisionData collisionData,
+  ) {
     if (other is FoxPlayer) {
       if (collisionData.direction.isUpSide) {
         if (!isDead) {
@@ -38,7 +45,6 @@ class FrogEnemy extends PlatformEnemy with WithForces {
         other.onDie();
       }
     }
-    super.onMovementBlocked(other, collisionData);
   }
 
   @override

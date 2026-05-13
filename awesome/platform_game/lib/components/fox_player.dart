@@ -17,7 +17,9 @@ class FoxPlayer extends PlatformPlayer with WithForces {
             jumpDownRight: PlatformSpritesheet.playerJumpDown,
           ),
         ),
-      );
+      ) {
+    collision.onBlockMovementListener(onBlockMovementListener);
+  }
 
   @override
   void onJoystickAction(JoystickActionEvent event) {
@@ -28,8 +30,10 @@ class FoxPlayer extends PlatformPlayer with WithForces {
     super.onJoystickAction(event);
   }
 
-  @override
-  bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
+  bool onBlockMovementListener(
+    Set<Vector2> intersectionPoints,
+    GameComponent other,
+  ) {
     if (other is TileWithCollision && other.tileClass == 'tree_trunk') {
       if (jumpingState == JumpingStateEnum.up) {
         inTrunk = true;
@@ -41,7 +45,7 @@ class FoxPlayer extends PlatformPlayer with WithForces {
       }
     }
 
-    return super.onBlockMovement(intersectionPoints, other);
+    return true;
   }
 
   @override

@@ -5,6 +5,8 @@ import 'package:bonfire/collision/polygons_intersect_util.dart';
 export 'body_type.dart';
 export 'collision_data.dart';
 
+
+// Returns true to block movement, false to allow movement
 typedef BlockMovementCallback = bool Function(
   Set<Vector2> intersectionPoints,
   GameComponent other,

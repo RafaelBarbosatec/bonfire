@@ -23,6 +23,7 @@ class Bird extends PlatformPlayer with WithForces, TapGesture {
         ) {
     _initialPosition = position.clone();
     anchor = Anchor.center;
+    collision.onBlockMovementListener(onBlockMovementListener);
   }
 
   @override
@@ -71,8 +72,7 @@ class Bird extends PlatformPlayer with WithForces, TapGesture {
     return super.onLoad();
   }
 
-  @override
-  bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
+  bool onBlockMovementListener(Set<Vector2> intersectionPoints, GameComponent other) {
     gameRef.pauseEngine();
     showDialog(
       context: context,
@@ -89,7 +89,7 @@ class Bird extends PlatformPlayer with WithForces, TapGesture {
         );
       },
     );
-    return super.onBlockMovement(intersectionPoints, other);
+    return true;
   }
 
   void _resetGame() {

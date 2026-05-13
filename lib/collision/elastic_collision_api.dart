@@ -32,7 +32,7 @@ class ElasticCollisionApi {
   void enable() => _enabled = true;
   void disable() => _enabled = false;
 
-  void onBounce(OnBounceCallback callback) {
+  void onBounceListener(OnBounceCallback callback) {
     _onBounceCallbacks.add(callback);
   }
 
