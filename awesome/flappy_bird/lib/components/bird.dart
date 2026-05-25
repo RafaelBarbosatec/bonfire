@@ -47,7 +47,7 @@ class Bird extends PlatformPlayer with WithForces, TapGesture {
   }
 
   void doJump() async {
-    jump(force: true, jumpSpeed: 250);
+    jumper.jump(force: true, jumpSpeed: 250);
   }
 
   final graus90 = 1.0472;

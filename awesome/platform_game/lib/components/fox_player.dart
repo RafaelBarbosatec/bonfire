@@ -25,7 +25,7 @@ class FoxPlayer extends PlatformPlayer with WithForces {
   void onJoystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN &&
         (event.id == LogicalKeyboardKey.space || event.id == 1)) {
-      jump();
+      jumper.jump();
     }
     super.onJoystickAction(event);
   }
@@ -35,7 +35,7 @@ class FoxPlayer extends PlatformPlayer with WithForces {
     GameComponent other,
   ) {
     if (other is TileWithCollision && other.tileClass == 'tree_trunk') {
-      if (jumpingState == JumpingStateEnum.up) {
+      if (jumper.jumpingState == JumpingStateEnum.up) {
         inTrunk = true;
       } else if (other.top > center.y) {
         inTrunk = false;

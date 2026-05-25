@@ -2,6 +2,8 @@ import 'package:bonfire/bonfire.dart';
 
 class PlatformPlayer extends SimplePlayer
     with WithCollision, Jumper, JumperAnimation {
+  final int countJumps;
+
   PlatformPlayer({
     required super.position,
     required super.size,
@@ -9,11 +11,15 @@ class PlatformPlayer extends SimplePlayer
     super.initDirection,
     super.speed,
     super.life,
-    int countJumps = 1,
+    this.countJumps = 1,
   }) : super(
           animation: animation?.toSimpleDirectionAnimation(),
-        ) {
-    setupJumper(maxJump: countJumps);
+        );
+
+  @override
+  void onMount() {
+    super.onMount();
+    jumper.setMaxJump(countJumps);
   }
 
   @override

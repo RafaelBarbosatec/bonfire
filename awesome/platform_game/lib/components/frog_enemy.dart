@@ -23,6 +23,18 @@ class FrogEnemy extends PlatformEnemy with WithForces {
     collision.onMovementBlockedListener(onMovementBlockedListener);
   }
 
+  @override
+  void onMount() {
+    super.onMount();
+    jumper.onJumpStateChangedListener(_onJumpStateChanged);
+  }
+
+  void _onJumpStateChanged(JumpingStateEnum state) {
+    if (state == JumpingStateEnum.idle) {
+      velocity = velocity.copyWith(x: 0);
+    }
+  }
+
   bool onBlockMovementListener(
     Set<Vector2> intersectionPoints,
     GameComponent other,
@@ -38,7 +50,7 @@ class FrogEnemy extends PlatformEnemy with WithForces {
     if (other is FoxPlayer) {
       if (collisionData.direction.isUpSide) {
         if (!isDead) {
-          other.jump(jumpSpeed: 100, force: true);
+          other.jumper.jump(jumpSpeed: 100, force: true);
           onDie();
         }
       } else {
@@ -72,19 +84,11 @@ class FrogEnemy extends PlatformEnemy with WithForces {
           await Future.delayed(const Duration(seconds: 2));
           if (!isDead) {
             Random().nextBool() ? moveRight() : moveLeft();
-            jump(jumpSpeed: 160);
+            jumper.jump(jumpSpeed: 160);
           }
         },
       );
     }
-  }
-
-  @override
-  void onJump(JumpingStateEnum state) {
-    if (state == JumpingStateEnum.idle) {
-      velocity = velocity.copyWith(x: 0);
-    }
-    super.onJump(state);
   }
 
   @override

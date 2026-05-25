@@ -23,7 +23,7 @@ class SimpleFoxPlayer extends PlatformPlayer with WithForces {
   void onJoystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN &&
         (event.id == LogicalKeyboardKey.space || event.id == 1)) {
-      jump();
+      jumper.jump();
     }
     super.onJoystickAction(event);
   }
