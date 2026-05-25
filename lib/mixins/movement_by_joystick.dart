@@ -67,6 +67,8 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
     _joystickAngle = event.radAngle;
     _newDirectional = _getDirectional(event.directional);
 
+    isIdleEnabled = _newDirectional == JoystickMoveDirectional.IDLE;
+
     super.onJoystickChangeDirectional(event);
   }
 
@@ -172,7 +174,7 @@ mixin MovementByJoystick on Movement, PlayerControllerListener {
   }
 
   void _toCorrectDirection(JoystickMoveDirectional directional) {
-    if(!_settings.stopOnIdle){
+    if (!_settings.stopOnIdle) {
       return;
     }
     velocity.sub(_getRestDirectionalVelocity(_currentDirectional));

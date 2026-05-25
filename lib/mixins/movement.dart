@@ -61,10 +61,7 @@ mixin Movement on GameComponent {
       onMove(); // Optional callback
       _alreadyCallIdle = false;
     } else {
-      if (!_alreadyCallIdle) {
-        _handleIdle();
-        _alreadyCallIdle = true;
-      }
+      _handleIdle();
     }
   }
 
@@ -97,8 +94,10 @@ mixin Movement on GameComponent {
     }
   }
 
+  bool isIdleEnabled = true;
+
   void _handleIdle() {
-    if (!_alreadyCallIdle) {
+    if (isIdleEnabled && !_alreadyCallIdle) {
       idle();
       _alreadyCallIdle = true;
     }
