@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
 class PlatformEnemy extends SimpleEnemy
-    with WithCollision, Jumper, JumperAnimation {
+    with WithCollision, WithJumper, JumperAnimation {
   final int countJumps;
 
   PlatformEnemy({

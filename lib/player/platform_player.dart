@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
 class PlatformPlayer extends SimplePlayer
-    with WithCollision, Jumper, JumperAnimation {
+    with WithCollision, WithJumper, JumperAnimation {
   final int countJumps;
 
   PlatformPlayer({

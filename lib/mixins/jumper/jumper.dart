@@ -24,7 +24,7 @@ export 'jumper_api.dart';
 ///   }
 /// }
 /// ```
-mixin Jumper on Movement, WithCollision {
+mixin WithJumper on Movement, WithCollision {
   late final JumperApi jumper = JumperApi(this);
 
   @override
