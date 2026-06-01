@@ -37,6 +37,7 @@ export 'package:bonfire/map/tiled/world_map_by_tiled.dart';
 export 'package:bonfire/map/util/world_map_reader.dart';
 export 'package:bonfire/map/world_map.dart';
 export 'package:bonfire/mixins/attackable.dart';
+export 'package:bonfire/mixins/direction_animation/direction_animation.dart';
 export 'package:bonfire/mixins/flip_render.dart';
 export 'package:bonfire/mixins/follower.dart';
 export 'package:bonfire/mixins/interval_checker.dart';

@@ -37,7 +37,10 @@ class LPCPlayer extends SimplePlayer with WithCollision {
           customStatus: customStatus,
           simpleAnimationChanged: (newAnimation, status) {
             customStatus = status;
-            replaceAnimation(newAnimation);
+            directionAnimation.replaceAnimation(
+              newAnimation,
+              idleCallback: idle,
+            );
           },
         ),
       );

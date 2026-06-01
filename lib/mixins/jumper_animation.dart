@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/direction_animation.dart';
 
 enum JumpAnimationsEnum {
   jumpUpRight,
@@ -14,6 +13,9 @@ mixin JumperAnimation on WithJumper, DirectionAnimation {
   void onMount() {
     super.onMount();
     jumper.onJumpStateChangedListener(_onJumpStateChanged);
+    directionAnimation.onAnimationExecutionListener(
+      _onDirectionAnimationExecution,
+    );
   }
 
   void _onJumpStateChanged(JumpingStateEnum state) {
@@ -26,84 +28,53 @@ mixin JumperAnimation on WithJumper, DirectionAnimation {
     }
   }
 
-  @override
-  void onPlayRunDownAnimation() {
-    if (jumper.isJumping) {
-      if (hDirection.isLeftSide) {
+  DirectionAnimationMethod? _lastDirectionAnimationMethod;
+
+  bool _onDirectionAnimationExecution(DirectionAnimationMethod method) {
+    if (!jumper.isJumping) {
+      return true;
+    }
+
+    if (_lastDirectionAnimationMethod == method) {
+      return false;
+    }
+
+    _lastDirectionAnimationMethod = method;
+
+    switch (method) {
+      case DirectionAnimationMethod.onPlayRunDownAnimation:
+        if (hDirection.isLeftSide) {
+          _jumpDownLeft();
+        } else {
+          animation?.playOther(
+            JumpAnimationsEnum.jumpDownRight,
+            flipX: false,
+          );
+        }
+        return false;
+      case DirectionAnimationMethod.onPlayRunDownRightAnimation:
+        animation?.playOther(JumpAnimationsEnum.jumpDownRight, flipX: false);
+        return false;
+      case DirectionAnimationMethod.onPlayRunDownLeftAnimation:
         _jumpDownLeft();
-      } else {
-        animation?.playOther(
-          JumpAnimationsEnum.jumpDownRight,
-          flipX: false,
-        );
-      }
-    }
-  }
-
-  @override
-  void onPlayRunDownRightAnimation() {
-    if (jumper.isJumping) {
-      animation?.playOther(JumpAnimationsEnum.jumpDownRight, flipX: false);
-    } else {
-      super.onPlayRunDownRightAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunDownLeftAnimation() {
-    if (jumper.isJumping) {
-      _jumpDownLeft();
-    } else {
-      super.onPlayRunDownLeftAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunUpLeftAnimation() {
-    if (jumper.isJumping) {
-      _playJumpUpLeft();
-    } else {
-      super.onPlayRunUpLeftAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunLeftAnimation() {
-    if (jumper.isJumping) {
-      _playJumpUpLeft();
-    } else {
-      super.onPlayRunLeftAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunRightAnimation() {
-    if (jumper.isJumping) {
-      animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
-    } else {
-      super.onPlayRunRightAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunUpRightAnimation() {
-    if (jumper.isJumping) {
-      animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
-    } else {
-      super.onPlayRunUpRightAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunUpAnimation() {
-    if (jumper.isJumping) {
-      if (hDirection.isLeftSide) {
+        return false;
+      case DirectionAnimationMethod.onPlayRunUpLeftAnimation:
+      case DirectionAnimationMethod.onPlayRunLeftAnimation:
         _playJumpUpLeft();
-      } else {
+        return false;
+      case DirectionAnimationMethod.onPlayRunRightAnimation:
+      case DirectionAnimationMethod.onPlayRunUpRightAnimation:
         animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
-      }
-    } else {
-      super.onPlayRunUpAnimation();
+        return false;
+      case DirectionAnimationMethod.onPlayRunUpAnimation:
+        if (hDirection.isLeftSide) {
+          _playJumpUpLeft();
+        } else {
+          animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
+        }
+        return false;
+      default:
+        return true;
     }
   }
 
@@ -126,13 +97,6 @@ mixin JumperAnimation on WithJumper, DirectionAnimation {
         JumpAnimationsEnum.jumpDownRight,
         flipX: true,
       );
-    }
-  }
-
-  @override
-  void idle() {
-    if (!jumper.isJumping) {
-      super.idle();
     }
   }
 }

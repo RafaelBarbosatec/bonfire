@@ -22,16 +22,20 @@ mixin Movement on GameComponent {
 
   // Essential getters
   Vector2 get velocity => _velocity;
-  bool get isMoving => !_velocity.isZero();
+  bool get isMoving => _countMove > _countMoveToNotIdle;
   bool get isIdle => _velocity.isZero();
+  int _countMove = 0;
+  static const int _countMoveToNotIdle = 2;
 
-  bool _alreadyCallIdle = false;
+  bool _idleCalled = false;
 
   // Velocity control
   set velocity(Vector2 newVelocity) {
     _velocity = newVelocity;
     if (!_velocity.isZero()) {
       direction = _getDirectionFromVelocity(_velocity);
+    } else {
+      _handleIdle();
     }
   }
 
@@ -57,9 +61,10 @@ mixin Movement on GameComponent {
 
     // Apply movement
     if (!velocity.isZero()) {
+      _countMove++;
       position += velocity * dt;
       onMove(); // Optional callback
-      _alreadyCallIdle = false;
+      _idleCalled = false;
     } else {
       _handleIdle();
     }
@@ -94,13 +99,12 @@ mixin Movement on GameComponent {
     }
   }
 
-  bool isIdleEnabled = true;
-
   void _handleIdle() {
-    if (isIdleEnabled && !_alreadyCallIdle) {
+    if (isMoving && !_idleCalled) {
       idle();
-      _alreadyCallIdle = true;
+      _idleCalled = true;
     }
+    _countMove = 0;
   }
 
   void idle() {}

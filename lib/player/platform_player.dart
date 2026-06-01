@@ -39,7 +39,6 @@ class PlatformPlayer extends SimplePlayer
     );
   }
 
-  @override
   Future<void> replaceAnimation(
     SimpleDirectionAnimation newAnimation, {
     bool doIdle = false,
@@ -53,7 +52,7 @@ class PlatformPlayer extends SimplePlayer
     PlatformAnimations animation, {
     bool doIdle = false,
   }) {
-    return super.replaceAnimation(
+    return directionAnimation.replaceAnimation(
       SimpleDirectionAnimation(
         idleRight: animation.idleRight,
         runRight: animation.runRight,
@@ -73,6 +72,7 @@ class PlatformPlayer extends SimplePlayer
         },
       ),
       doIdle: doIdle,
+      idleCallback: idle,
     );
   }
 }
