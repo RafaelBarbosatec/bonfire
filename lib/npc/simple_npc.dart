@@ -16,7 +16,7 @@ import 'package:bonfire/util/direction_animations/simple_direction_animation.dar
 /// on 22/03/22
 
 /// Enemy with animation in all direction
-class SimpleNpc extends Npc with DirectionAnimation {
+class SimpleNpc extends Npc with WithDirectionAnimation {
   SimpleNpc({
     required super.position,
     required super.size,

@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 
-class SimplePlayer extends Player with DirectionAnimation {
+class SimplePlayer extends Player with WithDirectionAnimation {
   SimplePlayer({
     required super.position,
     required super.size,

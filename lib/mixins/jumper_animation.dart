@@ -8,7 +8,7 @@ enum JumpAnimationsEnum {
 }
 
 /// Mixin used to adds animations in a Jumper.
-mixin JumperAnimation on WithJumper, DirectionAnimation {
+mixin JumperAnimation on WithJumper, WithDirectionAnimation {
   @override
   void onMount() {
     super.onMount();

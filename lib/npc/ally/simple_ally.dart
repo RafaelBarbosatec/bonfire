@@ -16,7 +16,7 @@ import 'package:bonfire/util/direction_animations/simple_direction_animation.dar
 /// on 24/03/22
 
 /// Enemy with animation in all direction
-class SimpleAlly extends Ally with DirectionAnimation {
+class SimpleAlly extends Ally with WithDirectionAnimation {
   SimpleAlly({
     required super.position,
     required super.size,
@@ -28,6 +28,5 @@ class SimpleAlly extends Ally with DirectionAnimation {
   }) {
     this.animation = animation;
     direction = initDirection;
-
   }
 }

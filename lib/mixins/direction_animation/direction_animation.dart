@@ -5,7 +5,7 @@ import 'package:bonfire/bonfire.dart';
 export 'direction_animation_api.dart';
 
 /// Mixin responsible for adding animations to movements
-mixin DirectionAnimation on Movement {
+mixin WithDirectionAnimation on Movement {
   late final DirectionAnimationApi directionAnimation = DirectionAnimationApi(
     this,
   );
@@ -13,8 +13,6 @@ mixin DirectionAnimation on Movement {
   SimpleDirectionAnimation? get animation => directionAnimation.animation;
   set animation(SimpleDirectionAnimation? value) =>
       directionAnimation.animation = value;
-
-  Vector2 get animationScale => directionAnimation.animationScale;
 
   @override
   void render(Canvas canvas) {
