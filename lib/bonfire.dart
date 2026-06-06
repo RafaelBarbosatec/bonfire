@@ -8,7 +8,7 @@ export 'package:bonfire/base/game_component.dart';
 export 'package:bonfire/behavior/behavior.dart';
 export 'package:bonfire/camera/camera_config.dart';
 export 'package:bonfire/collision/collision.dart';
-export 'package:bonfire/collision/elastic_collision.dart';
+export 'package:bonfire/collision/elastic/elastic_collision.dart';
 export 'package:bonfire/color_filter/game_color_filter.dart';
 export 'package:bonfire/decoration/decoration.dart';
 export 'package:bonfire/decoration/decoration_with_collision.dart';

@@ -1,4 +1,4 @@
-import 'package:bonfire/collision/elastic_collision_api.dart';
+import 'package:bonfire/collision/elastic/elastic_collision_api.dart';
 
 /// Extension for common bounce patterns
 extension BounceBehaviors on ElasticCollisionApi {

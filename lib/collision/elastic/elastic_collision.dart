@@ -1,5 +1,5 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/collision/elastic_collision_api.dart';
+import 'package:bonfire/collision/elastic/elastic_collision_api.dart';
 
 export 'elastic_collision_api_ext.dart';
 

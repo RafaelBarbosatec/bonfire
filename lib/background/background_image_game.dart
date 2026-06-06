@@ -28,7 +28,7 @@ class BackgroundImageGame extends GameBackground with UseSprite {
     this.isBackground = true,
     this.priorityImage = 0,
   }) {
-    opacity = opacity;
+    this.opacity = opacity;
   }
 
   @override
