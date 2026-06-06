@@ -49,6 +49,12 @@ class FoxPlayer extends PlatformPlayer with WithForces {
   }
 
   @override
+  void onMount() {
+    life.onDieListener(_onDie);
+    super.onMount();
+  }
+
+  @override
   Future<void> onLoad() {
     add(
       RectangleHitbox(
@@ -60,9 +66,7 @@ class FoxPlayer extends PlatformPlayer with WithForces {
     return super.onLoad();
   }
 
-  @override
-  void onDie() {
+  void _onDie() {
     removeFromParent();
-    super.onDie();
   }
 }

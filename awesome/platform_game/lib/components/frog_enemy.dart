@@ -27,6 +27,7 @@ class FrogEnemy extends PlatformEnemy with WithForces {
   void onMount() {
     super.onMount();
     jumper.onJumpStateChangedListener(_onJumpStateChanged);
+    life.onDieListener(_onDie);
   }
 
   void _onJumpStateChanged(JumpingStateEnum state) {
@@ -51,17 +52,15 @@ class FrogEnemy extends PlatformEnemy with WithForces {
       if (collisionData.direction.isUpSide) {
         if (!isDead) {
           other.jumper.jump(jumpSpeed: 100, force: true);
-          onDie();
+          life.remove(life.value);
         }
       } else {
-        other.onDie();
+        other.life.remove(other.life.value);
       }
     }
   }
 
-  @override
-  void onDie() {
-    super.onDie();
+  void _onDie() {
     forces.disable();
     velocity.setZero();
     animation?.playOnce(

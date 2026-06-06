@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/pointer_detector.dart';
+import 'package:bonfire/input/pointer_detector.dart';
 import 'package:flutter/widgets.dart';
 
 /// Base of the all components in the Bonfire

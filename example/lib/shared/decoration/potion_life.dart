@@ -21,7 +21,7 @@ class PotionLife extends GameDecoration with Sensor<Player>, Movement {
         if (_lifeDistributed < life) {
           double newLife = life * value - _lifeDistributed;
           _lifeDistributed += newLife;
-          component.addLife(newLife.roundToDouble());
+          component.life.add(newLife.roundToDouble());
         }
       },
     );

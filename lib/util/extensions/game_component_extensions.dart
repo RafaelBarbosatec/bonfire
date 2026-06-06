@@ -141,7 +141,7 @@ extension GameComponentExtensions on GameComponent {
     double? sizePush,
     double? marginFromCenter,
     Vector2? centerOffset,
-    void Function(Attackable attackable)? onDamage,
+    void Function(WithLife attackable)? onDamage,
   }) {
     final rect = rectCollision;
     simpleAttackMeleeByAngle(
@@ -173,7 +173,7 @@ extension GameComponentExtensions on GameComponent {
     bool withPush = true,
     double marginFromCenter = 0,
     Vector2? centerOffset,
-    void Function(Attackable attackable)? onDamage,
+    void Function(WithLife attackable)? onDamage,
   }) {
     final initPosition = rectCollision;
 

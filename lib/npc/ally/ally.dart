@@ -14,7 +14,7 @@ export 'simple_ally.dart';
 ///
 /// Rafaelbarbosatec
 /// on 24/03/22
-class Ally extends Npc with Attackable {
+class Ally extends Npc with WithLife {
   Ally({
     required Vector2 position,
     required Vector2 size,
@@ -24,8 +24,8 @@ class Ally extends Npc with Attackable {
         AcceptableAttackOriginEnum.ENEMY,
   }) : super(position: position, size: size, speed: speed) {
     this.speed = speed;
-    this.receivesAttackFrom = receivesAttackFrom;
-    initialLife(life);
+    this.life.receivesAttackFrom = receivesAttackFrom;
+    this.life.initial(life);
     this.position = position;
     this.size = size;
   }

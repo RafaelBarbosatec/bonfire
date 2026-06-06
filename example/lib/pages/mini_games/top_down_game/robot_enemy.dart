@@ -50,8 +50,7 @@ class ZombieEnemy extends RotationEnemy with WithCollision, RandomMovement {
     );
   }
 
-  @override
-  void onDie() {
+  void _onDie() {
     gameRef.add(
       AnimatedGameObject(
         animation: CommonSpriteSheet.smokeExplosion,
@@ -63,7 +62,12 @@ class ZombieEnemy extends RotationEnemy with WithCollision, RandomMovement {
     );
     gameRef.camera.shake(intensity: 4);
     removeFromParent();
-    super.onDie();
+  }
+
+  @override
+  void onMount() {
+    life.onDieListener(_onDie);
+    super.onMount();
   }
 
   @override

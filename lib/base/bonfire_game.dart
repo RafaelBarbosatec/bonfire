@@ -230,8 +230,8 @@ abstract class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  Iterable<Attackable> attackables({bool onlyVisible = false}) {
-    return query<Attackable>(onlyVisible: onlyVisible);
+  Iterable<WithLife> attackables({bool onlyVisible = false}) {
+    return query<WithLife>(onlyVisible: onlyVisible);
   }
 
   @override

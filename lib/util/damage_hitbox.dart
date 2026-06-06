@@ -8,7 +8,7 @@ class DamageHitbox extends GameComponent {
   final Duration damageInterval;
   final AttackOriginEnum origin;
   final dynamic id;
-  final void Function(Attackable attackable)? onDamage;
+  final void Function(WithLife attackable)? onDamage;
 
   final Paint _paint = Paint()..color = Sensor.color;
 
@@ -52,7 +52,7 @@ class DamageHitbox extends GameComponent {
           .attackables(onlyVisible: true)
           .where((a) => a.rectAttackable().overlaps(toAbsoluteRect()))
           .forEach((attackable) {
-        final receiveDamage = attackable.handleAttack(origin, damage, id);
+        final receiveDamage = attackable.life.handleAttack(origin, damage, id);
         if (receiveDamage) {
           onDamage?.call(attackable);
         }

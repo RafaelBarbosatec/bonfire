@@ -1,5 +1,5 @@
 import 'package:bonfire/lighting/lighting_config.dart';
-import 'package:bonfire/mixins/attackable.dart';
+import 'package:bonfire/mixins/life/life.dart';
 import 'package:bonfire/player/rotation_player.dart';
 import 'package:bonfire/util/extensions/game_component_extensions.dart';
 import 'package:flame/collisions.dart';

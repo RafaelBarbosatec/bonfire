@@ -64,36 +64,10 @@ class Knight extends SimplePlayer with Lighting, WithCollision, FireballAttack {
   }
 
   @override
-  void onDie() {
-    barLifeController.life = 0.0;
-    removeFromParent();
-    gameRef.add(
-      GameDecoration.withSprite(
-        sprite: Sprite.load('player/crypt.png'),
-        position: position,
-        size: Vector2.all(DungeonMap.tileSize),
-      ),
-    );
-    super.onDie();
-  }
-
-  @override
   void update(double dt) {
     super.update(dt);
     _checkViewEnemy(dt);
     _updateLifeAndStamina(dt);
-  }
-
-  @override
-  void onRemoveLife(double life) {
-    showDamage(
-      life,
-      config: TextStyle(
-        fontSize: width / 3,
-        color: Colors.red,
-      ),
-    );
-    super.onRemoveLife(life);
   }
 
   void execShowEmote() {
@@ -116,7 +90,9 @@ class Knight extends SimplePlayer with Lighting, WithCollision, FireballAttack {
   @override
   void onMount() {
     barLifeController = BarLifeController();
-    barLifeController.configure(maxLife: maxLife, maxStamina: 100);
+    barLifeController.configure(maxLife: life.max, maxStamina: 100);
+    life.onDieListener(_onDie);
+    life.onRemoveLifeListener(_onRemoveLife);
     super.onMount();
   }
 
@@ -125,13 +101,35 @@ class Knight extends SimplePlayer with Lighting, WithCollision, FireballAttack {
   }
 
   void _updateLifeAndStamina(double dt) {
-    barLifeController.updateLife(life);
+    barLifeController.updateLife(life.value);
     if (barLifeController.stamina >= 100) {
       return;
     }
     if (checkInterval('INCREMENT_STAMINA', 100, dt)) {
       barLifeController.increaseStamina(2);
     }
+  }
+
+  void _onDie() {
+    barLifeController.life = 0.0;
+    removeFromParent();
+    gameRef.add(
+      GameDecoration.withSprite(
+        sprite: Sprite.load('player/crypt.png'),
+        position: position,
+        size: Vector2.all(DungeonMap.tileSize),
+      ),
+    );
+  }
+
+  void _onRemoveLife(double amount) {
+    showDamage(
+      amount,
+      config: TextStyle(
+        fontSize: width / 3,
+        color: Colors.red,
+      ),
+    );
   }
 
   void _checkViewEnemy(double dt) {

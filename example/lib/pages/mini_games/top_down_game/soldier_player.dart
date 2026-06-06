@@ -91,10 +91,14 @@ class SoldierPlayer extends RotationPlayer with WithCollision, Lighting {
     );
   }
 
-  @override
-  void onDie() {
+  void _onDie() {
     removeFromParent();
-    super.onDie();
+  }
+
+  @override
+  void onMount() {
+    life.onDieListener(_onDie);
+    super.onMount();
   }
 
   @override

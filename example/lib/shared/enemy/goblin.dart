@@ -60,9 +60,7 @@ class Goblin extends SimpleEnemy
         ),
       ];
 
-  @override
-  void onDie() {
-    super.onDie();
+  void _onDie() {
     gameRef.add(
       AnimatedGameObject(
         animation: CommonSpriteSheet.smokeExplosion,
@@ -107,16 +105,21 @@ class Goblin extends SimpleEnemy
     );
   }
 
-  @override
-  void removeLife(double life) {
+  void _onRemoveLife(double amount) {
     showDamage(
-      life,
+      amount,
       config: TextStyle(
         fontSize: width / 3,
         color: Colors.white,
       ),
     );
-    super.removeLife(life);
+  }
+
+  @override
+  void onMount() {
+    life.onDieListener(_onDie);
+    life.onRemoveLifeListener(_onRemoveLife);
+    super.onMount();
   }
 
   @override

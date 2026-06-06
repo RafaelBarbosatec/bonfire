@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
 // Mixin used to adds a BarLife to the attacable component
-mixin UseLifeBar on Attackable {
+mixin UseLifeBar on WithLife {
   BarLifeComponent? barLife;
 
   Color _backgroundColor = const Color(0xFF000000);
@@ -59,8 +59,8 @@ mixin UseLifeBar on Attackable {
         borderColor: _borderColor,
         borderWidth: _borderWidth,
         colors: _colors,
-        life: life,
-        maxLife: maxLife,
+        life: life.value,
+        maxLife: life.max,
         borderRadius: _borderRadius,
         drawPosition: _barLifeDrawPosition,
         textStyle: _textStyle,
@@ -69,32 +69,14 @@ mixin UseLifeBar on Attackable {
         padding: _padding,
       ),
     );
+    life.onInitialLifeListener((double value) {
+      barLife?.updateLife(value);
+      barLife?.updatemaxLife(value);
+    });
+    life.onRemoveLifeListener((double _) => _animateBar());
+    life.onRestoreLifeListener((double _) => _animateBar());
+    life.onLifeUpdateListener((double value) => barLife?.updateLife(value));
     super.onMount();
-  }
-
-  @override
-  void initialLife(double life) {
-    barLife?.updateLife(life);
-    barLife?.updatemaxLife(life);
-    super.initialLife(life);
-  }
-
-  @override
-  void addLife(double life) {
-    super.addLife(life);
-    _animateBar();
-  }
-
-  @override
-  void removeLife(double life) {
-    super.removeLife(life);
-    _animateBar();
-  }
-
-  @override
-  void updateLife(double life, {bool verifyDieOrRevive = true}) {
-    super.updateLife(life, verifyDieOrRevive: verifyDieOrRevive);
-    barLife?.updateLife(super.life);
   }
 
   @override
@@ -110,7 +92,7 @@ mixin UseLifeBar on Attackable {
       _valueGenerator = generateValues(
         const Duration(milliseconds: 300),
         begin: barLife?.life ?? 0,
-        end: life,
+        end: life.value,
         onChange: (value) {
           barLife?.updateLife(value);
         },

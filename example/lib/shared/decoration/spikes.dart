@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 
-class Spikes extends GameDecoration with Sensor<Attackable> {
+class Spikes extends GameDecoration with Sensor<WithLife> {
   Spikes(Vector2 position, {Vector2? size})
       : super.withSprite(
           sprite: CommonSpriteSheet.spikesSprite,
@@ -13,11 +13,11 @@ class Spikes extends GameDecoration with Sensor<Attackable> {
   }
 
   @override
-  void onContact(Attackable component) {
+  void onContact(WithLife component) {
     if (component is Player) {
-      component.handleAttack(AttackOriginEnum.ENEMY, 10, 1);
+      component.life.handleAttack(AttackOriginEnum.ENEMY, 10, 1);
     } else {
-      component.handleAttack(AttackOriginEnum.PLAYER_OR_ALLY, 10, 1);
+      component.life.handleAttack(AttackOriginEnum.PLAYER_OR_ALLY, 10, 1);
     }
   }
 }

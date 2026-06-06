@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:bonfire/mixins/pointer_detector.dart';
+import 'package:bonfire/input/pointer_detector.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
