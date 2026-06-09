@@ -17,9 +17,9 @@ class BCanSeeType<T extends GameComponent> extends Behavior {
 
   @override
   bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
-    if (comp is Vision) {
+    if (comp is WithVision) {
       List<T>? list;
-      comp.seeComponentType<T>(
+      comp.vision.seeComponentType<T>(
         radiusVision: radiusVision,
         visionAngle: visionAngle,
         angle: angle,

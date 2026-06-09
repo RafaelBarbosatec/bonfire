@@ -108,7 +108,7 @@ extension AllyExtensions on Ally {
       return;
     }
 
-    seeComponentType<Enemy>(
+    vision.seeComponentType<Enemy>(
       radiusVision: radiusVision,
       angle: angle ?? direction.toRadians(),
       visionAngle: visionAngle,

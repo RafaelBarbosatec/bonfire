@@ -19,7 +19,7 @@ extension PlayerExtensions on Player {
     if (isDead) {
       return null;
     }
-    return seeComponentType<Enemy>(
+    return vision.seeComponentType<Enemy>(
       observed: observed,
       notObserved: notObserved,
       radiusVision: radiusVision,

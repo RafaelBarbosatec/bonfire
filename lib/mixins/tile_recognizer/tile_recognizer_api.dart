@@ -2,20 +2,13 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/map/base/tile_component.dart';
 import 'package:bonfire/util/extensions/game_component_extensions.dart';
 
-///
-/// Created by
-///
-/// ─▄▀─▄▀
-/// ──▀──▀
-/// █▀▀▀▀▀█▄
-/// █░░░░░█─█
-/// ▀▄▄▄▄▄▀▀
-///
-/// Rafaelbarbosatec
-/// on 16/05/22
+/// API for querying map tile information below the component.
+class TileRecognizerApi {
+  final GameComponent comp;
 
-mixin TileRecognizer on GameComponent {
-  /// Method that checks what type map tile is currently
+  TileRecognizerApi(this.comp);
+
+  /// Returns the type of the first map tile below the component.
   String? tileTypeBelow() {
     final list = tileTypeListBelow();
     if (list.isNotEmpty) {
@@ -24,34 +17,33 @@ mixin TileRecognizer on GameComponent {
     return null;
   }
 
-  /// Method that checks what types map tile is currently
+  /// Returns all tile types below the component.
   List<String> tileTypeListBelow() {
-    if (!hasGameRef) {
+    if (!comp.hasGameRef) {
       return [];
     }
-    final map = gameRef.map;
+    final map = comp.gameRef.map;
     if (map.getRenderedTiles().isNotEmpty) {
       return tileListBelow().map<String>((e) => e.tileClass!).toList();
     }
     return [];
   }
 
-  /// Method that checks what properties map tile is currently
+  /// Returns the properties of the first map tile below the component.
   Map<String, dynamic>? tilePropertiesBelow() {
     final list = tilePropertiesListBelow();
     if (list?.isNotEmpty == true) {
       return list?.first;
     }
-
     return null;
   }
 
-  /// Method that checks what properties list map tile is currently
+  /// Returns all tile properties below the component.
   List<Map<String, dynamic>>? tilePropertiesListBelow() {
-    if (!hasGameRef) {
+    if (!comp.hasGameRef) {
       return null;
     }
-    final map = gameRef.map;
+    final map = comp.gameRef.map;
     if (map.layers.isNotEmpty) {
       return tileListBelow()
           .map<Map<String, dynamic>>((e) => e.properties!)
@@ -60,15 +52,16 @@ mixin TileRecognizer on GameComponent {
     return null;
   }
 
-  /// Method that checks what map tiles is below
+  /// Returns all tile components below the component.
   Iterable<TileComponent> tileListBelow() {
-    if (!hasGameRef) {
+    if (!comp.hasGameRef) {
       return [];
     }
-    final map = gameRef.map;
+    final map = comp.gameRef.map;
     if (map.layers.isNotEmpty) {
       return map.getRenderedTiles().where((element) {
-        return element.overlaps(rectCollision) && (element.properties != null);
+        return element.overlaps(comp.rectCollision) &&
+            (element.properties != null);
       });
     }
     return [];

@@ -32,7 +32,7 @@ extension NpcExtensions on Npc {
       notObserved?.call();
       return null;
     }
-    return seeComponent(
+    return vision.seeComponent(
       player,
       observed: (c) => observed(c as Player),
       notObserved: notObserved,
@@ -107,7 +107,7 @@ extension NpcExtensions on Npc {
       return;
     }
 
-    seeComponentType<Enemy>(
+    vision.seeComponentType<Enemy>(
       radiusVision: radiusVision,
       visionAngle: visionAngle,
       angle: angle ?? direction.toRadians(),
@@ -154,7 +154,7 @@ extension NpcExtensions on Npc {
       return;
     }
 
-    seeComponentType<Ally>(
+    vision.seeComponentType<Ally>(
       radiusVision: radiusVision,
       visionAngle: visionAngle,
       angle: angle ?? direction.toRadians(),

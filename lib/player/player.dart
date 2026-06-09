@@ -8,7 +8,7 @@ class Player extends GameComponent
     with
         Movement,
         WithLife,
-        Vision,
+        WithVision,
         PlayerControllerListener,
         MovementByJoystick {
   Player({

@@ -6,10 +6,16 @@ import 'package:bonfire/geometry/rectangle.dart';
 import 'package:bonfire/util/extensions/color_extensions.dart';
 import 'package:flutter/material.dart';
 
-/// Mixin used to adds basic Vision to the component
-mixin Vision on GameComponent {
+/// Mixin that marks a component as invisible to the [WithVision] detection.
+mixin CanNotSeen on GameComponent {}
+
+/// API for managing vision/line-of-sight behavior.
+class VisionApi {
   // ignore: constant_identifier_names
   static const VISION_360 = 6.28319;
+
+  final GameComponent comp;
+
   final Paint _paint = Paint()..color = Colors.red.setOpacity(0.5);
   bool _drawVision = false;
   bool _checkWithRaycast = true;
@@ -17,7 +23,9 @@ mixin Vision on GameComponent {
   PolygonShape? _currentShape;
   int _countPolygonPoints = 20;
 
-  void setupVision({
+  VisionApi(this.comp);
+
+  void setup({
     Color? color,
     bool drawVision = false,
     bool checkWithRaycast = true,
@@ -30,11 +38,8 @@ mixin Vision on GameComponent {
     _paint.color = color ?? Colors.red.setOpacity(0.5);
   }
 
-  /// This method we notify when detect the component when enter
-  /// in [radiusVision] configuration
-  /// Method that bo used in [update] method.
-  /// [visionAngle] in radians
-  /// [angle] in radians.
+  /// Checks if [component] is within vision range.
+  /// [visionAngle] in radians. [angle] in radians.
   PolygonShape? seeComponent(
     GameComponent component, {
     required Function(GameComponent) observed,
@@ -58,6 +63,51 @@ mixin Vision on GameComponent {
     return _currentShape = shape;
   }
 
+  /// Checks if any component of type [T] is within vision range.
+  /// [visionAngle] in radians. [angle] in radians.
+  PolygonShape? seeComponentType<T extends GameComponent>({
+    required void Function(List<T>) observed,
+    VoidCallback? notObserved,
+    double radiusVision = 32,
+    double? visionAngle,
+    double angle = 3.14159,
+  }) {
+    final compVisible = comp.gameRef.visibles<T>();
+
+    if (compVisible.isEmpty) {
+      notObserved?.call();
+      return _currentShape = null;
+    }
+
+    final shape = _getShapeVision(radiusVision, visionAngle, angle);
+
+    final compObserved = compVisible.where((c) {
+      return _canSee(shape, c, radiusVision);
+    }).toList();
+
+    if (compObserved.isNotEmpty) {
+      observed(compObserved);
+    } else {
+      notObserved?.call();
+    }
+    return _currentShape = shape;
+  }
+
+  /// Clears the cached vision polygon shapes.
+  void cleanCache() {
+    _polygonCache.clear();
+  }
+
+  /// Renders the vision shape if [drawVision] is enabled.
+  void render(Canvas canvas) {
+    if (_drawVision) {
+      canvas.save();
+      canvas.translate(-comp.position.x, -comp.position.y);
+      _currentShape?.render(canvas, _paint);
+      canvas.restore();
+    }
+  }
+
   bool _canSee(
     PolygonShape shape,
     GameComponent component,
@@ -76,11 +126,11 @@ mixin Vision on GameComponent {
     final inShape = shape.isCollision(otherShape);
     if (inShape) {
       if (_checkWithRaycast) {
-        final myCenter = rectCollision.center.toVector2();
+        final myCenter = comp.rectCollision.center.toVector2();
         final compCenter = component.rectCollision.center.toVector2();
         final direction = (compCenter - myCenter).normalized();
 
-        final result = raycast(
+        final result = comp.raycast(
           direction,
           maxDistance: radiusVision,
           origin: myCenter,
@@ -95,37 +145,22 @@ mixin Vision on GameComponent {
     return false;
   }
 
-  /// This method we notify when detect components by type when enter
-  /// in [radiusVision] configuration
-  /// Method that bo used in [update] method.
-  /// [visionAngle] in radians
-  /// [angle] in radians.
-  PolygonShape? seeComponentType<T extends GameComponent>({
-    required void Function(List<T>) observed,
-    VoidCallback? notObserved,
-    double radiusVision = 32,
+  PolygonShape _getShapeVision(
+    double radiusVision,
     double? visionAngle,
-    double angle = 3.14159,
-  }) {
-    final compVisible = gameRef.visibles<T>();
-
-    if (compVisible.isEmpty) {
-      notObserved?.call();
-      return _currentShape = null;
-    }
-
-    final shape = _getShapeVision(radiusVision, visionAngle, angle);
-
-    final compObserved = compVisible.where((comp) {
-      return _canSee(shape, comp, radiusVision);
-    }).toList();
-
-    if (compObserved.isNotEmpty) {
-      observed(compObserved);
+    double angle,
+  ) {
+    final key = '$radiusVision/$visionAngle/$angle';
+    PolygonShape shape;
+    final center = comp.rectCollision.centerVector2;
+    if (_polygonCache.containsKey(key)) {
+      shape = _polygonCache[key]!;
+      shape.position = center;
     } else {
-      notObserved?.call();
+      shape = _buildShape(radiusVision, visionAngle, angle, center);
+      _polygonCache[key] = shape;
     }
-    return _currentShape = shape;
+    return shape;
   }
 
   PolygonShape _buildShape(
@@ -180,53 +215,11 @@ mixin Vision on GameComponent {
     );
   }
 
-  @override
-  void onRemove() {
-    cleanVisionCache();
-    super.onRemove();
-  }
-
-  void cleanVisionCache() {
-    _polygonCache.clear();
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    if (_drawVision) {
-      canvas.save();
-      canvas.translate(-position.x, -position.y);
-      _currentShape?.render(canvas, _paint);
-      canvas.restore();
-    }
-  }
-
-  PolygonShape _getShapeVision(
-    double radiusVision,
-    double? visionAngle,
-    double angle,
-  ) {
-    final key = '$radiusVision/$visionAngle/$angle';
-    PolygonShape shape;
-    final center = rectCollision.centerVector2;
-    if (_polygonCache.containsKey(key)) {
-      shape = _polygonCache[key]!;
-      shape.position = center;
-    } else {
-      shape = _buildShape(radiusVision, visionAngle, angle, center);
-      _polygonCache[key] = shape;
-    }
-    return shape;
-  }
-
   List<ShapeHitbox> _getCanNotSeenHitbox() {
     final sensorHitBox = <ShapeHitbox>[];
-    gameRef.query<CanNotSeen>(onlyVisible: true).forEach((e) {
+    comp.gameRef.query<CanNotSeen>(onlyVisible: true).forEach((e) {
       sensorHitBox.addAll(e.children.query<ShapeHitbox>());
     });
     return sensorHitBox;
   }
 }
-
-// Use it to turn your component not detectable from `Vision` mixin.
-mixin CanNotSeen on GameComponent {}

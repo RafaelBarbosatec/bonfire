@@ -19,9 +19,9 @@ class BCanSee extends Behavior {
 
   @override
   bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
-    if (comp is Vision) {
+    if (comp is WithVision) {
       var see = false;
-      comp.seeComponent(
+      comp.vision.seeComponent(
         target,
         radiusVision: radiusVision,
         visionAngle: visionAngle,
