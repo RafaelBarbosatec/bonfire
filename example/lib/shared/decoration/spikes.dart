@@ -2,18 +2,18 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 
-class Spikes extends GameDecoration with Sensor<WithLife> {
+class Spikes extends GameDecoration with WithSensor<WithLife> {
   Spikes(Vector2 position, {Vector2? size})
       : super.withSprite(
           sprite: CommonSpriteSheet.spikesSprite,
           position: position,
           size: size ?? Vector2.all(DungeonMap.tileSize / 1.5),
         ) {
-    sensorInterval = 500;
+    sensor.interval = 500;
+    sensor.onContactListener(_onContact);
   }
 
-  @override
-  void onContact(WithLife component) {
+  void _onContact(WithLife component) {
     if (component is Player) {
       component.life.handleAttack(AttackOriginEnum.ENEMY, 10, 1);
     } else {

@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 
-class PotionLife extends GameDecoration with Sensor<Player>, Movement {
+class PotionLife extends GameDecoration with WithSensor<Player>, Movement {
   final double life;
   double _lifeDistributed = 0;
 
@@ -13,8 +13,7 @@ class PotionLife extends GameDecoration with Sensor<Player>, Movement {
           size: size ?? Vector2.all(DungeonMap.tileSize * 0.5),
         );
 
-  @override
-  void onContact(Player component) {
+  void _onContact(Player component) {
     generateValues(
       const Duration(seconds: 1),
       onChange: (value) {
@@ -26,11 +25,11 @@ class PotionLife extends GameDecoration with Sensor<Player>, Movement {
       },
     );
     removeFromParent();
-    super.onContact(component);
   }
 
   @override
   void onMount() {
+    sensor.onContactListener(_onContact);
     gameRef.generateValues(
       const Duration(seconds: 1),
       onChange: (value) {

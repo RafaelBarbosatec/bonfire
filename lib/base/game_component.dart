@@ -127,8 +127,8 @@ abstract class GameComponent extends PositionComponent
     if (component is ShapeHitbox && gameRef.showCollisionArea) {
       final paintCollition = Paint()
         ..color = gameRef.collisionAreaColor ?? const Color(0xffffffff);
-      if (this is Sensor) {
-        paintCollition.color = Sensor.color;
+      if (this is WithSensor) {
+        paintCollition.color = WithSensor.color;
       }
       component.paint = paintCollition;
       component.renderShape = true;
@@ -240,7 +240,7 @@ abstract class GameComponent extends PositionComponent
 
   List<ShapeHitbox> _getSensorsHitbox() {
     final sensorHitBox = <ShapeHitbox>[];
-    gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
+    gameRef.query<WithSensor>(onlyVisible: true).forEach((e) {
       sensorHitBox.addAll(e.children.query<ShapeHitbox>());
     });
     return sensorHitBox;

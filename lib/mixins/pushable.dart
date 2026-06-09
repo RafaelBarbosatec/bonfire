@@ -43,7 +43,7 @@ mixin Pushable on Movement {
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if (_enablePushable && other is! Sensor) {
+    if (_enablePushable && other is! WithSensor) {
       if (other is GameComponent) {
         switch (_pushbleFrom) {
           case PushableFromEnum.ENEMY:

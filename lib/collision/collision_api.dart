@@ -121,7 +121,7 @@ class CollisionApi {
     Set<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
-    if (other is Sensor || !_isEnabled) {
+    if (other is WithSensor || !_isEnabled) {
       return;
     }
     var stopOtherMovement = true;

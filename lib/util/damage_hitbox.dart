@@ -10,7 +10,7 @@ class DamageHitbox extends GameComponent {
   final dynamic id;
   final void Function(WithLife attackable)? onDamage;
 
-  final Paint _paint = Paint()..color = Sensor.color;
+  final Paint _paint = Paint()..color = WithSensor.color;
 
   DamageHitbox({
     required Vector2 position,

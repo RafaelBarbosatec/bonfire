@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/multi_scenario/maps.dart';
 
-class MapSensor extends GameDecoration with Sensor<Player> {
+class MapSensor extends GameDecoration with WithSensor<Player> {
   final String id;
   bool hasContact = false;
   final String targetMap;
@@ -18,10 +18,11 @@ class MapSensor extends GameDecoration with Sensor<Player> {
   ) : super(
           position: position,
           size: size,
-        );
+        ) {
+    sensor.onContactListener(_onContact);
+  }
 
-  @override
-  void onContact(Player component) {
+  void _onContact(Player component) {
     if (!hasContact) {
       hasContact = true;
       MapNavigator.of(context).toNamed(
@@ -32,6 +33,5 @@ class MapSensor extends GameDecoration with Sensor<Player> {
         ),
       );
     }
-    super.onContact(component);
   }
 }

@@ -103,7 +103,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
 
   @override
   bool onComponentTypeCheck(PositionComponent other) {
-    if (other is Sensor) {
+    if (other is WithSensor) {
       return false;
     }
 
@@ -126,7 +126,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
       }
     }
 
-    if (other is Sensor) {
+    if (other is WithSensor) {
       return;
     }
 
