@@ -15,19 +15,13 @@ class SensorApi<T extends GameComponent> {
 
   final GameComponent comp;
 
-  int _intervalCallback = 100;
-  bool _enabled = true;
+  int interval = 100;
+  bool enabled = true;
 
   final List<SensorContactCallback<T>> _onContactCallbacks = [];
   final List<SensorContactCallback<T>> _onContactExitCallbacks = [];
 
   SensorApi(this.comp);
-
-  bool get enabled => _enabled;
-  set enabled(bool value) => _enabled = value;
-
-  int get interval => _intervalCallback;
-  set interval(int value) => _intervalCallback = value;
 
   /// Register callback fired while contact is detected.
   void onContactListener(SensorContactCallback<T> callback) {
@@ -53,13 +47,13 @@ class SensorApi<T extends GameComponent> {
   }
 
   void handleCollision(PositionComponent other) {
-    if (other is! T || !_enabled) {
+    if (other is! T || !enabled) {
       return;
     }
 
     if (comp.checkInterval(
       _sensorIntervalKey,
-      _intervalCallback,
+      interval,
       comp.lastDt,
     )) {
       for (final callback in _onContactCallbacks) {
