@@ -4,7 +4,7 @@ import 'package:bonfire/bonfire.dart';
 
 // Component with `Sprite`
 class GameObject extends GameComponent
-    with UseSprite, Lighting, UseAssetsLoader {
+    with UseSprite, Lighting, WithAssetsLoader {
   final int? objectPriority;
 
   GameObject({
@@ -22,7 +22,7 @@ class GameObject extends GameComponent
     this.position = position;
     this.size = size;
     this.angle = angle;
-    loader?.add(AssetToLoad<Sprite>(sprite, (value) => this.sprite = value));
+    assetsLoader.add(AssetToLoad<Sprite>(sprite, (value) => this.sprite = value));
     setupLighting(lightingConfig);
   }
 

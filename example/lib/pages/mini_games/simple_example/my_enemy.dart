@@ -12,7 +12,7 @@ import 'package:example/shared/util/enemy_sprite_sheet.dart';
 ///
 /// Rafaelbarbosatec
 /// on 19/10/21
-class MyEnemy extends SimpleEnemy with WithCollision, RandomMovement {
+class MyEnemy extends SimpleEnemy with WithCollision, WithRandomMovement {
   final bool withCollision;
   MyEnemy(Vector2 position, {this.withCollision = true})
       : super(
@@ -33,6 +33,6 @@ class MyEnemy extends SimpleEnemy with WithCollision, RandomMovement {
   @override
   void update(double dt) {
     super.update(dt);
-    runRandomMovement(dt);
+    randomMovement.update(dt);
   }
 }

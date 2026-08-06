@@ -23,7 +23,7 @@ class AnimatedGameObject extends GameObject with UseSpriteAnimation {
     super.objectPriority,
     super.renderAboveComponents,
   }) : super(sprite: null) {
-    loader?.add(
+    assetsLoader.add(
       AssetToLoad<SpriteAnimation>(
         animation,
         (value) {

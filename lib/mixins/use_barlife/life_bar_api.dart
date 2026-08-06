@@ -1,8 +1,10 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:flutter/material.dart';
 
-// Mixin used to adds a BarLife to the attacable component
-mixin UseLifeBar on WithLife {
+/// Mixin used to adds a BarLife to the attackable component.
+class LifeBarApi {
+  final WithLife comp;
+
   BarLifeComponent? barLife;
 
   Color _backgroundColor = const Color(0xFF000000);
@@ -19,14 +21,17 @@ mixin UseLifeBar on WithLife {
   EdgeInsets? _padding;
   Vector2? _size;
 
-  void setupLifeBar({
+  LifeBarApi(this.comp);
+
+  /// Sets up the life bar appearance and behavior.
+  void setup({
     Vector2? size,
     Color? backgroundColor,
     Color? borderColor,
     double borderWidth = 2,
     List<Color>? colors,
     BorderRadius? borderRadius,
-    BarLifeDrawPosition barLifeDrawPosition = BarLifeDrawPosition.top,
+    BarLifeDrawPosition drawPosition = BarLifeDrawPosition.top,
     Vector2? offset,
     Vector2? textOffset,
     TextStyle? textStyle,
@@ -40,7 +45,7 @@ mixin UseLifeBar on WithLife {
     _borderWidth = borderWidth;
     _colors = colors;
     _borderRadius = borderRadius ?? _borderRadius;
-    _barLifeDrawPosition = barLifeDrawPosition;
+    _barLifeDrawPosition = drawPosition;
     _barOffset = offset;
     _textStyle = textStyle;
     _showLifeText = showLifeText;
@@ -48,19 +53,19 @@ mixin UseLifeBar on WithLife {
     _size = size;
   }
 
-  @override
-  void onMount() {
-    add(
+  /// Mounts the life bar component and listeners.
+  void mount() {
+    comp.add(
       barLife = BarLifeComponent(
-        target: this,
+        target: comp as GameComponent,
         size: _size,
         offset: _barOffset,
         backgroundColor: _backgroundColor,
         borderColor: _borderColor,
         borderWidth: _borderWidth,
         colors: _colors,
-        life: life.value,
-        maxLife: life.max,
+        life: comp.life.value,
+        maxLife: comp.life.max,
         borderRadius: _borderRadius,
         drawPosition: _barLifeDrawPosition,
         textStyle: _textStyle,
@@ -69,30 +74,29 @@ mixin UseLifeBar on WithLife {
         padding: _padding,
       ),
     );
-    life.onInitialLifeListener((double value) {
+    comp.life.onInitialLifeListener((double value) {
       barLife?.updateLife(value);
       barLife?.updatemaxLife(value);
     });
-    life.onRemoveLifeListener((double _) => _animateBar());
-    life.onRestoreLifeListener((double _) => _animateBar());
-    life.onLifeUpdateListener((double value) => barLife?.updateLife(value));
-    super.onMount();
+    comp.life.onRemoveLifeListener((double _) => _animateBar());
+    comp.life.onRestoreLifeListener((double _) => _animateBar());
+    comp.life.onLifeUpdateListener((double value) => barLife?.updateLife(value));
   }
 
-  @override
-  void onRemove() {
+  /// Removes the life bar from the component.
+  void dispose() {
     barLife?.removeFromParent();
-    super.onRemove();
   }
 
   void _animateBar() {
-    if (hasGameRef) {
+    final gameComponent = comp as GameComponent;
+    if (gameComponent.hasGameRef) {
       _valueGenerator?.reset();
       _valueGenerator?.removeFromParent();
-      _valueGenerator = generateValues(
+      _valueGenerator = gameComponent.generateValues(
         const Duration(milliseconds: 300),
         begin: barLife?.life ?? 0,
-        end: life.value,
+        end: comp.life.value,
         onChange: (value) {
           barLife?.updateLife(value);
         },

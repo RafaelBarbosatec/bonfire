@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/util/critter_sprite_sheet.dart';
 
-class Critter extends SimpleNpc with WithCollision, RandomMovement {
+class Critter extends SimpleNpc with WithCollision, WithRandomMovement {
   bool enableBehaviors = true;
   Critter(Vector2 position)
       : super(
@@ -21,7 +21,7 @@ class Critter extends SimpleNpc with WithCollision, RandomMovement {
       observed: () {},
       radiusVision: DungeonMap.tileSize * 1.5,
       notObserved: () {
-        runRandomMovement(
+        randomMovement.update(
           dt,
           speed: speed / 10,
           maxDistance: (DungeonMap.tileSize),

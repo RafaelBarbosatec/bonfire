@@ -4,7 +4,7 @@ import 'package:example/shared/util/common_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
 class BarrelDraggable extends GameDecoration
-    with DragGesture, Movement, WithCollision, WithForces, Pushable {
+    with DragGesture, Movement, WithCollision, WithForces, WithPushable {
   late TextPaint _textConfig;
   String text = 'Drag here';
   double xCenter = 0;

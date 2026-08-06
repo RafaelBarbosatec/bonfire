@@ -12,7 +12,7 @@ import 'package:example/shared/util/common_sprite_sheet.dart';
 ///
 /// Rafaelbarbosatec
 /// on 28/01/22
-class ZombieEnemy extends RotationEnemy with WithCollision, RandomMovement {
+class ZombieEnemy extends RotationEnemy with WithCollision, WithRandomMovement {
   ZombieEnemy(Vector2 position)
       : super(
           position: position,
@@ -38,7 +38,7 @@ class ZombieEnemy extends RotationEnemy with WithCollision, RandomMovement {
       },
       radiusVision: 128,
       notObserved: () {
-        runRandomMovement(
+        randomMovement.update(
           dt,
           updateAngle: true,
           maxDistance: 64,

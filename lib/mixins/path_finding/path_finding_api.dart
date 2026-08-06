@@ -11,9 +11,16 @@ import 'package:bonfire/util/line_path_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-/// Mixin responsible for find path using `a_star_algorithm` and
-///  moving the component through the path
-mixin PathFinding on Movement {
+/// Callback fired when the component finishes moving along the path.
+typedef PathFindingFinishCallback = void Function();
+
+/// API responsible for finding paths using A* and moving the component
+/// through them.
+///
+/// The parent component must have a [Movement] mixin.
+class PathFindingApi {
+  final Movement comp;
+
   static const REDUCTION_TO_AVOID_ROUNDING_PROBLEMS = 4;
 
   List<Vector2> _currentPath = [];
@@ -25,7 +32,6 @@ mixin PathFinding on Movement {
   bool _withDiagonal = true;
   bool _useAreaBetweenPlayerAndTarget = false;
   double _factorInflateFindArea = 2;
-  VoidCallback? _onFinish;
 
   final List<(int, int)> _barriers = [];
   final List<ShapeHitbox> _ignoreCollisions = [];
@@ -36,7 +42,20 @@ mixin PathFinding on Movement {
   final Paint _paintShowBarriers = Paint()
     ..color = const Color(0xFF2196F3).setOpacity(0.5);
 
-  void setupPathFinding({
+  final List<PathFindingFinishCallback> _onFinishCallbacks = [];
+
+  PathFindingApi(this.comp);
+
+  /// Whether the component is currently moving along a path.
+  bool get isMoving => _currentPath.isNotEmpty;
+
+  /// Registers a callback fired when the component reaches the path end.
+  void onFinishListener(PathFindingFinishCallback callback) {
+    _onFinishCallbacks.add(callback);
+  }
+
+  /// Sets up path finding visuals and behavior.
+  void setup({
     bool? linePathEnabled,
 
     /// Use to set line path color
@@ -72,16 +91,19 @@ mixin PathFinding on Movement {
     _gridSizeIsCollisionSize = gridSizeIsCollisionSize;
   }
 
-  Future<List<Vector2>> moveToPositionWithPathFinding(
+  /// Moves the component to [position] using A* path finding.
+  Future<List<Vector2>> moveToPosition(
     Vector2 position, {
     List<GameComponent>? ignoreCollisions,
     VoidCallback? onFinish,
   }) async {
-    if (!hasGameRef) {
+    if (!comp.hasGameRef) {
       return Future.value([]);
     }
 
-    _onFinish = onFinish;
+    if (onFinish != null) {
+      _onFinishCallbacks.add(onFinish);
+    }
     _currentIndex = 0;
     _removeLinePathComponent();
 
@@ -96,15 +118,18 @@ mixin PathFinding on Movement {
     return _currentPath;
   }
 
+  /// Makes the component follow a previously calculated [path].
   void moveAlongThePath(
     List<Vector2> path, {
     VoidCallback? onFinish,
   }) {
-    if (!hasGameRef) {
+    if (!comp.hasGameRef) {
       return;
     }
 
-    _onFinish = onFinish;
+    if (onFinish != null) {
+      _onFinishCallbacks.add(onFinish);
+    }
     _currentIndex = 0;
     _removeLinePathComponent();
 
@@ -112,49 +137,52 @@ mixin PathFinding on Movement {
     _addLinePathComponent();
   }
 
+  /// Returns the path to [position] without moving the component.
   List<Vector2> getPathToPosition(
     Vector2 position, {
     List<GameComponent>? ignoreCollisions,
   }) {
     _ignoreCollisions.clear();
-    _ignoreCollisions.addAll(shapeHitboxes);
+    _ignoreCollisions.addAll(comp.shapeHitboxes);
 
     ignoreCollisions?.forEach(
-      (comp) => _ignoreCollisions.addAll(comp.shapeHitboxes),
+      (item) => _ignoreCollisions.addAll(item.shapeHitboxes),
     );
     return _calculatePath(position);
   }
 
-  @override
+  /// Updates path following movement.
   void update(double dt) {
-    super.update(dt);
     if (_currentPath.isNotEmpty) {
-      if (!moveToPosition(_currentPath[_currentIndex])) {
+      if (!comp.moveToPosition(_currentPath[_currentIndex])) {
         _goToNextPosition();
       }
     }
   }
 
-  @override
-  void renderTree(Canvas canvas) {
-    _drawBarrries(canvas);
-    super.renderTree(canvas);
+  /// Renders debug barriers if enabled.
+  void render(Canvas canvas) {
+    _drawBarriers(canvas);
   }
 
-  void stopMoveAlongThePath() {
+  /// Stops following the current path.
+  void stop() {
     _currentPath.clear();
     _barriers.clear();
     _currentIndex = 0;
     _removeLinePathComponent();
-    _onFinish?.call();
-    _onFinish = null;
-    stop();
+    _notifyFinish();
+    comp.stop();
+  }
+
+  /// Cleans up path line component when the component is removed.
+  void dispose() {
+    _removeLinePathComponent();
+    _onFinishCallbacks.clear();
   }
 
   List<Vector2> _calculatePath(Vector2 finalPosition) {
-    final player = this;
-
-    final positionPlayer = player.rectCollision.centerVector2;
+    final positionPlayer = comp.rectCollision.centerVector2;
 
     final playerPosition = _getCenterPositionByTile(positionPlayer);
 
@@ -202,7 +230,7 @@ mixin PathFinding on Movement {
 
     area = Rect.fromLTRB(left, top, right, bottom).inflate(inflate);
 
-    for (final e in gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
+    for (final e in comp.gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
       if (!_ignoreCollisions.contains(e)) {
         final rect = e.toAbsoluteRect();
         if (area.overlaps(rect) || !_useAreaBetweenPlayerAndTarget) {
@@ -214,7 +242,7 @@ mixin PathFinding on Movement {
     Iterable<(int, int)> result = [];
 
     if (_barriers.contains(targetPosition)) {
-      stop();
+      comp.stop();
       return [];
     }
 
@@ -232,7 +260,7 @@ mixin PathFinding on Movement {
         result = AStar.simplifyPath(result);
         return _mapToWorldPositions(result);
       } else {
-        stop();
+        comp.stop();
         return [];
       }
     } catch (e, stacktrace) {
@@ -244,16 +272,14 @@ mixin PathFinding on Movement {
 
   /// Get size of the grid used on algorithm to calculate path
   double get _tileSize {
-    final tileSize = gameRef.map.tileSize;
+    final tileSize = comp.gameRef.map.tileSize;
     if (_gridSizeIsCollisionSize) {
-      final rect = rectCollision;
+      final rect = comp.rectCollision;
       return max(rect.height, rect.width) +
           REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
     }
     return tileSize;
   }
-
-  bool get isMovingAlongThePath => _currentPath.isNotEmpty;
 
   (int, int) _getCenterPositionByTile(Vector2 center) {
     return (
@@ -323,11 +349,11 @@ mixin PathFinding on Movement {
     if (_currentIndex < _currentPath.length - 1) {
       _currentIndex++;
     } else {
-      stopMoveAlongThePath();
+      stop();
     }
   }
 
-  void _drawBarrries(Canvas canvas) {
+  void _drawBarriers(Canvas canvas) {
     if (_showBarriers) {
       for (final element in _barriers) {
         canvas.drawRect(
@@ -343,12 +369,6 @@ mixin PathFinding on Movement {
     }
   }
 
-  @override
-  void onRemove() {
-    _removeLinePathComponent();
-    super.onRemove();
-  }
-
   void _removeLinePathComponent() {
     _linePathComponent?.removeFromParent();
     _linePathComponent = null;
@@ -356,7 +376,7 @@ mixin PathFinding on Movement {
 
   void _addLinePathComponent() {
     if (_linePathEnabled) {
-      gameRef.add(
+      comp.gameRef.add(
         _linePathComponent = LinePathComponent(
           _currentPath,
           _pathLineColor,
@@ -371,5 +391,12 @@ mixin PathFinding on Movement {
       return Vector2(e.x * _tileSize, e.y * _tileSize)
           .translated(_tileSize / 2, _tileSize / 2);
     }).toList();
+  }
+
+  void _notifyFinish() {
+    for (final callback in _onFinishCallbacks) {
+      callback();
+    }
+    _onFinishCallbacks.clear();
   }
 }

@@ -9,8 +9,8 @@ class Goblin extends SimpleEnemy
         WithCollision,
         PlayerControllerListener,
         MovementByJoystick,
-        RandomMovement,
-        UseLifeBar,
+        WithRandomMovement,
+        WithLifeBar,
         UseBehavior {
   double attack = 20;
   bool enableBehaviors = true;
@@ -22,7 +22,7 @@ class Goblin extends SimpleEnemy
           speed: DungeonMap.tileSize,
           life: 100,
         ) {
-    setupLifeBar(
+    lifeBar.setup(
       borderRadius: BorderRadius.circular(2),
       borderWidth: 2,
     );

@@ -13,7 +13,7 @@ import 'package:bonfire/bonfire.dart';
 /// on 24/03/22
 
 /// Enemy used for top-down perspective
-class RotationAlly extends Ally with UseSpriteAnimation, UseAssetsLoader {
+class RotationAlly extends Ally with UseSpriteAnimation, WithAssetsLoader {
   SpriteAnimation? animIdle;
   SpriteAnimation? animRun;
 
@@ -28,12 +28,12 @@ class RotationAlly extends Ally with UseSpriteAnimation, UseAssetsLoader {
     super.receivesAttackFrom,
   }) {
     angle = currentRadAngle;
-    loader?.add(
+    assetsLoader.add(
       AssetToLoad<SpriteAnimation>(animIdle, (value) {
         this.animIdle = value;
       }),
     );
-    loader?.add(
+    assetsLoader.add(
       AssetToLoad<SpriteAnimation>(animRun, (value) {
         this.animRun = value;
       }),

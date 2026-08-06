@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 /// Component used to add in your [GameInterface]
 class InterfaceComponent extends GameComponent
-    with UseAssetsLoader, UseSprite, TapGesture {
+    with WithAssetsLoader, UseSprite, TapGesture {
   /// identifier
   final int id;
 
@@ -29,12 +29,12 @@ class InterfaceComponent extends GameComponent
     this.selectable = false,
     this.onTapComponent,
   }) {
-    loader?.add(
+    assetsLoader.add(
       AssetToLoad<Sprite>(spriteUnselected, (value) {
         this.spriteUnselected = value;
       }),
     );
-    loader?.add(
+    assetsLoader.add(
       AssetToLoad<Sprite>(spriteSelected, (value) {
         this.spriteSelected = value;
       }),

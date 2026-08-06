@@ -1,9 +1,9 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/player/simple/human.dart';
 
-class HumanPathFinding extends HumanPlayer with PathFinding, TapGesture {
+class HumanPathFinding extends HumanPlayer with WithPathFinding, TapGesture {
   HumanPathFinding({required Vector2 position}) : super(position: position) {
-    setupPathFinding(
+    pathFinding.setup(
       pathLineStrokeWidth: 2,
       useOnlyVisibleBarriers: false,
     );
@@ -14,7 +14,7 @@ class HumanPathFinding extends HumanPlayer with PathFinding, TapGesture {
 
   @override
   void onTapDownScreen(GestureEvent event) {
-    moveToPositionWithPathFinding(event.worldPosition);
+    pathFinding.moveToPosition(event.worldPosition);
     super.onTapDownScreen(event);
   }
 }
