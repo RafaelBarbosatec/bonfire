@@ -110,22 +110,35 @@ extension GameComponentExtensions on GameComponent {
     double marginFromOrigin = 16,
     Vector2? centerOffset,
   }) {
-    simpleAttackRangeByAngle(
-      angle: direction.toRadians(),
-      animation: animationRight,
-      attackFrom: attackFrom,
-      damage: damage,
-      size: size,
-      animationDestroy: animationDestroy,
-      centerOffset: centerOffset,
-      marginFromOrigin: marginFromOrigin,
-      collision: collision,
-      destroySize: destroySize,
-      id: id,
-      lightingConfig: lightingConfig,
-      onDestroy: onDestroy,
-      speed: speed,
-      withDecorationCollision: withCollision,
+    final initPosition = rectCollision;
+
+    var startPosition =
+        initPosition.center.toVector2() + (centerOffset ?? Vector2.zero());
+
+    final displacement =
+        max(initPosition.width, initPosition.height) / 2 + marginFromOrigin;
+
+    startPosition = BonfireUtil.movePointByAngle(
+      startPosition,
+      displacement,
+      direction.toRadians(),
+    );
+    gameRef.add(
+      FlyingAttackGameObject.byDirection(
+        direction: direction,
+        animation: animationRight,
+        attackFrom: attackFrom,
+        damage: damage,
+        size: size,
+        animationDestroy: animationDestroy,
+        destroySize: destroySize,
+        id: id,
+        lightingConfig: lightingConfig,
+        onDestroy: onDestroy,
+        speed: speed,
+        withDecorationCollision: withCollision,
+        position: startPosition,
+      ),
     );
   }
 
