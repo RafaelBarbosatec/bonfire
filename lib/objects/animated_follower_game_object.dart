@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
 /// Animated component that follow othe `GameComponent`
-class AnimatedFollowerGameObject extends AnimatedGameObject with Follower {
+class AnimatedFollowerGameObject extends AnimatedGameObject with WithFollower {
   AnimatedFollowerGameObject({
     required super.animation,
     required super.size,
@@ -18,7 +18,7 @@ class AnimatedFollowerGameObject extends AnimatedGameObject with Follower {
   }) : super(
           position: target.position + (offset ?? Vector2.zero()),
         ) {
-    setupFollower(target: target, offset: offset);
+    follower.setup(target: target, offset: offset);
   }
 
   @override

@@ -38,7 +38,7 @@ export 'package:bonfire/map/util/world_map_reader.dart';
 export 'package:bonfire/map/world_map.dart';
 export 'package:bonfire/mixins/direction_animation/direction_animation.dart';
 export 'package:bonfire/mixins/flip_render.dart';
-export 'package:bonfire/mixins/follower.dart';
+export 'package:bonfire/mixins/follower/follower.dart';
 export 'package:bonfire/mixins/interval_checker.dart';
 export 'package:bonfire/mixins/jumper/jumper.dart';
 export 'package:bonfire/mixins/jumper_animation.dart';
