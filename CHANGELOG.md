@@ -1,5 +1,22 @@
-# next
+# 4.0.0-beta.8
+- update README.md
+
+# 4.0.0-beta.7
+- **BREAKING:** Major restructuring of mixin APIs. Mixins now expose functionality through a named API object following the `WithFeature` + `feature.{resource}` pattern. This reduces namespace pollution on components and improves developer experience when combining multiple mixins.
+  - `Follower` → `WithFollower` (`follower.setup(...)`, `follower.target`, `follower.offset`).
+  - `Pushable` → `WithPushable` (`pushable.setup(...)`, `pushable.onPushListener(...)`). `onPush` override removed in favor of a registered callback.
+  - `RandomMovement` → `WithRandomMovement` (`randomMovement.update(dt, ...)`). Callback parameters moved to `randomMovement.onStartMoveListener(...)` / `randomMovement.onStopMoveListener(...)`. `randomMovementArea` is now `randomMovement.area`.
+  - `PathFinding` → `WithPathFinding` (`pathFinding.setup(...)`, `pathFinding.moveToPosition(...)`, `pathFinding.stop()`, `pathFinding.isMoving`).
+  - `FlipRender` → `WithFlipRender` (`flipRender.flipVertically()`, `flipRender.flipHorizontally()`).
+  - `MovePerCell` → `WithMovePerCell` (`movePerCell.setup(...)`, `movePerCell.cellSize`).
+  - `UseAssetsLoader` → `WithAssetsLoader` (`assetsLoader.add(AssetToLoad(...))`). Public `AssetsLoader` and `AssetToLoad` classes remain available.
+  - `UseLifeBar` → `WithLifeBar` (`lifeBar.setup(...)`).
+- Remove `CustomQuadTreeBroadphase`. `CustomQuadTreeCollisionDetection` now uses `QuadTreeBroadphase` directly.
+- Fix `PushableFromEnum.PLAYER_OR_ALLY` condition logic.
 - Fix FlyingAttackGameObject destroy method
+
+# 4.0.0-beta.6
+- Fix some bugs
 
 # 4.0.0-beta.5
 - Fix issue 592
