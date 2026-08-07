@@ -21,6 +21,29 @@ Build RPG games and similar with the power of [FlameEngine](https://flame-engine
 | ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/multi_biome.gif) | ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/defector.gif) |
 
 
+## Bonfire 4.0
+
+Version 4.0 is a major restructuring of the mixin API surface. The main motivation is to improve the developer experience when building complex game components.
+
+In previous versions, each mixin added methods and fields directly to the component. With several mixins (`Movement`, `Jumper`, `Sensor`, `PathFinding`, `Pushable`, `RandomMovement`, etc.), the component namespace became crowded and autocomplete less useful.
+
+Starting with 4.0, mixins follow a consistent `WithFeature` + `feature.{resource}` pattern:
+
+```dart
+class MyEnemy extends SimpleEnemy
+    with Movement, WithCollision, WithRandomMovement, WithPathFinding {
+  @override
+  void update(double dt) {
+    super.update(dt);
+    randomMovement.update(dt, speed: 20, maxDistance: 64);
+  }
+}
+```
+
+This groups related functionality under a named API and makes the codebase easier to navigate and maintain.
+
+> **Migrating from Bonfire 3.x?** See the [Migration Guide from 3.x to 4.0](MIGRATION_3_TO_4.md).
+
 Bonfire is ideal for building games from the following perspectives:
 
 ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/perspectiva.jpg)

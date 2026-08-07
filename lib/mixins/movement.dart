@@ -112,7 +112,6 @@ mixin Movement on GameComponent {
   // Stop movement
   void stop() {
     velocity = Vector2.zero();
-    _handleIdle();
   }
 
   // Basic cardinal movements - covers 90% of use cases
