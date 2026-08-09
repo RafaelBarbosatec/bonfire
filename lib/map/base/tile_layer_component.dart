@@ -4,7 +4,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
 import 'package:bonfire/util/quadtree.dart' as tree;
 
-class TileLayerComponent extends PositionComponent with HasPaint, UseShader {
+class TileLayerComponent extends PositionComponent with HasPaint, WithShader {
   final int id;
   final String? name;
   final String? layerClass;

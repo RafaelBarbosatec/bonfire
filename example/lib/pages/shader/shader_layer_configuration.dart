@@ -55,8 +55,8 @@ class ShaderConfiguration extends GameComponent {
 
   void _setupShader() {
     final layer = gameRef.map.layersComponent.elementAtOrNull(1);
-    layer?.shader = shader;
-    layer?.shaderComponentStatic = true;
+    layer?.shader.fragment = shader;
+    layer?.shader.componentStatic = true;
     controller.addListener(_controllerListener);
   }
 

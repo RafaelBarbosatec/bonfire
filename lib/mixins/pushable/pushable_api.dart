@@ -134,4 +134,9 @@ class PushableApi {
       ),
     );
   }
+
+  /// Releases the registered push listener.
+  void dispose() {
+    _onPushCallback = null;
+  }
 }

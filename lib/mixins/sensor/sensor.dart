@@ -33,4 +33,10 @@ mixin WithSensor<T extends GameComponent> on GameComponent {
 
   @override
   int get priority => LayerPriority.MAP + 1;
+
+  @override
+  void onRemove() {
+    sensor.dispose();
+    super.onRemove();
+  }
 }

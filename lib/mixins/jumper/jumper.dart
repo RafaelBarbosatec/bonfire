@@ -60,4 +60,10 @@ mixin WithJumper on Movement, WithCollision {
       super.stop();
     }
   }
+
+  @override
+  void onRemove() {
+    jumper.dispose();
+    super.onRemove();
+  }
 }

@@ -11,7 +11,7 @@ typedef JumpStateChangedCallback = void Function(JumpingStateEnum state);
 /// API for managing jump behavior
 /// Encapsulates all jump state and logic
 class JumperApi {
-  final Movement comp;
+  final Movement _comp;
 
   // Configuration
   static const double _defaultJumpSpeed = 150.0;
@@ -35,7 +35,7 @@ class JumperApi {
   // Callbacks for jump state changes
   final List<JumpStateChangedCallback> _jumpStateChangedCallbacks = [];
 
-  JumperApi(this.comp) {
+  JumperApi(this._comp) {
     _maxJump = 1;
   }
 
@@ -55,7 +55,7 @@ class JumperApi {
   void jump({double? jumpSpeed, bool force = false}) {
     if (!_isJumping || _currentJumps < _maxJump || force) {
       _currentJumps++;
-      comp.moveUp(speed: jumpSpeed ?? _defaultJumpSpeed);
+      _comp.moveUp(speed: jumpSpeed ?? _defaultJumpSpeed);
       _isJumping = true;
     }
   }
@@ -82,13 +82,13 @@ class JumperApi {
     PositionComponent other,
   ) {
     ++_tileCollisionCount;
-    comp.resetInterval(_tileCollisionCountKey);
+    _comp.resetInterval(_tileCollisionCountKey);
   }
 
   /// Handle collision end (decrement tile collision counter)
   void handleCollisionEnd(PositionComponent other) {
     if (--_tileCollisionCount == 0) {
-      comp.resetInterval(_tileCollisionCountKey);
+      _comp.resetInterval(_tileCollisionCountKey);
     }
   }
 
@@ -100,7 +100,7 @@ class JumperApi {
 
   /// Check if character landed on ground or is in air
   void _updateCollisionDetection(double dt) {
-    final tick = comp.checkInterval(
+    final tick = _comp.checkInterval(
       _tileCollisionCountKey,
       100,
       dt,
@@ -109,7 +109,7 @@ class JumperApi {
     if (tick) {
       if (!_isJumping &&
           _tileCollisionCount == 0 &&
-          comp.velocity.y.abs() > 0.1) {
+          _comp.velocity.y.abs() > 0.1) {
         _isJumping = true;
       }
     }
@@ -119,7 +119,7 @@ class JumperApi {
   void _notifyJumpStateChange() {
     JumpingStateEnum newDirection;
     if (_isJumping) {
-      if (comp.direction.isDownSide) {
+      if (_comp.direction.isDownSide) {
         newDirection = JumpingStateEnum.down;
       } else {
         newDirection = JumpingStateEnum.up;

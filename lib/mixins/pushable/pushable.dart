@@ -25,4 +25,10 @@ mixin WithPushable on Movement {
     super.onCollision(intersectionPoints, other);
     pushable.handleCollision(intersectionPoints, other);
   }
+
+  @override
+  void onRemove() {
+    pushable.dispose();
+    super.onRemove();
+  }
 }

@@ -27,4 +27,10 @@ mixin WithLife on GameComponent {
 
   /// Returns the rect used to receive damage (component's collision rect).
   Rect rectAttackable() => rectCollision;
+
+  @override
+  void onRemove() {
+    life.dispose();
+    super.onRemove();
+  }
 }

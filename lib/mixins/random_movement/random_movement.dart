@@ -18,4 +18,10 @@ export 'random_movement_api.dart';
 /// ```
 mixin WithRandomMovement on Movement {
   late final RandomMovementApi randomMovement = RandomMovementApi(this);
+
+  @override
+  void onRemove() {
+    randomMovement.dispose();
+    super.onRemove();
+  }
 }

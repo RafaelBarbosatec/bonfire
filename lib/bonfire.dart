@@ -51,7 +51,7 @@ export 'package:bonfire/mixins/movement_by_joystick.dart';
 export 'package:bonfire/mixins/path_finding/path_finding.dart';
 export 'package:bonfire/mixins/pushable/pushable.dart';
 export 'package:bonfire/mixins/random_movement/random_movement.dart';
-export 'package:bonfire/mixins/shader/use_shader.dart';
+export 'package:bonfire/mixins/shader/with_shader.dart';
 export 'package:bonfire/mixins/tile_recognizer/tile_recognizer.dart';
 export 'package:bonfire/mixins/update_camera_by_pinch_gesture.dart';
 export 'package:bonfire/mixins/use_barlife/use_barlife.dart';
