@@ -1,3 +1,12 @@
+# 4.0.0-beta.10
+- **BREAKING:** Migrate `WithLighting` to API strategy. Added `LightingApi` exposed through `lighting` API object.
+  - `setupLighting(...)` → `lighting.setup(...)`
+  - `lightingConfig` → `lighting.config`
+  - `lightingEnabled` → `lighting.enabled`
+  - `lightingAngle` → `lighting.angle`
+- Update `LightingComponent` to use the new `LightingApi`.
+- Update internal usages and examples to use the new lighting API.
+
 # 4.0.0-beta.9
 - **BREAKING:** Migrate `WithShader` to API strategy. Added `ShaderApi` exposed through `shader` API object.
 - Make component reference private (`_comp`) across all mixin APIs to avoid exposing internal state.
