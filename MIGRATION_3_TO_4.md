@@ -24,6 +24,29 @@ player.randomMovement.update(dt, speed: 20);
 player.pathFinding.setup(linePathEnabled: true);
 ```
 
+## What didn't change?
+
+The `Movement` mixin is the only mixin that keeps its original API. It remains the central movement interface for components and does not follow the `WithFeature` + `feature.{resource}` pattern.
+
+```dart
+class MyPlayer extends SimplePlayer with Movement, WithJumper, WithSensor {
+  @override
+  void update(double dt) {
+    super.update(dt);
+    // Movement continues to be accessed directly:
+    moveLeft();
+    stop();
+    if (isMoving) { ... }
+
+    // Other mixins use the API object:
+    jumper.jump();
+    sensor.enabled = false;
+  }
+}
+```
+
+> **Note:** All other mixins were migrated to the API-first pattern. `Movement` stays direct because it is the foundation used by almost every other mixin and by user code.
+
 ## Migration table
 
 ### Follower
