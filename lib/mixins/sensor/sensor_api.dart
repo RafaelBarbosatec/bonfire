@@ -13,7 +13,7 @@ typedef SensorContactCallback<T extends GameComponent> = void Function(
 class SensorApi<T extends GameComponent> {
   static const String _sensorIntervalKey = 'SensorContact';
 
-  final GameComponent comp;
+  final GameComponent _comp;
 
   int interval = 100;
   bool enabled = true;
@@ -21,7 +21,7 @@ class SensorApi<T extends GameComponent> {
   final List<SensorContactCallback<T>> _onContactCallbacks = [];
   final List<SensorContactCallback<T>> _onContactExitCallbacks = [];
 
-  SensorApi(this.comp);
+  SensorApi(this._comp);
 
   /// Register callback fired while contact is detected.
   void onContactListener(SensorContactCallback<T> callback) {
@@ -34,11 +34,11 @@ class SensorApi<T extends GameComponent> {
   }
 
   Future<void> ensureCollisionShape() async {
-    final containsShape = comp.children.query<ShapeHitbox>().isNotEmpty;
+    final containsShape = _comp.children.query<ShapeHitbox>().isNotEmpty;
     if (!containsShape) {
-      comp.add(
+      _comp.add(
         RectangleHitbox(
-          size: comp.size,
+          size: _comp.size,
           isSolid: true,
           collisionType: CollisionType.passive,
         ),
@@ -51,10 +51,10 @@ class SensorApi<T extends GameComponent> {
       return;
     }
 
-    if (comp.checkInterval(
+    if (_comp.checkInterval(
       _sensorIntervalKey,
       interval,
-      comp.lastDt,
+      _comp.lastDt,
     )) {
       for (final callback in _onContactCallbacks) {
         callback(other);

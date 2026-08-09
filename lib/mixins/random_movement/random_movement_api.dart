@@ -43,7 +43,7 @@ typedef OnRandomMovementStopCallback = void Function();
 ///
 /// The parent component must have a [Movement] mixin.
 class RandomMovementApi {
-  final Movement comp;
+  final Movement _comp;
 
   static const String _intervalKeepStoppedKey = 'INTERVAL_RANDOM_MOVEMENT';
 
@@ -60,7 +60,7 @@ class RandomMovementApi {
   final List<OnRandomMovementStartCallback> _onStartMoveCallbacks = [];
   final List<OnRandomMovementStopCallback> _onStopMoveCallbacks = [];
 
-  RandomMovementApi(this.comp) : _random = Random(Random().nextInt(1000));
+  RandomMovementApi(this._comp) : _random = Random(Random().nextInt(1000));
 
   /// Registers a callback fired when random movement starts.
   void onStartMoveListener(OnRandomMovementStartCallback callback) {
@@ -87,7 +87,7 @@ class RandomMovementApi {
     RandomMovementDirections directions = RandomMovementDirections.all,
   }) {
     if (_distanceToArrived == null) {
-      if (comp.checkInterval(_intervalKeepStoppedKey, timeKeepStopped, dt)) {
+      if (_comp.checkInterval(_intervalKeepStoppedKey, timeKeepStopped, dt)) {
         final target = _getTarget(
           minDistance,
           maxDistance,
@@ -100,20 +100,20 @@ class RandomMovementApi {
         }
         _currentDirection = target.direction;
         _distanceToArrived = target.distance;
-        _originPosition = comp.absoluteCenter.clone();
+        _originPosition = _comp.absoluteCenter.clone();
         _notifyStartMove(_currentDirection);
       }
     } else {
-      _travelledDistance = comp.absoluteCenter.distanceTo(_originPosition);
-      final isCanMove = comp.canMove(_currentDirection, displacement: speed);
+      _travelledDistance = _comp.absoluteCenter.distanceTo(_originPosition);
+      final isCanMove = _comp.canMove(_currentDirection, displacement: speed);
       if (_travelledDistance >= _distanceToArrived! || !isCanMove) {
         _stop();
         return;
       }
 
-      comp.moveFromDirection(_currentDirection, speed: speed);
+      _comp.moveFromDirection(_currentDirection, speed: speed);
       if (updateAngle) {
-        comp.angle = _currentDirection.toRadians();
+        _comp.angle = _currentDirection.toRadians();
       }
     }
   }
@@ -122,7 +122,7 @@ class RandomMovementApi {
     _notifyStopMove();
     _distanceToArrived = null;
     _originPosition = Vector2.zero();
-    comp.stop();
+    _comp.stop();
   }
 
   double _getDistance(double minDistance, double maxDistance) {
@@ -139,7 +139,7 @@ class RandomMovementApi {
     Direction currentDirection,
     double? distanceToArrived,
   ) {
-    return comp.absoluteCenter +
+    return _comp.absoluteCenter +
         currentDirection.toVector2() * distanceToArrived!;
   }
 
@@ -157,7 +157,7 @@ class RandomMovementApi {
       var isRaycastOk = true;
 
       if (checkDirectionWithRayCast) {
-        isRaycastOk = comp.canMove(
+        isRaycastOk = _comp.canMove(
           _currentDirection,
           displacement: _distanceToArrived,
         );

@@ -14,7 +14,7 @@ class VisionApi {
   // ignore: constant_identifier_names
   static const VISION_360 = 6.28319;
 
-  final GameComponent comp;
+  final GameComponent _comp;
 
   final Paint _paint = Paint()..color = Colors.red.setOpacity(0.5);
   bool _drawVision = false;
@@ -23,7 +23,7 @@ class VisionApi {
   PolygonShape? _currentShape;
   int _countPolygonPoints = 20;
 
-  VisionApi(this.comp);
+  VisionApi(this._comp);
 
   void setup({
     Color? color,
@@ -72,7 +72,7 @@ class VisionApi {
     double? visionAngle,
     double angle = 3.14159,
   }) {
-    final compVisible = comp.gameRef.visibles<T>();
+    final compVisible = _comp.gameRef.visibles<T>();
 
     if (compVisible.isEmpty) {
       notObserved?.call();
@@ -102,7 +102,7 @@ class VisionApi {
   void render(Canvas canvas) {
     if (_drawVision) {
       canvas.save();
-      canvas.translate(-comp.position.x, -comp.position.y);
+      canvas.translate(-_comp.position.x, -_comp.position.y);
       _currentShape?.render(canvas, _paint);
       canvas.restore();
     }
@@ -126,11 +126,11 @@ class VisionApi {
     final inShape = shape.isCollision(otherShape);
     if (inShape) {
       if (_checkWithRaycast) {
-        final myCenter = comp.rectCollision.center.toVector2();
+        final myCenter = _comp.rectCollision.center.toVector2();
         final compCenter = component.rectCollision.center.toVector2();
         final direction = (compCenter - myCenter).normalized();
 
-        final result = comp.raycast(
+        final result = _comp.raycast(
           direction,
           maxDistance: radiusVision,
           origin: myCenter,
@@ -152,7 +152,7 @@ class VisionApi {
   ) {
     final key = '$radiusVision/$visionAngle/$angle';
     PolygonShape shape;
-    final center = comp.rectCollision.centerVector2;
+    final center = _comp.rectCollision.centerVector2;
     if (_polygonCache.containsKey(key)) {
       shape = _polygonCache[key]!;
       shape.position = center;
@@ -217,7 +217,7 @@ class VisionApi {
 
   List<ShapeHitbox> _getCanNotSeenHitbox() {
     final sensorHitBox = <ShapeHitbox>[];
-    comp.gameRef.query<CanNotSeen>(onlyVisible: true).forEach((e) {
+    _comp.gameRef.query<CanNotSeen>(onlyVisible: true).forEach((e) {
       sensorHitBox.addAll(e.children.query<ShapeHitbox>());
     });
     return sensorHitBox;

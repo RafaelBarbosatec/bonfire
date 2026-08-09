@@ -5,14 +5,14 @@ import 'package:flame/components.dart';
 ///
 /// If [target] is null, the component will follow its parent.
 class FollowerApi {
-  final GameComponent comp;
+  final GameComponent _comp;
 
   GameComponent? _target;
   Vector2? _offset;
   Vector2? _lastTargetPosition;
   final Vector2 _zero = Vector2.zero();
 
-  FollowerApi(this.comp);
+  FollowerApi(this._comp);
 
   /// The target component being followed.
   GameComponent? get target => _target;
@@ -42,11 +42,11 @@ class FollowerApi {
     final target = _target;
     if (target != null && _lastTargetPosition != target.absolutePosition) {
       _lastTargetPosition = target.absolutePosition.clone();
-      comp.position = _lastTargetPosition! + (_offset ?? _zero);
+      _comp.position = _lastTargetPosition! + (_offset ?? _zero);
     }
   }
 
   /// Returns the target priority if available, otherwise falls back to the
   /// component's own priority.
-  int get priority => _target?.priority ?? comp.priority;
+  int get priority => _target?.priority ?? _comp.priority;
 }

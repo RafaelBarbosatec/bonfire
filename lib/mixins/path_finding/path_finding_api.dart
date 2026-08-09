@@ -19,7 +19,7 @@ typedef PathFindingFinishCallback = void Function();
 ///
 /// The parent component must have a [Movement] mixin.
 class PathFindingApi {
-  final Movement comp;
+  final Movement _comp;
 
   static const REDUCTION_TO_AVOID_ROUNDING_PROBLEMS = 4;
 
@@ -44,7 +44,7 @@ class PathFindingApi {
 
   final List<PathFindingFinishCallback> _onFinishCallbacks = [];
 
-  PathFindingApi(this.comp);
+  PathFindingApi(this._comp);
 
   /// Whether the component is currently moving along a path.
   bool get isMoving => _currentPath.isNotEmpty;
@@ -97,7 +97,7 @@ class PathFindingApi {
     List<GameComponent>? ignoreCollisions,
     VoidCallback? onFinish,
   }) async {
-    if (!comp.hasGameRef) {
+    if (!_comp.hasGameRef) {
       return Future.value([]);
     }
 
@@ -123,7 +123,7 @@ class PathFindingApi {
     List<Vector2> path, {
     VoidCallback? onFinish,
   }) {
-    if (!comp.hasGameRef) {
+    if (!_comp.hasGameRef) {
       return;
     }
 
@@ -143,7 +143,7 @@ class PathFindingApi {
     List<GameComponent>? ignoreCollisions,
   }) {
     _ignoreCollisions.clear();
-    _ignoreCollisions.addAll(comp.shapeHitboxes);
+    _ignoreCollisions.addAll(_comp.shapeHitboxes);
 
     ignoreCollisions?.forEach(
       (item) => _ignoreCollisions.addAll(item.shapeHitboxes),
@@ -154,7 +154,7 @@ class PathFindingApi {
   /// Updates path following movement.
   void update(double dt) {
     if (_currentPath.isNotEmpty) {
-      if (!comp.moveToPosition(_currentPath[_currentIndex])) {
+      if (!_comp.moveToPosition(_currentPath[_currentIndex])) {
         _goToNextPosition();
       }
     }
@@ -172,7 +172,7 @@ class PathFindingApi {
     _currentIndex = 0;
     _removeLinePathComponent();
     _notifyFinish();
-    comp.stop();
+    _comp.stop();
   }
 
   /// Cleans up path line component when the component is removed.
@@ -182,7 +182,7 @@ class PathFindingApi {
   }
 
   List<Vector2> _calculatePath(Vector2 finalPosition) {
-    final positionPlayer = comp.rectCollision.centerVector2;
+    final positionPlayer = _comp.rectCollision.centerVector2;
 
     final playerPosition = _getCenterPositionByTile(positionPlayer);
 
@@ -230,7 +230,7 @@ class PathFindingApi {
 
     area = Rect.fromLTRB(left, top, right, bottom).inflate(inflate);
 
-    for (final e in comp.gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
+    for (final e in _comp.gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
       if (!_ignoreCollisions.contains(e)) {
         final rect = e.toAbsoluteRect();
         if (area.overlaps(rect) || !_useAreaBetweenPlayerAndTarget) {
@@ -242,7 +242,7 @@ class PathFindingApi {
     Iterable<(int, int)> result = [];
 
     if (_barriers.contains(targetPosition)) {
-      comp.stop();
+      _comp.stop();
       return [];
     }
 
@@ -260,7 +260,7 @@ class PathFindingApi {
         result = AStar.simplifyPath(result);
         return _mapToWorldPositions(result);
       } else {
-        comp.stop();
+        _comp.stop();
         return [];
       }
     } catch (e, stacktrace) {
@@ -272,9 +272,9 @@ class PathFindingApi {
 
   /// Get size of the grid used on algorithm to calculate path
   double get _tileSize {
-    final tileSize = comp.gameRef.map.tileSize;
+    final tileSize = _comp.gameRef.map.tileSize;
     if (_gridSizeIsCollisionSize) {
-      final rect = comp.rectCollision;
+      final rect = _comp.rectCollision;
       return max(rect.height, rect.width) +
           REDUCTION_TO_AVOID_ROUNDING_PROBLEMS;
     }
@@ -376,7 +376,7 @@ class PathFindingApi {
 
   void _addLinePathComponent() {
     if (_linePathEnabled) {
-      comp.gameRef.add(
+      _comp.gameRef.add(
         _linePathComponent = LinePathComponent(
           _currentPath,
           _pathLineColor,

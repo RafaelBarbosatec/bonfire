@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 ///
 /// The parent component must have a [Movement] mixin.
 class MovePerCellApi {
-  final Movement comp;
+  final Movement _comp;
 
   bool _pushPerCellEnabled = false;
   double _pushPerCellDuration = 0.5;
@@ -16,13 +16,13 @@ class MovePerCellApi {
 
   Vector2? _targetCellPosition;
 
-  MovePerCellApi(this.comp);
+  MovePerCellApi(this._comp);
 
   /// Whether movement per cell is enabled.
   bool get enabled => _enabled;
 
   /// The configured cell size. Falls back to the component size.
-  Vector2 get cellSize => _cellSize ?? comp.size;
+  Vector2 get cellSize => _cellSize ?? _comp.size;
 
   /// Sets up movement per cell behavior.
   void setup({
@@ -42,8 +42,8 @@ class MovePerCellApi {
   /// Updates the movement state.
   void update(double dt) {
     if (_enabled && _moving && _targetCellPosition != null) {
-      if (comp.position.distanceTo(_targetCellPosition!) < 1.0) {
-        comp.stop();
+      if (_comp.position.distanceTo(_targetCellPosition!) < 1.0) {
+        _comp.stop();
         _moving = false;
         _targetCellPosition = null;
       }
@@ -53,7 +53,7 @@ class MovePerCellApi {
   /// Initiates a left movement by one cell.
   void moveLeft({double? speed, bool resetCrossAxis = false}) {
     _handleMove(
-      () => comp.moveLeft(speed: speed, resetCrossAxis: resetCrossAxis),
+      () => _comp.moveLeft(speed: speed, resetCrossAxis: resetCrossAxis),
       Vector2(-cellSize.x, 0),
     );
   }
@@ -61,7 +61,7 @@ class MovePerCellApi {
   /// Initiates a right movement by one cell.
   void moveRight({double? speed, bool resetCrossAxis = false}) {
     _handleMove(
-      () => comp.moveRight(speed: speed, resetCrossAxis: resetCrossAxis),
+      () => _comp.moveRight(speed: speed, resetCrossAxis: resetCrossAxis),
       Vector2(cellSize.x, 0),
     );
   }
@@ -69,7 +69,7 @@ class MovePerCellApi {
   /// Initiates a down movement by one cell.
   void moveDown({double? speed, bool resetCrossAxis = false}) {
     _handleMove(
-      () => comp.moveDown(speed: speed, resetCrossAxis: resetCrossAxis),
+      () => _comp.moveDown(speed: speed, resetCrossAxis: resetCrossAxis),
       Vector2(0, cellSize.y),
     );
   }
@@ -77,7 +77,7 @@ class MovePerCellApi {
   /// Initiates a up movement by one cell.
   void moveUp({double? speed, bool resetCrossAxis = false}) {
     _handleMove(
-      () => comp.moveUp(speed: speed, resetCrossAxis: resetCrossAxis),
+      () => _comp.moveUp(speed: speed, resetCrossAxis: resetCrossAxis),
       Vector2(0, -cellSize.y),
     );
   }
@@ -87,7 +87,7 @@ class MovePerCellApi {
       if (_moving) {
         return;
       }
-      _targetCellPosition = comp.position + targetOffset;
+      _targetCellPosition = _comp.position + targetOffset;
       _moving = true;
       move();
     } else {
@@ -114,7 +114,7 @@ class MovePerCellApi {
         default:
       }
     } else {
-      comp.moveByAngle(angle, speed: speed);
+      _comp.moveByAngle(angle, speed: speed);
     }
   }
 }

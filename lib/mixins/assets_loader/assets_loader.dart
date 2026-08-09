@@ -7,7 +7,7 @@ export 'assets_loader_api.dart';
 ///
 /// Access asset loading functionality through the [assetsLoader] API.
 mixin WithAssetsLoader on Component {
-  late final AssetsLoaderApi assetsLoader = AssetsLoaderApi(this);
+  late final AssetsLoaderApi assetsLoader = AssetsLoaderApi();
 
   @override
   Future<void> onLoad() async {

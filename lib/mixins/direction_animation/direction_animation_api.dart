@@ -28,33 +28,33 @@ enum DirectionAnimationMethod {
 
 /// API for managing movement direction animations.
 class DirectionAnimationApi {
-  final Movement comp;
+  final Movement _comp;
 
   SimpleDirectionAnimation? animation;
 
   final List<DirectionAnimationExecutionListener> _executionListeners = [];
 
-  DirectionAnimationApi(this.comp);
+  DirectionAnimationApi(this._comp);
 
   Vector2 get animationScale =>
-      comp.size.clone()..divide(animation!.animationSize);
+      _comp.size.clone()..divide(animation!.animationSize);
 
   void render(Canvas canvas, Paint paint) {
-    if (!comp.isRemoving && comp.isVisible) {
+    if (!_comp.isRemoving && _comp.isVisible) {
       animation?.render(canvas, paint);
     }
   }
 
   void update(double dt) {
-    animation?.update(dt, comp.size);
+    animation?.update(dt, _comp.size);
   }
 
   void updateAnimation() {
-    if (!comp.isMoving) {
+    if (!_comp.isMoving) {
       return;
     }
 
-    switch (comp.direction) {
+    switch (_comp.direction) {
       case Direction.left:
         onPlayRunLeftAnimation();
         break;
@@ -83,7 +83,7 @@ class DirectionAnimationApi {
   }
 
   void playIdleAnimation() {
-    switch (comp.direction) {
+    switch (_comp.direction) {
       case Direction.left:
         onPlayIdleLeftAnimation();
         break;
@@ -120,7 +120,7 @@ class DirectionAnimationApi {
     bool doIdle = false,
     VoidCallback? idleCallback,
   }) async {
-    await newAnimation.onLoad(comp.gameRef);
+    await newAnimation.onLoad(_comp.gameRef);
     animation = newAnimation;
     if (doIdle) {
       idleCallback?.call();
@@ -163,7 +163,7 @@ class DirectionAnimationApi {
     if (animation?.canRunDown == true) {
       play(SimpleAnimationEnum.runDown);
     } else {
-      if (comp.hDirection.isLeftSide) {
+      if (_comp.hDirection.isLeftSide) {
         play(SimpleAnimationEnum.runLeft);
       } else {
         play(SimpleAnimationEnum.runRight);
@@ -178,7 +178,7 @@ class DirectionAnimationApi {
     if (animation?.canRunUp == true) {
       play(SimpleAnimationEnum.runUp);
     } else {
-      if (comp.hDirection.isLeftSide) {
+      if (_comp.hDirection.isLeftSide) {
         play(SimpleAnimationEnum.runLeft);
       } else {
         play(SimpleAnimationEnum.runRight);
@@ -261,7 +261,7 @@ class DirectionAnimationApi {
     if (animation?.canIdleUp == true) {
       play(SimpleAnimationEnum.idleUp);
     } else {
-      if (comp.hDirection.isLeftSide) {
+      if (_comp.hDirection.isLeftSide) {
         play(SimpleAnimationEnum.idleLeft);
       } else {
         play(SimpleAnimationEnum.idleRight);
@@ -278,7 +278,7 @@ class DirectionAnimationApi {
     if (animation?.canIdleDown == true) {
       play(SimpleAnimationEnum.idleDown);
     } else {
-      if (comp.hDirection.isLeftSide) {
+      if (_comp.hDirection.isLeftSide) {
         play(SimpleAnimationEnum.idleLeft);
       } else {
         play(SimpleAnimationEnum.idleRight);

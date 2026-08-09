@@ -12,7 +12,7 @@ typedef OnPushCallback = bool Function(GameComponent component);
 ///
 /// To use this behavior the parent component must have a [Movement] mixin.
 class PushableApi {
-  final Movement comp;
+  final Movement _comp;
 
   bool _enabled = true;
   PushableFromEnum _pushableFrom = PushableFromEnum.ALL;
@@ -24,7 +24,7 @@ class PushableApi {
 
   OnPushCallback? _onPushCallback;
 
-  PushableApi(this.comp);
+  PushableApi(this._comp);
 
   /// Whether the pushable behavior is enabled.
   bool get enabled => _enabled;
@@ -75,7 +75,7 @@ class PushableApi {
 
       final component = other;
       if (component is Movement && _canPush(component)) {
-        final displacement = comp.rectCollision.centerVector2 -
+        final displacement = _comp.rectCollision.centerVector2 -
             component.rectCollision.centerVector2;
         if (_pushPerCellEnabled) {
           _movePerCell(component, displacement);
@@ -93,15 +93,15 @@ class PushableApi {
   void _move(Vector2 displacement) {
     if (displacement.x.abs() > displacement.y.abs()) {
       if (displacement.x < 0) {
-        comp.moveLeft();
+        _comp.moveLeft();
       } else {
-        comp.moveRight();
+        _comp.moveRight();
       }
     } else {
       if (displacement.y < 0) {
-        comp.moveUp();
+        _comp.moveUp();
       } else {
-        comp.moveDown();
+        _comp.moveDown();
       }
     }
   }
@@ -110,7 +110,7 @@ class PushableApi {
     if (_perCellMoving) {
       return;
     }
-    final cellSize = _cellSize ?? comp.size;
+    final cellSize = _cellSize ?? _comp.size;
     _perCellMoving = true;
     final Vector2 offset;
     if (displacement.x.abs() > displacement.y.abs()) {
@@ -123,7 +123,7 @@ class PushableApi {
           : Vector2(0, cellSize.y);
     }
 
-    comp.add(
+    _comp.add(
       MoveEffect.by(
         offset,
         EffectController(

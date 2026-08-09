@@ -1,3 +1,15 @@
+# 4.0.0-beta.9
+- **BREAKING:** Migrate `WithShader` to API strategy. Added `ShaderApi` exposed through `shader` API object.
+- Make component reference private (`_comp`) across all mixin APIs to avoid exposing internal state.
+- Add `dispose()` cleanup for APIs with listeners and call it on component `onRemove`:
+  - `WithJumper` → `jumper.dispose()`
+  - `WithSensor` → `sensor.dispose()`
+  - `WithRandomMovement` → `randomMovement.dispose()`
+  - `WithPushable` → `pushable.dispose()`
+- Clean up unused component references in `AssetsLoaderApi` and `FlipRenderApi` since they don't depend on the parent component.
+- Remove unnecessary cast in `ShaderApi._canSee`.
+- Remove unused import in `FlipRenderApi`.
+
 # 4.0.0-beta.8
 - update README.md
 

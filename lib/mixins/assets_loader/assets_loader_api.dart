@@ -36,12 +36,8 @@ class AssetsLoader<T> {
 ///
 /// The parent component must be a [Component].
 class AssetsLoaderApi {
-  final Component comp;
-
   final AssetsLoader _loader = AssetsLoader();
   bool _loaded = false;
-
-  AssetsLoaderApi(this.comp);
 
   void add(AssetToLoad asset) {
     _loader.add(asset);

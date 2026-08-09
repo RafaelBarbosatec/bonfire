@@ -9,7 +9,7 @@ export 'flip_render_api.dart';
 ///
 /// Access all flip functionality through the [flipRender] API.
 mixin WithFlipRender on GameComponent {
-  late final FlipRenderApi flipRender = FlipRenderApi(this);
+  late final FlipRenderApi flipRender = FlipRenderApi();
 
   @override
   void render(Canvas canvas) {

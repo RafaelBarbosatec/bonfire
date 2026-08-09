@@ -5,7 +5,7 @@ import 'package:bonfire/mixins/shader/shader_util.dart';
 
 /// API that handles fragment shader application over a component.
 class ShaderApi {
-  final PositionComponent comp;
+  final PositionComponent _comp;
 
   ui.FragmentShader? fragment;
   double canvasScale = 1;
@@ -15,13 +15,13 @@ class ShaderApi {
   ui.Paint? _paint;
   double _time = 0;
 
-  ShaderApi(this.comp);
+  ShaderApi(this._comp);
 
   bool get _run => fragment != null && _canSee;
 
   bool get _canSee {
-    if (comp is GameComponent) {
-      return (comp as GameComponent).isVisible;
+    if (_comp is GameComponent) {
+      return _comp.isVisible;
     }
     return true;
   }
@@ -31,8 +31,8 @@ class ShaderApi {
     if (_run) {
       _time += dt;
       fragment?.setFloat(0, _time);
-      fragment?.setFloat(1, comp.width);
-      fragment?.setFloat(2, comp.height);
+      fragment?.setFloat(1, _comp.width);
+      fragment?.setFloat(2, _comp.height);
       if (_time > 100000000) {
         _time = 0;
       }
@@ -44,13 +44,13 @@ class ShaderApi {
   /// Returns `true` if the shader was applied, `false` otherwise.
   bool render(ui.Canvas canvas) {
     if (_run) {
-      comp.decorator.applyChain(
+      _comp.decorator.applyChain(
         (decoratorCanvas) {
           _applyShader(
             decoratorCanvas,
             (recorderCanvas) {
-              comp.render(recorderCanvas);
-              for (final c in comp.children) {
+              _comp.render(recorderCanvas);
+              for (final c in _comp.children) {
                 c.renderTree(recorderCanvas);
               }
             },
@@ -69,7 +69,7 @@ class ShaderApi {
       shader: fragment,
       canvas: canvas,
       record: record,
-      size: comp.size,
+      size: _comp.size,
       paint: _paint!,
       shaderCanvasScale: canvasScale,
       shaderComponentStatic: componentStatic,

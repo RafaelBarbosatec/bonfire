@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// Mixin used to adds a BarLife to the attackable component.
 class LifeBarApi {
-  final WithLife comp;
+  final WithLife _comp;
 
   BarLifeComponent? barLife;
 
@@ -21,7 +21,7 @@ class LifeBarApi {
   EdgeInsets? _padding;
   Vector2? _size;
 
-  LifeBarApi(this.comp);
+  LifeBarApi(this._comp);
 
   /// Sets up the life bar appearance and behavior.
   void setup({
@@ -55,17 +55,17 @@ class LifeBarApi {
 
   /// Mounts the life bar component and listeners.
   void mount() {
-    comp.add(
+    _comp.add(
       barLife = BarLifeComponent(
-        target: comp as GameComponent,
+        target: _comp as GameComponent,
         size: _size,
         offset: _barOffset,
         backgroundColor: _backgroundColor,
         borderColor: _borderColor,
         borderWidth: _borderWidth,
         colors: _colors,
-        life: comp.life.value,
-        maxLife: comp.life.max,
+        life: _comp.life.value,
+        maxLife: _comp.life.max,
         borderRadius: _borderRadius,
         drawPosition: _barLifeDrawPosition,
         textStyle: _textStyle,
@@ -74,13 +74,13 @@ class LifeBarApi {
         padding: _padding,
       ),
     );
-    comp.life.onInitialLifeListener((double value) {
+    _comp.life.onInitialLifeListener((double value) {
       barLife?.updateLife(value);
       barLife?.updatemaxLife(value);
     });
-    comp.life.onRemoveLifeListener((double _) => _animateBar());
-    comp.life.onRestoreLifeListener((double _) => _animateBar());
-    comp.life.onLifeUpdateListener((double value) => barLife?.updateLife(value));
+    _comp.life.onRemoveLifeListener((double _) => _animateBar());
+    _comp.life.onRestoreLifeListener((double _) => _animateBar());
+    _comp.life.onLifeUpdateListener((double value) => barLife?.updateLife(value));
   }
 
   /// Removes the life bar from the component.
@@ -89,14 +89,14 @@ class LifeBarApi {
   }
 
   void _animateBar() {
-    final gameComponent = comp as GameComponent;
+    final gameComponent = _comp as GameComponent;
     if (gameComponent.hasGameRef) {
       _valueGenerator?.reset();
       _valueGenerator?.removeFromParent();
       _valueGenerator = gameComponent.generateValues(
         const Duration(milliseconds: 300),
         begin: barLife?.life ?? 0,
-        end: comp.life.value,
+        end: _comp.life.value,
         onChange: (value) {
           barLife?.updateLife(value);
         },

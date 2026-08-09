@@ -4,9 +4,9 @@ import 'package:bonfire/util/extensions/game_component_extensions.dart';
 
 /// API for querying map tile information below the component.
 class TileRecognizerApi {
-  final GameComponent comp;
+  final GameComponent _comp;
 
-  TileRecognizerApi(this.comp);
+  TileRecognizerApi(this._comp);
 
   /// Returns the type of the first map tile below the component.
   String? tileTypeBelow() {
@@ -19,10 +19,10 @@ class TileRecognizerApi {
 
   /// Returns all tile types below the component.
   List<String> tileTypeListBelow() {
-    if (!comp.hasGameRef) {
+    if (!_comp.hasGameRef) {
       return [];
     }
-    final map = comp.gameRef.map;
+    final map = _comp.gameRef.map;
     if (map.getRenderedTiles().isNotEmpty) {
       return tileListBelow().map<String>((e) => e.tileClass!).toList();
     }
@@ -40,10 +40,10 @@ class TileRecognizerApi {
 
   /// Returns all tile properties below the component.
   List<Map<String, dynamic>>? tilePropertiesListBelow() {
-    if (!comp.hasGameRef) {
+    if (!_comp.hasGameRef) {
       return null;
     }
-    final map = comp.gameRef.map;
+    final map = _comp.gameRef.map;
     if (map.layers.isNotEmpty) {
       return tileListBelow()
           .map<Map<String, dynamic>>((e) => e.properties!)
@@ -54,13 +54,13 @@ class TileRecognizerApi {
 
   /// Returns all tile components below the component.
   Iterable<TileComponent> tileListBelow() {
-    if (!comp.hasGameRef) {
+    if (!_comp.hasGameRef) {
       return [];
     }
-    final map = comp.gameRef.map;
+    final map = _comp.gameRef.map;
     if (map.layers.isNotEmpty) {
       return map.getRenderedTiles().where((element) {
-        return element.overlaps(comp.rectCollision) &&
+        return element.overlaps(_comp.rectCollision) &&
             (element.properties != null);
       });
     }

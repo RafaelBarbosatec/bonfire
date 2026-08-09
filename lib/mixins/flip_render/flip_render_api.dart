@@ -1,13 +1,7 @@
-import 'package:bonfire/base/game_component.dart';
-
 /// API that handles render flipping for a component.
 class FlipRenderApi {
-  final GameComponent comp;
-
   bool _vertically = false;
   bool _horizontally = false;
-
-  FlipRenderApi(this.comp);
 
   bool get isFlipped => _vertically || _horizontally;
 
