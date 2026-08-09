@@ -178,7 +178,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
             width: innerSize.x,
             height: innerSize.y,
           ).positionVector2,
-          lightingConfig: lightingConfig,
+          lightingConfig: lighting.config,
           size: innerSize,
           loop: false,
           renderAboveComponents: true,

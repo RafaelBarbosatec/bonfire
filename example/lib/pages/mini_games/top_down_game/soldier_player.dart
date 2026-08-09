@@ -15,7 +15,7 @@ import 'package:flutter/services.dart';
 ///
 /// Rafaelbarbosatec
 /// on 27/01/22
-class SoldierPlayer extends RotationPlayer with WithCollision, Lighting {
+class SoldierPlayer extends RotationPlayer with WithCollision, WithLighting {
   SoldierPlayer(Vector2 position)
       : super(
           position: position,
@@ -23,7 +23,7 @@ class SoldierPlayer extends RotationPlayer with WithCollision, Lighting {
           animIdle: _getSoldierSprite(),
           animRun: _getSoldierSprite(),
         ) {
-    setupLighting(
+    lighting.setup(
       LightingConfig(
         radius: size.y * 2,
         blurBorder: size.y / 2,

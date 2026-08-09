@@ -13,7 +13,8 @@ enum PlayerAttackType {
   attackRange,
 }
 
-class Knight extends SimplePlayer with Lighting, WithCollision, FireballAttack {
+class Knight extends SimplePlayer
+    with WithLighting, WithCollision, FireballAttack {
   double attack = 20;
   bool canShowEmote = true;
   bool showedDialog = false;
@@ -29,7 +30,7 @@ class Knight extends SimplePlayer with Lighting, WithCollision, FireballAttack {
           life: 200,
         ) {
     setupMovementByJoystick(intensityEnabled: true);
-    setupLighting(
+    lighting.setup(
       LightingConfig(
         radius: width * 1.5,
         color: Colors.transparent,
