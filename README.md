@@ -60,22 +60,6 @@ Test our online [DEMO](https://bonfire-engine.github.io/examples/bonfire-v3/) or
 
 If you build a game using Bonfire, you can open a PR to add your game here.
 
-## Build recomendations
-
-### WEB
-
-Use this command: `flutter build web --web-renderer=canvaskit`
-
-### Android
-
-Disable Impeller adding this code in your `AndroidManifest.xml` under the <application> tag:
-
-```xml
-<meta-data
-    android:name="io.flutter.embedding.android.EnableImpeller"
-    android:value="false" />
-```
-
 ## Useful packages
 
 | Name |  Link  | 
