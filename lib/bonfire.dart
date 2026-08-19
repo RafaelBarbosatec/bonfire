@@ -40,7 +40,6 @@ export 'package:bonfire/mixins/assets_loader/assets_loader.dart';
 export 'package:bonfire/mixins/direction_animation/direction_animation.dart';
 export 'package:bonfire/mixins/flip_render/flip_render.dart';
 export 'package:bonfire/mixins/follower/follower.dart';
-export 'package:bonfire/mixins/interval_checker.dart';
 export 'package:bonfire/mixins/jumper/jumper.dart';
 export 'package:bonfire/mixins/jumper_animation.dart';
 export 'package:bonfire/mixins/life/life.dart';

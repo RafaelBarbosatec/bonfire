@@ -19,6 +19,10 @@ class FlyingAttackGameObject extends AnimatedGameObject
   double _senAngle = 0;
   ShapeHitbox? shapeCollision;
 
+  final IntervalTick _intervalTick = IntervalTick(
+    1000,
+  );
+
   FlyingAttackGameObject({
     required super.position,
     required super.size,
@@ -147,7 +151,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }
 
   void _verifyExistInWorld(double dt) {
-    if (checkInterval('checkCanSee', 1000, dt) && !isRemoving) {
+    if (_intervalTick.update(dt) && !isRemoving) {
       final canSee = gameRef.camera.canSee(this);
       if (!canSee) {
         removeFromParent();

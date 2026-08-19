@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bonfire/bonfire.dart';
 
 class BSeeAndPositioned extends Behavior {
@@ -9,7 +7,10 @@ class BSeeAndPositioned extends Behavior {
   final Behavior? doElseBehavior;
   final double? minDistance;
   final void Function(GameComponent target) positioned;
-  String _intervalKey = '';
+
+  final IntervalTick _intervalTick = IntervalTick(
+    500,
+  );
 
   BSeeAndPositioned({
     required this.target,
@@ -19,9 +20,7 @@ class BSeeAndPositioned extends Behavior {
     this.doElseBehavior,
     this.minDistance,
     super.id,
-  }) {
-    _intervalKey = 'seeAndPositioned${Random().nextInt(10000)}';
-  }
+  });
   @override
   bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
     return BCanSee(
@@ -49,10 +48,12 @@ class BSeeAndPositioned extends Behavior {
                 final playerDirection = comp.getDirectionToTarget(
                   target,
                 );
-                
+
                 comp.direction = playerDirection;
 
-                if (comp.checkInterval(_intervalKey, 500, dt)) {
+                if (_intervalTick.update(
+                  dt,
+                )) {
                   comp.stop();
                 }
                 positioned.call(target);

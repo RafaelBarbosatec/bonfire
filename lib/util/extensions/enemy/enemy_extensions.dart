@@ -8,7 +8,6 @@ extension EnemyExtensions on Enemy {
     required double damage,
     required Vector2 size,
     int? id,
-    int interval = 1000,
     bool withPush = false,
     double? sizePush,
     Direction? direction,
@@ -16,10 +15,6 @@ extension EnemyExtensions on Enemy {
     VoidCallback? execute,
     Vector2? centerOffset,
   }) {
-    if (!checkInterval('attackMelee', interval, lastDt) || isDead) {
-      return;
-    }
-
     final direct = direction ??
         (gameRef.player != null
             ? getDirectionToTarget(gameRef.player!)
@@ -49,7 +44,6 @@ extension EnemyExtensions on Enemy {
     int? id,
     double speed = 150,
     double damage = 1,
-    int interval = 1000,
     bool withCollision = true,
     bool useAngle = false,
     ShapeHitbox? collision,
@@ -57,10 +51,6 @@ extension EnemyExtensions on Enemy {
     VoidCallback? execute,
     LightingConfig? lightingConfig,
   }) {
-    if (!checkInterval('attackRange', interval, lastDt) || isDead) {
-      return;
-    }
-
     if (useAngle) {
       simpleAttackRangeByAngle(
         animation: animation,
@@ -140,7 +130,7 @@ extension EnemyExtensions on Enemy {
             final playerDirection = getDirectionToTarget(player);
             direction = playerDirection;
 
-            if (checkInterval('seeAndMoveToAttackRange', 500, lastDt)) {
+            if (!isIdle) {
               stop();
             }
             positioned?.call(player);
@@ -154,7 +144,7 @@ extension EnemyExtensions on Enemy {
               final playerDirection = getDirectionToTarget(player);
               direction = playerDirection;
 
-              if (checkInterval('seeAndMoveToAttackRange', 500, lastDt)) {
+              if (!isIdle) {
                 stop();
               }
               positioned?.call(player);

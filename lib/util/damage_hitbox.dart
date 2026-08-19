@@ -12,6 +12,14 @@ class DamageHitbox extends GameComponent {
 
   final Paint _paint = Paint()..color = WithSensor.color;
 
+  late final IntervalTick _onRemoveTick = IntervalTick(
+    duration.inMilliseconds,
+  );
+
+  late final IntervalTick _intervalTick = IntervalTick(
+    damageInterval.inMilliseconds,
+  );
+
   DamageHitbox({
     required Vector2 position,
     required this.damage,
@@ -32,22 +40,11 @@ class DamageHitbox extends GameComponent {
 
   @override
   void update(double dt) {
-    if (checkInterval(
-          'onRemove',
-          duration.inMilliseconds,
-          dt,
-          firstCheckIsTrue: false,
-        ) &&
-        !isRemoving) {
+    if (_onRemoveTick.update(dt) && !isRemoving) {
       removeFromParent();
     }
 
-    if (checkInterval(
-          'doDamage',
-          damageInterval.inMilliseconds,
-          dt,
-        ) &&
-        !isRemoving) {
+    if (_intervalTick.update(dt) && !isRemoving) {
       gameRef
           .attackables(onlyVisible: true)
           .where((a) => a.rectAttackable().overlaps(toAbsoluteRect()))

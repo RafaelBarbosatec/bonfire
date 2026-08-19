@@ -11,15 +11,16 @@ typedef SensorContactCallback<T extends GameComponent> = void Function(
 /// This class encapsulates contact detection interval, enabled state,
 /// and collision handling callbacks.
 class SensorApi<T extends GameComponent> {
-  static const String _sensorIntervalKey = 'SensorContact';
-
   final GameComponent _comp;
 
-  int interval = 100;
   bool enabled = true;
 
   final List<SensorContactCallback<T>> _onContactCallbacks = [];
   final List<SensorContactCallback<T>> _onContactExitCallbacks = [];
+
+  final IntervalTick _intervalTick = IntervalTick(
+    100,
+  );
 
   SensorApi(this._comp);
 
@@ -50,12 +51,8 @@ class SensorApi<T extends GameComponent> {
     if (other is! T || !enabled) {
       return;
     }
-
-    if (_comp.checkInterval(
-      _sensorIntervalKey,
-      interval,
-      _comp.lastDt,
-    )) {
+    final tick = _intervalTick.update(_comp.lastDt);
+    if (tick) {
       for (final callback in _onContactCallbacks) {
         callback(other);
       }

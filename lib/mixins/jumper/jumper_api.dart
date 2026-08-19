@@ -24,8 +24,6 @@ class JumperApi {
   JumpingStateEnum? _lastDirectionJump = JumpingStateEnum.idle;
   int _tileCollisionCount = 0;
 
-  static const String _tileCollisionCountKey = 'tileCollisionCount';
-
   // Public getters
   bool get isJumping => _isJumping;
   JumpingStateEnum get jumpingState => _jumpingState;
@@ -34,6 +32,10 @@ class JumperApi {
 
   // Callbacks for jump state changes
   final List<JumpStateChangedCallback> _jumpStateChangedCallbacks = [];
+
+  final IntervalTick _tileCollisionTick = IntervalTick(
+    100,
+  );
 
   JumperApi(this._comp) {
     _maxJump = 1;
@@ -82,13 +84,13 @@ class JumperApi {
     PositionComponent other,
   ) {
     ++_tileCollisionCount;
-    _comp.resetInterval(_tileCollisionCountKey);
+    _tileCollisionTick.reset();
   }
 
   /// Handle collision end (decrement tile collision counter)
   void handleCollisionEnd(PositionComponent other) {
     if (--_tileCollisionCount == 0) {
-      _comp.resetInterval(_tileCollisionCountKey);
+      _tileCollisionTick.reset();
     }
   }
 
@@ -100,11 +102,8 @@ class JumperApi {
 
   /// Check if character landed on ground or is in air
   void _updateCollisionDetection(double dt) {
-    final tick = _comp.checkInterval(
-      _tileCollisionCountKey,
-      100,
+    final tick = _tileCollisionTick.update(
       dt,
-      firstCheckIsTrue: false,
     );
     if (tick) {
       if (!_isJumping &&

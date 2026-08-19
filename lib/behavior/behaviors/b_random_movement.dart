@@ -25,8 +25,7 @@ class BRandomMovement extends Behavior {
   @override
   bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
     if (comp is WithRandomMovement) {
-      comp.randomMovement.update(
-        dt,
+      comp.randomMovement.setup(
         speed: speed,
         maxDistance: maxDistance,
         minDistance: minDistance,
@@ -35,6 +34,7 @@ class BRandomMovement extends Behavior {
         updateAngle: updateAngle,
         directions: allowDirections,
       );
+      comp.randomMovement.run(dt);
     }
     return true;
   }
