@@ -10,12 +10,12 @@ class Critter extends SimpleNpc with WithCollision, WithRandomMovement {
           position: position,
           size: Vector2.all(DungeonMap.tileSize * 0.8),
           speed: DungeonMap.tileSize,
-        ){
-          randomMovement.setup(
-            speed: speed / 10,
-            maxDistance: (DungeonMap.tileSize),
-          );
-        }
+        ) {
+    randomMovement.setup(
+      speed: speed / 10,
+      maxDistance: (DungeonMap.tileSize),
+    );
+  }
 
   @override
   void update(double dt) {

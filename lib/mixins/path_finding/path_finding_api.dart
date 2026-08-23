@@ -230,7 +230,8 @@ class PathFindingApi {
 
     area = Rect.fromLTRB(left, top, right, bottom).inflate(inflate);
 
-    for (final e in _comp.gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
+    for (final e
+        in _comp.gameRef.collisions(onlyVisible: _useOnlyVisibleBarriers)) {
       if (!_ignoreCollisions.contains(e)) {
         final rect = e.toAbsoluteRect();
         if (area.overlaps(rect) || !_useAreaBetweenPlayerAndTarget) {
