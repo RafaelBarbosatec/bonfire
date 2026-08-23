@@ -19,6 +19,10 @@ class ComponentSpawner extends GameComponent {
 
   late Random _random;
 
+  late final IntervalTick _intervalTick = IntervalTick(
+    interval,
+  );
+
   ComponentSpawner({
     required Vector2 position,
     required this.area,
@@ -35,7 +39,7 @@ class ComponentSpawner extends GameComponent {
   @override
   void update(double dt) {
     super.update(dt);
-    if (checkInterval('SpawnPosition', interval, dt)) {
+    if (_intervalTick.update(dt)) {
       var enabled = true;
       if (onlyVisible) {
         enabled = isVisible;

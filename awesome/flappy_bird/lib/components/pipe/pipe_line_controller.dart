@@ -9,21 +9,29 @@ class PipeLineController extends GameComponent with ChangeNotifier {
   int currentInterval = 2000;
   int countPipesWin = 0;
 
+  late final IntervalTick _intervalTick = IntervalTick(
+    2000,
+    onTick: _addPipe,
+  );
+
   PipeLineController({required this.speed});
   @override
   void update(double dt) {
-    if (checkInterval('AddsPipe', currentInterval, dt)) {
-      double offsetY = Random().nextInt(100).toDouble() + -50;
-      double offsetX = Random().nextInt(50).toDouble() + 10;
-      gameRef.add(
-        PipeLine(
-          speed: speed,
-          offset: Vector2(offsetX, offsetY),
-          onWin: _countScore,
-        ),
-      );
-    }
+    _intervalTick.update(dt);
+
     super.update(dt);
+  }
+
+  void _addPipe() {
+    double offsetY = Random().nextInt(100).toDouble() + -50;
+    double offsetX = Random().nextInt(50).toDouble() + 10;
+    gameRef.add(
+      PipeLine(
+        speed: speed,
+        offset: Vector2(offsetX, offsetY),
+        onWin: _countScore,
+      ),
+    );
   }
 
   void _countScore() {

@@ -106,15 +106,9 @@ extension RotationEnemyExtensions on RotationEnemy {
     int? id,
     bool withPush = true,
     double? radAngleDirection,
-    VoidCallback? execute,
-    int interval = 1000,
     double marginFromCenter = 16,
     Vector2? centerOffset,
   }) {
-    if (!checkInterval('attackMelee', interval, lastDt) || isDead) {
-      return;
-    }
-
     simpleAttackMeleeByAngle(
       id: id,
       withPush: withPush,
@@ -126,8 +120,6 @@ extension RotationEnemyExtensions on RotationEnemy {
       animation: animationRight,
       attackFrom: AttackOriginEnum.ENEMY,
     );
-
-    execute?.call();
   }
 
   /// Execute the ranged attack using a component with animation
@@ -141,19 +133,13 @@ extension RotationEnemyExtensions on RotationEnemy {
     int? id,
     double speed = 150,
     double damage = 1,
-    int interval = 1000,
     bool withDecorationCollision = true,
     VoidCallback? onDestroy,
     ShapeHitbox? collision,
-    VoidCallback? onExecute,
     LightingConfig? lightingConfig,
     Vector2? centerOffset,
     double marginFromOrigin = 16,
   }) {
-    if (!checkInterval('attackRange', interval, lastDt) || isDead) {
-      return;
-    }
-
     simpleAttackRangeByAngle(
       animation: animation,
       animationDestroy: animationDestroy,
@@ -171,7 +157,5 @@ extension RotationEnemyExtensions on RotationEnemy {
       marginFromOrigin: marginFromOrigin,
       attackFrom: AttackOriginEnum.ENEMY,
     );
-
-    onExecute?.call();
   }
 }

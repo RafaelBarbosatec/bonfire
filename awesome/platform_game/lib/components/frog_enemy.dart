@@ -5,7 +5,7 @@ import 'package:platform_game/components/fox_player.dart';
 import 'package:platform_game/util/platform_spritesheet.dart';
 
 class FrogEnemy extends PlatformEnemy with WithForces {
-  int _timeToWaitBeforeJump = 4000;
+  final IntervalTick _intervalTick = IntervalTick(4000);
   FrogEnemy({required super.position})
     : super(
         size: Vector2(35, 32),
@@ -75,7 +75,7 @@ class FrogEnemy extends PlatformEnemy with WithForces {
     super.update(dt);
     if (isDead) return;
     if (!isVisible) return;
-    if (checkInterval('jump', _timeToWaitBeforeJump, dt)) {
+    if (_intervalTick.update(dt)) {
       animation?.playOnce(
         PlatformSpritesheet.frogActionRight,
         flipX: direction.isLeftSide,
@@ -99,7 +99,7 @@ class FrogEnemy extends PlatformEnemy with WithForces {
         isSolid: true,
       ),
     );
-    _timeToWaitBeforeJump += Random().nextInt(1000);
+    _intervalTick.updateInterval(4000 + Random().nextInt(1000));
     return super.onLoad();
   }
 }

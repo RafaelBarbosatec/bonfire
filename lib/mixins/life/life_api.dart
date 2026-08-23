@@ -50,6 +50,13 @@ class LifeApi {
   final List<LifeChangeCallback> _onInitialLifeCallbacks = [];
   final List<LifeChangeCallback> _onLifeUpdateCallbacks = [];
 
+  void _updateLife(double value) {
+    _life = value;
+    for (final cb in _onLifeUpdateCallbacks) {
+      cb(value);
+    }
+  }
+
   /// Registers a callback fired when life is removed.
   void onRemoveLifeListener(LifeChangeCallback callback) {
     _onRemoveLifeCallbacks.add(callback);
@@ -87,7 +94,7 @@ class LifeApi {
 
   /// Sets both current and max life to [value].
   void initial(double value) {
-    _life = value;
+    _updateLife(value);
     _maxLife = value;
     for (final cb in _onInitialLifeCallbacks) {
       cb(value);
@@ -97,9 +104,11 @@ class LifeApi {
   /// Increases life by [value], capped at [max].
   void add(double value) {
     var newLife = _life + value;
-    if (newLife > _maxLife) newLife = _maxLife;
+    if (newLife > _maxLife) {
+      newLife = _maxLife;
+    }
     final restored = newLife - _life;
-    _life = newLife;
+    _updateLife(newLife);
     if (restored > 0) {
       for (final cb in _onRestoreLifeCallbacks) {
         cb(restored);
@@ -110,7 +119,7 @@ class LifeApi {
 
   /// Directly sets life to [value], optionally skipping die/revive checks.
   void update(double value, {bool verifyDieOrRevive = true}) {
-    _life = value;
+    _updateLife(value);
     for (final cb in _onLifeUpdateCallbacks) {
       cb(value);
     }
@@ -122,9 +131,11 @@ class LifeApi {
   /// Reduces life by [value], floored at zero.
   void remove(double value) {
     var newLife = _life - value;
-    if (newLife < 0) newLife = 0;
+    if (newLife < 0) {
+      newLife = 0;
+    }
     final removed = _life - newLife;
-    _life = newLife;
+    _updateLife(newLife);
     if (removed > 0) {
       for (final cb in _onRemoveLifeCallbacks) {
         cb(removed);
@@ -141,7 +152,9 @@ class LifeApi {
     double damage,
     dynamic identify,
   ) {
-    if (!checkCanReceiveDamage(attacker)) return false;
+    if (!checkCanReceiveDamage(attacker)) {
+      return false;
+    }
     for (final cb in _onReceiveDamageCallbacks) {
       cb(attacker, damage, identify);
     }
@@ -151,7 +164,9 @@ class LifeApi {
 
   /// Returns `true` if this component can receive damage from [attacker].
   bool checkCanReceiveDamage(AttackOriginEnum attacker) {
-    if (_isDead || _isRemoving()) return false;
+    if (_isDead || _isRemoving()) {
+      return false;
+    }
     switch (receivesAttackFrom) {
       case AcceptableAttackOriginEnum.ALL:
         return true;

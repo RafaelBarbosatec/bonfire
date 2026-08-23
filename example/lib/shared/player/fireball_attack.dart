@@ -12,6 +12,8 @@ mixin FireballAttack on SimplePlayer {
 
   Knight get knight => this as Knight;
 
+  IntervalTick _attackRangeTicker = IntervalTick(150);
+
   @override
   void onJoystickAction(JoystickActionEvent event) {
     if (event.id == PlayerAttackType.attackRange) {
@@ -69,7 +71,7 @@ mixin FireballAttack on SimplePlayer {
     if (!executingRangeAttack || knight.barLifeController.stamina < 10) {
       return;
     }
-    if (checkInterval('ATTACK_RANGE', 150, dt)) {
+    if (_attackRangeTicker.update(dt)) {
       knight.decrementStamina(10);
       execRangeAttack(radAngleRangeAttack, knight.attack / 2);
     }

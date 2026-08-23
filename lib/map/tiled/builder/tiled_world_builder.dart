@@ -182,8 +182,9 @@ class TiledWorldBuilder {
 
   bool _layerHasType(tiled.TileLayer tileLayer, String type) {
     return tileLayer.properties
-            ?.where((element) =>
-                element.name == 'type' && element.value == type)
+            ?.where(
+              (element) => element.name == 'type' && element.value == type,
+            )
             .isNotEmpty ??
         false;
   }
@@ -231,8 +232,7 @@ class TiledWorldBuilder {
     // anchor the sprite to the bottom-left of its grid cell, matching how
     // the Tiled editor renders oversized tiles.
     final nativeSize = data.sprite?.size;
-    final scaleX =
-        _tileWidthOrigin == 0 ? 1.0 : _tileWidth / _tileWidthOrigin;
+    final scaleX = _tileWidthOrigin == 0 ? 1.0 : _tileWidth / _tileWidthOrigin;
     final scaleY =
         _tileHeightOrigin == 0 ? 1.0 : _tileHeight / _tileHeightOrigin;
     final drawW = (nativeSize?.x ?? _tileWidthOrigin) * scaleX;

@@ -6,9 +6,10 @@ import 'package:example/shared/enemy/goblin.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 
 class GameManualController extends GameComponent {
+  final IntervalTick _checkLivingEnemiesTicker = IntervalTick(500);
   @override
   void update(double dt) {
-    if (checkInterval('check_living_enemies', 500, dt)) {
+    if (_checkLivingEnemiesTicker.update(dt)) {
       if (gameRef.livingEnemies().length < 2) {
         _addEnemyInWorld();
       }

@@ -1,3 +1,9 @@
+# next
+- **BREAKING:** Remove the `InternalChecker` mixin and the `checkInterval` method.
+  - Use the `IntervalTick` class directly to control intervals instead of the `checkInterval` method (and the `resetInterval`, `pauseInterval`, `playInterval` helpers).
+  - Removed the built-in interval from the Enemy and Ally Attack extensions: `simpleAttackMelee` and `simpleAttackRange` no longer accept the `interval` parameter. You should control the execution interval yourself using an `IntervalTick`.
+  - `IntervalTick` now has the `tickFirstUpdate` parameter, which replaces the old `firstCheckIsTrue` behavior of `checkInterval`.
+
 # 4.0.0-beta.10
 - **BREAKING:** Migrate `WithLighting` to API strategy. Added `LightingApi` exposed through `lighting` API object.
   - `setupLighting(...)` → `lighting.setup(...)`

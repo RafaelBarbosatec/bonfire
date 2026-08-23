@@ -21,6 +21,9 @@ class Knight extends SimplePlayer
 
   late BarLifeController barLifeController;
 
+  final IntervalTick _staminalTick = IntervalTick(100);
+  final IntervalTick _seeEnemyTick = IntervalTick(250);
+
   Knight(Vector2 position)
       : super(
           animation: PlayerSpriteSheet.simpleDirectionAnimation,
@@ -106,7 +109,7 @@ class Knight extends SimplePlayer
     if (barLifeController.stamina >= 100) {
       return;
     }
-    if (checkInterval('INCREMENT_STAMINA', 100, dt)) {
+    if (_staminalTick.update(dt)) {
       barLifeController.increaseStamina(2);
     }
   }
@@ -134,7 +137,7 @@ class Knight extends SimplePlayer
   }
 
   void _checkViewEnemy(double dt) {
-    if (checkInterval('seeEnemy', 250, dt)) {
+    if (_seeEnemyTick.update(dt)) {
       seeEnemy(
         radiusVision: width * 4,
         notObserved: () => canShowEmote = true,

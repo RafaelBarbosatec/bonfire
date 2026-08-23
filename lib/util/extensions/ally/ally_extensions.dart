@@ -19,18 +19,12 @@ extension AllyExtensions on Ally {
     required double damage,
     required Vector2 size,
     int? id,
-    int interval = 1000,
     bool withPush = false,
     double? sizePush,
     Direction? direction,
     Future<SpriteAnimation>? animationRight,
-    VoidCallback? execute,
     Vector2? centerOffset,
   }) {
-    if (!checkInterval('attackMelee', interval, lastDt) || isDead) {
-      return;
-    }
-
     final direct = direction ?? this.direction;
 
     simpleAttackMeleeByDirection(
@@ -44,8 +38,6 @@ extension AllyExtensions on Ally {
       attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
       centerOffset: centerOffset,
     );
-
-    execute?.call();
   }
 
   /// Execute the ranged attack using a component with animation
@@ -58,17 +50,11 @@ extension AllyExtensions on Ally {
     double speed = 150,
     double damage = 1,
     Direction? direction,
-    int interval = 1000,
     bool withCollision = true,
     ShapeHitbox? collision,
     VoidCallback? onDestroy,
-    VoidCallback? execute,
     LightingConfig? lightingConfig,
   }) {
-    if (!checkInterval('attackRange', interval, lastDt) || isDead) {
-      return;
-    }
-
     final direct = direction ?? this.direction;
 
     simpleAttackRangeByDirection(
@@ -86,8 +72,6 @@ extension AllyExtensions on Ally {
       lightingConfig: lightingConfig,
       attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
     );
-
-    execute?.call();
   }
 
   /// Checks whether the Enemy is within range. If so, move to it.
@@ -123,7 +107,7 @@ extension AllyExtensions on Ally {
           final playerDirection = getDirectionToTarget(e);
           direction = playerDirection;
 
-          if (checkInterval('seeAndMoveToAttackRange', 500, lastDt)) {
+          if (!isIdle) {
             stop();
           }
           positioned?.call(e);

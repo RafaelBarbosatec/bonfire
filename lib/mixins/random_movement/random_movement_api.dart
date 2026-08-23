@@ -45,9 +45,7 @@ typedef OnRandomMovementStopCallback = void Function();
 class RandomMovementApi {
   final Movement _comp;
 
-  static const String _intervalKeepStoppedKey = 'INTERVAL_RANDOM_MOVEMENT';
-
-  final Random _random;
+  late Random _random;
 
   double? _distanceToArrived;
   Direction _currentDirection = Direction.left;
@@ -60,7 +58,56 @@ class RandomMovementApi {
   final List<OnRandomMovementStartCallback> _onStartMoveCallbacks = [];
   final List<OnRandomMovementStopCallback> _onStopMoveCallbacks = [];
 
-  RandomMovementApi(this._comp) : _random = Random(Random().nextInt(1000));
+  IntervalTick _intervalTick = IntervalTick(
+    2000,
+  );
+
+  double? _speed;
+  double _maxDistance = 50;
+  double _minDistance = 25;
+  bool _updateAngle = false;
+  bool _checkDirectionWithRayCast = false;
+  RandomMovementDirections _directions = RandomMovementDirections.all;
+
+  RandomMovementApi(this._comp) {
+    _random = Random(Random().nextInt(1000));
+  }
+
+  void setup({
+    double? speed,
+    double? maxDistance,
+    double? minDistance,
+
+    /// milliseconds
+    int? timeKeepStopped,
+    bool? updateAngle,
+    bool? checkDirectionWithRayCast,
+    RandomMovementDirections? directions,
+  }) {
+    if (speed != null) {
+      _speed = speed;
+    }
+    if (maxDistance != null) {
+      _maxDistance = maxDistance;
+    }
+    if (minDistance != null) {
+      _minDistance = minDistance;
+    }
+    if (timeKeepStopped != null) {
+      _intervalTick = IntervalTick(
+        timeKeepStopped,
+      );
+    }
+    if (updateAngle != null) {
+      _updateAngle = updateAngle;
+    }
+    if (checkDirectionWithRayCast != null) {
+      _checkDirectionWithRayCast = checkDirectionWithRayCast;
+    }
+    if (directions != null) {
+      _directions = directions;
+    }
+  }
 
   /// Registers a callback fired when random movement starts.
   void onStartMoveListener(OnRandomMovementStartCallback callback) {
@@ -74,25 +121,19 @@ class RandomMovementApi {
 
   /// Executes random movement. Should be called inside the component's
   /// [update] method.
-  void update(
-    double dt, {
-    double? speed,
-    double maxDistance = 50,
-    double minDistance = 25,
-
-    /// milliseconds
-    int timeKeepStopped = 2000,
-    bool updateAngle = false,
-    bool checkDirectionWithRayCast = false,
-    RandomMovementDirections directions = RandomMovementDirections.all,
-  }) {
+  void run(
+    double dt,
+  ) {
     if (_distanceToArrived == null) {
-      if (_comp.checkInterval(_intervalKeepStoppedKey, timeKeepStopped, dt)) {
+      final tick = _intervalTick.update(
+        dt,
+      );
+      if (tick) {
         final target = _getTarget(
-          minDistance,
-          maxDistance,
-          checkDirectionWithRayCast,
-          directions,
+          _minDistance,
+          _maxDistance,
+          _checkDirectionWithRayCast,
+          _directions,
         );
         if (target == null) {
           _stop();
@@ -105,14 +146,14 @@ class RandomMovementApi {
       }
     } else {
       _travelledDistance = _comp.absoluteCenter.distanceTo(_originPosition);
-      final isCanMove = _comp.canMove(_currentDirection, displacement: speed);
+      final isCanMove = _comp.canMove(_currentDirection, displacement: _speed);
       if (_travelledDistance >= _distanceToArrived! || !isCanMove) {
         _stop();
         return;
       }
 
-      _comp.moveFromDirection(_currentDirection, speed: speed);
-      if (updateAngle) {
+      _comp.moveFromDirection(_currentDirection, speed: _speed);
+      if (_updateAngle) {
         _comp.angle = _currentDirection.toRadians();
       }
     }

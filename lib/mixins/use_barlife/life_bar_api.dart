@@ -80,7 +80,8 @@ class LifeBarApi {
     });
     _comp.life.onRemoveLifeListener((double _) => _animateBar());
     _comp.life.onRestoreLifeListener((double _) => _animateBar());
-    _comp.life.onLifeUpdateListener((double value) => barLife?.updateLife(value));
+    _comp.life
+        .onLifeUpdateListener((double value) => barLife?.updateLife(value));
   }
 
   /// Removes the life bar from the component.

@@ -114,13 +114,11 @@ class PushableApi {
     _perCellMoving = true;
     final Vector2 offset;
     if (displacement.x.abs() > displacement.y.abs()) {
-      offset = displacement.x < 0
-          ? Vector2(-cellSize.x, 0)
-          : Vector2(cellSize.x, 0);
+      offset =
+          displacement.x < 0 ? Vector2(-cellSize.x, 0) : Vector2(cellSize.x, 0);
     } else {
-      offset = displacement.y < 0
-          ? Vector2(0, -cellSize.y)
-          : Vector2(0, cellSize.y);
+      offset =
+          displacement.y < 0 ? Vector2(0, -cellSize.y) : Vector2(0, cellSize.y);
     }
 
     _comp.add(

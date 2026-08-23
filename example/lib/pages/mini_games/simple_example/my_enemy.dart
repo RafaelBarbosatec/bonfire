@@ -33,6 +33,6 @@ class MyEnemy extends SimpleEnemy with WithCollision, WithRandomMovement {
   @override
   void update(double dt) {
     super.update(dt);
-    randomMovement.update(dt);
+    randomMovement.run(dt);
   }
 }
