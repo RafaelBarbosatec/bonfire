@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 class MeleeEnemy extends SimpleEnemy {
   late TextPaint _textPaint;
   final String text = 'MeleeEnemy';
-  final IntervalTick _attackTick = IntervalTick(600);
+  final IntervalTick _attackTick = IntervalTick(
+    600,
+    tickFirstUpdate: true,
+  );
   MeleeEnemy({required Vector2 position})
       : super(
           position: position,

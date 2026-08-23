@@ -15,8 +15,14 @@ class Goblin extends SimpleEnemy
   double attack = 20;
   bool enableBehaviors = true;
 
-  final IntervalTick _meleeTick = IntervalTick(400);
-  final IntervalTick _rangeTick = IntervalTick(500);
+  final IntervalTick _meleeTick = IntervalTick(
+    400,
+    tickFirstUpdate: true,
+  );
+  final IntervalTick _rangeTick = IntervalTick(
+    500,
+    tickFirstUpdate: true,
+  );
   Goblin(Vector2 position)
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,

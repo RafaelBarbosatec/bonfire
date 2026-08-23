@@ -5,9 +5,9 @@ class IntervalTick {
   double _currentTime = 0;
   bool _running = true;
   late double _intervalSeconds;
-  bool tickFistUpdate;
+  bool tickFirstUpdate;
   bool _isFistTick = true;
-  IntervalTick(int interval, {this.onTick, this.tickFistUpdate = false}) {
+  IntervalTick(int interval, {this.onTick, this.tickFirstUpdate = false}) {
     _intervalSeconds = interval / 1000;
   }
 
@@ -17,7 +17,7 @@ class IntervalTick {
 
   bool update(double dt) {
     if (_running) {
-      if (_isFistTick && tickFistUpdate) {
+      if (_isFistTick && tickFirstUpdate) {
         _isFistTick = false;
         onTick?.call();
         return true;

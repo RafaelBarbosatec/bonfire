@@ -18,7 +18,7 @@ class DamageHitbox extends GameComponent {
 
   late final IntervalTick _intervalTick = IntervalTick(
     damageInterval.inMilliseconds,
-    tickFistUpdate: true,
+    tickFirstUpdate: true,
   );
 
   DamageHitbox({
