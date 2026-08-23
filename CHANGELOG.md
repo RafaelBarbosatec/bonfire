@@ -1,3 +1,8 @@
+# next
+- **BREAKING:** Remove mixin `InternalChecker`.
+  - Now use `IntervalTick` class to controll interval instead of the method `checkInterval`.
+  - Removed the interval inside the Enemy Attack extension. You should control the execution interval yourself.”
+
 # 4.0.0-beta.10
 - **BREAKING:** Migrate `WithLighting` to API strategy. Added `LightingApi` exposed through `lighting` API object.
   - `setupLighting(...)` → `lighting.setup(...)`
