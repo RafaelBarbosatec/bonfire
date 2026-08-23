@@ -151,9 +151,54 @@ class MyPlayer extends SimplePlayer with Movement, WithJumper, WithSensor {
 | `UseLifeBar` mixin | `WithLifeBar` mixin |
 | `setupLifeBar(...)` | `lifeBar.setup(...)` |
 
+### Interval / `checkInterval`
+
+The `InternalChecker` mixin and the `checkInterval` method were removed. Instead of relying on internal timers keyed by `String`, you now manage your own `IntervalTick` instances. `IntervalTick` is public and can be created anywhere (field, constructor, `onLoad`).
+
+| Bonfire 3.x | Bonfire 4.0 |
+|-------------|-------------|
+| `checkInterval('key', 1000, dt)` | `final _tick = IntervalTick(1000);` … `_tick.update(dt)` |
+| `checkInterval('key', 1000, dt, firstCheckIsTrue: true)` | `IntervalTick(1000, tickFirstUpdate: true)` |
+| `resetInterval('key')` | `_tick.reset()` |
+| `pauseInterval('key')` | `_tick.pause()` |
+| `playInterval('key')` | `_tick.play()` |
+| `tickInterval('key')` | `_tick.tick()` |
+| `invervalIsRunning('key')` | `_tick.running` |
+
+> **Note:** The `interval` parameter was removed from the Enemy and Ally attack extensions — `simpleAttackMelee` and `simpleAttackRange` no longer control the execution frequency for you. You should control it yourself with an `IntervalTick`:
+
+```dart
+// Bonfire 3.x
+class MyEnemy extends SimpleEnemy {
+  @override
+  void update(double dt) {
+    super.update(dt);
+    simpleAttackMelee(
+      damage: 10,
+      size: Vector2(20, 20),
+      interval: 1000,
+    );
+  }
+}
+
+// Bonfire 4.0
+class MyEnemy extends SimpleEnemy {
+  final _attackTick = IntervalTick(1000);
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (_attackTick.update(dt)) {
+      simpleAttackMelee(damage: 10, size: Vector2(20, 20));
+    }
+  }
+}
+```
+
 ## Internal cleanup
 
 - `CustomQuadTreeBroadphase` was removed. `CustomQuadTreeCollisionDetection` now uses `QuadTreeBroadphase` directly.
+- `InternalChecker` mixin and the `checkInterval` method were removed. Use `IntervalTick` directly (see the migration table above).
 
 ## Quick checklist
 
@@ -161,4 +206,5 @@ class MyPlayer extends SimplePlayer with Movement, WithJumper, WithSensor {
 2. Replace mixin names with the `With` prefix.
 3. Replace direct method calls with calls through the API object.
 4. Replace direct property assignments with API methods or setters.
-5. Run `flutter analyze` and fix remaining issues.
+5. Replace `checkInterval(...)` calls with your own `IntervalTick` instance.
+6. Run `flutter analyze` and fix remaining issues.
