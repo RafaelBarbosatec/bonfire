@@ -106,7 +106,6 @@ extension RotationEnemyExtensions on RotationEnemy {
     int? id,
     bool withPush = true,
     double? radAngleDirection,
-    VoidCallback? execute,
     double marginFromCenter = 16,
     Vector2? centerOffset,
   }) {
@@ -121,8 +120,6 @@ extension RotationEnemyExtensions on RotationEnemy {
       animation: animationRight,
       attackFrom: AttackOriginEnum.ENEMY,
     );
-
-    execute?.call();
   }
 
   /// Execute the ranged attack using a component with animation
@@ -139,7 +136,6 @@ extension RotationEnemyExtensions on RotationEnemy {
     bool withDecorationCollision = true,
     VoidCallback? onDestroy,
     ShapeHitbox? collision,
-    VoidCallback? onExecute,
     LightingConfig? lightingConfig,
     Vector2? centerOffset,
     double marginFromOrigin = 16,
@@ -161,7 +157,5 @@ extension RotationEnemyExtensions on RotationEnemy {
       marginFromOrigin: marginFromOrigin,
       attackFrom: AttackOriginEnum.ENEMY,
     );
-
-    onExecute?.call();
   }
 }

@@ -23,7 +23,6 @@ extension AllyExtensions on Ally {
     double? sizePush,
     Direction? direction,
     Future<SpriteAnimation>? animationRight,
-    VoidCallback? execute,
     Vector2? centerOffset,
   }) {
     final direct = direction ?? this.direction;
@@ -39,8 +38,6 @@ extension AllyExtensions on Ally {
       attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
       centerOffset: centerOffset,
     );
-
-    execute?.call();
   }
 
   /// Execute the ranged attack using a component with animation
@@ -56,7 +53,6 @@ extension AllyExtensions on Ally {
     bool withCollision = true,
     ShapeHitbox? collision,
     VoidCallback? onDestroy,
-    VoidCallback? execute,
     LightingConfig? lightingConfig,
   }) {
     final direct = direction ?? this.direction;
@@ -76,8 +72,6 @@ extension AllyExtensions on Ally {
       lightingConfig: lightingConfig,
       attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
     );
-
-    execute?.call();
   }
 
   /// Checks whether the Enemy is within range. If so, move to it.

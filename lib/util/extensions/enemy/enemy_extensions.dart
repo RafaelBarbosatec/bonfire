@@ -12,7 +12,6 @@ extension EnemyExtensions on Enemy {
     double? sizePush,
     Direction? direction,
     Future<SpriteAnimation>? animationRight,
-    VoidCallback? execute,
     Vector2? centerOffset,
   }) {
     final direct = direction ??
@@ -31,8 +30,6 @@ extension EnemyExtensions on Enemy {
       attackFrom: AttackOriginEnum.ENEMY,
       centerOffset: centerOffset,
     );
-
-    execute?.call();
   }
 
   /// Execute the ranged attack using a component with animation
@@ -48,7 +45,6 @@ extension EnemyExtensions on Enemy {
     bool useAngle = false,
     ShapeHitbox? collision,
     VoidCallback? onDestroy,
-    VoidCallback? execute,
     LightingConfig? lightingConfig,
   }) {
     if (useAngle) {
@@ -87,8 +83,6 @@ extension EnemyExtensions on Enemy {
         attackFrom: AttackOriginEnum.ENEMY,
       );
     }
-
-    execute?.call();
   }
 
   /// Checks whether the player is within range. If so, move to it.
