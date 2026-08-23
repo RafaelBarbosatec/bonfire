@@ -8,10 +8,12 @@ class PlatformGameController extends GameComponent {
   bool showWin = false;
   final VoidCallback reset;
 
+  final IntervalTick _intervalTick = IntervalTick(500);
+
   PlatformGameController({required this.reset});
   @override
   void update(double dt) {
-    if (checkInterval('check win', 500, dt)) {
+    if (_intervalTick.update(dt)) {
       _checkWin();
       _checkGameOver();
     }

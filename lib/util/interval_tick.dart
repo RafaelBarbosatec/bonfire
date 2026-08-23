@@ -1,14 +1,17 @@
 import 'dart:ui';
 
 class IntervalTick {
-  late int interval; // in Milliseconds
   final VoidCallback? onTick;
   double _currentTime = 0;
   bool _running = true;
   late double _intervalSeconds;
   bool tickFistUpdate;
   bool _isFistTick = true;
-  IntervalTick(this.interval, {this.onTick, this.tickFistUpdate = false}) {
+  IntervalTick(int interval, {this.onTick, this.tickFistUpdate = false}) {
+    _intervalSeconds = interval / 1000;
+  }
+
+  void updateInterval(int interval) {
     _intervalSeconds = interval / 1000;
   }
 
