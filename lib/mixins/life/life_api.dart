@@ -104,7 +104,9 @@ class LifeApi {
   /// Increases life by [value], capped at [max].
   void add(double value) {
     var newLife = _life + value;
-    if (newLife > _maxLife) newLife = _maxLife;
+    if (newLife > _maxLife) {
+      newLife = _maxLife;
+    }
     final restored = newLife - _life;
     _updateLife(newLife);
     if (restored > 0) {
@@ -129,7 +131,9 @@ class LifeApi {
   /// Reduces life by [value], floored at zero.
   void remove(double value) {
     var newLife = _life - value;
-    if (newLife < 0) newLife = 0;
+    if (newLife < 0) {
+      newLife = 0;
+    }
     final removed = _life - newLife;
     _updateLife(newLife);
     if (removed > 0) {
@@ -148,7 +152,9 @@ class LifeApi {
     double damage,
     dynamic identify,
   ) {
-    if (!checkCanReceiveDamage(attacker)) return false;
+    if (!checkCanReceiveDamage(attacker)) {
+      return false;
+    }
     for (final cb in _onReceiveDamageCallbacks) {
       cb(attacker, damage, identify);
     }
@@ -158,7 +164,9 @@ class LifeApi {
 
   /// Returns `true` if this component can receive damage from [attacker].
   bool checkCanReceiveDamage(AttackOriginEnum attacker) {
-    if (_isDead || _isRemoving()) return false;
+    if (_isDead || _isRemoving()) {
+      return false;
+    }
     switch (receivesAttackFrom) {
       case AcceptableAttackOriginEnum.ALL:
         return true;

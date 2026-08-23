@@ -70,7 +70,7 @@ class TileComponent extends GameComponent with WithAssetsLoader {
     double offsetX = 0,
     double offsetY = 0,
   }) {
-    properties = properties;
+    this.properties = properties;
     id = '${position.x}/${position.y}';
     _animation = animation;
     applyBleedingPixel(
