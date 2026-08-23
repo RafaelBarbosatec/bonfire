@@ -14,6 +14,9 @@ class Goblin extends SimpleEnemy
         UseBehavior {
   double attack = 20;
   bool enableBehaviors = true;
+
+  final IntervalTick _meleeTick = IntervalTick(400);
+  final IntervalTick _rangeTick = IntervalTick(500);
   Goblin(Vector2 position)
       : super(
           animation: EnemySpriteSheet.simpleDirectionAnimation,
@@ -41,10 +44,10 @@ class Goblin extends SimpleEnemy
             doBehavior: BSeeAndMoveToTarget(
               target: gameRef.player!,
               radiusVision: DungeonMap.tileSize,
-              onClose: (_, __) => execAttack(attack),
+              onClose: (dt, __) => execAttack(attack, dt),
               doElseBehavior: BSeeAndPositioned(
                 radiusVision: DungeonMap.tileSize * 3,
-                positioned: (_) => execAttackRange(attack),
+                positioned: (_, dt) => execAttackRange(attack, dt),
                 target: gameRef.player!,
                 doElseBehavior: BRandomMovement(
                   speed: speed / 2,
@@ -72,37 +75,40 @@ class Goblin extends SimpleEnemy
     removeFromParent();
   }
 
-  void execAttackRange(double damage) {
+  void execAttackRange(double damage, double dt) {
     if (gameRef.player != null && gameRef.player?.isDead == true) return;
-    simpleAttackRange(
-      animation: CommonSpriteSheet.fireBallRight,
-      animationDestroy: CommonSpriteSheet.explosionAnimation,
-      id: 35,
-      useAngle: true,
-      size: Vector2.all(width * 0.9),
-      damage: damage,
-      speed: DungeonMap.tileSize * 3,
-      collision: RectangleHitbox(
-        size: Vector2.all(width / 2),
-        position: Vector2(width * 0.25, width * 0.25),
-      ),
-      lightingConfig: LightingConfig(
-        radius: width / 2,
-        blurBorder: width,
-        color: Colors.orange.withOpacity(0.3),
-      ),
-    );
+    if (_rangeTick.update(dt)) {
+      simpleAttackRange(
+        animation: CommonSpriteSheet.fireBallRight,
+        animationDestroy: CommonSpriteSheet.explosionAnimation,
+        id: 35,
+        useAngle: true,
+        size: Vector2.all(width * 0.9),
+        damage: damage,
+        speed: DungeonMap.tileSize * 3,
+        collision: RectangleHitbox(
+          size: Vector2.all(width / 2),
+          position: Vector2(width * 0.25, width * 0.25),
+        ),
+        lightingConfig: LightingConfig(
+          radius: width / 2,
+          blurBorder: width,
+          color: Colors.orange.withValues(alpha: 0.3),
+        ),
+      );
+    }
   }
 
-  void execAttack(double damage) {
+  void execAttack(double damage, double dt) {
     if (gameRef.player != null && gameRef.player?.isDead == true) return;
-    simpleAttackMelee(
-      size: Vector2.all(width),
-      damage: damage / 2,
-      interval: 400,
-      sizePush: DungeonMap.tileSize / 2,
-      animationRight: CommonSpriteSheet.blackAttackEffectRight,
-    );
+    if (_meleeTick.update(dt)) {
+      simpleAttackMelee(
+        size: Vector2.all(width),
+        damage: damage / 2,
+        sizePush: DungeonMap.tileSize / 2,
+        animationRight: CommonSpriteSheet.blackAttackEffectRight,
+      );
+    }
   }
 
   void _onRemoveLife(double amount) {

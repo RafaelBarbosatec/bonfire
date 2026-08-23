@@ -6,7 +6,7 @@ class BSeeAndPositioned extends Behavior {
   final double? visionAngle;
   final Behavior? doElseBehavior;
   final double? minDistance;
-  final void Function(GameComponent target) positioned;
+  final void Function(GameComponent target, double dt) positioned;
 
   final IntervalTick _intervalTick = IntervalTick(
     500,
@@ -56,7 +56,7 @@ class BSeeAndPositioned extends Behavior {
                 )) {
                   comp.stop();
                 }
-                positioned.call(target);
+                positioned.call(target, dt);
               }
             }
             return true;

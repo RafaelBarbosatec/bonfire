@@ -19,7 +19,14 @@ class ZombieEnemy extends RotationEnemy with WithCollision, WithRandomMovement {
           size: Vector2(68, 43),
           animIdle: _getAnimation(),
           animRun: _getAnimation(),
-        );
+        ) {
+    randomMovement.setup(
+      speed: 20,
+      maxDistance: 64,
+      minDistance: 32,
+      updateAngle: true,
+    );
+  }
 
   static Future<SpriteAnimation> _getAnimation() {
     return Sprite.load('zombie.png').toAnimation();
@@ -38,12 +45,8 @@ class ZombieEnemy extends RotationEnemy with WithCollision, WithRandomMovement {
       },
       radiusVision: 128,
       notObserved: () {
-        randomMovement.update(
+        randomMovement.run(
           dt,
-          updateAngle: true,
-          maxDistance: 64,
-          minDistance: 32,
-          speed: 20,
         );
         return false;
       },

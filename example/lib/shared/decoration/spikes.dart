@@ -9,7 +9,7 @@ class Spikes extends GameDecoration with WithSensor<WithLife> {
           position: position,
           size: size ?? Vector2.all(DungeonMap.tileSize / 1.5),
         ) {
-    sensor.interval = 500;
+    sensor.setup(interval: 500);
     sensor.onContactListener(_onContact);
   }
 

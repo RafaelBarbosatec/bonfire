@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class RageEnemy extends SimpleEnemy with WithCollision {
   late TextPaint _textPaint;
   final String text = 'RangeEnemy';
+  final IntervalTick _attackTick = IntervalTick(600);
   RageEnemy({
     required Vector2 position,
   }) : super(
@@ -19,7 +20,7 @@ class RageEnemy extends SimpleEnemy with WithCollision {
   void update(double dt) {
     seeAndMoveToAttackRange(
       positioned: (p) {
-        if (checkInterval('attack', 600, dt)) {
+        if (_attackTick.update(dt)) {
           _playAttackAnimation();
         }
       },

@@ -7,6 +7,8 @@ class Chest extends GameDecoration with TapGesture, WithVision {
   bool _observedPlayer = false;
 
   late TextPaint _textConfig;
+
+  final IntervalTick _intervalTick = IntervalTick(500);
   Chest(Vector2 position)
       : super.withAnimation(
           animation: CommonSpriteSheet.chestAnimated,
@@ -23,7 +25,7 @@ class Chest extends GameDecoration with TapGesture, WithVision {
 
   @override
   void update(double dt) {
-    if (gameRef.player != null && checkInterval('SeepLayr', 500, dt)) {
+    if (gameRef.player != null && _intervalTick.update(dt)) {
       vision.seeComponent(
         gameRef.player!,
         observed: (player) {

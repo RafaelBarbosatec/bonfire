@@ -18,11 +18,18 @@ class SensorApi<T extends GameComponent> {
   final List<SensorContactCallback<T>> _onContactCallbacks = [];
   final List<SensorContactCallback<T>> _onContactExitCallbacks = [];
 
-  final IntervalTick _intervalTick = IntervalTick(
+  IntervalTick _intervalTick = IntervalTick(
     100,
   );
 
   SensorApi(this._comp);
+
+  void setup({int interval = 100, bool enabled = true}) {
+    this.enabled = enabled;
+    _intervalTick = IntervalTick(
+      interval,
+    );
+  }
 
   /// Register callback fired while contact is detected.
   void onContactListener(SensorContactCallback<T> callback) {

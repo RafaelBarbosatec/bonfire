@@ -125,9 +125,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
         return;
       }
 
-      if (animationDestroy == null) {
-        other.life.handleAttack(attackFrom, damage, id);
-      }
+      other.life.handleAttack(attackFrom, damage, id);
     }
 
     if (other is WithSensor) {
