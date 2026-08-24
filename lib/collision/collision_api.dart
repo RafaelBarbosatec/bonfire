@@ -112,7 +112,9 @@ class CollisionApi {
       }
     }
     if (bodyType.isStatic) {
-      return comp.absoluteCenter;
+      // Static bodies don't move: reflect the full velocity so that
+      // `velocity -= reflection` zeroes it out (same semantics as Bonfire 3.x).
+      return comp.velocity;
     }
     return data.normal * comp.velocity.dot(data.normal);
   }

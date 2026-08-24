@@ -6,7 +6,9 @@ class ForcesApi {
   BonfireGameInterface get _gameRef => comp.gameRef;
 
   double _mass = 1.0;
-  double _dragCoefficient = 0.01; // Air resistance
+  // Air resistance. Off by default; enable it explicitly with
+  // `setDragCoefficient` or one of the `make*` presets.
+  double _dragCoefficient = 0.0;
   bool _isEnabled = true;
   bool get isEnabled => _isEnabled;
 
