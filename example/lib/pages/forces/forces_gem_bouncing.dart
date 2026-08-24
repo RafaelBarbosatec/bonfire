@@ -10,7 +10,7 @@ class ForcesGemBouncing extends GameDecoration
           position: position,
           size: Vector2(15, 13),
         ) {
-    elasticCollision.setup(bounciness: 2);
+    elasticCollision.setup(bounciness: 1);
     forces.setup(friction: Vector2.all(0));
     forces.enableEarthGravity();
   }
