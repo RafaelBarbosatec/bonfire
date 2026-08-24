@@ -1,8 +1,12 @@
-# next
+# 4.0.0-beta.11
 - **BREAKING:** Remove the `InternalChecker` mixin and the `checkInterval` method.
   - Use the `IntervalTick` class directly to control intervals instead of the `checkInterval` method (and the `resetInterval`, `pauseInterval`, `playInterval` helpers).
   - Removed the built-in interval from the Enemy and Ally Attack extensions: `simpleAttackMelee` and `simpleAttackRange` no longer accept the `interval` parameter. You should control the execution interval yourself using an `IntervalTick`.
   - `IntervalTick` now has the `tickFirstUpdate` parameter, which replaces the old `firstCheckIsTrue` behavior of `checkInterval`.
+- Fix drag force default: `ForcesApi` and `GlobalForcesSettings` now default to no drag (`0.0`) instead of `0.01`, preventing the quadratic drag from nullifying velocities when forces are applied.
+- Fix `Movement.diagonalFactor` precision: use the exact `sqrt(2)/2` value so diagonal movement is properly normalized.
+- Add `turn_game` example to `awesome/`.
+- Update docs: document the `IntervalTick` API (replaces `checkInterval`) and remove outdated `interval`/`execute` params from the Enemy/Ally attack extensions docs.
 
 # 4.0.0-beta.10
 - **BREAKING:** Migrate `WithLighting` to API strategy. Added `LightingApi` exposed through `lighting` API object.
