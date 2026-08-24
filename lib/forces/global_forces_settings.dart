@@ -10,6 +10,6 @@ class GlobalForcesSettings {
     this.gravity,
     this.wind,
     this.friction,
-    this.dragCoefficient = 0.01,
+    this.dragCoefficient = 0.0,
   });
 }

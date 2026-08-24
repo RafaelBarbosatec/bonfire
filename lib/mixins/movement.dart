@@ -11,7 +11,7 @@ import 'package:bonfire/bonfire.dart';
 /// - Direction tracking
 /// - Extensible for advanced cases
 mixin Movement on GameComponent {
-  static const double diagonalFactor = 0.7071; // 1/sqrt(2)
+  static const double diagonalFactor = 0.7071067811865476; // sqrt(2)/2
   static const double defaultSpeed = 80.0;
 
   double speed = defaultSpeed;
