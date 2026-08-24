@@ -26,7 +26,7 @@ player.pathFinding.setup(linePathEnabled: true);
 
 ## What didn't change?
 
-The `Movement` mixin is the only mixin that keeps its original API. It remains the central movement interface for components and does not follow the `WithFeature` + `feature.{resource}` pattern.
+The `Movement` mixin is the only mixin that keeps its original **access style** — it remains the central movement interface for components and does not follow the `WithFeature` + `feature.{resource}` pattern.
 
 ```dart
 class MyPlayer extends SimplePlayer with Movement, WithJumper, WithSensor {
@@ -46,6 +46,47 @@ class MyPlayer extends SimplePlayer with Movement, WithJumper, WithSensor {
 ```
 
 > **Note:** All other mixins were migrated to the API-first pattern. `Movement` stays direct because it is the foundation used by almost every other mixin and by user code.
+
+> **⚠️ Important:** although `Movement` is still accessed directly, it was **rewritten and simplified** in 4.0. Several public members were removed, renamed or had their signatures changed. See the [Movement migration table](#movement) below before upgrading.
+
+## Movement
+
+Even though `Movement` keeps the direct-access style, it was heavily simplified. The following table lists every public API change you need to be aware of:
+
+### Removed
+
+| Bonfire 3.x | Bonfire 4.0 |
+|-------------|-------------|
+| `displacement` (Vector2 moved last frame) | Removed. Track it yourself if needed: `final moved = velocity * dt;` in `update()` |
+| `lastDirection` / `lastDirectionHorizontal` / `lastDirectionVertical` | Removed. Use `direction`, `hDirection`, `vDirection` (these now reflect the current velocity) |
+| `acceleration` | Removed |
+| `velocityRadAngle` | Removed |
+| `minDisplacementToConsiderMove` | Removed. `isMoving` now uses an internal frame counter |
+| `diagonalSpeed` / `dtSpeed` / `dtDiagonalSpeed` | Removed. Use `speed` (or `speed * diagonalFactor`) directly |
+| `setVelocityAxis({x, y})` | Removed. Assign `velocity` directly |
+| `moveLeftOnce()` / `moveRightOnce()` / `moveUpOnce()` / `moveDownOnce()` / diagonal `*Once` variants | Removed. Use the regular `moveLeft()`, etc. and stop when you want to halt |
+| `stopMove({forceIdle, isX, isY})` | Removed. Use `stop()` |
+| `onVelocityUpdate(dt, velocity)` | Removed |
+| `onApplyDisplacement(dt)` | Removed |
+| `correctPositionFromCollision(position)` | Removed |
+| `static const speedDefault` | Removed. Use `Movement.defaultSpeed` (or just `speed`) |
+
+### Renamed / changed signature
+
+| Bonfire 3.x | Bonfire 4.0 |
+|-------------|-------------|
+| `moveFromAngle(angle, {speed})` | `moveByAngle(angle, {speed})` |
+| `moveFromDirection(dir, {enabledDiagonal})` | `moveFromDirection(dir, {useDiagonal})` |
+| `onMove(double speed, Vector2 displacement, Direction direction, double angle)` | `onMove()` — no arguments. Override it to react to any movement; read `velocity`, `direction`, `hDirection`, `vDirection` for details |
+| `position` setter (with collision correction side-effects) | Removed custom setter — `position` behaves like a plain `PositionComponent` |
+
+### Added in 4.0
+
+- `moveByAngle(double angleRadians, {double? speed})`
+- `moveToward(Vector2 target, {double? speed})`
+- `isMoving` / `isIdle` getters
+- `hDirection` / `vDirection` getters
+- `onMove()` hook (no args)
 
 ## Migration table
 
@@ -165,7 +206,7 @@ The `InternalChecker` mixin and the `checkInterval` method were removed. Instead
 | `tickInterval('key')` | `_tick.tick()` |
 | `invervalIsRunning('key')` | `_tick.running` |
 
-> **Note:** The `interval` parameter was removed from the Enemy and Ally attack extensions — `simpleAttackMelee` and `simpleAttackRange` no longer control the execution frequency for you. You should control it yourself with an `IntervalTick`:
+> **Note:** The `interval` and `execute` parameters were removed from the Enemy and Ally attack extensions — `simpleAttackMelee` and `simpleAttackRange` no longer control the execution frequency for you (and no longer accept an `execute` callback). You should control it yourself with an `IntervalTick`:
 
 ```dart
 // Bonfire 3.x
@@ -200,6 +241,14 @@ class MyEnemy extends SimpleEnemy {
 - `CustomQuadTreeBroadphase` was removed. `CustomQuadTreeCollisionDetection` now uses `QuadTreeBroadphase` directly.
 - `InternalChecker` mixin and the `checkInterval` method were removed. Use `IntervalTick` directly (see the migration table above).
 
+## FlyingAttackGameObject
+
+| Bonfire 3.x | Bonfire 4.0 |
+|-------------|-------------|
+| `FlyingAttackGameObject(... collision: ...)` | `FlyingAttackGameObject(... shapeCollision: ...)` — parameter renamed |
+| `moveFromAngle(angle)` | `moveByAngle(angle)` |
+| `moveFromDirection(dir, enabledDiagonal: ...)` | `moveFromDirection(dir, useDiagonal: ...)` — parameter renamed |
+
 ## Quick checklist
 
 1. Update `pubspec.yaml` to `bonfire: ^4.0.0`.
@@ -207,4 +256,5 @@ class MyEnemy extends SimpleEnemy {
 3. Replace direct method calls with calls through the API object.
 4. Replace direct property assignments with API methods or setters.
 5. Replace `checkInterval(...)` calls with your own `IntervalTick` instance.
-6. Run `flutter analyze` and fix remaining issues.
+6. Review your `Movement` overrides (`onMove`, `displacement`, `lastDirection`, `stopMove`, `*Once` methods) against the [Movement table](#movement).
+7. Run `flutter analyze` and fix remaining issues.
