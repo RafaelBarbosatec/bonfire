@@ -35,7 +35,7 @@ class BSeeAndMoveToTarget extends Behavior {
       ),
       doBehavior: (target) {
         return BCondition(
-          condition: (_, comp, game) => comp.isCloseTo(
+          condition: (_, comp, game) => comp.util.isCloseTo(
             target,
             distance: distance,
           ),

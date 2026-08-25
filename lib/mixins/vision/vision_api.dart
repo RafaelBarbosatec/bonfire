@@ -93,6 +93,262 @@ class VisionApi {
     return _currentShape = shape;
   }
 
+  /// Checks if the player is within vision range.
+  /// [visionAngle] in radians. [angle] in radians.
+  PolygonShape? seePlayer({
+    required Function(Player) observed,
+    VoidCallback? notObserved,
+    double radiusVision = 32,
+    double? visionAngle,
+    double? angle,
+  }) {
+    final player = _comp.gameRef.player;
+    if (player == null || player.isDead) {
+      notObserved?.call();
+      return null;
+    }
+    return seeComponent(
+      player,
+      observed: (c) => observed(c as Player),
+      notObserved: notObserved,
+      radiusVision: radiusVision,
+      visionAngle: visionAngle,
+      angle: angle ?? _defaultAngle(),
+    );
+  }
+
+  /// Checks if the player is within range. If so, move to it.
+  /// [visionAngle] in radians. [angle] in radians.
+  PolygonShape? seeAndMoveToPlayer({
+    Function(Player)? closePlayer,
+    // return true to stop move.
+    BoolCallback? notObserved,
+    VoidCallback? observed,
+    VoidCallback? notCanMove,
+    double radiusVision = 32,
+    double margin = 2,
+    double? visionAngle,
+    double? angle,
+    bool runOnlyVisibleInScreen = true,
+    MovementAxis movementAxis = MovementAxis.all,
+  }) {
+    if (runOnlyVisibleInScreen && !_comp.isVisible) {
+      return null;
+    }
+
+    return seePlayer(
+      radiusVision: radiusVision,
+      visionAngle: visionAngle,
+      angle: angle,
+      observed: (player) {
+        observed?.call();
+        final movement = _movement;
+        if (movement == null) {
+          return;
+        }
+        final move = movement.moveTowardsTarget(
+          target: player,
+          close: () => closePlayer?.call(player),
+          margin: margin,
+          movementAxis: movementAxis,
+        );
+        if (!move) {
+          notCanMove?.call();
+        }
+      },
+      notObserved: () {
+        final canStop = notObserved?.call() ?? true;
+        if (canStop) {
+          _movement?.stop();
+        }
+      },
+    );
+  }
+
+  /// Checks whether the enemy is within range. If so, move to it.
+  /// [visionAngle] in radians. [angle] in radians.
+  void seeAndMoveToEnemy({
+    required Function(Enemy) closeEnemy,
+    // return true to stop move.
+    BoolCallback? notObserved,
+    VoidCallback? observed,
+    VoidCallback? notCanMove,
+    double radiusVision = 32,
+    double? visionAngle,
+    double? angle,
+    double margin = 10,
+    bool runOnlyVisibleInScreen = true,
+    MovementAxis movementAxis = MovementAxis.all,
+  }) {
+    if (runOnlyVisibleInScreen && !_comp.isVisible) {
+      return;
+    }
+
+    seeComponentType<Enemy>(
+      radiusVision: radiusVision,
+      visionAngle: visionAngle,
+      angle: angle ?? _defaultAngle(),
+      observed: (enemy) {
+        observed?.call();
+        final movement = _movement;
+        if (movement == null) {
+          return;
+        }
+        final move = movement.moveTowardsTarget(
+          target: enemy.first,
+          close: () {
+            closeEnemy(enemy.first);
+          },
+          margin: margin,
+          movementAxis: movementAxis,
+        );
+        if (!move) {
+          notCanMove?.call();
+        }
+      },
+      notObserved: () {
+        final canStop = notObserved?.call() ?? true;
+        if (canStop) {
+          _movement?.stop();
+        }
+      },
+    );
+  }
+
+  /// Checks whether the ally is within range. If so, move to it.
+  /// [visionAngle] in radians. [angle] in radians.
+  void seeAndMoveToAlly({
+    required Function(Ally) closeAlly,
+    // return true to stop move.
+    BoolCallback? notObserved,
+    VoidCallback? observed,
+    VoidCallback? notCanMove,
+    double radiusVision = 32,
+    double? visionAngle,
+    double? angle,
+    double margin = 10,
+    bool runOnlyVisibleInScreen = true,
+    MovementAxis movementAxis = MovementAxis.all,
+  }) {
+    if (runOnlyVisibleInScreen && !_comp.isVisible) {
+      return;
+    }
+
+    seeComponentType<Ally>(
+      radiusVision: radiusVision,
+      visionAngle: visionAngle,
+      angle: angle ?? _defaultAngle(),
+      observed: (ally) {
+        observed?.call();
+        final movement = _movement;
+        if (movement == null) {
+          return;
+        }
+        final move = movement.moveTowardsTarget(
+          target: ally.first,
+          close: () {
+            closeAlly(ally.first);
+          },
+          movementAxis: movementAxis,
+          margin: margin,
+        );
+        if (!move) {
+          notCanMove?.call();
+        }
+      },
+      notObserved: () {
+        final canStop = notObserved?.call() ?? true;
+        if (canStop) {
+          _movement?.stop();
+        }
+      },
+    );
+  }
+
+  /// Checks if any enemy is within vision range.
+  /// [visionAngle] in radians. [angle] in radians.
+  PolygonShape? seeEnemy({
+    required Function(List<Enemy>) observed,
+    VoidCallback? notObserved,
+    double radiusVision = 32,
+    double? visionAngle,
+    double? angle,
+  }) {
+    if (_comp is WithLife && _comp.isDead) {
+      return null;
+    }
+    return seeComponentType<Enemy>(
+      observed: observed,
+      notObserved: notObserved,
+      radiusVision: radiusVision,
+      angle: angle ?? _defaultAngle(),
+      visionAngle: visionAngle,
+    );
+  }
+
+  /// Checks whether the [T] components are within attack range. If so, move to
+  /// them and call [positioned] when in range.
+  /// [visionAngle] in radians. [angle] in radians.
+  void seeAndMoveToAttackRange<T extends GameComponent>({
+    Function(T)? positioned,
+    // return true to stop move.
+    BoolCallback? notObserved,
+    Function(T)? observed,
+    double radiusVision = 32,
+    double? visionAngle,
+    double? angle,
+    double? minDistanceFromPlayer,
+    bool useDiagonal = true,
+  }) {
+    if (_comp is WithLife && _comp.isDead) {
+      return;
+    }
+
+    seeComponentType<T>(
+      radiusVision: radiusVision,
+      visionAngle: visionAngle,
+      angle: angle ?? _defaultAngle(),
+      observed: (targets) {
+        final target = targets.first;
+        observed?.call(target);
+        final minD = minDistanceFromPlayer ?? (radiusVision - 5);
+        final movement = _movement;
+        if (movement == null) {
+          return;
+        }
+        if (useDiagonal) {
+          final inDistance = movement.keepDistance(target, minD);
+          if (inDistance) {
+            movement.direction = movement.util.getDirectionToTarget(target);
+            if (!movement.isIdle) {
+              movement.stop();
+            }
+            positioned?.call(target);
+          }
+        } else {
+          movement.positionsItselfAndKeepDistance(
+            target,
+            minDistanceFromPlayer: minD,
+            radiusVision: radiusVision,
+            positioned: (t) {
+              movement.direction = movement.util.getDirectionToTarget(t);
+              if (!movement.isIdle) {
+                movement.stop();
+              }
+              positioned?.call(t);
+            },
+          );
+        }
+      },
+      notObserved: () {
+        final canStop = notObserved?.call() ?? true;
+        if (canStop) {
+          _movement?.stop();
+        }
+      },
+    );
+  }
+
   /// Clears the cached vision polygon shapes.
   void cleanCache() {
     _polygonCache.clear();
@@ -106,6 +362,12 @@ class VisionApi {
       _currentShape?.render(canvas, _paint);
       canvas.restore();
     }
+  }
+
+  Movement? get _movement => _comp is Movement ? _comp : null;
+
+  double _defaultAngle() {
+    return _comp is Movement ? _comp.direction.toRadians() : 3.14159;
   }
 
   bool _canSee(

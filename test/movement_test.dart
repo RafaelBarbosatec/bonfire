@@ -64,7 +64,7 @@ void main() {
     test('diagonal movement is normalized', () {
       final c = MovableComponent()..speed = 100;
       c.moveUpRight();
-      final expected = 100 * Movement.diagonalFactor;
+      const expected = 100 * Movement.diagonalFactor;
       expect(c.velocity.x, closeTo(expected, 1e-6));
       expect(c.velocity.y, closeTo(-expected, 1e-6));
       expect(c.velocity.length, closeTo(100, 1e-6));
@@ -73,7 +73,7 @@ void main() {
     test('moveFromDirection maps the Direction enum', () {
       final c = MovableComponent()..speed = 100;
       c.moveFromDirection(Direction.downLeft);
-      final expected = 100 * Movement.diagonalFactor;
+      const expected = 100 * Movement.diagonalFactor;
       expect(c.velocity.x, closeTo(-expected, 1e-6));
       expect(c.velocity.y, closeTo(expected, 1e-6));
     });

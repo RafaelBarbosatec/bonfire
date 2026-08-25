@@ -65,7 +65,7 @@ class _SectionDrawerWidgetState extends State<SectionDrawerWidget>
           children: [
             if (containTitle)
               Container(
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black.withValues(alpha: 0.2),
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [

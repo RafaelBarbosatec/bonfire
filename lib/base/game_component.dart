@@ -10,7 +10,9 @@ abstract class GameComponent extends PositionComponent
         BonfireHasGameRef,
         PointerDetectorHandler,
         HasPaint,
-        CollisionCallbacks {
+        CollisionCallbacks,
+        WithUtil,
+        WithAttack {
   Map<String, dynamic>? properties;
 
   /// When true this component render above all components in game.

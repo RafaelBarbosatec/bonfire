@@ -104,7 +104,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
       end: color,
     );
 
-    generateValues(
+    util.generateValues(
       duration,
       onChange: (value) {
         this.color = _tween?.transform(value);

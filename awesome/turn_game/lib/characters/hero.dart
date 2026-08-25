@@ -20,7 +20,7 @@ class PHero extends PlayerAlly {
   void doAttackEnemy(PlayerEnemy enemy) {
     int distance = center.distanceTo(enemy.center).round();
     if (distance * 0.9 > tileSize.x) {
-      simpleAttackRangeByAngle(
+      attack.rangeByAngle(
         animation: SpriteSheetBuilder.fireballRight,
         size: size,
         angle: BonfireUtil.angleBetweenPoints(center, enemy.center),
@@ -31,7 +31,7 @@ class PHero extends PlayerAlly {
       );
     } else {
       enemy.life.handleAttack(AttackOriginEnum.PLAYER_OR_ALLY, 25, 0);
-      simpleAttackMeleeByAngle(
+      attack.meleeByAngle(
         animation: SpriteSheetBuilder.attackRight,
         size: size,
         angle: BonfireUtil.angleBetweenPoints(center, enemy.center),

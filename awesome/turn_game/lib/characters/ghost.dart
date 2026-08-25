@@ -22,7 +22,7 @@ class Ghost extends PlayerEnemy {
   @override
   void doAttackAlly(PlayerAlly ally) {
     ally.life.handleAttack(AttackOriginEnum.ENEMY, 25, 0);
-    simpleAttackMeleeByAngle(
+    attack.meleeByAngle(
       animation: SpriteSheetBuilder.attackRight,
       size: size,
       angle: BonfireUtil.angleBetweenPoints(center, ally.center),

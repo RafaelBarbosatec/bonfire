@@ -20,7 +20,7 @@ class Necromancer extends PlayerEnemy {
   void doAttackAlly(PlayerAlly ally) {
     int distance = center.distanceTo(ally.center).round();
     if (distance * 0.9 > tileSize.x) {
-      simpleAttackRangeByAngle(
+      attack.rangeByAngle(
         animation: SpriteSheetBuilder.fireballRight,
         size: size,
         angle: BonfireUtil.angleBetweenPoints(center, ally.center),
@@ -31,7 +31,7 @@ class Necromancer extends PlayerEnemy {
       );
     } else {
       ally.life.handleAttack(AttackOriginEnum.ENEMY, 25, 0);
-      simpleAttackMeleeByAngle(
+      attack.meleeByAngle(
         animation: SpriteSheetBuilder.attackRight,
         size: size,
         angle: BonfireUtil.angleBetweenPoints(center, ally.center),

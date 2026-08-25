@@ -1,3 +1,21 @@
+# 4.0.0-beta.12
+- **BREAKING:** Introduce `WithAttack` and `AttackApi`, exposed through the `attack` object on every `GameComponent`. The old attack extension methods (`simpleAttackMelee`, `simpleAttackRange`, `simpleAttackMeleeByDirection`, `simpleAttackMeleeByAngle`, `simpleAttackRangeByDirection`, `simpleAttackRangeByAngle`) were removed from the `Player`, `Enemy`, `Ally` and `GameComponent` extensions.
+  - Melee: `attack.melee(damage: ..., size: ..., animation: ...)`
+  - Range: `attack.range(animation: ..., damage: ..., ...)`
+  - Advanced: `attack.meleeByAngle(...)`, `attack.meleeByDirection(...)`, `attack.rangeByAngle(...)`, `attack.rangeByDirection(...)`
+  - `damage` is now a named parameter and `animationRight` is now `animation`.
+- **BREAKING:** Introduce `WithUtil` and `UtilApi`, exposed through the `util` object on every `GameComponent`. The following extension methods were removed from `GameComponent`/`Npc`/`Enemy`/`Ally`/`Player`:
+  - `util.showDamage(...)`, `util.generateValues(...)`, `util.addParticle(...)`
+  - `util.getAngleToTarget(...)`, `util.getDirectionToTarget(...)`, `util.getAngleToPlayer()`, `util.getInverseAngleToPlayer()`, `util.getDirectionToPlayer()`, `util.playerRect`
+  - `util.isCloseTo(...)`, `util.overlaps(...)`, `util.top`, `util.bottom`, `util.left`, `util.right`
+  - `util.loadParallaxComponent(...)`, `util.loadCameraParallaxComponent(...)`
+  - `util.globalToViewportPosition(...)`, `util.viewportPositionToGlobal(...)`
+- **BREAKING:** Move vision helpers (`seePlayer`, `seeAndMoveToPlayer`, `seeAndMoveToEnemy`, `seeAndMoveToAlly`, `seeEnemy`, `seeAndMoveToAttackRange`) from the `Npc`/`Enemy`/`Ally`/`Player` extensions into the `vision` API object: `vision.seePlayer(...)`, `vision.seeAndMoveToPlayer(...)`, etc.
+- Remove the `ally`, `enemy`, `game_component`, `npc` and `player` extension files (including the `rotation_*` variants). Their functionality now lives in the `util`, `attack` and `vision` API objects.
+- Fix `FlyingAttackGameObject` dealing damage twice when `animationDestroy` is set: the direct collision no longer applies damage when the destroy animation spawns an explosion `DamageHitbox`.
+- Update `example/` to the new APIs and stop excluding it from analysis (lint errors are now reported). Also fix deprecations: `withOpacity` → `withValues`, `Radio.groupValue`/`onChanged` → `RadioGroup`.
+- Update `awesome/` examples to the new APIs (`util.loadParallaxComponent`, `attack.meleeByAngle`, etc.).
+
 # 4.0.0-beta.11
 - **BREAKING:** Remove the `InternalChecker` mixin and the `checkInterval` method.
   - Use the `IntervalTick` class directly to control intervals instead of the `checkInterval` method (and the `resetInterval`, `pauseInterval`, `playInterval` helpers).

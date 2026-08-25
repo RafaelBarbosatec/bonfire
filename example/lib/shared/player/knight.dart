@@ -15,7 +15,7 @@ enum PlayerAttackType {
 
 class Knight extends SimplePlayer
     with WithLighting, WithCollision, FireballAttack {
-  double attack = 20;
+  double damage = 20;
   bool canShowEmote = true;
   bool showedDialog = false;
 
@@ -59,7 +59,7 @@ class Knight extends SimplePlayer
           event.id == PlayerAttackType.attackMelee) {
         if (barLifeController.stamina >= 15) {
           decrementStamina(15);
-          execMeleeAttack(attack);
+          execMeleeAttack(damage);
         }
       }
     }
@@ -126,8 +126,11 @@ class Knight extends SimplePlayer
     );
   }
 
+  int count = 0;
   void _onRemoveLife(double amount) {
-    showDamage(
+    print('Knight _onRemoveLife: $count - ${DateTime.now().toIso8601String()}');
+    count++;
+    util.showDamage(
       amount,
       config: TextStyle(
         fontSize: width / 3,
@@ -138,7 +141,7 @@ class Knight extends SimplePlayer
 
   void _checkViewEnemy(double dt) {
     if (_seeEnemyTick.update(dt)) {
-      seeEnemy(
+      vision.seeEnemy(
         radiusVision: width * 4,
         notObserved: () => canShowEmote = true,
         observed: (enemies) => _handleObserveEnemy(enemies.first),
@@ -170,10 +173,10 @@ class Knight extends SimplePlayer
     }
   }
 
-  void execMeleeAttack(double attack) {
-    simpleAttackMelee(
-      damage: attack,
-      animationRight: CommonSpriteSheet.whiteAttackEffectRight,
+  void execMeleeAttack(double damage) {
+    attack.melee(
+      damage: damage,
+      animation: CommonSpriteSheet.whiteAttackEffectRight,
       size: Vector2.all(DungeonMap.tileSize),
     );
   }

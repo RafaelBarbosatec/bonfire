@@ -21,7 +21,7 @@ class RageEnemy extends SimpleEnemy with WithCollision {
 
   @override
   void update(double dt) {
-    seeAndMoveToAttackRange(
+    vision.seeAndMoveToAttackRange<Player>(
       positioned: (p) {
         if (_attackTick.update(dt)) {
           _playAttackAnimation();

@@ -22,7 +22,7 @@ class Knight extends PlayerAlly {
   @override
   void doAttackEnemy(PlayerEnemy enemy) {
     enemy.life.handleAttack(AttackOriginEnum.PLAYER_OR_ALLY, 25, 0);
-    simpleAttackMeleeByAngle(
+    attack.meleeByAngle(
       animation: SpriteSheetBuilder.attackRight,
       size: size,
       angle: BonfireUtil.angleBetweenPoints(center, enemy.center),

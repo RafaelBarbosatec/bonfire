@@ -14,7 +14,7 @@ class PotionLife extends GameDecoration with WithSensor<Player>, Movement {
         );
 
   void _onContact(Player component) {
-    generateValues(
+    util.generateValues(
       const Duration(seconds: 1),
       onChange: (value) {
         if (_lifeDistributed < life) {

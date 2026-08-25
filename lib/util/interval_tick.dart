@@ -36,7 +36,6 @@ class IntervalTick {
 
   void reset() {
     _currentTime = 0;
-    _isFirstTick = true;
   }
 
   void pause() {

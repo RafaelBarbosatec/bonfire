@@ -62,7 +62,7 @@ class GameManualMap extends StatelessWidget {
         interface: KnightInterface(),
         map: DungeonMap.map(),
         backgroundColor: Colors.blueGrey[900]!,
-        lightingColorGame: Colors.black.withOpacity(0.75),
+        lightingColorGame: Colors.black.withValues(alpha: 0.75),
       );
     });
   }

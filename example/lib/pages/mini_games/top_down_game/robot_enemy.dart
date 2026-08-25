@@ -35,12 +35,12 @@ class ZombieEnemy extends RotationEnemy with WithCollision, WithRandomMovement {
   @override
   void update(double dt) {
     super.update(dt);
-    seeAndMoveToPlayer(
+    vision.seeAndMoveToPlayer(
       closePlayer: (_) {
-        simpleAttackMelee(
+        attack.melee(
           damage: 10,
           size: Vector2.all(size.y),
-          animationRight: CommonSpriteSheet.blackAttackEffectRight,
+          animation: CommonSpriteSheet.blackAttackEffectRight,
         );
       },
       radiusVision: 128,

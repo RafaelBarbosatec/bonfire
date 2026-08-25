@@ -120,12 +120,20 @@ class FlyingAttackGameObject extends AnimatedGameObject
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (isRemoving || isRemoved) {
+      return;
+    }
     if (other is WithLife) {
       if (!other.life.checkCanReceiveDamage(attackFrom)) {
         return;
       }
 
-      other.life.handleAttack(attackFrom, damage, id);
+      // When there is an explosion (animationDestroy), the damage is applied
+      // by the explosion DamageHitbox created in [_destroyByAngle]. Applying
+      // it here too would hit the target twice.
+      if (animationDestroy == null) {
+        other.life.handleAttack(attackFrom, damage, id);
+      }
     }
 
     if (other is WithSensor) {
@@ -137,9 +145,6 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }
 
   void _destroyObject() {
-    if (isRemoving || isRemoved) {
-      return;
-    }
     removeAll(children);
     removeFromParent();
     if (animationDestroy != null) {

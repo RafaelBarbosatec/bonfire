@@ -21,7 +21,7 @@ class Critter extends SimpleNpc with WithCollision, WithRandomMovement {
   void update(double dt) {
     if (!enableBehaviors) return;
 
-    seeAndMoveToPlayer(
+    vision.seeAndMoveToPlayer(
       closePlayer: (player) {},
       observed: () {},
       radiusVision: DungeonMap.tileSize * 1.5,

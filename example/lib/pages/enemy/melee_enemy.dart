@@ -20,7 +20,7 @@ class MeleeEnemy extends SimpleEnemy {
 
   @override
   void update(double dt) {
-    seeAndMoveToPlayer(
+    vision.seeAndMoveToPlayer(
       closePlayer: (p) {
         animation?.showStroke(Colors.white, 1);
         if (_attackTick.update(dt)) {

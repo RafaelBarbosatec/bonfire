@@ -12,7 +12,7 @@ class Goblin extends SimpleEnemy
         WithRandomMovement,
         WithLifeBar,
         UseBehavior {
-  double attack = 20;
+  double damage = 20;
   bool enableBehaviors = true;
 
   final IntervalTick _meleeTick = IntervalTick(
@@ -20,7 +20,7 @@ class Goblin extends SimpleEnemy
     tickFirstUpdate: true,
   );
   final IntervalTick _rangeTick = IntervalTick(
-    500,
+    600,
     tickFirstUpdate: true,
   );
   Goblin(Vector2 position)
@@ -50,10 +50,10 @@ class Goblin extends SimpleEnemy
             doBehavior: BSeeAndMoveToTarget(
               target: gameRef.player!,
               radiusVision: DungeonMap.tileSize,
-              onClose: (dt, __) => execAttack(attack, dt),
+              onClose: (dt, __) => execAttack(damage, dt),
               doElseBehavior: BSeeAndPositioned(
                 radiusVision: DungeonMap.tileSize * 3,
-                positioned: (_, dt) => execAttackRange(attack, dt),
+                positioned: (_, dt) => execAttackRange(damage, dt),
                 target: gameRef.player!,
                 doElseBehavior: BRandomMovement(
                   speed: speed / 2,
@@ -84,7 +84,7 @@ class Goblin extends SimpleEnemy
   void execAttackRange(double damage, double dt) {
     if (gameRef.player != null && gameRef.player?.isDead == true) return;
     if (_rangeTick.update(dt)) {
-      simpleAttackRange(
+      attack.range(
         animation: CommonSpriteSheet.fireBallRight,
         animationDestroy: CommonSpriteSheet.explosionAnimation,
         id: 35,
@@ -108,17 +108,17 @@ class Goblin extends SimpleEnemy
   void execAttack(double damage, double dt) {
     if (gameRef.player != null && gameRef.player?.isDead == true) return;
     if (_meleeTick.update(dt)) {
-      simpleAttackMelee(
+      attack.melee(
         size: Vector2.all(width),
         damage: damage / 2,
         sizePush: DungeonMap.tileSize / 2,
-        animationRight: CommonSpriteSheet.blackAttackEffectRight,
+        animation: CommonSpriteSheet.blackAttackEffectRight,
       );
     }
   }
 
   void _onRemoveLife(double amount) {
-    showDamage(
+    util.showDamage(
       amount,
       config: TextStyle(
         fontSize: width / 3,

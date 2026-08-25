@@ -27,7 +27,7 @@ class SoldierPlayer extends RotationPlayer with WithCollision, WithLighting {
       LightingConfig(
         radius: size.y * 2,
         blurBorder: size.y / 2,
-        color: Colors.yellow.withOpacity(0.3),
+        color: Colors.yellow.withValues(alpha: 0.3),
         type: LightingType.arc(
           endRadAngle: (2 * pi) / 6,
           isCenter: true,
@@ -80,7 +80,7 @@ class SoldierPlayer extends RotationPlayer with WithCollision, WithLighting {
         centerOffset = Vector2(-16, 10);
         break;
     }
-    simpleAttackRangeByAngle(
+    attack.rangeByAngle(
       attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
       angle: angle,
       size: Vector2(8, 4),

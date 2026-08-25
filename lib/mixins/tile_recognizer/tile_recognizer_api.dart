@@ -1,6 +1,5 @@
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/map/base/tile_component.dart';
-import 'package:bonfire/util/extensions/game_component_extensions.dart';
 
 /// API for querying map tile information below the component.
 class TileRecognizerApi {
@@ -60,7 +59,7 @@ class TileRecognizerApi {
     final map = _comp.gameRef.map;
     if (map.layers.isNotEmpty) {
       return map.getRenderedTiles().where((element) {
-        return element.overlaps(_comp.rectCollision) &&
+        return element.util.overlaps(_comp.rectCollision) &&
             (element.properties != null);
       });
     }

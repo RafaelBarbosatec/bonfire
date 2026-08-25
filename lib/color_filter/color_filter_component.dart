@@ -55,7 +55,7 @@ class ColorFilterComponent extends GameComponent
       end: color,
     );
 
-    generateValues(
+    util.generateValues(
       duration,
       onChange: (value) {
         config.color = _tween?.transform(value);

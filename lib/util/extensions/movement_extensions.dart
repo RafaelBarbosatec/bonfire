@@ -23,7 +23,7 @@ extension MovementExtensions on Movement {
       return false;
     }
 
-    final radAngle = getAngleToTarget(target);
+    final radAngle = util.getAngleToTarget(target);
     var directionToMove = BonfireUtil.getDirectionFromAngle(
       radAngle,
     );
@@ -57,7 +57,7 @@ extension MovementExtensions on Movement {
     );
 
     if (distance < minDistance) {
-      final angle = getAngleToTarget(target);
+      final angle = util.getAngleToTarget(target);
       moveByAngle(angle + pi);
       return false;
     }

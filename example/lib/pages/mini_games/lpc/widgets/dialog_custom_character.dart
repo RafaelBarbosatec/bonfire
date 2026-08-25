@@ -201,20 +201,20 @@ class _DialogCustomCharacterState extends State<DialogCustomCharacter> {
     T valueSelected,
     void Function(T value) onChange,
   ) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Radio<T>(
-          value: value,
-          groupValue: valueSelected,
-          onChanged: (value) {
-            if (value != null) {
-              onChange(value);
-            }
-          },
-        ),
-        Text(label),
-      ],
+    return RadioGroup<T>(
+      groupValue: valueSelected,
+      onChanged: (value) {
+        if (value != null) {
+          onChange(value);
+        }
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Radio<T>(value: value),
+          Text(label),
+        ],
+      ),
     );
   }
 

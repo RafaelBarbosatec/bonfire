@@ -251,7 +251,7 @@ abstract class PlayerTurn extends SimpleNpc
     if (isDead || damage == 0) {
       return;
     }
-    showDamage(damage, config: TextStyle(fontSize: tileSize.x / 2));
+    util.showDamage(damage, config: TextStyle(fontSize: tileSize.x / 2));
     var lastDirection = hDirection;
     if (lastDirection == Direction.left) {
       animation?.playOnce(

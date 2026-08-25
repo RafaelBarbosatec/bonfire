@@ -10,7 +10,7 @@ class SimpleTorch extends GameDecoration {
           position: position,
           lightingConfig: LightingConfig(
             radius: 32,
-            color: Colors.deepOrangeAccent.withOpacity(0.3),
+            color: Colors.deepOrangeAccent.withValues(alpha: 0.3),
             withPulse: true,
           ),
         );

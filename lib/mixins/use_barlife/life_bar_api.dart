@@ -94,7 +94,7 @@ class LifeBarApi {
     if (gameComponent.hasGameRef) {
       _valueGenerator?.reset();
       _valueGenerator?.removeFromParent();
-      _valueGenerator = gameComponent.generateValues(
+      _valueGenerator = gameComponent.util.generateValues(
         const Duration(milliseconds: 300),
         begin: barLife?.life ?? 0,
         end: _comp.life.value,

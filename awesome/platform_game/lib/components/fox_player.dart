@@ -37,7 +37,7 @@ class FoxPlayer extends PlatformPlayer with WithForces {
     if (other is TileWithCollision && other.tileClass == 'tree_trunk') {
       if (jumper.jumpingState == JumpingStateEnum.up) {
         inTrunk = true;
-      } else if (other.top > center.y) {
+      } else if (other.util.top > center.y) {
         inTrunk = false;
       }
       if (inTrunk) {
