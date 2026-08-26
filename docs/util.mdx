@@ -1,0 +1,357 @@
+---
+title: Util
+description: "Utility components and functions."
+---
+
+
+There are some functions and Components that can be helpful in your game development process.
+
+## Functions
+
+There are many functions that can be helpful in `BonfireUtil`:
+
+```dart
+
+ Direction getDirectionFromAngle(double angle);
+ double getAngleFromDirection(Direction direction);
+ double angleBetweenPoints(Vector2 p1, Vector2 p2);
+ Offset rotatePoint(Offset point, double angle, Offset center);
+ Vector2 movePointByAngle(
+    Vector2 point,
+    double speed,
+    double angle,
+  );
+Vector2 vector2ByAngle(double angle, {double intencity = 1})
+
+```
+
+GameComponent API (`util`):
+
+Every `GameComponent` exposes a `util` object with general helper functions:
+
+```dart
+/// Used to generate numbers to create your animations or anythings
+  ValueGeneratorComponent util.generateValues(
+    Duration duration, {
+    double begin = 0.0,
+    double end = 1.0,
+    Curve curve = Curves.linear,
+    bool autoStart = true,
+    bool infinite = false,
+    Curve? reverseCurve,
+    VoidCallback? onFinish,
+    ValueChanged<double>? onChange,
+  })
+
+  /// Used to add particles in your component.
+  void util.addParticle(
+    Particle particle, {
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
+  })
+
+  /// Add in the game a text with animation representing damage received
+  void util.showDamage(
+    double damage, {
+    TextStyle? config,
+    double initVelocityVertical = -5,
+    double initVelocityHorizontal = 1,
+    double gravity = 0.5,
+    double maxDownSize = 20,
+    DirectionTextDamage direction = DirectionTextDamage.RANDOM,
+    bool onlyUp = false,
+  })
+
+  /// Get the direction that another component is in relation to you
+  Direction util.getDirectionToTarget(GameComponent target)
+
+  /// Get angle between this comp to target
+  double util.getAngleToTarget(GameComponent target)
+
+  /// Get the direction the player is in relation to this component
+  Direction? util.getDirectionToPlayer()
+
+  /// Get angle between this comp and player (player as base)
+  double util.getAngleToPlayer()
+
+  /// Get angle between this comp and player (this comp position as base)
+  double util.getInverseAngleToPlayer()
+
+  /// Checks if this component overlaps the [other] rect.
+  bool util.overlaps(Rect other)
+
+  /// Checks if this component is close to [target].
+  bool util.isCloseTo(GameComponent target, {double distance = 5})
+
+  /// Loads a [ParallaxComponent] with pre-defined velocity.
+  Future<ParallaxComponent> util.loadParallaxComponent(Iterable<ParallaxData> dataList, {...})
+
+  /// Loads a parallax based on camera movement.
+  Future<ParallaxComponent> util.loadCameraParallaxComponent(Iterable<ParallaxData> dataList, {...})
+```
+
+Others:
+
+```dart
+// Help you to calculate zoom by max tiles can be visible
+double getZoomFromMaxVisibleTile(
+  BuildContext context,
+  double tileSize,
+  int maxTile,
+)
+
+// Could be helpful to render some sprite rotating using angle.
+void renderSpriteByRadAngle(
+  Canvas canvas,
+  double radAngle,
+  Rect rect,
+  Sprite sprite, {
+  Paint? overridePaint,
+})
+
+// Useful for generating animations.
+ValueGeneratorComponent gameRef.generateValues(
+    Duration duration, {
+    double begin = 0.0,
+    double end = 1.0,
+    Curve curve = Curves.linear,
+    bool autoStart = true,
+    VoidCallback? onFinish,
+    ValueChanged<double>? onChange,
+  })
+
+```
+
+
+## Components
+
+
+### ComponentSpawner
+
+Sometimes we need spawn something, like enemy or items in your map, dynamically. To do it you can use the `ComponentSpawner`:
+
+```dart
+
+    ComponentSpawner({
+        required Vector2 position,
+        required this.area,
+        required this.interval,
+        required this.builder,
+        this.spawCondition,
+        this.onlyVisible = true,
+    })
+
+
+```
+
+
+### GameObject
+
+Object that renders a `Sprite`.
+
+
+```dart
+ GameObject({
+    required Vector2 position,
+    required Vector2 size,
+    required FutureOr<Sprite>? sprite,
+    Vector2? positionFromTarget,
+    LightingConfig? lightingConfig,
+    this.objectPriority,
+    double angle = 0,
+    Anchor anchor = Anchor.topLeft,
+  })
+```
+
+### AnimatedGameObject
+
+Object that renders a `SpriteAnimation`.
+
+```dart
+   AnimatedGameObject({
+    required super.position,
+    required super.size,
+    FutureOr<SpriteAnimation>? animation,
+    this.onFinish,
+    this.onStart,
+    this.removeOnFinish = true,
+    super.angle = 0,
+    super.lightingConfig,
+    super.anchor = Anchor.topLeft,
+    bool loop = true,
+    super.objectPriority,
+  })
+
+```
+
+### FollowerGameObject
+
+Like the previous one, this can play an animation once before it destroys itself and can also can can keep playing in a loop. But the most important feature is that this component follows another element on the map, like a player, enemy or decoration.
+
+
+```dart
+FollowerGameObject({
+    required GameComponent target,
+    required super.size,
+    required super.sprite,
+    Vector2? offset,
+    super.objectPriority,
+    super.lightingConfig,
+  })
+```
+
+### AnimatedFollowerObject
+
+The same `FollowerObject` with animation.
+
+```dart
+AnimatedFollowerGameObject({
+    required super.animation,
+    required super.size,
+    required GameComponent target,
+    super.lightingConfig,
+    super.loop = true,
+    super.onFinish,
+    super.onStart,
+    super.angle,
+    super.removeOnFinish = true,
+    Vector2? offset,
+    super.objectPriority,
+  })
+```
+
+
+
+### FlyingAttackGameObject
+
+A component that is in a certain direction set at a certain speed also configurable to only to hit an enemy or player inflicting damage, or it can be destroyed when hitting a component that has a collision (Tiles, Decorations).
+
+This move from `angle` or `direction`.
+
+```dart
+
+FlyingAttackGameObject({
+    required super.position,
+    required super.size,
+    required super.animation,
+    super.angle = 0,
+    this.direction,
+    this.id,
+    this.animationDestroy,
+    this.destroySize,
+    double speed = 150,
+    this.damage = 1,
+    this.attackFrom = AttackOriginEnum.ENEMY,
+    this.withDecorationCollision = true,
+    this.onDestroy,
+    this.enabledDiagonal = true,
+    super.lightingConfig,
+    this.shapeCollision,
+  })
+
+```
+
+## FollowerWidget
+
+You can show a widget to follow a component in the game. This is useful to create dialogs, inventory, interactions, etc.
+
+To show a widget, just call `FollowerWidget.show`. See below:
+
+```dart
+   FollowerWidget.show(
+      identify: 'PLAYER_INVENTORY', // identify used to remove
+      context: context,
+      target: player, // You can add here any GameComponent
+      child: MyWidget(), // Add here your widget
+      align: Offset.zero, // Align from targe
+   );
+```
+
+To hide:
+
+```dart
+   FollowerWidget.remove('PLAYER_INVENTORY');
+```
+
+## IntervalTick
+
+The `InternalChecker` mixin and the `checkInterval` method were removed in Bonfire 4.0. To control the frequency of an action (attacks, spawning, state checks, etc.) create your own `IntervalTick` instance and call `update(dt)` inside your component's `update`.
+
+```dart
+class MyEnemy extends SimpleEnemy {
+  final IntervalTick _attackTick = IntervalTick(1000); // attacks every 1 second
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (_attackTick.update(dt)) {
+      attack.melee(
+        damage: 10,
+        size: Vector2(20, 20),
+      );
+    }
+  }
+}
+```
+
+You can also execute a callback automatically every time the interval ticks, without checking the return of `update`:
+
+```dart
+final IntervalTick _tick = IntervalTick(
+  1000,
+  onTick: () {
+    // runs every 1 second
+  },
+);
+
+@override
+void update(double dt) {
+  super.update(dt);
+  _tick.update(dt);
+}
+```
+
+### Migrating from `checkInterval`
+
+| Bonfire 3.x | Bonfire 4.0 |
+|-------------|-------------|
+| `checkInterval('key', 1000, dt)` | `final _tick = IntervalTick(1000);` … `_tick.update(dt)` |
+| `checkInterval('key', 1000, dt, firstCheckIsTrue: true)` | `IntervalTick(1000, tickFirstUpdate: true)` |
+| `resetInterval('key')` | `_tick.reset()` |
+| `pauseInterval('key')` | `_tick.pause()` |
+| `playInterval('key')` | `_tick.play()` |
+| `tickInterval('key')` | `_tick.tick()` |
+| `invervalIsRunning('key')` | `_tick.running` |
+
+Main API:
+
+```dart
+IntervalTick(int interval, {VoidCallback? onTick, bool tickFirstUpdate = false})
+
+// Returns true every `interval` milliseconds. Call it inside `update(dt)`.
+bool update(double dt)
+
+// Change the interval at runtime.
+void updateInterval(int interval)
+
+// Restart the countdown.
+void reset()
+
+// Pause / resume the countdown.
+void pause()
+void play()
+
+// Finish the current countdown immediately (fires the tick on the next update).
+void tick()
+
+// Whether the countdown is running.
+bool get running
+```
+
+> **Note:** `tickFirstUpdate` makes `update` return `true` on the first call, which replaces the old `firstCheckIsTrue` behavior of `checkInterval`.
+
+

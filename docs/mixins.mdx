@@ -1,0 +1,522 @@
+---
+title: Mixins
+description: "Useful mixins to add behaviors to your components."
+---
+
+
+> With mixins you can add different behaviors to your component.
+
+Starting with Bonfire 4.0, most mixins follow a consistent API-first pattern:
+
+- The mixin is named `WithFeature`.
+- The mixin exposes a single API object: `feature`.
+- All related methods, listeners and state are accessed through `component.feature.method()`.
+
+This reduces namespace pollution on components and improves code discoverability when combining multiple mixins.
+
+> For a complete migration guide from Bonfire 3.x, see [What's New in 4.0](/bonfire-4).
+
+---
+
+## Movement
+
+Mixin responsible for adding movement to your component.
+
+`Movement` is the **only mixin that keeps its original direct API**. It is the foundation used by almost every other mixin.
+
+Your component gains properties like:
+
+```dart
+bool isIdle;
+bool isMoving;
+double speed;
+Vector2 velocity;
+Direction direction;
+Direction hDirection;
+Direction vDirection;
+```
+
+And methods to move your component:
+
+```dart
+void moveUp({double? speed, bool resetCrossAxis = false})
+void moveDown({double? speed, bool resetCrossAxis = false})
+void moveLeft({double? speed, bool resetCrossAxis = false})
+void moveRight({double? speed, bool resetCrossAxis = false})
+void moveByAngle(double angle, {double? speed})
+void moveToward(Vector2 target, {double? speed})
+void moveFromDirection(Direction direction, {double? speed, ...})
+bool moveToPosition(Vector2 target, {double? speed, ...})
+bool canMove(Direction direction, {double? displacement, ...})
+void stop()
+void idle()
+```
+
+---
+
+## WithJumper
+
+> To use this mixin your component must contain `Movement` and `WithCollision` mixins.
+
+Adds jump behavior for platform games.
+
+```dart
+class MyPlayer extends SimplePlayer with WithJumper {
+  @override
+  void onMount() {
+    super.onMount();
+    jumper.setMaxJump(2);
+    jumper.onJumpStateChangedListener(_onJumpStateChanged);
+  }
+
+  void _onJumpStateChanged(JumpingStateEnum state) {
+    // update animation based on state
+  }
+}
+```
+
+Main API:
+
+```dart
+jumper.jump({double? jumpSpeed, bool force = false})
+jumper.setMaxJump(int maxJump)
+jumper.onJumpStateChangedListener(JumpStateChangedCallback callback)
+bool jumper.isJumping
+JumpingStateEnum jumper.jumpingState
+```
+
+---
+
+## WithDirectionAnimation
+
+> To use this mixin your component must contain the `Movement` mixin.
+
+Adds animations synchronized with movement directions.
+
+```dart
+class MyComponent extends GameComponent with Movement, WithDirectionAnimation {
+  MyComponent() {
+    directionAnimation = SimpleDirectionAnimation(...);
+  }
+}
+```
+
+You can replace the animation setup using:
+
+```dart
+directionAnimation.replaceAnimation(
+  SimpleDirectionAnimation newAnimation, {
+  bool doIdle = true,
+})
+```
+
+---
+
+## WithPathFinding
+
+> To use this mixin your component must contain the `Movement` mixin.
+
+Finds paths using `a_star_algorithm` and moves the component through the path.
+
+See [PathFinding](/path-finding) for details.
+
+```dart
+class MyPlayer extends SimplePlayer with WithPathFinding, TapGesture {
+  MyPlayer(Vector2 position) : super(position: position) {
+    pathFinding.setup(
+      pathLineStrokeWidth: 2,
+      useOnlyVisibleBarriers: false,
+    );
+  }
+
+  @override
+  void onTapDownScreen(GestureEvent event) {
+    pathFinding.moveToPosition(event.worldPosition);
+    super.onTapDownScreen(event);
+  }
+}
+```
+
+Main API:
+
+```dart
+pathFinding.setup({...})
+Future<List<Vector2>> pathFinding.moveToPosition(Vector2 position, {...})
+void pathFinding.moveAlongThePath(List<Vector2> path, {...})
+List<Vector2> pathFinding.getPathToPosition(Vector2 position, {...})
+void pathFinding.stop()
+bool pathFinding.isMoving
+```
+
+---
+
+## WithRandomMovement
+
+> To use this mixin your component must contain the `Movement` mixin.
+
+Adds random movement behavior, useful for enemies and NPCs walking around.
+
+```dart
+class MyEnemy extends SimpleEnemy with WithRandomMovement {
+  @override
+  void update(double dt) {
+    super.update(dt);
+    randomMovement.update(
+      dt,
+      speed: 20,
+      maxDistance: 100,
+    );
+  }
+}
+```
+
+Main API:
+
+```dart
+randomMovement.update(
+  double dt, {
+  double? speed,
+  double maxDistance = 50,
+  double minDistance = 25,
+  int timeKeepStopped = 2000,
+  bool updateAngle = false,
+  bool checkDirectionWithRayCast = false,
+  RandomMovementDirections directions = RandomMovementDirections.all,
+})
+randomMovement.onStartMoveListener(OnRandomMovementStartCallback callback)
+randomMovement.onStopMoveListener(OnRandomMovementStopCallback callback)
+ShapeHitbox? randomMovement.area
+```
+
+---
+
+## WithMovementByJoystick
+
+> To use this mixin your component must contain `Movement` and `JoystickListener` mixins.
+
+Adds movement controlled by joystick events.
+
+```dart
+class MyComponent extends GameComponent
+    with Movement, JoystickListener, WithMovementByJoystick {
+  MyComponent() {
+    movementByJoystick.setup(...);
+  }
+}
+```
+
+You can disable this behavior setting `movementByJoystick.enabled = false`.
+
+---
+
+## WithLife
+
+Mixin responsible for adding damage-taking and health behavior.
+
+```dart
+class MyEnemy extends SimpleEnemy with WithLife {
+  MyEnemy(Vector2 position) : super(position: position) {
+    life.initial(200);
+    life.onDieListener(_onDie);
+    life.onRemoveLifeListener(_onDamage);
+  }
+}
+```
+
+Main API:
+
+```dart
+life.initial(double value)
+life.add(double value)
+life.remove(double value)
+life.update(double value, {bool verifyDieOrRevive = true})
+life.handleAttack(AttackOriginEnum attacker, double damage, dynamic identify)
+bool life.isDead
+double life.value
+double life.max
+life.onDieListener(LifeCallback callback)
+life.onRemoveLifeListener(LifeChangeCallback callback)
+life.onRestoreLifeListener(LifeChangeCallback callback)
+```
+
+---
+
+## WithLifeBar
+
+> To use this mixin your component must contain the `WithLife` mixin.
+
+Adds a life bar above the component.
+
+```dart
+class MyEnemy extends SimpleEnemy with WithLife, WithLifeBar {
+  MyEnemy(Vector2 position) : super(position: position) {
+    lifeBar.setup(
+      borderRadius: BorderRadius.circular(2),
+      borderWidth: 2,
+    );
+  }
+}
+```
+
+---
+
+## WithVision
+
+Mixin responsible for adding vision to the component. Components like `Player`, `Npc` and `Decoration` use this mixin.
+
+Your component gains `vision.seeComponent(...)` and `vision.seeComponentType(...)` methods.
+
+```dart
+vision.setup(drawVision: true);
+```
+
+When you use any vision method, the vision area will be drawn if `drawVision` is enabled.
+
+---
+
+## WithSensor
+
+Mixin responsible for adding a trigger to detect other objects without blocking their passage.
+
+Example: fire on the ground, spikes, etc. Things that the character or enemy can go through and take damage or activate any other behavior.
+
+```dart
+class Spikes extends GameDecoration with WithSensor<GameComponent> {
+  Spikes(Vector2 position)
+      : super.withAnimation(
+          Future<SpriteAnimation>.value(...),
+          size: Vector2.all(32),
+          position: position,
+        ) {
+    sensor.onContactListener((component) {
+      if (component is Player) {
+        component.life.remove(10);
+      }
+    });
+  }
+}
+```
+
+See [Sensor](/sensor) for more.
+
+---
+
+## WithLighting
+
+Mixin used to configure lighting in your component.
+
+See [Lighting](/lighting)
+
+---
+
+## WithCollision
+
+Mixin responsible for adding collision.
+
+See [Collision System](/collision-system)
+
+---
+
+## WithPushable
+
+> To use this mixin your component must contain the `Movement` mixin.
+
+Mixin responsible for enabling push behavior on the component.
+
+```dart
+class MyBox extends GameObject with Movement, WithCollision, WithPushable {
+  @override
+  void onMount() {
+    super.onMount();
+    pushable.setup(pushableFrom: PushableFromEnum.ALL);
+    pushable.onPushListener((component) => component is Enemy);
+  }
+}
+```
+
+Use `pushable.onPushListener(...)` to control when the component can be pushed.
+
+---
+
+## WithFollower
+
+Makes the component follow the position of a target.
+
+```dart
+class MyFollower extends GameComponent with WithFollower {
+  @override
+  void onMount() {
+    super.onMount();
+    follower.setup(target: player, offset: Vector2(10, 10));
+  }
+}
+```
+
+Main API:
+
+```dart
+follower.setup({GameComponent? target, Vector2? offset})
+follower.removeTarget()
+GameComponent? follower.target
+Vector2? follower.offset
+```
+
+---
+
+## WithForces
+
+> To use this mixin your component must contain the `Movement` mixin.
+
+Mixin used to apply physics forces to your component like gravity, wind, friction and drag.
+
+```dart
+class MyObject extends GameObject with Movement, WithForces {
+  MyObject() {
+    forces.setGravity(Vector2(0, 300));
+  }
+}
+```
+
+Your component gains the `forces` API. See [Forces](/forces) for the complete list of methods.
+
+---
+
+## WithMovePerCell
+
+> To use this mixin your component must contain the `Movement` mixin.
+
+Restricts component movement to discrete cells.
+
+```dart
+class MyCharacter extends SimplePlayer with WithMovePerCell {
+  @override
+  void onMount() {
+    super.onMount();
+    movePerCell.setup(cellSize: Vector2.all(32));
+  }
+}
+```
+
+---
+
+## WithAssetsLoader
+
+Mixin used to load assets during `onLoad`.
+
+```dart
+class MyComponent extends GameComponent with WithAssetsLoader {
+  SpriteAnimation? animation;
+
+  MyComponent(Future<SpriteAnimation> animIdle) {
+    assetsLoader.add(
+      AssetToLoad<SpriteAnimation>(animIdle, (value) {
+        animation = value;
+      }),
+    );
+  }
+}
+```
+
+> `AssetsLoader` and `AssetToLoad` classes remain public and exported.
+
+---
+
+## WithSpriteAnimation
+
+Mixin that adds easy use of `SpriteAnimation` to your component.
+
+Your component gains the `animation` property and `playSpriteAnimationOnce` method.
+
+```dart
+class MyComponent extends GameComponent with WithSpriteAnimation {
+  void playJump() {
+    playSpriteAnimationOnce(MySpriteSheetLoader.getJumpAnimation());
+  }
+
+  @override
+  Future<void> onLoad() async {
+    animation = await MySpriteSheetLoader.getAnimation();
+    return super.onLoad();
+  }
+}
+```
+
+---
+
+## WithSprite
+
+Mixin that adds easy use of `Sprite` to your component.
+
+Your component gains the `sprite` property.
+
+```dart
+class MyComponent extends GameComponent with WithSprite {
+  @override
+  Future<void> onLoad() async {
+    sprite = await MySpriteSheetLoader.getSprite();
+    return super.onLoad();
+  }
+}
+```
+
+---
+
+## WithShader
+
+Mixin that applies a fragment shader over a component.
+
+```dart
+class MyLayer extends PositionComponent with WithShader {
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    shader.shader = await loadFragmentShader(...);
+    shader.canvasScale = 2;
+    shader.componentStatic = true;
+  }
+}
+```
+
+See [Shader](/shader) for more.
+
+---
+
+## WithTileRecognizer
+
+Mixin responsible for detecting which tiles the component is over.
+
+Your component gains the `tileRecognizer` API to query tile information.
+
+---
+
+## WithUpdateCameraByPinchGesture
+
+Mixin that enables camera zoom control using pinch gesture.
+
+---
+
+## Combining mixins
+
+You can combine multiple mixins to build complex behaviors:
+
+```dart
+class Goblin extends SimpleEnemy
+    with
+        WithCollision,
+        WithRandomMovement,
+        WithLife,
+        WithLifeBar {
+  Goblin(Vector2 position) : super(position: position, size: Vector2.all(32)) {
+    life.initial(100);
+    lifeBar.setup(borderWidth: 2);
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    randomMovement.update(dt, speed: speed / 2, maxDistance: 64);
+  }
+}
+```
+
+> Remember: `Movement` is the only mixin accessed directly. All other mixins use their respective API object.

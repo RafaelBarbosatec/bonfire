@@ -1,0 +1,260 @@
+---
+title: Ally
+description: "Create friendly characters that can fight alongside the player."
+---
+
+
+> *This is a [Npc](https://github.com/RafaelBarbosatec/bonfire/blob/master/lib/npc/npc.dart) and uses
+[WithLife](/mixins#withlife) mixin.*
+
+
+This is an NPC that is a player ally. So, it can receive damage from enemies and can inflict damage to enemies.
+
+{/* TODO: add a section for PlatformAlly */}
+There are three types of allyes: `SimpleAlly`, `RotationAlly` and `PlatformAlly`:
+
+## SimpleAlly
+
+> *This is a [Ally](#ally) and uses the
+[WithDirectionAnimation](/mixins#withdirectionanimation) mixin.*
+
+Used for 45º and 67.5º perspectives. We can configure motion animations for all directions (up, down, left, right, up_right, up_left, down_left, down_right).
+
+To use it, simply create a class that will represent your ally and extend SimpleAlly:
+
+```dart
+class Human extends SimpleAlly {
+
+    Human(Vector2 position)
+      : super(
+          position: position, // required
+          size: Vector2(32.0,32.0), // required
+          life: 100,
+          speed: 100,
+          initDirection: Direction.right,
+          animation: SimpleDirectionAnimation(
+            idleLeft: Future<SpriteAnimation>(), 
+            idleRight: Future<SpriteAnimation>(), // required
+            runLeft: Future<SpriteAnimation>(), 
+            runRight: Future<SpriteAnimation>(), // required
+            idleUp: Future<SpriteAnimation>(),
+            idleDown: Future<SpriteAnimation>(),
+            idleUpLeft: Future<SpriteAnimation>(),
+            idleUpRight: Future<SpriteAnimation>(),
+            idleDownLeft: Future<SpriteAnimation>(),
+            idleDownRight: Future<SpriteAnimation>(),
+            runUp: Future<SpriteAnimation>(),
+            runDown: Future<SpriteAnimation>(),
+            runUpLeft: Future<SpriteAnimation>(),
+            runUpRight: Future<SpriteAnimation>(),
+            runDownLeft: Future<SpriteAnimation>(),
+            runDownRight: Future<SpriteAnimation>(),
+          ),
+      );
+
+    @override
+    void update(double dt) {
+      // do anything
+      super.update(dt);
+    }
+
+    @override
+    void render(Canvas canvas) {
+      // do anything
+      super.render(canvas);
+    }
+}
+```
+
+Now that you have a class that represents your ally, you can configure their behavior.
+
+There are several useful methods that you can use inside the `update` method that will help you with this task:
+
+
+```dart 
+  void attack.melee({
+    required double damage,
+    required Vector2 size,
+    Future<SpriteAnimation>? animation,
+    dynamic id,
+    Direction? direction,
+    double? angle,
+    bool withPush = true,
+    double? sizePush,
+    Vector2? centerOffset,
+    double? marginFromCenter,
+    bool diagonalEnabled = true,
+    AttackOriginEnum? attackFrom,
+  })
+```
+Executes a physical attack to the enemy, making the configured damage. The execution frequency is no longer controlled internally: use an `IntervalTick` to limit how often the attack runs (see [IntervalTick](/util#intervaltick)). You can add animations to represent this attack.
+
+
+```dart 
+  void attack.range({
+    required Future<SpriteAnimation> animation,
+    required Vector2 size,
+    Future<SpriteAnimation>? animationDestroy,
+    Vector2? destroySize,
+    dynamic id,
+    double speed = 150,
+    double damage = 1,
+    Direction? direction,
+    double? angle,
+    bool useAngle = false,
+    bool withCollision = true,
+    bool withDecorationCollision = true,
+    ShapeHitbox? collision,
+    VoidCallback? onDestroy,
+    LightingConfig? lightingConfig,
+    Vector2? centerOffset,
+    double marginFromOrigin = 16,
+    AttackOriginEnum? attackFrom,
+  })
+```
+Executes a ranged attack. It will add a `FlyingAttackGameObject` projectile to the game and this will be sent in the configured direction, dealing some damage to whomever it hits or being destroyed when hitting barriers (tiles with collision).
+
+
+```dart 
+  void vision.seeAndMoveToAttackRange<T extends GameComponent>({
+    Function(T)? positioned,
+    Function(T)? observed,
+    BoolCallback? notObserved, // return true to stop move
+    double radiusVision = 32,
+    double? visionAngle,
+    double? angle,
+    double? minDistanceFromPlayer,
+    bool useDiagonal = true,
+  })
+```
+When the enemy is within the radiusVision, the ally will position itself to perform a ranged attack. Once it reaches the attack position, the `positioned` callback will be fired.
+
+
+And all of the `GameComponent` methods. Take a look [GameComponent functions](/util#functions)
+
+
+### Change animations
+
+To update the `SimpleAlly` animation you should use this method:
+
+```dart
+  replaceAnimation(SimpleDirectionAnimation());
+```
+
+To play the moment animation you should use the `SimpleDirectionAnimation` methods. For example:
+
+```dart
+  animation.playOnce(
+    FutureOr<SpriteAnimation> animation, {
+      VoidCallback? onFinish,
+      VoidCallback? onStart,
+      bool runToTheEnd = false,
+      bool flipX = false,
+      bool flipY = false,
+      bool useCompFlip = false,
+      Vector2? size,
+      Vector2? offset,
+    },
+  );
+  animation.pause();
+  animation.resume();
+```
+
+## RotationAlly
+
+> *This is a [Ally](#ally) and use 
+[UseSpriteAnimation](/mixins#withspriteanimation),
+[WithAssetsLoader](/mixins#withassetsloader).*
+
+
+Used for 90º perspectives. We can configure Motion animations for run and idle.
+
+```dart
+class Tank extends RotationAlly {
+
+    Tank(Vector2 position)
+      : super(
+          position: position, // required
+          animIdle: Future<SpriteAnimation>(), // required
+          animRun: Future<SpriteAnimation>(), // required
+          size: Vector2(32.0,32.0), // required
+          life: 100,
+          speed: 100,
+          currentRadAngle: -1.55, 
+      );
+
+    @override
+    void update(double dt) {
+      // do anything
+      super.update(dt);
+    }
+
+    @override
+    void render(Canvas canvas) {
+      // do anything
+      super.render(canvas);
+    }
+}
+```
+
+Now that we have our class that represents our ally, we can configure their behavior.
+
+There are several useful methods that we can use in `update` that will help us to configure these movements:
+
+```dart 
+  void vision.seeAndMoveToAttackRange<T extends GameComponent>({
+    Function(T)? positioned,
+    Function(T)? observed,
+    BoolCallback? notObserved, // return true to stop move
+    double radiusVision = 32,
+    double? visionAngle,
+    double? angle,
+    double? minDistanceFromPlayer,
+    bool useDiagonal = true,
+  })
+```
+
+```dart 
+  void attack.melee({
+    required double damage,
+    required Vector2 size,
+    Future<SpriteAnimation>? animation,
+    dynamic id,
+    Direction? direction,
+    double? angle,
+    bool withPush = true,
+    double? sizePush,
+    Vector2? centerOffset,
+    double? marginFromCenter,
+    bool diagonalEnabled = true,
+    AttackOriginEnum? attackFrom,
+  })
+```
+
+```dart 
+  void attack.range({
+    required Future<SpriteAnimation> animation,
+    required Vector2 size,
+    Future<SpriteAnimation>? animationDestroy,
+    Vector2? destroySize,
+    dynamic id,
+    double speed = 150,
+    double damage = 1,
+    Direction? direction,
+    double? angle,
+    bool useAngle = false,
+    bool withDecorationCollision = true,
+    ShapeHitbox? collision,
+    VoidCallback? onDestroy,
+    LightingConfig? lightingConfig,
+    Vector2? centerOffset,
+    double marginFromOrigin = 16,
+    AttackOriginEnum? attackFrom,
+  })
+```
+
+And all of the `GameComponent` methods. Take a look [GameComponent functions](/util#functions)
+
+## Custom
+
+If none of these types of allyes meet your needs, you can create your own by extending the `Ally` class.

@@ -1,0 +1,96 @@
+{
+  "$schema": "https://docs.page/schema.json",
+  "name": "Bonfire",
+  "description": "Create RPG-style or similar games easily with Flutter, powered by Flame.",
+  "favicon": "/assets/favicon.png",
+  "logo": {
+    "light": "/assets/bonfire.gif",
+    "dark": "/assets/bonfire.gif"
+  },
+  "theme": {
+    "primary": "#EA580C"
+  },
+  "header": {
+    "links": [
+      {
+        "title": "GitHub",
+        "href": "https://github.com/RafaelBarbosatec/bonfire"
+      },
+      {
+        "title": "pub.dev",
+        "href": "https://pub.dev/packages/bonfire",
+        "cta": true
+      }
+    ]
+  },
+  "scripts": {
+    "googleAnalytics": "G-XW6XTLBWR6"
+  },
+  "social": {
+    "website": "https://bonfire-engine.github.io",
+    "github": "RafaelBarbosatec/bonfire"
+  },
+  "sidebar": [
+    {
+      "group": "Start Here",
+      "pages": [
+        { "title": "Welcome", "href": "/" },
+        { "title": "Getting Started", "href": "/getting-started" },
+        { "title": "What's New in 4.0", "href": "/bonfire-4" },
+        { "title": "Overview", "href": "/overview" }
+      ]
+    },
+    {
+      "group": "Game Elements",
+      "pages": [
+        { "title": "Map", "href": "/map" },
+        { "title": "Player", "href": "/player" },
+        { "title": "Enemy", "href": "/enemy" },
+        { "title": "Ally", "href": "/ally" },
+        { "title": "Decoration", "href": "/decoration" },
+        { "title": "Lighting", "href": "/lighting" },
+        { "title": "Sensor", "href": "/sensor" }
+      ]
+    },
+    {
+      "group": "Input & Controls",
+      "pages": [
+        { "title": "Input", "href": "/input" },
+        { "title": "Joystick", "href": "/joystick" },
+        { "title": "Camera", "href": "/camera" }
+      ]
+    },
+    {
+      "group": "Systems & Effects",
+      "pages": [
+        { "title": "Collision System", "href": "/collision-system" },
+        { "title": "Forces", "href": "/forces" },
+        { "title": "Effects", "href": "/effects" },
+        { "title": "Particles", "href": "/particles" },
+        { "title": "Ray casting", "href": "/ray-casting" },
+        { "title": "Text Rendering", "href": "/text-rendering" },
+        { "title": "Talk Dialog", "href": "/talk-dialog" },
+        { "title": "Parallax", "href": "/parallax" },
+        { "title": "Map Navigator", "href": "/map-navigator" },
+        { "title": "Shader", "href": "/shader" }
+      ]
+    },
+    {
+      "group": "Utilities",
+      "pages": [
+        { "title": "Useful Mixins", "href": "/mixins" },
+        { "title": "Loading Assets", "href": "/loading-assets" },
+        { "title": "Tiled Support", "href": "/tiled-support" },
+        { "title": "Scene Builder", "href": "/scene-builder" },
+        { "title": "Path Finding", "href": "/path-finding" },
+        { "title": "Util", "href": "/util" }
+      ]
+    },
+    {
+      "group": "Community",
+      "pages": [
+        { "title": "Examples", "href": "/examples" }
+      ]
+    }
+  ]
+}

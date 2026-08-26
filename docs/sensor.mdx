@@ -1,0 +1,74 @@
+---
+title: Sensor
+description: "Create sensors that react when components enter an area."
+---
+
+
+> Mixin useful to detect if any object came into contact without blocking its passage.
+
+Example: fire on the ground, spikes, etc. Things that the character or enemy can go through and take damage or activate any other type of behavior.
+
+<img src="/assets/sensor.gif" width="600"/>
+
+```dart
+class Spikes extends GameDecoration with WithSensor<GameComponent> {
+  Spikes(Vector2 position)
+      : super.withAnimation(
+          Future<SpriteAnimation>.value(...),
+          size: Vector2.all(32),
+          position: position,
+        ) {
+    sensor.onContactListener((component) {
+      if (component is Player) {
+        component.life.remove(10);
+      }
+    });
+  }
+}
+```
+
+## How it works
+
+`WithSensor` automatically creates a collision shape matching the component size if one doesn't exist. It then detects other components that overlap this area.
+
+You can control the detection using listeners and the `enabled` flag:
+
+```dart
+sensor.enabled = false; // disable detection
+sensor.enabled = true;  // enable detection
+```
+
+## Main API
+
+```dart
+// Called while contact is detected
+sensor.onContactListener(SensorContactCallback<T> callback)
+
+// Called when contact ends
+sensor.onContactEndListener(SensorContactCallback<T> callback)
+
+// Enable or disable the sensor
+sensor.enabled = true;
+
+// Interval in milliseconds between contact checks
+sensor.setup(interval: 100);
+```
+
+## Type safety
+
+`WithSensor<T extends GameComponent>` lets you specify which type of component you want to detect. For example, detect only `Player`:
+
+```dart
+class PlayerDetector extends GameDecoration with WithSensor<Player> {
+  PlayerDetector(Vector2 position) : super.withSprite(
+    sprite: ...,
+    position: position,
+    size: Vector2.all(32),
+  ) {
+    sensor.onContactListener((player) {
+      // player is typed as Player
+      player.life.remove(5);
+    });
+  }
+}
+```

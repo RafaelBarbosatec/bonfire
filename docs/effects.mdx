@@ -1,0 +1,40 @@
+---
+title: Effects
+description: "Apply visual effects to game components."
+---
+
+
+An effect is a special component that attaches to another component to modify its properties or appearance over time — scale, position, rotation, opacity, color, etc.
+
+Bonfire re-exports all [Flame Effects](https://docs.flame-engine.org/latest/flame/effects/effects.html), so you can attach any of them directly to your components with `add(...)`:
+
+```dart
+class MyEnemy extends SimpleEnemy {
+  @override
+  Future<void> onLoad() async {
+    // Scale up and down continuously
+    add(
+      ScaleEffect.by(
+        Vector2.all(1.5),
+        EffectController(
+          duration: 0.5,
+          alternate: true, // goes back and forth
+          infinite: true, // loops forever
+        ),
+      ),
+    );
+
+    // Fade out, then remove the component
+    add(
+      OpacityEffect.fadeOut(
+        EffectController(duration: 1),
+        onComplete: () => removeFromParent(),
+      ),
+    );
+  }
+}
+```
+
+> Effects are added the same way as any child component. Check the [Flame Effects documentation](https://docs.flame-engine.org/latest/flame/effects/effects.html) for the full list of effects (`MoveEffect`, `RotateEffect`, `ColorEffect`, `ScaleEffect`, `OpacityEffect`, etc.).
+
+For custom animations (colors, numeric values, etc.) you can also use `util.generateValues(...)` — see [Util](/util).
