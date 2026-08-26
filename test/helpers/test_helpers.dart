@@ -1,4 +1,3 @@
-import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/bonfire.dart';
 
 /// Minimal component that only uses [Movement].

@@ -126,10 +126,7 @@ class Knight extends SimplePlayer
     );
   }
 
-  int count = 0;
   void _onRemoveLife(double amount) {
-    print('Knight _onRemoveLife: $count - ${DateTime.now().toIso8601String()}');
-    count++;
     util.showDamage(
       amount,
       config: TextStyle(
