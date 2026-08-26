@@ -192,6 +192,57 @@ Even though `Movement` keeps the direct-access style, it was heavily simplified.
 | `UseLifeBar` mixin | `WithLifeBar` mixin |
 | `setupLifeBar(...)` | `lifeBar.setup(...)` |
 
+### Attack
+
+The attack extension methods (`simpleAttackMelee`, `simpleAttackRange`, etc.) that lived on `Player`, `Enemy`, `Ally` and `GameComponent` were removed. Every `GameComponent` now exposes an `attack` API object (`WithAttack` mixin):
+
+| Bonfire 3.x | Bonfire 4.0 |
+|-------------|-------------|
+| `simpleAttackMelee(damage: ..., size: ..., animationRight: ...)` | `attack.melee(damage: ..., size: ..., animation: ...)` |
+| `simpleAttackRange(animation: ..., animationDestroy: ..., damage: ...)` | `attack.range(animation: ..., animationDestroy: ..., damage: ...)` |
+| `simpleAttackMeleeByDirection(...)` | `attack.meleeByDirection(...)` |
+| `simpleAttackMeleeByAngle(...)` | `attack.meleeByAngle(...)` |
+| `simpleAttackRangeByDirection(...)` | `attack.rangeByDirection(...)` |
+| `simpleAttackRangeByAngle(...)` | `attack.rangeByAngle(...)` |
+
+> `damage` is now a required named parameter and `animationRight` was renamed to `animation`.
+
+### Util
+
+The `GameComponent`/`Npc`/`Enemy`/`Ally`/`Player` helper extension methods were removed. Every `GameComponent` now exposes a `util` API object (`WithUtil` mixin):
+
+| Bonfire 3.x | Bonfire 4.0 |
+|-------------|-------------|
+| `showDamage(...)` | `util.showDamage(...)` |
+| `generateValues(...)` | `util.generateValues(...)` |
+| `addParticle(...)` | `util.addParticle(...)` |
+| `getAngleToTarget(...)` | `util.getAngleToTarget(...)` |
+| `getDirectionToTarget(...)` | `util.getDirectionToTarget(...)` |
+| `getAngleToPlayer()` | `util.getAngleToPlayer()` |
+| `getInverseAngleToPlayer()` | `util.getInverseAngleToPlayer()` |
+| `getDirectionToPlayer()` | `util.getDirectionToPlayer()` |
+| `playerRect` | `util.playerRect` |
+| `isCloseTo(...)` | `util.isCloseTo(...)` |
+| `overlaps(...)` | `util.overlaps(...)` |
+| `top` / `bottom` / `left` / `right` | `util.top` / `util.bottom` / `util.left` / `util.right` |
+| `loadParallaxComponent(...)` | `util.loadParallaxComponent(...)` |
+| `loadCameraParallaxComponent(...)` | `util.loadCameraParallaxComponent(...)` |
+| `globalToViewportPosition(...)` | `util.globalToViewportPosition(...)` |
+| `viewportPositionToGlobal(...)` | `util.viewportPositionToGlobal(...)` |
+
+### Vision
+
+The vision helpers that lived on the `Npc`, `Enemy`, `Ally` and `Player` extensions were moved into the `vision` API object (`WithVision` mixin, already available on `Npc` and `Player`):
+
+| Bonfire 3.x | Bonfire 4.0 |
+|-------------|-------------|
+| `seePlayer(...)` | `vision.seePlayer(...)` |
+| `seeAndMoveToPlayer(...)` | `vision.seeAndMoveToPlayer(...)` |
+| `seeAndMoveToEnemy(...)` | `vision.seeAndMoveToEnemy(...)` |
+| `seeAndMoveToAlly(...)` | `vision.seeAndMoveToAlly(...)` |
+| `seeEnemy(...)` | `vision.seeEnemy(...)` |
+| `seeAndMoveToAttackRange(...)` | `vision.seeAndMoveToAttackRange(...)` |
+
 ### Interval / `checkInterval`
 
 The `InternalChecker` mixin and the `checkInterval` method were removed. Instead of relying on internal timers keyed by `String`, you now manage your own `IntervalTick` instances. `IntervalTick` is public and can be created anywhere (field, constructor, `onLoad`).
@@ -206,7 +257,7 @@ The `InternalChecker` mixin and the `checkInterval` method were removed. Instead
 | `tickInterval('key')` | `_tick.tick()` |
 | `invervalIsRunning('key')` | `_tick.running` |
 
-> **Note:** The `interval` and `execute` parameters were removed from the Enemy and Ally attack extensions — `simpleAttackMelee` and `simpleAttackRange` no longer control the execution frequency for you (and no longer accept an `execute` callback). You should control it yourself with an `IntervalTick`:
+> **Note:** Attack methods no longer control the execution frequency for you (and no longer accept an `interval`/`execute` parameter). You should control it yourself with an `IntervalTick`:
 
 ```dart
 // Bonfire 3.x
@@ -230,7 +281,7 @@ class MyEnemy extends SimpleEnemy {
   void update(double dt) {
     super.update(dt);
     if (_attackTick.update(dt)) {
-      simpleAttackMelee(damage: 10, size: Vector2(20, 20));
+      attack.melee(damage: 10, size: Vector2(20, 20));
     }
   }
 }
@@ -240,6 +291,7 @@ class MyEnemy extends SimpleEnemy {
 
 - `CustomQuadTreeBroadphase` was removed. `CustomQuadTreeCollisionDetection` now uses `QuadTreeBroadphase` directly.
 - `InternalChecker` mixin and the `checkInterval` method were removed. Use `IntervalTick` directly (see the migration table above).
+- The `ally`, `enemy`, `game_component`, `npc` and `player` extension files (including the `rotation_*` variants) were removed. Their functionality now lives in the `attack`, `util` and `vision` API objects (see the migration tables above).
 
 ## FlyingAttackGameObject
 
@@ -253,8 +305,11 @@ class MyEnemy extends SimpleEnemy {
 
 1. Update `pubspec.yaml` to `bonfire: ^4.0.0`.
 2. Replace mixin names with the `With` prefix.
-3. Replace direct method calls with calls through the API object.
+3. Replace direct method calls with calls through the API object (`jumper`, `sensor`, `pathFinding`, `randomMovement`, `life`, `attack`, `util`, `vision`, ...).
 4. Replace direct property assignments with API methods or setters.
 5. Replace `checkInterval(...)` calls with your own `IntervalTick` instance.
-6. Review your `Movement` overrides (`onMove`, `displacement`, `lastDirection`, `stopMove`, `*Once` methods) against the [Movement table](#movement).
-7. Run `flutter analyze` and fix remaining issues.
+6. Replace `simpleAttack*` methods with `attack.melee(...)` / `attack.range(...)` (see the [Attack table](#attack)).
+7. Replace extension helpers (`showDamage`, `getDirectionToTarget`, `loadParallaxComponent`, ...) with the `util` API object (see the [Util table](#util)).
+8. Replace vision helpers (`seePlayer`, `seeAndMoveToPlayer`, ...) with the `vision` API object (see the [Vision table](#vision)).
+9. Review your `Movement` overrides (`onMove`, `displacement`, `lastDirection`, `stopMove`, `*Once` methods) against the [Movement table](#movement).
+10. Run `flutter analyze` and fix remaining issues.
