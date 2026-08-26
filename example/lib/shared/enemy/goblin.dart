@@ -38,36 +38,36 @@ class Goblin extends SimpleEnemy
   }
 
   @override
-  List<Behavior> get behaviors => [
-        BCondition(
-          condition: (_, __, game) {
-            return !game.sceneBuilderStatus.isRunning && enableBehaviors;
-          },
-          doBehavior: BCondition(
-            condition: (_, __, game) {
-              return game.player != null && game.player?.isDead == false;
-            },
-            doBehavior: BSeeAndMoveToTarget(
-              target: gameRef.player!,
-              radiusVision: DungeonMap.tileSize,
-              onClose: (dt, __) => execAttack(damage, dt),
-              doElseBehavior: BSeeAndPositioned(
-                radiusVision: DungeonMap.tileSize * 3,
-                positioned: (_, dt) => execAttackRange(damage, dt),
-                target: gameRef.player!,
-                doElseBehavior: BRandomMovement(
-                  speed: speed / 2,
-                  maxDistance: (DungeonMap.tileSize * 3),
-                ),
-              ),
-            ),
+  late final List<Behavior> behaviors = [
+    BCondition(
+      condition: (_, __, game) {
+        return !game.sceneBuilderStatus.isRunning && enableBehaviors;
+      },
+      doBehavior: BCondition(
+        condition: (_, __, game) {
+          return game.player != null && game.player?.isDead == false;
+        },
+        doBehavior: BSeeAndMoveToTarget(
+          target: gameRef.player!,
+          radiusVision: DungeonMap.tileSize,
+          onClose: (dt, __) => execAttack(damage, dt),
+          doElseBehavior: BSeeAndPositioned(
+            radiusVision: DungeonMap.tileSize * 3,
+            positioned: (_, dt) => execAttackRange(damage, dt),
+            target: gameRef.player!,
             doElseBehavior: BRandomMovement(
               speed: speed / 2,
               maxDistance: (DungeonMap.tileSize * 3),
             ),
           ),
         ),
-      ];
+        doElseBehavior: BRandomMovement(
+          speed: speed / 2,
+          maxDistance: (DungeonMap.tileSize * 3),
+        ),
+      ),
+    ),
+  ];
 
   void _onDie() {
     gameRef.add(

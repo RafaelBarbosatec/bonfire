@@ -23,7 +23,7 @@ class BRandomMovement extends Behavior {
     super.id,
   });
   @override
-  bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
+  bool process(double dt, GameComponent comp, BonfireGameInterface game) {
     if (comp is WithRandomMovement) {
       comp.randomMovement.setup(
         speed: speed,

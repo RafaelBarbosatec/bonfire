@@ -13,7 +13,7 @@ class BMoveToComponent extends Behavior {
   });
 
   @override
-  bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
+  bool process(double dt, GameComponent comp, BonfireGameInterface game) {
     if (comp is Movement) {
       return comp.moveTowardsTarget(
         target: target,

@@ -22,7 +22,7 @@ class BSeeAndPositioned extends Behavior {
     super.id,
   });
   @override
-  bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
+  bool process(double dt, GameComponent comp, BonfireGameInterface game) {
     return BCanSee(
       target: target,
       radiusVision: radiusVision,
@@ -32,7 +32,7 @@ class BSeeAndPositioned extends Behavior {
           if (comp is Movement && doElseBehavior == null) {
             comp.stop();
           }
-          return doElseBehavior?.runAction(dt, comp, game) ?? true;
+          return doElseBehavior?.process(dt, comp, game) ?? true;
         },
       ),
       doBehavior: (target) {
@@ -63,6 +63,6 @@ class BSeeAndPositioned extends Behavior {
           },
         );
       },
-    ).runAction(dt, comp, game);
+    ).process(dt, comp, game);
   }
 }

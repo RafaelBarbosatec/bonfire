@@ -49,7 +49,8 @@
         { "title": "Ally", "href": "/ally" },
         { "title": "Decoration", "href": "/decoration" },
         { "title": "Lighting", "href": "/lighting" },
-        { "title": "Sensor", "href": "/sensor" }
+        { "title": "Sensor", "href": "/sensor" },
+        { "title": "Behaviors", "href": "/behaviors" }
       ]
     },
     {

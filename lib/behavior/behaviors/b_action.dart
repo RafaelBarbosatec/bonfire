@@ -9,7 +9,7 @@ class BAction extends Behavior {
   BAction({required this.action, super.id});
 
   @override
-  bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
+  bool process(double dt, GameComponent comp, BonfireGameInterface game) {
     action(dt, comp, game);
     return false;
   }
