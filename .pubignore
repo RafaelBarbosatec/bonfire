@@ -4,3 +4,5 @@ media
 games
 build
 .dart_tool
+docs
+docs.json
