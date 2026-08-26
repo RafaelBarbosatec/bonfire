@@ -1,3 +1,12 @@
+# 4.0.0-beta.13
+- **BREAKING:** Rename `Behavior.runAction` to `Behavior.process` and fix the return contract documentation: `true` = behavior finished (advance to the next one), `false` = keep running.
+- Add `BSelector` (priority), `BParallel` and `BOnce` behaviors to the behavior system.
+- Add behavior debugging: `UseBehavior.debugBehaviors` logs behavior transitions and `UseBehavior.currentBehaviorId` exposes the active behavior.
+- Fix the `example` goblin to keep the behavior list stable (`late final`) so internal behavior state isn't reset.
+- Add unit tests for the behavior system.
+- Fix deprecated `Color` API usage in the shader setter (`.red/.green/.blue/opacity` → `.r/.g/.b/.a`).
+- Add project documentation in `docs/` (including the new Behaviors page), update the `MIGRATION_3_TO_4.md` guide and the docs site to the new APIs.
+
 # 4.0.0-beta.12
 - **BREAKING:** Introduce `WithAttack` and `AttackApi`, exposed through the `attack` object on every `GameComponent`. The old attack extension methods (`simpleAttackMelee`, `simpleAttackRange`, `simpleAttackMeleeByDirection`, `simpleAttackMeleeByAngle`, `simpleAttackRangeByDirection`, `simpleAttackRangeByAngle`) were removed from the `Player`, `Enemy`, `Ally` and `GameComponent` extensions.
   - Melee: `attack.melee(damage: ..., size: ..., animation: ...)`
@@ -15,11 +24,6 @@
 - Fix `FlyingAttackGameObject` dealing damage twice when `animationDestroy` is set: the direct collision no longer applies damage when the destroy animation spawns an explosion `DamageHitbox`.
 - Update `example/` to the new APIs and stop excluding it from analysis (lint errors are now reported). Also fix deprecations: `withOpacity` → `withValues`, `Radio.groupValue`/`onChanged` → `RadioGroup`.
 - Update `awesome/` examples to the new APIs (`util.loadParallaxComponent`, `attack.meleeByAngle`, etc.).
-- **BREAKING:** Rename `Behavior.runAction` to `Behavior.process` and fix the return contract documentation: `true` = behavior finished (advance to the next), `false` = keep running.
-- Add `BSelector` (priority), `BParallel` and `BOnce` behaviors to the behavior system.
-- Add behavior debugging: `UseBehavior.debugBehaviors` logs behavior transitions and `UseBehavior.currentBehaviorId` exposes the active behavior.
-- Fix the `example` goblin to keep the behavior list stable (`late final`) so internal behavior state isn't reset.
-- Add unit tests for the behavior system.
 
 # 4.0.0-beta.11
 - **BREAKING:** Remove the `InternalChecker` mixin and the `checkInterval` method.
