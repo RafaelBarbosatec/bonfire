@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/person_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
-class RageEnemy extends SimpleEnemy with WithCollision {
+class RageEnemy extends SimpleEnemy with WithCollision, UseBehavior {
   late TextPaint _textPaint;
   final String text = 'RangeEnemy';
   final IntervalTick _attackTick = IntervalTick(
@@ -19,17 +19,21 @@ class RageEnemy extends SimpleEnemy with WithCollision {
           initDirection: Direction.down,
         );
 
+  /// Declarative AI: keeps distance from the player and attacks
+  /// when positioned at range.
   @override
-  void update(double dt) {
-    vision.seeAndMoveToAttackRange<Player>(
-      positioned: (p) {
+  late final List<Behavior> behaviors = [
+    BSeeAndPositioned(
+      target: gameRef.player!,
+      radiusVision: 32,
+      minDistance: 27,
+      positioned: (target, dt) {
         if (_attackTick.update(dt)) {
           _playAttackAnimation();
         }
       },
-    );
-    super.update(dt);
-  }
+    ),
+  ];
 
   @override
   Future<void> onLoad() {
