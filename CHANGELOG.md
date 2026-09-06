@@ -1,3 +1,54 @@
+# 4.0.0
+
+Bonfire 4.0 is a major release focused on **developer experience** and **correctness**: a cleaner, API-first architecture for mixins, a simplified movement system and a fully modernized codebase (Flame `^1.38.0`). Below is the consolidated overview; each pre-release (beta.4 → beta.13) has its detailed entry further down.
+
+### Breaking: API-first mixins (`WithFeature` + `feature.{resource}`)
+
+Most mixins no longer add methods/fields directly to the component. Functionality is grouped under a named API object, keeping the component namespace clean when many mixins are combined:
+
+- `WithJumper` → `jumper` (`jumper.jump()`)
+- `WithSensor` → `sensor` (`sensor.enabled`, `sensor.onContactListener`...)
+- `WithRandomMovement` → `randomMovement` (`randomMovement.update(dt, ...)`, `randomMovement.onStartMoveListener`/`onStopMoveListener`, `randomMovement.area`)
+- `WithPathFinding` → `pathFinding` (`pathFinding.setup`, `pathFinding.moveToPosition`, `pathFinding.stop`, `pathFinding.isMoving`)
+- `WithCollision` → `collision` (`collision.onBlockMovementListener`, `collision.bodyType`, `collision.enable/disable`)
+- `WithAttack` → `attack` (`attack.melee`, `attack.range`, `attack.meleeByAngle`, `attack.rangeByAngle`, `attack.meleeByDirection`, `attack.rangeByDirection`)
+- `WithVision` → `vision` (`vision.seePlayer`, `vision.seeEnemy`, `vision.seeAndMoveToPlayer`, ...)
+- `WithLighting` → `lighting` (`lighting.setup`, `lighting.config`, `lighting.enabled`, `lighting.angle`)
+- `WithShader` → `shader`
+- `WithUtil` → `util` (`util.showDamage`, `util.generateValues`, `util.addParticle`, `util.getAngleToTarget`, `util.loadParallaxComponent`...)
+- `WithFollower`, `WithPushable`, `WithFlipRender`, `WithMovePerCell`, `WithAssetsLoader`, `WithLifeBar` — same pattern (`follower`, `pushable`, `flipRender`, `movePerCell`, `assetsLoader`, `lifeBar`)
+
+The legacy extension files (`ally`, `enemy`, `game_component`, `npc`, `player` + `rotation_*`) were removed — their helpers now live in the API objects above.
+
+### Breaking: Movement rewritten (direct access kept)
+
+`Movement` is the only mixin that keeps its original access style, but it was fully **rewritten and simplified**:
+
+- Velocity-based: `update()` applies `position += velocity * dt`; `direction`, `hDirection` and `vDirection` are now plain fields reflecting the current velocity.
+- New/renamed: `stop()`, `idle()`, `moveByAngle(...)` (was `moveFromAngle`), `moveFromDirection(dir, {useDiagonal})`, `onMove()` with no arguments, `Movement.defaultSpeed`.
+- Removed: `lastDirection`/`lastDirectionHorizontal`/`lastDirectionVertical`, `acceleration`, `velocityRadAngle`, `displacement`, `setVelocityAxis`, all `*Once` movement helpers, `stopMove({forceIdle})`, `speedDefault`, `onVelocityUpdate`, `onApplyDisplacement`, `correctPositionFromCollision`.
+- `isMoving` now uses an internal frame counter (no more `minDisplacementToConsiderMove`).
+
+### Breaking: other core changes
+
+- **Collision is event-driven**: `WithCollision` + `collision.onBlockMovementListener((points, other) => bool)` — return `false` to allow the movement. The old `BlockMovementCollision` mixin and `onBlockMovement` override were removed.
+- **Direction animations**: `SimplePlayer`/`SimpleEnemy` now use `WithDirectionAnimation` with an 8-direction `SimpleDirectionAnimation` (idle + run for the 4 axes); the sprite animation follows `direction` automatically (`directionAnimation.onPlayRun*/onPlayIdle*Animation()`).
+- **Intervals**: `InternalChecker`/`checkInterval` were removed — use `IntervalTick` (now with `tickFirstUpdate`). Built-in attack intervals were removed; control execution yourself.
+- **Behaviors**: new behavior tree system — `BSelector` (priority), `BParallel`, `BOnce` and the unified `Behavior.process` contract (`true` = finished, `false` = keep running), with `UseBehavior.debugBehaviors` and `UseBehavior.currentBehaviorId` for debugging.
+- `CustomQuadTreeBroadphase` removed; quad-tree collision uses the standard `QuadTreeBroadphase`.
+
+### Non-breaking improvements & fixes
+
+- Exact diagonal normalization: `Movement.diagonalFactor` is `sqrt(2)/2`.
+- Forces/global forces default to **no drag** (`0.0`) so applied velocities aren't nullified.
+- `FlyingAttackGameObject` no longer deals damage twice when `animationDestroy` spawns an explosion.
+- Component APIs with listeners now expose `dispose()` (called on `onRemove`).
+- Modern Flutter/Flame APIs (`Color.withValues` instead of deprecated channels), `RadioGroup` usage, etc.
+- `example/` updated to the new APIs and **included in analysis**; `awesome/` examples updated (`turn_game` added).
+- New **behavior unit tests**; docs in `docs/` (including Behaviors page) and a complete **Migration Guide** (`MIGRATION_3_TO_4.md`).
+
+> Migrating? Read [MIGRATION_3_TO_4.md](MIGRATION_3_TO_4.md) — it has the full before/after tables for every changed API.
+
 # 4.0.0-beta.13
 - **BREAKING:** Rename `Behavior.runAction` to `Behavior.process` and fix the return contract documentation: `true` = behavior finished (advance to the next one), `false` = keep running.
 - Add `BSelector` (priority), `BParallel` and `BOnce` behaviors to the behavior system.
