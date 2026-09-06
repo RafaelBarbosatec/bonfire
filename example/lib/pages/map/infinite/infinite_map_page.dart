@@ -50,7 +50,7 @@ class _InfiniteColumn extends GameDecoration {
       : super.withSprite(
           sprite: CommonSpriteSheet.columnSprite,
           position: position,
-          size: const Vector2(16, 48),
+          size: Vector2(16, 48),
         );
 
   @override
@@ -58,8 +58,8 @@ class _InfiniteColumn extends GameDecoration {
     add(
       RectangleHitbox(
         isSolid: true,
-        size: const Vector2(12, 16),
-        position: const Vector2(2, 30),
+        size: Vector2(12, 16),
+        position: Vector2(2, 30),
       ),
     );
     return super.onLoad();

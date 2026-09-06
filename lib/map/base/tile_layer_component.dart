@@ -196,8 +196,7 @@ class TileLayerComponent extends PositionComponent with HasPaint, WithShader {
                 _tileSize) /
             2)
         .ceil()
-        .clamp(1, 1000)
-        .toInt();
+        .clamp(1, 1000);
 
     _quadTree = tree.QuadTree(
       minX - pad,

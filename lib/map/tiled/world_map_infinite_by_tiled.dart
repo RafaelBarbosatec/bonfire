@@ -298,7 +298,10 @@ class WorldMapInfiniteByTiled extends WorldMap {
   ({int minCx, int maxCx, int minCy, int maxCy}) _windowFromIds(
     Set<String> ids,
   ) {
-    var minCx = 0, maxCx = 0, minCy = 0, maxCy = 0;
+    var minCx = 0;
+    var maxCx = 0;
+    var minCy = 0;
+    var maxCy = 0;
     for (final id in ids) {
       final parts = id.split(',');
       final cx = int.parse(parts[0]);
@@ -341,7 +344,7 @@ class WorldMapInfiniteByTiled extends WorldMap {
     final origin = super.getMapRect();
     switch (type) {
       case InfiniteWorldMapType.open:
-        return Rect.fromLTRB(-big, -big, big, big);
+        return const Rect.fromLTRB(-big, -big, big, big);
       case InfiniteWorldMapType.vertical:
         return Rect.fromLTRB(
           origin.left - tileSize,

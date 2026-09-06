@@ -1,6 +1,5 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/camera/camera_effects.dart';
-import 'package:flame/experimental.dart';
 
 // Custom implmentation of Flame's `CameraComponent`
 class BonfireCamera extends CameraComponent with BonfireHasGameRef {
