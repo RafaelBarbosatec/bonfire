@@ -5,19 +5,19 @@ import 'package:platform_game/util/platform_spritesheet.dart';
 class FoxPlayer extends PlatformPlayer with WithForces {
   bool inTrunk = false;
   FoxPlayer({required super.position})
-    : super(
-        size: Vector2.all(33),
-        speed: 50,
-        countJumps: 2,
-        animation: PlatformAnimations(
-          idleRight: PlatformSpritesheet.playerIdleRight,
-          runRight: PlatformSpritesheet.playerRunRight,
-          jump: PlatformJumpAnimations(
-            jumpUpRight: PlatformSpritesheet.playerJumpUp,
-            jumpDownRight: PlatformSpritesheet.playerJumpDown,
+      : super(
+          size: Vector2.all(33),
+          speed: 50,
+          countJumps: 2,
+          animation: PlatformAnimations(
+            idleRight: PlatformSpritesheet.playerIdleRight,
+            runRight: PlatformSpritesheet.playerRunRight,
+            jump: PlatformJumpAnimations(
+              jumpUpRight: PlatformSpritesheet.playerJumpUp,
+              jumpDownRight: PlatformSpritesheet.playerJumpDown,
+            ),
           ),
-        ),
-      ) {
+        ) {
     collision.onBlockMovementListener(onBlockMovementListener);
   }
 

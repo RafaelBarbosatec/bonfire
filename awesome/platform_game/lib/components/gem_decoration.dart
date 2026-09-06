@@ -4,10 +4,10 @@ import 'package:platform_game/util/platform_spritesheet.dart';
 class GemDecoration extends GameDecoration with WithSensor {
   bool _alreadyContad = false;
   GemDecoration({required super.position})
-    : super.withAnimation(
-        animation: PlatformSpritesheet.gem,
-        size: Vector2(15, 13),
-      ) {
+      : super.withAnimation(
+          animation: PlatformSpritesheet.gem,
+          size: Vector2(15, 13),
+        ) {
     sensor.onContactListener(_onContact);
   }
 

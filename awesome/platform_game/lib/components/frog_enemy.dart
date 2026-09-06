@@ -7,18 +7,18 @@ import 'package:platform_game/util/platform_spritesheet.dart';
 class FrogEnemy extends PlatformEnemy with WithForces {
   final IntervalTick _intervalTick = IntervalTick(4000);
   FrogEnemy({required super.position})
-    : super(
-        size: Vector2(35, 32),
-        speed: 50,
-        animation: PlatformAnimations(
-          idleRight: PlatformSpritesheet.frogIdleRight,
-          runRight: PlatformSpritesheet.frogIdleRight,
-          jump: PlatformJumpAnimations(
-            jumpUpRight: PlatformSpritesheet.frogJumpUp,
-            jumpDownRight: PlatformSpritesheet.frogJumpDown,
+      : super(
+          size: Vector2(35, 32),
+          speed: 50,
+          animation: PlatformAnimations(
+            idleRight: PlatformSpritesheet.frogIdleRight,
+            runRight: PlatformSpritesheet.frogIdleRight,
+            jump: PlatformJumpAnimations(
+              jumpUpRight: PlatformSpritesheet.frogJumpUp,
+              jumpDownRight: PlatformSpritesheet.frogJumpDown,
+            ),
           ),
-        ),
-      ) {
+        ) {
     collision.onBlockMovementListener(onBlockMovementListener);
     collision.onMovementBlockedListener(onMovementBlockedListener);
   }
