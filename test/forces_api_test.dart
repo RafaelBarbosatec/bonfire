@@ -68,6 +68,18 @@ void main() {
       expect(c.velocity.y, closeTo(300, 1e-6));
     });
 
+    test('global-only gravity applies even when idle at spawn', () {
+      final c = ForcedComponent();
+      c.gameRef = FakeBonfireGame(
+        globalForces: GlobalForcesSettings(gravity: Vector2(0, 100)),
+      );
+      // No local forces and zero velocity — the force gate must still open,
+      // otherwise the player floats in the air until the first input
+      // (walk/jump). Regression: fox in awesome/platform_game.
+      c.forces.update(1.0);
+      expect(c.velocity.y, closeTo(100, 1e-6));
+    });
+
     test('custom named forces are applied as acceleration', () {
       final c = _component();
       c.forces.addForce('boost', Vector2(0, 10));

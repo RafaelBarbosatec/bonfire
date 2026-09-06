@@ -102,11 +102,16 @@ class ForcesApi {
   }
 
   bool _allForcesAreZero() {
+    final global = _gameRef.globalForces;
     return _gravity.isZero() &&
         _wind.isZero() &&
         _friction.isZero() &&
         _customForces.isEmpty &&
-        _dragCoefficient == 0.0;
+        _dragCoefficient == 0.0 &&
+        (global.gravity ?? Vector2.zero()).isZero() &&
+        (global.wind ?? Vector2.zero()).isZero() &&
+        (global.friction ?? Vector2.zero()).isZero() &&
+        (global.dragCoefficient ?? 0.0) == 0.0;
   }
 
   void _applyAllForces(double dt) {
