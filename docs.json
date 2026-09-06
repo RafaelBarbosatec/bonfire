@@ -44,6 +44,7 @@
       "group": "Game Elements",
       "pages": [
         { "title": "Map", "href": "/map" },
+        { "title": "Infinite Map", "href": "/infinite-map" },
         { "title": "Player", "href": "/player" },
         { "title": "Enemy", "href": "/enemy" },
         { "title": "Ally", "href": "/ally" },
