@@ -7,7 +7,8 @@ void main() {
       final tick = IntervalTick(100); // 100ms
       expect(tick.update(0.05), isFalse);
       expect(tick.update(0.049), isFalse);
-      expect(tick.update(0.01), isTrue, reason: '0.05+0.049+0.01 = 0.109 >= 0.1');
+      expect(tick.update(0.01), isTrue,
+          reason: '0.05+0.049+0.01 = 0.109 >= 0.1');
     });
 
     test('does not fire again until time accumulates again', () {

@@ -5,8 +5,7 @@ import 'package:turn_game/util/player_ally.dart';
 abstract class PlayerEnemy extends PlayerTurn {
   @override
   // ignore: overridden_fields
-  final Paint rectPaint = Paint()
-    ..color = Colors.red.withValues(alpha: 0.5);
+  final Paint rectPaint = Paint()..color = Colors.red.withValues(alpha: 0.5);
 
   PlayerEnemy({
     required super.position,

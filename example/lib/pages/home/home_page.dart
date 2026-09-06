@@ -229,10 +229,10 @@ class _HomePageState extends State<HomePage> {
       SectionDrawer(
         itens: [
           ItemDrawer(
-            name: 'BlockMovementCollision',
+            name: 'Collision',
             builder: (_) => const CollisionPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/forces',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/collision',
           ),
         ],
       ),

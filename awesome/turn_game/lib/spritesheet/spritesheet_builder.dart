@@ -83,7 +83,7 @@ class SpriteSheetBuilder {
         ),
       );
 
-      static Future<SpriteAnimation> get fireballRight => SpriteAnimation.load(
+  static Future<SpriteAnimation> get fireballRight => SpriteAnimation.load(
         'fireball_right.png',
         SpriteAnimationData.sequenced(
           amount: 3,

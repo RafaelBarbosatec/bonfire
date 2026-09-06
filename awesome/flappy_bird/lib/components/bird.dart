@@ -72,7 +72,8 @@ class Bird extends PlatformPlayer with WithForces, TapGesture {
     return super.onLoad();
   }
 
-  bool onBlockMovementListener(Set<Vector2> intersectionPoints, GameComponent other) {
+  bool onBlockMovementListener(
+      Set<Vector2> intersectionPoints, GameComponent other) {
     gameRef.pauseEngine();
     showDialog(
       context: context,
