@@ -129,6 +129,92 @@ class TileLayerComponent extends PositionComponent with HasPaint, WithShader {
     refresh();
   }
 
+  /// Adds many tiles at once (used by infinite maps when a new chunk loads).
+  ///
+  /// Grows the quad tree when a tile falls outside its current bounds, so
+  /// chunks can be spawned at arbitrary (including negative) coordinates.
+  void addTiles(List<Tile> tiles) {
+    if (tiles.isEmpty) {
+      return;
+    }
+    _tiles.addAll(tiles);
+    _growQuadTreeToFit(tiles);
+    for (final tile in tiles) {
+      _quadTree?.insert(
+        tile,
+        Point(tile.x, tile.y),
+        id: tile.id,
+      );
+    }
+    refresh();
+  }
+
+  /// Removes many tiles at once (used by infinite maps when a chunk unloads).
+  void removeTiles(List<Tile> tiles) {
+    if (tiles.isEmpty) {
+      return;
+    }
+    final ids = tiles.map((tile) => tile.id).toSet();
+    _tiles.removeWhere((tile) => ids.contains(tile.id));
+    for (final id in ids) {
+      _quadTree?.removeById(id);
+    }
+    refresh();
+  }
+
+  /// All tiles currently registered in this layer.
+  List<Tile> get tiles => _tiles;
+
+  void _growQuadTreeToFit(List<Tile> newTiles) {
+    final qt = _quadTree;
+    if (qt == null) {
+      return;
+    }
+    final needsGrow = newTiles.any(
+      (tile) => !qt.containsPoint(Point(tile.x, tile.y)),
+    );
+    if (!needsGrow) {
+      return;
+    }
+
+    var minX = double.infinity;
+    var minY = double.infinity;
+    var maxX = double.negativeInfinity;
+    var maxY = double.negativeInfinity;
+    for (final tile in _tiles) {
+      minX = math.min(minX, tile.x);
+      minY = math.min(minY, tile.y);
+      maxX = math.max(maxX, tile.x);
+      maxY = math.max(maxY, tile.y);
+    }
+    final pad = math.max(2.0, (math.max(maxX - minX, maxY - minY)) * 0.05);
+
+    final maxItems = ((math.min(
+                  _lastScreenSize?.x ?? 1,
+                  _lastScreenSize?.y ?? 1,
+                ) /
+                _tileSize) /
+            2)
+        .ceil()
+        .clamp(1, 1000)
+        .toInt();
+
+    _quadTree = tree.QuadTree(
+      minX - pad,
+      minY - pad,
+      (maxX - minX) + pad * 2,
+      (maxY - minY) + pad * 2,
+      maxItems: maxItems,
+    );
+    for (final tile in _tiles) {
+      _quadTree?.insert(
+        tile,
+        Point(tile.x, tile.y),
+        id: tile.id,
+      );
+    }
+  }
+
   void removeTile(String id) {
     try {
       _tiles.removeWhere((element) => element.id == id);
