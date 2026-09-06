@@ -46,7 +46,7 @@ The legacy extension files (`ally`, `enemy`, `game_component`, `npc`, `player` +
 - Modern Flutter/Flame APIs (`Color.withValues` instead of deprecated channels), `RadioGroup` usage, etc.
 - `example/` updated to the new APIs and **included in analysis**; `awesome/` examples updated (`turn_game` added).
 - New **behavior unit tests**; docs in `docs/` (including Behaviors page) and a complete **Migration Guide** (`MIGRATION_3_TO_4.md`).
-- Dependencies updated: Flame `^1.38.2`, `http` `^1.6.0` and `tiledjsonreader` `^1.4.2`; CI now uses the Flutter-bundled Dart SDK (no more pinned `3.11.0`).
+- Dependencies updated: Flame `^1.38.2`, `http` `^1.6.0` and `tiledjsonreader` `^1.4.2`; CI pins Dart `3.11.0` and runs the unit test suite (`flutter test`).
 
 > Migrating? Read [MIGRATION_3_TO_4.md](MIGRATION_3_TO_4.md) — it has the full before/after tables for every changed API.
 
