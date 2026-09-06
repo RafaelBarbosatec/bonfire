@@ -62,36 +62,59 @@ class TileLayerComponent extends PositionComponent with HasPaint, WithShader {
     }
   }
 
-  void initLayer(Vector2 gameSize, Vector2 screenSize) {
+  void initLayer(
+    Vector2 gameSize,
+    Vector2 screenSize, {
+    bool infiniteMap = false,
+  }) {
     if (gameSize.isZero()) {
       return;
     }
-    _createQuadTree(gameSize, screenSize);
+    _createQuadTree(
+      gameSize,
+      screenSize,
+      infiniteMap: infiniteMap,
+    );
   }
 
   void _createQuadTree(
     Vector2 mapSize,
     Vector2 screenSize, {
     bool force = false,
+    bool infiniteMap = false,
   }) {
     if (_lastScreenSize == screenSize && !force) {
       return;
     }
     _lastScreenSize = screenSize.clone();
-    final treeSize = Vector2(
-      mapSize.x / tileSize,
-      mapSize.y / tileSize,
-    );
     var maxItems = 100;
     final minScreen = min(screenSize.x, screenSize.y);
     maxItems = ((minScreen / tileSize) / 2).ceil();
-    _quadTree = tree.QuadTree(
-      0,
-      0,
-      treeSize.x,
-      treeSize.y,
-      maxItems: maxItems,
-    );
+    if (infiniteMap) {
+      // Infinite worlds add tiles at arbitrary (including very negative)
+      // coordinates. Use huge bounds from the start so chunk additions never
+      // need to rebuild the tree.
+      const infiniteHalf = 1000000.0;
+      _quadTree = tree.QuadTree(
+        -infiniteHalf,
+        -infiniteHalf,
+        infiniteHalf * 2,
+        infiniteHalf * 2,
+        maxItems: maxItems,
+      );
+    } else {
+      final treeSize = Vector2(
+        mapSize.x / tileSize,
+        mapSize.y / tileSize,
+      );
+      _quadTree = tree.QuadTree(
+        0,
+        0,
+        treeSize.x,
+        treeSize.y,
+        maxItems: maxItems,
+      );
+    }
 
     for (final tile in _tiles) {
       _quadTree?.insert(
@@ -138,15 +161,19 @@ class TileLayerComponent extends PositionComponent with HasPaint, WithShader {
       return;
     }
     _tiles.addAll(tiles);
-    _growQuadTreeToFit(tiles);
-    for (final tile in tiles) {
-      _quadTree?.insert(
-        tile,
-        Point(tile.x, tile.y),
-        id: tile.id,
-      );
+    final grew = _growQuadTreeToFit(tiles);
+    if (!grew) {
+      for (final tile in tiles) {
+        _quadTree?.insert(
+          tile,
+          Point(tile.x, tile.y),
+          id: tile.id,
+        );
+      }
     }
-    refresh();
+    // Differential update: only add the newly visible tiles and remove the
+    // ones that are no longer visible — no full rebuild (cheap on chunk load).
+    onMoveCamera(_lastRectCamera);
   }
 
   /// Removes many tiles at once (used by infinite maps when a chunk unloads).
@@ -159,22 +186,22 @@ class TileLayerComponent extends PositionComponent with HasPaint, WithShader {
     for (final id in ids) {
       _quadTree?.removeById(id);
     }
-    refresh();
+    onMoveCamera(_lastRectCamera);
   }
 
   /// All tiles currently registered in this layer.
   List<Tile> get tiles => _tiles;
 
-  void _growQuadTreeToFit(List<Tile> newTiles) {
+  bool _growQuadTreeToFit(List<Tile> newTiles) {
     final qt = _quadTree;
     if (qt == null) {
-      return;
+      return false;
     }
     final needsGrow = newTiles.any(
       (tile) => !qt.containsPoint(Point(tile.x, tile.y)),
     );
     if (!needsGrow) {
-      return;
+      return false;
     }
 
     var minX = double.infinity;
@@ -212,6 +239,7 @@ class TileLayerComponent extends PositionComponent with HasPaint, WithShader {
         id: tile.id,
       );
     }
+    return true;
   }
 
   void removeTile(String id) {

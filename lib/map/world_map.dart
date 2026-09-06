@@ -90,7 +90,11 @@ class WorldMap extends GameMap {
       lastMinorZoom = gameRef.camera.zoom;
       _calculatePositionAndSize();
       for (final layer in layersComponent) {
-        layer.initLayer(size, sizeScreen);
+        layer.initLayer(
+          size,
+          sizeScreen,
+          infiniteMap: isWorldInfinite,
+        );
       }
     }
     if (sizeToUpdate == 0) {
