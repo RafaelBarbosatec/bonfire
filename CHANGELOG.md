@@ -46,6 +46,7 @@ The legacy extension files (`ally`, `enemy`, `game_component`, `npc`, `player` +
 - Modern Flutter/Flame APIs (`Color.withValues` instead of deprecated channels), `RadioGroup` usage, etc.
 - `example/` updated to the new APIs and **included in analysis**; `awesome/` examples updated (`turn_game` added).
 - New **behavior unit tests**; docs in `docs/` (including Behaviors page) and a complete **Migration Guide** (`MIGRATION_3_TO_4.md`).
+- **Infinite maps**: new `WorldMapInfiniteByTiled` treats a small Tiled map as a pattern and repeats it as an endless world (`InfiniteWorldMapType.open`/`vertical`/`horizontal`) — chunks stream in around the camera and unload when far away, Y-sort stays correct on negative coordinates, camera bounds respect the finite axis(es) and the collision area is widened. Supporting APIs: `TileLayerComponent.addTiles`/`removeTiles`/`tiles` (quad tree grows automatically) and `TiledWorldBuilder.build(onlyObjects:)` with cached map parsing.
 - Dependencies updated: Flame `^1.38.2`, `http` `^1.6.0` and `tiledjsonreader` `^1.4.2`; CI pins Dart `3.11.0` and runs the unit test suite (`flutter test`).
 
 > Migrating? Read [MIGRATION_3_TO_4.md](MIGRATION_3_TO_4.md) — it has the full before/after tables for every changed API.

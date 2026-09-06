@@ -1,0 +1,86 @@
+{ "compressionlevel":-1,
+ "height":10,
+ "infinite":false,
+ "layers":[
+        {
+         "data":[37, 37, 37, 37, 37, 37, 37, 37, 37, 37,
+            37, 37, 37, 37, 37, 37, 37, 37, 37, 37,
+            37, 37, 37, 37, 37, 37, 37, 37, 37, 37,
+            37, 37, 37, 37, 37, 37, 37, 37, 37, 37,
+            37, 37, 37, 37, 37, 37, 37, 37, 37, 37,
+            37, 37, 37, 37, 37, 37, 37, 37, 37, 37,
+            37, 37, 37, 37, 37, 37, 37, 37, 37, 37,
+            37, 37, 37, 37, 37, 37, 37, 37, 37, 37,
+            37, 37, 37, 37, 37, 37, 37, 37, 37, 37,
+            37, 37, 37, 37, 37, 37, 37, 37, 37, 37],
+         "height":10,
+         "id":1,
+         "name":"floor",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":10,
+         "x":0,
+         "y":0
+        },
+        {
+         "draworder":"topdown",
+         "id":2,
+         "name":"objects",
+         "objects":[
+            {
+             "height":16,
+             "id":1,
+             "name":"column",
+             "rotation":0,
+             "type":"",
+             "visible":true,
+             "width":16,
+             "x":32,
+             "y":64
+            },
+            {
+             "height":16,
+             "id":2,
+             "name":"column",
+             "rotation":0,
+             "type":"",
+             "visible":true,
+             "width":16,
+             "x":112,
+             "y":64
+            },
+            {
+             "height":16,
+             "id":3,
+             "name":"column",
+             "rotation":0,
+             "type":"",
+             "visible":true,
+             "width":16,
+             "x":64,
+             "y":128
+            }
+         ],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }],
+ "nextlayerid":3,
+ "nextobjectid":4,
+ "orientation":"orthogonal",
+ "renderorder":"right-down",
+ "tiledversion":"1.9.0",
+ "tileheight":16,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "source":"HouseTemplate_Tileset.tsj"
+        }],
+ "tilewidth":16,
+ "type":"map",
+ "version":"1.9",
+ "width":10
+}
