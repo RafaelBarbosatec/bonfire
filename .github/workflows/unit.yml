@@ -17,6 +17,8 @@ jobs:
       
       - name: Intall dart
         uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 3.11.0
 
       - name: Setup flutter
         uses: subosito/flutter-action@v2
