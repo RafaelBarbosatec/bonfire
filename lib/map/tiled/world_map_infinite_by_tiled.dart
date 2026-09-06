@@ -3,6 +3,8 @@ import 'dart:math' as math;
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tiled/builder/tiled_world_builder.dart';
+import 'package:bonfire/map/tiled/model/tiled_world_data.dart';
+import 'package:flame/experimental.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
 
@@ -358,7 +360,7 @@ class WorldMapInfiniteByTiled extends WorldMap {
   }
 
   @override
-  Shape? getMoveAreaBounds(Rect visibleWorldRect) {
+  Rectangle? getMoveAreaBounds(Rect visibleWorldRect) {
     const big = 100000.0;
     final origin = super.getMapRect();
     final halfW = visibleWorldRect.width / 2;

@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/base/layer.dart';
+import 'package:flame/experimental.dart';
 
 export 'package:bonfire/map/base/tile_layer_component.dart';
 
@@ -40,7 +41,7 @@ abstract class GameMap extends GameComponent with WithShader {
   /// Area where the camera center is allowed to move when
   /// `CameraConfig.moveOnlyMapArea` is enabled. Infinite maps override this
   /// to release the axis(es) that never end.
-  Shape? getMoveAreaBounds(Rect visibleWorldRect) {
+  Rectangle? getMoveAreaBounds(Rect visibleWorldRect) {
     final rect = getMapRect().deflatexy(
       visibleWorldRect.width / 2,
       visibleWorldRect.height / 2,

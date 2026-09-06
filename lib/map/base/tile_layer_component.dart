@@ -182,14 +182,14 @@ class TileLayerComponent extends PositionComponent with HasPaint, WithShader {
     var maxX = double.negativeInfinity;
     var maxY = double.negativeInfinity;
     for (final tile in _tiles) {
-      minX = math.min(minX, tile.x);
-      minY = math.min(minY, tile.y);
-      maxX = math.max(maxX, tile.x);
-      maxY = math.max(maxY, tile.y);
+      minX = min(minX, tile.x);
+      minY = min(minY, tile.y);
+      maxX = max(maxX, tile.x);
+      maxY = max(maxY, tile.y);
     }
-    final pad = math.max(2.0, (math.max(maxX - minX, maxY - minY)) * 0.05);
+    final pad = max(2.0, (max(maxX - minX, maxY - minY)) * 0.05);
 
-    final maxItems = ((math.min(
+    final maxItems = ((min(
                   _lastScreenSize?.x ?? 1,
                   _lastScreenSize?.y ?? 1,
                 ) /
