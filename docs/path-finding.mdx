@@ -1,0 +1,97 @@
+---
+title: PathFinding
+description: "Find paths for your characters with the A* algorithm."
+---
+
+
+> Algorithm to find your way around obstacles
+
+<img src="/assets/git_move_along_the_path.gif" width="600"/>
+
+Bonfire uses the package [a_star_algorithm](https://pub.dev/packages/a_star_algorithm) to find the path.
+
+To use it, add the mixin `WithPathFinding` (by default `Player` uses it) and call the method `pathFinding.moveToPosition`. Never call this method inside the `update` method — call it once to start the movement.
+
+The component must contain the `Movement` mixin (by default `Player` and `Enemy` use it).
+
+When you use the `JoystickMoveToPosition` joystick this functionality is activated in the Player. See [here](/joystick#joystickmovetoposition).
+
+## Configuring
+
+You can configure path finding calling `pathFinding.setup`:
+
+```dart
+class Knight extends SimplePlayer {
+  Knight(Vector2 position)
+      : super(
+          position: position,
+          size: Vector2.all(32),
+        ) {
+    pathFinding.setup(
+      linePathEnabled: true,
+      pathLineColor: Colors.lightBlueAccent.withOpacity(0.5),
+      barriersCalculatedColor: Colors.blue.withOpacity(0.5),
+      pathLineStrokeWidth: 4,
+      showBarriersCalculated: false, // use this to debug. Shows tiles considered collision by the algorithm.
+      gridSizeIsCollisionSize: false,
+      useOnlyVisibleBarriers: true,
+      withDiagonal: true,
+      factorInflateFindArea: 2,
+    );
+  }
+}
+```
+
+## Main API
+
+```dart
+// Move to a position using path finding
+Future<List<Vector2>> pathFinding.moveToPosition(
+  Vector2 position, {
+  List<GameComponent>? ignoreCollisions,
+  VoidCallback? onFinish,
+})
+
+// Follow a previously calculated path
+void pathFinding.moveAlongThePath(
+  List<Vector2> path, {
+  VoidCallback? onFinish,
+})
+
+// Get the path without moving
+List<Vector2> pathFinding.getPathToPosition(
+  Vector2 position, {
+  List<GameComponent>? ignoreCollisions,
+})
+
+// Stop following the current path
+void pathFinding.stop()
+
+// Whether the component is currently moving along a path
+bool get pathFinding.isMoving
+
+// Register a callback fired when the path ends
+void pathFinding.onFinishListener(PathFindingFinishCallback callback)
+```
+
+## Example
+
+```dart
+class HumanPathFinding extends HumanPlayer with WithPathFinding, TapGesture {
+  HumanPathFinding({required Vector2 position}) : super(position: position) {
+    pathFinding.setup(
+      pathLineStrokeWidth: 2,
+      useOnlyVisibleBarriers: false,
+    );
+  }
+
+  @override
+  void onTap() {}
+
+  @override
+  void onTapDownScreen(GestureEvent event) {
+    pathFinding.moveToPosition(event.worldPosition);
+    super.onTapDownScreen(event);
+  }
+}
+```

@@ -8,9 +8,18 @@ class DamageHitbox extends GameComponent {
   final Duration damageInterval;
   final AttackOriginEnum origin;
   final dynamic id;
-  final void Function(Attackable attackable)? onDamage;
+  final void Function(WithLife attackable)? onDamage;
 
-  final Paint _paint = Paint()..color = Sensor.color;
+  final Paint _paint = Paint()..color = WithSensor.color;
+
+  late final IntervalTick _onRemoveTick = IntervalTick(
+    duration.inMilliseconds,
+  );
+
+  late final IntervalTick _intervalTick = IntervalTick(
+    damageInterval.inMilliseconds,
+    tickFirstUpdate: true,
+  );
 
   DamageHitbox({
     required Vector2 position,
@@ -32,27 +41,16 @@ class DamageHitbox extends GameComponent {
 
   @override
   void update(double dt) {
-    if (checkInterval(
-          'onRemove',
-          duration.inMilliseconds,
-          dt,
-          firstCheckIsTrue: false,
-        ) &&
-        !isRemoving) {
+    if (_onRemoveTick.update(dt) && !isRemoving) {
       removeFromParent();
     }
 
-    if (checkInterval(
-          'doDamage',
-          damageInterval.inMilliseconds,
-          dt,
-        ) &&
-        !isRemoving) {
+    if (_intervalTick.update(dt) && !isRemoving) {
       gameRef
           .attackables(onlyVisible: true)
           .where((a) => a.rectAttackable().overlaps(toAbsoluteRect()))
           .forEach((attackable) {
-        final receiveDamage = attackable.handleAttack(origin, damage, id);
+        final receiveDamage = attackable.life.handleAttack(origin, damage, id);
         if (receiveDamage) {
           onDamage?.call(attackable);
         }

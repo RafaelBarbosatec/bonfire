@@ -1,0 +1,124 @@
+---
+title: Collision System
+description: "Detect and react to collisions between game components."
+---
+
+
+> System responsible for determining and configuring the collision between objects.
+
+## How to use
+
+In Bonfire 4.0, the collision system is using [Flame CollisionDetection](https://docs.flame-engine.org/latest/flame/collision_detection.html).
+
+To add collisions to your component just add a `ShapeHitbox` (`PolygonHitbox`, `RectangleHitbox` or `CircleHitbox`) like this:
+
+```dart
+class MyComponent extends SimplePlayer {
+  // ...
+  @override
+  Future<void> onLoad() {
+    add(RectangleHitbox(size: size));
+    return super.onLoad();
+  }
+}
+```
+
+After that, the Flame Engine will detect all collisions between hitboxes in the game. You can listen to this by overriding these methods:
+
+```dart
+class MyCollidable extends SimplePlayer {
+  // ...
+  @override
+  void onCollision(Set<Vector2> points, PositionComponent other) {
+    if (other is ScreenHitbox) {
+      // ...
+    } else if (other is YourOtherComponent) {
+      // ...
+    }
+  }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    if (other is ScreenHitbox) {
+      // ...
+    } else if (other is YourOtherComponent) {
+      // ...
+    }
+  }
+}
+```
+
+## Blocking movement
+
+To block the component movement when colliding, add the `WithCollision` mixin:
+
+```dart
+class MyComponent extends SimplePlayer with WithCollision {
+  // ...
+  @override
+  Future<void> onLoad() {
+    add(RectangleHitbox(size: size));
+    return super.onLoad();
+  }
+}
+```
+
+Now, when you move the player and collide with a wall or another component with `ShapeHitbox`, the movement is stopped.
+
+## Collision API
+
+You can access and configure collision behavior through the `collision` API:
+
+```dart
+// Enable or disable collision response
+collision.enable()
+collision.disable()
+
+// Called to decide if movement should be blocked
+bool collision.blockMovementHandle(
+  Set<Vector2> intersectionPoints,
+  GameComponent other,
+)
+
+// Listen to block movement decisions
+collision.onBlockMovementListener(BlockMovementCallback callback)
+
+// Listen to when movement was actually blocked
+collision.onMovementBlockedListener(MovementBlockedCallback callback)
+
+// Customize velocity reflection after collision
+collision.reflectionResolution(ReflectionResolutionCallback callback)
+
+// Get last collision data
+collision.lastCollisionData
+
+// Body type: dynamic, static or kinetic
+collision.bodyType = BodyType.dynamic;
+```
+
+## Knowing who collided
+
+You can listen to collisions blocking movement:
+
+```dart
+class MyComponent extends SimplePlayer with WithCollision {
+  @override
+  void onMount() {
+    super.onMount();
+    collision.onMovementBlockedListener((other, data) {
+      // Handle collision response
+    });
+  }
+}
+```
+
+## Configuration
+
+You can configure the collision system globally using `BonfireCollisionConfig`. For QuadTree collision detection, use:
+
+```dart
+BonfireWidget(
+  collisionConfig: BonfireCollisionConfig.quadTree(),
+  // ...
+)
+```

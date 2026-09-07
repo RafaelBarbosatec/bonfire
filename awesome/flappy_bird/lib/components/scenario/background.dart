@@ -11,7 +11,7 @@ class ParallaxBackground extends GameBackground {
   }
 
   void _addParallax() async {
-    final p = await loadParallaxComponent(
+    final p = await util.loadParallaxComponent(
       [
         ParallaxImageData('background-day.png'),
       ],

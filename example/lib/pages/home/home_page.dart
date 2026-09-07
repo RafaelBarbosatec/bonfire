@@ -10,13 +10,13 @@ import 'package:example/pages/input/mouse/mouse_input_page.dart';
 import 'package:example/pages/input/move_camera_mouse/move_camera_page.dart';
 import 'package:example/pages/input/tap/tap_gesture_page.dart';
 import 'package:example/pages/lighting/lighting_page.dart';
+import 'package:example/pages/map/infinite/infinite_map_page.dart';
 import 'package:example/pages/map/spritefusion/spritefusion_page.dart';
 import 'package:example/pages/map/terrain_builder/terrain_builder_page.dart';
 import 'package:example/pages/map/tiled/tiled_network_page.dart';
 import 'package:example/pages/map/tiled/tiled_page.dart';
 import 'package:example/pages/mini_games/manual_map/game_manual_map.dart';
 import 'package:example/pages/mini_games/multi_scenario/multi_scenario_game.dart';
-import 'package:example/pages/mini_games/platform/platform_game.dart';
 import 'package:example/pages/mini_games/random_map/random_map_game.dart';
 import 'package:example/pages/mini_games/simple_example/simple_example_game.dart';
 import 'package:example/pages/mini_games/tiled_map/game_tiled_map.dart';
@@ -141,6 +141,12 @@ class _HomePageState extends State<HomePage> {
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/map/terrain_builder',
           ),
+          ItemDrawer(
+            name: 'Infinite world (Tiled)',
+            builder: (_) => const InfiniteMapPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/map/infinite',
+          ),
         ],
       ),
       SectionDrawer(
@@ -230,10 +236,10 @@ class _HomePageState extends State<HomePage> {
       SectionDrawer(
         itens: [
           ItemDrawer(
-            name: 'BlockMovementCollision',
+            name: 'Collision',
             builder: (_) => const CollisionPage(),
             codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/forces',
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/collision',
           ),
         ],
       ),
@@ -305,12 +311,6 @@ class _HomePageState extends State<HomePage> {
           ItemDrawer(
             name: 'Topdown game',
             builder: (_) => const TopDownGame(),
-            codeUrl:
-                'https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/mini_games',
-          ),
-          ItemDrawer(
-            name: 'Platform game',
-            builder: (_) => const PlatformGame(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/mini_games',
           ),

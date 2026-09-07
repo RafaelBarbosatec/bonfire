@@ -2,7 +2,7 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/mini_games/platform/platform_spritesheet.dart';
 import 'package:flutter/services.dart';
 
-class SimpleFoxPlayer extends PlatformPlayer with HandleForces {
+class SimpleFoxPlayer extends PlatformPlayer with WithForces {
   SimpleFoxPlayer({
     required Vector2 position,
   }) : super(
@@ -23,7 +23,7 @@ class SimpleFoxPlayer extends PlatformPlayer with HandleForces {
   void onJoystickAction(JoystickActionEvent event) {
     if (event.event == ActionEvent.DOWN &&
         (event.id == LogicalKeyboardKey.space || event.id == 1)) {
-      jump();
+      jumper.jump();
     }
     super.onJoystickAction(event);
   }

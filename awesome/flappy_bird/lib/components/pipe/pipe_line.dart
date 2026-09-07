@@ -21,7 +21,7 @@ class PipeLine extends GameDecoration with Movement {
     if (_goOutOnTheLeft() && !isRemoving) {
       removeFromParent();
     }
-    if (!alreadyWin && gameRef.player!.left > right) {
+    if (!alreadyWin && gameRef.player!.util.left > util.right) {
       alreadyWin = true;
       onWin();
     }

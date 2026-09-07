@@ -29,7 +29,7 @@ class HomeContent extends StatelessWidget {
                 Text(
                   'Bonfire is a game development framework that enables the creation of\nFlutter/Flame games in a more easy, objective and fast way!',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withValues(alpha: 0.7),
                       ),
                   textAlign: TextAlign.center,
                 ),

@@ -12,6 +12,8 @@ mixin FireballAttack on SimplePlayer {
 
   Knight get knight => this as Knight;
 
+  final IntervalTick _attackRangeTicker = IntervalTick(150);
+
   @override
   void onJoystickAction(JoystickActionEvent event) {
     if (event.id == PlayerAttackType.attackRange) {
@@ -69,14 +71,14 @@ mixin FireballAttack on SimplePlayer {
     if (!executingRangeAttack || knight.barLifeController.stamina < 10) {
       return;
     }
-    if (checkInterval('ATTACK_RANGE', 150, dt)) {
+    if (_attackRangeTicker.update(dt)) {
       knight.decrementStamina(10);
-      execRangeAttack(radAngleRangeAttack, knight.attack / 2);
+      execRangeAttack(radAngleRangeAttack, knight.damage / 2);
     }
   }
 
   void execRangeAttack(double angle, double damage) {
-    simpleAttackRangeByAngle(
+    attack.rangeByAngle(
       attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
       animation: CommonSpriteSheet.fireBallRight,
       animationDestroy: CommonSpriteSheet.explosionAnimation,
@@ -91,7 +93,7 @@ mixin FireballAttack on SimplePlayer {
       lightingConfig: LightingConfig(
         radius: width / 2,
         blurBorder: width,
-        color: Colors.orange.withOpacity(0.3),
+        color: Colors.orange.withValues(alpha: 0.3),
       ),
     );
   }

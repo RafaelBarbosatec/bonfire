@@ -1,6 +1,5 @@
 // ignore_for_file: invalid_use_of_internal_member
 
-import 'package:bonfire/collision/quad_tree/custom_quad_tree_broadphase.dart';
 import 'package:flame/collisions.dart';
 import 'package:flutter/widgets.dart';
 
@@ -17,7 +16,7 @@ class CustomQuadTreeCollisionDetection
     int maxObjects = 25,
     int maxDepth = 10,
   }) : super(
-          broadphase: CustomQuadTreeBroadphase(
+          broadphase: QuadTreeBroadphase(
             mainBoxSize: mapDimensions,
             maxObjects: maxObjects,
             maxDepth: maxDepth,

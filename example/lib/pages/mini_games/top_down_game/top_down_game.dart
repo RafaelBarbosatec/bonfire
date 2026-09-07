@@ -45,7 +45,7 @@ class TopDownGame extends StatelessWidget {
         zoom: getZoomFromMaxVisibleTile(context, 68, 12),
       ),
       player: SoldierPlayer(Vector2(64 * 17, 64 * 4)),
-      lightingColorGame: Colors.black.withOpacity(0.7),
+      lightingColorGame: Colors.black.withValues(alpha: 0.7),
     );
   }
 }

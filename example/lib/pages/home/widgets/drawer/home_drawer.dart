@@ -60,7 +60,7 @@ class HomeDrawer extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       height: 1,
                     )
                   ],

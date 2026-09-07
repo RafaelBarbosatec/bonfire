@@ -5,10 +5,10 @@ import 'package:flutter/widgets.dart';
 
 /// Animated component used like range attack.
 class FlyingAttackGameObject extends AnimatedGameObject
-    with Movement, CanNotSeen, BlockMovementCollision {
+    with Movement, CanNotSeen {
   final dynamic id;
   Future<SpriteAnimation>? animationDestroy;
-  final Direction? direction;
+
   final double damage;
   final AttackOriginEnum attackFrom;
   final bool withDecorationCollision;
@@ -17,14 +17,18 @@ class FlyingAttackGameObject extends AnimatedGameObject
   final Vector2? destroySize;
   double _cosAngle = 0;
   double _senAngle = 0;
-  ShapeHitbox? collision;
+  ShapeHitbox? shapeCollision;
+
+  final IntervalTick _intervalTick = IntervalTick(
+    1000,
+  );
 
   FlyingAttackGameObject({
     required super.position,
     required super.size,
     required super.animation,
     super.angle = 0,
-    this.direction,
+    Direction? direction,
     this.id,
     this.animationDestroy,
     this.destroySize,
@@ -35,7 +39,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     this.onDestroy,
     this.enabledDiagonal = true,
     super.lightingConfig,
-    this.collision,
+    this.shapeCollision,
   }) {
     this.speed = speed;
 
@@ -43,9 +47,9 @@ class FlyingAttackGameObject extends AnimatedGameObject
     _senAngle = sin(angle);
 
     if (direction != null) {
-      moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
+      moveFromDirection(direction, useDiagonal: enabledDiagonal);
     } else {
-      moveFromAngle(angle);
+      moveByAngle(angle);
     }
   }
 
@@ -53,7 +57,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
     required super.position,
     required super.size,
     required super.animation,
-    required this.direction,
+    Direction? direction,
     this.id,
     this.animationDestroy,
     this.destroySize,
@@ -64,10 +68,10 @@ class FlyingAttackGameObject extends AnimatedGameObject
     this.onDestroy,
     this.enabledDiagonal = true,
     super.lightingConfig,
-    this.collision,
+    this.shapeCollision,
   }) {
     this.speed = speed;
-    moveFromDirection(direction!, enabledDiagonal: enabledDiagonal);
+    moveFromDirection(direction!, useDiagonal: enabledDiagonal);
   }
 
   FlyingAttackGameObject.byAngle({
@@ -85,14 +89,14 @@ class FlyingAttackGameObject extends AnimatedGameObject
     this.onDestroy,
     this.enabledDiagonal = true,
     super.lightingConfig,
-    this.collision,
-  }) : direction = null {
+    this.shapeCollision,
+  }) {
     this.speed = speed;
 
     _cosAngle = cos(angle);
     _senAngle = sin(angle);
 
-    moveFromAngle(angle);
+    moveByAngle(angle);
   }
 
   @override
@@ -103,7 +107,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
 
   @override
   bool onComponentTypeCheck(PositionComponent other) {
-    if (other is Sensor) {
+    if (other is WithSensor) {
       return false;
     }
 
@@ -116,17 +120,23 @@ class FlyingAttackGameObject extends AnimatedGameObject
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Attackable) {
-      if (!other.checkCanReceiveDamage(attackFrom)) {
+    if (isRemoving || isRemoved) {
+      return;
+    }
+    if (other is WithLife) {
+      if (!other.life.checkCanReceiveDamage(attackFrom)) {
         return;
       }
 
+      // When there is an explosion (animationDestroy), the damage is applied
+      // by the explosion DamageHitbox created in [_destroyByAngle]. Applying
+      // it here too would hit the target twice.
       if (animationDestroy == null) {
-        other.handleAttack(attackFrom, damage, id);
+        other.life.handleAttack(attackFrom, damage, id);
       }
     }
 
-    if (other is Sensor) {
+    if (other is WithSensor) {
       return;
     }
 
@@ -135,115 +145,20 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }
 
   void _destroyObject() {
-    if (isRemoving || isRemoved) {
-      return;
-    }
     removeAll(children);
     removeFromParent();
     if (animationDestroy != null) {
-      final currentDirection = direction;
-      if (currentDirection != null) {
-        _destroyByDirection(currentDirection);
-      } else {
-        _destroyByAngle();
-      }
+      _destroyByAngle();
     }
     onDestroy?.call();
   }
 
   void _verifyExistInWorld(double dt) {
-    if (checkInterval('checkCanSee', 1000, dt) && !isRemoving) {
+    if (_intervalTick.update(dt) && !isRemoving) {
       final canSee = gameRef.camera.canSee(this);
       if (!canSee) {
         removeFromParent();
       }
-    }
-  }
-
-  void _destroyByDirection(Direction direction) {
-    Vector2 positionDestroy;
-
-    final double biggerSide = max(width, height);
-    var addCenterX = 0.0;
-    var addCenterY = 0.0;
-
-    const divisionFactor = 2.0;
-
-    if (destroySize != null) {
-      addCenterX = (size.x - destroySize!.x) / divisionFactor;
-      addCenterY = (size.y - destroySize!.y) / divisionFactor;
-    }
-    switch (direction) {
-      case Direction.left:
-        positionDestroy = Vector2(
-          left - (biggerSide / divisionFactor) + addCenterX,
-          top + addCenterY,
-        );
-        break;
-      case Direction.right:
-        positionDestroy = Vector2(
-          left + (biggerSide / divisionFactor) + addCenterX,
-          top + addCenterY,
-        );
-        break;
-      case Direction.up:
-        positionDestroy = Vector2(
-          left + addCenterX,
-          top - (biggerSide / divisionFactor) + addCenterY,
-        );
-        break;
-      case Direction.down:
-        positionDestroy = Vector2(
-          left + addCenterX,
-          top + (biggerSide / divisionFactor) + addCenterY,
-        );
-        break;
-      case Direction.upLeft:
-        positionDestroy = Vector2(
-          left - (biggerSide / divisionFactor) + addCenterX,
-          top - (biggerSide / divisionFactor) + addCenterY,
-        );
-        break;
-      case Direction.upRight:
-        positionDestroy = Vector2(
-          left + (biggerSide / divisionFactor) + addCenterX,
-          top - (biggerSide / divisionFactor) + addCenterY,
-        );
-        break;
-      case Direction.downLeft:
-        positionDestroy = Vector2(
-          left - (biggerSide / divisionFactor) + addCenterX,
-          top + (biggerSide / divisionFactor) + addCenterY,
-        );
-        break;
-      case Direction.downRight:
-        positionDestroy = Vector2(
-          left + (biggerSide / divisionFactor) + addCenterX,
-          top + (biggerSide / divisionFactor) + addCenterY,
-        );
-        break;
-    }
-
-    if (hasGameRef) {
-      final innerSize = destroySize ?? size;
-      gameRef.add(
-        AnimatedGameObject(
-          animation: animationDestroy,
-          position: positionDestroy,
-          size: innerSize,
-          lightingConfig: lightingConfig,
-          loop: false,
-          renderAboveComponents: true,
-        ),
-      );
-      _applyDestroyDamage(
-        Rect.fromLTWH(
-          positionDestroy.x,
-          positionDestroy.y,
-          innerSize.x,
-          innerSize.y,
-        ),
-      );
     }
   }
 
@@ -270,7 +185,7 @@ class FlyingAttackGameObject extends AnimatedGameObject
             width: innerSize.x,
             height: innerSize.y,
           ).positionVector2,
-          lightingConfig: lightingConfig,
+          lightingConfig: lighting.config,
           size: innerSize,
           loop: false,
           renderAboveComponents: true,
@@ -300,19 +215,14 @@ class FlyingAttackGameObject extends AnimatedGameObject
   }
 
   @override
-  bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
-    return false;
-  }
-
-  @override
   void onMount() {
-    anchor = Anchor.center;
     super.onMount();
+    anchor = Anchor.center;
   }
 
   @override
   Future<void> onLoad() {
-    add(collision ?? RectangleHitbox(size: size, isSolid: true));
+    add(shapeCollision ?? RectangleHitbox(size: size, isSolid: true));
     return super.onLoad();
   }
 }

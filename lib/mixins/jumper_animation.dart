@@ -1,5 +1,4 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/direction_animation.dart';
 
 enum JumpAnimationsEnum {
   jumpUpRight,
@@ -9,85 +8,73 @@ enum JumpAnimationsEnum {
 }
 
 /// Mixin used to adds animations in a Jumper.
-mixin JumperAnimation on Jumper, DirectionAnimation {
+mixin JumperAnimation on WithJumper, WithDirectionAnimation {
   @override
-  void onPlayRunDownAnimation() {
-    if (isJumping) {
-      if (lastDirectionHorizontal == Direction.left) {
+  void onMount() {
+    super.onMount();
+    jumper.onJumpStateChangedListener(_onJumpStateChanged);
+    directionAnimation.onAnimationExecutionListener(
+      _onDirectionAnimationExecution,
+    );
+  }
+
+  void _onJumpStateChanged(JumpingStateEnum state) {
+    if (state == JumpingStateEnum.idle) {
+      if (hDirection.isLeftSide) {
+        animation?.play(SimpleAnimationEnum.idleLeft);
+      } else {
+        animation?.play(SimpleAnimationEnum.idleRight);
+      }
+    }
+  }
+
+  DirectionAnimationMethod? _lastDirectionAnimationMethod;
+
+  bool _onDirectionAnimationExecution(DirectionAnimationMethod method) {
+    if (!jumper.isJumping) {
+      return true;
+    }
+
+    if (_lastDirectionAnimationMethod == method) {
+      return false;
+    }
+
+    _lastDirectionAnimationMethod = method;
+
+    switch (method) {
+      case DirectionAnimationMethod.onPlayRunDownAnimation:
+        if (hDirection.isLeftSide) {
+          _jumpDownLeft();
+        } else {
+          animation?.playOther(
+            JumpAnimationsEnum.jumpDownRight,
+            flipX: false,
+          );
+        }
+        return false;
+      case DirectionAnimationMethod.onPlayRunDownRightAnimation:
+        animation?.playOther(JumpAnimationsEnum.jumpDownRight, flipX: false);
+        return false;
+      case DirectionAnimationMethod.onPlayRunDownLeftAnimation:
         _jumpDownLeft();
-      } else {
-        animation?.playOther(
-          JumpAnimationsEnum.jumpDownRight,
-          flipX: false,
-        );
-      }
-    }
-  }
-
-  @override
-  void onPlayRunDownRightAnimation() {
-    if (isJumping) {
-      animation?.playOther(JumpAnimationsEnum.jumpDownRight, flipX: false);
-    } else {
-      super.onPlayRunDownRightAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunDownLeftAnimation() {
-    if (isJumping) {
-      _jumpDownLeft();
-    } else {
-      super.onPlayRunDownLeftAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunUpLeftAnimation() {
-    if (isJumping) {
-      _playJumpUpLeft();
-    } else {
-      super.onPlayRunUpLeftAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunLeftAnimation() {
-    if (isJumping) {
-      _playJumpUpLeft();
-    } else {
-      super.onPlayRunLeftAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunRightAnimation() {
-    if (isJumping) {
-      animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
-    } else {
-      super.onPlayRunRightAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunUpRightAnimation() {
-    if (isJumping) {
-      animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
-    } else {
-      super.onPlayRunUpRightAnimation();
-    }
-  }
-
-  @override
-  void onPlayRunUpAnimation() {
-    if (isJumping) {
-      if (lastDirectionHorizontal == Direction.left) {
+        return false;
+      case DirectionAnimationMethod.onPlayRunUpLeftAnimation:
+      case DirectionAnimationMethod.onPlayRunLeftAnimation:
         _playJumpUpLeft();
-      } else {
+        return false;
+      case DirectionAnimationMethod.onPlayRunRightAnimation:
+      case DirectionAnimationMethod.onPlayRunUpRightAnimation:
         animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
-      }
-    } else {
-      super.onPlayRunUpAnimation();
+        return false;
+      case DirectionAnimationMethod.onPlayRunUpAnimation:
+        if (hDirection.isLeftSide) {
+          _playJumpUpLeft();
+        } else {
+          animation?.playOther(JumpAnimationsEnum.jumpUpRight, flipX: false);
+        }
+        return false;
+      default:
+        return true;
     }
   }
 
@@ -110,25 +97,6 @@ mixin JumperAnimation on Jumper, DirectionAnimation {
         JumpAnimationsEnum.jumpDownRight,
         flipX: true,
       );
-    }
-  }
-
-  @override
-  void onJump(JumpingStateEnum state) {
-    super.onJump(state);
-    if (state == JumpingStateEnum.idle) {
-      if (lastDirectionHorizontal == Direction.left) {
-        animation?.play(SimpleAnimationEnum.idleLeft);
-      } else {
-        animation?.play(SimpleAnimationEnum.idleRight);
-      }
-    }
-  }
-
-  @override
-  void idle() {
-    if (!isJumping) {
-      super.idle();
     }
   }
 }

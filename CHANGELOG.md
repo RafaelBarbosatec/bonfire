@@ -1,8 +1,140 @@
-# 3.17.2
-- Adds params `useAreaBetweenPlayerAndTarget` to fix issue 592
+# 4.0.0
 
-# 3.17.1
-- Updates flame to 1.37.0
+Bonfire 4.0 is a major release focused on **developer experience** and **correctness**: a cleaner, API-first architecture for mixins, a simplified movement system and a fully modernized codebase (Flame `^1.38.0`). Below is the consolidated overview; each pre-release (beta.4 → beta.13) has its detailed entry further down.
+
+### Breaking: API-first mixins (`WithFeature` + `feature.{resource}`)
+
+Most mixins no longer add methods/fields directly to the component. Functionality is grouped under a named API object, keeping the component namespace clean when many mixins are combined:
+
+- `WithJumper` → `jumper` (`jumper.jump()`)
+- `WithSensor` → `sensor` (`sensor.enabled`, `sensor.onContactListener`...)
+- `WithRandomMovement` → `randomMovement` (`randomMovement.update(dt, ...)`, `randomMovement.onStartMoveListener`/`onStopMoveListener`, `randomMovement.area`)
+- `WithPathFinding` → `pathFinding` (`pathFinding.setup`, `pathFinding.moveToPosition`, `pathFinding.stop`, `pathFinding.isMoving`)
+- `WithCollision` → `collision` (`collision.onBlockMovementListener`, `collision.bodyType`, `collision.enable/disable`)
+- `WithAttack` → `attack` (`attack.melee`, `attack.range`, `attack.meleeByAngle`, `attack.rangeByAngle`, `attack.meleeByDirection`, `attack.rangeByDirection`)
+- `WithVision` → `vision` (`vision.seePlayer`, `vision.seeEnemy`, `vision.seeAndMoveToPlayer`, ...)
+- `WithLighting` → `lighting` (`lighting.setup`, `lighting.config`, `lighting.enabled`, `lighting.angle`)
+- `WithShader` → `shader`
+- `WithUtil` → `util` (`util.showDamage`, `util.generateValues`, `util.addParticle`, `util.getAngleToTarget`, `util.loadParallaxComponent`...)
+- `WithFollower`, `WithPushable`, `WithFlipRender`, `WithMovePerCell`, `WithAssetsLoader`, `WithLifeBar` — same pattern (`follower`, `pushable`, `flipRender`, `movePerCell`, `assetsLoader`, `lifeBar`)
+
+The legacy extension files (`ally`, `enemy`, `game_component`, `npc`, `player` + `rotation_*`) were removed — their helpers now live in the API objects above.
+
+### Breaking: Movement rewritten (direct access kept)
+
+`Movement` is the only mixin that keeps its original access style, but it was fully **rewritten and simplified**:
+
+- Velocity-based: `update()` applies `position += velocity * dt`; `direction`, `hDirection` and `vDirection` are now plain fields reflecting the current velocity.
+- New/renamed: `stop()`, `idle()`, `moveByAngle(...)` (was `moveFromAngle`), `moveFromDirection(dir, {useDiagonal})`, `onMove()` with no arguments, `Movement.defaultSpeed`.
+- Removed: `lastDirection`/`lastDirectionHorizontal`/`lastDirectionVertical`, `acceleration`, `velocityRadAngle`, `displacement`, `setVelocityAxis`, all `*Once` movement helpers, `stopMove({forceIdle})`, `speedDefault`, `onVelocityUpdate`, `onApplyDisplacement`, `correctPositionFromCollision`.
+- `isMoving` now uses an internal frame counter (no more `minDisplacementToConsiderMove`).
+
+### Breaking: other core changes
+
+- **Collision is event-driven**: `WithCollision` + `collision.onBlockMovementListener((points, other) => bool)` — return `false` to allow the movement. The old `BlockMovementCollision` mixin and `onBlockMovement` override were removed.
+- **Direction animations**: `SimplePlayer`/`SimpleEnemy` now use `WithDirectionAnimation` with an 8-direction `SimpleDirectionAnimation` (idle + run for the 4 axes); the sprite animation follows `direction` automatically (`directionAnimation.onPlayRun*/onPlayIdle*Animation()`).
+- **Intervals**: `InternalChecker`/`checkInterval` were removed — use `IntervalTick` (now with `tickFirstUpdate`). Built-in attack intervals were removed; control execution yourself.
+- **Behaviors**: new behavior tree system — `BSelector` (priority), `BParallel`, `BOnce` and the unified `Behavior.process` contract (`true` = finished, `false` = keep running), with `UseBehavior.debugBehaviors` and `UseBehavior.currentBehaviorId` for debugging.
+- `CustomQuadTreeBroadphase` removed; quad-tree collision uses the standard `QuadTreeBroadphase`.
+
+### Non-breaking improvements & fixes
+
+- Exact diagonal normalization: `Movement.diagonalFactor` is `sqrt(2)/2`.
+- Forces/global forces default to **no drag** (`0.0`) so applied velocities aren't nullified.
+- `FlyingAttackGameObject` no longer deals damage twice when `animationDestroy` spawns an explosion.
+- Component APIs with listeners now expose `dispose()` (called on `onRemove`).
+- Modern Flutter/Flame APIs (`Color.withValues` instead of deprecated channels), `RadioGroup` usage, etc.
+- `example/` updated to the new APIs and **included in analysis**; `awesome/` examples updated (`turn_game` added).
+- New **behavior unit tests**; docs in `docs/` (including Behaviors page) and a complete **Migration Guide** (`MIGRATION_3_TO_4.md`).
+- **Infinite maps**: new `WorldMapInfiniteByTiled` treats a small Tiled map as a pattern and repeats it as an endless world (`InfiniteWorldMapType.open`/`vertical`/`horizontal`) — chunks stream in around the camera and unload when far away, Y-sort stays correct on negative coordinates, camera bounds respect the finite axis(es) and the collision area is widened. Supporting APIs: `TileLayerComponent.addTiles`/`removeTiles`/`tiles` (quad tree grows automatically) and `TiledWorldBuilder.build(onlyObjects:)` with cached map parsing.
+- Dependencies updated: Flame `^1.38.2`, `http` `^1.6.0` and `tiledjsonreader` `^1.4.2`; CI pins Dart `3.11.0` and runs the unit test suite (`flutter test`).
+
+> Migrating? Read [MIGRATION_3_TO_4.md](MIGRATION_3_TO_4.md) — it has the full before/after tables for every changed API.
+
+# 4.0.0-beta.13
+- **BREAKING:** Rename `Behavior.runAction` to `Behavior.process` and fix the return contract documentation: `true` = behavior finished (advance to the next one), `false` = keep running.
+- Add `BSelector` (priority), `BParallel` and `BOnce` behaviors to the behavior system.
+- Add behavior debugging: `UseBehavior.debugBehaviors` logs behavior transitions and `UseBehavior.currentBehaviorId` exposes the active behavior.
+- Fix the `example` goblin to keep the behavior list stable (`late final`) so internal behavior state isn't reset.
+- Add unit tests for the behavior system.
+- Fix deprecated `Color` API usage in the shader setter (`.red/.green/.blue/opacity` → `.r/.g/.b/.a`).
+- Add project documentation in `docs/` (including the new Behaviors page), update the `MIGRATION_3_TO_4.md` guide and the docs site to the new APIs.
+
+# 4.0.0-beta.12
+- **BREAKING:** Introduce `WithAttack` and `AttackApi`, exposed through the `attack` object on every `GameComponent`. The old attack extension methods (`simpleAttackMelee`, `simpleAttackRange`, `simpleAttackMeleeByDirection`, `simpleAttackMeleeByAngle`, `simpleAttackRangeByDirection`, `simpleAttackRangeByAngle`) were removed from the `Player`, `Enemy`, `Ally` and `GameComponent` extensions.
+  - Melee: `attack.melee(damage: ..., size: ..., animation: ...)`
+  - Range: `attack.range(animation: ..., damage: ..., ...)`
+  - Advanced: `attack.meleeByAngle(...)`, `attack.meleeByDirection(...)`, `attack.rangeByAngle(...)`, `attack.rangeByDirection(...)`
+  - `damage` is now a named parameter and `animationRight` is now `animation`.
+- **BREAKING:** Introduce `WithUtil` and `UtilApi`, exposed through the `util` object on every `GameComponent`. The following extension methods were removed from `GameComponent`/`Npc`/`Enemy`/`Ally`/`Player`:
+  - `util.showDamage(...)`, `util.generateValues(...)`, `util.addParticle(...)`
+  - `util.getAngleToTarget(...)`, `util.getDirectionToTarget(...)`, `util.getAngleToPlayer()`, `util.getInverseAngleToPlayer()`, `util.getDirectionToPlayer()`, `util.playerRect`
+  - `util.isCloseTo(...)`, `util.overlaps(...)`, `util.top`, `util.bottom`, `util.left`, `util.right`
+  - `util.loadParallaxComponent(...)`, `util.loadCameraParallaxComponent(...)`
+  - `util.globalToViewportPosition(...)`, `util.viewportPositionToGlobal(...)`
+- **BREAKING:** Move vision helpers (`seePlayer`, `seeAndMoveToPlayer`, `seeAndMoveToEnemy`, `seeAndMoveToAlly`, `seeEnemy`, `seeAndMoveToAttackRange`) from the `Npc`/`Enemy`/`Ally`/`Player` extensions into the `vision` API object: `vision.seePlayer(...)`, `vision.seeAndMoveToPlayer(...)`, etc.
+- Remove the `ally`, `enemy`, `game_component`, `npc` and `player` extension files (including the `rotation_*` variants). Their functionality now lives in the `util`, `attack` and `vision` API objects.
+- Fix `FlyingAttackGameObject` dealing damage twice when `animationDestroy` is set: the direct collision no longer applies damage when the destroy animation spawns an explosion `DamageHitbox`.
+- Update `example/` to the new APIs and stop excluding it from analysis (lint errors are now reported). Also fix deprecations: `withOpacity` → `withValues`, `Radio.groupValue`/`onChanged` → `RadioGroup`.
+- Update `awesome/` examples to the new APIs (`util.loadParallaxComponent`, `attack.meleeByAngle`, etc.).
+
+# 4.0.0-beta.11
+- **BREAKING:** Remove the `InternalChecker` mixin and the `checkInterval` method.
+  - Use the `IntervalTick` class directly to control intervals instead of the `checkInterval` method (and the `resetInterval`, `pauseInterval`, `playInterval` helpers).
+  - Removed the built-in interval from the Enemy and Ally Attack extensions: `simpleAttackMelee` and `simpleAttackRange` no longer accept the `interval` parameter. You should control the execution interval yourself using an `IntervalTick`.
+  - `IntervalTick` now has the `tickFirstUpdate` parameter, which replaces the old `firstCheckIsTrue` behavior of `checkInterval`.
+- Fix drag force default: `ForcesApi` and `GlobalForcesSettings` now default to no drag (`0.0`) instead of `0.01`, preventing the quadratic drag from nullifying velocities when forces are applied.
+- Fix `Movement.diagonalFactor` precision: use the exact `sqrt(2)/2` value so diagonal movement is properly normalized.
+- Add `turn_game` example to `awesome/`.
+- Update docs: document the `IntervalTick` API (replaces `checkInterval`) and remove outdated `interval`/`execute` params from the Enemy/Ally attack extensions docs.
+
+# 4.0.0-beta.10
+- **BREAKING:** Migrate `WithLighting` to API strategy. Added `LightingApi` exposed through `lighting` API object.
+  - `setupLighting(...)` → `lighting.setup(...)`
+  - `lightingConfig` → `lighting.config`
+  - `lightingEnabled` → `lighting.enabled`
+  - `lightingAngle` → `lighting.angle`
+- Update `LightingComponent` to use the new `LightingApi`.
+- Update internal usages and examples to use the new lighting API.
+
+# 4.0.0-beta.9
+- **BREAKING:** Migrate `WithShader` to API strategy. Added `ShaderApi` exposed through `shader` API object.
+- Make component reference private (`_comp`) across all mixin APIs to avoid exposing internal state.
+- Add `dispose()` cleanup for APIs with listeners and call it on component `onRemove`:
+  - `WithJumper` → `jumper.dispose()`
+  - `WithSensor` → `sensor.dispose()`
+  - `WithRandomMovement` → `randomMovement.dispose()`
+  - `WithPushable` → `pushable.dispose()`
+- Clean up unused component references in `AssetsLoaderApi` and `FlipRenderApi` since they don't depend on the parent component.
+- Remove unnecessary cast in `ShaderApi._canSee`.
+- Remove unused import in `FlipRenderApi`.
+
+# 4.0.0-beta.8
+- update README.md
+
+# 4.0.0-beta.7
+- **BREAKING:** Major restructuring of mixin APIs. Mixins now expose functionality through a named API object following the `WithFeature` + `feature.{resource}` pattern. This reduces namespace pollution on components and improves developer experience when combining multiple mixins.
+  - `Follower` → `WithFollower` (`follower.setup(...)`, `follower.target`, `follower.offset`).
+  - `Pushable` → `WithPushable` (`pushable.setup(...)`, `pushable.onPushListener(...)`). `onPush` override removed in favor of a registered callback.
+  - `RandomMovement` → `WithRandomMovement` (`randomMovement.update(dt, ...)`). Callback parameters moved to `randomMovement.onStartMoveListener(...)` / `randomMovement.onStopMoveListener(...)`. `randomMovementArea` is now `randomMovement.area`.
+  - `PathFinding` → `WithPathFinding` (`pathFinding.setup(...)`, `pathFinding.moveToPosition(...)`, `pathFinding.stop()`, `pathFinding.isMoving`).
+  - `FlipRender` → `WithFlipRender` (`flipRender.flipVertically()`, `flipRender.flipHorizontally()`).
+  - `MovePerCell` → `WithMovePerCell` (`movePerCell.setup(...)`, `movePerCell.cellSize`).
+  - `UseAssetsLoader` → `WithAssetsLoader` (`assetsLoader.add(AssetToLoad(...))`). Public `AssetsLoader` and `AssetToLoad` classes remain available.
+  - `UseLifeBar` → `WithLifeBar` (`lifeBar.setup(...)`).
+- Remove `CustomQuadTreeBroadphase`. `CustomQuadTreeCollisionDetection` now uses `QuadTreeBroadphase` directly.
+- Fix `PushableFromEnum.PLAYER_OR_ALLY` condition logic.
+- Fix FlyingAttackGameObject destroy method
+
+# 4.0.0-beta.6
+- Fix some bugs
+
+# 4.0.0-beta.5
+- Fix issue 592
+- Fix elastic collision
+
+# 4.0.0-beta.4
+- Updates Flame to 1.37.0
 
 # 3.17.0
 - **BREAKING:** Tiles whose sprite is larger than the map cell (e.g. a 192×256 tree on a 64×64 map) are no longer squished to fit the cell. They are now automatically extracted as `GameDecoration` and rendered at their native size, anchored to the bottom-left of the cell — matching how the Tiled editor previews them. Projects that relied on the previous behaviour (oversized tilesets being forced into the map tile size) will see these tiles render larger than before.

@@ -1,4 +1,4 @@
-import 'package:bonfire/mixins/direction_animation.dart';
+import 'package:bonfire/mixins/direction_animation/direction_animation.dart';
 import 'package:bonfire/npc/ally/ally.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
@@ -16,7 +16,7 @@ import 'package:bonfire/util/direction_animations/simple_direction_animation.dar
 /// on 24/03/22
 
 /// Enemy with animation in all direction
-class SimpleAlly extends Ally with DirectionAnimation {
+class SimpleAlly extends Ally with WithDirectionAnimation {
   SimpleAlly({
     required super.position,
     required super.size,
@@ -27,8 +27,6 @@ class SimpleAlly extends Ally with DirectionAnimation {
     super.receivesAttackFrom,
   }) {
     this.animation = animation;
-    lastDirection = initDirection;
-    lastDirectionHorizontal =
-        initDirection == Direction.left ? Direction.left : Direction.right;
+    direction = initDirection;
   }
 }

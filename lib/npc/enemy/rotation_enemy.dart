@@ -1,7 +1,7 @@
 import 'package:bonfire/bonfire.dart';
 
 /// Enemy used for top-down perspective
-class RotationEnemy extends Enemy with UseSpriteAnimation, UseAssetsLoader {
+class RotationEnemy extends Enemy with UseSpriteAnimation, WithAssetsLoader {
   SpriteAnimation? animIdle;
   SpriteAnimation? animRun;
 
@@ -16,12 +16,12 @@ class RotationEnemy extends Enemy with UseSpriteAnimation, UseAssetsLoader {
     super.receivesAttackFrom,
   }) {
     angle = currentRadAngle;
-    loader?.add(
+    assetsLoader.add(
       AssetToLoad<SpriteAnimation>(animIdle, (value) {
         this.animIdle = value;
       }),
     );
-    loader?.add(
+    assetsLoader.add(
       AssetToLoad<SpriteAnimation>(animRun, (value) {
         this.animRun = value;
       }),
@@ -29,10 +29,10 @@ class RotationEnemy extends Enemy with UseSpriteAnimation, UseAssetsLoader {
   }
 
   @override
-  void moveFromAngle(double angle, {double? speed}) {
+  void moveByAngle(double angle, {double? speed}) {
     setAnimation(animRun);
     this.angle = angle;
-    super.moveFromAngle(angle, speed: speed);
+    super.moveByAngle(angle, speed: speed);
   }
 
   @override

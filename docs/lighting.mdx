@@ -1,0 +1,59 @@
+---
+title: Lighting
+description: "Add lighting effects to your game world."
+---
+
+
+> *This is a [GameComponent](https://github.com/RafaelBarbosatec/bonfire/blob/master/lib/base/game_component.dart)*
+
+Layer responsible for adding lighting to the game.
+
+<img src="/assets/example_lighting.jpg" width="400" />
+
+By setting the `lightingColorGame` property on `BonfireWidget`, you automatically enable this lighting system.
+
+To add light to objects, add the `WithLighting` mixin to the component and configure it using the `lighting.setup(...)` method:
+
+```dart
+class MyCustomDecoration extends GameDecoration with WithLighting {
+  MyCustomDecoration(Vector2 position)
+      : super.withAnimation(
+          Future<SpriteAnimation>.value(...),
+          size: Vector2(32, 32),
+          position: position,
+        ) {
+    lighting.setup(
+      LightingConfig(
+        radius: width * 1.5,
+        color: Colors.transparent,
+        // blurBorder: 20, // this is a default value
+        // type: LightingType.circle, // this is a default value
+        // useComponentAngle: false, // this is a default value. When true, light rotates together when a component changes its `angle` param.
+      ),
+    );
+  }
+}
+```
+
+You can enable or disable the light at any time:
+
+```dart
+lighting.enabled = false;
+lighting.enabled = true;
+```
+
+You can access the game lighting and change it like this:
+
+```dart
+gameRef.lighting.animateToColor(Colors.blue.withOpacity(0.7));
+```
+
+## GameColorFilter
+
+You can apply color filters in your game programmatically.
+
+### BlendMode and Color
+
+```dart
+gameRef.colorFilter.animateTo(Colors.blue, BlendMode.colorBurn);
+```

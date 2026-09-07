@@ -15,7 +15,7 @@ class LightingPage extends StatelessWidget {
           'torch': (prop) => SimpleTorch(prop.position),
         },
       ),
-      lightingColorGame: Colors.black.withOpacity(0.8),
+      lightingColorGame: Colors.black.withValues(alpha: 0.8),
       cameraConfig: CameraConfig(
         zoom: getZoomFromMaxVisibleTile(context, tileSize, 30),
         initPosition: Vector2(tileSize * 5, tileSize * 5),

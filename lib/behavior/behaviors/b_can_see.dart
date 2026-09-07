@@ -18,10 +18,10 @@ class BCanSee extends Behavior {
   });
 
   @override
-  bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
-    if (comp is Vision) {
+  bool process(double dt, GameComponent comp, BonfireGameInterface game) {
+    if (comp is WithVision) {
       var see = false;
-      comp.seeComponent(
+      comp.vision.seeComponent(
         target,
         radiusVision: radiusVision,
         visionAngle: visionAngle,
@@ -31,9 +31,9 @@ class BCanSee extends Behavior {
         },
       );
       if (see) {
-        return doBehavior(target).runAction(dt, comp, game);
+        return doBehavior(target).process(dt, comp, game);
       }
-      return doElseBehavior?.runAction(dt, comp, game) ?? true;
+      return doElseBehavior?.process(dt, comp, game) ?? true;
     } else {
       return true;
     }

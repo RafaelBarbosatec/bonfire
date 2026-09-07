@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 
-class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
+class RotationPlayer extends Player with UseSpriteAnimation, WithAssetsLoader {
   SpriteAnimation? animIdle;
   SpriteAnimation? animRun;
 
@@ -15,17 +15,18 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
     double currentRadAngle = -1.55,
     super.life,
   }) {
+    anchor = Anchor.center;
     setupMovementByJoystick(
       moveType: MovementByJoystickType.angle,
     );
     movementByJoystickRadAngle = currentRadAngle;
-    loader?.add(
+    assetsLoader.add(
       AssetToLoad<SpriteAnimation>(
         animIdle,
         (value) => this.animIdle = value,
       ),
     );
-    loader?.add(
+    assetsLoader.add(
       AssetToLoad<SpriteAnimation>(
         animRun,
         (value) => this.animRun = value,
@@ -55,11 +56,5 @@ class RotationPlayer extends Player with UseSpriteAnimation, UseAssetsLoader {
   Future<void> onLoad() async {
     await super.onLoad();
     setAnimation(animIdle);
-  }
-
-  @override
-  void onMount() {
-    anchor = Anchor.center;
-    super.onMount();
   }
 }

@@ -1,0 +1,96 @@
+---
+title: Forces
+description: "Apply forces like gravity, wind, friction and drag to components."
+---
+
+
+Bonfire has a simple forces system that you can add to your games: gravity, wind, friction, drag and custom forces.
+
+| Acceleration | Linear    | Resistance    |
+| :---:   | :---: | :---: |
+| ![](/assets/force_acceleration.gif) | ![](/assets/force_linear.gif)   | ![](/assets/force_resistance.gif)   |
+
+## Using forces
+
+To use forces, add the `WithForces` mixin to a component that has `Movement`:
+
+```dart
+class MyCustomDecoration extends GameDecoration with Movement, WithForces {
+  MyCustomDecoration() {
+    forces.setGravity(Vector2(0, 50));
+  }
+}
+```
+
+You can also configure forces using `setup`:
+
+```dart
+forces.setup(
+  mass: 2,
+  gravity: Vector2(0, 300),
+  friction: Vector2(0.1, 0.1),
+  dragCoefficient: 0.01,
+);
+```
+
+## Global forces
+
+You can configure global forces that affect all components with `WithForces`. These are usually configured in your `BonfireGame` or through `gameRef.globalForces`:
+
+```dart
+gameRef.globalForces.gravity = Vector2(0, 300);
+gameRef.globalForces.wind = Vector2(20, 0);
+gameRef.globalForces.friction = Vector2(0.1, 0.1);
+gameRef.globalForces.dragCoefficient = 0.01;
+```
+
+## Available API
+
+```dart
+// Configuration
+forces.setup({
+  double? mass,
+  double? dragCoefficient,
+  bool? enabled,
+  Vector2? gravity,
+  Vector2? wind,
+  Vector2? friction,
+})
+
+// Built-in forces
+forces.setGravity(Vector2 gravity)
+forces.setWind(Vector2 wind)
+forces.setFriction(Vector2 friction)
+forces.setDragCoefficient(double coefficient)
+forces.setMass(double mass)
+
+// Custom forces
+forces.addForce(String name, Vector2 force)
+forces.removeForce(String name)
+
+// Enable/disable
+forces.enable()
+forces.disable()
+
+// Presets
+forces.enableEarthGravity()
+forces.enableMoonGravity()
+forces.enableZeroGravity()
+forces.enableIceFriction()
+forces.enableNormalFriction()
+forces.enableHighFriction()
+
+// Common physics presets
+forces.makeProjectile({Vector2? gravity})
+forces.makeFlyingObject({Vector2? wind})
+forces.makeGroundObject()
+forces.makeSpaceObject()
+```
+
+## Mass
+
+You can edit the mass of a component to make it more or less affected by forces:
+
+```dart
+forces.setMass(2);
+```

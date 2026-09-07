@@ -1,7 +1,9 @@
 import 'package:bonfire/bonfire.dart';
 
 class PlatformPlayer extends SimplePlayer
-    with BlockMovementCollision, Jumper, JumperAnimation {
+    with WithCollision, WithJumper, JumperAnimation {
+  final int countJumps;
+
   PlatformPlayer({
     required super.position,
     required super.size,
@@ -9,11 +11,15 @@ class PlatformPlayer extends SimplePlayer
     super.initDirection,
     super.speed,
     super.life,
-    int countJumps = 1,
+    this.countJumps = 1,
   }) : super(
           animation: animation?.toSimpleDirectionAnimation(),
-        ) {
-    setupJumper(maxJump: countJumps);
+        );
+
+  @override
+  void onMount() {
+    super.onMount();
+    jumper.setMaxJump(countJumps);
   }
 
   @override
@@ -33,7 +39,6 @@ class PlatformPlayer extends SimplePlayer
     );
   }
 
-  @override
   Future<void> replaceAnimation(
     SimpleDirectionAnimation newAnimation, {
     bool doIdle = false,
@@ -47,7 +52,7 @@ class PlatformPlayer extends SimplePlayer
     PlatformAnimations animation, {
     bool doIdle = false,
   }) {
-    return super.replaceAnimation(
+    return directionAnimation.replaceAnimation(
       SimpleDirectionAnimation(
         idleRight: animation.idleRight,
         runRight: animation.runRight,
@@ -67,6 +72,7 @@ class PlatformPlayer extends SimplePlayer
         },
       ),
       doIdle: doIdle,
+      idleCallback: idle,
     );
   }
 }

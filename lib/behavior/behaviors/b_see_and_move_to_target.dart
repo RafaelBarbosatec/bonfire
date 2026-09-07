@@ -20,7 +20,7 @@ class BSeeAndMoveToTarget extends Behavior {
     super.id,
   });
   @override
-  bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
+  bool process(double dt, GameComponent comp, BonfireGameInterface game) {
     return BCanSee(
       target: target,
       radiusVision: radiusVision,
@@ -28,21 +28,21 @@ class BSeeAndMoveToTarget extends Behavior {
       doElseBehavior: BCustom(
         behavior: (dt, comp, game) {
           if (comp is Movement && doElseBehavior == null) {
-            comp.stopMove();
+            comp.stop();
           }
-          return doElseBehavior?.runAction(dt, comp, game) ?? true;
+          return doElseBehavior?.process(dt, comp, game) ?? true;
         },
       ),
       doBehavior: (target) {
         return BCondition(
-          condition: (_, comp, game) => comp.isCloseTo(
+          condition: (_, comp, game) => comp.util.isCloseTo(
             target,
             distance: distance,
           ),
           doBehavior: BAction(
             action: (dt, comp, game) {
               if (comp is Movement) {
-                comp.stopMove();
+                comp.stop();
               }
               onClose(dt, comp);
             },
@@ -54,6 +54,6 @@ class BSeeAndMoveToTarget extends Behavior {
           ),
         );
       },
-    ).runAction(dt, comp, game);
+    ).process(dt, comp, game);
   }
 }

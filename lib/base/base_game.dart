@@ -1,5 +1,5 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/pointer_detector.dart';
+import 'package:bonfire/input/pointer_detector.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/gestures.dart';

@@ -1,0 +1,121 @@
+---
+title: Shader
+description: "Apply shaders to your game components."
+---
+
+
+> Mixin useful to apply shader in your component.
+
+To use shader in your component just use the mixin `WithShader`.
+Once added, you can access the shader through the `shader` API object:
+
+- `shader.shader` : After loading your `FragmentShader`, set it here.
+- `shader.componentStatic`: If your component is static (doesn't change over time), set this to `true` for better performance. This way the component texture doesn't need to be sent to the shader every frame.
+- `shader.canvasScale`: Useful to customize or correct scale.
+
+> Some components already have this mixin. They are `GameMap` and `TileLayerComponent`. This makes it possible to add shader effects to the map or to a specific layer of the map.
+
+## Setting a shader in your component
+
+The first step is to create your `.frag` file, place it in the `shaders` folder and declare it in your `pubspec.yaml`:
+
+```yaml
+flutter:
+  shaders:
+    - shaders/myshader.frag
+```
+
+The file should have this base structure:
+
+```glsl
+#include <flutter/runtime_effect.glsl>
+
+uniform float uTime; // TIME
+uniform vec2 uSize;  // COMPONENT SIZE
+uniform sampler2D uTexture; // COMPONENT TEXTURE
+
+out vec4 fragColor;
+
+void main() {
+  vec2 uv = FlutterFragCoord().xy / uSize;
+  fragColor =  texture(uTexture, uv);
+}
+```
+
+Loading and setting this shader in your component:
+
+```dart
+class MyComponent extends GameDecoration with WithShader {
+  @override
+  Future<void> onLoad() async {
+    final program = await FragmentProgram.fromAsset('shaders/myshader.frag');
+    shader.shader = program.fragmentShader();
+    return super.onLoad();
+  }
+}
+```
+
+Done! Now your component will be rendered by your shader file and you have all the power of shaders to apply effects to the component.
+
+Take a look at our example [here](https://github.com/RafaelBarbosatec/bonfire/tree/develop/example/lib/pages/shader).
+
+## Setting values to the shader
+
+> Bonfire already sends the `time`, `size` and `texture` of the component, so you must start the `float` index at `3` and the `sampler` index at `1`.
+
+Sometimes it's hard to manage these params because the index order is important. For example:
+
+```dart
+void updateShader(FragmentShader shader, Color color, Image image) {
+  shader.setFloat(0, 23);  // uScale
+  shader.setFloat(1, 114); // uMagnitude x
+  shader.setFloat(2, 83);  // uMagnitude y
+
+  // Convert color to premultiplied opacity.
+  shader.setFloat(3, color.red / 255 * color.opacity);   // uColor r
+  shader.setFloat(4, color.green / 255 * color.opacity); // uColor g
+  shader.setFloat(5, color.blue / 255 * color.opacity);  // uColor b
+  shader.setFloat(6, color.opacity);                     // uColor a
+
+  // Initialize sampler uniform.
+  shader.setImageSampler(0, image);
+}
+```
+
+To help with this task we created the `ShaderSetter`.
+
+```dart
+void updateShader(FragmentShader shader, Color color, Image image) {
+  ShaderSetter(
+    values: [
+      SetterImage(noiseGradiente), // uNoise
+      SetterDouble(0.05),          // uIntensity
+      SetterVector2(Vector2(0.05, 0.05)), // uScroll
+      SetterColor(Colors.blue),    // uColor
+    ],
+  ).apply(shader);
+}
+```
+
+It will send the params to the shader like this:
+
+```glsl
+#include <flutter/runtime_effect.glsl>
+
+uniform float uTime; // TIME
+uniform vec2 uSize;  // COMPONENT SIZE
+uniform sampler2D uTexture; // COMPONENT TEXTURE
+
+/// PARAMS RECEIVED BY DART CODE
+uniform sampler2D uNoise;
+uniform float uIntensity; 
+uniform vec2 uScroll;
+uniform vec4 uColor;
+
+out vec4 fragColor;
+
+void main() {
+  vec2 uv = FlutterFragCoord().xy / uSize;
+  fragColor =  texture(uTexture, uv);
+}
+```

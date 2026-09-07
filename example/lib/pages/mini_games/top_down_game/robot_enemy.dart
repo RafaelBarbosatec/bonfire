@@ -12,15 +12,21 @@ import 'package:example/shared/util/common_sprite_sheet.dart';
 ///
 /// Rafaelbarbosatec
 /// on 28/01/22
-class ZombieEnemy extends RotationEnemy
-    with BlockMovementCollision, RandomMovement {
+class ZombieEnemy extends RotationEnemy with WithCollision, WithRandomMovement {
   ZombieEnemy(Vector2 position)
       : super(
           position: position,
           size: Vector2(68, 43),
           animIdle: _getAnimation(),
           animRun: _getAnimation(),
-        );
+        ) {
+    randomMovement.setup(
+      speed: 20,
+      maxDistance: 64,
+      minDistance: 32,
+      updateAngle: true,
+    );
+  }
 
   static Future<SpriteAnimation> _getAnimation() {
     return Sprite.load('zombie.png').toAnimation();
@@ -29,30 +35,25 @@ class ZombieEnemy extends RotationEnemy
   @override
   void update(double dt) {
     super.update(dt);
-    seeAndMoveToPlayer(
+    vision.seeAndMoveToPlayer(
       closePlayer: (_) {
-        simpleAttackMelee(
+        attack.melee(
           damage: 10,
           size: Vector2.all(size.y),
-          animationRight: CommonSpriteSheet.blackAttackEffectRight,
+          animation: CommonSpriteSheet.blackAttackEffectRight,
         );
       },
       radiusVision: 128,
       notObserved: () {
-        runRandomMovement(
+        randomMovement.run(
           dt,
-          updateAngle: true,
-          maxDistance: 64,
-          minDistance: 32,
-          speed: 20,
         );
         return false;
       },
     );
   }
 
-  @override
-  void onDie() {
+  void _onDie() {
     gameRef.add(
       AnimatedGameObject(
         animation: CommonSpriteSheet.smokeExplosion,
@@ -64,7 +65,12 @@ class ZombieEnemy extends RotationEnemy
     );
     gameRef.camera.shake(intensity: 4);
     removeFromParent();
-    super.onDie();
+  }
+
+  @override
+  void onMount() {
+    life.onDieListener(_onDie);
+    super.onMount();
   }
 
   @override

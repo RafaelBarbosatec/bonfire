@@ -3,10 +3,12 @@ import 'package:example/pages/mini_games/manual_map/dungeon_map.dart';
 import 'package:example/shared/decoration/potion_life.dart';
 import 'package:example/shared/util/common_sprite_sheet.dart';
 
-class Chest extends GameDecoration with TapGesture, Vision {
+class Chest extends GameDecoration with TapGesture, WithVision {
   bool _observedPlayer = false;
 
   late TextPaint _textConfig;
+
+  final IntervalTick _intervalTick = IntervalTick(500);
   Chest(Vector2 position)
       : super.withAnimation(
           animation: CommonSpriteSheet.chestAnimated,
@@ -23,8 +25,8 @@ class Chest extends GameDecoration with TapGesture, Vision {
 
   @override
   void update(double dt) {
-    if (gameRef.player != null && checkInterval('SeepLayr', 500, dt)) {
-      seeComponent(
+    if (gameRef.player != null && _intervalTick.update(dt)) {
+      vision.seeComponent(
         gameRef.player!,
         observed: (player) {
           if (!_observedPlayer) {

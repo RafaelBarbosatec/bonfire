@@ -1,7 +1,7 @@
 import 'package:bonfire/base/bonfire_game_interface.dart';
 import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/behavior/behavior.dart';
-import 'package:bonfire/mixins/random_movement.dart';
+import 'package:bonfire/mixins/random_movement/random_movement.dart';
 
 class BRandomMovement extends Behavior {
   final double? speed;
@@ -23,10 +23,9 @@ class BRandomMovement extends Behavior {
     super.id,
   });
   @override
-  bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
-    if (comp is RandomMovement) {
-      comp.runRandomMovement(
-        dt,
+  bool process(double dt, GameComponent comp, BonfireGameInterface game) {
+    if (comp is WithRandomMovement) {
+      comp.randomMovement.setup(
         speed: speed,
         maxDistance: maxDistance,
         minDistance: minDistance,
@@ -35,6 +34,7 @@ class BRandomMovement extends Behavior {
         updateAngle: updateAngle,
         directions: allowDirections,
       );
+      comp.randomMovement.run(dt);
     }
     return true;
   }

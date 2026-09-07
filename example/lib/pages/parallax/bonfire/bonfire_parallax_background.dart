@@ -8,7 +8,7 @@ class BonfireParallaxBackground extends GameBackground {
   }
 
   void _addParallax() async {
-    final p = await loadCameraParallaxComponent(
+    final p = await util.loadCameraParallaxComponent(
       [
         ParallaxImageData('platform/back.png'),
         ParallaxImageData('platform/middle.png'),

@@ -212,7 +212,7 @@ class KnightInterface extends GameInterface {
   void _animateColorFilter() {
     if (gameRef.colorFilter?.config.color == null) {
       gameRef.colorFilter?.animateTo(
-        Colors.red.withOpacity(0.5),
+        Colors.red.withValues(alpha: 0.5),
       );
     } else {
       gameRef.colorFilter?.animateTo(Colors.transparent, onFinish: () {

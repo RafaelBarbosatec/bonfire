@@ -17,7 +17,7 @@ class BonfireVersion extends StatelessWidget {
         Text(
           'v3',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Colors.white.withOpacity(0.5),
+                color: Colors.white.withValues(alpha: 0.5),
               ),
         ),
       ],

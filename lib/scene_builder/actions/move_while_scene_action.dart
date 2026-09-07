@@ -18,7 +18,7 @@ class MoveWhileSceneAction extends SceneAction {
       doThis(component);
       return false;
     } else {
-      component.stopMove();
+      component.stop();
       return true;
     }
   }

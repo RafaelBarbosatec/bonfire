@@ -29,10 +29,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: cb6a278ef2dbb298455e1a713bda08524a175630ec643a242c399c932a0a1f7d
+      sha256: ace891da0862b0e4cabbb064ee3fd87b2728b898949fdb366d83fe98342c9f19
       url: "https://pub.dev"
     source: hosted
-    version: "3.6.1"
+    version: "4.2.0"
   args:
     dependency: transitive
     description:
@@ -55,7 +55,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.17.1"
+    version: "4.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -120,6 +120,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  ffi:
+    dependency: transitive
+    description:
+      name: ffi
+      sha256: "6d7fd89431262d8f3125e81b50d3847a091d846eafcd4fdb88dd06f36d705a45"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   file:
     dependency: transitive
     description:
@@ -140,10 +148,10 @@ packages:
     dependency: transitive
     description:
       name: flame
-      sha256: b9e65f6d7d06a301d6ea3cde03731cad3cdc255d56e0fb53c56c1e7806aaaf6a
+      sha256: b4d7e59b81f35a426f8b39dcec10175180b9c2984b2b2e619021660d8951307c
       url: "https://pub.dev"
     source: hosted
-    version: "1.37.0"
+    version: "1.38.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -198,10 +206,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: "2c11f3f94c687ee9bad77c171151672986360b2b001d109814ee7140b2cf261b"
+      sha256: "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.0"
+    version: "1.6.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -330,6 +338,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
+  posix:
+    dependency: transitive
+    description:
+      name: posix
+      sha256: bc1bad54ad2b735816e31f8d4600cfde6c7839975085ddfbca48b6c9f7c4044e
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.5.2"
   pub_semver:
     dependency: transitive
     description:
@@ -459,10 +475,10 @@ packages:
     dependency: transitive
     description:
       name: tiledjsonreader
-      sha256: "5d5731f17830f48ae8f926ddb2d81a5b7890d6047f78e35a13a29da9834aee32"
+      sha256: ca987348c2d82d2806311c137cc77bf9f83d2517697ee19d0d7a7b01531375b1
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.1"
+    version: "1.4.2"
   typed_data:
     dependency: transitive
     description:

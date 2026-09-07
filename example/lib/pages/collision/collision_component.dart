@@ -1,13 +1,25 @@
 import 'package:bonfire/bonfire.dart';
 
 class CollisionComponent extends GameDecoration
-    with Movement, BlockMovementCollision, HandleForces, ElasticCollision {
+    with Movement, WithCollision, WithForces, WithElasticCollision {
   final bool isCircle;
+
   CollisionComponent({
     required Vector2 position,
     required this.isCircle,
   }) : super(position: position, size: Vector2.all(16)) {
-    addForce(GravityForce2D());
+    // Configurar comportamento elástico - AGORA com valores físicos corretos
+    elasticCollision.setup(
+      bounciness: 0.85, // Valor físicamente realístico
+      minBounceVelocity: 20.0,
+    );
+
+    // Configurar física com menos resistência
+    forces.setup(
+      friction: Vector2(0.05, 0.05), // Fricção muito baixa
+      dragCoefficient: 0.01, // Resistência mínima
+      gravity: Vector2(0, 400), // Gravidade moderada
+    );
   }
 
   @override

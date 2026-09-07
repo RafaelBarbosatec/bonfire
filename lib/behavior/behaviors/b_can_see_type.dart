@@ -16,10 +16,10 @@ class BCanSeeType<T extends GameComponent> extends Behavior {
   });
 
   @override
-  bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
-    if (comp is Vision) {
+  bool process(double dt, GameComponent comp, BonfireGameInterface game) {
+    if (comp is WithVision) {
       List<T>? list;
-      comp.seeComponentType<T>(
+      comp.vision.seeComponentType<T>(
         radiusVision: radiusVision,
         visionAngle: visionAngle,
         angle: angle,
@@ -28,9 +28,9 @@ class BCanSeeType<T extends GameComponent> extends Behavior {
         },
       );
       if (list != null) {
-        return doBehavior(list!).runAction(dt, comp, game);
+        return doBehavior(list!).process(dt, comp, game);
       }
-      return doElseBehavior?.runAction(dt, comp, game) ?? true;
+      return doElseBehavior?.process(dt, comp, game) ?? true;
     } else {
       return true;
     }

@@ -7,8 +7,8 @@ export 'simple_player.dart';
 class Player extends GameComponent
     with
         Movement,
-        Attackable,
-        Vision,
+        WithLife,
+        WithVision,
         PlayerControllerListener,
         MovementByJoystick {
   Player({
@@ -18,8 +18,8 @@ class Player extends GameComponent
     double? speed,
   }) {
     this.speed = speed ?? this.speed;
-    receivesAttackFrom = AcceptableAttackOriginEnum.ENEMY;
-    initialLife(life);
+    this.life.receivesAttackFrom = AcceptableAttackOriginEnum.ENEMY;
+    this.life.initial(life);
     this.position = position;
     this.size = size;
   }

@@ -25,7 +25,7 @@ class ParallaxBaseBackground extends GameComponent {
   }
 
   void _addParallax() async {
-    final p = await loadParallaxComponent(
+    final p = await util.loadParallaxComponent(
       [
         ParallaxImageData('base.png'),
       ],

@@ -1,4 +1,4 @@
-import 'package:bonfire/mixins/direction_animation.dart';
+import 'package:bonfire/mixins/direction_animation/direction_animation.dart';
 import 'package:bonfire/npc/npc.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
@@ -16,7 +16,7 @@ import 'package:bonfire/util/direction_animations/simple_direction_animation.dar
 /// on 22/03/22
 
 /// Enemy with animation in all direction
-class SimpleNpc extends Npc with DirectionAnimation {
+class SimpleNpc extends Npc with WithDirectionAnimation {
   SimpleNpc({
     required super.position,
     required super.size,
@@ -25,8 +25,6 @@ class SimpleNpc extends Npc with DirectionAnimation {
     Direction initDirection = Direction.right,
   }) {
     this.animation = animation;
-    lastDirection = initDirection;
-    lastDirectionHorizontal =
-        initDirection == Direction.left ? Direction.left : Direction.right;
+    direction = initDirection;
   }
 }

@@ -7,7 +7,7 @@ import 'package:flappy_bird/util/spritesheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Bird extends PlatformPlayer with HandleForces, TapGesture {
+class Bird extends PlatformPlayer with WithForces, TapGesture {
   Vector2? _initialPosition;
   Bird({required super.position})
       : super(
@@ -23,6 +23,7 @@ class Bird extends PlatformPlayer with HandleForces, TapGesture {
         ) {
     _initialPosition = position.clone();
     anchor = Anchor.center;
+    collision.onBlockMovementListener(onBlockMovementListener);
   }
 
   @override
@@ -36,7 +37,7 @@ class Bird extends PlatformPlayer with HandleForces, TapGesture {
 
   @override
   void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
-    // TODO: disable directional
+    //disable directional
   }
 
   @override
@@ -46,7 +47,7 @@ class Bird extends PlatformPlayer with HandleForces, TapGesture {
   }
 
   void doJump() async {
-    jump(force: true, jumpSpeed: 160);
+    jumper.jump(force: true, jumpSpeed: 250);
   }
 
   final graus90 = 1.0472;
@@ -71,8 +72,8 @@ class Bird extends PlatformPlayer with HandleForces, TapGesture {
     return super.onLoad();
   }
 
-  @override
-  bool onBlockMovement(Set<Vector2> intersectionPoints, GameComponent other) {
+  bool onBlockMovementListener(
+      Set<Vector2> intersectionPoints, GameComponent other) {
     gameRef.pauseEngine();
     showDialog(
       context: context,
@@ -89,15 +90,15 @@ class Bird extends PlatformPlayer with HandleForces, TapGesture {
         );
       },
     );
-    return super.onBlockMovement(intersectionPoints, other);
+    return true;
   }
 
   void _resetGame() {
     gameRef.query<PipeLineController>().first.reset();
     gameRef.query<PipeLine>().forEach((element) => element.removeFromParent());
-    setZeroVelocity();
+    stop();
     position = _initialPosition!.clone();
-    lastDirection = Direction.right;
+    direction = Direction.right;
     gameRef.resumeEngine();
     Navigator.pop(context);
   }

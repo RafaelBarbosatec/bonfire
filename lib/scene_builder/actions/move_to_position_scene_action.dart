@@ -33,18 +33,18 @@ class MoveToPositionSceneAction<T extends Movement> extends SceneAction {
 
     final dtSpeed = component.speed * dt;
     if (diffPosition.x.abs() < dtSpeed && diffPosition.y.abs() < dtSpeed) {
-      component.stopMove();
+      component.stop();
       return true;
     }
 
     final d = _diffPosition - diffPosition;
     if (d.isZero()) {
-      component.stopMove();
+      component.stop();
       return true;
     }
     _diffPosition = diffPosition;
     final radAngle = atan2(diffPosition.y, diffPosition.x);
-    component.moveFromAngle(radAngle);
+    component.moveByAngle(radAngle);
     return false;
   }
 }

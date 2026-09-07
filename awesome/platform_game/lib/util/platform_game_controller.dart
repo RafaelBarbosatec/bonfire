@@ -1,0 +1,74 @@
+import 'package:bonfire/bonfire.dart';
+import 'package:flutter/material.dart';
+import 'package:platform_game/components/fox_player.dart';
+import 'package:platform_game/components/gem_decoration.dart';
+
+class PlatformGameController extends GameComponent {
+  bool showGameOver = false;
+  bool showWin = false;
+  final VoidCallback reset;
+
+  final IntervalTick _intervalTick = IntervalTick(500);
+
+  PlatformGameController({required this.reset});
+  @override
+  void update(double dt) {
+    if (_intervalTick.update(dt)) {
+      _checkWin();
+      _checkGameOver();
+    }
+    super.update(dt);
+  }
+
+  void _checkWin() {
+    var containGem = gameRef.query<GemDecoration>().isNotEmpty;
+    if (!containGem && !showWin) {
+      showWin = true;
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Congratulation'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  void _checkGameOver() {
+    if (gameRef.query<FoxPlayer>().isEmpty && !showGameOver) {
+      showGameOver = true;
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Game Over'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  reset();
+                },
+                child: const Text('TRY AGAIN'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+}

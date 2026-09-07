@@ -15,11 +15,11 @@ class BCondition extends Behavior {
   });
 
   @override
-  bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
+  bool process(double dt, GameComponent comp, BonfireGameInterface game) {
     if (condition(dt, comp, game)) {
-      return doBehavior.runAction(dt, comp, game);
+      return doBehavior.process(dt, comp, game);
     } else {
-      return doElseBehavior?.runAction(dt, comp, game) ?? true;
+      return doElseBehavior?.process(dt, comp, game) ?? true;
     }
   }
 }

@@ -67,19 +67,34 @@ class TiledWorldBuilder {
     _objectsBuilder[name] = builder;
   }
 
-  Future<WorldBuildData> build() async {
+  Future<WorldBuildData> build({bool onlyObjects = false}) async {
     try {
-      _tiledMap = await reader.readMap();
+      // Cache the parsed map so repeated builds (e.g. infinite maps loading
+      // one chunk at a time) don't re-read/re-parse the asset every time.
+      _tiledMap ??= await reader.readMap();
       if (_tiledMap?.orientation != _mapOrientationSupported) {
         throw Exception(
           'Bonfire have only suport to $_mapOrientationSupported orientation.',
         );
       }
-      _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble() ?? 0.0;
-      _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble() ?? 0.0;
+      if (_tileWidthOrigin == 0) {
+        _tileWidthOrigin = _tiledMap?.tileWidth?.toDouble() ?? 0.0;
+        _tileHeightOrigin = _tiledMap?.tileHeight?.toDouble() ?? 0.0;
+      }
       _tileWidth = forceTileSize?.x ?? _tileWidthOrigin;
       _tileHeight = forceTileSize?.y ?? _tileHeightOrigin;
-      await _load(_tiledMap!);
+      if (onlyObjects) {
+        // Keep the tile layers untouched and only (re)build the objects of
+        // the object layers. Internal lists are cleared so repeated builds
+        // don't accumulate components.
+        _components.clear();
+        _mapDecorations.clear();
+      } else {
+        _layers.clear();
+        _components.clear();
+        _mapDecorations.clear();
+      }
+      await _load(_tiledMap!, onlyObjects: onlyObjects);
     } catch (e) {
       onError?.call(e);
       // ignore: avoid_print
@@ -98,14 +113,29 @@ class TiledWorldBuilder {
     );
   }
 
-  Future<void> _load(TiledMap tiledMap) async {
+  Future<void> _load(TiledMap tiledMap, {bool onlyObjects = false}) async {
     for (final layer in tiledMap.layers ?? const <MapLayer>[]) {
-      await _loadLayer(layer);
+      await _loadLayer(layer, onlyObjects: onlyObjects);
     }
   }
 
-  Future<void> _loadLayer(MapLayer layer) async {
+  Future<void> _loadLayer(
+    MapLayer layer, {
+    bool onlyObjects = false,
+  }) async {
     if (layer.visible != true) {
+      return;
+    }
+
+    if (onlyObjects) {
+      if (layer is ObjectLayer) {
+        _addObjects(layer);
+      }
+      if (layer is GroupLayer) {
+        for (final child in layer.layers ?? const <MapLayer>[]) {
+          await _loadLayer(child, onlyObjects: true);
+        }
+      }
       return;
     }
 

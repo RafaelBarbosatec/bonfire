@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:bonfire/bonfire.dart';
 
 class BSeeAndPositioned extends Behavior {
@@ -8,8 +6,11 @@ class BSeeAndPositioned extends Behavior {
   final double? visionAngle;
   final Behavior? doElseBehavior;
   final double? minDistance;
-  final void Function(GameComponent target) positioned;
-  String _intervalKey = '';
+  final void Function(GameComponent target, double dt) positioned;
+
+  final IntervalTick _intervalTick = IntervalTick(
+    500,
+  );
 
   BSeeAndPositioned({
     required this.target,
@@ -19,11 +20,9 @@ class BSeeAndPositioned extends Behavior {
     this.doElseBehavior,
     this.minDistance,
     super.id,
-  }) {
-    _intervalKey = 'seeAndPositioned${Random().nextInt(10000)}';
-  }
+  });
   @override
-  bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
+  bool process(double dt, GameComponent comp, BonfireGameInterface game) {
     return BCanSee(
       target: target,
       radiusVision: radiusVision,
@@ -31,9 +30,9 @@ class BSeeAndPositioned extends Behavior {
       doElseBehavior: BCustom(
         behavior: (dt, comp, game) {
           if (comp is Movement && doElseBehavior == null) {
-            comp.stopMove();
+            comp.stop();
           }
-          return doElseBehavior?.runAction(dt, comp, game) ?? true;
+          return doElseBehavior?.process(dt, comp, game) ?? true;
         },
       ),
       doBehavior: (target) {
@@ -46,24 +45,24 @@ class BSeeAndPositioned extends Behavior {
                 minD,
               );
               if (inDistance) {
-                final playerDirection = comp.getDirectionToTarget(
+                final playerDirection = comp.util.getDirectionToTarget(
                   target,
                 );
-                comp.lastDirection = playerDirection;
-                if (comp.lastDirection.isHorizontal) {
-                  comp.lastDirectionHorizontal = comp.lastDirection;
-                }
 
-                if (comp.checkInterval(_intervalKey, 500, dt)) {
-                  comp.stopMove();
+                comp.direction = playerDirection;
+
+                if (_intervalTick.update(
+                  dt,
+                )) {
+                  comp.stop();
                 }
-                positioned.call(target);
+                positioned.call(target, dt);
               }
             }
             return true;
           },
         );
       },
-    ).runAction(dt, comp, game);
+    ).process(dt, comp, game);
   }
 }

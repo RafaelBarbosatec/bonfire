@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/pointer_detector.dart';
+import 'package:bonfire/input/pointer_detector.dart';
 import 'package:flutter/widgets.dart';
 
 /// Base of the all components in the Bonfire
@@ -9,9 +9,10 @@ abstract class GameComponent extends PositionComponent
     with
         BonfireHasGameRef,
         PointerDetectorHandler,
-        InternalChecker,
         HasPaint,
-        CollisionCallbacks {
+        CollisionCallbacks,
+        WithUtil,
+        WithAttack {
   Map<String, dynamic>? properties;
 
   /// When true this component render above all components in game.
@@ -65,7 +66,10 @@ abstract class GameComponent extends PositionComponent
     if (renderAboveComponents && hasGameRef) {
       return LayerPriority.getAbovePriority(gameRef.highestPriority);
     }
-    return LayerPriority.getComponentPriority(rectCollision.bottom.floor());
+    final priorityOffset = hasGameRef ? gameRef.map.renderPriorityOffsetY : 0.0;
+    return LayerPriority.getComponentPriority(
+      (rectCollision.bottom + priorityOffset).floor(),
+    );
   }
 
   @override
@@ -127,8 +131,8 @@ abstract class GameComponent extends PositionComponent
     if (component is ShapeHitbox && gameRef.showCollisionArea) {
       final paintCollition = Paint()
         ..color = gameRef.collisionAreaColor ?? const Color(0xffffffff);
-      if (this is Sensor) {
-        paintCollition.color = Sensor.color;
+      if (this is WithSensor) {
+        paintCollition.color = WithSensor.color;
       }
       component.paint = paintCollition;
       component.renderShape = true;
@@ -240,7 +244,7 @@ abstract class GameComponent extends PositionComponent
 
   List<ShapeHitbox> _getSensorsHitbox() {
     final sensorHitBox = <ShapeHitbox>[];
-    gameRef.query<Sensor>(onlyVisible: true).forEach((e) {
+    gameRef.query<WithSensor>(onlyVisible: true).forEach((e) {
       sensorHitBox.addAll(e.children.query<ShapeHitbox>());
     });
     return sensorHitBox;

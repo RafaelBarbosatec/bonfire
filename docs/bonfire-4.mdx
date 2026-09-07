@@ -1,0 +1,159 @@
+---
+title: What's New in 4.0
+description: "What's new in Bonfire 4.0 and how to migrate from 3.x."
+---
+
+
+Bonfire 4.0 introduces a new API-first architecture for mixins. The main goal is to improve the developer experience when building complex game components.
+
+## Motivation
+
+In previous versions, mixins exposed methods and variables directly on the component. When a component used several mixins (`Movement`, `Jumper`, `Sensor`, `PathFinding`, `Pushable`, `RandomMovement`, etc.), the component namespace became crowded and autocomplete less useful.
+
+Starting with Bonfire 4.0, most mixins follow a consistent pattern:
+
+- The mixin is named `WithFeature`.
+- The mixin exposes a single API object: `feature`.
+- All related methods, listeners and state are accessed through `component.feature.method()`.
+
+```dart
+// Bonfire 3.x
+player.jump();
+player.runRandomMovement(dt, speed: 20);
+player.setupPathFinding(linePathEnabled: true);
+
+// Bonfire 4.0
+player.jumper.jump();
+player.randomMovement.update(dt, speed: 20);
+player.pathFinding.setup(linePathEnabled: true);
+```
+
+## What changed?
+
+| Old mixin | New mixin | API object | Main methods |
+|-----------|-----------|------------|--------------|
+| `Follower` | `WithFollower` | `follower` | `setup(...)`, `removeTarget()` |
+| `Jumper` | `WithJumper` | `jumper` | `jump()`, `setMaxJump(...)` |
+| `Sensor` | `WithSensor` | `sensor` | `onContactListener(...)`, `onContactEndListener(...)` |
+| `Attackable` / `Life` | `WithLife` | `life` | `initial(...)`, `add(...)`, `remove(...)` |
+| `Pushable` | `WithPushable` | `pushable` | `setup(...)`, `onPushListener(...)` |
+| `RandomMovement` | `WithRandomMovement` | `randomMovement` | `update(dt, ...)` |
+| `PathFinding` | `WithPathFinding` | `pathFinding` | `setup(...)`, `moveToPosition(...)` |
+| `FlipRender` | `WithFlipRender` | `flipRender` | `flipVertically()`, `flipHorizontally()` |
+| `MovePerCell` | `WithMovePerCell` | `movePerCell` | `setup(...)` |
+| `UseAssetsLoader` | `WithAssetsLoader` | `assetsLoader` | `add(AssetToLoad(...))` |
+| `UseLifeBar` | `WithLifeBar` | `lifeBar` | `setup(...)` |
+| `UseShader` / `WithShader` | `WithShader` | `shader` | `shader`, `canvasScale`, `componentStatic` |
+| `Attack extensions` | `WithAttack` | `attack` | `melee(...)`, `range(...)`, `meleeByAngle(...)`, `rangeByAngle(...)` |
+| `GameComponent extensions` | `WithUtil` | `util` | `showDamage(...)`, `generateValues(...)`, `getDirectionToTarget(...)` |
+| `Vision extensions` | `WithVision` | `vision` | `seePlayer(...)`, `seeAndMoveToPlayer(...)`, `seeAndMoveToEnemy(...)` |
+
+> **Note:** `Movement` is the only mixin that remains directly accessible. It keeps its original API because it is the foundation used by almost every other mixin and by user code.
+
+## Examples
+
+### WithLife
+
+```dart
+class MyEnemy extends SimpleEnemy with WithLife {
+  MyEnemy(Vector2 position) : super(position: position, size: Vector2.all(32)) {
+    life.initial(200);
+    life.onDieListener(_onDie);
+    life.onRemoveLifeListener(_onDamage);
+  }
+
+  void _onDie() {
+    removeFromParent();
+  }
+
+  void _onDamage(double amount) {
+    util.showDamage(amount);
+  }
+}
+```
+
+### WithJumper
+
+```dart
+class MyCharacter extends SimplePlayer with WithJumper {
+  @override
+  void onMount() {
+    super.onMount();
+    jumper.setMaxJump(2);
+    jumper.onJumpStateChangedListener(_onJumpStateChanged);
+  }
+
+  void _onJumpStateChanged(JumpingStateEnum state) {
+    // update animation based on state
+  }
+
+  void jumpAction() {
+    jumper.jump();
+  }
+}
+```
+
+### WithSensor
+
+```dart
+class Spikes extends GameDecoration with WithSensor<GameComponent> {
+  Spikes(Vector2 position)
+      : super.withAnimation(
+          Future<SpriteAnimation>.value(...),
+          size: Vector2.all(32),
+          position: position,
+        ) {
+    sensor.onContactListener((component) {
+      if (component is Player) {
+        component.life.remove(10);
+      }
+    });
+  }
+}
+```
+
+### WithPathFinding
+
+```dart
+class MyPlayer extends SimplePlayer with WithPathFinding, TapGesture {
+  MyPlayer(Vector2 position) : super(position: position, size: Vector2.all(32)) {
+    pathFinding.setup(
+      pathLineStrokeWidth: 2,
+      useOnlyVisibleBarriers: false,
+    );
+  }
+
+  @override
+  void onTapDownScreen(GestureEvent event) {
+    pathFinding.moveToPosition(event.worldPosition);
+    super.onTapDownScreen(event);
+  }
+}
+```
+
+### WithRandomMovement
+
+```dart
+class MyEnemy extends SimpleEnemy with WithRandomMovement {
+  @override
+  void update(double dt) {
+    super.update(dt);
+    randomMovement.update(
+      dt,
+      speed: speed / 2,
+      maxDistance: 64,
+      minDistance: 32,
+    );
+  }
+}
+```
+
+## Internal cleanup
+
+- `CustomQuadTreeBroadphase` was removed. `CustomQuadTreeCollisionDetection` now uses `QuadTreeBroadphase` directly.
+- Listener cleanup (`dispose()`) was added to APIs with callbacks and is called automatically when the component is removed.
+- The component reference inside each API is now private to avoid exposing internal state.
+
+## Migrating from Bonfire 3.x?
+
+See the full [Migration Guide from 3.x to 4.0](https://github.com/RafaelBarbosatec/bonfire/blob/master/MIGRATION_3_TO_4.md) in the repository.

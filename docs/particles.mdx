@@ -1,0 +1,36 @@
+---
+title: Particles
+description: "Create particle effects."
+---
+
+
+Bonfire uses the [Flame particle system](https://docs.flame-engine.org/latest/flame/rendering/particles.html#particles), so every Flame particle works out of the box.
+
+The easiest way is using `util.addParticle(...)` in your component:
+
+```dart
+class MyEnemy extends SimpleEnemy {
+  void explode() {
+    util.addParticle(
+      CircleParticle(
+        radius: 4,
+        paint: Paint()..color = Colors.orange,
+      ),
+      position: center.toVector2(), // optional
+      size: Vector2.all(8), // optional
+    );
+  }
+}
+```
+
+Or add a `ParticleSystemComponent` directly to the game:
+
+```dart
+gameRef.add(
+  ParticleSystemComponent(
+    particle: CircleParticle(),
+  ),
+);
+```
+
+> Check the [Flame Particles documentation](https://docs.flame-engine.org/latest/flame/rendering/particles.html#particles) for all available particles — `CircleParticle`, `SpriteParticle`, `Particle.generate(...)`, and more.

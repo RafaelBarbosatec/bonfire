@@ -56,7 +56,7 @@ abstract class BonfireGame extends BaseGame implements BonfireGameInterface {
   final Color? lightingColorGame;
 
   @override
-  final List<Force2D> globalForces;
+  final GlobalForcesSettings globalForces;
 
   @override
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
@@ -116,8 +116,8 @@ abstract class BonfireGame extends BaseGame implements BonfireGameInterface {
     Color? backgroundColor,
     GameColorFilter? colorFilter,
     CameraConfig? cameraConfig,
-    List<Force2D>? globalForces,
-  })  : globalForces = globalForces ?? [],
+    GlobalForcesSettings? globalForces,
+  })  : globalForces = globalForces ?? GlobalForcesSettings(),
         super(
           camera: BonfireCamera(
             config: cameraConfig,
@@ -230,8 +230,8 @@ abstract class BonfireGame extends BaseGame implements BonfireGameInterface {
   }
 
   @override
-  Iterable<Attackable> attackables({bool onlyVisible = false}) {
-    return query<Attackable>(onlyVisible: onlyVisible);
+  Iterable<WithLife> attackables({bool onlyVisible = false}) {
+    return query<WithLife>(onlyVisible: onlyVisible);
   }
 
   @override

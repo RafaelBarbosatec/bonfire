@@ -12,7 +12,7 @@ class Torch extends GameDecoration {
           lightingConfig: LightingConfig(
             radius: DungeonMap.tileSize * 2,
             blurBorder: DungeonMap.tileSize,
-            color: Colors.deepOrangeAccent.withOpacity(0.3),
+            color: Colors.deepOrangeAccent.withValues(alpha: 0.3),
             withPulse: true,
             align: Vector2(
                 -DungeonMap.tileSize * 0.25, -DungeonMap.tileSize * 0.3),

@@ -2,9 +2,13 @@ import 'package:bonfire/bonfire.dart';
 import 'package:example/shared/util/person_sprite_sheet.dart';
 import 'package:flutter/material.dart';
 
-class MeleeEnemy extends SimpleEnemy {
+class MeleeEnemy extends SimpleEnemy with UseBehavior {
   late TextPaint _textPaint;
   final String text = 'MeleeEnemy';
+  final IntervalTick _attackTick = IntervalTick(
+    600,
+    tickFirstUpdate: true,
+  );
   MeleeEnemy({required Vector2 position})
       : super(
           position: position,
@@ -14,22 +18,30 @@ class MeleeEnemy extends SimpleEnemy {
           initDirection: Direction.down,
         );
 
+  /// Declarative AI: moves to the player when seen and attacks when close.
+  /// When the player is not observed, hides the stroke and stops moving.
   @override
-  void update(double dt) {
-    seeAndMoveToPlayer(
-      closePlayer: (p) {
+  late final List<Behavior> behaviors = [
+    BSeeAndMoveToTarget(
+      target: gameRef.player!,
+      radiusVision: 32,
+      onClose: (dt, _) {
         animation?.showStroke(Colors.white, 1);
-        if (checkInterval('attack', 600, dt)) {
+        if (_attackTick.update(dt)) {
           _playAttackAnimation();
         }
       },
-      notObserved: () {
-        animation?.hideStroke();
-        return true;
-      },
-    );
-    super.update(dt);
-  }
+      doElseBehavior: BCustom(
+        behavior: (dt, comp, game) {
+          animation?.hideStroke();
+          if (comp is Movement) {
+            comp.stop();
+          }
+          return true;
+        },
+      ),
+    ),
+  ];
 
   @override
   Future<void> onLoad() {
@@ -40,7 +52,7 @@ class MeleeEnemy extends SimpleEnemy {
   }
 
   void _playAttackAnimation() {
-    switch (lastDirection) {
+    switch (direction) {
       case Direction.left:
         animation?.playOnceOther(PersonAttackEnum.meeleLeft);
         break;

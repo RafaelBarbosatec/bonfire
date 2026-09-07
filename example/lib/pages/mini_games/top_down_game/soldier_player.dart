@@ -15,8 +15,7 @@ import 'package:flutter/services.dart';
 ///
 /// Rafaelbarbosatec
 /// on 27/01/22
-class SoldierPlayer extends RotationPlayer
-    with BlockMovementCollision, Lighting {
+class SoldierPlayer extends RotationPlayer with WithCollision, WithLighting {
   SoldierPlayer(Vector2 position)
       : super(
           position: position,
@@ -24,11 +23,11 @@ class SoldierPlayer extends RotationPlayer
           animIdle: _getSoldierSprite(),
           animRun: _getSoldierSprite(),
         ) {
-    setupLighting(
+    lighting.setup(
       LightingConfig(
         radius: size.y * 2,
         blurBorder: size.y / 2,
-        color: Colors.yellow.withOpacity(0.3),
+        color: Colors.yellow.withValues(alpha: 0.3),
         type: LightingType.arc(
           endRadAngle: (2 * pi) / 6,
           isCenter: true,
@@ -55,7 +54,7 @@ class SoldierPlayer extends RotationPlayer
   void actionAttack() {
     Vector2 centerOffset = Vector2.zero();
 
-    switch (lastDirection) {
+    switch (direction) {
       case Direction.left:
         centerOffset = Vector2(10, -10);
         break;
@@ -81,7 +80,7 @@ class SoldierPlayer extends RotationPlayer
         centerOffset = Vector2(-16, 10);
         break;
     }
-    simpleAttackRangeByAngle(
+    attack.rangeByAngle(
       attackFrom: AttackOriginEnum.PLAYER_OR_ALLY,
       angle: angle,
       size: Vector2(8, 4),
@@ -92,10 +91,14 @@ class SoldierPlayer extends RotationPlayer
     );
   }
 
-  @override
-  void onDie() {
+  void _onDie() {
     removeFromParent();
-    super.onDie();
+  }
+
+  @override
+  void onMount() {
+    life.onDieListener(_onDie);
+    super.onMount();
   }
 
   @override

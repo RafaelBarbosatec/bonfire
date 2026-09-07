@@ -1,0 +1,378 @@
+---
+title: Enemy
+description: "Create enemies with simple artificial intelligence."
+---
+
+
+> *This is a [Npc](https://github.com/RafaelBarbosatec/bonfire/blob/master/lib/npc/npc.dart) and uses the
+[WithLife](/mixins#withlife) mixin.*
+
+
+Create an enemy in the game. Instances of this class have predefined behaviors that are ready to be used and configured as wanted. All the actions and movements are customizable.
+
+There are three types of enemies: `SimpleEnemy`, `RotationEnemy` and `PlatformEnemy`:
+
+## SimpleEnemy
+
+> *This is a [Enemy](#enemy) and uses the
+[WithDirectionAnimation](/mixins#withdirectionanimation) mixin.*
+
+<img src="/assets/simple_enemy.png" width="100" />
+
+Used for 45º and 67.5º perspectives. We can configure motion animations for all directions (up, down, left, right, up_right, up_left, down_left, down_right).
+
+To use it, simply create a class that will represent your enemy and extend SimpleEnemy:
+
+```dart
+class Goblin extends SimpleEnemy {
+
+    Goblin(Vector2 position)
+      : super(
+          position: position, // required
+          size: Vector2(32.0,32.0), // required
+          life: 100,
+          speed: 100,
+          initDirection: Direction.right,
+          animation: SimpleDirectionAnimation(
+            idleLeft: Future<SpriteAnimation>(), 
+            idleRight: Future<SpriteAnimation>(), // required
+            runLeft: Future<SpriteAnimation>(), 
+            runRight: Future<SpriteAnimation>(), // required
+            idleUp: Future<SpriteAnimation>(),
+            idleDown: Future<SpriteAnimation>(),
+            idleUpLeft: Future<SpriteAnimation>(),
+            idleUpRight: Future<SpriteAnimation>(),
+            idleDownLeft: Future<SpriteAnimation>(),
+            idleDownRight: Future<SpriteAnimation>(),
+            runUp: Future<SpriteAnimation>(),
+            runDown: Future<SpriteAnimation>(),
+            runUpLeft: Future<SpriteAnimation>(),
+            runUpRight: Future<SpriteAnimation>(),
+            runDownLeft: Future<SpriteAnimation>(),
+            runDownRight: Future<SpriteAnimation>(),
+          ),
+      );
+
+    @override
+    void update(double dt) {
+      // do anything
+      super.update(dt);
+    }
+
+    @override
+    void render(Canvas canvas) {
+      // do anything
+      super.render(canvas);
+    }
+}
+```
+
+Now that you have a class that represents your enemy, you can configure their behavior.
+
+There are several useful methods that you can use inside the `update` method that will help you with this task:
+
+
+```dart 
+  PolygonShape? vision.seePlayer({
+    required Function(Player) observed,
+    VoidCallback? notObserved,
+    double radiusVision = 32,
+    double? visionAngle, // default 6,28319 (360 degrees)
+    double? angle,
+  })
+```
+It will trigger a callback function once the player is within the enemy's radiusVision.
+
+
+```dart 
+  PolygonShape? vision.seeAndMoveToPlayer({
+    Function(Player)? closePlayer,
+    BoolCallback? notObserved, // return true to stop move
+    VoidCallback? observed,
+    VoidCallback? notCanMove,
+    double radiusVision = 32,
+    double margin = 2,
+    double? visionAngle, // default 6,28319 (360 degrees)
+    double? angle,
+    bool runOnlyVisibleInScreen = true,
+    MovementAxis movementAxis = MovementAxis.all,
+  })
+```
+The enemy will move in the direction of the player once it gets within the radiusVision. When it gets close to the player, `closePlayer` will be fired.
+
+
+```dart 
+  void attack.melee({
+    required double damage,
+    required Vector2 size,
+    Future<SpriteAnimation>? animation,
+    dynamic id,
+    Direction? direction,
+    double? angle,
+    bool withPush = true,
+    double? sizePush,
+    Vector2? centerOffset,
+    double? marginFromCenter,
+    bool diagonalEnabled = true,
+    AttackOriginEnum? attackFrom,
+  })
+```
+Executes a physical attack on the player, making the configured damage. The execution frequency is no longer controlled internally: use an `IntervalTick` to limit how often the attack runs (see [IntervalTick](/util#intervaltick)). You can add animations to represent this attack.
+
+
+```dart 
+  void attack.range({
+    required Future<SpriteAnimation> animation,
+    required Vector2 size,
+    Future<SpriteAnimation>? animationDestroy,
+    Vector2? destroySize,
+    dynamic id,
+    double speed = 150,
+    double damage = 1,
+    Direction? direction,
+    double? angle,
+    bool useAngle = false,
+    bool withCollision = true,
+    bool withDecorationCollision = true,
+    ShapeHitbox? collision,
+    VoidCallback? onDestroy,
+    LightingConfig? lightingConfig,
+    Vector2? centerOffset,
+    double marginFromOrigin = 16,
+    AttackOriginEnum? attackFrom,
+  })
+```
+Executes a ranged attack. It will add a `FlyingAttackGameObject` projectile to the game and this will be sent in the configured direction, dealing some damage to whomever it hits or being destroyed when hitting barriers (tiles with collision).
+
+
+```dart 
+  void vision.seeAndMoveToAttackRange<T extends GameComponent>({
+    Function(T)? positioned,
+    BoolCallback? notObserved, // return true to stop move
+    Function(T)? observed,
+    double radiusVision = 32,
+    double? visionAngle,
+    double? angle,
+    double? minDistanceFromPlayer,
+    bool useDiagonal = true,
+  })
+```
+When the player is within the radiusVision, the enemy will position itself to perform a distance attack. Once it reaches the attack position, the `positioned` callback will be fired.
+
+
+And all of the `GameComponent` methods. Take a look [GameComponent functions](/util#functions)
+
+> For complex AI (chase, attack, patrol, etc.), check the [Behaviors](/behaviors) system — compose your enemy behavior declaratively, without `if`s in `update()`.
+
+
+### Change animations
+
+To update the `SimpleEnemy` animation you should use this method:
+
+```dart
+  replaceAnimation(SimpleDirectionAnimation());
+```
+
+To play the moment animation you should use the `SimpleDirectionAnimation` methods. For example:
+
+```dart
+  animation.playOnce(
+    FutureOr<SpriteAnimation> animation, 
+    VoidCallback? onFinish,
+    VoidCallback? onStart,
+    bool runToTheEnd = false,
+    bool flipX = false,
+    bool flipY = false,
+    bool useCompFlip = false,
+    Vector2? size,
+    Vector2? offset,
+  );
+  animation.pause();
+  animation.resume();
+```
+
+> IMPORTANT: Enemies only move if they are visible in the camera. if you want to disable this, add false in `collisionOnlyVisibleScreen` in your collision config. See [Colission System](/collision-system#collision-system).
+
+Complete SimpleEnemy example [here](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/shared/enemy/goblin.dart).
+
+
+## RotationEnemy
+
+> *This is a [Enemy](https://github.com/RafaelBarbosatec/bonfire/blob/v2.4.0/lib/npc/enemy/enemy.dart) and uses the
+[UseSpriteAnimation](/mixins#withspriteanimation),
+[WithAssetsLoader](/mixins#withassetsloader) `mixins`.*
+
+<img src="/assets/rotation_enemy.png" width="100" />
+
+Used for 90º perspectives. And we can configure Motion animations for run and idle.
+
+```dart
+class Tank extends RotationEnemy {
+
+    Tank(Vector2 position)
+      : super(
+          position: position, // required
+          animIdle: Future<SpriteAnimation>(), // required
+          animRun: Future<SpriteAnimation>(), // required
+          size: Vector2(32.0,32.0), // required
+          life: 100,
+          speed: 100,
+          currentRadAngle: -1.55, 
+      );
+
+    @override
+    void update(double dt) {
+      // do anything
+      super.update(dt);
+    }
+
+    @override
+    void render(Canvas canvas) {
+      // do anything
+      super.render(canvas);
+    }
+}
+```
+
+Now that we have our class that represents our enemy, we can configure their behavior.
+
+There are several useful methods that we can use in `update` that will help us to configure these movements:
+
+```dart 
+  PolygonShape? vision.seePlayer({
+    required Function(Player) observed,
+    VoidCallback? notObserved,
+    double radiusVision = 32,
+    double? visionAngle, // default 6,28319 (360 degrees)
+    double? angle,
+  })
+```
+
+```dart 
+ PolygonShape? vision.seeAndMoveToPlayer({
+    Function(Player)? closePlayer,
+    BoolCallback? notObserved, // return true to stop move
+    double radiusVision = 32,
+    double margin = 2,
+    bool runOnlyVisibleInScreen = true,
+  })
+```
+
+```dart 
+  void vision.seeAndMoveToAttackRange<T extends GameComponent>({
+    Function(T)? positioned,
+    BoolCallback? notObserved, // return true to stop move
+    double radiusVision = 32,
+    double? minDistanceFromPlayer,
+    bool useDiagonal = true,
+  })
+```
+
+```dart 
+  void attack.melee({
+    required double damage,
+    required Vector2 size,
+    Future<SpriteAnimation>? animation,
+    dynamic id,
+    Direction? direction,
+    double? angle,
+    bool withPush = true,
+    double? sizePush,
+    Vector2? centerOffset,
+    double? marginFromCenter,
+    bool diagonalEnabled = true,
+    AttackOriginEnum? attackFrom,
+  })
+```
+
+```dart 
+  void attack.range({
+    required Future<SpriteAnimation> animation,
+    required Vector2 size,
+    Future<SpriteAnimation>? animationDestroy,
+    Vector2? destroySize,
+    dynamic id,
+    double speed = 150,
+    double damage = 1,
+    Direction? direction,
+    double? angle,
+    bool useAngle = false,
+    bool withDecorationCollision = true,
+    ShapeHitbox? collision,
+    VoidCallback? onDestroy,
+    LightingConfig? lightingConfig,
+    Vector2? centerOffset,
+    double marginFromOrigin = 16,
+    AttackOriginEnum? attackFrom,
+  })
+```
+
+And all of the `GameComponent` methods. Take a look [GameComponent functions](/util#functions)
+
+> For complex AI (chase, attack, patrol, etc.), check the [Behaviors](/behaviors) system — compose your enemy behavior declaratively, without `if`s in `update()`.
+
+
+## PlatformEnemy
+
+> *This is a [SimpleEnemy](#SimpleEnemy) and uses the
+[WithCollision](/collision-system#collision-system), WithJumper and JumperAnimation `mixins`*
+
+Used for platform games. We can configure Motion animations for run, idle and jump.
+
+```dart
+class BowserEnemy extends PlatformEnemy {
+
+    BowserEnemy(vector2 position)
+      : super(
+        position: position, // required
+        animation: PlatformAnimations(), // required
+        size: Vector.all(32), // required
+        life: 100,
+        speed: 100,
+        countJumps: 1,
+      );
+}
+```
+
+### Jumping
+
+{/* TODO: Add documentation for the Jumper mixin */}
+To do the player jump you can use the [WithJumper](/mixins#withjumper) method:
+
+```dart
+  jump({double? jumpSpeed, bool force = false});
+```
+
+
+### Change animations
+
+To update the `PlatformEnemy` animation you should use this method:
+
+```dart
+  replacePlatformAnimation(PlatformAnimations());
+```
+
+To play the moment animation you should use the `SimpleDirectionAnimation` methods. For example:
+
+```dart
+  animation.playOnce(
+    FutureOr<SpriteAnimation> animation,
+    VoidCallback? onFinish,
+    VoidCallback? onStart,
+    bool runToTheEnd = false,
+    bool flipX = false,
+    bool flipY = false,
+    bool useCompFlip = false,
+    Vector2? size,
+    Vector2? offset,
+  );
+  animation.pause();
+  animation.resume();
+```
+
+> IMPORTANT: Remember to add a gravity force in this component, to correct the behavior. Take a look [WithForces](/forces#forces)
+
+
+## Custom
+
+If none of these types of enemies do not meet your needs. You can create your own by extending the `Enemy` class.

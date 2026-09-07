@@ -35,7 +35,7 @@ abstract class BonfireGameInterface {
   bool get showCollisionArea;
   Color? get collisionAreaColor;
   GameInterface? get interface;
-  List<Force2D> get globalForces;
+  GlobalForcesSettings get globalForces;
   SceneBuilderStatus sceneBuilderStatus = SceneBuilderStatus();
   double timeScale = 1.0;
 
@@ -70,7 +70,7 @@ abstract class BonfireGameInterface {
   Iterable<GameDecoration> decorations({bool onlyVisible = false});
 
   /// Used to get all "Attackables" or oly visibles.
-  Iterable<Attackable> attackables({bool onlyVisible = false});
+  Iterable<WithLife> attackables({bool onlyVisible = false});
 
   /// Used to get all "ShapeHitbox".
   Iterable<ShapeHitbox> collisions({bool onlyVisible = false});

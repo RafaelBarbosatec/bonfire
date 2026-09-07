@@ -14,12 +14,15 @@ enum PlayerAttackType {
 }
 
 class Knight extends SimplePlayer
-    with Lighting, BlockMovementCollision, FireballAttack {
-  double attack = 20;
+    with WithLighting, WithCollision, FireballAttack {
+  double damage = 20;
   bool canShowEmote = true;
   bool showedDialog = false;
 
   late BarLifeController barLifeController;
+
+  final IntervalTick _staminalTick = IntervalTick(100);
+  final IntervalTick _seeEnemyTick = IntervalTick(250);
 
   Knight(Vector2 position)
       : super(
@@ -30,7 +33,7 @@ class Knight extends SimplePlayer
           life: 200,
         ) {
     setupMovementByJoystick(intensityEnabled: true);
-    setupLighting(
+    lighting.setup(
       LightingConfig(
         radius: width * 1.5,
         color: Colors.transparent,
@@ -56,7 +59,7 @@ class Knight extends SimplePlayer
           event.id == PlayerAttackType.attackMelee) {
         if (barLifeController.stamina >= 15) {
           decrementStamina(15);
-          execMeleeAttack(attack);
+          execMeleeAttack(damage);
         }
       }
     }
@@ -65,36 +68,10 @@ class Knight extends SimplePlayer
   }
 
   @override
-  void onDie() {
-    barLifeController.life = 0.0;
-    removeFromParent();
-    gameRef.add(
-      GameDecoration.withSprite(
-        sprite: Sprite.load('player/crypt.png'),
-        position: position,
-        size: Vector2.all(DungeonMap.tileSize),
-      ),
-    );
-    super.onDie();
-  }
-
-  @override
   void update(double dt) {
     super.update(dt);
     _checkViewEnemy(dt);
     _updateLifeAndStamina(dt);
-  }
-
-  @override
-  void onRemoveLife(double life) {
-    showDamage(
-      life,
-      config: TextStyle(
-        fontSize: width / 3,
-        color: Colors.red,
-      ),
-    );
-    super.onRemoveLife(life);
   }
 
   void execShowEmote() {
@@ -117,7 +94,9 @@ class Knight extends SimplePlayer
   @override
   void onMount() {
     barLifeController = BarLifeController();
-    barLifeController.configure(maxLife: maxLife, maxStamina: 100);
+    barLifeController.configure(maxLife: life.max, maxStamina: 100);
+    life.onDieListener(_onDie);
+    life.onRemoveLifeListener(_onRemoveLife);
     super.onMount();
   }
 
@@ -126,18 +105,40 @@ class Knight extends SimplePlayer
   }
 
   void _updateLifeAndStamina(double dt) {
-    barLifeController.updateLife(life);
+    barLifeController.updateLife(life.value);
     if (barLifeController.stamina >= 100) {
       return;
     }
-    if (checkInterval('INCREMENT_STAMINA', 100, dt)) {
+    if (_staminalTick.update(dt)) {
       barLifeController.increaseStamina(2);
     }
   }
 
+  void _onDie() {
+    barLifeController.life = 0.0;
+    removeFromParent();
+    gameRef.add(
+      GameDecoration.withSprite(
+        sprite: Sprite.load('player/crypt.png'),
+        position: position,
+        size: Vector2.all(DungeonMap.tileSize),
+      ),
+    );
+  }
+
+  void _onRemoveLife(double amount) {
+    util.showDamage(
+      amount,
+      config: TextStyle(
+        fontSize: width / 3,
+        color: Colors.red,
+      ),
+    );
+  }
+
   void _checkViewEnemy(double dt) {
-    if (checkInterval('seeEnemy', 250, dt)) {
-      seeEnemy(
+    if (_seeEnemyTick.update(dt)) {
+      vision.seeEnemy(
         radiusVision: width * 4,
         notObserved: () => canShowEmote = true,
         observed: (enemies) => _handleObserveEnemy(enemies.first),
@@ -153,7 +154,7 @@ class Knight extends SimplePlayer
     if (!showedDialog) {
       showedDialog = true;
       double lastZoom = gameRef.camera.zoom;
-      stopMove();
+      stop();
       PlayerDialog.execShowTalk(
         gameRef,
         enemy,
@@ -169,10 +170,10 @@ class Knight extends SimplePlayer
     }
   }
 
-  void execMeleeAttack(double attack) {
-    simpleAttackMelee(
-      damage: attack,
-      animationRight: CommonSpriteSheet.whiteAttackEffectRight,
+  void execMeleeAttack(double damage) {
+    attack.melee(
+      damage: damage,
+      animation: CommonSpriteSheet.whiteAttackEffectRight,
       size: Vector2.all(DungeonMap.tileSize),
     );
   }

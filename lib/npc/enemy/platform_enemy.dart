@@ -1,7 +1,9 @@
 import 'package:bonfire/bonfire.dart';
 
 class PlatformEnemy extends SimpleEnemy
-    with BlockMovementCollision, Jumper, JumperAnimation {
+    with WithCollision, WithJumper, JumperAnimation {
+  final int countJumps;
+
   PlatformEnemy({
     required super.position,
     required super.size,
@@ -9,10 +11,14 @@ class PlatformEnemy extends SimpleEnemy
     super.initDirection,
     super.speed,
     super.life,
-    int countJumps = 1,
+    this.countJumps = 1,
   }) : super(
           animation: animation?.toSimpleDirectionAnimation(),
-        ) {
-    setupJumper(maxJump: countJumps);
+        );
+
+  @override
+  void onMount() {
+    super.onMount();
+    jumper.setMaxJump(countJumps);
   }
 }

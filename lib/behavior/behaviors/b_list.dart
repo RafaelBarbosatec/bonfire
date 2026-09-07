@@ -9,9 +9,9 @@ class BList extends Behavior {
 
   int _currentIdex = 0;
   @override
-  bool runAction(double dt, GameComponent comp, BonfireGameInterface game) {
+  bool process(double dt, GameComponent comp, BonfireGameInterface game) {
     final current = behaviors[_currentIdex];
-    if (current.runAction(dt, comp, game)) {
+    if (current.process(dt, comp, game)) {
       _currentIdex++;
     }
     return _currentIdex >= behaviors.length;

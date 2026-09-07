@@ -1,0 +1,64 @@
+---
+title: Text Rendering
+description: "Render text in the game."
+---
+
+
+Bonfire uses Flame's text rendering, based on `TextPaint`. All Flame text options are available.
+
+## TextComponent
+
+To show a static text in the game, add a Flame `TextComponent`:
+
+```dart
+gameRef.add(
+  TextComponent(
+    text: 'Hello world!',
+    position: Vector2(100, 50),
+    anchor: Anchor.topLeft,
+    textRenderer: TextPaint(
+      style: const TextStyle(
+        fontSize: 20,
+        color: Colors.white,
+      ),
+    ),
+  ),
+);
+```
+
+## TextPaint
+
+For custom rendering inside a component, use `TextPaint` directly:
+
+```dart
+final textPaint = TextPaint(
+  style: const TextStyle(
+    fontSize: 16,
+    color: Colors.white,
+  ),
+);
+
+@override
+void render(Canvas canvas) {
+  textPaint.render(canvas, 'My text', position);
+  super.render(canvas);
+}
+```
+
+## Damage text
+
+`util.showDamage(...)` renders an animated damage number above the component:
+
+```dart
+util.showDamage(
+  amount,
+  config: TextStyle(
+    fontSize: width / 3,
+    color: Colors.red,
+  ),
+);
+```
+
+See [Util](/util) for more helper functions.
+
+> Check the [Flame Text Rendering documentation](https://docs.flame-engine.org/latest/flame/rendering/text_rendering.html) for more details.

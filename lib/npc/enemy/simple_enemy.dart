@@ -1,10 +1,10 @@
-import 'package:bonfire/mixins/direction_animation.dart';
+import 'package:bonfire/mixins/direction_animation/direction_animation.dart';
 import 'package:bonfire/npc/enemy/enemy.dart';
 import 'package:bonfire/util/direction.dart';
 import 'package:bonfire/util/direction_animations/simple_direction_animation.dart';
 
 /// Enemy with animation in all direction
-class SimpleEnemy extends Enemy with DirectionAnimation {
+class SimpleEnemy extends Enemy with WithDirectionAnimation {
   SimpleEnemy({
     required super.position,
     required super.size,
@@ -15,8 +15,6 @@ class SimpleEnemy extends Enemy with DirectionAnimation {
     super.receivesAttackFrom,
   }) {
     this.animation = animation;
-    lastDirection = initDirection;
-    lastDirectionHorizontal =
-        initDirection == Direction.left ? Direction.left : Direction.right;
+    direction = initDirection;
   }
 }

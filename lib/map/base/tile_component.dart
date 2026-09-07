@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/controlled_update_animation.dart';
 
-class TileComponent extends GameComponent with UseAssetsLoader {
+class TileComponent extends GameComponent with WithAssetsLoader {
   final String? tileClass;
   String id = '';
   Sprite? _sprite;
@@ -30,7 +30,7 @@ class TileComponent extends GameComponent with UseAssetsLoader {
       calculatePosition: true,
     );
     if (spritePath.isNotEmpty) {
-      loader?.add(
+      assetsLoader.add(
         AssetToLoad<Sprite>(
           Sprite.load(spritePath),
           (value) => _sprite = value,
@@ -70,7 +70,7 @@ class TileComponent extends GameComponent with UseAssetsLoader {
     double offsetX = 0,
     double offsetY = 0,
   }) {
-    properties = properties;
+    this.properties = properties;
     id = '${position.x}/${position.y}';
     _animation = animation;
     applyBleedingPixel(

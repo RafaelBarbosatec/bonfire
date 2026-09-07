@@ -13,7 +13,7 @@ import 'package:bonfire/bonfire.dart';
 /// on 22/03/22
 
 /// Npc used for top-down perspective
-class RotationNpc extends Npc with UseSpriteAnimation, UseAssetsLoader {
+class RotationNpc extends Npc with UseSpriteAnimation, WithAssetsLoader {
   SpriteAnimation? animIdle;
   SpriteAnimation? animRun;
 
@@ -26,24 +26,24 @@ class RotationNpc extends Npc with UseSpriteAnimation, UseAssetsLoader {
     super.speed,
   }) {
     angle = currentRadAngle;
-    loader?.add(
+    assetsLoader.add(
       AssetToLoad<SpriteAnimation>(animIdle, (value) {
         this.animIdle = value;
       }),
     );
-    loader?.add(
+    assetsLoader.add(
       AssetToLoad<SpriteAnimation>(animRun, (value) {
         this.animRun = value;
       }),
     );
   }
 
-  @override
-  void moveFromAngle(double angle, {double? speed}) {
-    setAnimation(animRun);
-    this.angle = angle;
-    super.moveFromAngle(angle, speed: speed);
-  }
+  // @override
+  // void moveFromAngle(double angle, {double? speed}) {
+  //   setAnimation(animRun);
+  //   this.angle = angle;
+  //   super.moveFromAngle(angle, speed: speed);
+  // }
 
   @override
   void idle() {

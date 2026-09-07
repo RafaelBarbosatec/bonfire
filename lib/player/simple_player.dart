@@ -1,7 +1,6 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:bonfire/mixins/direction_animation.dart';
 
-class SimplePlayer extends Player with DirectionAnimation {
+class SimplePlayer extends Player with WithDirectionAnimation {
   SimplePlayer({
     required super.position,
     required super.size,
@@ -11,9 +10,6 @@ class SimplePlayer extends Player with DirectionAnimation {
     super.life,
   }) {
     this.animation = animation;
-    lastDirection = initDirection;
-    if (initDirection == Direction.left || initDirection == Direction.right) {
-      lastDirectionHorizontal = initDirection;
-    }
+    direction = initDirection;
   }
 }
