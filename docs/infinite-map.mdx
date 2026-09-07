@@ -1,0 +1,95 @@
+---
+title: Infinite Map
+description: "Create endless worlds by repeating a small Tiled pattern around the player."
+---
+
+# Infinite Map
+
+Sometimes a single map is not enough: you want the player to be able to walk
+**forever** in one (or both) directions without loading screens.
+
+`WorldMapInfiniteByTiled` turns a **small Tiled map into a pattern** and repeats
+it around the player as an endless world. Chunks are added and removed
+automatically as the camera moves, so memory stays bounded no matter how far
+the player walks.
+
+## Using
+
+Give it any Tiled map (`.json`) and treat it as a single "chunk" of the world:
+
+```dart
+WorldMapInfiniteByTiled(
+  WorldMapReader.fromAsset('tiled/my_pattern.json'),
+  type: InfiniteWorldMapType.open,
+  objectsBuilder: {
+    'goblin': (TiledObjectProperties properties) => Goblin(properties.position),
+    'tree': (TiledObjectProperties properties) => Tree(properties.position),
+  },
+)
+```
+
+Inside `BonfireWidget`:
+
+```dart
+return BonfireWidget(
+  map: WorldMapInfiniteByTiled(
+    WorldMapReader.fromAsset('tiled/my_pattern.json'),
+    type: InfiniteWorldMapType.open,
+    objectsBuilder: {
+      'column': (TiledObjectProperties properties) => ColumnDecoration(properties.position),
+    },
+  ),
+  player: MyPlayer(initialPosition),
+  cameraConfig: CameraConfig(
+    zoom: 2,
+    moveOnlyMapArea: true,
+  ),
+);
+```
+
+### InfiniteWorldMapType
+
+The pattern can be repeated on one or both axes:
+
+| Type | Behavior |
+| ---- | -------- |
+| `InfiniteWorldMapType.open` | Repeats on **both** axes — a real infinite world. |
+| `InfiniteWorldMapType.vertical` | Repeats **vertically only** — the world keeps a single column. |
+| `InfiniteWorldMapType.horizontal` | Repeats **horizontally only** — the world keeps a single row. |
+
+## How it works
+
+- The Tiled map you provide is the **origin chunk** (always kept alive).
+- Around the camera, the engine keeps the visible chunks **plus a margin**
+  (`cameraMargin`, default `200` px) loaded; chunks farther away are **unloaded**
+  again.
+- **Tile layers** are repeated by copying the origin tiles with an offset.
+- **Object layers** (objects, collision rectangles, texts) are recreated for
+  every chunk, so your `objectsBuilder` is invoked once per chunk.
+- Tile collisions authored in the TileSet are repeated together with the tiles.
+
+## Camera
+
+With `CameraConfig.moveOnlyMapArea: true` the camera is constrained to the
+world. For infinite maps this is adapted automatically:
+
+- `open` → no bounds (camera follows the player freely);
+- `vertical` → bounds only limit the horizontal axis;
+- `horizontal` → bounds only limit the vertical axis.
+
+## Notes & limitations
+
+- The world repeats the pattern as-is, so the map edges must be **seamless**
+  (a border wall around the pattern will look like a wall grid).
+- Prefer putting content that should repeat on **object layers**. Oversized or
+  "above" decorations authored directly on **tile layers** only appear on the
+  origin chunk.
+- Chunks are loaded/unloaded while the game runs — you don't need to manage
+  anything. `map.loadedChunksCount` is available for debugging.
+
+## Example
+
+You can try it in the example app under **Map → "Infinite world (Tiled)"**:
+
+- [infinite_map_page.dart](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/pages/map/infinite/infinite_map_page.dart)
+- [infinite_map.tmj](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/assets/images/tiled/simple_topdown/infinite_map.tmj)

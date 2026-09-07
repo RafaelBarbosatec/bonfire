@@ -37,7 +37,7 @@ class Bird extends PlatformPlayer with WithForces, TapGesture {
 
   @override
   void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
-    // TODO: disable directional
+    //disable directional
   }
 
   @override

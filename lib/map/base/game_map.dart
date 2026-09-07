@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/base/layer.dart';
+import 'package:flame/experimental.dart';
 
 export 'package:bonfire/map/base/tile_layer_component.dart';
 
@@ -28,6 +29,25 @@ abstract class GameMap extends GameComponent with WithShader {
   void removeLayer(int id);
   Future addLayer(Layer layer);
   Future<void> updateLayers(List<Layer> layers);
+
+  /// World keeps expanding around the player (used by infinite maps).
+  bool get isWorldInfinite => false;
+
+  /// Pixels added to the Y priority of game components so they keep rendering
+  /// above the tile map when the world extends to negative coordinates.
+  /// Defaults to 0 for regular maps (origin at 0+).
+  double get renderPriorityOffsetY => 0;
+
+  /// Area where the camera center is allowed to move when
+  /// `CameraConfig.moveOnlyMapArea` is enabled. Infinite maps override this
+  /// to release the axis(es) that never end.
+  Rectangle? getMoveAreaBounds(Rect visibleWorldRect) {
+    final rect = getMapRect().deflatexy(
+      visibleWorldRect.width / 2,
+      visibleWorldRect.height / 2,
+    );
+    return Rectangle.fromRect(rect);
+  }
 
   @override
   int get priority => LayerPriority.MAP;
