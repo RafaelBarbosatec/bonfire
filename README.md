@@ -21,6 +21,10 @@ Build **RPG-style games** (and beyond) with the power of [FlameEngine](https://f
 | ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/multi_biome.gif) | ![](https://raw.githubusercontent.com/RafaelBarbosatec/bonfire/master/media/defector.gif) |
 
 
+## 📚 Documentation
+
+Complete documentation with examples: [**docs.page/rafaelbarbosatec/bonfire**](https://docs.page/rafaelbarbosatec/bonfire)
+
 ## ✨ Features
 
 - 🧙 **RPG-ready components** — `Player`, `Enemy`, `Ally`, `Npc`, `GameDecoration` and a complete `GameComponent` API.
