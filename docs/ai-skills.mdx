@@ -1,0 +1,66 @@
+---
+title: AI Agent Skills
+description: "Teach AI coding agents how to use Bonfire — skills shipped with the package."
+---
+
+# AI Agent Skills
+
+Bonfire ships [Agent Skills](https://agentskills.io/specification) inside the
+package. They are short, prescriptive instructions that teach AI coding agents
+(Claude Code, Codex, Cursor, GitHub Copilot, OpenCode, Antigravity and any
+other tool that supports the Agent Skills spec) how to use **the version of
+Bonfire installed in your project**.
+
+That last part matters: generic model knowledge is often from Bonfire 3.x. In
+4.x most mixins moved to API objects (`player.jumper.jump()` instead of
+`player.jump()`), so an agent writing from memory will produce code that does
+not compile. The skills describe the installed version.
+
+## Install
+
+Inside your game project (the one that depends on `bonfire`):
+
+```bash
+# interactive: choose which skills to install
+dart run skills@ get
+
+# install every skill from every dependency that ships them
+dart run skills@ get --all
+
+# update later after upgrading Bonfire
+dart run skills@ get
+```
+
+The CLI scans your direct dependencies for a `skills/` directory and installs
+them into the right folder for your agent (`.claude/skills`, `.agents/skills`,
+`.cursor/skills`, `.github/skills`, ...). It tracks what it installed in
+`.config/dart_skills/skills_config.json`, so `remove` and `prune` never touch
+skills you wrote by hand.
+
+## Available skills
+
+| Skill | Use when |
+|---|---|
+| `bonfire-getting-started` | bootstrapping the project, `BonfireWidget`, assets that fail to load |
+| `bonfire-player` | player classes, animations, input, attacks, life, HUD |
+| `bonfire-enemy-ai` | enemies, NPCs, vision, behaviors (chase/attack/patrol), spawning |
+| `bonfire-collision-sensor` | hitboxes, blocking movement, non-blocking triggers |
+| `bonfire-map-world` | Tiled, `objectsBuilder`, matrix/random maps, infinite world, camera |
+| `bonfire-decoration-items` | decorations, chests, pickups, effects, lighting |
+| `bonfire-dialog-ui` | `TalkDialog`, `GameInterface`, `TypeWriter`, `MiniMap` |
+| `bonfire-v4-api` | 4.x API-object reference and 3.x → 4.x migration traps |
+
+Every skill contains runnable snippets adapted from the
+[`example/`](https://github.com/RafaelBarbosatec/bonfire/tree/master/example)
+app, plus a "Pitfalls" section with the mistakes agents make most often (and
+that the docs sometimes get wrong — the skills are checked against `lib/`, so
+the source wins).
+
+## Example prompt
+
+> "Create a SimpleEnemy that patrols randomly and chases the player when it
+> gets within 3 tiles, attacking with a melee hitbox every 400 ms."
+
+With the skills installed, the agent loads `bonfire-enemy-ai` and writes
+`UseBehavior` + `BSeeAndMoveToTarget` + `IntervalTick` in the current API
+instead of inventing a v3-style `update()` loop.
