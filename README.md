@@ -101,6 +101,22 @@ Test our online [DEMO](https://bonfire-engine.github.io/examples/bonfire-v3/) or
 [bonfire-engine.github.io](https://bonfire-engine.github.io)
 
 
+## 🤖 AI agent skills
+
+Bonfire ships [Agent Skills](https://agentskills.io/specification) inside the
+package, so AI coding agents (Claude Code, Codex, Cursor, Copilot, ...) know
+the **installed version's** API instead of guessing from older releases.
+
+```bash
+dart run skills@ get        # choose the skills to install
+dart run skills@ get --all  # install all of them
+```
+
+There are skills for getting started, player, enemy AI, collisions/sensors,
+maps, decorations/effects, dialogs/HUD and a v4 API-object reference. See
+[`skills/`](skills) for the list.
+
+
 ## 🧩 Bonfire Awesome
 
 [Link](awesome)
