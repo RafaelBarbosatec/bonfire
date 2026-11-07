@@ -196,6 +196,67 @@ void main() {
       expect(api.isAnimating, isFalse);
       expect(api.config!.radius, 10);
     });
+
+    test('arc with isCenter centers the cone on the component angle', () {
+      final component = _TestComponent()..angle = 1.0;
+      final api = LightingApi(component)
+        ..setup(
+          LightingConfig(
+            radius: 10,
+            color: Colors.white,
+            useComponentAngle: true,
+            type: LightingType.arc(
+              startRadAngle: -0.4,
+              endRadAngle: 0.8,
+              isCenter: true,
+            ),
+          ),
+        );
+
+      api.update(0.016);
+
+      // The arc spans [-0.4, 0.4] before the rotation, so the rotation that
+      // centers it on 1.0 is exactly 1.0.
+      expect(api.angle, closeTo(1.0, 1e-9));
+    });
+
+    test('arc with start angle zero keeps the historical centering', () {
+      final component = _TestComponent()..angle = 2.0;
+      final api = LightingApi(component)
+        ..setup(
+          LightingConfig(
+            radius: 10,
+            color: Colors.white,
+            useComponentAngle: true,
+            type: LightingType.arc(endRadAngle: 1.2, isCenter: true),
+          ),
+        );
+
+      api.update(0.016);
+
+      expect(api.angle, closeTo(2.0 - 0.6, 1e-9));
+    });
+
+    test('non centered arc ends at the component angle', () {
+      final component = _TestComponent()..angle = 1.0;
+      final api = LightingApi(component)
+        ..setup(
+          LightingConfig(
+            radius: 10,
+            color: Colors.white,
+            useComponentAngle: true,
+            type: LightingType.arc(
+              startRadAngle: -0.4,
+              endRadAngle: 0.8,
+            ),
+          ),
+        );
+
+      api.update(0.016);
+
+      // Local span [-0.4, 0.4] rotated by 0.6 ends exactly at 1.0.
+      expect(api.angle, closeTo(0.6, 1e-9));
+    });
   });
 
   group('LightFlicker', () {

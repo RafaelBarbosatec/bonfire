@@ -69,10 +69,12 @@ class LightingApi {
     final config = _config;
     if (config != null && config.type is ArcLightingType) {
       final type = config.type as ArcLightingType;
+      // The arc is drawn from `startRadAngle` and sweeps `endRadAngle` radians,
+      // so the start angle must be taken into account when aligning the cone.
       if (type.isCenter) {
-        return _comp.angle - (type.endRadAngle / 2);
+        return _comp.angle - type.startRadAngle - (type.endRadAngle / 2);
       } else {
-        return _comp.angle - type.endRadAngle;
+        return _comp.angle - type.startRadAngle - type.endRadAngle;
       }
     }
     return 0.0;

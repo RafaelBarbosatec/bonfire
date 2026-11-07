@@ -119,6 +119,18 @@ lighting.setup(
 Lights follow the camera transform, so they stay aligned when the camera is
 zoomed, moved or rotated (`CameraConfig.angle`).
 
+About the arc parameters:
+
+| Parameter | Meaning |
+| --- | --- |
+| `startRadAngle` | Angle (radians) where the arc starts, before rotation. |
+| `endRadAngle` | **Sweep** of the arc in radians (not the end angle). |
+| `isCenter` | `true` centers the cone on the component angle; `false` makes the end of the cone point at the component angle. |
+| `radius` | Reach of the light, in the same unit used by circle lights. |
+
+So `LightingType.arc(startRadAngle: -0.4, endRadAngle: 0.8, isCenter: true)`
+produces a cone of 0.8 rad centered exactly on the component facing direction.
+
 ### Soft falloff without blur
 
 `LightFalloff.blur` keeps the historical `MaskFilter.blur` edge. For a softer,

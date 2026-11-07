@@ -284,9 +284,9 @@ class LightingComponent extends GameComponent implements LightingInterface {
     required bool cutout,
   }) {
     final type = config.type as ArcLightingType;
-    // Kept as `radius * 2` to preserve the historical arc rendering: changing
-    // it would alter every existing arc light. It can be revisited separately.
-    final radius = config.radiusWithEffects * 2;
+    // `radius` is the actual reach of the light, the same unit used by circle
+    // lights, so switching between `arc` and `circle` keeps the same coverage.
+    final radius = config.radiusWithEffects;
 
     canvas.save();
 

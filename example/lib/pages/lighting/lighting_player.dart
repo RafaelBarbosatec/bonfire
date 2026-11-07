@@ -32,8 +32,11 @@ class LightingPlayer extends RotationPlayer with WithCollision, WithLighting {
   );
 
   /// Classic round light around the player.
+  ///
+  /// Uses the same radius as the flashlight so switching between the two
+  /// presets does not change the lit area.
   static final LightingConfig omni = LightingConfig(
-    radius: 64,
+    radius: 84,
     color: const Color(0xFFBFE9FF).withValues(alpha: 0.12),
     blurBorder: 20,
   );

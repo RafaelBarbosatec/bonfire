@@ -27,6 +27,11 @@
   `additiveBlendMode` and `flicker`.
 - `PulseValue` now honors `pulseCurve`, never exceeds `pulseVariation` and keeps
   the previous pulse timing.
+- Arc lights now respect `radius` instead of being drawn with twice the
+  configured radius, so switching between `arc` and `circle` lights keeps the
+  same coverage.
+- Arc lights with `isCenter: true` are now centered on the component angle even
+  when `startRadAngle` is not zero (the start angle was being ignored).
 - Lights follow the camera transform, staying aligned when the camera is rotated
   or uses a custom anchor.
 - Arc lights rotate around the component absolute center.
