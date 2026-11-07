@@ -26,6 +26,8 @@ class SimpleTorch extends GameDecoration {
               amplitude: 0.05,
               seed: 3,
             ),
+            // Walls registered in the game block this light.
+            castShadows: true,
           ),
         );
 }

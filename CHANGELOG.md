@@ -19,6 +19,19 @@
 - `LightSource` with `gameRef.lighting.addLight(...)`/`removeLight(...)` allows
   lights that are not attached to any component (explosions, muzzle flashes,
   ambient details).
+- `LightingType.rect(size)` and `LightingType.polygon(points)` add rectangular
+  and polygonal lights. With `useComponentAngle: true` they rotate with the
+  component.
+- Shadow casting: `LightingConfig.castShadows` clips a light with the registered
+  `LightingOccluder`s. Add static geometry with
+  `gameRef.lighting.addOccluder(...)`/`removeOccluder(...)` or moving obstacles
+  with the `WithLightingOcclusion` mixin.
+- `LightingQuality` (`low`, `medium`, `high`) controls how many rays are cast
+  per light when computing the shadow silhouette (`24`, `64`, `160`).
+- `gameRef.lighting.debug` draws the light shapes, the shadow clip and the
+  occluders, to debug lights that are not reaching somewhere.
+- `LightingPreset` (`day`, `dusk`, `night`, `dungeon`) with `apply(...)` fades
+  the ambient color for the common day/night setups.
 
 ### Fixed
 

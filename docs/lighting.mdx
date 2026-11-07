@@ -9,12 +9,14 @@ description: "Add ambient darkness, dynamic lights, pulses and emissive light so
 Looking for a runnable sample? The
 [lighting example](https://github.com/RafaelBarbosatec/bonfire/tree/master/example/lib/pages/lighting)
 demonstrates every feature on this page: cutout and additive lights, pulses,
-arc flashlights, `animateTo`, `fadeIn`/`fadeOut` and camera rotation.
+arc flashlights, rectangle/polygon lights, shadows with occluders, ambient
+presets, `animateTo`, `fadeIn`/`fadeOut` and camera rotation.
 
-The lighting layer is composed of two independent pieces:
+The lighting layer is composed of three independent pieces:
 
 1. **Ambient darkness**, configured once on `BonfireWidget` through `lightingColorGame`.
 2. **Light sources**, added to any component with the `WithLighting` mixin.
+3. **Occluders**, optional geometry that blocks lights with `castShadows`.
 
 ```dart
 BonfireWidget(
@@ -73,6 +75,7 @@ lighting.enabled = true;
 | `intensity` | `1` | Multiplies the alpha of `color` (`0..1`). |
 | `additiveBlendMode` | `BlendMode.plus` | Blend mode used by additive lights (`plus`, `screen`...). |
 | `flicker` | `null` | Optional candle-like flicker. |
+| `castShadows` | `false` | Clips the light with the registered `LightingOccluder`s. |
 | `withPulse` | `false` | Enables the pulsing radius. |
 | `pulseVariation` | `0.1` | Maximum radius variation, relative to `radius`. |
 | `pulseSpeed` | `0.1` | Pulse speed. A full sweep takes `pulseVariation / pulseSpeed` seconds. |
@@ -216,9 +219,126 @@ gameRef.lighting.removeLight(light);
 `LightSource` also has `enabled`, `angle` (used by arc lights) and a mutable
 `position`, so you can move it every frame without creating a component.
 
+### Rectangles and polygons
+
+Besides circles and arcs, a light can cover a rectangle or an arbitrary polygon.
+Both are centered on the component and, with `useComponentAngle: true`, rotate
+with it:
+
+```dart
+lighting.setup(
+  LightingConfig(
+    radius: 80,
+    color: const Color(0xFFFFE0B2).withValues(alpha: 0.35),
+    type: LightingType.rect(Vector2(120, 40)),
+  ),
+);
+
+lighting.setup(
+  LightingConfig(
+    radius: 90,
+    color: const Color(0xFF80D8FF).withValues(alpha: 0.4),
+    type: LightingType.polygon([
+      Vector2(0, -80),
+      Vector2(60, 0),
+      Vector2(0, 80),
+    ]),
+  ),
+);
+```
+
+For these shapes `radius` is the reference distance: the shape is scaled by
+`radiusWithEffects / radius`, so pulse and flicker grow and shrink it like a
+circular light.
+
+## Shadows and occlusion
+
+Walls can block a light. Register the geometry once (ideal for tile maps):
+
+```dart
+gameRef.lighting.addOccluder(
+  LightingOccluder.rect(Rect.fromLTWH(64, 0, 16, 96)),
+);
+
+// Later, if the wall is destroyed:
+gameRef.lighting.removeOccluder(wall);
+```
+
+Then enable shadows on the lights that should respect them:
+
+```dart
+lighting.setup(
+  LightingConfig(
+    radius: 140,
+    color: const Color(0xFFFFB300).withValues(alpha: 0.4),
+    castShadows: true,
+  ),
+);
+```
+
+For moving obstacles use the `WithLightingOcclusion` mixin, so the occluder
+follows the component:
+
+```dart
+class Door extends GameDecoration with WithLightingOcclusion {
+  @override
+  List<LightingOccluder> get lightingOccluders => [
+        LightingOccluder.rect(toAbsoluteRect()),
+      ];
+}
+```
+
+The light is clipped to the region visible from its center, so shadows are
+**hard edged** (there is no soft penumbra). An occluder containing the light
+center blocks the light completely.
+
+`castShadows` is `false` by default: computing the silhouette costs CPU, so
+enable it only on the lights that need it.
+
+### Quality
+
+`LightingQuality` sets how many rays are cast per light when computing the
+shadow polygon:
+
+| Quality | Rays | When to use |
+| --- | --- | --- |
+| `LightingQuality.low` | 24 | many small lights, low end devices |
+| `LightingQuality.medium` | 64 | default |
+| `LightingQuality.high` | 160 | a few large lights, smooth silhouettes |
+
+```dart
+gameRef.lighting.quality = LightingQuality.high;
+```
+
+### Debug overlay
+
+When a light is not reaching where it should, turn the overlay on:
+
+```dart
+gameRef.lighting.debug = true;
+```
+
+It draws each light shape in green, the visibility polygon (shadow clip) in
+yellow and the occluders in red.
+
+## Ambient presets
+
+`LightingPreset` ships ready-to-use ambient colors:
+
+```dart
+LightingPreset.night.apply(gameRef.lighting); // fade into the night
+LightingPreset.dusk.apply(gameRef.lighting);
+LightingPreset.day.apply(gameRef.lighting);   // back to a fully lit map
+```
+
+`day` has no ambient color, so cutout lights are skipped (there is nothing to
+erase) while additive lights keep glowing. `apply` accepts `duration` and
+`curve` to control the transition.
+
 ## Animating the ambient light
 
-The ambient color can be animated through `gameRef.lighting`:
+Use a [preset](#ambient-presets) for the common cases, or animate the color
+yourself:
 
 ```dart
 // Fade the ambient darkness in.
@@ -270,6 +390,9 @@ lighting.setup(otherConfig);
   pulsing lights on low-end devices.
 - `LightingConfig` is immutable. Reuse config instances instead of creating them
   inside `update`.
+- Shadows are recomputed per light, per frame. The cost grows with the number of
+  occluders and with `LightingQuality.shadowRays`, so register only the geometry
+  near the lights and use `LightingQuality.low` on scenes with many lights.
 
 ## GameColorFilter
 

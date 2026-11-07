@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 ///
 /// * `LightingMode.cutout` torches with gradient falloff, flicker and `align`;
 /// * `LightingMode.additive` crystal that glows under the ambient darkness;
+/// * shadow casting with `LightingOccluder`s and `LightingQuality`;
+/// * `LightingPreset` ambient colors (day/night and friends);
 /// * `copyWith` (which now preserves `align`);
 /// * `LightingApi.animateTo`, `LightingInterface.fadeIn`/`fadeOut`;
 /// * `LightSource` added/removed at runtime (`addLight`/`removeLight`);
@@ -21,7 +23,6 @@ class LightingPage extends StatefulWidget {
 
 class _LightingPageState extends State<LightingPage> {
   static const double tileSize = 16;
-  static const Color _nightColor = Color(0xFF020617);
 
   /// The game widget is built once and kept alive: rebuilding it would restart
   /// the game and lose the state we are demonstrating.
@@ -36,6 +37,9 @@ class _LightingPageState extends State<LightingPage> {
   final _cameraRotated = ValueNotifier(false);
   final _torchWide = ValueNotifier(false);
   final _crystalOn = ValueNotifier(true);
+  final _shadows = ValueNotifier(true);
+  final _debug = ValueNotifier(false);
+  final _quality = ValueNotifier(LightingQuality.medium);
 
   @override
   void initState() {
@@ -50,6 +54,9 @@ class _LightingPageState extends State<LightingPage> {
     _cameraRotated.dispose();
     _torchWide.dispose();
     _crystalOn.dispose();
+    _shadows.dispose();
+    _debug.dispose();
+    _quality.dispose();
     super.dispose();
   }
 
@@ -103,6 +110,30 @@ class _LightingPageState extends State<LightingPage> {
                         onPressed: _toggleCrystal,
                       ),
                     ),
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _shadows,
+                      builder: (_, on, __) => _DemoButton(
+                        icon: Icons.dark_mode_outlined,
+                        label: on ? 'Shadows: on' : 'Shadows: off',
+                        onPressed: _toggleShadows,
+                      ),
+                    ),
+                    ValueListenableBuilder<LightingQuality>(
+                      valueListenable: _quality,
+                      builder: (_, quality, __) => _DemoButton(
+                        icon: Icons.tune,
+                        label: 'Quality: ${quality.name}',
+                        onPressed: _cycleQuality,
+                      ),
+                    ),
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _debug,
+                      builder: (_, on, __) => _DemoButton(
+                        icon: Icons.bug_report,
+                        label: on ? 'Debug: on' : 'Debug: off',
+                        onPressed: _toggleDebug,
+                      ),
+                    ),
                     _DemoButton(
                       icon: Icons.bolt,
                       label: 'Flash (addLight)',
@@ -126,9 +157,10 @@ class _LightingPageState extends State<LightingPage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
-                    'Move with the joystick. Torches flicker with a gradient '
-                    'falloff; the crystal is additive and glows under the '
-                    'ambient darkness. Flash adds a temporary LightSource.',
+                    'Move with the joystick. The torch casts shadows through the '
+                    'invisible walls (press Debug to see them). The crystal is '
+                    'additive and glows under the ambient darkness. Flash adds '
+                    'a temporary LightSource.',
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ),
@@ -149,7 +181,7 @@ class _LightingPageState extends State<LightingPage> {
         },
       ),
       backgroundColor: const Color(0xFF101820),
-      lightingColorGame: _nightColor.withValues(alpha: 0.88),
+      lightingColorGame: LightingPreset.night.ambient,
       player: _player,
       playerControllers: [
         Joystick(directional: JoystickDirectional()),
@@ -160,8 +192,39 @@ class _LightingPageState extends State<LightingPage> {
         zoom: getZoomFromMaxVisibleTile(context, tileSize, 14),
         initPosition: Vector2(tileSize * 5, tileSize * 7),
       ),
-      onReady: (game) => _game = game,
+      onReady: (game) {
+        _game = game;
+        _setupOccluders();
+      },
     );
+  }
+
+  /// Registers the invisible walls used by the torch shadows.
+  ///
+  /// In a real game these would come from the map collision layer. Here they
+  /// are two rectangles near the first torch; enable `Debug` to see them.
+  void _setupOccluders() {
+    final lighting = _game?.lighting;
+    if (lighting == null) {
+      return;
+    }
+
+    lighting
+      ..addOccluder(
+        LightingOccluder.rect(
+          Rect.fromLTWH(tileSize * 4.5, 0, tileSize * 0.5, tileSize * 2.5),
+        ),
+      )
+      ..addOccluder(
+        LightingOccluder.rect(
+          Rect.fromLTWH(
+            tileSize * 1.25,
+            tileSize * 2.25,
+            tileSize * 2,
+            tileSize * 0.5,
+          ),
+        ),
+      );
   }
 
   void _toggleAmbient() {
@@ -171,14 +234,8 @@ class _LightingPageState extends State<LightingPage> {
     }
 
     final night = !_isNight.value;
-    if (night) {
-      lighting.fadeIn(
-        _nightColor.withValues(alpha: 0.88),
-        duration: const Duration(milliseconds: 900),
-      );
-    } else {
-      lighting.fadeOut(duration: const Duration(milliseconds: 900));
-    }
+    final preset = night ? LightingPreset.night : LightingPreset.day;
+    preset.apply(lighting);
     _isNight.value = night;
   }
 
@@ -251,6 +308,41 @@ class _LightingPageState extends State<LightingPage> {
     final on = !_crystalOn.value;
     _crystal.lighting.enabled = on;
     _crystalOn.value = on;
+  }
+
+  void _toggleShadows() {
+    final lighting = _torch?.lighting;
+    final current = lighting?.config;
+    if (lighting == null || current == null) {
+      return;
+    }
+
+    final enabled = !_shadows.value;
+    lighting.setup(current.copyWith(castShadows: enabled));
+    _shadows.value = enabled;
+  }
+
+  void _toggleDebug() {
+    final lighting = _game?.lighting;
+    if (lighting == null) {
+      return;
+    }
+
+    final enabled = !_debug.value;
+    lighting.debug = enabled;
+    _debug.value = enabled;
+  }
+
+  void _cycleQuality() {
+    final lighting = _game?.lighting;
+    if (lighting == null) {
+      return;
+    }
+
+    const values = LightingQuality.values;
+    final next = values[(values.indexOf(_quality.value) + 1) % values.length];
+    lighting.quality = next;
+    _quality.value = next;
   }
 }
 
