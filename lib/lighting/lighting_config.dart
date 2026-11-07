@@ -11,9 +11,12 @@ enum LightingMode {
   /// with [LightingConfig.color]. This is the classic "flashlight" behavior.
   cutout,
 
-  /// Adds the light on top of the scene without erasing the ambient darkness.
-  /// Useful for torches, magic, explosions and any emissive light, including
-  /// on maps that have no ambient darkness at all.
+  /// Adds light to the scene without erasing the ambient darkness.
+  ///
+  /// Additive lights are composited **below** the ambient color, so the night
+  /// tint darkens them instead of having the light painted over the darkness.
+  /// On maps without ambient darkness they simply glow over the scene.
+  /// Useful for torches, magic, explosions and any emissive light.
   additive,
 }
 

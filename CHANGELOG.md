@@ -32,6 +32,8 @@
   same coverage.
 - Arc lights with `isCenter: true` are now centered on the component angle even
   when `startRadAngle` is not zero (the start angle was being ignored).
+- Additive lights are now composited below the ambient darkness, so the ambient
+  color darkens them instead of the light being painted over the night color.
 - Lights follow the camera transform, staying aligned when the camera is rotated
   or uses a custom anchor.
 - Arc lights rotate around the component absolute center.

@@ -94,64 +94,85 @@ class LightingComponent extends GameComponent implements LightingInterface {
         .toList(growable: false);
 
     final hasAmbient = _containColor;
-    final hasAdditive = componentLights.any(
-          (light) => light.lighting.config!.mode == LightingMode.additive,
-        ) ||
-        lightSources.any(
-          (light) => light.config.mode == LightingMode.additive,
-        );
 
-    if (!hasAmbient && !hasAdditive) {
-      return;
-    }
-
-    canvas.saveLayer(bounds, paint);
-
-    if (hasAmbient) {
-      canvas.drawColor(color!, BlendMode.dstATop);
-    }
-
-    canvas.save();
-    _applyCameraTransform(canvas);
+    final additive = <_PendingLight>[];
+    final cutout = <_PendingLight>[];
 
     for (final light in componentLights) {
       final config = light.lighting.config!;
-      final cutout = config.mode == LightingMode.cutout;
-
-      // A cutout light only makes sense when there is ambient darkness to
-      // erase. Additive lights are drawn even on fully lit scenes.
-      if (cutout && !hasAmbient) {
-        continue;
-      }
-
-      _renderLight(
-        canvas,
+      final pending = _PendingLight(
         config: config,
         center: light.absoluteCenter + config.align,
         angle: light.lighting.angle,
-        cutout: cutout,
       );
+      if (config.mode == LightingMode.additive) {
+        additive.add(pending);
+      } else if (hasAmbient) {
+        // A cutout light only makes sense when there is ambient darkness to
+        // erase.
+        cutout.add(pending);
+      }
     }
 
     for (final light in lightSources) {
       final config = light.config;
-      final cutout = config.mode == LightingMode.cutout;
-
-      if (cutout && !hasAmbient) {
-        continue;
-      }
-
-      _renderLight(
-        canvas,
+      final pending = _PendingLight(
         config: config,
         center: light.position + config.align,
         angle: light.angle,
-        cutout: cutout,
       );
+      if (config.mode == LightingMode.additive) {
+        additive.add(pending);
+      } else if (hasAmbient) {
+        cutout.add(pending);
+      }
     }
 
-    canvas.restore();
-    canvas.restore();
+    if (additive.isEmpty && !hasAmbient) {
+      return;
+    }
+
+    // Additive lights are composited *below* the ambient darkness, so the
+    // ambient color darkens them instead of the light being painted on top of
+    // the night color.
+    if (additive.isNotEmpty) {
+      canvas.saveLayer(bounds, paint);
+      canvas.save();
+      _applyCameraTransform(canvas);
+
+      for (final light in additive) {
+        _renderLight(
+          canvas,
+          config: light.config,
+          center: light.center,
+          angle: light.angle,
+          cutout: false,
+        );
+      }
+
+      canvas.restore();
+      canvas.restore();
+    }
+
+    if (hasAmbient) {
+      canvas.saveLayer(bounds, paint);
+      canvas.drawColor(color!, BlendMode.dstATop);
+      canvas.save();
+      _applyCameraTransform(canvas);
+
+      for (final light in cutout) {
+        _renderLight(
+          canvas,
+          config: light.config,
+          center: light.center,
+          angle: light.angle,
+          cutout: true,
+        );
+      }
+
+      canvas.restore();
+      canvas.restore();
+    }
   }
 
   /// Applies the same transform the camera uses to render the world.
@@ -434,4 +455,17 @@ class LightingComponent extends GameComponent implements LightingInterface {
     bounds = gameRef.camera.viewport.virtualSize.toRect();
     super.onGameResize(size);
   }
+}
+
+/// A light resolved to world coordinates, ready to be rendered.
+class _PendingLight {
+  final LightingConfig config;
+  final Vector2 center;
+  final double angle;
+
+  const _PendingLight({
+    required this.config,
+    required this.center,
+    required this.angle,
+  });
 }

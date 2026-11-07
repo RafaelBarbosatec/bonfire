@@ -84,9 +84,11 @@ lighting.enabled = true;
 `LightingMode.cutout` is the classic flashlight: it erases the ambient darkness
 inside the shape and tints it with `color`.
 
-`LightingMode.additive` adds light on top of the scene without erasing the
-ambient darkness. It works even when `lightingColorGame` is transparent, so you
-can use it for torches, magic, explosions and neon on fully lit maps:
+`LightingMode.additive` adds light to the scene without erasing the ambient
+darkness. It is composited **below** the ambient color, so at night the ambient
+tint darkens the glow instead of the glow being painted over the darkness. It
+works even when `lightingColorGame` is transparent, so you can use it for
+torches, magic, explosions and neon on fully lit maps:
 
 ```dart
 lighting.setup(

@@ -1,5 +1,5 @@
 import 'package:bonfire/bonfire.dart';
-import 'package:example/pages/lighting/lighting_player.dart';
+import 'package:example/pages/lighting/demo_player.dart';
 import 'package:example/pages/lighting/magic_crystal.dart';
 import 'package:example/pages/lighting/simple_torch.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +7,10 @@ import 'package:flutter/material.dart';
 /// Interactive showcase of every lighting feature:
 ///
 /// * `LightingMode.cutout` torches with gradient falloff, flicker and `align`;
-/// * `LightingMode.additive` crystal that glows even without ambient darkness;
-/// * arc light following the player angle (`useComponentAngle`);
+/// * `LightingMode.additive` crystal that glows under the ambient darkness;
 /// * `copyWith` (which now preserves `align`);
 /// * `LightingApi.animateTo`, `LightingInterface.fadeIn`/`fadeOut`;
 /// * `LightSource` added/removed at runtime (`addLight`/`removeLight`);
-/// * crisped edge light (`blurBorder: 0`);
 /// * lights staying aligned while the camera is rotated.
 class LightingPage extends StatefulWidget {
   const LightingPage({super.key});
@@ -30,20 +28,19 @@ class _LightingPageState extends State<LightingPage> {
   Widget? _gameWidget;
   BonfireGameInterface? _game;
 
-  late final LightingPlayer _player;
+  late final DemoPlayer _player;
   late final MagicCrystal _crystal;
   SimpleTorch? _torch;
 
   final _isNight = ValueNotifier(true);
   final _cameraRotated = ValueNotifier(false);
   final _torchWide = ValueNotifier(false);
-  final _flashlight = ValueNotifier(true);
   final _crystalOn = ValueNotifier(true);
 
   @override
   void initState() {
     super.initState();
-    _player = LightingPlayer(position: Vector2(tileSize * 4, tileSize * 7));
+    _player = DemoPlayer(position: Vector2(tileSize * 4, tileSize * 7));
     _crystal = MagicCrystal(position: Vector2(tileSize * 7, tileSize * 9));
   }
 
@@ -52,7 +49,6 @@ class _LightingPageState extends State<LightingPage> {
     _isNight.dispose();
     _cameraRotated.dispose();
     _torchWide.dispose();
-    _flashlight.dispose();
     _crystalOn.dispose();
     super.dispose();
   }
@@ -100,15 +96,6 @@ class _LightingPageState extends State<LightingPage> {
                       ),
                     ),
                     ValueListenableBuilder<bool>(
-                      valueListenable: _flashlight,
-                      builder: (_, flashlight, __) => _DemoButton(
-                        icon: Icons.flashlight_on,
-                        label:
-                            flashlight ? 'Player: round light' : 'Player: cone',
-                        onPressed: _animatePlayerLight,
-                      ),
-                    ),
-                    ValueListenableBuilder<bool>(
                       valueListenable: _crystalOn,
                       builder: (_, on, __) => _DemoButton(
                         icon: Icons.diamond,
@@ -139,10 +126,9 @@ class _LightingPageState extends State<LightingPage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
-                    'Move with the joystick: the cone follows the player angle. '
-                    'Turn the ambient off: cutout lights disappear, but the '
-                    'additive crystal keeps glowing. Torches flicker with a '
-                    'gradient falloff; Flash adds a temporary LightSource.',
+                    'Move with the joystick. Torches flicker with a gradient '
+                    'falloff; the crystal is additive and glows under the '
+                    'ambient darkness. Flash adds a temporary LightSource.',
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ),
@@ -259,16 +245,6 @@ class _LightingPageState extends State<LightingPage> {
       const Duration(milliseconds: 300),
       () => lighting.removeLight(light),
     );
-  }
-
-  void _animatePlayerLight() {
-    final flashlight = !_flashlight.value;
-    _player.lighting.animateTo(
-      flashlight ? LightingPlayer.flashlight : LightingPlayer.omni,
-      duration: const Duration(milliseconds: 600),
-      curve: Curves.easeInOut,
-    );
-    _flashlight.value = flashlight;
   }
 
   void _toggleCrystal() {
