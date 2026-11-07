@@ -1,10 +1,24 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:flame/extensions.dart' show CanvasExtension;
 import 'package:flutter/widgets.dart';
 
 abstract class LightingInterface {
   Color? color;
   void animateToColor(
     Color color, {
+    Duration duration = const Duration(milliseconds: 500),
+    Curve curve = Curves.decelerate,
+  });
+
+  /// Animates the ambient color from fully transparent to [color].
+  void fadeIn(
+    Color color, {
+    Duration duration = const Duration(milliseconds: 500),
+    Curve curve = Curves.decelerate,
+  });
+
+  /// Animates the ambient color to fully transparent.
+  void fadeOut({
     Duration duration = const Duration(milliseconds: 500),
     Curve curve = Curves.decelerate,
   });
@@ -19,7 +33,6 @@ class LightingComponent extends GameComponent implements LightingInterface {
   final Paint _paintFocusArc = Paint()..blendMode = BlendMode.clear;
   final Paint _paintLightingArc = Paint();
 
-  double _dtUpdate = 0.0;
   ColorTween? _tween;
   bool _containColor = false;
   Rect? bounds;
@@ -54,40 +67,75 @@ class LightingComponent extends GameComponent implements LightingInterface {
 
   @override
   void renderTree(Canvas canvas) {
-    if (!_containColor) {
+    final lights = _visibleLight.where(_isLightRenderable).toList(
+          growable: false,
+        );
+
+    final hasAmbient = _containColor;
+    final hasAdditive = lights.any(
+      (light) => light.lighting.config!.mode == LightingMode.additive,
+    );
+
+    if (!hasAmbient && !hasAdditive) {
       return;
     }
+
     canvas.saveLayer(bounds, paint);
-    canvas.drawColor(color!, BlendMode.dstATop);
-    for (final light in _visibleLight) {
-      final config = light.lighting.config;
-      if (config == null || !light.lighting.enabled) {
+
+    if (hasAmbient) {
+      canvas.drawColor(color!, BlendMode.dstATop);
+    }
+
+    for (final light in lights) {
+      final config = light.lighting.config!;
+      final drawCutout = config.mode == LightingMode.cutout;
+
+      // A cutout light only makes sense when there is ambient darkness to
+      // erase. Additive lights are drawn even on fully lit scenes.
+      if (drawCutout && !hasAmbient) {
         continue;
       }
-      config.update(_dtUpdate);
-      canvas.save();
 
-      canvas.scale(gameRef.camera.zoom);
-      final tl = gameRef.camera.topleft;
-      canvas.translate(-tl.x, -tl.y);
+      canvas.save();
+      _applyCameraTransform(canvas);
 
       if (config.type is CircleLightingType) {
-        _drawCircle(canvas, light);
+        _drawCircle(canvas, light, cutout: drawCutout);
+      } else if (config.type is ArcLightingType) {
+        _drawArc(canvas, light, cutout: drawCutout);
       }
 
-      if (config.type is ArcLightingType) {
-        _drawArc(canvas, light);
-      }
       canvas.restore();
     }
+
     canvas.restore();
   }
 
+  /// Applies the same transform the camera uses to render the world.
+  ///
+  /// Using the viewfinder transform (instead of manually translating by the
+  /// camera top-left) keeps lights aligned when the camera is rotated or when
+  /// a custom anchor is used.
+  void _applyCameraTransform(Canvas canvas) {
+    canvas.transform2D(gameRef.camera.viewfinder.transform);
+  }
+
+  bool _isLightRenderable(WithLighting light) {
+    final config = light.lighting.config;
+    return config != null && light.lighting.enabled;
+  }
+
   @override
-  // ignore: must_call_super
   void update(double dt) {
     _containColor = _containsColor();
-    _dtUpdate = dt;
+
+    for (final light in _visibleLight) {
+      if (_isLightRenderable(light)) {
+        light.lighting.config!.update(dt);
+      }
+    }
+
+    super.update(dt);
   }
 
   @override
@@ -116,77 +164,99 @@ class LightingComponent extends GameComponent implements LightingInterface {
     );
   }
 
-  bool _containsColor() {
-    return color != null && color != const Color(0x00000000);
+  @override
+  void fadeIn(
+    Color color, {
+    Duration duration = const Duration(milliseconds: 500),
+    Curve curve = Curves.decelerate,
+  }) {
+    this.color = color.withValues(alpha: 0);
+    animateToColor(color, duration: duration, curve: curve);
   }
 
-  void _drawArc(Canvas canvas, WithLighting light) {
+  @override
+  void fadeOut({
+    Duration duration = const Duration(milliseconds: 500),
+    Curve curve = Curves.decelerate,
+  }) {
+    final current = color;
+    if (current == null) {
+      return;
+    }
+    animateToColor(
+      current.withValues(alpha: 0),
+      duration: duration,
+      curve: curve,
+    );
+  }
+
+  bool _containsColor() {
+    return color != null && color!.a > 0;
+  }
+
+  void _drawArc(Canvas canvas, WithLighting light, {required bool cutout}) {
     final config = light.lighting.config!;
     final type = config.type as ArcLightingType;
-    final offset = (light.absoluteCenter + config.align).toOffset();
+    final center = (light.absoluteCenter + config.align).toOffset();
+    // Kept as `radius * 2` to preserve the historical arc rendering: changing
+    // it would alter every existing arc light. It can be revisited separately.
+    final radius = config.radius * 2;
 
     canvas.save();
 
-    canvas.translate(light.center.x, light.center.y);
-    canvas.rotate(light.lighting.angle);
-    canvas.translate(-light.center.x, -light.center.y);
+    if (light.lighting.angle != 0) {
+      canvas.translate(center.dx, center.dy);
+      canvas.rotate(light.lighting.angle);
+      canvas.translate(-center.dx, -center.dy);
+    }
+
+    final path = Path()
+      ..moveTo(center.dx, center.dy)
+      ..arcTo(
+        Rect.fromCircle(radius: radius, center: center),
+        type.startRadAngle,
+        type.endRadAngle,
+        false,
+      )
+      ..close();
+
+    if (cutout) {
+      canvas.drawPath(
+        path,
+        _paintFocusArc..maskFilter = config.maskFilter,
+      );
+    }
 
     canvas.drawPath(
-      Path()
-        ..moveTo(offset.dx, offset.dy)
-        ..arcTo(
-          Rect.fromCircle(
-            radius: config.radius * 2,
-            center: offset,
-          ),
-          type.startRadAngle,
-          type.endRadAngle,
-          false,
-        )
-        ..close(),
-      _paintFocusArc..maskFilter = config.maskFilter,
-    );
-
-    canvas.drawPath(
-      Path()
-        ..moveTo(offset.dx, offset.dy)
-        ..arcTo(
-          Rect.fromCircle(
-            radius: light.lighting.config!.radius * 2,
-            center: offset,
-          ),
-          type.startRadAngle,
-          type.endRadAngle,
-          false,
-        )
-        ..close(),
+      path,
       _paintLightingArc
         ..color = config.color
-        ..maskFilter = config.maskFilter,
+        ..maskFilter = config.maskFilter
+        ..blendMode = cutout ? BlendMode.srcOver : BlendMode.plus,
     );
 
     canvas.restore();
   }
 
-  void _drawCircle(Canvas canvas, WithLighting light) {
+  void _drawCircle(Canvas canvas, WithLighting light, {required bool cutout}) {
     final config = light.lighting.config!;
     final offset = (light.absoluteCenter + config.align).toOffset();
+    final radius = config.radius * (1 - config.valuePulse);
 
-    canvas.drawCircle(
-      offset,
-      config.radius * (1 - config.valuePulse),
-      _paintFocus..maskFilter = config.maskFilter,
-    );
+    if (cutout) {
+      canvas.drawCircle(
+        offset,
+        radius,
+        _paintFocus..maskFilter = config.maskFilter,
+      );
+    }
 
     _paintLighting
       ..color = config.color
-      ..maskFilter = config.maskFilter;
+      ..maskFilter = config.maskFilter
+      ..blendMode = cutout ? BlendMode.srcOver : BlendMode.plus;
 
-    canvas.drawCircle(
-      offset,
-      config.radius * (config.withPulse ? (1 - config.valuePulse) : 1),
-      _paintLighting,
-    );
+    canvas.drawCircle(offset, radius, _paintLighting);
   }
 
   @override

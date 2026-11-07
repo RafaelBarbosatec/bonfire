@@ -2,6 +2,25 @@
 
 Bonfire 4.0 is a major release focused on **developer experience** and **correctness**: a cleaner, API-first architecture for mixins, a simplified movement system and a fully modernized codebase (Flame `^1.38.0`). Below is the consolidated overview; each pre-release (beta.4 → beta.13) has its detailed entry further down.
 
+### Lighting
+
+The lighting system received a round of fixes and new capabilities:
+
+- `LightingConfig.copyWith` now preserves `align` (it used to reset it to zero)
+  and accepts `align`/`mode`.
+- `PulseValue` now honors `pulseCurve`, never exceeds `pulseVariation` and keeps
+  the previous pulse timing.
+- Lights follow the camera transform, staying aligned when the camera is rotated
+  or uses a custom anchor.
+- New `LightingMode.additive` draws emissive lights (torches, magic, explosions)
+  on top of the scene, even when no ambient darkness is configured.
+- New `LightingApi.animateTo(config, duration, curve)` to transition radius,
+  color, blur and alignment smoothly.
+- New `gameRef.lighting.fadeIn(color)` / `fadeOut()` for ambient transitions.
+- `blurBorder: 0` now produces a crisp edge instead of an invalid blur.
+- Pulse updates no longer depend on rendering and `LightingComponent.update` now
+  calls `super.update(dt)`.
+
 ### Breaking: API-first mixins (`WithFeature` + `feature.{resource}`)
 
 Most mixins no longer add methods/fields directly to the component. Functionality is grouped under a named API object, keeping the component namespace clean when many mixins are combined:
