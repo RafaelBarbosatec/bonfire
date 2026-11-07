@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:flutter/widgets.dart' show Curve, Curves;
 
 /// API used to configure lighting in a component.
 class LightingApi {
