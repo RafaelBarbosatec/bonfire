@@ -37,3 +37,24 @@ jobs:
 
       # - name: Check lint errors
       #   run: flutter analyze .
+
+  analyze-example:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.41.2
+          cache: true
+
+      - name: Get example packages
+        working-directory: example
+        run: flutter pub get
+
+      - name: Analyze example
+        working-directory: example
+        run: flutter analyze

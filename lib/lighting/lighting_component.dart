@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:bonfire/bonfire.dart';
 import 'package:flame/extensions.dart' show CanvasExtension;
 import 'package:flutter/widgets.dart';
@@ -24,14 +26,20 @@ abstract class LightingInterface {
   });
 
   bool isEnabled();
+
+  /// Adds a light that is not attached to a component.
+  LightSource addLight(LightSource light);
+
+  /// Removes a light previously added with [addLight].
+  bool removeLight(LightSource light);
 }
 
 /// Layer component responsible for adding lighting to the game.
 class LightingComponent extends GameComponent implements LightingInterface {
-  final Paint _paintFocus = Paint()..blendMode = BlendMode.clear;
   final Paint _paintLighting = Paint();
-  final Paint _paintFocusArc = Paint()..blendMode = BlendMode.clear;
   final Paint _paintLightingArc = Paint();
+
+  final List<LightSource> _lightSources = [];
 
   ColorTween? _tween;
   bool _containColor = false;
@@ -40,6 +48,9 @@ class LightingComponent extends GameComponent implements LightingInterface {
   Color? color;
 
   LightingComponent({this.color});
+
+  /// Lights added through [addLight].
+  List<LightSource> get lightSources => List.unmodifiable(_lightSources);
 
   @override
   int get priority {
@@ -66,49 +77,102 @@ class LightingComponent extends GameComponent implements LightingInterface {
   }
 
   @override
+  LightSource addLight(LightSource light) {
+    _lightSources.add(light);
+    return light;
+  }
+
+  @override
+  bool removeLight(LightSource light) => _lightSources.remove(light);
+
+  @override
   void renderTree(Canvas canvas) {
-    final lights = _visibleLight.where(_isLightRenderable).toList(
-          growable: false,
-        );
+    final componentLights =
+        _visibleLight.where(_isLightRenderable).toList(growable: false);
+    final lightSources = _lightSources
+        .where((light) => light.enabled && _isLightSourceVisible(light))
+        .toList(growable: false);
 
     final hasAmbient = _containColor;
-    final hasAdditive = lights.any(
-      (light) => light.lighting.config!.mode == LightingMode.additive,
-    );
 
-    if (!hasAmbient && !hasAdditive) {
+    final additive = <_PendingLight>[];
+    final cutout = <_PendingLight>[];
+
+    for (final light in componentLights) {
+      final config = light.lighting.config!;
+      final pending = _PendingLight(
+        config: config,
+        center: light.absoluteCenter + config.align,
+        angle: light.lighting.angle,
+      );
+      if (config.mode == LightingMode.additive) {
+        additive.add(pending);
+      } else if (hasAmbient) {
+        // A cutout light only makes sense when there is ambient darkness to
+        // erase.
+        cutout.add(pending);
+      }
+    }
+
+    for (final light in lightSources) {
+      final config = light.config;
+      final pending = _PendingLight(
+        config: config,
+        center: light.position + config.align,
+        angle: light.angle,
+      );
+      if (config.mode == LightingMode.additive) {
+        additive.add(pending);
+      } else if (hasAmbient) {
+        cutout.add(pending);
+      }
+    }
+
+    if (additive.isEmpty && !hasAmbient) {
       return;
     }
 
-    canvas.saveLayer(bounds, paint);
-
-    if (hasAmbient) {
-      canvas.drawColor(color!, BlendMode.dstATop);
-    }
-
-    for (final light in lights) {
-      final config = light.lighting.config!;
-      final drawCutout = config.mode == LightingMode.cutout;
-
-      // A cutout light only makes sense when there is ambient darkness to
-      // erase. Additive lights are drawn even on fully lit scenes.
-      if (drawCutout && !hasAmbient) {
-        continue;
-      }
-
+    // Additive lights are composited *below* the ambient darkness, so the
+    // ambient color darkens them instead of the light being painted on top of
+    // the night color.
+    if (additive.isNotEmpty) {
+      canvas.saveLayer(bounds, paint);
       canvas.save();
       _applyCameraTransform(canvas);
 
-      if (config.type is CircleLightingType) {
-        _drawCircle(canvas, light, cutout: drawCutout);
-      } else if (config.type is ArcLightingType) {
-        _drawArc(canvas, light, cutout: drawCutout);
+      for (final light in additive) {
+        _renderLight(
+          canvas,
+          config: light.config,
+          center: light.center,
+          angle: light.angle,
+          cutout: false,
+        );
       }
 
       canvas.restore();
+      canvas.restore();
     }
 
-    canvas.restore();
+    if (hasAmbient) {
+      canvas.saveLayer(bounds, paint);
+      canvas.drawColor(color!, BlendMode.dstATop);
+      canvas.save();
+      _applyCameraTransform(canvas);
+
+      for (final light in cutout) {
+        _renderLight(
+          canvas,
+          config: light.config,
+          center: light.center,
+          angle: light.angle,
+          cutout: true,
+        );
+      }
+
+      canvas.restore();
+      canvas.restore();
+    }
   }
 
   /// Applies the same transform the camera uses to render the world.
@@ -125,6 +189,13 @@ class LightingComponent extends GameComponent implements LightingInterface {
     return config != null && light.lighting.enabled;
   }
 
+  bool _isLightSourceVisible(LightSource light) {
+    final camera = gameRef.camera;
+    return camera.cameraRectWithSpacing
+        .inflate(light.config.radius)
+        .contains(light.position.toOffset());
+  }
+
   @override
   void update(double dt) {
     _containColor = _containsColor();
@@ -132,6 +203,12 @@ class LightingComponent extends GameComponent implements LightingInterface {
     for (final light in _visibleLight) {
       if (_isLightRenderable(light)) {
         light.lighting.config!.update(dt);
+      }
+    }
+
+    for (final light in _lightSources) {
+      if (light.enabled) {
+        light.config.update(dt);
       }
     }
 
@@ -194,19 +271,49 @@ class LightingComponent extends GameComponent implements LightingInterface {
     return color != null && color!.a > 0;
   }
 
-  void _drawArc(Canvas canvas, WithLighting light, {required bool cutout}) {
-    final config = light.lighting.config!;
+  void _renderLight(
+    Canvas canvas, {
+    required LightingConfig config,
+    required Vector2 center,
+    required double angle,
+    required bool cutout,
+  }) {
+    if (config.type is ArcLightingType) {
+      _drawArc(
+        canvas,
+        config: config,
+        center: center.toOffset(),
+        angle: angle,
+        cutout: cutout,
+      );
+    } else {
+      _drawCircle(
+        canvas,
+        config: config,
+        center: center.toOffset(),
+        radius: config.radiusWithEffects,
+        cutout: cutout,
+      );
+    }
+  }
+
+  void _drawArc(
+    Canvas canvas, {
+    required LightingConfig config,
+    required Offset center,
+    required double angle,
+    required bool cutout,
+  }) {
     final type = config.type as ArcLightingType;
-    final center = (light.absoluteCenter + config.align).toOffset();
-    // Kept as `radius * 2` to preserve the historical arc rendering: changing
-    // it would alter every existing arc light. It can be revisited separately.
-    final radius = config.radius * 2;
+    // `radius` is the actual reach of the light, the same unit used by circle
+    // lights, so switching between `arc` and `circle` keeps the same coverage.
+    final radius = config.radiusWithEffects;
 
     canvas.save();
 
-    if (light.lighting.angle != 0) {
+    if (angle != 0) {
       canvas.translate(center.dx, center.dy);
-      canvas.rotate(light.lighting.angle);
+      canvas.rotate(angle);
       canvas.translate(-center.dx, -center.dy);
     }
 
@@ -220,43 +327,127 @@ class LightingComponent extends GameComponent implements LightingInterface {
       )
       ..close();
 
+    final area = Rect.fromCircle(radius: radius, center: center);
+
     if (cutout) {
       canvas.drawPath(
         path,
-        _paintFocusArc..maskFilter = config.maskFilter,
+        _buildPaint(config, area, cutout: true, erase: true, arc: true),
       );
     }
 
     canvas.drawPath(
       path,
-      _paintLightingArc
-        ..color = config.color
-        ..maskFilter = config.maskFilter
-        ..blendMode = cutout ? BlendMode.srcOver : BlendMode.plus,
+      _buildPaint(config, area, cutout: cutout, arc: true),
     );
 
     canvas.restore();
   }
 
-  void _drawCircle(Canvas canvas, WithLighting light, {required bool cutout}) {
-    final config = light.lighting.config!;
-    final offset = (light.absoluteCenter + config.align).toOffset();
-    final radius = config.radius * (1 - config.valuePulse);
+  void _drawCircle(
+    Canvas canvas, {
+    required LightingConfig config,
+    required Offset center,
+    required double radius,
+    required bool cutout,
+  }) {
+    final area = Rect.fromCircle(center: center, radius: radius);
 
     if (cutout) {
       canvas.drawCircle(
-        offset,
+        center,
         radius,
-        _paintFocus..maskFilter = config.maskFilter,
+        _buildPaint(config, area, cutout: true, erase: true),
       );
     }
 
-    _paintLighting
-      ..color = config.color
-      ..maskFilter = config.maskFilter
-      ..blendMode = cutout ? BlendMode.srcOver : BlendMode.plus;
+    canvas.drawCircle(
+      center,
+      radius,
+      _buildPaint(config, area, cutout: cutout),
+    );
+  }
 
-    canvas.drawCircle(offset, radius, _paintLighting);
+  /// Builds the paint for a light.
+  ///
+  /// When [erase] is true the paint cuts the ambient darkness instead of
+  /// tinting it. With a gradient [LightFalloff] the cut is proportional to the
+  /// gradient alpha (`BlendMode.dstOut`), which produces a soft edge without
+  /// the cost of `MaskFilter.blur`.
+  Paint _buildPaint(
+    LightingConfig config,
+    Rect area, {
+    required bool cutout,
+    bool erase = false,
+    bool arc = false,
+  }) {
+    final paint = arc ? _paintLightingArc : _paintLighting;
+    final color = erase ? const Color(0xFFFFFFFF) : config.effectiveColor;
+    final blendMode = erase
+        ? null
+        : cutout
+            ? BlendMode.srcOver
+            : config.additiveBlendMode;
+
+    if (config.falloff == LightFalloff.blur) {
+      paint
+        ..shader = null
+        ..color = color
+        ..maskFilter = config.maskFilter
+        ..blendMode = erase ? BlendMode.clear : blendMode!;
+    } else {
+      paint
+        ..shader = _falloffShader(config, area, color)
+        ..maskFilter = null
+        ..blendMode = erase ? BlendMode.dstOut : blendMode!;
+    }
+    return paint;
+  }
+
+  ui.Shader _falloffShader(LightingConfig config, Rect area, Color color) {
+    final inner = config.innerRadius.clamp(0.0, 1.0);
+
+    // No falloff: the whole shape has full intensity.
+    if (inner >= 1) {
+      return ui.Gradient.radial(
+        area.center,
+        area.width / 2,
+        [color, color],
+        [0, 1],
+      );
+    }
+
+    final transparent = color.withValues(alpha: 0);
+    final colors = <Color>[];
+    final stops = <double>[];
+
+    if (inner > 0) {
+      colors
+        ..add(color)
+        ..add(color);
+      stops
+        ..add(0)
+        ..add(inner);
+    } else {
+      colors.add(color);
+      stops.add(0);
+    }
+
+    if (config.falloff == LightFalloff.linear) {
+      colors.add(transparent);
+      stops.add(1);
+    } else {
+      const samples = 6;
+      for (var i = 1; i <= samples; i++) {
+        final t = i / samples;
+        // 1 - smoothstep(t)
+        final alpha = 1 - (t * t * (3 - 2 * t));
+        colors.add(color.withValues(alpha: color.a * alpha));
+        stops.add(inner + (1 - inner) * t);
+      }
+    }
+
+    return ui.Gradient.radial(area.center, area.width / 2, colors, stops);
   }
 
   @override
@@ -264,4 +455,17 @@ class LightingComponent extends GameComponent implements LightingInterface {
     bounds = gameRef.camera.viewport.virtualSize.toRect();
     super.onGameResize(size);
   }
+}
+
+/// A light resolved to world coordinates, ready to be rendered.
+class _PendingLight {
+  final LightingConfig config;
+  final Vector2 center;
+  final double angle;
+
+  const _PendingLight({
+    required this.config,
+    required this.center,
+    required this.angle,
+  });
 }

@@ -2,6 +2,7 @@ import 'package:bonfire/base/game_component.dart';
 import 'package:bonfire/lighting/lighting_api.dart';
 
 export 'lighting_api.dart';
+export 'light_source.dart';
 
 /// Mixin used to configure lighting in your component.
 ///

@@ -68,6 +68,11 @@ lighting.enabled = true;
 | `blurBorder` | same as `radius` | Blur applied to the light edge. `0` gives a crisp edge. |
 | `align` | `Vector2.zero()` | Offset of the light relative to the component center. |
 | `mode` | `LightingMode.cutout` | How the light interacts with the ambient darkness. |
+| `falloff` | `LightFalloff.blur` | How the light fades to the edge: `blur`, `linear` or `smooth`. |
+| `innerRadius` | `0.35` | Fraction of `radius` with full intensity in gradient falloffs. |
+| `intensity` | `1` | Multiplies the alpha of `color` (`0..1`). |
+| `additiveBlendMode` | `BlendMode.plus` | Blend mode used by additive lights (`plus`, `screen`...). |
+| `flicker` | `null` | Optional candle-like flicker. |
 | `withPulse` | `false` | Enables the pulsing radius. |
 | `pulseVariation` | `0.1` | Maximum radius variation, relative to `radius`. |
 | `pulseSpeed` | `0.1` | Pulse speed. A full sweep takes `pulseVariation / pulseSpeed` seconds. |
@@ -79,9 +84,11 @@ lighting.enabled = true;
 `LightingMode.cutout` is the classic flashlight: it erases the ambient darkness
 inside the shape and tints it with `color`.
 
-`LightingMode.additive` adds light on top of the scene without erasing the
-ambient darkness. It works even when `lightingColorGame` is transparent, so you
-can use it for torches, magic, explosions and neon on fully lit maps:
+`LightingMode.additive` adds light to the scene without erasing the ambient
+darkness. It is composited **below** the ambient color, so at night the ambient
+tint darkens the glow instead of the glow being painted over the darkness. It
+works even when `lightingColorGame` is transparent, so you can use it for
+torches, magic, explosions and neon on fully lit maps:
 
 ```dart
 lighting.setup(
@@ -113,6 +120,101 @@ lighting.setup(
 
 Lights follow the camera transform, so they stay aligned when the camera is
 zoomed, moved or rotated (`CameraConfig.angle`).
+
+About the arc parameters:
+
+| Parameter | Meaning |
+| --- | --- |
+| `startRadAngle` | Angle (radians) where the arc starts, before rotation. |
+| `endRadAngle` | **Sweep** of the arc in radians (not the end angle). |
+| `isCenter` | `true` centers the cone on the component angle; `false` makes the end of the cone point at the component angle. |
+| `radius` | Reach of the light, in the same unit used by circle lights. |
+
+So `LightingType.arc(startRadAngle: -0.4, endRadAngle: 0.8, isCenter: true)`
+produces a cone of 0.8 rad centered exactly on the component facing direction.
+
+### Soft falloff without blur
+
+`LightFalloff.blur` keeps the historical `MaskFilter.blur` edge. For a softer,
+cheaper edge use a radial gradient instead:
+
+```dart
+lighting.setup(
+  LightingConfig(
+    radius: 160,
+    color: const Color(0xFFFFB300).withValues(alpha: 0.35),
+    falloff: LightFalloff.smooth, // or LightFalloff.linear
+    innerRadius: 0.45,            // 45% of the radius at full intensity
+  ),
+);
+```
+
+`innerRadius` keeps the center of the light at full intensity and the gradient
+only covers the outer band, which avoids the washed out look of a uniform blur.
+Gradient falloffs also give a proportional (`dstOut`) cut on the ambient
+darkness, so the light edge is soft instead of binary.
+
+### Intensity and additive blend mode
+
+`intensity` multiplies the alpha of `color`, so you can reuse the same color
+for several lights. For additive lights you can also choose the blend mode:
+
+```dart
+lighting.setup(
+  LightingConfig(
+    radius: 90,
+    color: Colors.amber,
+    mode: LightingMode.additive,
+    intensity: 0.6,
+    additiveBlendMode: BlendMode.screen,
+  ),
+);
+```
+
+### Flicker
+
+Candle-like variation applied to both radius and intensity. It is
+deterministic, so different lights can have different `seed`s:
+
+```dart
+lighting.setup(
+  LightingConfig(
+    radius: 70,
+    color: const Color(0xFFFF8A00).withValues(alpha: 0.5),
+    flicker: const LightFlicker(
+      frequency: 7,
+      amplitude: 0.15,
+      seed: 42,
+    ),
+  ),
+);
+```
+
+### Lights without a component
+
+For explosions, muzzle flashes or ambient details you don't need a component
+with `WithLighting`. Add a `LightSource` to the game lighting layer and remove
+it when it is no longer needed:
+
+```dart
+final light = gameRef.lighting.addLight(
+  LightSource(
+    position: someWorldPosition,
+    config: LightingConfig(
+      radius: 180,
+      color: Colors.white.withValues(alpha: 0.9),
+      mode: LightingMode.additive,
+      falloff: LightFalloff.smooth,
+    ),
+  ),
+);
+
+// Later:
+gameRef.lighting.removeLight(light);
+```
+
+`LightSource` also has `enabled`, `angle` (used by arc lights) and a mutable
+`position`, so you can move it every frame without creating a component.
 
 ## Animating the ambient light
 
@@ -162,6 +264,8 @@ lighting.setup(otherConfig);
   top-down lighting; it uses a single `saveLayer`.
 - `blurBorder: 0` is cheaper than a large blur and gives a pixel-art friendly
   crisp edge.
+- `LightFalloff.smooth`/`LightFalloff.linear` avoid `MaskFilter.blur` and scale
+  better when several lights are visible at once.
 - Lights outside the camera are not rendered nor updated. Avoid hundreds of
   pulsing lights on low-end devices.
 - `LightingConfig` is immutable. Reuse config instances instead of creating them
