@@ -129,7 +129,7 @@ List<Vector2> computeVisibilityPolygon({
 
   // A light inside a wall is fully blocked.
   for (final occluder in occluders) {
-    if (occluder.bounds.contains(center.toOffset()) &&
+    if (occluder.bounds.contains(Offset(center.x, center.y)) &&
         pointInPolygon(center, occluder.points)) {
       return const [];
     }

@@ -212,12 +212,17 @@ class _LightingPageState extends State<LightingPage> {
     lighting
       ..addOccluder(
         LightingOccluder.rect(
-          Rect.fromLTWH(tileSize * 4.5, 0, tileSize * 0.5, tileSize * 2.5),
+          const Rect.fromLTWH(
+            tileSize * 4.5,
+            0,
+            tileSize * 0.5,
+            tileSize * 2.5,
+          ),
         ),
       )
       ..addOccluder(
         LightingOccluder.rect(
-          Rect.fromLTWH(
+          const Rect.fromLTWH(
             tileSize * 1.25,
             tileSize * 2.25,
             tileSize * 2,
