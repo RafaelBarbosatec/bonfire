@@ -57,6 +57,4 @@ jobs:
 
       - name: Analyze example
         working-directory: example
-        # Warnings and infos are reported but do not fail the job so the gate
-        # catches real compilation errors in the example app.
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+        run: flutter analyze
