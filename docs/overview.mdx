@@ -6,6 +6,24 @@ description: "Understand the BonfireWidget and how the engine is organized."
 
 Bonfire is basically a Widget where you are passing the parameters and configuring it, according to what kind of game you want to build.
 
+## Everything is a `GameComponent` + mixins
+
+The classes in this page are not special engine types — they are **combinations of mixins**. `Player` is `GameComponent` with `Movement`, `WithLife`, `WithVision`, `PlayerControllerListener` and `MovementByJoystick`. `Enemy` is a `GameComponent` with `Movement`, `WithVision` and `WithLife`. And so on.
+
+```dart
+class Player extends GameComponent
+    with
+        Movement,
+        WithLife,
+        WithVision,
+        PlayerControllerListener,
+        MovementByJoystick { ... }
+
+class Npc extends GameComponent with Movement, WithVision { ... }
+```
+
+That means you can assemble any element you need — including a player with no sprite animation, a decoration that takes damage, or a projectile that collides — by picking the right bricks. See [Components are LEGO bricks](/mixins#components-are-lego-bricks).
+
 
 ## BonfireWidget
 

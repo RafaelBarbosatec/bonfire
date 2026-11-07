@@ -7,11 +7,45 @@ description: "Create and configure the player character."
 > *This is a [GameComponent](https://github.com/RafaelBarbosatec/bonfire/blob/master/lib/base/game_component.dart) and uses `mixins` like 
 [Movement](/mixins#movement), 
 [WithLife](/mixins#withlife), 
-[Vision](/mixins#vision), 
+[WithVision](/mixins#withvision), 
 [MovementByJoystick](/mixins#movementbyjoystick) and 
-[JoystickListener](/joystick#joysticklistener)*
+[PlayerControllerListener](/mixins#movementbyjoystick)*
 
 Represents the character controlled by the user in the game. Instances of this class have actions and movements ready to be used and configured. 
+
+## Player is a composition, not a monolith
+
+Before choosing a class, it helps to see what `Player` actually is:
+
+```dart
+class Player extends GameComponent
+    with
+        Movement,
+        WithLife,
+        WithVision,
+        PlayerControllerListener,
+        MovementByJoystick {
+  Player({
+    required Vector2 position,
+    required Vector2 size,
+    double life = 100,
+    double? speed,
+  }) { ... }
+}
+```
+
+No sprite. No animation. No drawing. `Player` is only the **base recipe** of a controllable character — and every concrete player is that recipe plus a couple more bricks:
+
+| Class | Composition |
+|---|---|
+| `Player` | `GameComponent` + `Movement`, `WithLife`, `WithVision`, `PlayerControllerListener`, `MovementByJoystick` |
+| `SimplePlayer` | `Player` + `WithDirectionAnimation` |
+| `RotationPlayer` | `Player` + `UseSpriteAnimation`, `WithAssetsLoader` |
+| `PlatformPlayer` | `SimplePlayer` + `WithCollision`, `WithJumper`, `JumperAnimation` |
+
+<Info>
+  This is the LEGO side of Bonfire: if a built-in player is 90% of what you need, extend it and add/swap one mixin. If it is 0%, extend `Player` (or even `GameComponent`) and snap on only the bricks you want — no sprite animation, no joystick, no life, whatever fits. See [Components are LEGO bricks](/mixins#components-are-lego-bricks) for the full catalog and recipes.
+</Info>
 
 We can create three types of enemies `SimplePlayer`, `RotationPlayer` and `PlatformPlayer`:
 
@@ -67,15 +101,15 @@ class Knight extends SimplePlayer {
     }
 
     @override
-    void joystickChangeDirectional(JoystickDirectionalEvent event) {
+    void onJoystickChangeDirectional(JoystickDirectionalEvent event) {
       // do anything with event of the joystick
-      super.joystickChangeDirectional(event);
+      super.onJoystickChangeDirectional(event);
     }
 
     @override
-    void joystickAction(JoystickActionEvent event) {
+    void onJoystickAction(JoystickActionEvent event) {
       // do anything with event of the joystick
-      super.joystickAction(event);
+      super.onJoystickAction(event);
     }
 
 }
@@ -89,9 +123,9 @@ Player instances can receive actions configured on the Joystick by overriding th
 ```dart
 
   @override
-  void joystickAction(JoystickActionEvent event) {
+  void onJoystickAction(JoystickActionEvent event) {
     // do anything with event of the joystick
-    super.joystickAction(event);
+    super.onJoystickAction(event);
   }
 
 ```
@@ -344,4 +378,87 @@ To play the moment animation you should use the `SimpleDirectionAnimation` metho
 
 ## Custom
 
-If none of these types of player do not meet your needs. You can create your own by extending the `Player` class.
+If none of these types of player meet your needs, **do not fight the hierarchy — assemble your own.**
+
+### Extend `Player` and draw it yourself
+
+`Player` already gives you movement, joystick wiring, life, vision and `attack` (inherited from `GameComponent`). Add only what is missing and render however you want:
+
+```dart
+import 'dart:ui';
+
+class NeonCube extends Player with WithCollision {
+  NeonCube(Vector2 position)
+      : super(
+          position: position,
+          size: Vector2.all(28),
+          speed: 140,
+          life: 100,
+        );
+
+  @override
+  Future<void> onLoad() async {
+    add(RectangleHitbox(size: size));
+    return super.onLoad();
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, size.x, size.y),
+      Paint()
+        ..color = const Color(0xFF22D3EE)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2,
+    );
+  }
+}
+```
+
+No `SpriteAnimation`, no `Sprite`, no `SimpleDirectionAnimation` — and it is still a `Player`, so `BonfireWidget(player: NeonCube(...))` works exactly the same.
+
+The same trick works for built-ins. Need a `SimplePlayer` that also shows a life bar and receives no damage? Extend it and change the brick list:
+
+```dart
+class InvincibleKnight extends SimplePlayer with WithLifeBar {
+  InvincibleKnight(Vector2 position)
+      : super(position: position, size: Vector2.all(32)) {
+    life.receivesAttackFrom = AcceptableAttackOriginEnum.NONE;
+    lifeBar.setup(borderWidth: 2);
+  }
+}
+```
+
+### Build a component that is not a `Player`
+
+If your controlled thing is not a character at all — a cursor, a drone, a car — start from `GameComponent` and snap on `Movement`, `PlayerControllerListener` and `MovementByJoystick`. Then register it as a joystick observer:
+
+```dart
+class Drone extends GameComponent
+    with Movement, PlayerControllerListener, MovementByJoystick {
+  Drone(Vector2 position) {
+    this.position = position;
+    size = Vector2.all(20);
+    speed = 90;
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    canvas.drawCircle(
+      Offset(size.x / 2, size.y / 2),
+      size.x / 2,
+      Paint()..color = const Color(0xFFFFB300),
+    );
+  }
+}
+
+// in your BonfireGame
+game.add(drone);
+game.addJoystickObserver(drone);
+```
+
+Want it to take damage too? Add `WithLife`. Want a health bar? Add `WithLifeBar`. Want it to push boxes? Add `WithPushable`, `WithCollision`. That is the entire workflow — no engine change required.
+
+> The complete list of bricks, their requirements and their APIs is in [Components are LEGO bricks](/mixins#components-are-lego-bricks).
