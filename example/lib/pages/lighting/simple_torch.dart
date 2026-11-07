@@ -9,9 +9,15 @@ class SimpleTorch extends GameDecoration {
           size: Vector2.all(16),
           position: position,
           lightingConfig: LightingConfig(
-            radius: 32,
+            radius: 34,
             color: Colors.deepOrangeAccent.withValues(alpha: 0.3),
+            blurBorder: 18,
+            // Offset of the light relative to the component center.
+            align: Vector2(0, -6),
             withPulse: true,
+            pulseVariation: 0.12,
+            // The configured curve is used by the pulse animation.
+            pulseCurve: Curves.easeInOut,
           ),
         );
 }
