@@ -20,6 +20,16 @@ The lighting system received a round of fixes and new capabilities:
 - `blurBorder: 0` now produces a crisp edge instead of an invalid blur.
 - Pulse updates no longer depend on rendering and `LightingComponent.update` now
   calls `super.update(dt)`.
+- New `LightFalloff.linear` and `LightFalloff.smooth` render the light edge with
+  a radial gradient instead of `MaskFilter.blur`, with a configurable
+  `innerRadius` (full-intensity core).
+- New `intensity` multiplies the light color alpha and `additiveBlendMode`
+  allows `BlendMode.screen` and others on additive lights.
+- New `LightFlicker` adds a deterministic candle-like variation to radius and
+  intensity.
+- New `LightSource` + `gameRef.lighting.addLight(...)`/`removeLight(...)` allow
+  lights that are not attached to any component (explosions, muzzle flashes,
+  ambient details).
 
 ### Breaking: API-first mixins (`WithFeature` + `feature.{resource}`)
 

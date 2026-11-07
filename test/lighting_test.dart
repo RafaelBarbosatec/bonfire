@@ -1,4 +1,5 @@
 import 'package:bonfire/bonfire.dart';
+import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:bonfire/util/pulse_value.dart';
 import 'package:flutter/material.dart' show Colors;
 import 'package:flutter/widgets.dart';
@@ -194,6 +195,125 @@ void main() {
 
       expect(api.isAnimating, isFalse);
       expect(api.config!.radius, 10);
+    });
+  });
+
+  group('LightFlicker', () {
+    test('samples stay in [-1, 1]', () {
+      const flicker = LightFlicker(frequency: 9, amplitude: 0.2);
+      for (var i = 0; i < 500; i++) {
+        final value = flicker.sample(i * 0.017);
+        expect(value, inInclusiveRange(-1, 1));
+      }
+    });
+
+    test('is deterministic for the same time and seed', () {
+      const flicker = LightFlicker(frequency: 6, seed: 42);
+      expect(flicker.sample(1.234), flicker.sample(1.234));
+    });
+
+    test('different seeds produce different patterns', () {
+      const a = LightFlicker(seed: 1);
+      const b = LightFlicker(seed: 2);
+      expect(a.sample(0.5), isNot(b.sample(0.5)));
+    });
+
+    test('config applies the flicker amplitude', () {
+      final config = LightingConfig(
+        radius: 100,
+        color: Colors.white,
+        flicker: const LightFlicker(amplitude: 0.2, frequency: 4),
+      );
+
+      for (var i = 0; i < 120; i++) {
+        config.update(0.02);
+        expect(config.valueFlicker, inInclusiveRange(-0.2, 0.2));
+        expect(config.radiusWithEffects, inInclusiveRange(80, 120));
+      }
+    });
+  });
+
+  group('LightingConfig intensity and falloff', () {
+    test('intensity multiplies the color alpha', () {
+      final config = LightingConfig(
+        radius: 100,
+        color: const Color(0x80FFFFFF),
+        intensity: 0.5,
+      );
+
+      expect(
+        config.effectiveColor.a,
+        closeTo((0x80 / 255) * 0.5, 1e-6),
+      );
+    });
+
+    test('copyWith preserves falloff, innerRadius and intensity', () {
+      final config = LightingConfig(
+        radius: 100,
+        color: Colors.white,
+        falloff: LightFalloff.smooth,
+        innerRadius: 0.6,
+        intensity: 0.7,
+        additiveBlendMode: BlendMode.screen,
+      );
+
+      final copy = config.copyWith(radius: 200);
+
+      expect(copy.falloff, LightFalloff.smooth);
+      expect(copy.innerRadius, 0.6);
+      expect(copy.intensity, 0.7);
+      expect(copy.additiveBlendMode, BlendMode.screen);
+    });
+
+    test('lerpTo interpolates intensity and innerRadius', () {
+      final from = LightingConfig(
+        radius: 10,
+        color: Colors.white,
+        intensity: 0,
+        innerRadius: 0,
+        falloff: LightFalloff.linear,
+      );
+      final to = LightingConfig(
+        radius: 20,
+        color: Colors.white,
+        intensity: 1,
+        innerRadius: 1,
+        falloff: LightFalloff.linear,
+      );
+
+      final mid = from.lerpTo(to, 0.5);
+
+      expect(mid.intensity, closeTo(0.5, 1e-9));
+      expect(mid.innerRadius, closeTo(0.5, 1e-9));
+    });
+  });
+
+  group('LightSource manager', () {
+    test('adds and removes lights', () {
+      final component = LightingComponent();
+      final light = LightSource(
+        position: Vector2(10, 10),
+        config: LightingConfig(radius: 40, color: Colors.white),
+      );
+
+      expect(component.lightSources, isEmpty);
+
+      final added = component.addLight(light);
+      expect(added, same(light));
+      expect(component.lightSources, [light]);
+
+      expect(component.removeLight(light), isTrue);
+      expect(component.lightSources, isEmpty);
+    });
+
+    test('removing an unknown light returns false', () {
+      final component = LightingComponent();
+      final light = LightSource(
+        position: Vector2.zero(),
+        config: LightingConfig(radius: 40, color: Colors.white),
+      );
+
+      expect(component.removeLight(light), isFalse);
     });
   });
 }

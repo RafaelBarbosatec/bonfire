@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 
 /// Interactive showcase of every lighting feature:
 ///
-/// * `LightingMode.cutout` torches with pulse (`pulseCurve`) and `align`;
+/// * `LightingMode.cutout` torches with gradient falloff, flicker and `align`;
 /// * `LightingMode.additive` crystal that glows even without ambient darkness;
 /// * arc light following the player angle (`useComponentAngle`);
 /// * `copyWith` (which now preserves `align`);
 /// * `LightingApi.animateTo`, `LightingInterface.fadeIn`/`fadeOut`;
+/// * `LightSource` added/removed at runtime (`addLight`/`removeLight`);
 /// * crisped edge light (`blurBorder: 0`);
 /// * lights staying aligned while the camera is rotated.
 class LightingPage extends StatefulWidget {
@@ -115,6 +116,11 @@ class _LightingPageState extends State<LightingPage> {
                         onPressed: _toggleCrystal,
                       ),
                     ),
+                    _DemoButton(
+                      icon: Icons.bolt,
+                      label: 'Flash (addLight)',
+                      onPressed: _flash,
+                    ),
                   ],
                 ),
               ),
@@ -135,7 +141,8 @@ class _LightingPageState extends State<LightingPage> {
                   child: const Text(
                     'Move with the joystick: the cone follows the player angle. '
                     'Turn the ambient off: cutout lights disappear, but the '
-                    'additive crystal keeps glowing.',
+                    'additive crystal keeps glowing. Torches flicker with a '
+                    'gradient falloff; Flash adds a temporary LightSource.',
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ),
@@ -215,16 +222,43 @@ class _LightingPageState extends State<LightingPage> {
     torch.lighting.animateTo(
       // `copyWith` keeps `align` (it used to reset it to zero).
       current.copyWith(
-        radius: wide ? 72 : 34,
-        color: wide
-            ? Colors.deepOrange.withValues(alpha: 0.45)
-            : Colors.deepOrangeAccent.withValues(alpha: 0.3),
-        blurBorder: wide ? 26 : 18,
+        radius: wide ? 72 : 40,
+        color: wide ? Colors.deepOrange : Colors.deepOrangeAccent,
+        intensity: wide ? 0.95 : 0.7,
       ),
       duration: const Duration(milliseconds: 700),
       curve: Curves.easeInOut,
     );
     _torchWide.value = wide;
+  }
+
+  /// Adds a temporary additive [LightSource] at the player position.
+  ///
+  /// Demonstrates [LightingInterface.addLight]/`removeLight`, which do not
+  /// require a component.
+  void _flash() {
+    final lighting = _game?.lighting;
+    if (lighting == null || !_player.hasGameRef) {
+      return;
+    }
+
+    final light = lighting.addLight(
+      LightSource(
+        position: _player.absoluteCenter.clone(),
+        config: LightingConfig(
+          radius: 170,
+          color: Colors.white.withValues(alpha: 0.9),
+          mode: LightingMode.additive,
+          falloff: LightFalloff.smooth,
+          innerRadius: 0.2,
+        ),
+      ),
+    );
+
+    Future.delayed(
+      const Duration(milliseconds: 300),
+      () => lighting.removeLight(light),
+    );
   }
 
   void _animatePlayerLight() {
