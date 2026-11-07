@@ -1,6 +1,5 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/player/rotation/human_topdown_player_spritesheet.dart';
-import 'package:flutter/material.dart';
 
 /// Player used by the lighting example.
 ///

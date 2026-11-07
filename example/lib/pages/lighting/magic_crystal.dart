@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 /// cutting a hole in the ambient darkness. It keeps glowing even when the
 /// ambient light is fully transparent (`lightingColorGame` off).
 class MagicCrystal extends GameDecoration {
-  MagicCrystal(Vector2 position)
+  MagicCrystal({required Vector2 position})
       : super.withSprite(
           sprite: Sprite.load('platform/gem.png'),
           position: position,
