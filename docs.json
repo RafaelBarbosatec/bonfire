@@ -37,7 +37,8 @@
         { "title": "Welcome", "href": "/" },
         { "title": "Getting Started", "href": "/getting-started" },
         { "title": "What's New in 4.0", "href": "/bonfire-4" },
-        { "title": "Overview", "href": "/overview" }
+        { "title": "Overview", "href": "/overview" },
+        { "title": "Composition (LEGO mixins)", "href": "/mixins" }
       ]
     },
     {
@@ -80,7 +81,6 @@
     {
       "group": "Utilities",
       "pages": [
-        { "title": "Useful Mixins", "href": "/mixins" },
         { "title": "Loading Assets", "href": "/loading-assets" },
         { "title": "Tiled Support", "href": "/tiled-support" },
         { "title": "Scene Builder", "href": "/scene-builder" },

@@ -36,6 +36,45 @@ Bonfire was created with the purpose of letting you create Flutter games in an e
 
 This tool was built over [Flame](https://flame-engine.org/) and all its resources and classes are available to be used along with Bonfire. It is recommended to familiarize yourself with Flame before you start doing something with Bonfire.
 
+## Composable by design — think LEGO
+
+Bonfire is not a framework where you must accept a ready-made `Player`, `Enemy` or `Decoration`. **Every game element is a `GameComponent` with mixins snapped on top.** Each mixin adds one capability — movement, life, vision, collision, jump, forces, sensors, sprite, animation — and exposes it through its own API object.
+
+```dart
+// This is literally what `Player` is:
+class Player extends GameComponent
+    with
+        Movement,
+        WithLife,
+        WithVision,
+        PlayerControllerListener,
+        MovementByJoystick { ... }
+```
+
+<table>
+  <thead>
+    <tr><th>Mixins</th><th>Result</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Movement + WithLife + WithVision + MovementByJoystick</code></td><td>Your own animated (or drawn) player</td></tr>
+    <tr><td><code>Movement + WithCollision + WithJumper + WithForces</code></td><td>A platform character</td></tr>
+    <tr><td><code>Movement + WithLife + WithLifeBar + WithRandomMovement</code></td><td>An enemy that walks around and takes damage</td></tr>
+    <tr><td><code>Movement + WithCollision + WithPushable</code></td><td>A box you can push</td></tr>
+    <tr><td><code>WithCollision + WithSensor</code></td><td>Spikes that hurt on contact</td></tr>
+  </tbody>
+</table>
+
+If a built-in serves 90% of what you need, extend it and swap one mixin. If it serves 0%, start from `GameComponent` and snap on only the bricks you want — including a player that draws a circle instead of using sprite animations.
+
+<CardGroup cols={2}>
+  <Card title="Mixins & composition" icon="blocks" href="/mixins#components-are-lego-bricks">
+    The full brick catalog, dependency rules and recipes to build your own player.
+  </Card>
+  <Card title="Player" icon="user" href="/player">
+    ...and how the built-in players are assembled from those same bricks.
+  </Card>
+</CardGroup>
+
 ![Game perspective](/assets/perspectiva.png)
 
 <Info>

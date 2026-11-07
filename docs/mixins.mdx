@@ -1,10 +1,77 @@
 ---
-title: Mixins
-description: "Useful mixins to add behaviors to your components."
+title: Composition (mixins)
+description: "Build Bonfire components like LEGO: combine small behavior mixins to assemble players, enemies and anything else."
 ---
 
 
 > With mixins you can add different behaviors to your component.
+
+## Components are LEGO bricks
+
+Bonfire does not give you a closed `Player`/`Enemy` hierarchy that you have to fight against. **Everything is a `GameComponent` plus a stack of small mixins.** Each mixin adds exactly one capability — move, have life, see, collide, jump, be pushed, follow, sense — and exposes it through a single API object.
+
+Think of a component as a LEGO figure:
+
+- `GameComponent` is **the base plate**. It already brings the engine plumbing every component needs: game reference, pointer detection, paint, collision callbacks, `util` helpers and `attack` (yes — any `GameComponent` can attack, even a rock).
+- Each mixin is **a brick** you snap on top. It carries its own state and methods, so it never pollutes the component namespace: you reach it through `component.life`, `component.collision`, `component.vision`, `component.forces`, and so on.
+- A class like `SimplePlayer` is **just a pre-built recipe**: a base plate with a specific set of bricks snapped in a specific order.
+
+This is the actual definition of `Player` in Bonfire 4.x:
+
+```dart
+class Player extends GameComponent
+    with
+        Movement,
+        WithLife,
+        WithVision,
+        PlayerControllerListener,
+        MovementByJoystick {
+  Player({
+    required Vector2 position,
+    required Vector2 size,
+    double life = 100,
+    double? speed,
+  }) {
+    this.speed = speed ?? this.speed;
+    this.life.receivesAttackFrom = AcceptableAttackOriginEnum.ENEMY;
+    this.life.initial(life);
+    this.position = position;
+    this.size = size;
+  }
+}
+```
+
+There is **no sprite, no animation and no keyboard in `Player`**. It only bundles what every controllable character needs. The players you already know are assembled on top of it:
+
+```dart
+class SimplePlayer extends Player with WithDirectionAnimation { ... }
+
+class RotationPlayer extends Player with UseSpriteAnimation, WithAssetsLoader { ... }
+
+class PlatformPlayer extends SimplePlayer
+    with WithCollision, WithJumper, JumperAnimation { ... }
+```
+
+The same is true everywhere in the engine:
+
+| Built-in class | How it is assembled |
+|---|---|
+| `GameComponent` | `PositionComponent` + `BonfireHasGameRef`, `PointerDetectorHandler`, `HasPaint`, `CollisionCallbacks`, `WithUtil`, `WithAttack` |
+| `Player` | `GameComponent` + `Movement`, `WithLife`, `WithVision`, `PlayerControllerListener`, `MovementByJoystick` |
+| `SimplePlayer` | `Player` + `WithDirectionAnimation` |
+| `RotationPlayer` | `Player` + `UseSpriteAnimation`, `WithAssetsLoader` |
+| `PlatformPlayer` | `SimplePlayer` + `WithCollision`, `WithJumper`, `JumperAnimation` |
+| `Npc` | `GameComponent` + `Movement`, `WithVision` |
+| `Enemy` / `Ally` | `Npc` + `WithLife` |
+| `SimpleEnemy` / `SimpleAlly` | `Enemy` / `Ally` + `WithDirectionAnimation` |
+| `GameObject` | `GameComponent` + `UseSprite`, `WithLighting`, `WithAssetsLoader` |
+| `GameDecoration` | `AnimatedGameObject` (which is `GameObject` + `UseSpriteAnimation`) |
+
+<Info>
+  Read that table backwards and you get the customization strategy: **if a built-in serves 90% of what you need, extend it and swap the last brick. If it serves 0%, start from `GameComponent` and snap only the bricks you want.**
+</Info>
+
+### One API object per brick
 
 Starting with Bonfire 4.0, most mixins follow a consistent API-first pattern:
 
@@ -14,11 +81,150 @@ Starting with Bonfire 4.0, most mixins follow a consistent API-first pattern:
 
 This reduces namespace pollution on components and improves code discoverability when combining multiple mixins.
 
+`Movement` is the deliberate exception: it keeps its original direct API (`moveUp`, `stop`, `speed`, `velocity`, `direction`...) because almost every other mixin builds on it.
+
 > For a complete migration guide from Bonfire 3.x, see [What's New in 4.0](/bonfire-4).
 
----
+### Recipe 1 — a player without sprite animations
 
-## Movement
+`Player` has no animation brick at all. If you do not want `SimpleDirectionAnimation`, do not extend `SimplePlayer` — extend `Player` and draw whatever you want:
+
+```dart
+import 'dart:ui';
+
+class NeonCube extends Player with WithCollision {
+  NeonCube(Vector2 position)
+      : super(
+          position: position,
+          size: Vector2.all(28),
+          speed: 140,
+          life: 100,
+        );
+
+  @override
+  Future<void> onLoad() async {
+    add(RectangleHitbox(size: size));
+    return super.onLoad();
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, size.x, size.y),
+      Paint()..color = const Color(0xFF22D3EE),
+    );
+  }
+}
+```
+
+It is still a `Player`, so `BonfireWidget(player: NeonCube(...))` and the joystick keep working, and you still have the bricks you kept: `Movement`, `life`, `vision`, `collision` and `attack`.
+
+You can go the other way too: keep `SimplePlayer` and replace just the animation API:
+
+```dart
+class Ghost extends SimplePlayer {
+  Ghost(Vector2 position)
+      : super(position: position, size: Vector2.all(24)) {
+    animation = SimpleDirectionAnimation(
+      idleRight: _idleRight,
+      runRight: _runRight,
+    );
+  }
+}
+```
+
+### Recipe 2 — no `Player` at all
+
+A component does not need to extend `Player` to be controlled. `BonfireWidget` only needs a *listener* of the joystick, and you can wire any component with `PlayerControllerListener` yourself:
+
+```dart
+class Drone extends GameComponent
+    with
+        Movement,
+        WithLife,
+        WithVision,
+        PlayerControllerListener,
+        MovementByJoystick,
+        WithCollision {
+  Drone(Vector2 position) {
+    this.position = position;
+    size = Vector2.all(20);
+    speed = 90;
+    life.initial(50);
+  }
+
+  @override
+  Future<void> onLoad() async {
+    add(RectangleHitbox(size: size));
+    return super.onLoad();
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    canvas.drawCircle(
+      Offset(size.x / 2, size.y / 2),
+      size.x / 2,
+      Paint()..color = const Color(0xFFFFB300),
+    );
+  }
+}
+```
+
+```dart
+// inside BonfireGame.onReady, for example
+game.add(drone);
+game.addJoystickObserver(drone);
+```
+
+`addJoystickObserver` is the same mechanism `BonfireWidget(player: ...)` uses internally. Use it when the "player" is a drone, a cursor, a car — or when you want to switch control between components at runtime.
+
+### Swapping bricks
+
+You do not need to rewrite a class to change it — just change its `with` clause (or extend it and add one more mixin):
+
+| I want to... | Snap on | Needs |
+|---|---|---|
+| take damage and die | `WithLife` | — |
+| show a health bar | `WithLifeBar` | `WithLife` |
+| collide with the map and other hitboxes | `WithCollision` | `Movement` |
+| bounce on collision | `WithElasticCollision` | `WithCollision` |
+| jump | `WithJumper` | `Movement`, `WithCollision` |
+| apply gravity, wind, friction, drag | `WithForces` | `Movement` |
+| walk around randomly | `WithRandomMovement` | `Movement` |
+| follow a path with A* | `WithPathFinding` | `Movement` |
+| be moved one cell at a time | `WithMovePerCell` | `Movement` |
+| be pushed by other components | `WithPushable` | `Movement` |
+| follow a target | `WithFollower` | — |
+| detect contact without blocking | `WithSensor` | — |
+| see other components | `WithVision` | — |
+| emit light | `WithLighting` | — |
+| draw a `Sprite` | `UseSprite` | — |
+| draw a `SpriteAnimation` | `UseSpriteAnimation` | — |
+| apply a fragment shader | `WithShader` | `PositionComponent` |
+| load async assets in `onLoad` | `WithAssetsLoader` | — |
+| use a joystick | `MovementByJoystick` | `Movement`, `PlayerControllerListener` |
+| run `Behavior` objects | `UseBehavior` | — |
+
+### Rules of the stack
+
+Mixins declare their requirements with `on`, and Dart checks them when you build the class:
+
+```dart
+mixin WithCollision on Movement { ... }
+mixin WithJumper on Movement, WithCollision { ... }
+mixin WithLifeBar on WithLife { ... }
+```
+
+Two practical consequences:
+
+1. **Order matters.** The mixins a brick depends on must appear before it in the `with` clause: `GameComponent with Movement, WithCollision, WithJumper`. Dart reports a compile error if you invert it.
+2. **A brick can be removed.** Remove `MovementByJoystick` and the joystick no longer moves your component — you can drive it with `moveToward`, `moveByAngle` or your own AI instead. Remove `WithLife` and the component simply cannot die. The engine does not assume a brick is there.
+
+### Brick catalog
+
+#### Movement
 
 Mixin responsible for adding movement to your component.
 
@@ -96,18 +302,21 @@ Adds animations synchronized with movement directions.
 ```dart
 class MyComponent extends GameComponent with Movement, WithDirectionAnimation {
   MyComponent() {
-    directionAnimation = SimpleDirectionAnimation(...);
+    animation = SimpleDirectionAnimation(
+      idleRight: idleRightAnimation,
+      runRight: runRightAnimation,
+    );
   }
 }
 ```
 
-You can replace the animation setup using:
+You can replace the animation at any time with the `animation` setter (or `directionAnimation.animation`):
 
 ```dart
-directionAnimation.replaceAnimation(
-  SimpleDirectionAnimation newAnimation, {
-  bool doIdle = true,
-})
+animation = SimpleDirectionAnimation(
+  idleRight: newIdleRight,
+  runRight: newRunRight,
+);
 ```
 
 ---
@@ -156,16 +365,18 @@ bool pathFinding.isMoving
 
 Adds random movement behavior, useful for enemies and NPCs walking around.
 
+Set the parameters once with `setup`, then call `run(dt)` from `update`:
+
 ```dart
 class MyEnemy extends SimpleEnemy with WithRandomMovement {
+  MyEnemy(Vector2 position) : super(position: position, size: Vector2.all(32)) {
+    randomMovement.setup(speed: 20, maxDistance: 100);
+  }
+
   @override
   void update(double dt) {
     super.update(dt);
-    randomMovement.update(
-      dt,
-      speed: 20,
-      maxDistance: 100,
-    );
+    randomMovement.run(dt);
   }
 }
 ```
@@ -173,16 +384,16 @@ class MyEnemy extends SimpleEnemy with WithRandomMovement {
 Main API:
 
 ```dart
-randomMovement.update(
-  double dt, {
+randomMovement.setup({
   double? speed,
-  double maxDistance = 50,
-  double minDistance = 25,
-  int timeKeepStopped = 2000,
-  bool updateAngle = false,
-  bool checkDirectionWithRayCast = false,
-  RandomMovementDirections directions = RandomMovementDirections.all,
+  double? maxDistance,
+  double? minDistance,
+  int? timeKeepStopped, // milliseconds
+  bool? updateAngle,
+  bool? checkDirectionWithRayCast,
+  RandomMovementDirections? directions,
 })
+void randomMovement.run(double dt)
 randomMovement.onStartMoveListener(OnRandomMovementStartCallback callback)
 randomMovement.onStopMoveListener(OnRandomMovementStopCallback callback)
 ShapeHitbox? randomMovement.area
@@ -190,22 +401,28 @@ ShapeHitbox? randomMovement.area
 
 ---
 
-## WithMovementByJoystick
+## MovementByJoystick
 
-> To use this mixin your component must contain `Movement` and `JoystickListener` mixins.
+> To use this mixin your component must contain the `Movement` and `PlayerControllerListener` mixins.
 
 Adds movement controlled by joystick events.
 
 ```dart
 class MyComponent extends GameComponent
-    with Movement, JoystickListener, WithMovementByJoystick {
+    with Movement, PlayerControllerListener, MovementByJoystick {
   MyComponent() {
-    movementByJoystick.setup(...);
+    setupMovementByJoystick(
+      moveType: MovementByJoystickType.direction, // or .angle for 360 degrees
+      intensityEnabled: false,
+      diagonalEnabled: true,
+      enabled: true,
+      startOnIdle: true,
+    );
   }
 }
 ```
 
-You can disable this behavior setting `movementByJoystick.enabled = false`.
+`MovementByJoystickType.direction` gives the 8 directions; `MovementByJoystickType.angle` gives full 360 movement (the mode used by `RotationPlayer`). Call `setupMovementByJoystick` again at runtime to change any of these options.
 
 ---
 
@@ -421,21 +638,21 @@ class MyComponent extends GameComponent with WithAssetsLoader {
 
 ---
 
-## WithSpriteAnimation
+## UseSpriteAnimation
 
 Mixin that adds easy use of `SpriteAnimation` to your component.
 
-Your component gains the `animation` property and `playSpriteAnimationOnce` method.
+Your component gains `setAnimation`, `playSpriteAnimationOnce` and the animation state getters. There is no `animation` field to assign: pass the animation to `setAnimation`.
 
 ```dart
-class MyComponent extends GameComponent with WithSpriteAnimation {
+class MyComponent extends GameComponent with UseSpriteAnimation {
   void playJump() {
     playSpriteAnimationOnce(MySpriteSheetLoader.getJumpAnimation());
   }
 
   @override
   Future<void> onLoad() async {
-    animation = await MySpriteSheetLoader.getAnimation();
+    setAnimation(await MySpriteSheetLoader.getAnimation());
     return super.onLoad();
   }
 }
@@ -443,14 +660,14 @@ class MyComponent extends GameComponent with WithSpriteAnimation {
 
 ---
 
-## WithSprite
+## UseSprite
 
 Mixin that adds easy use of `Sprite` to your component.
 
-Your component gains the `sprite` property.
+Your component gains the `sprite` property (and `spriteOffset`).
 
 ```dart
-class MyComponent extends GameComponent with WithSprite {
+class MyComponent extends GameComponent with UseSprite {
   @override
   Future<void> onLoad() async {
     sprite = await MySpriteSheetLoader.getSprite();
@@ -481,7 +698,7 @@ See [Shader](/shader) for more.
 
 ---
 
-## WithTileRecognizer
+## TileRecognizer
 
 Mixin responsible for detecting which tiles the component is over.
 
@@ -489,34 +706,53 @@ Your component gains the `tileRecognizer` API to query tile information.
 
 ---
 
-## WithUpdateCameraByPinchGesture
+## UpdateCameraByPinchGesture
 
 Mixin that enables camera zoom control using pinch gesture.
+
+> Requires `PinchGesture`.
 
 ---
 
 ## Combining mixins
 
-You can combine multiple mixins to build complex behaviors:
+The `with` clause is just a shopping list. This enemy:
+
+- already has `Movement`, `WithVision` and `WithLife` (from `SimpleEnemy`);
+- snaps on `WithCollision` to respect the map;
+- snaps on `WithRandomMovement` to walk around;
+- snaps on `WithLifeBar` to show a health bar.
 
 ```dart
 class Goblin extends SimpleEnemy
-    with
-        WithCollision,
-        WithRandomMovement,
-        WithLife,
-        WithLifeBar {
+    with WithCollision, WithRandomMovement, WithLifeBar {
   Goblin(Vector2 position) : super(position: position, size: Vector2.all(32)) {
     life.initial(100);
     lifeBar.setup(borderWidth: 2);
+    randomMovement.setup(speed: speed / 2, maxDistance: 64);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    randomMovement.update(dt, speed: speed / 2, maxDistance: 64);
+    randomMovement.run(dt);
   }
 }
 ```
 
+Its full brick stack, from the base plate up:
+
+```text
+GameComponent                     <- engine plumbing + attack + util
+  + Movement, WithVision          <- from Npc
+  + WithLife                      <- from Enemy
+  + WithDirectionAnimation        <- from SimpleEnemy
+  + WithCollision                 <- this class
+  + WithRandomMovement            <- this class
+  + WithLifeBar                   <- this class
+```
+
+That is the whole idea: **you never need a new engine class to get a new kind of character — you need a new combination.**
+
 > Remember: `Movement` is the only mixin accessed directly. All other mixins use their respective API object.
+

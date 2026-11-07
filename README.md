@@ -27,6 +27,7 @@ Complete documentation with examples: [**docs.page/rafaelbarbosatec/bonfire**](h
 
 ## ✨ Features
 
+- 🧩 **Composable by design (LEGO)** — every element is a `GameComponent` plus small mixins: snap on `Movement`, `WithLife`, `WithCollision`, `WithJumper`, `WithVision`, `WithForces`... Build the exact player/enemy/object you need instead of accepting a fixed hierarchy.
 - 🧙 **RPG-ready components** — `Player`, `Enemy`, `Ally`, `Npc`, `GameDecoration` and a complete `GameComponent` API.
 - 🗺️ **Maps** — Tiled map support, multi-map worlds, custom/matrix maps, collisions and portals.
 - 🕹️ **Input** — Joystick, keyboard and mouse controls with 8-direction movement.
@@ -48,13 +49,31 @@ Starting with 4.0, mixins follow a consistent **`WithFeature` + `feature.{resour
 ```dart
 class MyEnemy extends SimpleEnemy
     with Movement, WithCollision, WithRandomMovement, WithPathFinding {
+  MyEnemy(Vector2 position) : super(position: position, size: Vector2.all(32)) {
+    randomMovement.setup(speed: 20, maxDistance: 64);
+  }
+
   @override
   void update(double dt) {
     super.update(dt);
-    randomMovement.update(dt, speed: 20, maxDistance: 64);
+    randomMovement.run(dt);
   }
 }
 ```
+
+That is also the LEGO side of Bonfire. `Player` itself is just:
+
+```dart
+class Player extends GameComponent
+    with
+        Movement,
+        WithLife,
+        WithVision,
+        PlayerControllerListener,
+        MovementByJoystick {}
+```
+
+No sprite, no animation, no drawing. `SimplePlayer`, `RotationPlayer` and `PlatformPlayer` are that same recipe plus a couple of bricks. **If the built-in player does not fit — for example, you do not want sprite animations — extend `Player` (or `GameComponent`) and snap on only the mixins you want.** Same for enemies, decorations and props. See [Composition (LEGO mixins)](https://docs.page/rafaelbarbosatec/bonfire/mixins#components-are-lego-bricks).
 
 Highlights of the release:
 
