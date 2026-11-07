@@ -51,18 +51,13 @@ class Player extends GameComponent
         MovementByJoystick { ... }
 ```
 
-<table>
-  <thead>
-    <tr><th>Mixins</th><th>Result</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>Movement + WithLife + WithVision + MovementByJoystick</code></td><td>Your own animated (or drawn) player</td></tr>
-    <tr><td><code>Movement + WithCollision + WithJumper + WithForces</code></td><td>A platform character</td></tr>
-    <tr><td><code>Movement + WithLife + WithLifeBar + WithRandomMovement</code></td><td>An enemy that walks around and takes damage</td></tr>
-    <tr><td><code>Movement + WithCollision + WithPushable</code></td><td>A box you can push</td></tr>
-    <tr><td><code>WithCollision + WithSensor</code></td><td>Spikes that hurt on contact</td></tr>
-  </tbody>
-</table>
+| Mixins you snap on | What you get |
+|---|---|
+| `Movement + WithLife + WithVision + MovementByJoystick` | Your own animated (or drawn) player |
+| `Movement + WithCollision + WithJumper + WithForces` | A platform character |
+| `Movement + WithLife + WithLifeBar + WithRandomMovement` | An enemy that walks around and takes damage |
+| `Movement + WithCollision + WithPushable` | A box you can push |
+| `WithCollision + WithSensor` | Spikes that hurt on contact |
 
 If a built-in serves 90% of what you need, extend it and swap one mixin. If it serves 0%, start from `GameComponent` and snap on only the bricks you want — including a player that draws a circle instead of using sprite animations.
 
