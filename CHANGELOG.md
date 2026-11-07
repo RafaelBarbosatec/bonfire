@@ -1,35 +1,42 @@
-# 4.0.0
+# next
 
-Bonfire 4.0 is a major release focused on **developer experience** and **correctness**: a cleaner, API-first architecture for mixins, a simplified movement system and a fully modernized codebase (Flame `^1.38.0`). Below is the consolidated overview; each pre-release (beta.4 → beta.13) has its detailed entry further down.
+## Lighting
 
-### Lighting
+### Added
 
-The lighting system received a round of fixes and new capabilities:
+- `LightingMode.additive` draws emissive lights (torches, magic, explosions) on
+  top of the scene, even when no ambient darkness is configured.
+- `LightingApi.animateTo(config, duration, curve)` transitions the radius,
+  color, blur and alignment of a light smoothly.
+- `gameRef.lighting.fadeIn(color)` / `fadeOut()` animate the ambient light.
+- `LightFalloff.linear` and `LightFalloff.smooth` render the light edge with a
+  radial gradient instead of `MaskFilter.blur`, with a configurable
+  `innerRadius` (full-intensity core).
+- `intensity` multiplies the light color alpha and `additiveBlendMode` allows
+  `BlendMode.screen` and others on additive lights.
+- `LightFlicker` adds a deterministic candle-like variation to radius and
+  intensity.
+- `LightSource` with `gameRef.lighting.addLight(...)`/`removeLight(...)` allows
+  lights that are not attached to any component (explosions, muzzle flashes,
+  ambient details).
+
+### Fixed
 
 - `LightingConfig.copyWith` now preserves `align` (it used to reset it to zero)
-  and accepts `align`/`mode`.
+  and accepts `align`, `mode`, `falloff`, `innerRadius`, `intensity`,
+  `additiveBlendMode` and `flicker`.
 - `PulseValue` now honors `pulseCurve`, never exceeds `pulseVariation` and keeps
   the previous pulse timing.
 - Lights follow the camera transform, staying aligned when the camera is rotated
   or uses a custom anchor.
-- New `LightingMode.additive` draws emissive lights (torches, magic, explosions)
-  on top of the scene, even when no ambient darkness is configured.
-- New `LightingApi.animateTo(config, duration, curve)` to transition radius,
-  color, blur and alignment smoothly.
-- New `gameRef.lighting.fadeIn(color)` / `fadeOut()` for ambient transitions.
+- Arc lights rotate around the component absolute center.
 - `blurBorder: 0` now produces a crisp edge instead of an invalid blur.
 - Pulse updates no longer depend on rendering and `LightingComponent.update` now
   calls `super.update(dt)`.
-- New `LightFalloff.linear` and `LightFalloff.smooth` render the light edge with
-  a radial gradient instead of `MaskFilter.blur`, with a configurable
-  `innerRadius` (full-intensity core).
-- New `intensity` multiplies the light color alpha and `additiveBlendMode`
-  allows `BlendMode.screen` and others on additive lights.
-- New `LightFlicker` adds a deterministic candle-like variation to radius and
-  intensity.
-- New `LightSource` + `gameRef.lighting.addLight(...)`/`removeLight(...)` allow
-  lights that are not attached to any component (explosions, muzzle flashes,
-  ambient details).
+
+# 4.0.0
+
+Bonfire 4.0 is a major release focused on **developer experience** and **correctness**: a cleaner, API-first architecture for mixins, a simplified movement system and a fully modernized codebase (Flame `^1.38.0`). Below is the consolidated overview; each pre-release (beta.4 → beta.13) has its detailed entry further down.
 
 ### Breaking: API-first mixins (`WithFeature` + `feature.{resource}`)
 
