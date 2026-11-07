@@ -15,7 +15,7 @@ class BonfireVersion extends StatelessWidget {
         ),
         const SizedBox(width: 2),
         Text(
-          'v3',
+          'v4',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: Colors.white.withValues(alpha: 0.5),
               ),
