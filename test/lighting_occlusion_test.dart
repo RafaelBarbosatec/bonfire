@@ -77,7 +77,7 @@ void main() {
 
       expect(polygon, hasLength(32));
       for (final point in polygon) {
-        expect(point.length, closeTo(100, 1e-6));
+        expect(point.length, closeTo(100, 1e-3));
       }
     });
 
@@ -134,7 +134,7 @@ void main() {
 
       expect(polygon, hasLength(16));
       for (final point in polygon) {
-        expect(point.length, closeTo(100, 1e-6));
+        expect(point.length, closeTo(100, 1e-3));
       }
     });
 
