@@ -22,8 +22,8 @@ class SimpleTorch extends GameDecoration {
             pulseCurve: Curves.easeInOut,
             // Candle-like flicker applied to radius and intensity.
             flicker: const LightFlicker(
-              frequency: 8,
-              amplitude: 0.12,
+              frequency: 2,
+              amplitude: 0.05,
               seed: 3,
             ),
           ),
