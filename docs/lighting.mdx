@@ -1,52 +1,166 @@
 ---
 title: Lighting
-description: "Add lighting effects to your game world."
+description: "Add ambient darkness, dynamic lights, pulses and emissive light sources to your game."
 ---
 
 
 > *This is a [GameComponent](https://github.com/RafaelBarbosatec/bonfire/blob/master/lib/base/game_component.dart)*
 
-Layer responsible for adding lighting to the game.
+The lighting layer is composed of two independent pieces:
+
+1. **Ambient darkness**, configured once on `BonfireWidget` through `lightingColorGame`.
+2. **Light sources**, added to any component with the `WithLighting` mixin.
+
+```dart
+BonfireWidget(
+  lightingColorGame: const Color(0xFF000000).withValues(alpha: 0.85),
+  // ...
+)
+```
 
 <img src="/assets/example_lighting.jpg" width="400" />
 
-By setting the `lightingColorGame` property on `BonfireWidget`, you automatically enable this lighting system.
+## Adding a light to a component
 
-To add light to objects, add the `WithLighting` mixin to the component and configure it using the `lighting.setup(...)` method:
+Add the `WithLighting` mixin and configure it with `lighting.setup(...)`:
 
 ```dart
-class MyCustomDecoration extends GameDecoration with WithLighting {
-  MyCustomDecoration(Vector2 position)
+class Torch extends GameDecoration with WithLighting {
+  Torch(Vector2 position)
       : super.withAnimation(
-          Future<SpriteAnimation>.value(...),
+          Future<SpriteAnimation>.value(torchSprite),
           size: Vector2(32, 32),
           position: position,
         ) {
     lighting.setup(
       LightingConfig(
-        radius: width * 1.5,
-        color: Colors.transparent,
-        // blurBorder: 20, // this is a default value
-        // type: LightingType.circle, // this is a default value
-        // useComponentAngle: false, // this is a default value. When true, light rotates together when a component changes its `angle` param.
+        radius: 120,
+        color: const Color(0xFFFFB300).withValues(alpha: 0.35),
+        withPulse: true,
+        pulseVariation: 0.12,
+        pulseSpeed: 0.1,
+        blurBorder: 40,
       ),
     );
   }
 }
 ```
 
-You can enable or disable the light at any time:
+Enable or disable a light without removing the component:
 
 ```dart
 lighting.enabled = false;
 lighting.enabled = true;
 ```
 
-You can access the game lighting and change it like this:
+## LightingConfig
+
+| Property | Default | Description |
+| --- | --- | --- |
+| `radius` | **required** | Radius of the light. |
+| `color` | **required** | Color used to fill the light area. Alpha matters: it is the light intensity. |
+| `type` | `LightingType.circle` | `LightingType.circle` or `LightingType.arc(...)`. |
+| `blurBorder` | same as `radius` | Blur applied to the light edge. `0` gives a crisp edge. |
+| `align` | `Vector2.zero()` | Offset of the light relative to the component center. |
+| `mode` | `LightingMode.cutout` | How the light interacts with the ambient darkness. |
+| `withPulse` | `false` | Enables the pulsing radius. |
+| `pulseVariation` | `0.1` | Maximum radius variation, relative to `radius`. |
+| `pulseSpeed` | `0.1` | Pulse speed. A full sweep takes `pulseVariation / pulseSpeed` seconds. |
+| `pulseCurve` | `Curves.decelerate` | Curve applied to the pulse. |
+| `useComponentAngle` | `false` | Keeps the light aligned with the component `angle` (useful for arcs/flashlights). |
+
+### Cutout and additive lights
+
+`LightingMode.cutout` is the classic flashlight: it erases the ambient darkness
+inside the shape and tints it with `color`.
+
+`LightingMode.additive` adds light on top of the scene without erasing the
+ambient darkness. It works even when `lightingColorGame` is transparent, so you
+can use it for torches, magic, explosions and neon on fully lit maps:
 
 ```dart
-gameRef.lighting.animateToColor(Colors.blue.withOpacity(0.7));
+lighting.setup(
+  LightingConfig(
+    radius: 90,
+    color: const Color(0xFFFF8A00).withValues(alpha: 0.5),
+    mode: LightingMode.additive,
+    withPulse: true,
+  ),
+);
 ```
+
+### Arcs (flashlights, cones)
+
+```dart
+lighting.setup(
+  LightingConfig(
+    radius: 140,
+    color: const Color(0xFFFFF3B0).withValues(alpha: 0.4),
+    type: LightingType.arc(
+      startRadAngle: -0.4,
+      endRadAngle: 0.8,
+      isCenter: true,
+    ),
+    useComponentAngle: true,
+  ),
+);
+```
+
+Lights follow the camera transform, so they stay aligned when the camera is
+zoomed, moved or rotated (`CameraConfig.angle`).
+
+## Animating the ambient light
+
+The ambient color can be animated through `gameRef.lighting`:
+
+```dart
+// Fade the ambient darkness in.
+gameRef.lighting.fadeIn(
+  const Color(0xFF000022).withValues(alpha: 0.9),
+  duration: const Duration(seconds: 2),
+);
+
+// Change to another ambient color.
+gameRef.lighting.animateToColor(
+  Colors.deepPurple.withValues(alpha: 0.7),
+  duration: const Duration(milliseconds: 800),
+);
+
+// Fade the ambient darkness out.
+gameRef.lighting.fadeOut();
+```
+
+## Animating a single light
+
+Every light can transition smoothly to another configuration. `radius`, `color`,
+`align` and `blurBorder` are interpolated; discrete properties (`type`, `mode`,
+pulse settings) switch at the middle of the transition:
+
+```dart
+lighting.animateTo(
+  LightingConfig(
+    radius: 220,
+    color: const Color(0xFFFF0000).withValues(alpha: 0.6),
+    mode: LightingMode.additive,
+  ),
+  duration: const Duration(milliseconds: 600),
+  curve: Curves.easeOut,
+);
+
+// Jump to a configuration immediately and cancel any transition.
+lighting.setup(otherConfig);
+```
+
+## Performance tips
+
+- Prefer `mode: LightingMode.cutout` with a dark ambient color for classic
+  top-down lighting; it uses a single `saveLayer`.
+- `blurBorder: 0` is cheaper than a large blur and gives a pixel-art friendly
+  crisp edge.
+- Lights outside the camera are not rendered nor updated. Avoid hundreds of
+  pulsing lights on low-end devices.
+- `LightingConfig` is immutable. Reuse config instances instead of creating them
+  inside `update`.
 
 ## GameColorFilter
 

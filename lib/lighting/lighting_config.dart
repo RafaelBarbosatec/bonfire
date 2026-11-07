@@ -1,6 +1,20 @@
+import 'dart:ui' show lerpDouble;
+
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/util/pulse_value.dart';
 import 'package:flutter/widgets.dart';
+
+/// How a light interacts with the game scene.
+enum LightingMode {
+  /// Erases the ambient darkness inside the light shape and tints that area
+  /// with [LightingConfig.color]. This is the classic "flashlight" behavior.
+  cutout,
+
+  /// Adds the light on top of the scene without erasing the ambient darkness.
+  /// Useful for torches, magic, explosions and any emissive light, including
+  /// on maps that have no ambient darkness at all.
+  additive,
+}
 
 /// Class used to configure lighting
 class LightingConfig {
@@ -25,15 +39,19 @@ class LightingConfig {
   /// Configure curve in pulse effect
   final Curve pulseCurve;
 
-  /// Configure blur in lighting
+  /// Configure blur in lighting. When `0`, the light has a crisp edge.
   final double blurBorder;
 
   /// Configure type of the lighting
   final LightingType type;
 
+  /// Offset applied to the light, relative to the component center.
   final Vector2 align;
 
-  late MaskFilter _maskFilter;
+  /// How the light interacts with the scene.
+  final LightingMode mode;
+
+  late MaskFilter? _maskFilter;
 
   PulseValue? _pulseAnimation;
 
@@ -48,7 +66,8 @@ class LightingConfig {
     double? blurBorder,
     this.type = LightingType.circle,
     Vector2? align,
-  })  : align = align ?? Vector2.zero(),
+    this.mode = LightingMode.cutout,
+  })  : align = align?.clone() ?? Vector2.zero(),
         blurBorder = blurBorder ?? radius {
     _pulseAnimation = PulseValue(
       speed: pulseSpeed,
@@ -56,10 +75,12 @@ class LightingConfig {
       pulseVariation: pulseVariation,
     );
 
-    _maskFilter = MaskFilter.blur(
-      BlurStyle.normal,
-      _convertRadiusToSigma(this.blurBorder),
-    );
+    _maskFilter = this.blurBorder > 0
+        ? MaskFilter.blur(
+            BlurStyle.normal,
+            _convertRadiusToSigma(this.blurBorder),
+          )
+        : null;
   }
 
   void update(double dt) {
@@ -69,12 +90,17 @@ class LightingConfig {
   }
 
   double get valuePulse => _pulseAnimation?.value ?? 0.0;
-  MaskFilter get maskFilter => _maskFilter;
+
+  /// Blur applied to the light edge. `null` means a crisp edge.
+  MaskFilter? get maskFilter => _maskFilter;
 
   static double _convertRadiusToSigma(double radius) {
     return radius * 0.57735 + 0.5;
   }
 
+  /// Returns a copy with the given fields replaced.
+  ///
+  /// All fields are preserved, including [align] and [mode].
   LightingConfig copyWith({
     double? radius,
     Color? color,
@@ -85,6 +111,8 @@ class LightingConfig {
     Curve? pulseCurve,
     double? blurBorder,
     LightingType? type,
+    Vector2? align,
+    LightingMode? mode,
   }) {
     return LightingConfig(
       radius: radius ?? this.radius,
@@ -96,6 +124,32 @@ class LightingConfig {
       pulseCurve: pulseCurve ?? this.pulseCurve,
       blurBorder: blurBorder ?? this.blurBorder,
       type: type ?? this.type,
+      align: align ?? this.align,
+      mode: mode ?? this.mode,
+    );
+  }
+
+  /// Interpolates between this config and [other].
+  ///
+  /// Used by `LightingApi.animateTo` to animate radius, color, blur and
+  /// alignment. Discrete fields switch at the middle of the animation.
+  LightingConfig lerpTo(LightingConfig other, double t) {
+    final discrete = t < 0.5;
+    return LightingConfig(
+      radius: lerpDouble(radius, other.radius, t)!,
+      color: Color.lerp(color, other.color, t)!,
+      withPulse: discrete ? withPulse : other.withPulse,
+      useComponentAngle: discrete ? useComponentAngle : other.useComponentAngle,
+      pulseVariation: lerpDouble(pulseVariation, other.pulseVariation, t)!,
+      pulseSpeed: lerpDouble(pulseSpeed, other.pulseSpeed, t)!,
+      pulseCurve: discrete ? pulseCurve : other.pulseCurve,
+      blurBorder: lerpDouble(blurBorder, other.blurBorder, t)!,
+      type: discrete ? type : other.type,
+      align: Vector2(
+        lerpDouble(align.x, other.align.x, t)!,
+        lerpDouble(align.y, other.align.y, t)!,
+      ),
+      mode: discrete ? mode : other.mode,
     );
   }
 }
