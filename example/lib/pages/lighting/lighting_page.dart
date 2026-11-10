@@ -1,18 +1,26 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/lighting/demo_player.dart';
 import 'package:example/pages/lighting/magic_crystal.dart';
+import 'package:example/pages/lighting/shadow_torch.dart';
 import 'package:example/pages/lighting/simple_torch.dart';
 import 'package:flutter/material.dart';
 
-/// Interactive showcase of every lighting feature:
+/// Interactive showcase of every lighting feature, split into independent
+/// demos so each configuration can be read on its own:
 ///
-/// * `LightingMode.cutout` torches with gradient falloff, flicker and `align`;
-/// * `LightingMode.additive` crystal that glows under the ambient darkness;
-/// * shadow casting with `LightingOccluder`s and `LightingQuality`;
+/// * **Default torch** (top left, from the map): the classic `cutout` light
+///   with `blurBorder`, pulse and `align` — no gradient, no flicker and no
+///   shadows;
+/// * **Shadow torch** (top right): `LightFalloff.linear` + flicker +
+///   `castShadows`, blocked by the L-shaped wall declared in Tiled in the
+///   `lighting_occluders` object layer; enable `Debug` to see the occluders;
+/// * **Crystal** (bottom left): `LightingMode.additive` glow under the ambient
+///   darkness;
 /// * `LightingPreset` ambient colors (day/night and friends);
-/// * `copyWith` (which now preserves `align`);
-/// * `LightingApi.animateTo`, `LightingInterface.fadeIn`/`fadeOut`;
+/// * `copyWith` (which preserves `align`), `LightingApi.animateTo`,
+///   `LightingInterface.fadeIn`/`fadeOut`;
 /// * `LightSource` added/removed at runtime (`addLight`/`removeLight`);
+/// * `LightingQuality` and the debug overlay, which affect the shadow demo;
 /// * lights staying aligned while the camera is rotated.
 class LightingPage extends StatefulWidget {
   const LightingPage({super.key});
@@ -24,6 +32,14 @@ class LightingPage extends StatefulWidget {
 class _LightingPageState extends State<LightingPage> {
   static const double tileSize = 16;
 
+  static final TextPaint _labelStyle = TextPaint(
+    style: const TextStyle(
+      color: Colors.white,
+      fontSize: 7,
+      shadows: [Shadow(color: Colors.black, blurRadius: 2)],
+    ),
+  );
+
   /// The game widget is built once and kept alive: rebuilding it would restart
   /// the game and lose the state we are demonstrating.
   Widget? _gameWidget;
@@ -31,7 +47,8 @@ class _LightingPageState extends State<LightingPage> {
 
   late final DemoPlayer _player;
   late final MagicCrystal _crystal;
-  SimpleTorch? _torch;
+  late final ShadowTorch _shadowTorch;
+  SimpleTorch? _defaultTorch;
 
   final _isNight = ValueNotifier(true);
   final _cameraRotated = ValueNotifier(false);
@@ -45,7 +62,11 @@ class _LightingPageState extends State<LightingPage> {
   void initState() {
     super.initState();
     _player = DemoPlayer(position: Vector2(tileSize * 4, tileSize * 7));
-    _crystal = MagicCrystal(position: Vector2(tileSize * 7, tileSize * 9));
+    // Each demo has its own area: the default torch comes from the map, the
+    // shadow torch and the crystal are placed away from it so their lights do
+    // not overlap.
+    _shadowTorch = ShadowTorch(position: Vector2(tileSize * 6.5, tileSize * 4));
+    _crystal = MagicCrystal(position: Vector2(tileSize * 2, tileSize * 10));
   }
 
   @override
@@ -98,16 +119,8 @@ class _LightingPageState extends State<LightingPage> {
                       valueListenable: _torchWide,
                       builder: (_, wide, __) => _DemoButton(
                         icon: Icons.local_fire_department,
-                        label: wide ? 'Torch: small' : 'Torch: big',
+                        label: wide ? 'Default torch: 34' : 'Default torch: 60',
                         onPressed: _animateTorch,
-                      ),
-                    ),
-                    ValueListenableBuilder<bool>(
-                      valueListenable: _crystalOn,
-                      builder: (_, on, __) => _DemoButton(
-                        icon: Icons.diamond,
-                        label: on ? 'Crystal: off' : 'Crystal: on',
-                        onPressed: _toggleCrystal,
                       ),
                     ),
                     ValueListenableBuilder<bool>(
@@ -124,6 +137,14 @@ class _LightingPageState extends State<LightingPage> {
                         icon: Icons.tune,
                         label: 'Quality: ${quality.name}',
                         onPressed: _cycleQuality,
+                      ),
+                    ),
+                    ValueListenableBuilder<bool>(
+                      valueListenable: _crystalOn,
+                      builder: (_, on, __) => _DemoButton(
+                        icon: Icons.diamond,
+                        label: on ? 'Crystal: off' : 'Crystal: on',
+                        onPressed: _toggleCrystal,
                       ),
                     ),
                     ValueListenableBuilder<bool>(
@@ -157,10 +178,10 @@ class _LightingPageState extends State<LightingPage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
-                    'Move with the joystick. The torch casts shadows through the '
-                    'invisible walls (press Debug to see them). The crystal is '
-                    'additive and glows under the ambient darkness. Flash adds '
-                    'a temporary LightSource.',
+                    'Three independent demos: default torch (top left), shadows '
+                    'cast by walls (top right, press Debug to see them) and an '
+                    'additive crystal (bottom left). Move with the joystick; '
+                    'Flash adds a temporary LightSource.',
                     style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ),
@@ -177,7 +198,8 @@ class _LightingPageState extends State<LightingPage> {
       map: WorldMapByTiled(
         WorldMapReader.fromAsset('tiled/tiled_example.tmj'),
         objectsBuilder: {
-          'torch': (prop) => _torch ??= SimpleTorch(prop.position),
+          // Only the first torch of the map is used: it is the default demo.
+          'torch': (prop) => _defaultTorch ??= SimpleTorch(prop.position),
         },
       ),
       backgroundColor: const Color(0xFF101820),
@@ -187,49 +209,27 @@ class _LightingPageState extends State<LightingPage> {
         Joystick(directional: JoystickDirectional()),
         Keyboard(),
       ],
-      components: [_crystal],
+      components: [
+        _shadowTorch,
+        _crystal,
+        _label('default', Vector2(tileSize * 2.2, tileSize * 0.1)),
+        _label('shadows', Vector2(tileSize * 6, tileSize * 2.9)),
+        _label('additive', Vector2(tileSize * 1.1, tileSize * 8.9)),
+      ],
       cameraConfig: CameraConfig(
         zoom: getZoomFromMaxVisibleTile(context, tileSize, 14),
         initPosition: Vector2(tileSize * 5, tileSize * 7),
       ),
-      onReady: (game) {
-        _game = game;
-        _setupOccluders();
-      },
+      onReady: (game) => _game = game,
     );
   }
 
-  /// Registers the invisible walls used by the torch shadows.
-  ///
-  /// In a real game these would come from the map collision layer. Here they
-  /// are two rectangles near the first torch; enable `Debug` to see them.
-  void _setupOccluders() {
-    final lighting = _game?.lighting;
-    if (lighting == null) {
-      return;
-    }
-
-    lighting
-      ..addOccluder(
-        LightingOccluder.rect(
-          const Rect.fromLTWH(
-            tileSize * 4.5,
-            0,
-            tileSize * 0.5,
-            tileSize * 2.5,
-          ),
-        ),
-      )
-      ..addOccluder(
-        LightingOccluder.rect(
-          const Rect.fromLTWH(
-            tileSize * 1.25,
-            tileSize * 2.25,
-            tileSize * 2,
-            tileSize * 0.5,
-          ),
-        ),
-      );
+  TextComponent _label(String text, Vector2 position) {
+    return TextComponent(
+      text: text,
+      position: position,
+      textRenderer: _labelStyle,
+    );
   }
 
   void _toggleAmbient() {
@@ -255,25 +255,19 @@ class _LightingPageState extends State<LightingPage> {
     _cameraRotated.value = rotated;
   }
 
+  /// Animates only the radius of the default torch, to show `animateTo` without
+  /// changing its configuration (no gradient, flicker or shadows).
   void _animateTorch() {
-    final torch = _torch;
-    if (torch == null) {
+    final torch = _defaultTorch;
+    final current = torch?.lighting.config;
+    if (torch == null || current == null) {
       return;
     }
 
     final wide = !_torchWide.value;
-    final current = torch.lighting.config;
-    if (current == null) {
-      return;
-    }
-
     torch.lighting.animateTo(
-      // `copyWith` keeps `align` (it used to reset it to zero).
-      current.copyWith(
-        radius: wide ? 72 : 40,
-        color: wide ? Colors.deepOrange : Colors.deepOrangeAccent,
-        intensity: wide ? 0.95 : 0.7,
-      ),
+      // `copyWith` keeps `align`, `blurBorder` and the pulse settings.
+      current.copyWith(radius: wide ? 60 : 34),
       duration: const Duration(milliseconds: 700),
       curve: Curves.easeInOut,
     );
@@ -316,9 +310,9 @@ class _LightingPageState extends State<LightingPage> {
   }
 
   void _toggleShadows() {
-    final lighting = _torch?.lighting;
-    final current = lighting?.config;
-    if (lighting == null || current == null) {
+    final lighting = _shadowTorch.lighting;
+    final current = lighting.config;
+    if (current == null) {
       return;
     }
 

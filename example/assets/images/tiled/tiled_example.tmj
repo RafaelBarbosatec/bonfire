@@ -115,9 +115,43 @@
          "visible":true,
          "x":0,
          "y":0
+        },
+        {
+         "class":"lighting_occluder",
+         "draworder":"topdown",
+         "id":4,
+         "name":"lighting_occluders",
+         "objects":[
+                {
+                 "height":44,
+                 "id":10,
+                 "name":"wall_left",
+                 "rotation":0,
+                 "type":"lighting_occluder",
+                 "visible":true,
+                 "width":8,
+                 "x":88,
+                 "y":40
+                }, 
+                {
+                 "height":8,
+                 "id":11,
+                 "name":"wall_bottom",
+                 "rotation":0,
+                 "type":"lighting_occluder",
+                 "visible":true,
+                 "width":40,
+                 "x":96,
+                 "y":84
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":4,
- "nextobjectid":10,
+ "nextlayerid":5,
+ "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
