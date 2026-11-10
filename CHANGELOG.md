@@ -39,6 +39,11 @@
 
 ### Fixed
 
+- `gameRef.lighting` and `gameRef.colorFilter` no longer throw
+  `Bad state: No element` when read from another component's `onLoad`
+  (for instance `WorldMapByTiled` registering Tiled occluders). Flame empties
+  the viewport children while mounting the tree, so the layers are now
+  resolved once in the `BonfireGame` constructor.
 - `LightingConfig.copyWith` now preserves `align` (it used to reset it to zero)
   and accepts `align`, `mode`, `falloff`, `innerRadius`, `intensity`,
   `additiveBlendMode` and `flicker`.
