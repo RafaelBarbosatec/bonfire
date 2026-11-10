@@ -224,12 +224,8 @@ class _LightingPageState extends State<LightingPage> {
     );
   }
 
-  TextComponent _label(String text, Vector2 position) {
-    return TextComponent(
-      text: text,
-      position: position,
-      textRenderer: _labelStyle,
-    );
+  _DemoLabel _label(String text, Vector2 position) {
+    return _DemoLabel(text, position: position, style: _labelStyle);
   }
 
   void _toggleAmbient() {
@@ -342,6 +338,28 @@ class _LightingPageState extends State<LightingPage> {
     final next = values[(values.indexOf(_quality.value) + 1) % values.length];
     lighting.quality = next;
     _quality.value = next;
+  }
+}
+
+/// World-space text label used to name each demo area.
+///
+/// `TextComponent` is a Flame component, and `BonfireWidget.components`
+/// expects `GameComponent`s, so this small wrapper renders the text itself.
+class _DemoLabel extends GameComponent {
+  final String text;
+  final TextPaint style;
+
+  _DemoLabel(this.text, {required Vector2 position, required this.style}) {
+    this.position = position;
+    size = style.getLineMetrics(text).size;
+  }
+
+  @override
+  void update(double dt) {}
+
+  @override
+  void render(Canvas canvas) {
+    style.render(canvas, text, Vector2.zero());
   }
 }
 
