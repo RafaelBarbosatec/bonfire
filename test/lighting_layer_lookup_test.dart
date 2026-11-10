@@ -1,11 +1,25 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// `BonfireGame` is abstract, but a concrete game is needed to build the
-/// viewport hud layers in its constructor.
-class _TestGame extends BonfireGame {
-  _TestGame() : super(map: WorldMap(const []));
+/// The game constructor stores the [BuildContext] but the tests never touch
+/// Flutter-dependent APIs, so a fake is enough.
+class _FakeBuildContext implements BuildContext {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+/// `BonfireGame` is abstract; `BonfireWithCollision` is the concrete game used
+/// by `BonfireWidget`, and it builds the viewport hud layers in its
+/// constructor just like any other `BonfireGame`.
+class _TestGame extends BonfireWithCollision {
+  _TestGame()
+      : super(
+          context: _FakeBuildContext(),
+          map: WorldMap(const []),
+          configDefault: BonfireCollisionConfigDefault(),
+        );
 }
 
 /// Regression test for the `Bad state: No element` crash reported when a
