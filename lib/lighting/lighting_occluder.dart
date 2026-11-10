@@ -178,6 +178,86 @@ List<Vector2> computeVisibilityPolygon({
   return result;
 }
 
+/// Merges a grid of blocked cells into as few rectangles as possible.
+///
+/// Used by the Tiled integration: an occluder tile layer can have thousands of
+/// tiles and one [LightingOccluder] per tile would cost four segments each
+/// during shadow casting. Rows are merged into horizontal runs and identical
+/// runs are merged vertically.
+///
+/// [cells] is indexed as `cells[row][column]`. The returned rectangles are in
+/// world coordinates, using [tileWidth], [tileHeight] and [offsetX]/[offsetY].
+List<Rect> mergeOccluderTileGrid({
+  required List<List<bool>> cells,
+  required double tileWidth,
+  required double tileHeight,
+  double offsetX = 0,
+  double offsetY = 0,
+}) {
+  if (cells.isEmpty || tileWidth <= 0 || tileHeight <= 0) {
+    return const [];
+  }
+
+  final blocked = [
+    for (final row in cells) List<bool>.of(row),
+  ];
+  final result = <Rect>[];
+
+  for (var row = 0; row < blocked.length; row++) {
+    final columns = blocked[row].length;
+    var column = 0;
+
+    while (column < columns) {
+      if (!blocked[row][column]) {
+        column++;
+        continue;
+      }
+
+      final start = column;
+      while (column < columns && blocked[row][column]) {
+        column++;
+      }
+      final end = column;
+
+      // Extend the run downwards while the same span is fully blocked.
+      var height = 1;
+      while (row + height < blocked.length) {
+        final next = blocked[row + height];
+        var full = next.length >= end;
+        if (full) {
+          for (var c = start; c < end; c++) {
+            if (!next[c]) {
+              full = false;
+              break;
+            }
+          }
+        }
+        if (!full) {
+          break;
+        }
+        height++;
+      }
+
+      for (var r = row; r < row + height; r++) {
+        for (var c = start; c < end; c++) {
+          blocked[r][c] = false;
+        }
+      }
+
+      result.add(
+        Rect.fromLTWH(
+          offsetX + start * tileWidth,
+          offsetY + row * tileHeight,
+          (end - start) * tileWidth,
+          height * tileHeight,
+        ),
+      );
+    }
+  }
+
+  return result;
+}
+
 /// Whether [point] is inside the polygon defined by [polygon].
 ///
 /// Uses the even-odd rule, so it works with concave polygons as well.

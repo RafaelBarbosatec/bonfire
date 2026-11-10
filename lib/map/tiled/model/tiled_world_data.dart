@@ -9,9 +9,14 @@ class WorldBuildData {
   /// the dynamic Y-sort used by game-level components).
   final List<GameComponent>? mapChildren;
 
+  /// Occluders declared in Tiled through layers/objects with the
+  /// `lighting_occluder` class. Registered by [WorldMapByTiled].
+  final List<LightingOccluder> lightingOccluders;
+
   WorldBuildData({
     required this.map,
     this.components,
     this.mapChildren,
+    this.lightingOccluders = const [],
   });
 }

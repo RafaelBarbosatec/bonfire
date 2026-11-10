@@ -32,6 +32,10 @@
   occluders, to debug lights that are not reaching somewhere.
 - `LightingPreset` (`day`, `dusk`, `night`, `dungeon`) with `apply(...)` fades
   the ambient color for the common day/night setups.
+- Tiled integration: `WorldMapByTiled` now registers `LightingOccluder`s
+  declared in Tiled. Tile layers and objects with the `lighting_occluder`
+  class become occluders; occluder tile layers are not rendered and adjacent
+  tiles are merged into rectangles.
 
 ### Fixed
 

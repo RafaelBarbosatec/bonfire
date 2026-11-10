@@ -295,6 +295,41 @@ center blocks the light completely.
 `castShadows` is `false` by default: computing the silhouette costs CPU, so
 enable it only on the lights that need it.
 
+### Occluders from Tiled
+
+You can draw occluders in Tiled instead of registering them in code, following
+the same pattern used by collision:
+
+- **Tile layer**: set the layer **class** (or type) to `lighting_occluder`.
+  Every non-empty tile becomes an occluder. The layer is **not rendered**, so
+  you can keep it on top of the wall art; adjacent tiles are merged into
+  rectangles automatically.
+- **Object layer**: set the layer class, or the class of each object, to
+  `lighting_occluder`. Rectangle and polygon objects become occluders, and
+  `rotation` is respected.
+
+```text
+Tiled
+├── base              (tile layer, rendered)
+├── walls             (tile layer, rendered)
+├── occluders         (tile or object layer, class = lighting_occluder)
+└── objects
+```
+
+`WorldMapByTiled` registers the occluders in `gameRef.lighting` when the map
+loads, so no code is needed on the game side:
+
+```dart
+WorldMapByTiled(
+  WorldMapReader.fromAsset('map.tmj'),
+);
+```
+
+Keep the layer visible in Tiled — invisible layers are ignored, like the rest
+of the map. `WorldMapInfiniteByTiled` does not consume Tiled occluders yet (the
+pattern is repeated per chunk); register them with
+`gameRef.lighting.addOccluder(...)` in that case.
+
 ### Quality
 
 `LightingQuality` sets how many rays are cast per light when computing the
