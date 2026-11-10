@@ -2,6 +2,12 @@ import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/color_filter/color_filter_component.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// `BonfireGame` is abstract, but a concrete game is needed to build the
+/// viewport hud layers in its constructor.
+class _TestGame extends BonfireGame {
+  _TestGame() : super(map: WorldMap(const []));
+}
+
 /// Regression test for the `Bad state: No element` crash reported when a
 /// `WorldMapByTiled` registers its lighting occluders in `onLoad`.
 ///
@@ -12,7 +18,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('BonfireGame hud layers', () {
     test('lighting is resolvable while the viewport children are re-added', () {
-      final game = BonfireGame(map: WorldMap(const []));
+      final game = _TestGame();
 
       final lighting = game.lighting;
       // Same thing `_reAddChildren` does while mounting: the layer leaves the
@@ -24,7 +30,7 @@ void main() {
 
     test('color filter is resolvable while the viewport children are re-added',
         () {
-      final game = BonfireGame(map: WorldMap(const []));
+      final game = _TestGame();
 
       final colorFilter = game.colorFilter;
       (colorFilter as GameComponent).removeFromParent();
