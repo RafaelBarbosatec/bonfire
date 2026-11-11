@@ -26,6 +26,7 @@ class WorldMapByTiled extends WorldMap {
   Future<void> onLoad() async {
     final map = await _builder.build();
     layers = map.map.layers;
+    _registerLightingOccluders(map.lightingOccluders);
     gameRef.addAll(map.components ?? []);
     // `mapChildren` are decorations that must live inside the WorldMap
     // subtree (not as game-level siblings) so their priority is compared
@@ -35,5 +36,22 @@ class WorldMapByTiled extends WorldMap {
       add(child);
     }
     return super.onLoad();
+  }
+
+  /// Registers the occluders declared in Tiled (layers/objects with the
+  /// `lighting_occluder` class) in the game lighting layer.
+  void _registerLightingOccluders(List<LightingOccluder> occluders) {
+    if (occluders.isEmpty) {
+      return;
+    }
+
+    final lighting = gameRef.lighting;
+    if (lighting == null) {
+      return;
+    }
+
+    for (final occluder in occluders) {
+      lighting.addOccluder(occluder);
+    }
   }
 }

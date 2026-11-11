@@ -67,14 +67,22 @@ class LightingApi {
 
   double _calculateAngle() {
     final config = _config;
-    if (config != null && config.type is ArcLightingType) {
-      final type = config.type as ArcLightingType;
-      // The arc is drawn from `startRadAngle` and sweeps `endRadAngle` radians,
-      // so the start angle must be taken into account when aligning the cone.
-      if (type.isCenter) {
-        return _comp.angle - type.startRadAngle - (type.endRadAngle / 2);
-      } else {
-        return _comp.angle - type.startRadAngle - type.endRadAngle;
+    if (config != null) {
+      final type = config.type;
+      if (type is ArcLightingType) {
+        // The arc is drawn from `startRadAngle` and sweeps `endRadAngle`
+        // radians, so the start angle must be taken into account when aligning
+        // the cone.
+        if (type.isCenter) {
+          return _comp.angle - type.startRadAngle - (type.endRadAngle / 2);
+        } else {
+          return _comp.angle - type.startRadAngle - type.endRadAngle;
+        }
+      }
+      // Rectangles and polygons are anchored on the component facing
+      // direction.
+      if (type is RectLightingType || type is PolygonLightingType) {
+        return _comp.angle;
       }
     }
     return 0.0;

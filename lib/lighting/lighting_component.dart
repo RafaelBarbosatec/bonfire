@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:bonfire/bonfire.dart';
@@ -32,17 +33,49 @@ abstract class LightingInterface {
 
   /// Removes a light previously added with [addLight].
   bool removeLight(LightSource light);
+
+  /// Quality used to compute the shadows of lights with
+  /// `LightingConfig.castShadows`.
+  LightingQuality get quality;
+  set quality(LightingQuality value);
+
+  /// When `true`, draws the outline of every light, occluder and shadow
+  /// silhouette. Useful to debug why a light is not reaching somewhere.
+  bool get debug;
+  set debug(bool value);
+
+  /// Occluders registered through [addOccluder].
+  List<LightingOccluder> get occluders;
+
+  /// Registers a light blocker in world coordinates.
+  ///
+  /// Register static geometry once (walls, tiles); moving obstacles can use the
+  /// `WithLightingOcclusion` mixin instead.
+  LightingOccluder addOccluder(LightingOccluder occluder);
+
+  /// Removes an occluder previously added with [addOccluder].
+  bool removeOccluder(LightingOccluder occluder);
+
+  /// Applies an ambient [preset], fading the ambient color smoothly.
+  void applyPreset(
+    LightingPreset preset, {
+    Duration duration = const Duration(milliseconds: 900),
+    Curve curve = Curves.decelerate,
+  });
 }
 
 /// Layer component responsible for adding lighting to the game.
 class LightingComponent extends GameComponent implements LightingInterface {
   final Paint _paintLighting = Paint();
-  final Paint _paintLightingArc = Paint();
 
   final List<LightSource> _lightSources = [];
+  final List<LightingOccluder> _occluders = [];
 
   ColorTween? _tween;
   bool _containColor = false;
+  LightingQuality _quality = LightingQuality.medium;
+  bool _debug = false;
+
   Rect? bounds;
   @override
   Color? color;
@@ -55,6 +88,43 @@ class LightingComponent extends GameComponent implements LightingInterface {
   @override
   int get priority {
     return LayerPriority.getHudLightingPriority();
+  }
+
+  @override
+  LightingQuality get quality => _quality;
+
+  @override
+  set quality(LightingQuality value) {
+    _quality = value;
+  }
+
+  @override
+  bool get debug => _debug;
+
+  @override
+  set debug(bool value) {
+    _debug = value;
+  }
+
+  @override
+  List<LightingOccluder> get occluders => List.unmodifiable(_occluders);
+
+  @override
+  LightingOccluder addOccluder(LightingOccluder occluder) {
+    _occluders.add(occluder);
+    return occluder;
+  }
+
+  @override
+  bool removeOccluder(LightingOccluder occluder) => _occluders.remove(occluder);
+
+  @override
+  void applyPreset(
+    LightingPreset preset, {
+    Duration duration = const Duration(milliseconds: 900),
+    Curve curve = Curves.decelerate,
+  }) {
+    preset.apply(this, duration: duration, curve: curve);
   }
 
   Path getWheelPath(double wheelSize, double fromRadius, double toRadius) {
@@ -93,43 +163,48 @@ class LightingComponent extends GameComponent implements LightingInterface {
         .where((light) => light.enabled && _isLightSourceVisible(light))
         .toList(growable: false);
 
-    final hasAmbient = _containColor;
+    if (componentLights.isEmpty && lightSources.isEmpty) {
+      if (_debug) {
+        _renderDebug(canvas, const [], _resolveOccluders());
+      }
+      return;
+    }
+
+    final occluders =
+        componentLights.any((light) => light.lighting.config!.castShadows) ||
+                lightSources.any((light) => light.config.castShadows)
+            ? _resolveOccluders()
+            : const <LightingOccluder>[];
 
     final additive = <_PendingLight>[];
     final cutout = <_PendingLight>[];
 
     for (final light in componentLights) {
       final config = light.lighting.config!;
-      final pending = _PendingLight(
+      final pending = _resolveLight(
         config: config,
         center: light.absoluteCenter + config.align,
         angle: light.lighting.angle,
+        occluders: occluders,
       );
-      if (config.mode == LightingMode.additive) {
-        additive.add(pending);
-      } else if (hasAmbient) {
-        // A cutout light only makes sense when there is ambient darkness to
-        // erase.
-        cutout.add(pending);
+      if (pending == null) {
+        continue;
       }
+      (config.mode == LightingMode.additive ? additive : cutout).add(pending);
     }
 
     for (final light in lightSources) {
       final config = light.config;
-      final pending = _PendingLight(
+      final pending = _resolveLight(
         config: config,
         center: light.position + config.align,
         angle: light.angle,
+        occluders: occluders,
       );
-      if (config.mode == LightingMode.additive) {
-        additive.add(pending);
-      } else if (hasAmbient) {
-        cutout.add(pending);
+      if (pending == null) {
+        continue;
       }
-    }
-
-    if (additive.isEmpty && !hasAmbient) {
-      return;
+      (config.mode == LightingMode.additive ? additive : cutout).add(pending);
     }
 
     // Additive lights are composited *below* the ambient darkness, so the
@@ -141,37 +216,30 @@ class LightingComponent extends GameComponent implements LightingInterface {
       _applyCameraTransform(canvas);
 
       for (final light in additive) {
-        _renderLight(
-          canvas,
-          config: light.config,
-          center: light.center,
-          angle: light.angle,
-          cutout: false,
-        );
+        _renderLight(canvas, light, cutout: false);
       }
 
       canvas.restore();
       canvas.restore();
     }
 
-    if (hasAmbient) {
+    // A cutout light only makes sense when there is ambient darkness to erase.
+    if (_containColor) {
       canvas.saveLayer(bounds, paint);
       canvas.drawColor(color!, BlendMode.dstATop);
       canvas.save();
       _applyCameraTransform(canvas);
 
       for (final light in cutout) {
-        _renderLight(
-          canvas,
-          config: light.config,
-          center: light.center,
-          angle: light.angle,
-          cutout: true,
-        );
+        _renderLight(canvas, light, cutout: true);
       }
 
       canvas.restore();
       canvas.restore();
+    }
+
+    if (_debug) {
+      _renderDebug(canvas, [...additive, ...cutout], occluders);
     }
   }
 
@@ -191,9 +259,20 @@ class LightingComponent extends GameComponent implements LightingInterface {
 
   bool _isLightSourceVisible(LightSource light) {
     final camera = gameRef.camera;
+    final radius = _shapeRadius(light.config, light.config.radiusWithEffects);
     return camera.cameraRectWithSpacing
-        .inflate(light.config.radius)
+        .inflate(radius)
         .contains(light.position.toOffset());
+  }
+
+  /// Occluders registered through [addOccluder] plus the ones provided by
+  /// components with the [WithLightingOcclusion] mixin.
+  List<LightingOccluder> _resolveOccluders() {
+    final result = List<LightingOccluder>.of(_occluders);
+    for (final component in gameRef.visibles<WithLightingOcclusion>()) {
+      result.addAll(component.lightingOccluders);
+    }
+    return result;
   }
 
   @override
@@ -271,101 +350,179 @@ class LightingComponent extends GameComponent implements LightingInterface {
     return color != null && color!.a > 0;
   }
 
-  void _renderLight(
-    Canvas canvas, {
+  /// Resolves a light into the world space shape that will be drawn, together
+  /// with the clip path produced by its shadows (when enabled).
+  ///
+  /// Returns `null` when the light has no reach or when its center is inside an
+  /// occluder.
+  _PendingLight? _resolveLight({
     required LightingConfig config,
     required Vector2 center,
     required double angle,
-    required bool cutout,
+    required List<LightingOccluder> occluders,
   }) {
-    if (config.type is ArcLightingType) {
-      _drawArc(
-        canvas,
-        config: config,
-        center: center.toOffset(),
-        angle: angle,
-        cutout: cutout,
-      );
-    } else {
-      _drawCircle(
-        canvas,
-        config: config,
-        center: center.toOffset(),
-        radius: config.radiusWithEffects,
-        cutout: cutout,
-      );
+    final radius = config.radiusWithEffects;
+    if (radius <= 0) {
+      return null;
     }
+
+    final shapeRadius = _shapeRadius(config, radius);
+    final shape = _buildShapePath(config, center, angle, radius);
+
+    Path? clip;
+    if (config.castShadows && occluders.isNotEmpty) {
+      final polygon = computeVisibilityPolygon(
+        center: center,
+        radius: shapeRadius,
+        occluders: occluders,
+        rays: _quality.shadowRays,
+      );
+      if (polygon.isEmpty) {
+        // Fully blocked by an occluder.
+        return null;
+      }
+      clip = Path()
+        ..addPolygon(
+          polygon.map((point) => point.toOffset()).toList(growable: false),
+          true,
+        );
+    }
+
+    return _PendingLight(
+      config: config,
+      center: center,
+      shape: shape,
+      gradientArea: Rect.fromCircle(
+        center: center.toOffset(),
+        radius: shapeRadius,
+      ),
+      clip: clip,
+    );
   }
 
-  void _drawArc(
-    Canvas canvas, {
-    required LightingConfig config,
-    required Offset center,
-    required double angle,
-    required bool cutout,
-  }) {
-    final type = config.type as ArcLightingType;
-    // `radius` is the actual reach of the light, the same unit used by circle
-    // lights, so switching between `arc` and `circle` keeps the same coverage.
-    final radius = config.radiusWithEffects;
+  /// Reach of the light shape, in world units.
+  double _shapeRadius(LightingConfig config, double radius) {
+    final type = config.type;
 
-    canvas.save();
-
-    if (angle != 0) {
-      canvas.translate(center.dx, center.dy);
-      canvas.rotate(angle);
-      canvas.translate(-center.dx, -center.dy);
+    if (type is RectLightingType) {
+      final scale = config.radius > 0 ? radius / config.radius : 1.0;
+      final halfWidth = type.size.x / 2;
+      final halfHeight = type.size.y / 2;
+      return math.sqrt(halfWidth * halfWidth + halfHeight * halfHeight) * scale;
     }
 
-    final path = Path()
-      ..moveTo(center.dx, center.dy)
-      ..arcTo(
-        Rect.fromCircle(radius: radius, center: center),
-        type.startRadAngle,
-        type.endRadAngle,
-        false,
-      )
-      ..close();
+    if (type is PolygonLightingType) {
+      final scale = config.radius > 0 ? radius / config.radius : 1.0;
+      var maxLength = 0.0;
+      for (final point in type.points) {
+        maxLength = math.max(maxLength, point.length);
+      }
+      return maxLength * scale;
+    }
 
-    final area = Rect.fromCircle(radius: radius, center: center);
+    return radius;
+  }
+
+  Path _buildShapePath(
+    LightingConfig config,
+    Vector2 center,
+    double angle,
+    double radius,
+  ) {
+    final type = config.type;
+
+    if (type is ArcLightingType) {
+      return Path()
+        ..moveTo(center.x, center.y)
+        ..arcTo(
+          Rect.fromCircle(center: center.toOffset(), radius: radius),
+          // Rotating the arc is the same as offsetting its start angle.
+          type.startRadAngle + angle,
+          type.endRadAngle,
+          false,
+        )
+        ..close();
+    }
+
+    if (type is RectLightingType || type is PolygonLightingType) {
+      final scale = config.radius > 0 ? radius / config.radius : 1.0;
+      final List<Offset> points;
+
+      if (type is RectLightingType) {
+        final halfWidth = type.size.x * scale / 2;
+        final halfHeight = type.size.y * scale / 2;
+        points = [
+          _rotate(Offset(-halfWidth, -halfHeight), angle),
+          _rotate(Offset(halfWidth, -halfHeight), angle),
+          _rotate(Offset(halfWidth, halfHeight), angle),
+          _rotate(Offset(-halfWidth, halfHeight), angle),
+        ];
+      } else {
+        points = [
+          for (final point in (type as PolygonLightingType).points)
+            _rotate(Offset(point.x * scale, point.y * scale), angle),
+        ];
+      }
+
+      return Path()
+        ..addPolygon(
+          [
+            for (final point in points)
+              Offset(point.dx + center.x, point.dy + center.y),
+          ],
+          true,
+        );
+    }
+
+    return Path()
+      ..addOval(
+        Rect.fromCircle(center: center.toOffset(), radius: radius),
+      );
+  }
+
+  Offset _rotate(Offset point, double angle) {
+    if (angle == 0) {
+      return point;
+    }
+    final cos = math.cos(angle);
+    final sin = math.sin(angle);
+    return Offset(
+      point.dx * cos - point.dy * sin,
+      point.dx * sin + point.dy * cos,
+    );
+  }
+
+  void _renderLight(
+    Canvas canvas,
+    _PendingLight light, {
+    required bool cutout,
+  }) {
+    final clip = light.clip;
+    if (clip != null) {
+      canvas.save();
+      canvas.clipPath(clip);
+    }
 
     if (cutout) {
       canvas.drawPath(
-        path,
-        _buildPaint(config, area, cutout: true, erase: true, arc: true),
+        light.shape,
+        _buildPaint(
+          light.config,
+          light.gradientArea,
+          cutout: true,
+          erase: true,
+        ),
       );
     }
 
     canvas.drawPath(
-      path,
-      _buildPaint(config, area, cutout: cutout, arc: true),
+      light.shape,
+      _buildPaint(light.config, light.gradientArea, cutout: cutout),
     );
 
-    canvas.restore();
-  }
-
-  void _drawCircle(
-    Canvas canvas, {
-    required LightingConfig config,
-    required Offset center,
-    required double radius,
-    required bool cutout,
-  }) {
-    final area = Rect.fromCircle(center: center, radius: radius);
-
-    if (cutout) {
-      canvas.drawCircle(
-        center,
-        radius,
-        _buildPaint(config, area, cutout: true, erase: true),
-      );
+    if (clip != null) {
+      canvas.restore();
     }
-
-    canvas.drawCircle(
-      center,
-      radius,
-      _buildPaint(config, area, cutout: cutout),
-    );
   }
 
   /// Builds the paint for a light.
@@ -379,9 +536,8 @@ class LightingComponent extends GameComponent implements LightingInterface {
     Rect area, {
     required bool cutout,
     bool erase = false,
-    bool arc = false,
   }) {
-    final paint = arc ? _paintLightingArc : _paintLighting;
+    final paint = _paintLighting;
     final color = erase ? const Color(0xFFFFFFFF) : config.effectiveColor;
     final blendMode = erase
         ? null
@@ -450,6 +606,59 @@ class LightingComponent extends GameComponent implements LightingInterface {
     return ui.Gradient.radial(area.center, area.width / 2, colors, stops);
   }
 
+  void _renderDebug(
+    Canvas canvas,
+    List<_PendingLight> lights,
+    List<LightingOccluder> occluders,
+  ) {
+    final zoom = gameRef.camera.zoom;
+    final strokeWidth = 1.5 / zoom;
+
+    final shapePaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..color = const Color(0xFF00E676);
+    final occluderPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..color = const Color(0xFFFF1744);
+    final clipPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth
+      ..color = const Color(0xFFFFFF00);
+    final centerPaint = Paint()..color = const Color(0xFF00E676);
+
+    canvas.save();
+    _applyCameraTransform(canvas);
+
+    for (final occluder in occluders) {
+      canvas.drawPath(_polygonPath(occluder.points), occluderPaint);
+    }
+
+    for (final light in lights) {
+      canvas.drawPath(light.shape, shapePaint);
+      final clip = light.clip;
+      if (clip != null) {
+        canvas.drawPath(clip, clipPaint);
+      }
+      canvas.drawCircle(light.center.toOffset(), 2 / zoom, centerPaint);
+    }
+
+    canvas.restore();
+  }
+
+  Path _polygonPath(List<Vector2> points) {
+    final path = Path();
+    if (points.isEmpty) {
+      return path;
+    }
+    path.moveTo(points.first.x, points.first.y);
+    for (var i = 1; i < points.length; i++) {
+      path.lineTo(points[i].x, points[i].y);
+    }
+    return path..close();
+  }
+
   @override
   void onGameResize(Vector2 size) {
     bounds = gameRef.camera.viewport.virtualSize.toRect();
@@ -461,11 +670,15 @@ class LightingComponent extends GameComponent implements LightingInterface {
 class _PendingLight {
   final LightingConfig config;
   final Vector2 center;
-  final double angle;
+  final Path shape;
+  final Rect gradientArea;
+  final Path? clip;
 
   const _PendingLight({
     required this.config,
     required this.center,
-    required this.angle,
+    required this.shape,
+    required this.gradientArea,
+    required this.clip,
   });
 }

@@ -9,12 +9,14 @@ description: "Add ambient darkness, dynamic lights, pulses and emissive light so
 Looking for a runnable sample? The
 [lighting example](https://github.com/RafaelBarbosatec/bonfire/tree/master/example/lib/pages/lighting)
 demonstrates every feature on this page: cutout and additive lights, pulses,
-arc flashlights, `animateTo`, `fadeIn`/`fadeOut` and camera rotation.
+arc flashlights, rectangle/polygon lights, shadows with occluders, ambient
+presets, `animateTo`, `fadeIn`/`fadeOut` and camera rotation.
 
-The lighting layer is composed of two independent pieces:
+The lighting layer is composed of three independent pieces:
 
 1. **Ambient darkness**, configured once on `BonfireWidget` through `lightingColorGame`.
 2. **Light sources**, added to any component with the `WithLighting` mixin.
+3. **Occluders**, optional geometry that blocks lights with `castShadows`.
 
 ```dart
 BonfireWidget(
@@ -73,6 +75,7 @@ lighting.enabled = true;
 | `intensity` | `1` | Multiplies the alpha of `color` (`0..1`). |
 | `additiveBlendMode` | `BlendMode.plus` | Blend mode used by additive lights (`plus`, `screen`...). |
 | `flicker` | `null` | Optional candle-like flicker. |
+| `castShadows` | `false` | Clips the light with the registered `LightingOccluder`s. |
 | `withPulse` | `false` | Enables the pulsing radius. |
 | `pulseVariation` | `0.1` | Maximum radius variation, relative to `radius`. |
 | `pulseSpeed` | `0.1` | Pulse speed. A full sweep takes `pulseVariation / pulseSpeed` seconds. |
@@ -216,9 +219,209 @@ gameRef.lighting.removeLight(light);
 `LightSource` also has `enabled`, `angle` (used by arc lights) and a mutable
 `position`, so you can move it every frame without creating a component.
 
+### Rectangles and polygons
+
+Besides circles and arcs, a light can cover a rectangle or an arbitrary polygon.
+Both are centered on the component and, with `useComponentAngle: true`, rotate
+with it:
+
+```dart
+lighting.setup(
+  LightingConfig(
+    radius: 80,
+    color: const Color(0xFFFFE0B2).withValues(alpha: 0.35),
+    type: LightingType.rect(Vector2(120, 40)),
+  ),
+);
+
+lighting.setup(
+  LightingConfig(
+    radius: 90,
+    color: const Color(0xFF80D8FF).withValues(alpha: 0.4),
+    type: LightingType.polygon([
+      Vector2(0, -80),
+      Vector2(60, 0),
+      Vector2(0, 80),
+    ]),
+  ),
+);
+```
+
+For these shapes `radius` is the reference distance: the shape is scaled by
+`radiusWithEffects / radius`, so pulse and flicker grow and shrink it like a
+circular light.
+
+## Shadows and occlusion
+
+Walls can block a light. Register the geometry once (ideal for tile maps):
+
+```dart
+gameRef.lighting.addOccluder(
+  LightingOccluder.rect(Rect.fromLTWH(64, 0, 16, 96)),
+);
+
+// Later, if the wall is destroyed:
+gameRef.lighting.removeOccluder(wall);
+```
+
+Then enable shadows on the lights that should respect them:
+
+```dart
+lighting.setup(
+  LightingConfig(
+    radius: 140,
+    color: const Color(0xFFFFB300).withValues(alpha: 0.4),
+    castShadows: true,
+  ),
+);
+```
+
+For moving obstacles use the `WithLightingOcclusion` mixin, so the occluder
+follows the component:
+
+```dart
+class Door extends GameDecoration with WithLightingOcclusion {
+  @override
+  List<LightingOccluder> get lightingOccluders => [
+        LightingOccluder.rect(toAbsoluteRect()),
+      ];
+}
+```
+
+The light is clipped to the region visible from its center, so shadows are
+**hard edged** (there is no soft penumbra). An occluder containing the light
+center blocks the light completely.
+
+`castShadows` is `false` by default: computing the silhouette costs CPU, so
+enable it only on the lights that need it.
+
+### Occluders from Tiled
+
+You can draw occluders in Tiled instead of registering them in code, following
+the same pattern used by collision:
+
+- **Tile layer**: set the layer **class** (or type) to `lighting_occluder`.
+  Every non-empty tile becomes an occluder. The layer is **not rendered**, so
+  you can keep it on top of the wall art; adjacent tiles are merged into
+  rectangles automatically.
+- **Object layer**: set the layer class, or the class of each object, to
+  `lighting_occluder`. Rectangle and polygon objects become occluders, and
+  `rotation` is respected.
+
+```text
+Tiled
+├── base              (tile layer, rendered)
+├── walls             (tile layer, rendered)
+├── occluders         (tile or object layer, class = lighting_occluder)
+└── objects
+```
+
+Keep the layer visible in Tiled — invisible layers are ignored, like the rest
+of the map.
+
+#### Combining roles (object layers)
+
+Tiled stores a single class per layer/object, so a wall that should both block
+movement and block light would have to be duplicated. In an **object layer**
+(or on individual objects) you can declare the roles separated by commas:
+
+```text
+collision,lighting_occluder
+```
+
+On the layer class it is the common case: one object layer whose objects are
+collisions **and** occluders.
+
+```text
+Tiled
+└── walls             (object layer, class = collision,lighting_occluder)
+    ├── wall_01       (collision + occluder)
+    └── wall_02       (collision + occluder)
+```
+
+`lighting_occluder` is always an **extra** role: it never replaces the other
+ones, so an object declared as `collision,lighting_occluder` still produces its
+`CollisionMapComponent` (or goes through `objectsBuilder`) and additionally
+becomes an occluder. Tokens are trimmed and compared case-insensitively, and
+the plural `lighting_occluders` is accepted as an alias.
+
+```text
+Tiled
+├── walls             (object layer, class = collision)   ← collision only
+└── occluders         (object layer, class = lighting_occluder)
+```
+
+The combination is not supported on **tile layers**: collision for tiles comes
+from the tileset, not from the layer class. A tile layer only reads the
+`lighting_occluder` class, which marks it as a helper layer (not rendered).
+
+So when the collision already lives in the tileset, keep it there and add an
+object layer (or individual objects) with `lighting_occluder` to describe the
+same walls for the lighting:
+
+```text
+Tiled
+├── walls             (tile layer, collision from the tileset)
+└── walls_occluders   (object layer, class = lighting_occluder)
+```
+
+`WorldMapByTiled` registers the occluders in `gameRef.lighting` when the map
+loads, so no code is needed on the game side:
+
+```dart
+WorldMapByTiled(
+  WorldMapReader.fromAsset('map.tmj'),
+);
+```
+
+`WorldMapInfiniteByTiled` does not consume Tiled occluders yet (the pattern is
+repeated per chunk); register them with `gameRef.lighting.addOccluder(...)` in
+that case.
+
+### Quality
+
+`LightingQuality` sets how many rays are cast per light when computing the
+shadow polygon:
+
+| Quality | Rays | When to use |
+| --- | --- | --- |
+| `LightingQuality.low` | 24 | many small lights, low end devices |
+| `LightingQuality.medium` | 64 | default |
+| `LightingQuality.high` | 160 | a few large lights, smooth silhouettes |
+
+```dart
+gameRef.lighting.quality = LightingQuality.high;
+```
+
+### Debug overlay
+
+When a light is not reaching where it should, turn the overlay on:
+
+```dart
+gameRef.lighting.debug = true;
+```
+
+It draws each light shape in green, the visibility polygon (shadow clip) in
+yellow and the occluders in red.
+
+## Ambient presets
+
+`LightingPreset` ships ready-to-use ambient colors:
+
+```dart
+LightingPreset.night.apply(gameRef.lighting); // fade into the night
+LightingPreset.dusk.apply(gameRef.lighting);
+LightingPreset.day.apply(gameRef.lighting);   // back to a fully lit map
+```
+
+`day` has no ambient color, so cutout lights are skipped (there is nothing to
+erase) while additive lights keep glowing. `apply` accepts `duration` and
+`curve` to control the transition.
+
 ## Animating the ambient light
 
-The ambient color can be animated through `gameRef.lighting`:
+Use a [preset](#ambient-presets) for the common cases, or animate the color
+yourself:
 
 ```dart
 // Fade the ambient darkness in.
@@ -270,6 +473,9 @@ lighting.setup(otherConfig);
   pulsing lights on low-end devices.
 - `LightingConfig` is immutable. Reuse config instances instead of creating them
   inside `update`.
+- Shadows are recomputed per light, per frame. The cost grows with the number of
+  occluders and with `LightingQuality.shadowRays`, so register only the geometry
+  near the lights and use `LightingQuality.low` on scenes with many lights.
 
 ## GameColorFilter
 

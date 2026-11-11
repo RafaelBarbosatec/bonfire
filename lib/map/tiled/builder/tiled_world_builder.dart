@@ -32,6 +32,16 @@ class TiledWorldBuilder {
   static const ABOVE_TYPE = 'above';
   static const LAYERED_TYPE = 'layered';
   static const DYNAMIC_ABOVE_TYPE = 'dynamicAbove';
+
+  /// Tiled class/type used to mark layers and objects as light occluders.
+  static const LIGHTING_OCCLUDER_TYPE = 'lighting_occluder';
+
+  /// Accepted alias for [LIGHTING_OCCLUDER_TYPE].
+  static const LIGHTING_OCCLUDER_TYPE_ALIAS = 'lighting_occluders';
+
+  /// Tiled class/type used to mark layers and objects as collision.
+  static const COLLISION_TYPE = 'collision';
+
   static const _mapOrientationSupported = 'orthogonal';
 
   final Vector2? forceTileSize;
@@ -41,6 +51,7 @@ class TiledWorldBuilder {
   final List<Layer> _layers = [];
   final List<GameComponent> _components = [];
   final List<GameComponent> _mapDecorations = [];
+  final List<LightingOccluder> _lightingOccluders = [];
   String? _basePath;
   TiledMap? _tiledMap;
   double _tileWidth = 0;
@@ -83,6 +94,7 @@ class TiledWorldBuilder {
       }
       _tileWidth = forceTileSize?.x ?? _tileWidthOrigin;
       _tileHeight = forceTileSize?.y ?? _tileHeightOrigin;
+      _lightingOccluders.clear();
       if (onlyObjects) {
         // Keep the tile layers untouched and only (re)build the objects of
         // the object layers. Internal lists are cleared so repeated builds
@@ -109,6 +121,7 @@ class TiledWorldBuilder {
         ),
         components: _components,
         mapChildren: _mapDecorations,
+        lightingOccluders: _lightingOccluders,
       ),
     );
   }
@@ -140,11 +153,17 @@ class TiledWorldBuilder {
     }
 
     if (layer is tiled.TileLayer) {
-      _layers.add(
-        MapLayerMapper.toLayer(layer, countTileLayer),
-      );
-      await _addTileLayer(layer);
-      countTileLayer++;
+      if (_isLightingOccluderLayer(layer)) {
+        // Occluder layers are helpers: they are not rendered and do not
+        // consume a render layer index.
+        _addLightingOccluderTileLayer(layer);
+      } else {
+        _layers.add(
+          MapLayerMapper.toLayer(layer, countTileLayer),
+        );
+        await _addTileLayer(layer);
+        countTileLayer++;
+      }
     }
 
     if (layer is ObjectLayer) {
@@ -217,6 +236,147 @@ class TiledWorldBuilder {
             )
             .isNotEmpty ??
         false;
+  }
+
+  /// Splits the Tiled `class` (or the legacy `type`) into role tokens.
+  ///
+  /// Tiled stores a single class per layer/object, so a map that needs a wall
+  /// to both block movement and light would have to duplicate it. Declaring
+  /// the roles separated by commas solves that:
+  ///
+  /// ```text
+  /// collision,lighting_occluder
+  /// ```
+  ///
+  /// Tokens are trimmed and compared case-insensitively, and the plural
+  /// `lighting_occluders` is accepted as an alias.
+  static Set<String> parseObjectTypes(String? typeOrClass) {
+    if (typeOrClass == null || typeOrClass.isEmpty) {
+      return const <String>{};
+    }
+
+    return typeOrClass
+        .split(',')
+        .map((type) => type.trim().toLowerCase())
+        .map(
+          (type) => type == LIGHTING_OCCLUDER_TYPE_ALIAS
+              ? LIGHTING_OCCLUDER_TYPE
+              : type,
+        )
+        .where((type) => type.isNotEmpty)
+        .toSet();
+  }
+
+  bool _isLightingOccluderLayer(MapLayer layer) {
+    return parseObjectTypes(layer.layerClass).contains(LIGHTING_OCCLUDER_TYPE);
+  }
+
+  /// Collects the non-empty tiles of an occluder layer as merged rectangles.
+  void _addLightingOccluderTileLayer(tiled.TileLayer tileLayer) {
+    final width = tileLayer.width?.toInt() ?? 0;
+    final height = tileLayer.height?.toInt() ?? 0;
+    final data = tileLayer.data ?? const <int>[];
+    if (width <= 0 || height <= 0 || data.isEmpty) {
+      return;
+    }
+
+    final cells = List<List<bool>>.generate(
+      height,
+      (row) => List<bool>.generate(width, (column) {
+        final index = row * width + column;
+        return index < data.length && data[index] != 0;
+      }),
+    );
+
+    final offsetX = _getDoubleByProportion(tileLayer.offsetX);
+    final offsetY = _getDoubleByProportion(tileLayer.offsetY);
+
+    for (final rect in mergeOccluderTileGrid(
+      cells: cells,
+      tileWidth: _tileWidth,
+      tileHeight: _tileHeight,
+      offsetX: offsetX,
+      offsetY: offsetY,
+    )) {
+      _lightingOccluders.add(LightingOccluder.rect(rect));
+    }
+  }
+
+  /// Adds a rectangle or polygon object as an occluder.
+  void _addLightingOccluderObject(
+    Objects element,
+    double x,
+    double y,
+    double width,
+    double height,
+    double rotation,
+  ) {
+    final polygon = element.polygon;
+    var points = <Vector2>[];
+
+    if (polygon != null && polygon.isNotEmpty) {
+      points = [
+        for (final point in polygon)
+          Vector2(
+            x + _getDoubleByProportion(point.x),
+            y + _getDoubleByProportion(point.y),
+          ),
+      ];
+    } else {
+      points = [
+        Vector2(x, y),
+        Vector2(x + width, y),
+        Vector2(x + width, y + height),
+        Vector2(x, y + height),
+      ];
+    }
+
+    if (rotation != 0) {
+      points = _rotatePoints(points, rotation);
+    }
+
+    if (points.length >= 3) {
+      _lightingOccluders.add(LightingOccluder(points));
+    }
+  }
+
+  List<Vector2> _rotatePoints(List<Vector2> points, double radians) {
+    var minX = points.first.x;
+    var minY = points.first.y;
+    var maxX = minX;
+    var maxY = minY;
+
+    for (final point in points) {
+      if (point.x < minX) {
+        minX = point.x;
+      }
+      if (point.x > maxX) {
+        maxX = point.x;
+      }
+      if (point.y < minY) {
+        minY = point.y;
+      }
+      if (point.y > maxY) {
+        maxY = point.y;
+      }
+    }
+
+    final pivotX = (minX + maxX) / 2;
+    final pivotY = (minY + maxY) / 2;
+    final cosAngle = cos(radians);
+    final sinAngle = sin(radians);
+
+    return [
+      for (final point in points)
+        Vector2(
+          pivotX +
+              (point.x - pivotX) * cosAngle -
+              (point.y - pivotY) * sinAngle,
+          pivotY +
+              (point.x - pivotX) * sinAngle +
+              (point.y - pivotY) * cosAngle,
+        ),
+    ];
   }
 
   void _addTile(
@@ -447,7 +607,9 @@ class TiledWorldBuilder {
     if (layer.visible != true) {
       return;
     }
-    final isCollisionLayer = layer.layerClass?.toLowerCase() == 'collision';
+    final layerTypes = parseObjectTypes(layer.layerClass);
+    final isCollisionLayer = layerTypes.contains(COLLISION_TYPE);
+    final isOccluderLayer = layerTypes.contains(LIGHTING_OCCLUDER_TYPE);
     final offsetX = _getDoubleByProportion(layer.offsetX);
     final offsetY = _getDoubleByProportion(layer.offsetY);
     for (final element in layer.objects ?? const <Objects>[]) {
@@ -456,8 +618,18 @@ class TiledWorldBuilder {
       final width = _getDoubleByProportion(element.width);
       final height = _getDoubleByProportion(element.height);
       final rotation = (element.rotation ?? 0) * pi / 180;
+      final objectTypes = parseObjectTypes(element.typeOrClass);
+      final isOccluderObject = objectTypes.contains(LIGHTING_OCCLUDER_TYPE);
+
+      // `lighting_occluder` is an extra role, it never replaces the others:
+      // `collision,lighting_occluder` produces a collision **and** an
+      // occluder, so the same wall does not need to be drawn twice in Tiled.
+      if (isOccluderLayer || isOccluderObject) {
+        _addLightingOccluderObject(element, x, y, width, height, rotation);
+      }
+
       final isObjectCollision =
-          element.typeOrClass?.toLowerCase() == 'collision' || isCollisionLayer;
+          objectTypes.contains(COLLISION_TYPE) || isCollisionLayer;
       final collision = _getCollisionObject(
         x,
         y,

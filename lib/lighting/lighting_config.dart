@@ -113,6 +113,18 @@ class LightingConfig {
   /// Optional candle-like flicker.
   final LightFlicker? flicker;
 
+  /// Whether this light is blocked by [LightingOccluder]s.
+  ///
+  /// The light shape is clipped to the region visible from its center, so
+  /// walls cast hard shadows. Add occluders with
+  /// `gameRef.lighting.addOccluder(...)` (static geometry, ideal for tile maps)
+  /// or with the `WithLightingOcclusion` mixin (moving obstacles).
+  ///
+  /// The cost grows with the number of occluders and with
+  /// [LightingQuality.shadowRays], so enable it only for the lights that
+  /// really need it.
+  final bool castShadows;
+
   late MaskFilter? _maskFilter;
 
   PulseValue? _pulseAnimation;
@@ -136,6 +148,7 @@ class LightingConfig {
     this.intensity = 1,
     this.additiveBlendMode = BlendMode.plus,
     this.flicker,
+    this.castShadows = false,
   })  : assert(intensity >= 0 && intensity <= 1),
         assert(innerRadius >= 0 && innerRadius <= 1),
         align = align?.clone() ?? Vector2.zero(),
@@ -211,6 +224,7 @@ class LightingConfig {
     double? intensity,
     BlendMode? additiveBlendMode,
     LightFlicker? flicker,
+    bool? castShadows,
   }) {
     return LightingConfig(
       radius: radius ?? this.radius,
@@ -229,6 +243,7 @@ class LightingConfig {
       intensity: intensity ?? this.intensity,
       additiveBlendMode: additiveBlendMode ?? this.additiveBlendMode,
       flicker: flicker ?? this.flicker,
+      castShadows: castShadows ?? this.castShadows,
     );
   }
 
@@ -258,6 +273,7 @@ class LightingConfig {
       intensity: lerpDouble(intensity, other.intensity, t)!,
       additiveBlendMode: discrete ? additiveBlendMode : other.additiveBlendMode,
       flicker: discrete ? flicker : other.flicker,
+      castShadows: discrete ? castShadows : other.castShadows,
     );
   }
 }

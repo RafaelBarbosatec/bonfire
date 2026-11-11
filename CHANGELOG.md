@@ -19,9 +19,35 @@
 - `LightSource` with `gameRef.lighting.addLight(...)`/`removeLight(...)` allows
   lights that are not attached to any component (explosions, muzzle flashes,
   ambient details).
+- `LightingType.rect(size)` and `LightingType.polygon(points)` add rectangular
+  and polygonal lights. With `useComponentAngle: true` they rotate with the
+  component.
+- Shadow casting: `LightingConfig.castShadows` clips a light with the registered
+  `LightingOccluder`s. Add static geometry with
+  `gameRef.lighting.addOccluder(...)`/`removeOccluder(...)` or moving obstacles
+  with the `WithLightingOcclusion` mixin.
+- `LightingQuality` (`low`, `medium`, `high`) controls how many rays are cast
+  per light when computing the shadow silhouette (`24`, `64`, `160`).
+- `gameRef.lighting.debug` draws the light shapes, the shadow clip and the
+  occluders, to debug lights that are not reaching somewhere.
+- `LightingPreset` (`day`, `dusk`, `night`, `dungeon`) with `apply(...)` fades
+  the ambient color for the common day/night setups.
+- Tiled integration: `WorldMapByTiled` now registers `LightingOccluder`s
+  declared in Tiled. Tile layers and objects with the `lighting_occluder`
+  class become occluders; occluder tile layers are not rendered and adjacent
+  tiles are merged into rectangles. Object layers and objects can declare
+  several roles separated by commas (e.g. `collision,lighting_occluder`), so
+  the same wall blocks movement and light without being duplicated in the map.
+  The combination is not supported on tile layers, where collisions come from
+  the tileset.
 
 ### Fixed
 
+- `gameRef.lighting` and `gameRef.colorFilter` no longer throw
+  `Bad state: No element` when read from another component's `onLoad`
+  (for instance `WorldMapByTiled` registering Tiled occluders). Flame empties
+  the viewport children while mounting the tree, so the layers are now
+  resolved once in the `BonfireGame` constructor.
 - `LightingConfig.copyWith` now preserves `align` (it used to reset it to zero)
   and accepts `align`, `mode`, `falloff`, `innerRadius`, `intensity`,
   `additiveBlendMode` and `flicker`.

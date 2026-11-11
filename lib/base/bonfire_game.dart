@@ -67,13 +67,25 @@ abstract class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   ValueChanged<BonfireGame>? onReady;
 
-  @override
-  LightingInterface get lighting =>
-      camera.viewport.children.whereType<LightingInterface>().first;
+  /// Lighting layer created by this game.
+  ///
+  /// The reference is captured in the constructor on purpose: while the
+  /// component tree is being mounted Flame removes every child and re-adds
+  /// them one by one, so `camera.viewport.children` is temporarily empty.
+  /// Looking the layer up from another component's `onLoad` (for instance a
+  /// `WorldMapByTiled` registering occluders) would fail with
+  /// `Bad state: No element`.
+  late final LightingInterface _lightingLayer;
+
+  /// Color filter layer created by this game. Captured for the same reason as
+  /// [_lightingLayer].
+  late final ColorFilterInterface _colorFilterLayer;
 
   @override
-  ColorFilterInterface get colorFilter =>
-      camera.viewport.children.whereType<ColorFilterInterface>().first;
+  LightingInterface get lighting => _lightingLayer;
+
+  @override
+  ColorFilterInterface get colorFilter => _colorFilterLayer;
 
   @override
   Color backgroundColor() => _bgColor ?? super.backgroundColor();
@@ -145,6 +157,11 @@ abstract class BonfireGame extends BaseGame implements BonfireGameInterface {
         ) {
     this.debugMode = debugMode;
     _bgColor = backgroundColor;
+
+    _lightingLayer =
+        camera.viewport.children.whereType<LightingInterface>().first;
+    _colorFilterLayer =
+        camera.viewport.children.whereType<ColorFilterInterface>().first;
 
     _intervalUpdateOder = IntervalTick(
       INTERVAL_UPDATE_ORDER,
