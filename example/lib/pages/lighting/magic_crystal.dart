@@ -15,7 +15,7 @@ class MagicCrystal extends GameDecoration {
           size: Vector2.all(16),
           lightingConfig: LightingConfig(
             radius: 84,
-            color: const Color(0xFF4FC3F7).withValues(alpha: 0.2),
+            color: const Color(0xFF4FC3F7).withValues(alpha: 0.5),
             mode: LightingMode.additive,
             // Gradient falloff with a bright core.
             falloff: LightFalloff.smooth,
