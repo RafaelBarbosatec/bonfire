@@ -316,6 +316,55 @@ Tiled
 └── objects
 ```
 
+Keep the layer visible in Tiled — invisible layers are ignored, like the rest
+of the map.
+
+#### Combining roles (object layers)
+
+Tiled stores a single class per layer/object, so a wall that should both block
+movement and block light would have to be duplicated. In an **object layer**
+(or on individual objects) you can declare the roles separated by commas:
+
+```text
+collision,lighting_occluder
+```
+
+On the layer class it is the common case: one object layer whose objects are
+collisions **and** occluders.
+
+```text
+Tiled
+└── walls             (object layer, class = collision,lighting_occluder)
+    ├── wall_01       (collision + occluder)
+    └── wall_02       (collision + occluder)
+```
+
+`lighting_occluder` is always an **extra** role: it never replaces the other
+ones, so an object declared as `collision,lighting_occluder` still produces its
+`CollisionMapComponent` (or goes through `objectsBuilder`) and additionally
+becomes an occluder. Tokens are trimmed and compared case-insensitively, and
+the plural `lighting_occluders` is accepted as an alias.
+
+```text
+Tiled
+├── walls             (object layer, class = collision)   ← collision only
+└── occluders         (object layer, class = lighting_occluder)
+```
+
+The combination is not supported on **tile layers**: collision for tiles comes
+from the tileset, not from the layer class. A tile layer only reads the
+`lighting_occluder` class, which marks it as a helper layer (not rendered).
+
+So when the collision already lives in the tileset, keep it there and add an
+object layer (or individual objects) with `lighting_occluder` to describe the
+same walls for the lighting:
+
+```text
+Tiled
+├── walls             (tile layer, collision from the tileset)
+└── walls_occluders   (object layer, class = lighting_occluder)
+```
+
 `WorldMapByTiled` registers the occluders in `gameRef.lighting` when the map
 loads, so no code is needed on the game side:
 
@@ -325,10 +374,9 @@ WorldMapByTiled(
 );
 ```
 
-Keep the layer visible in Tiled — invisible layers are ignored, like the rest
-of the map. `WorldMapInfiniteByTiled` does not consume Tiled occluders yet (the
-pattern is repeated per chunk); register them with
-`gameRef.lighting.addOccluder(...)` in that case.
+`WorldMapInfiniteByTiled` does not consume Tiled occluders yet (the pattern is
+repeated per chunk); register them with `gameRef.lighting.addOccluder(...)` in
+that case.
 
 ### Quality
 

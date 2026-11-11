@@ -96,3 +96,8 @@ You can manage the cache of this too. By default, it uses `TiledMemoryCacheProvi
 - You can set `class` in your tile to `dynamicAbove` to render this tile dynamic by Y axis.
 - You can set `class` in your Object to `collision`. This object will be added in the game with transparency and collision.
 - You can set `class` in your ObjectLayer to `collision`. All objects of this layer will be added in the game with transparency and collision.
+- You can combine classes separating them with commas, e.g. `collision,lighting_occluder`.
+  The object (or every object of the layer) becomes a collision **and** a light
+  occluder, so the same wall doesn't need to be declared twice in the map. This
+  works for objects and object layers only — collisions of tile layers come from
+  the tileset. See [Lighting](/lighting) for the occluder options.
