@@ -36,7 +36,7 @@ open `lib/mixins/<feature>/` and read the `*_api.dart` file.
 | `component.shader = ...` | `component.shader.fragment = ...` | `shader` |
 
 **Exception:** `Movement` remains directly on the component
-(`moveFromDirection`, `moveFromAngle`, `stop`, `position`, `speed`) because it
+(`moveFromDirection`, `moveByAngle`, `stop`, `position`, `speed`) because it
 is the foundation of everything else. There is no `component.movement` object.
 
 ## Correct v4 snippets

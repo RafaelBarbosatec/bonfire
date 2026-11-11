@@ -54,6 +54,11 @@ factory (`p.others['damage'] ?? 10`).
 Tile collision: tiles marked with collision in the tileset become solid
 barriers automatically; do not add hitboxes for walls.
 
+Light occluders: a tile/object layer, or an individual object, with class
+`lighting_occluder` becomes a shadow blocker — `WorldMapByTiled` registers it
+automatically (no code needed). In object layers you can combine roles:
+`collision,lighting_occluder` makes the same wall block movement **and** light.
+
 Maps can also be loaded from a URL: `WorldMapReader.fromNetwork(Uri.parse(...))`.
 
 ## 2. SpriteFusion

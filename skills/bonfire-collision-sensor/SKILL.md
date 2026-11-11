@@ -61,14 +61,16 @@ Collision API:
 collision.enable();
 collision.disable();
 collision.bodyType = BodyType.dynamic; // dynamic | static | kinetic
-collision.onBlockMovementListener((other, data) { ... });
+collision.onBlockMovementListener((points, other) {
+  return other is! Ghost; // true blocks the movement, false lets it pass
+});
 collision.onMovementBlockedListener((other, data) { ... });
-collision.reflectionResolution((velocity, normal, ...) { ... });
+collision.reflectionResolution((other, data) => null); // or a custom velocity
 collision.lastCollisionData;
 ```
 
-Return `false` from `collision.blockMovementHandle(points, other)` to let the
-component pass through a specific object.
+`onBlockMovementListener` runs before the block is applied — return `false` to
+let the component pass through that specific object.
 
 ## 3. Reacting to collisions
 

@@ -135,39 +135,102 @@ add(OpacityEffect.fadeOut(EffectController(duration: 1), onComplete: removeFromP
 
 ## 5. Lighting
 
-Enable the global layer first:
+Enable the ambient darkness (the layer that lights cut holes in) on the widget:
 
 ```dart
 BonfireWidget(lightingColorGame: Colors.black.withValues(alpha: 0.7), ...)
 ```
 
-Then any component with `WithLighting` becomes a light source:
+Then any `GameObject` (and therefore any `GameDecoration`) can be a light
+source through the `lightingConfig:` constructor parameter — the `lighting` API
+is already mixed in:
 
 ```dart
-class Torch extends GameDecoration with WithLighting {
+class Torch extends GameDecoration {
   Torch(Vector2 position)
       : super.withSprite(
           sprite: Sprite.load('itens/torch.png'),
           position: position,
           size: Vector2.all(16),
-        ) {
-    lighting.setup(
-      LightingConfig(
-        radius: 96,
-        color: Colors.orange.withValues(alpha: 0.4),
-        blurBorder: 20,
-        type: LightingType.circle,
-      ),
-    );
-  }
+          lightingConfig: LightingConfig(
+            radius: 96,
+            color: Colors.orange.withValues(alpha: 0.4),
+            blurBorder: 20,             // MaskFilter blur edge
+            type: LightingType.circle,  // also .arc / .rect(size) / .polygon(points)
+            align: Vector2(0, -6),      // offset from the component center
+          ),
+        );
 }
 ```
 
-`lighting.enabled = false/true` toggles it at runtime. Projectiles also accept
-`lightingConfig:` in `attack.range(...)`.
+Components that are not a `GameObject` (players, enemies, custom components)
+become lights with `with WithLighting` + `lighting.setup(LightingConfig(...))`,
+or by creating a detached `LightSource`.
 
-Game-wide tint: `gameRef.lighting.animateToColor(Colors.blue.withValues(alpha: 0.7))`.
-Color filter: `gameRef.colorFilter.animateTo(Colors.red, BlendMode.colorBurn)`.
+Common variations:
+
+```dart
+// Soft gradient edge instead of blur, with a full-intensity core
+LightingConfig(
+  radius: 120,
+  color: Colors.orange,
+  falloff: LightFalloff.linear, // or .smooth
+  innerRadius: 0.45,
+  intensity: 0.8,               // multiplies the color alpha
+)
+
+// Emissive light (glow added on top, readable even with no ambient darkness)
+LightingConfig(radius: 84, color: Colors.cyan, mode: LightingMode.additive)
+
+// Candle behaviour
+LightingConfig(
+  radius: 96,
+  color: Colors.orange,
+  withPulse: true, pulseVariation: 0.12, pulseCurve: Curves.easeInOut,
+  flicker: const LightFlicker(frequency: 2, amplitude: 0.05, seed: 3),
+)
+```
+
+**Shadows.** Set `castShadows: true` on the light and register what blocks it:
+
+```dart
+// static geometry (walls), in world coordinates
+gameRef.lighting.addOccluder(LightingOccluder.rect(Rect.fromLTWH(64, 32, 16, 96)));
+gameRef.lighting.quality = LightingQuality.high; // low 24 / medium 64 / high 160 rays
+gameRef.lighting.debug = true;                   // light outline, shadow clip, occluders
+```
+
+Moving obstacles use the `WithLightingOcclusion` mixin (`lightingOccluders`
+getter). With Tiled maps, declare the occluders in the map instead of in code:
+a tile/object layer (or object) with class `lighting_occluder` is registered by
+`WorldMapByTiled` automatically. In an object layer you can combine roles:
+
+```text
+collision,lighting_occluder
+```
+
+**Ambient presets and transitions:**
+
+```dart
+LightingPreset.night.apply(gameRef.lighting);      // day | dusk | night | dungeon
+gameRef.lighting.animateToColor(Colors.blue.withValues(alpha: 0.7));
+gameRef.lighting.fadeOut();                        // back to a fully lit scene
+```
+
+**Detached lights** (explosions, muzzle flashes) do not need a component:
+
+```dart
+final light = gameRef.lighting.addLight(
+  LightSource(position: position, config: LightingConfig(radius: 170, color: Colors.white)),
+);
+gameRef.lighting.removeLight(light);
+```
+
+`lighting.enabled = false/true` toggles a component light at runtime. Projectiles
+also accept `lightingConfig:` in `attack.range(...)`. Lights follow the camera
+transform, so they stay aligned when the camera is rotated.
+
+Color filter: `gameRef.colorFilter.animateTo(Colors.red, blendMode: BlendMode.colorBurn)`.
 
 ## 6. Spawning items over time
 
@@ -193,7 +256,9 @@ Query components at runtime with `gameRef.query<T>()`.
 - Remove one-shot effects/components with `removeFromParent()`; leaving them
   alive leaks animations.
 - Sprites are loaded through Bonfire's asset loader (`assets/images/` prefix).
-- `WithLighting` only draws when `lightingColorGame` is set on `BonfireWidget`.
+- Cutout lights (the default `LightingMode.cutout`) only show when there is
+  ambient darkness (`lightingColorGame`); `LightingMode.additive` glows even
+  without it.
 - Don't instantiate `Sprite.load` in `render()`; load once (constructor or
   static getter).
 

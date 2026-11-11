@@ -171,7 +171,9 @@ Two different things:
 ## Changing animation at runtime
 
 ```dart
-replaceAnimation(SimpleDirectionAnimation(idleRight: ..., runRight: ...));
+directionAnimation.replaceAnimation(
+  SimpleDirectionAnimation(idleRight: ..., runRight: ...),
+);
 
 // one-shot (attack, hurt, emote)
 animation.playOnce(
@@ -193,7 +195,7 @@ For `RotationPlayer`, assign `animIdle` / `animRun`; for `PlatformPlayer`,
 - Player `life` must be initialized through the constructor (`life:` param) or
   `life.initial(...)`; `life.add` alone can never exceed `max`.
 - `gameRef.player` is `Player?` — null during teardown.
-- Don't mutate `position` by hand for movement; use `moveFromAngle` /
+- Don't mutate `position` by hand for movement; use `moveByAngle` /
   `moveFromDirection` or the controllers, otherwise collision response is skipped.
 - In 4.x it is `player.jumper.jump()`, **not** `player.jump()`.
 
