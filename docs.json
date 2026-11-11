@@ -38,7 +38,8 @@
         { "title": "Getting Started", "href": "/getting-started" },
         { "title": "What's New in 4.0", "href": "/bonfire-4" },
         { "title": "Overview", "href": "/overview" },
-        { "title": "Composition (LEGO mixins)", "href": "/mixins" }
+        { "title": "Composition (LEGO mixins)", "href": "/mixins" },
+        { "title": "AI Agent Skills", "href": "/ai-skills" }
       ]
     },
     {
