@@ -95,7 +95,7 @@ Add Bonfire to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  bonfire: ^4.0.0
+  bonfire: ^4.1.0
 ```
 
 Then create your first map + character and run it inside a `BonfireWidget`. The quickest way to see everything working is to open the bundled **[example app](example/)** — a complete, runnable project with maps, players, enemies, attacks, life bars and interface.

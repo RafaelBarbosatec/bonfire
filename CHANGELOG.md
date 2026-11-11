@@ -1,4 +1,16 @@
-# next
+# 4.1.0
+
+Bonfire 4.1 brings a complete **lighting** system: cutout and additive lights,
+gradient falloffs, pulse and candle-like flicker, shadow casting with occluders,
+quality and debug helpers, and day/night presets. Occluders can be declared in
+Tiled following the same pattern used by collision, and a layer/object can be a
+collision and an occluder at the same time.
+
+`LightingConfig` keeps its previous defaults, so existing lights keep working as
+before; the behaviour changes are listed under **Fixed**.
+
+4.1 also ships **Agent Skills** with the package, so AI coding agents write code
+against the installed version instead of guessing from 3.x.
 
 ## Lighting
 
@@ -66,6 +78,16 @@
 - `blurBorder: 0` now produces a crisp edge instead of an invalid blur.
 - Pulse updates no longer depend on rendering and `LightingComponent.update` now
   calls `super.update(dt)`.
+
+## Agent Skills
+
+### Added
+
+- The package now ships [Agent Skills](https://agentskills.io/specification) in
+  `skills/`: prescriptive guides for AI coding agents covering getting started,
+  player, enemy AI, collisions/sensors, maps, decorations/effects, dialogs/HUD
+  and the 4.x API-object reference. Install them in a game project with
+  `dart run skills@ get` (or `--all`). See `docs/ai-skills.mdx`.
 
 # 4.0.0
 
