@@ -1,7 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:flutter/material.dart' show Colors;
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -205,7 +204,7 @@ void main() {
       final type = LightingType.rect(Vector2(32, 16));
 
       expect(type, isA<RectLightingType>());
-      expect((type as RectLightingType).size, Vector2(32, 16));
+      expect(type.size, Vector2(32, 16));
     });
 
     test('polygon copies the given points', () {
@@ -219,7 +218,7 @@ void main() {
       points.first.setValues(99, 99);
 
       expect(type, isA<PolygonLightingType>());
-      expect((type as PolygonLightingType).points.first, Vector2(0, -10));
+      expect(type.points.first, Vector2(0, -10));
     });
   });
 

@@ -261,7 +261,7 @@ class LightingConfig {
       pulseVariation: lerpDouble(pulseVariation, other.pulseVariation, t)!,
       pulseSpeed: lerpDouble(pulseSpeed, other.pulseSpeed, t)!,
       pulseCurve: discrete ? pulseCurve : other.pulseCurve,
-      blurBorder: lerpDouble(blurBorder, other.blurBorder, t)!,
+      blurBorder: lerpDouble(blurBorder, other.blurBorder, t),
       type: discrete ? type : other.type,
       align: Vector2(
         lerpDouble(align.x, other.align.x, t)!,

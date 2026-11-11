@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:bonfire/bonfire.dart';
-import 'package:flame/extensions.dart' show CanvasExtension;
 import 'package:flutter/widgets.dart';
 
 abstract class LightingInterface {

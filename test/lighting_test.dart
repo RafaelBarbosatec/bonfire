@@ -18,7 +18,6 @@ void main() {
     test('value stays within pulseVariation', () {
       final pulse = PulseValue(
         speed: 0.5,
-        pulseVariation: 0.1,
         curve: Curves.linear,
       );
 
@@ -30,14 +29,11 @@ void main() {
 
     test('uses the configured curve instead of a hardcoded one', () {
       final linear = PulseValue(
-        speed: 1,
         pulseVariation: 1,
         curve: Curves.linear,
       );
       final decelerate = PulseValue(
-        speed: 1,
         pulseVariation: 1,
-        curve: Curves.decelerate,
       );
 
       linear.update(0.5);
@@ -50,7 +46,6 @@ void main() {
     test('keeps the historical timing: speed 0.1 takes 1s to reach 0.1', () {
       final pulse = PulseValue(
         speed: 0.1,
-        pulseVariation: 0.1,
         curve: Curves.linear,
       );
 
@@ -64,7 +59,6 @@ void main() {
 
     test('ping-pongs back to zero', () {
       final pulse = PulseValue(
-        speed: 1,
         pulseVariation: 1,
         curve: Curves.linear,
       );
@@ -337,7 +331,6 @@ void main() {
       final to = LightingConfig(
         radius: 20,
         color: Colors.white,
-        intensity: 1,
         innerRadius: 1,
         falloff: LightFalloff.linear,
       );

@@ -1,6 +1,5 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tiled/builder/tiled_world_builder.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
 

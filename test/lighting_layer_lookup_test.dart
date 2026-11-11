@@ -1,6 +1,5 @@
-import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/base/bonfire_with_collision.dart';
-import 'package:bonfire/color_filter/color_filter_component.dart';
+import 'package:bonfire/bonfire.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
