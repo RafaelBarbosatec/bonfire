@@ -35,7 +35,9 @@
 - Tiled integration: `WorldMapByTiled` now registers `LightingOccluder`s
   declared in Tiled. Tile layers and objects with the `lighting_occluder`
   class become occluders; occluder tile layers are not rendered and adjacent
-  tiles are merged into rectangles.
+  tiles are merged into rectangles. Layers and objects can declare several
+  roles separated by commas (e.g. `collision,lighting_occluder`), so the same
+  wall blocks movement and light without being duplicated in the map.
 
 ### Fixed
 

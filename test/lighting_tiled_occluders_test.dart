@@ -1,5 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/tiled/builder/tiled_world_builder.dart';
+import 'package:bonfire/util/collision_game_component.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tiledjsonreader/map/tiled_map.dart';
@@ -268,6 +269,141 @@ void main() {
       final built = await TiledWorldBuilder(_FakeTiledReader(map)).build();
 
       expect(built.lightingOccluders, isEmpty);
+    });
+  });
+
+  group('TiledWorldBuilder — role tokens', () {
+    test('splits, trims and normalizes comma separated roles', () {
+      expect(
+        TiledWorldBuilder.parseObjectTypes(' Collision , LIGHTING_OCCLUDERS '),
+        {'collision', 'lighting_occluder'},
+      );
+      expect(TiledWorldBuilder.parseObjectTypes(null), isEmpty);
+      expect(TiledWorldBuilder.parseObjectTypes(' , '), isEmpty);
+      expect(
+        TiledWorldBuilder.parseObjectTypes('lighting_occluder'),
+        {'lighting_occluder'},
+      );
+    });
+
+    test('a layer can be collision and occluder at the same time', () async {
+      final map = TiledMap.fromJson(
+        _mapJson(
+          layers: [
+            {
+              'id': 1,
+              'name': 'walls',
+              'type': 'objectgroup',
+              'class': 'collision,lighting_occluder',
+              'visible': true,
+              'objects': [
+                {
+                  'id': 1,
+                  'name': 'wall_01',
+                  'x': 0,
+                  'y': 0,
+                  'width': 16,
+                  'height': 8,
+                  'rotation': 0,
+                  'visible': true,
+                },
+                {
+                  'id': 2,
+                  'name': 'wall_02',
+                  'x': 32,
+                  'y': 0,
+                  'width': 16,
+                  'height': 8,
+                  'rotation': 0,
+                  'visible': true,
+                },
+              ],
+            },
+          ],
+        ),
+      );
+
+      final built = await TiledWorldBuilder(_FakeTiledReader(map)).build();
+
+      expect(built.lightingOccluders, hasLength(2));
+      expect(built.components, hasLength(2));
+      expect(
+        built.components!
+            .every((component) => component is CollisionMapComponent),
+        isTrue,
+      );
+    });
+
+    test('an object can be collision and occluder at the same time', () async {
+      final map = TiledMap.fromJson(
+        _mapJson(
+          layers: [
+            {
+              'id': 1,
+              'name': 'walls',
+              'type': 'objectgroup',
+              'visible': true,
+              'objects': [
+                {
+                  'id': 1,
+                  'name': 'wall',
+                  'type': 'collision,lighting_occluder',
+                  'x': 8,
+                  'y': 8,
+                  'width': 16,
+                  'height': 16,
+                  'rotation': 0,
+                  'visible': true,
+                },
+              ],
+            },
+          ],
+        ),
+      );
+
+      final built = await TiledWorldBuilder(_FakeTiledReader(map)).build();
+
+      expect(built.lightingOccluders, hasLength(1));
+      expect(
+        built.lightingOccluders.first.bounds,
+        const Rect.fromLTWH(8, 8, 16, 16),
+      );
+      expect(built.components, hasLength(1));
+      expect(built.components!.first, isA<CollisionMapComponent>());
+    });
+
+    test('an occluder only object does not create a collision', () async {
+      final map = TiledMap.fromJson(
+        _mapJson(
+          layers: [
+            {
+              'id': 1,
+              'name': 'decorations',
+              'type': 'objectgroup',
+              'visible': true,
+              'objects': [
+                {
+                  'id': 1,
+                  'name': 'beam',
+                  // Plural alias.
+                  'class': 'lighting_occluders',
+                  'x': 0,
+                  'y': 0,
+                  'width': 16,
+                  'height': 8,
+                  'rotation': 0,
+                  'visible': true,
+                },
+              ],
+            },
+          ],
+        ),
+      );
+
+      final built = await TiledWorldBuilder(_FakeTiledReader(map)).build();
+
+      expect(built.lightingOccluders, hasLength(1));
+      expect(built.components ?? const <GameComponent>[], isEmpty);
     });
   });
 }

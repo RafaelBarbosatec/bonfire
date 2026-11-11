@@ -35,6 +35,13 @@ class TiledWorldBuilder {
 
   /// Tiled class/type used to mark layers and objects as light occluders.
   static const LIGHTING_OCCLUDER_TYPE = 'lighting_occluder';
+
+  /// Accepted alias for [LIGHTING_OCCLUDER_TYPE].
+  static const LIGHTING_OCCLUDER_TYPE_ALIAS = 'lighting_occluders';
+
+  /// Tiled class/type used to mark layers and objects as collision.
+  static const COLLISION_TYPE = 'collision';
+
   static const _mapOrientationSupported = 'orthogonal';
 
   final Vector2? forceTileSize;
@@ -231,8 +238,37 @@ class TiledWorldBuilder {
         false;
   }
 
+  /// Splits the Tiled `class` (or the legacy `type`) into role tokens.
+  ///
+  /// Tiled stores a single class per layer/object, so a map that needs a wall
+  /// to both block movement and light would have to duplicate it. Declaring
+  /// the roles separated by commas solves that:
+  ///
+  /// ```text
+  /// collision,lighting_occluder
+  /// ```
+  ///
+  /// Tokens are trimmed and compared case-insensitively, and the plural
+  /// `lighting_occluders` is accepted as an alias.
+  static Set<String> parseObjectTypes(String? typeOrClass) {
+    if (typeOrClass == null || typeOrClass.isEmpty) {
+      return const <String>{};
+    }
+
+    return typeOrClass
+        .split(',')
+        .map((type) => type.trim().toLowerCase())
+        .map(
+          (type) => type == LIGHTING_OCCLUDER_TYPE_ALIAS
+              ? LIGHTING_OCCLUDER_TYPE
+              : type,
+        )
+        .where((type) => type.isNotEmpty)
+        .toSet();
+  }
+
   bool _isLightingOccluderLayer(MapLayer layer) {
-    return layer.layerClass?.toLowerCase() == LIGHTING_OCCLUDER_TYPE;
+    return parseObjectTypes(layer.layerClass).contains(LIGHTING_OCCLUDER_TYPE);
   }
 
   /// Collects the non-empty tiles of an occluder layer as merged rectangles.
@@ -571,8 +607,9 @@ class TiledWorldBuilder {
     if (layer.visible != true) {
       return;
     }
-    final isCollisionLayer = layer.layerClass?.toLowerCase() == 'collision';
-    final isOccluderLayer = _isLightingOccluderLayer(layer);
+    final layerTypes = parseObjectTypes(layer.layerClass);
+    final isCollisionLayer = layerTypes.contains(COLLISION_TYPE);
+    final isOccluderLayer = layerTypes.contains(LIGHTING_OCCLUDER_TYPE);
     final offsetX = _getDoubleByProportion(layer.offsetX);
     final offsetY = _getDoubleByProportion(layer.offsetY);
     for (final element in layer.objects ?? const <Objects>[]) {
@@ -581,18 +618,18 @@ class TiledWorldBuilder {
       final width = _getDoubleByProportion(element.width);
       final height = _getDoubleByProportion(element.height);
       final rotation = (element.rotation ?? 0) * pi / 180;
-      final isOccluderObject =
-          element.typeOrClass?.toLowerCase() == LIGHTING_OCCLUDER_TYPE;
+      final objectTypes = parseObjectTypes(element.typeOrClass);
+      final isOccluderObject = objectTypes.contains(LIGHTING_OCCLUDER_TYPE);
 
-      // Occluders only feed the lighting layer: they do not render, collide
-      // or run through `objectsBuilder`.
+      // `lighting_occluder` is an extra role, it never replaces the others:
+      // `collision,lighting_occluder` produces a collision **and** an
+      // occluder, so the same wall does not need to be drawn twice in Tiled.
       if (isOccluderLayer || isOccluderObject) {
         _addLightingOccluderObject(element, x, y, width, height, rotation);
-        continue;
       }
 
       final isObjectCollision =
-          element.typeOrClass?.toLowerCase() == 'collision' || isCollisionLayer;
+          objectTypes.contains(COLLISION_TYPE) || isCollisionLayer;
       final collision = _getCollisionObject(
         x,
         y,

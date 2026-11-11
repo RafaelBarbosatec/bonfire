@@ -316,6 +316,40 @@ Tiled
 └── objects
 ```
 
+#### Combining roles
+
+Tiled stores a single class per layer/object, so a wall that should both block
+movement and block light would have to be duplicated. Instead, declare the
+roles separated by commas:
+
+```text
+collision,lighting_occluder
+```
+
+The same works on the layer class, which is the common case: one object layer
+whose objects are collisions **and** occluders.
+
+```text
+Tiled
+└── walls             (object layer, class = collision,lighting_occluder)
+    ├── wall_01       (collision + occluder)
+    └── wall_02       (collision + occluder)
+```
+
+`lighting_occluder` is always an **extra** role: it never replaces the other
+ones, so an object declared as `collision,lighting_occluder` still produces its
+`CollisionMapComponent` (or goes through `objectsBuilder`) and additionally
+becomes an occluder. Tokens are trimmed and compared case-insensitively, and
+the plural `lighting_occluders` is accepted as an alias.
+
+Two notes:
+
+- On **tile layers** only `lighting_occluder` has an effect: tile collisions
+  come from the tileset, not from the layer class. An occluder tile layer is
+  still a helper layer and is not rendered.
+- Keep the layer visible in Tiled — invisible layers are ignored, like the rest
+  of the map.
+
 `WorldMapByTiled` registers the occluders in `gameRef.lighting` when the map
 loads, so no code is needed on the game side:
 
@@ -325,10 +359,9 @@ WorldMapByTiled(
 );
 ```
 
-Keep the layer visible in Tiled — invisible layers are ignored, like the rest
-of the map. `WorldMapInfiniteByTiled` does not consume Tiled occluders yet (the
-pattern is repeated per chunk); register them with
-`gameRef.lighting.addOccluder(...)` in that case.
+`WorldMapInfiniteByTiled` does not consume Tiled occluders yet (the pattern is
+repeated per chunk); register them with `gameRef.lighting.addOccluder(...)` in
+that case.
 
 ### Quality
 
