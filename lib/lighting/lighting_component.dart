@@ -210,7 +210,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
     // ambient color darkens them instead of the light being painted on top of
     // the night color.
     if (additive.isNotEmpty) {
-      canvas.saveLayer(bounds, paint);
+      canvas.saveLayer(_layerBounds(additive), paint);
       canvas.save();
       _applyCameraTransform(canvas);
 
@@ -224,7 +224,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
 
     // A cutout light only makes sense when there is ambient darkness to erase.
     if (_containColor) {
-      canvas.saveLayer(bounds, paint);
+      canvas.saveLayer(_layerBounds(cutout), paint);
       canvas.drawColor(color!, BlendMode.dstATop);
       canvas.save();
       _applyCameraTransform(canvas);
@@ -249,6 +249,35 @@ class LightingComponent extends GameComponent implements LightingInterface {
   /// a custom anchor is used.
   void _applyCameraTransform(Canvas canvas) {
     canvas.transform2D(gameRef.camera.viewfinder.transform);
+  }
+
+  /// Bounds for the layer that composites the given lights.
+  ///
+  /// The [MaskFilter.blur] used by [LightFalloff.blur] extends the light
+  /// beyond its shape. When the layer is limited to the viewport, the blur is
+  /// truncated at the screen edge, which makes the soft edge shimmer as the
+  /// light moves (more visible near the map edges). Inflating the layer by the
+  /// practical blur reach keeps the Gaussian tail intact.
+  Rect? _layerBounds(List<_PendingLight> lights) {
+    final base = bounds;
+    if (base == null) {
+      return null;
+    }
+
+    final zoom = gameRef.camera.zoom;
+    var inflation = 0.0;
+    for (final light in lights) {
+      final config = light.config;
+      if (config.falloff == LightFalloff.blur && config.maskFilter != null) {
+        final reach = light.gradientArea.width / 2 + config.blurSigma * 3;
+        final viewportReach = reach * zoom;
+        if (viewportReach > inflation) {
+          inflation = viewportReach;
+        }
+      }
+    }
+
+    return inflation > 0 ? base.inflate(inflation) : base;
   }
 
   bool _isLightRenderable(WithLighting light) {

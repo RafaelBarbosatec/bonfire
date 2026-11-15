@@ -1,3 +1,12 @@
+# NEXT
+
+- Fixed shadow silhouettes jumping on large maps. The visibility polygon is
+  now computed in light-local coordinates, so large world coordinates no longer
+  degrade the floating point precision of the intersection math.
+- Fixed `LightFalloff.blur` lights shimmering near the screen edges. The
+  lighting layer is now inflated by the practical blur reach, so the Gaussian
+  edge is not truncated by the layer bounds.
+
 # 4.1.2
 
 - Lights with `castShadows: true` no longer lose the soft `LightFalloff.blur`

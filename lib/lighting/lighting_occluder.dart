@@ -116,9 +116,21 @@ List<Vector2> computeVisibilityPolygon({
     return const [];
   }
 
+  // Work in light-local coordinates. Big maps place the light and occluders
+  // far from the world origin, and the intersection math loses enough float
+  // precision there to make the silhouette jump between frames. Translating
+  // the light to the origin keeps every value small and stable.
+  final localCenter = Vector2.zero();
+  final localOccluders = <LightingOccluder>[
+    for (final occluder in occluders)
+      LightingOccluder([
+        for (final point in occluder.points) point - center,
+      ]),
+  ];
+
   final segments = <_Segment>[];
-  for (final occluder in occluders) {
-    if (_distanceToRect(center, occluder.bounds) > radius) {
+  for (final occluder in localOccluders) {
+    if (_distanceToRect(localCenter, occluder.bounds) > radius) {
       continue;
     }
     final points = occluder.points;
@@ -128,15 +140,16 @@ List<Vector2> computeVisibilityPolygon({
   }
 
   // A light inside a wall is fully blocked.
-  for (final occluder in occluders) {
-    if (occluder.bounds.contains(Offset(center.x, center.y)) &&
-        pointInPolygon(center, occluder.points)) {
+  for (final occluder in localOccluders) {
+    if (occluder.bounds.contains(Offset.zero) &&
+        pointInPolygon(localCenter, occluder.points)) {
       return const [];
     }
   }
 
   if (segments.isEmpty) {
-    return _circlePolygon(center, radius, rays);
+    final polygon = _circlePolygon(localCenter, radius, rays);
+    return [for (final point in polygon) point + center];
   }
 
   final angles = <double>[];
@@ -155,7 +168,7 @@ List<Vector2> computeVisibilityPolygon({
   for (final segment in segments) {
     for (final point in [segment.a, segment.b]) {
       final baseAngle = _normalizeAngle(
-        math.atan2(point.y - center.y, point.x - center.x),
+        math.atan2(point.y - localCenter.y, point.x - localCenter.x),
       );
       angles
         ..add(_normalizeAngle(baseAngle - _cornerEpsilon))
@@ -172,16 +185,16 @@ List<Vector2> computeVisibilityPolygon({
     var distance = radius;
 
     for (final segment in segments) {
-      final hit = _rayHit(center, direction, segment);
+      final hit = _rayHit(localCenter, direction, segment);
       if (hit != null && hit > _minDistance && hit < distance) {
         distance = hit;
       }
     }
 
-    result.add(center + direction * distance);
+    result.add(localCenter + direction * distance);
   }
 
-  return result;
+  return [for (final point in result) point + center];
 }
 
 /// Merges a grid of blocked cells into as few rectangles as possible.
