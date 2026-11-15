@@ -1,3 +1,12 @@
+# 4.1.1
+
+### Fixed
+
+- Cutout lights with `LightFalloff.blur` no longer render a flickering square
+  instead of a soft circle on backends that do not support `BlendMode.clear`
+  (notably web/CanvasKit and Impeller). The ambient erasing now uses
+  `BlendMode.dstOut`, which produces the same soft edge portably.
+
 # 4.1.0
 
 Bonfire 4.1 brings a complete **lighting** system: cutout and additive lights,
