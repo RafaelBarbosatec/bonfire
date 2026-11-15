@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/lighting/lighting_component.dart';
 import 'package:flutter/material.dart' show Colors;
@@ -134,6 +136,30 @@ void main() {
       expect(polygon, hasLength(16));
       for (final point in polygon) {
         expect(point.length, closeTo(100, 1e-3));
+      }
+    });
+
+    test('points stay ordered by angle when the light is below the occluder',
+        () {
+      final wall = LightingOccluder.rect(const Rect.fromLTRB(0, 0, 16, 16));
+      final center = Vector2(8, 32);
+
+      final polygon = computeVisibilityPolygon(
+        center: center,
+        radius: 100,
+        occluders: [wall],
+      );
+
+      var previousAngle = -1.0;
+      for (final point in polygon) {
+        final angle = math.atan2(point.y - center.y, point.x - center.x);
+        final normalized = angle < 0 ? angle + math.pi * 2 : angle;
+        expect(
+          normalized,
+          greaterThanOrEqualTo(previousAngle - 1e-9),
+          reason: 'Polygon point out of angular order: $point',
+        );
+        previousAngle = normalized;
       }
     });
 

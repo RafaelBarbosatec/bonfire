@@ -148,13 +148,19 @@ List<Vector2> computeVisibilityPolygon({
 
   // Besides the evenly spaced rays, aim at both ends of every segment. The
   // small offsets avoid missing a corner when two rays are nearly parallel.
+  // `atan2` returns angles in `[-π, π]`, so they must be normalized to
+  // `[0, 2π)` to sort together with the evenly spaced rays above. Without
+  // this, corners above the light (negative angles) are sorted before the
+  // `0` ray, producing a self-intersecting polygon and glitchy shadows.
   for (final segment in segments) {
     for (final point in [segment.a, segment.b]) {
-      final angle = math.atan2(point.y - center.y, point.x - center.x);
+      final baseAngle = _normalizeAngle(
+        math.atan2(point.y - center.y, point.x - center.x),
+      );
       angles
-        ..add(angle - _cornerEpsilon)
-        ..add(angle)
-        ..add(angle + _cornerEpsilon);
+        ..add(_normalizeAngle(baseAngle - _cornerEpsilon))
+        ..add(baseAngle)
+        ..add(_normalizeAngle(baseAngle + _cornerEpsilon));
     }
   }
 
@@ -284,6 +290,16 @@ bool pointInPolygon(Vector2 point, List<Vector2> polygon) {
 
 const double _cornerEpsilon = 0.0002;
 const double _minDistance = 0.001;
+
+/// Wraps [angle] into the `[0, 2π)` range.
+double _normalizeAngle(double angle) {
+  const tau = math.pi * 2;
+  var result = angle % tau;
+  if (result < 0) {
+    result += tau;
+  }
+  return result;
+}
 
 List<Vector2> _circlePolygon(Vector2 center, double radius, int rays) {
   final count = math.max(8, rays);

@@ -1,3 +1,13 @@
+# 4.1.2
+
+- Lights with `castShadows: true` no longer lose the soft `LightFalloff.blur`
+  edge when nothing is blocking them. The shadow silhouette is now computed
+  up to the practical reach of the blur (3σ), so the gradient is preserved in
+  open areas while occluders still cast hard shadows.
+- Fixed glitchy shadow silhouettes when a light is below an occluder. Corner
+  ray angles are now normalized to `[0, 2π)` before sorting, so the visibility
+  polygon stays in angular order instead of self-intersecting.
+
 # 4.1.1
 
 ### Fixed

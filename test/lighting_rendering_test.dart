@@ -39,6 +39,7 @@ Future<ByteData> _renderCutoutLight({
   required Color ambient,
   required LightingConfig config,
   Vector2? lightPosition,
+  List<LightingOccluder> occluders = const [],
   Size viewport = const Size(300, 300),
 }) async {
   final camera = BonfireCamera(
@@ -57,6 +58,9 @@ Future<ByteData> _renderCutoutLight({
 
   final lighting = LightingComponent(color: ambient);
   lighting.gameRef = game;
+  for (final occluder in occluders) {
+    lighting.addOccluder(occluder);
+  }
   lighting.onGameResize(viewport.toVector2());
   lighting.update(0.016);
 
@@ -97,6 +101,37 @@ void main() {
       final edge = _redAt(data, width, 150, 150 - 50);
       expect(edge, greaterThan(104));
       expect(edge, lessThan(250));
+    });
+
+    test('blur falloff keeps the soft edge when shadows are enabled', () async {
+      const ambient = Color(0xFF090253);
+      const width = 300;
+      final config = LightingConfig(
+        color: const Color(0x00000000),
+        radius: 50,
+        blurBorder: 20,
+      );
+
+      final withoutShadows = await _renderCutoutLight(
+        ambient: ambient.withValues(alpha: 0.6),
+        config: config,
+      );
+      final withShadows = await _renderCutoutLight(
+        ambient: ambient.withValues(alpha: 0.6),
+        config: config.copyWith(castShadows: true),
+        occluders: [
+          // Far away from the light, so it does not block any ray.
+          LightingOccluder.rect(const Rect.fromLTWH(260, 260, 10, 10)),
+        ],
+      );
+
+      // Sample the edge where the blur falloff is halfway: the result must
+      // stay soft instead of turning into a hard circle cut at the radius.
+      for (final y in [150 - 50, 150 - 60, 150 - 70]) {
+        final a = _redAt(withoutShadows, width, 150, y);
+        final b = _redAt(withShadows, width, 150, y);
+        expect((a - b).abs(), lessThan(25), reason: 'y=$y without=$a with=$b');
+      }
     });
 
     test('gradient falloff also erases with a soft edge', () async {
