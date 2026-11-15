@@ -200,6 +200,9 @@ class LightingConfig {
   /// Blur applied to the light edge. `null` means a crisp edge.
   MaskFilter? get maskFilter => _maskFilter;
 
+  /// Gaussian sigma used by [maskFilter].
+  double get blurSigma => _convertRadiusToSigma(blurBorder);
+
   static double _convertRadiusToSigma(double radius) {
     return radius * 0.57735 + 0.5;
   }

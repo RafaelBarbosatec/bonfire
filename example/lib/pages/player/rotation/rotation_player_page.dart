@@ -1,6 +1,6 @@
 import 'package:bonfire/bonfire.dart';
 import 'package:example/pages/player/rotation/human_topdown_player.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class RotationPlayerPage extends StatelessWidget {
   const RotationPlayerPage({Key? key}) : super(key: key);
@@ -10,7 +10,8 @@ class RotationPlayerPage extends StatelessWidget {
     const tileSize = 16.0;
     return BonfireWidget(
       map: WorldMapByTiled(
-        WorldMapReader.fromAsset('tiled/simple_topdown/simple.tmj'),
+        WorldMapReader.fromAsset(
+            'tiled/simple_topdown/simple_with_lighring.tmj'),
       ),
       playerControllers: [
         Joystick(
@@ -18,11 +19,12 @@ class RotationPlayerPage extends StatelessWidget {
         )
       ],
       player: HumanTopdownPlayer(
-        position: Vector2(5 * tileSize, 5 * tileSize),
+        position: Vector2(7 * tileSize, 7 * tileSize),
       ),
       cameraConfig: CameraConfig(
         zoom: getZoomFromMaxVisibleTile(context, tileSize, 20),
       ),
+      lightingColorGame: Colors.black.withValues(alpha: 0.6),
     );
   }
 }

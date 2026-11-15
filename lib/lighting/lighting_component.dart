@@ -372,7 +372,7 @@ class LightingComponent extends GameComponent implements LightingInterface {
     if (config.castShadows && occluders.isNotEmpty) {
       final polygon = computeVisibilityPolygon(
         center: center,
-        radius: shapeRadius,
+        radius: _shadowClipRadius(config, shapeRadius),
         occluders: occluders,
         rays: _quality.shadowRays,
       );
@@ -397,6 +397,20 @@ class LightingComponent extends GameComponent implements LightingInterface {
       ),
       clip: clip,
     );
+  }
+
+  /// Radius used to compute the shadow silhouette.
+  ///
+  /// The [LightFalloff.blur] falloff extends beyond the nominal shape radius,
+  /// so clipping the light at the shape radius would cut its soft edge and
+  /// produce a hard polygonal border even when nothing is blocking it.
+  /// Extending the silhouette by the practical reach of the Gaussian blur
+  /// (3σ) preserves the gradient in open areas.
+  double _shadowClipRadius(LightingConfig config, double shapeRadius) {
+    if (config.falloff != LightFalloff.blur || config.maskFilter == null) {
+      return shapeRadius;
+    }
+    return shapeRadius + config.blurSigma * 3;
   }
 
   /// Reach of the light shape, in world units.
