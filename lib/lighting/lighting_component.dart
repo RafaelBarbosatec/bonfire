@@ -549,7 +549,11 @@ class LightingComponent extends GameComponent implements LightingInterface {
         ..shader = null
         ..color = color
         ..maskFilter = config.maskFilter
-        ..blendMode = erase ? BlendMode.clear : blendMode!;
+        // `BlendMode.clear` is not supported by every backend (notably web
+        // and Impeller), where it renders the shape's bounding box instead of
+        // the blurred shape, producing a flickering square around the light.
+        // `dstOut` erases using the blurred alpha and is portable.
+        ..blendMode = erase ? BlendMode.dstOut : blendMode!;
     } else {
       paint
         ..shader = _falloffShader(config, area, color)
