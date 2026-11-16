@@ -6,7 +6,7 @@
  "name":"0x72_DungeonTilesetII_v1.3",
  "spacing":0,
  "tilecount":1024,
- "tiledversion":"1.9.0",
+ "tiledversion":"1.11.2",
  "tileheight":16,
  "tiles":[
         {
@@ -14,15 +14,14 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
-                     "class":"",
                      "height":16,
                      "id":1,
                      "name":"",
                      "rotation":0,
+                     "type":"",
                      "visible":true,
                      "width":16,
                      "x":0,
@@ -53,15 +52,14 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
-                     "class":"",
                      "height":16,
                      "id":1,
                      "name":"",
                      "rotation":0,
+                     "type":"",
                      "visible":true,
                      "width":16,
                      "x":0,
@@ -91,27 +89,26 @@
          "id":68
         }, 
         {
-         "class":"above",
-         "id":165
+         "id":165,
+         "type":"above"
         }, 
         {
-         "class":"above",
-         "id":197
+         "id":197,
+         "type":"above"
         }, 
         {
          "id":256,
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
-                     "class":"",
                      "height":16,
                      "id":1,
                      "name":"",
                      "rotation":0,
+                     "type":"",
                      "visible":true,
                      "width":5.18181818181818,
                      "x":10.8181818181818,
@@ -129,15 +126,14 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
-                     "class":"",
                      "height":16,
                      "id":1,
                      "name":"",
                      "rotation":0,
+                     "type":"",
                      "visible":true,
                      "width":4.90909090909091,
                      "x":0,
@@ -155,15 +151,14 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
-                     "class":"",
                      "height":16,
                      "id":1,
                      "name":"",
                      "rotation":0,
+                     "type":"",
                      "visible":true,
                      "width":16,
                      "x":0,
@@ -181,15 +176,14 @@
          "objectgroup":
             {
              "draworder":"index",
-             "id":2,
              "name":"",
              "objects":[
                     {
-                     "class":"",
                      "height":16,
                      "id":1,
                      "name":"",
                      "rotation":0,
+                     "type":"",
                      "visible":true,
                      "width":16,
                      "x":0,
@@ -253,8 +247,34 @@
                  "tileid":629
                 }],
          "id":627
+        }, 
+        {
+         "id":659,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "id":2,
+             "name":"",
+             "objects":[
+                    {
+                     "height":12.9891304347826,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":15.9076086956522,
+                     "x":0.0614325171054054,
+                     "y":3.02491340299138
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            }
         }],
  "tilewidth":16,
  "type":"tileset",
- "version":"1.8"
+ "version":"1.10"
 }

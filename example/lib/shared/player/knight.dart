@@ -35,7 +35,7 @@ class Knight extends SimplePlayer
     setupMovementByJoystick(intensityEnabled: true);
     lighting.setup(
       LightingConfig(
-        radius: width * 1.5,
+        radius: width * 2,
         color: Colors.transparent,
       ),
     );

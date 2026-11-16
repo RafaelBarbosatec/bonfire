@@ -30,9 +30,9 @@
          "data":[2, 2, 5, 2, 5, 5, 2, 5, 2, 2,
             259, 34, 37, 34, 37, 37, 34, 37, 34, 260,
             258, 0, 69, 0, 69, 69, 0, 69, 0, 257,
+            258, 0, 0, 0, 0, 660, 0, 0, 0, 257,
             258, 0, 0, 0, 0, 0, 0, 0, 0, 257,
-            258, 0, 0, 0, 0, 0, 0, 0, 0, 257,
-            258, 0, 0, 0, 0, 0, 0, 0, 0, 257,
+            258, 0, 0, 0, 0, 0, 660, 0, 660, 257,
             258, 0, 0, 0, 0, 0, 0, 0, 0, 257,
             258, 0, 0, 0, 0, 0, 0, 0, 0, 257,
             258, 0, 0, 0, 0, 0, 295, 0, 0, 257,
@@ -115,7 +115,7 @@
          "visible":true,
          "x":0,
          "y":0
-        },
+        }, 
         {
          "class":"lighting_occluder",
          "draworder":"topdown",
@@ -123,26 +123,37 @@
          "name":"lighting_occluders",
          "objects":[
                 {
-                 "height":44,
+                 "height":12.8722700801566,
                  "id":10,
                  "name":"wall_left",
                  "rotation":0,
                  "type":"lighting_occluder",
                  "visible":true,
-                 "width":8,
-                 "x":88,
-                 "y":40
+                 "width":15.9309544078329,
+                 "x":80.0491326996821,
+                 "y":51.0784748635203
                 }, 
                 {
-                 "height":8,
+                 "height":12.7996943687309,
                  "id":11,
                  "name":"wall_bottom",
                  "rotation":0,
                  "type":"lighting_occluder",
                  "visible":true,
-                 "width":40,
-                 "x":96,
-                 "y":84
+                 "width":15.8385725405664,
+                 "x":96.0869565217391,
+                 "y":83.1105218901237
+                }, 
+                {
+                 "height":12.7997173913043,
+                 "id":12,
+                 "name":"wall_bottom",
+                 "rotation":0,
+                 "type":"lighting_occluder",
+                 "visible":true,
+                 "width":15.8820782608696,
+                 "x":128.070354355506,
+                 "y":83.0558534069816
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -151,10 +162,10 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":12,
+ "nextobjectid":13,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.10.2",
+ "tiledversion":"1.11.2",
  "tileheight":16,
  "tilesets":[
         {

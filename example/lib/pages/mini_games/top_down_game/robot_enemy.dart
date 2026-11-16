@@ -44,6 +44,9 @@ class ZombieEnemy extends RotationEnemy with WithCollision, WithRandomMovement {
         );
       },
       radiusVision: 128,
+      observed: () {
+        angle = util.getAngleToPlayer();
+      },
       notObserved: () {
         randomMovement.run(
           dt,

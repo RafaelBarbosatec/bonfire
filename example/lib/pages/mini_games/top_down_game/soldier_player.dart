@@ -25,15 +25,14 @@ class SoldierPlayer extends RotationPlayer with WithCollision, WithLighting {
         ) {
     lighting.setup(
       LightingConfig(
-        radius: size.y * 2,
-        blurBorder: size.y / 2,
-        color: Colors.yellow.withValues(alpha: 0.3),
-        type: LightingType.arc(
-          endRadAngle: (2 * pi) / 6,
-          isCenter: true,
-        ),
-        useComponentAngle: true,
-      ),
+          radius: size.y * 4,
+          color: Colors.yellow.withValues(alpha: 0.3),
+          type: LightingType.arc(
+            endRadAngle: (2 * pi) / 6,
+            isCenter: true,
+          ),
+          useComponentAngle: true,
+          castShadows: true),
     );
   }
 

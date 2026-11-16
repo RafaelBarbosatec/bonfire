@@ -149,7 +149,7 @@ class LightingConfig {
     Vector2? align,
     this.mode = LightingMode.cutout,
     this.falloff = LightFalloff.smooth,
-    this.innerRadius = 0.35,
+    this.innerRadius = 0.1,
     this.intensity = 1,
     this.additiveBlendMode = BlendMode.plus,
     this.flicker,

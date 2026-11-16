@@ -1,4 +1,4 @@
-# NEXT
+# 4.1.3
 
 - **Breaking:** `LightingConfig.falloff` now defaults to `LightFalloff.smooth`
   instead of `LightFalloff.blur`. The gradient falloff is stable and portable,
