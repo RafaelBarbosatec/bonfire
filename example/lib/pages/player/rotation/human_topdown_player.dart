@@ -18,6 +18,7 @@ class HumanTopdownPlayer extends RotationPlayer
         radius: size.x * 2,
         color: Colors.orange[100]!.withValues(alpha: 0.2),
         castShadows: true,
+        falloff: LightFalloff.smooth,
       ),
     );
   }

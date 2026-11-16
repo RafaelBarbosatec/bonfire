@@ -1,5 +1,9 @@
 # NEXT
 
+- **Breaking:** `LightingConfig.falloff` now defaults to `LightFalloff.smooth`
+  instead of `LightFalloff.blur`. The gradient falloff is stable and portable,
+  while `blur` can shimmer on Impeller and web; pass
+  `falloff: LightFalloff.blur` explicitly to keep the old Gaussian edge.
 - Fixed shadow silhouettes jumping on large maps. The visibility polygon is
   now computed in light-local coordinates, so large world coordinates no longer
   degrade the floating point precision of the intersection math.

@@ -46,7 +46,7 @@ class Torch extends GameDecoration with WithLighting {
         withPulse: true,
         pulseVariation: 0.12,
         pulseSpeed: 0.1,
-        blurBorder: 40,
+        falloff: LightFalloff.smooth,
       ),
     );
   }
@@ -67,10 +67,10 @@ lighting.enabled = true;
 | `radius` | **required** | Radius of the light. |
 | `color` | **required** | Color used to fill the light area. Alpha matters: it is the light intensity. |
 | `type` | `LightingType.circle` | `LightingType.circle` or `LightingType.arc(...)`. |
-| `blurBorder` | same as `radius` | Blur applied to the light edge. `0` gives a crisp edge. |
+| `blurBorder` | same as `radius` | Blur applied to the light edge. Only used by `LightFalloff.blur`. `0` gives a crisp edge. |
 | `align` | `Vector2.zero()` | Offset of the light relative to the component center. |
 | `mode` | `LightingMode.cutout` | How the light interacts with the ambient darkness. |
-| `falloff` | `LightFalloff.blur` | How the light fades to the edge: `blur`, `linear` or `smooth`. |
+| `falloff` | `LightFalloff.smooth` | How the light fades to the edge: `blur`, `linear` or `smooth`. |
 | `innerRadius` | `0.35` | Fraction of `radius` with full intensity in gradient falloffs. |
 | `intensity` | `1` | Multiplies the alpha of `color` (`0..1`). |
 | `additiveBlendMode` | `BlendMode.plus` | Blend mode used by additive lights (`plus`, `screen`...). |
@@ -136,10 +136,11 @@ About the arc parameters:
 So `LightingType.arc(startRadAngle: -0.4, endRadAngle: 0.8, isCenter: true)`
 produces a cone of 0.8 rad centered exactly on the component facing direction.
 
-### Soft falloff without blur
+### Soft falloff (default)
 
-`LightFalloff.blur` keeps the historical `MaskFilter.blur` edge. For a softer,
-cheaper edge use a radial gradient instead:
+`LightFalloff.smooth` is the default: it uses a radial gradient and stays
+within the light `radius`, so there is no extra blur pass and no spill beyond
+the shape. `LightFalloff.linear` is the same idea with a linear ramp.
 
 ```dart
 lighting.setup(
@@ -156,6 +157,11 @@ lighting.setup(
 only covers the outer band, which avoids the washed out look of a uniform blur.
 Gradient falloffs also give a proportional (`dstOut`) cut on the ambient
 darkness, so the light edge is soft instead of binary.
+
+`LightFalloff.blur` keeps the historical `MaskFilter.blur` edge for backwards
+compatibility. It spills beyond `radius` and can shimmer on backends that
+struggle with large blurs (notably Impeller and web), so prefer the gradient
+falloffs for new lights.
 
 ### Intensity and additive blend mode
 

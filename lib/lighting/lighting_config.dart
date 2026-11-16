@@ -24,6 +24,11 @@ enum LightingMode {
 enum LightFalloff {
   /// Soft edge produced by `MaskFilter.blur` (the historical behavior).
   /// It still uses [LightingConfig.blurBorder].
+  ///
+  /// Kept for backwards compatibility: the blur spills beyond the light
+  /// radius and can shimmer on backends that do not handle large
+  /// `MaskFilter.blur` well (notably Impeller and web). Prefer [smooth] or
+  /// [linear] for new lights.
   blur,
 
   /// Alpha decreases linearly from [LightingConfig.innerRadius] to the edge.
@@ -97,7 +102,7 @@ class LightingConfig {
   /// How the light interacts with the scene.
   final LightingMode mode;
 
-  /// How the light fades to its edge.
+  /// How the light fades to its edge. Defaults to [LightFalloff.smooth].
   final LightFalloff falloff;
 
   /// Fraction of [radius] (0..1) where a gradient falloff still has full
@@ -143,7 +148,7 @@ class LightingConfig {
     this.type = LightingType.circle,
     Vector2? align,
     this.mode = LightingMode.cutout,
-    this.falloff = LightFalloff.blur,
+    this.falloff = LightFalloff.smooth,
     this.innerRadius = 0.35,
     this.intensity = 1,
     this.additiveBlendMode = BlendMode.plus,
