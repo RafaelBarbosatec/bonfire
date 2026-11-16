@@ -91,9 +91,9 @@ mixin FireballAttack on SimplePlayer {
         position: Vector2(width * 0.1, 0),
       ),
       lightingConfig: LightingConfig(
-        radius: width / 2,
+        radius: width,
         blurBorder: width,
-        color: Colors.orange.withValues(alpha: 0.3),
+        color: Colors.orange.withValues(alpha: 0.2),
       ),
     );
   }

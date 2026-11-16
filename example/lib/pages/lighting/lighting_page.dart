@@ -203,7 +203,7 @@ class _LightingPageState extends State<LightingPage> {
         },
       ),
       backgroundColor: const Color(0xFF101820),
-      lightingColorGame: LightingPreset.night.ambient,
+      lightingColorGame: LightingPreset.night.ambient.withValues(alpha: 0.5),
       player: _player,
       playerControllers: [
         Joystick(directional: JoystickDirectional()),
