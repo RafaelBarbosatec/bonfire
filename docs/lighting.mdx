@@ -158,6 +158,33 @@ only covers the outer band, which avoids the washed out look of a uniform blur.
 Gradient falloffs also give a proportional (`dstOut`) cut on the ambient
 darkness, so the light edge is soft instead of binary.
 
+For a very soft light with no hard core (the look most people associate with
+`LightFalloff.blur`), set `innerRadius` to `0` so the fade starts at the
+center:
+
+```dart
+lighting.setup(
+  LightingConfig(
+    radius: 160,
+    color: const Color(0xFFFFB300).withValues(alpha: 0.35),
+    falloff: LightFalloff.smooth,
+    innerRadius: 0.0, // fade from the center, no hard core
+  ),
+);
+```
+
+Because `smooth` stays within `radius` (no halo beyond it like `blur`), bump
+the `radius` slightly to compensate when replicating a blur look:
+
+```dart
+LightingConfig(
+  radius: 160 * 1.15,
+  color: const Color(0xFFFFB300).withValues(alpha: 0.35),
+  falloff: LightFalloff.smooth,
+  innerRadius: 0.2,
+)
+```
+
 `LightFalloff.blur` keeps the historical `MaskFilter.blur` edge for backwards
 compatibility. It spills beyond `radius` and can shimmer on backends that
 struggle with large blurs (notably Impeller and web), so prefer the gradient
