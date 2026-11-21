@@ -16,11 +16,9 @@ class SpriteStackComponent extends PositionComponent {
     this.pitch = SpriteStack.defaultPitch,
     this.stackScale = 1,
     this.spacing = 1,
-    Vector2? position,
-    int priority = 0,
+    super.position,
+    super.priority,
   }) : super(
-          position: position,
-          priority: priority,
           anchor: Anchor.topLeft,
           size: Vector2(
             stack.sliceWidth * stackScale,
