@@ -13,7 +13,7 @@ class SpriteStackPainter extends CustomPainter {
     this.scale = 1,
     this.spacing = 1,
     this.offset = Offset.zero,
-    this.paint,
+    this.stackPaint,
   });
 
   final SpriteStack stack;
@@ -33,7 +33,7 @@ class SpriteStackPainter extends CustomPainter {
   final Offset offset;
 
   /// Optional paint, e.g. to apply a color filter.
-  final Paint? paint;
+  final Paint? stackPaint;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -44,7 +44,7 @@ class SpriteStackPainter extends CustomPainter {
       pitch: pitch,
       scale: scale,
       spacing: spacing,
-      paint: paint,
+      paint: stackPaint,
     );
   }
 
@@ -56,5 +56,5 @@ class SpriteStackPainter extends CustomPainter {
       oldDelegate.scale != scale ||
       oldDelegate.spacing != spacing ||
       oldDelegate.offset != offset ||
-      oldDelegate.paint != paint;
+      oldDelegate.stackPaint != stackPaint;
 }
