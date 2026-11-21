@@ -1,10 +1,20 @@
 name: sprite_stack
 description: >-
-  Render sprite-stacking props in Flutter with free turntable rotation.
-  Feed it a horizontal slice strip (top-down cross-sections) and get a
-  fake-3D billboard that spins.
+  Render sprite-stacking props in Flutter with free turntable rotation from a
+  horizontal strip of top-down cross-sections. One draw per slice.
 version: 0.1.0
-publish_to: none
+
+homepage: https://github.com/RafaelBarbosatec/bonfire/tree/master/packages/sprite_stack
+repository: https://github.com/RafaelBarbosatec/bonfire
+issue_tracker: https://github.com/RafaelBarbosatec/bonfire/issues
+documentation: https://github.com/RafaelBarbosatec/bonfire/tree/master/packages/sprite_stack#readme
+
+topics:
+  - gamedev
+  - flame
+  - sprites
+  - pixel-art
+  - rendering
 
 environment:
   sdk: '>=3.5.0 <4.0.0'
