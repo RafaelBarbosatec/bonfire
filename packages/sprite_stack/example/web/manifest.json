@@ -1,0 +1,11 @@
+{
+  "name": "sprite_stack example",
+  "short_name": "sprite_stack",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#101828",
+  "theme_color": "#101828",
+  "description": "Sprite stacking turntable demo",
+  "orientation": "landscape-primary",
+  "prefer_related_applications": false
+}
