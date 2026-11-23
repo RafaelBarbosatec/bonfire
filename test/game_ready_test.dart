@@ -43,10 +43,14 @@ class _TestGame extends BonfireWithCollision {
 /// Mimics `GameWidgetState.loaderFuture`: `onGameResize` must happen before
 /// `load()`/`mount()`, since `Component._startLoading` asserts `hasLayout`.
 Future<_TestGame> _bootGame(
-    GameComponent slowComponent, VoidCallback onReady) async {
+  GameComponent slowComponent,
+  VoidCallback onReady,
+) async {
   final game = _TestGame(slowComponent: slowComponent, onGameReady: onReady);
   game.onGameResize(Vector2(800, 600));
+  // ignore: invalid_use_of_internal_member
   await game.load();
+  // ignore: invalid_use_of_internal_member
   game.mount();
   game.update(0);
   return game;

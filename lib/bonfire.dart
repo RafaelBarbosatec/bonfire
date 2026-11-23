@@ -33,6 +33,7 @@ export 'package:bonfire/map/base/tile.dart';
 export 'package:bonfire/map/base/tile_component.dart';
 export 'package:bonfire/map/base/tile_with_collision.dart';
 export 'package:bonfire/map/matrix_map/matrix_map_generator.dart';
+export 'package:bonfire/map/pixel_tileset/pixel_tileset.dart';
 export 'package:bonfire/map/spritefusion/world_map_by_spritefusion.dart';
 export 'package:bonfire/map/tiled/cache_provider/tiled_cache_provider.dart';
 export 'package:bonfire/map/tiled/model/tiled_object_properties.dart';

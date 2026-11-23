@@ -1,5 +1,13 @@
-# NEXT
+# 4.2.0
 
+- Added `PixelTileset`: build whole tilesets - and maps - as pixel art
+  described in plain Dart code (`PixelArt`/`PixelTile`), with no image asset
+  involved. The tileset packs itself into a single atlas image generated at
+  runtime and registered into `Flame.images`, so `Tile`/`TileSprite`/
+  `TilelAnimation`/collisions work exactly as with a loaded spritesheet.
+  `PixelTileset.worldMapFromAscii`/`layerFromAscii` turn an ASCII legend +
+  level layout directly into a `WorldMap`/`Layer`. See the "Pixel tileset"
+  section in the map docs and the new example page.
 - Fixed `BonfireGame.onReady` (and `GameComponent.onGameMounted`) firing
   before every initial component had actually finished loading. Readiness
   used to be inferred from `world.children.isNotEmpty`, which becomes true

@@ -11,6 +11,7 @@ import 'package:example/pages/input/move_camera_mouse/move_camera_page.dart';
 import 'package:example/pages/input/tap/tap_gesture_page.dart';
 import 'package:example/pages/lighting/lighting_page.dart';
 import 'package:example/pages/map/infinite/infinite_map_page.dart';
+import 'package:example/pages/map/pixel_tileset/pixel_tileset_page.dart';
 import 'package:example/pages/map/spritefusion/spritefusion_page.dart';
 import 'package:example/pages/map/terrain_builder/terrain_builder_page.dart';
 import 'package:example/pages/map/tiled/tiled_network_page.dart';
@@ -146,6 +147,12 @@ class _HomePageState extends State<HomePage> {
             builder: (_) => const InfiniteMapPage(),
             codeUrl:
                 'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/map/infinite',
+          ),
+          ItemDrawer(
+            name: 'Pixel tileset (no assets)',
+            builder: (_) => const PixelTilesetPage(),
+            codeUrl:
+                'https://github.com/RafaelBarbosatec/bonfire/blob/develop/example/lib/pages/map/pixel_tileset',
           ),
         ],
       ),

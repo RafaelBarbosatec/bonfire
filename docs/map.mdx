@@ -328,6 +328,99 @@ MapTerrainCorners(
 
 ```
 
+## Pixel tileset (no image assets)
+
+You can also create a whole tileset directly in code, with no image asset at
+all. Each tile is pixel art described as a grid of palette codes
+(`PixelArt`), packed by `PixelTileset` into a single atlas image generated at
+runtime (so there's nothing to `await` before using it).
+
+This is handy for prototyping, tiny games, or when you want an AI agent to
+generate a good-looking level purely from text.
+
+```dart
+final tileset = PixelTileset(
+  tileSize: 16,
+  palette: {
+    'g': Color(0xFF4CAF50), // grass
+    'G': Color(0xFF2E7D32), // grass speck
+    'd': Color(0xFF8D6E63), // dirt
+    's': Color(0xFF9E9E9E), // wall stone
+  },
+  tiles: {
+    'grass': PixelTile.single(PixelArt.rows([
+      'gggggggggggggggg',
+      'gGgggggggggggggg',
+      // ... 16 rows of 16 characters (tileSize = 16)
+    ])),
+    'dirt': PixelTile.single(PixelArt.rows([
+      'dddddddddddddddd',
+      // ...
+    ])),
+    'wall': PixelTile.single(
+      PixelArt.rows([
+        'ssssssssssssssss',
+        // ...
+      ]),
+      collision: true, // adds a full-tile RectangleHitbox automatically
+    ),
+    'water': PixelTile.animated(
+      [
+        PixelArt.rows([ /* frame 1 rows */ ]),
+        PixelArt.rows([ /* frame 2 rows */ ]),
+      ],
+      stepTime: 0.3,
+    ),
+  },
+);
+```
+
+`'.'` is reserved to mean "transparent pixel" inside `PixelArt.rows`, unless
+you add it explicitly to the palette.
+
+### Building a level as ASCII art
+
+The easiest way to turn a tileset into a full map is `worldMapFromAscii`,
+which maps a legend of characters to tile names and lays them out from a list
+of rows:
+
+```dart
+final map = tileset.worldMapFromAscii(
+  legend: {
+    '#': 'wall',
+    '.': 'grass',
+    '=': 'dirt',
+    '~': 'water',
+  },
+  rows: [
+    '#####################',
+    '#...................#',
+    '#....~~~~...=========',
+    '#####################',
+  ],
+);
+
+return BonfireWidget(map: map, ...);
+```
+
+Just like in `PixelArt`, `'.'` means an empty cell (no tile placed) unless
+you map it explicitly in `legend`.
+
+### Lower-level API
+
+If you need more control (multiple layers, mixing with other map sources,
+etc.), use `layerFromAscii` (returns a `Layer` instead of a whole `WorldMap`)
+or build each `Tile` yourself with `tileset.tile(x: ..., y: ..., name: ...)`,
+`tileset.sprite(name)` and `tileset.animation(name)` - these plug directly
+into `Layer`, `MatrixMapGenerator`'s `builder`, or any other place that
+expects a `Tile`/`TileSprite`/`TilelAnimation`.
+
+> A `PixelTileset` is content-addressed: building two tilesets with the exact
+> same `tileSize`/`palette`/`tiles` reuses the same generated atlas image
+> instead of creating a new one (handy across hot reloads).
+
+[Example](https://github.com/RafaelBarbosatec/bonfire/blob/master/example/lib/pages/map/pixel_tileset/pixel_tileset_page.dart)
+
 ## Custom
 
 You can create your own map by creating a class extending the `WorldMap` and filling `List<TileModel> tiles`. 
