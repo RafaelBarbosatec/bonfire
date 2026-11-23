@@ -1,3 +1,14 @@
+# NEXT
+
+- Fixed `BonfireGame.onReady` (and `GameComponent.onGameMounted`) firing
+  before every initial component had actually finished loading. Readiness
+  used to be inferred from `world.children.isNotEmpty`, which becomes true
+  as soon as a single component (e.g. the `map`) finishes mounting, even
+  while others (e.g. a `Player` with an asynchronous `onLoad`, such as one
+  loading sprites) are still loading. The game now waits for every
+  component passed to it (`map`, `player` and `components`) to be fully
+  mounted before notifying readiness.
+
 # 4.1.3
 
 - **Breaking:** `LightingConfig.falloff` now defaults to `LightFalloff.smooth`

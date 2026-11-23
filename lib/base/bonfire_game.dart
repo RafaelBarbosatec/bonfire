@@ -67,6 +67,13 @@ abstract class BonfireGame extends BaseGame implements BonfireGameInterface {
 
   ValueChanged<BonfireGame>? onReady;
 
+  /// Components originally provided to the game (the [map], the [player]
+  /// and any extra `components`). These are the components whose mounting
+  /// (including any asynchronous work performed inside their own
+  /// `onLoad`) must finish before the game is considered ready, see
+  /// [_notifyGameMounted].
+  late final List<Component> _initialWorldComponents;
+
   /// Lighting layer created by this game.
   ///
   /// The reference is captured in the constructor on purpose: while the
@@ -157,6 +164,12 @@ abstract class BonfireGame extends BaseGame implements BonfireGameInterface {
         ) {
     this.debugMode = debugMode;
     _bgColor = backgroundColor;
+    final currentPlayer = player;
+    _initialWorldComponents = [
+      map,
+      if (currentPlayer != null) currentPlayer,
+      ...components ?? [],
+    ];
 
     _lightingLayer =
         camera.viewport.children.whereType<LightingInterface>().first;
@@ -188,6 +201,8 @@ abstract class BonfireGame extends BaseGame implements BonfireGameInterface {
     } else if (player != null && camera.config.startFollowPlayer) {
       camera.moveToPlayer();
     }
+
+    unawaited(_waitForGameMounted());
   }
 
   bool _gameMounted = false;
@@ -205,11 +220,27 @@ abstract class BonfireGame extends BaseGame implements BonfireGameInterface {
     // next frame. This keeps cache valid for the entire frame and avoids
     // repeated recomputation when multiple queries happen in the same frame.
     _frameCounter = _frameCounter + 1;
-    final containsChildren = camera.world?.children.isNotEmpty == true;
-    if (!_gameMounted && containsChildren) {
-      _gameMounted = true;
-      Future.delayed(Duration.zero, _notifyGameMounted);
+  }
+
+  /// Waits until every component originally provided to the game (the
+  /// [map], the [player] and any extra `components`) has fully finished
+  /// loading *and* mounting before notifying that the game is ready.
+  ///
+  /// Relying only on `world.children.isNotEmpty` (as a previous
+  /// implementation did) is not enough: Flame only adds a component to its
+  /// parent's `children` set once that component's own `onLoad` has
+  /// completed, but `isNotEmpty` becomes true as soon as *any single*
+  /// component finishes mounting - not necessarily all of them. Components
+  /// with heavier asynchronous `onLoad` (for instance a [Player] loading
+  /// images/sprites) could therefore still be loading while [onReady] /
+  /// [GameComponent.onGameMounted] already fired.
+  Future<void> _waitForGameMounted() async {
+    await Future.wait(_initialWorldComponents.map((c) => c.mounted));
+    if (_gameMounted) {
+      return;
     }
+    _gameMounted = true;
+    _notifyGameMounted();
   }
 
   @override
