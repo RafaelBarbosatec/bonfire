@@ -93,7 +93,9 @@ void main() {
       final tileset = PixelTileset(
         tileSize: 2,
         palette: {'r': _red},
-        tiles: {'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))},
+        tiles: {
+          'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
       );
 
       expect(
@@ -177,12 +179,16 @@ void main() {
       final first = PixelTileset(
         tileSize: 2,
         palette: {'r': _red},
-        tiles: {'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))},
+        tiles: {
+          'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
       );
       final second = PixelTileset(
         tileSize: 2,
         palette: {'r': _blue},
-        tiles: {'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))},
+        tiles: {
+          'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
       );
       expect(first.imageKey, isNot(second.imageKey));
     });
@@ -191,7 +197,9 @@ void main() {
       final tileset = PixelTileset(
         tileSize: 2,
         palette: {'r': _red},
-        tiles: {'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))},
+        tiles: {
+          'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
       );
       expect(Flame.images.containsKey(tileset.imageKey), isTrue);
       tileset.dispose();
@@ -237,7 +245,9 @@ void main() {
       final tileset = PixelTileset(
         tileSize: 2,
         palette: {'r': _red},
-        tiles: {'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))},
+        tiles: {
+          'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
       );
       expect(
         () => tileset.animation('solid'),
@@ -257,7 +267,9 @@ void main() {
       final tileset = PixelTileset(
         tileSize: 2,
         palette: {'r': _red},
-        tiles: {'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))},
+        tiles: {
+          'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
       );
 
       final tile = tileset.tile(x: 3, y: 5, name: 'solid');
@@ -269,7 +281,8 @@ void main() {
       expect(tile.collisions, isNull);
     });
 
-    test('adds a full-tile RectangleHitbox when PixelTile.collision is true', () {
+    test('adds a full-tile RectangleHitbox when PixelTile.collision is true',
+        () {
       final tileset = PixelTileset(
         tileSize: 4,
         palette: {'r': _red},

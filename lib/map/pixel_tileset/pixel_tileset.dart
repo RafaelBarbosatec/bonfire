@@ -243,7 +243,8 @@ class PixelTileset {
       stepTime: pixelTile.stepTime,
       frames: [
         for (final cell in _frameCellsOf(name))
-          TileSprite(path: imageKey, position: cell, size: Vector2.all(tileSize)),
+          TileSprite(
+              path: imageKey, position: cell, size: Vector2.all(tileSize)),
       ],
     );
   }
