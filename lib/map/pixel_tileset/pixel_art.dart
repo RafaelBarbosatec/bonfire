@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:bonfire/map/pixel_tileset/pixel_palette.dart';
@@ -66,6 +67,12 @@ class PixelArt {
   /// Paints this pixel art onto [canvas], with its top-left pixel at
   /// [offset], resolving each pixel code through [palette].
   ///
+  /// Pixels are batched by colour and drawn with [Canvas.drawRawPoints]
+  /// (1 px squares) instead of one [Canvas.drawRect] per pixel. A 32x32 tile
+  /// is 1024 pixels, so a tileset with a few hundred tiles used to record
+  /// hundreds of thousands of individual canvas operations while building its
+  /// atlas; this keeps the same output with a handful of calls per tile.
+  ///
   /// [ownerName] is used only to produce a helpful error message pointing at
   /// which tile/frame contains the offending pixel code.
   void paint(
@@ -74,27 +81,46 @@ class PixelArt {
     PixelPalette palette, {
     required String ownerName,
   }) {
-    final pixelPaint = Paint()..isAntiAlias = false;
+    final pointsByColor = <int, List<double>>{};
+
     for (var y = 0; y < height; y++) {
       final row = rows[y];
       for (var x = 0; x < width; x++) {
         final code = row[x];
-        final color = palette[code] ?? (code == '.' ? null : _unknownCode(
-              code,
-              ownerName,
-              y,
-              x,
-              palette,
-            ));
+        final color = palette[code] ??
+            (code == '.'
+                ? null
+                : _unknownCode(
+                    code,
+                    ownerName,
+                    y,
+                    x,
+                    palette,
+                  ));
         if (color == null || color.a == 0) {
           continue;
         }
-        pixelPaint.color = color;
-        canvas.drawRect(
-          Rect.fromLTWH(offset.dx + x, offset.dy + y, 1, 1),
-          pixelPaint,
-        );
+        final points = pointsByColor.putIfAbsent(color.toARGB32(), () => []);
+        points
+          // +0.5 centres a 1 px square exactly on the pixel, so the batched
+          // points cover the same area as the old drawRect(offset, 1, 1).
+          ..add(offset.dx + x + 0.5)
+          ..add(offset.dy + y + 0.5);
       }
+    }
+
+    for (final entry in pointsByColor.entries) {
+      final pixelPaint = Paint()
+        ..color = Color(entry.key)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1
+        ..strokeCap = StrokeCap.square
+        ..isAntiAlias = false;
+      canvas.drawRawPoints(
+        PointMode.points,
+        Float32List.fromList(entry.value),
+        pixelPaint,
+      );
     }
   }
 
