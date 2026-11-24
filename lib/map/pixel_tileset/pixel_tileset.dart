@@ -234,9 +234,9 @@ class PixelTileset {
   /// one) of the tile named [name].
   ///
   /// The returned instance is shared by every [Tile] built for that tile name:
-  /// [TileSprite] is immutable, and [Tile.getTile] only reads its path and
-  /// atlas position, so a map with thousands of repeated tiles does not need
-  /// thousands of wrappers.
+  /// [TileSprite] is a stateless descriptor (path, atlas position and size) and
+  /// [Tile.getTile] only reads it, so a map with thousands of repeated tiles
+  /// does not need thousands of wrappers.
   TileSprite sprite(String name, {int frame = 0}) {
     final sprites = _spritesOf(name);
     if (frame < 0 || frame >= sprites.length) {
