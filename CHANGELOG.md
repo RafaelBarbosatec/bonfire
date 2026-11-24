@@ -1,4 +1,4 @@
-# Unreleased
+# 4.2.1
 
 - Performance: `PixelArt.paint` now batches pixels by colour and records one
   `drawRawPoints` call per colour instead of one `drawRect` per pixel. Building
