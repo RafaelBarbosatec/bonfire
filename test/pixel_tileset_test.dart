@@ -93,7 +93,9 @@ void main() {
       final tileset = PixelTileset(
         tileSize: 2,
         palette: {'r': _red},
-        tiles: {'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))},
+        tiles: {
+          'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
       );
 
       expect(
@@ -177,21 +179,55 @@ void main() {
       final first = PixelTileset(
         tileSize: 2,
         palette: {'r': _red},
-        tiles: {'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))},
+        tiles: {
+          'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
       );
       final second = PixelTileset(
         tileSize: 2,
         palette: {'r': _blue},
-        tiles: {'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))},
+        tiles: {
+          'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
       );
       expect(first.imageKey, isNot(second.imageKey));
+    });
+
+    test('duplicate art shares one atlas cell', () {
+      final tileset = PixelTileset(
+        tileSize: 2,
+        palette: {'r': _red},
+        tiles: {
+          'a': PixelTile.single(PixelArt.rows(['rr', 'rr'])),
+          'b': PixelTile.single(PixelArt.rows(['rr', 'rr'])),
+        },
+      );
+
+      // Both names point at the same 2x2 cell, so the atlas stays 2x2.
+      expect(tileset.atlasSize, Vector2(2, 2));
+      expect(tileset.sprite('a').position, tileset.sprite('b').position);
+      expect(identical(tileset.sprite('a'), tileset.sprite('b')), isTrue);
+    });
+
+    test('sprite() reuses the same TileSprite instance', () {
+      final tileset = PixelTileset(
+        tileSize: 2,
+        palette: {'r': _red},
+        tiles: {
+          'a': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
+      );
+
+      expect(identical(tileset.sprite('a'), tileset.sprite('a')), isTrue);
     });
 
     test('dispose() removes the atlas image from the Flame cache', () {
       final tileset = PixelTileset(
         tileSize: 2,
         palette: {'r': _red},
-        tiles: {'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))},
+        tiles: {
+          'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
       );
       expect(Flame.images.containsKey(tileset.imageKey), isTrue);
       tileset.dispose();
@@ -226,6 +262,14 @@ void main() {
       expect(animation.frames[1].position, Vector2(1, 0));
     });
 
+    test('animation() reuses the same descriptor instance', () {
+      final tileset = buildAnimatedTileset();
+      expect(
+        identical(tileset.animation('water'), tileset.animation('water')),
+        isTrue,
+      );
+    });
+
     test('sprite() can still target a specific frame', () {
       final tileset = buildAnimatedTileset();
       expect(tileset.sprite('water').position, Vector2(0, 0));
@@ -237,7 +281,9 @@ void main() {
       final tileset = PixelTileset(
         tileSize: 2,
         palette: {'r': _red},
-        tiles: {'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))},
+        tiles: {
+          'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
       );
       expect(
         () => tileset.animation('solid'),
@@ -257,7 +303,9 @@ void main() {
       final tileset = PixelTileset(
         tileSize: 2,
         palette: {'r': _red},
-        tiles: {'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))},
+        tiles: {
+          'solid': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
       );
 
       final tile = tileset.tile(x: 3, y: 5, name: 'solid');
@@ -269,7 +317,8 @@ void main() {
       expect(tile.collisions, isNull);
     });
 
-    test('adds a full-tile RectangleHitbox when PixelTile.collision is true', () {
+    test('adds a full-tile RectangleHitbox when PixelTile.collision is true',
+        () {
       final tileset = PixelTileset(
         tileSize: 4,
         palette: {'r': _red},

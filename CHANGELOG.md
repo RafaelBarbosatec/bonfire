@@ -1,3 +1,21 @@
+# Unreleased
+
+- Performance: `PixelArt.paint` now batches pixels by colour and records one
+  `drawRawPoints` call per colour instead of one `drawRect` per pixel. Building
+  a runtime `PixelTileset` atlas with a few hundred 32x32 tiles used to record
+  hundreds of thousands of canvas operations; now it records a handful per
+  tile. Output pixels are unchanged.
+- Performance: `TileLayerComponent.loadAssets` now loads each unique image path
+  once (in parallel) instead of awaiting `Flame.images.load` for every tile.
+  Large maps whose tiles all share one spritesheet no longer do thousands of
+  redundant cache lookups during load.
+- Performance: `PixelTileset` now paints each unique `PixelArt` once per atlas
+  (repeated art, including repeated animation frames, shares one cell) and
+  caches the `TileSprite` wrappers per atlas cell. Building a map with thousands
+  of repeated tiles no longer allocates a new wrapper per tile, and duplicate
+  tile names return the exact same `TileSprite` instance (and the same
+  `TilelAnimation` descriptor for animated tiles).
+
 # 4.2.0
 
 - Added `PixelTileset`: build whole tilesets - and maps - as pixel art

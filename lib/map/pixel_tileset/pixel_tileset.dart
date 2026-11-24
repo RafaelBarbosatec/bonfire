@@ -83,6 +83,9 @@ class PixelTileset {
   late final int _columns;
   late final int _rows;
   final Map<String, List<Vector2>> _frameCells = {};
+  final Map<String, List<TileSprite>> _frameSprites = {};
+  final Map<String, TileSprite> _spriteByCell = {};
+  final Map<String, TilelAnimation> _animations = {};
 
   PixelTileset({
     required this.tileSize,
@@ -126,18 +129,33 @@ class PixelTileset {
           _AtlasEntry(tileEntry.key, i, tileEntry.value.frames[i]),
     ];
 
-    _columns = math.sqrt(entries.length).ceil();
-    _rows = (entries.length / _columns).ceil();
+    // Several tile names can share the same pixel art (or an animation can
+    // repeat a frame). Paint each unique art once and point every name/frame at
+    // that cell instead of duplicating it in the atlas.
+    final uniqueEntries = <_AtlasEntry>[];
+    final cellByArt = <String, int>{};
+    final cellIndexes = <int>[];
+    for (final entry in entries) {
+      final artKey = entry.art.rows.join('\n');
+      final index = cellByArt.putIfAbsent(artKey, () {
+        uniqueEntries.add(entry);
+        return uniqueEntries.length - 1;
+      });
+      cellIndexes.add(index);
+    }
 
-    imageKey = 'pixel_tileset/${_contentHash(entries)}';
+    _columns = math.sqrt(uniqueEntries.length).ceil();
+    _rows = (uniqueEntries.length / _columns).ceil();
+
+    imageKey = 'pixel_tileset/${_contentHash(uniqueEntries)}';
 
     for (var index = 0; index < entries.length; index++) {
-      final entry = entries[index];
+      final cellIndex = cellIndexes[index];
       final cell = Vector2(
-        (index % _columns).toDouble(),
-        (index ~/ _columns).toDouble(),
+        (cellIndex % _columns).toDouble(),
+        (cellIndex ~/ _columns).toDouble(),
       );
-      (_frameCells[entry.name] ??= []).add(cell);
+      (_frameCells[entries[index].name] ??= []).add(cell);
     }
 
     if (Flame.images.containsKey(imageKey)) {
@@ -147,8 +165,8 @@ class PixelTileset {
     final tileSizeInt = tileSize.round();
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
-    for (var index = 0; index < entries.length; index++) {
-      final entry = entries[index];
+    for (var index = 0; index < uniqueEntries.length; index++) {
+      final entry = uniqueEntries[index];
       final col = index % _columns;
       final row = index ~/ _columns;
       entry.art.paint(
@@ -214,19 +232,20 @@ class PixelTileset {
 
   /// Returns the [TileSprite] for the given [frame] (defaults to the first
   /// one) of the tile named [name].
+  ///
+  /// The returned instance is shared by every [Tile] built for that tile name:
+  /// [TileSprite] is a stateless descriptor (path, atlas position and size) and
+  /// [Tile.getTile] only reads it, so a map with thousands of repeated tiles
+  /// does not need thousands of wrappers.
   TileSprite sprite(String name, {int frame = 0}) {
-    final cells = _frameCellsOf(name);
-    if (frame < 0 || frame >= cells.length) {
+    final sprites = _spritesOf(name);
+    if (frame < 0 || frame >= sprites.length) {
       throw ArgumentError(
-        'PixelTileset.sprite: tile "$name" has ${cells.length} frame(s), '
+        'PixelTileset.sprite: tile "$name" has ${sprites.length} frame(s), '
         'frame $frame is out of range.',
       );
     }
-    return TileSprite(
-      path: imageKey,
-      position: cells[frame],
-      size: Vector2.all(tileSize),
-    );
+    return sprites[frame];
   }
 
   /// Returns the [TilelAnimation] for the tile named [name]. Throws if that
@@ -239,12 +258,36 @@ class PixelTileset {
         'Use `sprite("$name")` instead.',
       );
     }
-    return TilelAnimation(
-      stepTime: pixelTile.stepTime,
-      frames: [
-        for (final cell in _frameCellsOf(name))
-          TileSprite(path: imageKey, position: cell, size: Vector2.all(tileSize)),
-      ],
+    return _animations.putIfAbsent(
+      name,
+      () => TilelAnimation(
+        stepTime: pixelTile.stepTime,
+        // The cached list is shared between callers, so keep the descriptor's
+        // list independent.
+        frames: List<TileSprite>.of(_spritesOf(name)),
+      ),
+    );
+  }
+
+  List<TileSprite> _spritesOf(String name) {
+    final cached = _frameSprites[name];
+    if (cached != null) return cached;
+
+    final cells = _frameCellsOf(name);
+    return _frameSprites[name] = [
+      for (final cell in cells) _spriteAt(cell),
+    ];
+  }
+
+  TileSprite _spriteAt(Vector2 cell) {
+    final key = '${cell.x}/${cell.y}';
+    return _spriteByCell.putIfAbsent(
+      key,
+      () => TileSprite(
+        path: imageKey,
+        position: cell,
+        size: Vector2.all(tileSize),
+      ),
     );
   }
 

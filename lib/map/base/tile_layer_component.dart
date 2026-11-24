@@ -289,20 +289,23 @@ class TileLayerComponent extends PositionComponent with HasPaint, WithShader {
     });
   }
 
-  Future<void> loadAssets() {
-    return Future.forEach(_tiles, _loadTile);
-  }
-
-  Future<void> _loadTile(Tile element) async {
-    if (element.sprite != null) {
-      await MapAssetsManager.loadImage(element.sprite?.path ?? '');
-    }
-    if (element.animation != null) {
-      for (final frame in element.animation?.frames ?? <TileSprite>[]) {
-        await MapAssetsManager.loadImage(frame.path);
+  Future<void> loadAssets() async {
+    // Large maps can contain thousands of tiles that all point at the same
+    // spritesheet (a generated atlas, for instance). Loading the image once
+    // per *unique path* instead of once per tile avoids thousands of redundant
+    // cache lookups/awaits during map load.
+    final paths = <String>{};
+    for (final tile in _tiles) {
+      final sprite = tile.sprite;
+      if (sprite != null) paths.add(sprite.path);
+      final animation = tile.animation;
+      if (animation != null) {
+        for (final frame in animation.frames) {
+          paths.add(frame.path);
+        }
       }
     }
-    return Future.value();
+    await Future.wait(paths.map(MapAssetsManager.loadImage));
   }
 
   @override
