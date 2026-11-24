@@ -193,6 +193,34 @@ void main() {
       expect(first.imageKey, isNot(second.imageKey));
     });
 
+    test('duplicate art shares one atlas cell', () {
+      final tileset = PixelTileset(
+        tileSize: 2,
+        palette: {'r': _red},
+        tiles: {
+          'a': PixelTile.single(PixelArt.rows(['rr', 'rr'])),
+          'b': PixelTile.single(PixelArt.rows(['rr', 'rr'])),
+        },
+      );
+
+      // Both names point at the same 2x2 cell, so the atlas stays 2x2.
+      expect(tileset.atlasSize, Vector2(2, 2));
+      expect(tileset.sprite('a').position, tileset.sprite('b').position);
+      expect(identical(tileset.sprite('a'), tileset.sprite('b')), isTrue);
+    });
+
+    test('sprite() reuses the same TileSprite instance', () {
+      final tileset = PixelTileset(
+        tileSize: 2,
+        palette: {'r': _red},
+        tiles: {
+          'a': PixelTile.single(PixelArt.rows(['rr', 'rr']))
+        },
+      );
+
+      expect(identical(tileset.sprite('a'), tileset.sprite('a')), isTrue);
+    });
+
     test('dispose() removes the atlas image from the Flame cache', () {
       final tileset = PixelTileset(
         tileSize: 2,
