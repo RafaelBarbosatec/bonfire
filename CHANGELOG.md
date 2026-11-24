@@ -13,7 +13,8 @@
   (repeated art, including repeated animation frames, shares one cell) and
   caches the `TileSprite` wrappers per atlas cell. Building a map with thousands
   of repeated tiles no longer allocates a new wrapper per tile, and duplicate
-  tile names return the exact same `TileSprite` instance.
+  tile names return the exact same `TileSprite` instance (and the same
+  `TilelAnimation` descriptor for animated tiles).
 
 # 4.2.0
 

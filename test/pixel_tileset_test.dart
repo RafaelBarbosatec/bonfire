@@ -262,6 +262,14 @@ void main() {
       expect(animation.frames[1].position, Vector2(1, 0));
     });
 
+    test('animation() reuses the same descriptor instance', () {
+      final tileset = buildAnimatedTileset();
+      expect(
+        identical(tileset.animation('water'), tileset.animation('water')),
+        isTrue,
+      );
+    });
+
     test('sprite() can still target a specific frame', () {
       final tileset = buildAnimatedTileset();
       expect(tileset.sprite('water').position, Vector2(0, 0));

@@ -85,6 +85,7 @@ class PixelTileset {
   final Map<String, List<Vector2>> _frameCells = {};
   final Map<String, List<TileSprite>> _frameSprites = {};
   final Map<String, TileSprite> _spriteByCell = {};
+  final Map<String, TilelAnimation> _animations = {};
 
   PixelTileset({
     required this.tileSize,
@@ -257,10 +258,14 @@ class PixelTileset {
         'Use `sprite("$name")` instead.',
       );
     }
-    return TilelAnimation(
-      stepTime: pixelTile.stepTime,
-      // Copy the list: the cached one is shared between callers.
-      frames: List<TileSprite>.of(_spritesOf(name)),
+    return _animations.putIfAbsent(
+      name,
+      () => TilelAnimation(
+        stepTime: pixelTile.stepTime,
+        // The cached list is shared between callers, so keep the descriptor's
+        // list independent.
+        frames: List<TileSprite>.of(_spritesOf(name)),
+      ),
     );
   }
 
