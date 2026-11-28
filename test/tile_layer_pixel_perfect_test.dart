@@ -32,20 +32,22 @@ void main() {
       );
 
       expect(snap, isNotNull);
-      expect(snap!.x, closeTo(-0.4, 1e-9));
-      expect(snap.y, closeTo(0.25, 1e-9));
+      // `Vector2` stores float32, so the tolerance is that precision, not 1e-9.
+      expect(snap!.x, closeTo(-0.4, 1e-6));
+      expect(snap.y, closeTo(0.25, 1e-6));
     });
 
     test('accounts for the zoom and the device pixel ratio', () {
-      // 10.4 logical * 2 dpr = 20.8 device pixels: 0.8 of a device pixel to
-      // remove, which is 0.8 / (2 zoom * 2 dpr) = 0.2 in world units.
+      // 10.4 logical * 2 dpr = 20.8 device pixels. Rounding to the nearest
+      // edge is +0.2 device pixels, which is 0.2 / (2 zoom * 2 dpr) = 0.05
+      // world units.
       final snap = TileLayerComponent.devicePixelSnapOffset(
         _transform(scaleX: 2, scaleY: 2, translationX: 10.4, translationY: 20),
         2,
       );
 
       expect(snap, isNotNull);
-      expect(snap!.x, closeTo(-0.2, 1e-9));
+      expect(snap!.x, closeTo(0.05, 1e-6));
       expect(snap.y, 0);
     });
 
