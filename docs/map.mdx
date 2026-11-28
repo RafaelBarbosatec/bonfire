@@ -38,6 +38,32 @@ WorldMapByTiled(
 )
 ```
 
+## Tile seams (pixel-perfect layers)
+
+Tiles are separate images that share an edge. When the camera or the zoom puts
+that edge on a fractional pixel, antialiasing draws it half transparent from
+both sides, and compositing the two halves leaves part of the background
+showing through — the dark line you see between tiles, which appears and
+disappears as the camera moves.
+
+Every `TileLayerComponent` is `pixelPerfect` by default. It:
+
+- turns antialiasing off for the layer, so each boundary pixel belongs to
+  exactly one tile;
+- rounds the layer's translation to whole device pixels, so tiles keep a stable
+  sub-pixel phase instead of crawling while the camera moves.
+
+```dart
+// Only if you want the old smooth (antialiased) edges:
+for (final layer in gameRef.map.layersComponent) {
+  layer.pixelPerfect = false;
+}
+```
+
+> The remaining artifact is uneven tile widths when the zoom is not a whole
+> number — `getZoomFromMaxVisibleTile` returns fractions. That is not a seam,
+> it is pixel art scaled by a fraction. Use an integer zoom if it bothers you.
+
 ## Infinite world
 
 Want an **endless** map? `WorldMapInfiniteByTiled` repeats a small Tiled map as
