@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:bonfire/bonfire.dart';
 import 'package:bonfire/map/util/map_assets_manager.dart';
@@ -27,6 +28,33 @@ class TileLayerComponent extends PositionComponent with HasPaint, WithShader {
 
   Set<String> _visibleSet = {};
 
+  bool _pixelPerfect = true;
+
+  /// Draws the layer without antialiasing and on whole device pixels.
+  ///
+  /// Tiles are separate `drawImageRect` calls that share an edge. With
+  /// antialiasing on, a shared edge that falls on a fractional coordinate is
+  /// drawn half-transparent by each tile; compositing two 50% edges leaves 25%
+  /// of the background showing through, which reads as a dark line between
+  /// tiles. It appears and disappears as the camera moves, because the
+  /// fractional part changes with it.
+  ///
+  /// With antialiasing off the rasterizer gives every pixel to exactly one of
+  /// the two quads, so there is no background left to show through. The layer
+  /// translation is rounded to whole device pixels as well, which keeps each
+  /// tile at a stable sub-pixel phase instead of crawling as the camera moves.
+  ///
+  /// Turn it off for layers that rely on smooth (non pixel-art) edges.
+  bool get pixelPerfect => _pixelPerfect;
+
+  set pixelPerfect(bool value) {
+    if (_pixelPerfect == value) {
+      return;
+    }
+    _pixelPerfect = value;
+    paint.isAntiAlias = !value;
+  }
+
   TileLayerComponent({
     required this.id,
     required List<Tile> tiles,
@@ -37,10 +65,76 @@ class TileLayerComponent extends PositionComponent with HasPaint, WithShader {
     double opacity = 1,
     this.properties,
     super.priority,
+    bool pixelPerfect = true,
   })  : _tiles = tiles,
         _isVisible = visible {
     this.opacity = opacity;
+    _pixelPerfect = pixelPerfect;
+    paint.isAntiAlias = !pixelPerfect;
     _updateSizeAndPosition();
+  }
+
+  /// Translation, in the canvas' current coordinate space, that moves a layer
+  /// onto whole device pixels.
+  ///
+  /// [transform] is a canvas transform matrix (`Canvas.getTransform`), which
+  /// maps the current space to logical pixels, and [devicePixelRatio] turns
+  /// those into device pixels. The result is `null` when the matrix is rotated
+  /// or degenerate — "device pixel alignment" has no single axis there — and
+  /// when the translation already lands on a pixel edge.
+  static Vector2? devicePixelSnapOffset(
+    List<double> transform,
+    double devicePixelRatio,
+  ) {
+    if (devicePixelRatio <= 0) {
+      return null;
+    }
+    // Column-major 4x4: [0] and [5] are the x/y scales, [1] and [4] the
+    // rotation/skew terms, [12] and [13] the translation.
+    final scaleX = transform[0];
+    final scaleY = transform[5];
+    if (scaleX == 0 || scaleY == 0) {
+      return null;
+    }
+    if (transform[1] != 0 || transform[4] != 0) {
+      return null;
+    }
+    final deviceX = transform[12] * devicePixelRatio;
+    final deviceY = transform[13] * devicePixelRatio;
+    final partialX = deviceX - deviceX.roundToDouble();
+    final partialY = deviceY - deviceY.roundToDouble();
+    if (partialX == 0 && partialY == 0) {
+      return null;
+    }
+    return Vector2(
+      -partialX / (scaleX * devicePixelRatio),
+      -partialY / (scaleY * devicePixelRatio),
+    );
+  }
+
+  @override
+  void renderTree(Canvas canvas) {
+    if (!_pixelPerfect) {
+      super.renderTree(canvas);
+      return;
+    }
+    final snap = devicePixelSnapOffset(
+      canvas.getTransform(),
+      _devicePixelRatio,
+    );
+    if (snap == null) {
+      super.renderTree(canvas);
+      return;
+    }
+    canvas.save();
+    canvas.translate(snap.x, snap.y);
+    super.renderTree(canvas);
+    canvas.restore();
+  }
+
+  static double get _devicePixelRatio {
+    final views = PlatformDispatcher.instance.views;
+    return views.isEmpty ? 1.0 : views.first.devicePixelRatio;
   }
 
   void _updateSizeAndPosition() {

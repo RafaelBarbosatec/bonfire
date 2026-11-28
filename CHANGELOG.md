@@ -1,3 +1,14 @@
+# Unreleased
+
+- Fixed the dark lines between tiles on devices and platforms where tile edges
+  land on fractional pixels (most visible on Linux desktop, and with the
+  fractional zoom from `getZoomFromMaxVisibleTile`). `TileLayerComponent` is now
+  `pixelPerfect` by default: antialiasing is off for the layer — two
+  half-transparent edges used to leave ~25% of the background showing through —
+  and the layer translation is rounded to whole device pixels, so the grid stops
+  crawling as the camera moves. Turn it off per layer with
+  `layer.pixelPerfect = false`.
+
 # 4.2.1
 
 - Performance: `PixelArt.paint` now batches pixels by colour and records one
